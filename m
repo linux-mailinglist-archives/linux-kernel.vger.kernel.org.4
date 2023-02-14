@@ -2,85 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A855869644A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB55696454
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjBNNKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S231878AbjBNNKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBNNKT (ORCPT
+        with ESMTP id S229882AbjBNNKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:10:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C5125E31;
-        Tue, 14 Feb 2023 05:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ACDE615FD;
-        Tue, 14 Feb 2023 13:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C607EC4339B;
-        Tue, 14 Feb 2023 13:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676380216;
-        bh=ho24ZQU+5EOMGBAmuBmpO4sBosy4WC266JK1rlfvEW4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Sb9koF5O4nXobQEGXY3vTtivOsdFyh6q2H1kyIc+EGPx7PHVNfUUrhvFJ/hM4DFCe
-         aYK1T8zk86tIL7L8O7G5hCJB81UraH5uBscQffxCaP4AvgscIkrUo9MAl3le5pqyhH
-         2zm2pHEBNRvFzs0DMGWGNGdquK8GCQxxuVodhknVKVC38mWJPI7Iy1KBzZGjhritIr
-         FQMPPWz48VsPL6pw3VakLYlx4MPsqtuG9BTuZzQ57UjdDfZLnEqTEB0HlG5H36v1Fi
-         ykvVmbOalGqmnWEikfBYb3psLdoFTdasDETZQ4C0T6RSJjuKtS40MjGhu5h+Lqg6wd
-         /eI0N61rbMKdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA4B1E68D39;
-        Tue, 14 Feb 2023 13:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 14 Feb 2023 08:10:42 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67C265AE;
+        Tue, 14 Feb 2023 05:10:35 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id e17so8143831plg.12;
+        Tue, 14 Feb 2023 05:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/UCnR+z6gmAvcqmKIJeLEMH14WiUbQ57wKTFDt5pcJ8=;
+        b=AroULSWko9Zr7eGEPpWTPA6D2mG8vKfAIsqG1/UHiZHP3HX3PbVp0qrMJ+FuAJsbWS
+         v05+kTojvExJxZ8W+9yB21D5w8vexFjRyphDjBsOddEZTMVdttkVBNXjxWFQ3Iqwojqw
+         +DKSZuOkQRuVKSaqQXL+bh2B50zxlDW7/k12RIgkMnOVm0uYI6LnfzeI25mloiCklp33
+         VHHtIf4Dpr/qSsDgSQMEDKRS4lg6TE80G2m56Li8ak7Mi6jrTmPyCPMKDQkClT1hFcFO
+         HozC1z+zsQ4VmKCtjiLNbcQm7z7g/V4D6C2WAOwQT8Y+WTTuWkSjrC9wQJ19rS06uj77
+         A7tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/UCnR+z6gmAvcqmKIJeLEMH14WiUbQ57wKTFDt5pcJ8=;
+        b=Yh6r+Cyvc3ch25WkKMIPEi6JcdDwdok7HPEIBQnK6V3sl44mwC+eZ9qNKbOBDbxtWl
+         pof2JqyJXjSSkT8CMFExO6s/Qg28xNIzZkC0gf6zD/Fh+L8VnVr0nhv9e95EdfNmzZTR
+         mdriLMeZO1jKC0hSUmr7gF4InzhVx6vYPbNQQ8J2yZyraPf7ek6Pouq2xaeU5/n1QvIh
+         62bC+IUUpxppa3F30Zet7GzbPx34lKOrKwsgIq/jlYuYB6wCjk/1hDo9foMfVKj6XxAJ
+         PfUvAkaQAcovc0GqBavEGkC2KonLbGO9yNI9xAlc31QaGUfLWltVqIdRyWQZZwBNHzML
+         5ybw==
+X-Gm-Message-State: AO0yUKVlmB4becgaZjpBNj4c5EG+0gsBpVCgNJr8BykApiyxmUb9E0HV
+        vCKgG/aiZ7YWKDdAKAHhvWoBkfHaEEujRQyII+g=
+X-Google-Smtp-Source: AK7set8wnbcla18BA65mD0tF+YGFQZaLOi1vF6MNFPYgJ+xCNbkwNuOA5gg0rl8sjl7Hw+xmx/asisuFdRpgxW5I32w=
+X-Received: by 2002:a17:90a:d486:b0:233:c720:e6d5 with SMTP id
+ s6-20020a17090ad48600b00233c720e6d5mr2301551pju.94.1676380235318; Tue, 14 Feb
+ 2023 05:10:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 1/1] hv_netvsc: Check status in SEND_RNDIS_PKT
- completion message
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167638021669.21305.9259204926008867600.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Feb 2023 13:10:16 +0000
-References: <1676264881-48928-1-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1676264881-48928-1-git-send-email-mikelley@microsoft.com>
-To:     Michael Kelley (LINUX) <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214074925.228106-1-alexghiti@rivosinc.com> <20230214074925.228106-22-alexghiti@rivosinc.com>
+In-Reply-To: <20230214074925.228106-22-alexghiti@rivosinc.com>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 14 Feb 2023 05:10:24 -0800
+Message-ID: <CAMo8BfLCDbYWBWfF7ZJtG_U7E846RmJLF5OFdWpaFOv8ydo0Eg@mail.gmail.com>
+Subject: Re: [PATCH v3 21/24] xtensa: Remove empty <uapi/asm/setup.h>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Feb 14, 2023 at 12:11 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  arch/xtensa/include/uapi/asm/setup.h | 15 ---------------
+>  1 file changed, 15 deletions(-)
+>  delete mode 100644 arch/xtensa/include/uapi/asm/setup.h
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-On Sun, 12 Feb 2023 21:08:01 -0800 you wrote:
-> Completion responses to SEND_RNDIS_PKT messages are currently processed
-> regardless of the status in the response, so that resources associated
-> with the request are freed.  While this is appropriate, code bugs that
-> cause sending a malformed message, or errors on the Hyper-V host, go
-> undetected. Fix this by checking the status and outputting a rate-limited
-> message if there is an error.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v3,1/1] hv_netvsc: Check status in SEND_RNDIS_PKT completion message
-    https://git.kernel.org/netdev/net-next/c/dca5161f9bd0
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks.
+-- Max
