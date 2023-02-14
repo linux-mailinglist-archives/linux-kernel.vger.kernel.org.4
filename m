@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0536970F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF73E6970FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjBNW43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S232081AbjBNW6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjBNW40 (ORCPT
+        with ESMTP id S229518AbjBNW57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:56:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C6D28D00;
-        Tue, 14 Feb 2023 14:56:24 -0800 (PST)
-Date:   Tue, 14 Feb 2023 22:56:21 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676415382;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Tue, 14 Feb 2023 17:57:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9ACB28D00
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676415418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F/EyZtc/c4hULHkzUWu3gLrNDX4NGHDqf7vxGPy2BCQ=;
-        b=JTVFvuwU0aYI15OKztuXlSY5Zn6fPvKrT5/s6UP6VyIV0/M5oBP8NBL91YBna9pW1oRGKC
-        M9UIkyHU2KoitPVARKKnUGEUf7q7SjWS9pHpnm0CHJb+R5ik40zpFEojbxI3x2WELf/bcj
-        MXyvRmzLNmAmhqMBHD6i6LcNgxldDShTZpia5gJ4x3aX0papVtDHgBM0wTzcpVCAv/UU/H
-        qQ4m5Y1rkLvL3EGwlVlZpoARxMZg9nJ70bGhvnv5Ho0Swh+cG/hoYXcatpwI9U5nth933d
-        QDiA6Zf8MqOOQ3FM1RPPfldpH4i18PEpYMsnJLY8/KwFTOEHgvBov51ALxqQPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676415382;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F/EyZtc/c4hULHkzUWu3gLrNDX4NGHDqf7vxGPy2BCQ=;
-        b=FdKkpmd6Vl01v2MUrlXi38TF1la6Ov1yO5PXcE+QwYxJ9xYhpL6QVuogIMpgvp646C+zVw
-        hset+cBK3FjlYZBg==
-From:   "tip-bot2 for Srivatsa S. Bhat (VMware)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/hotplug: Remove incorrect comment about
- mwait_play_dead()
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230128003751.141317-1-srivatsa@csail.mit.edu>
-References: <20230128003751.141317-1-srivatsa@csail.mit.edu>
+        bh=J1eB3+uWhBW292dy0PfFX0Qmu/QtjvuUp1sDv9ahW6A=;
+        b=GJzc4aX4ep2duIogbv7UDVYN1IhPYK1X37nKt6yLy5ZaT0ycYGpRrA5t0OAk3hl8PzkiRC
+        Pl45Ar81B26gvTL5OkRs4j6iQa9v4Rabayo8z/MC/Ye4G1kjY3P5OmJIkhH4wkc9AqNOho
+        GTPwYWENS0wREbyUaF4MsYEqZIVBZho=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-vSwp5IO2PbGa6pnbSTtAuQ-1; Tue, 14 Feb 2023 17:56:55 -0500
+X-MC-Unique: vSwp5IO2PbGa6pnbSTtAuQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB9D11C041AC;
+        Tue, 14 Feb 2023 22:56:54 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C08FA2026D4B;
+        Tue, 14 Feb 2023 22:56:52 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230214171330.2722188-1-dhowells@redhat.com>
+References: <20230214171330.2722188-1-dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, smfrench@gmail.com
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just list)
 MIME-Version: 1.0
-Message-ID: <167641538169.4906.16439407610502454489.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2877091.1676415412.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 14 Feb 2023 22:56:52 +0000
+Message-ID: <2877092.1676415412@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+Hi Jens,
 
-Commit-ID:     fcb3a81d221750d2a54b4e3a82b3efbbeab8780c
-Gitweb:        https://git.kernel.org/tip/fcb3a81d221750d2a54b4e3a82b3efbbeab8780c
-Author:        Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
-AuthorDate:    Fri, 27 Jan 2023 16:37:51 -08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 14 Feb 2023 23:44:34 +01:00
+If you decide not to take my patches in this merge window, would you have =
+any
+objection to my patches 1-3 and 10-11 in this series going through Steve
+French's cifs tree so that he can take my cifs iteratorisation patches?
 
-x86/hotplug: Remove incorrect comment about mwait_play_dead()
+Patches 1-3 would add filemap_splice_read() and direct_splice_read(), but =
+not
+connect them up to anything and 10-11 would add iov_iter_extract_pages(). =
+ I
+can then give Steve a patch to make cifs use them as part of my patches fo=
+r
+that.
 
-The comment that says mwait_play_dead() returns only on failure is a bit
-misleading because mwait_play_dead() could actually return for valid
-reasons (such as mwait not being supported by the platform) that do not
-indicate a failure of the CPU offline operation. So, remove the comment.
+This would only affect cifs.  See my iov-cifs branch:
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230128003751.141317-1-srivatsa@csail.mit.edu
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
+/?h=3Diov-cifs
 
----
- arch/x86/kernel/smpboot.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+for an example of how this would look.
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 55cad72..9013bb2 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1833,7 +1833,7 @@ void native_play_dead(void)
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
- 
--	mwait_play_dead();	/* Only returns on failure */
-+	mwait_play_dead();
- 	if (cpuidle_play_dead())
- 		hlt_play_dead();
- }
+David
+
