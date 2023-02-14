@@ -2,197 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C669677E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B07696783
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbjBNPAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S233366AbjBNPBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjBNPAp (ORCPT
+        with ESMTP id S231910AbjBNPA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:00:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC51BDA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676386803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Y0i1G7CGmJ3aU/RrjzieSXfqNBmOoSoOUJ9sUny07Y=;
-        b=akN2hNUFRAe3BAFuc+n9UEozlziGVRwbgrJIe/3Kx0wfiYRdMizMLaYkK7zmnjRXbjr+4q
-        9E4CaPbhmEzXOGve2PONuZcZTbzoCYQdDa1BNmh7rY80AziUzuxxTq0hM09wM1fIMrAx1b
-        BKWNlIKp33v1WgXfz7Ei6XH8HI8hQjk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-150-QGNzbRPXO_qG8Z47ZKTgdw-1; Tue, 14 Feb 2023 10:00:01 -0500
-X-MC-Unique: QGNzbRPXO_qG8Z47ZKTgdw-1
-Received: by mail-ej1-f69.google.com with SMTP id jo5-20020a170906f6c500b008b133fc52e9so1009520ejb.22
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:00:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Y0i1G7CGmJ3aU/RrjzieSXfqNBmOoSoOUJ9sUny07Y=;
-        b=KpjsmDWxPJ1pUuljmRfkWhCq2RZ6aiEkvkQ5uBjlWjtSNHU2O3RsxaoZTLEuczSU4+
-         4hlqzWYZrUhH+qqs+3Jvp5zWf+6daF5AomGYzvtEhAdGWc/9Y1s3gO9HqNonkoJoTGuE
-         sxkjooN3A5crg/9KE0zFVh6HTfdaWsoY0WF3w+J+i0MOKvgVj4wuGRZ6D8T/EDamK1nT
-         HvGWnkCUOsihMntmsvtOWGC4F+QO+e3d93jOrYrFcnajybMrFnBwH3cX62LnIAktsGZz
-         cE4w5fyf+TEPQ5p5HKK0B9Tp3UP6PrYXCH9ZUyxGFU/y/1FMWpXj31CRPD914DA+Qf4K
-         qm3g==
-X-Gm-Message-State: AO0yUKVzWgiFMhf28DL9MH6LcqYnI9x1HMeDKgpN2+oDYcsjCPtofLlJ
-        5qTdna5QLY1K4CIBa6sjzLiyJBOPpSXbuPDjakKOUzfxnuVS60Zg72XuKXpioCGn6NmmbRmrbnC
-        pGUKwQcQx1x1T+ueICElQya2h
-X-Received: by 2002:a50:aac2:0:b0:4ac:bf55:7d69 with SMTP id r2-20020a50aac2000000b004acbf557d69mr2608257edc.42.1676386800577;
-        Tue, 14 Feb 2023 07:00:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set+cwMTzgQSeX9+VMvJQqzXqjKyplrTQ3LHy4WXUktpA6qt/fyjC2BwIKZEEbgoTe3bf1P8iGQ==
-X-Received: by 2002:a50:aac2:0:b0:4ac:bf55:7d69 with SMTP id r2-20020a50aac2000000b004acbf557d69mr2608237edc.42.1676386800308;
-        Tue, 14 Feb 2023 07:00:00 -0800 (PST)
-Received: from [192.168.43.127] ([109.37.137.201])
-        by smtp.gmail.com with ESMTPSA id r10-20020a50c00a000000b004acd14ab4dfsm2041132edb.41.2023.02.14.06.59.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 06:59:59 -0800 (PST)
-Message-ID: <a3a2ca3b-9f9d-58d2-d0f0-0035291d81c5@redhat.com>
-Date:   Tue, 14 Feb 2023 15:59:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Regression] Bug 217026 - Backlight control broken on kernels
- 6.1.4+
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Daniel Dadap <ddadap@nvidia.com>
-Cc:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, albimarini4283@gmail.com
-References: <197e2991-9d0a-4cb3-e2d3-f0f58fb28a2e@leemhuis.info>
+        Tue, 14 Feb 2023 10:00:58 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236EC25945;
+        Tue, 14 Feb 2023 07:00:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IB0BuFEcvJcpnKsM0MWAwsGyjpOExbsMk4V83idHVUV7AAs78x154u5NprVMJ9+shiAjz3nDP4VTZF6XXmFMrupMWU/ckcqigsqsMyQjZpQaLwxi4M/pF31xKw7BUjGfC16lBKqFtq81GlYv4HzmCU5kngpCFQz7+bVTeIVPEVGLKcDME1LhHKLF44lLGbvKj0nw/egPT8jRbEvPlmONFfgUJYz1wdJKavMmsH0YUKYvJzMJcDZvi7DtRW6BMRpqAPS6ZvCf5pleHQqWvc7dIl1VaRe/GIA+AQj6nqrDFXXf7smdyc/NJKRPqSVNfCd9lPyXpB/ekElmVcrh0LCOtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PaOhuLbshxSTaphG+NovIwrTSKRg6Hkc1lB4GTevrT4=;
+ b=arbzdgZonZQqtDFxJ2G2i8WOmc00qnwNVJKnU7xWSXe63R4lX5qmScSi1bylDc3apKqrDRfeqPCvmTU2pQptVjK8f2n7Om8LVnpBsUkU+B+YU6lluB9zoiEDKkm4q2782CFsgm+Dex8n5uLvDSd6jrrHMjMPOtAW4SvUMtxErmMs6P8qbElPLl2nplKwuz+fEUWAQsN63ZAuNrl2FYEpcOXnW+kBLXIMUqStiK+oksWerSJjzXofxO+KqsmZR2P4R1zK/mjOxSN1Q325MbsXMbMMlOcAp9SafIDPb8FBGwNw+zaayd48UJXMWTmuhoJCWkWPt/v5YjthdUds7GbaAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PaOhuLbshxSTaphG+NovIwrTSKRg6Hkc1lB4GTevrT4=;
+ b=n8P4yrTIdYPJ52b8Sy4NPDWS8YKc8MWLU/NtLvtjNgfV1ujQJVfCohdMyhEcdJbouRuYXpyo27dfw6jgdUAcCsuz3CFUzA6C0XH7UYLgCMHkGqTT7DZePIFGhMnj4ElYeIH/yul4cJiOkThqGfd/IseBj2v6oVDKt1plip9BgeA=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH7PR12MB6538.namprd12.prod.outlook.com (2603:10b6:510:1f1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Tue, 14 Feb
+ 2023 15:00:53 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c%5]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
+ 15:00:52 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dbilios@stdio.gr" <dbilios@stdio.gr>, Len Brown <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH 2/2] ACPI: x86: Add more systems to quirk list for forcing
+ StorageD3Enable
+Thread-Topic: [PATCH 2/2] ACPI: x86: Add more systems to quirk list for
+ forcing StorageD3Enable
+Thread-Index: AQHZP/Mm6AFdqfdHpUiBXMFpR3XHoq7OhvgAgAAAQpCAAAKPgIAAADtw
+Date:   Tue, 14 Feb 2023 15:00:52 +0000
+Message-ID: <MN0PR12MB61012E7DCCF3397D6DF5679AE2A29@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230213213537.6121-1-mario.limonciello@amd.com>
+ <20230213213537.6121-2-mario.limonciello@amd.com>
+ <CAJZ5v0j0GYyrF33=7ginfhYMrNyD=EDUK0RuHHYkKJ2VZAQnsQ@mail.gmail.com>
+ <MN0PR12MB61018CBDE5DBBAB7C65F9F4AE2A29@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CAJZ5v0hD2evYkZFmxv+pwF34UUr4VV1HGBvcjbtW_RMD6a6vpg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hD2evYkZFmxv+pwF34UUr4VV1HGBvcjbtW_RMD6a6vpg@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <197e2991-9d0a-4cb3-e2d3-f0f58fb28a2e@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-02-14T15:00:51Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=39585526-a871-44ae-9a8b-a2dce8ea3a72;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-02-14T15:00:51Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 650ff50a-c4ca-4670-9866-2f9194eaf436
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|PH7PR12MB6538:EE_
+x-ms-office365-filtering-correlation-id: a7d0136e-1d86-4f91-5554-08db0e9c4474
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2QxW0KOnMsmNVpjknYRBiJxPvjBRsgZ3W0WWtqZWMhInRxD/PzMtreIXX+Ba0sLAv/V3I4F07PWfso7VPBm+9EluyQoSR01Py72F8n8Fwt1VjSZ6XQe5NLBpSbPciPX9DoFMnAiEkhrLB7rFwN+iVg5DCs7HgtNk+R4jDAlfmBPsk+XYM93BOgAKrq3Trn+vro7APS7v4wFd1XZ5ML9RvGUs7z5i90ImfcSEPW+BHGsJFGZdWtMMk5ZQqHFJU3Azjn+OABz6AvXXEwiP1H8mWLX7V6keaQdAPzOfbF1E+PmP4D7MDhhfybteCL0l6O/c7hbiRo9cvxZNNvOtCGPDrbEwe1osibWArAAhE8tMYdA2tECI97GqGSHx9q5HactulM7Ew1gq1f5sXM7wC+UK7vw8yd7DK1InpwJBlwvLfZOgp7P2oruakmFdtNUwp1gl0cVuKJZ49Ekk4W/1xv3/zfMC6NAsOl0ZUJ66sOmCZ/szaTrOYt/s0muRPWVmluJxe7kLGF//TAWbJr58D/pa6+3ybQFv69TqmG4awlFoHp7JWdHLA5btu8Ur7NIVbIP7onp8BCS6c2+bVmEyZZ64VBEY8kQqK+TZa0WodrnvQvuX1krdDjo+v6kxwyTbzBQs8+dvcAYmSWlWKSC6EiOZ4D3drEgMRBLbaSfzBB2DL4BAk8jJa8fbbInVC3EE4HSk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(346002)(396003)(136003)(451199018)(66446008)(54906003)(316002)(66476007)(4326008)(66556008)(6916009)(8676002)(66946007)(64756008)(76116006)(52536014)(8936002)(41300700001)(66899018)(5660300002)(6506007)(7696005)(71200400001)(966005)(478600001)(122000001)(9686003)(26005)(2906002)(53546011)(186003)(55016003)(33656002)(83380400001)(38100700002)(38070700005)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NkZPNjBVN0R4VmdjMjJhYjNCOG9mSDVZNnQrSlZibThmUTVyam1KVnNzU2tu?=
+ =?utf-8?B?NEhrVmROcTVQNlFlZEJ1ZGc5MC9YV0pzNGRLb05ZUk5TOHRpbVlVNUt5UjQ2?=
+ =?utf-8?B?R3VjcjBxTTdtcFZtdVdKb3dNTmV2Rnc4eGx2ckxwejJsQmRzZWVVb3U4SURW?=
+ =?utf-8?B?cTNoQkNPd1g2cWJxdWRLcStDSnRjWTFjbzRqOGJJbkkwNDRnWjZSN2xJR1Rk?=
+ =?utf-8?B?eWZ1WHc0OVEvV1VUazVYZHdNWE1BYlBNa3RuQUNwZGcwNVFYcTJ0MGlGRDlU?=
+ =?utf-8?B?SE4xNzF0aXlJUll0c21BU0xDcEVPV1hDOEc4SU01dUdRdWh2ZWdsenB4M3lB?=
+ =?utf-8?B?ZFNyYktEOFBpWEplUnNtMmZqMFVqdCtRR1dTZ2xjNDl6bzZZaTdBNkVRYStC?=
+ =?utf-8?B?bWN5bGw1eGdYMGFHTjhubWVuRUNaa010Z1IzM2NhWlNtd0VTTzNKQSswSVlH?=
+ =?utf-8?B?ajZOSFAvc0NobGlGR09oeWpvRTc1RzkvTWFJVURQQ0R6eUVyUnRXblRFSkQr?=
+ =?utf-8?B?L2hPbnRLamhkZ29qV1VvVXV4Skc4NzU4UjErSEJWUnNocnNqSXZPMWFvbE5r?=
+ =?utf-8?B?SXFXditBNjlSSnB3S3ppbit1aldsa2RxNGJBRFRnbGh0WGdSS1dpSFcwTmJj?=
+ =?utf-8?B?b1FKMGM0ajEzb3VaQUlrSS9qWmNYeWloeUg2TmJHdDEvWDM4WnMwVUJHZmV0?=
+ =?utf-8?B?QXI1dkt2UzlpOWE5V2lVQ24xcCtVWHh3VncrcmNLNDRqYmdjWTJYZHBzZ3R2?=
+ =?utf-8?B?Sy9MRWRUbHZ1RE9CYi9OLzBiVGVYbFZlV1NSRkpOV1lxSFhiajVjUUVsUmVC?=
+ =?utf-8?B?ckpDVW90MDlqUmUxalNXcGs5ZlBNbGNxYUZwQ3d3QXc5SEZIbzR0eTBHdXZo?=
+ =?utf-8?B?Q0Y2SXpsTWtEckRnL3d1WUozbDZ4djhlVVdKMkpPRVI5SlBYckVuWjJpZWJ2?=
+ =?utf-8?B?V1FDZkQ5MnBCNFAxRStySnZ0RFpiNm9ramR3QkFxVDJ4TEdUQ3FDZHNyVFM1?=
+ =?utf-8?B?Ukd6RGVoUVJJK0ttV2t3S1duZ1A3YTFJTFU3aWk2eW9Gbml6RFRJRk1yL1Fa?=
+ =?utf-8?B?MTRlR2hreHJtVzV2QTVsaXkraEJVMXYvSDZOdHUxalhKSHM2UC9sU3ArUk02?=
+ =?utf-8?B?VWZsVXJnVG9rem9YT25qUGc3TmJuN0lVSVdHRlhSYXlNTWI2RnBlN0lMV241?=
+ =?utf-8?B?Ylp5Y2V6VGNoSTV5OXk1UGduT1FnZVpFb0tXM2hYbkhSMFY1dWhTWTNZSTZh?=
+ =?utf-8?B?Y2VOR1IzOS80YVV3NzVQeXlWQlU5SnhCam1HV3pkUC9nM0ZWOUVFekh0OW56?=
+ =?utf-8?B?U0xzcDIwVHZ0Ti9jUUNYdlFSSlE2MEpEcURnRnFCbVhxYTB6OFJZYUp0MGNE?=
+ =?utf-8?B?RGtKQU5adzNLMEV3UnlrZ1UzT1JTUjJSc2JrSlJjMVBZWGtYWlZXWGRxc2E4?=
+ =?utf-8?B?UUhhRk00WUxRUXcwZXdkbHhldUpha1NiYnk4dXJDZElmZ2hQNHZoYXh6WElS?=
+ =?utf-8?B?dkg1OWlsQzVuVU9oNkpQYnRBNUlhSWNUVUNRSFI2b1pmNC8zRTM4dlJyZm03?=
+ =?utf-8?B?MnNERE1seGNWdS9BR3FlT2gvamxLcUVZYk1BT0NIV0tlZmkzOVBFQTlKYi90?=
+ =?utf-8?B?WHJWckhLMDYxL0ZjMU0yUi9BZy81cURweDROVVVuRVIzUTNRMlZyVjFNcGl1?=
+ =?utf-8?B?L2xSN2tmOWFoMkRRZlp1dmVQTWhyZ1VEbXJ3TlV6c29uRStrMUtwTEtrbGs3?=
+ =?utf-8?B?ejNmZ2N3eTNzTHF3Y3E1UGJTSmpxZHJhNE5IN0FSM01vZDZoTGUrUTZsbDB4?=
+ =?utf-8?B?eGl4Y2QrdEFDcGxCdUllY2VDMkZhMXVYRE0xMFVia044aFk1S2d1THZQeHJK?=
+ =?utf-8?B?YTEzV0I0UEp5NGFjajdic2ZFcW1rNEhITHRVVmZXZVN3WFcrTDlrTXpORUVl?=
+ =?utf-8?B?OGRTdFNhZjdWNldBM3VuWnV1dXlCVHVRYnU0WDdBeEtuaWtEYmU1MU1jM3Qv?=
+ =?utf-8?B?OGtuUnpjSDBLMnJ4aEhhSmpWSXBjOUZoRWlMU0FCVVJ4N1dqQVJyNEdDd1hL?=
+ =?utf-8?B?cXRmckJWZkdnNzZCN0JER3Z6WWl6bk9keUx6aFIyOUZLLzVqWTcxcSt0bUgz?=
+ =?utf-8?Q?+1Qg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7d0136e-1d86-4f91-5554-08db0e9c4474
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 15:00:52.9062
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8t8QXNL+ev86FIyKuC/8uAfxduxscrHbcYpIDDECd/CVs/IqOtcBtB/wZ0in7pW/y0scQfb2QsMralQisqP09A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6538
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten,
-
-On 2/14/23 11:44, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217026 :
-> 
->>  albimarini4283@gmail.com 2023-02-12 20:57:03 UTC
->>
->> Brightness control does not work with AMD Ryzen 5800H when using hybrid
->> graphics on kernel updates 6.1.4+. I am using a Lenovo Legion Slim 7
->> (2021, 15ACH6) currently running Arch Linux with the mainline kernel
->> 6.1.11, however, I have been testing my experience with this issue on
->> every point revision from 6.1.3 to 6.1.11.
->>
->>       CPU: AMD Ryzen 5 5800H with Radeon Graphics
->>       GPU: NVIDIA RTX 3060 Mobile / Max-Q (Proprietary NVIDIA driver,
->> tested with 525.78.01-1 (version prior to 6.1.4 being released) and
->> 525.89.02-1 (latest driver at time of writing))
->>       System Memory: 40 GB
->>       Display: Laptop (Laptop Screen)
->>
->> The only parameters applied at boot on my system are: nvidia-drm.modeset=1
->>
->> How to reproduce the issue:
->> Enable hybrid graphics/Optimus in BIOS setup.
->>
->> Prior to kernel version 6.1.4, /sys/class/backlight contained two entries:
->> amdgpu_bl0 and nvidia_wmi_ec_backlight
->>
->> With these two entries in /sys/class/backlight , I was able to write to
->> their respective brightness files directly or use a program like light
->> to change the values. Those values would change the brightness of the
->> screen depending on if I was using the AMD GPU or NVIDIA GPU to display
->> the current application. I could set these values to roughly the same
->> thing to achieve an overall complete brightness experience regardless of
->> whether or not I was currently running an application on my integrated
->> (AMD) GPU or dedicated (NVIDIA) GPU.
->>
->> Then, upon updating to kernel versions 6.1.4+, there is no longer an
->> amdgpu_bl0 entry in /sys/class/backlight , just a
->> nvidia_wmi_ec_backlight entry, making it impossible for me to change the
->> brightness on my display when using the iGPU. Interestingly, on kernels
->> 6.1.4+, running "journalctl -b -0 | grep backlight" returns an output
->> "amdgpu: [drm] Skipping amdgpu DM backlight registration", which was not
->> present in prior kernel versions.
->>
->> However, if I instead prepend the option "acpi_backlight=native" to my
->> kernel command line options at boot, "amdgpu_bl0" is once again present
->> in /sys/class/backlight but "nvidia_wmi_ec_backlight" has now
->> disappeared and is nowhere to be seen making it so I can change the
->> brightness when using the iGPU, but the brightness is stuck at max when
->> using the dedicated GPU. Running the above journalctl command at this
->> point returns no errors relating to my AMD GPU and does not mention
->> anything about the NVIDIA GPU. Trying different acpi_backlight options
->> on 6.1.4+ does not fix the issue and instead removes functionality.
->> acpi_backlight=vendor makes an entry called "ideapad" pop up in
->> /sys/class/backlight with nothing else. Changing the brightness values
->> in ideapad does nothing.
->> acpi_backlight=video makes only two entries appear in
->> /sys/class/backlight, acpi_video0 and acpi_video1. Changing the
->> brightness values in either of these directories does nothing.
->> acpi_backlight=none causes nothing to appear under /sys/class/backlight.
->>
->> If hybrid graphics is disabled, the display is connected to the NVIDIA
->> GPU and /sys/class/backlight/nvidia_0 is present, the NVIDIA driver can
->> change the display brightness without a problem.p
->>
->> Below is my lscpi -nn and dmidecode outputs on kernel 6.1.3 and 6.1.11.
->> [...]
-> 
-> See the ticket for more details.
-> 
-> [TLDR for the rest of this mail: I'm adding this report to the list of
-> tracked Linux kernel regressions; the text you find below is based on a
-> few templates paragraphs you might have encountered already in similar
-> form.]
-> 
-> BTW, let me use this mail to also add the report to the list of tracked
-> regressions to ensure it's doesn't fall through the cracks:
-> 
-> #regzbot introduced: v6.1.3..v6.1.4
-> https://bugzilla.kernel.org/show_bug.cgi?id=217026
-> #regzbot title: backlight: brightness control stopped working on a Ryzen
-> system with hybrid graphics
-> #regzbot ignore-activity
-
-Thank you for forwarding this. I have just added the following comment
-to the bug:
-
-"""
-Yes this has already been reported on the malinglist.
-
-There unfortunately is a firmware bug on the Lenovo Legion models.
-
-On models with the Nvidia WMI EC backlight interface, when the laptop is configured in dynamic mux mode in the BIOS (1) the backlight should always be controlled by the Nvidia WMI EC backlight interface. So in theory the kernel is behaving as it should according to the documentation here.
-
-But as you found out, some Legion models are not behaving as the Nvidia WMI spec says they should behave. This is also why you needed the hack/script to write brightness values to both backlight devices at the same time with older kernels.
-
-Daniel Dadap from Nvidia is looking into this, but I'm afraid that we don't have a solution yet.
-
-1) So that you can switch at runtime which GPU is connected to the builtin LCD panel
-"""
-
-Lets continue this inside bugzilla.
-
-Regards,
-
-Hans
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCg0KDQo+IC0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQo+IEZyb206IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9y
+Zz4NCj4gU2VudDogVHVlc2RheSwgRmVicnVhcnkgMTQsIDIwMjMgMDg6NTkNCj4gVG86IExpbW9u
+Y2llbGxvLCBNYXJpbyA8TWFyaW8uTGltb25jaWVsbG9AYW1kLmNvbT4NCj4gQ2M6IFJhZmFlbCBK
+LiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz47IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmc7DQo+IGRiaWxpb3NAc3RkaW8uZ3I7IExlbiBCcm93biA8bGVuYkBrZXJuZWwub3JnPjsgbGlu
+dXgtYWNwaUB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzJdIEFDUEk6
+IHg4NjogQWRkIG1vcmUgc3lzdGVtcyB0byBxdWlyayBsaXN0IGZvciBmb3JjaW5nDQo+IFN0b3Jh
+Z2VEM0VuYWJsZQ0KPiANCj4gT24gVHVlLCBGZWIgMTQsIDIwMjMgYXQgMzo1MiBQTSBMaW1vbmNp
+ZWxsbywgTWFyaW8NCj4gPE1hcmlvLkxpbW9uY2llbGxvQGFtZC5jb20+IHdyb3RlOg0KPiA+DQo+
+ID4gW0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQo+ID4NCj4gPg0KPiA+DQo+ID4g
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogUmFmYWVsIEouIFd5c29j
+a2kgPHJhZmFlbEBrZXJuZWwub3JnPg0KPiA+ID4gU2VudDogVHVlc2RheSwgRmVicnVhcnkgMTQs
+IDIwMjMgMDg6NDkNCj4gPiA+IFRvOiBMaW1vbmNpZWxsbywgTWFyaW8gPE1hcmlvLkxpbW9uY2ll
+bGxvQGFtZC5jb20+DQo+ID4gPiBDYzogcmFmYWVsQGtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2
+Z2VyLmtlcm5lbC5vcmc7IGRiaWxpb3NAc3RkaW8uZ3I7DQo+IExlbg0KPiA+ID4gQnJvd24gPGxl
+bmJAa2VybmVsLm9yZz47IGxpbnV4LWFjcGlAdmdlci5rZXJuZWwub3JnDQo+ID4gPiBTdWJqZWN0
+OiBSZTogW1BBVENIIDIvMl0gQUNQSTogeDg2OiBBZGQgbW9yZSBzeXN0ZW1zIHRvIHF1aXJrIGxp
+c3QgZm9yDQo+IGZvcmNpbmcNCj4gPiA+IFN0b3JhZ2VEM0VuYWJsZQ0KPiA+ID4NCj4gPiA+IE9u
+IE1vbiwgRmViIDEzLCAyMDIzIGF0IDEwOjM1IFBNIE1hcmlvIExpbW9uY2llbGxvDQo+ID4gPiA8
+bWFyaW8ubGltb25jaWVsbG9AYW1kLmNvbT4gd3JvdGU6DQo+ID4gPiA+DQo+ID4gPiA+IGNvbW1p
+dCAwMThkNjcxMWMyNmU0ICgiQUNQSTogeDg2OiBBZGQgYSBxdWlyayBmb3IgRGVsbCBJbnNwaXJv
+biAxNCAyLWluLQ0KPiAxDQo+ID4gPiA+IGZvciBTdG9yYWdlRDNFbmFibGUiKSBpbnRyb2R1Y2Vk
+IGEgcXVpcmsgdG8gYWxsb3cgYSBzeXN0ZW0gd2l0aA0KPiBhbWJpZ3VvdXMNCj4gPiA+ID4gdXNl
+IG9mIF9BRFIgMCB0byBmb3JjZSBTdG9yYWdlRDNFbmFibGUuDQo+ID4gPiA+DQo+ID4gPiA+IEl0
+IGlzIHJlcG9ydGVkIHRoYXQgVm9zdHJvIDU2MjYgc3VmZmVycyBzYW1lIHN5bXB0b21zLiBBZGQg
+dGhpcyBvdGhlcg0KPiA+ID4gPiBzeXN0ZW0gdG8gdGhlIGxpc3QgYXMgd2VsbC4NCj4gPiA+ID4N
+Cj4gPiA+ID4gU3VnZ2VzdGVkLWJ5OiBkYmlsaW9zQHN0ZGlvLmdyDQo+ID4gPiA+IExpbms6IGh0
+dHBzOi8vYnVnemlsbGEua2VybmVsLm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MjE3MDAzDQo+ID4gPiA+
+IFNpZ25lZC1vZmYtYnk6IE1hcmlvIExpbW9uY2llbGxvIDxtYXJpby5saW1vbmNpZWxsb0BhbWQu
+Y29tPg0KPiA+ID4NCj4gPiA+IENhbiB5b3UgcGxlYXNlIGNvbWJpbmUgdGhlc2UgdHdvIHBhdGNo
+ZXMgaW50byBvbmU/DQo+ID4gPg0KPiA+ID4gT3IgYXQgbGVhc3QgbWFrZSB0aGUgc3ViamVjdHMg
+ZGlmZmVyPw0KPiA+DQo+ID4gSSBsZWZ0IHRoZW0gc3BsaXQgc28gdGhhdCB3ZSBjb3VsZCByZXZl
+cnQgb25lIGlmIHRoZSBCSU9TIGlzIGZpeGVkIG9uIG9uZQ0KPiA+IGluIHRoZSBmdXR1cmUuICBI
+YXBweSB0byByZXNwaW4gd2l0aCBzZXBhcmF0ZSBzdWJqZWN0cy4NCj4gPg0KPiA+IEJ1dCBiZWZv
+cmUgSSByZXNwaW47IHNvbWV0aGluZyBlbHNlIEkgd2FudCB0byBvZmZlciBhcyBhbiBpZGVhIHRv
+IGF2b2lkIHRoaXMNCj4gbGlzdA0KPiA+IGdyb3dpbmcuDQo+ID4NCj4gPiBUaGV5IGFsbCB1c2Ug
+dGhlIHNhbWUgQ1BVLiAgU28gd2UgY291bGQganVzdCBhZGQgdGhlIENQVSBtb2RlbCB0aGF0IGFs
+bCBvZg0KPiB0aGVzZQ0KPiA+IHVzZSB0byB0aGUgZm9yY2UgU3RvcmFnZUQzRW5hYmxlIGxpc3Qg
+YW5kIHRha2Ugb3V0IHRoZSB3aG9sZSAoZ3Jvd2luZykgbGlzdC4NCj4gDQo+IFdlbGwsIEknZCBy
+YXRoZXIgZG8gdGhpcywgYnV0IGluIHRoZSBuZXh0IGN5Y2xlLg0KPiANCj4gPiBXaGljaCB3YXkg
+d291bGQgeW91IHByZWZlcj8NCj4gDQo+IEZvciB0aGlzIG1lcmdlIHdpbmRvdywgcGxlYXNlIHJl
+c3BpbiB0aGUgY3VycmVudCBwYXRjaCBzZXJpZXMgYW5kIG1ha2UNCj4gdGhlIGNoYW5nZXMgYXMg
+cGVyIHRoZSBhYm92ZSBlYXJseSBhZnRlciA2LjMtcmMxLg0KPiANCj4gSXQgbWF5IGJlIHN0aWxs
+IG5lY2Vzc2FyeSB0byBwdWxsIHRoZW0gaW50byA2LjMtcmMgbGF0ZXIsIGlmIG1vcmUNCj4gaW5z
+dGFuY2VzIGFyZSByZXBvcnRlZCBvciBkaXNjb3ZlcmVkLCBidXQgd2UnbGwgc2VlLg0KDQpTdXJl
+LCB0aGFua3MuICBJJ2xsIHJld29yayBpdCBmb3IgdGhpcyBhbmQgd2FpdCB1bnRpbCA2LjMtcmMx
+IHRvIHNlbmQgaXQuDQo=
