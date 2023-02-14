@@ -2,68 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738B16955F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 02:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9473A6955FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 02:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjBNBbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 20:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S230353AbjBNBd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 20:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjBNBbN (ORCPT
+        with ESMTP id S230245AbjBNBd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 20:31:13 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D7E518AB6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:31:10 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8CxSNld5OpjyFEAAA--.772S3;
-        Tue, 14 Feb 2023 09:31:09 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxib1b5OpjgJQyAA--.28695S3;
-        Tue, 14 Feb 2023 09:31:07 +0800 (CST)
-Message-ID: <ec49593a-60a4-be91-0fb2-af517eaf6d6a@loongson.cn>
-Date:   Tue, 14 Feb 2023 09:31:07 +0800
+        Mon, 13 Feb 2023 20:33:28 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69EF4238
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676338406; x=1707874406;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6O0cKiof/xhZj67mC+vtf+PEcWgOhr6C3UqDaX253AU=;
+  b=ZtElqt8rArRhtvkVf2hNO8h4jmnovSnwR5cyL1Yfx5iUP1cmSbbttyig
+   85aXXQEY5UbPEZkKkL36IXi2F3PgF5IPAbNJADOAz6zsgnMQIDnUzPFPK
+   /jahUHUmtFXKxYYracjkBtOWXMnB75JZxzhrHz3kN03Os00xHzgHZGflL
+   0kr6hrCQWbfJfiXywYovBYqz1b127VqKks6nruxKxDx5CaQBDMZxbpSX4
+   9WGVRJ589KF5p/99tZiwbuQQqrlWxKSXU2TVtQ6y5Z5eNDaQQmwcCwC37
+   unlsgIWFzSgInD9FraTpMNngWLb4vM4nyFMENp9AFY4S97gyNU30RYK0L
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669046400"; 
+   d="scan'208";a="223249309"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 09:33:25 +0800
+IronPort-SDR: hkl3w7mxzrTxYsU1zqED1wbMTuPf8TKMg/0K38RtBHfKmg8Rq3ICuYkkBhcQRdjTaii2rg4Bfb
+ psd9KJGva5Pg+CDdg8w1iP8bsnqD23oaOCjb+z0dbzQc4cCzlnaEIHSu3EcV8146ug2In7okDy
+ huRJfpwJlPwLthZLRlS4+wloFSmS0tH++txvyK8HB2wDUETclkoKcyQrxjvwDb+SYL2fnyd6cf
+ VK2808Gv4BWfC+BPv+4UNY2DAAgXMWHDrzota5uYIWU35GNHwdzUvvHCeVmEKjVXMkRFuWDGKt
+ O6s=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 16:50:34 -0800
+IronPort-SDR: voyC81FWCS3kc4D+Ne35IZYnPK/yg2nAr3OXhWRLjB86NUa1xBqQrursQEXhNOsFOuIEXSqnVL
+ XCPT/y1KfHAT6m7jmRR/7KCm0Y4EeUQzqOBH/dX0ivNEFfEuUXsj5G9WHno42Ta4LTk253FmAA
+ 98ky74XN8fUJeF75Wp5HXa+1dWfn651H3ET24BnL+Owe1f6MPPcVKPg9CtEJId29mrop+befd/
+ haTVwyUYlP3ql7Dn58yotuL8uI8mNUnOgiNJA+cW3eddlPYrWPhLRrVUXDjtO1MF3qtnF8p4ap
+ eac=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 17:33:25 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PG3d15909z1RvTr
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:33:25 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676338405; x=1678930406; bh=6O0cKiof/xhZj67mC+vtf+PEcWgOhr6C3Uq
+        DaX253AU=; b=dVGgCOL8MI0ix9REakmGSKKN0VY0iIig3sG6tbi9NK0TuFA50At
+        m2b/PGDUCKY1W/uLkoH84nv8oKLGfS0xu8kiL0SkFHSolRX81+xTPDfs78joCd7D
+        6zY94TUAL/F3KUudyXjs+Fu1cyKkS+bgYR0pU65MZt2r7JkXGgnCkV7e5E/ur6gG
+        fHi7m/DKGzghHRN++8NeuJ8QYIyIZY2/LZmjhzndRoucFLiuWghCW6GxZUFQZ/7g
+        hYwJS8l5Yr88v5ODtRjY3NHXZP0aag9Cz23hAvRWjHvqt4ra7WKlvczOe5ghLeZy
+        VomkDlMPi0B3nszWtPq8WC5IWKKKHwCoHHw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Br5xwAMj3xfX for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Feb 2023 17:33:25 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PG3d04hy0z1RvLy;
+        Mon, 13 Feb 2023 17:33:24 -0800 (PST)
+Message-ID: <b7626a3c-cf6b-45a2-0342-3bafa8090dcf@opensource.wdc.com>
+Date:   Tue, 14 Feb 2023 10:33:23 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] LoongArch: add checksum optimization for 64-bit system
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ata: libata-core: Disable READ LOG DMA EXT for Samsung
+ MZ7LH
+To:     Patrick McLean <chutzpah@gentoo.org>
+Cc:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
+References: <20230210215151.812839-1-chutzpah@gentoo.org>
+ <dce110de-649d-cde8-9401-346675c95263@opensource.wdc.com>
+ <20230213121745.2847a9ff@moya.linuxfreak.ca>
 Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230209035839.2610277-1-maobibo@loongson.cn>
- <e6bb59c32134477aa4890047ae5ad51b@AcuMS.aculab.com>
- <741b2246-d609-ccc6-bf55-d6b0b5e54b54@loongson.cn>
- <2aa6243491784e74960182dc12968170@AcuMS.aculab.com>
- <CAAhV-H7BgBASt_CpSQgS6MNbzxODhoq8ykK5ZAn2y3ZOekXM9g@mail.gmail.com>
- <0fe7ed7c-7161-65d5-a09f-12db6ccda05a@loongson.cn>
- <b17430342e9e4c39b53004d842ea9c55@AcuMS.aculab.com>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <b17430342e9e4c39b53004d842ea9c55@AcuMS.aculab.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230213121745.2847a9ff@moya.linuxfreak.ca>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxib1b5OpjgJQyAA--.28695S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFWUWry3Zr1UAw15Cw4xtFb_yoWrZryrpF
-        W5GF1rG3ZrZFn5Jrn7tF47u395Zws5GryUGF45JrWYv3s8CF4ftayDKrZ0vanFkr4SkFya
-        v3Wqvw1xWF1DAw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,141 +99,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/2/10 19:08, David Laight 写道:
-> From: maobibo
->> Sent: 10 February 2023 10:06
+On 2/14/23 05:17, Patrick McLean wrote:
+> On Sat, 11 Feb 2023 12:11:48 +0900
+> Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
+> 
+>> On 2/11/23 06:51, Patrick McLean wrote:
+>>> Samsung MZ7LH drives are spewing messages like this in to dmesg with AMD
+>>> SATA controllers:
+>>>
+>>> ata1.00: exception Emask 0x0 SAct 0x7e0000 SErr 0x0 action 0x6 frozen
+>>> ata1.00: failed command: SEND FPDMA QUEUED
+>>> ata1.00: cmd 64/01:88:00:00:00/00:00:00:00:00/a0 tag 17 ncq dma 512 out
+>>>          res 40/00:01:01:4f:c2/00:00:00:00:00/00 Emask
+>>>          0x4 (timeout)
+>>>
+>>> Since this was seen previously with SSD 840 EVO drives in
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=203475 let's add the same
+>>> fix for these drives as the EVOs have, since they likely have very
+>>> similar firmwares.
+>>>
+>>> Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
+>>> ---
+>>>  drivers/ata/libata-core.c | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+>>> index 2ea572628b1c..c4c89d24f84c 100644
+>>> --- a/drivers/ata/libata-core.c
+>>> +++ b/drivers/ata/libata-core.c
+>>> @@ -4045,6 +4045,9 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
+>>>  	{ "Samsung SSD 870*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+>>>  						ATA_HORKAGE_ZERO_AFTER_TRIM |
+>>>  						ATA_HORKAGE_NO_NCQ_ON_ATI },
+>>> +	{ "SAMSUNG*MZ7LH*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+>>> +						ATA_HORKAGE_ZERO_AFTER_TRIM |
+>>> +						ATA_HORKAGE_NO_NCQ_ON_ATI, },
+>>>  	{ "FCCT*M500*",			NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+>>>  						ATA_HORKAGE_ZERO_AFTER_TRIM },
+>>>    
 >>
->> With the test cases
->>   https://github.com/bibo-mao/bench/tree/master/csum
+>> Looks OK, but ATA_HORKAGE_NO_NCQ_ON_ATI is for PCI vendor ID 1002h. AMD
+>> also has vendor ID 1022h. Did you check you adapter vendor ID & tested
+>> this patch ?
+> 
+> We tested this patch, and it resolves the problem for us (we have been
+> using it for several months).
+
+OK. Thanks for confirming. Will apply in a little while. Thanks !
+
+> 
+>> -- 
+>> Damien Le Moal
+>> Western Digital Research
 >>
->> Tested with different buffer size 4096/1472/250/40, here is the output on my
->> loongarch machine. Loops times is 0x100000, and time cost unit is milliseconds,
->> and the smaller value will be better.
->>
->>
->> buf size[4096] loops[0x100000] times[us]: csum uint128 344473 asm method 373391 uint64 741412
->> buf size[1472] loops[0x100000] times[us]: csum uint128 131849 asm method 138533 uint64 271317
->> buf size[ 250] loops[0x100000] times[us]: csum uint128 34512 asm method 36294 uint64 51576
->> buf size[  40] loops[0x100000] times[us]: csum uint128 12182 asm method 23874 uint64 15769
 > 
-> What do those work out as in bytes/clock?
 > 
-> Rather than run 1000s of iterations (and be hit by interrupts etc)
-> I sometimes just use an accurate cycle counter and measure the
-> time for a single buffer (or varying length).
-> Save and print the values of 10 calls and you'll get pretty
-> consistent values after the first couple (cold cache).
-> Then you can work out how long each iteration of the main loop costs.
-> 
-> I think you have to execute 4 instructions for each 64bit word.
-> One memory read, the main add, a setle and the add of the carry.
-> 
-> For a simple cpu that is always going to be 4 clocks.
-> But if there are delay slots after the memory read you can
-> fill them with the alu instructions for an earlier read.
-> You also need an add and bne for the address for each iteration.
-> So unrolling the loop further will help.
-> 
-> OTOH if your cpu can execute multiple instructions in one clock
-> you can expect to do a lot better.
-> With 3 ALU instructions (and one read) you should be able to
-> find a code sequence that will run at 8 bytes/clock.
-> With 4 ALU it is likely that the loop instructions can also
-> execute in parallel - so you don't need massive loop unrolling.
-> 
-> Unless the cpu is massively 'out of order' (like some x86)
-> I'd expect the best code to interleave the reads and alu
-> operations for earlier values - rather than having all
-> the reads at the top of the loop.
-> So the loop would be a repeating pattern of instructions
-> with some values being carried between iterations.
-Part of asm code depends on previous intr in website
-https://github.com/loongson/linux/commit/92a6df48ccb73dd2c3dc1799add08adf0e0b0deb,
-such as macro ADDC
-#define ADDC(sum,reg)                                           \
-        ADD     sum, sum, reg;                                  \
-        sltu    t8, sum, reg;                                   \
-        ADD     sum, sum, t8;                                   \
-these three instructions depends on each other, and can not execute
-in parallel. 
 
-The original of main loop about Lmove_128bytes is:
-#define CSUM_BIGCHUNK(src, offset, sum, _t0, _t1, _t2, _t3)     \
-        LOAD    _t0, src, (offset + UNIT(0));                   \
-        LOAD    _t1, src, (offset + UNIT(1));                   \
-        LOAD    _t2, src, (offset + UNIT(2));                   \
-        LOAD    _t3, src, (offset + UNIT(3));                   \
-        ADDC(_t0, _t1);                                         \
-        ADDC(_t2, _t3);                                         \
-        ADDC(sum, _t0);                                         \
-        ADDC(sum, _t2)
-
-.Lmove_128bytes:
-        CSUM_BIGCHUNK(src, 0x00, sum, t0, t1, t3, t4)
-        CSUM_BIGCHUNK(src, 0x20, sum, t0, t1, t3, t4)
-        CSUM_BIGCHUNK(src, 0x40, sum, t0, t1, t3, t4)
-        CSUM_BIGCHUNK(src, 0x60, sum, t0, t1, t3, t4)
-        addi.d  t5, t5, -1
-        addi.d  src, src, 0x80
-        bnez    t5, .Lmove_128bytes
-
-I modified the main loop with label .Lmove_128bytes to reduce
-dependency between instructions like this, it can improve the
-performance.
-can improve the performance.
-.Lmove_128bytes:
-        LOAD    t0, src, 0
-        LOAD    t1, src, 8
-        LOAD    t3, src, 16
-        LOAD    t4, src, 24
-        LOAD    a3, src, 0 + 0x20
-        LOAD    a4, src, 8 + 0x20
-        LOAD    a5, src, 16 + 0x20
-        LOAD    a6, src, 24 + 0x20
-        ADD     t0, t0,  t1
-        ADD     t3, t3,  t4
-        ADD     a3, a3,  a4
-        ADD     a5, a5,  a6
-        sltu    t8, t0,  t1
-        sltu    a7, t3,  t4
-        ADD     t0, t0,  t8
-        ADD     t3, t3,  a7
-        sltu    t1, a3,  a4
-        sltu    t4, a5,  a6
-        ADD     a3, a3,  t1
-        ADD     a5, a5,  t4
-        ADD     t0, t0, t3
-        ADD     a3, a3, a5
-        sltu    t1, t0, t3
-        sltu    t4, a3, a5
-        ADD     t0, t0, t1
-        ADD     a3, a3, t4
-        ADD     sum, sum, t0
-        sltu    t8,  sum, t0
-        ADD     sum, sum,  t8
-        ADD     sum, sum, a3
-        sltu    t8,  sum, a3
-        addi.d  t5, t5, -1
-        ADD     sum, sum, t8
-
-However the result and principle is almost the similar with
-uint128 c code. And there is no performance impact interleaving
-the reads and alu operations.
-
-Regards
-Bibo, Mao
-
-> 
-> I doubt you'll get a loop to execute every clock, but
-> a two clock loop is entirely possible.
-> It rather depends how fast the instruction decoder
-> handles the (predicted) branch.
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+-- 
+Damien Le Moal
+Western Digital Research
 
