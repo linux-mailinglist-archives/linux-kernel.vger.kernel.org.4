@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A58696A3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BA8696A51
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjBNQs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S232163AbjBNQvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbjBNQsv (ORCPT
+        with ESMTP id S232787AbjBNQum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:48:51 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E86A93FE;
-        Tue, 14 Feb 2023 08:48:48 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id bl15so6365512qkb.4;
-        Tue, 14 Feb 2023 08:48:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nau7lgiudKbh01gy/XQ5sRV2ogzSHbVMQQVqpfepIyY=;
-        b=H0M5c0e2xuyV72DLSzHYxC41sV3A2EJB351Bi8GUtZuUnnl3fUPXtfVqpLpqAaTD1t
-         veM07BgNlys43ZAVAcxg/selzbWZir79lwsUi0c+FuOlDiQvZn4wIlbwXpzVJJfjkhy7
-         OQmpY3/o+MaacAOe3Uw67yY9fsokcUeRJ6DJxTUfMh/IxeB4PLnuCcc4BSMmYshnmkf6
-         +BNCwCxwdDZSbxo86tZ1E2gF1ylHX9m2esqrQ1W/hHHA6dX51vbk3EZoocI7MST1JBXC
-         vxLKAeknEOBOCfLnQFb9KMY22v7it9IjdzLV7PdDPCrwum3oRvTenIuyootEEhEWZPud
-         e60w==
+        Tue, 14 Feb 2023 11:50:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FA22E83C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676393356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CUubzQ7KCAE1aIRENx4rj6ON9/S0MhnolQl1MQ3LvdE=;
+        b=i7hdnp+TUEgUm/AX3XynjIY0d6lLiwAxEZf1I3tsKZkotOtfng6LAXQ/Md3PN70OhElqdk
+        vN+yiYx2qKucJrUtwC+JDEei1u6OlZcI9o8B1rWs/zssqGtiFgvVin/iP06bAB9Fkc62Pb
+        9+IpZgPk0PZNTpLw9Wi25Ef/ssFWYyc=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-358-iayBYkpAM66ocg4tBuZHvA-1; Tue, 14 Feb 2023 11:49:14 -0500
+X-MC-Unique: iayBYkpAM66ocg4tBuZHvA-1
+Received: by mail-pj1-f72.google.com with SMTP id v24-20020a17090ac91800b00233e56ef3a0so3220396pjt.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:49:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nau7lgiudKbh01gy/XQ5sRV2ogzSHbVMQQVqpfepIyY=;
-        b=4MsezhOVPiD+yPRQ0uGBXkoKcxSHq6v1ehBuCoRSPGPyRwT7608GV2snV1SYyY7Sv2
-         OyesTyY75JOM/M/En/QhPKy2tBuxmrd0URrbCp8akomsS5pAYehArQ0l3iflbkBme99T
-         CoFKo58qN9DWiE/9Hmk2baCKCs9RDacbyRL3G0Ble9NfyVhdoJntcPwTf0VKCsXAuNdB
-         OZ7+OLYxsiL93M/btZZjD8w6myCGqL5zei5TwwOiiKqR2tNTvPEHo2PsDY0gWwiFGkGt
-         /QAV8BniWpB7K7/ld+FWG3ZgD3dxzj1U0ogWxOFoqdd/lkgkAJGeC4P3i4DzEl7GXgDx
-         SKag==
-X-Gm-Message-State: AO0yUKUDRWFZMifu8fICu7T1lUVmgDRK60/xben5mEL0h/lBxUDouE/2
-        G+I46wcOYo+TBUb8W0eem93yNKNmoUJUYhiWnHvy8yN7eV8kww==
-X-Google-Smtp-Source: AK7set+O41SkSlASBYPRgAtQ1mhirkdG7vKW0SAlOOQXg7ZYHnMbY+fyzZCR9s5UUcjsk+MzQ39LQjExm97fcWjs71U=
-X-Received: by 2002:a37:9a85:0:b0:725:ff53:b58e with SMTP id
- c127-20020a379a85000000b00725ff53b58emr229775qke.331.1676393327818; Tue, 14
- Feb 2023 08:48:47 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CUubzQ7KCAE1aIRENx4rj6ON9/S0MhnolQl1MQ3LvdE=;
+        b=6GEwitjmSk086Ajfa4jJiCK41KWvCRjtRybaTJSEd6cJLu8SlJU5s69atwAaR3vByW
+         aAOT4DzMkI3Zjra1ZdI+l3Y/6vhYeuH6rgXqGLiAVYxV8PldIkxZO8okqURJDIO2Kn01
+         KVOe1UacHLP+L4EGnpJXsz98rfODiznM/ORTZelSOzcUdwmT4HEG6KXtLANFDJ0Bh2NZ
+         yM2dB3Xjeu2dFbAAC8jl08kASI3ZXSOKZQPfq2fsjrj6ZMRP5yOg+hAXXOLCW0vrOV1R
+         TaBNG2Z1Qt3BiLISo10ewK/Y8SpavYbfIT5d8t43ZrWQzkDQ9RCgJZCMr+1/ojbp3TWQ
+         lYwg==
+X-Gm-Message-State: AO0yUKXjpI5AFddwv/3eo3ZHQap5fF8qqo1CupVfi1x69I8E7oZk5lxO
+        fSztheJSVqWf3dlBvDC6Hihkjp+grli3El6y6vjn5pOSSvLdkrjCaBehvIMjrQvMEfO5Vfx+CCE
+        /MUUc2mgNCc499tirqYD5UgK9
+X-Received: by 2002:a17:902:e38d:b0:19a:96f0:b13 with SMTP id g13-20020a170902e38d00b0019a96f00b13mr2210338ple.31.1676393353339;
+        Tue, 14 Feb 2023 08:49:13 -0800 (PST)
+X-Google-Smtp-Source: AK7set/NrVzuxCjYm8lLvH1AzVpV4SSXCQwWIOzaYPj93yVDuqiq3AIhyyk1vgnTNuVGX4s3YyCPQQ==
+X-Received: by 2002:a17:902:e38d:b0:19a:96f0:b13 with SMTP id g13-20020a170902e38d00b0019a96f00b13mr2210317ple.31.1676393353049;
+        Tue, 14 Feb 2023 08:49:13 -0800 (PST)
+Received: from kernel-devel ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902b08700b0019aaccb665bsm2883733plr.245.2023.02.14.08.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 08:49:12 -0800 (PST)
+Date:   Wed, 15 Feb 2023 01:49:08 +0900
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] l2tp: Avoid possible recursive deadlock in
+ l2tp_tunnel_register()
+Message-ID: <Y+u7hGIAxhvyDG/2@kernel-devel>
+References: <20230212162623.2301597-1-syoshida@redhat.com>
+ <Y+pPXOqfrYkXPg1K@debian>
 MIME-Version: 1.0
-References: <20230214125949.3462396-1-alexander.stein@ew.tq-group.com> <CAHp75Vf0u_F4bFs-1hyckG7h-7r3XqxdZc_6EjuWxTxbfMPMjQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vf0u_F4bFs-1hyckG7h-7r3XqxdZc_6EjuWxTxbfMPMjQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 14 Feb 2023 18:48:11 +0200
-Message-ID: <CAHp75VdLuDmaBRr0X_==zKxAN5mkxDZV4MMywo7bETaFCvmASg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: vf610: make irq_chip immutable
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+pPXOqfrYkXPg1K@debian>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,41 +80,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 6:45 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Feb 14, 2023 at 2:59 PM Alexander Stein
-> <alexander.stein@ew.tq-group.com> wrote:
+Hi Guillaume,
 
-...
+On Mon, Feb 13, 2023 at 03:55:24PM +0100, Guillaume Nault wrote:
+> On Mon, Feb 13, 2023 at 01:26:23AM +0900, Shigeru Yoshida wrote:
+> > +static struct l2tp_tunnel *pppol2tp_tunnel_get(struct net *net,
+> > +					       struct l2tp_connect_info *info,
+> 
+> Please make "*info" const.
 
-> >         void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
->
-> Now you can use gpio_num here...
->
-> > +       irq_hw_number_t gpio_num = irqd_to_hwirq(d);
+Thank you so much for your comment.  I got it.
 
-...
+> > +					       bool *new_tunnel)
+> > +{
+> > +	struct l2tp_tunnel *tunnel;
+> > +	int error;
+> > +
+> > +	*new_tunnel = false;
+> > +
+> > +	tunnel = l2tp_tunnel_get(net, info->tunnel_id);
+> > +
+> > +	/* Special case: create tunnel context if session_id and
+> > +	 * peer_session_id is 0. Otherwise look up tunnel using supplied
+> > +	 * tunnel id.
+> > +	 */
+> > +	if (!info->session_id && !info->peer_session_id) {
+> > +		if (!tunnel) {
+> > +			struct l2tp_tunnel_cfg tcfg = {
+> > +				.encap = L2TP_ENCAPTYPE_UDP,
+> > +			};
+> > +
+> > +			/* Prevent l2tp_tunnel_register() from trying to set up
+> > +			 * a kernel socket.
+> > +			 */
+> > +			if (info->fd < 0)
+> > +				return ERR_PTR(-EBADF);
+> > +
+> > +			error = l2tp_tunnel_create(info->fd,
+> > +						   info->version,
+> > +						   info->tunnel_id,
+> > +						   info->peer_tunnel_id, &tcfg,
+> > +						   &tunnel);
+> > +			if (error < 0)
+> > +				return ERR_PTR(error);
+> > +
+> > +			l2tp_tunnel_inc_refcount(tunnel);
+> > +			error = l2tp_tunnel_register(tunnel, net, &tcfg);
+> > +			if (error < 0) {
+> > +				kfree(tunnel);
+> > +				return ERR_PTR(error);
+> > +			}
+> > +
+> > +			*new_tunnel = true;
+> > +		}
+> > +	} else {
+> > +		/* Error if we can't find the tunnel */
+> > +		if (!tunnel)
+> > +			return ERR_PTR(-ENOENT);
+> > +
+> > +		/* Error if socket is not prepped */
+> > +		if (!tunnel->sock) {
+> > +			l2tp_tunnel_dec_refcount(tunnel);
+> > +			return ERR_PTR(-ENOENT);
+> > +		}
+> > +	}
+> > +
+> > +	return tunnel;
+> > +}
+> > +
+> >  /* connect() handler. Attach a PPPoX socket to a tunnel UDP socket
+> >   */
+> >  static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+> > @@ -663,7 +722,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+> >  	struct pppol2tp_session *ps;
+> >  	struct l2tp_session_cfg cfg = { 0, };
+> >  	bool drop_refcnt = false;
+> > -	bool drop_tunnel = false;
+> >  	bool new_session = false;
+> >  	bool new_tunnel = false;
+> >  	int error;
+> > @@ -672,6 +730,10 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+> >  	if (error < 0)
+> >  		return error;
+> >  
+> > +	tunnel = pppol2tp_tunnel_get(sock_net(sk), &info, &new_tunnel);
+> > +	if (IS_ERR(tunnel))
+> > +		return PTR_ERR(tunnel);
+> > +
+> >  	lock_sock(sk);
+> >  
+> >  	/* Check for already bound sockets */
+> > @@ -689,57 +751,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+> >  	if (!info.tunnel_id)
+> >  		goto end;
+> 
+> The original code did test info.tunnel_id before trying to get or
+> create the tunnel (as it doesn't make sense to work on a tunnel whose
+> ID is 0). So we need move this test before the pppol2tp_tunnel_get()
+> call.
 
-> >  static void vf610_gpio_irq_unmask(struct irq_data *d)
-> >  {
-> > -       struct vf610_gpio_port *port =
-> > -               gpiochip_get_data(irq_data_get_irq_chip_data(d));
-> > +       struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-> > +       struct vf610_gpio_port *port = gpiochip_get_data(gc);
-> >         void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
+Got it.
 
-And here.
+> > -	tunnel = l2tp_tunnel_get(sock_net(sk), info.tunnel_id);
+> > -	if (tunnel)
+> > -		drop_tunnel = true;
+> > -
+> > -	/* Special case: create tunnel context if session_id and
+> > -	 * peer_session_id is 0. Otherwise look up tunnel using supplied
+> > -	 * tunnel id.
+> > -	 */
+> 
+> Just a note for your future submissions: for networking patches, we
+> normally indicate which tree the patch is targetted to in the mail
+> subject (for example "[PATCH net v2]"). Also, you should Cc:
+> the author of the patch listed in the Fixes tag.
 
-> > +       irq_hw_number_t gpio_num = irqd_to_hwirq(d);
-> >
-> > +       gpiochip_enable_irq(gc, gpio_num);
-> >         vf610_gpio_writel(port->irqc[d->hwirq] << PORT_PCR_IRQC_OFFSET,
->
-> ...and here.
->
-> >                           pcr_base);
-> >  }
+Thanks for the helpful advice.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Just one more thing.  I created this patch based on the mainline linux
+tree, but networking subsystem has own tree, net.  Is it preferable to
+create a patch based on net tree for networking patches?
+
+Thanks,
+Shigeru
+
+> 
+
