@@ -2,249 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B46695B7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2B3695B81
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjBNH5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S231599AbjBNH5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbjBNH50 (ORCPT
+        with ESMTP id S231575AbjBNH5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:57:26 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33315206A5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:57:24 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 78so9711516pgb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j0Z3rzguH4ZoJOngNzhmwoM/o5xYQMHZRaqzjDLV+ZY=;
-        b=TT5qGbRp+TwoKbeoF8RFdMUbptoh0Tt+uCr8QbFYXP+VDWlmHqE0TWskWe7Gg86ZOl
-         w2szTKW6pZULps5U/lb0RAWobrUA+dl61/EqpGukGnH6udCW7LU+n688a001VOF6WnRG
-         l8Xj5sx1HKNNl4w4OHepXx71PY3MkIN5u7aYE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j0Z3rzguH4ZoJOngNzhmwoM/o5xYQMHZRaqzjDLV+ZY=;
-        b=vP/7ga9KyA26PeDuIZAjHZHBrTIQ1VBzJtFYaFSDQyjBnRYPn4jYJ3kxNUDPcBYXdh
-         E+1rkIoSOn/na1GO7aDJBQRYskQKIPOqi8kcFdoH4a5pmhQyt8UGZ/vDXwmE6WFCWX1z
-         DtrSNt6CEtV7zvqprRJVkc2gRUSuxIt3Xvaa0W5JOcRstnmcdVuU+G/4XJVDBqvflR4W
-         eLt2sKYNXKcma7BBAb+74apgqNoRnkHlZssmM9VQX4gF1+52QkHi16DRD+TOELW4lWhg
-         UIq+5A9UIIu7V7L5OtKSBK0LVUHsfl3B4z3gQmOw1zIcni/VF8l8mz7aqe/2Z4AGqttS
-         +ciA==
-X-Gm-Message-State: AO0yUKWfSDO7TLAYjlr2oOW989uciYa4E658DbPiqT0TQvJYKfl/ls8U
-        xuyM2eWrwfSpjDyFqyXkfm26hA==
-X-Google-Smtp-Source: AK7set8t1j4eGyz7sD1P5cj3c4rXd6726tRljRGwe6ONwfw0yR6YYRfJIu4Pb2DYlGLxA9+9Gn6mkg==
-X-Received: by 2002:aa7:95a9:0:b0:5a8:bd6e:90fb with SMTP id a9-20020aa795a9000000b005a8bd6e90fbmr1427099pfk.19.1676361443593;
-        Mon, 13 Feb 2023 23:57:23 -0800 (PST)
-Received: from localhost ([2401:fa00:8f:203:45f7:92a0:f546:300f])
-        by smtp.gmail.com with UTF8SMTPSA id d19-20020aa78153000000b00593fa670c88sm9134529pfn.57.2023.02.13.23.57.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 23:57:22 -0800 (PST)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        David Stevens <stevensd@chromium.org>
-Subject: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-Date:   Tue, 14 Feb 2023 16:57:10 +0900
-Message-Id: <20230214075710.2401855-2-stevensd@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-In-Reply-To: <20230214075710.2401855-1-stevensd@google.com>
-References: <20230214075710.2401855-1-stevensd@google.com>
+        Tue, 14 Feb 2023 02:57:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D772C21A25;
+        Mon, 13 Feb 2023 23:57:33 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EECDE660216F;
+        Tue, 14 Feb 2023 07:57:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676361452;
+        bh=bLuH3JNMnvAE/sd8bnRNmS8hADblvHZLNhfCr4oCcs0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ok3IRdMKvUkFcuLuDpafb/xmh9qr1fWMpvlJCB9RJ37YXB1qHtxPPzQJBmrpYhXGb
+         aUEnFVi4PZCGRImQcghZRjXGN4C1VYoLrv+mopvvN5yUn1XRKNKgzMvTbmVngYGGZN
+         T6dv5VOmBAwkkde4WCYfqhU8xnu6VTRXL6kpa5AYGNFpsjDVHtoUob5yZBRWC7hqIJ
+         Wo4bV6ZwlQcKRCih0/JMbH42HY826QLorvWUQOsD7jI0LXmLV6oHe9VnzepM7WifWL
+         SAGOqaa2X3WXuQEoQtknmsZaAJZ3P35wR2zCczus7cm14240bL+hM+/JZvqKl/iuWn
+         TqvN+F4jTROjA==
+Message-ID: <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
+Date:   Tue, 14 Feb 2023 12:57:21 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <Y+QfDN4Y5Q10x8GQ@x1n>
+ <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com> <Y+qur8iIUQTLyE8f@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y+qur8iIUQTLyE8f@x1n>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+On 2/14/23 2:42 AM, Peter Xu wrote:
+> On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
+>> On 2/9/23 3:15 AM, Peter Xu wrote:
+>>> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+>>>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>>>> the info about page table entries. The following operations are supported
+>>>> in this ioctl:
+>>>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>>>   (PAGE_IS_SWAPPED).
+>>>> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+>>>>   pages have been written-to.
+>>>> - Find pages which have been written-to and write protect the pages
+>>>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>>>>
+>>>> To get information about which pages have been written-to and/or write
+>>>> protect the pages, following must be performed first in order:
+>>>> - The userfaultfd file descriptor is created with userfaultfd syscall.
+>>>> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
+>>>> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
+>>>>   through UFFDIO_REGISTER IOCTL.
+>>>> Then the any part of the registered memory or the whole memory region
+>>>> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
+>>>> PAGEMAP_SCAN IOCTL.
+>>>>
+>>>> struct pagemap_scan_args is used as the argument of the IOCTL. In this
+>>>> struct:
+>>>> - The range is specified through start and len.
+>>>> - The output buffer of struct page_region array and size is specified as
+>>>>   vec and vec_len.
+>>>> - The optional maximum requested pages are specified in the max_pages.
+>>>> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
+>>>>   is the only added flag at this time.
+>>>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+>>>>   and return_mask.
+>>>>
+>>>> This IOCTL can be extended to get information about more PTE bits. This
+>>>> IOCTL doesn't support hugetlbs at the moment. No information about
+>>>> hugetlb can be obtained. This patch has evolved from a basic patch from
+>>>> Gabriel Krisman Bertazi.
+>>>>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>> ---
+>>>> Changes in v10:
+>>>> - move changes in tools/include/uapi/linux/fs.h to separate patch
+>>>> - update commit message
+>>>>
+>>>> Change in v8:
+>>>> - Correct is_pte_uffd_wp()
+>>>> - Improve readability and error checks
+>>>> - Remove some un-needed code
+>>>>
+>>>> Changes in v7:
+>>>> - Rebase on top of latest next
+>>>> - Fix some corner cases
+>>>> - Base soft-dirty on the uffd wp async
+>>>> - Update the terminologies
+>>>> - Optimize the memory usage inside the ioctl
+>>>>
+>>>> Changes in v6:
+>>>> - Rename variables and update comments
+>>>> - Make IOCTL independent of soft_dirty config
+>>>> - Change masks and bitmap type to _u64
+>>>> - Improve code quality
+>>>>
+>>>> Changes in v5:
+>>>> - Remove tlb flushing even for clear operation
+>>>>
+>>>> Changes in v4:
+>>>> - Update the interface and implementation
+>>>>
+>>>> Changes in v3:
+>>>> - Tighten the user-kernel interface by using explicit types and add more
+>>>>   error checking
+>>>>
+>>>> Changes in v2:
+>>>> - Convert the interface from syscall to ioctl
+>>>> - Remove pidfd support as it doesn't make sense in ioctl
+>>>> ---
+>>>>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
+>>>>  include/uapi/linux/fs.h |  50 +++++++
+>>>>  2 files changed, 340 insertions(+)
+>>>>
+>>>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>>>> index e35a0398db63..c6bde19d63d9 100644
+>>>> --- a/fs/proc/task_mmu.c
+>>>> +++ b/fs/proc/task_mmu.c
+>>>> @@ -19,6 +19,7 @@
+>>>>  #include <linux/shmem_fs.h>
+>>>>  #include <linux/uaccess.h>
+>>>>  #include <linux/pkeys.h>
+>>>> +#include <linux/minmax.h>
+>>>>  
+>>>>  #include <asm/elf.h>
+>>>>  #include <asm/tlb.h>
+>>>> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
+>>>>  }
+>>>>  #endif
+>>>>  
+>>>> +static inline bool is_pte_uffd_wp(pte_t pte)
+>>>> +{
+>>>> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>>>> +	    (pte_swp_uffd_wp_any(pte)))
+>>>> +		return true;
+>>>> +	return false;
+>>>
+>>> Sorry I should have mentioned this earlier: you can directly return here.
+>> No problem at all. I'm replacing these two helper functions with following
+>> in next version so that !present pages don't show as dirty:
+>>
+>> static inline bool is_pte_written(pte_t pte)
+>> {
+>> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>> 	    (pte_swp_uffd_wp_any(pte)))
+>> 		return false;
+>> 	return (pte_present(pte) || is_swap_pte(pte));
+>> }
+> 
+> Could you explain why you don't want to return dirty for !present?  A page
+> can be written then swapped out.  Don't you want to know that happened
+> (from dirty tracking POV)?
+> 
+> The code looks weird to me too..  We only have three types of ptes: (1)
+> present, (2) swap, (3) none.
+> 
+> Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
+> that what you're really looking for?
+Yes, this is what I've been trying to do. I'll use !pte_none() to make it
+simpler.
 
-Make sure that collapse_file respects any userfaultfds registered with
-MODE_MISSING. If userspace has any such userfaultfds registered, then
-for any page which it knows to be missing, it may expect a
-UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
-collapsing a shmem range would result in replacing an empty page with a
-THP, so that it doesn't break userfaultfd.
+> 
+>>
+>> static inline bool is_pmd_written(pmd_t pmd)
+>> {
+>> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+>> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
+>> 		return false;
+>> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
+>> }
+> 
+> [...]
+> 
+>>>> +	bitmap = cur & p->return_mask;
+>>>> +	if (cpy && bitmap) {
+>>>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
+>>>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
+>>>> +			prev->len += len;
+>>>> +			p->found_pages += len;
+>>>> +		} else if (p->vec_index < p->vec_len) {
+>>>> +			if (prev->len) {
+>>>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+>>>> +				p->vec_index++;
+>>>> +			}
+>>>
+>>> IIUC you can have:
+>>>
+>>>   int pagemap_scan_deposit(p)
+>>>   {
+>>>         if (p->vec_index >= p->vec_len)
+>>>                 return -ENOSPC;
+>>>
+>>>         if (p->prev->len) {
+>>>                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+>>>                 p->vec_index++;
+>>>         }
+>>>
+>>>         return 0;
+>>>   }
+>>>
+>>> Then call it here.  I think it can also be called below to replace
+>>> export_prev_to_out().
+>> No this isn't possible. We fill up prev until the next range doesn't merge
+>> with it. At that point, we put prev into the output buffer and new range is
+>> put into prev. Now that we have shifted to smaller page walks of <= 512
+>> entries. We want to visit all ranges before finally putting the prev to
+>> output. Sorry to have this some what complex method. The problem is that we
+>> want to merge the consective matching regions into one entry in the output.
+>> So to achieve this among multiple different page walks, the prev is being used.
+>>
+>> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
+>> having length of 1024 pages and all of the memory has been written.
+>> walk_page_range() will be called 2 times. In the first call, prev will be
+>> set having length of 512. In second call, prev will be updated to 1024 as
+>> the previous range stored in prev could be extended. After this, the prev
+>> will be stored to the user output buffer consuming only 1 struct of page_range.
+>>
+>> If we store prev back to output memory in every walk_page_range() call, we
+>> wouldn't get 1 struct of page_range with length 1024. Instead we would get
+>> 2 elements of page_range structs with half the length.
+> 
+> I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
+> with such a pagemap_scan_deposit() you can rewrite it as:
+> 
+> if (cpy && bitmap) {
+>         if ((prev->len) && (prev->bitmap == bitmap) &&
+>             (prev->start + prev->len * PAGE_SIZE == addr)) {
+>                 prev->len += len;
+>                 p->found_pages += len;
+>         } else {
+>                 if (pagemap_scan_deposit(p))
+>                         return -ENOSPC;
+>                 prev->start = addr;
+>                 prev->len = len;
+>                 prev->bitmap = bitmap;
+>                 p->found_pages += len;
+>         }
+> }
+> 
+> Then you can reuse pagemap_scan_deposit() when before returning to
+> userspace, just to flush PREV to p->vec properly in a single helper.
+> It also makes the code slightly easier to read.
+Yeah, this would have worked as you have described. But in
+pagemap_scan_output(), we are flushing prev to p->vec. But later in
+export_prev_to_out() we need to flush prev to user_memory directly.
 
-Synchronization when checking for userfaultfds in collapse_file is
-tricky because the mmap locks can't be used to prevent races with the
-registration of new userfaultfds. Instead, we provide synchronization by
-ensuring that userspace cannot observe the fact that pages are missing
-before we check for userfaultfds. Although this allows registration of a
-userfaultfd to race with collapse_file, it ensures that userspace cannot
-observe any pages transition from missing to present after such a race.
-This makes such a race indistinguishable to the collapse occurring
-immediately before the userfaultfd registration.
 
-The first step to provide this synchronization is to stop filling gaps
-during the loop iterating over the target range, since the page cache
-lock can be dropped during that loop. The second step is to fill the
-gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
-time, to avoid races with accesses to the page cache that only take the
-RCU read lock.
+> 
 
-This fix is targeted at khugepaged, but the change also applies to
-MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
-return EBUSY if there are any missing pages (instead of succeeding on
-shmem and returning EINVAL on anonymous memory). There is also now a
-window during MADV_COLLAPSE where a fault on a missing page will cause
-the syscall to fail with EAGAIN.
-
-The fact that intermediate page cache state can no longer be observed
-before the rollback of a failed collapse is also technically a
-userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
-is exceedingly unlikely that anything relies on being able to observe
-that transient state.
-
-Signed-off-by: David Stevens <stevensd@chromium.org>
----
- mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 58 insertions(+), 8 deletions(-)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index b648f1053d95..8c2e2349e883 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -55,6 +55,7 @@ enum scan_result {
- 	SCAN_CGROUP_CHARGE_FAIL,
- 	SCAN_TRUNCATED,
- 	SCAN_PAGE_HAS_PRIVATE,
-+	SCAN_PAGE_FILLED,
- };
- 
- #define CREATE_TRACE_POINTS
-@@ -1725,8 +1726,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
-  *  - allocate and lock a new huge page;
-  *  - scan page cache replacing old pages with the new one
-  *    + swap/gup in pages if necessary;
-- *    + fill in gaps;
-  *    + keep old pages around in case rollback is required;
-+ *  - finalize updates to the page cache;
-  *  - if replacing succeeds:
-  *    + copy data over;
-  *    + free old pages;
-@@ -1805,13 +1806,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 						result = SCAN_TRUNCATED;
- 						goto xa_locked;
- 					}
--					xas_set(&xas, index);
-+					xas_set(&xas, index + 1);
- 				}
- 				if (!shmem_charge(mapping->host, 1)) {
- 					result = SCAN_FAIL;
- 					goto xa_locked;
- 				}
--				xas_store(&xas, hpage);
- 				nr_none++;
- 				continue;
- 			}
-@@ -1970,6 +1970,56 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 		put_page(page);
- 		goto xa_unlocked;
- 	}
-+
-+	if (nr_none) {
-+		struct vm_area_struct *vma;
-+		int nr_none_check = 0;
-+
-+		xas_unlock_irq(&xas);
-+		i_mmap_lock_read(mapping);
-+		xas_lock_irq(&xas);
-+
-+		xas_set(&xas, start);
-+		for (index = start; index < end; index++) {
-+			if (!xas_next(&xas)) {
-+				xas_store(&xas, XA_RETRY_ENTRY);
-+				nr_none_check++;
-+			}
-+		}
-+
-+		if (nr_none != nr_none_check) {
-+			result = SCAN_PAGE_FILLED;
-+			goto immap_locked;
-+		}
-+
-+		/*
-+		 * If userspace observed a missing page in a VMA with an armed
-+		 * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for
-+		 * that page, so we need to roll back to avoid suppressing such
-+		 * an event. Any userfaultfds armed after this point will not be
-+		 * able to observe any missing pages due to the previously
-+		 * inserted retry entries.
-+		 */
-+		vma_interval_tree_foreach(vma, &mapping->i_mmap, start, start) {
-+			if (userfaultfd_missing(vma)) {
-+				result = SCAN_EXCEED_NONE_PTE;
-+				goto immap_locked;
-+			}
-+		}
-+
-+immap_locked:
-+		i_mmap_unlock_read(mapping);
-+		if (result != SCAN_SUCCEED) {
-+			xas_set(&xas, start);
-+			for (index = start; index < end; index++) {
-+				if (xas_next(&xas) == XA_RETRY_ENTRY)
-+					xas_store(&xas, NULL);
-+			}
-+
-+			goto xa_locked;
-+		}
-+	}
-+
- 	nr = thp_nr_pages(hpage);
- 
- 	if (is_shmem)
-@@ -2068,15 +2118,13 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 		}
- 
- 		xas_set(&xas, start);
--		xas_for_each(&xas, page, end - 1) {
-+		end = index;
-+		for (index = start; index < end; index++) {
-+			xas_next(&xas);
- 			page = list_first_entry_or_null(&pagelist,
- 					struct page, lru);
- 			if (!page || xas.xa_index < page->index) {
--				if (!nr_none)
--					break;
- 				nr_none--;
--				/* Put holes back where they were */
--				xas_store(&xas, NULL);
- 				continue;
- 			}
- 
-@@ -2592,11 +2640,13 @@ static int madvise_collapse_errno(enum scan_result r)
- 	case SCAN_ALLOC_HUGE_PAGE_FAIL:
- 		return -ENOMEM;
- 	case SCAN_CGROUP_CHARGE_FAIL:
-+	case SCAN_EXCEED_NONE_PTE:
- 		return -EBUSY;
- 	/* Resource temporary unavailable - trying again might succeed */
- 	case SCAN_PAGE_LOCK:
- 	case SCAN_PAGE_LRU:
- 	case SCAN_DEL_PAGE_LRU:
-+	case SCAN_PAGE_FILLED:
- 		return -EAGAIN;
- 	/*
- 	 * Other: Trying again likely not to succeed / error intrinsic to
 -- 
-2.39.1.581.gbfd45094c4-goog
-
+BR,
+Muhammad Usama Anjum
