@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E39695D09
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E647695D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbjBNIfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S232040AbjBNIiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjBNIfW (ORCPT
+        with ESMTP id S231779AbjBNIiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:35:22 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548FF974D;
-        Tue, 14 Feb 2023 00:35:20 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id f34so22427185lfv.10;
-        Tue, 14 Feb 2023 00:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x65XtyIfR+ZJ05hwpjz7xjX2mVyl1QeYBrniTfHqa60=;
-        b=UKaPO3Uur1CbXPKbA2/Vj7sENyfzQYgOw5b3WeCnWN4PmtNi4/OIxsnpuKah/7kPFs
-         5HCA2lwzkt+WkUBLeFM1UEM7TTJHdwqd8kbGRho07qoB3m3/TYyo78L+ccQqUO+yko41
-         kUELxhjOanKB1A/3XUupy8D8U5v6qCX+waLmHZGBo/YDWOqb9E6QJyzPRhunDJvJrOz+
-         KfFsGPkJ2DiKb/qmTCDvh8oi4k7DJqRTY91CyYjztVO/r9V+sjftTjtwKD4faBiWseOl
-         JhVcdf45eM3kHALWJziU3ChqN91AhPMfKet14k8tcXPWfhbIfwhaA2O4H9LEGN1LNJdz
-         H/Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x65XtyIfR+ZJ05hwpjz7xjX2mVyl1QeYBrniTfHqa60=;
-        b=Yt0WiZ+MW1pE3ij1bjk7cH4WLOZbhnnkm3Hwvx3rb5JVMszzeZMP/UqemU7PW8d+rf
-         ukv/25QKtkgpJHuWOr5ID9du0NrSvTrmjFem8mSNV12i801TzZC0YCQKP9hr/6v0Z2gO
-         Vl4VX8CcRuHjMFi4rgm7GeJlOVk2I5c3sUKtUEVi4XsN1ctvYexXxURRyY8NAsCbvB2D
-         F7KSWy+3FBVQ6/Dc6iuybC0EPDhrUJceb0RSvGOKAXyz1WSeuguuFdX9N3ccVmqtMeYV
-         5v7jXzi2CPLaMJDKcUolgrwyLM8p6jqjXpgeudIdYmHZpSjfppOHXqZaxKGlqgxbhN/l
-         R5rA==
-X-Gm-Message-State: AO0yUKWPQL0Zb2et2llo81jxSHlOJ9RE1I8f22mbi8ixtUZe7rhLu/6W
-        yDmf6jtOudRwdaxb6PYcJyyuDoMa9uM=
-X-Google-Smtp-Source: AK7set/tooVt2BimFjOg+wATvIPv1I3VIevFYeSLtk3fjnn7ySQeUyz4nyEsGx7zjQc+8+ifeHsP+w==
-X-Received: by 2002:ac2:561c:0:b0:4a4:68b9:6085 with SMTP id v28-20020ac2561c000000b004a468b96085mr496252lfd.16.1676363718209;
-        Tue, 14 Feb 2023 00:35:18 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.87.80])
-        by smtp.gmail.com with ESMTPSA id c7-20020a197607000000b004dafde0e7b7sm1042426lff.279.2023.02.14.00.35.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:35:17 -0800 (PST)
-Subject: Re: [PATCH] ata: pata_octeon_cf: drop kernel-doc notation
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        David Daney <ddaney@caviumnetworks.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-ide@vger.kernel.org
-References: <20230213212549.29914-1-rdunlap@infradead.org>
- <51fb5b13-3e9c-785f-b96f-6f398389d434@gmail.com>
-Message-ID: <c67e4b38-7bec-0901-b13d-6390c1d51cd8@gmail.com>
-Date:   Tue, 14 Feb 2023 11:35:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 14 Feb 2023 03:38:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E32FC178
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676363838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Vq3Sj7rlsNdLjcqHDgs0XkW5jVa94T8TrtK6zXmHKG4=;
+        b=iH+nUlBCZ76lKU4+M3HxJ8XomuUkNywbP86qwv/9jfjS+iqk77wQi924pmsWNX9Smyoeq2
+        vZhRHdMbPlxHm9SooBdbJOaKq9nw5wLyxx77o2eNTq2IQkub7eZVJ2XIs+PHcMaQhmAmhI
+        oWPvoUHx+URqL4olDosTgOlK8wFEVDQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-132-bCtj-sb0O7-xSZu8Wwp9jg-1; Tue, 14 Feb 2023 03:37:15 -0500
+X-MC-Unique: bCtj-sb0O7-xSZu8Wwp9jg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52454857A93;
+        Tue, 14 Feb 2023 08:37:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4236A492B03;
+        Tue, 14 Feb 2023 08:37:12 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v3 0/5] iov_iter: Adjust styling/location of new splice functions
+Date:   Tue, 14 Feb 2023 08:37:05 +0000
+Message-Id: <20230214083710.2547248-1-dhowells@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <51fb5b13-3e9c-785f-b96f-6f398389d434@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,30 +65,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 11:33 AM, Sergei Shtylyov wrote:
-> Hello!
-> 
->    Hm, why didn't you CC me?
-> 
-> On 2/14/23 12:25 AM, Randy Dunlap wrote:
-> 
->> Fix a slew of kernel-doc warnings in pata_octeon_cf.c by changing
->> all "/**" comments to "/*" since they are not in kernel-doc format.
->>
->> Fixes: 3c929c6f5aa7 ("libata: New driver for OCTEON SOC Compact Flash interface (v7).")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/all/202302101722.5O56RClE-lkp@intel.com/
->> Cc: David Daney <ddaney@caviumnetworks.com>
->> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->> Cc: linux-ide@vger.kernel.org
-> 
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Hi Jens, Al, Christoph,
 
-   Oops, replied from a wrong account... :-/
-   Damien, please let me know if you need this fixed...
+Here are patches to make some changes that Christoph requested[1] to the
+new generic file splice functions that I implemented[2].  Apart from one
+functional change, they just altering the styling and move one of the
+functions to a different file:
 
-> [...]
+ (1) Rename the main functions:
 
-MBR, Sergey
+	generic_file_buffered_splice_read() -> filemap_splice_read()
+	generic_file_direct_splice_read()   -> direct_splice_read()
+
+ (2) Abstract out the calculation of the location of the head pipe buffer
+     into a helper function in linux/pipe_fs_i.h.
+
+ (3) Use init_sync_kiocb() in filemap_splice_read().
+
+     This is where the functional change is.  Some kiocb fields are then
+     filled in where they were set to 0 before, including setting ki_flags
+     from f_iocb_flags.
+
+ (4) Move filemap_splice_read() to mm/filemap.c.  filemap_get_pages() can
+     then be made static again.
+
+ (5) Fix splice-read for a number of filesystems that don't provide a
+     ->read_folio() op and for which filemap_get_pages() cannot be used.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract-3
+
+I've also updated worked the changes into the commits on my iov-extract
+branch if that would be preferable, though that means Jens would need to
+update his for-6.3/iov-extract again.
+
+David
+
+Link: https://lore.kernel.org/r/Y+n0n2UE8BQa/OwW@infradead.org/ [1]
+Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ [2]
+
+Changes
+=======
+ver #3)
+ - Fix filesystems/drivers that don't have ->read_folio().
+
+ver #2)
+ - Don't attempt to filter IOCB_* flags in filemap_splice_read().
+
+Link: https://lore.kernel.org/r/20230213134619.2198965-1-dhowells@redhat.com/ # v1
+
+David Howells (5):
+  splice: Rename new splice functions
+  splice: Provide pipe_head_buf() helper
+  splice: Use init_sync_kiocb() in filemap_splice_read()
+  splice: Move filemap_read_splice() to mm/filemap.c
+  shmem, overlayfs, coda, tty, proc, kernfs, random: Fix splice-read
+
+ drivers/char/random.c     |   4 +-
+ drivers/tty/tty_io.c      |   4 +-
+ fs/coda/file.c            |  36 +++++++++-
+ fs/kernfs/file.c          |   2 +-
+ fs/overlayfs/file.c       |  36 +++++++++-
+ fs/proc/inode.c           |   4 +-
+ fs/proc/proc_sysctl.c     |   2 +-
+ fs/proc_namespace.c       |   6 +-
+ fs/splice.c               | 146 ++------------------------------------
+ include/linux/fs.h        |   6 ++
+ include/linux/pagemap.h   |   2 -
+ include/linux/pipe_fs_i.h |  20 ++++++
+ mm/filemap.c              | 136 +++++++++++++++++++++++++++++++++--
+ mm/internal.h             |   6 ++
+ mm/shmem.c                | 124 +++++++++++++++++++++++++++++++-
+ 15 files changed, 373 insertions(+), 161 deletions(-)
+
