@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B3B697188
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B0C697186
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjBNXFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S232673AbjBNXEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjBNXE7 (ORCPT
+        with ESMTP id S232435AbjBNXEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:04:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA88C2B286
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676415671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 14 Feb 2023 18:04:12 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB8583DB;
+        Tue, 14 Feb 2023 15:03:53 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676415738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YmHy+prDWHALm0V0utdI+mvQwfHPIsWoSbo8A3qGVlY=;
-        b=B/kB1dGZF6v2Ga3Wnub3k4SweZkcNiWOrJXtM7kEy30aeepvAOHBs8mV3rQgMJnXjF2zMK
-        3mStECRhj5npHWgt+Ejm1+HxEfHdPGIzSjVUHo/Lyg864S5mdJYp8mvrP25H/RBLhlrxVQ
-        ijEJm9Hy/eg+GflVfm7DrMooFbadEZ4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-9Xcun7eGPNac6uAIILJ4Mg-1; Tue, 14 Feb 2023 18:01:07 -0500
-X-MC-Unique: 9Xcun7eGPNac6uAIILJ4Mg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77AD92804839;
-        Tue, 14 Feb 2023 23:01:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 81A0B40C945A;
-        Tue, 14 Feb 2023 23:01:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2877092.1676415412@warthog.procyon.org.uk>
-References: <2877092.1676415412@warthog.procyon.org.uk> <20230214171330.2722188-1-dhowells@redhat.com>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        smfrench@gmail.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just list)
+        bh=1TZyqrcMFCLessiMncscuzYoYIAD62aNI8vRDgUPP3k=;
+        b=jMzPtUH8cOaAWtyVHBIQ2BbS0NZpRPb60KzK5K9SRz5L30HSvrbDWT7l995RFz+0BgwERa
+        zsieuBAGYveJQl1cxKykS1g74XZGSdJj1hjpERTUqX89YohcB3BrnA/YTGBAD1drcQdgFc
+        n8TD1RE4LAOGJV0XURmMIc3bhUPB4uJM5MelYIphtPFHJr2whhkMjkgV+y6k/8sMfUNIt1
+        7ozxNEn5Cy/OPFBuKy7ZJLnkGn+pXH25WQr0zZdBXza+2PifozLHut8kwcsMa9lqDQ0jZW
+        rXTMjyGHT0/e0ymqr77qM5vcA0SDlSUSYFNq7mg84/JGaHBlrbVUh3fx+77xLA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676415738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1TZyqrcMFCLessiMncscuzYoYIAD62aNI8vRDgUPP3k=;
+        b=giWIrphHr/qvN3KE3qcAtDFYG0NVvPtd6fRhLnGlV4NUj+LGCINAQ7Utf3Z0PnZ/wApjc7
+        9BXt+4Ii3Ay/WuAA==
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kevin.tian@intel.com, darwi@linutronix.de
+Subject: Re: [PATCH] PCI: Fix build error when CONFIG_PCI_MSI disabled
+In-Reply-To: <20230214222400.GA3089902@bhelgaas>
+References: <20230214222400.GA3089902@bhelgaas>
+Date:   Wed, 15 Feb 2023 00:02:17 +0100
+Message-ID: <87v8k3rgue.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2877342.1676415663.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Feb 2023 23:01:03 +0000
-Message-ID: <2877343.1676415663@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+On Tue, Feb 14 2023 at 16:24, Bjorn Helgaas wrote:
+>> Provide definitions for pci_msix_alloc_irq_at() and pci_msix_free_irq() in
+>> preparation for users that need to compile when CONFIG_PCI_MSI is
+>> disabled.
+>
+> I think this should have a "Fixes:" tag to connect it with the commit
+> that added pci_msix_alloc_irq_at() and pci_msix_free_irq().
+>
+> Looks like 34026364df8e ("PCI/MSI: Provide post-enable dynamic
+> allocation interfaces for MSI-X").
+>
+> Thomas merged 34026364df8e, so it would be best if he took the fixup
+> as well.
 
-> This would only affect cifs.
+I did and miserably failed to Cc you on the notification. Sorry about that.
 
-Actually, that's not quite true: it changes the flags argument to
-iov_iter_get_pages*().
+  https://lore.kernel.org/r/167628749774.4906.17069524905880641563.tip-bot2@tip-bot2
 
-David
+Thanks,
 
+        tglx
