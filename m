@@ -2,180 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A27695E45
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78624695E61
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjBNJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S231833AbjBNJKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjBNJIR (ORCPT
+        with ESMTP id S232327AbjBNJJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:08:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22979241DC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:07:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83C2AB81CA1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F5FC4339B;
-        Tue, 14 Feb 2023 09:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676365604;
-        bh=kp1wVIwcdvhNcVUnIXnS31Y8JKlXiQHAlaDN5T+0ibM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G4ewpXF7SjWjM+mb44swT+LqkLRokikcBkPsFkRTGptgmYyFy+SRvG4LiW/il+X79
-         k7xtdgIK2/YXfWze9ZalwbeL5114R9T1x9y0/NwyTHJ6iU5x8thP7fM4X31lphbSMy
-         N8gBbP92PzVRl5Z5abUZQJivPclFdsKA7R4GJTm5NJ0RNYq7fBEoz/WGtWIw5V46Ox
-         1UiV37T90KUrCzF76Z3Ekoc3HVri/NWChojUunn+nf5RK8sGwek8B+xDHXat7SdRoS
-         m9QGI/tYgV56tzox2iUHajoy+7tpdTID8zEdRQA/juASftcp48cZ7pi1+ixEDN/HTs
-         G2plgh7se8R/g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pRrHk-0002ld-VL; Tue, 14 Feb 2023 10:07:37 +0100
-Date:   Tue, 14 Feb 2023 10:07:36 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/arm-smmu-qcom: Rework the logic finding the bypass
- quirk
-Message-ID: <Y+tPWAUBwBxcOPFm@hovoldconsulting.com>
-References: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
- <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
- <20230214075312.GB4981@thinkpad>
+        Tue, 14 Feb 2023 04:09:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB7EC6C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676365665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wXhjJZ2GdnHCbU45RiKd1H4tJiPK57eePtUK3Fm9rk4=;
+        b=gygpW1m8ETDkwu0jtPdgUp1geawkq/isu4lEGeoIVpgkBsVYZUHWkOEnMe4fNV4VYPVNJH
+        NqQw41h9+jj56aKuWL8GdUE4NCyOjygRRQ9LGm6g7Eg7htVAYWT0HKsm+PbH+OjZCSDILE
+        CfdcTmCC7QYEssuJXiBvNTqYMJiZMs0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-1yWmBRUbOHCaxK5BuD3jMQ-1; Tue, 14 Feb 2023 04:07:44 -0500
+X-MC-Unique: 1yWmBRUbOHCaxK5BuD3jMQ-1
+Received: by mail-wm1-f71.google.com with SMTP id l21-20020a05600c4f1500b003e00be23a70so10639394wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:07:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wXhjJZ2GdnHCbU45RiKd1H4tJiPK57eePtUK3Fm9rk4=;
+        b=Li4x/w06ydTpDAorkSK0slEO/ppbHNNaTbJkK5LzXLWYtg7us26I5RX7FNuFCDGZ/U
+         zgTMgcvfXh3iBNKRaLfkHpuwG/c1rhuslRDaosOZgGm2naUFPLasCvCWLcmUFv/3Yz6x
+         zciHc3OzV3Eo2kW+EAUr/keHo8JnTahMybbrPHCA4wBT3shQUmTMSsoMM9+9QhdVb6Jz
+         jh+DSfdqPyRFmnGM/yYRBkUnLnRnQiI6dcTrIczieSH5gmD9pXwz0/9a//rWgLF4O3pq
+         d747ipS8LWF92ELfwzn8uhZKt/mLI7mqjvyjI4+ftLl5CQ65Jl4ioaA+32XDI3IczAVZ
+         HpIQ==
+X-Gm-Message-State: AO0yUKUvVLjT0bfKWQaC81TPhJJ1EwLHmtEQXH9NHSQ7QFWc+TXGD2H2
+        A+3ml5L2v7kUNJQ1Pi5uc9KGqOy4Mwk6SPzJWO1AwC2xmFeVGtccNRZeKdy5E12Oipx11ND/UEu
+        h/Kco1y42dAPFWTaOeGmdx0gW
+X-Received: by 2002:a5d:46d2:0:b0:2c5:4b93:1f4 with SMTP id g18-20020a5d46d2000000b002c54b9301f4mr1673347wrs.58.1676365663048;
+        Tue, 14 Feb 2023 01:07:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set9tKSS15UUZyB55NrmYIY9oMjNB9gXG+WnOns1nL3MBlxyjxsKbgGdScR9/PpTqD72Icq0ULQ==
+X-Received: by 2002:a5d:46d2:0:b0:2c5:4b93:1f4 with SMTP id g18-20020a5d46d2000000b002c54b9301f4mr1673316wrs.58.1676365662594;
+        Tue, 14 Feb 2023 01:07:42 -0800 (PST)
+Received: from [192.168.3.108] (p5b0c60e7.dip0.t-ipconnect.de. [91.12.96.231])
+        by smtp.gmail.com with ESMTPSA id l4-20020adff484000000b002c569acab1esm265077wro.73.2023.02.14.01.07.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 01:07:42 -0800 (PST)
+Message-ID: <75d74adc-7f18-d0df-e092-10bca4f05f2a@redhat.com>
+Date:   Tue, 14 Feb 2023 10:07:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214075312.GB4981@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 0/5] iov_iter: Adjust styling/location of new splice
+ functions
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230214083710.2547248-1-dhowells@redhat.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230214083710.2547248-1-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:23:12PM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Feb 13, 2023 at 05:43:56PM +0100, Johan Hovold wrote:
-> > On Wed, Feb 01, 2023 at 01:55:00PM +0530, Manivannan Sadhasivam wrote:
-> > > The logic used to find the quirky firmware that intercepts the writes to
-> > > S2CR register to replace bypass type streams with a fault, and ignore the
-> > > fault type, is not working with the firmware on newer SoCs like SC8280XP.
-> > > 
-> > > The current logic uses the last stream mapping group (num_mapping_groups
-> > > - 1) as an index for finding quirky firmware. But on SC8280XP, this
-> > > logic is not working as the number of stream mapping groups reported by
-> > > the SMMU (163 as on the SC8280XP-CRD device) is not valid for some reason.
-> > 
-> > NUMSMRG read back as 162 here, both on my CRD and X13s. Was '163' a typo
-> > or a real difference?
-> > 
+On 14.02.23 09:37, David Howells wrote:
+> Hi Jens, Al, Christoph,
 > 
-> Ah yes, it is 162 indeed. Sorry, typo!
+> Here are patches to make some changes that Christoph requested[1] to the
+> new generic file splice functions that I implemented[2].  Apart from one
+> functional change, they just altering the styling and move one of the
+> functions to a different file:
 > 
-> > > So the current logic that checks the (163-1) S2CR entry fails to detect
-> > > the quirky firmware on these devices and triggers invalid context fault
-> > > for bypass streams.
-> > > 
-> > > To fix this issue, rework the logic to find the first non-valid (free)
-> > > stream mapping register group (SMR) and use that index to access S2CR
-> > > for detecting the bypass quirk.
-> > 
-> > So while this works for the quirk detection, shouldn't we also do
-> > something about that bogus NUMSMRG value? At least cap it at 128, which
-> > appears to be the maximum according to the specification, for example,
-> > by clearing bit 7 when any of the lower bits are set?
-> > 
-> > That would give us 35 (or 36) groups and working quirk detection with
-> > just the following smaller patch:
-> > 
+>   (1) Rename the main functions:
 > 
-> I'm not certain if the value is bogus or not. It is clear that the spec
-> specifies 128 as the max but internal qcom document shows that they indeed
-> set 162 on purpose in the hypervisor.
+> 	generic_file_buffered_splice_read() -> filemap_splice_read()
+> 	generic_file_direct_splice_read()   -> direct_splice_read()
+> 
+>   (2) Abstract out the calculation of the location of the head pipe buffer
+>       into a helper function in linux/pipe_fs_i.h.
+> 
+>   (3) Use init_sync_kiocb() in filemap_splice_read().
+> 
+>       This is where the functional change is.  Some kiocb fields are then
+>       filled in where they were set to 0 before, including setting ki_flags
+>       from f_iocb_flags.
+> 
+>   (4) Move filemap_splice_read() to mm/filemap.c.  filemap_get_pages() can
+>       then be made static again.
+> 
+>   (5) Fix splice-read for a number of filesystems that don't provide a
+>       ->read_folio() op and for which filemap_get_pages() cannot be used.
+> 
+> I've pushed the patches here also:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract-3
+> 
+> I've also updated worked the changes into the commits on my iov-extract
+> branch if that would be preferable, though that means Jens would need to
+> update his for-6.3/iov-extract again.
+> 
+> David
+> 
+> Link: https://lore.kernel.org/r/Y+n0n2UE8BQa/OwW@infradead.org/ [1]
+> Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ [2]
+> 
+> Changes
+> =======
+> ver #3)
+>   - Fix filesystems/drivers that don't have ->read_folio().
+> 
+> ver #2)
+>   - Don't attempt to filter IOCB_* flags in filemap_splice_read().
+> 
+> Link: https://lore.kernel.org/r/20230213134619.2198965-1-dhowells@redhat.com/ # v1
 >
-> So until we get a clear view on that, I'd not cap it.
 
-But if we fault as soon as we try to do something with those register
-groups above 128 that also violate the spec, it doesn't seem right to
-trust the fw value here.
+You ignored my RB's :(
 
-Clarification from Qualcomm would be good either way, but if they are
-indication that it's not just a bug that has left bit 7 set then
-limiting to 128 also seems reasonable (i.e. not by clearing the high
-bit, but by using the minimum of 128 and size below).
+.. but unrelated, what's the plan with this now? As Jens mentioned, it 
+might be better to wait for 6.4 for the full series, in which case 
+folding this series into the other series would be better.
 
-> > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> > index 2ff7a72cf377..0f564a86c352 100644
-> > --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> > @@ -1744,6 +1744,12 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
-> >                         return -ENODEV;
-> >                 }
-> >  
-> > +               if (size > 0x80) {
-> > +                       dev_warn(smmu->dev,
-> > +                                "invalid number of SMR groups, clearing bit 7\n");
-> > +                       size -= 0x80;
-> > +               }
-> > +
-> >                 /* Zero-initialised to mark as invalid */
-> >                 smmu->smrs = devm_kcalloc(smmu->dev, size, sizeof(*smmu->smrs),
-> >                                           GFP_KERNEL);
-> > 
-> > I also verified that using index 127 (group 128) for the quirk detection
-> > works on my CRD, while the invalid index 128 fails (as do index 161
-> > which would currently be used).
-> > 
-> > > This also warrants a change in variable name from last_s2cr to free_s2cr.
-> > > 
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
-> > >  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 24 +++++++++++++++++-----
-> > >  1 file changed, 19 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > index 78fc0e1bf215..4104f81b8d8f 100644
-> > > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > @@ -267,23 +267,37 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
-> > >  
-> > >  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
-> > >  {
-> > > -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
-> > >  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
-> > > +	u32 free_s2cr;
-> > >  	u32 reg;
-> > >  	u32 smr;
-> > >  	int i;
-> > >  
-> > > +	/*
-> > > +	 * Find the first non-valid (free) stream mapping register group and
-> > > +	 * use that index to access S2CR for detecting the bypass quirk.
-> > > +	 */
-> > > +	for (i = 0; i < smmu->num_mapping_groups; i++) {
-> > > +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
-> > > +
-> > > +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
-> > > +			break;
-> > > +	}
-> > > +
-> > > +	free_s2cr = ARM_SMMU_GR0_S2CR(i);
-> > 
-> > In the unlikely event that there is no free group this would access an
-> > invalid index.
-> > 
-> 
-> Hmm, theoretically yes. But what would be the plan of action if that happens?
-> Should we just bail out with error or skip the quirk detection?
+-- 
+Thanks,
 
-Yes, skipping quirk detection seems preferable to crashing systems that
-don't need the quirk.
+David / dhildenb
 
-Johan
