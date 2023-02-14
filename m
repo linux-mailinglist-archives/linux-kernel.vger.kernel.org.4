@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAC2695529
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4F4695546
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjBNAGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 19:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S230079AbjBNAOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 19:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjBNAGk (ORCPT
+        with ESMTP id S229941AbjBNAOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:06:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CEC974E;
-        Mon, 13 Feb 2023 16:06:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AEF5B815D7;
-        Tue, 14 Feb 2023 00:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC84C433D2;
-        Tue, 14 Feb 2023 00:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676333197;
-        bh=7w+QCpSPJLTXIjjwLzAaojQaLQkv4JGlLYFaWApxh2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=atX5FSy3oMqM0KJX4C9JKBaYToW3bt9BZfi4iTetnG8kgxG1NORadoz221vwE5XHR
-         VXyIxXQ26X2Xhpwf30nLLhfmhXLQPCYJ8LoSVKpJlU1iXN6UZVmAhM+IPOgswpbuZK
-         ttbnaBBayDQOLKM1/mBoP+bItXrsH/ZLt8ztlmSEGyJdFOA9D2bCoJPLFLFC/tco9G
-         j5/9RkiWU8Fe5GTDu2rdHQcIGj962P3YwhVIPm4N+9zpxT/fxwXunUSrjZb8RwkKXe
-         0p3NVE7Ob6NNeUoEDtZ/ZOrlnhFzEdsccpjZmK2ihBlfHxm17p9P2t0Kz8qUg5Uu1d
-         QGDYjtDmmIEmw==
-Date:   Mon, 13 Feb 2023 19:06:36 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        christophe.leroy@csgroup.eu, npiggin@gmail.com,
-        naveen.n.rao@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH AUTOSEL 6.1 17/38] powerpc/85xx: Fix unannotated
- intra-function call warning
-Message-ID: <Y+rQjJr2CyQhfIZN@sashalap>
-References: <20230209111459.1891941-1-sashal@kernel.org>
- <20230209111459.1891941-17-sashal@kernel.org>
- <288e133f-f740-6818-8125-8079217ab822@linux.ibm.com>
+        Mon, 13 Feb 2023 19:14:17 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48E10193F8;
+        Mon, 13 Feb 2023 16:14:15 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 423DE1A9A;
+        Mon, 13 Feb 2023 16:14:57 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83DA23F663;
+        Mon, 13 Feb 2023 16:14:11 -0800 (PST)
+Date:   Tue, 14 Feb 2023 00:07:36 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Bastian Germann <bage@debian.org>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: hwlock: sun6i: Add missing names
+Message-ID: <20230214000736.3697f8c6@slackpad.lan>
+In-Reply-To: <20230213231931.6546-3-bage@debian.org>
+References: <20230213231931.6546-1-bage@debian.org>
+        <20230213231931.6546-3-bage@debian.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <288e133f-f740-6818-8125-8079217ab822@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 04:55:54PM +0530, Sathvika Vasireddy wrote:
->Hi Sasha,
->
->On 09/02/23 16:44, Sasha Levin wrote:
->>From: Sathvika Vasireddy <sv@linux.ibm.com>
->>
->>[ Upstream commit 8afffce6aa3bddc940ac1909627ff1e772b6cbf1 ]
->>
->>objtool throws the following warning:
->>   arch/powerpc/kernel/head_85xx.o: warning: objtool: .head.text+0x1a6c:
->>   unannotated intra-function call
->>
->>Fix the warning by annotating KernelSPE symbol with SYM_FUNC_START_LOCAL
->>and SYM_FUNC_END macros.
->>
->>Reported-by: kernel test robot <lkp@intel.com>
->>Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->>Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->>Link: https://lore.kernel.org/r/20230128124138.1066176-1-sv@linux.ibm.com
->>Signed-off-by: Sasha Levin <sashal@kernel.org>
->>---
->>  arch/powerpc/kernel/head_85xx.S | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->>diff --git a/arch/powerpc/kernel/head_85xx.S b/arch/powerpc/kernel/head_85xx.S
->>index 52c0ab416326a..d3939849f4550 100644
->>--- a/arch/powerpc/kernel/head_85xx.S
->>+++ b/arch/powerpc/kernel/head_85xx.S
->>@@ -862,7 +862,7 @@ _GLOBAL(load_up_spe)
->>   * SPE unavailable trap from kernel - print a message, but let
->>   * the task use SPE in the kernel until it returns to user mode.
->>   */
->>-KernelSPE:
->>+SYM_FUNC_START_LOCAL(KernelSPE)
->>  	lwz	r3,_MSR(r1)
->>  	oris	r3,r3,MSR_SPE@h
->>  	stw	r3,_MSR(r1)	/* enable use of SPE after return */
->>@@ -879,6 +879,7 @@ KernelSPE:
->>  #endif
->>  	.align	4,0
->>+SYM_FUNC_END(KernelSPE)
->>  #endif /* CONFIG_SPE */
->>  /*
->
->Please drop this patch because objtool enablement patches for powerpc 
->are not a part of kernel v6.1.
+On Tue, 14 Feb 2023 00:19:29 +0100
+Bastian Germann <bage@debian.org> wrote:
 
-Ack, I'll drop this and the other one you've pointed out. Thanks!
+> The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
+> and reset-names set to "ahb" as required by the driver.
 
--- 
-Thanks,
-Sasha
+That should read "Linux driver", and is technically not a good
+rationale to change a DT binding, but I guess the Linux kernel is the
+only user so far, so the change should be fine:
+
+> Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
+> Signed-off-by: Bastian Germann <bage@debian.org>
+
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+> ---
+>  .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml         | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> index 01b1bbb3061f..1f11d9580646 100644
+> --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> @@ -23,9 +23,17 @@ properties:
+>    clocks:
+>      maxItems: 1
+>  
+> +  clock-names:
+> +    items:
+> +      - const: ahb
+> +
+>    resets:
+>      maxItems: 1
+>  
+> +  reset-names:
+> +    items:
+> +      - const: ahb
+> +
+>    '#hwlock-cells':
+>      const: 1
+>  
+> @@ -33,7 +41,9 @@ required:
+>    - compatible
+>    - reg
+>    - clocks
+> +  - clock-names
+>    - resets
+> +  - reset-names
+>    - "#hwlock-cells"
+>  
+>  additionalProperties: false
+
