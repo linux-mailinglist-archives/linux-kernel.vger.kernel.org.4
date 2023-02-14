@@ -2,61 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA89A6957E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8876957EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjBNE0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S230022AbjBNEfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBNEZ5 (ORCPT
+        with ESMTP id S229604AbjBNEfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:25:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA4E18B03
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676348756; x=1707884756;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iPFmtli6ouLRz7LBBGZTxmL8LIqT9rw6/9iOEH63zSI=;
-  b=Q9pMvMy257/CuqXIJlFyd05am4L2v2I+B7mk9KKQ8ph/T9IhGDOk9iFs
-   bXvEEp6P03eIVaC8wB4ibCtTSwSWmki90KFgMComKFiM/aOkhGKf1cRtA
-   WXXF1m1hmH8GnsA7neix1FrQ+kzISh7FI9p8o2Gb3LSgtNSGfLaCliDuo
-   ow2i0JzKyJwAF99iCUByvy4drZafUcd1LjbhYXcK5tTET7ufw/huDMfkS
-   OfupYTQb+sdq7UKa28B+dsO8uNpha5ITv1Vhv+FF/DVtIdJkSHyMsQQHk
-   pdc3xAlMJROGgT/5d6Iilg3iVxbt3T3wDfoHH36pLh60+JlYefoiQZ5Js
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="311432848"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="311432848"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 20:25:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="811866307"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="811866307"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2023 20:25:54 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRmt8-0008DH-0g;
-        Tue, 14 Feb 2023 04:25:54 +0000
-Date:   Tue, 14 Feb 2023 12:25:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 0a5e985fb1c8633a4727a472550434f8a4ca7d29
-Message-ID: <63eb0d2c.qiM5bLaHlmIA1OOE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 13 Feb 2023 23:35:06 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A21318B3B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:35:05 -0800 (PST)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 558E710047D88
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:35:04 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id Rn20p11SLaJXNRn20pHCsC; Tue, 14 Feb 2023 04:35:04 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=ZpQol/3G c=1 sm=1 tr=0 ts=63eb0f78
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=m04uMKEZRckA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ycx7yKhb6BHF5jh1v4RxAby3S01VdNj1GD911429xQ4=; b=NBGY7KVJE4UyBnWheIM1/Ih+hy
+        prqGo3Dd0rVnTNB5m/iijxPfINOEnl6GHlPIAAVqM3zTsbCSFHUAmtwDpdCIx8pcKRR3fWhzJLLw9
+        2acHX24ugLHTJO+NfI5llbpYX+T/D/4Km8yVIssTEj0d4YYwmRzGWiegga72jClD5h068P/bf6naW
+        Mwv4MjqcZNmyWk76jYjONDI34oLnNn+xG4XBrO7nsNEnzJX9WP2y1NjIwqSvyL5YJZ2AjlvnwXwtG
+        lTpqesJc19ZX3WkMe2wcMBrjD5XtXPNHdjefITd+CTK0K//D/V6auRhZANjGhfQQNqPKs7t5/6qJi
+        s/m56vyA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54266 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pRn1z-004ORN-CE;
+        Mon, 13 Feb 2023 21:35:03 -0700
+Subject: Re: [PATCH 6.1 000/114] 6.1.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230213144742.219399167@linuxfoundation.org>
+In-Reply-To: <20230213144742.219399167@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <3269b73f-7198-4da5-3cc5-5c33cf7ed0d2@w6rz.net>
+Date:   Mon, 13 Feb 2023 20:34:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pRn1z-004ORN-CE
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:54266
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,62 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 0a5e985fb1c8633a4727a472550434f8a4ca7d29  Merge branch 'linus'
+On 2/13/23 6:47 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.12 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-elapsed time: 1013m
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-configs tested: 43
-configs skipped: 3
+Tested-by: Ron Economos <re@w6rz.net>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
