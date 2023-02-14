@@ -2,93 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF54696C55
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6C0696C58
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbjBNSGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S233227AbjBNSG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjBNSGv (ORCPT
+        with ESMTP id S230073AbjBNSG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:06:51 -0500
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8803D40E2;
-        Tue, 14 Feb 2023 10:06:48 -0800 (PST)
-Received: by mail-vk1-f182.google.com with SMTP id bs10so8396562vkb.3;
-        Tue, 14 Feb 2023 10:06:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KrQm1/EFavHyFPihiEA+04y1YzVp/FTphoUcyDODtiU=;
-        b=1eUHz/xRl+jwcqfb9Kc+JFJCTUeSLpZMGMH2tU04axq3YtKDBfxuVMnvc0iWSHmzZV
-         jdiJwTMLFxfvgdO3EEV6bNHyh/g1bGyySAaYtluhhTczW/2AoENPX5LZM+D1TXNlEBG2
-         H4hfU5BUmfalrY0hu0E7mIYDNPNq2imdXj/35+yaHbPqFk76DRO3DWBbQ+osCIcUAzNZ
-         zLik78pj2yhUl8SLuFJOcpCVvH7sjTo/1tqBcayzCK3LtIE5PMKHXYt30Ptf+VKRht/U
-         xs14rjkA5++IYsjPZpSnDt0HnpsC4pzb3Tpc30yqc7TIr95Yfuup82sOTdPSBd06fI+c
-         qkjA==
-X-Gm-Message-State: AO0yUKXLURTRLnOoq9OxXUeLrgGks3DzQTxFWOn6Sn7gZtNVmUWoE0lu
-        nOmQUHQ5EpKfQ1oyg8Fb2UTBgEKD1yYH8UiA9sc=
-X-Google-Smtp-Source: AK7set9DyOIWzAEHf2w4JiY6NohRsF9v8/HH3brHwyUo6IdtREUtQdjy8HQC/QZMvWHphz7qN7f7ZBMN33o/dyqbH1I=
-X-Received: by 2002:a1f:a258:0:b0:401:b89:5375 with SMTP id
- l85-20020a1fa258000000b004010b895375mr526413vke.22.1676398007610; Tue, 14 Feb
- 2023 10:06:47 -0800 (PST)
+        Tue, 14 Feb 2023 13:06:56 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681662F7B8;
+        Tue, 14 Feb 2023 10:06:55 -0800 (PST)
+Received: from [192.168.1.90] (unknown [86.120.32.152])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6B8E866020A4;
+        Tue, 14 Feb 2023 18:06:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676398013;
+        bh=ft8PH/ZqA6nSgApIqin+YnV9fYbavSwte6N7D71qPzY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Tw/5LqZEgofQMm+jUdg1ofHxTTLysSEGiKAK2I5nemTdfdb+gbMdIoqHQBC2up2c7
+         IQURtYbXkNEgW3EWE5RDCRXlmI7GZ2+JnuRafMUmhIk+Fl9XrDoypvR7x5Q3xnfQKs
+         Tz/AAOZS9L/NcQKckHwdb5WWXm+Q6W3OWUX6SQJ9tT9dWaUr83u0WMhVowSq1cIuJU
+         2m3NmAatl/MPmyhMUBiG3WbjrJmCeth69VFTvcV17fZHQylzNJDnBjv26rwQ5qGzPP
+         CRTqFqSfedTHbhAElWszPSsMja6HWQypl72R+5CRptn6hKxBjpbQQqimgz6IM5yC7x
+         9hoBu6favdwZA==
+Message-ID: <3256853a-d744-4a41-41b6-752b5c95eedc@collabora.com>
+Date:   Tue, 14 Feb 2023 20:06:49 +0200
 MIME-Version: 1.0
-References: <20230214050452.26390-1-namhyung@kernel.org> <20230214050452.26390-5-namhyung@kernel.org>
- <CAP-5=fWV+VCheBocBpXg-jRHr+vkNnKWbH4Rjma9imQRJpis+w@mail.gmail.com>
-In-Reply-To: <CAP-5=fWV+VCheBocBpXg-jRHr+vkNnKWbH4Rjma9imQRJpis+w@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 14 Feb 2023 10:06:36 -0800
-Message-ID: <CAM9d7ch9pLB7ZvNjisASruLqaQTw_DdZDjJQFSir7zntQHNnhw@mail.gmail.com>
-Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 05/12] riscv: Implement non-coherent DMA support via
+ SiFive cache flushing
+Content-Language: en-US
+To:     Ben Dooks <ben.dooks@codethink.co.uk>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-6-cristian.ciocaltea@collabora.com>
+ <f1a6c357-b7e0-2869-72e0-e850b63e6ca9@codethink.co.uk>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <f1a6c357-b7e0-2869-72e0-e850b63e6ca9@codethink.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 8:41 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Mon, Feb 13, 2023 at 9:05 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > When it uses bpf filters, event might drop some samples.  It'd be nice
-> > if it can report how many samples it lost.  As LOST_SAMPLES event can
-> > carry the similar information, let's use it for bpf filters.
-> >
-> > To indicate it's from BPF filters, add a new misc flag for that and
-> > do not display cpu load warnings.
->
-> Can you potentially have lost samples from being too slow to drain the
-> ring buffer and dropped samples because of BPF? Is it possible to
-> distinguish lost and dropped with this approach?
+On 2/13/23 10:30, Ben Dooks wrote:
+> On 11/02/2023 03:18, Cristian Ciocaltea wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>>
+>> This variant is used on the StarFive JH7100 SoC.
+>>
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>> ---
+>>   arch/riscv/Kconfig              |  6 ++++--
+>>   arch/riscv/mm/dma-noncoherent.c | 37 +++++++++++++++++++++++++++++++--
+>>   2 files changed, 39 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 9c687da7756d..05f6c77faf6f 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -232,12 +232,14 @@ config LOCKDEP_SUPPORT
+>>       def_bool y
+>>   config RISCV_DMA_NONCOHERENT
+>> -    bool
+>> +    bool "Support non-coherent DMA"
+>> +    default SOC_STARFIVE
+>>       select ARCH_HAS_DMA_PREP_COHERENT
+>> +    select ARCH_HAS_DMA_SET_UNCACHED
+>> +    select ARCH_HAS_DMA_CLEAR_UNCACHED
+>>       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>>       select ARCH_HAS_SYNC_DMA_FOR_CPU
+>>       select ARCH_HAS_SETUP_DMA_OPS
+>> -    select DMA_DIRECT_REMAP
+>>   config AS_HAS_INSN
+>>       def_bool $(as-instr,.insn r 51$(comma) 0$(comma) 0$(comma) 
+>> t0$(comma) t0$(comma) zero)
+>> diff --git a/arch/riscv/mm/dma-noncoherent.c 
+>> b/arch/riscv/mm/dma-noncoherent.c
+>> index d919efab6eba..e07e53aea537 100644
+>> --- a/arch/riscv/mm/dma-noncoherent.c
+>> +++ b/arch/riscv/mm/dma-noncoherent.c
+>> @@ -9,14 +9,21 @@
+>>   #include <linux/dma-map-ops.h>
+>>   #include <linux/mm.h>
+>>   #include <asm/cacheflush.h>
+>> +#include <soc/sifive/sifive_ccache.h>
+>>   static bool noncoherent_supported;
+>>   void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+>>                     enum dma_data_direction dir)
+>>   {
+>> -    void *vaddr = phys_to_virt(paddr);
+>> +    void *vaddr;
+>> +    if (sifive_ccache_handle_noncoherent()) {
+>> +        sifive_ccache_flush_range(paddr, size);
+>> +        return;
+>> +    }
+>> +
+>> +    vaddr = phys_to_virt(paddr);
+>>       switch (dir) {
+>>       case DMA_TO_DEVICE:
+>>           ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+>> @@ -35,8 +42,14 @@ void arch_sync_dma_for_device(phys_addr_t paddr, 
+>> size_t size,
+>>   void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>>                  enum dma_data_direction dir)
+>>   {
+>> -    void *vaddr = phys_to_virt(paddr);
+>> +    void *vaddr;
+>> +
+>> +    if (sifive_ccache_handle_noncoherent()) {
+>> +        sifive_ccache_flush_range(paddr, size);
+>> +        return;
+>> +    }
+> 
+> ok, what happens if we have an system where the ccache and another level
+> of cache also requires maintenance operations?
 
-Yeah, the former is exactly what LOST_SAMPLES event gives you.
-It should come from the kernel while BPF filters keep a separate
-counter for dropped samples and inject LOST_SAMPLES events
-with the new misc flag.  So we can differentiate them using the misc
-flag and that's how I suppress the warning for BPF dropped ones.
+According to [1], the handling of non-coherent DMA on RISC-V is 
+currently being worked on, so I will respin the series as soon as the 
+proper support arrives.
 
-Thanks,
-Namhyung
+[1] https://lore.kernel.org/lkml/Y+d36nz0xdfXmDI1@spud/
+
+
+>> +    vaddr = phys_to_virt(paddr);
+>>       switch (dir) {
+>>       case DMA_TO_DEVICE:
+>>           break;
+>> @@ -49,10 +62,30 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, 
+>> size_t size,
+>>       }
+>>   }
+>> +void *arch_dma_set_uncached(void *addr, size_t size)
+>> +{
+>> +    if (sifive_ccache_handle_noncoherent())
+>> +        return sifive_ccache_set_uncached(addr, size);
+>> +
+>> +    return addr;
+>> +}
+>> +
+>> +void arch_dma_clear_uncached(void *addr, size_t size)
+>> +{
+>> +    if (sifive_ccache_handle_noncoherent())
+>> +        sifive_ccache_clear_uncached(addr, size);
+>> +}
+>> +
+>>   void arch_dma_prep_coherent(struct page *page, size_t size)
+>>   {
+>>       void *flush_addr = page_address(page);
+>> +    if (sifive_ccache_handle_noncoherent()) {
+>> +        memset(flush_addr, 0, size);
+>> +        sifive_ccache_flush_range(__pa(flush_addr), size);
+>> +        return;
+>> +    }
+>> +
+>>       ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
+>>   }
+> 
