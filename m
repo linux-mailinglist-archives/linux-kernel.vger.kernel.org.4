@@ -2,128 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60B3696801
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D124696804
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBNPZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S233117AbjBNP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBNPZ4 (ORCPT
+        with ESMTP id S232916AbjBNP0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:25:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6BB2A143;
-        Tue, 14 Feb 2023 07:25:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E7ACB81BFA;
-        Tue, 14 Feb 2023 15:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE26CC433EF;
-        Tue, 14 Feb 2023 15:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676388352;
-        bh=S672kuM2oKkdizJFtUPdFijqnxwsifpqRIps1yp91iA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PHh5CRZ99XD1TaFZ1paqrurf/zq/FH7vYrIiq7aCOtOKbEZpaebqUKELEfOBBtaoY
-         Yz/l+RRRaujZhwCH7D9zIYv5Fs8L4bzd6TYuuNIRw/c3jYwn3Lvaztpo/KjHan52ZH
-         MQTRkwCglfeZwvAENIAMGnMvEgUzYO5MLPSBPQaP7pm9pEuilZrJl2a6X1zW17nPA/
-         unJyFzPjE8BEVYhrq9LkCuCWAXSktDTqn1DDjZj3Em1XQBUCZ5n8gpONP1WXOqAbh0
-         teS4WER/vNmOnGDU42z2SOc2ujCzKkiKJwwk62HS3Qf3x8lCMjSxbeIWihKaK1qNTo
-         1ws56mDxoyINA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Marcin Szycik <marcin.szycik@linux.intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        Lu Wei <luwei32@huawei.com>, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] ethernet: ice: avoid gcc-9 integer overflow warning
-Date:   Tue, 14 Feb 2023 16:25:36 +0100
-Message-Id: <20230214152548.826703-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 14 Feb 2023 10:26:02 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7B52BEC6;
+        Tue, 14 Feb 2023 07:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kTyUSKK7hvPiQEADgfxatgjm3C74+H+ZAOqQmAnnxTI=; b=nrUawyRgW9aOP52Ra7t5w0yh3H
+        wg7vqOZKVF/gV+g0fQbgp+vIBCIwQuYpWgTfm6DBE+wKyAJOBVxh65HYP7PIrIkV5TqdTR2+KjOVI
+        5ghBfnubfvWcnbIEMgPIp9dXdzObeT97SYI2l/ilmBXtlVePZR+BySPCG7BCV4OoAVSFHy3EILgqu
+        MTdQTCETJ3kRv8x6z5LZxnbpqy8UPsIRxKBEW35m3Z0Dx2K0thxs1kPdRQA/5dC8/dR+INkWp2BLQ
+        lWQWvgFT9LarvSG0u9FQL7Ee27qvkDA6xgFtVAubBPTnU4jj1p+9Fj+trmEjam7NbNihSam6YwzWJ
+        /MKCxO9g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52916)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pRxBr-0005ff-79; Tue, 14 Feb 2023 15:25:55 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pRxBo-000419-NX; Tue, 14 Feb 2023 15:25:52 +0000
+Date:   Tue, 14 Feb 2023 15:25:52 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
+Message-ID: <Y+uoAEzpM588j/lw@shell.armlinux.org.uk>
+References: <20230213144745.696901179@linuxfoundation.org>
+ <cc3f4cfb-adbc-c3b7-1c21-bb28e98499d8@gmail.com>
+ <Y+soPsujgwChdgr7@kroah.com>
+ <Y+ugWb4vsEyvd9W0@shell.armlinux.org.uk>
+ <Y+ukMhMS7DvuFLOJ@sashalap>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+ukMhMS7DvuFLOJ@sashalap>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Feb 14, 2023 at 10:09:38AM -0500, Sasha Levin wrote:
+> On Tue, Feb 14, 2023 at 02:53:13PM +0000, Russell King (Oracle) wrote:
+> > On Tue, Feb 14, 2023 at 07:20:46AM +0100, Greg Kroah-Hartman wrote:
+> > > On Mon, Feb 13, 2023 at 11:50:24AM -0800, Florian Fainelli wrote:
+> > > > On 2/13/23 06:49, Greg Kroah-Hartman wrote:
+> > > > > This is the start of the stable review cycle for the 5.10.168 release.
+> > > > > There are 139 patches in this series, all will be posted as a response
+> > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > let me know.
+> > > > >
+> > > > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+> > > > > Anything received after that time might be too late.
+> > > > >
+> > > > > The whole patch series can be found in one patch at:
+> > > > > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
+> > > > > or in the git tree and branch at:
+> > > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > > > > and the diffstat can be found below.
+> > > > >
+> > > > > thanks,
+> > > > >
+> > > > > greg k-h
+> > > >
+> > > > There is a regression coming from:
+> > > >
+> > > > nvmem: core: fix registration vs use race
+> > > >
+> > > > which causes the following to happen for MTD devices:
+> > > >
+> > > > [    6.031640] kobject_add_internal failed for mtd0 with -EEXIST, don't try
+> > > > to register things with the same name in the same directory.
+> > > > [    7.846965] spi-nor: probe of spi0.0 failed with error -17
+> > > >
+> > > > attached is a full log with the call trace. This does not happen with
+> > > > v6.2-rc8 where the MTD partitions are successfully registered.
+> > > 
+> > > Can you use `git bisect` to find the offending commit?
+> > 
+> > The reason for this is because, due to how my patch series was
+> > backported, you have ended up with nvmem_register() initialising
+> > its embedded device, and then calling device_add() on it _twice_.
+> > 
+> > Basically, the backport of:
+> > 
+> > 	"nvmem: core: fix registration vs use race"
+> > 
+> > is broken, because the original patch _moved_ the device_add() and
+> > that has not been carried forward to whatever got applied to stable
+> > trees.
+> > 
+> > It looks like the 5.15-stable version of this patch was correct.
+> > 
+> > Maybe whoever tried to fixup the failure needs to try again?
+> 
+> I've dropped the backport series from both 5.15 and 5.10.
 
-With older compilers like gcc-9, the calculation of the vlan
-priority field causes a false-positive warning from the byteswap:
+So you've dropped what looks to be a perfectly good backport in 5.15,
+and all of the 5.10 despite it just being the last patch which is the
+problem. Sounds like a total over-reaction to me.
 
-In file included from drivers/net/ethernet/intel/ice/ice_tc_lib.c:4:
-drivers/net/ethernet/intel/ice/ice_tc_lib.c: In function 'ice_parse_cls_flower':
-include/uapi/linux/swab.h:15:15: error: integer overflow in expression '(int)(short unsigned int)((int)match.key-><U67c8>.<U6698>.vlan_priority << 13) & 57344 & 255' of type 'int' results in '0' [-Werror=overflow]
-   15 |  (((__u16)(x) & (__u16)0x00ffU) << 8) |   \
-      |   ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-include/uapi/linux/swab.h:106:2: note: in expansion of macro '___constant_swab16'
-  106 |  ___constant_swab16(x) :   \
-      |  ^~~~~~~~~~~~~~~~~~
-include/uapi/linux/byteorder/little_endian.h:42:43: note: in expansion of macro '__swab16'
-   42 | #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
-      |                                           ^~~~~~~~
-include/linux/byteorder/generic.h:96:21: note: in expansion of macro '__cpu_to_be16'
-   96 | #define cpu_to_be16 __cpu_to_be16
-      |                     ^~~~~~~~~~~~~
-drivers/net/ethernet/intel/ice/ice_tc_lib.c:1458:5: note: in expansion of macro 'cpu_to_be16'
- 1458 |     cpu_to_be16((match.key->vlan_priority <<
-      |     ^~~~~~~~~~~
-
-After a change to be16_encode_bits(), the code becomes more
-readable to both people and compilers, which avoids the warning.
-
-Fixes: 34800178b302 ("ice: Add support for VLAN priority filters in switchdev")
-Suggested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: use be16_encode_bits() instead of a temporary variable.
----
- drivers/net/ethernet/intel/ice/ice_tc_lib.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_tc_lib.c b/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-index 6b48cbc049c6..76f29a5bf8d7 100644
---- a/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-@@ -1455,8 +1455,8 @@ ice_parse_cls_flower(struct net_device *filter_dev, struct ice_vsi *vsi,
- 		if (match.mask->vlan_priority) {
- 			fltr->flags |= ICE_TC_FLWR_FIELD_VLAN_PRIO;
- 			headers->vlan_hdr.vlan_prio =
--				cpu_to_be16((match.key->vlan_priority <<
--					     VLAN_PRIO_SHIFT) & VLAN_PRIO_MASK);
-+				be16_encode_bits(match.key->vlan_priority,
-+						 VLAN_PRIO_MASK);
- 		}
- 
- 		if (match.mask->vlan_tpid)
-@@ -1489,8 +1489,8 @@ ice_parse_cls_flower(struct net_device *filter_dev, struct ice_vsi *vsi,
- 		if (match.mask->vlan_priority) {
- 			fltr->flags |= ICE_TC_FLWR_FIELD_CVLAN_PRIO;
- 			headers->cvlan_hdr.vlan_prio =
--				cpu_to_be16((match.key->vlan_priority <<
--					     VLAN_PRIO_SHIFT) & VLAN_PRIO_MASK);
-+				be16_encode_bits(match.key->vlan_priority,
-+						 VLAN_PRIO_MASK);
- 		}
- 	}
- 
 -- 
-2.39.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
