@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62855696145
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CB469616C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbjBNKrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        id S232102AbjBNKuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjBNKrJ (ORCPT
+        with ESMTP id S232776AbjBNKtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:47:09 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60958252A2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:46:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id jg8so38987877ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:46:48 -0800 (PST)
+        Tue, 14 Feb 2023 05:49:49 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F211A138;
+        Tue, 14 Feb 2023 02:49:07 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id bx22so14695254pjb.3;
+        Tue, 14 Feb 2023 02:49:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bSZu2dCpB4pUnfEG7IZ7hWgBfaAKgOTGJQciP+JhljI=;
-        b=aInsRALgA9wZYs93mqIJfVgwnQuxi8FJcVt7WdnlcIoY/NwQulebHxmweQjHMbfsiQ
-         vq6JJyxTh8yirL735aQ7KfJ/Ued/I3W63m/SLwzueFUtAPZCXT7NAM747gy0YAckbJtd
-         DeE+BZMjvwVTLVg3Fmr882truHpV/P0nxG/2ZiMYgX5yeMDmASvEnfJKR90qJkryIjOg
-         4O0aQZPubX3k9resjMZh6If4fx6fXbkeYDZmbxxfpd1oh2qXmdwSR+ft+4hUVsqj9QHk
-         QkOjnHrNxHZZFZoAA3OB9vCK/ZDcxQjlUoUoUdz4mrt2idONS0Yr1QvdlUjUE5wBHgGG
-         p3mg==
+        bh=pUdKercMwIzfCNwi4nXhcJunGaPC6aQ18aVtD0+Afx0=;
+        b=pTg9tmmAA/bvDbEYMKfFp3A2ZngmUpK5yL1c2kHC3TXKGt+yCXE4TgPE0vdJj5P+Fq
+         yO9EWMTUPB1jBmQvC3tGxAG56Uyvrgu3rCkJXN3QjG96QD+RQZiuU4+yWsG0XOLoVlyo
+         aZiruIrTPs1PmpHF8eowCdumteLWtPYBVaDbIAeLaDOoEha5e8aIB8uJvZaS0Fo5DSV+
+         KlZK84PnQakzSH26kjgNQmQ5+2MktIugXiy6mZ+o+yRQkLc20rAnURN+MAsTvy48aUUA
+         ARlh5Qh0ykOj9BGgs/u8BHtm1RV4RbvZMsjNsECnusEtRfm3voUZptSRi63AVXYmWa4h
+         hehQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSZu2dCpB4pUnfEG7IZ7hWgBfaAKgOTGJQciP+JhljI=;
-        b=OBDL2qIbYXwclu8VNaq/wOQMvmC6av9jq9wU1QgBiySc8UpoiJ7ybZ1E7VQx+uy1cZ
-         t19Do/LdC8rxQFxXTGVsz9nKlWssOP5NhslksU10QqLXsTtAIy8rlpJ/6CtKViX8FquK
-         Sxriw1InsR4mEVdm9XZW/5L3a0GogapTnHPvmME1Gt8tgZw5gISqx9qdgFxAouOonIIK
-         IdXV26I7fG1DuUUqLOorNdezbh8lxvJappEUGezdYz24Ga60ddjzlpaTZqpRSpS3Q0Ts
-         0KnKNqsUrIVVQ5mxwYkKMMpqsjC/I17sPI5Wi1j7vAuvtM+seq4aVHQZAqrzw5OHwgrr
-         qxuA==
-X-Gm-Message-State: AO0yUKXGknOcGPSSFfgJrY9aneD09qQAjnnabcBM2uMmZlUIVu59/wrR
-        ug/BLY9mefUHqIVLtPiVPca1R3i4xVjEtpTm
-X-Google-Smtp-Source: AK7set+SZIbDQUqGvv3dWu5Z+4Ra/zloJPpjrNsbIKyCqSc+rR30uYZQqR/vfvaa2Dts5ofkLbFpQg==
-X-Received: by 2002:a17:907:7245:b0:8a5:8620:575 with SMTP id ds5-20020a170907724500b008a586200575mr3170288ejc.3.1676371605817;
-        Tue, 14 Feb 2023 02:46:45 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id sd18-20020a170906ce3200b008b1329cd4cdsm449192ejb.190.2023.02.14.02.46.44
+        bh=pUdKercMwIzfCNwi4nXhcJunGaPC6aQ18aVtD0+Afx0=;
+        b=P041H4J72PYzXGyY26Tq4TI2d2ppEzo0IeuB6dL5uPC8Sx4VQjjyaPSlvZRlxK+aUi
+         q7fpdIgBeMlpcVyPFvUvDZLLhN/dlZgPA3fuMOE0eiU9qTeEkXu72J0T7ipO3N1G8uWx
+         IaWPNX1oFP1fJTZDWtSOEGjO66yRxd99DLnNt4KmIOQlG9tBwxmzZaktcFA1VoWIyrb3
+         VwfNUHhrsJ/wjl1VcI97JG9yRIaVDcTYcAy8nzuq0FSty2pPxkvLSgIBKwWETDIOQ/8Q
+         9O120quqDgzcg1T8qOwluJJJg5qDFhSawtpRqfFuDwZkVS8jIobYbT1Q4eEcHOO0ygSn
+         sPYw==
+X-Gm-Message-State: AO0yUKVa2Ioq5Wd41uZflYWVwfBGzhuGo07O0cDvvvc+0deSlHU+TeEk
+        cc7dbc8GPoapMMQcixgo6yw=
+X-Google-Smtp-Source: AK7set9TMA7b72PJHBf9qda1QRhsBpPP15denuLukpwCcgHpNmh8Rw69/ujtyFkT9ktxiFaCDRedlw==
+X-Received: by 2002:a05:6a20:728b:b0:c6:5d8b:494b with SMTP id o11-20020a056a20728b00b000c65d8b494bmr2121410pzk.33.1676371734266;
+        Tue, 14 Feb 2023 02:48:54 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902a51200b00199136ded1dsm9942101plq.112.2023.02.14.02.48.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 02:46:45 -0800 (PST)
-Message-ID: <9e9a2822-2b4b-a4e7-d430-e6233ff0c7f1@linaro.org>
-Date:   Tue, 14 Feb 2023 11:46:43 +0100
+        Tue, 14 Feb 2023 02:48:53 -0800 (PST)
+Message-ID: <5771a4cb-4df7-e9a0-9e7e-9a116a40a411@gmail.com>
+Date:   Tue, 14 Feb 2023 18:48:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230103142120.15605-1-konrad.dybcio@linaro.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v2 03/21] KVM: x86: Add macros to track first...last VMX
+ feature MSRs
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230103142120.15605-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230210003148.2646712-1-seanjc@google.com>
+ <20230210003148.2646712-4-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20230210003148.2646712-4-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/2/2023 8:31 am, Sean Christopherson wrote:
+> +/*
+> + * The first...last VMX feature MSRs that are emulated by KVM.  This may or may
+> + * not cover all known VMX MSRs, as KVM doesn't emulate an MSR until there's an
+> + * associated feature that KVM supports for nested virtualization.
+> + */
+> +#define KVM_FIRST_EMULATED_VMX_MSR	MSR_IA32_VMX_BASIC
+> +#define KVM_LAST_EMULATED_VMX_MSR	MSR_IA32_VMX_VMFUNC
 
-
-On 3.01.2023 15:21, Konrad Dybcio wrote:
-> Due to what seems to be a copy-paste error, the _NRT master was
-> identical to the _RT master, which should not be the case.. Fix it
-> using the values available from the downstream kernel [1].
-> 
-> [1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/scuba-bus.dtsi#127
-> Fixes: 1a14b1ac3935 ("interconnect: qcom: Add QCM2290 driver support")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-Gentle bump
-
-Konrad
-> Not tested on real hw.
-> 
->  drivers/interconnect/qcom/qcm2290.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
-> index 0da612d6398c..a29cdb4fac03 100644
-> --- a/drivers/interconnect/qcom/qcm2290.c
-> +++ b/drivers/interconnect/qcom/qcm2290.c
-> @@ -147,9 +147,9 @@ static struct qcom_icc_node mas_snoc_bimc_nrt = {
->  	.name = "mas_snoc_bimc_nrt",
->  	.buswidth = 16,
->  	.qos.ap_owned = true,
-> -	.qos.qos_port = 2,
-> +	.qos.qos_port = 3,
->  	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
-> -	.mas_rpm_id = 163,
-> +	.mas_rpm_id = 164,
->  	.slv_rpm_id = -1,
->  	.num_links = ARRAY_SIZE(mas_snoc_bimc_nrt_links),
->  	.links = mas_snoc_bimc_nrt_links,
+Off-topic, we now have "#define MSR_IA32_VMX_PROCBASED_CTLS3 0x00000492",
+any further changes needed here if L2 guest needs IPI virtualization or why not ?
