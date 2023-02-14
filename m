@@ -2,242 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908656969EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B016969EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjBNQla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S232391AbjBNQlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBNQl2 (ORCPT
+        with ESMTP id S231549AbjBNQlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:41:28 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE1C2CFDB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:41:02 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso14113008wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:41:02 -0800 (PST)
+        Tue, 14 Feb 2023 11:41:49 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F00E2BF2A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:41:29 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso14103427wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QVEVZPx0K3ZOcm8VgbJ77zWaJWVs4WHPzqQwX9jExfU=;
-        b=FYBQbwR3oOM1QbI57RCqMbveqZ8gYey9bS5JB17GDW5lSZn+K+WPL2yfzSyxyzzWPG
-         kMY2xEYvNsFc6t0i93QQEKaAQk5eBu8K4AvVfv34PNTF/zNo6GGzUOuS1zjohLmRGM6j
-         AarqS97tRd3NwufRRVLLekhI7bwdedlHLTDpPWBLm2YFSnk3+S9yRi9ty4AGW1MZSrGY
-         fKFPVOPREUh5TTG7Vy4rIbbytTXaZsrbqbxDieSfhGk+ooTQlNffwldJdVhwFdqePewt
-         OEW/mSvVFXI2eCR4/7ukgwtyZGLlhXQ4iU4FHMxdiX3gTHFgeQ7C/GNSq6zuTyGBC4vg
-         svVg==
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=30SyWhHcXeQCmwLuKz2hroahSQOV1hg9TM2IX1B5XYM=;
+        b=NLRoxDC/X3OQcw1AUFUitV0lw8OBtSVP028kbRsqfwUQNnGDGW4xMUewYmQl3vaRDW
+         heYkrs9ziTDrKSntcIvDoEWhVySmf4AAHqeXLDjuPlHIVI2IGaVKQJPh/IWqggKHCihX
+         xJXOnZYOz4Bko+li2gyxdQvuLs0SGH9TAxUA/I4Dgmsgmt7caQKPWeekQDEmwjZEO1yE
+         aJ711SrbHJguyD7KtnJ9RNT7KgU0DCfsmTb5FpF8kwj4s+yaoLEf9Sh/6f8cMu59+gWf
+         qFmWivGuqc+AZ1UL5CUOx97SHsdsZsDGFSjBqZsDdwfM7pQSH7JhAIJ8F5ib95PIyDRC
+         j1Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QVEVZPx0K3ZOcm8VgbJ77zWaJWVs4WHPzqQwX9jExfU=;
-        b=qp4MKtKpeiilunFI5wPHqK5rs4UKbRxd4Wvu2deTVX5kAQm/dmSlmpZzMkof6G/GhY
-         h3Am0wFIQDTWOPkHAQ0AtNLvWdY2uYjDo0CuHdvkUcig9XxOau4yIJQVd4Mpiwmc9MAJ
-         7Tq3Br2bJil4OYjJ7hmMvhSBofg9lBbg5DncQ07Uy75lC5RjAtJmpMjQa5wr7jSigHWB
-         ynD+8aCjht5l4OjbrrvFVmha4AA2CQ/NUiR79ltzmjV94q9dEsEfgqlfOqIHvJdXfoam
-         a+HOogYyDxov6UFw+OV5Q3t046X2IpCzgR9kvOmPd3G4DQ5pevrQ4Np1OVrXBQBoMj7R
-         qJOA==
-X-Gm-Message-State: AO0yUKXMk/+YNVsrELiwtxbGcohfPHAPinI69BXHYjTGXN66G6SvlBrO
-        2rHNbK7ZtEtJRZ0kGUdrx+q9QmoXYw40w1kiPiX9rw==
-X-Google-Smtp-Source: AK7set+m/D6oq+FxwDf17S592BJEibi99RpP2MpAg9c+81twvi+rqernjlbr+zMOrHh2ZFANu4b7C4yovxkXcM7AwfA=
-X-Received: by 2002:a7b:cdf0:0:b0:3db:1d5e:699 with SMTP id
- p16-20020a7bcdf0000000b003db1d5e0699mr11361wmj.195.1676392860546; Tue, 14 Feb
- 2023 08:41:00 -0800 (PST)
+        bh=30SyWhHcXeQCmwLuKz2hroahSQOV1hg9TM2IX1B5XYM=;
+        b=mNaUTT2hHaqLBFt0ogsw+ZtVQ0PpP21lBQZ3KnLc7PIcNg1c9Vu7yy72bG2kmTbQDS
+         B09Ry3A4bqVi9whh8PrU8yT8MFAJnQshmiOJdX8hVUYV4+dl0cFhsI9kn6qNGDQX0fXC
+         xJFOPHYszeFezjBoIix+AjyWwIGJykQkCJY41UXXzIN0eoPxfetkTXAZkf/P8f2xPJW2
+         HiaM/yAL2phZQSdPU/ZZft6nbcgCdN3Y9mc7xx8aJY/MJvE7U5MbxBgCjVwG7fq1uV0z
+         PrU99NbMh16DLY9fvOvTc6bu97NMp5NiDdi2C1RLbkPcnfSB9DIC5QhB9ZD5nxt6gTS7
+         rBxA==
+X-Gm-Message-State: AO0yUKUAkpAIblQVUmqZhqab4eeRmkxQpQzZ4Y/vOTRV54620MTA5UjZ
+        r3I7HlL13BU5WVa7EFP7f0AJtw==
+X-Google-Smtp-Source: AK7set9tWFGWqjp93dl8Si0fD9QUPlDhi7r+5Dn5r8ciUlQO/1PqNvT//Wl+KhWphviMxSMdtOOhNQ==
+X-Received: by 2002:a05:600c:448a:b0:3dc:5a13:c7d1 with SMTP id e10-20020a05600c448a00b003dc5a13c7d1mr2515688wmo.16.1676392881054;
+        Tue, 14 Feb 2023 08:41:21 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05600c224300b003db01178b62sm20785505wmm.40.2023.02.14.08.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 08:41:20 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 14 Feb 2023 17:41:18 +0100
+Subject: [PATCH v4] power: reset: add Odroid Go Ultra poweroff driver
 MIME-Version: 1.0
-References: <20230214050452.26390-1-namhyung@kernel.org> <20230214050452.26390-5-namhyung@kernel.org>
-In-Reply-To: <20230214050452.26390-5-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 14 Feb 2023 08:40:48 -0800
-Message-ID: <CAP-5=fWV+VCheBocBpXg-jRHr+vkNnKWbH4Rjma9imQRJpis+w@mail.gmail.com>
-Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230126-b4-odroid-go-ultra-poweroff-v4-1-979efb6eb3fb@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAK2562MC/5XOzQ6CMBAE4FcxPbsGWkD05HsYD9s/aEK6ZIuoM
+ by7hZs3Pc4cvpm3SI6DS+K8ewt2c0iBYg7VfidMj7FzEGzOQhZSFaVsQFdAlilY6Ajuw8QIIz0
+ ck/dgWm8NnpRXTossaEwONGM0fTbifRhyObLz4blNXm859yFNxK/twSzX9rexWUIJ2Jq6aJvGV
+ 2guQ4jIdCDuxArP6g9MZazAo7fK1qbS6gtbluUDaMYkFykBAAA=
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 9:05 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> When it uses bpf filters, event might drop some samples.  It'd be nice
-> if it can report how many samples it lost.  As LOST_SAMPLES event can
-> carry the similar information, let's use it for bpf filters.
->
-> To indicate it's from BPF filters, add a new misc flag for that and
-> do not display cpu load warnings.
+The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+to its two PMICs in order, this represents the poweroff scheme needed to complete
+a clean poweroff of the system.
 
-Can you potentially have lost samples from being too slow to drain the
-ring buffer and dropped samples because of BPF? Is it possible to
-distinguish lost and dropped with this approach?
+This implement this scheme by implementing a self registering driver to permit
+using probe defer until both pmics are finally probed.
 
-Thanks,
-Ian
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Previous submission was at [1], but I converted it to an independent
+platform device with device auto registration to permit waiting for
+both the PMICs drivers to probe.
 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-record.c  | 37 ++++++++++++++++++++++--------------
->  tools/perf/util/bpf-filter.c |  7 +++++++
->  tools/perf/util/bpf-filter.h |  5 +++++
->  tools/perf/util/session.c    |  3 ++-
->  4 files changed, 37 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index c81047a78f3e..3201d1a1ea1f 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -1869,24 +1869,16 @@ record__switch_output(struct record *rec, bool at_exit)
->         return fd;
->  }
->
-> -static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
-> +static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
->                                         struct perf_record_lost_samples *lost,
-> -                                       int cpu_idx, int thread_idx)
-> +                                       int cpu_idx, int thread_idx, u64 lost_count,
-> +                                       u16 misc_flag)
->  {
-> -       struct perf_counts_values count;
->         struct perf_sample_id *sid;
->         struct perf_sample sample = {};
->         int id_hdr_size;
->
-> -       if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
-> -               pr_err("read LOST count failed\n");
-> -               return;
-> -       }
-> -
-> -       if (count.lost == 0)
-> -               return;
-> -
-> -       lost->lost = count.lost;
-> +       lost->lost = lost_count;
->         if (evsel->core.ids) {
->                 sid = xyarray__entry(evsel->core.sample_id, cpu_idx, thread_idx);
->                 sample.id = sid->id;
-> @@ -1895,6 +1887,7 @@ static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
->         id_hdr_size = perf_event__synthesize_id_sample((void *)(lost + 1),
->                                                        evsel->core.attr.sample_type, &sample);
->         lost->header.size = sizeof(*lost) + id_hdr_size;
-> +       lost->header.misc = misc_flag;
->         record__write(rec, NULL, lost, lost->header.size);
->  }
->
-> @@ -1918,6 +1911,7 @@ static void record__read_lost_samples(struct record *rec)
->
->         evlist__for_each_entry(session->evlist, evsel) {
->                 struct xyarray *xy = evsel->core.sample_id;
-> +               u64 lost_count;
->
->                 if (xy == NULL || evsel->core.fd == NULL)
->                         continue;
-> @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
->
->                 for (int x = 0; x < xyarray__max_x(xy); x++) {
->                         for (int y = 0; y < xyarray__max_y(xy); y++) {
-> -                               __record__read_lost_samples(rec, evsel, lost, x, y);
-> +                               struct perf_counts_values count;
-> +
-> +                               if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
-> +                                       pr_err("read LOST count failed\n");
-> +                                       goto out;
-> +                               }
-> +
-> +                               if (count.lost) {
-> +                                       __record__save_lost_samples(rec, evsel, lost,
-> +                                                                   x, y, count.lost, 0);
-> +                               }
->                         }
->                 }
-> +
-> +               lost_count = perf_bpf_filter__lost_count(evsel);
-> +               if (lost_count)
-> +                       __record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
-> +                                                   PERF_RECORD_MISC_LOST_SAMPLES_BPF);
->         }
-> +out:
->         free(lost);
-> -
->  }
->
->  static volatile sig_atomic_t workload_exec_errno;
-> diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
-> index f47420cf81c9..11fb391c92e9 100644
-> --- a/tools/perf/util/bpf-filter.c
-> +++ b/tools/perf/util/bpf-filter.c
-> @@ -76,6 +76,13 @@ int perf_bpf_filter__destroy(struct evsel *evsel)
->         return 0;
->  }
->
-> +u64 perf_bpf_filter__lost_count(struct evsel *evsel)
-> +{
-> +       struct sample_filter_bpf *skel = evsel->bpf_skel;
-> +
-> +       return skel ? skel->bss->dropped : 0;
-> +}
-> +
->  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
->                                                        enum perf_bpf_filter_op op,
->                                                        unsigned long val)
-> diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
-> index 6077930073f9..36b44c8188ab 100644
-> --- a/tools/perf/util/bpf-filter.h
-> +++ b/tools/perf/util/bpf-filter.h
-> @@ -22,6 +22,7 @@ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flag
->  int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
->  int perf_bpf_filter__prepare(struct evsel *evsel);
->  int perf_bpf_filter__destroy(struct evsel *evsel);
-> +u64 perf_bpf_filter__lost_count(struct evsel *evsel);
->
->  #else /* !HAVE_BPF_SKEL */
->
-> @@ -38,5 +39,9 @@ static inline int perf_bpf_filter__destroy(struct evsel *evsel)
->  {
->         return -ENOSYS;
->  }
-> +static inline u64 perf_bpf_filter__lost_count(struct evsel *evsel)
-> +{
-> +       return 0;
-> +}
->  #endif /* HAVE_BPF_SKEL*/
->  #endif /* PERF_UTIL_BPF_FILTER_H */
-> \ No newline at end of file
-> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-> index 749d5b5c135b..7d8d057d1772 100644
-> --- a/tools/perf/util/session.c
-> +++ b/tools/perf/util/session.c
-> @@ -1582,7 +1582,8 @@ static int machines__deliver_event(struct machines *machines,
->                         evlist->stats.total_lost += event->lost.lost;
->                 return tool->lost(tool, event, sample, machine);
->         case PERF_RECORD_LOST_SAMPLES:
-> -               if (tool->lost_samples == perf_event__process_lost_samples)
-> +               if (tool->lost_samples == perf_event__process_lost_samples &&
-> +                   !(event->header.misc & PERF_RECORD_MISC_LOST_SAMPLES_BPF))
->                         evlist->stats.total_lost_samples += event->lost_samples.lost;
->                 return tool->lost_samples(tool, event, sample, machine);
->         case PERF_RECORD_READ:
-> --
-> 2.39.1.581.gbfd45094c4-goog
->
+[1] https://lore.kernel.org/all/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org/
+---
+Changes in v4:
+- handle pmic struct device removal by devm_add_action_or_reset()
+- add dependency on I2C for of_find_i2c_device_by_node() after kernel test robot reports
+- Link to v3: https://lore.kernel.org/r/20230126-b4-odroid-go-ultra-poweroff-v3-1-0a7fd3d5c4b3@linaro.org
+
+Changes in v3:
+- Removed dependency with rk08
+- Switched to storing struct device of pmics
+- Fixed module init/exit
+- Link to v2: https://lore.kernel.org/r/20230126-b4-odroid-go-ultra-poweroff-v2-1-a8c50866f4ac@linaro.org
+
+Changes in v2:
+- Switched to devm_register_sys_off_handler()
+- Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org
+---
+ drivers/power/reset/Kconfig                    |   7 +
+ drivers/power/reset/Makefile                   |   1 +
+ drivers/power/reset/odroid-go-ultra-poweroff.c | 177 +++++++++++++++++++++++++
+ 3 files changed, 185 insertions(+)
+
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index a8c46ba5878f..7059bd1f2ee7 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -141,6 +141,13 @@ config POWER_RESET_OCELOT_RESET
+ 	help
+ 	  This driver supports restart for Microsemi Ocelot SoC and similar.
+ 
++config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
++	bool "Odroid Go Ultra power-off driver"
++	depends on ARCH_MESON || COMPILE_TEST
++	depends on I2C && OF
++	help
++	  This driver supports Power off for Odroid Go Ultra device.
++
+ config POWER_RESET_OXNAS
+ 	bool "OXNAS SoC restart driver"
+ 	depends on ARCH_OXNAS
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 0a39424fc558..d763e6735ee3 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+ obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
+ obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+ obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
++obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
+ obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+ obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
+ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+diff --git a/drivers/power/reset/odroid-go-ultra-poweroff.c b/drivers/power/reset/odroid-go-ultra-poweroff.c
+new file mode 100644
+index 000000000000..f46271da4e8e
+--- /dev/null
++++ b/drivers/power/reset/odroid-go-ultra-poweroff.c
+@@ -0,0 +1,177 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
++ */
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/of_platform.h>
++#include <linux/mfd/rk808.h>
++#include <linux/regmap.h>
++#include <linux/module.h>
++#include <linux/reboot.h>
++#include <linux/i2c.h>
++
++/*
++ * The Odroid Go Ultra has 2 PMICs:
++ * - RK818 (manages the battery and USB-C power supply)
++ * - RK817
++ * Both PMICs feeds power to the S922X SoC, so they must be powered-off in sequence.
++ * Vendor does power-off the RK817 first, then the RK818 so here we follow this sequence.
++ */
++
++struct odroid_go_ultra_poweroff_data {
++	struct device *dev;
++	struct device *rk817;
++	struct device *rk818;
++};
++
++static int odroid_go_ultra_poweroff_prepare(struct sys_off_data *data)
++{
++	struct odroid_go_ultra_poweroff_data *poweroff_data = data->cb_data;
++	struct regmap *rk817, *rk818;
++	int ret;
++
++	/* RK817 Regmap */
++	rk817 = dev_get_regmap(poweroff_data->rk817, NULL);
++	if (!rk817) {
++		dev_err(poweroff_data->dev, "failed to get rk817 regmap\n");
++		return notifier_from_errno(-EINVAL);
++	}
++
++	/* RK818 Regmap */
++	rk818 = dev_get_regmap(poweroff_data->rk818, NULL);
++	if (!rk818) {
++		dev_err(poweroff_data->dev, "failed to get rk818 regmap\n");
++		return notifier_from_errno(-EINVAL);
++	}
++
++	dev_info(poweroff_data->dev, "Setting PMICs for power off");
++
++	/* RK817 */
++	ret = regmap_update_bits(rk817, RK817_SYS_CFG(3), DEV_OFF, DEV_OFF);
++	if (ret) {
++		dev_err(poweroff_data->dev, "failed to poweroff rk817\n");
++		return notifier_from_errno(ret);
++	}
++
++	/* RK818 */
++	ret = regmap_update_bits(rk818, RK818_DEVCTRL_REG, DEV_OFF, DEV_OFF);
++	if (ret) {
++		dev_err(poweroff_data->dev, "failed to poweroff rk818\n");
++		return notifier_from_errno(ret);
++	}
++
++	return NOTIFY_OK;
++}
++
++static void odroid_go_ultra_poweroff_put_pmic_device(void *data)
++{
++	struct device *dev = data;
++
++	put_device(dev);
++}
++
++static int odroid_go_ultra_poweroff_get_pmic_device(struct device *dev, const char *compatible,
++						    struct device **pmic)
++{
++	struct device_node *pmic_node;
++	struct i2c_client *pmic_client;
++
++	pmic_node = of_find_compatible_node(NULL, NULL, compatible);
++	if (!pmic_node)
++		return -ENODEV;
++
++	pmic_client = of_find_i2c_device_by_node(pmic_node);
++	of_node_put(pmic_node);
++	if (!pmic_client)
++		return -EPROBE_DEFER;
++
++	*pmic = &pmic_client->dev;
++
++	return devm_add_action_or_reset(dev, odroid_go_ultra_poweroff_put_pmic_device, *pmic);
++}
++
++static int odroid_go_ultra_poweroff_probe(struct platform_device *pdev)
++{
++	struct odroid_go_ultra_poweroff_data *poweroff_data;
++	int ret;
++
++	poweroff_data = devm_kzalloc(&pdev->dev, sizeof(*poweroff_data), GFP_KERNEL);
++	if (!poweroff_data)
++		return -ENOMEM;
++
++	dev_set_drvdata(&pdev->dev, poweroff_data);
++
++	/* RK818 PMIC Device */
++	ret = odroid_go_ultra_poweroff_get_pmic_device(&pdev->dev, "rockchip,rk818",
++						       &poweroff_data->rk818);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to get rk818 mfd data\n");
++
++	/* RK817 PMIC Device */
++	ret = odroid_go_ultra_poweroff_get_pmic_device(&pdev->dev, "rockchip,rk817",
++						       &poweroff_data->rk817);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to get rk817 mfd data\n");
++
++	/* Register as SYS_OFF_MODE_POWER_OFF_PREPARE because regmap_update_bits may sleep */
++	ret = devm_register_sys_off_handler(&pdev->dev,
++					    SYS_OFF_MODE_POWER_OFF_PREPARE,
++					    SYS_OFF_PRIO_DEFAULT,
++					    odroid_go_ultra_poweroff_prepare,
++					    poweroff_data);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to register sys-off handler\n");
++
++	dev_info(&pdev->dev, "Registered Power-Off handler\n");
++
++	return 0;
++}
++static struct platform_device *pdev;
++
++static struct platform_driver odroid_go_ultra_poweroff_driver = {
++	.driver = {
++		.name	= "odroid-go-ultra-poweroff",
++	},
++	.probe = odroid_go_ultra_poweroff_probe,
++};
++
++static int __init odroid_go_ultra_poweroff_init(void)
++{
++	int ret;
++
++	/* Only create when running on the Odroid Go Ultra device */
++	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
++		return -ENODEV;
++
++	ret = platform_driver_register(&odroid_go_ultra_poweroff_driver);
++	if (ret)
++		return ret;
++
++	pdev = platform_device_register_resndata(NULL, "odroid-go-ultra-poweroff", -1,
++						 NULL, 0, NULL, 0);
++
++	if (IS_ERR(pdev)) {
++		platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
++		return PTR_ERR(pdev);
++	}
++
++	return 0;
++}
++
++static void __exit odroid_go_ultra_poweroff_exit(void)
++{
++	/* Only delete when running on the Odroid Go Ultra device */
++	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
++		return;
++
++	platform_device_unregister(pdev);
++	platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
++}
++
++module_init(odroid_go_ultra_poweroff_init);
++module_exit(odroid_go_ultra_poweroff_exit);
++
++MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
++MODULE_DESCRIPTION("Odroid Go Ultra poweroff driver");
++MODULE_LICENSE("GPL");
+
+---
+base-commit: 38d2b86a665b5e86371a1a30228bce259aa6c101
+change-id: 20230126-b4-odroid-go-ultra-poweroff-c8fdca93f3eb
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
