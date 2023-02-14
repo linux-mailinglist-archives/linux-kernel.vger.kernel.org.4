@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA5A69586F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 06:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6134769587F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 06:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjBNFUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 00:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S230340AbjBNF0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 00:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBNFUJ (ORCPT
+        with ESMTP id S230008AbjBNF0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 00:20:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F50F271D;
-        Mon, 13 Feb 2023 21:20:06 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E5HlYT006974;
-        Tue, 14 Feb 2023 05:19:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=on/G+7xydrT612HiE9+iKfuHNvPuUmqw1zf4SLBWcm0=;
- b=Ddf+SX016z+OY+svfB5UhuyzyWyFCKz62U+PzeZfpNx73/+72O/7J420rp0npmVBUq+5
- 0rJUA1cGeeCEx/yZmj63ym5NJoegwYm9J+KzZnur9aWuxj1DY9xfSLGy7Bkw1f7DTYHK
- PsmMHE8q5zG8DF36X2WakD5pwkNI6QGEuOu3/m4AmUr+P4XQCD3ze1DYz1W79/AZIld5
- DJEMh+2ufJLMPR1oo+b4pBVrg4rxf4jzEGwBI5UKulOZyConQO4EfQdnqdjDC/h2Xkks
- sjrQzRDK2BXzj29bYmtL4H22+UonDwpIkHIIjJmc7NQBgIiYQ/dBtzOcxxXRmSpcSLQD +Q== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr41e00kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 05:19:45 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E1BSFv020028;
-        Tue, 14 Feb 2023 05:19:44 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3np2n6x2ym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 05:19:44 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31E5Jhrv37683604
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 05:19:44 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3D535805B;
-        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C0B858058;
-        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
-Received: from localhost (unknown [9.211.96.43])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: qemu boot log difference today
-In-Reply-To: <20230214143150.7c7fdd05@canb.auug.org.au>
-References: <20230214143150.7c7fdd05@canb.auug.org.au>
-Date:   Mon, 13 Feb 2023 23:19:43 -0600
-Message-ID: <878rh0aknk.fsf@linux.ibm.com>
+        Tue, 14 Feb 2023 00:26:50 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9366E18152
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 21:26:48 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o13so14067306pjg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 21:26:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p8kKvdqmvpHr+41blCI28NnpNACNfpNUrrNduJ+T5IA=;
+        b=mm8Jbxqx2bW8q1vBlyxFTOTTUXrqCFQv/rjnGUFy+0/CiNVUF/zcoi3+1JK60kiFKz
+         Fl3KBDfHLOYFSradpeBbXmj3rHgOYD/I8Ddi6MLGhBSodBU2QkRYiWUj+PIvs392A2Vd
+         r5m7XvX97zEb+NJI3wP7INy8bKzQo3rDDkA0eaExOSgIhu5bBoGzZsJeNvRH0CYlt4Kb
+         LCpA+BvwfEEin6Dd+GWLAtnd7285Dlt8s5rDZmhYRrFe3iaMFj33KgTnskIHHEzJ2mqG
+         nZdD7vjDzuchj1p7/Y3Ko2FZ5PlVBGth26ZTJaAV/BgZ0rcIR3VA9FrYQqBEo3bsbwX0
+         SHRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p8kKvdqmvpHr+41blCI28NnpNACNfpNUrrNduJ+T5IA=;
+        b=ppHSKU/hWOdUCraQR/aFtxmJPOXPfr3rUXkygCXpVjCU7vA//ybkSg8qNRZMEbTd+H
+         UGeNJRpC00L5LbwNR826TQZM6l1kZwC2o+TWh6c52flskRhuBMTo5hm42Ai2dlpxkSy2
+         yGHGRCkYpU0VFEHgI9cvjh1k0SYZuAtiZwuqgKslYd2eMqo5SZMGF2Y+o3fgiVt9HHT3
+         HiHpEGHq83TQR2/gZcT1zyGcZGKT0hznVD1h0oeqoPCgIYCLf6mkHtymXhn+ei6PsZPt
+         2/TyZyzZy0slwYq+AZEDvIfVcTdlxnKE/xf667U5tieylMuUh95jA8ECl4ebzP5eVJVG
+         f3Rw==
+X-Gm-Message-State: AO0yUKVInH+/GbnMzIE1v5fmtAQDF9352l/ywsFiBkL+fu5CNLTE6iJV
+        qXInGJy/c9gemnWD8FM08N0ANA==
+X-Google-Smtp-Source: AK7set+2be1/LmwMXDSq6PbLICdWuFZBa4mhYfPoH5Hlfx+LQKOQWZ9Uuc61szH5thjNweW8XiP9Xg==
+X-Received: by 2002:a05:6a20:734d:b0:bc:ce49:79a7 with SMTP id v13-20020a056a20734d00b000bcce4979a7mr1234916pzc.18.1676352408020;
+        Mon, 13 Feb 2023 21:26:48 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id t3-20020a1709027fc300b0019949a3be88sm9080163plb.138.2023.02.13.21.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 21:26:47 -0800 (PST)
+Date:   Tue, 14 Feb 2023 10:56:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify
+ supported opp tables
+Message-ID: <20230214052645.khcr3qtkhymfyhkq@vireshk-i7>
+References: <20230208153913.24436-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: s3pa4hTPdjUeE41BhGsKVamhkK-zeFZ2
-X-Proofpoint-GUID: s3pa4hTPdjUeE41BhGsKVamhkK-zeFZ2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_03,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140041
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208153913.24436-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
->
-> Today's qemu boot log shows 256k extra in reserved memory:
->
-> - Memory: 2046080K/2097152K available (14720K kernel code, 2944K rwdata, 18048K rodata, 5184K init, 1431K bss, 51072K reserved, 0K cma-reserved)
-> + Memory: 2045824K/2097152K available (14720K kernel code, 2944K rwdata, 18048K rodata, 5184K init, 1439K bss, 51328K reserved, 0K cma-reserved)
->
-> I don't know what has caused this.
+On 08-02-23, 16:39, Christian Marangi wrote:
+> Add additional info on what opp tables the defined devices in this schema
+> supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+> and reference them.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+> Changes v6:
+> - No change
+> Changes v5:
+> - Swap patch 1 and patch 2 to fix dt_check_warning on single
+>   patch bisecting 
+> Changes v4:
+> - Add patch split from patch 1
+> 
+>  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+>  1 file changed, 26 insertions(+), 9 deletions(-)
 
-Assuming it's pseries, it's the RTAS work area allocator reserving the
-memory.
 
-43033bc62d34 powerpc/pseries: add RTAS work area allocator
+Applied. Thanks.
+
+-- 
+viresh
