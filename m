@@ -2,91 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C82696D52
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6307696D62
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjBNSvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S233148AbjBNSxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjBNSvo (ORCPT
+        with ESMTP id S233441AbjBNSxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:51:44 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EF24224
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:51:43 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c11ae6ab25so168326117b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:51:43 -0800 (PST)
+        Tue, 14 Feb 2023 13:53:03 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357F883FB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:52:53 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id 135so6521246qkh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:52:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBABwlFNTWMj+OjkJm26ysoCCOBdecl6mEpKIPGdoU0=;
-        b=dJ82eLB/kuIvWdVkC/59SzpMuWdofWypOJfKy8sZBOyhrEZA+PC0dJ9W3iEddR3aMc
-         Lqd3Py6GYkRG/iI63g90bJs3wLGPib4ROQc5/t19/kWUZ48XCVSXUJAWn8xC0SZYh8M0
-         zGClqScCLvwyoxW0XwL2UE6DghdhJfdPxJ+iiXcYl9v2ubWyPnQD1DvIvGqLv9g12NKZ
-         muTvwj5ixhqxrBP7IyqorCFppNQ/iqfP/pYjsVdBj+A3R+PBKL6MGm3gWV+FVPSmhpyL
-         pI5bizntZQpmJEpoP20IraPbBOBL9+OZbFf6BF2az54lI1G1lCqXkOfxlbaoi2j8nNtC
-         UmJg==
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OO7zbNPYsLgMAueQIKSxf/Kr+7+LgMABqvRk9SFj/Jk=;
+        b=Ayqx7xMhzV5E3CwlCICFqozMpZyqraoxxSDrfJbeU4C0r04jYtPH/VZOq0X/zQBJsJ
+         cVbztPVtJDwSojXI0guADhvaylJaR9jGSbH23VL3t09cdmzwhUo0nwC06tH7PF76ZLus
+         jqpi+aYN0gw3r6WUedmXi1qlDlrPobJp8gOLQ8ie/JXGOQyMcKJYRxioUrcuyne+A1+m
+         ElLjsTheSlhAOO07Q/QYhyqjGWG+R2KAHWkplQ6PoAuhVwZDs2P0n8FgFEBGIYUMJrU0
+         KiiD6TeOE5hvz+AJcqKz1zXpcYWKV+jStjOOeJLKWq4gm9Kb58M7hMV6ovXRG6OLSr4O
+         abhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBABwlFNTWMj+OjkJm26ysoCCOBdecl6mEpKIPGdoU0=;
-        b=YmF9kPf0EHI//CYuJF+1cjOtNXxu896Z69mDA9g3gB2xuACOSA0bGnu+QUzD51lgOt
-         c65QFUP4g+cuD9lCPBtbPklRYL41OyARBblNxcp1VB0/SwpNOP6zWgj5X0fbCVYgr5rJ
-         e4XKEa3ek3cMh/xyF/xL5WFjAb11fw7RVqkaJuInDERXpQM/TSHx5KJYPkL3A+Y2m3nb
-         m9pJOL+zYgZDASs8XyrWROu3y2FkyXe0ugmJnYgen/+dvOjXikHyqSLL0MnnWFpAzcfI
-         Xs0L3+kBTx+uWSKvK3OpMYApGdrjXu/2Yv0xNIoxLbi481J18YSxJcXVFG7ZwsZF3IBi
-         zcRw==
-X-Gm-Message-State: AO0yUKVt+NlqRVmeGApxrvq2bmgvcvZ9/oapF0EXindsrOHN1oaSpCY4
-        LagcuUsNmDMJqllDmGFkHE4mNrC1SY4=
-X-Google-Smtp-Source: AK7set/SNZbRFHqvZ7ACMxDYON677YCI5I8pZlgQQujkfw+QOIWB6rggnifY3rIXZOpKoomJfrYdkIGlxWU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:6804:0:b0:527:1a01:964c with SMTP id
- d4-20020a816804000000b005271a01964cmr411317ywc.480.1676400702514; Tue, 14 Feb
- 2023 10:51:42 -0800 (PST)
-Date:   Tue, 14 Feb 2023 10:51:40 -0800
-In-Reply-To: <5771a4cb-4df7-e9a0-9e7e-9a116a40a411@gmail.com>
-Mime-Version: 1.0
-References: <20230210003148.2646712-1-seanjc@google.com> <20230210003148.2646712-4-seanjc@google.com>
- <5771a4cb-4df7-e9a0-9e7e-9a116a40a411@gmail.com>
-Message-ID: <Y+vYPDY82Z/7VBal@google.com>
-Subject: Re: [PATCH v2 03/21] KVM: x86: Add macros to track first...last VMX
- feature MSRs
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OO7zbNPYsLgMAueQIKSxf/Kr+7+LgMABqvRk9SFj/Jk=;
+        b=7p+HNJpkNjMLb+oq1kIKgdZQrN731GYpr29ficAljuVStCq0LRhE/vZ0eLAGxn1GZz
+         S62iwKtogxpr/ON7NUSAq0a/fd9rgHpz2FmbCG/DpbNzg7b/jhN3HxozO1qx4UF/mLWz
+         35Kn7xIIOEnJhIy/mfuMB52wSq9lG4gJU2YMk8F2i5PujXTPUJqaGbG9aJ4MuGrw7Q4+
+         qPzMiY5dPp/I36r+pSuc/1MYEfBEn5fvxr6z3oF/2W6fF8AB3nyi3FU9soq4g/IwQSQE
+         o9aCYyEA4QqRTnd4gQ5tSBwk91Wr0uNlbg9GyKCSw1/e2+RBD49CSlCk0LqZKfGbnYrV
+         MYwg==
+X-Gm-Message-State: AO0yUKXpBnZxuWgHdT04jIXiD4pFjuB7ABdcRqi8xFhknWmDBkLN7aTZ
+        3ORo3o1CnERgmGtLHssBEvATvlaVj/zUKb4b7M02vg==
+X-Google-Smtp-Source: AK7set+wb66HZ+f0aMDWEe3NDhalPbeZXZ4gImsWcqepnaTG0T3+q5z7ICV7K81oQPd1lHtaiAHk1AS8WVD6fknRwZc=
+X-Received: by 2002:a05:620a:cc1:b0:720:6045:25ea with SMTP id
+ b1-20020a05620a0cc100b00720604525eamr225052qkj.27.1676400772177; Tue, 14 Feb
+ 2023 10:52:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20230207035139.272707-1-shiyn.lin@gmail.com> <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
+ <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
+ <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
+ <Y+Z8ymNYc+vJMBx8@strix-laptop> <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
+ <Y+uv3iTajGoOuNMO@strix-laptop> <CA+CK2bCKOONeipaYNQJSPTicej1DW0OWvw97r0TbG7oRtxVGnQ@mail.gmail.com>
+ <Y+vV9YaiEIUQaW65@strix-laptop>
+In-Reply-To: <Y+vV9YaiEIUQaW65@strix-laptop>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Tue, 14 Feb 2023 13:52:16 -0500
+Message-ID: <CA+CK2bDYHT4m=we7jbLWxneZTnBt2wJd2Msw67V97c1nNq-KZQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
+To:     Chih-En Lin <shiyn.lin@gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Barret Rhoden <brho@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023, Like Xu wrote:
-> On 10/2/2023 8:31 am, Sean Christopherson wrote:
-> > +/*
-> > + * The first...last VMX feature MSRs that are emulated by KVM.  This may or may
-> > + * not cover all known VMX MSRs, as KVM doesn't emulate an MSR until there's an
-> > + * associated feature that KVM supports for nested virtualization.
-> > + */
-> > +#define KVM_FIRST_EMULATED_VMX_MSR	MSR_IA32_VMX_BASIC
-> > +#define KVM_LAST_EMULATED_VMX_MSR	MSR_IA32_VMX_VMFUNC
-> 
-> Off-topic, we now have "#define MSR_IA32_VMX_PROCBASED_CTLS3 0x00000492",
-> any further changes needed here if L2 guest needs IPI virtualization or why not ?
+On Tue, Feb 14, 2023 at 1:42 PM Chih-En Lin <shiyn.lin@gmail.com> wrote:
+>
+> On Tue, Feb 14, 2023 at 11:30:26AM -0500, Pasha Tatashin wrote:
+> > > > The thing with THP is, that during fork(), we always allocate a backup PTE
+> > > > table, to be able to PTE-map the THP whenever we have to. Otherwise we'd
+> > > > have to eventually fail some operations we don't want to fail -- similar to
+> > > > the case where break_cow_pte() could fail now due to -ENOMEM although we
+> > > > really don't want to fail (e.g., change_pte_range() ).
+> > > >
+> > > > I always considered that wasteful, because in many scenarios, we'll never
+> > > > ever split a THP and possibly waste memory.
+> > > >
+> > > > Optimizing that for THP (e.g., don't always allocate backup THP, have some
+> > > > global allocation backup pool for splits + refill when close-to-empty) might
+> > > > provide similar fork() improvements, both in speed and memory consumption
+> > > > when it comes to anonymous memory.
+> > >
+> > > When collapsing huge pages, do/can they reuse those PTEs for backup?
+> > > So, we don't have to allocate the PTE or maintain the pool.
+> >
+> > It might not work for all pages, as collapsing pages might have had
+> > holes in the user page table, and there were no PTE tables.
+>
+> So if there have holes in the user page table, after we doing the
+> collapsing and then splitting. Do those holes be filled? Assume it is,
+> then, I think it's the reason why it's not work for all the pages.
+>
+> But, after those operations, Will the user get the additional and
+> unexpected memory (which is from the huge page filling)?
 
-If KVM exposes IPI virtualization, or any other feature that depends on tertiary
-controls, to L1, then yes this will need to be extended.  But that will naturally
-happen as part of any such enabling, otherwise userspace won't be able to do
-anything with L1's tertiary controls.
+Yes, more memory is going to be allocated for a process in such THP
+collapse case. This is similar to madvise huge pages, and touching the
+first byte may allocate 2M.
 
-As for supporting IPI virtualization for nested VMs, that's definitely future work.
-I haven't though about it too much, but I assume it's a similar story to AVIC where
-KVM would need to shadow L1's PID table.
+Pasha
