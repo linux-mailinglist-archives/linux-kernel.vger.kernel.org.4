@@ -2,71 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC6D6958E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C08B6958EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjBNGMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 01:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S231451AbjBNGNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 01:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjBNGMb (ORCPT
+        with ESMTP id S231269AbjBNGNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 01:12:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F246A5F;
-        Mon, 13 Feb 2023 22:12:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G0/WVB6qNrAaN5ACJglpC0Dt5fwi5uc2iQpoJ82fBxQ=; b=oP9c+fi5tr9naLFnem3+coI9f4
-        OFNgd0dF7kJlU6WdkDQIiQTFssKMjrZItC5mDiWGFY/zIAJGfooluGQx+RBB6zzfCvsh87zEotcLM
-        hMt6sozsh9sOU6wbnWwMD9pc37iFa8gARB9z7c0ml1fSSXkLrvJHyNesk4EzDrjemFLhHJZY3c7NQ
-        GaPKY6gOGbMbqIKdoTfDu2lapFQwPwyH7JU1RmTpYosC9un5YVjBUvQ1OEkxuydserb9DgONMUsO8
-        V4mq2OfSN67MFno9a5pleSh9cuuHp1LofAtIHWHZ/dZ2jxuu+IxrCQ5Fbid3ZfctlAP1BwFYMkZQt
-        sN5ZU5zQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRoXw-0001HL-Qo; Tue, 14 Feb 2023 06:12:08 +0000
-Date:   Mon, 13 Feb 2023 22:12:08 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     JiaJie Ho <jiajie.ho@starfivetech.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 14 Feb 2023 01:13:07 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2101.outbound.protection.outlook.com [40.107.215.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949B8558A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 22:13:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WMHOGW5lRlBeM5UhBLmDNd0MSu3tSNUrQPROw2lUL4MvJzB5WY+B6JTZgirhhSA/GZ8naETKkHykKYfcrcE6usp3rd0OjUx782lEpcYnL2/+GNxy9XRWM7ze1i8mki3E7n2MxUZE0mqf37qNViemrkxJWAFIMjgCt1XhluK+O1Ed9MCVrIv4vYkLckoTBtzAlrfUcdKn4XXYWJwB/qgamXxNhMd0aR3D2rM1kOBsfmGsBa6voExy3fF+8DI8HKx0LCfWNoGC1y/J9K51bFFa1RgbInw5RgzTZwytQ0rjMudegYkGuUek+JCNGnnhfIpZnIWXV63uyp/YlGR7Tk4y1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h+tvUWAOyFFwTj/NQfBhEA+wHjiTY59r81vsySqFb5E=;
+ b=YEok0kz3eaKvBq4Ne9BAg8Ly/+CbM4rDoIUgZNGc3lUi0weoXXAu5wgWvTUlX3NxYgvBCbxajQ02Q7vudQLPH+V7rz4FQ3qqxwlM88bC8ylwrwa9SHtEp9CZvBiZLTix4pcUYwzJFSnF0Scgsg6aLj6Zi6jXWscnVAHgs9x8L0n5b/RnOfW4SBoePceT6+POg5rYdxO/I6GsYxksdRGP26E4UytxaMwXvGE/VUqa7u8lvU3EfVFoWn+ThwIOfPPzjQZTfp/0dKycXCIS1wc5O7/+zQpTFrBQlCVOL3kLoxviSov0bVYVjKV2SYdARxXwdMdeGlcEEvn7tjvDwsXDuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h+tvUWAOyFFwTj/NQfBhEA+wHjiTY59r81vsySqFb5E=;
+ b=agmXQ64FZegsXY5cCzEEelxrMy5ywJURTlzTUEG/laEfjqBVgL1JhCsDuONXtPmforolhJf3LXrfJGW6xSJJ5CJnqCFci9GuuG/sG2WrGhICDfmxIqYHpPszx8hf4rjBGABxBROuRCnW5jYkFxzvKBvCDvFgHM4DuIi62yWJ0KFdwY4gHECAJWA6s43s7YLY3wD5riLMVMZpEy3gcWZErkKiUmi9RlwH+zv/cIv85v1Blh6Ukjr3E8zeZVA3UwACZ8f0nc4sZajSH4iWTVVSslk+8Dau4QVmR8x5uIXBOC3k9IwF55BeqyaANaFwNCHP6TkyNColsiJWVk9yJpLFeg==
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by PSAPR06MB4392.apcprd06.prod.outlook.com (2603:1096:301:79::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.10; Tue, 14 Feb
+ 2023 06:12:54 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6111.010; Tue, 14 Feb 2023
+ 06:12:54 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jeremy Kerr <jk@ozlabs.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
-Message-ID: <Y+smOBZ9CkEGY8Ua@infradead.org>
-References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
- <20230130154242.112613-5-jiajie.ho@starfivetech.com>
- <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
- <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 3/3] i2c: aspeed: support ast2600 i2c new register mode
+ driver
+Thread-Topic: [PATCH v4 3/3] i2c: aspeed: support ast2600 i2c new register
+ mode driver
+Thread-Index: AQHZNii3gD5v2vNmBkaMPcn6K0RsGq67LCOAgAAkr4CAABWagIAAB/owgBKbtbA=
+Date:   Tue, 14 Feb 2023 06:12:54 +0000
+Message-ID: <SEZPR06MB52698009DA893813FECBE76FF2A29@SEZPR06MB5269.apcprd06.prod.outlook.com>
+References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+ <20230201103359.1742140-4-ryan_chen@aspeedtech.com>
+ <30c7cbbf57abbdfb5f974d6ee17b2218d124c7e8.camel@ozlabs.org>
+ <SEZPR06MB526941A3DDB25529F0671112F2D69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <5239ea2f-284a-dcf5-6dd4-be3b13b319e6@linaro.org>
+ <SEZPR06MB526951F24B841965C0DD6B84F2D69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+In-Reply-To: <SEZPR06MB526951F24B841965C0DD6B84F2D69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|PSAPR06MB4392:EE_
+x-ms-office365-filtering-correlation-id: f97de24e-2ccc-4e73-9240-08db0e5282a9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zD3D8Er1XpnD9exJ2EGnYLIGq83cYUB4dQY6MJC5zje5JLDTIvRZQv3N4MO+U6A/Xu2Yme00AybB+RCkQqAIugADhM3ay9jNERTHomohXcstM37NVeUHV4lOQoTwaT8OCmlLwHNp7H1/H4zniLJm8XlxotfkjlgehUjPfJYXzVHzW9HDERabs8kYvR2a2ibHZWX+Ss88/tNJESoyY665VeCX7ZZ6c64mHwT9+SrhehwMICKMCZByQPd05t7Mk4Ci8noHG247rjIzGKQhLKhbcFFV9KI6+UcGgkRktnlMvRnHJXIZuUXI9S8KbAooC7P5zvfF6RoOEeKuaM+DV9PVgZ1OmbFUC6gFyTDQ3QBm1Wl56VoHOtc1IZqUDpOJY/xRXxjX4qy1QiIcZRiS1/9nc/fgaenfaGjRmfEL7tQFhl3DfcCn5ZL1koXJ8/IxYD7yfAyybMk7ia1Ry552BMrxN0CTWFQdqiYvh4vQb4ukB3YYQq72cGR/sO12zQR7WtMYaSXmupsSKzhpsVf0a2afsARDKSrh1OHI+t9yOE5iUB45fke5NyUP2i3Po/QYEXWX/lskbDXwil5AnD9GyB7dTF54vIn5CszXlGgADdiOU/0hvddcjHYMGnciqWVUCVEH4Z8zElqtiAySaLSYisw4YQfWHPEOXZvqKQT4p79/wCGqcw9mNSop6DZ9CXt09eV56/lHC/MkggJZvFLIAVCTcM7ctxQK0z/0SJF/FZy9k94=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(39840400004)(396003)(346002)(366004)(376002)(451199018)(5660300002)(7416002)(71200400001)(9686003)(41300700001)(53546011)(26005)(6506007)(186003)(52536014)(2906002)(38100700002)(8936002)(38070700005)(478600001)(7696005)(55016003)(110136005)(316002)(66946007)(64756008)(66556008)(8676002)(76116006)(66446008)(66476007)(83380400001)(86362001)(33656002)(122000001)(921005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SThMSE1zb2Yxc1gyRFBSNFpEWjVNOHpwcWdCR0VTVDltaVN5Wlhpbk1YaW1l?=
+ =?utf-8?B?em9NSXFHUmozNW5ZbHRmTzRBVzFtL3BIOXFsUjR6UXhtVE1mRkFmN3BCLzFM?=
+ =?utf-8?B?SmZPdkV4ZkRVNUpDSG41NkJCQVhBTkNXRDhGeWUxd1FxRDRObEsvMHZmTFV0?=
+ =?utf-8?B?Umd6bGhVMStXTGorTzNHQ2NmTlBKMWVzUVhlVUZzdWhNdGo0Njgxb05URld2?=
+ =?utf-8?B?NjFvMWlnSnpnU21ZOStiaFY3R3J1em9wazhHSEtrSGxkMlN6bHhaTE9PbFJp?=
+ =?utf-8?B?cnhRTStTcDlhd0NxUUdjeElJamRQOS9LaDUrYmxucU9PWVZaU2V3VDRaczF5?=
+ =?utf-8?B?bVh4amh4bzNSSFQ1SjBscGpwdGFwNmg2Mk0vNDU4bWwrbVB6WG5jeHpHMTdO?=
+ =?utf-8?B?MTBGSmRmZmJ1aWpjNS9uVzVSM2VuU3QvSFJVaXRxZjl6MmNLb0JmWGdvenp6?=
+ =?utf-8?B?aVhtRWNUc1pkVm1uVGMzN1pNL1QrMGcrcThnMzN1OUpPMS9TSEFIaGsvVlpY?=
+ =?utf-8?B?c1hqcGhkVlQ4Y3JIVFBEZGN6amFrUnZGN3RPMlpWOVFIamVmZGpjaTNwalRD?=
+ =?utf-8?B?c0Jnb09ad3Jwc1huUzVYdlZYUWtoK1ZLY0d4YzZBdk1qMUlleGY3eWVVN2lw?=
+ =?utf-8?B?Rzc2dXBuWjUvaVordWlPV1FRditZQ0dKbXdKSDhHU3NyempmNzZiejlaRk1T?=
+ =?utf-8?B?WGluWHI2VTBuSXBnc2FwQnlzZFNIMEhyelU2cHV1cGpCbWZzUXZtOERzUENG?=
+ =?utf-8?B?bk5JeEYxZEdvcldBTVJXMkd3dWc5VzYwTm90YTNPeGtqaXE0OFhaY2VRVWRk?=
+ =?utf-8?B?VTIrT29BUWJLajBQTXhNVXJ5eGhvalFKR21EZU1qaFc4aGlwSTdtTjNlbW03?=
+ =?utf-8?B?bXFNYXB5MWpFRlc1MEFoWW9GVGFyWXNpdGtsMythd0toR3NKTTIxY3U2TDhU?=
+ =?utf-8?B?S1I1a1lhVzNtQ25CV2JINUhScnM2U3NOQWIrdFBhUmFwNzJiMCtLVGI0T1k4?=
+ =?utf-8?B?elc5M29LTlFLT3lmakJtWjlIOXY3YUFQOEFORnAvcWlBM2dLK2FPbUJvNEdB?=
+ =?utf-8?B?NGZYM1BXbVN5NDAwSUs3bTB1Sis2VnZ6Y1lSZkRyUDk3MDdYQlQvUm5SeExo?=
+ =?utf-8?B?dXd5eXZwb1poSlpUUFYrRTFuUkt4cUpCckNNNTBCcFRTczZZWmJLKyt5cUds?=
+ =?utf-8?B?aGpiRU9qK3R4RlpGampCVndrbFpTa1JxSW56M3V6YmpSL1ZCa05GRWE0MlN3?=
+ =?utf-8?B?Z0s3RDFESThQSXZScy9KSmQ0QXltRG9LNDFLYWI4akpnT1Y2THRTTTh6OTMz?=
+ =?utf-8?B?cUp2cUgvSGRxbUZ4S2FpTjFxeWk5SkppbHAwQUc3QTdmTk1GSk5rQTdiaEdv?=
+ =?utf-8?B?M1BuZG1jR2czOVZzN3FTV2ZEdmFRV0FZRkpKbzJnSWhzUW9QYVE2UExicDkw?=
+ =?utf-8?B?aksybVZUcFpGZmovbzF6cTZXU0ZzRmJFSkh3WTBmR244R0oxenJZN1BDOVJ4?=
+ =?utf-8?B?SzBlQWFmMmRPSXluZlNFZnJXazdyV2NmSzdncjNLMkZ2Qk1sTjhkVkd1R2RV?=
+ =?utf-8?B?RHBsQUQvR2VGbzkxa0RVQitYZCtQRG1uY0xrdXR2YjYyWDlZRThIMldZU2or?=
+ =?utf-8?B?bTl2TitHbmgzTnRiSWt3bFdUaHVHcEFtbkdQZDIxK0tmWDYvbk9Ic1FITkhY?=
+ =?utf-8?B?V25vYTRiUjZKSGM4Z1h5d0dGZ3Y4Vnhva2ZwNHV1OHNDSmZwYUhjU3NuMUxE?=
+ =?utf-8?B?M05JS3JoeXNqdmpBNWRaWUFyNjYyTTQvMUlQdzNOS05TVVNObXExRUtvb0JJ?=
+ =?utf-8?B?ekovQzNMdVNsSXFsdGlsZFJ6S245LzdBbkduNHRkakRTVGM2THRrK0dtMytU?=
+ =?utf-8?B?Yk9vQXplWHpzWVhMWkFHOUJqbnFsRVZ1WmkzbzlwVXpQa1hiVUYrS0ZLUU1M?=
+ =?utf-8?B?RWdHaDM0aW12T2hKREJPdWt2QXV4ZGZQSXJPUk9UWE9OWjZkWjRsOG5HKzBx?=
+ =?utf-8?B?dWQwTUg4Sll6ekJPYW01NkhscmpnaWlLenhGNUtUeWF0cStSL2xYQUlsUW84?=
+ =?utf-8?B?dVZIVmU4T2o5d1REc1RmYmlYN2NyRndkSDI4YXR5NSt0cE5HYThwR2ExZk0r?=
+ =?utf-8?Q?/Fqy623s0EekfSrqCaFWqXBq4?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f97de24e-2ccc-4e73-9240-08db0e5282a9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 06:12:54.4690
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5cc/dKSsR2LoLUSNMbabtKVSbrO3Vv5NyaTP3SrrPkotKo9rRrVGGkuYvUixTD/klQaSBxfZ5tS93teoJK/9E8nT87/p7y9jcN190+9FD+4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4392
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 09:33:06AM +0000, JiaJie Ho wrote:
-> > Why do you copy everything before you feed it to the hardware?
-> > If the issue is alignment then surely you should only to copy a small amount
-> > of header (and perhaps trailer) for that?
-> > 
-> 
-> The DMA can only support 32-bit addressing.
-> So, I am copying everything in case kernel allocated memory region >32-bit for a user app.
-
-The DMA API takes care of that.
+SGVsbG8gS3J6eXN6dG9mLA0KPiANCj4gPiBPbiAwMi8wMi8yMDIzIDEwOjE2LCBSeWFuIENoZW4g
+d3JvdGU6DQo+ID4gPj4+PiArc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgYXN0MjYwMF9p
+MmNfZ2xvYmFsX2RyaXZlciA9IHsNCj4gPiA+Pj4gK8KgwqDCoMKgwqDCoMKgLnByb2JlwqAgPSBh
+c3QyNjAwX2kyY19nbG9iYWxfcHJvYmUsDQo+ID4gPj4+ICvCoMKgwqDCoMKgwqDCoC5kcml2ZXIg
+PSB7DQo+ID4gPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAubmFtZSA9IEtCVUlM
+RF9NT0ROQU1FLA0KPiA+ID4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLm9mX21h
+dGNoX3RhYmxlID0NCj4gYXN0MjYwMF9pMmNfZ2xvYmFsX29mX21hdGNoLA0KPiA+ID4+PiArwqDC
+oMKgwqDCoMKgwqB9LA0KPiA+ID4+PiArfTsNCj4gPiA+Pj4gKw0KPiA+ID4+PiArc3RhdGljIGlu
+dCBfX2luaXQgYXN0MjYwMF9pMmNfZ2xvYmFsX2luaXQodm9pZCkgew0KPiA+ID4+PiArwqDCoMKg
+wqDCoMKgwqByZXR1cm4NCj4gPiA+Pj4gK3BsYXRmb3JtX2RyaXZlcl9yZWdpc3RlcigmYXN0MjYw
+MF9pMmNfZ2xvYmFsX2RyaXZlcik7DQo+ID4gPj4+ICt9DQo+ID4gPj4+ICtkZXZpY2VfaW5pdGNh
+bGwoYXN0MjYwMF9pMmNfZ2xvYmFsX2luaXQpOw0KPiA+ID4+DQo+ID4gPj4gTWF5YmUgbW9kdWxl
+X3BsYXRmb3JtX2RyaXZlcigpIGluc3RlYWQ/DQo+ID4gPg0KPiA+ID4gRHVlIHRvIGkyYyBnbG9i
+YWwgaXMgdG9wIG9mIGFsbCBpMmMgYnVzIGxpa2UgdGhlIHNjdSwgaXQgbWFrZSBzdXJlDQo+ID4g
+PiB0aGUgZHJpdmVyIGlzDQo+ID4gYmVmb3JlIHRoZSBpMmMgYnVzIGRyaXZlciBwcm9iZS4NCj4g
+PiA+IEl0IGlzIG5lZWRlZCB1c2UgZGV2aWNlX2luaXRjYWwgZnVuY3Rpb24uDQo+ID4NCj4gPiBO
+bywgd2UgZG8gbm90IGRvIHN1Y2ggb3JkZXJpbmcuIGRldmljZSBsaW5rcyBhbmQgcHJvcGVyIHJl
+c291cmNlDQo+ID4gc2hhcmluZyBoYW5kbGUgdGhlIG9yZGVyLiBUaGlzIG11c3QgYmUgbW9kdWxl
+X3BsYXRmb3JtX2RyaXZlcigpDQo+ID4gKGFzc3VtaW5nIHdlIGRvIG5vdCBkcm9wIGVudGlyZSBz
+dWJtaXNzaW9uKS4NCj4gDQo+IA0KPiBJZiBnbG9iYWwgZHJpdmVyIHVzZSBtb2R1bGVfcGxhdGZv
+cm1fZHJpdmVyLCBkb2VzIGkyYyBkcml2ZXIgd2lsbCBsYXR0ZXIgdGhlDQo+IGdsb2JhbCBkcml2
+ZXIgcHJvYmU/DQo+IElmIHllcywgSSB0aGluayBpdCB3aWxsIHdvcmthYmxlLg0KPiA+DQpJIGZp
+bmQgYSBnb29kIHdheSBpbnN0ZWFkLiANCnN1YnN5c19pbml0Y2FsbChhc3QyNjAwX2kyY19nbG9i
+YWxfaW5pdCk7IGlzIGJldHRlciA/DQoNCkJlc3QgcmVnYXJkcywNClJ5YW4NCg==
