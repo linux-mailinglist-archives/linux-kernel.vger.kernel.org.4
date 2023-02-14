@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C837696FA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBD7696F9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbjBNV1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S233122AbjBNV1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbjBNV1o (ORCPT
+        with ESMTP id S233034AbjBNV1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:27:44 -0500
+        Tue, 14 Feb 2023 16:27:33 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E5C303F1;
-        Tue, 14 Feb 2023 13:27:21 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EFfkIY008029;
-        Tue, 14 Feb 2023 21:25:41 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180122FCE2;
+        Tue, 14 Feb 2023 13:27:05 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EKidC4012731;
+        Tue, 14 Feb 2023 21:25:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=b7G1zihIRPJyCCnYYGc4mIFQvqk2y844xfg2/C9NQv4=;
- b=DbOShkAyt3l5ADheaYdXVMiQDJHc7OZw5HI7HiZYudCHnH2cjbWJ/nxQeY1//TiEXzSb
- fqkprEIqjK4RD5Q4ZhheIDBU7zTRhLq99f6S5+Q1qzKhW5uMpjJFaDXp6hRr+bcFZM5r
- ABnQVSDVYFO/U4p5AhWczw5inZMTaZnHb9LjhlHV8zb5TLit9MhatHWU5vRmjDy8QLZ/
- Z+UItv2Y1KP9beE20445fAPfWyIolDZ6dsLiCzdRFQ/3IEFuKmjEpCfliV7NxfzCYLnm
- MV1YeXZKlxLXapWZSY2ARXieS3hEQ9sXTYpJPlK3PS0s6FSld2wR+/iSoz8wdNT3D/8O ow== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr26u2hue-1
+ bh=zqGbikFIIa2m+Gc6+asp0mxiTKZjbfNd8w4T+3IJz6o=;
+ b=f1otfkkXBDniANCdcPdoIBE9ij8/5ag/W2riUvsMSYeezVQZne2nTGvNaoBMHeCED6LA
+ wWeYziLLaKiOI6dGvk//XD/nnIa9b681jVHzPqEHJO0LSlOAuOS0zK9iyUHrIDybsKEW
+ OF5S0sywDLq0XI5iQffAvIYOuAyAb/Z/TP29RENJZM/u/ChgaW3f8GBJVJ+wVxYOO2XY
+ zDzLfbRF6mb5ZrIBIE4gKmRi4x50t6kuVjxR/GO+WnsBfMGpKUiIdB1YisvG/MsgSnZR
+ +pSnGXtawb63qqt6pyWnPwZgvThnNrgZkZT+UZDF70V4zFT0QYoE0MPyknoBCAIOiAM6 2A== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqpmmm1yr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:25:40 +0000
+        Tue, 14 Feb 2023 21:25:53 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ELPegC005625
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ELPqIt028542
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:25:40 GMT
+        Tue, 14 Feb 2023 21:25:52 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 13:25:39 -0800
+ 15.2.986.36; Tue, 14 Feb 2023 13:25:51 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Alex Elder <elder@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Elliot Berman <quic_eberman@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
@@ -56,15 +55,16 @@ CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v10 19/26] gunyah: vm_mgr: Add framework to add VM Functions
-Date:   Tue, 14 Feb 2023 13:25:30 -0800
-Message-ID: <20230214212531.3323284-1-quic_eberman@quicinc.com>
+Subject: [PATCH v10 20/26] virt: gunyah: Add resource tickets
+Date:   Tue, 14 Feb 2023 13:25:40 -0800
+Message-ID: <20230214212540.3324345-1-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230214211229.3239350-1-quic_eberman@quicinc.com>
 References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
@@ -76,15 +76,15 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8bTHOsjE0C-CGJOteESNWd9xYK6onqlk
-X-Proofpoint-ORIG-GUID: 8bTHOsjE0C-CGJOteESNWd9xYK6onqlk
+X-Proofpoint-ORIG-GUID: wVUxHGU_83jb-A6eB3GNYXE34WgMsOsh
+X-Proofpoint-GUID: wVUxHGU_83jb-A6eB3GNYXE34WgMsOsh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 spamscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0
+ bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302140184
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -96,489 +96,232 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Introduce a framework for Gunyah userspace to install VM functions. VM
-functions are optional interfaces to the virtual machine. vCPUs,
-ioeventfs, and irqfds are examples of such VM functions and are
-implemented in subsequent patches.
+Some VM functions need to acquire Gunyah resources. For instance, Gunyah
+vCPUs are exposed to the host as a resource. The Gunyah vCPU function
+will register a resource ticket and be able to interact with the
+hypervisor once the resource ticket is filled.
 
-A generic framework is implemented instead of individual ioctls to
-create vCPUs, irqfds, etc., in order to simplify the VM manager core
-implementation and allow dynamic loading of VM function modules.
+Resource tickets are the mechanism for functions to acquire ownership of
+Gunyah resources. Gunyah functions can be created before the VM's
+resources are created and made available to Linux. A resource ticket
+identifies a type of resource and a label of a resource which the ticket
+holder is interested in.
+
+Resources are created by Gunyah as configured in the VM's devicetree
+configuration. Gunyah doesn't process the label and that makes it
+possible for userspace to create multiple resources with the same label.
+Resource ticket owners need to be prepared for populate to be called
+multiple times if userspace created multiple resources with the same
+label.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- Documentation/virt/gunyah/vm-manager.rst |  18 ++
- drivers/virt/gunyah/vm_mgr.c             | 240 ++++++++++++++++++++++-
- drivers/virt/gunyah/vm_mgr.h             |   3 +
- include/linux/gunyah_vm_mgr.h            |  80 ++++++++
- include/uapi/linux/gunyah.h              |  17 ++
- 5 files changed, 353 insertions(+), 5 deletions(-)
- create mode 100644 include/linux/gunyah_vm_mgr.h
+ drivers/virt/gunyah/vm_mgr.c  | 110 +++++++++++++++++++++++++++++++++-
+ drivers/virt/gunyah/vm_mgr.h  |   4 ++
+ include/linux/gunyah_vm_mgr.h |  14 +++++
+ 3 files changed, 127 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
-index c0126cfeadc7..5272a6e9145c 100644
---- a/Documentation/virt/gunyah/vm-manager.rst
-+++ b/Documentation/virt/gunyah/vm-manager.rst
-@@ -17,6 +17,24 @@ sharing userspace memory with a VM is done via the GH_VM_SET_USER_MEM_REGION
- ioctl. The VM itself is configured to use the memory region via the
- devicetree.
- 
-+Gunyah Functions
-+================
-+
-+Components of a Gunyah VM's configuration that need kernel configuration are
-+called "functions" and are built on top of a framework. Functions are identified
-+by a string and have some argument(s) to configure them. They are typically
-+created by the `GH_VM_ADD_FUNCTION` ioctl.
-+
-+Functions typically will always do at least one of these operations:
-+
-+1. Create resource ticket(s). Resource tickets allow a function to register
-+   itself as the client for a Gunyah resource (e.g. doorbell or vCPU) and
-+   the function is given the pointer to the `struct gunyah_resource` when the
-+   VM is starting.
-+
-+2. Register IO handler(s). IO handlers allow a function to handle stage-2 faults
-+   from the virtual machine.
-+
- Sample Userspace VMM
- ====================
- 
 diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-index fa324385ade5..e9c55e7dd1b3 100644
+index e9c55e7dd1b3..7190107a6a0d 100644
 --- a/drivers/virt/gunyah/vm_mgr.c
 +++ b/drivers/virt/gunyah/vm_mgr.c
-@@ -6,8 +6,10 @@
- #define pr_fmt(fmt) "gh_vm_mgr: " fmt
+@@ -189,6 +189,74 @@ static long gh_vm_rm_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
+ 	return r;
+ }
  
- #include <linux/anon_inodes.h>
-+#include <linux/compat.h>
- #include <linux/file.h>
- #include <linux/gunyah_rsc_mgr.h>
-+#include <linux/gunyah_vm_mgr.h>
- #include <linux/miscdevice.h>
- #include <linux/mm.h>
- #include <linux/module.h>
-@@ -16,6 +18,177 @@
- 
- #include "vm_mgr.h"
- 
-+static DEFINE_MUTEX(functions_lock);
-+static DEFINE_IDR(functions);
-+
-+int gh_vm_function_register(struct gh_vm_function *drv)
++int gh_vm_add_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket)
 +{
++	struct gh_vm_resource_ticket *iter;
++	struct gunyah_resource *ghrsc;
 +	int ret = 0;
 +
-+	if (!drv->bind || !drv->unbind)
-+		return -EINVAL;
++	mutex_lock(&ghvm->resources_lock);
++	list_for_each_entry(iter, &ghvm->resource_tickets, list) {
++		if (iter->resource_type == ticket->resource_type && iter->label == ticket->label) {
++			ret = -EEXIST;
++			goto out;
++		}
++	}
 +
-+	mutex_lock(&functions_lock);
-+	if (idr_find(&functions, drv->type)) {
-+		ret = -EEXIST;
++	if (!try_module_get(ticket->owner)) {
++		ret = -ENODEV;
 +		goto out;
 +	}
 +
-+	INIT_LIST_HEAD(&drv->instances);
-+	ret = idr_alloc(&functions, drv, drv->type, drv->type + 1, GFP_KERNEL);
-+	if (ret > 0)
-+		ret = 0;
++	list_add(&ticket->list, &ghvm->resource_tickets);
++	INIT_LIST_HEAD(&ticket->resources);
++
++	list_for_each_entry(ghrsc, &ghvm->resources, list) {
++		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
++			if (!ticket->populate(ticket, ghrsc))
++				list_move(&ghrsc->list, &ticket->resources);
++		}
++	}
 +out:
-+	mutex_unlock(&functions_lock);
++	mutex_unlock(&ghvm->resources_lock);
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(gh_vm_function_register);
++EXPORT_SYMBOL_GPL(gh_vm_add_resource_ticket);
 +
-+static void gh_vm_remove_function_instance(struct gh_vm_function_instance *inst)
-+	__must_hold(functions_lock)
++void gh_vm_remove_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket)
 +{
-+	inst->fn->unbind(inst);
-+	list_del(&inst->vm_list);
-+	list_del(&inst->fn_list);
-+	module_put(inst->fn->mod);
-+	if (inst->arg_size)
-+		kfree(inst->argp);
-+	kfree(inst);
++	struct gunyah_resource *ghrsc, *iter;
++
++	mutex_lock(&ghvm->resources_lock);
++	list_for_each_entry_safe(ghrsc, iter, &ticket->resources, list) {
++		ticket->unpopulate(ticket, ghrsc);
++		list_move(&ghrsc->list, &ghvm->resources);
++	}
++
++	module_put(ticket->owner);
++	list_del(&ticket->list);
++	mutex_unlock(&ghvm->resources_lock);
 +}
++EXPORT_SYMBOL_GPL(gh_vm_remove_resource_ticket);
 +
-+void gh_vm_function_unregister(struct gh_vm_function *fn)
++static void gh_vm_add_resource(struct gh_vm *ghvm, struct gunyah_resource *ghrsc)
 +{
-+	struct gh_vm_function_instance *inst, *iter;
++	struct gh_vm_resource_ticket *ticket;
 +
-+	mutex_lock(&functions_lock);
-+	list_for_each_entry_safe(inst, iter, &fn->instances, fn_list)
-+		gh_vm_remove_function_instance(inst);
-+	idr_remove(&functions, fn->type);
-+	mutex_unlock(&functions_lock);
-+}
-+EXPORT_SYMBOL_GPL(gh_vm_function_unregister);
-+
-+static long gh_vm_add_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
-+{
-+	struct gh_vm_function_instance *inst;
-+	void __user *argp;
-+	long r = 0;
-+
-+	if (f->arg_size > GH_FN_MAX_ARG_SIZE)
-+		return -EINVAL;
-+
-+	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
-+	if (!inst)
-+		return -ENOMEM;
-+
-+	inst->arg_size = f->arg_size;
-+	if (inst->arg_size) {
-+		inst->argp = kzalloc(inst->arg_size, GFP_KERNEL);
-+		if (!inst->arg) {
-+			r = -ENOMEM;
-+			goto free;
-+		}
-+
-+		argp = is_compat_task() ? compat_ptr(f->arg) : (void __user *) f->arg;
-+		if (copy_from_user(inst->argp, argp, f->arg_size)) {
-+			r = -EFAULT;
-+			goto free_arg;
-+		}
-+	} else {
-+		inst->arg = f->arg;
-+	}
-+
-+	mutex_lock(&functions_lock);
-+	inst->fn = idr_find(&functions, f->type);
-+	if (!inst->fn) {
-+		mutex_unlock(&functions_lock);
-+		r = request_module("ghfunc:%d", f->type);
-+		if (r)
-+			goto unlock_free;
-+
-+		mutex_lock(&functions_lock);
-+		inst->fn = idr_find(&functions, f->type);
-+	}
-+
-+	if (!inst->fn) {
-+		r = -ENOENT;
-+		goto unlock_free;
-+	}
-+
-+	if (!try_module_get(inst->fn->mod)) {
-+		r = -ENOENT;
-+		inst->fn = NULL;
-+		goto unlock_free;
-+	}
-+
-+	inst->ghvm = ghvm;
-+	inst->rm = ghvm->rm;
-+
-+	r = inst->fn->bind(inst);
-+	if (r < 0) {
-+		module_put(inst->fn->mod);
-+		goto unlock_free;
-+	}
-+
-+	list_add(&inst->vm_list, &ghvm->functions);
-+	list_add(&inst->fn_list, &inst->fn->instances);
-+	mutex_unlock(&functions_lock);
-+	return r;
-+unlock_free:
-+	mutex_unlock(&functions_lock);
-+free_arg:
-+	if (inst->arg_size)
-+		kfree(inst->argp);
-+free:
-+	kfree(inst);
-+	return r;
-+}
-+
-+static long gh_vm_rm_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
-+{
-+	struct gh_vm_function_instance *inst, *iter;
-+	void __user *user_argp;
-+	void *argp;
-+	long r = 0;
-+
-+	r = mutex_lock_interruptible(&functions_lock);
-+	if (r)
-+		return r;
-+
-+	if (f->arg_size) {
-+		argp = kzalloc(f->arg_size, GFP_KERNEL);
-+		if (!argp) {
-+			r = -ENOMEM;
-+			goto out;
-+		}
-+
-+		user_argp = is_compat_task() ? compat_ptr(f->arg) : (void __user *) f->arg;
-+		if (copy_from_user(argp, user_argp, f->arg_size)) {
-+			r = -EFAULT;
-+			kfree(argp);
-+			goto out;
-+		}
-+
-+		list_for_each_entry_safe(inst, iter, &ghvm->functions, vm_list) {
-+			if (inst->fn->type == f->type &&
-+				f->arg_size == inst->arg_size &&
-+				!memcmp(argp, inst->argp, f->arg_size))
-+				gh_vm_remove_function_instance(inst);
-+		}
-+	} else {
-+		list_for_each_entry_safe(inst, iter, &ghvm->functions, vm_list) {
-+			if (inst->fn->type == f->type &&
-+				f->arg_size == inst->arg_size &&
-+				inst->arg == f->arg)
-+				gh_vm_remove_function_instance(inst);
++	mutex_lock(&ghvm->resources_lock);
++	list_for_each_entry(ticket, &ghvm->resource_tickets, list) {
++		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
++			if (!ticket->populate(ticket, ghrsc)) {
++				list_add(&ghrsc->list, &ticket->resources);
++				goto found;
++			}
 +		}
 +	}
-+
-+out:
-+	mutex_unlock(&functions_lock);
-+	return r;
++	list_add(&ghrsc->list, &ghvm->resources);
++found:
++	mutex_unlock(&ghvm->resources_lock);
 +}
 +
  static int gh_vm_rm_notification_status(struct gh_vm *ghvm, void *data)
  {
  	struct gh_rm_vm_status_payload *payload = data;
-@@ -80,6 +253,7 @@ static void gh_vm_stop(struct gh_vm *ghvm)
- static void gh_vm_free(struct work_struct *work)
+@@ -254,6 +322,8 @@ static void gh_vm_free(struct work_struct *work)
  {
  	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
-+	struct gh_vm_function_instance *inst, *iiter;
+ 	struct gh_vm_function_instance *inst, *iiter;
++	struct gh_vm_resource_ticket *ticket, *titer;
++	struct gunyah_resource *ghrsc, *riter;
  	struct gh_vm_mem *mapping, *tmp;
  	int ret;
  
-@@ -90,7 +264,13 @@ static void gh_vm_free(struct work_struct *work)
- 		fallthrough;
- 	case GH_RM_VM_STATUS_INIT_FAILED:
- 	case GH_RM_VM_STATUS_LOAD:
--	case GH_RM_VM_STATUS_LOAD_FAILED:
-+	case GH_RM_VM_STATUS_EXITED:
-+		mutex_lock(&functions_lock);
-+		list_for_each_entry_safe(inst, iiter, &ghvm->functions, vm_list) {
-+			gh_vm_remove_function_instance(inst);
+@@ -271,6 +341,23 @@ static void gh_vm_free(struct work_struct *work)
+ 		}
+ 		mutex_unlock(&functions_lock);
+ 
++		if (!list_empty(&ghvm->resource_tickets)) {
++			pr_warn("Dangling resource tickets:\n");
++			list_for_each_entry_safe(ticket, titer, &ghvm->resource_tickets, list) {
++				pr_warn("  %pS\n", ticket->populate);
++				gh_vm_remove_resource_ticket(ghvm, ticket);
++			}
 +		}
-+		mutex_unlock(&functions_lock);
++
++		list_for_each_entry_safe(ghrsc, riter, &ghvm->resources, list) {
++			gh_rm_free_resource(ghrsc);
++		}
++
++		ret = gh_rm_vm_reset(ghvm->rm, ghvm->vmid);
++		if (ret)
++			pr_err("Failed to reset the vm: %d\n", ret);
++		wait_event(ghvm->vm_status_wait, ghvm->vm_status == GH_RM_VM_STATUS_RESET);
 +
  		mutex_lock(&ghvm->mm_lock);
  		list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
  			gh_vm_mem_reclaim(ghvm, mapping);
-@@ -113,6 +293,28 @@ static void gh_vm_free(struct work_struct *work)
- 	}
- }
- 
-+static void _gh_vm_put(struct kref *kref)
-+{
-+	struct gh_vm *ghvm = container_of(kref, struct gh_vm, kref);
-+
-+	/* VM will be reset and make RM calls which can interruptible sleep.
-+	 * Defer to a work so this thread can receive signal.
-+	 */
-+	schedule_work(&ghvm->free_work);
-+}
-+
-+int __must_check gh_vm_get(struct gh_vm *ghvm)
-+{
-+	return kref_get_unless_zero(&ghvm->kref);
-+}
-+EXPORT_SYMBOL_GPL(gh_vm_get);
-+
-+void gh_vm_put(struct gh_vm *ghvm)
-+{
-+	kref_put(&ghvm->kref, _gh_vm_put);
-+}
-+EXPORT_SYMBOL_GPL(gh_vm_put);
-+
- static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
- {
- 	struct gh_vm *ghvm;
-@@ -147,6 +349,8 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
- 	INIT_LIST_HEAD(&ghvm->memory_mappings);
+@@ -350,6 +437,9 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
  	init_rwsem(&ghvm->status_lock);
  	INIT_WORK(&ghvm->free_work, gh_vm_free);
-+	kref_init(&ghvm->kref);
-+	INIT_LIST_HEAD(&ghvm->functions);
+ 	kref_init(&ghvm->kref);
++	mutex_init(&ghvm->resources_lock);
++	INIT_LIST_HEAD(&ghvm->resources);
++	INIT_LIST_HEAD(&ghvm->resource_tickets);
+ 	INIT_LIST_HEAD(&ghvm->functions);
  	ghvm->vm_status = GH_RM_VM_STATUS_LOAD;
  
- 	return ghvm;
-@@ -291,6 +495,35 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 		r = gh_vm_ensure_started(ghvm);
- 		break;
- 	}
-+	case GH_VM_ADD_FUNCTION: {
-+		struct gh_fn_desc *f;
-+
-+		f = kzalloc(sizeof(*f), GFP_KERNEL);
-+		if (!f)
-+			return -ENOMEM;
-+
-+		if (copy_from_user(f, argp, sizeof(*f)))
-+			return -EFAULT;
-+
-+		r = gh_vm_add_function(ghvm, f);
-+		if (r < 0)
-+			kfree(f);
-+		break;
-+	}
-+	case GH_VM_REMOVE_FUNCTION: {
-+		struct gh_fn_desc *f;
-+
-+		f = kzalloc(sizeof(*f), GFP_KERNEL);
-+		if (!f)
-+			return -ENOMEM;
-+
-+		if (copy_from_user(f, argp, sizeof(*f)))
-+			return -EFAULT;
-+
-+		r = gh_vm_rm_function(ghvm, f);
-+		kfree(f);
-+		break;
-+	}
- 	default:
- 		r = -ENOTTY;
- 		break;
-@@ -303,10 +536,7 @@ static int gh_vm_release(struct inode *inode, struct file *filp)
+@@ -359,9 +449,11 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+ static int gh_vm_start(struct gh_vm *ghvm)
  {
- 	struct gh_vm *ghvm = filp->private_data;
+ 	struct gh_vm_mem *mapping;
++	struct gh_rm_hyp_resources *resources;
++	struct gunyah_resource *ghrsc;
+ 	u64 dtb_offset;
+ 	u32 mem_handle;
+-	int ret;
++	int ret, i, n;
  
--	/* VM will be reset and make RM calls which can interruptible sleep.
--	 * Defer to a work so this thread can receive signal.
--	 */
--	schedule_work(&ghvm->free_work);
-+	gh_vm_put(ghvm);
- 	return 0;
- }
+ 	down_write(&ghvm->status_lock);
+ 	if (ghvm->vm_status != GH_RM_VM_STATUS_LOAD) {
+@@ -412,6 +504,22 @@ static int gh_vm_start(struct gh_vm *ghvm)
+ 		goto err;
+ 	}
  
++	ret = gh_rm_get_hyp_resources(ghvm->rm, ghvm->vmid, &resources);
++	if (ret) {
++		pr_warn("Failed to get hypervisor resources for VM: %d\n", ret);
++		goto err;
++	}
++
++	for (i = 0, n = le32_to_cpu(resources->n_entries); i < n; i++) {
++		ghrsc = gh_rm_alloc_resource(ghvm->rm, &resources->entries[i]);
++		if (!ghrsc) {
++			ret = -ENOMEM;
++			goto err;
++		}
++
++		gh_vm_add_resource(ghvm, ghrsc);
++	}
++
+ 	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
+ 	if (ret) {
+ 		pr_warn("Failed to start VM: %d\n", ret);
 diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-index e9cf56647cc2..4750d56c1297 100644
+index 4750d56c1297..56ae97d752d6 100644
 --- a/drivers/virt/gunyah/vm_mgr.h
 +++ b/drivers/virt/gunyah/vm_mgr.h
-@@ -8,6 +8,7 @@
+@@ -7,6 +7,7 @@
+ #define _GH_PRIV_VM_MGR_H
  
  #include <linux/gunyah_rsc_mgr.h>
++#include <linux/gunyah_vm_mgr.h>
  #include <linux/list.h>
-+#include <linux/kref.h>
+ #include <linux/kref.h>
  #include <linux/miscdevice.h>
- #include <linux/mutex.h>
- #include <linux/rwsem.h>
-@@ -44,8 +45,10 @@ struct gh_vm {
- 	struct rw_semaphore status_lock;
- 
- 	struct work_struct free_work;
-+	struct kref kref;
+@@ -49,6 +50,9 @@ struct gh_vm {
  	struct mutex mm_lock;
  	struct list_head memory_mappings;
-+	struct list_head functions;
+ 	struct list_head functions;
++	struct mutex resources_lock;
++	struct list_head resources;
++	struct list_head resource_tickets;
  };
  
  int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
 diff --git a/include/linux/gunyah_vm_mgr.h b/include/linux/gunyah_vm_mgr.h
-new file mode 100644
-index 000000000000..f0a95af50b2e
---- /dev/null
+index f0a95af50b2e..84579150d6bc 100644
+--- a/include/linux/gunyah_vm_mgr.h
 +++ b/include/linux/gunyah_vm_mgr.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _GUNYAH_VM_MGR_H
-+#define _GUNYAH_VM_MGR_H
-+
-+#include <linux/compiler_types.h>
-+#include <linux/gunyah.h>
-+#include <linux/gunyah_rsc_mgr.h>
-+#include <linux/list.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/notifier.h>
-+
-+#include <uapi/linux/gunyah.h>
-+
-+struct gh_vm;
-+
-+int __must_check gh_vm_get(struct gh_vm *ghvm);
-+void gh_vm_put(struct gh_vm *ghvm);
-+
-+struct gh_vm_function_instance;
-+struct gh_vm_function {
-+	u32 type;
-+	const char *name;
-+	struct module *mod;
-+	long (*bind)(struct gh_vm_function_instance *f);
-+	void (*unbind)(struct gh_vm_function_instance *f);
-+	struct mutex instances_lock;
-+	struct list_head instances;
-+};
-+
-+/**
-+ * struct gh_vm_function_instance - Represents one function instance
-+ * @arg_size: size of user argument
-+ * @arg: user argument to describe the function instance; arg_size is 0
-+ * @argp: pointer to user argument
-+ * @ghvm: Pointer to VM instance
-+ * @rm: Pointer to resource manager for the VM instance
-+ * @fn: The ops for the function
-+ * @data: Private data for function
-+ * @vm_list: for gh_vm's functions list
-+ * @fn_list: for gh_vm_function's instances list
-+ */
-+struct gh_vm_function_instance {
-+	size_t arg_size;
-+	union {
-+		u64 arg;
-+		void *argp;
-+	};
-+	struct gh_vm *ghvm;
-+	struct gh_rm *rm;
-+	struct gh_vm_function *fn;
-+	void *data;
-+	struct list_head vm_list;
-+	struct list_head fn_list;
-+};
-+
-+int gh_vm_function_register(struct gh_vm_function *f);
-+void gh_vm_function_unregister(struct gh_vm_function *f);
-+
-+#define DECLARE_GUNYAH_VM_FUNCTION(_name, _type, _bind, _unbind)	\
-+	static struct gh_vm_function _name = {		\
-+		.type = _type,						\
-+		.name = __stringify(_name),				\
-+		.mod = THIS_MODULE,					\
-+		.bind = _bind,						\
-+		.unbind = _unbind,					\
-+	};								\
-+	MODULE_ALIAS("ghfunc:"__stringify(_type))
-+
-+#define module_gunyah_vm_function(__gf)					\
-+	module_driver(__gf, gh_vm_function_register, gh_vm_function_unregister)
-+
-+#define DECLARE_GUNYAH_VM_FUNCTION_INIT(_name, _type, _bind, _unbind)	\
-+	DECLARE_GUNYAH_VM_FUNCTION(_name, _type, _bind, _unbind);	\
-+	module_gunyah_vm_function(_name)
-+
-+#endif
-diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
-index d899bba6a4c6..8df455a2a293 100644
---- a/include/uapi/linux/gunyah.h
-+++ b/include/uapi/linux/gunyah.h
-@@ -66,4 +66,21 @@ struct gh_vm_dtb_config {
+@@ -77,4 +77,18 @@ void gh_vm_function_unregister(struct gh_vm_function *f);
+ 	DECLARE_GUNYAH_VM_FUNCTION(_name, _type, _bind, _unbind);	\
+ 	module_gunyah_vm_function(_name)
  
- #define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
- 
-+#define GH_FN_MAX_ARG_SIZE		256
++struct gh_vm_resource_ticket {
++	struct list_head list; /* for gh_vm's resources list */
++	struct list_head resources; /* for gunyah_resources's list */
++	enum gunyah_resource_type resource_type;
++	u32 label;
 +
-+/**
-+ * struct gh_fn_desc - Arguments to create a VM function
-+ * @type: Type of the function. See GH_FN_* macro for supported types
-+ * @arg_size: Size of argument to pass to the function
-+ * @arg: Value or pointer to argument given to the function
-+ */
-+struct gh_fn_desc {
-+	__u32 type;
-+	__u32 arg_size;
-+	__u64 arg;
++	struct module *owner;
++	int (*populate)(struct gh_vm_resource_ticket *ticket, struct gunyah_resource *ghrsc);
++	void (*unpopulate)(struct gh_vm_resource_ticket *ticket, struct gunyah_resource *ghrsc);
 +};
 +
-+#define GH_VM_ADD_FUNCTION	_IOW(GH_IOCTL_TYPE, 0x4, struct gh_fn_desc)
-+#define GH_VM_REMOVE_FUNCTION	_IOW(GH_IOCTL_TYPE, 0x7, struct gh_fn_desc)
++int gh_vm_add_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket);
++void gh_vm_remove_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket);
 +
  #endif
 -- 
