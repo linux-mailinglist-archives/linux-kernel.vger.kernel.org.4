@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1316695800
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55867695806
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjBNEuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S230120AbjBNEy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBNEur (ORCPT
+        with ESMTP id S229597AbjBNEy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:50:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7071D11E;
-        Mon, 13 Feb 2023 20:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p+bChmlvh7LMvh5Y4Z+EEbtWSwcTxFruTWwVWYj6SM4=; b=O+ebOqEE74wqxSJzcbyIu0QYBH
-        2vs06XLi0DzhSjrQev+ypdu/zOwEZb1yiIf52NSNtpTyglV1CUwwA55PZpbc72Zq6+zBCbln2yqby
-        o0KHZRljjzrHdF2APS6WX1Zx+o1SjUVF2sxp0QP6rbM8dxPQZx+4y3fZKLKdMRwJwlS3D0lO/iom9
-        prqRmdjvfYBndWVhyF3y/VJYavF7mmkJrPm65WdATw5dnfsmHdGFvaKGTsxmwJPz2jmbriTlkFqlU
-        FhLgxhAHo8Yc/2LX6WTwtMMtJZqL05vMdpYqVhapD+LKCLgpO8K55UXfvaHDQTn2wsUIVh3Vl9901
-        8fdmdI8g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRnGx-006OMR-1R; Tue, 14 Feb 2023 04:50:31 +0000
-Date:   Tue, 14 Feb 2023 04:50:30 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, damon@lists.linux.dev,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Mon, 13 Feb 2023 23:54:57 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F884B443
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:54:56 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 5E71392009C; Tue, 14 Feb 2023 05:54:53 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 50C2B92009B;
+        Tue, 14 Feb 2023 04:54:53 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 04:54:53 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Some cleanups for page isolation
-Message-ID: <Y+sTFqwMNAjDvxw3@casper.infradead.org>
-References: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
+Subject: Re: [PING][PATCH v3] x86: Use `get_random_u8' for kernel stack offset
+ randomization
+In-Reply-To: <877cwltmno.ffs@tglx>
+Message-ID: <alpine.DEB.2.21.2302140447190.6368@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk> <alpine.DEB.2.21.2302122311470.46819@angie.orcam.me.uk> <877cwltmno.ffs@tglx>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,13 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:18:05AM +0800, Baolin Wang wrote:
-> The page isolation functions did not return a boolean to indicate
-> success or not, instead it will return a negative error when failed
-> to isolate a page. So it's better to check the negative error explicitly
-> for isolation to make the code more clear per Linus's suggestion in [1].
+On Mon, 13 Feb 2023, Thomas Gleixner wrote:
 
-Only one caller of isolate_lru_page() or folio_isolate_lru() actually
-uses the errno.  And the errno can only be 0 or -EBUSY.  It'd be
-better to change the three functions to return bool and fix
-add_page_for_migration() to set the errno to -EBUSY itself.
+> >> For x86 kernel stack offset randomization uses the RDTSC instruction, 
+> >> which according to H. Peter Anvin is not a secure source of entropy:
+> >> 
+> >> "RDTSC isn't a super fast instruction either, but what is *way* more
+> >> significant is that this use of RDTSC is NOT safe: in certain power states
+> >> it may very well be that stone number of lower bits of TSC contain no
+> >> entropy at all."
+> >
+> >  Ping for:
+> > <https://lore.kernel.org/all/alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk/>.
+> 
+> I'm waiting for you to address Peter Anvins feedback.
+
+ Do you mean this part:
+
+On Tue, 31 Jan 2023, H. Peter Anvin wrote:
+
+> Well, what I said was that masking out the low bits of TSC is not a valid use to
+> extract a random(-ish) number this way, because the lower bits may be affected
+> by quantization. Something like a circular multiply using a large prime with a
+> good 0:1 balance can be used to mitigate that.
+> 
+> However, the second part is that subsequent RDTSCs will be highly correlated,
+> and so a CSPRNG is needed if you are actually trying to get reasonable security
+> this way – and, well, we already have one of those.
+
+?  Well, I inferred, perhaps incorrectly, from the second paragraph that 
+Peter agrees with my approach (with the CSPRNG being what `get_random_u8' 
+and friends get at).
+
+> You also cite him
+> w/o providing a link to the conversation, so any context is missing.
+
+ Sorry about that.  I put the change heading for the previous iterations 
+in the change log, but I agree actual web links would've been better:
+<https://lore.kernel.org/all/alpine.DEB.2.21.2301081919550.65308@angie.orcam.me.uk/>,
+<https://lore.kernel.org/all/alpine.DEB.2.21.2301082113350.65308@angie.orcam.me.uk/>.
+
+ Please let me know if you need anything else.  Thank you for your review.
+
+  Maciej
