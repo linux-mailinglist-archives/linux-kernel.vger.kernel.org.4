@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00534696021
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F2E696024
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjBNKBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S232284AbjBNKCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjBNKAw (ORCPT
+        with ESMTP id S230342AbjBNKCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:00:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627B125E32;
-        Tue, 14 Feb 2023 02:00:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2664B81CCE;
-        Tue, 14 Feb 2023 10:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 69716C433D2;
-        Tue, 14 Feb 2023 10:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676368817;
-        bh=lTvtUBadmlpWwQeOZ6L7kfaww5BbsQR2JxusDsIOyjI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jSv6f5pm9a1xkeLXlqsvG8dlShizzQYLUiomQE8DpKvWMhBTuipNd3qOi0dVsx9pp
-         h7exnarB8oA433Ak0wLYvBxRgl/xPJvQQVzCrUwctwec03aCTV7wUMGYCcet0apMde
-         O7rawfNHakV5gPcVGiJUFO4zUbA3hXfSFEuG48cST6BIY+LCYtGFcFwXdnnes6GgCi
-         9fJ4BnZrNa4vKOrrrT+6tmdYbLf4++Y3uZfVpViCE/3EWvj76ipucvMyh4v+GIpHaF
-         Hmp3pu7QWdjNOXjT85xCDrOHzDsqON+NtSYleMp2mcGEHis5UVsNUgjjULvPv3ETyB
-         gSYH2sIoWwIfg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44FAFE68D39;
-        Tue, 14 Feb 2023 10:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 14 Feb 2023 05:02:03 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEF9265A3;
+        Tue, 14 Feb 2023 02:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676368845; x=1707904845;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ay2iQk5KSGr6gse7ujsRlbfAyYEoHsLc7jM48yfVN6k=;
+  b=O7Bu3v3chlld3pNpqOiXUcohl/qssLprq/EyVUrOUhR08nukqUMqc4ZI
+   C79ozRLsAM9pwIUSH25VfYMLINqr8JOGA2P5wOBMGAZGmcdLEmk8FVCcl
+   Pi6HarCKFyCk6AVGimQ4ebYW+L+0IllbpFzcC0ydauT94BJS9GE9fGbd4
+   GZK7KcRM5OIHjZttFmizK/BzO8J+fcjfuTZXr7/UyVBSMuz5zubLYGK9n
+   OnAvqqf28qovz5UvVbWBB7M5TW1RwFfOdrafz4FzdYYc3i/r5ZltAjuDy
+   0h380d/f1pQcJC5PmFCyYSvuKgOuI7SXai/IODSb8j+YHMFCM8Uu4Vtvk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310758254"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="310758254"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 02:00:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="778263089"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="778263089"
+Received: from asmit6-mobl2.ger.corp.intel.com ([10.249.37.52])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 02:00:43 -0800
+Date:   Tue, 14 Feb 2023 12:00:41 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 2/4] selftests/resctrl: Don't hard code divisor in MBM
+ results
+In-Reply-To: <8ed0dcbd-86af-2658-95de-fdccffba7728@intel.com>
+Message-ID: <346283c6-b5a5-ad35-7a90-fd17858be46f@linux.intel.com>
+References: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com> <20230208094026.22529-3-ilpo.jarvinen@linux.intel.com> <8ed0dcbd-86af-2658-95de-fdccffba7728@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: net: dsa: mediatek,mt7530: improve binding
- description
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167636881727.16047.7374583953083530603.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Feb 2023 10:00:17 +0000
-References: <20230212131258.47551-1-arinc.unal@arinc9.com>
-In-Reply-To: <20230212131258.47551-1-arinc.unal@arinc9.com>
-To:     Willem-Jan de Hoog <arinc9.unal@gmail.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, Landen.Chao@mediatek.com,
-        dqfext@gmail.com, sean.wang@mediatek.com, arinc.unal@arinc9.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-941652853-1676368845=:1771"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+--8323329-941652853-1676368845=:1771
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-On Sun, 12 Feb 2023 16:12:58 +0300 you wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Mon, 13 Feb 2023, Reinette Chatre wrote:
+
+> Hi Ilpo,
 > 
-> Fix inaccurate information about PHY muxing, and merge standalone and
-> multi-chip module MT7530 configuration methods.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> [...]
+> The subject is "Don't hard code divisor ..." yet it seems to me
+> that the hard coding persists. It is just changed from a magic
+> constant to a macro.
 
-Here is the summary with links:
-  - dt-bindings: net: dsa: mediatek,mt7530: improve binding description
-    https://git.kernel.org/netdev/net-next/c/a71fad0fd893
+Yeah, it was a bad wording.
 
-You are awesome, thank you!
+> On 2/8/2023 1:40 AM, Ilpo Järvinen wrote:
+> > From: Fenghua Yu <fenghua.yu@intel.com>
+> > 
+> > Presently, while calculating MBM results, the divisor is hard coded as 4.
+> 
+> "Presently" can be removed. Here and in the rest of the series the usage of
+> "presently" and "currently" can usually be removed to improve clarity.
+> 
+> > It's hard coded to 4 because "NUM_OF_RUNS" is defined as 5 and the test
+> > does not count first result and hence 4. So, instead of hard coding the
+> > value to 4, change it to NUM_OF_RUNS - 1.
+> 
+> Are there any plans surrounding using struct resctrl_val_param::num_of_runs
+> instead?
+
+Actually no.
+
+What I'd want to do is that the functions which call these result 
+calculator functions would specify the number of tests they passed
+into the result calculator. It seems safer because the results are read 
+back from a file which could have changed (or got deleted due to an 
+ipc bug prematurely cleaning up the file) and would better take account 
+those cases where the first value is skipped when reading the results.
+
+I think I'll drop this patch for now.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ i.
 
-
+--8323329-941652853-1676368845=:1771--
