@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF91A6965FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1127D696600
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbjBNOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S233286AbjBNOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjBNOJo (ORCPT
+        with ESMTP id S233298AbjBNOJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:09:44 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6276E2203C;
-        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id dr8so40272796ejc.12;
-        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p7hlSNqIh/Sna2kEiZvGWoB1aXxpevaYTwBOmCsTko4=;
-        b=VQhEXrJCClXlTMVNlCv6k10DCH92MxLpaMSlvWwbjtVae3qS3cNwQgeAVYBviuU7Yn
-         CVrJCkXVIcdcLCGmqRbZkFaQhvVuEr5hxzmM0tZN0sDNKarno1aQs2/9x2Caimp5KZVt
-         62wU+p9URpngfpXIJnTaO5usOM03PsVEyse9ne86RnZCb9ZcEBA0RgmWWR4ROEZYjSH4
-         IyVk/TEIdorq44jWadIQ9iydvdZ1NYndc5VSj1F2IAuaGyyrzy0LaCMtPoyBKy4lPboZ
-         2oFkMEQQcfKw8dqVddV42X2WUXPOEzEvolkkocsynZHRjCK89y/kOghpFRu2eABZ2mwY
-         3TSg==
-X-Gm-Message-State: AO0yUKWM3g51Zo0twbdNTwVK1WD3xqSiM0BEEbeVQgracy+Vt6g7sl0J
-        +s0Hq4jmLZvy77ZspNuBDoE1aFD0abtqatNPCuw=
-X-Google-Smtp-Source: AK7set+1uGQfF1O93l4l2QxjShVpBRHJC5I5JTqL8wOB2fyUeCuafm+Tc+pvZllJxQbEAbLdUrPoB0rt+WbmOkOKcl8=
-X-Received: by 2002:a17:906:b310:b0:8b1:2d36:a58e with SMTP id
- n16-20020a170906b31000b008b12d36a58emr1154572ejz.2.1676383662806; Tue, 14 Feb
- 2023 06:07:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org> <20230214095300.pv3e73r36poth5w4@vireshk-i7>
-In-Reply-To: <20230214095300.pv3e73r36poth5w4@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:07:31 +0100
-Message-ID: <CAJZ5v0ip_OHkSjQwNh5o+p2T2utXozH7DV6DFVp23bw5tzShtQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: qcom-hw: Add missing null pointer check
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rafael@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 09:09:55 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B892687A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:09:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3B1FE1FE93;
+        Tue, 14 Feb 2023 14:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676383670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OSO2QbLyv+zn3UTRMO+utM0hLTbwThBPOtHdVJRukMs=;
+        b=VQFlWV8C8xc/DGU3fHIu2epVcfS2YfVxmb74UNKM/2TSgZj0oTxk0b7JigCftLSWTdCpX/
+        MWlqXYy+p9VYKOEqyFRFi5ROssVLr/C5HFhUxKXNW8jBfzJPEUFf220u2IXcj+R3DXdHK+
+        QfGwPAurGElCn8oAqq1WcVIrt1Kils8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676383670;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OSO2QbLyv+zn3UTRMO+utM0hLTbwThBPOtHdVJRukMs=;
+        b=ew0OEl6NSCdBhiZZhU2FEE6QRBQJWltI3zBwRDD2d4YGMDD7BwVAnZOXVEM60qr40vhy3S
+        JMt+Dh1F7kcKGyDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9176913A21;
+        Tue, 14 Feb 2023 14:07:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vFtkH7WV62NASgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 14 Feb 2023 14:07:49 +0000
+Date:   Tue, 14 Feb 2023 15:07:48 +0100
+Message-ID: <87edqs8hmz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Andy Chi <andy.chi@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        Kacper =?ISO-8859-2?Q?Michaj=B3ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ALSA: hda/realtek: Enable mute/micmute LEDs and speaker support for HP Laptops
+In-Reply-To: <20230214140432.39654-1-andy.chi@canonical.com>
+References: <87sff88p2c.wl-tiwai@suse.de>
+        <20230214140432.39654-1-andy.chi@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 14-02-23, 15:11, Manivannan Sadhasivam wrote:
-> > of_device_get_match_data() may return NULL, so add a check to prevent
-> > potential null pointer dereference.
-> >
-> > Issue reported by Qualcomm's internal static analysis tool.
-> >
-> > Cc: stable@vger.kernel.org # v6.2
-> > Fixes: 4f7961706c63 ("cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index 340fed35e45d..6425c6b6e393 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -689,6 +689,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
-> >               return -ENOMEM;
-> >
-> >       qcom_cpufreq.soc_data = of_device_get_match_data(dev);
-> > +     if (!qcom_cpufreq.soc_data)
-> > +             return -ENODEV;
-> >
-> >       clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-> >       if (!clk_data)
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> Rafael,
->
-> Can you still send this for 6.2 ?
+On Tue, 14 Feb 2023 15:04:31 +0100,
+Andy Chi wrote:
+> 
+> On HP Laptops, requires the ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
+> make its audio LEDs and speaker work.
+> 
+> Signed-off-by: Andy Chi <andy.chi@canonical.com>
+> 
+> v3: mentioned that this quirk also fix speaker in commit message
 
-Yes, I can.
+Thanks, applied.
+
+
+Takashi
