@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2432A69647E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4828696486
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjBNNUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
+        id S232586AbjBNNVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjBNNUr (ORCPT
+        with ESMTP id S231834AbjBNNVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:20:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F30274A0;
-        Tue, 14 Feb 2023 05:20:30 -0800 (PST)
+        Tue, 14 Feb 2023 08:21:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5EF279B7;
+        Tue, 14 Feb 2023 05:20:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B30161637;
-        Tue, 14 Feb 2023 13:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68356C4339C;
-        Tue, 14 Feb 2023 13:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676380829;
-        bh=KdANFRR4PRJ9kp/ABO4FSUJAPI+iM5+P01yw4+tRecg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n64qKUh3kEFPlUcR6itG132XR7uCD164NatKPKbJDotAvNNKJEU5TWRBollm43lEm
-         psw9zw3RqbkLzEsjoFvYTfmPXbSAQ47KutKvbz+UDmXT9ChDMuGCiR+iJ2wUYmkORv
-         +uLIW7eiAWsRPLOigveURHt33QWGBQbURgiuLAvw=
-Date:   Tue, 14 Feb 2023 14:20:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V3 1/2] usb: gadget: u_ether: Convert prints to device
- prints
-Message-ID: <Y+uKmxD+QLNSMx8e@kroah.com>
-References: <20230209125319.18589-1-jonathanh@nvidia.com>
- <bcbf9d22-c90a-a4d1-2931-0da43bc7371e@collabora.com>
- <3dc8575e-050c-5e04-ae7c-af380801a227@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE1B61637;
+        Tue, 14 Feb 2023 13:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1588DC433D2;
+        Tue, 14 Feb 2023 13:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676380856;
+        bh=9m8ZbKJsD+az2elSMPiB/zCuKKeWwdmecOz4rRFlokw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BM5Iz0iwcVDt6wMsJwSQqIgE769d6X+hnI4PuaEX4j/mDAXprrZJCBYjc49bgctp2
+         5AgbRg2mNfecieyWcPOz7FfuAEJ6jKznh9yFsaCG8fQC7uaGLhh25LTSOEVcu4bnNr
+         Dwo588zvSBn/mojAkTU9P6Vc4OlzY4CSEVQyF4r/Fj3y7Aes9IJa+okDwm0fuCOaeH
+         Eez00iOt94mjXZTDhGcC1QvpSXE+GvU811v+G+B5P2+j/rpt8Tt1Cm9+h8WJ2GXarK
+         hszGdJV/dWlMpc94Au/83/mGc3pX7mAm07FIg6/MJOwQk58h3dH5G13qp+i319IcOi
+         1XHGvdaNI3+8w==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: qcom_battmgr: remove bogus do_div()
+Date:   Tue, 14 Feb 2023 14:20:42 +0100
+Message-Id: <20230214132052.1556699-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3dc8575e-050c-5e04-ae7c-af380801a227@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,81 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:55:56AM +0000, Jon Hunter wrote:
-> 
-> On 13/02/2023 13:49, Andrzej Pietrasiewicz wrote:
-> > Hi Jon,
-> > 
-> > W dniu 9.02.2023 o 13:53, Jon Hunter pisze:
-> > > The USB ethernet gadget driver implements its own print macros which
-> > > call printk. Device drivers should use the device prints that print the
-> > > device name. Fortunately, the same macro names are defined in the header
-> > > file 'linux/usb/composite.h' and these use the device prints. Therefore,
-> > > remove the local definitions in the USB ethernet gadget driver and use
-> > > those in 'linux/usb/composite.h'. The only difference is that now the
-> > > device name is printed instead of the ethernet interface name.
-> > > 
-> > > Tested using ethernet gadget on Jetson AGX Orin.
-> > > 
-> > > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > > Tested-by: Jon Hunter <jonathanh@nvidia.com>
-> > > ---
-> > > V3: Added this patch and dropped the patch in V2 that improved some of
-> > >      the prints.
-> > > 
-> > >   drivers/usb/gadget/function/u_ether.c | 36 +--------------------------
-> > >   1 file changed, 1 insertion(+), 35 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/u_ether.c
-> > > b/drivers/usb/gadget/function/u_ether.c
-> > > index 8f12f3f8f6ee..740331882e8d 100644
-> > > --- a/drivers/usb/gadget/function/u_ether.c
-> > > +++ b/drivers/usb/gadget/function/u_ether.c
-> > > @@ -17,6 +17,7 @@
-> > >   #include <linux/etherdevice.h>
-> > >   #include <linux/ethtool.h>
-> > >   #include <linux/if_vlan.h>
-> > > +#include <linux/usb/composite.h>
-> > >   #include "u_ether.h"
-> > > @@ -103,41 +104,6 @@ static inline int qlen(struct usb_gadget
-> > > *gadget, unsigned qmult)
-> > > /*-------------------------------------------------------------------------*/
-> > > -/* REVISIT there must be a better way than having two sets
-> > > - * of debug calls ...
-> > > - */
-> > > -
-> > > -#undef DBG
-> > > -#undef VDBG
-> > > -#undef ERROR
-> > > -#undef INFO
-> > > -
-> > > -#define xprintk(d, level, fmt, args...) \
-> > > -    printk(level "%s: " fmt , (d)->net->name , ## args)
-> > > -
-> > > -#ifdef DEBUG
-> > > -#undef DEBUG
-> > > -#define DBG(dev, fmt, args...) \
-> > > -    xprintk(dev , KERN_DEBUG , fmt , ## args)
-> > > -#else
-> > > -#define DBG(dev, fmt, args...) \
-> > > -    do { } while (0)
-> > > -#endif /* DEBUG */
-> > 
-> > Actually there are more (at least hypothetical) changes than the declared
-> > change of printed device name.
-> > 
-> > If DEBUG is not set there can be _more_ messages printed
-> > when your patch is applied as-is (i.e. all DBG() invocations will
-> > expand into some dev_dbg(), whereas before the patch is applied
-> > they compile into nothing).
-> 
-> So dev_dbg() messages will only be printed if DEBUG is defined or if dynamic
-> debug is enabled and the prints are enabled.
-> 
-> Greg, let me know what your thoughts on this version are?
+From: Arnd Bergmann <arnd@arndb.de>
 
-Looks good to me, let me queue it up now.
+The argument to do_div() is a 32-bit integer, and it was read from a
+32-bit register so there is no point in doing a 64-bit division on it.
 
-thanks,
+On 32-bit arm, do_div() causes a compile-time warning here:
 
-greg k-h
+include/asm-generic/div64.h:238:22: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+  238 |   __rem = __div64_32(&(n), __base); \
+      |                      ^~~~
+      |                      |
+      |                      unsigned int *
+drivers/power/supply/qcom_battmgr.c:1130:4: note: in expansion of macro 'do_div'
+ 1130 |    do_div(battmgr->status.percent, 100);
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/power/supply/qcom_battmgr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index ec31f887184f..de77df97b3a4 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -1126,8 +1126,7 @@ static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
+ 			battmgr->info.charge_type = le32_to_cpu(resp->intval.value);
+ 			break;
+ 		case BATT_CAPACITY:
+-			battmgr->status.percent = le32_to_cpu(resp->intval.value);
+-			do_div(battmgr->status.percent, 100);
++			battmgr->status.percent = le32_to_cpu(resp->intval.value) / 100;
+ 			break;
+ 		case BATT_VOLT_OCV:
+ 			battmgr->status.voltage_ocv = le32_to_cpu(resp->intval.value);
+-- 
+2.39.1
+
