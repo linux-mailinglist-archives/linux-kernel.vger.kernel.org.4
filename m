@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E076971B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B11D6971BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjBNXU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S232164AbjBNXVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBNXU4 (ORCPT
+        with ESMTP id S231843AbjBNXVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:20:56 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3622003
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:20:55 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-501c3a414acso228096227b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:20:55 -0800 (PST)
+        Tue, 14 Feb 2023 18:21:45 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BF521A13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:21:44 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id v23so18620751plo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nyl0p8SQm1y6pAg3OTXhzJtHEYuVho6+udK41+XIoIw=;
-        b=RUqMLnE+xU+QgkbgEHXrnDs9Uxky30vazz4NOSxlTFAFy7ZDasML5PI8RzhsmulwYr
-         Bk/jVbb/sY8++VJhuGxdiK/kTonD+WfNXuUBlttxJ3s6NSTIyydT09X4slKafc6mYUxY
-         /lXEwZ2gBT1+GYczbOg0WmOgHNPZmpmX9keUXZp+Am0KnMQmhjNql69YfxMQWj9GhSYE
-         77SmA0OXWqimlkJVoRoacd+jSIUlgu2BxfOeUGaBoJV1APBuQjDkxxypaaIEd0zrx8pX
-         Vs0SOfOqI+kAI1r6qvccUbvB9MLa/H8HaNao4MNAq4miHYvHGlGg/V9rJvIRSngVr8FY
-         0k4Q==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wVlSW+MzcaFhWzFtR663veMvlkA/2gETJbdbvLMrqwg=;
+        b=YtQfkyFjqHsFwgLK1k2ylJT9ni2w93w6RvbOhhSCH/15ARnLhvtKyJPzZ3MhtXGpg7
+         cdWXC1UTFP3cd9zeCHpjnWyQaOsxOk1eH4efxLrUbr5ULex03BITFebPGEAIvx7y7au5
+         W32xN1pFjjKkOZ/v4N8ddGbx9TomNuN74dKeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nyl0p8SQm1y6pAg3OTXhzJtHEYuVho6+udK41+XIoIw=;
-        b=FwcwWsGTfUnxCoFyYjjLfYwSZMKazUx+Hmf/3+wV+Ty7qgchteRmXMqe8YMTRz6Ihw
-         6X87CSDVLBoRxnwVf17L6pK2AUuc/MRoeCf+jS0CChJRids0A5owSRRyvZQyg2qUX8b7
-         PQfHaI5znw/jFceykzgr8vUA2M2quGRmC0DdxwFdPJkuarGENNLRCmmzS1vEcaxWaOfk
-         +oD489GQRZf1Sf8hD30THZm68yQQLLYmFAIjXNAY4iL5zYYTgLAqlvrg81JTeB3lTpG+
-         y57YJcvNDEvaUdqN05xt1rG+lWTciIA1BxtxN1LCh/3SgeVlDD+lfNMVqujak0ePYYQN
-         hP7w==
-X-Gm-Message-State: AO0yUKXPdoYchewwFFW8WCj01bMXsiTfDmZpn9El3K7y/pmtZUlwTGVP
-        Vn6SDpeXVuiarw5vXMFBLj2iOn68/HXI5Y/5NSBB
-X-Google-Smtp-Source: AK7set81DXuGY+35pmRfQRXMfyIQZfomwDZTe26wQ1wU4OiYtSU6DIRVKjiSSoFcGoSfR5ybJ6mHFK0A9alC75TzZLo=
-X-Received: by 2002:a0d:f002:0:b0:52e:d52e:97d0 with SMTP id
- z2-20020a0df002000000b0052ed52e97d0mr40421ywe.117.1676416854744; Tue, 14 Feb
- 2023 15:20:54 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wVlSW+MzcaFhWzFtR663veMvlkA/2gETJbdbvLMrqwg=;
+        b=nQZHrjitn5rhSsC5OFbF3F7HGlJSK2VFyLyHE7S8lB0gasRktb9Hl9wzwCTJwCzKuZ
+         lerEPoTVxJRLl0R8pZGjV4zmYVuTvA6+aexqFeVPFEc2HsCsCNXZISKj1EBD9hYZBYCz
+         JR+IYd1O55s42TO+HEB5aL6l7pdwhdtcjqdzW0LswsQjXnhbL56+1HB4uNm3/NrVWyWp
+         agH2HTVlquoYOII8OA7N2uzpe0FgW0TVtwCz81BW0meCsvpg4IXYaHpa3nW/1dmocRSQ
+         rk+34tat7fObaisSO5Q8G+1uBjg7MLP30B1Jgtw9oFtGAgp/QGe81dyipK3b/wombSYN
+         ZRkw==
+X-Gm-Message-State: AO0yUKW9Y3zdIttjjevDsSCJ2mKght23archJPK56bJhkRCdbK/UGTD4
+        se/j2jyhcU54UQiwMyliOoT1mQ==
+X-Google-Smtp-Source: AK7set9q8bTv2pNuwHm4PPCPSiBfM2nKd30kkfNZw8jfMk5RqJT9oVnFuc8N8F2HAJ3AyI3Zi9kfSw==
+X-Received: by 2002:a17:902:d501:b0:198:b945:4108 with SMTP id b1-20020a170902d50100b00198b9454108mr642068plg.0.1676416904081;
+        Tue, 14 Feb 2023 15:21:44 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id w9-20020a1709029a8900b0019605d48707sm10721849plp.114.2023.02.14.15.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 15:21:43 -0800 (PST)
+Message-ID: <63ec1787.170a0220.8e840.4d7a@mx.google.com>
+X-Google-Original-Message-ID: <202302141521.@keescook>
+Date:   Tue, 14 Feb 2023 15:21:43 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] smb3: Replace smb2pdu 1-element arrays with flex-arrays
+References: <20230214215446.never.567-kees@kernel.org>
+ <CAH2r5msOxm0PLoc1fAFjDnaonGVv+E1vyHxBGEh_rtAvJ_qNaQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230214105412.5856-1-walter.chang@mediatek.com>
- <20230214105412.5856-5-walter.chang@mediatek.com> <1726f1d2-7411-2b49-79cd-f5aecff2d19e@linaro.org>
-In-Reply-To: <1726f1d2-7411-2b49-79cd-f5aecff2d19e@linaro.org>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 14 Feb 2023 15:20:42 -0800
-Message-ID: <CANDhNCrYaepM3d-xHybqc9n5j0q0iMfPiTGPZKskEWjqjD6nRA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] clocksource/drivers/timer-mediatek: Make
- timer-mediatek become loadable module
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     walter.chang@mediatek.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
-        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH2r5msOxm0PLoc1fAFjDnaonGVv+E1vyHxBGEh_rtAvJ_qNaQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 3:09 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 14/02/2023 11:53, walter.chang@mediatek.com wrote:
-> > From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
-> >
-> > Make the timer-mediatek driver which can register
-> > an always-on timer as tick_broadcast_device on
-> > MediaTek SoCs become loadable module in GKI.
->
-> Other questions are unanswered. Please do not ignore feedback and
-> respond to it.
->
+On Tue, Feb 14, 2023 at 04:53:10PM -0600, Steve French wrote:
+> This seems to have a lot of conflicts with for-next (doesn't apply).
+> Any chance you could rebase it on linux-next
 
-Apologies, I know it can be a pain to repeat yourself, but would you
-clarify which questions were unanswered?
-My initial skim made it seem like the items you raised were addressed
-in some form (though maybe not sufficiently?).
+Ah, dang. I was working off of 20230203. I will rebase! Sorry for the
+noise. :)
 
-thanks
--john
+-- 
+Kees Cook
