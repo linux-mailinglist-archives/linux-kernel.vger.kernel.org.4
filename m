@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F179695919
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6704C69591D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjBNGUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 01:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S231360AbjBNGXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 01:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBNGUv (ORCPT
+        with ESMTP id S229581AbjBNGX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 01:20:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE491C336;
-        Mon, 13 Feb 2023 22:20:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4595060E8C;
-        Tue, 14 Feb 2023 06:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4B4C433EF;
-        Tue, 14 Feb 2023 06:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676355649;
-        bh=S4jqq7VhGw4LBwFTGJheW0/oEWFrtHDP7F1uVtcRTCM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vxqBoAD0pj0noMeUTYqItKeZokj715a7MWXTZMK2uOqcODzKTUfUxX0sEFzLGDkAv
-         S6+BYCZyJPDJ2YxEo+QquOc0VNVm9UWYax1hlfAPWoncwqhdmT/Yy8lWA9T2LvllZG
-         uztpBj4l0c9watZg/yBXtWgN+eg2DSFhGjXYe19c=
-Date:   Tue, 14 Feb 2023 07:20:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     stable@vger.kernel.org, rmk+kernel@armlinux.org.uk,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Message-ID: <Y+soPsujgwChdgr7@kroah.com>
-References: <20230213144745.696901179@linuxfoundation.org>
- <cc3f4cfb-adbc-c3b7-1c21-bb28e98499d8@gmail.com>
+        Tue, 14 Feb 2023 01:23:29 -0500
+Received: from out28-170.mail.aliyun.com (out28-170.mail.aliyun.com [115.124.28.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E152213DFB;
+        Mon, 13 Feb 2023 22:23:27 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.179232|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.213737-0.00173606-0.784527;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.RLc3oUz_1676355804;
+Received: from 192.168.220.144(mailfrom:victor@allwinnertech.com fp:SMTPD_---.RLc3oUz_1676355804)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Feb 2023 14:23:25 +0800
+Message-ID: <0e5db8d4-9d33-0c26-cc39-0b43770901fe@allwinnertech.com>
+Date:   Tue, 14 Feb 2023 14:23:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc3f4cfb-adbc-c3b7-1c21-bb28e98499d8@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RESEND] Bluetooth: btrtl: Add support for RTL8852BS
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230206063334.45861-1-victor@allwinnertech.com>
+ <5c249a19-f79b-346d-2fb1-cdfc05324909@molgen.mpg.de>
+From:   Victor Hassan <victor@allwinnertech.com>
+In-Reply-To: <5c249a19-f79b-346d-2fb1-cdfc05324909@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:50:24AM -0800, Florian Fainelli wrote:
-> On 2/13/23 06:49, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.10.168 release.
-> > There are 139 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> There is a regression coming from:
-> 
-> nvmem: core: fix registration vs use race
-> 
-> which causes the following to happen for MTD devices:
-> 
-> [    6.031640] kobject_add_internal failed for mtd0 with -EEXIST, don't try
-> to register things with the same name in the same directory.
-> [    7.846965] spi-nor: probe of spi0.0 failed with error -17
-> 
-> attached is a full log with the call trace. This does not happen with
-> v6.2-rc8 where the MTD partitions are successfully registered.
+Dear Paul:
+   Thank you for your advises. I had send PATCH-v2 to fix it. Can you 
+give me more advises?
 
-Can you use `git bisect` to find the offending commit?
-
-thanks,
-
-greg k-h
+On 2023/2/6 18:03, Paul Menzel wrote:
+> Dear Victor,
+> 
+> 
+> Thank you for your patch.
+> 
+> Am 06.02.23 um 07:33 schrieb Victor Hassan:
+>> Add the support for RTL8852BS BT controller on UART interface.
+>> The necessary firmware file will be submitted to linux-firmware.
+>>
+>> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+>> ---
+>>   drivers/bluetooth/btrtl.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+>> index 69c3fe649ca7..36c3a23324f8 100644
+>> --- a/drivers/bluetooth/btrtl.c
+>> +++ b/drivers/bluetooth/btrtl.c
+>> @@ -198,6 +198,14 @@ static const struct id_table ic_id_table[] = {
+>>         .fw_name  = "rtl_bt/rtl8852bu_fw.bin",
+>>         .cfg_name = "rtl_bt/rtl8852bu_config" },
+>> +    /* 8852B with UART interface */
+>> +    { IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_UART),
+>> +      .config_needed = true,
+>> +      .has_rom_version = true,
+>> +      .has_msft_ext = true,
+>> +      .fw_name  = "rtl_bt/rtl8852bs_fw.bin",
+>> +      .cfg_name = "rtl_bt/rtl8852bs_config" },
+>> +
+> 
+> I’d sort *bs* before *bu*.
+> 
+>>       /* 8852C */
+>>       { IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
+>>         .config_needed = false,
+>> @@ -965,5 +973,7 @@ MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
+>>   MODULE_FIRMWARE("rtl_bt/rtl8852au_config.bin");
+>>   MODULE_FIRMWARE("rtl_bt/rtl8852bu_fw.bin");
+>>   MODULE_FIRMWARE("rtl_bt/rtl8852bu_config.bin");
+>> +MODULE_FIRMWARE("rtl_bt/rtl8852bs_fw.bin");
+>> +MODULE_FIRMWARE("rtl_bt/rtl8852bs_config.bin");
+>>   MODULE_FIRMWARE("rtl_bt/rtl8852cu_fw.bin");
+>>   MODULE_FIRMWARE("rtl_bt/rtl8852cu_config.bin");
+> 
+> Ditto.
+> 
+> 
+> Kind regards,
+> 
+> Paul
