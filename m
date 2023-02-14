@@ -2,191 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C1B696419
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A695469641D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbjBNNAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S232523AbjBNNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjBNNAA (ORCPT
+        with ESMTP id S231716AbjBNNAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:00:00 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85268273A;
-        Tue, 14 Feb 2023 04:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676379595; x=1707915595;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fpuTkZWynYxgsQG+YYF/iRN5EE7qjk+6jG6qIWNIM54=;
-  b=a2Yql8JgTSkYkTeT72T8lL6H0pNbU4xXd3Se/bWBNJP6oQymwAXxApBO
-   CYAPCaicGc0RN7b+05QNeMhQr11T3HiptXqgrYYHla4zwtJGHx7SDFypn
-   pSYvuOwqbd4MjjzLo2dEuQicsLZSK3OYnGrHpjxmRZ9YFjuX2s8NAckKi
-   O5DeaSZ3pEgNrJyu8qfaMsQyTzmynmDamHa/187kbmHAAxKukbvVwFU4R
-   8PAboZbMxWzZM7ShfzY1sRAcuUaELEfc49cJWXVUcCPm+nsFFSP3KIrPU
-   qwWxw5sZVM/GHIYCHyShC04M1gXnVWqmYSTWqUVS76NBF90iIP6gdgO55
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
-   d="scan'208";a="29073403"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 14 Feb 2023 13:59:53 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 14 Feb 2023 13:59:53 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 14 Feb 2023 13:59:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676379593; x=1707915593;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fpuTkZWynYxgsQG+YYF/iRN5EE7qjk+6jG6qIWNIM54=;
-  b=DvejR1bjZL4e7iv8lvf9YrMgAf4fAREnFRYxeh62B6R+RK7IaQeNZi2w
-   C8GzGnSNrC6BB/hs91YcEAktdlgp4PJ6VXsXBbW58Y0UoRRZe6W2quRlO
-   Pqmiro+CZTFkWUrRVnP6VF0/57U+FboogUi2ZrtLaiEXx2bWxaqP40DPf
-   dxCFccS1gWvfkbUMQ/szw/cruiM9daDr4j0d1OuxFpMmxn1J/qiYKzM/9
-   ZWZfQM4yS6hwpWpuNMYA4UXfMDHrmyDKHGU1I+FAhEQcADWNG0UkSpfXb
-   fQw/gb1t/Z7Kqs8/vc43QfbrSpR1FG49zzmPyi0INgRz+Cs4uimpK+V7/
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
-   d="scan'208";a="29073402"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 14 Feb 2023 13:59:53 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 6EE57280056;
-        Tue, 14 Feb 2023 13:59:53 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v2 1/1] gpio: vf610: make irq_chip immutable
-Date:   Tue, 14 Feb 2023 13:59:49 +0100
-Message-Id: <20230214125949.3462396-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Feb 2023 08:00:55 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AF93273A;
+        Tue, 14 Feb 2023 05:00:52 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8BxONkDhutjEogAAA--.1314S3;
+        Tue, 14 Feb 2023 21:00:51 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyr0ChutjydoyAA--.29297S3;
+        Tue, 14 Feb 2023 21:00:51 +0800 (CST)
+Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
+ interface
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
+ <20230214025648.1898508-2-zhaotianrui@loongson.cn>
+ <Y+ssT+W27GxDRAAZ@kroah.com>
+ <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
+ <Y+tbMwXjA0hkiUJA@kroah.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <a44fc722-e3e2-7f8a-0454-f27a8a10d52b@loongson.cn>
+Date:   Tue, 14 Feb 2023 21:00:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <Y+tbMwXjA0hkiUJA@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Bxyr0ChutjydoyAA--.29297S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7JFy8XFWUAFyfJF17CryDZFb_yoWfuFc_Cr
+        17Jr4Du3y5GF45Ka1DGFs0kFWxG3W5Ga4Iqrs8Kry3urnrXF48Ca1kG34kZFW3Kw4xKr4I
+        9wn5tFW8XwsFqjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        e7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since recently, the kernel is nagging about mutable irq_chips:
 
-    "not an immutable chip, please consider fixing it!"
 
-Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-helper functions and call the appropriate gpiolib functions.
+在 2023年02月14日 17:58, Greg Kroah-Hartman 写道:
+> On Tue, Feb 14, 2023 at 05:00:56PM +0800, Tianrui Zhao wrote:
+>>>> +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
+>>>> +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
+>>> Why does this arch need new ioctls?
+>> We want to use this ioctl to access multiple csrs at one time. If without
+>> this, we only access one csr.
+> What is wrong with accessing only one csr at a time?  Isn't this what
+> other architectures do?
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-Thanks Andy for the feedback!
+Generally, using KVM_GET_ONE_GET ioctl to get one reg, but we want a
+more convenient interface to get serial regs at one time, so we add this
+ioctl.
+And in x86 platform, using KVM_GET_MSRS to access multiple registers. and
+our functions reference this.
 
-Changes in v2:
-* Add missing calls to gpiochip_disable_irq() and gpiochip_enable_irq()
+Thanks,
+Tianrui Zhao
 
- drivers/gpio/gpio-vf610.c | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
-index a429176673e7..b657a07a9b56 100644
---- a/drivers/gpio/gpio-vf610.c
-+++ b/drivers/gpio/gpio-vf610.c
-@@ -30,7 +30,6 @@ struct fsl_gpio_soc_data {
- 
- struct vf610_gpio_port {
- 	struct gpio_chip gc;
--	struct irq_chip ic;
- 	void __iomem *base;
- 	void __iomem *gpio_base;
- 	const struct fsl_gpio_soc_data *sdata;
-@@ -207,19 +206,23 @@ static int vf610_gpio_irq_set_type(struct irq_data *d, u32 type)
- 
- static void vf610_gpio_irq_mask(struct irq_data *d)
- {
--	struct vf610_gpio_port *port =
--		gpiochip_get_data(irq_data_get_irq_chip_data(d));
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	struct vf610_gpio_port *port = gpiochip_get_data(gc);
- 	void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
-+	irq_hw_number_t gpio_num = irqd_to_hwirq(d);
- 
- 	vf610_gpio_writel(0, pcr_base);
-+	gpiochip_disable_irq(gc, gpio_num);
- }
- 
- static void vf610_gpio_irq_unmask(struct irq_data *d)
- {
--	struct vf610_gpio_port *port =
--		gpiochip_get_data(irq_data_get_irq_chip_data(d));
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	struct vf610_gpio_port *port = gpiochip_get_data(gc);
- 	void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
-+	irq_hw_number_t gpio_num = irqd_to_hwirq(d);
- 
-+	gpiochip_enable_irq(gc, gpio_num);
- 	vf610_gpio_writel(port->irqc[d->hwirq] << PORT_PCR_IRQC_OFFSET,
- 			  pcr_base);
- }
-@@ -237,6 +240,17 @@ static int vf610_gpio_irq_set_wake(struct irq_data *d, u32 enable)
- 	return 0;
- }
- 
-+static const struct irq_chip vf610_irqchip = {
-+	.name = "gpio-vf610",
-+	.irq_ack = vf610_gpio_irq_ack,
-+	.irq_mask = vf610_gpio_irq_mask,
-+	.irq_unmask = vf610_gpio_irq_unmask,
-+	.irq_set_type = vf610_gpio_irq_set_type,
-+	.irq_set_wake = vf610_gpio_irq_set_wake,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static void vf610_gpio_disable_clk(void *data)
- {
- 	clk_disable_unprepare(data);
-@@ -249,7 +263,6 @@ static int vf610_gpio_probe(struct platform_device *pdev)
- 	struct vf610_gpio_port *port;
- 	struct gpio_chip *gc;
- 	struct gpio_irq_chip *girq;
--	struct irq_chip *ic;
- 	int i;
- 	int ret;
- 
-@@ -315,14 +328,6 @@ static int vf610_gpio_probe(struct platform_device *pdev)
- 	gc->direction_output = vf610_gpio_direction_output;
- 	gc->set = vf610_gpio_set;
- 
--	ic = &port->ic;
--	ic->name = "gpio-vf610";
--	ic->irq_ack = vf610_gpio_irq_ack;
--	ic->irq_mask = vf610_gpio_irq_mask;
--	ic->irq_unmask = vf610_gpio_irq_unmask;
--	ic->irq_set_type = vf610_gpio_irq_set_type;
--	ic->irq_set_wake = vf610_gpio_irq_set_wake;
--
- 	/* Mask all GPIO interrupts */
- 	for (i = 0; i < gc->ngpio; i++)
- 		vf610_gpio_writel(0, port->base + PORT_PCR(i));
-@@ -331,7 +336,7 @@ static int vf610_gpio_probe(struct platform_device *pdev)
- 	vf610_gpio_writel(~0, port->base + PORT_ISFR);
- 
- 	girq = &gc->irq;
--	girq->chip = ic;
-+	gpio_irq_chip_set_chip(girq, &vf610_irqchip);
- 	girq->parent_handler = vf610_gpio_irq_handler;
- 	girq->num_parents = 1;
- 	girq->parents = devm_kcalloc(&pdev->dev, 1,
--- 
-2.34.1
+>
+>> There is another function, can we use the KVM_GET/SET_MSRS to access our
+>> csrs?
+> I do not know, that's up to the KVM developers to answer.
+>
+> thanks,
+>
+> greg k-h
 
