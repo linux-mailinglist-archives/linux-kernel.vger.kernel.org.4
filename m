@@ -2,292 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B14A696F2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8275E696EEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjBNVUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:20:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S232100AbjBNVMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjBNVUb (ORCPT
+        with ESMTP id S230263AbjBNVMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:20:31 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A944C25;
-        Tue, 14 Feb 2023 13:20:30 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EJp9Rq019429;
-        Tue, 14 Feb 2023 21:20:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=OcZJ9FjJy7jbdYriOCDiXlSBEC0RxeLblvVoPyOxuDY=;
- b=VCHEzM9E9pKhNJEITazZPomXIDFgAjyEwISVRKpCCL7ruCPLUsG4EY2+P1A8XmlHVGzg
- UvHeH7IlBm6ms9NVqvlkgy1sKtJF/YjL/vEJ9K/jdhMNMsrZOZmOrSZQL9HHV3SXQLbc
- 8RG71C0C+A7cDo+ll+gVdvGM1rPdCGN3PxP9xmide0HpHbf7Qoe2d/ffFvJe/XaPaFNS
- BK5+3BQ+TmGIFuyd7mefggxWBK3yrPqA/gWbDT3u1WS7TZE4T69DsWl0j3YctuO9xsV7
- JOsgK07ViOVzEbzv2B0Y2NlswEfMMiQUfcihQdsAFUrmOMyrj8VnOKtNdiI5yKUckuYq PA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6ps1xsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:20:18 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ELKHiT024852
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:20:17 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 13:13:25 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v10 04/26] virt: gunyah: Add hypercalls to identify Gunyah
-Date:   Tue, 14 Feb 2023 13:12:07 -0800
-Message-ID: <20230214211229.3239350-5-quic_eberman@quicinc.com>
+        Tue, 14 Feb 2023 16:12:05 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA0929147
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:12:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ea3spVb9V/ANpkNvYiEqT6iMSa1jRs4WnaQi9BQBUuKdxRHA8ieP3HCJr1iKQkzsFTk5aXGTILakTxnMU9VbOcm3Dt7UQQBUOAH9Xf3sQxvUk4uq9tKcA5JfScx2q+xvVxZ8JpHjWDBoDvhswF2uPslHZqlIXhsJ4jUbPhYWsBLJhhB6v1Ecx4To50LCZZb+gn9GEkiqgDhynBHJiqIVjS758NCSxAo9D5O3xmE/PJY3kGidoVuQEv5zZJYLLSo/o0zJF6epNKq6XHGMSfx3CYtJDg4HqQghPXDLWEnvBypit2vsqAnjBzXvAt8N6QWf8l2tJMP12aY+Reaxy269Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OWs7F9eCOdpi4KdwL8v/e6svZn1EccRKMbmYQOmIfAw=;
+ b=KeWHrrqwjI9HHYRYEflTf8dVvonCIwYPSTq9EUEfSkPkWce/9jsnnQAKvHSOuN9YNWUCqrl2W9CFN5XKtA+1o38smrWwWuDSDgHFI/kxBRwwimTX7/IUqZyJDk7hZDFP4Pe4w+uhoTi4WAB/ufdMyqwKXPl11uuUt3mwMdIaPsG6bYkqdG9ch69DQEpwS7UkJbJzQ1DM+OupNbOqbytquRW6VrKUSoM6GZrSWEKCGVtZLYPHA5T2gdcjv+GFZrHphGhQPT6U4yWw3DnRtSKh8I1cCBN3nWefpm50zNHgd3UssjdnLTsinVOUdf3h+Qlc7Uwb5DH47mJSuTR4fUHNKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OWs7F9eCOdpi4KdwL8v/e6svZn1EccRKMbmYQOmIfAw=;
+ b=P7xGdkdhj5fxXf56+i/2obRq5YvwkTrDPaY1yVTO3OD7+Te4Xl9StiuP8VVXmEw2eNxbDa5+CXu7xI5FfdASm4x67UBfxG/pzN+srCcjUPSoL7ZMK28VJRUUv/pELEa6noSXxtJ8+3NkYGbIIef7voBSqoLQtRAz6rgiRzPIXNY=
+Received: from BN9PR03CA0364.namprd03.prod.outlook.com (2603:10b6:408:f7::9)
+ by CH3PR12MB8711.namprd12.prod.outlook.com (2603:10b6:610:176::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Tue, 14 Feb
+ 2023 21:12:01 +0000
+Received: from BL02EPF00010206.namprd05.prod.outlook.com
+ (2603:10b6:408:f7:cafe::80) by BN9PR03CA0364.outlook.office365.com
+ (2603:10b6:408:f7::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
+ Transport; Tue, 14 Feb 2023 21:12:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF00010206.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6111.10 via Frontend Transport; Tue, 14 Feb 2023 21:12:00 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 14 Feb
+ 2023 15:11:58 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>,
+        "Nagulendran, Iswara" <Iswara.Nagulendran@amd.com>,
+        Tony Tascioglu <tony.tascioglu@amd.com>,
+        zhikzhai <zhikai.zhai@amd.com>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        "Leung, Martin" <Martin.Leung@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: only warn once in dce110_edp_wait_for_hpd_ready()
+Date:   Tue, 14 Feb 2023 16:12:54 -0500
+Message-ID: <20230214211254.233468-1-hamza.mahfooz@amd.com>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230214211229.3239350-1-quic_eberman@quicinc.com>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: WJZ-YM6OR8cREDk-pvDx_14Vr89f-kH_
-X-Proofpoint-GUID: WJZ-YM6OR8cREDk-pvDx_14Vr89f-kH_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140183
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010206:EE_|CH3PR12MB8711:EE_
+X-MS-Office365-Filtering-Correlation-Id: c564e2cf-ac09-4e06-d7ed-08db0ed01d28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ocVjFEGknyzklbNDFTOb0+J1sKTmuRN5g2qA69g3Ac67l3uXXtQdXcYce3/87j9UWDi6WK455/7kdZnE/D0QR/ve3mMI52xkIo85vXwfWd9IqFgbu3wvVnpbnMJEIl2v/thdX2dec0Tb/upLnL9rKromRA7fBmr6VeM+yaFDmz+4v554s1invBQ8XLsqX2t6gP7i3OTLziHfCUgwkOGq/JJLMfwhRZ5WjtSP7rczUX6QM4/VU/ygOL6xTFl2oLyrIHBJ1SfKn6wCNZKQp8GMJ1UIOieBcV5MmnIEuzj8CEj9qj1LEjTx1wT5jfaw/53ZKe1PQssUj3sYFCmz3aiZ4SL9W05ST2VZPZ+tIOboFDVvPzAi7H28HFDiIUEvVN2XejCY/X1NoSqP1nHg4ckS+8zOlDaxtjk5xmoqyZ4v0HELMWmUQrqoGBxrHt+REvHrRgDwVmg8xL46yZrjmenxPV2iVjuPKlRuiuPHsN6rBo63+LhOm4d9SlgYE/yJ/r51Ufkg6y00lcoZvSMnGT6UOrc6MXK++QksfRp0gODvkFIeBRwumjA2JdPUYa/eeRWPpXlWB+xiNjaFdBjCToZQEx0q9Mgndgl4FJ74Zz02zoljpHFtv9pI2wkDUIN/uZ+FWqe4XP3HIvdwn0vkPi5tb4gC+pQS1oY7oW627bAzPzX4DCPKVOl0GfPLQFoYofBVSh5Q+gcGa2kEl3k5hMHEUATVfMw7Q0nT0cBnq6nX2xHRJswofOYII/zgTghG2vg+SCbOsyj+8X0JU3whR2MRVA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199018)(46966006)(40470700004)(36840700001)(478600001)(47076005)(36860700001)(40480700001)(83380400001)(426003)(86362001)(81166007)(82740400003)(82310400005)(356005)(6666004)(1076003)(36756003)(40460700003)(186003)(26005)(16526019)(336012)(2616005)(4744005)(5660300002)(41300700001)(44832011)(6916009)(8676002)(4326008)(316002)(54906003)(8936002)(70206006)(70586007)(2906002)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 21:12:00.7790
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c564e2cf-ac09-4e06-d7ed-08db0ed01d28
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8711
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add hypercalls to identify when Linux is running a virtual machine under
-Gunyah.
+Since, hot plugging eDP displays isn't supported, it is sufficient for
+us to warn about the lack of a connected display once. So, use ASSERT()
+in dce110_edp_wait_for_hpd_ready() instead of DC_LOG_WARNING().
 
-There are two calls to help identify Gunyah:
-
-1. gh_hypercall_get_uid() returns a UID when running under a Gunyah
-   hypervisor.
-2. gh_hypercall_hyp_identify() returns build information and a set of
-   feature flags that are supported by Gunyah.
-
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 ---
- arch/arm64/Kbuild                    |  1 +
- arch/arm64/gunyah/Makefile           |  3 ++
- arch/arm64/gunyah/gunyah_hypercall.c | 61 ++++++++++++++++++++++++++++
- drivers/virt/Kconfig                 |  2 +
- drivers/virt/gunyah/Kconfig          | 13 ++++++
- include/linux/gunyah.h               | 33 +++++++++++++++
- 6 files changed, 113 insertions(+)
- create mode 100644 arch/arm64/gunyah/Makefile
- create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
- create mode 100644 drivers/virt/gunyah/Kconfig
+ drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/Kbuild b/arch/arm64/Kbuild
-index 5bfbf7d79c99..e4847ba0e3c9 100644
---- a/arch/arm64/Kbuild
-+++ b/arch/arm64/Kbuild
-@@ -3,6 +3,7 @@ obj-y			+= kernel/ mm/ net/
- obj-$(CONFIG_KVM)	+= kvm/
- obj-$(CONFIG_XEN)	+= xen/
- obj-$(subst m,y,$(CONFIG_HYPERV))	+= hyperv/
-+obj-$(CONFIG_GUNYAH)	+= gunyah/
- obj-$(CONFIG_CRYPTO)	+= crypto/
+diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
+index fb3fd5b7c78b..0d4d3d586166 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
+@@ -779,10 +779,8 @@ void dce110_edp_wait_for_hpd_ready(
  
- # for cleaning
-diff --git a/arch/arm64/gunyah/Makefile b/arch/arm64/gunyah/Makefile
-new file mode 100644
-index 000000000000..84f1e38cafb1
---- /dev/null
-+++ b/arch/arm64/gunyah/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_GUNYAH) += gunyah_hypercall.o
-diff --git a/arch/arm64/gunyah/gunyah_hypercall.c b/arch/arm64/gunyah/gunyah_hypercall.c
-new file mode 100644
-index 000000000000..f30d06ee80cf
---- /dev/null
-+++ b/arch/arm64/gunyah/gunyah_hypercall.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/arm-smccc.h>
-+#include <linux/module.h>
-+#include <linux/gunyah.h>
-+
-+static const uint32_t gunyah_known_uuids[][4] = {
-+	{0x19bd54bd, 0x0b37571b, 0x946f609b, 0x54539de6}, /* QC_HYP (Qualcomm's build) */
-+	{0x673d5f14, 0x9265ce36, 0xa4535fdb, 0xc1d58fcd}, /* GUNYAH (open source build) */
-+};
-+
-+bool arch_is_gunyah_guest(void)
-+{
-+	struct arm_smccc_res res;
-+	u32 uid[4];
-+	int i;
-+
-+	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-+
-+	uid[0] = lower_32_bits(res.a0);
-+	uid[1] = lower_32_bits(res.a1);
-+	uid[2] = lower_32_bits(res.a2);
-+	uid[3] = lower_32_bits(res.a3);
-+
-+	for (i = 0; i < ARRAY_SIZE(gunyah_known_uuids); i++)
-+		if (!memcmp(uid, gunyah_known_uuids[i], sizeof(uid)))
-+			break;
-+
-+	return i != ARRAY_SIZE(gunyah_known_uuids);
-+}
-+EXPORT_SYMBOL_GPL(arch_is_gunyah_guest);
-+
-+#define GH_HYPERCALL(fn)	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_64, \
-+						   ARM_SMCCC_OWNER_VENDOR_HYP, \
-+						   fn)
-+
-+#define GH_HYPERCALL_HYP_IDENTIFY		GH_HYPERCALL(0x8000)
-+
-+/**
-+ * gh_hypercall_hyp_identify() - Returns build information and feature flags
-+ *                               supported by Gunyah.
-+ * @hyp_identity: filled by the hypercall with the API info and feature flags.
-+ */
-+void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity)
-+{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_1_1_hvc(GH_HYPERCALL_HYP_IDENTIFY, &res);
-+
-+	hyp_identity->api_info = res.a0;
-+	hyp_identity->flags[0] = res.a1;
-+	hyp_identity->flags[1] = res.a2;
-+	hyp_identity->flags[2] = res.a3;
-+}
-+EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
-diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
-index f79ab13a5c28..85bd6626ffc9 100644
---- a/drivers/virt/Kconfig
-+++ b/drivers/virt/Kconfig
-@@ -54,4 +54,6 @@ source "drivers/virt/coco/sev-guest/Kconfig"
+ 	dal_gpio_destroy_irq(&hpd);
  
- source "drivers/virt/coco/tdx-guest/Kconfig"
- 
-+source "drivers/virt/gunyah/Kconfig"
-+
- endif
-diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-new file mode 100644
-index 000000000000..1a737694c333
---- /dev/null
-+++ b/drivers/virt/gunyah/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config GUNYAH
-+	tristate "Gunyah Virtualization drivers"
-+	depends on ARM64
-+	depends on MAILBOX
-+	help
-+	  The Gunyah drivers are the helper interfaces that run in a guest VM
-+	  such as basic inter-VM IPC and signaling mechanisms, and higher level
-+	  services such as memory/device sharing, IRQ sharing, and so on.
-+
-+	  Say Y/M here to enable the drivers needed to interact in a Gunyah
-+	  virtual environment.
-diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-index 59ef4c735ae8..3fef2854c5e1 100644
---- a/include/linux/gunyah.h
-+++ b/include/linux/gunyah.h
-@@ -6,8 +6,10 @@
- #ifndef _LINUX_GUNYAH_H
- #define _LINUX_GUNYAH_H
- 
-+#include <linux/bitfield.h>
- #include <linux/errno.h>
- #include <linux/limits.h>
-+#include <linux/types.h>
- 
- /******************************************************************************/
- /* Common arch-independent definitions for Gunyah hypercalls                  */
-@@ -79,4 +81,35 @@ static inline int gh_remap_error(enum gh_error gh_error)
- 	}
+-	if (false == edp_hpd_high) {
+-		DC_LOG_WARNING(
+-				"%s: wait timed out!\n", __func__);
+-	}
++	/* ensure that the panel is detected */
++	ASSERT(edp_hpd_high);
  }
  
-+enum gh_api_feature {
-+	GH_API_FEATURE_DOORBELL,
-+	GH_API_FEATURE_MSGQUEUE,
-+	GH_API_FEATURE_VCPU,
-+	GH_API_FEATURE_MEMEXTENT,
-+};
-+
-+bool arch_is_gunyah_guest(void);
-+
-+u16 gh_api_version(void);
-+bool gh_api_has_feature(enum gh_api_feature feature);
-+
-+#define GUNYAH_API_V1			1
-+
-+#define GH_API_INFO_API_VERSION_MASK	GENMASK_ULL(13, 0)
-+#define GH_API_INFO_BIG_ENDIAN		BIT_ULL(14)
-+#define GH_API_INFO_IS_64BIT		BIT_ULL(15)
-+#define GH_API_INFO_VARIANT_MASK	GENMASK_ULL(63, 56)
-+
-+#define GH_IDENTIFY_DOORBELL			BIT_ULL(1)
-+#define GH_IDENTIFY_MSGQUEUE			BIT_ULL(2)
-+#define GH_IDENTIFY_VCPU			BIT_ULL(5)
-+#define GH_IDENTIFY_MEMEXTENT			BIT_ULL(6)
-+
-+struct gh_hypercall_hyp_identify_resp {
-+	u64 api_info;
-+	u64 flags[3];
-+};
-+
-+void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
-+
- #endif
+ void dce110_edp_power_control(
 -- 
 2.39.1
 
