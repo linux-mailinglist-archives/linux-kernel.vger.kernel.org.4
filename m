@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6B6696B73
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CBA696B80
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbjBNR2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S233069AbjBNR2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBNR2V (ORCPT
+        with ESMTP id S233000AbjBNR2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:28:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1B9524B;
-        Tue, 14 Feb 2023 09:28:16 -0800 (PST)
+        Tue, 14 Feb 2023 12:28:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C25313D73;
+        Tue, 14 Feb 2023 09:28:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 395C2617C8;
-        Tue, 14 Feb 2023 17:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5D3C433A1;
-        Tue, 14 Feb 2023 17:28:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 336D0B81E44;
+        Tue, 14 Feb 2023 17:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF507C433A0;
+        Tue, 14 Feb 2023 17:28:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676395695;
-        bh=By2YoftB1VENHi1k10kHOrHOooi4UaKqxSqwDanAXt0=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=h4L99RPzOjliln8FGZdZGqUV6v9TMiyT6pJvD9/Wy7B0ZKQkFfDw4E2LET3fMjHEV
-         cIF0EcIxI7PxSocL/IDwEd+IAZsU83PVwen7KV9GRS0ll+EV2Bm7nXfGc9SpJ8j1Yz
-         LE/JCQFtEzfODhD1mfGVl35UBM1wX/MrUOyWI/2yE5eqDQ/fk9lObPSE/8R6nYX9YA
-         rlbN1PuYChN1J1fu/pKHtqwf94MJbITMkZp0Ewl3/JjyL9xUl5StQ0/4kboggYVYxS
-         G5xL8D9W/pyL6FnqdNqvnZTnn/yYdRVg0ISGWsJGtHW5i7fDc9RNemwV2t/VZZP2sI
-         NWZnebNodT73g==
+        s=k20201202; t=1676395697;
+        bh=13vIi1ckUu3/aumbSCkzljgpO2EtfLful4/vNSEbxF8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aT2Bl8Ny5fS4v3KYPoPJxFW/YcawNoaYqRbr5Qp15/YcCzqFruiSGB2x4ZM9KCZRm
+         a1HKnFgKfY4wJF5PINp3cQFnSHlJmiKDNkpaHNyDa3LFl1lz2RyUIlwkQQkVDL+Li6
+         oACppWOj+5Gq64KivVEcKgD1WnUeyD0qihZzIw+zAL58Yi5gOKJhEYckpjYLKg5MPd
+         J+H4BbWAK63jhCJ/wp4uJv1b5eU3G1GsEKCZDvGn44CydakZKxH2A20695hvfzGgQi
+         G2cA/QkOd2JYS+HPLpK5sZkeT8W8tpwvGj2pcLIisQyM+7NI68AtwdV2zl85lM2NoY
+         jMbX33woNACWQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     Banajit Goswami <bgoswami@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH] dt-bindings: remoteproc: qcom,sm8550-pas: correct power domains
-Date:   Tue, 14 Feb 2023 09:30:14 -0800
-Message-Id: <167639581474.996065.11129738192205911246.b4-ty@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: (subset) [PATCH v2 1/7] arm64: dts: qcom: ipq6018: align RPM G-Link node with bindings
+Date:   Tue, 14 Feb 2023 09:30:15 -0800
+Message-Id: <167639581474.996065.4144950480631659648.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230206193313.30667-1-krzysztof.kozlowski@linaro.org>
-References: <20230206193313.30667-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+References: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,18 +65,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Feb 2023 20:33:13 +0100, Krzysztof Kozlowski wrote:
-> Correct CDSP and MPSS power domains to match what is used in DTS and the
-> Linux driver:
-> 
->   sm8550-mtp.dtb: remoteproc@32300000: power-domain-names: ['cx', 'mxc', 'nsp'] is too long
+On Wed, 8 Feb 2023 11:15:39 +0100, Krzysztof Kozlowski wrote:
+> Bindings expect (and most of DTS use) the RPM G-Link node name to be
+> "rpm-requests".
 > 
 > 
 
 Applied, thanks!
 
-[1/1] dt-bindings: remoteproc: qcom,sm8550-pas: correct power domains
-      commit: 6f998eb2fd02a7a7a529abb4c7d8bbf44fc3ff13
+[6/7] dt-bindings: remoteproc: qcom,glink-rpm-edge: convert to DT schema
+      commit: fdafdddf7b2f5cab8d233ef97f1fad8ec7d2e7a0
+[7/7] dt-bindings: remoteproc: qcom,glink-edge: correct label description
+      commit: 6f9c2f19a8743c880903a031c7f3f3c534d4b813
 
 Best regards,
 -- 
