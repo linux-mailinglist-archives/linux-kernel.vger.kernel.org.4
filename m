@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C267696ACA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA88696AF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbjBNRHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S233007AbjBNRMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjBNRHP (ORCPT
+        with ESMTP id S232816AbjBNRLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:07:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB629CA26
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:06:19 -0800 (PST)
+        Tue, 14 Feb 2023 12:11:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA482DE74
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:10:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676394378;
+        s=mimecast20190719; t=1676394621;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4xhjIgOLD34GhGSF0bJgUI1/ZkWKw+rh+EHdWU9oeAM=;
-        b=d4YKcXvT7t3bxZ2hqzJLplHbM+pwvjUanl6IHc6A2xoiq+oeKxyxY81CLyN9qmC8zmenZ3
-        G3Jzx9mNrnDijzQzjnJmfLtVPiB4z7cFcQHDbbw1k85510sFoeGorpd/cfHEiLb4kwzeyx
-        a93Bkgz8o/trPoG7m2mh5wLR8QXNWfU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-1WEFv077OQqXn6aeKRzQyw-1; Tue, 14 Feb 2023 12:06:17 -0500
-X-MC-Unique: 1WEFv077OQqXn6aeKRzQyw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B132F3C16E94;
-        Tue, 14 Feb 2023 17:06:16 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9535DC15BA0;
-        Tue, 14 Feb 2023 17:06:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     thomas.lendacky@amd.com
-Subject: [PATCH 3/3] Documentation/hw-vuln: Add documentation for Cross-Thread Return Predictions
-Date:   Tue, 14 Feb 2023 12:06:15 -0500
-Message-Id: <20230214170615.1297202-4-pbonzini@redhat.com>
-In-Reply-To: <20230214170615.1297202-1-pbonzini@redhat.com>
-References: <20230214170615.1297202-1-pbonzini@redhat.com>
+        bh=0DJXN9Zb39FhiQZf73JvN0gT+bxqzwusS/lWbuaFLXw=;
+        b=hqAb9FuqwvN4sfxwa3Ipt+0x05PFq8SfV2bd8KoEs2shJNl1eTJfE54NXvyvFnbW6GBPGS
+        QFue/TOaGCMOk4wEIndKdGc2Lm1Jj+U+Q4JhYpAkZ+lKFgt4Mr6EW609wixUdVkhn0FJAi
+        O+yy2mV/QF0xyciA+XYXj6+SVRHJOeo=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-631-PTC-JrJyN365Bb13z_d90w-1; Tue, 14 Feb 2023 12:09:38 -0500
+X-MC-Unique: PTC-JrJyN365Bb13z_d90w-1
+Received: by mail-qk1-f198.google.com with SMTP id 130-20020a370588000000b0072fcbe20069so9913342qkf.22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:09:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DJXN9Zb39FhiQZf73JvN0gT+bxqzwusS/lWbuaFLXw=;
+        b=1OIZS/b8487pzJdX7FMQyB1RJEaWRV+hiL/Ag/2YYsgQx6khJ4vM8LxY6kHlG2BBG8
+         hzzilnb2Ecli5iCEgZNqLrRj/gx2TrO1r+/1RKmC1yfq/l1onurmA+94xK9JUZUAhGxy
+         B4HoAXLvbM42Q2noPFoUVK/qNh+2tLPmdSrHETVULQX57lSbNI0iIUjYWSY4EQjKCUVk
+         DYdfym3072pgpXX+bTGqecINPFdJR1CcKNstcjnvsSyCdy6QYIvPu8I167iOAei+H4iU
+         Pp5EkijdXwRbPBvU6d0HXmkuTVL/CSHeaT0MZeZE7tf+8OQn2k86ys8+uIdLsagN+2J3
+         8CfA==
+X-Gm-Message-State: AO0yUKXEffp2a0rEfYpA424tRVypIXc0j1vAjAWYYolRITwCz8AskAOI
+        u92EP0kVovs1IzPMgGVyO3ius0+yx9kQL2nmDDz4BUhBpqMMDXtBjusor01rmz/mHTXC890CipN
+        oZuqBOhTXkEsJF7/YpItOGwU2
+X-Received: by 2002:a05:622a:13ce:b0:3b9:b9b4:cb8d with SMTP id p14-20020a05622a13ce00b003b9b9b4cb8dmr5606819qtk.11.1676394577591;
+        Tue, 14 Feb 2023 09:09:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set9nrBuxI7vKhnbD9jG+rn0Zx5mXmYMbBddcbNffn3VsQz+QYI3PTcTYhZP5fvn0d8bv3bzoJg==
+X-Received: by 2002:a05:622a:13ce:b0:3b9:b9b4:cb8d with SMTP id p14-20020a05622a13ce00b003b9b9b4cb8dmr5606794qtk.11.1676394577365;
+        Tue, 14 Feb 2023 09:09:37 -0800 (PST)
+Received: from debian (2a01cb058918ce00ffc7d132b72de2cb.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:ffc7:d132:b72d:e2cb])
+        by smtp.gmail.com with ESMTPSA id m126-20020a378a84000000b0073b587194d0sm2059470qkd.104.2023.02.14.09.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 09:09:36 -0800 (PST)
+Date:   Tue, 14 Feb 2023 18:09:33 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] l2tp: Avoid possible recursive deadlock in
+ l2tp_tunnel_register()
+Message-ID: <Y+vATfTKLogXw+Ki@debian>
+References: <20230212162623.2301597-1-syoshida@redhat.com>
+ <Y+pPXOqfrYkXPg1K@debian>
+ <Y+u7hGIAxhvyDG/2@kernel-devel>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+u7hGIAxhvyDG/2@kernel-devel>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -60,126 +81,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Lendacky <thomas.lendacky@amd.com>
+On Wed, Feb 15, 2023 at 01:49:08AM +0900, Shigeru Yoshida wrote:
+> Just one more thing.  I created this patch based on the mainline linux
+> tree, but networking subsystem has own tree, net.  Is it preferable to
+> create a patch based on net tree for networking patches?
 
-Add the admin guide for the Cross-Thread Return Predictions vulnerability.
+Yes. Networking fixes should be based on the "net" tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
 
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-Message-Id: <60f9c0b4396956ce70499ae180cb548720b25c7e.1675956146.git.thomas.lendacky@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../admin-guide/hw-vuln/cross-thread-rsb.rst  | 92 +++++++++++++++++++
- Documentation/admin-guide/hw-vuln/index.rst   |  1 +
- 2 files changed, 93 insertions(+)
- create mode 100644 Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst
+For more details about posting patches to netdev, you can check
+Documentation/process/maintainer-netdev.rst
 
-diff --git a/Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst b/Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst
-new file mode 100644
-index 000000000000..ec6e9f5bcf9e
---- /dev/null
-+++ b/Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst
-@@ -0,0 +1,92 @@
-+
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Cross-Thread Return Address Predictions
-+=======================================
-+
-+Certain AMD and Hygon processors are subject to a cross-thread return address
-+predictions vulnerability. When running in SMT mode and one sibling thread
-+transitions out of C0 state, the other sibling thread could use return target
-+predictions from the sibling thread that transitioned out of C0.
-+
-+The Spectre v2 mitigations protect the Linux kernel, as it fills the return
-+address prediction entries with safe targets when context switching to the idle
-+thread. However, KVM does allow a VMM to prevent exiting guest mode when
-+transitioning out of C0. This could result in a guest-controlled return target
-+being consumed by the sibling thread.
-+
-+Affected processors
-+-------------------
-+
-+The following CPUs are vulnerable:
-+
-+    - AMD Family 17h processors
-+    - Hygon Family 18h processors
-+
-+Related CVEs
-+------------
-+
-+The following CVE entry is related to this issue:
-+
-+   ==============  =======================================
-+   CVE-2022-27672  Cross-Thread Return Address Predictions
-+   ==============  =======================================
-+
-+Problem
-+-------
-+
-+Affected SMT-capable processors support 1T and 2T modes of execution when SMT
-+is enabled. In 2T mode, both threads in a core are executing code. For the
-+processor core to enter 1T mode, it is required that one of the threads
-+requests to transition out of the C0 state. This can be communicated with the
-+HLT instruction or with an MWAIT instruction that requests non-C0.
-+When the thread re-enters the C0 state, the processor transitions back
-+to 2T mode, assuming the other thread is also still in C0 state.
-+
-+In affected processors, the return address predictor (RAP) is partitioned
-+depending on the SMT mode. For instance, in 2T mode each thread uses a private
-+16-entry RAP, but in 1T mode, the active thread uses a 32-entry RAP. Upon
-+transition between 1T/2T mode, the RAP contents are not modified but the RAP
-+pointers (which control the next return target to use for predictions) may
-+change. This behavior may result in return targets from one SMT thread being
-+used by RET predictions in the sibling thread following a 1T/2T switch. In
-+particular, a RET instruction executed immediately after a transition to 1T may
-+use a return target from the thread that just became idle. In theory, this
-+could lead to information disclosure if the return targets used do not come
-+from trustworthy code.
-+
-+Attack scenarios
-+----------------
-+
-+An attack can be mounted on affected processors by performing a series of CALL
-+instructions with targeted return locations and then transitioning out of C0
-+state.
-+
-+Mitigation mechanism
-+--------------------
-+
-+Before entering idle state, the kernel context switches to the idle thread. The
-+context switch fills the RAP entries (referred to as the RSB in Linux) with safe
-+targets by performing a sequence of CALL instructions.
-+
-+Prevent a guest VM from directly putting the processor into an idle state by
-+intercepting HLT and MWAIT instructions.
-+
-+Both mitigations are required to fully address this issue.
-+
-+Mitigation control on the kernel command line
-+---------------------------------------------
-+
-+Use existing Spectre v2 mitigations that will fill the RSB on context switch.
-+
-+Mitigation control for KVM - module parameter
-+---------------------------------------------
-+
-+By default, the KVM hypervisor mitigates this issue by intercepting guest
-+attempts to transition out of C0. A VMM can use the KVM_CAP_X86_DISABLE_EXITS
-+capability to override those interceptions, but since this is not common, the
-+mitigation that covers this path is not enabled by default.
-+
-+The mitigation for the KVM_CAP_X86_DISABLE_EXITS capability can be turned on
-+using the boolean module parameter mitigate_smt_rsb, e.g.:
-+        kvm.mitigate_smt_rsb=1
-diff --git a/Documentation/admin-guide/hw-vuln/index.rst b/Documentation/admin-guide/hw-vuln/index.rst
-index 4df436e7c417..e0614760a99e 100644
---- a/Documentation/admin-guide/hw-vuln/index.rst
-+++ b/Documentation/admin-guide/hw-vuln/index.rst
-@@ -18,3 +18,4 @@ are configurable at compile, boot or run time.
-    core-scheduling.rst
-    l1d_flush.rst
-    processor_mmio_stale_data.rst
-+   cross-thread-rsb.rst
--- 
-2.39.1
+Or the online version:
+https://kernel.org/doc/html/latest/process/maintainer-netdev.html
+
+> Thanks,
+> Shigeru
+> 
+> > 
+> 
 
