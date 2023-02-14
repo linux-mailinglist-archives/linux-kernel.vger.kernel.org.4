@@ -2,156 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D420C695596
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A62469559C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBNAwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 19:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S229931AbjBNAyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 19:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBNAwn (ORCPT
+        with ESMTP id S229485AbjBNAyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:52:43 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96232C657
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 16:52:41 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id cf42so21400384lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 16:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R4TS2ADE1jCEwaoOWe0k/AJLfcDw2mFKFwgxzj3+qAE=;
-        b=q7FlsurgDee1i0EoZRC1Dt6Cl5MbEIJD0uLar8soLfz00ylL+JfAanr+jk333Ye/zk
-         itI5Hkk2bE0CfwZKa79YRj6hev2L3ZWDocvD9hLkK2/4jxpoGOnQXVIkNYdCEy6bZ9ye
-         /DxydrGMJ9X30Nw8GS5scyVdl9lr/B7KKlwEc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R4TS2ADE1jCEwaoOWe0k/AJLfcDw2mFKFwgxzj3+qAE=;
-        b=X/2hXXp+yVPn2DJKSZqNnhtmuppeoBSWOpAtLU9Ngcg4IlfdbSfrNvAo3VrvaBIDWW
-         7Xkx6ksOLdQn3bmysRjKhZJTtDVcts+hFnKjky/XGq4T4C95VaHrG3lmE4gv/YZ6CqVO
-         +HZxwTr7zd2VdnydvbYYrXACEZQb4s2IEH3FejrNvFfqk47Ljbw38B8K//zsVHEnq8EI
-         sziUBiT6u4/tnEn1y0KvJcydi0lNGizHAoA9H+uY+TEw+YlMcIHWHpNio8AbMkIocKbd
-         QTJHO/tRRTsX169SIuqU2kE7CHMJshoJbxlBlA3KBFdhq9iOBqXb5OhvJyxcZqeOuScO
-         9EFg==
-X-Gm-Message-State: AO0yUKV/XPmUIO7MDDYqBCBQdwJ8mqUJqtVju0JDcleXIedIYC8vmGbS
-        hCQouheW3ns8DUorLKEz8t6m3Y6x+MA6r1vwIv5uAQ==
-X-Google-Smtp-Source: AK7set9BnTldYq/TiF0rvsXB3Yn04/VPUEse4R0+YiI+dzKLK1P3lHFT7XKZEkcttgIU9v3sSZJmJ0x9Swlzw09SS0A=
-X-Received: by 2002:a05:6512:3d1d:b0:4db:17d2:8aea with SMTP id
- d29-20020a0565123d1d00b004db17d28aeamr11564lfv.11.1676335959818; Mon, 13 Feb
- 2023 16:52:39 -0800 (PST)
+        Mon, 13 Feb 2023 19:54:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1B3105;
+        Mon, 13 Feb 2023 16:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=maH2SZy98/KPk5SI0WVIPKnJ0GBrmU/W71CMItL8ib8=; b=U05NZKDIp4T6btFRFUQTHY/uOV
+        swOuky79Glp29Yi1jzXUjH8YvkxuxZ/u9EqDYiqUCX7SZBUPiE/alTvIt4VB4FEaIPBcLOn742fcK
+        6mC7Xx+WWKug2znulWwdEDg158RNYjlTtLUyKQK12F2tBaKt8pNdMtJeQVnY6d8RU6v7+4Nw2267H
+        KBfZKFB1kY4F2v4+VkhTA+g5t/G3Co6sRzNgasrZ7+hrydpA/j4wlkOydRKOYxZLvw7XTvpP6F8zV
+        Yh9YGM/KUQUmvh4LjSBfPr8MLgwYyHLWPUHQw+0UAlPHjJxMzBvwAgyrCY+JPmU8ndkkzLeDbqyfk
+        YWZ/PRmg==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRja5-00GwhC-Db; Tue, 14 Feb 2023 00:54:01 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, Song Liu <song@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] module: fix MIPS module_layout -> module_memory
+Date:   Mon, 13 Feb 2023 16:54:00 -0800
+Message-Id: <20230214005400.17137-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
- <Y+hWAksfk4C0M2gB@rowland.harvard.edu> <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
- <Y+ob0xFUp+d7LROE@andrea>
-In-Reply-To: <Y+ob0xFUp+d7LROE@andrea>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 13 Feb 2023 19:52:27 -0500
-Message-ID: <CAEXW_YRZ097Qedp+ffxvVnJGWpehAn3-3efNcrDS5YW5u5QxDA@mail.gmail.com>
-Subject: Re: Current LKMM patch disposition
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 6:15 AM Andrea Parri <parri.andrea@gmail.com> wrote:
->
-> > > Would you like to post a few examples showing some of the most difficult
-> > > points you encountered?  Maybe explanation.txt can be improved.
-> >
-> > Just to list 2 of the pain points:
-> >
-> > 1. I think it is hard to reason this section
-> > "PROPAGATION ORDER RELATION: cumul-fence"
-> >
-> > All store-related fences should affect propagation order, even the
-> > smp_wmb() which is not A-cumulative should do so (po-earlier stores
-> > appearing before po-later). I think expanding this section with some
-> > examples would make sense to understand what makes "cumul-fence"
-> > different from any other store-related fence.
->
-> FWIW, litmus-tests/WRC+pooncerelease+fencermbonceonce+Once.litmus illustrates
-> the concept of A-cumulativity.
+Correct the struct's field/member name from mod_mem to mem.
 
-Right, this I knew. The smp_store_release() in that test A-cumulative.
-However, the "cumul-fence" naming in the document we are discussing
-sounds redundant. (but I could be missing something).
+Fixes this build error:
+../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
+../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
+  643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
 
-> (The terminology is not LKMM-specific, it was borrowed from other MCM literature, e.g. "Understanding POWER Multiprocessors"
-> in Documentation/references.txt.)
+Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Song Liu <song@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+---
+Has this already been fixed?
 
-Thank you!
+ arch/mips/kernel/vpe.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > 2. This part is confusing and has always confused me " The
-> > happens-before relation (hb) links memory accesses that have to
-> > execute in a certain order"
-> >
-> > It is not memory accesses that execute, it is instructions that
-> > execute. Can we separate out "memory access" from "instruction
-> > execution" in this description?
-> >
-> > I think ->hb tries to say that A ->hb B means, memory access A
-> > happened before memory access B exactly in its associated
-> > instruction's execution order (time order), but to be specific --
-> > should that be instruction issue order, or instruction retiring order?
-> >
-> > AFAICS ->hb maps instruction execution order to memory access order.
-> > Not all ->po does  fall into that category because of out-of-order
-> > hardware execution. As does not ->co because the memory subsystem may
-> > have writes to the same variable to be resolved out of order. It would
-> > be nice to call out that ->po is instruction issue order, which is
-> > different from execution/retiring and that's why it cannot be ->hb.
-> >
-> > ->rf does because of data flow causality, ->ppo does because of
-> > program structure, so that makes sense to be ->hb.
-> >
-> > IMHO, ->rfi should as well, because it is embodying a flow of data, so
-> > that is a bit confusing. It would be great to clarify more perhaps
-> > with an example about why ->rfi cannot be ->hb, in the
-> > "happens-before" section.
-> >
-> > That's really how far I typically get (line 1368) before life takes
-> > over, and I have to go do other survival-related things. Then I
-> > restart the activity. Now that I started reading the CAT file as well,
-> > I feel I can make it past that line :D. But I never wanted to get past
-> > it, till I built a solid understanding of the contents before it.
-> >
-> > As I read the file more, I can give more feedback, but the above are
-> > different 2 that persist.
->
-> AFAICT, sections "The happens-before relation: hb" and "An operational model"
-> in Documentation/explanation.txt elaborate (should help) clarify such issues.
-> About the ->rfi example cf. e.g. Test PPOCA in the above mentioned paper; the
-> test remains allowed in arm64 and riscv.
-
-Thank you, this clarifies a lot and appears there is already a similar
-relation mentioned in the explanation.txt as Alan pointed. This paper
-is great to clarify the concept -- appreciate!.  I wonder what other
-ordering 'havocs' do processor branch speculation cause.  This should
-imply load-load control dependency is also subject to reordering on
-these architectures.
-
-thanks,
-
-  - Joel
+diff -- a/arch/mips/kernel/vpe.c b/arch/mips/kernel/vpe.c
+--- a/arch/mips/kernel/vpe.c
++++ b/arch/mips/kernel/vpe.c
+@@ -640,7 +640,7 @@ static int vpe_elfload(struct vpe *v)
+ 		layout_sections(&mod, hdr, sechdrs, secstrings);
+ 	}
+ 
+-	v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
++	v->load_addr = alloc_progmem(mod.mem[MOD_TEXT].size);
+ 	if (!v->load_addr)
+ 		return -ENOMEM;
+ 
