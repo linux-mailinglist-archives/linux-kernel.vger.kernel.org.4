@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919EE695F5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D415695F5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjBNJgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S232501AbjBNJg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbjBNJgB (ORCPT
+        with ESMTP id S232515AbjBNJgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:36:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B0768C;
-        Tue, 14 Feb 2023 01:35:59 -0800 (PST)
-Date:   Tue, 14 Feb 2023 09:35:56 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676367357;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AnHUKuwyU2GALNl/FSylj78vAcnU+5Z3BJ7Qbr/o6G0=;
-        b=0y5OoRbz7URyNEhfAmt1a3+JoJEpLVuLw5uOK2Vpr1KjBS9Yyi249pLp9oAIXl/4JYAsn5
-        YetnnvzESu35QXDA8pnTY97RwMCxy6CuGT15Kb+DZL+x04C4KZgfd1Lug9s2qo1VsuMoCk
-        BSnNiUXZ9OTQCrg+APTlL8TrkzCvmp0ujsOa3VMNbX6dYuXjSl8kAHtGbeXsBXklAO4IVG
-        MEv5BZ2VBr4q60rwq3ZZ69OIDHMXlAFTF19HRgrmE3xqR7w3KerirmcDCXbho5xIasA2Ir
-        YK9PYBS5Ls8OcmoWP+oaVaO7IASRFBaoZrwhNhyV7CvMrPf0noP8x25OERJ/pQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676367357;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AnHUKuwyU2GALNl/FSylj78vAcnU+5Z3BJ7Qbr/o6G0=;
-        b=vFMTTH7snpiDiyAIF5jqVd/pPFxTu5K/CK5fxxWU+zwuB/Dwfem+Xd2i3MVRK1DxqSHEQm
-        pwqoETSX92S60cCw==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/mtrr: Revert 90b926e68f50 ("x86/pat: Fix
- pat_x_mtrr_type() for MTRR disabled case")
-Cc:     Christian Kujau <lists@nerdbynature.de>,
-        Juergen Gross <jgross@suse.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
-References: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
+        Tue, 14 Feb 2023 04:36:22 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C3C233C9;
+        Tue, 14 Feb 2023 01:36:17 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D9062660216A;
+        Tue, 14 Feb 2023 09:36:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676367375;
+        bh=I0xlUPTQjUVqujxFEQUs5rV8kqpJYvjuzeEqfHqSU04=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l7tFNlOyJodSIoviMgrVgynN/hgCGoWsiMMoPzS5mT6IMyqxYoXq7FRnqd4Y5BT5n
+         oNgbU920nBZAAlhrz7YO9Fyn8koyaQuAEy+8AMz9Ll6hvS41NTpmhEwT9+fTKj7U88
+         W3W9pLyjQS8cRqeAlGY5jscc+Pa/tR6VCNsDZXt06hjyqfJQunMGeMNDa/UQewZWd+
+         OfsNvlDKW98FTRYSF/ywk1idQQ4L7X+DOvvLycalMgtLjNwEwLV/P1DMVz4iCjK1L8
+         EgyoWkqBnrPB/eWzf0BrpMahzYPWmAG3JIFCy2BemqxPhG0nJKV4efXKI6VKsS3bR6
+         Nu/jtxaSCLrXw==
+Message-ID: <17239a6f-1d85-d725-89d6-02afe4fbe56a@collabora.com>
+Date:   Tue, 14 Feb 2023 10:36:11 +0100
 MIME-Version: 1.0
-Message-ID: <167636735608.4906.4788207020350311572.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3 05/11] iommu/mediatek: mt8195: Add iova_region_larb_msk
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com
+References: <20230214031114.926-1-yong.wu@mediatek.com>
+ <20230214031114.926-6-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214031114.926-6-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,53 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Il 14/02/23 04:11, Yong Wu ha scritto:
+> Add iova_region_larb_msk for mt8195. We separate the 16GB iova regions
+> by each device's larbid/portid.
+> Refer to include/dt-bindings/memory/mt8195-memory-port.h
+> 
+> Define a new macro MT8192_MULTI_REGION_MAX_NR to indicate
+> the index of mt8xxx_larb_region_msk and
+> "struct mtk_iommu_iova_region mt8192_multi_dom"
+> are the same.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-Commit-ID:     f9f57da2c2d119dbf109e3f6e1ceab7659294046
-Gitweb:        https://git.kernel.org/tip/f9f57da2c2d119dbf109e3f6e1ceab7659294046
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Thu, 09 Feb 2023 08:22:17 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 14 Feb 2023 10:16:34 +01:00
+Sorry but... you *are* introducing a iova_region_larb_msk for MT8192 later,
+while you're introducing definitions containing the `MT8192` name in a commit
+that introduces the same but for MT8195.
 
-x86/mtrr: Revert 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
+I strongly suggest to, at this point, introduce MT8192 region mask here, along
+with the MT8192 definitions, and MT8195 after that :-)
 
-Commit
 
-  90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
+Regards,
+Angelo
 
-broke the use case of running Xen dom0 kernels on machines with an
-external disk enclosure attached via USB, see Link tag.
-
-What this commit was originally fixing - SEV-SNP guests on Hyper-V - is
-a more specialized situation which has other issues at the moment anyway
-so reverting this now and addressing the issue properly later is the
-prudent thing to do.
-
-So revert it in time for the 6.2 proper release.
-
-  [ bp: Rewrite commit message. ]
-
-Reported-by: Christian Kujau <lists@nerdbynature.de>
-Tested-by: Christian Kujau <lists@nerdbynature.de>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de
----
- arch/x86/mm/pat/memtype.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index fb4b1b5..46de9cf 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -387,8 +387,7 @@ static unsigned long pat_x_mtrr_type(u64 start, u64 end,
- 		u8 mtrr_type, uniform;
- 
- 		mtrr_type = mtrr_type_lookup(start, end, &uniform);
--		if (mtrr_type != MTRR_TYPE_WRBACK &&
--		    mtrr_type != MTRR_TYPE_INVALID)
-+		if (mtrr_type != MTRR_TYPE_WRBACK)
- 			return _PAGE_CACHE_MODE_UC_MINUS;
- 
- 		return _PAGE_CACHE_MODE_WB;
