@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A2E696F8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16E0697001
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbjBNV1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        id S232022AbjBNVqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbjBNV1J (ORCPT
+        with ESMTP id S230379AbjBNVqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:27:09 -0500
+        Tue, 14 Feb 2023 16:46:10 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE01A305C1;
-        Tue, 14 Feb 2023 13:26:30 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E9xNAh000593;
-        Tue, 14 Feb 2023 21:25:21 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F299029400;
+        Tue, 14 Feb 2023 13:46:08 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ELHFtl027210;
+        Tue, 14 Feb 2023 21:25:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=qEzhKoSzvDz6eDic9ShqsO1IaMAkLeDlxywRsMKX9tU=;
- b=LaudCg6qWvyiYEtAm+/vYom6o4ZUfxHpDB++gMIct6bCNAfzk84Ay4P/z38bnXDr4ISX
- fNvZ/qAlahpp3CF67tX6toIiOVcX39IaOYjyl4zuqg29nz0HnrKo78Vt6xcf1mBG7q5/
- qWsK7PUvee+bL605jFlpKQ3J9oTgeZZbrLXnf28cze3wq96ydGWY3KayJRyrVjgdCAIf
- +I3m9GDVAQpnjRkG2JoJJdAMMgYM16p9LvAWieWDdYW1c7ZVe2jVVE3v9ZkQaBHHKt1O
- tuq8wZH3pCseGGRBgVwSnhOydCbssD6n5de3ZvaGsBMp4LqXB70YYBjrFzX+IFBGKlkl Lg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6ps1y3n-1
+ bh=XFIbjyjqBQ0YC71kR7vks/UO90Rz2T2TuIWzalc6tiI=;
+ b=HVcDH1TCvKCeFPTooCj1iwZfuGQ7XtQ22SGOB8nLH0i0pkB02jujmQ6YuNSav8tzUwPA
+ TJ4tzHrnoufGvvDkO6BGU7XE6pJA3tLRo82midoHJYGBH680VmW8egKAgUMTp1dECn1F
+ sToMsYkujDuBRxME0F2mctMCrswOjM9NX/TZnNye1EgK98AKGo5qiZg+hLHk8ncSmkjJ
+ aYbfII0tQC65fsczXXRx5WrzBLLN8KBIoQtrD7ENO/G89gvEXb4WwOxSRHz8RQbzS8mN
+ 3/Z+fSc98nI06owh6dSeHmRPcxBaraVknJkwuGHlYjCi4E4Uk1eH47PbDTjg4N2EXkJh nQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqyygttx1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:25:21 +0000
+        Tue, 14 Feb 2023 21:25:31 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ELPKxu009765
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ELPUmV001471
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:25:20 GMT
+        Tue, 14 Feb 2023 21:25:30 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 13:25:19 -0800
+ 15.2.986.36; Tue, 14 Feb 2023 13:25:29 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Alex Elder <elder@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Elliot Berman <quic_eberman@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
@@ -56,15 +57,15 @@ CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v10 17/26] docs: gunyah: Document Gunyah VM Manager
-Date:   Tue, 14 Feb 2023 13:25:06 -0800
-Message-ID: <20230214212506.3320728-1-quic_eberman@quicinc.com>
+Subject: [PATCH v10 18/26] virt: gunyah: Translate gh_rm_hyp_resource into gunyah_resource
+Date:   Tue, 14 Feb 2023 13:25:20 -0800
+Message-ID: <20230214212521.3322247-1-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230214211229.3239350-1-quic_eberman@quicinc.com>
 References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
@@ -76,15 +77,15 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ci4G_TzNlWD7BYnRFyxhgpx7NFSziymm
-X-Proofpoint-GUID: Ci4G_TzNlWD7BYnRFyxhgpx7NFSziymm
+X-Proofpoint-ORIG-GUID: eKEr1g2BVd_PtdDwXMlAEEUR0RkxzYGK
+X-Proofpoint-GUID: eKEr1g2BVd_PtdDwXMlAEEUR0RkxzYGK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 mlxlogscore=947 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302140184
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -96,139 +97,294 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Document the ioctls and usage of Gunyah VM Manager driver.
+When booting a Gunyah virtual machine, the host VM may gain capabilities
+to interact with resources for the guest virtual machine. Examples of
+such resources are vCPUs or message queues. To use those resources, we
+need to translate the RM response into a gunyah_resource structure which
+are useful to Linux drivers. Presently, Linux drivers need only to know
+the type of resource, the capability ID, and an interrupt.
+
+On ARM64 systems, the interrupt reported by Gunyah is the GIC interrupt
+ID number and always a SPI.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- Documentation/virt/gunyah/index.rst      |   1 +
- Documentation/virt/gunyah/vm-manager.rst | 106 +++++++++++++++++++++++
- 2 files changed, 107 insertions(+)
- create mode 100644 Documentation/virt/gunyah/vm-manager.rst
+ arch/arm64/include/asm/gunyah.h |  23 +++++
+ drivers/virt/gunyah/rsc_mgr.c   | 161 +++++++++++++++++++++++++++++++-
+ include/linux/gunyah.h          |   4 +
+ include/linux/gunyah_rsc_mgr.h  |   4 +
+ 4 files changed, 191 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/include/asm/gunyah.h
 
-diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gunyah/index.rst
-index 45adbbc311db..b204b85e86db 100644
---- a/Documentation/virt/gunyah/index.rst
-+++ b/Documentation/virt/gunyah/index.rst
-@@ -7,6 +7,7 @@ Gunyah Hypervisor
- .. toctree::
-    :maxdepth: 1
- 
-+   vm-manager
-    message-queue
- 
- Gunyah is a Type-1 hypervisor which is independent of any OS kernel, and runs in
-diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
+diff --git a/arch/arm64/include/asm/gunyah.h b/arch/arm64/include/asm/gunyah.h
 new file mode 100644
-index 000000000000..c0126cfeadc7
+index 000000000000..64cfb964efee
 --- /dev/null
-+++ b/Documentation/virt/gunyah/vm-manager.rst
-@@ -0,0 +1,106 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/arch/arm64/include/asm/gunyah.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++#ifndef __ASM_GUNYAH_H_
++#define __ASM_GUNYAH_H_
 +
-+=======================
-+Virtual Machine Manager
-+=======================
++#include <linux/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+The Gunyah Virtual Machine Manager is a Linux driver to support launching
-+virtual machines using Gunyah. It presently supports launching non-proxy
-+scheduled Linux-like virtual machines.
++static inline int arch_gh_fill_irq_fwspec_params(u32 virq, struct irq_fwspec *fwspec)
++{
++	if (virq < 32 || virq > 1019)
++		return -EINVAL;
 +
-+Except for some basic information about the location of initial binaries,
-+most of the configuration about a Gunyah virtual machine is described in the
-+VM's devicetree. The devicetree is generated by userspace. Interacting with the
-+virtual machine is still done via the kernel and VM configuration requires some
-+of the corresponding functionality to be set up in the kernel. For instance,
-+sharing userspace memory with a VM is done via the GH_VM_SET_USER_MEM_REGION
-+ioctl. The VM itself is configured to use the memory region via the
-+devicetree.
++	fwspec->param_count = 3;
++	fwspec->param[0] = GIC_SPI;
++	fwspec->param[1] = virq - 32;
++	fwspec->param[2] = IRQ_TYPE_EDGE_RISING;
++	return 0;
++}
 +
-+Sample Userspace VMM
-+====================
++#endif
+diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
+index 73c5a6b7cbbc..eb1bc3f68792 100644
+--- a/drivers/virt/gunyah/rsc_mgr.c
++++ b/drivers/virt/gunyah/rsc_mgr.c
+@@ -18,6 +18,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/miscdevice.h>
+ 
++#include <asm/gunyah.h>
 +
-+A sample userspace VMM is included in samples/gunyah/ along with a minimal
-+devicetree that can be used to launch a VM. To build this sample, enable
-+CONFIG_SAMPLE_GUNYAH.
+ #include "rsc_mgr.h"
+ #include "vm_mgr.h"
+ 
+@@ -107,8 +109,137 @@ struct gh_rm {
+ 	struct blocking_notifier_head nh;
+ 
+ 	struct miscdevice miscdev;
++	struct irq_domain *irq_domain;
++};
 +
-+IOCTLs and userspace VMM flows
-+==============================
++struct gh_irq_chip_data {
++	u32 gh_virq;
++};
 +
-+The kernel exposes a char device interface at /dev/gunyah.
++static struct irq_chip gh_rm_irq_chip = {
++	.name			= "Gunyah",
++	.irq_enable		= irq_chip_enable_parent,
++	.irq_disable		= irq_chip_disable_parent,
++	.irq_ack		= irq_chip_ack_parent,
++	.irq_mask		= irq_chip_mask_parent,
++	.irq_mask_ack		= irq_chip_mask_ack_parent,
++	.irq_unmask		= irq_chip_unmask_parent,
++	.irq_eoi		= irq_chip_eoi_parent,
++	.irq_set_affinity	= irq_chip_set_affinity_parent,
++	.irq_set_type		= irq_chip_set_type_parent,
++	.irq_set_wake		= irq_chip_set_wake_parent,
++	.irq_set_vcpu_affinity	= irq_chip_set_vcpu_affinity_parent,
++	.irq_retrigger		= irq_chip_retrigger_hierarchy,
++	.irq_get_irqchip_state	= irq_chip_get_parent_state,
++	.irq_set_irqchip_state	= irq_chip_set_parent_state,
++	.flags			= IRQCHIP_SET_TYPE_MASKED |
++				  IRQCHIP_SKIP_SET_WAKE |
++				  IRQCHIP_MASK_ON_SUSPEND,
++};
 +
-+To create a VM, use the GH_CREATE_VM ioctl. A successful call will return a
-+"Gunyah VM" file descriptor.
++static int gh_rm_irq_domain_alloc(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs,
++				 void *arg)
++{
++	struct gh_irq_chip_data *chip_data, *spec = arg;
++	struct irq_fwspec parent_fwspec;
++	struct gh_rm *rm = d->host_data;
++	u32 gh_virq = spec->gh_virq;
++	int ret;
 +
-+/dev/gunyah API Descriptions
-+----------------------------
++	if (nr_irqs != 1 || gh_virq == U32_MAX)
++		return -EINVAL;
 +
-+GH_CREATE_VM
-+~~~~~~~~~~~~
++	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
++	if (!chip_data)
++		return -ENOMEM;
 +
-+Creates a Gunyah VM. The argument is reserved for future use and must be 0.
++	chip_data->gh_virq = gh_virq;
 +
-+Gunyah VM API Descriptions
-+--------------------------
++	ret = irq_domain_set_hwirq_and_chip(d, virq, chip_data->gh_virq, &gh_rm_irq_chip,
++						chip_data);
++	if (ret)
++		return ret;
 +
-+GH_VM_SET_USER_MEM_REGION
-+~~~~~~~~~~~~~~~~~~~~~~~~~
++	parent_fwspec.fwnode = d->parent->fwnode;
++	ret = arch_gh_fill_irq_fwspec_params(chip_data->gh_virq, &parent_fwspec);
++	if (ret) {
++		dev_err(rm->dev, "virq translation failed %u: %d\n", chip_data->gh_virq, ret);
++		goto err_free_irq_data;
++	}
 +
-+::
++	ret = irq_domain_alloc_irqs_parent(d, virq, nr_irqs, &parent_fwspec);
++	if (ret)
++		goto err_free_irq_data;
 +
-+  struct gh_userspace_memory_region {
-+	__u32 label;
-+	__u32 flags;
-+	__u64 guest_phys_addr;
-+	__u64 memory_size;
-+	__u64 userspace_addr;
-+  };
++	return ret;
++err_free_irq_data:
++	kfree(chip_data);
++	return ret;
++}
 +
-+This ioctl allows the user to create or delete a memory parcel for a guest
-+virtual machine. Each memory region is uniquely identified by a label;
-+attempting to create two regions with the same label is not allowed.
++static void gh_rm_irq_domain_free_single(struct irq_domain *d, unsigned int virq)
++{
++	struct gh_irq_chip_data *chip_data;
++	struct irq_data *irq_data;
 +
-+While VMM is guest-agnostic and allows runtime addition of memory regions,
-+Linux guest virtual machines do not support accepting memory regions at runtime.
-+Thus, memory regions should be provided before starting the VM and the VM must
-+be configured to accept these at boot-up.
++	irq_data = irq_domain_get_irq_data(d, virq);
++	if (!irq_data)
++		return;
 +
-+The guest physical address is used by Linux kernel to check that the requested
-+user regions do not overlap and to help find the corresponding memory region
-+for calls like GH_VM_SET_DTB_CONFIG. It should be page aligned.
++	chip_data = irq_data->chip_data;
 +
-+memory_size and userspace_addr should be page-aligned.
++	kfree(chip_data);
++	irq_data->chip_data = NULL;
++}
 +
-+The flags field of gh_userspace_memory_region accepts the following bits. All
-+other bits must be 0 and are reserved for future use. The ioctl will return
-+-EINVAL if an unsupported bit is detected.
++static void gh_rm_irq_domain_free(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs)
++{
++	unsigned int i;
 +
-+  - GH_MEM_ALLOW_READ/GH_MEM_ALLOW_WRITE/GH_MEM_ALLOW_EXEC sets read/write/exec
-+    permissions for the guest, respectively.
-+  - GH_MEM_LENT means that the memory will be unmapped from the host and be
-+    unaccessible by the host while the guest has the region.
++	for (i = 0; i < nr_irqs; i++)
++		gh_rm_irq_domain_free_single(d, virq);
++}
 +
-+To add a memory region, call GH_VM_SET_USER_MEM_REGION with fields set as
-+described above.
++static const struct irq_domain_ops gh_rm_irq_domain_ops = {
++	.alloc		= gh_rm_irq_domain_alloc,
++	.free		= gh_rm_irq_domain_free,
+ };
+ 
++struct gunyah_resource *gh_rm_alloc_resource(struct gh_rm *rm,
++						struct gh_rm_hyp_resource *hyp_resource)
++{
++	struct gunyah_resource *ghrsc;
 +
-+To delete a memory region, call GH_VM_SET_USER_MEM_REGION with label set to the
-+desired region and memory_size set to 0.
++	ghrsc = kzalloc(sizeof(*ghrsc), GFP_KERNEL);
++	if (!ghrsc)
++		return NULL;
 +
-+GH_VM_SET_DTB_CONFIG
-+~~~~~~~~~~~~~~~~~~~~
++	ghrsc->type = hyp_resource->type;
++	ghrsc->capid = le64_to_cpu(hyp_resource->cap_id);
++	ghrsc->irq = IRQ_NOTCONNECTED;
++	ghrsc->rm_label = le32_to_cpu(hyp_resource->resource_label);
++	if (hyp_resource->virq && le32_to_cpu(hyp_resource->virq) != U32_MAX) {
++		struct gh_irq_chip_data irq_data = {
++			.gh_virq = le32_to_cpu(hyp_resource->virq),
++		};
 +
-+::
++		ghrsc->irq = irq_domain_alloc_irqs(rm->irq_domain, 1, NUMA_NO_NODE, &irq_data);
++		if (ghrsc->irq < 0) {
++			pr_err("Failed to allocate interrupt for resource %d label: %d: %d\n",
++				ghrsc->type, ghrsc->rm_label, ghrsc->irq);
++			ghrsc->irq = IRQ_NOTCONNECTED;
++		}
++	}
 +
-+  struct gh_vm_dtb_config {
-+	__u64 gpa;
-+	__u64 size;
-+  };
++	return ghrsc;
++}
 +
-+This ioctl sets the location of the VM's devicetree blob and is used by Gunyah
-+Resource Manager to allocate resources. The guest physical memory should be part
-+of the primary memory parcel provided to the VM prior to GH_VM_START.
++void gh_rm_free_resource(struct gunyah_resource *ghrsc)
++{
++	irq_dispose_mapping(ghrsc->irq);
++	kfree(ghrsc);
++}
 +
-+GH_VM_START
-+~~~~~~~~~~~
+ static struct gh_rm_connection *gh_rm_alloc_connection(__le32 msg_id, u8 type)
+ {
+ 	struct gh_rm_connection *connection;
+@@ -553,6 +684,8 @@ static int gh_msgq_platform_probe_direction(struct platform_device *pdev,
+ 
+ static int gh_rm_drv_probe(struct platform_device *pdev)
+ {
++	struct irq_domain *parent_irq_domain;
++	struct device_node *parent_irq_node;
+ 	struct gh_msgq_tx_data *msg;
+ 	struct gh_rm *rm;
+ 	int ret;
+@@ -590,15 +723,40 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_cache;
+ 
++	parent_irq_node = of_irq_find_parent(pdev->dev.of_node);
++	if (!parent_irq_node) {
++		dev_err(&pdev->dev, "Failed to find interrupt parent of resource manager\n");
++		ret = -ENODEV;
++		goto err_msgq;
++	}
 +
-+This ioctl starts the VM.
++	parent_irq_domain = irq_find_host(parent_irq_node);
++	if (!parent_irq_domain) {
++		dev_err(&pdev->dev, "Failed to find interrupt parent domain of resource manager\n");
++		ret = -ENODEV;
++		goto err_msgq;
++	}
++
++	rm->irq_domain = irq_domain_add_hierarchy(parent_irq_domain, 0, 0, pdev->dev.of_node,
++							&gh_rm_irq_domain_ops, NULL);
++	if (!rm->irq_domain) {
++		dev_err(&pdev->dev, "Failed to add irq domain\n");
++		ret = -ENODEV;
++		goto err_msgq;
++	}
++	rm->irq_domain->host_data = rm;
++
+ 	rm->miscdev.name = "gunyah";
+ 	rm->miscdev.minor = MISC_DYNAMIC_MINOR;
+ 	rm->miscdev.fops = &gh_dev_fops;
+ 
+ 	ret = misc_register(&rm->miscdev);
+ 	if (ret)
+-		goto err_msgq;
++		goto err_irq_domain;
+ 
+ 	return 0;
++err_irq_domain:
++	irq_domain_remove(rm->irq_domain);
+ err_msgq:
+ 	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+ 	gh_msgq_remove(&rm->msgq);
+@@ -612,6 +770,7 @@ static int gh_rm_drv_remove(struct platform_device *pdev)
+ 	struct gh_rm *rm = platform_get_drvdata(pdev);
+ 
+ 	misc_deregister(&rm->miscdev);
++	irq_domain_remove(rm->irq_domain);
+ 	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+ 	gh_msgq_remove(&rm->msgq);
+ 	kmem_cache_destroy(rm->cache);
+diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+index 2e13669c6363..a06d5fa68a65 100644
+--- a/include/linux/gunyah.h
++++ b/include/linux/gunyah.h
+@@ -27,6 +27,10 @@ struct gunyah_resource {
+ 	enum gunyah_resource_type type;
+ 	u64 capid;
+ 	int irq;
++
++	/* To help allocator of resource manager */
++	struct list_head list;
++	u32 rm_label;
+ };
+ 
+ /**
+diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
+index dc05d5b1e1a3..2fb6efbe2f70 100644
+--- a/include/linux/gunyah_rsc_mgr.h
++++ b/include/linux/gunyah_rsc_mgr.h
+@@ -147,6 +147,10 @@ int gh_rm_get_hyp_resources(struct gh_rm *rm, u16 vmid,
+ 				struct gh_rm_hyp_resources **resources);
+ int gh_rm_get_vmid(struct gh_rm *rm, u16 *vmid);
+ 
++struct gunyah_resource *gh_rm_alloc_resource(struct gh_rm *rm,
++						struct gh_rm_hyp_resource *hyp_resource);
++void gh_rm_free_resource(struct gunyah_resource *ghrsc);
++
+ struct gunyah_rm_platform_ops {
+ 	int (*pre_mem_share)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
+ 	int (*post_mem_reclaim)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
 -- 
 2.39.1
 
