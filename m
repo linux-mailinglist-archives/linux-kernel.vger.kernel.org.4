@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EAE6957E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14656957E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjBNEX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S230014AbjBNEZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBNEXU (ORCPT
+        with ESMTP id S231592AbjBNEZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:23:20 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5945FEF9B;
-        Mon, 13 Feb 2023 20:23:19 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676348597;
-        bh=XNGLB3UhxdSqVyS81dpprAvvvxiF/US4JFBcP36WqyI=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=UReHhwNqGK8rqcq/xW7yonrURSIxpGN9fAfxi/rlWADYHupWSRZbpF7JbeQzFgWJw
-         eA3jzJapx3aUFjy5M7lEQsHjtafl+zJ36gwXm94M0qraxF77baaVH7qSbQfpV2YtSK
-         cRvY3bk+H+xMxDf7O9gddVE2CTq4q6zydNF73VgU=
-Date:   Tue, 14 Feb 2023 04:23:12 +0000
-Subject: [PATCH net-next v2 2/2] net-sysfs: make kobj_type structures
- constant
+        Mon, 13 Feb 2023 23:25:01 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70711969E;
+        Mon, 13 Feb 2023 20:25:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676348700; x=1707884700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qS9r1+DDeebaYhT1Tf6BMORix1uHV7srDyqZtYE5TnQ=;
+  b=TwHtx0l2YDkNwjohDqx9kDJ0WOsmGbDwnu6Ekuo5ATrVhinGG6G3tBKN
+   +YeFErwJVstBKUlyP0guQ9RjAOESBPCh0Y0IXQ7uIpEC39GfUfhOlwwnR
+   8NVjHjCmmscVqU1OBFycRoB54SWWsxU52TxMDvTxyE6JsmOeJZpYPeDxO
+   xxbm6mH1ucPM0SJyt9bztxoReL3ZsHRKTxz00jtH/9ZXSiPak0mtpKvLm
+   Do+V9QxStdJXI/eWN5ouaEHXW04Di+uN7zAuPrhJ8zkH/rELeSHKr0eet
+   a4DMKYim2xUmrBEbhTu8hVHTig5KGJm+z+iBwnAeMITP6seTufpgEp0vd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393475388"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="393475388"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 20:25:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701522522"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="701522522"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2023 20:24:54 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRmsA-0008DA-0U;
+        Tue, 14 Feb 2023 04:24:54 +0000
+Date:   Tue, 14 Feb 2023 12:24:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao shi <jitao.shi@mediatek.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mac.shen@mediatek.com,
+        stuart.lee@mediatek.com, Guillaume Ranquet <granquet@baylibre.com>
+Subject: Re: [PATCH v7 3/3] phy: mediatek: add support for phy-mtk-hdmi-mt8195
+Message-ID: <202302141253.tAssz6h3-lkp@intel.com>
+References: <20220919-v7-3-b5b58c5ccc07@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230211-kobj_type-net-v2-2-013b59e59bf3@weissschuh.net>
-References: <20230211-kobj_type-net-v2-0-013b59e59bf3@weissschuh.net>
-In-Reply-To: <20230211-kobj_type-net-v2-0-013b59e59bf3@weissschuh.net>
-To:     Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676348594; l=1293;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=XNGLB3UhxdSqVyS81dpprAvvvxiF/US4JFBcP36WqyI=;
- b=e3JEW3GQbCOozB5YsgCio/CYP6aWitXRRwFV1mCB42LQ+4l60CNQrnFhoIxZzGcRzreeviOxR
- i0VVsnJgoN2Cc3sl19l3nfsBxaGQ/xwqe6lHMY4QQJH6C+YdCyr+yCU
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919-v7-3-b5b58c5ccc07@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+Hi Guillaume,
 
-Take advantage of this to constify the structure definitions to prevent
-modification at runtime.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- net/core/net-sysfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[auto build test ERROR on 09e41676e35ab06e4bce8870ea3bf1f191c3cb90]
 
-diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
-index ca55dd747d6c..a3771bba841a 100644
---- a/net/core/net-sysfs.c
-+++ b/net/core/net-sysfs.c
-@@ -1040,7 +1040,7 @@ static void rx_queue_get_ownership(const struct kobject *kobj,
- 	net_ns_get_ownership(net, uid, gid);
- }
- 
--static struct kobj_type rx_queue_ktype __ro_after_init = {
-+static const struct kobj_type rx_queue_ktype = {
- 	.sysfs_ops = &rx_queue_sysfs_ops,
- 	.release = rx_queue_release,
- 	.default_groups = rx_queue_default_groups,
-@@ -1643,7 +1643,7 @@ static void netdev_queue_get_ownership(const struct kobject *kobj,
- 	net_ns_get_ownership(net, uid, gid);
- }
- 
--static struct kobj_type netdev_queue_ktype __ro_after_init = {
-+static const struct kobj_type netdev_queue_ktype = {
- 	.sysfs_ops = &netdev_queue_sysfs_ops,
- 	.release = netdev_queue_release,
- 	.default_groups = netdev_queue_default_groups,
+url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-Ranquet/dt-bindings-phy-mediatek-hdmi-phy-Add-mt8195-compatible/20230213-193958
+base:   09e41676e35ab06e4bce8870ea3bf1f191c3cb90
+patch link:    https://lore.kernel.org/r/20220919-v7-3-b5b58c5ccc07%40baylibre.com
+patch subject: [PATCH v7 3/3] phy: mediatek: add support for phy-mtk-hdmi-mt8195
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230214/202302141253.tAssz6h3-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/94dbdd48a9476284394fe686b9d3f8d9277281db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guillaume-Ranquet/dt-bindings-phy-mediatek-hdmi-phy-Add-mt8195-compatible/20230213-193958
+        git checkout 94dbdd48a9476284394fe686b9d3f8d9277281db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302141253.tAssz6h3-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__udivdi3" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PM
+   Depends on [n]: !MMU [=y]
+   Selected by [y]:
+   - SUN20I_PPU [=y] && (ARCH_SUNXI || COMPILE_TEST [=y])
 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
