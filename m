@@ -2,163 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9D26967D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6B9696818
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbjBNPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S231442AbjBNPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjBNPTB (ORCPT
+        with ESMTP id S229611AbjBNPaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:19:01 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D1B26CEC;
-        Tue, 14 Feb 2023 07:19:00 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pRx58-00005h-Me; Tue, 14 Feb 2023 16:18:58 +0100
-Message-ID: <deecc5a8-35b7-6e0f-c1f5-35e36118f774@leemhuis.info>
-Date:   Tue, 14 Feb 2023 16:18:58 +0100
+        Tue, 14 Feb 2023 10:30:14 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F03046A1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:30:12 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id r2so16053343wrv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LiBc+IEi5GSzALdS1gVE7cwYWbpTvaEbHdfomWycl4=;
+        b=qqLL5EvXU1B2z6vPs3vAEdKZzORW1NJ+JGa/ij7SuI9OK6PZA+Kwd/EIY2yJzRtfuz
+         oP5+rsKq1l8DtMswP/4cTEb9w9U8JucUTAlx2CxOEOssaTlHFmbzDV96CuqVq/9W4miU
+         FClwoY5mcIByWI/xGjscyg9fFsQZjBMqBX9ovhcJweue9IoaHT/xP+qgxIq2hOPQnKG5
+         fuDFk/kx3GvtepxKuye5bjjyZGUTojaUAyIHglqZFeYZtDau1ddZL5WGxv6pgoCQamp3
+         mJ3v0D3jAQA6M4BiC2mzIBt8pvkhgIfsfOfec6styMEG5kBvMadXZVsqzBoNFmdivGAV
+         tM6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7LiBc+IEi5GSzALdS1gVE7cwYWbpTvaEbHdfomWycl4=;
+        b=aJa4pyviDDVJLHu0wUpGFpUlhb764oRJ0y0e6QV/ujn9eXmcEBPcxS+yLvFIDBv7Ck
+         ypannsO+kO2e7vHAsoUAY4RZKyxVxBga6P2mO8cG8IxzKiRICtENx7uBHLi4bkzhftn6
+         zoGfwqZ9a19VRK7Tun+FF2xw8A8q+0yKNBv0XNKXHi7m41kA6cdQucDM5a2bzQZrnVZM
+         ZBQAzwKUnxH8iVXxgvdRDsmF2pOoUEnQxplMbCzW9u4X+KjygFyJSe6F1dB7imhlX6ty
+         tMnW96v0fcTTlcFHj+OkU/hXqi87wjOVqG5iFHXxGEYf3uIyb8dukCsfFTVvl2l3mQgI
+         RXIg==
+X-Gm-Message-State: AO0yUKWdzMF8Ev9ZRisUcyV5ZN7TDrgc4rgvpI/5gtSX0mQq/JJtuMJO
+        EBZpPU2HuyLJQZx6I70GLyzg23iMxCkkxHUe
+X-Google-Smtp-Source: AK7set8NW4LzDC0f2hrJuKWKMbBkqlXzlPBaikxKRKgTwWY8rzIcatl/dKYjWL7U72THc4JCa1+y4w==
+X-Received: by 2002:a5d:458d:0:b0:2c3:d657:e951 with SMTP id p13-20020a5d458d000000b002c3d657e951mr2621913wrq.29.1676388610543;
+        Tue, 14 Feb 2023 07:30:10 -0800 (PST)
+Received: from lmecxl1178.lme.st.com ([80.214.29.100])
+        by smtp.gmail.com with ESMTPSA id a4-20020adfeec4000000b002bfc0558ecdsm13224166wrp.113.2023.02.14.07.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 07:30:09 -0800 (PST)
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        op-tee@lists.trustedfirmware.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Subject: [PATCH v2 1/2] tee: system invocation
+Date:   Tue, 14 Feb 2023 16:20:46 +0100
+Message-Id: <20230214152047.1143106-1-etienne.carriere@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [Regression] Bug 217026 - Backlight control broken on kernels
- 6.1.4+
-Content-Language: en-US, de-DE
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Daniel Dadap <ddadap@nvidia.com>
-Cc:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, albimarini4283@gmail.com
-References: <197e2991-9d0a-4cb3-e2d3-f0f58fb28a2e@leemhuis.info>
- <a3a2ca3b-9f9d-58d2-d0f0-0035291d81c5@redhat.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <a3a2ca3b-9f9d-58d2-d0f0-0035291d81c5@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676387940;cfc0f532;
-X-HE-SMSGID: 1pRx58-00005h-Me
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 15:59, Hans de Goede wrote:
-> 
-> On 2/14/23 11:44, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, this is your Linux kernel regression tracker.
->>
->> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->> kernel developer don't keep an eye on it, I decided to forward it by
->> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217026 :
->>
->>>  albimarini4283@gmail.com 2023-02-12 20:57:03 UTC
->>>
->>> Brightness control does not work with AMD Ryzen 5800H when using hybrid
->>> graphics on kernel updates 6.1.4+. I am using a Lenovo Legion Slim 7
->>> (2021, 15ACH6) currently running Arch Linux with the mainline kernel
->>> 6.1.11, however, I have been testing my experience with this issue on
->>> every point revision from 6.1.3 to 6.1.11.
->>>
->>>       CPU: AMD Ryzen 5 5800H with Radeon Graphics
->>>       GPU: NVIDIA RTX 3060 Mobile / Max-Q (Proprietary NVIDIA driver,
->>> tested with 525.78.01-1 (version prior to 6.1.4 being released) and
->>> 525.89.02-1 (latest driver at time of writing))
->>>       System Memory: 40 GB
->>>       Display: Laptop (Laptop Screen)
->>>
->>> The only parameters applied at boot on my system are: nvidia-drm.modeset=1
->>>
->>> How to reproduce the issue:
->>> Enable hybrid graphics/Optimus in BIOS setup.
->>>
->>> Prior to kernel version 6.1.4, /sys/class/backlight contained two entries:
->>> amdgpu_bl0 and nvidia_wmi_ec_backlight
->>>
->>> With these two entries in /sys/class/backlight , I was able to write to
->>> their respective brightness files directly or use a program like light
->>> to change the values. Those values would change the brightness of the
->>> screen depending on if I was using the AMD GPU or NVIDIA GPU to display
->>> the current application. I could set these values to roughly the same
->>> thing to achieve an overall complete brightness experience regardless of
->>> whether or not I was currently running an application on my integrated
->>> (AMD) GPU or dedicated (NVIDIA) GPU.
->>>
->>> Then, upon updating to kernel versions 6.1.4+, there is no longer an
->>> amdgpu_bl0 entry in /sys/class/backlight , just a
->>> nvidia_wmi_ec_backlight entry, making it impossible for me to change the
->>> brightness on my display when using the iGPU. Interestingly, on kernels
->>> 6.1.4+, running "journalctl -b -0 | grep backlight" returns an output
->>> "amdgpu: [drm] Skipping amdgpu DM backlight registration", which was not
->>> present in prior kernel versions.
->>>
->>> However, if I instead prepend the option "acpi_backlight=native" to my
->>> kernel command line options at boot, "amdgpu_bl0" is once again present
->>> in /sys/class/backlight but "nvidia_wmi_ec_backlight" has now
->>> disappeared and is nowhere to be seen making it so I can change the
->>> brightness when using the iGPU, but the brightness is stuck at max when
->>> using the dedicated GPU. Running the above journalctl command at this
->>> point returns no errors relating to my AMD GPU and does not mention
->>> anything about the NVIDIA GPU. Trying different acpi_backlight options
->>> on 6.1.4+ does not fix the issue and instead removes functionality.
->>> acpi_backlight=vendor makes an entry called "ideapad" pop up in
->>> /sys/class/backlight with nothing else. Changing the brightness values
->>> in ideapad does nothing.
->>> acpi_backlight=video makes only two entries appear in
->>> /sys/class/backlight, acpi_video0 and acpi_video1. Changing the
->>> brightness values in either of these directories does nothing.
->>> acpi_backlight=none causes nothing to appear under /sys/class/backlight.
->>>
->>> If hybrid graphics is disabled, the display is connected to the NVIDIA
->>> GPU and /sys/class/backlight/nvidia_0 is present, the NVIDIA driver can
->>> change the display brightness without a problem.p
->>>
->>> Below is my lscpi -nn and dmidecode outputs on kernel 6.1.3 and 6.1.11.
->>> [...]
->>
->> See the ticket for more details.
->>
->> [TLDR for the rest of this mail: I'm adding this report to the list of
->> tracked Linux kernel regressions; the text you find below is based on a
->> few templates paragraphs you might have encountered already in similar
->> form.]
->>
->> BTW, let me use this mail to also add the report to the list of tracked
->> regressions to ensure it's doesn't fall through the cracks:
->>
->> #regzbot introduced: v6.1.3..v6.1.4
->> https://bugzilla.kernel.org/show_bug.cgi?id=217026
->> #regzbot title: backlight: brightness control stopped working on a Ryzen
->> system with hybrid graphics
->> #regzbot ignore-activity
-> 
-> Thank you for forwarding this.
+Adds TEE system invocation context provisioning for a Linux driver
+to provision execution contexts for invocation of system service
+hosted in TEE. OP-TEE SMC ABI implements such invocation context
+provisioning.
 
-yw
+This feature is needed when a TEE invocation cannot afford to wait for
+a free TEE thread when all TEE threads context are used and suspended
+as these may be suspended waiting for a system service, as an SCMI clock
+or voltage regulator, to be enabled. An example is when OP-TEE invokes
+a Linux OS remote service (RPC) to access an eMMC RPMB partition and
+the eMMC device is supplied by an OP-TEE SCMI regulator.
 
-> I have just added the following comment to the bug:
-> [...]
-> Lets continue this inside bugzilla.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+---
+Change since v1
+- Addressed comment on Linux client to claim reservation on TEE context.
+  This brings 2 new operations from client to TEE to request and release
+  system thread contexts: 2 new tee_drv.h API functions, 2 new ops
+  functions in struct tee_driver_ops. The OP-TEE implement shall implement
+  2 new fastcall SMC funcIDs.
+- Fixed typos in commit message.
+---
+ drivers/tee/optee/optee_smc.h | 60 +++++++++++++++++++++++++++++++++--
+ drivers/tee/optee/smc_abi.c   | 34 +++++++++++++++++++-
+ drivers/tee/tee_core.c        | 30 ++++++++++++++++++
+ include/linux/tee_drv.h       | 21 ++++++++++++
+ 4 files changed, 141 insertions(+), 4 deletions(-)
 
-Thx. FWIW, at least from my side there is no need to post replies to
-bugzilla and the list; some developers prefer one, some the other -- and
-regzbot will notice replies to both places.
+diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+index 73b5e7760d10..75b19e1bd185 100644
+--- a/drivers/tee/optee/optee_smc.h
++++ b/drivers/tee/optee/optee_smc.h
+@@ -108,7 +108,8 @@ struct optee_smc_call_get_os_revision_result {
+  * Call with struct optee_msg_arg as argument
+  *
+  * When called with OPTEE_SMC_CALL_WITH_RPC_ARG or
+- * OPTEE_SMC_CALL_WITH_REGD_ARG in a0 there is one RPC struct optee_msg_arg
++ * OPTEE_SMC_CALL_WITH_REGD_ARG or OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG
++ * in a0 there is one RPC struct optee_msg_arg
+  * following after the first struct optee_msg_arg. The RPC struct
+  * optee_msg_arg has reserved space for the number of RPC parameters as
+  * returned by OPTEE_SMC_EXCHANGE_CAPABILITIES.
+@@ -130,8 +131,8 @@ struct optee_smc_call_get_os_revision_result {
+  * a4-6	Not used
+  * a7	Hypervisor Client ID register
+  *
+- * Call register usage, OPTEE_SMC_CALL_WITH_REGD_ARG:
+- * a0	SMC Function ID, OPTEE_SMC_CALL_WITH_REGD_ARG
++ * Call register usage, OPTEE_SMC_CALL_WITH_REGD_ARG and OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG:
++ * a0	SMC Function ID, OPTEE_SMC_CALL_WITH_REGD_ARG or OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG
+  * a1	Upper 32 bits of a 64-bit shared memory cookie
+  * a2	Lower 32 bits of a 64-bit shared memory cookie
+  * a3	Offset of the struct optee_msg_arg in the shared memory with the
+@@ -175,6 +176,8 @@ struct optee_smc_call_get_os_revision_result {
+ 	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG)
+ #define OPTEE_SMC_CALL_WITH_REGD_ARG \
+ 	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG)
++#define OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG)
+ 
+ /*
+  * Get Shared Memory Config
+@@ -254,6 +257,8 @@ struct optee_smc_get_shm_config_result {
+ #define OPTEE_SMC_SEC_CAP_ASYNC_NOTIF		BIT(5)
+ /* Secure world supports pre-allocating RPC arg struct */
+ #define OPTEE_SMC_SEC_CAP_RPC_ARG		BIT(6)
++/* Secure world provisions thread for system service invocation */
++#define OPTEE_SMC_SEC_CAP_SYSTEM_THREAD		BIT(7)
+ 
+ #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
+ #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
+@@ -426,6 +431,55 @@ struct optee_smc_disable_shm_cache_result {
+ /* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
+ #define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
+ 
++/* See OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG above */
++#define OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG	20
++
++/*
++ * Request reservation of a system invocation thread context in OP-TEE
++ *
++ * Call register usage:
++ * a0	SMC Function ID: OPTEE_SMC_CALL_RESERVE_SYS_THREAD
++ * a1-6	Not used
++ * a7	Hypervisor Client ID register
++ *
++ * Normal return register usage:
++ * a0	Return value, OPTEE_SMC_RETURN_*
++ * a1-3	Not used
++ * a4-7	Preserved
++ *
++ * Possible return values:
++ * OPTEE_SMC_RETURN_UNKNOWN_FUNCTION	Trusted OS does not recognize this
++ *                                      function.
++ * OPTEE_SMC_RETURN_OK			Call successfully completed.
++ * OPTEE_SMC_RETURN_ETHREAD_LIMIT	Number of Trusted OS threads exceeded
++ *                                      for the request.
++ */
++#define OPTEE_SMC_FUNCID_CALL_RESERVE_SYS_THREAD	21
++#define OPTEE_SMC_CALL_RESERVE_SYS_THREAD \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_RESERVE_SYS_THREAD)
++
++/*
++ * Unregister reservation of a system invocation thread context in OP-TEE
++ *
++ * Call register usage:
++ * a0	SMC Function ID: OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD
++ * a1-6	Not used
++ * a7	Hypervisor Client ID register
++ *
++ * Normal return register usage:
++ * a0	Return value, OPTEE_SMC_RETURN_*
++ * a1-3	Not used
++ * a4-7	Preserved
++ *
++ * Possible return values:
++ * OPTEE_SMC_RETURN_UNKNOWN_FUNCTION	Trusted OS does not recognize this
++ *                                      function.
++ * OPTEE_SMC_RETURN_OK			Call successfully completed.
++ */
++#define OPTEE_SMC_FUNCID_CALL_UNRESERVE_SYS_THREAD	22
++#define OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_UNRESERVE_SYS_THREAD)
++
+ /*
+  * Resume from RPC (for example after processing a foreign interrupt)
+  *
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..013b5ae31c0e 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -889,7 +889,10 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+ 	}
+ 
+ 	if  (rpc_arg && tee_shm_is_dynamic(shm)) {
+-		param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
++		if (ctx->system_ctx_count)
++			param.a0 = OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG;
++		else
++			param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
+ 		reg_pair_from_64(&param.a1, &param.a2, (u_long)shm);
+ 		param.a3 = offs;
+ 	} else {
+@@ -1085,6 +1088,33 @@ static int optee_smc_open(struct tee_context *ctx)
+ 	return optee_open(ctx, sec_caps & OPTEE_SMC_SEC_CAP_MEMREF_NULL);
+ }
+ 
++static int optee_request_sys_ctx(struct tee_context *ctx)
++{
++	struct optee *optee = tee_get_drvdata(ctx->teedev);
++	struct arm_smccc_res res;
++
++	if (!(optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD))
++		return -EINVAL;
++
++	optee->smc.invoke_fn(OPTEE_SMC_CALL_RESERVE_SYS_THREAD,
++			     0, 0, 0, 0, 0, 0, 0, &res);
++
++	if (res.a0 != OPTEE_SMC_RETURN_OK)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void optee_release_sys_ctx(struct tee_context *ctx)
++{
++	struct optee *optee = tee_get_drvdata(ctx->teedev);
++	struct arm_smccc_res res;
++
++	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD)
++		optee->smc.invoke_fn(OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD,
++				     0, 0, 0, 0, 0, 0, 0, &res);
++}
++
+ static const struct tee_driver_ops optee_clnt_ops = {
+ 	.get_version = optee_get_version,
+ 	.open = optee_smc_open,
+@@ -1095,6 +1125,8 @@ static const struct tee_driver_ops optee_clnt_ops = {
+ 	.cancel_req = optee_cancel_req,
+ 	.shm_register = optee_shm_register,
+ 	.shm_unregister = optee_shm_unregister,
++	.system_ctx_request = optee_request_sys_ctx,
++	.system_ctx_release = optee_release_sys_ctx,
+ };
+ 
+ static const struct tee_desc optee_clnt_desc = {
+diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+index 98da206cd761..a7dfdea5d85b 100644
+--- a/drivers/tee/tee_core.c
++++ b/drivers/tee/tee_core.c
+@@ -5,6 +5,7 @@
+ 
+ #define pr_fmt(fmt) "%s: " fmt, __func__
+ 
++#include <linux/bug.h>
+ #include <linux/cdev.h>
+ #include <linux/cred.h>
+ #include <linux/fs.h>
+@@ -1141,10 +1142,39 @@ EXPORT_SYMBOL_GPL(tee_client_open_context);
+ 
+ void tee_client_close_context(struct tee_context *ctx)
+ {
++	while (ctx->system_ctx_count)
++		tee_client_release_system_context(ctx);
++
+ 	teedev_close_context(ctx);
+ }
+ EXPORT_SYMBOL_GPL(tee_client_close_context);
+ 
++int tee_client_request_system_context(struct tee_context *ctx)
++{
++	int ret;
++
++	if (!ctx->teedev->desc->ops->system_ctx_request ||
++	    !ctx->teedev->desc->ops->system_ctx_release)
++		return -EINVAL;
++
++	ret = ctx->teedev->desc->ops->system_ctx_request(ctx);
++	if (!ret)
++		ctx->system_ctx_count++;
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(tee_client_request_system_context);
++
++void tee_client_release_system_context(struct tee_context *ctx)
++{
++	if (ctx->system_ctx_count &&
++	    ctx->teedev->desc->ops->system_ctx_release) {
++		ctx->teedev->desc->ops->system_ctx_release(ctx);
++		ctx->system_ctx_count--;
++	}
++}
++EXPORT_SYMBOL_GPL(tee_client_release_system_context);
++
+ void tee_client_get_version(struct tee_context *ctx,
+ 			    struct tee_ioctl_version_data *vers)
+ {
+diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+index 17eb1c5205d3..45577256bb71 100644
+--- a/include/linux/tee_drv.h
++++ b/include/linux/tee_drv.h
+@@ -47,6 +47,8 @@ struct tee_shm_pool;
+  *              non-blocking in nature.
+  * @cap_memref_null: flag indicating if the TEE Client support shared
+  *                   memory buffer with a NULL pointer.
++ * @system_ctx_count: Number of system invocation contexts provisioned for
++ *                    this TEE client or 0.
+  */
+ struct tee_context {
+ 	struct tee_device *teedev;
+@@ -55,6 +57,7 @@ struct tee_context {
+ 	bool releasing;
+ 	bool supp_nowait;
+ 	bool cap_memref_null;
++	unsigned int system_ctx_count;
+ };
+ 
+ struct tee_param_memref {
+@@ -90,6 +93,8 @@ struct tee_param {
+  * @supp_send:		called for supplicant to send a response
+  * @shm_register:	register shared memory buffer in TEE
+  * @shm_unregister:	unregister shared memory buffer in TEE
++ * @system_ctx_request:	Request provisioning of a new system context in TEE
++ * @system_ctx_release:	Release a provisioned system context in TEE
+  */
+ struct tee_driver_ops {
+ 	void (*get_version)(struct tee_device *teedev,
+@@ -112,6 +117,8 @@ struct tee_driver_ops {
+ 			    struct page **pages, size_t num_pages,
+ 			    unsigned long start);
+ 	int (*shm_unregister)(struct tee_context *ctx, struct tee_shm *shm);
++	int (*system_ctx_request)(struct tee_context *ctx);
++	void (*system_ctx_release)(struct tee_context *ctx);
+ };
+ 
+ /**
+@@ -397,6 +404,20 @@ tee_client_open_context(struct tee_context *start,
+  */
+ void tee_client_close_context(struct tee_context *ctx);
+ 
++/**
++ * tee_client_request_system_context() - Close a TEE context
++ * @ctx:	TEE context to close
++ *
++ * @return 0 on success else an error code
++ */
++int tee_client_request_system_context(struct tee_context *ctx);
++
++/**
++ * tee_client_release_system_context() - Release a reserved system exec context
++ * @ctx:	TEE context reference
++ */
++void tee_client_release_system_context(struct tee_context *ctx);
++
+ /**
+  * tee_client_get_version() - Query version of TEE
+  * @ctx:	TEE context to TEE to query
+-- 
+2.25.1
 
-It's IMHO unfortunate that we have to deal with two places, but well,
-that's how it is.
-
-Ciao, Thorsten
-
-P.S.: while at it, let me tell regzbot that this one will take some time
-to get resolved:
-
-#regzbot backburner: known bios issue, that why there where tricky
-aspects beforehand as well; someone from Nvidia is looking into this
