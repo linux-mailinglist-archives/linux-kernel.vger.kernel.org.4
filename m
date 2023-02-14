@@ -2,70 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE668695759
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FB069575E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjBNDSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S231352AbjBNDT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjBNDSc (ORCPT
+        with ESMTP id S229936AbjBNDT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:18:32 -0500
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C783D4694;
-        Mon, 13 Feb 2023 19:18:31 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VbdtbCo_1676344708;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VbdtbCo_1676344708)
-          by smtp.aliyun-inc.com;
-          Tue, 14 Feb 2023 11:18:28 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, baolin.wang@linux.alibaba.com,
-        damon@lists.linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] mm: mempolicy: check negative error of isolate_hugetlb() when failed to isolate a hugetlb
-Date:   Tue, 14 Feb 2023 11:18:08 +0800
-Message-Id: <db2459c4a8c31cba597680bd9dd7c868534e00be.1676342827.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
-References: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
+        Mon, 13 Feb 2023 22:19:26 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD2F4694;
+        Mon, 13 Feb 2023 19:19:26 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1676344764;
+        bh=/j6gYMkWQlw3NcQ1X0C8XkJ0pAG5hrhzDMoF3CPWPq4=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Uy6Aov4R9l4UUO0iiwFR9AHOn+xr2EJEWsvfuEBWWYOspGztYXlLgMXOt+5NOjUb6
+         B3vJyLq2QuFBqSPJcEtiHght6itypsj8p1Rt1JvdDn5V6xAMKxuE5fc13tJ9lvp3zl
+         X96UJMFExdwj392iJW1hIYyFUwyyNuRs8ciwqJmM=
+Date:   Tue, 14 Feb 2023 03:19:22 +0000
+Subject: [PATCH] md: make kobj_type structures constant
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230214-kobj_type-md-v1-1-d6853f707f11@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIALn96mMC/x2NWwqDMBAAryL73QVNLAGvIlKSuNb1ESWxRRHv7
+ uLnDAxzQqLIlKDKToj058RLECheGfjehi8ht8KgcqVzVZQ4Lm74bMdKOLdotTfG6LcpfQeSOJs
+ IXbTB9xKF3zSJXCN1vD+PurmuGwztvLFzAAAA
+To:     Song Liu <song@kernel.org>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676344762; l=1569;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=/j6gYMkWQlw3NcQ1X0C8XkJ0pAG5hrhzDMoF3CPWPq4=;
+ b=bsFcY3wtN3ALz/fXXkg2f+AZItfYpqAJ3W8jA8TNC9MDF/AEAN0Xnb41ix9R9DZ6GfTA26Uqe
+ Eq1kH03/ec0DTJlhXmcbaD6Yg23DDDSEgNuGo2RD1n/poVDpR5D4SmP
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Better to check the negative error of isolate_hugetlb() when failed to
-isolate a hugetlb page, which makes the code more clear.
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
-No functional changes.
+Take advantage of this to constify the structure definitions to prevent
+modification at runtime.
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- mm/mempolicy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/md.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 0919c7a719d4..e3d87b21516b 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -609,7 +609,7 @@ static int queue_folios_hugetlb(pte_t *pte, unsigned long hmask,
- 	if (flags & (MPOL_MF_MOVE_ALL) ||
- 	    (flags & MPOL_MF_MOVE && folio_estimated_sharers(folio) == 1 &&
- 	     !hugetlb_pmd_shared(pte))) {
--		if (isolate_hugetlb(folio, qp->pagelist) &&
-+		if (isolate_hugetlb(folio, qp->pagelist)  < 0 &&
- 			(flags & MPOL_MF_STRICT))
- 			/*
- 			 * Failed to isolate folio but allow migrating pages
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 02b0240e7c71..091c1d6f0b87 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -78,7 +78,7 @@
+ static LIST_HEAD(pers_list);
+ static DEFINE_SPINLOCK(pers_lock);
+ 
+-static struct kobj_type md_ktype;
++static const struct kobj_type md_ktype;
+ 
+ struct md_cluster_operations *md_cluster_ops;
+ EXPORT_SYMBOL(md_cluster_ops);
+@@ -3600,7 +3600,7 @@ static const struct sysfs_ops rdev_sysfs_ops = {
+ 	.show		= rdev_attr_show,
+ 	.store		= rdev_attr_store,
+ };
+-static struct kobj_type rdev_ktype = {
++static const struct kobj_type rdev_ktype = {
+ 	.release	= rdev_free,
+ 	.sysfs_ops	= &rdev_sysfs_ops,
+ 	.default_groups	= rdev_default_groups,
+@@ -5558,7 +5558,7 @@ static const struct sysfs_ops md_sysfs_ops = {
+ 	.show	= md_attr_show,
+ 	.store	= md_attr_store,
+ };
+-static struct kobj_type md_ktype = {
++static const struct kobj_type md_ktype = {
+ 	.release	= md_kobj_release,
+ 	.sysfs_ops	= &md_sysfs_ops,
+ 	.default_groups	= md_attr_groups,
+
+---
+base-commit: f6feea56f66d34259c4222fa02e8171c4f2673d1
+change-id: 20230214-kobj_type-md-a3c7773574cf
+
+Best regards,
 -- 
-2.27.0
+Thomas Weißschuh <linux@weissschuh.net>
 
