@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50BB696639
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45F0696668
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbjBNONU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S233282AbjBNOSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbjBNOM5 (ORCPT
+        with ESMTP id S233355AbjBNOSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:12:57 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19882820A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:12:17 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso7873709pjn.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:12:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBRSJ/850lpcvhrPddtFi8OtzyTgr3C1oIhbwpQOV+A=;
-        b=LCxzmGGqVpvip3MreelaQGBlCqmmH9TfJAiwjirjXwHbejxi6zRdfpv+lDzCIzfBga
-         u6c9uVt4gb+/uqzDdvBU4bAtW7P7QL1fcRsKRZtABoAqX0l86S4f3roLK6vWdwzesFTT
-         YmtUqfMHVLdk5uVjAZehj5SxY5vmYpb7my/S34mh7PMmed0W1E0CbgVBVbDAweE1YBWH
-         boNQmreGRWVWdM7H8psF8ns1+As0tek2eDDvrNYk5ylQOUBZSqipFC+hP2qcePtGBaRb
-         C1KJloPtqXqa9QnvpGKUJy682EiNrA2QHyPJd+jZH+8njkc8VFmXnkyNH3EyBMVxNNR7
-         QS9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBRSJ/850lpcvhrPddtFi8OtzyTgr3C1oIhbwpQOV+A=;
-        b=2fOPo/XPbh0Dw+/pLD6xlIKF/R/yJDRfJ76npctfN0TZXgl5HodPVlPwtBsK7vP9mH
-         14LzEpk/Z6djUM8dAiBEvwTOWfXnWPdJm1uUqOY+o+gusvuemNo8x4VaNxdhPaoiX+MS
-         Zt0Jf7LUEk+MFZRhAxArPQcB5ypLHzZXCJWSMOxcElKap/jdbPEainNTVS+10+Zndi7p
-         8vBg5HZUEatCVeVEEinht9UK1lFfJ2K4M9YyX7B+O/cUnnDvXGdViylVYA0pTOJRyQRH
-         +1uPI2as1feUq3CfD9ZjqT+u//ZNXJ+R+V8Vuju4spON+8Yy//1h2LS6TM2ntv1T5v1r
-         mzpg==
-X-Gm-Message-State: AO0yUKVofB5FISapwokZm0zjkskTpmIDgIIrIdIZPvKlKfej08N5Y+Lp
-        EBxCFYG3mURIPPQtdsBI8RgybA==
-X-Google-Smtp-Source: AK7set/A26k3GHX7cExFN9tZ63pti9KWqv9TNGokEqPmNb2E+2Jvf+KndRCaHcD1j1+QviGgJOl0EQ==
-X-Received: by 2002:a17:902:b610:b0:19a:b6bf:1df6 with SMTP id b16-20020a170902b61000b0019ab6bf1df6mr1857528pls.20.1676383906881;
-        Tue, 14 Feb 2023 06:11:46 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902ee8a00b001992e74d058sm5588462pld.7.2023.02.14.06.11.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 06:11:46 -0800 (PST)
-Message-ID: <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
-Date:   Tue, 14 Feb 2023 19:41:45 +0530
+        Tue, 14 Feb 2023 09:18:08 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2774772A1;
+        Tue, 14 Feb 2023 06:17:46 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E8KCHK015473;
+        Tue, 14 Feb 2023 14:12:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=/nCTd7pBuvatiw5+3uUxEm27G6Sx1tzD9Hft3j7OtVM=;
+ b=BEBpJwvu+8pjT12u5xgfS1yulu+6V0NzfOX1iZLQjfx70YM1P1OZ66wxfkatDQsIYDlQ
+ 6iDKinAzSIQ3JSRJtPIy4jTX4U3TdCzra957lvyoeAEZ+WwsRNUPOGPF6vT9qkos2P7p
+ pu5j3aNP0DFccYPuBshXJrCAguexYbrDRNFpIHq9K/RUq8EAcXT4cXrb/Z+B4WhG8kRv
+ LYruVIr/DgkNuF/pK3FPOS8eKK0oKk0jZ5s5IfwX5TofGR2y8emTrlS3D33RTdI4ncIe
+ d4QbOP8yFyLu9bDX1vvbMNXC6Em6iF6r1FV18IDmH3B6FzS5UP6LdgYDCb+dHybIU7NS Tw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6ps0t72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 14:12:31 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EECUhb005371
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 14:12:30 GMT
+Received: from [10.216.50.155] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 06:12:27 -0800
+Message-ID: <62ffa065-bc85-09bf-0492-7de0bd45ae13@quicinc.com>
+Date:   Tue, 14 Feb 2023 19:42:23 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 4/4] hwmon: (pmbus/core): Notify hwmon events
+Subject: Re: [PATCH] remoteproc: qcom: fix sparse warnings
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
- <20230207120241.2800662-4-Naresh.Solanki@9elements.com>
- <20230211154647.GA204954@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20230211154647.GA204954@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <mathieu.poirier@linaro.org>, <konrad.dybcio@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
+ <bba9e244-0a02-4d46-8ba8-bc8b11ddf6b4@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <bba9e244-0a02-4d46-8ba8-bc8b11ddf6b4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UsWmiX7zLmzlaEVb20jXGkip6SY7Mcyn
+X-Proofpoint-GUID: UsWmiX7zLmzlaEVb20jXGkip6SY7Mcyn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_07,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 mlxlogscore=947 malwarescore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140121
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,122 +81,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 11-02-2023 09:16 pm, Guenter Roeck wrote:
-> On Tue, Feb 07, 2023 at 01:02:41PM +0100, Naresh Solanki wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+
+On 2/13/2023 6:25 AM, Dmitry Baryshkov wrote:
+> On 31/01/2023 18:01, Mukesh Ojha wrote:
+>> This patch try to address below sparse warnings.
 >>
->> Notify hwmon events using the pmbus irq handler.
+>> drivers/remoteproc/qcom_common.c:126:27: warning: restricted __le32 
+>> degrades to integer
+>> drivers/remoteproc/qcom_common.c:133:32: warning: cast to restricted 
+>> __le32
+>> drivers/remoteproc/qcom_common.c:133:32: warning: cast from restricted 
+>> __le64
 >>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ...
->> Changes in V2
->> - Remove __maybe_unsed attribute as its not needed.
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+
+Thanks for the review.
+
+> Also see below.
+> 
 >> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 48 ++++++++++++++++++++++++++++----
->>   1 file changed, 43 insertions(+), 5 deletions(-)
+>>   drivers/remoteproc/qcom_common.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index d5403baad60a..f6778a9c7126 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2735,8 +2735,36 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->>   	},
->>   };
->>   
->> +#define to_dev_attr(_dev_attr) \
->> +	container_of(_dev_attr, struct device_attribute, attr)
->> +
->> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < data->num_attributes; i++) {
->> +		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
->> +		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
->> +		int index = attr->index;
->> +		u16 smask = pb_index_to_mask(index);
->> +		u8 spage = pb_index_to_page(index);
->> +		u16 sreg = pb_index_to_reg(index);
->> +
->> +		if (reg == sreg && page == spage && (smask & flags)) {
->> +			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
->> +			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
->> +			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
->> +			flags &= ~smask;
->> +		}
->> +
->> +		if (!flags)
->> +			break;
->> +	}
->> +}
->> +
->> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
->> +			   bool notify)
->>   
->> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->>   {
->>   	int i, status, ret;
->>   	const struct pmbus_status_category *cat;
->> @@ -2764,6 +2792,10 @@ static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsi
->>   			if (status & bit->pflag)
->>   				*flags |= bit->rflag;
->>   		}
->> +
->> +		if (notify && status)
->> +			pmbus_notify(data, page, cat->reg, status);
->> +
->>   	}
->>   
->>   	/*
->> @@ -2866,7 +2898,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   	struct i2c_client *client = to_i2c_client(dev->parent);
->>   	struct pmbus_data *data = i2c_get_clientdata(client);
->>   
->> -	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
->> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
->>   }
->>   
->>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->> @@ -3108,10 +3140,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->>   {
->>   	struct pmbus_data *data = pdata;
->>   	struct i2c_client *client = to_i2c_client(data->dev);
->> -	int i, status;
->> +	int i, status, ret;
->>   
->> -	mutex_lock(&data->update_lock);
->>   	for (i = 0; i < data->info->pages; i++) {
->> +		ret = pmbus_get_flags(data, i, &status, true);
->> +		if (ret)
->> +			return ret;
->> +
->> +		mutex_lock(&data->update_lock);
+>> diff --git a/drivers/remoteproc/qcom_common.c 
+>> b/drivers/remoteproc/qcom_common.c
+>> index 020349f..7133c1f 100644
+>> --- a/drivers/remoteproc/qcom_common.c
+>> +++ b/drivers/remoteproc/qcom_common.c
+>> @@ -123,14 +123,14 @@ static int qcom_add_minidump_segments(struct 
+>> rproc *rproc, struct minidump_subsy
+>>       for (i = 0; i < seg_cnt; i++) {
+>>           memcpy_fromio(&region, ptr + i, sizeof(region));
+>> -        if (region.valid == MD_REGION_VALID) {
+>> +        if (le32_to_cpu(region.valid) == MD_REGION_VALID) {
+>>               name = kstrdup(region.name, GFP_KERNEL);
 > 
-> You should introduce a locked version of pmbus_get_flags() and call
-> that function, and keep the existing locking in place.
-> 
-I'm not sure if you meant to have pmbus_get_flags that wont use lock?
+> While you are at it, please replace this kstrdup() with kstrndup(). 
+> There is no guarantee that region.name will be 0-terminated.
 
->>   		status = pmbus_read_status_word(client, i);
->>   		if (status < 0) {
->>   			mutex_unlock(&data->update_lock);
->> @@ -3120,8 +3156,10 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->>   
->>   		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
->>   			pmbus_clear_fault_page(client, i);
->> +
->> +		mutex_unlock(&data->update_lock);
->>   	}
->> -	mutex_unlock(&data->update_lock);
->> +
+Kept it as separate patch in this mail thread itself.
+
+-Mukesh
+>>               if (!name) {
+>>                   iounmap(ptr);
+>>                   return -ENOMEM;
+>>               }
+>>               da = le64_to_cpu(region.address);
+>> -            size = le32_to_cpu(region.size);
+>> +            size = le64_to_cpu(region.size);
+>>               rproc_coredump_add_custom_segment(rproc, da, size, NULL, 
+>> name);
+>>           }
+>>       }
 > 
-> This would add a second empty line (not that it matters because the code
-> should not change the locking in the first place).
-> 
-Will remove the new line
->>   
->>   	return IRQ_HANDLED;
->>   }
