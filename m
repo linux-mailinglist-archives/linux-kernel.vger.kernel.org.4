@@ -2,119 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976D569667D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2528696656
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbjBNOVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S229790AbjBNOQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjBNOUz (ORCPT
+        with ESMTP id S232797AbjBNOQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:20:55 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6C5C0;
-        Tue, 14 Feb 2023 06:20:53 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id AA6843200302;
-        Tue, 14 Feb 2023 09:12:51 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 14 Feb 2023 09:12:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676383971; x=1676470371; bh=YRxaNRC4BH
-        1ycBKeOawmXxp8krGFIkOuJJQE9+IMh0E=; b=dYZdi6z1BBW8qZ+1yTNZYVnlzu
-        bd1rdhnWTBQ3winl855ARQim1KYx5d0+eSeo6xbILH8Dd+fYcX21cDZq7K4dym+B
-        1lwEKlo3CnmrObFIGtwewAtKRMzsl73+xY6yGXw4ROSf2JNAVLfo0944TMJrOJlZ
-        1tvTH+LTtEip7C0IQzn3doc2lo+gA72BqG/HXPologcAGGOGOUax47AkzoTZhd7g
-        D2T/sxmJsk0xcjQvaoLyhMQwBm4UEFyETbAidyKWuUA/z8j6SmXY0dXJbmZNjLAq
-        uBPdWjFbtnrjaivDuFbECbd8ILEgcMoOGSAuH1xj8fWbQgMPrq+YYQbJzS6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676383971; x=1676470371; bh=YRxaNRC4BH1ycBKeOawmXxp8krGF
-        IkOuJJQE9+IMh0E=; b=plSFOhcc+E+PfxIEOh9EFkWLD7z1ZH8TqV/Yf3HqNFfO
-        o0UDk42j6uzH+wqFQb5B5B5SJBG5Vp8XiBifhfV9EuPtwQXBmJ2NHelxCbZ5K3Hz
-        RX8guFFpCTdjAgxtVPB3F6jfV+4TOUJeOoNh6wePzGygWyPBYQsHpUX5BP9niFFu
-        0xWhf9DXO6X1PnyKoYsbQ8kCvJyRgmqj5i382pEybyGb7+1MO7FGgNmSD3TYvLE6
-        InadPT5sQEdLtw3hir2yPkdkpAJYByGvuF9eRMMoXzjnAXyhvE8h5YKeIZ/QarqO
-        JeNzq6/MysYlmsjyDmu2UcFPnWC13/9tKTDDjwfQ6Q==
-X-ME-Sender: <xms:4JbrYx29CQPfpw-AgqwktggwgqlHPffduFo6v3RJtBvNrSzvWk4JRg>
-    <xme:4JbrY4Gvv8-TVyRI4jC7uMOZm4YkOIdyEGTDePZDBYFgIHbhddWNXqNaOKIG7Lboi
-    EUteCRBBWO12m5hj-Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeifedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:4JbrYx74l0zXhtWSNpvI4dS4YaZ55Y67l_qXYTMEt2738mj_yoEK4A>
-    <xmx:4JbrY-0EKyp8u8qEEXCpn_eeS3oxLxI4W6aE7cD-a-nvZhHXp__L4g>
-    <xmx:4JbrY0HLfeeNmGp9POEmduij6SzPY5T-Cn933nq1FDDJ5D4f6N_7pw>
-    <xmx:45brY_lzf_KpqWMPuKF1Oe3JCZOy9uE8pCt1a8rc1FJks4JKxdk9Uw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 30FB2B60086; Tue, 14 Feb 2023 09:12:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <4e57a5aa-fd7a-4cda-90e3-6a02cfeb04c0@app.fastmail.com>
-In-Reply-To: <20230214140121.131859-1-gregkh@linuxfoundation.org>
-References: <20230214140121.131859-1-gregkh@linuxfoundation.org>
-Date:   Tue, 14 Feb 2023 15:12:29 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Christoph Hellwig" <hch@lst.de>,
-        "Marek Szyprowski" <m.szyprowski@samsung.com>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
-        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] dma-mapping: no need to pass a bus_type into get_arch_dma_ops()
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 09:16:11 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3732943E;
+        Tue, 14 Feb 2023 06:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676384147; x=1707920147;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mri8wotyu4TxK5L7MM4u6zbY5O40yObsw3E1ScBxR/8=;
+  b=gGur7x0XTyVCh1lJrh0XAohYC6deLwNJOgWvaNpHuTo6ApkWTmeqgLNk
+   FcMpsjPDd5Opi4Ep9rZSTZCnEvRB78US9kCOPHZ/5Rlu9uS5Wh68cUK+1
+   i33ag02iWF4wSN6ySiB3PqsIaRKzGw8ltCIbBTpdvgoPoGqXohju+Crjn
+   8BUWEADt7GAWr4tw7bJKit2pioOulo839jV8t42sBlThkK2xPTd4ysMJS
+   U5slsxrJ+BHdLT1I7laEjiiS0XMi7MzfWCynX/36rXNvGoVERYv9qxADb
+   s1334fyZh46j3D2xcxJ9bKAlDy5czIZmcVWlmH8AydVBHHmSedknm2VGM
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
+   d="scan'208";a="29076468"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 14 Feb 2023 15:12:57 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 14 Feb 2023 15:12:57 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 14 Feb 2023 15:12:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676383977; x=1707919977;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mri8wotyu4TxK5L7MM4u6zbY5O40yObsw3E1ScBxR/8=;
+  b=a2Lj26EjJ7wmXSpY/hqYkh+5cK/Sz1tADb1dFVS+lEcs4Dne+4z/ey6T
+   gHoXPL79UTG6rSqw+JeUVvAX3qVm0bXmIdoJOs0R3wyfvszO91h3BwlO7
+   9m4VBkLazSRXStfKyb0VSs6XPTUei5eGb3obNOgZTdrlvaU6eImgSr9DW
+   YisQiz3kVRyVWJ/QxZmFSPv5pL+3gyViDnpMmjV84OkCr+rc9Ts5QoBA2
+   U87+cwHyl2D360ULb7qDvZWqSLaPGmPMIZ+u332p29AmcFI8ceTdeAOG+
+   XgXGQoLUOGtzh7rmlA7BbpUa4fglHefZOJhXXKfvyTcxaISK8X6NPnwD/
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
+   d="scan'208";a="29076467"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 14 Feb 2023 15:12:57 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 34F01280056;
+        Tue, 14 Feb 2023 15:12:57 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+Subject: Re: [PATCH v3 3/6] drm: lcdif: Determine bus format and flags in ->atomic_check()
+Date:   Tue, 14 Feb 2023 15:12:55 +0100
+Message-ID: <1755644.VLH7GnMWUR@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230213085612.1026538-4-victor.liu@nxp.com>
+References: <20230213085612.1026538-1-victor.liu@nxp.com> <20230213085612.1026538-4-victor.liu@nxp.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023, at 15:01, Greg Kroah-Hartman wrote:
-> The get_arch_dma_ops() arch-specific function never does anything with
-> the struct bus_type that is passed into it, so remove it entirely as it
-> is not needed.
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Liu,
+
+thanks for the update.
+
+Am Montag, 13. Februar 2023, 09:56:09 CET schrieb Liu Ying:
+> Instead of determining LCDIF output bus format and bus flags in
+> ->atomic_enable(), do that in ->atomic_check().  This is a
+> preparation for the upcoming patch to check consistent bus format
+> and bus flags across all first downstream bridges in ->atomic_check().
+> New lcdif_crtc_state structure is introduced to cache bus format
+> and bus flags states in ->atomic_check() so that they can be read
+> in ->atomic_enable().
+>=20
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 > ---
-> Note: Unless someone objects, I would like to take this through the
-> driver-core tree, as further bus_type cleanups depend on it, and it's
-> stand-alone from everyone else's tree at the moment from what I can
-> determine.
+> v2->v3:
+> * No change.
+>=20
+> v1->v2:
+> * Split from patch 2/2 in v1. (Marek, Alexander)
+> * Add comment on the 'base' member of lcdif_crtc_state structure to
+>   note it should always be the first member. (Lothar)
+>=20
+>  drivers/gpu/drm/mxsfb/lcdif_kms.c | 138 ++++++++++++++++++++++--------
+>  1 file changed, 100 insertions(+), 38 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> b/drivers/gpu/drm/mxsfb/lcdif_kms.c index e54200a9fcb9..294cecdf5439 1006=
+44
+> --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> @@ -30,6 +30,18 @@
+>  #include "lcdif_drv.h"
+>  #include "lcdif_regs.h"
+>=20
+> +struct lcdif_crtc_state {
+> +	struct drm_crtc_state	base;	/* always be the first=20
+member */
 
-Nice find!
+Is it strictly necessary that base is the first member? to_lcdif_crtc_state=
+()=20
+should be able to handle any position within the struct. I mean it's sensib=
+le=20
+to put it in first place. But the comment somehow bugs me.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> +	u32			bus_format;
+> +	u32			bus_flags;
+> +};
+> +
+> +static inline struct lcdif_crtc_state *
+> +to_lcdif_crtc_state(struct drm_crtc_state *s)
+> +{
+> +	return container_of(s, struct lcdif_crtc_state, base);
+> +}
+> +
+>  /*
+> -------------------------------------------------------------------------=
+=2D-
+> -- * CRTC
+>   */
+> @@ -385,48 +397,72 @@ static void lcdif_reset_block(struct lcdif_drm_priv=
+ate
+> *lcdif) readl(lcdif->base + LCDC_V8_CTRL);
+>  }
+>=20
+> -static void lcdif_crtc_mode_set_nofb(struct lcdif_drm_private *lcdif,
+> -				     struct drm_plane_state=20
+*plane_state,
+> -				     struct drm_bridge_state=20
+*bridge_state,
+> -				     const u32 bus_format)
+> +static void lcdif_crtc_mode_set_nofb(struct drm_crtc_state *crtc_state,
+> +				     struct drm_plane_state=20
+*plane_state)
+>  {
+> -	struct drm_device *drm =3D lcdif->crtc.dev;
+> -	struct drm_display_mode *m =3D &lcdif->crtc.state->adjusted_mode;
+> -	u32 bus_flags =3D 0;
+> -
+> -	if (lcdif->bridge->timings)
+> -		bus_flags =3D lcdif->bridge->timings->input_bus_flags;
+> -	else if (bridge_state)
+> -		bus_flags =3D bridge_state->input_bus_cfg.flags;
+> +	struct lcdif_crtc_state *lcdif_crtc_state =3D
+> to_lcdif_crtc_state(crtc_state); +	struct drm_device *drm =3D
+> crtc_state->crtc->dev;
+> +	struct lcdif_drm_private *lcdif =3D to_lcdif_drm_private(drm);
+> +	struct drm_display_mode *m =3D &crtc_state->adjusted_mode;
+>=20
+>  	DRM_DEV_DEBUG_DRIVER(drm->dev, "Pixel clock: %dkHz (actual: %dkHz)
+\n",
+>  			     m->crtc_clock,
+>  			     (int)(clk_get_rate(lcdif->clk) / 1000));
+>  	DRM_DEV_DEBUG_DRIVER(drm->dev, "Bridge bus_flags: 0x%08X\n",
+> -			     bus_flags);
+> +			     lcdif_crtc_state->bus_flags);
+>  	DRM_DEV_DEBUG_DRIVER(drm->dev, "Mode flags: 0x%08X\n", m->flags);
+>=20
+>  	/* Mandatory eLCDIF reset as per the Reference Manual */
+>  	lcdif_reset_block(lcdif);
+>=20
+> -	lcdif_set_formats(lcdif, plane_state, bus_format);
+> +	lcdif_set_formats(lcdif, plane_state, lcdif_crtc_state->bus_format);
+>=20
+> -	lcdif_set_mode(lcdif, bus_flags);
+> +	lcdif_set_mode(lcdif, lcdif_crtc_state->bus_flags);
+>  }
+>=20
+>  static int lcdif_crtc_atomic_check(struct drm_crtc *crtc,
+>  				   struct drm_atomic_state *state)
+>  {
+> +	struct drm_device *drm =3D crtc->dev;
+> +	struct lcdif_drm_private *lcdif =3D to_lcdif_drm_private(drm);
+>  	struct drm_crtc_state *crtc_state =3D=20
+drm_atomic_get_new_crtc_state(state,
+>  							=09
+	  crtc);
+> +	struct lcdif_crtc_state *lcdif_crtc_state =3D
+> to_lcdif_crtc_state(crtc_state); bool has_primary =3D crtc_state->plane_m=
+ask
+> &
+>  			   drm_plane_mask(crtc->primary);
+> +	struct drm_bridge_state *bridge_state;
+> +	struct drm_bridge *bridge =3D lcdif->bridge;
+> +	int ret;
+>=20
+>  	/* The primary plane has to be enabled when the CRTC is active. */
+>  	if (crtc_state->active && !has_primary)
+>  		return -EINVAL;
+>=20
+> -	return drm_atomic_add_affected_planes(state, crtc);
+> +	ret =3D drm_atomic_add_affected_planes(state, crtc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	bridge_state =3D drm_atomic_get_new_bridge_state(state, bridge);
+> +	if (!bridge_state)
+> +		lcdif_crtc_state->bus_format =3D MEDIA_BUS_FMT_FIXED;
+> +	else
+> +		lcdif_crtc_state->bus_format =3D bridge_state-
+>input_bus_cfg.format;
+> +
+> +	if (lcdif_crtc_state->bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
+> +		dev_warn_once(drm->dev,
+> +			      "Bridge does not provide bus format,=20
+assuming
+> MEDIA_BUS_FMT_RGB888_1X24.\n" +			      "Please fix=20
+bridge driver by
+> handling atomic_get_input_bus_fmts.\n"); +		lcdif_crtc_state-
+>bus_format =3D
+> MEDIA_BUS_FMT_RGB888_1X24;
+> +	}
+> +
+> +	if (bridge->timings)
+> +		lcdif_crtc_state->bus_flags =3D bridge->timings-
+>input_bus_flags;
+> +	else if (bridge_state)
+> +		lcdif_crtc_state->bus_flags =3D bridge_state-
+>input_bus_cfg.flags;
+> +	else
+> +		lcdif_crtc_state->bus_flags =3D 0;
+> +
+> +	return 0;
+>  }
+>=20
+>  static void lcdif_crtc_atomic_flush(struct drm_crtc *crtc,
+> @@ -458,35 +494,21 @@ static void lcdif_crtc_atomic_enable(struct drm_crtc
+> *crtc, struct drm_atomic_state *state)
+>  {
+>  	struct lcdif_drm_private *lcdif =3D to_lcdif_drm_private(crtc->dev);
+> -	struct drm_plane_state *new_pstate =3D=20
+drm_atomic_get_new_plane_state(state,
+> -							=09
+	    crtc->primary);
+> +	struct drm_crtc_state *new_crtc_state =3D
+> drm_atomic_get_new_crtc_state(state, crtc); +	struct drm_plane_state
+> *new_plane_state =3D drm_atomic_get_new_plane_state(state, +		=09
+						=09
+> crtc->primary);
 
-It looks like the bus was last required in 2020 before commit
-255a69a94b8c ("sparc32: use per-device dma_ops").
+While the rename to 'new_plane_state' makes sense, this is an unrelated=20
+change.
 
-    Arnd
+>  	struct drm_display_mode *m =3D &lcdif->crtc.state->adjusted_mode;
+> -	struct drm_bridge_state *bridge_state =3D NULL;
+>  	struct drm_device *drm =3D lcdif->drm;
+> -	u32 bus_format;
+>  	dma_addr_t paddr;
+>=20
+> -	bridge_state =3D drm_atomic_get_new_bridge_state(state, lcdif-
+>bridge);
+> -	if (!bridge_state)
+> -		bus_format =3D MEDIA_BUS_FMT_FIXED;
+> -	else
+> -		bus_format =3D bridge_state->input_bus_cfg.format;
+> -
+> -	if (bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
+> -		dev_warn_once(drm->dev,
+> -			      "Bridge does not provide bus format,=20
+assuming
+> MEDIA_BUS_FMT_RGB888_1X24.\n" -			      "Please fix=20
+bridge driver by
+> handling atomic_get_input_bus_fmts.\n"); -		bus_format =3D
+> MEDIA_BUS_FMT_RGB888_1X24;
+> -	}
+> -
+>  	clk_set_rate(lcdif->clk, m->crtc_clock * 1000);
+>=20
+>  	pm_runtime_get_sync(drm->dev);
+>=20
+> -	lcdif_crtc_mode_set_nofb(lcdif, new_pstate, bridge_state,=20
+bus_format);
+> +	lcdif_crtc_mode_set_nofb(new_crtc_state, new_plane_state);
+>=20
+>  	/* Write cur_buf as well to avoid an initial corrupt frame */
+> -	paddr =3D drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
+> +	paddr =3D drm_fb_dma_get_gem_addr(new_plane_state->fb,=20
+new_plane_state, 0);
+>  	if (paddr) {
+>  		writel(lower_32_bits(paddr),
+>  		       lcdif->base + LCDC_V8_CTRLDESCL_LOW0_4);
+> @@ -520,6 +542,46 @@ static void lcdif_crtc_atomic_disable(struct drm_crtc
+> *crtc, pm_runtime_put_sync(drm->dev);
+>  }
+>=20
+> +static void lcdif_crtc_reset(struct drm_crtc *crtc)
+> +{
+> +	struct lcdif_crtc_state *state;
+> +
+> +	if (crtc->state)
+> +		__drm_atomic_helper_crtc_destroy_state(crtc->state);
+> +
+> +	kfree(to_lcdif_crtc_state(crtc->state));
+
+Shouldn't this be just
+if (crtc->state)
+	crtc->funcs->atomic_destroy_state(crtc, crtc->state);
+
+similar to what drm_atomic_helper_crtc_reset is doing? This will eventually=
+=20
+call lcdif_crtc_atomic_destroy_state().
+
+> +	crtc->state =3D NULL;
+> +
+> +	state =3D kzalloc(sizeof(*state), GFP_KERNEL);
+> +	if (state)
+> +		__drm_atomic_helper_crtc_reset(crtc, &state->base);
+
+Is there a specific reason to not call this helper when 'state=3D=3DNULL'?=
+=20
+drm_atomic_helper_crtc_reset() does call this even when passing NULL for=20
+crtc_state.
+
+> +}
+> +
+> +static struct drm_crtc_state *
+> +lcdif_crtc_atomic_duplicate_state(struct drm_crtc *crtc)
+> +{
+> +	struct lcdif_crtc_state *old =3D to_lcdif_crtc_state(crtc->state);
+> +	struct lcdif_crtc_state *new;
+> +
+
+drm_atomic_helper_crtc_duplicate_state() has a check for
+if (WARN_ON(!crtc->state))
+	return NULL;
+
+Maybe it should be added here as well. But then the call to=20
+to_lcdif_crtc_state() has to be moved down.
+
+Best regards,
+Alexander
+
+> +	new =3D kzalloc(sizeof(*new), GFP_KERNEL);
+> +	if (!new)
+> +		return NULL;
+> +
+> +	__drm_atomic_helper_crtc_duplicate_state(crtc, &new->base);
+> +
+> +	new->bus_format =3D old->bus_format;
+> +	new->bus_flags =3D old->bus_flags;
+> +
+> +	return &new->base;
+> +}
+> +
+> +static void lcdif_crtc_atomic_destroy_state(struct drm_crtc *crtc,
+> +					    struct drm_crtc_state=20
+*state)
+> +{
+> +	__drm_atomic_helper_crtc_destroy_state(state);
+> +	kfree(to_lcdif_crtc_state(state));
+> +}
+> +
+>  static int lcdif_crtc_enable_vblank(struct drm_crtc *crtc)
+>  {
+>  	struct lcdif_drm_private *lcdif =3D to_lcdif_drm_private(crtc->dev);
+> @@ -548,12 +610,12 @@ static const struct drm_crtc_helper_funcs
+> lcdif_crtc_helper_funcs =3D { };
+>=20
+>  static const struct drm_crtc_funcs lcdif_crtc_funcs =3D {
+> -	.reset =3D drm_atomic_helper_crtc_reset,
+> +	.reset =3D lcdif_crtc_reset,
+>  	.destroy =3D drm_crtc_cleanup,
+>  	.set_config =3D drm_atomic_helper_set_config,
+>  	.page_flip =3D drm_atomic_helper_page_flip,
+> -	.atomic_duplicate_state =3D drm_atomic_helper_crtc_duplicate_state,
+> -	.atomic_destroy_state =3D drm_atomic_helper_crtc_destroy_state,
+> +	.atomic_duplicate_state =3D lcdif_crtc_atomic_duplicate_state,
+> +	.atomic_destroy_state =3D lcdif_crtc_atomic_destroy_state,
+>  	.enable_vblank =3D lcdif_crtc_enable_vblank,
+>  	.disable_vblank =3D lcdif_crtc_disable_vblank,
+>  };
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
