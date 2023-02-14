@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05DB696826
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908AA696830
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbjBNPdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S232210AbjBNPg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBNPdc (ORCPT
+        with ESMTP id S229622AbjBNPgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:33:32 -0500
+        Tue, 14 Feb 2023 10:36:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7BE4EEC;
-        Tue, 14 Feb 2023 07:33:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E814231;
+        Tue, 14 Feb 2023 07:36:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71587B81DDC;
-        Tue, 14 Feb 2023 15:33:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9E8C433EF;
-        Tue, 14 Feb 2023 15:33:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9BDB81E17;
+        Tue, 14 Feb 2023 15:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D953C433D2;
+        Tue, 14 Feb 2023 15:36:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676388796;
-        bh=aHy3Iiimaf1qswXNWdy2gKuRpQCCTYiwjKtlDK5+Nko=;
+        s=k20201202; t=1676388982;
+        bh=SUUZC64r6jozYPFZgHOdcKJ2XL7T3VA4vV3vgcIkpZw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OKJBy5yG+mjxCmCNmSvuQ13jQ3a8EC3iKLd04yw7dNpJnlseSQ+CpGYarmgX0Ii1C
-         M3jv5abdwIpI60q2oUUtRXYoQAmBaOmlsggQJfRPWouvZ/AGEYlzQNK8ZVMH5PS1qk
-         WYGlSOkxPxODivJdfmEh03oXzkeWgfSLQpzqO6bbRVfZn93B9rKxEiYflBEsyv3ZUB
-         Jyb+OFwbWPQkIgaC/b0lSlp5BqDbFUADR2MOv0lUa8C8NBosJjxHRUQHb11gPkhowj
-         aqZP/LNwKugpUTaYtw/9m2eHw0aeSp/M3QVd/r30UCd5gfcy3Aru8bEhINzM4NQJiU
-         ektnJ7CZJ/DSQ==
-Date:   Tue, 14 Feb 2023 10:33:15 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Message-ID: <Y+upu2+mLUG9R6+/@sashalap>
-References: <20230213144745.696901179@linuxfoundation.org>
- <cc3f4cfb-adbc-c3b7-1c21-bb28e98499d8@gmail.com>
- <Y+soPsujgwChdgr7@kroah.com>
- <Y+ugWb4vsEyvd9W0@shell.armlinux.org.uk>
- <Y+ukMhMS7DvuFLOJ@sashalap>
- <Y+uoAEzpM588j/lw@shell.armlinux.org.uk>
+        b=J8ubYdnPp+ayC/tfWvgz6Nra4BJzPHgJj5KDbiZBBzGo8d9piqINqrzDsfV/5RxQ5
+         jlsu4ohRkyOXS+vdVjZReJv2kGfiXRlKAb7zOOfurqThNTWdkmGoTeTxpVjfq1WNbf
+         w9NFXUkhwuvEpKRL07zIkaukxFh07ItJPmrfJpc0klt599BN+tGaoc3B8VoCX3ZcMQ
+         FjT+wLhnuqlfFRwzBSiLIH4A9Q1616fVu3qse+hBWze7B8JSsAlsxUZ/Ch7IQbGqcX
+         ldI5K1/UG3egqxzxwo5rVDR4Otl46XaxBysahq7C5ZjzFy6h7mw6oZvR8X0ygfnbhr
+         85EjWc8RBDZ3Q==
+Date:   Tue, 14 Feb 2023 21:06:17 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>, Lee Jones <lee@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/7] dt-bindings: mfd: qcom,spmi-pmic: Add pattern
+ property for phy
+Message-ID: <Y+uqcb+CZUy/8GYh@matsya>
+References: <20230208190200.2966723-1-abel.vesa@linaro.org>
+ <20230208190200.2966723-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+uoAEzpM588j/lw@shell.armlinux.org.uk>
+In-Reply-To: <20230208190200.2966723-3-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,75 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 03:25:52PM +0000, Russell King (Oracle) wrote:
->On Tue, Feb 14, 2023 at 10:09:38AM -0500, Sasha Levin wrote:
->> On Tue, Feb 14, 2023 at 02:53:13PM +0000, Russell King (Oracle) wrote:
->> > On Tue, Feb 14, 2023 at 07:20:46AM +0100, Greg Kroah-Hartman wrote:
->> > > On Mon, Feb 13, 2023 at 11:50:24AM -0800, Florian Fainelli wrote:
->> > > > On 2/13/23 06:49, Greg Kroah-Hartman wrote:
->> > > > > This is the start of the stable review cycle for the 5.10.168 release.
->> > > > > There are 139 patches in this series, all will be posted as a response
->> > > > > to this one.  If anyone has any issues with these being applied, please
->> > > > > let me know.
->> > > > >
->> > > > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
->> > > > > Anything received after that time might be too late.
->> > > > >
->> > > > > The whole patch series can be found in one patch at:
->> > > > > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
->> > > > > or in the git tree and branch at:
->> > > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
->> > > > > and the diffstat can be found below.
->> > > > >
->> > > > > thanks,
->> > > > >
->> > > > > greg k-h
->> > > >
->> > > > There is a regression coming from:
->> > > >
->> > > > nvmem: core: fix registration vs use race
->> > > >
->> > > > which causes the following to happen for MTD devices:
->> > > >
->> > > > [    6.031640] kobject_add_internal failed for mtd0 with -EEXIST, don't try
->> > > > to register things with the same name in the same directory.
->> > > > [    7.846965] spi-nor: probe of spi0.0 failed with error -17
->> > > >
->> > > > attached is a full log with the call trace. This does not happen with
->> > > > v6.2-rc8 where the MTD partitions are successfully registered.
->> > >
->> > > Can you use `git bisect` to find the offending commit?
->> >
->> > The reason for this is because, due to how my patch series was
->> > backported, you have ended up with nvmem_register() initialising
->> > its embedded device, and then calling device_add() on it _twice_.
->> >
->> > Basically, the backport of:
->> >
->> > 	"nvmem: core: fix registration vs use race"
->> >
->> > is broken, because the original patch _moved_ the device_add() and
->> > that has not been carried forward to whatever got applied to stable
->> > trees.
->> >
->> > It looks like the 5.15-stable version of this patch was correct.
->> >
->> > Maybe whoever tried to fixup the failure needs to try again?
->>
->> I've dropped the backport series from both 5.15 and 5.10.
->
->So you've dropped what looks to be a perfectly good backport in 5.15,
->and all of the 5.10 despite it just being the last patch which is the
->problem. Sounds like a total over-reaction to me.
+On 08-02-23, 21:01, Abel Vesa wrote:
+> The phy pattern property will be used for providing eUSB2 repeater
+> functionality. This will be modelled as a Qualcomm PHY driver.
 
-The context is that we want to get the releases out today, and neither
-of us will have time to verify that we did the right thing in 5.15 in
-the next few hours.
+Lee,
 
-I'm just defering it to the next release cycle which is probably a few
-days away, not completely throwing it away.... why is it such a big
-deal?
+Can I get your ack and merge this thru phy tree
+
+
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> The v4 is here:
+> https://lore.kernel.org/all/20230207135551.1418637-3-abel.vesa@linaro.org/
+> 
+> Changes since v4:
+>  * none
+> 
+> Changes since v3:
+>  * made this the second patch rather than the first in the series
+> 
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> index adf88245c409..1e6fadec1301 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> @@ -135,6 +135,10 @@ patternProperties:
+>      type: object
+>      $ref: /schemas/pinctrl/qcom,pmic-gpio.yaml#
+>  
+> +  "phy@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/phy/qcom,snps-eusb2-repeater.yaml#
+> +
+>    "pon@[0-9a-f]+$":
+>      type: object
+>      $ref: /schemas/power/reset/qcom,pon.yaml#
+> -- 
+> 2.34.1
 
 -- 
-Thanks,
-Sasha
+~Vinod
