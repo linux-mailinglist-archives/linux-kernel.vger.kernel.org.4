@@ -2,311 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A481C6968B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784336968B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjBNQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S229618AbjBNQCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbjBNP74 (ORCPT
+        with ESMTP id S229496AbjBNQCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:59:56 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E1C4EF8;
-        Tue, 14 Feb 2023 07:59:37 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id w14-20020a17090a5e0e00b00233d3b9650eso8385688pjf.4;
-        Tue, 14 Feb 2023 07:59:37 -0800 (PST)
+        Tue, 14 Feb 2023 11:02:45 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2111.outbound.protection.outlook.com [40.107.241.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319012BF03;
+        Tue, 14 Feb 2023 08:02:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OEXrwto8p/T0S6D6r5AmpfWF0hwhQhFWdtR1aU6EmSeTiuN8jN6dfSlW9IstACi0UY0xS5sesHdXBFki872p36DHg/bIG/YPw/eYGSf8Z4BPVetqvEEnravOq1J/xSF2pDnQ0r5fuWexeLbg6GC/uCuRlTJzhDHmy5AproSj/mCH5fNG2sra+dczDyrHpmWU7fJ78UCN5NGUvLlBEvVx3WiPa6oQfLi8//rrLz7HfTC4nTc5W6SMvbnWaIfuEfWGM/l1Sat290oVisTNV1m1+jK86at0nyQLrx9jBBpEW9tNDmSZIXk39HQtg7ROrqZZO8WsynxtZzVQKKKpsudVjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lZ7crUH7ogiA9pYYJzwdP6/8qOecBgv3FRlNza3gMog=;
+ b=WEEYW2ZJPA8heXUu5BXvpqmFS30Uq7xFlP+VRNc9/OtRqzeBUHIOJ1u1gkcSDqnYJRY1/lqYRG7Ut+yw9cXzDmiqmc8NuK4y2iIKVB4+OF9hji0+HiunWHlrrjI63JkQaRxnn1ZdALTByISUWdsesHTLq8nJoChOZjLlg/g/WkRs488rdiYTg1xP+YRZEXFRxVkRCGWJYC31IbYRa7Ov4PDmNVV+O4/wVVk8KYD/oMWayx9pc9J2x6EJ0YWqdpB6mKAiOYbTDx9VYzWBP+U8JR588VTFnGJ2+GqXqNKiAzPgPrq0m4wXHhJAKNW5Sc9/xPfHZoR0EI/CljC0ZNwZCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3g86130uxQggxNGw5hMsuR1xjKf2UnEXUI3pZWrB+zM=;
-        b=QcKhuLxD8asj0kZsWaPRbgWs2XT8VLb30pfsTaOckvDJupF88yC7qaFi3lWZfyPGcW
-         mI0LuhqYrA1R7D9TGQ6Bt8eEPIzxPUTb6URIIp1f6CeSu52KX8S+0wOxy6luHIoH9oy6
-         lqyK+n4FdsbErGo78uljdTf0rJzHvyrYTS91XK7E3iRUcik4GlAf66kKQ8KN8YYeMjvx
-         Jqw5T8L9gyFKqWQq9YhZIVsPw/fmdmgm2KZffUOHVCdI2SZwBkHWAlwjZX+tBlzklw5R
-         7juv7VtVsSwuiMwz9w/9e7m5YtPEdc8QdJU16ZpiAxbD8cr54wTIBQ0CIkDAAB3d30Ts
-         /h/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3g86130uxQggxNGw5hMsuR1xjKf2UnEXUI3pZWrB+zM=;
-        b=5iPhHdIDmzc2ltKpTx6aQSAA8Z3P3pOPhyPWKy2bY0skiXJQp5FkDsVJ3y7glx9sZ+
-         BZzr7OkIEM79fNx35xdqycQhnkCCiwdb13j4J6BczusUY5bb0drxfwdfv2Lw6Z2KPGKc
-         qrNqE0BKaIIsVO/KxrrIAqAHddzF9wWmZFxiPMzkySNCVfEY8ATpzEEjsBWD2scPAIri
-         CzsGMboxJIe/cGFVdtiqvMB8oWcxSSvWgICqhUjb9tuk9FqjmxBLwkzO9CJpykLdNhb8
-         LWLq5ceMc3Z1o/TJ4rtVic+AGRIbYtOmBclZfjMguXAVWaRPRXt4GDAIrxJ+sTBs9lAY
-         3fkQ==
-X-Gm-Message-State: AO0yUKWNRPRfw/tkX5o3FoGe3yGrfkjmDIHJkeiSrKa1/0CMRpi69pW+
-        zm+IsnXBUFg1kd7eoo45Pdo=
-X-Google-Smtp-Source: AK7set/tJsqtwlyKqGqi+ILx69c+tzsbCCp7rep+puceR0LRE9p78Ievlg5P9dVL/lKi+YWzbiIzdQ==
-X-Received: by 2002:a17:90b:3806:b0:233:be3d:8a49 with SMTP id mq6-20020a17090b380600b00233be3d8a49mr2979380pjb.11.1676390377060;
-        Tue, 14 Feb 2023 07:59:37 -0800 (PST)
-Received: from strix-laptop (2001-b011-20e0-1465-11be-7287-d61f-f938.dynamic-ip6.hinet.net. [2001:b011:20e0:1465:11be:7287:d61f:f938])
-        by smtp.gmail.com with ESMTPSA id mp6-20020a17090b190600b00233c9eb64f3sm5862366pjb.47.2023.02.14.07.59.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 07:59:36 -0800 (PST)
-Date:   Tue, 14 Feb 2023 23:59:26 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Barret Rhoden <brho@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
-Message-ID: <Y+uv3iTajGoOuNMO@strix-laptop>
-References: <20230207035139.272707-1-shiyn.lin@gmail.com>
- <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
- <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
- <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
- <Y+Z8ymNYc+vJMBx8@strix-laptop>
- <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lZ7crUH7ogiA9pYYJzwdP6/8qOecBgv3FRlNza3gMog=;
+ b=Nag61gW9U8QjEtud4GscEiO2j0JoEtzXNmQcA7X8fpNqJh8LPSSs5AGXTAmcv8WkmX83FAzAd9PpaKfgKPkdHitQZMDWZq3fi0Ui6T7QzTx2LBXZlfSA4J1QHEOn5DZrxP9ZgnJTZK96vDOJPDTKjytT4ndKnwV/i855aKPvVm8=
+Received: from FR0P281CA0090.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1e::15)
+ by AM0PR03MB6196.eurprd03.prod.outlook.com (2603:10a6:20b:15b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 16:02:32 +0000
+Received: from VI1EUR06FT032.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:d10:1e:cafe::f6) by FR0P281CA0090.outlook.office365.com
+ (2603:10a6:d10:1e::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.10 via Frontend
+ Transport; Tue, 14 Feb 2023 16:02:32 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ VI1EUR06FT032.mail.protection.outlook.com (10.13.7.224) with Microsoft SMTP
+ Server id 15.20.6086.24 via Frontend Transport; Tue, 14 Feb 2023 16:02:31
+ +0000
+Received: from esd-s20.esd.local (jenkins.esd [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id 8DAB07C1635;
+        Tue, 14 Feb 2023 17:02:31 +0100 (CET)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id 7C8292E0125; Tue, 14 Feb 2023 17:02:31 +0100 (CET)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH v2 0/3] can: esd_usb: Some more preparation for supporting esd CAN-USB/3
+Date:   Tue, 14 Feb 2023 17:02:20 +0100
+Message-Id: <20230214160223.1199464-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1EUR06FT032:EE_|AM0PR03MB6196:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 90b4db36-0cfa-4f38-9d7e-08db0ea4e146
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Qos/81rnq23GG/ZzeQ5FpZVRqDc9AKzuTanJppRV2z3Fs17IYLBrUeNi0Qy5mOoVkPXKGAsEuFQ/PEZ5Qf1ppdwuDeSr0FQz4hbc5Op6yDBZpGztXl+ahRu1e5UAn+hZIeq1IuMP1Qtypk/s6xiHZmlVx2RX9/qQtEj6a3K81ejijmf1aVDJKy/ucwHZQ31A4FzipLqZDmU5iRCXX7oqgl4Ko8Iht9zfGL51RlQJ4/hUiqAuRSoD7wHib6mdx59NA1T7+mr8+4Sy5zmwOH8vz13xknvQvPZ9j6VLQirVDwIR9yzjsyeCGipuGPSuvlDO5wJYai/LpD7Iur8rXQmwJfb0uS0HAWfl9oAjQ+/I8OWMtQFnge+0BCYBQ2l0KAwtAQzIwOlvvAYRMGVRrZTwYrK8vZKQn1YsQKi6zoICdKjYddHW1GheahNwZfnrf0ME6z337wLFOAYkPmkcAfhJCfuu4isATSf1VOySgNOSCk4IfrpRmU7lEVUH+lrWw4Fi7hHkg5/Ga8AxqjiJSEgEj4XmUj7GQoLP0B5f+6uaTMX7XPPA8O0pZp0cDtqIeOAt29701gJBv3Knf7EOoJgBaNo58mkGkMEwb7BEYhR/a1mrAv4iofT8CaEJDaNtIej++VzuVFQRdAPrpkP/hYqwK4ljCqFUXh2YQ40GaEtCScA=
+X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(346002)(136003)(376002)(396003)(451199018)(36840700001)(46966006)(1076003)(356005)(40480700001)(5660300002)(44832011)(6666004)(336012)(81166007)(2616005)(36860700001)(26005)(478600001)(186003)(6266002)(47076005)(83380400001)(36756003)(4326008)(8676002)(316002)(8936002)(70206006)(70586007)(966005)(41300700001)(86362001)(110136005)(54906003)(42186006)(2906002)(82310400005);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 16:02:31.9202
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90b4db36-0cfa-4f38-9d7e-08db0ea4e146
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT032.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB6196
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:58:30AM +0100, David Hildenbrand wrote:
-> On 10.02.23 18:20, Chih-En Lin wrote:
-> > On Fri, Feb 10, 2023 at 11:21:16AM -0500, Pasha Tatashin wrote:
-> > > > > > Currently, copy-on-write is only used for the mapped memory; the child
-> > > > > > process still needs to copy the entire page table from the parent
-> > > > > > process during forking. The parent process might take a lot of time and
-> > > > > > memory to copy the page table when the parent has a big page table
-> > > > > > allocated. For example, the memory usage of a process after forking with
-> > > > > > 1 GB mapped memory is as follows:
-> > > > > 
-> > > > > For some reason, I was not able to reproduce performance improvements
-> > > > > with a simple fork() performance measurement program. The results that
-> > > > > I saw are the following:
-> > > > > 
-> > > > > Base:
-> > > > > Fork latency per gigabyte: 0.004416 seconds
-> > > > > Fork latency per gigabyte: 0.004382 seconds
-> > > > > Fork latency per gigabyte: 0.004442 seconds
-> > > > > COW kernel:
-> > > > > Fork latency per gigabyte: 0.004524 seconds
-> > > > > Fork latency per gigabyte: 0.004764 seconds
-> > > > > Fork latency per gigabyte: 0.004547 seconds
-> > > > > 
-> > > > > AMD EPYC 7B12 64-Core Processor
-> > > > > Base:
-> > > > > Fork latency per gigabyte: 0.003923 seconds
-> > > > > Fork latency per gigabyte: 0.003909 seconds
-> > > > > Fork latency per gigabyte: 0.003955 seconds
-> > > > > COW kernel:
-> > > > > Fork latency per gigabyte: 0.004221 seconds
-> > > > > Fork latency per gigabyte: 0.003882 seconds
-> > > > > Fork latency per gigabyte: 0.003854 seconds
-> > > > > 
-> > > > > Given, that page table for child is not copied, I was expecting the
-> > > > > performance to be better with COW kernel, and also not to depend on
-> > > > > the size of the parent.
-> > > > 
-> > > > Yes, the child won't duplicate the page table, but fork will still
-> > > > traverse all the page table entries to do the accounting.
-> > > > And, since this patch expends the COW to the PTE table level, it's not
-> > > > the mapped page (page table entry) grained anymore, so we have to
-> > > > guarantee that all the mapped page is available to do COW mapping in
-> > > > the such page table.
-> > > > This kind of checking also costs some time.
-> > > > As a result, since the accounting and the checking, the COW PTE fork
-> > > > still depends on the size of the parent so the improvement might not
-> > > > be significant.
-> > > 
-> > > The current version of the series does not provide any performance
-> > > improvements for fork(). I would recommend removing claims from the
-> > > cover letter about better fork() performance, as this may be
-> > > misleading for those looking for a way to speed up forking. In my
-> > 
-> >  From v3 to v4, I changed the implementation of the COW fork() part to do
-> > the accounting and checking. At the time, I also removed most of the
-> > descriptions about the better fork() performance. Maybe it's not enough
-> > and still has some misleading. I will fix this in the next version.
-> > Thanks.
-> > 
-> > > case, I was looking to speed up Redis OSS, which relies on fork() to
-> > > create consistent snapshots for driving replicates/backups. The O(N)
-> > > per-page operation causes fork() to be slow, so I was hoping that this
-> > > series, which does not duplicate the VA during fork(), would make the
-> > > operation much quicker.
-> > 
-> > Indeed, at first, I tried to avoid the O(N) per-page operation by
-> > deferring the accounting and the swap stuff to the page fault. But,
-> > as I mentioned, it's not suitable for the mainline.
-> > 
-> > Honestly, for improving the fork(), I have an idea to skip the per-page
-> > operation without breaking the logic. However, this will introduce the
-> > complicated mechanism and may has the overhead for other features. It
-> > might not be worth it. It's hard to strike a balance between the
-> > over-complicated mechanism with (probably) better performance and data
-> > consistency with the page status. So, I would focus on the safety and
-> > stable approach at first.
-> 
-> Yes, it is most probably possible, but complexity, robustness and
-> maintainability have to be considered as well.
-> 
-> Thanks for implementing this approach (only deduplication without other
-> optimizations) and evaluating it accordingly. It's certainly "cleaner", such
-> that we only have to mess with unsharing and not with other
-> accounting/pinning/mapcount thingies. But it also highlights how intrusive
-> even this basic deduplication approach already is -- and that most benefits
-> of the original approach requires even more complexity on top.
-> 
-> I am not quite sure if the benefit is worth the price (I am not to decide
-> and I would like to hear other options).
+Another small batch of patches to be seen as preparation for adding
+support of the newly available esd CAN-USB/3 to esd_usb.c.
 
-I'm looking at the discussion of page table sharing in 2002 [1]. 
-It looks like in 2002 ~ 2006, there also have some patches try to
-improve fork().
+Due to some unresolved questions adding support for
+CAN_CTRLMODE_BERR_REPORTING has been postponed to one of the future
+patches.
 
-After that, I also saw one thread which is about another shared page
-table patch's benchmark. I can't find the original patch though [2].
-But, I found the probably same patch in 2005 [3], it also mentioned
-the previous benchmark discussion:
+*Resend of the whole series as v2 for easier handling.*
+---
+* Changelog *
 
-"
-For those familiar with the shared page table patch I did a couple of years
-ago, this patch does not implement copy-on-write page tables for private
-mappings.  Analysis showed the cost and complexity far outweighed any
-potential benefit.
-"
+v1:
+Link: https://lore.kernel.org/all/20221219212013.1294820-1-frank.jungclaus@esd.eu/
+Link: https://lore.kernel.org/all/20221219212717.1298282-1-frank.jungclaus@esd.eu/
 
-However, it might be different right now. For example, the implemetation
-. We have split page table lock now, so we don't have to consider the
-page_table_share_lock thing. Also, presently, we have different use
-cases (shells [2] v.s. VM cloning and fuzzing) to consider.
+v1 -> v2:
 
-Nonetheless, I still think the discussion can provide some of the mind
-to us.
+ * [Patch v2 1/3]: No changes.
 
-BTW, It seems like the 2002 patch [1] is different from the 2002 [2]
-and 2005 [3].
+ * [Patch v2 2/3]: Make use of can_change_state() and relocate testing
+   alloc_can_err_skb() for NULL to the end of esd_usb_rx_event(), to
+   have things like can_bus_off(), can_change_state() working even in
+   out of memory conditions.
 
-[1] https://lkml.iu.edu/hypermail/linux/kernel/0202.2/0102.html
-[2] https://lore.kernel.org/linux-mm/3E02FACD.5B300794@digeo.com/
-[3] https://lore.kernel.org/linux-mm/7C49DFF721CB4E671DB260F9@%5B10.1.1.4%5D/T/#u
+ * [Patch v2 3/3]: No changes. I will 'declare esd_usb_msg as an union
+   instead of a struct' in a separate follow-up patch.
 
-> My quick thoughts after skimming over the core parts of this series
-> 
-> (1) forgetting to break COW on a PTE in some pgtable walker feels quite
->     likely (meaning that it might be fairly error-prone) and forgetting
->     to break COW on a PTE table, accidentally modifying the shared
->     table.
 
-Maybe I should also handle arch/ and others parts.
-I will keep looking at where I missed.
+Frank Jungclaus (3):
+  can: esd_usb: Improved behavior on esd CAN_ERROR_EXT event (1)
+  can: esd_usb: Improved behavior on esd CAN_ERROR_EXT event (2)
+  can: esd_usb: Improved decoding for ESD_EV_CAN_ERROR_EXT messages
 
-> (2) break_cow_pte() can fail, which means that we can fail some
->     operations (possibly silently halfway through) now. For example,
->     looking at your change_pte_range() change, I suspect it's wrong.
+ drivers/net/can/usb/esd_usb.c | 70 ++++++++++++++++++++---------------
+ 1 file changed, 40 insertions(+), 30 deletions(-)
 
-Maybe I should add WARN_ON() and skip the failed COW PTE.
 
-> (3) handle_cow_pte_fault() looks quite complicated and needs quite some
->     double-checking: we temporarily clear the PMD, to reset it
->     afterwards. I am not sure if that is correct. For example, what
->     stops another page fault stumbling over that pmd_none() and
->     allocating an empty page table? Maybe there are some locking details
->     missing or they are very subtle such that we better document them. I
->    recall that THP played quite some tricks to make such cases work ...
+base-commit: fa1d915a624f72b153a9ff9700232056758a2b6c
+-- 
+2.25.1
 
-I think that holding mmap_write_lock may be enough (I added
-mmap_assert_write_locked() in the fault function btw). But, I might
-be wrong. I will look at the THP stuff to see how they work. Thanks.
-
-Thanks for the review.
-
-> > 
-> > > > Actually, at the RFC v1 and v2, we proposed the version of skipping
-> > > > those works, and we got a significant improvement. You can see the
-> > > > number from RFC v2 cover letter [1]:
-> > > > "In short, with 512 MB mapped memory, COW PTE decreases latency by 93%
-> > > > for normal fork"
-> > > 
-> > > I suspect the 93% improvement (when the mapcount was not updated) was
-> > > only for VAs with 4K pages. With 2M mappings this series did not
-> > > provide any benefit is this correct?
-> > 
-> > Yes. In this case, the COW PTE performance is similar to the normal
-> > fork().
-> 
-> 
-> The thing with THP is, that during fork(), we always allocate a backup PTE
-> table, to be able to PTE-map the THP whenever we have to. Otherwise we'd
-> have to eventually fail some operations we don't want to fail -- similar to
-> the case where break_cow_pte() could fail now due to -ENOMEM although we
-> really don't want to fail (e.g., change_pte_range() ).
-> 
-> I always considered that wasteful, because in many scenarios, we'll never
-> ever split a THP and possibly waste memory.
-> 
-> Optimizing that for THP (e.g., don't always allocate backup THP, have some
-> global allocation backup pool for splits + refill when close-to-empty) might
-> provide similar fork() improvements, both in speed and memory consumption
-> when it comes to anonymous memory.
-
-When collapsing huge pages, do/can they reuse those PTEs for backup?
-So, we don't have to allocate the PTE or maintain the pool.
-
-Thanks,
-Chih-En Lin
