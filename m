@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D76696E4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7A2696E52
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbjBNULg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S231878AbjBNURE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBNULe (ORCPT
+        with ESMTP id S231722AbjBNURC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:11:34 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0709ED2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:11:27 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-52f1b1d08c2so97581237b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:11:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CugAHDwfDvxDIt0AM3bPQhn+jgScaC+ZsDp2eafN2MA=;
-        b=kaHuwZuozd/uwQY2LXXKeDd0XTRPgmEyBrqC6AOHxcrVbvANFUB/cJQzNyDmSTo8Xu
-         nsN/8nRPqAnzT0nX44w7gjADJWOZMWrpn9oJUc/Ys/5o564mfLTmL0dTwgvb+yGJR1zg
-         90z1lGhU7i3ZeMC0cfMDi3aqlqihWQu9uYfsCGmwK3X89VkyWTcS9h1KmqHhJ9wFYh3M
-         qkEgSy4N5Hn4CeBoqSwQl8VDaSEMH9hRSlRqnus2rOjweYQ/sEtHE4LB6izkPb6vsj32
-         WwKionXiZIK8na1Os9Cnpo4i/bOdNH8Mc2rG2KZRA2bNlkSp1NE1aDdUNeUjzYr26zv/
-         oNwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CugAHDwfDvxDIt0AM3bPQhn+jgScaC+ZsDp2eafN2MA=;
-        b=GaIfMP7rjdTKunQVAtPTqsWeayNzVgvRbFgExz1mnHUybg2/hBMKHka1uX00x3l+/3
-         C+aSI71ncvwmmtQ9WziWjQLM+kuqLNsgBNirVJ31ziK6jT4mt4pYMJzAk7MLJq4PUY/l
-         FN8/94mRhofkG9mVDjAfuvjVWSGjuQWWo+h2K2g85ejgSNeysLeGJ5VHK6tm2DA85GtS
-         Hq39QeKrGPu2a+WUp/reCqP8DovNQTzj5Zmj1gETEJn+dvuu1DHgC15IGiO5NjQ4A1kE
-         dE9sZ+mp4YCKfhjg4ZRWlzNnKTnCMyvAAR87NX9UllMw6Mai1p2ko4HmRC2In4cwKisp
-         09uw==
-X-Gm-Message-State: AO0yUKUDOWWL82eP4VzUXt1lnTv01LoLTNhD9kHWEKmZ5uqQEC/IJzLq
-        pOW4QC/+y1JQmGAdC8t5mvmR5lsB4vvepVhtqeDo
-X-Google-Smtp-Source: AK7set8gF8yZFNU5iS80Sq7CPE9sU5oyTQ1gkrK6ATEg7+Dc/81PtMzV/A4BTy6H3TA8WDJV2PU6BO+0RPUKfcpo8/I=
-X-Received: by 2002:a81:830c:0:b0:52e:d52e:97d0 with SMTP id
- t12-20020a81830c000000b0052ed52e97d0mr432243ywf.117.1676405486975; Tue, 14
- Feb 2023 12:11:26 -0800 (PST)
+        Tue, 14 Feb 2023 15:17:02 -0500
+Received: from out-120.mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2776A2ED66
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:17:01 -0800 (PST)
+Date:   Tue, 14 Feb 2023 15:16:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676405818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eSWzIVGczc7EzveFCTPh08T19cRLa22SeoV16DrBPTY=;
+        b=XIK5I60hDW7FVglNFGktAmCCOuOeo1nTB94Cg3f2LYMLCFfLvZWSB5c3arbq9c2E4jd2ri
+        agi3sp0rnEqIktFqknl9w1roQHmMeq2+A7o40LreGITnjyYzF2r5elDlhRf9iCAyQNwDs3
+        2GeaJFzo56Tz06m17e40OCytNcNZJ1c=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+vsNnP9PPXPNz+M@moria.home.lan>
+References: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+qFc7Q2NfXERwYT@moria.home.lan>
+ <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com> <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
- <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com> <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
- <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com> <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
-In-Reply-To: <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 14 Feb 2023 12:11:16 -0800
-Message-ID: <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
-        adrian.hunter@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:00 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> On 2023-02-14 9:51 a.m., Liang, Kan wrote:
-> > If I understand correctly, the idea is to let the user space tool run
-> > the above interpoloation algorithm several times to 'guess' the atomic
-> > mapping. Using the mapping information to covert the TSC from the PEBS
-> > record. Is my understanding correct?
-> >
-> > If so, to be honest, I doubt we can get the accuracy we want.
-> >
->
-> I implemented a simple test to evaluate the error.
+On Tue, Feb 14, 2023 at 12:05:27PM +0100, Peter Zijlstra wrote:
+> This is lock order per decree, if you get the order function wrong
+> lockdep will not see the inversion but you *will* deadlock.
 
-Very cool!
+Yeah, that's what I mean. Given that a subclass isn't a fixed thing you
+assign to a lock, just something you magic up as needed - I just don't
+see what this gets us?
 
-> I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
-> at the start and end of perf cmd.
->         MONO_RAW        TSC
-> start   89553516545645  223619715214239
-> end     89562251233830  223641517000376
->
-> Here is what I get via mult/shift conversion from this patch.
->         MONO_RAW        TSC
-> PEBS    89555942691466  223625770878571
->
-> Then I use the time information from start and end to create a linear
-> function and 'guess' the MONO_RAW of PEBS from the TSC. I get
-> 89555942692721.
-> There is a 1255 ns difference.
-> I tried several different PEBS records. The error is ~1000ns.
-> I think it should be an observable error.
+Why not just tell lockdep what the order function is directly?
 
-Interesting. That's a good bit higher than I'd expect as I'd expect a
-clock_gettime() call to take ~ double digit nanoseconds range on
-average, so the error should be within that.
-
-Can you share your logic?
-
-thanks
--john
+(I know, I've been saying I'd write a patch for this, I'll get around to
+it, I swear :)
