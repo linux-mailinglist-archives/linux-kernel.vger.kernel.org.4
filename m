@@ -2,193 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BDF695AA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F28A3695AA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjBNH2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S230282AbjBNH3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBNH2C (ORCPT
+        with ESMTP id S229642AbjBNH3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:28:02 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795532738
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676359675; x=1707895675;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl9OxHQsLM=;
-  b=VAowxglM/EE8Rd7vUmx7UUE5atxUF5NkK3whJDIQ1sbe5USY+XKhq11a
-   SvWpTibdtZNrxpG+KYM5kvKcNKJRIznAIl+XS6Iv/RluElp8GHOnavN+g
-   MxomEqvbAehv3LGK/53Ow1Rb9hsItAxtzdRtWmzrTji0kCgjI7bRhWops
-   7M3KtB5yz5poDRkqMMMvS1aqNMLB3lUFUDoBXktraMnJUoZtbhxWuiblx
-   fjkq9Oj3ob4iaf7XwLwFXsFKZc7+BQaRGDsebNf4hZXwSFkuUzd/CSJLc
-   7bHDIQTYwInaI3iLdm3c+zrhXIDIXpmWjAweu8x7kHBm3S2QSO6QCUkUb
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669046400"; 
-   d="scan'208";a="228219320"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 15:27:54 +0800
-IronPort-SDR: pLIhsEu0JnAFXLFpYWRcOwanhtYwhwu+Bl3lMmZs9zlbNjLfJzXrcpbrJ/KVbZq9nuk+BxZxJr
- a1UoKyi3LlLIee2/jLSFavaq0xSKoPYMLSseg7Oaw7mlJQI60im+3BUSanxcRHUTYWHFs831sj
- Y5SOHDkAGvME+kHxSAQFH68hdDDGNVKN3Ng8aLMT2rkkLT40DvbQe4JjU86usBOUmOufDeMsf/
- bQBQ60A561bSywVp1rxrTFZnDlvZKTrqjmrHZEXcqHt5CzRubdOsbU3VaHB2nuW95PhpGtpNbf
- GQc=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 22:45:02 -0800
-IronPort-SDR: SyAzyvghB5ka6v0bsH7tABPrTVYEL5O34yFeCoswPf/7Ups1ObzLEt9HvBVgVxdy7o2hWprrSD
- FChbBAZVZEaaqEzVFv0VmErB1R4KDvkqhFMv7cueTFsO5Snk45uKmdAvLk1QTNjIRRd47A6/6/
- lBrH4YqcrjAh2qBGhfIsF4dtSQSwQNbmmXcMC1Kcnq0Oilz2JWHuI7HNAB/UIL+D4mvDr9/ujM
- vDegAdGvPHek5w1gqe3yagW2UBZPZIYhS91diCSUza0Tz3+470b26MD0d3Ux9TunoAR8HYeaC1
- f1c=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 23:27:55 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGCV21wZ9z1Rwt8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:27:54 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676359673; x=1678951674; bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl
-        9OxHQsLM=; b=qLBsRkuvgw2X455pPBLbc9DStaa/OCukEQXQRY2Wz6jlqoGYX7l
-        Dk6XTYLcm5BasJgQgx5GFJBNLLDA6LdTYDBePk8N5yOvIKXXOyy8RhZMLezRyBOz
-        MTO2+tSH4IkEPkDd9vt9Sx+lvUwQd/QQTwkc9dBfv1gQCf9tEjnXjndxNltzc7W0
-        PcXbBjAJM50oznYEigYII42+YxgwGOuV4QOiolfQRTPmvnXZGbcjfQ1GFTeJ0EPe
-        Vla7PL3geXYrSgMwFEoRGwuWQl0b0t+slE71bNkB5EiQd+EJCWsEVRNmSnGs3SCA
-        rj/vgeD8DZFlzjPtu9/5bFqgSJ/cf2r015A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id aSZO4pUBy6c9 for <linux-kernel@vger.kernel.org>;
-        Mon, 13 Feb 2023 23:27:53 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGCTz3h31z1RvLy;
-        Mon, 13 Feb 2023 23:27:51 -0800 (PST)
-Message-ID: <9b335f88-a20a-83da-3ce1-df409e05004a@opensource.wdc.com>
-Date:   Tue, 14 Feb 2023 16:27:50 +0900
+        Tue, 14 Feb 2023 02:29:35 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E648E;
+        Mon, 13 Feb 2023 23:29:33 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id z14-20020a17090abd8e00b00233bb9d6bdcso9445115pjr.4;
+        Mon, 13 Feb 2023 23:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=enCF4Ov/OlkQdmaMaFzB48EzRaEzlSuP3i76xugtVG0=;
+        b=YI9+/TJ5ZqYgsshCJGlCFNQctAJFwyuPmJZFZd10YtUMpt+DUyc58ryiTWricALIfM
+         zDlRBvAQMGm/f9MKfJO/sNSdPi7iZoPpN7PlEC2GYz4XzqBI5RKcrP58LIWYhBbsooNS
+         1ff7nRN9NuJ0KDTxaHwTkH0tijZYngSwcZWTJbix1oa320ZbOWXHhnJOQOqEOGaIOLjE
+         DRqywPukX5GHxY43Pv3nbstYHKpHXaoHxsnYZqX8JBkEtzbyZ8Tsp24VE0kxOlRR1k69
+         XcZfQDbCNAXrxIzMToRAx+GMin0y5Q48xKo5XlIvgZiOEmlPS94dXLuQSc6LKdhAQw/z
+         Nb/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=enCF4Ov/OlkQdmaMaFzB48EzRaEzlSuP3i76xugtVG0=;
+        b=ZNjCdaVjel5CLg6sLjejIJgXd+XsnAIvrle0PfmD7OBpmxj57noxKOv27m6JZ7ui+P
+         y/bDsqGUV7i/LHczvXU40XxoKf35P4TezmnTMlIdH5geYgDFROcMMZ+u9spG1CAFMHjl
+         KYwx7fNysF8/iBLVTaka973HFG9SHtGDkok+0xppY92z3ASkWr4R90pYrnwFe6fOa+QA
+         yELRRtfmbR7NzrUnczh5hTuG7oOtnmQikl8avF5NM+eM0TFgJsP5JJZPR5P0QT0hzqtj
+         1E75dWuXnKbyFkb4PslfYR+Pha+E3cup7hsUVldWkBkRhnnMdd/YH6s3twRezDOeYygx
+         D8Kw==
+X-Gm-Message-State: AO0yUKWlzCH2ryNm97x0nynuPzH8bubFciVD8V1WuCCNHC738IgorO92
+        cCnreCYj6F3q3D4ACOAR/OMFG7ylY1A=
+X-Google-Smtp-Source: AK7set/Sbhz9vuvzyzM7KAajqXP+UBiOQ0X71zrknnXXe5Wn4IIzoUJtNBzBh2dGUjtYp/2tC5n09w==
+X-Received: by 2002:a05:6a20:a110:b0:bc:c663:41bd with SMTP id q16-20020a056a20a11000b000bcc66341bdmr1636765pzk.4.1676359773345;
+        Mon, 13 Feb 2023 23:29:33 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-66.three.co.id. [180.214.232.66])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa792c3000000b0058bc37f3d1csm9045542pfa.44.2023.02.13.23.29.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 23:29:33 -0800 (PST)
+Message-ID: <02f796c7-c1d5-2f2b-3385-e72298f5f470@gmail.com>
+Date:   Tue, 14 Feb 2023 14:29:29 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] scsi: ipr: work around fortify-string warning
+ Thunderbird/102.7.2
+Subject: Re: nvme boot problems after merge of mm-stable tree into linux-next
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-mm@kvack.org
+References: <ed33b9ff-e6f2-dae8-ede6-59dc3c649ece@roeck-us.net>
+ <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
+ <a276d6ae-677d-e4cf-13d7-934c0a7639d2@gmail.com>
+ <58fb32f8-ce1e-913b-3b85-c41b0630d4c6@roeck-us.net>
+ <20230214172040.60657882@canb.auug.org.au>
+ <07c870d3-5d98-ca51-5de8-034abc631673@roeck-us.net>
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Brian King <brking@us.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230213101143.3821483-1-arnd@kernel.org>
- <3d94fc3f-fbe5-a56e-3713-4f0788ebc7f9@opensource.wdc.com>
- <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <07c870d3-5d98-ca51-5de8-034abc631673@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 16:14, Arnd Bergmann wrote:
-> On Tue, Feb 14, 2023, at 04:59, Damien Le Moal wrote:
->> On 2/13/23 19:10, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
+On 2/14/23 13:49, Guenter Roeck wrote:
+> In next-20230210, the crash happened after the merge of mm-stable.
+> In next-20230213, the crash happens after the merge of mm-everything.
+> That means both the merge of mm-stable and mm-nonmm-stable are now fine.
+> So I would suspect that something in the merge of mm-everything
+> interacts with the rest of -next.
 > 
->>>   **/
->>> -static int strip_and_pad_whitespace(int i, char *buf)
->>> +static void strip_whitespace(int i, char *buf)
->>>  {
->>>  	while (i && buf[i] == ' ')
->>>  		i--;
->>> -	buf[i+1] = ' ';
->>> -	buf[i+2] = '\0';
->>> -	return i + 2;
->>> +	buf[i+1] = '\0';
->>
->> If i is now the size of the buffer, this is a buffer overflow, no ? And
->> the initial loop should start at "i - 1" I think...
-> 
-> Right, I definitely have the wrong length here.
-> 
->>>  }
->>>  
->>>  /**
->>> @@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
->>>  static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
->>>  				struct ipr_vpd *vpd)
->>>  {
->>> -	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
->>> -	int i = 0;
->>> +	char vendor_id[IPR_VENDOR_ID_LEN + 1];
->>
->> ...but the size is in fact "i + 1"... So in strip_whitespace(), i is the
->> index of the last possible character in the string, and given that the
->> string may be much shorter, that function may not actually strip
->> whitespaces after the string...
-> 
-> I think aside from the off-by-one bug I introduced, this is not
-> a (new) problem as the old code already assumed that the input
-> is padded with spaces rather than nul-terminated.
 
-Yeah. The HW probably always give the same amount of chars with short
-strings completed by spaces...
-
-> 
->>> +	char product_id[IPR_PROD_ID_LEN + 1];
->>> +	char sn[IPR_SERIAL_NUM_LEN + 1];
->>>  
->>> -	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
->>> -	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
->>> +	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
->>> +	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
->>
->> So this call should really be:
->>
->> 	strip_whitespace(strlen(vendor_id) - 1, vendor_id);
->>
->> Which means that this helper can be turned into:
->>
->> static void strip_whitespace(char *buf)
->> {
->> 	int i = strlen(buf) - 1;
->>
->> 	while (i > 0 && buf[i] == ' ')
->> 		i--;
->> 	buf[i+1] = '\0';
->> }
->>
->> Unless I am missing something :)
-> 
-> The strlen() here requires the input to be a properly terminated string,
-> so this would at least require adding a \0.
-> 
-> Also, if the input is a short nul-terminated string instead of
-> a space padded array, we probably don't need to strip the trailing
-> whitespace, or at least the original version didn't either.
-> 
-> Let me try to respin my patch with just the off-by-one error
-> fixed but otherwise keeping the output of ipr_log_vpd_compact()
-> unchanged.
-> 
->       Arnd
+OK, thanks!
 
 -- 
-Damien Le Moal
-Western Digital Research
+An old man doll... just what I always wanted! - Clara
 
