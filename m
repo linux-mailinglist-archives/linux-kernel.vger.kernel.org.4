@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7754569700A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6469697067
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjBNVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S233227AbjBNWEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBNVti (ORCPT
+        with ESMTP id S233212AbjBNWEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:49:38 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA5529E3F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:49:37 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so2203675pjd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:49:37 -0800 (PST)
+        Tue, 14 Feb 2023 17:04:42 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC0B3AAA;
+        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d8so17225339plr.10;
+        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=K24hJmuuzDCWGJfa7cedDOeMiqAh7XOOikUOicrsYLk=;
-        b=Nop4t4j/Ezoqqr7Wxz59BFFcsJEksG49eS0wzKJYp0Ewg6CRR2Z56e7MIKXOcTQroZ
-         jmH+t/mxjQ/cE3U0i3+oUfIcqKyoLXqpDUBtpmA/0ewOc3LRubdiII7zMuWfo6pP5zs/
-         U1qsI3khO4ndqEQ+91O3IXBhxmHP6OccfJk/Y=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oV3VgFBLdqdFf0Ea+vkgthoqfBBbr34vGspqoFBdBuY=;
+        b=ci6jB/L5E5M98Nw7Z5xC1J1e0t9D3ayUJF0Fb03GdIxeHHbkym8/PRcs7av+rDcq1Z
+         osJFuYQ8zwoJKUO+5e2xMLXaT6pfQmtI/3I0a2uX6gOH3ZaxXZNdgOJ6QFMBjaWHw3q7
+         LMeEpIavISB31JJvk35mO0ZCv35C9poV2uiT3Lz92wgCB3GbwXvrmErdjuapg2PLuk0U
+         8n3bV6OteJRnbhggxEMnlylqFr6RB3kQwSBDYgutxYEkVGijTvXdAFNb1cJpk2BPt2L8
+         HRFL1nw32Oz854hiCrt7iUQs1iC0DyKo4p2UzdzHuHnDmvHPcs5LMz7/w1UhAGTfrgqM
+         22NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K24hJmuuzDCWGJfa7cedDOeMiqAh7XOOikUOicrsYLk=;
-        b=GgxlEi7Arv1mzkRIefH7kDRwXblEqW6wBU3mxtooiRZ8EjZ/GITwNuLbFvVkmOMmLB
-         J+ahHqxrofbMiFJ9hSvsLkVw7hQbLi7XO9ZXmyDTrMIyET8qfyM6o4qd/a0bKbHTtTI8
-         sDXAll9ZTT2XKR8bLQfGC9lRQp8LP40zhhwYYK4QI+oOmKXNySw+SdUFSJLP28u5GYil
-         oll7AhXkXv+p8gJKkxWLiEekIDnhkiP4DTcRj/gnlgdMerB+4qI9zbmrsSFFJb3nmGk1
-         iaroPEpNRpNL98Q6K4vjSm7RySjNGxapySOCQSbVyskMzr5o54Clsa/XdySMUYSrhUvx
-         ZijA==
-X-Gm-Message-State: AO0yUKX4fThj0aFnCl38uC9KDseGy+w9GzKmGl1ecvs/dxszyk5l7tit
-        mZTbZldwZ2EyGKiN2JBspX4xpA==
-X-Google-Smtp-Source: AK7set9ijZSYts9u+A6XDClyLfPMQi8mabb6Pc9oedy/Kth90eU0jMozxH4xbvCYUALbaqjcfNSilA==
-X-Received: by 2002:a17:90b:4b42:b0:234:5eb:2177 with SMTP id mi2-20020a17090b4b4200b0023405eb2177mr403521pjb.9.1676411376902;
-        Tue, 14 Feb 2023 13:49:36 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q35-20020a17090a1b2600b002343bac52aesm30108pjq.7.2023.02.14.13.49.35
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oV3VgFBLdqdFf0Ea+vkgthoqfBBbr34vGspqoFBdBuY=;
+        b=N/+Nq5KuAAduIjxKjnwSpJZPBwdZqngZ8cAZdwOkOKQQc8uf3xx3r8j8b6dOxL555p
+         tREu3rB29vWw+n2ovw1490fsvBPyLpsDPFEx4+f8yvumh7corJzBG9aJAp9h/oTS1ZIQ
+         zqBbnWnTkmKA4S8xtFfPPnSjLwBVCsnCVFYqwF5h5rhRKGPkZMFjCxk9fK2Zkfg9GRd9
+         EkT1+iKf+U2fqniDQKP9vIoe+ny4MxX3oNWnAjFUzf1VFlmWnQLajNleneJAZLOohz++
+         0wiY879EwR/TRO+VHqXbCcIRY6WXzWlc6gwaEOdBoqFY+dHoxjBaqaKGN3cmM42PCMSY
+         jrow==
+X-Gm-Message-State: AO0yUKVkH8xLAX5vinkfmCBVte+w2L9sdLWuyyGaVP9Alv1RbrcVmPnm
+        vpVYvXpQHFELRRF2yYRP+w9oALKDeQ6Pbg==
+X-Google-Smtp-Source: AK7set+JFYJC70ppqj6wFSZKns7z/qYnwZw5g3Dtklhm0QZPoVE5Foy6hPNHInIp/4cr3C64xgUXWQ==
+X-Received: by 2002:a17:90b:4b0b:b0:233:e940:d3f9 with SMTP id lx11-20020a17090b4b0b00b00233e940d3f9mr347227pjb.34.1676412279094;
+        Tue, 14 Feb 2023 14:04:39 -0800 (PST)
+Received: from kazuki-mac.lan ([2400:4051:ea3:5910::19a])
+        by smtp.gmail.com with ESMTPSA id e17-20020a17090ab39100b00233e8a83853sm23759pjr.34.2023.02.14.14.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 13:49:36 -0800 (PST)
-Message-ID: <63ec01f0.170a0220.94c76.011e@mx.google.com>
-X-Google-Original-Message-ID: <202302141348.@keescook>
-Date:   Tue, 14 Feb 2023 13:49:35 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Brian King <brking@us.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        James Bottomley <James.Bottomley@steeleye.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        John Garry <john.g.garry@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
-References: <20230214132831.2118392-1-arnd@kernel.org>
+        Tue, 14 Feb 2023 14:04:38 -0800 (PST)
+From:   Kazuki Hashimoto <kazukih0205@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Kazuki Hashimoto <kazukih0205@gmail.com>
+Subject: [PATCH] PM: s2idle: Don't allow s2idle when cpuidle isn't supported
+Date:   Wed, 15 Feb 2023 06:50:03 +0900
+Message-Id: <20230214215003.70683-1-kazukih0205@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:28:08PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
-> about a potential string overflow with all versions of clang:
+s2idle isn't supported on platforms that don't support cpuidle as of
+31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
+too"), so update the suspend framework to reflect this in order to avoid
+breakages.
 
-Perhaps this is arch or config specific? I haven't been able to reproduce
-this for some reason.
+Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
+Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
+Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
+---
+ kernel/power/suspend.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 3f436282547c..27507ae7c9c9 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -556,6 +556,12 @@ static int enter_state(suspend_state_t state)
+ 
+ 	trace_suspend_resume(TPS("suspend_enter"), state, true);
+ 	if (state == PM_SUSPEND_TO_IDLE) {
++		struct cpuidle_device *dev = cpuidle_get_device();
++		struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
++
++		if (cpuidle_not_available(drv, dev))
++			return -EINVAL;
++
+ #ifdef CONFIG_PM_DEBUG
+ 		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
+ 			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
 -- 
-Kees Cook
+2.39.1
+
