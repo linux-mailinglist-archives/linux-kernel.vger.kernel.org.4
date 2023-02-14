@@ -2,115 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C660A695548
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D783B695550
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjBNAOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 19:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S229863AbjBNAUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 19:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBNAOl (ORCPT
+        with ESMTP id S229521AbjBNAUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:14:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF9C18AB6;
-        Mon, 13 Feb 2023 16:14:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78B94CE0B97;
-        Tue, 14 Feb 2023 00:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551A7C433D2;
-        Tue, 14 Feb 2023 00:14:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676333664;
-        bh=YALIEKwDWeTS5hkjQM1YsNTXDG41DravRixOrdPsrZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aZw2RRzWn+O1Z5oeIlFWqKh2uLq2OKCjfmo2wAA3qpDnxpdyG34A37APcsyu1QjEX
-         n+hVbRUpIgCYhfRmjxINoWcIrAYeRqaToH4bSLJoDWClXlQVlhGayUU3Fq678NezBB
-         2FTLAZpFFlpM4bWjdmENGrYCjcuOzrBN7R0+ZkyjFoML9DxtcQN/uW/A3BJi6x20e8
-         /M6O9kxhwt7tX/X8F/eR5V+snKzOZgl7t3ASwgH4eQ5kirosoVy+Y1LZe+pXpxkMU4
-         dmzmJN/+xauJB6OxrRcKSjpat9sTX99g7ojKuvd0Zg6owO17vIdDvwRqmjMRHntJq4
-         MTahIZ3aYj4XA==
-Date:   Mon, 13 Feb 2023 17:14:22 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Longlong Xia <xialonglong1@huawei.com>
-Cc:     gregkh@linuxfoundation.org, chenwandun@huawei.com,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        sunnanyong@huawei.com, wangkefeng.wang@huawei.com,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH -next v2 1/3] driver core: add error handling for
- devtmpfs_create_node()
-Message-ID: <Y+rSXg14z1Myd8Px@dev-arch.thelio-3990X>
-References: <20230210095444.4067307-1-xialonglong1@huawei.com>
- <20230210095444.4067307-2-xialonglong1@huawei.com>
+        Mon, 13 Feb 2023 19:20:16 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15EF41968E;
+        Mon, 13 Feb 2023 16:20:15 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F6081AED;
+        Mon, 13 Feb 2023 16:20:57 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D849C3F663;
+        Mon, 13 Feb 2023 16:20:12 -0800 (PST)
+Date:   Tue, 14 Feb 2023 00:18:05 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Bastian Germann <bage@debian.org>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/3] Enable hwlock on Allwinner A64
+Message-ID: <20230214001805.6ead683d@slackpad.lan>
+In-Reply-To: <20230213231931.6546-1-bage@debian.org>
+References: <20230213231931.6546-1-bage@debian.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210095444.4067307-2-xialonglong1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Longlong,
+On Tue, 14 Feb 2023 00:19:27 +0100
+Bastian Germann <bage@debian.org> wrote:
 
-On Fri, Feb 10, 2023 at 09:54:42AM +0000, Longlong Xia wrote:
-> In some cases, devtmpfs_create_node() can return error value.
-> So, make use of it.
+Hi Bastian,
+
+> The allwinner,sun6i-a31-hwspinlock compatible driver can be used with
+> the Allwinner A64 chip. Add the wiring required to enable it.
 > 
-> Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
-> ---
->  drivers/base/core.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> The device tree schema needs some work to verify everything that is
+> needed by the sun6i hwlock driver.
 > 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 7dab705f2937..aaa3088e5456 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -3405,7 +3405,9 @@ int device_add(struct device *dev)
->  		if (error)
->  			goto SysEntryError;
->  
-> -		devtmpfs_create_node(dev);
-> +		error = devtmpfs_create_node(dev);
-> +		if (error)
-> +			goto DevtmpfsError;
->  	}
->  
->  	/* Notify clients of device addition.  This call must come
-> @@ -3461,6 +3463,8 @@ int device_add(struct device *dev)
->  done:
->  	put_device(dev);
->  	return error;
-> + DevtmpfsError:
-> +	device_remove_sys_dev_entry(dev);
->   SysEntryError:
->  	if (MAJOR(dev->devt))
->  		device_remove_file(dev, &dev_attr_dev);
-> -- 
-> 2.25.1
-> 
+> The hwlock device was verified to be available with this series applied
+> on a Pinebook.
 
-After this change in -next as commit 31b4b6730fd4 ("driver core: add
-error handling for devtmpfs_create_node()"), my test machines failed to
-boot after the rootfs could not be mounted. I added some logging to see
-which device was failing, which triggers a few times with the exact same
-message:
-
-  device: 'btrfs-control': devtmpfs_create_node() failed, err = -17
-
-with -17 being -EEXIST. I am not sure why this device is getting
-registered more than once, it appears to occur during module insertion
-though, as I am able to get to systemd starting within the initrd.
-
-Should this particular return value be downgraded to a warning so that
-the device still loads or should the driver be fixed? I have cc'd the
-btrfs mailing list, in case they have any input.
+The changes look fine, but are there any actual users of this device?
+The missing binding bits you fixed demonstrate that a driver/binding
+without actual users can create problems.
+So are there Linux/Crust patches out there that use this device?
 
 Cheers,
-Nathan
+Andre
+
+> 
+> Bastian Germann (3):
+>   dt-bindings: hwlock: sun6i: Add missing #hwlock-cells
+>   dt-bindings: hwlock: sun6i: Add missing names
+>   arm64: dts: allwinner: a64: Add hwspinlock node
+> 
+>  .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml     | 14 ++++++++++++++
+>  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      | 10 ++++++++++
+>  2 files changed, 24 insertions(+)
+> 
+
