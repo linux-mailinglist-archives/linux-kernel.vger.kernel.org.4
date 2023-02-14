@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA010695D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D739D695D5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjBNIld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S230290AbjBNIn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjBNIlI (ORCPT
+        with ESMTP id S229609AbjBNIn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:41:08 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C017723659
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:40:55 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id k16so6681264ejv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fpl2dYq09X1UimTogkpAO+pdBXIqBUdMeEeTg/7qSas=;
-        b=Bg8GgDZY7kilURoRNLSzE7rxV3xwzXlJM55ZH1SFuchlelKg4/Oo2ByXZyYFUPpDax
-         9Ju6E4HG3M6A+SBoj3mm1DCi5h38nSAxOxQcIVBUwkmszC1uj9DadSmk/AAGVd6B8zHk
-         t70bGTz4hL1S82MoXdc7UpQsOOYDwEqKNbgvLD8Gkrc3zlxaNyieJY/tptgdf4lMKfOl
-         qSHK0ls61o9vzdtYW4RmuFjluOFGVvl3IdigDrnZjuTxDTmdggijPGCfNzfpczqepD4a
-         cz0HmuE6HZUh2La1hs25nVI/K16REIw7eMbVnw6HRdGInSwspQCzAqTkwMCniqKUK1G8
-         jZYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fpl2dYq09X1UimTogkpAO+pdBXIqBUdMeEeTg/7qSas=;
-        b=zQsdFUlEafFrg8Qadawm9e/71bpZsNmKBUvJeX3VPRl2QwCwENoIDXVaMY0T6AC/Z2
-         +kiJMdJQNln4qko78GF7GoB82uEyp+wAtJ9HRgmFpoF2d19Q1NjXunrntDadDC9EVLS3
-         sS4ys8sgELuORNH2G6rVitelYLAI6ADzSb9OsirLA8rchVM+uDDGg8Z0CJ8n6vAG0or6
-         lLkftH3q97Aa7C9Zb0c78P8KUVD+EuBc8SLu7xQzmgpDx/0BmZ0OKLbCeK6iqCyLf0Iq
-         4gYs2qeiFOEvqrQXFa6fymGQq5dOTOFZaBmGhoNgNxLHNLUAsWesCZi3jps6vZZ49/LB
-         VQjw==
-X-Gm-Message-State: AO0yUKV11HOC1mM5NISUPe7gTqSOLqTxUqXj+6appl61I3F4PoQ4xsyb
-        tPb7zgHflkHBdVKplsVIaOfjOA==
-X-Google-Smtp-Source: AK7set+I//8fpiZU3b0KhszicIsqrrq4SNLouZHvMeHfov9b5wupT38PcfS5I7rS9K0/QE6Ss3FaiA==
-X-Received: by 2002:a17:906:ecb2:b0:878:5372:a34b with SMTP id qh18-20020a170906ecb200b008785372a34bmr1732692ejb.45.1676364054093;
-        Tue, 14 Feb 2023 00:40:54 -0800 (PST)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id t21-20020a170906179500b0088a9e083318sm7921654eje.168.2023.02.14.00.40.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:40:53 -0800 (PST)
-Message-ID: <0a255859-9ec1-c808-d7d5-3500a6c49386@blackwall.org>
-Date:   Tue, 14 Feb 2023 10:40:52 +0200
+        Tue, 14 Feb 2023 03:43:27 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FC6CDD6;
+        Tue, 14 Feb 2023 00:43:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676364207; x=1707900207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BXIr4+VIWq9cUCsuzL+i/vlpdZv710csS/iIfxVyaMQ=;
+  b=y6BkbzCorruBLp4rdSyTOFz7wNVQ27MrL4QDDBDTjW3ypa8oau3/uQrW
+   4qPSoEh6JMzSv4oxQjAeOSgMjx9wx/tIZ/LISVNOo/YLvSLBIHIRospDL
+   yAHwol6hD8x3tK/43Rdx5YHpVLYWEaJun0nkeoNpJuCUHpafdAjyh43W7
+   bHikOUZiQVJ3nytYgZtc78wlLhQ+aN5EvJnCH8ArQAIancjoGy1n2tdVL
+   xP8P4UPrV05hZ/Cq/aM2l1yswIIT4EkQYxXq/Lk2zVXIlzwZFCDo4n7M/
+   36CAcp+/Md7iU9YRy0yROE5vPtXS1yy674zcksKXXbSZSn3vzTNeYwKcq
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,296,1669100400"; 
+   d="scan'208";a="196806006"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Feb 2023 01:43:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 01:43:24 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 01:43:22 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Use automatic selection of VCAP rule actionset
+Date:   Tue, 14 Feb 2023 09:42:06 +0100
+Message-ID: <20230214084206.1412423-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next v2 1/2] net: bridge: make kobj_type structure
- constant
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230211-kobj_type-net-v2-0-013b59e59bf3@weissschuh.net>
- <20230211-kobj_type-net-v2-1-013b59e59bf3@weissschuh.net>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20230211-kobj_type-net-v2-1-013b59e59bf3@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 06:23, Thomas Weißschuh wrote:
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
-> 
-> Take advantage of this to constify the structure definition to prevent
-> modification at runtime.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  net/bridge/br_if.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/bridge/br_if.c b/net/bridge/br_if.c
-> index ad13b48e3e08..24f01ff113f0 100644
-> --- a/net/bridge/br_if.c
-> +++ b/net/bridge/br_if.c
-> @@ -269,7 +269,7 @@ static void brport_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t
->  	net_ns_get_ownership(dev_net(p->dev), uid, gid);
->  }
->  
-> -static struct kobj_type brport_ktype = {
-> +static const struct kobj_type brport_ktype = {
->  #ifdef CONFIG_SYSFS
->  	.sysfs_ops = &brport_sysfs_ops,
->  #endif
-> 
+Now the VCAP API automatically selects the action set, therefore is
+not needed to be hardcoded anymore to hardcode the action in the
+lan966x. Therefore remove this.
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
+index bd10a71897418..f960727ecaeec 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
+@@ -261,8 +261,6 @@ static int lan966x_tc_flower_add(struct lan966x_port *port,
+ 							0);
+ 			err |= vcap_rule_add_action_u32(vrule, VCAP_AF_MASK_MODE,
+ 							LAN966X_PMM_REPLACE);
+-			err |= vcap_set_rule_set_actionset(vrule,
+-							   VCAP_AFS_BASE_TYPE);
+ 			if (err)
+ 				goto out;
+ 
+-- 
+2.38.0
 
