@@ -2,111 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3276957C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC146957C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjBNEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S231520AbjBNEM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBNEMi (ORCPT
+        with ESMTP id S231589AbjBNEMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:12:38 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032F1193E9;
-        Mon, 13 Feb 2023 20:12:36 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DMXDV7021046;
-        Tue, 14 Feb 2023 04:12:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=kLd+/Xj3vG3ZXa0ORXHsNiBzfre06yH3VV2BY5VrgyY=;
- b=SXpNIo3k2MjblCKAfHiUU5eXFImRGRshgrXv8eayIKmgFQHx5yiiujfr4YnQimGyn0pt
- Fsx0p4bKhV/hS1Hx0jbEtzsjOsKuFRaQt/Fq6HXKqLLmscyCf6Xf0szw7E04LVUekoXI
- tUcw+6Zq26V6/UDkCbS4M6tF9bmQWeLzEpFO9UX/h/Maqk0QMYnFEaDtVbpfN3bwu5jQ
- 7QTx93AEHoNTgQ7WvK68oqvTIRaFOFqIXcNTL6LkhiuhSTgiExcRX+w9PsjNvLLCvLST
- kS1Q95kc+Qu+WjiUXCV0/kZVtOXC017LBaOOlVUrI3WV5Q1dPrBG3zhIbBqVCiOfTpdb xQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np0cw69ts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 04:12:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31E4CV5M028212
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 04:12:31 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
- 2023 20:12:28 -0800
-Message-ID: <a0bfd20c-4f3e-b4e1-bdf4-3b84f75262ab@quicinc.com>
-Date:   Tue, 14 Feb 2023 09:42:25 +0530
+        Mon, 13 Feb 2023 23:12:51 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141571BAFA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:12:45 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id j22so5649419qka.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O3iIghNYce+dgV8YXeRndeSBcZ6lqwpwyBMDGmIlOl8=;
+        b=NOaiRQz8/erHu63o/MSbzbiH2dmiIQi0N0YfbT4HXb0CLIBSXOIIVY9SodHRc7V4in
+         mRaScclm4RUTavZepiGyN/qUZf/iE4JPpVTY0A6Yc66Z4d0qpGffV/cQinqECPpDZU5t
+         L6KpyyNX8vvNsQ4ZAWRGeIeEF+fcOqLovMh8u4oV5EEq/jmZkaOHm9T8kIRAS1e0pTU6
+         51haYM1xiLQQyQ9swU++2Ye/KJxfAgNkY9sf00gifLMbKFeUVyN2CBqSl6iIJ5ZNLX8g
+         IzicdftGyR6GYUfIyQmjOTYiMKXc26LRh2/NWqFxvVcaR7e2VCJWHRwx+E8aTYLbyGDN
+         UKXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O3iIghNYce+dgV8YXeRndeSBcZ6lqwpwyBMDGmIlOl8=;
+        b=QV9hr2vddw4H0TdHL3VCaDu4foxXdGPcVfGjITpcqG+rtPElE+JiS4J79FtgHopwjn
+         VRQ7VhhbHp52DEBd6fNqcVTqC/N9D+z6KO+99CVXWyXsT6nnO4zFK6kn6dK89K+Hmqq1
+         U2uvd4bf7RpwYKHaEWTUZGi8cxGnhfgawvExDsBflhAtJDVztWX1xhI688X5+dc2aZp2
+         AzunRqjCyWeDuIzxtoiTALDxyxS6xMFIASZDs9UkFuvJWIsx1MY/Ij7FgXq24qpyd63h
+         46O/A3PDHsE/RAYZLIO9XDa/HE653pFcnE2j23O1IOUEwVl1jLf3/AZvcyTT6ZqisKV8
+         Lojg==
+X-Gm-Message-State: AO0yUKWtT2H4rwiR3t4kyAZ0ZRZ/u/9qfBIrvpvy40XKP86ybAs8iZBK
+        43M8PZN2DiWxZ955Akg62eGxj9g5MQx/Pvbz8g==
+X-Google-Smtp-Source: AK7set+AdzIq/5rDhtDrF4XiTC+Tcq5dF2Hh0/zQULOdzxDf5Ik2ez3ccExxuOFjvH+3SfGSVMH2ODpSbWFaEto+BZA=
+X-Received: by 2002:a37:be47:0:b0:706:2a8e:1992 with SMTP id
+ o68-20020a37be47000000b007062a8e1992mr38245qkf.137.1676347963913; Mon, 13 Feb
+ 2023 20:12:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V5] clk: qcom: clk-alpha-pll: Add support for Stromer PLLs
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Sricharan R <quic_srichara@quicinc.com>
-References: <20230120082631.22053-1-quic_kathirav@quicinc.com>
- <2987f2ce9377bd17d1cd85fce4bd3c28.sboyd@kernel.org>
- <99c91609-61ce-fa30-96b1-ba45e9fe1e1e@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <99c91609-61ce-fa30-96b1-ba45e9fe1e1e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RswkWzJRoXGrRkl6BuFbjmOwPOLdPGit
-X-Proofpoint-ORIG-GUID: RswkWzJRoXGrRkl6BuFbjmOwPOLdPGit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_01,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 phishscore=0
- mlxlogscore=740 clxscore=1015 suspectscore=0 mlxscore=0 impostorscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140031
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac8:6749:0:b0:3bb:740c:7a09 with HTTP; Mon, 13 Feb 2023
+ 20:12:43 -0800 (PST)
+Reply-To: cfc.ubagroup013@gmail.com
+From:   Kristalina Georgieva <sergeyforuk@gmail.com>
+Date:   Mon, 13 Feb 2023 20:12:43 -0800
+Message-ID: <CAKqLMiSq47fbpxPRT+Kr-2rBPfdu8bPaAZjDxqLGJcVOEuoHuQ@mail.gmail.com>
+Subject: =?UTF-8?Q?BOAS_NOT=C3=8DCIAS?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:744 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [sergeyforuk[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [cfc.ubagroup013[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Prezado Benefici=C3=A1rio,
+Enviei esta carta h=C3=A1 um m=C3=AAs, mas n=C3=A3o tive not=C3=ADcias suas=
+, n=C3=A3o
+Tenho certeza que voc=C3=AA recebeu, e =C3=A9 por isso que enviei para voc=
+=C3=AA novamente,
+Em primeiro lugar, sou a Sra. Kristalina Georgieva, Diretora Administrativa=
+ e
+Presidente do Fundo Monet=C3=A1rio Internacional.
 
-On 1/31/2023 10:22 AM, Kathiravan Thirumoorthy wrote:
->
-> On 1/26/2023 2:59 AM, Stephen Boyd wrote:
->> Quoting Kathiravan Thirumoorthy (2023-01-20 00:26:31)
->>> From: Varadarajan Narayanan <quic_varada@quicinc.com>
->>>
->>> Add programming sequence support for managing the Stromer
->>> PLLs.
->>>
->>> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
->>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->>> ---
->> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
->
-> Thanks Stephen. Bjorn, is it possible to pick up this patch for v6.3?
->
-> Thanks, Kathiravan T.
+Na verdade, revisamos todos os obst=C3=A1culos e quest=C3=B5es que envolvem
+sua transa=C3=A7=C3=A3o incompleta e sua incapacidade de atender =C3=A0s co=
+bran=C3=A7as
+taxas de transfer=C3=AAncia cobradas, contra voc=C3=AA, pelas op=C3=A7=C3=
+=B5es de
+transfer=C3=AAncias anteriores, visite nosso site para confirma=C3=A7=C3=A3=
+o 38
+=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
 
-Hi Bjorn,
+Somos o Conselho de Administra=C3=A7=C3=A3o, o Banco Mundial e o Fundo Mone=
+t=C3=A1rio
+Internacional (FMI) de Washington, DC, juntamente com o Departamento de
+Tesouro dos Estados Unidos e algumas outras ag=C3=AAncias de investiga=C3=
+=A7=C3=A3o
+relevante aqui nos Estados Unidos da Am=C3=A9rica. ordenou
+nossa Unidade de Remessa de Pagamentos no Exterior, United Bank of
+Africa Lome Togo, para lhe emitir um cart=C3=A3o VISA, onde $
+1,5 milh=C3=A3o do seu fundo, para um maior saque do seu fundo.
 
-Gentle Ping!
+Durante o curso de nossa investiga=C3=A7=C3=A3o, descobrimos com
+consterna=C3=A7=C3=A3o que seu pagamento tenha sido atrasado por funcion=C3=
+=A1rios corruptos
+do Banco que est=C3=A3o tentando desviar seus fundos para suas contas
+privado.
 
-Thanks,
+E hoje informamos que seu fundo foi creditado em um cart=C3=A3o
+VISA pelo UBA Bank e tamb=C3=A9m est=C3=A1 pronto para ser entregue. Agora
+entre em contato com o diretor do UBA Bank, seu nome =C3=A9 Sr. Tony
+Elumelu, E-mail: (cfc.ubagroup013@gmail.com)
+para lhe dizer como receber o seu cart=C3=A3o VISA Multibanco.
 
+Sinceramente,
+
+Sra. Kristalina Georgieva
