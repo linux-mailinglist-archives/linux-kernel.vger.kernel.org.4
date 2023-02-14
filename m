@@ -2,67 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339BE696AF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDEC696AFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjBNRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S231571AbjBNROd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbjBNRLa (ORCPT
+        with ESMTP id S229535AbjBNRO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:11:30 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6CC2FCE0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:11:11 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-52ebee9a848so199873637b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r4pky0IDsnlu/cqFPhqYvFTqN8LlUn92zh6XIpOqBhY=;
-        b=tJYGr5212BC/zy/n6YiZ7I5C/JLAWDXGWcWsgIogmNqeseFgoMNI73KimK3bD9DQ2R
-         OaAdDEHfXTPAOwRPo577cYx45n182mjVNhtWOe1hF5u1YtwKBteiCStPAQ+RKqIWD+0A
-         qcfaYbTWgAPssQ+sNf2QMOnEG+Zzb/c+gsDGiLEBSBQbNpmZmqO/f6kdZiQZc5wWXABu
-         mTPnIVZ9ahESnu68ZIgqmVNoUnZUwM//Hpqp1ESWNvbAsJOW9NmY+pY2rTS/Jo13opj4
-         LVq7Nr1yz6QRXYsjTs+kyxkgNhrdlNhQ6Ny0erdwJA8jEr3Ipms4rGEJps4R2NUEpyIt
-         jBeA==
+        Tue, 14 Feb 2023 12:14:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AB32BEDC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676394789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/5VgWxD5A7kEC1uUIaEm14WHnCpjbWdzDimNIwkMXo=;
+        b=ihdM7ZE8sImoq9OdTOvUcqrEfHrDisTsuPwK3khjHL6Oc9Y+0KVqtQYggQXgho4TxpxR89
+        bYNtllaqMN/ATvo/Vw2On74lc/cSKDBjUXxyHyo+zU3hOSKSUUoPFFehVchLkcje19NcR4
+        sLESMdPKNPx24FpzcpuVUKIuSYsOXmQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-636-lCn5InbXMoeC29YezIGbzA-1; Tue, 14 Feb 2023 12:13:06 -0500
+X-MC-Unique: lCn5InbXMoeC29YezIGbzA-1
+Received: by mail-wm1-f72.google.com with SMTP id r14-20020a05600c35ce00b003e10bfcd160so8987458wmq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:13:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r4pky0IDsnlu/cqFPhqYvFTqN8LlUn92zh6XIpOqBhY=;
-        b=WWlZYogEihLkbskxAKeMhDJV9UWB4jcnEDN63ftoZDwQyCZvQW2d+JPnqr05Cp9jzA
-         NR4Ikt4SNO5vZai+3A2kqUyUSAFCbWVGVpEF4I5STzyzHaPEky+Dvak0A38p3LbMzeBb
-         d4f0gyNfof6x+qGatDdXEf8MAgMLNu7PYtwALjh5Zs+41BllXjZcao+iOrwrkmUWEGRE
-         hhNUm9lnUjeyHWClKfO1XO076/kcabmdPJ2MTmaeTF32gn5Jw3Bas0c6QDZln8Ken4pT
-         BtZzyr8TqsSpuiWhy3/7EN8YPojZIJxDYFK6pSo2dOB68ozs1fTgnZQ/9hl+9wSnBxOw
-         0oHA==
-X-Gm-Message-State: AO0yUKW2J9g/ogEgbHHgva6rXOs03j5Jsqw+HDYyRP98FA2STtwmETCc
-        gpzry4ntKvqMopliihjPWyvo6U4OE4aDlFcGohaVz8K9sgt0QS9qauU=
-X-Google-Smtp-Source: AK7set+ovpxzz//8A139EdXwefeTv+mGh3Kjc7myJY3emAZXMZbejrZMUZTSCki77CFv8cRh2W35et11xRQdQtRmbKo=
-X-Received: by 2002:a81:bf53:0:b0:506:6364:fda3 with SMTP id
- s19-20020a81bf53000000b005066364fda3mr346950ywk.72.1676394669813; Tue, 14 Feb
- 2023 09:11:09 -0800 (PST)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y/5VgWxD5A7kEC1uUIaEm14WHnCpjbWdzDimNIwkMXo=;
+        b=JpJws8Dr1Npo0/FgDtOUoi9gf8k9oF64uUsnnEKUxt9OCnZFMbnySbXb1PHKG1z/o/
+         wvlu8oOLcpvROJf53tNlC1YgvZzPHXtZyr7uHmTif7YSBmb6CA1Unetgoy4M73yZ41R+
+         +WSRUgBLT64sW8MMzSgzYbulOXWIdUY188oY1FTOnD9RxE9Fy0JJ4Dg9lP+sxVBw8kf+
+         FJDJMpnIV3fwUEb/ySHI+/rf3ZjDLdPfkh/BMRuaw+xQP5K0qZGHlxibO7CRm0kPgnHU
+         dGR+Qo/BCUJ2A7vv5hx6WNaR/zyEjj7oISIwcW3ZY52wykGUE1Ctt1tBcAEUJtugmtzK
+         HJ5w==
+X-Gm-Message-State: AO0yUKWpDax0fCPoiugEn5b2aplTWaJGydTJDJIlWOk7KlNmd+XCWSY2
+        hDWASuEmlkFptgb5l8QSDqtOdrURPixEFR3zhIB/1JROftaZDn8MKpukr7Ksz15N+21fue75oNV
+        YOSXz7cWHZreW5nndZHKIzp5w
+X-Received: by 2002:a05:600c:2e95:b0:3dc:d5b:5f6a with SMTP id p21-20020a05600c2e9500b003dc0d5b5f6amr2691501wmn.30.1676394784976;
+        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set/cJ2piCMFvK42J7bNZHKpTnu+3/VQ2u9+S6qVF3JZHtDfSzPg6gZVBJQN9lL9IMudwblyc5Q==
+X-Received: by 2002:a05:600c:2e95:b0:3dc:d5b:5f6a with SMTP id p21-20020a05600c2e9500b003dc0d5b5f6amr2691475wmn.30.1676394784663;
+        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
+Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c4fd300b003dc59d6f2f8sm18425547wmq.17.2023.02.14.09.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
+Date:   Tue, 14 Feb 2023 17:13:01 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC] Support for Arm CCA VMs on Linux
+Message-ID: <Y+vBHXbxPBgHxzGY@work-vm>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
 MIME-Version: 1.0
-References: <CAJuCfpHa+RhNk_-C=c=E8opF7mR2tnpd-KyhaXCQ8XnKvwVXoQ@mail.gmail.com>
- <20230214070429.3613260-1-kamatam@amazon.com>
-In-Reply-To: <20230214070429.3613260-1-kamatam@amazon.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 14 Feb 2023 09:10:58 -0800
-Message-ID: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/psi: fix use-after-free in ep_remove_wait_queue()
-To:     Munehisa Kamata <kamatam@amazon.com>
-Cc:     ebiggers@kernel.org, hannes@cmpxchg.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mengcc@amazon.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127112248.136810-1-suzuki.poulose@arm.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,174 +96,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks!
-Overall LGTM, just a couple of nits (simplifications):
+* Suzuki K Poulose (suzuki.poulose@arm.com) wrote:
+> We are happy to announce the early RFC version of the Arm
+> Confidential Compute Architecture (CCA) support for the Linux
+> stack. The intention is to seek early feedback in the following areas:
+>  * KVM integration of the Arm CCA
+>  * KVM UABI for managing the Realms, seeking to generalise the operations
+>    wherever possible with other Confidential Compute solutions.
+>    Note: This version doesn't support Guest Private memory, which will be added
+>    later (see below).
+>  * Linux Guest support for Realms
+> 
+> Arm CCA Introduction
+> =====================
+> 
+> The Arm CCA is a reference software architecture and implementation that builds
+> on the Realm Management Extension (RME), enabling the execution of Virtual
+> machines, while preventing access by more privileged software, such as hypervisor.
+> The Arm CCA allows the hypervisor to control the VM, but removes the right for
+> access to the code, register state or data that is used by VM.
+> More information on the architecture is available here[0].
+> 
+>     Arm CCA Reference Software Architecture
+> 
+>         Realm World    ||    Normal World   ||  Secure World  ||
+>                        ||        |          ||                ||
+>  EL0 x-------x         || x----x | x------x ||                ||
+>      | Realm |         || |    | | |      | ||                ||
+>      |       |         || | VM | | |      | ||                ||
+>  ----|  VM*  |---------||-|    |---|      |-||----------------||
+>      |       |         || |    | | |  H   | ||                ||
+>  EL1 x-------x         || x----x | |      | ||                ||
+>          ^             ||        | |  o   | ||                ||
+>          |             ||        | |      | ||                ||
+>  ------- R*------------------------|  s  -|---------------------
+>          S             ||          |      | ||                ||
+>          I             ||          |  t   | ||                ||
+>          |             ||          |      | ||                || 
+>          v             ||          x------x ||                ||
+>  EL2    RMM*           ||              ^    ||                ||
+>          ^             ||              |    ||                ||
+>  ========|=============================|========================
+>          |                             | SMC
+>          x--------- *RMI* -------------x
+> 
+>  EL3                   Root World
+>                        EL3 Firmware
+>  ===============================================================
+> Where :
+>  RMM - Realm Management Monitor
+>  RMI - Realm Management Interface
+>  RSI - Realm Service Interface
+>  SMC - Secure Monitor Call
 
-On Mon, Feb 13, 2023 at 11:04 PM Munehisa Kamata <kamatam@amazon.com> wrote:
->
-> If a non-root cgroup gets removed when there is a thread that registered
-> trigger and is polling on a pressure file within the cgroup, the polling
-> waitqueue gets freed without clearing the queue and reference in the
-> following path.
+Hi,
+  It's nice to see this full stack posted - thanks!
 
-Let's remove "without clearing the queue and reference" in the above
-sentence. The next section explains why this is problematic, therefore
-mentioning that here is unnecessary IMHO.
+Are there any pointers to information on attestation and similar
+measurement things?  In particular, are there any plans for a vTPM
+for Realms - if there were, it would make life easy for us, since we
+can share some user space stuff with other CoCo systems.
 
->
->  do_rmdir
->    cgroup_rmdir
->      kernfs_drain_open_files
->        cgroup_file_release
->          cgroup_pressure_release
->            psi_trigger_destroy
->
-> However, the polling thread can keep having the last reference to the
-> pressure file that is tied to the freed waitqueue until explicit close or
-> exit later.
+Dave
 
-Suggest replacing: However, the polling thread still has a reference
-to the pressure file it is polling and will access the freed waitqueue
-when file is closed or upon exit:
+> RME introduces a new security state "Realm world", in addition to the
+> traditional Secure and Non-Secure states. The Arm CCA defines a new component,
+> Realm Management Monitor (RMM) that runs at R-EL2. This is a standard piece of
+> firmware, verified, installed and loaded by the EL3 firmware (e.g, TF-A), at
+> system boot.
+> 
+> The RMM provides standard interfaces - Realm Management Interface (RMI) - to the
+> Normal world hypervisor to manage the VMs running in the Realm world (also called
+> Realms in short). These are exposed via SMC and are routed through the EL3
+> firmwre.
+> The RMI interface includes:
+>   - Move a physical page from the Normal world to the Realm world
+>   - Creating a Realm with requested parameters, tracked via Realm Descriptor (RD)
+>   - Creating VCPUs aka Realm Execution Context (REC), with initial register state.
+>   - Create stage2 translation table at any level.
+>   - Load initial images into Realm Memory from normal world memory
+>   - Schedule RECs (vCPUs) and handle exits
+>   - Inject virtual interrupts into the Realm
+>   - Service stage2 runtime faults with pages (provided by host, scrubbed by RMM).
+>   - Create "shared" mappings that can be accessed by VMM/Hyp.
+>   - Reclaim the memory allocated for the RAM and RTTs (Realm Translation Tables)
+> 
+> However v1.0 of RMM specifications doesn't support:
+>  - Paging protected memory of a Realm VM. Thus the pages backing the protected
+>    memory region must be pinned.
+>  - Live migration of Realms.
+>  - Trusted Device assignment.
+>  - Physical interrupt backed Virtual interrupts for Realms
+> 
+> RMM also provides certain services to the Realms via SMC, called Realm Service
+> Interface (RSI). These include:
+>  - Realm Guest Configuration.
+>  - Attestation & Measurement services
+>  - Managing the state of an Intermediate Physical Address (IPA aka GPA) page.
+>  - Host Call service (Communication with the Normal world Hypervisor)
+> 
+> The specifications for the RMM software is currently at *v1.0-Beta2* and the
+> latest version is available here [1].
+> 
+> The Trusted Firmware foundation has an implementation of the RMM - TF-RMM -
+> available here [3].
+> 
+> Implementation
+> =================
+> 
+> This version of the stack is based on the RMM specification v1.0-Beta0[2], with
+> following exceptions :
+>   - TF-RMM/KVM currently doesn't support the optional features of PMU,
+>      SVE and Self-hosted debug (coming soon).
+>   - The RSI_HOST_CALL structure alignment requirement is reduced to match
+>      RMM v1.0 Beta1
+>   - RMI/RSI version numbers do not match the RMM spec. This will be
+>     resolved once the spec/implementation is complete, across TF-RMM+Linux stack.
+> 
+> We plan to update the stack to support the latest version of the RMMv1.0 spec
+> in the coming revisions.
+> 
+> This release includes the following components :
+> 
+>  a) Linux Kernel
+>      i) Host / KVM support - Support for driving the Realms via RMI. This is
+>      dependent on running in the Kernel at EL2 (aka VHE mode). Also provides
+>      UABI for VMMs to manage the Realm VMs. The support is restricted to 4K page
+>      size, matching the Stage2 granule supported by RMM. The VMM is responsible
+>      for making sure the guest memory is locked.
+> 
+>        TODO: Guest Private memory[10] integration - We have been following the
+>        series and support will be added once it is merged upstream.
+>      
+>      ii) Guest support - Support for a Linux Kernel to run in the Realm VM at
+>      Realm-EL1, using RSI services. This includes virtio support (virtio-v1.0
+>      only). All I/O are treated as non-secure/shared.
+>  
+>  c) kvmtool - VMM changes required to manage Realm VMs. No guest private memory
+>     as mentioned above.
+>  d) kvm-unit-tests - Support for running in Realms along with additional tests
+>     for RSI ABI.
+> 
+> Running the stack
+> ====================
+> 
+> To run/test the stack, you would need the following components :
+> 
+> 1) FVP Base AEM RevC model with FEAT_RME support [4]
+> 2) TF-A firmware for EL3 [5]
+> 3) TF-A RMM for R-EL2 [3]
+> 4) Linux Kernel [6]
+> 5) kvmtool [7]
+> 6) kvm-unit-tests [8]
+> 
+> Instructions for building the firmware components and running the model are
+> available here [9]. Once, the host kernel is booted, a Realm can be launched by
+> invoking the `lkvm` commad as follows:
+> 
+>  $ lkvm run --realm 				 \
+> 	 --measurement-algo=["sha256", "sha512"] \
+> 	 --disable-sve				 \
+> 	 <normal-vm-options>
+> 
+> Where:
+>  * --measurement-algo (Optional) specifies the algorithm selected for creating the
+>    initial measurements by the RMM for this Realm (defaults to sha256).
+>  * GICv3 is mandatory for the Realms.
+>  * SVE is not yet supported in the TF-RMM, and thus must be disabled using
+>    --disable-sve
+> 
+> You may also run the kvm-unit-tests inside the Realm world, using the similar
+> options as above.
+> 
+> 
+> Links
+> ============
+> 
+> [0] Arm CCA Landing page (See Key Resources section for various documentations)
+>     https://www.arm.com/architecture/security-features/arm-confidential-compute-architecture
+> 
+> [1] RMM Specification Latest
+>     https://developer.arm.com/documentation/den0137/latest
+> 
+> [2] RMM v1.0-Beta0 specification
+>     https://developer.arm.com/documentation/den0137/1-0bet0/
+> 
+> [3] Trusted Firmware RMM - TF-RMM
+>     https://www.trustedfirmware.org/projects/tf-rmm/
+>     GIT: https://git.trustedfirmware.org/TF-RMM/tf-rmm.git
+> 
+> [4] FVP Base RevC AEM Model (available on x86_64 / Arm64 Linux)
+>     https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms
+> 
+> [5] Trusted Firmware for A class
+>     https://www.trustedfirmware.org/projects/tf-a/
+> 
+> [6] Linux kernel support for Arm-CCA
+>     https://gitlab.arm.com/linux-arm/linux-cca
+>     Host Support branch:	cca-host/rfc-v1
+>     Guest Support branch:	cca-guest/rfc-v1
+> 
+> [7] kvmtool support for Arm CCA
+>     https://gitlab.arm.com/linux-arm/kvmtool-cca cca/rfc-v1
+> 
+> [8] kvm-unit-tests support for Arm CCA
+>     https://gitlab.arm.com/linux-arm/kvm-unit-tests-cca  cca/rfc-v1
+> 
+> [9] Instructions for Building Firmware components and running the model, see
+>     section 4.19.2 "Building and running TF-A with RME"
+>     https://trustedfirmware-a.readthedocs.io/en/latest/components/realm-management-extension.html#building-and-running-tf-a-with-rme
+> 
+> [10] fd based Guest Private memory for KVM
+>    https://lkml.kernel.org/r/20221202061347.1070246-1-chao.p.peng@linux.intel.com
+> 
+> Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+> Cc: Andrew Jones <andrew.jones@linux.dev>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Chao Peng <chao.p.peng@linux.intel.com>
+> Cc: Christoffer Dall <christoffer.dall@arm.com>
+> Cc: Fuad Tabba <tabba@google.com>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Cc: Joey Gouly <Joey.Gouly@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Oliver Upton <oliver.upton@linux.dev>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Quentin Perret <qperret@google.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Steven Price <steven.price@arm.com>
+> Cc: Thomas Huth <thuth@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Zenghui Yu <yuzenghui@huawei.com>
+> To: linux-coco@lists.linux.dev
+> To: kvmarm@lists.linux.dev
+> Cc: kvmarm@lists.cs.columbia.edu
+> Cc: linux-arm-kernel@lists.infradead.org
+> To: linux-kernel@vger.kernel.org
+> To: kvm@vger.kernel.org
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
->
->  fput
->    ep_eventpoll_release
->      ep_free
->        ep_remove_wait_queue
->          remove_wait_queue
->
-> Then, the thread accesses to the already-freed waitqueue when dropping the
-> reference and results in use-after-free as pasted below.
-
-Suggest replacing: This results is use-after-free as pasted below.
-
->
-> The fundamental problem here is that the lifetime of the waitqueue is not
-> tied to the file's real lifetime as shown above.
-
-The fundamental problem here is that cgroup_file_release() (and
-consequently waitqueue's lifetime) is not tied to the file's real
-lifetime.
-
-> Using wake_up_pollfree()
-> here might be less than ideal, but it also is not fully contradicting the
-> comment at commit 42288cb44c4b ("wait: add wake_up_pollfree()") since the
-> waitqueue's lifetime is not tied to file's one and can be considered as
-> another special case. While this would be fixable by somehow making
-> cgroup_file_release() be tied to the fput(), it would require sizable
-> refactoring at cgroups or higher layer which might be more justifiable if
-> we identify more cases like this.
->
->  BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
->  Write of size 4 at addr ffff88810e625328 by task a.out/4404
->
->  CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
->  Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
->  Call Trace:
->  <TASK>
->  dump_stack_lvl+0x73/0xa0
->  print_report+0x16c/0x4e0
->  ? _printk+0x59/0x80
->  ? __virt_addr_valid+0xb8/0x130
->  ? _raw_spin_lock_irqsave+0x60/0xc0
->  kasan_report+0xc3/0xf0
->  ? _raw_spin_lock_irqsave+0x60/0xc0
->  kasan_check_range+0x2d2/0x310
->  _raw_spin_lock_irqsave+0x60/0xc0
->  remove_wait_queue+0x1a/0xa0
->  ep_free+0x12c/0x170
->  ep_eventpoll_release+0x26/0x30
->  __fput+0x202/0x400
->  task_work_run+0x11d/0x170
->  do_exit+0x495/0x1130
->  ? update_cfs_rq_load_avg+0x2c2/0x2e0
->  do_group_exit+0x100/0x100
->  get_signal+0xd67/0xde0
->  ? finish_task_switch+0x15f/0x3a0
->  arch_do_signal_or_restart+0x2a/0x2b0
->  exit_to_user_mode_prepare+0x94/0x100
->  syscall_exit_to_user_mode+0x20/0x40
->  do_syscall_64+0x52/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  RIP: 0033:0x7f8e392bfb91
->  Code: Unable to access opcode bytes at 0x7f8e392bfb67.
->  RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
->  RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
->  RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
->  RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
->  R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
->  R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
->
->  Allocated by task 4404:
->  kasan_set_track+0x3d/0x60
->  __kasan_kmalloc+0x85/0x90
->  psi_trigger_create+0x113/0x3e0
->  pressure_write+0x146/0x2e0
->  cgroup_file_write+0x11c/0x250
->  kernfs_fop_write_iter+0x186/0x220
->  vfs_write+0x3d8/0x5c0
->  ksys_write+0x90/0x110
->  do_syscall_64+0x43/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
->  Freed by task 4407:
->  kasan_set_track+0x3d/0x60
->  kasan_save_free_info+0x27/0x40
->  ____kasan_slab_free+0x11d/0x170
->  slab_free_freelist_hook+0x87/0x150
->  __kmem_cache_free+0xcb/0x180
->  psi_trigger_destroy+0x2e8/0x310
->  cgroup_file_release+0x4f/0xb0
->  kernfs_drain_open_files+0x165/0x1f0
->  kernfs_drain+0x162/0x1a0
->  __kernfs_remove+0x1fb/0x310
->  kernfs_remove_by_name_ns+0x95/0xe0
->  cgroup_addrm_files+0x67f/0x700
->  cgroup_destroy_locked+0x283/0x3c0
->  cgroup_rmdir+0x29/0x100
->  kernfs_iop_rmdir+0xd1/0x140
->  vfs_rmdir+0xfe/0x240
->  do_rmdir+0x13d/0x280
->  __x64_sys_rmdir+0x2c/0x30
->  do_syscall_64+0x43/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> v2: updated commit message
->
-> Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
-> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-> Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
-> ---
->  kernel/sched/psi.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 8ac8b81bfee6..6e66c15f6450 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
->
->         group = t->group;
->         /*
-> -        * Wakeup waiters to stop polling. Can happen if cgroup is deleted
-> -        * from under a polling process.
-> +        * Wakeup waiters to stop polling and clear the queue to prevent it from
-> +        * being accessed later. Can happen if cgroup is deleted from under a
-> +        * polling process otherwise.
-
-This "otherwise" at the end seems extra. Was there a continuation of
-this comment which was removed without removing this "otherwise" ?
-
->          */
-> -       wake_up_interruptible(&t->event_wait);
-> +       wake_up_pollfree(&t->event_wait);
->
->         mutex_lock(&group->trigger_lock);
->
-> --
-> 2.38.1
->
