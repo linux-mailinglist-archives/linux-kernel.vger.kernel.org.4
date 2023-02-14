@@ -2,258 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AC5695656
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68147695663
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjBNCFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 21:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S229934AbjBNCJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 21:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBNCFG (ORCPT
+        with ESMTP id S229462AbjBNCJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 21:05:06 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDA2D6D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:05:04 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PG4Gq4NpLz16NNN;
-        Tue, 14 Feb 2023 10:02:43 +0800 (CST)
-Received: from [10.174.148.223] (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 14 Feb 2023 10:05:01 +0800
-Message-ID: <5ec828eb-6012-1d8e-63b1-5dab19095e0c@huawei.com>
-Date:   Tue, 14 Feb 2023 10:05:00 +0800
+        Mon, 13 Feb 2023 21:09:56 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA1912F17;
+        Mon, 13 Feb 2023 18:09:55 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id g18so16103921qtb.6;
+        Mon, 13 Feb 2023 18:09:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b0+HenZNoKThrL9wix0Mx2a4DCWq8ldMDRHK+a4MjSI=;
+        b=FRtdaCSMOqUMFiLr5EA7VHivdDV8PBAwUlmYDWmHk3FjPPZBrA92/CpiUGnywDNrzW
+         gvtm3forCiGREhmqQ6Zd1U2umPlavkVTRiptJEoGvwVxt6M9eqJnskl6HeCSh89WAlhg
+         Or90PeVl9eQEke/PSOYR4Z/asaXrp0b1/L9w1ZYCZM5QYu5cdrBRiOodG8c3W7b0XL/x
+         NVertr+7exT9RKsGVxVh1heTp+9Xe44WFfAk3Nml2OCdEStyIjjU11ppiVnSpcRzRZ+b
+         hT79NGx51/gXTupeV3aTV134OJySPpJnECFUES/YgJEoiMiIpZu0e5ykjnPIBnrts/Ub
+         sufQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b0+HenZNoKThrL9wix0Mx2a4DCWq8ldMDRHK+a4MjSI=;
+        b=6rKEgB8g072s15ZNyXE5jI9LBpXbkAXpImoQCDwxX9wE5WlYGYOrPYL7k1vB2pphg/
+         0l6Np9RyrqHHW/GIHaYgzLEnzSL+Nkv9qfcm6n9WSUU0FKilENX9lICKZ4G7iRbmqo7v
+         6RqrSe3BzO0cUMWzwvIxjADvyy8mtyw8ZAvBXUx5bDyOe9UucYyPHAvLDMCfLPMxBnb4
+         pmQPwfJl2C/HjLV7aDJ44DgSBw6L2lNZhxpLuyN5ThaEBI6H3NJAiKtoMPjX0dTYA+n/
+         tOQpK2Hj6pUbJZbqLUwcX6UFSRjayGudu4LYJsDRQNVYH+G1RZ/bUt4iAEjSyJ7XWxDv
+         D+qw==
+X-Gm-Message-State: AO0yUKX3h8RH2MM++klIdfCqCz/ZGGiLAZCTGPSTgRFtWcREJob4OmM+
+        gSvs2TO1uH+XisD2lhpLb4c=
+X-Google-Smtp-Source: AK7set9WiiGg3n7cZ5WmiTdlMMMoWlmE0t6H59xFWsd9QmQmy7TFHt1NQayAxAmFc/EzNTzLgqIhvw==
+X-Received: by 2002:ac8:59cc:0:b0:3b9:a4bb:e53d with SMTP id f12-20020ac859cc000000b003b9a4bbe53dmr806835qtf.34.1676340595032;
+        Mon, 13 Feb 2023 18:09:55 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id y129-20020a376487000000b00738e8e81dc9sm10921256qkb.75.2023.02.13.18.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 18:09:54 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id E592327C0054;
+        Mon, 13 Feb 2023 21:09:53 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 13 Feb 2023 21:09:53 -0500
+X-ME-Sender: <xms:ce3qYyECgyTa1VtlIFtW98AyS2dcXp5yyMyF5dHweyAJ4qdtChUAuw>
+    <xme:ce3qYzWqExwK5M5YmXSLl5_kp5CqNchelXt_SPwZODLdMYssBN3YNx-ZXjONWCGd8
+    4bSfzGhYV8Pfgaa7w>
+X-ME-Received: <xmr:ce3qY8Juh3UHmjyi3rLwsrqnVFLhickgP_cCl3uueZwVR4LvZxkwRXmNDqQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeivddggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:ce3qY8Hg51Njg0jT4uY687rjaT4ia5bOYgrpeQvKMdVe6jqk2FsUmA>
+    <xmx:ce3qY4Xc19kJzrh_I0d_xee9YViTQ6mPQ_-5qec0zXo4J5SZ9IpPcQ>
+    <xmx:ce3qY_P-itJLw-tonIJkMc00ccQ3z8xNejzbi18hOoND0Z1s-DPAcQ>
+    <xmx:ce3qY5vr_xC6Ji3MJLkMD_yZduFr4wr4l72J5GMWXV-RB_-X_mKvfA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Feb 2023 21:09:52 -0500 (EST)
+Date:   Mon, 13 Feb 2023 18:09:16 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+rtTLD9UtPI5uGM@boqun-archlinux>
+References: <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
+ <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
+ <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
+ <Y+rr4p6njVOTSYxs@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/2] vdpasim: support doorbell mapping
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-CC:     <stefanha@redhat.com>, <sgarzare@redhat.com>,
-        <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
-        <huangzhichao@huawei.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <eperezma@redhat.com>
-References: <20230129025034.2000-1-longpeng2@huawei.com>
- <20230129025034.2000-3-longpeng2@huawei.com>
- <CACGkMEvZsfxQW0fVdy0CpqxoWQzz6z=dYK__xFisncuSRms67A@mail.gmail.com>
- <20230213070446-mutt-send-email-mst@kernel.org>
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-In-Reply-To: <20230213070446-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+rr4p6njVOTSYxs@rowland.harvard.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/2/13 20:05, Michael S. Tsirkin 写道:
-> On Sun, Jan 29, 2023 at 02:19:51PM +0800, Jason Wang wrote:
->> On Sun, Jan 29, 2023 at 10:51 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
->>>
->>> From: Longpeng <longpeng2@huawei.com>
->>>
->>> Support doorbell mapping for vdpasim devices, then we can test the notify
->>> passthrough feature even if there's no real hardware on hand.
->>>
->>> Allocates a dummy page which is used to emulate the notify page of the device,
->>> all VQs share the same notify register  that initiated to 0xffff. A  periodic
->>> work will check whether there're requests need to process ( the value of the
->>> notify register is 0xffff or not ).
->>> ---
->>>   drivers/vdpa/vdpa_sim/vdpa_sim.c | 65 ++++++++++++++++++++++++++++++++
->>>   drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++
->>>   2 files changed, 68 insertions(+)
->>>
->>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>> index b071f0d842fb..4fcfeb6e2fb8 100644
->>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>> @@ -39,6 +39,8 @@ MODULE_PARM_DESC(max_iotlb_entries,
->>>   #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
->>>   #define VDPASIM_QUEUE_MAX 256
->>>   #define VDPASIM_VENDOR_ID 0
->>> +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
->>> +#define VDPASIM_NOTIFY_DEFVAL 0xffff
->>>
->>>   static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
->>>   {
->>> @@ -246,6 +248,28 @@ static const struct dma_map_ops vdpasim_dma_ops = {
->>>   static const struct vdpa_config_ops vdpasim_config_ops;
->>>   static const struct vdpa_config_ops vdpasim_batch_config_ops;
->>>
->>> +static void vdpasim_notify_work(struct work_struct *work)
->>> +{
->>> +       struct vdpasim *vdpasim;
->>> +       u16 *val;
->>> +
->>> +       vdpasim = container_of(work, struct vdpasim, notify_work.work);
->>> +
->>> +       if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
->>> +               goto out;
->>> +
->>> +       if (!vdpasim->running)
->>> +               goto out;
->>> +
->>> +       val = (u16 *)vdpasim->notify;
->>> +       if (xchg(val, VDPASIM_NOTIFY_DEFVAL) != VDPASIM_NOTIFY_DEFVAL)
->>> +               schedule_work(&vdpasim->work);
->>> +
->>> +out:
->>> +       schedule_delayed_work(&vdpasim->notify_work,
->>> +                             msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
->>> +}
->>> +
->>>   struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->>>                                 const struct vdpa_dev_set_config *config)
->>>   {
->>> @@ -287,6 +311,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->>>          set_dma_ops(dev, &vdpasim_dma_ops);
->>>          vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
->>>
->>> +       INIT_DELAYED_WORK(&vdpasim->notify_work, vdpasim_notify_work);
->>> +
->>> +       vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
->>> +       if (!vdpasim->notify)
->>> +               goto err_iommu;
->>
->> We can simply avoid the advertising notification area in this case.
->>
->>> +       *(u16 *)vdpasim->notify = VDPASIM_NOTIFY_DEFVAL;
->>
->> WRITE_ONCE()?
+On Mon, Feb 13, 2023 at 09:03:14PM -0500, Alan Stern wrote:
+> On Mon, Feb 13, 2023 at 05:51:11PM -0800, Boqun Feng wrote:
+> > Basically if you have two lock instances A and B with the same class,
+> > and you know that locking ordering is always A -> B, then you can do
+> > 
+> > 	mutex_lock(A);
+> > 	mutex_lock_nest_lock(B, A); // lock B.
+> > 
+> > to tell the lockdep this is not deadlock, plus lockdep will treat the
+> > acquisition of A and the precondition of acquisition B, so the following
+> > is not a deadlock as well:
+> > 
+> > T1:
+> > 	mutex_lock(A);
+> > 	mutex_lock(C);
+> > 	mutex_lock_nest_lock(B, A);
+> > 
+> > T2:
+> > 	mutex_lock(A);
+> > 	mutex_lock_nest_lock(B, A);
+> > 	mutex_lock(C);
 > 
-> it is just initialization so it should not matter.
+> Why isn't this treated as a deadlock?  It sure looks like a deadlock to 
+> me.  Is this an example where lockdep just doesn't get the right answer?
 > 
-I think so.
 
-And WRITE_ONCE seems operate on a variable, but we want write value into 
-a specific memory location here.
+Because A serializes B and C, so that particular piece of code doesn't
+cause deadlock. Note that you can still use you normal mutex_lock() for
+B, so if there is more code:
 
->>> +
->>>          vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
->>>          if (!vdpasim->config)
->>>                  goto err_iommu;
->>> @@ -498,16 +529,21 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
->>>   static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
->>>   {
->>>          struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>> +       bool started = vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK;
->>
->> Do we need to do the check under the vdpasim->lock?
->>
->>>
->>>          spin_lock(&vdpasim->lock);
->>>          vdpasim->status = status;
->>>          spin_unlock(&vdpasim->lock);
->>> +       if (!started && (status & VIRTIO_CONFIG_S_DRIVER_OK))
->>> +               schedule_delayed_work(&vdpasim->notify_work,
->>> +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
->>>   }
->>>
->>>   static int vdpasim_reset(struct vdpa_device *vdpa)
->>>   {
->>>          struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>
->>> +       cancel_delayed_work_sync(&vdpasim->notify_work);
->>
->> Do we need to do this after setting running to zero? Otherwise it's racy.
->>
->> Thanks
->>
->>>          spin_lock(&vdpasim->lock);
->>>          vdpasim->status = 0;
->>>          vdpasim_do_reset(vdpasim);
->>> @@ -672,11 +708,34 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
->>>          return 0;
->>>   }
->>>
->>> +static pgprot_t vdpasim_get_vq_notification_pgprot(struct vdpa_device *vdpa,
->>> +                                                  u16 qid, pgprot_t prot)
->>> +{
->>> +       /*
->>> +        * We use normal RAM pages to emulate the vq notification area, so
->>> +        * just keep the pgprot as it mmaped.
->>> +        */
->>> +       return prot;
->>> +}
->>> +
->>> +static struct vdpa_notification_area
->>> +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
->>> +{
->>> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>> +       struct vdpa_notification_area notify;
->>> +
->>> +       notify.addr = virt_to_phys((void *)vdpasim->notify);
->>> +       notify.size = PAGE_SIZE;
->>> +
->>> +       return notify;
->>> +}
->>> +
->>>   static void vdpasim_free(struct vdpa_device *vdpa)
->>>   {
->>>          struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>          int i;
->>>
->>> +       cancel_delayed_work_sync(&vdpasim->notify_work);
->>>          cancel_work_sync(&vdpasim->work);
->>>
->>>          for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
->>> @@ -693,6 +752,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
->>>          vhost_iotlb_free(vdpasim->iommu);
->>>          kfree(vdpasim->vqs);
->>>          kfree(vdpasim->config);
->>> +       if (vdpasim->notify)
->>> +               free_page(vdpasim->notify);
->>>   }
->>>
->>>   static const struct vdpa_config_ops vdpasim_config_ops = {
->>> @@ -704,6 +765,8 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
->>>          .get_vq_ready           = vdpasim_get_vq_ready,
->>>          .set_vq_state           = vdpasim_set_vq_state,
->>>          .get_vq_state           = vdpasim_get_vq_state,
->>> +       .get_vq_notification    = vdpasim_get_vq_notification,
->>> +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
->>>          .get_vq_align           = vdpasim_get_vq_align,
->>>          .get_vq_group           = vdpasim_get_vq_group,
->>>          .get_device_features    = vdpasim_get_device_features,
->>> @@ -737,6 +800,8 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
->>>          .get_vq_ready           = vdpasim_get_vq_ready,
->>>          .set_vq_state           = vdpasim_set_vq_state,
->>>          .get_vq_state           = vdpasim_get_vq_state,
->>> +       .get_vq_notification    = vdpasim_get_vq_notification,
->>> +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
->>>          .get_vq_align           = vdpasim_get_vq_align,
->>>          .get_vq_group           = vdpasim_get_vq_group,
->>>          .get_device_features    = vdpasim_get_device_features,
->>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>> index 0e78737dcc16..0769ccbd3911 100644
->>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>> @@ -69,6 +69,9 @@ struct vdpasim {
->>>          bool running;
->>>          /* spinlock to synchronize iommu table */
->>>          spinlock_t iommu_lock;
->>> +       /* dummy notify page */
->>> +       unsigned long notify;
->>> +       struct delayed_work notify_work;
->>>   };
->>>
->>>   struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
->>> --
->>> 2.23.0
->>>
-> 
-> .
+T3:
+	mutex_lock(C);
+	mutex_lock(B);
+
+lockdep will report deadlock.
+
+Regards,
+Boqun
+
+> Alan Stern
+
