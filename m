@@ -2,206 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44DF695EC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89FB695EC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbjBNJS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S231523AbjBNJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjBNJST (ORCPT
+        with ESMTP id S231877AbjBNJRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:18:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BF811EB3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:17:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676366227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 14 Feb 2023 04:17:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998FA12599
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:17:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F6D221A3C;
+        Tue, 14 Feb 2023 09:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676366233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=stZkDlYkb1TUePaSeudFaELIWH0qbeUMQe5FKThxbNY=;
-        b=Y2r2z6gHpgsiC/ZZ348lRk+3Fz9Pe9Kiwym/sUF/y8TlW8qiWsdOTLzUiPLFIDd2kWAgx9
-        OV/4mU+YKsQG3WDjTyfG05T8CR21uKc3kzSLLnXNlO7jCLzqm4Tb54rlZkTEy1IacIDdel
-        tuN16SdAj/hrKLLHkyrE0z3cxdnNkaE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-563-iTN-M5i7MVaiwccGC8Gpqw-1; Tue, 14 Feb 2023 04:17:06 -0500
-X-MC-Unique: iTN-M5i7MVaiwccGC8Gpqw-1
-Received: by mail-wm1-f69.google.com with SMTP id l31-20020a05600c1d1f00b003deab30bb8bso7498676wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:17:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=stZkDlYkb1TUePaSeudFaELIWH0qbeUMQe5FKThxbNY=;
-        b=8HIqKscfOiJQYJSr10e2Xhqm3k752pWv9zHVdHfdVKehlQERUOSSWPSCdPqm9YjdYq
-         Dd6kQm47AJtPPNChDDE/D7ZoH6C9cWeCGoy0dr23ciWKmcasBAARYa2fBIJzJhq5Gjm6
-         7xpoxjvKkWy/bO4kmzUimQNHXoofpmzHHV2tnXAMcMj1aJCh9e/AjKkLAW4Hii2us0y7
-         0LcazpcFS1kGZibAqv8p9krfztHk/Sc4U4NS5AX8LpWazp2mFGYTkwVK+5jIst/FmTqv
-         dEWCTx5rtqxCyzZozzapN6hCIWIE2se480KnU1C5JkYF0o8uYenQ6MgqpH9IsUxo9Tsr
-         M2cQ==
-X-Gm-Message-State: AO0yUKU+HZakUEF0YGHZXUeCFhS/gO+tGrETw89REOt8TqHL+yo6Uuiu
-        h5dJmTaA/gPtKd37plRN8cLTGesh6nqJ3XRBQT7TjSco744eR1qettBdwt3mqtXlhFeaQYPR7aL
-        RabiFDBKtIIsRGfOwK5dPnVhP
-X-Received: by 2002:a05:600c:91d:b0:3df:eda1:43b9 with SMTP id m29-20020a05600c091d00b003dfeda143b9mr1458562wmp.4.1676366225243;
-        Tue, 14 Feb 2023 01:17:05 -0800 (PST)
-X-Google-Smtp-Source: AK7set+ycz0IC1I6k2bpLGRNvKfsXo87T6s/E3RwQk+9PHOkoLPxL7ChlRJwHipS/3WqDbPqyW6kGA==
-X-Received: by 2002:a05:600c:91d:b0:3df:eda1:43b9 with SMTP id m29-20020a05600c091d00b003dfeda143b9mr1458539wmp.4.1676366224946;
-        Tue, 14 Feb 2023 01:17:04 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c60e7.dip0.t-ipconnect.de. [91.12.96.231])
-        by smtp.gmail.com with ESMTPSA id f21-20020a05600c43d500b003dc522dd25esm15958603wmn.30.2023.02.14.01.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:17:04 -0800 (PST)
-Message-ID: <eefc40e5-a14b-22c5-3480-6786afa1c8f4@redhat.com>
-Date:   Tue, 14 Feb 2023 10:17:03 +0100
+        bh=mkpGixPuFTSezTeMtSkek1NPGQfDYOVi1Bi5+Jov7fg=;
+        b=uQslx2LflRJitvCeIchGLcDuph4SOz/6UxeYPUpItddeSK1u2799/+kGc63BiOX7t62eHD
+        K9RGH+VTGiEV2PPmvSexFptqDwiLk/X3l047lUhrbxe+jlPu/gjdZxszPK0BXum1lguTQT
+        P4zUA8h3tKmTwa9lFrSXpfsMYO+YSNI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05CDA138E3;
+        Tue, 14 Feb 2023 09:17:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r0WRO5hR62PgPwAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 14 Feb 2023 09:17:12 +0000
+Message-ID: <807cca5b-06b9-da85-738b-d88fc10298cb@suse.com>
+Date:   Tue, 14 Feb 2023 10:17:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
+ Thunderbird/102.7.1
 Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Teng Hu <huteng.ht@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <muchun.song@linux.dev>
-References: <20230212110305.93670-1-zhengqi.arch@bytedance.com>
- <2484666e-e78e-549d-e075-b2c39d460d71@suse.cz>
- <85af4ada-96c8-1f99-90fa-9b6d63d0016e@bytedance.com>
- <c6908bd0-5f76-47eb-2b77-ce8f7bf9fbff@suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c6908bd0-5f76-47eb-2b77-ce8f7bf9fbff@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <6257114d-a957-f586-145c-d2a885417360@suse.com>
+ <Y+pRK6a419jenR9R@zn.tnic> <Y+pTDFQlX9qNL35z@zn.tnic>
+ <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com> <Y+pZ5ccprqequvpE@zn.tnic>
+ <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com> <Y+qHMsZhYaYEmtTo@zn.tnic>
+ <6f561386-9bc4-a3bf-656d-db27a2275413@suse.com> <Y+tNQvpXdOAfZztQ@zn.tnic>
+ <3520cd7f-0e60-b140-9fd3-032ddb6778b5@suse.com> <Y+tP7fvvSFSSCznH@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+In-Reply-To: <Y+tP7fvvSFSSCznH@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------A001yQ1aenwvwoOIj5ATQ5H4"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 09:42, Vlastimil Babka wrote:
-> On 2/13/23 12:00, Qi Zheng wrote:
->>
->>
->> On 2023/2/13 16:47, Vlastimil Babka wrote:
->>> On 2/12/23 12:03, Qi Zheng wrote:
->>>> In x86, numa_register_memblks() is only interested in
->>>> those nodes which have enough memory, so it skips over
->>>> all nodes with memory below NODE_MIN_SIZE (treated as
->>>> a memoryless node). Later on, we will initialize these
->>>> memoryless nodes (allocate pgdat in free_area_init()
->>>> and build zonelist etc), and will online these nodes
->>>> in init_cpu_to_node() and init_gi_nodes().
->>>>
->>>> After boot, these memoryless nodes are in N_ONLINE
->>>> state but not in N_MEMORY state. But we can still allocate
->>>> pages from these memoryless nodes.
->>>>
->>>> In SLUB, we only process nodes in the N_MEMORY state,
->>>> such as allocating their struct kmem_cache_node. So if
->>>> we allocate a page from the memoryless node above to
->>>> SLUB, the struct kmem_cache_node of the node corresponding
->>>> to this page is NULL, which will cause panic.
->>>>
->>>> For example, if we use qemu to start a two numa node kernel,
->>>> one of the nodes has 2M memory (less than NODE_MIN_SIZE),
->>>> and the other node has 2G, then we will encounter the
->>>> following panic:
->>>>
->>>> [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
->>>> [    0.150783] #PF: supervisor write access in kernel mode
->>>> [    0.151488] #PF: error_code(0x0002) - not-present page
->>>> <...>
->>>> [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
->>>> <...>
->>>> [    0.169781] Call Trace:
->>>> [    0.170159]  <TASK>
->>>> [    0.170448]  deactivate_slab+0x187/0x3c0
->>>> [    0.171031]  ? bootstrap+0x1b/0x10e
->>>> [    0.171559]  ? preempt_count_sub+0x9/0xa0
->>>> [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
->>>> [    0.172735]  ? bootstrap+0x1b/0x10e
->>>> [    0.173236]  bootstrap+0x6b/0x10e
->>>> [    0.173720]  kmem_cache_init+0x10a/0x188
->>>> [    0.174240]  start_kernel+0x415/0x6ac
->>>> [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
->>>> [    0.175417]  </TASK>
->>>> [    0.175713] Modules linked in:
->>>> [    0.176117] CR2: 0000000000000000
->>>>
->>>> In addition, we can also encountered this panic in the actual
->>>> production environment. We set up a 2c2g container with two
->>>> numa nodes, and then reserved 128M for kdump, and then we
->>>> can encountered the above panic in the kdump kernel.
->>>>
->>>> To fix it, we can filter memoryless nodes when allocating
->>>> pages.
->>>>
->>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>>> Reported-by: Teng Hu <huteng.ht@bytedance.com>
->>>
->>> Well AFAIK the key mechanism to only allocate from "good" nodes is the
->>> zonelist, we shouldn't need to start putting extra checks like this. So it
->>> seems to me that the code building the zonelists should take the
->>> NODE_MIN_SIZE constraint in mind.
->>
->> Indeed. How about the following patch:
-> 
-> +Cc also David, forgot earlier.
-> 
-> Looks good to me, at least.
-> 
->> @@ -6382,8 +6378,11 @@ int find_next_best_node(int node, nodemask_t
->> *used_node_mask)
->>           int min_val = INT_MAX;
->>           int best_node = NUMA_NO_NODE;
->>
->> -       /* Use the local node if we haven't already */
->> -       if (!node_isset(node, *used_node_mask)) {
->> +       /*
->> +        * Use the local node if we haven't already. But for memoryless
->> local
->> +        * node, we should skip it and fallback to other nodes.
->> +        */
->> +       if (!node_isset(node, *used_node_mask) && node_state(node,
->> N_MEMORY)) {
->>                   node_set(node, *used_node_mask);
->>                   return node;
->>           }
->>
->> For memoryless node, we skip it and fallback to other nodes when
->> build its zonelists.
->>
->> Say we have node0 and node1, and node0 is memoryless, then:
->>
->> [    0.102400] Fallback order for Node 0: 1
->> [    0.102931] Fallback order for Node 1: 1
->>
->> In this way, we will not allocate pages from memoryless node0.
->>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------A001yQ1aenwvwoOIj5ATQ5H4
+Content-Type: multipart/mixed; boundary="------------0GGggdQYEr1vnuniTzq9DBd0";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <807cca5b-06b9-da85-738b-d88fc10298cb@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <6257114d-a957-f586-145c-d2a885417360@suse.com>
+ <Y+pRK6a419jenR9R@zn.tnic> <Y+pTDFQlX9qNL35z@zn.tnic>
+ <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com> <Y+pZ5ccprqequvpE@zn.tnic>
+ <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com> <Y+qHMsZhYaYEmtTo@zn.tnic>
+ <6f561386-9bc4-a3bf-656d-db27a2275413@suse.com> <Y+tNQvpXdOAfZztQ@zn.tnic>
+ <3520cd7f-0e60-b140-9fd3-032ddb6778b5@suse.com> <Y+tP7fvvSFSSCznH@zn.tnic>
+In-Reply-To: <Y+tP7fvvSFSSCznH@zn.tnic>
 
-In offline_pages(), we'll first build_all_zonelists() to then 
-node_states_clear_node()->node_clear_state(node, N_MEMORY);
+--------------0GGggdQYEr1vnuniTzq9DBd0
+Content-Type: multipart/mixed; boundary="------------Twp7FuWpfzuMc0jo8NxTrqtN"
 
-So at least on the offlining path, we wouldn't detect it properly yet I 
-assume, and build a zonelist that contains a now-memory-less node?
+--------------Twp7FuWpfzuMc0jo8NxTrqtN
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
--- 
-Thanks,
+T24gMTQuMDIuMjMgMTA6MTAsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBG
+ZWIgMTQsIDIwMjMgYXQgMTA6MDI6NTFBTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IEkganVzdCBkb24ndCBsaWtlIHRoZSBpZGVhIG9mIHRyeWluZyB0byBjYXRjaCBhbGwg
+cG9zc2libGUgbWlzdXNlcyBpbg0KPj4gbG93ZXIgbGV2ZWxzLCBhdCB0aGUgc2FtZSB0aW1l
+IGludHJvZHVjaW5nIHRoZSBuZWVkIHRvIG1vZGlmeSB0aG9zZQ0KPj4gdGVzdHMgaW4gY2Fz
+ZSBhIG5ldyB2YWxpZCB1c2UgY2FzZSBpcyBwb3BwaW5nIHVwLg0KPiANCj4gU28gd2hhdCB3
+b3VsZCB5b3UgZG86IGdlbmVyYWxseSBhbGxvdyB0aGlzIHNvIHRoYXQgcG90ZW50aWFsbHkg
+b3RoZXINCj4gZ3Vlc3QgY29uZmlndXJhdGlvbnMgbWlzdXNlIGl0Pw0KDQpJIGd1ZXNzIHRo
+aXMgbGFyZ2VseSBkZXBlbmRzIG9uIHRoZSBmdW5jdGlvbmFsaXR5LiBJIGRvbid0IHNlZSB3
+aHkgYW55b25lDQp3b3VsZCB0cnkgdG8gdXNlIE1UUlIgb3ZlcndyaXRlIGZ1bmN0aW9uYWxp
+dHkgd2l0aG91dCByZWFsbHkgbmVlZGluZyBpdC4NCg0KQnV0IG1heWJlIEknbSB3cm9uZyBo
+ZXJlIGFuZCBJJ20gdW5kZXItZXN0aW1hdGluZyB0aGUgImNyZWF0aXZpdHkiIG9mDQprZXJu
+ZWwgaGFja2Vycy4NCg0KPiBBbmQgd2hlbiB3ZSBkZWNpZGUgdG8gY2hhbmdlIGl0LCBhbGwg
+dGhvc2UgdXNlcnMgd2lsbCBjb21lIHJ1bm5pbmcgYW5kDQo+IGNvbXBsYWluaW5nIHRoYXQg
+d2UgYnJva2UgaXQ/DQo+IA0KPiBBbmQgdGhlbiB3ZSdyZSBzdHVjayB3aXRoIGEgbmFzdHkg
+d29ya2Fyb3VuZCBpbiB0aGUgdHJlZSBiZWNhdXNlIHdlIGhhdmUNCj4gdG8gc3VwcG9ydCB0
+aGVtIHRvbz8NCj4gDQo+IFNlZSwgYWxsIHdlIGRvIGhlcmUgaXMgYmVjYXVzZSBvZiBzdWNo
+IG1pc2d1aWRlZCAob3IgbWF5YmUgZGlkbid0IGtub3cNCj4gYmV0dGVyKSBkZWNpc2lvbnMg
+d2hpY2ggaGF2ZSBoYXBwZW5lZCBhIGxvbmcgdGltZSBhZ28uDQoNCkkgY2FuIHNlZSB5b3Vy
+IHBvaW50Lg0KDQpNYXliZSBJIGhhdmVuJ3Qgc2VlbiBlbm91Z2ggY3JhenkgaGFja3MgeWV0
+LiA6LSkNCg0KTm8gbmVlZCB0byBmdXJ0aGVyIGRpc2N1c3MgdGhpcyB0b3BpYyBmcm9tIG15
+IHNpZGUsIGFzIEkgaGF2ZSB2b2ljZWQgbXkNCm9waW5pb24gYW5kIHlvdSBkaWQgc28sIHRv
+by4gSSB3aWxsIGFkZCB0aGUgdGVzdHMgeW91IGFyZSBhc2tpbmcgZm9yLg0KDQoNCkp1ZXJn
+ZW4NCg==
+--------------Twp7FuWpfzuMc0jo8NxTrqtN
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-David / dhildenb
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------Twp7FuWpfzuMc0jo8NxTrqtN--
+
+--------------0GGggdQYEr1vnuniTzq9DBd0--
+
+--------------A001yQ1aenwvwoOIj5ATQ5H4
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPrUZgFAwAAAAAACgkQsN6d1ii/Ey/0
+8wf/Si5n6CP23mzBrwPLsZ4l0Q6OXs34o6q0y8f0D6h9RNlXZbpC4Zu3NpK6is2/ud7b/4ssl4Ti
+nNlZjnFPCFpYEzlnLb4GgHeR0hARo87SCCG58txON6mhLZiv3S4gnz8/7AT1YeOLQ8/eVYkqz2+Q
+7kp/WGfK2PJN/RH4bV+RU669pxIIB2rCRM94IZcvzITHmnvX98aAwDBON9ZT15aOZ1Sw3OiY8p09
+jjonqc4b3E6cBSlqT6UlHG6wR3rIP9FzCyu2CxO7dV7FydekcHUVmecy5fI+ZaQ54EgBU1Mws8om
+AdUMX2X4/m+NXAPr17eFYmS1bPf2nIEAgOVbMRpO/w==
+=3GwQ
+-----END PGP SIGNATURE-----
+
+--------------A001yQ1aenwvwoOIj5ATQ5H4--
