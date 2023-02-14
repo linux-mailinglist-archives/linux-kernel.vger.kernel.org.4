@@ -2,72 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACF1697014
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89906697011
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBNVvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S232383AbjBNVvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjBNVvH (ORCPT
+        with ESMTP id S232418AbjBNVu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:51:07 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4401305E4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id t13-20020a056902018d00b0074747131938so17172794ybh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
-        b=Qay9NGY+kevbOhpcduj2lxzQEFadpk9SFQFC5/rXdXofLs8NttK/CIfoXhs3/rw/3n
-         Vl49iXVxwZJBdFcIsvmEvl4woJWIh/PEKJeFx1F8R7n36raTS6dU9ChEZ20cFXj2XEl+
-         uFls14nOLrDtGKC9fYuu08xrafCrSunlP0gV22d0ze3+Rd8M+6n0UAbxUdXoX5FGeYT0
-         CsICm7fVCo1u+7WOby0MsJphWSOwBfnVcq78xI3TiXzZjr6sychzLaS77OlPYYxxR7Mb
-         lZc/KrUYjyfoSnOAlJ01fR1vqNTPBjqUc1KjU8GfjkjNWfUzWa7nwI5CwvXerVfqyo+N
-         OyPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
-        b=jL3927vOdpcXdSjSWsRME6pxR49vxewQ9Oqx9AZSCdDyD7QA6QDXYwrOdVr7kWQm0C
-         j+MXBteSef9kXnvONXetP1RItL7nSI8mJNY+ASYdkvrbVpud9/3Y2ecuso0rdEMHZUxw
-         MZfS4fhQUYj2H1Qdxi0Mb3e8A8j+2WGbbEq+AIJfH5SmAyYZm3aI7RgHU/F98YIw1njC
-         jsBbbUfqf00Py9eiWAIB1PgI8DCyq26FNidyDqMexYgkFseKnb/0ESKzJ3fIeP9OYLRT
-         /jpy7L0SWlO5ErPqui1THHeXveHn/gIHYsIxITyWGDQW7wdkTrsR8h/9o+zMwTyyYR6L
-         aqTg==
-X-Gm-Message-State: AO0yUKUNp6IkRj5exJ15XkhvAQK0ZPgYPn39aP3f/Q4oAZK3a72s0Rae
-        XWOnFEBySIy043XPUHB52yv/6zXUx0XI34jMDPci
-X-Google-Smtp-Source: AK7set/UuWwz2D+btTN2iVANQS92vAVf1LCQRG6th9IPcVzzaqtIi31Q6ChM3iY+rl8IW8bGj44vP7BuxGgl1GRldWoW
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:2483:e0be:d4cf:3b41])
- (user=axelrasmussen job=sendgmr) by 2002:a05:6902:3c7:b0:8fe:5e0f:9712 with
- SMTP id g7-20020a05690203c700b008fe5e0f9712mr1ybs.5.1676411463637; Tue, 14
- Feb 2023 13:51:03 -0800 (PST)
-Date:   Tue, 14 Feb 2023 13:50:46 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230214215046.1187635-1-axelrasmussen@google.com>
-Subject: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
-        Peter Xu <peterx@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        James Houghton <jthoughton@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 14 Feb 2023 16:50:57 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2088.outbound.protection.outlook.com [40.107.20.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058F52B099;
+        Tue, 14 Feb 2023 13:50:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R1wgHNTDSs5SGrZWfzmKNsvtVBFCWK848tV1DNoM55PEDpMxmvoIcQ60xg0iKYl+NmBP8MEjmPR0eCZKJ3HTGmu1FPtjZybuzP6BxxIa6dGt2vszk2AhYGKfw73+xVgXZGdVPvz854rto8Ozw3ukYEFXehakx684wCb3q+sJ+2lIpglXEOimFp1/HpZvQxZHrrOmbFmib2ipX0f5WFR+SIDbtEPGU4PFKsVgGfEGA41NGElJRhRFCA3JOVZUm0MlRD4IjPr6VnQNoBA4ddUSMBF9c/08Oqj2NPOUv7LZB+uD2VmQpf/STVRDqU9XeAh6mGQcFlznWWiNCINkIWCfvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kdtFYlX20IEK541Gw8+LiZ8Q//r+toSMtPAvioJzOJc=;
+ b=DMMzDv8Sz3WJ9zz44cnI0oszL1MKTFy2ca1dtYrsX9K0q7tQX2F5dMqTjC3Q5JNm60yST9Zv0GxnybCCtJKNkzto87BFhFdWZNNrm+anG4/I9arnYct+NdskZ1SrWKHSRZ151sNGudLsM0RPpmPVj4P3xKNbvC30ESso10pgU2qVEntqnucJfG9PQikmnb3lORRFTybw7X35KAXl4F5x6o2o18OgXF7hubSCOmKPu/oGBhlg32e5nfQHt2YGvnBFj6e14ZuI8huc03EyZhj8VY50Gpm8OenWukTaGtHd8tTi4afzOYlhNvLd4xaGNu3Eokw7zZILt22EKUBP0DchJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kdtFYlX20IEK541Gw8+LiZ8Q//r+toSMtPAvioJzOJc=;
+ b=RsKirE2Fl4R4StZmEIt9zuRzZaNbiaVK/mU30sHexk+bBWH2h/fHiqYTDV8IBO4/sqs5eVZ7zQrl/rIz4klB70ydZRZucO+oO5OLf1FFGMpBTH0i5WkxQAkMlfUCNaTILMbfsA1Y/F34dUoUIlQxAGIz7Cb/qI0aznzcKc823h4=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by AS8PR04MB8644.eurprd04.prod.outlook.com (2603:10a6:20b:42b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 21:50:53 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.6086.023; Tue, 14 Feb 2023
+ 21:50:52 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?utf-8?B?S3J6eXN6dG9mIFdpbGN6ecWEc2tp?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: RE: [EXT] Re: [PATCH 1/1] PCI: layerscape: Set 64-bit DMA mask
+Thread-Topic: [EXT] Re: [PATCH 1/1] PCI: layerscape: Set 64-bit DMA mask
+Thread-Index: AQHZJr0yaCK3pFdB6EKPvZEvJoExp67O6h2AgABEYyA=
+Date:   Tue, 14 Feb 2023 21:50:51 +0000
+Message-ID: <HE1PR0401MB233186A0CDA481B775B9B92888A29@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20230112193621.1513505-1-Frank.Li@nxp.com>
+ <45d1fdae-f6c0-ab19-f6a2-2499ead9289a@seco.com>
+In-Reply-To: <45d1fdae-f6c0-ab19-f6a2-2499ead9289a@seco.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AS8PR04MB8644:EE_
+x-ms-office365-filtering-correlation-id: 544d0d55-197f-4fcc-c247-08db0ed58a8b
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bpKY/Lj2cq9//+UBHoxVYGkLBCIS7+tVyp1zGroaGJyybjZUCTTMpL8HCNo9Lb5D/jzyDaSlGjrEK1icLyEAo0autc6GVuZoB46X0lvgH8NC//ubl4cztSBFqMU6zwuEmSTutG3lqosVwoOwg39oqD5co7PWnP65auwFxS+eKjAFbfYsi1X/cQR6/HWZz46GbiHcIRPkiB6gDWWpjUj93CXIys0SvixmevHp1wEvzWongNEBXc4Tbyd/jMkwyvskL9VsbiqGs2U3a9t1wPZ0K812kcGC+DKzVtVQOTMElxlpZLGbpEfIOapyuiQ5oLl6vkGVNZwQEkBzciZtEQolepfGXKlxr+ESYNt91yAed/8QF7/nWZ4nWQH9wnJtBHIXUFmZA06QzdEK9djb8fpSyeNjXhRBYGa3FS/t1pJRlr4pdh9WS4t8+FlfYDSS8pk1KKpXLdkUvBlEe+mmk8jgXCOf8XE7E6Nfqn/dS5t4hzuW/I8mMB4QiLMdvgJH0sV/wA8A+LDWTbCiiOT+CrMwZTGNEsL1cJL+gSegDGFHbocJfJCuUPg5LkYcpKGggru/3KzSa7QOs/NAfphL56mwcAN/eNdRLtqRp93foSO7cW8AzeUSGtxG1DvBGZDrbYpoLJ/IZtkL2jhx7HcHWe8iWs0IgR8i9LCfHzWbgid1i/rNxjBrqE8ZkybaYiGYh8qEVKYaRYnTA5cgLCe8oU/Ttg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199018)(71200400001)(4326008)(9686003)(5660300002)(7416002)(4744005)(41300700001)(2906002)(26005)(186003)(52536014)(55236004)(6506007)(55016003)(38100700002)(44832011)(38070700005)(8936002)(316002)(478600001)(66946007)(110136005)(86362001)(7696005)(8676002)(66446008)(66556008)(66476007)(64756008)(76116006)(83380400001)(33656002)(122000001)(921005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SVJ4a0I1SUFOT3VpTEpKWGthUUxXREREcVMrR0h3ZXZqcGdCNXlLSFVSbWFa?=
+ =?utf-8?B?bXNnTEhZM3ppVFA0MjVkQjlaa0VUSHo3eEkyQnNuZytiL3QrYXNKejBCd2RU?=
+ =?utf-8?B?UXU0UlY4VUVlTTU2TGx2M092YXFSNnJXeFlxc2ROVzdiZ1Mrbmo1dEd0MU9i?=
+ =?utf-8?B?TzRncDlRVyt2djBhSXEyTzVQbk51dTJTUUVFS1lEbFdkYnFwbFM5WXBWS2FB?=
+ =?utf-8?B?ZmVhZU5rU25LeWh0M2phbTRFZngwVXNIbGFGWnNIUVJWTy9vUlptaTcvLy9Z?=
+ =?utf-8?B?ek9MYVR3RlZxNUJVN0NoZmpzQUZSWkJTQS9rTVBxOHlKMXpZREVqczM4TUJ1?=
+ =?utf-8?B?QW9sQ0YvZUNZdUtoQklLakZXb0J2K3BaZXJRU3pFTExEOGxoaEx5VkxaUzVT?=
+ =?utf-8?B?RGJGeFF5LzYwRDZ6L1lEczNNbmZTTGRIWnFGMmQ4V3U4dExqbm1WUUVrY2NL?=
+ =?utf-8?B?bWRVK1l6bzA4elJiVXA1ckFYcXF2di8waHV5YkNRS0NuazJ1ME41T1A2YUM4?=
+ =?utf-8?B?eWtJNFBocHp1SUxPZGZkNzR6MkwvSUc2R3lnQXViSE5QNENjdk9wYlFKdTk0?=
+ =?utf-8?B?UU5jeUhFeWd4c0E0ZEc3aXBRZ2dOWncyN0NldGlCWFdJREl6VjJXc0U5eTlM?=
+ =?utf-8?B?ckw5eitZTXhPejNzNXlEYVlpb0RWblBpUmM3ZEdlSEVGMEpvVFJVM1MvMWR6?=
+ =?utf-8?B?ZHI2eDJiQitDN1RqQ3kxWlV0ODRCd2dzU2lmdS9OZUpXd3ZOVTBETU5lSTNX?=
+ =?utf-8?B?cDRkR1BBT0hocUJLUWovQm1udWMyc2dMMkthNFpjcHljWGpqWm5JWlFXQmVu?=
+ =?utf-8?B?OVdrd2VobituZUlpdmllSTNCc3g2UzhEai9kOGFzNGFjMnA2TDM5eW4wRVgv?=
+ =?utf-8?B?UmJwUXVMcGJTNUxVcHM0RkFUdmdLTUFGQTJBNldCdnZ2R29FQ1gzK0oya3NO?=
+ =?utf-8?B?bEVaVDlaRkVnVVhzWjk3Rk5zd0hzcjJ5ZDhQUTJuVFU2THFYZjQwd2MrVmVN?=
+ =?utf-8?B?YjlnUVlMU3F4TmNzakVJZG1sRWZ0czd6M1FEaXNkYWxUaElBY0xQc1NTd2lT?=
+ =?utf-8?B?ZFJpVXVzK1ZNN3dUMUpMdDEwcDNKYzR3YkRPMGZoQjRCTWFGWUQyQUl6N3Z0?=
+ =?utf-8?B?VFZtOGIyWTVLNTF3Wm1KRlBDcEdsNHd5YU9McFdUb0pBR2phOG15OEFNZGMx?=
+ =?utf-8?B?L1lTZ0Z6Mzl3bHFUdGdTRHFtbU50RFFrQkV1ODNIekJnR2p1ekhYMXhLSmJp?=
+ =?utf-8?B?dHRjT0tOallKVGtyQ3lWS3ZiSmdGMzFqdS9ycFR0QjY2NDh3bThtOS80QURm?=
+ =?utf-8?B?eVZRMDBRb2xwZ0loeXFaWnpUMnRWeDIveEhQaWxiUmJlUHdiQmhWWlRPSk1k?=
+ =?utf-8?B?aWFya1dWT1pFbTYraXZITldqRHBMSFNkeHJnYWV4empkSGc1R0RoOHVpTzVl?=
+ =?utf-8?B?N2RjaG8xV0g5bmR2SEJpaU93amE4ZjVSQXVMaVM5V2ZRM2F3UWMzNGcxNDB0?=
+ =?utf-8?B?cU9UQk5GZFhsV1p3Z3I4cjdpQWNTSllSNWpPaVhnQUVYQStDdzNFd0w4bE0y?=
+ =?utf-8?B?cjJHdjlrV21vSlllTFJ1bGJVNWIzRlF5dytCaHZlMG1ZWkZReXZFdHhvdFpH?=
+ =?utf-8?B?MUhDdmEvQVREMVFCK2JiZ0dlVTBkZTA5QlFPbVd4TGdnbzhtQ3lRM1cxaE5R?=
+ =?utf-8?B?bEE2Rmk1TVp6T1ZpMnRlU2xuNXpRejdDWkVLci82dTJaTjlzYU81Vk9zcmFV?=
+ =?utf-8?B?MXpXb3ZPTU5VclVsQmRlR2tMOXA5R1NzZkYyRjRHN2JMYWx6MmJSZWFZRXVp?=
+ =?utf-8?B?Ti9WSVNlWUV5Y2NnQTlYbDhwT2lOTnhWbGJOZ3JIR0lObnFVaTZDbnduWnBF?=
+ =?utf-8?B?T0kzbjRkOXJ3amFtTDhNNkRSOTU1aG9LWTRTRlZUSVpwQ1FEYVNQdjFORExK?=
+ =?utf-8?B?M25pc2lyWW1uYmZBd3pra2NXTkFhZFl1SDUzMmxtdTFQOHdGWjlzWHZha1RS?=
+ =?utf-8?B?WlJuK2NzdmNmOWg2bm4vVGkwa01XNEdHeDJXUG1mZUVXQlJiMDJrUng0ZTNM?=
+ =?utf-8?B?NnNPMVFwS3NVTnYrWkg5WTZ2WEE3ZU9LRjRqSTExV29JbUR5RXRrVi9KS1NQ?=
+ =?utf-8?Q?Hp0g=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 544d0d55-197f-4fcc-c247-08db0ed58a8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 21:50:51.7670
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UAWV3M1HauDVJWaxLWLZOxxxxyh/vN10NT7yhMH1xibAolbdHpjcT/MlVKp88hp02YStuxNLo1VdD8DQ8NP8Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8644
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,343 +138,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
-
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-but for *minor* faults.
-
-Rename "wp_copy" arguments to "wp_mode", since the mode now applies
-more widely than just to the copy operation.
-
-Update the selftest to do some very basic exercising of the new flag.
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c                         |  6 ++-
- include/linux/userfaultfd_k.h            |  3 +-
- include/uapi/linux/userfaultfd.h         |  7 ++++
- mm/hugetlb.c                             |  6 +--
- mm/shmem.c                               |  4 +-
- mm/userfaultfd.c                         | 49 ++++++++++++++----------
- tools/testing/selftests/vm/userfaultfd.c |  4 ++
- 7 files changed, 51 insertions(+), 28 deletions(-)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index cc694846617a..545dc033eec8 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1910,13 +1910,15 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mcopy_continue(ctx->mm, uffdio_continue.range.start,
- 				     uffdio_continue.range.len,
--				     &ctx->mmap_changing);
-+				     &ctx->mmap_changing,
-+				     uffdio_continue.mode);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 9df0b9a762cc..a53aa56e78ad 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -69,7 +69,8 @@ extern ssize_t mfill_zeropage(struct mm_struct *dst_mm,
- 			      unsigned long len,
- 			      atomic_t *mmap_changing);
- extern ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--			      unsigned long len, atomic_t *mmap_changing);
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      __u64 mode);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index bdbfeb6fb393..a1bd0b0c6c43 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6169,7 +6169,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 			    unsigned long src_addr,
- 			    enum mcopy_atomic_mode mode,
- 			    struct page **pagep,
--			    bool wp_copy)
-+			    bool wp_mode)
- {
- 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
- 	struct hstate *h = hstate_vma(dst_vma);
-@@ -6306,7 +6306,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
- 	 * with wp flag set, don't set pte write bit.
- 	 */
--	if (wp_copy || (is_continue && !vm_shared))
-+	if (wp_mode || (is_continue && !vm_shared))
- 		writable = 0;
- 	else
- 		writable = dst_vma->vm_flags & VM_WRITE;
-@@ -6321,7 +6321,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	_dst_pte = huge_pte_mkdirty(_dst_pte);
- 	_dst_pte = pte_mkyoung(_dst_pte);
- 
--	if (wp_copy)
-+	if (wp_mode)
- 		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
- 
- 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 0005ab2c29af..725e5d5d85ab 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2402,7 +2402,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 			   struct vm_area_struct *dst_vma,
- 			   unsigned long dst_addr,
- 			   unsigned long src_addr,
--			   bool zeropage, bool wp_copy,
-+			   bool zeropage, bool wp_mode,
- 			   struct page **pagep)
- {
- 	struct inode *inode = file_inode(dst_vma->vm_file);
-@@ -2493,7 +2493,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 		goto out_release;
- 
- 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--				       &folio->page, true, wp_copy);
-+				       &folio->page, true, wp_mode);
- 	if (ret)
- 		goto out_delete_from_cache;
- 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 0499907b6f1a..2ad4dcf72968 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -58,7 +58,7 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
- int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 			     struct vm_area_struct *dst_vma,
- 			     unsigned long dst_addr, struct page *page,
--			     bool newly_allocated, bool wp_copy)
-+			     bool newly_allocated, bool wp_mode)
- {
- 	int ret;
- 	pte_t _dst_pte, *dst_pte;
-@@ -79,7 +79,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	 * Always mark a PTE as write-protected when needed, regardless of
- 	 * VM_WRITE, which the user might change.
- 	 */
--	if (wp_copy) {
-+	if (wp_mode) {
- 		_dst_pte = pte_mkuffd_wp(_dst_pte);
- 		writable = false;
- 	}
-@@ -147,7 +147,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
- 			    unsigned long dst_addr,
- 			    unsigned long src_addr,
- 			    struct page **pagep,
--			    bool wp_copy)
-+			    bool wp_mode)
- {
- 	void *page_kaddr;
- 	int ret;
-@@ -208,7 +208,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		goto out_release;
- 
- 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--				       page, true, wp_copy);
-+				       page, true, wp_mode);
- 	if (ret)
- 		goto out_release;
- out:
-@@ -258,7 +258,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
- 				pmd_t *dst_pmd,
- 				struct vm_area_struct *dst_vma,
- 				unsigned long dst_addr,
--				bool wp_copy)
-+				bool wp_mode)
- {
- 	struct inode *inode = file_inode(dst_vma->vm_file);
- 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
-@@ -284,7 +284,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
- 	}
- 
- 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--				       page, false, wp_copy);
-+				       page, false, wp_mode);
- 	if (ret)
- 		goto out_release;
- 
-@@ -330,7 +330,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 					      unsigned long src_start,
- 					      unsigned long len,
- 					      enum mcopy_atomic_mode mode,
--					      bool wp_copy)
-+					      bool wp_mode)
- {
- 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
- 	ssize_t err;
-@@ -427,7 +427,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 
- 		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
- 					       dst_addr, src_addr, mode, &page,
--					       wp_copy);
-+					       wp_mode);
- 
- 		hugetlb_vma_unlock_read(dst_vma);
- 		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-@@ -483,7 +483,7 @@ extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 				      unsigned long src_start,
- 				      unsigned long len,
- 				      enum mcopy_atomic_mode mode,
--				      bool wp_copy);
-+				      bool wp_mode);
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
-@@ -493,13 +493,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 						unsigned long src_addr,
- 						struct page **page,
- 						enum mcopy_atomic_mode mode,
--						bool wp_copy)
-+						bool wp_mode)
- {
- 	ssize_t err;
- 
- 	if (mode == MCOPY_ATOMIC_CONTINUE) {
- 		return mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--					    wp_copy);
-+					    wp_mode);
- 	}
- 
- 	/*
-@@ -516,7 +516,7 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 		if (mode == MCOPY_ATOMIC_NORMAL)
- 			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
- 					       dst_addr, src_addr, page,
--					       wp_copy);
-+					       wp_mode);
- 		else
- 			err = mfill_zeropage_pte(dst_mm, dst_pmd,
- 						 dst_vma, dst_addr);
-@@ -524,12 +524,21 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
- 					     dst_addr, src_addr,
- 					     mode != MCOPY_ATOMIC_NORMAL,
--					     wp_copy, page);
-+					     wp_mode, page);
- 	}
- 
- 	return err;
- }
- 
-+static inline bool wp_mode_enabled(enum mcopy_atomic_mode mcopy_mode, __u64 mode)
-+{
-+	switch (mode) {
-+	case MCOPY_ATOMIC_NORMAL: return mode & UFFDIO_COPY_MODE_WP;
-+	case MCOPY_ATOMIC_CONTINUE: return mode & UFFDIO_CONTINUE_MODE_WP;
-+	default: return false;
-+	}
-+}
-+
- static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 					      unsigned long dst_start,
- 					      unsigned long src_start,
-@@ -544,7 +553,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 	unsigned long src_addr, dst_addr;
- 	long copied;
- 	struct page *page;
--	bool wp_copy;
-+	bool wp_mode;
- 
- 	/*
- 	 * Sanitize the command parameters:
-@@ -594,8 +603,8 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 	 * validate 'mode' now that we know the dst_vma: don't allow
- 	 * a wrprotect copy if the userfaultfd didn't register as WP.
- 	 */
--	wp_copy = mode & UFFDIO_COPY_MODE_WP;
--	if (wp_copy && !(dst_vma->vm_flags & VM_UFFD_WP))
-+	wp_mode = wp_mode_enabled(mcopy_mode, mode);
-+	if (wp_mode && !(dst_vma->vm_flags & VM_UFFD_WP))
- 		goto out_unlock;
- 
- 	/*
-@@ -604,7 +613,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 	if (is_vm_hugetlb_page(dst_vma))
- 		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
- 					       src_start, len, mcopy_mode,
--					       wp_copy);
-+					       wp_mode);
- 
- 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
- 		goto out_unlock;
-@@ -656,7 +665,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 		BUG_ON(pmd_trans_huge(*dst_pmd));
- 
- 		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--				       src_addr, &page, mcopy_mode, wp_copy);
-+				       src_addr, &page, mcopy_mode, wp_mode);
- 		cond_resched();
- 
- 		if (unlikely(err == -ENOENT)) {
-@@ -718,10 +727,10 @@ ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long start,
--		       unsigned long len, atomic_t *mmap_changing)
-+		       unsigned long len, atomic_t *mmap_changing, __u64 mode)
- {
- 	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
--			      mmap_changing, 0);
-+			      mmap_changing, mode);
- }
- 
- void uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--- 
-2.39.1.581.gbfd45094c4-goog
-
+PiA+DQo+ID4gKyAgICAgLyogc2V0IDY0LWJpdCBETUEgbWFzayBhbmQgY29oZXJlbnQgRE1BIG1h
+c2sgKi8NCj4gPiArICAgICBpZiAoZG1hX3NldF9tYXNrX2FuZF9jb2hlcmVudChkZXYsIERNQV9C
+SVRfTUFTSyg2NCkpKQ0KPiA+ICsgICAgICAgICAgICAgZGV2X3dhcm4oZGV2LCAiRmFpbGVkIHRv
+IHNldCA2NC1iaXQgRE1BIG1hc2suXG4iKTsNCj4gDQo+IElzbid0IHRoaXMgbWFuZGF0b3J5PyBX
+aHkgbm90IGRldl9lcnJfcHJvYmUgYW5kIHJldHVybiB0aGUgZXJyb3I/DQoNCkkgZG9uJ3QgdGhp
+bmsgaXQgaXMgbWFuZGF0b3J5LiBJZiBmYWlsdXJlLCBkbWEgd2lsbCB1c2Ugc3dpb3RsYi4gDQpK
+dXN0IGFuIGFkZGl0aW9uYWwgbWVtY3B5IGludm9sdmVkLiANCg0KRnJhbmsgTGkNCg0KPiANCj4g
+LS1TZWFuDQo+IA0KPiA+ICAgICAgIHBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHBjaWUpOw0K
+PiA+DQo+ID4gICAgICAgcmV0ID0gZHdfcGNpZV9lcF9pbml0KCZwY2ktPmVwKTsNCg0K
