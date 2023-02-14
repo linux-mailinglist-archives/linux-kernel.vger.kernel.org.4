@@ -2,90 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95716960BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E346960C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjBNKaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S232470AbjBNKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjBNKaU (ORCPT
+        with ESMTP id S232428AbjBNKam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:30:20 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE77233DA;
-        Tue, 14 Feb 2023 02:30:18 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 14 Feb 2023 05:30:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F67241C9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:30:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 5BD2C3FA55;
-        Tue, 14 Feb 2023 10:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1676370617; bh=imb1OrlC2L4fhlGYWYO9ydzZ8X82aRztwsYTQ4mpkvs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ZykmX5JNjkB3Y2h1/1GRLL+fijsmHvUBD60tmVyCD6yhG7QlsRKgHefVISM7GHE/u
-         H5lgKlNbrTgU36J59T1YLh20aa53BBvWozzjTA55LHZMGqAiw/KeI4DSGl1I4Iac8F
-         0b9u30zROlSRIIggJjky6bgDkNzGv96+9mdfoW9wjXB14tKQ9efIaL+m3FgzrUHDcA
-         gg7dIIIHDhfEy5HuJ+UlMJxsZGcoJw4iOzF0F6Aih6EtYjN6yzfn4nKVcs5Amr9Vp9
-         k2/qdJBTc+B7CW/7srsXmaLPd+jq7K7DDUX2hL2qjwiuCTouhJ2okV2BsnyzI10kZH
-         Pjrn9j2ijK4mw==
-Message-ID: <65548ce6-d2d8-c913-a494-5ac044af2e35@marcan.st>
-Date:   Tue, 14 Feb 2023 19:30:10 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] brcmfmac: cfg80211: Use WSEC to set SAE password
-Content-Language: en-US
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Double Lo <double.lo@infineon.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC04B614F8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:30:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E7BC433EF;
+        Tue, 14 Feb 2023 10:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676370634;
+        bh=9T6pAt8RK/wq+3Lfrzi3xrLApHJkjngyCRo3iZZ8lcM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FRujVgQdhII1Y1kLFdI49NShstvdPkwW9DJTqMSApgiaz2cPn7FjCjQsVcxy4228C
+         Y2iGvCNYWUAVz2GoYmvgW2/ja59ZwxyVnyZ/BZ5onLQ07n19oJvl9EMTfpbNRn2xgq
+         QEkw6+6Tsoyx5p198fWDYBUoQNdDInMJM93CtK3a8RafJ9ykweJIG58qK5MtdG6Xwh
+         U9+1ikY/FV6uI+wm1uM8FqSnEwksPW9wwkTs3CdLV2cNxbQXAybJXpU5dvxK+b++fE
+         KjkKPqFqmv32h6dHpqvqQmgppq5BrWQQ5lZ0JudInrsf0adg25t3Pl1T7cCZATr4/h
+         jIv3FSv/RYIZQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vernon Yang <vernon2gm@gmail.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-References: <20230214093319.21077-1-marcan@marcan.st>
- <edcabef3-f440-9c15-e69f-845eb6a4de1b@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <edcabef3-f440-9c15-e69f-845eb6a4de1b@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] [RFC] maple_tree: reduce stack usage with gcc-9 and earlier
+Date:   Tue, 14 Feb 2023 11:30:24 +0100
+Message-Id: <20230214103030.1051950-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 19.07, Arend van Spriel wrote:
-> + Double Lo
-> 
-> On 2/14/2023 10:33 AM, Hector Martin wrote:
->> Using the WSEC command instead of sae_password seems to be the supported
->> mechanism on newer firmware, and also how the brcmdhd driver does it.
-> 
-> The SAE code in brcmfmac was added by Cypress/Infineon. For my BCA 
-> devices that did not work, but this change should be verified on Cypress 
-> hardware.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Do you mean the existing SAE code does not work on BCA, or this version
-doesn't?
+gcc-10 changed the way inlining works to be less aggressive, but
+older versions run into an oversized stack frame warning whenever
+CONFIG_KASAN_STACK is enabled, as that forces variables from
+inlined callees to be non-overlapping:
 
-I assume/hope this version works for WCC in general, since that is what
-the Apple-relevant chips are tagged as. If so it sounds like we need a
-firmware type conditional on this, if CYW needs the existing behavior.
+lib/maple_tree.c: In function 'mas_wr_bnode':
+lib/maple_tree.c:4320:1: error: the frame size of 1424 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
-- Hector
+Change the annotations on mas_store_b_node() and mas_commit_b_node()
+to explicitly forbid inlining in this configuration, which is
+the same behavior that newer versions already have.
+
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: kasan-dev@googlegroups.com
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ lib/maple_tree.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 5e9703189259..646297cae5d1 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -146,6 +146,13 @@ struct maple_subtree_state {
+ 	struct maple_big_node *bn;
+ };
+ 
++#ifdef CONFIG_KASAN_STACK
++/* Prevent mas_wr_bnode() from exceeding the stack frame limit */
++#define noinline_for_kasan noinline_for_stack
++#else
++#define noinline_for_kasan inline
++#endif
++
+ /* Functions */
+ static inline struct maple_node *mt_alloc_one(gfp_t gfp)
+ {
+@@ -2107,7 +2114,7 @@ static inline void mas_bulk_rebalance(struct ma_state *mas, unsigned char end,
+  *
+  * Return: The actual end of the data stored in @b_node
+  */
+-static inline void mas_store_b_node(struct ma_wr_state *wr_mas,
++static noinline_for_kasan void mas_store_b_node(struct ma_wr_state *wr_mas,
+ 		struct maple_big_node *b_node, unsigned char offset_end)
+ {
+ 	unsigned char slot;
+@@ -3579,7 +3586,7 @@ static inline bool mas_reuse_node(struct ma_wr_state *wr_mas,
+  * @b_node: The maple big node
+  * @end: The end of the data.
+  */
+-static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
++static noinline_for_kasan int mas_commit_b_node(struct ma_wr_state *wr_mas,
+ 			    struct maple_big_node *b_node, unsigned char end)
+ {
+ 	struct maple_node *node;
+-- 
+2.39.1
+
