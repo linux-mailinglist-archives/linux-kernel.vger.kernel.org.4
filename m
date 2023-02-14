@@ -2,275 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EA9696C16
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26675696C1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbjBNRyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S233195AbjBNRzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233201AbjBNRyv (ORCPT
+        with ESMTP id S233312AbjBNRzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:54:51 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF91C2D174;
-        Tue, 14 Feb 2023 09:54:49 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id w14-20020a17090a5e0e00b00233d3b9650eso8746351pjf.4;
-        Tue, 14 Feb 2023 09:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a09WllYZDnimLE8v2wTR3vxHfJ4ytKtsiaLki5l7X90=;
-        b=Qzg38EyqGAaADeTuF7AOzhFZ5UsLAmJ0g5L8w/2P0NokzD/mBFYc/xSZMycMBKS0Z5
-         wupb9ekS9ypcL8sFebok6R3xKRsZhP8u+iaa12pEciXf21c8ZXJiOctYQYk9LVGEYCVu
-         g3DGijIIyVE/ZMg8N79Qsna8x3qme/cmCgDsYVFxGbW9qE/xs2r0A9iTPcsosueeEqTu
-         Jjr4TM2Qc8KOxzHBWYhxdTXRrHBL3CQ+Nv28xLmFXnyOa56lPyjadVTJqgogsd17m5P4
-         o5bGV64r9s9UEghXDAd2No6h5gbin7zTwrT5EMqmeWba/l76WEkimFknICZVPr71c6ka
-         FzCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a09WllYZDnimLE8v2wTR3vxHfJ4ytKtsiaLki5l7X90=;
-        b=XX1NXOMKTDv01vCelgr8njCfwMkaT4GCkIEtorgZNfSOSnd6jRYgVgS1n0xwP2lWLv
-         6ZmT1MFxu2h0aqZqEaF9HeBKTMUthtU99TUN1xx/UayZlqxpBT/oD1yR/1qUq9IXJT6P
-         C2cHQOoFNU0Z3id28myRo3kwjNQgTjRvZdLNZiHZPifXYnu15uzfT0y6ig9pi/dy3nim
-         1rAmDeCojbRFCM1NxpXV2B2hO2ylwYGEyOrwYlowiqBlRonYz8WF6AvK8Lh7CgPL5Zyq
-         8UQcY6rZkZzHJMinVzrvFDdKrOUn0fap83HKU87EJgvci2ixAev1CRJLT7YHMVIC/GzD
-         OkuQ==
-X-Gm-Message-State: AO0yUKXlSoZB5O1ojFASw/bF7jnubY1SPX6r/4W0nM5GSP22W05HiPRR
-        telZFw3e/5pqCZesElxQ1fA=
-X-Google-Smtp-Source: AK7set/RGBzMrGawJ2NUjzEXa9UQINjHfKyuBo/buaEy0zUQBjImCtSLL6T8Fy1l0Il06cXLI1p46w==
-X-Received: by 2002:a17:902:e84a:b0:198:fded:3b69 with SMTP id t10-20020a170902e84a00b00198fded3b69mr4275449plg.53.1676397289002;
-        Tue, 14 Feb 2023 09:54:49 -0800 (PST)
-Received: from strix-laptop (2001-b011-20e0-1465-11be-7287-d61f-f938.dynamic-ip6.hinet.net. [2001:b011:20e0:1465:11be:7287:d61f:f938])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709028a8400b001993411d66bsm10427907plo.272.2023.02.14.09.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 09:54:48 -0800 (PST)
-Date:   Wed, 15 Feb 2023 01:54:38 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Barret Rhoden <brho@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
-Message-ID: <Y+vK3tXWHCgTC8qk@strix-laptop>
-References: <20230207035139.272707-1-shiyn.lin@gmail.com>
- <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
- <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
- <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
- <Y+Z8ymNYc+vJMBx8@strix-laptop>
- <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
- <Y+uv3iTajGoOuNMO@strix-laptop>
- <a02714ee-3223-ba53-09eb-33f7b03ef038@redhat.com>
+        Tue, 14 Feb 2023 12:55:16 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593E12DE4B;
+        Tue, 14 Feb 2023 09:55:13 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EEhWbA015420;
+        Tue, 14 Feb 2023 17:55:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bIxLz53hdks8PSzH4Z/mhWkOgtHjw/e8sEJInHbVjBo=;
+ b=Jv4NpBbnKB7lr/20r5OOf5F79y9t6zv+g19YrWwG5UmzdWDkEcV/9VBkO6BNQ6KFM+tF
+ LLdTxd4czU+tYTVNTBDfw02UsW9ubttGSGnXnYfDsMSb+PpEv7Ie3cTyOqkQyv7zUhi0
+ yd/IXVLPRtPaZn3cAuwP+nD+RS8SCcxyAhUIm2CKDF2UHK7iwV8u58rwlsy+fVeOYlVw
+ 4Z3T59IqHlTHn7PCtVQO6JYJPO1Mp00GGASErYCasR0PTu4RrhDL+30J0pjoFFp1nI14
+ ycRNcfqYZa6DMaKm4HAwVboDbx1xpCQ80hO3c4Ygxe6RNcDVV1Z9rQpRWlkTatMu7SQ5 eA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np0qpyvd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 17:55:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EHsxo9009728
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 17:54:59 GMT
+Received: from [10.110.55.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 09:54:57 -0800
+Message-ID: <d514591a-2891-8c2d-2cd4-5af8283748f5@quicinc.com>
+Date:   Tue, 14 Feb 2023 09:54:57 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a02714ee-3223-ba53-09eb-33f7b03ef038@redhat.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
+ on DSI interfaces
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        <phone-devel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Loic Poulain" <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221231215006.211860-1-marijn.suijten@somainline.org>
+ <20221231215006.211860-6-marijn.suijten@somainline.org>
+ <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
+ <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
+ <df059f88-6ff6-5906-58f1-4f6c752c4214@quicinc.com>
+ <20230214130636.ldckqgcq6ajph372@SoMainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230214130636.ldckqgcq6ajph372@SoMainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -RvlEdomxGUwtI54SWJiR1Z4rcJMBVIe
+X-Proofpoint-ORIG-GUID: -RvlEdomxGUwtI54SWJiR1Z4rcJMBVIe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_13,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140154
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 05:58:45PM +0100, David Hildenbrand wrote:
+
+
+On 2/14/2023 5:06 AM, Marijn Suijten wrote:
+> On 2023-02-13 19:09:32, Abhinav Kumar wrote:
+>>
+>>
+>> On 2/13/2023 1:46 PM, Dmitry Baryshkov wrote:
+>>> On 13/02/2023 21:37, Jessica Zhang wrote:
+>>>>
+>>>>
+>>>> On 12/31/2022 1:50 PM, Marijn Suijten wrote:
+>>>>> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
+>>>>> but excluding 7.x.x) have the tear interrupt and control registers moved
+>>>>> out of the PINGPONG block and into the INTF block.  Wire up the
+>>>>> necessary interrupts and IRQ masks on all supported hardware.
+>>>>
+>>>> Hi Marijn,
+>>>>
+>>>> Thanks for the patch.
+>>>>
+>>>> I saw that in your commit msg, you mentioned that 7.x doesn't have
+>>>> tearcheck in the INTF block -- can you double check that this is correct?
 > 
-> > > > 
-> > > > Honestly, for improving the fork(), I have an idea to skip the per-page
-> > > > operation without breaking the logic. However, this will introduce the
-> > > > complicated mechanism and may has the overhead for other features. It
-> > > > might not be worth it. It's hard to strike a balance between the
-> > > > over-complicated mechanism with (probably) better performance and data
-> > > > consistency with the page status. So, I would focus on the safety and
-> > > > stable approach at first.
-> > > 
-> > > Yes, it is most probably possible, but complexity, robustness and
-> > > maintainability have to be considered as well.
-> > > 
-> > > Thanks for implementing this approach (only deduplication without other
-> > > optimizations) and evaluating it accordingly. It's certainly "cleaner", such
-> > > that we only have to mess with unsharing and not with other
-> > > accounting/pinning/mapcount thingies. But it also highlights how intrusive
-> > > even this basic deduplication approach already is -- and that most benefits
-> > > of the original approach requires even more complexity on top.
-> > > 
-> > > I am not quite sure if the benefit is worth the price (I am not to decide
-> > > and I would like to hear other options).
-> > 
-> > I'm looking at the discussion of page table sharing in 2002 [1].
-> > It looks like in 2002 ~ 2006, there also have some patches try to
-> > improve fork().
-> > 
-> > After that, I also saw one thread which is about another shared page
-> > table patch's benchmark. I can't find the original patch though [2].
-> > But, I found the probably same patch in 2005 [3], it also mentioned
-> > the previous benchmark discussion:
-> > 
-> > "
-> > For those familiar with the shared page table patch I did a couple of years
-> > ago, this patch does not implement copy-on-write page tables for private
-> > mappings.  Analysis showed the cost and complexity far outweighed any
-> > potential benefit.
-> > "
+> It wasn't correct and has already been removed for v2 [1] after rebasing
+> on top of SM8[345]50 support, where the registers reside at a different
+> (named 7xxxx downstream) offset.
 > 
-> Thanks for the pointer, interesting read. And my personal opinion is that
-> part of that statement still hold true :)
-
-;)
-
-> > 
-> > However, it might be different right now. For example, the implemetation
-> > . We have split page table lock now, so we don't have to consider the
-> > page_table_share_lock thing. Also, presently, we have different use
-> > cases (shells [2] v.s. VM cloning and fuzzing) to consider.
-> > 
-> > Nonetheless, I still think the discussion can provide some of the mind
-> > to us.
-> > 
-> > BTW, It seems like the 2002 patch [1] is different from the 2002 [2]
-> > and 2005 [3].
-> > 
-> > [1] https://lkml.iu.edu/hypermail/linux/kernel/0202.2/0102.html
-> > [2] https://lore.kernel.org/linux-mm/3E02FACD.5B300794@digeo.com/
-> > [3] https://lore.kernel.org/linux-mm/7C49DFF721CB4E671DB260F9@%5B10.1.1.4%5D/T/#u
-> > 
-> > > My quick thoughts after skimming over the core parts of this series
-> > > 
-> > > (1) forgetting to break COW on a PTE in some pgtable walker feels quite
-> > >      likely (meaning that it might be fairly error-prone) and forgetting
-> > >      to break COW on a PTE table, accidentally modifying the shared
-> > >      table.
-> > 
-> > Maybe I should also handle arch/ and others parts.
-> > I will keep looking at where I missed.
+> [1] https://github.com/SoMainline/linux/commit/886d3fb9eed925e7e9c8d6ca63d2439eaec1c702
 > 
-> One could add sanity checks when modifying a PTE while the PTE table is
-> still marked shared ... but I guess there are some valid reasons where we
-> might want to modify shared PTE tables (rmap).
-
-Sounds good for adding sanity checks. I will look at this.
-One of the valid reasons that come to my head might be the
-referenced bit (rmap).
-
-> > 
-> > > (2) break_cow_pte() can fail, which means that we can fail some
-> > >      operations (possibly silently halfway through) now. For example,
-> > >      looking at your change_pte_range() change, I suspect it's wrong.
-> > 
-> > Maybe I should add WARN_ON() and skip the failed COW PTE.
+>>>> I'm working on SM8350 (DPU v7) and I'm seeing that it does have
+>>>> tearcheck in INTF block.
+>>>
+>>> I confirm, according to the vendor drivers INTF TE should be used for
+>>> all DPU >= 5.0, including 7.x and 8.x
+>>>
+>>> However I think I know what Marijn meant here. For 5.x and 6.x these
+>>> IRQs are handled at the address MDSS + 0x6e800 / + 0x6e900 (which means
+>>> offset here should 0x6d800 and 0x6d900) for INTF_1 and INTF_2. Since DPU
+>>> 7.x these IRQ registers were moved close to the main INTF block (0x36800
+>>> and 0x37800 = INTF + 0x800).
 > 
-> One way or the other we'll have to handle it. WARN_ON() sounds wrong for
-> handling OOM situations (e.g., if only that cgroup is OOM).
-
-Or we should do the same thing like you mentioned:
-"
-For example, __split_huge_pmd() is currently not able to report a 
-failure. I assume that we could sleep in there. And if we're not able to 
-allocate any memory in there (with sleeping), maybe the process should 
-be zapped either way by the OOM killer.
-"
-
-But instead of zapping the process, we just skip the failed COW PTE.
-I don't think the user will expect their process to be killed by
-changing the protection.
-
-> > 
-> > > (3) handle_cow_pte_fault() looks quite complicated and needs quite some
-> > >      double-checking: we temporarily clear the PMD, to reset it
-> > >      afterwards. I am not sure if that is correct. For example, what
-> > >      stops another page fault stumbling over that pmd_none() and
-> > >      allocating an empty page table? Maybe there are some locking details
-> > >      missing or they are very subtle such that we better document them. I
-> > >     recall that THP played quite some tricks to make such cases work ...
-> > 
-> > I think that holding mmap_write_lock may be enough (I added
-> > mmap_assert_write_locked() in the fault function btw). But, I might
-> > be wrong. I will look at the THP stuff to see how they work. Thanks.
-> > 
+> That might have been the case.
 > 
-> Ehm, but page faults don't hold the mmap lock writable? And so are other
-> callers, like MADV_DONTNEED or MADV_FREE.
+>> Got it, then the commit text should remove "control" and just say tear
+>> interrupt registers. It got a bit confusing.
 > 
-> handle_pte_fault()->handle_pte_fault()->mmap_assert_write_locked() should
-> bail out.
+> The wording here points to both the interrupt (MDP_INTFx_TEAR_INTR)
+> registers and control (INTF_TEAR_xxx) registers separately.  Feel free
+> to bikeshed the wording in preliminary v2 [1]; should I drop the mention
+> of the control registers being "moved" from PP to INTF entirely, leaving
+> just the wording about the interrupt registers moving from
+> MDP_SSPP_TOP0_INTR to a dedicated MDP_INTFx_TEAR_INTR region?
+
+Yes, that makes more sense to me. Drop the mention on control registers.
 > 
-> Either I am missing something or you didn't test with lockdep enabled :)
-
-You're right. I thought I enabled the lockdep.
-And, why do I have the page fault will handle the mmap lock writable in my mind.
-The page fault holds the mmap lock readable instead of writable.
-;-)
-
-I should check/test all the locks again.
-Thanks.
-
+>> We will add the 7xxx intf tear check support on top of this series.
 > 
-> Note that there are upstream efforts to use only a VMA lock (and some people
-> even want to perform some page faults only protected by RCU).
+> No need, that is already taken care of in an impending v2 [1] (unless
+> additional changes are required beyond the moved register offset).
+> 
 
-I saw the discussion (https://lwn.net/Articles/906852/) before.
-If the page fault handler only uses a VMA lock, handle_cow_pte_fault() might not
-be affected since it only takes one VMA at a time. handle_cow_pte_fault() just
-allocate the PTE and copy the COW mapping entries to the new one.
-It's alredy handle the checking and accounting in copy_cow_pte_range().
+Ok, we will wait till you post v2 and see if that works for us without 
+any of our local changes.
 
-But, if we decide to skip the per-page operation during fork().
-We should handle the VMA lock (or RCU) for the accounting and other
-stuff. It might be more complicated than before...
+>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>> ---
+>>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
+>>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
+>>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
+>>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
+>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
+>>>>>    5 files changed, 68 insertions(+), 33 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> index 1cfe94494135..b9b9b5b0b615 100644
+>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> @@ -86,6 +86,15 @@
+>>>>>    #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>>>>> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>> +             BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>> +             BIT(MDP_INTF0_INTR) | \
+>>>>> +             BIT(MDP_INTF1_INTR) | \
+>>>>> +             BIT(MDP_INTF2_INTR) | \
+>>>>> +             BIT(MDP_INTF3_INTR) | \
+>>>>> +             BIT(MDP_INTF4_INTR))
+>>>>> +
+>>>>>    #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>> @@ -100,13 +109,15 @@
+>>>>>    #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>> -             BIT(MDP_INTF1_INTR))
+>>>>> +             BIT(MDP_INTF1_INTR) | \
+>>>>> +             BIT(MDP_INTF1_TEAR_INTR))
+>>>>>    #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>>                 BIT(MDP_INTF0_INTR) | \
+>>>>> -             BIT(MDP_INTF1_INTR))
+>>>>> +             BIT(MDP_INTF1_INTR) | \
+>>>>> +             BIT(MDP_INTF1_TEAR_INTR))
+>>>>>    #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>>                 BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>> @@ -120,7 +131,9 @@
+>>>>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>>                 BIT(MDP_INTF0_INTR) | \
+>>>>>                 BIT(MDP_INTF1_INTR) | \
+>>>>> +             BIT(MDP_INTF1_TEAR_INTR) | \
+>>>>>                 BIT(MDP_INTF2_INTR) | \
+>>>>> +             BIT(MDP_INTF2_TEAR_INTR) | \
+>>>>>                 BIT(MDP_INTF3_INTR) | \
+>>>>>                 BIT(MDP_INTF4_INTR))
+>>>>> @@ -129,7 +142,9 @@
+>>>>>                  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>>                  BIT(MDP_INTF0_INTR) | \
+>>>>>                  BIT(MDP_INTF1_INTR) | \
+>>>>> +              BIT(MDP_INTF1_TEAR_INTR) | \
+>>>>>                  BIT(MDP_INTF2_INTR) | \
+>>>>> +              BIT(MDP_INTF2_TEAR_INTR) | \
+>>>>>                  BIT(MDP_INTF3_INTR) | \
+>>>>>                  BIT(MDP_INTF4_INTR) | \
+>>>>>                  BIT(MDP_INTF5_INTR) | \
+>>>>> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
+>>>>>    /*************************************************************
+>>>>>     * INTF sub blocks config
+>>>>>     *************************************************************/
+>>>>> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch,
+>>>>> _features, _reg, _underrun_bit, _vsync_bit) \
+>>>>> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id,
+>>>>> _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg,
+>>>>> _tear_rd_ptr_bit) \
+>>>>>        {\
+>>>>>        .name = _name, .id = _id, \
+>>>>> -    .base = _base, .len = 0x280, \
+>>>>> +    .base = _base, .len = _len, \
+>>>>>        .features = _features, \
+>>>>>        .type = _type, \
+>>>>>        .controller_id = _ctrl_id, \
+>>>>>        .prog_fetch_lines_worst_case = _progfetch, \
+>>>>>        .intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
+>>>>>        .intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
+>>>>> +    .intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
+>>>>>        }
+>>>>>    static const struct dpu_intf_cfg msm8998_intf[] = {
+>>>>> -    INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25,
+>>>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>>>> -    INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25,
+>>>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+>>>>> -    INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25,
+>>>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+>>>>> -    INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25,
+>>>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+>>>>> +    INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25,
+>>>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+>>>>
+>>>> Just wondering, how were the lengths calculated for the INTF blocks?
+>>>> The values in general seem a little off to me.
+> 
+> These (for MSM8998) have been taken from downstream specifically; my
+> series starts using INTF_STATUS at 0x26C which conveniently is the
+> register right after 0x268, matching the fact that INTF TE and these
+> registers weren't supported/available yet on MSM8998.
+> 
+>>>> For example, I'm looking downstream and it seems to me that the length
+>>>> for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm
+>>>> seeing that length for INTF + tearcheck should be 0x2c4.
+> 
+> There are many different downstream sources and tags with seemingly
+> conflicting/confusing information.  For v2 [2] I've picked the highest
+> register used by the driver which is INTF_TEAR_AUTOREFRESH_CONFIG at
+> 0x2B4 (but there might always be more registers that don't need to be
+> poked at by the driver, but contain magic debug information and the
+> like... those would be useful to capture in the dump going forward).
+> 
+> [2]: https://github.com/SoMainline/linux/commit/2bbc609dd28aa0bd0a2dede20163e521912d0072
+> 
 
-Thanks,
-Chih-En Lin
+Not entirely correct.TEAR_AUTOREFRESH_STATUS is at 0x2c0 for sm8350 and 
+sm8450 as well so 0x2b4 is a bit short. DPU code uses autorefresh status 
+today.Esp after your changes it will use the autorefresh status from 
+intf te which is at offset 0x2c0
+
+>>> We have discussed INTF lengths in [1]. The current understanding of the
+>>> block lengths can be found at [2]. Please comment there if any of the
+>>> fixed lengths sounds incorrect to you.
+>>>
+>>> [1] https://patchwork.freedesktop.org/patch/522187/
+>>> [2] https://patchwork.freedesktop.org/patch/522227/
+>>>
+>>> [skipped the rest]
+>>>
+>>
+>> Please correct my understanding here, it was agreed to fix intf blocks
+>> to 0x2c4 here https://patchwork.freedesktop.org/patch/522227/ but I dont
+>> see this was merged?
+>>
+>> It was agreed to first land INTF_TE and then add the higher addresses
+> 
+> Seems like it, at least if I interpret [3] correctly.  My series adds a
+> new define that will hardcode _len to 0x2B8 for now, and Dmitry/Konrad
+> can later extend it to whatever is stated by the correct downstream
+> source.
+> 
+
+Like mentioned above it should be 0x2c0 for intf block.
+
+If you face any conflicting information in downstream code, you can 
+always check with me on IRC.
+
+> [3]: https://lore.kernel.org/linux-arm-msm/6ad96cff-b91b-a4c7-4573-7bb8de7194f8@linaro.org/
+> 
+>> but I dont see such a change, am i missing something?
+> 
+> This was discussed just yesterday.  And it wouldn't make much sense to
+> make such a change now, knowing that my v2 for this series - which isn't
+> even on the lists yet - will already change the INTF_BLK macro resulting
+> in unneeded conflicts.  As requested by Dmitry, let's get INTF TE
+> processed first before rebasing the block length change?
+> 
+
+Please see above comment on why it should be 0x2c4.
+
+> - Marijn
