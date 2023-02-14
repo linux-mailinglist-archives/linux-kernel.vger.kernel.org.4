@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCCD6968E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9EC6968EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjBNQM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S232214AbjBNQNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjBNQMW (ORCPT
+        with ESMTP id S232064AbjBNQM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:12:22 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D4B358E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:12:20 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qw12so41400070ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U7FmuUYV4i+tUiEr3sQgj1FjRrcMIeNDDjtwxcnomOg=;
-        b=ChWsQKERNUzcd/oJs7wTTCOMWypEqtx1FKjgOWz7kJ+kkTcf4QMZwOsyT4AmKiepR1
-         wmxrLJ4iRxvFe0J1XGA2Z3esLkJoV7N3DC8zgmX0k29BYLjTY/Ai2/kwEJhGVOCreKAR
-         yMGNAxkWetCgLSo4NI2y2Ba1GE+hwP3q2eDmOrC0f3ytM/gZaoK14SdcyfaWtnudMzOD
-         RlwTWR3t6HnEyuw05f6HCN5WDFn9wi+EeeZj/Cq9Tt3N+ahT2cnQunaABSIXajZLoYdH
-         o97szoafzgzU6RlKejoU8n1dWmjfGPFSVfFLoQtuOpJwAx698Mw6iZ7NC2NDQiiYZqlb
-         rjvQ==
+        Tue, 14 Feb 2023 11:12:57 -0500
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085B252BD;
+        Tue, 14 Feb 2023 08:12:39 -0800 (PST)
+Received: by mail-io1-f47.google.com with SMTP id j17so6019950ioa.9;
+        Tue, 14 Feb 2023 08:12:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U7FmuUYV4i+tUiEr3sQgj1FjRrcMIeNDDjtwxcnomOg=;
-        b=ksStWb3PP5jHTAq/riVihfu6IIHjjv3ocz6oaMLjj80Th/Ti2eSnlPGtFrzkX1Re+i
-         Yah2DnhA/gVl7h592Goie91hHvx8qYWvGyykLSgPaxiFUe/vbZtr+YQfYccjHLknb5A4
-         0h3xIb2/cerzA2OHcJ4pxHDodCIdGsTb+rg/WKFuULCqPaQkOhzbc5hWzgjj4VWv9m7+
-         FdXYQIWQwzDVVeiaGAOx5puBUHlMB8XoCuwEoiskB7l9sXYvGjady6nOCkU2EvhUdkkL
-         9usGE2VC4zEFvcsBTWCC6pj0PZxY1bMeSUGps7JsTDRxBY4RxrSmzDyL4mSxVlCA0ktf
-         uelA==
-X-Gm-Message-State: AO0yUKV/Aob2hd4L9L5/Otap5/4QDp9pTQ2jsN4wzcKHR3fd23UKMAaj
-        T6PFvEFPB7fU/VwJ9rr0bJ8lXA==
-X-Google-Smtp-Source: AK7set8I/5R1R2ISxCMl/lGAba1E4D5oDFL02UTwyH1kszy4po+MhCYWuX1EWAPCSKb5IDTUW9p5Zg==
-X-Received: by 2002:a17:906:8410:b0:8ac:f02b:7ea8 with SMTP id n16-20020a170906841000b008acf02b7ea8mr175787ejx.6.1676391139426;
-        Tue, 14 Feb 2023 08:12:19 -0800 (PST)
-Received: from fedora.. (cpezg-94-253-130-165-cbl.xnet.hr. [94.253.130.165])
-        by smtp.googlemail.com with ESMTPSA id de56-20020a1709069bf800b00878530f5324sm8564376ejc.90.2023.02.14.08.12.18
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sxGQh4DHINPPQJzpA71hCGf9LwnTAZIRU/+oLDvRlgk=;
+        b=dt3mx2Sm3ApPzYir4aK/MFBwDom804+1Bl/LJ9sPw+Q9KrYbxhdgjBp30DlwdzGutd
+         VpYfoZp2oYlxAY/BwWDtngQAe4ucBzWul1hYnuTZXd2mNnFDscFP/1saGzbbzSHeYaoJ
+         LIs61IZFMR6lPTBHxyI52LSs7KF/ZlrxgzOtgdV08XmfSe46pn/eX6UIBvjBUrj06OnW
+         5AU+YGbxfuUwbjyqCvlZf9BwXVRq7q8uRCI5SuF9UwjAmmD+ufYKGkZ/9Z5huvilJPy+
+         tXwAho7E9a+/AQWX2lwaLXYj53rtnEaTRTlXWUMqcqqButtBEmETkbDi4rn1xazu6B1q
+         jCsQ==
+X-Gm-Message-State: AO0yUKVyRQl7vFcwg+I3f8cADR+Vj97TmQ+bDfetxn6ypPT7eGgS/roK
+        fWQeDvmeiXk1uHBSAtoNCA==
+X-Google-Smtp-Source: AK7set8d05seqW+6Lpm2vtV7rgeGYkDNnRLFja2NokWcAe/KeKg1s2d/S8b8G5y3trFBOSommRRYsQ==
+X-Received: by 2002:a5e:c30a:0:b0:71a:1b72:5afc with SMTP id a10-20020a5ec30a000000b0071a1b725afcmr2256087iok.19.1676391158375;
+        Tue, 14 Feb 2023 08:12:38 -0800 (PST)
+Received: from robh_at_kernel.org (c-73-14-99-67.hsd1.co.comcast.net. [73.14.99.67])
+        by smtp.gmail.com with ESMTPSA id t66-20020a6bc345000000b00704878474c7sm5289961iof.53.2023.02.14.08.12.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 08:12:19 -0800 (PST)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 4/4] ARM: dts: qcom: ipq4018-ap120c-ac: use NVMEM for ath10k caldata
-Date:   Tue, 14 Feb 2023 17:12:11 +0100
-Message-Id: <20230214161211.306462-4-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230214161211.306462-1-robert.marko@sartura.hr>
-References: <20230214161211.306462-1-robert.marko@sartura.hr>
-MIME-Version: 1.0
+        Tue, 14 Feb 2023 08:12:37 -0800 (PST)
+Received: (nullmailer pid 76712 invoked by uid 1000);
+        Tue, 14 Feb 2023 16:12:34 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Shradha Todi <shradha.t@samsung.com>
+Cc:     alim.akhtar@samsung.com, Sergey.Semin@baikalelectronics.ru,
+        pankaj.dubey@samsung.com, jh80.chung@samsung.co,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
+        lpieralisi@kernel.org, tglx@linutronix.de,
+        linux-samsung-soc@vger.kernel.org, kw@linux.com,
+        jingoohan1@gmail.com
+In-Reply-To: <20230214121333.1837-6-shradha.t@samsung.com>
+References: <20230214121333.1837-1-shradha.t@samsung.com>
+ <CGME20230214121424epcas5p38e74b52a2d94a32b82a093c7e0a12499@epcas5p3.samsung.com>
+ <20230214121333.1837-6-shradha.t@samsung.com>
+Message-Id: <167638944926.3699.15638999253407034271.robh@kernel.org>
+Subject: Re: [PATCH 05/16] dt-bindings: PCI: Rename the term elbi to appl
+Date:   Tue, 14 Feb 2023 10:12:34 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ath10k now supports loading the pre-cal via NVMEM instead of having
-to use userspace scripts, lets use it.
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+On Tue, 14 Feb 2023 17:43:22 +0530, Shradha Todi wrote:
+> DT uses the name elbi in reg-names for application logic
+> registers which is a wrong nomenclature. This patch fixes
+> the same.
+> 
+> This commit shouldn't be applied without changes
+> "arm64: dts: Rename the term elbi to appl" and
+> "PCI: samsung: Rename the term elbi to appl"
+> 
+> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/pci/samsung,pcie.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-index bb0c888b048ec..d90b4f4c63afe 100644
---- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-@@ -170,6 +170,17 @@ partition@170000 {
- 				label = "ART";
- 				reg = <0x00170000 0x00010000>;
- 				read-only;
-+				compatible = "nvmem-cells";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				precal_art_1000: precal@1000 {
-+					reg = <0x1000 0x2f20>;
-+				};
-+
-+				precal_art_5000: precal@5000 {
-+					reg = <0x5000 0x2f20>;
-+				};
- 			};
- 
- 			partition@180000 {
-@@ -233,10 +244,14 @@ &mdio {
- 
- &wifi0 {
- 	status = "okay";
-+	nvmem-cell-names = "pre-calibration";
-+	nvmem-cells = <&precal_art_1000>;
- };
- 
- &wifi1 {
- 	status = "okay";
-+	nvmem-cell-names = "pre-calibration";
-+	nvmem-cells = <&precal_art_5000>;
- 	qcom,ath10k-calibration-variant = "ALFA-Network-AP120C-AC";
- };
- 
--- 
-2.39.1
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/samsung,pcie.example.dtb: pcie@15700000: reg-names:1: 'appl' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/samsung,pcie.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230214121333.1837-6-shradha.t@samsung.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
