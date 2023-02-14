@@ -2,209 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F012695B38
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E71695B45
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBNHxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S231559AbjBNHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjBNHxV (ORCPT
+        with ESMTP id S230028AbjBNHyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:53:21 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAEC3A96
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:53:20 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso6849348pjn.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7q20+SNXT2AMtnhltu6WLGIIunSDfG6EAHJrNxTXkcc=;
-        b=RQfRhtsBF00rc7XBryAEKIPojZtinvL6x3xfeKP2z704501dj2CDpFne1Rb+gkY6y+
-         wQ6BeU18myH7bpAhqoOtMEypP9sy9SzVjefDJFKTcZgWwuS1lSpwADKMCU768o5H7Xvv
-         KGD/bcsxkWRQWIdKwj6Q1djiKeGiy6qhb4qHVeVLcGB1fPDM3sC/OXeSyxVHk0IXh4YS
-         EPLZKos4xMDabM+X5/iuMqeZkxv+4j2emVS/+WwgEN66s9dxLvFAjdvNwu9s+tu9bEgR
-         rVjjp0dF/Vh03nZvjpJ7n2+DxW8NlwcH0ZgKD5NOTsv9HzSuJdOg+sslUAUFe/22GUUo
-         VSSQ==
+        Tue, 14 Feb 2023 02:54:11 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D856026B3;
+        Mon, 13 Feb 2023 23:54:09 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id fi26so16085977edb.7;
+        Mon, 13 Feb 2023 23:54:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7q20+SNXT2AMtnhltu6WLGIIunSDfG6EAHJrNxTXkcc=;
-        b=Um8JuLqmG8F8GgnAxFgIexQw7/ycG4DJNp2qgcDeFSw4cfzPno2rl4cMOC6vVUZ10V
-         iDq9c2aOAUUN/CIWrREbW9tqQrIfRtyz7FeJ7k2KdsGSFEBylGhw75CKVzBYD+t10VWL
-         cymLwuXypq0IftRHqgRQYJb6wvulmK2Yt4IG1N5CPPhoBW9fILD8bBVqDyoLJ/9gRSXr
-         GWp+syRKcHuzzQhmjaAsDC0NqG+gWhMLKXMRpa8xAMrS3wM0Ak7qxVgnCvPSnYv7L4DK
-         WnTrlUmWt/0K+7j3ILsu3gJxKi14o9AxQ8M7aSe6EecifQa9RKnFJqj6SV4QHaulZXSI
-         XzRQ==
-X-Gm-Message-State: AO0yUKWiqnJ/Dh5hp7Aqff6zknaSXEchD9HXaeufnH8bs1k7Fjjy2v8t
-        UcMsDN3HWguQdhfvqjS/vDmM
-X-Google-Smtp-Source: AK7set+eT6+n3qyGsgE7ZX/AJoq2siIymbp5DKA1AsgWDfgj/m9HcIoZBdJgfq0nYmeThBKMXx909A==
-X-Received: by 2002:a17:902:d485:b0:19a:b4f9:6cd with SMTP id c5-20020a170902d48500b0019ab4f906cdmr1895882plg.48.1676361199523;
-        Mon, 13 Feb 2023 23:53:19 -0800 (PST)
-Received: from thinkpad ([117.217.179.87])
-        by smtp.gmail.com with ESMTPSA id jn3-20020a170903050300b00180033438a0sm9524798plb.106.2023.02.13.23.53.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 23:53:19 -0800 (PST)
-Date:   Tue, 14 Feb 2023 13:23:12 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/arm-smmu-qcom: Rework the logic finding the bypass
- quirk
-Message-ID: <20230214075312.GB4981@thinkpad>
-References: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
- <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
+        bh=HZJ6zhgUh/ZKtXL7pKp/OS8n3+HahCHd3UvO2XgOPDY=;
+        b=RZ3EcoiZmAo/Ebk36jAkXd9qhnlVZO/so5iOHKlV5SHP38paA/PE9+z7Rkz//ZXSrv
+         u1SEpmxRT74YG7SwkZr+WHxx/rr0+XXxxU0UBFS0X8JMTOgTMivG1MM+gLdAcvDcVJW6
+         pAjqMLBXviNp9ycE+ovCKOG3bZdUdcEMqssnZK+RdZ8mgNJGOU2rLfNHDBbvgstxqiwh
+         krfyfbgvW7iO9QkYbqxGOZq8myl8SH2aRKrakC9Ac2tmHwT+eQE4WJSiCl8Pa8hfqNB6
+         vXuKrjpXfPLiv15Dbetfm6A47CzQ4HO/6wFTjWp7N2277kWrqKEDawIUZ2DbyJLCdPzw
+         qx6Q==
+X-Gm-Message-State: AO0yUKUSYnuaL1xqSQJzxi2yYw1Jtc8zAuHfCdq5XS/dnhicmBUwZ2y5
+        zJM7izSWQ44q+zFMkMfgfhU=
+X-Google-Smtp-Source: AK7set8faDisTfoodQJEOx+37p7FJghZBFoz5XpndvA4hYgfbEiZR9snHjvcZyRx9QTOSfmm0kDQ5g==
+X-Received: by 2002:a50:f69a:0:b0:4ab:db9e:9682 with SMTP id d26-20020a50f69a000000b004abdb9e9682mr1542611edn.34.1676361248442;
+        Mon, 13 Feb 2023 23:54:08 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id q24-20020a50cc98000000b004acc7202074sm2563962edi.16.2023.02.13.23.54.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 23:54:08 -0800 (PST)
+Message-ID: <b5dd2505-b087-b521-739b-ad4e97f3cbc5@kernel.org>
+Date:   Tue, 14 Feb 2023 08:54:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+References: <20230213140638.620206-1-fe@dev.tdt.de>
+ <20230213140638.620206-3-fe@dev.tdt.de>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 2/2] leds: trigger: ledtrig-tty: add additional modes
+In-Reply-To: <20230213140638.620206-3-fe@dev.tdt.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 05:43:56PM +0100, Johan Hovold wrote:
-> On Wed, Feb 01, 2023 at 01:55:00PM +0530, Manivannan Sadhasivam wrote:
-> > The logic used to find the quirky firmware that intercepts the writes to
-> > S2CR register to replace bypass type streams with a fault, and ignore the
-> > fault type, is not working with the firmware on newer SoCs like SC8280XP.
-> > 
-> > The current logic uses the last stream mapping group (num_mapping_groups
-> > - 1) as an index for finding quirky firmware. But on SC8280XP, this
-> > logic is not working as the number of stream mapping groups reported by
-> > the SMMU (163 as on the SC8280XP-CRD device) is not valid for some reason.
+On 13. 02. 23, 15:06, Florian Eckert wrote:
+> Add additional modes to trigger the selected LED.
+> The following modes are supported:
 > 
-> NUMSMRG read back as 162 here, both on my CRD and X13s. Was '163' a typo
-> or a real difference?
+> TD/RD:	Flash LED on data transmission (default)
+> CTS:	DCE Ready to accept data from the DTE.
+> DSR:	DCE is ready to receive and send data.
+> CAR:	DCE is receiving a carrier from a remote DTE.
+> RNG:	DCE has detected an incoming ring signal.
 > 
+> The mode can be changed for example with the following command:
+> echo "CTS" /sys/class/leds/<led>/mode
 
-Ah yes, it is 162 indeed. Sorry, typo!
+This will emit only:
+CTS /sys/class/leds/<led>/mode
 
-> > So the current logic that checks the (163-1) S2CR entry fails to detect
-> > the quirky firmware on these devices and triggers invalid context fault
-> > for bypass streams.
-> > 
-> > To fix this issue, rework the logic to find the first non-valid (free)
-> > stream mapping register group (SMR) and use that index to access S2CR
-> > for detecting the bypass quirk.
+> This would turn on the LED, when the DTE(modem) signals the DCE that it
+> is ready to accept data.
 > 
-> So while this works for the quirk detection, shouldn't we also do
-> something about that bogus NUMSMRG value? At least cap it at 128, which
-> appears to be the maximum according to the specification, for example,
-> by clearing bit 7 when any of the lower bits are set?
-> 
-> That would give us 35 (or 36) groups and working quirk detection with
-> just the following smaller patch:
-> 
-
-I'm not certain if the value is bogus or not. It is clear that the spec
-specifies 128 as the max but internal qcom document shows that they indeed
-set 162 on purpose in the hypervisor.
-
-So until we get a clear view on that, I'd not cap it.
-
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> index 2ff7a72cf377..0f564a86c352 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> @@ -1744,6 +1744,12 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
->                         return -ENODEV;
->                 }
->  
-> +               if (size > 0x80) {
-> +                       dev_warn(smmu->dev,
-> +                                "invalid number of SMR groups, clearing bit 7\n");
-> +                       size -= 0x80;
-> +               }
+> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+...
+> --- a/drivers/leds/trigger/ledtrig-tty.c
+> +++ b/drivers/leds/trigger/ledtrig-tty.c
+> @@ -7,6 +7,14 @@
+>   #include <linux/tty.h>
+>   #include <uapi/linux/serial.h>
+>   
+> +enum tty_led_mode {
+> +	TTY_LED_CNT,
+> +	TTY_LED_CTS,
+> +	TTY_LED_DSR,
+> +	TTY_LED_CAR,
+> +	TTY_LED_RNG,
+> +};
 > +
->                 /* Zero-initialised to mark as invalid */
->                 smmu->smrs = devm_kcalloc(smmu->dev, size, sizeof(*smmu->smrs),
->                                           GFP_KERNEL);
-> 
-> I also verified that using index 127 (group 128) for the quirk detection
-> works on my CRD, while the invalid index 128 fails (as do index 161
-> which would currently be used).
-> 
-> > This also warrants a change in variable name from last_s2cr to free_s2cr.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 24 +++++++++++++++++-----
-> >  1 file changed, 19 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > index 78fc0e1bf215..4104f81b8d8f 100644
-> > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > @@ -267,23 +267,37 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
-> >  
-> >  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
-> >  {
-> > -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
-> >  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
-> > +	u32 free_s2cr;
-> >  	u32 reg;
-> >  	u32 smr;
-> >  	int i;
-> >  
-> > +	/*
-> > +	 * Find the first non-valid (free) stream mapping register group and
-> > +	 * use that index to access S2CR for detecting the bypass quirk.
-> > +	 */
-> > +	for (i = 0; i < smmu->num_mapping_groups; i++) {
-> > +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
-> > +
-> > +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
-> > +			break;
-> > +	}
-> > +
-> > +	free_s2cr = ARM_SMMU_GR0_S2CR(i);
-> 
-> In the unlikely event that there is no free group this would access an
-> invalid index.
-> 
+>   struct ledtrig_tty_data {
+>   	struct led_classdev *led_cdev;
+>   	struct delayed_work dwork;
+> @@ -14,6 +22,15 @@ struct ledtrig_tty_data {
+>   	const char *ttyname;
+>   	struct tty_struct *tty;
+>   	int rx, tx;
+> +	unsigned int mode;
 
-Hmm, theoretically yes. But what would be the plan of action if that happens?
-Should we just bail out with error or skip the quirk detection?
+Why not the enum then?
 
-Thanks,
-Mani
+> +};
+> +
+> +static const char * const mode[] = {
 
-> > +
-> >  	/*
-> >  	 * With some firmware versions writes to S2CR of type FAULT are
-> >  	 * ignored, and writing BYPASS will end up written as FAULT in the
-> > -	 * register. Perform a write to S2CR to detect if this is the case and
-> > -	 * if so reserve a context bank to emulate bypass streams.
-> > +	 * register. Perform a write to the first free S2CR to detect if
-> > +	 * this is the case and if so reserve a context bank to emulate
-> > +	 * bypass streams.
-> >  	 */
-> >  	reg = FIELD_PREP(ARM_SMMU_S2CR_TYPE, S2CR_TYPE_BYPASS) |
-> >  	      FIELD_PREP(ARM_SMMU_S2CR_CBNDX, 0xff) |
-> >  	      FIELD_PREP(ARM_SMMU_S2CR_PRIVCFG, S2CR_PRIVCFG_DEFAULT);
-> > -	arm_smmu_gr0_write(smmu, last_s2cr, reg);
-> > -	reg = arm_smmu_gr0_read(smmu, last_s2cr);
-> > +	arm_smmu_gr0_write(smmu, free_s2cr, reg);
-> > +	reg = arm_smmu_gr0_read(smmu, free_s2cr);
-> >  	if (FIELD_GET(ARM_SMMU_S2CR_TYPE, reg) != S2CR_TYPE_BYPASS) {
-> >  		qsmmu->bypass_quirk = true;
-> >  		qsmmu->bypass_cbndx = smmu->num_context_banks - 1;
-> 
-> Johan
+This is not a wise name.
 
+> +	[TTY_LED_CNT] = "TD/RD", // Trasmit Data / Receive Data
+> +	[TTY_LED_CTS] = "CTS", // CTS Clear To Send
+> +	[TTY_LED_DSR] = "DSR", // DSR Data Set Ready
+> +	[TTY_LED_CAR] = "CAR", // CAR Data Carrier Detect (DCD)
+> +	[TTY_LED_RNG] = "RNG", // RNG Ring Indicator (RI)
+>   };
+>   
+>   static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
+> @@ -21,6 +38,74 @@ static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
+>   	schedule_delayed_work(&trigger_data->dwork, 0);
+>   }
+>   
+> +static ssize_t mode_show(struct device *dev,
+> +			 struct device_attribute *attr, char *buf)
+> +{
+> +	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+> +	enum tty_led_mode tty_mode;
+> +
+> +	mutex_lock(&trigger_data->mutex);
+> +	tty_mode = trigger_data->mode;
+> +	mutex_unlock(&trigger_data->mutex);
+> +
+> +	switch (tty_mode) {
+> +	case TTY_LED_CTS:
+> +		return sprintf(buf, "%s [%s] %s %s %s\n", mode[TTY_LED_CNT],
+> +				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
+> +				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
+> +	case TTY_LED_DSR:
+> +		return sprintf(buf, "%s %s [%s] %s %s\n", mode[TTY_LED_CNT],
+> +				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
+> +				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
+> +	case TTY_LED_CAR:
+> +		return sprintf(buf, "%s %s %s [%s] %s\n", mode[TTY_LED_CNT],
+> +				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
+> +				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
+> +	case TTY_LED_RNG:
+> +		return sprintf(buf, "%s %s %s %s [%s]\n", mode[TTY_LED_CNT],
+> +				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
+> +				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
+> +	case TTY_LED_CNT:
+> +	default:
+> +		return sprintf(buf, "[%s] %s %s %s %s\n", mode[TTY_LED_CNT],
+> +				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
+> +				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
+
+Can't we do the above in a loop easier?
+
+> +static ssize_t mode_store(struct device *dev,
+> +			  struct device_attribute *attr, const char *buf,
+> +			  size_t size)
+> +{
+> +	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+> +	ssize_t ret = size;
+> +	enum tty_led_mode tty_mode;
+> +
+> +	/* Check for new line in string*/
+> +	if (size > 0 && buf[size - 1] == '\n')
+> +		size -= 1;
+> +
+> +	if (strncmp(buf, mode[TTY_LED_CTS], size) == 0)
+> +		tty_mode = TTY_LED_CTS;
+> +	else if (strncmp(buf, mode[TTY_LED_DSR], size) == 0)
+> +		tty_mode = TTY_LED_DSR;
+> +	else if (strncmp(buf, mode[TTY_LED_CAR], size) == 0)
+> +		tty_mode = TTY_LED_CAR;
+> +	else if (strncmp(buf, mode[TTY_LED_RNG], size) == 0)
+> +		tty_mode = TTY_LED_RNG;
+> +	else if (strncmp(buf, mode[TTY_LED_CNT], size) == 0)
+> +		tty_mode = TTY_LED_CNT;
+> +	else
+> +		return -EINVAL;
+
+Again, a loop?
+
+> +
+> +	mutex_lock(&trigger_data->mutex);
+> +	trigger_data->mode = tty_mode;
+> +	mutex_unlock(&trigger_data->mutex);
+> +
+> +	return ret;
+> +}
+> +static DEVICE_ATTR_RW(mode);
+> +
+>   static ssize_t ttyname_show(struct device *dev,
+>   			    struct device_attribute *attr, char *buf)
+>   {
+> @@ -76,6 +161,18 @@ static ssize_t ttyname_store(struct device *dev,
+>   }
+>   static DEVICE_ATTR_RW(ttyname);
+>   
+> +static void ledtrig_tty_flags(struct ledtrig_tty_data *trigger_data,
+> +		unsigned int flag)
+> +{
+> +	unsigned int status;
+> +
+> +	status = tty_get_mget(trigger_data->tty);
+
+So what about negative values = errors?
+
+> +	if (status & flag)
+
+They really might hit here.
+
+> +		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +	else
+> +		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> +}
+> +
+
+
+thanks,
 -- 
-மணிவண்ணன் சதாசிவம்
+js
+suse labs
+
