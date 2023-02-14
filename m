@@ -2,90 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDEC696AFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C12696B03
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjBNROd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:14:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S232458AbjBNROm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBNRO1 (ORCPT
+        with ESMTP id S230410AbjBNROb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:14:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AB32BEDC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:13:15 -0800 (PST)
+        Tue, 14 Feb 2023 12:14:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4961557A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676394789;
+        s=mimecast20190719; t=1676394825;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y/5VgWxD5A7kEC1uUIaEm14WHnCpjbWdzDimNIwkMXo=;
-        b=ihdM7ZE8sImoq9OdTOvUcqrEfHrDisTsuPwK3khjHL6Oc9Y+0KVqtQYggQXgho4TxpxR89
-        bYNtllaqMN/ATvo/Vw2On74lc/cSKDBjUXxyHyo+zU3hOSKSUUoPFFehVchLkcje19NcR4
-        sLESMdPKNPx24FpzcpuVUKIuSYsOXmQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-636-lCn5InbXMoeC29YezIGbzA-1; Tue, 14 Feb 2023 12:13:06 -0500
-X-MC-Unique: lCn5InbXMoeC29YezIGbzA-1
-Received: by mail-wm1-f72.google.com with SMTP id r14-20020a05600c35ce00b003e10bfcd160so8987458wmq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:13:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y/5VgWxD5A7kEC1uUIaEm14WHnCpjbWdzDimNIwkMXo=;
-        b=JpJws8Dr1Npo0/FgDtOUoi9gf8k9oF64uUsnnEKUxt9OCnZFMbnySbXb1PHKG1z/o/
-         wvlu8oOLcpvROJf53tNlC1YgvZzPHXtZyr7uHmTif7YSBmb6CA1Unetgoy4M73yZ41R+
-         +WSRUgBLT64sW8MMzSgzYbulOXWIdUY188oY1FTOnD9RxE9Fy0JJ4Dg9lP+sxVBw8kf+
-         FJDJMpnIV3fwUEb/ySHI+/rf3ZjDLdPfkh/BMRuaw+xQP5K0qZGHlxibO7CRm0kPgnHU
-         dGR+Qo/BCUJ2A7vv5hx6WNaR/zyEjj7oISIwcW3ZY52wykGUE1Ctt1tBcAEUJtugmtzK
-         HJ5w==
-X-Gm-Message-State: AO0yUKWpDax0fCPoiugEn5b2aplTWaJGydTJDJIlWOk7KlNmd+XCWSY2
-        hDWASuEmlkFptgb5l8QSDqtOdrURPixEFR3zhIB/1JROftaZDn8MKpukr7Ksz15N+21fue75oNV
-        YOSXz7cWHZreW5nndZHKIzp5w
-X-Received: by 2002:a05:600c:2e95:b0:3dc:d5b:5f6a with SMTP id p21-20020a05600c2e9500b003dc0d5b5f6amr2691501wmn.30.1676394784976;
-        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
-X-Google-Smtp-Source: AK7set/cJ2piCMFvK42J7bNZHKpTnu+3/VQ2u9+S6qVF3JZHtDfSzPg6gZVBJQN9lL9IMudwblyc5Q==
-X-Received: by 2002:a05:600c:2e95:b0:3dc:d5b:5f6a with SMTP id p21-20020a05600c2e9500b003dc0d5b5f6amr2691475wmn.30.1676394784663;
-        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
-Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c4fd300b003dc59d6f2f8sm18425547wmq.17.2023.02.14.09.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 09:13:04 -0800 (PST)
-Date:   Tue, 14 Feb 2023 17:13:01 +0000
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
-Subject: Re: [RFC] Support for Arm CCA VMs on Linux
-Message-ID: <Y+vBHXbxPBgHxzGY@work-vm>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/N6vDGBSYYBmS81mm02wafMU3bwciOhaLBlzHvia7ks=;
+        b=ICBd4lz3yVvnGXCrWJoeeWvcmOyLG/B6c5bRbYvL2owUd+yD5dccfx5V7jKxZ7jvGPH+SC
+        xDzQNBvCd5nJQYP6ABg9SwBYNWOaqAKLv6/HuW6xp0T51TftpdTj5cKL5Xh0a2z4936qcV
+        hoSoQpaspKMheD6haF74dtJB8vKHknA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-139-hJ3AtmtCMqi-GCgyb70qHg-1; Tue, 14 Feb 2023 12:13:41 -0500
+X-MC-Unique: hJ3AtmtCMqi-GCgyb70qHg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FFAA183B3C1;
+        Tue, 14 Feb 2023 17:13:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B55C2026D4B;
+        Tue, 14 Feb 2023 17:13:33 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just list)
+Date:   Tue, 14 Feb 2023 17:13:13 +0000
+Message-Id: <20230214171330.2722188-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127112248.136810-1-suzuki.poulose@arm.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -96,245 +65,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Suzuki K Poulose (suzuki.poulose@arm.com) wrote:
-> We are happy to announce the early RFC version of the Arm
-> Confidential Compute Architecture (CCA) support for the Linux
-> stack. The intention is to seek early feedback in the following areas:
->  * KVM integration of the Arm CCA
->  * KVM UABI for managing the Realms, seeking to generalise the operations
->    wherever possible with other Confidential Compute solutions.
->    Note: This version doesn't support Guest Private memory, which will be added
->    later (see below).
->  * Linux Guest support for Realms
-> 
-> Arm CCA Introduction
-> =====================
-> 
-> The Arm CCA is a reference software architecture and implementation that builds
-> on the Realm Management Extension (RME), enabling the execution of Virtual
-> machines, while preventing access by more privileged software, such as hypervisor.
-> The Arm CCA allows the hypervisor to control the VM, but removes the right for
-> access to the code, register state or data that is used by VM.
-> More information on the architecture is available here[0].
-> 
->     Arm CCA Reference Software Architecture
-> 
->         Realm World    ||    Normal World   ||  Secure World  ||
->                        ||        |          ||                ||
->  EL0 x-------x         || x----x | x------x ||                ||
->      | Realm |         || |    | | |      | ||                ||
->      |       |         || | VM | | |      | ||                ||
->  ----|  VM*  |---------||-|    |---|      |-||----------------||
->      |       |         || |    | | |  H   | ||                ||
->  EL1 x-------x         || x----x | |      | ||                ||
->          ^             ||        | |  o   | ||                ||
->          |             ||        | |      | ||                ||
->  ------- R*------------------------|  s  -|---------------------
->          S             ||          |      | ||                ||
->          I             ||          |  t   | ||                ||
->          |             ||          |      | ||                || 
->          v             ||          x------x ||                ||
->  EL2    RMM*           ||              ^    ||                ||
->          ^             ||              |    ||                ||
->  ========|=============================|========================
->          |                             | SMC
->          x--------- *RMI* -------------x
-> 
->  EL3                   Root World
->                        EL3 Firmware
->  ===============================================================
-> Where :
->  RMM - Realm Management Monitor
->  RMI - Realm Management Interface
->  RSI - Realm Service Interface
->  SMC - Secure Monitor Call
+Hi Jens, Al, Christoph,
 
-Hi,
-  It's nice to see this full stack posted - thanks!
+Here are patches to provide support for extracting pages from an iov_iter
+and to use this in the extraction functions in the block layer bio code.
 
-Are there any pointers to information on attestation and similar
-measurement things?  In particular, are there any plans for a vTPM
-for Realms - if there were, it would make life easy for us, since we
-can share some user space stuff with other CoCo systems.
+The patches make the following changes:
 
-Dave
+ (1) Change generic_file_splice_read() to no longer use ITER_PIPE for doing
+     a read from an O_DIRECT file fd, but rather load up an ITER_BVEC
+     iterator with sufficient pages and use that rather than using an
+     ITER_PIPE.  This avoids a problem[2] when __iomap_dio_rw() calls
+     iov_iter_revert() to shorten an iterator when it races with
+     truncation.  The reversion causes the pipe iterator to prematurely
+     release the pages it was retaining - despite the read still being in
+     progress.  This caused memory corruption.
 
-> RME introduces a new security state "Realm world", in addition to the
-> traditional Secure and Non-Secure states. The Arm CCA defines a new component,
-> Realm Management Monitor (RMM) that runs at R-EL2. This is a standard piece of
-> firmware, verified, installed and loaded by the EL3 firmware (e.g, TF-A), at
-> system boot.
-> 
-> The RMM provides standard interfaces - Realm Management Interface (RMI) - to the
-> Normal world hypervisor to manage the VMs running in the Realm world (also called
-> Realms in short). These are exposed via SMC and are routed through the EL3
-> firmwre.
-> The RMI interface includes:
->   - Move a physical page from the Normal world to the Realm world
->   - Creating a Realm with requested parameters, tracked via Realm Descriptor (RD)
->   - Creating VCPUs aka Realm Execution Context (REC), with initial register state.
->   - Create stage2 translation table at any level.
->   - Load initial images into Realm Memory from normal world memory
->   - Schedule RECs (vCPUs) and handle exits
->   - Inject virtual interrupts into the Realm
->   - Service stage2 runtime faults with pages (provided by host, scrubbed by RMM).
->   - Create "shared" mappings that can be accessed by VMM/Hyp.
->   - Reclaim the memory allocated for the RAM and RTTs (Realm Translation Tables)
-> 
-> However v1.0 of RMM specifications doesn't support:
->  - Paging protected memory of a Realm VM. Thus the pages backing the protected
->    memory region must be pinned.
->  - Live migration of Realms.
->  - Trusted Device assignment.
->  - Physical interrupt backed Virtual interrupts for Realms
-> 
-> RMM also provides certain services to the Realms via SMC, called Realm Service
-> Interface (RSI). These include:
->  - Realm Guest Configuration.
->  - Attestation & Measurement services
->  - Managing the state of an Intermediate Physical Address (IPA aka GPA) page.
->  - Host Call service (Communication with the Normal world Hypervisor)
-> 
-> The specifications for the RMM software is currently at *v1.0-Beta2* and the
-> latest version is available here [1].
-> 
-> The Trusted Firmware foundation has an implementation of the RMM - TF-RMM -
-> available here [3].
-> 
-> Implementation
-> =================
-> 
-> This version of the stack is based on the RMM specification v1.0-Beta0[2], with
-> following exceptions :
->   - TF-RMM/KVM currently doesn't support the optional features of PMU,
->      SVE and Self-hosted debug (coming soon).
->   - The RSI_HOST_CALL structure alignment requirement is reduced to match
->      RMM v1.0 Beta1
->   - RMI/RSI version numbers do not match the RMM spec. This will be
->     resolved once the spec/implementation is complete, across TF-RMM+Linux stack.
-> 
-> We plan to update the stack to support the latest version of the RMMv1.0 spec
-> in the coming revisions.
-> 
-> This release includes the following components :
-> 
->  a) Linux Kernel
->      i) Host / KVM support - Support for driving the Realms via RMI. This is
->      dependent on running in the Kernel at EL2 (aka VHE mode). Also provides
->      UABI for VMMs to manage the Realm VMs. The support is restricted to 4K page
->      size, matching the Stage2 granule supported by RMM. The VMM is responsible
->      for making sure the guest memory is locked.
-> 
->        TODO: Guest Private memory[10] integration - We have been following the
->        series and support will be added once it is merged upstream.
->      
->      ii) Guest support - Support for a Linux Kernel to run in the Realm VM at
->      Realm-EL1, using RSI services. This includes virtio support (virtio-v1.0
->      only). All I/O are treated as non-secure/shared.
->  
->  c) kvmtool - VMM changes required to manage Realm VMs. No guest private memory
->     as mentioned above.
->  d) kvm-unit-tests - Support for running in Realms along with additional tests
->     for RSI ABI.
-> 
-> Running the stack
-> ====================
-> 
-> To run/test the stack, you would need the following components :
-> 
-> 1) FVP Base AEM RevC model with FEAT_RME support [4]
-> 2) TF-A firmware for EL3 [5]
-> 3) TF-A RMM for R-EL2 [3]
-> 4) Linux Kernel [6]
-> 5) kvmtool [7]
-> 6) kvm-unit-tests [8]
-> 
-> Instructions for building the firmware components and running the model are
-> available here [9]. Once, the host kernel is booted, a Realm can be launched by
-> invoking the `lkvm` commad as follows:
-> 
->  $ lkvm run --realm 				 \
-> 	 --measurement-algo=["sha256", "sha512"] \
-> 	 --disable-sve				 \
-> 	 <normal-vm-options>
-> 
-> Where:
->  * --measurement-algo (Optional) specifies the algorithm selected for creating the
->    initial measurements by the RMM for this Realm (defaults to sha256).
->  * GICv3 is mandatory for the Realms.
->  * SVE is not yet supported in the TF-RMM, and thus must be disabled using
->    --disable-sve
-> 
-> You may also run the kvm-unit-tests inside the Realm world, using the similar
-> options as above.
-> 
-> 
-> Links
-> ============
-> 
-> [0] Arm CCA Landing page (See Key Resources section for various documentations)
->     https://www.arm.com/architecture/security-features/arm-confidential-compute-architecture
-> 
-> [1] RMM Specification Latest
->     https://developer.arm.com/documentation/den0137/latest
-> 
-> [2] RMM v1.0-Beta0 specification
->     https://developer.arm.com/documentation/den0137/1-0bet0/
-> 
-> [3] Trusted Firmware RMM - TF-RMM
->     https://www.trustedfirmware.org/projects/tf-rmm/
->     GIT: https://git.trustedfirmware.org/TF-RMM/tf-rmm.git
-> 
-> [4] FVP Base RevC AEM Model (available on x86_64 / Arm64 Linux)
->     https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms
-> 
-> [5] Trusted Firmware for A class
->     https://www.trustedfirmware.org/projects/tf-a/
-> 
-> [6] Linux kernel support for Arm-CCA
->     https://gitlab.arm.com/linux-arm/linux-cca
->     Host Support branch:	cca-host/rfc-v1
->     Guest Support branch:	cca-guest/rfc-v1
-> 
-> [7] kvmtool support for Arm CCA
->     https://gitlab.arm.com/linux-arm/kvmtool-cca cca/rfc-v1
-> 
-> [8] kvm-unit-tests support for Arm CCA
->     https://gitlab.arm.com/linux-arm/kvm-unit-tests-cca  cca/rfc-v1
-> 
-> [9] Instructions for Building Firmware components and running the model, see
->     section 4.19.2 "Building and running TF-A with RME"
->     https://trustedfirmware-a.readthedocs.io/en/latest/components/realm-management-extension.html#building-and-running-tf-a-with-rme
-> 
-> [10] fd based Guest Private memory for KVM
->    https://lkml.kernel.org/r/20221202061347.1070246-1-chao.p.peng@linux.intel.com
-> 
-> Cc: Alexandru Elisei <alexandru.elisei@arm.com>
-> Cc: Andrew Jones <andrew.jones@linux.dev>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Chao Peng <chao.p.peng@linux.intel.com>
-> Cc: Christoffer Dall <christoffer.dall@arm.com>
-> Cc: Fuad Tabba <tabba@google.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Cc: Joey Gouly <Joey.Gouly@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Oliver Upton <oliver.upton@linux.dev>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Steven Price <steven.price@arm.com>
-> Cc: Thomas Huth <thuth@redhat.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Zenghui Yu <yuzenghui@huawei.com>
-> To: linux-coco@lists.linux.dev
-> To: kvmarm@lists.linux.dev
-> Cc: kvmarm@lists.cs.columbia.edu
-> Cc: linux-arm-kernel@lists.infradead.org
-> To: linux-kernel@vger.kernel.org
-> To: kvm@vger.kernel.org
-> 
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+ (2) Change generic_file_splice_read() to no longer use ITER_PIPE for doing
+     a read from a buffered file fd, but rather get pages directly from the
+     pagecache using filemap_get_pages() do all the readahead, reading,
+     waiting and extraction, and then feed the pages directly into the
+     pipe.
+
+ (3) filemap_get_pages() is altered so that it doesn't take an iterator
+     (which we don't have in (2)), but rather the count and a flag
+     indicating if we can handle partially uptodate pages are passed in and
+     down to its subsidiary functions.
+
+ (4) Remove ITER_PIPE and its paraphernalia as generic_file_splice_read()
+     was the only user.
+
+ (5) Add a function, iov_iter_extract_pages() to replace
+     iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+     appropriate to the iterator type.
+
+     Add a function, iov_iter_extract_will_pin() that will indicate from
+     the iterator type how the cleanup is to be performed, returning true
+     if the pages will need unpinning, false otherwise.
+
+ (6) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (indicating
+     FOLL_GET was used) and BIO_PAGE_PINNED (indicating FOLL_PIN was used)
+     is added.
+
+     BIO_PAGE_REFFED will go away, but at the moment fs/direct-io.c sets it
+     and this series does not fully address that file.
+
+ (7) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
+
+ (8) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+     pages appropriately and clean them up later.
+
+ (9) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Changes:
+========
+ver #14)
+ - Some changes to generic_file_buffered_splice_read():
+   - Rename to filemap_splice_read() and move to mm/filemap.c.
+   - Create a helper, pipe_head_buf().
+   - Use init_sync_kiocb().
+ - Some changes to generic_file_direct_splice_read():
+   - Use alloc_pages_bulk_array() rather than alloc_pages_bulk_list().
+   - Use release_pages() instead of __free_page() in a loop.
+   - Rename to direct_splice_read().
+ - Rearrange the patches to implement filemap_splice_read() and
+   direct_splice_read() separately to changing generic_file_splice_read().
+ - Don't call generic_file_splice_read() when there isn't a ->read_folio().
+ - Insert patches to fix read_folio-less cases:
+   - Make tty, procfs, kernfs and (u)random use direct_splice_read().
+   - Make overlayfs and coda call down to a lower layer.
+   - Give shmem its own splice-read that doesn't insert missing pages.
+ - Fixed a min() with mixed type args on some arches.
+
+ver #13)
+ - Only use allocation in advance and ITER_BVEC for DIO read-splice.
+ - Make buffered read-splice get pages directly from the pagecache.
+ - Alter filemap_get_pages() & co. so that it doesn't need an iterator.
+
+ver #12)
+ - Added the missing __bitwise on the iov_iter_extraction_t typedef.
+ - Rebased on -rc7.
+ - Don't specify FOLL_PIN to pin_user_pages_fast().
+ - Inserted patch at front to fix race between DIO read and truncation that
+   caused memory corruption when iov_iter_revert() got called on an
+   ITER_PIPE iterator[2].
+ - Inserted a patch after that to remove the now-unused ITER_PIPE and its
+   helper functions.
+ - Removed the ITER_PIPE bits from iov_iter_extract_pages().
+
+ver #11)
+ - Fix iov_iter_extract_kvec_pages() to include the offset into the page in
+   the returned starting offset.
+ - Use __bitwise for the extraction flags
+
+ver #10)
+ - Fix use of i->kvec in iov_iter_extract_bvec_pages() to be i->bvec.
+ - Drop bio_set_cleanup_mode(), open coding it instead.
+
+ver #9)
+ - It's now not permitted to use FOLL_PIN outside of mm/, so:
+ - Change iov_iter_extract_mode() into iov_iter_extract_will_pin() and
+   return true/false instead of FOLL_PIN/0.
+ - Drop of folio_put_unpin() and page_put_unpin() and instead call
+   unpin_user_page() (and put_page()) directly as necessary.
+ - Make __bio_release_pages() call bio_release_page() instead of
+   unpin_user_page() as there's no BIO_* -> FOLL_* translation to do.
+ - Drop the FOLL_* renumbering patch.
+ - Change extract_flags to extraction_flags.
+
+ver #8)
+ - Import Christoph Hellwig's changes.
+   - Split the conversion-to-extraction patch.
+   - Drop the extract_flags arg from iov_iter_extract_mode().
+   - Don't default bios to BIO_PAGE_REFFED, but set explicitly.
+ - Switch FOLL_PIN and FOLL_GET when renumbering so PIN is at bit 0.
+ - Switch BIO_PAGE_PINNED and BIO_PAGE_REFFED so PINNED is at bit 0.
+ - We should always be using FOLL_PIN (not FOLL_GET) for DIO, so adjust the
+   patches for that.
+
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/000000000000b0b3c005f3a09383@google.com/ [2]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+Link: https://lore.kernel.org/r/20230120175556.3556978-1-dhowells@redhat.com/ # v7
+Link: https://lore.kernel.org/r/20230123173007.325544-1-dhowells@redhat.com/ # v8
+Link: https://lore.kernel.org/r/20230124170108.1070389-1-dhowells@redhat.com/ # v9
+Link: https://lore.kernel.org/r/20230125210657.2335748-1-dhowells@redhat.com/ # v10
+Link: https://lore.kernel.org/r/20230126141626.2809643-1-dhowells@redhat.com/ # v11
+Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ # v12
+Link: https://lore.kernel.org/r/20230209102954.528942-1-dhowells@redhat.com/ # v13
+
+Additional patches that got folded in:
+
+Link: https://lore.kernel.org/r/20230213134619.2198965-1-dhowells@redhat.com/ # v1
+Link: https://lore.kernel.org/r/20230213153301.2338806-1-dhowells@redhat.com/ # v2
+Link: https://lore.kernel.org/r/20230214083710.2547248-1-dhowells@redhat.com/ # v3
+
+Christoph Hellwig (1):
+  block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted
+    logic
+
+David Howells (16):
+  mm: Pass info, not iter, into filemap_get_pages()
+  splice: Add a func to do a splice from a buffered file without
+    ITER_PIPE
+  splice: Add a func to do a splice from an O_DIRECT file without
+    ITER_PIPE
+  shmem: Implement splice-read
+  overlayfs: Implement splice-read
+  coda: Implement splice-read
+  tty, proc, kernfs, random: Use direct_splice_read()
+  splice: Do splice read from a file without using ITER_PIPE
+  iov_iter: Kill ITER_PIPE
+  iov_iter: Define flags to qualify page extraction.
+  iov_iter: Add a function to extract a page list from an iterator
+  iomap: Don't get an reference on ZERO_PAGE for direct I/O block
+    zeroing
+  block: Fix bio_flagged() so that gcc can better optimise it
+  block: Add BIO_PAGE_PINNED and associated infrastructure
+  block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+  block: convert bio_map_user_iov to use iov_iter_extract_pages
+
+ block/bio.c               |  33 +-
+ block/blk-map.c           |  26 +-
+ block/blk.h               |  12 +
+ drivers/char/random.c     |   4 +-
+ drivers/tty/tty_io.c      |   4 +-
+ fs/cifs/file.c            |   8 +-
+ fs/coda/file.c            |  36 +-
+ fs/direct-io.c            |   2 +
+ fs/iomap/direct-io.c      |   1 -
+ fs/kernfs/file.c          |   2 +-
+ fs/overlayfs/file.c       |  36 +-
+ fs/proc/inode.c           |   4 +-
+ fs/proc/proc_sysctl.c     |   2 +-
+ fs/proc_namespace.c       |   6 +-
+ fs/splice.c               | 114 +++++-
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/fs.h        |   6 +
+ include/linux/pipe_fs_i.h |  20 ++
+ include/linux/uio.h       |  49 ++-
+ lib/iov_iter.c            | 713 +++++++++++++++-----------------------
+ mm/filemap.c              | 154 +++++++-
+ mm/internal.h             |   6 +
+ mm/shmem.c                | 124 ++++++-
+ 24 files changed, 830 insertions(+), 540 deletions(-)
 
