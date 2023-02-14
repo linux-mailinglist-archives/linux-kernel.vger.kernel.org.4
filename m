@@ -2,110 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75554696365
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC3B696360
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjBNMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S232327AbjBNMTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjBNMTx (ORCPT
+        with ESMTP id S232138AbjBNMTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:19:53 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF2526CD8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:20 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d2so14895785pjd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:20 -0800 (PST)
+        Tue, 14 Feb 2023 07:19:41 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8F265BF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:15 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id co8so11684811wrb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ovmXEYXrq2+vyqNrmh/+q0b8mG/0E3L5r82zzYP6cY=;
-        b=y8YgAGJfycz1eajRJ3OxTa4gkUBalpbYdEOoYAYdodFrxH7XPByIgLUcaGSp4OzY0D
-         ABUGzaPq4R89DzXn/eU14LySsYBbuRK3Zjj2HhRz0kKZrU2lnVWAsBYyCUbd9DSQ0zqt
-         WZyqJbY8WTiHMuBnuFfANGR3knj0390epLD8ZZF2hc+S+QGQNzROGsnvnjojcpHKXEsO
-         RpUIZz5CD7EWOJADMlJvCTHedS46Nha9+LCMNADtUfJtgl4L1q23xdYqKfPM2+Z2YS4u
-         k6UxDfXpK0+wJDJiHaTIHQ8XLr6jJv3lHC+zOSZUPFUOChfdSN2sWbzLdJs8XGcRmfye
-         TyiA==
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o+pcbmPUt7ucXTMejkTVCbJMfV8kCxmzBsuK/5V4ikQ=;
+        b=DeNi2sWRj0VwoeJ1/pn7CfvmTEnwm347qpAIx0K+ICZPUpykUv0vv0w+vS12lriOxl
+         zgkOgtn8RLZG+YnHvCFVpH8vsEMuoaIkdqmL+LgSwWczISLvRxh70DHPs1VjkIzeoJjl
+         t+i47n3CrIp+WGyr/tpIiobX4TYROfN1UD/125zu2KcevcWhGjqKWeWWuEMpoWHXba8s
+         fKMRtY7jPoPIye2UEfMDCXNNCafryQJIFcgCEmnZxBXO0BeYcIRhAsi5tGOkyMg1nuVT
+         LpllOuSMcsxwufJ7IAfraCqn3Elp9Oc5tEjUl5zhXkCxoyPJA+JyFQyQzVOWT1nL7wyV
+         PKVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+ovmXEYXrq2+vyqNrmh/+q0b8mG/0E3L5r82zzYP6cY=;
-        b=PoS9BhMak3b+j/VhgibveRxAnmI4RgRj5udh+ASWKMxSU/YPfasusyqE1RVcufOQjn
-         32c9WtDuZPFGaHS6f4OBj5yY95SFDiCbszQ8Yvx/pfevHzBfdOgq16H5UBSZdCfBqlDZ
-         E+vONvgUNdcxRSgbfr5jtyAlGzQ+FagWSJPpyNGA79jXKrbaU5vE7c2Jg/qMdO5Dpxiu
-         Durf6EPOKhKMAqezY1hXDZY1oaoDmAjOTAtYKKy0ugg1SqdqKXFpaqBRW/pLXAwCfN5C
-         xSQ1NF5iYCjVtWp2xkctN6A5bJ18CmTfN8sC9xkqabcDqPbtFB0GoZSNBStZgYEj0/1c
-         xnsw==
-X-Gm-Message-State: AO0yUKUp87wbXyNPSrNhLtTEjZcWIAcOhc3wEBwFvyqILCfXseN88ebh
-        RBDMakiUp/YEnT62HMMRNYO3r5lLVaMoFjoGbpj71A==
-X-Google-Smtp-Source: AK7set9iaXemtEt75X9jSSXzKMgJee9mLgR7Giz8FYkln7bdKK9+0dWJXw2hqvNJePGa2aMmUpJ8pMP9IrEdaGyyvv4=
-X-Received: by 2002:a17:90b:602:b0:233:d176:4e5d with SMTP id
- gb2-20020a17090b060200b00233d1764e5dmr2278579pjb.121.1676377159630; Tue, 14
- Feb 2023 04:19:19 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o+pcbmPUt7ucXTMejkTVCbJMfV8kCxmzBsuK/5V4ikQ=;
+        b=zyaK5YdSROny+zphjccBHlzkjKn8zIuzyD74V7AquwGPah0IXQXeKUI5ytu3zKPdHN
+         IYDjg8njJd94BoQn6Y1TnOUf8/3n8XyX6SM0hAZ7SNyIAgjCI6hQ2l5zxV0GXwfV6sVu
+         eoC7x6iV7i4G+mLyoZmqIx6tXzSoyeBvoLI18Jptd2TQMYuDNQsfOHjg5g1U63g/y18n
+         KVk8RnO7/B6CqPBA9jsnwUZ557ha/e1i1x/GagYrrJqZL0yFbuxW3tnyLSbS78snL6TI
+         35jJ3dEpO6Rbwk0R2eaNEM4R5KbU/9VeRnX9COIOO59JBDOA3btytdFCJdyMPrUh11Vv
+         VyLA==
+X-Gm-Message-State: AO0yUKVMBkgt+1GXjRJn0SAptZN8cB5RS3U8HsGGSahYGxAPtOexIt/e
+        OMgRIHFuD39sacF7yOQgaRuv3zgFlrdvwOSO
+X-Google-Smtp-Source: AK7set8953co7QYRnUzErsT2Q29KFxYLHPL4gDFOVcuBI2Y6US+eNm5w3mvY7vLmVy4bk4mZL9SW4g==
+X-Received: by 2002:adf:fd50:0:b0:2c4:71b1:3160 with SMTP id h16-20020adffd50000000b002c471b13160mr2149046wrs.42.1676377154426;
+        Tue, 14 Feb 2023 04:19:14 -0800 (PST)
+Received: from ?IPV6:2003:f6:af20:a800:4c1e:9f81:fad8:f3dc? (p200300f6af20a8004c1e9f81fad8f3dc.dip0.t-ipconnect.de. [2003:f6:af20:a800:4c1e:9f81:fad8:f3dc])
+        by smtp.gmail.com with ESMTPSA id s8-20020adfecc8000000b002c5509ab3d1sm7935496wro.83.2023.02.14.04.19.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 04:19:14 -0800 (PST)
+Message-ID: <13deaeb6-dfb2-224c-0aa3-5546ad426f63@grsecurity.net>
+Date:   Tue, 14 Feb 2023 13:19:12 +0100
 MIME-Version: 1.0
-References: <20230213205529.2104120-1-konrad.dybcio@linaro.org>
-In-Reply-To: <20230213205529.2104120-1-konrad.dybcio@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 14 Feb 2023 13:18:42 +0100
-Message-ID: <CAPDyKFoT47Dx8gZgRHF=pYYHqFp89vNoi6YK58e9G32-SyYw=g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: sdhci-msm: Allow 1 icc path
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/5] KVM: Put struct kvm_vcpu on a diet
+Content-Language: en-US, de-DE
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230213163351.30704-1-minipli@grsecurity.net>
+ <Y+pt5MGR+EjLH4qQ@google.com>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <Y+pt5MGR+EjLH4qQ@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 at 21:55, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Some SoCs (like msm8998) only have a SDHC<->DDR path. Allow this case.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 13.02.23 18:05, Sean Christopherson wrote:
+> On Mon, Feb 13, 2023, Mathias Krause wrote:
+>> Relayout members of struct kvm_vcpu and embedded structs to reduce its
+>> memory footprint. Not that it makes sense from a memory usage point of
+>> view (given how few of such objects get allocated), but this series
+>> achieves to make it consume two cachelines less, which should provide a
+>> micro-architectural net win. However, I wasn't able to see a noticeable
+>> difference running benchmarks within a guest VM -- the VMEXIT costs are
+>> likely still high enough to mask any gains.
+> 
+> ...
+> 
+>> Below is the high level pahole(1) diff. Most significant is the overall
+>> size change from 6688 to 6560 bytes, i.e. -128 bytes.
+> 
+> While part of me wishes KVM were more careful about struct layouts, IMO fiddling
+> with per vCPU or per VM structures isn't worth the ongoing maintenance cost.
+> 
+> Unless the size of the vCPU allocation (vcpu_vmx or vcpu_svm in x86 land) crosses
+> a meaningful boundary, e.g. drops the size from an order-3 to order-2 allocation,
+> the memory savings are negligible in the grand scheme.  Assuming the kernel is
+> even capable of perfectly packing vCPU allocations, saving even a few hundred bytes
+> per vCPU is uninteresting unless the vCPU count gets reaaally high, and at that
+> point the host likely has hundreds of GiB of memory, i.e. saving a few KiB is again
+> uninteresting.
 
-Applied for next, thanks!
+Fully agree! That's why I said, this change makes no sense from a memory
+usage point of view. The overall memory savings are not visible at all,
+recognizing that the slab allocator isn't able to put more vCPU objects
+in a given slab page. However, I still remain confident that this makes
+sense from a uarch point of view. Touching less cache lines should be a
+win -- even if I'm unable to measure it. By preserving more cachelines
+during a VMEXIT, guests should be able to resume their work faster
+(assuming they still need these cachelines).
 
-Kind regards
-Uffe
+> And as you observed, imperfect struct layouts are highly unlikely to have a
+> measurable impact on performance.  The types of operations that are involved in
+> a world switch are just too costly for the layout to matter much.  I do like to
+> shave cycles in the VM-Enter/VM-Exit paths, but only when a change is inarguably
+> more performant, doesn't require ongoing mainteance, and/or also improves the code
+> quality.
 
+Any pointers to measure the "more performant" aspect? I tried to make
+use of the vmx_vmcs_shadow_test in kvm-unit-tests, as it's already
+counting cycles, but the numbers are too unstable, even if I pin the
+test to a given CPU, disable turbo mode, SMT, use the performance cpu
+governor, etc.
 
-> ---
->  Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> index 01f77a77987c..64df6919abaf 100644
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> @@ -127,11 +127,13 @@ properties:
->        phandle to apps_smmu node with sid mask.
->
->    interconnects:
-> +    minItems: 1
->      items:
->        - description: data path, sdhc to ddr
->        - description: config path, cpu to sdhc
->
->    interconnect-names:
-> +    minItems: 1
->      items:
->        - const: sdhc-ddr
->        - const: cpu-sdhc
-> --
-> 2.39.1
->
+> I am in favor in cleaning up kvm_mmu_memory_cache as there's no reason to carry
+> a sub-optimal layouy and the change is arguably warranted even without the change
+> in size.  Ditto for kvm_pmu, logically I think it makes sense to have the version
+> at the very top.
+
+Yeah, was exactly thinking the same when modifying kvm_pmu.
+
+> But I dislike using bitfields instead of bools in kvm_queued_exception, and shuffling
+> fields in kvm_vcpu, kvm_vcpu_arch, vcpu_vmx, vcpu_svm, etc. unless there's a truly
+> egregious field(s) just isn't worth the cost in the long term.
+
+Heh, just found this gem in vcpu_vmx:
+
+struct vcpu_vmx {
+  [...]
+  union vmx_exit_reason      exit_reason;
+
+  /* XXX 44 bytes hole, try to pack */
+
+  /* --- cacheline 123 boundary (7872 bytes) --- */
+  struct pi_desc             pi_desc __attribute__((__aligned__(64)));
+  [...]
+
+So there are, in fact, some bigger holes left.
+
+Would be nice if pahole had a --density flag that would output some
+ASCII art, visualizing which bytes of a struct are allocated by real
+members and which ones are pure padding.
