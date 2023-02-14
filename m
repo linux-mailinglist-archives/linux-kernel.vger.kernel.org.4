@@ -2,161 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FC6696A32
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E81696A37
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjBNQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S232163AbjBNQsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjBNQrm (ORCPT
+        with ESMTP id S232041AbjBNQsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:47:42 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0306165A0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:47:38 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-52ee632329dso140769567b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:47:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ayL3I3lSJXQSr5Jm+VXTau51rl41gfRsh35PsMQ4l4=;
-        b=p2TLRP1LQYRQFLiyDUgbiLevDu32jCQ1L/y8KHXKpM3qk3yQMC/KRusxiAUo/2I5FR
-         akQzZTLXnxb+P1qBmss9iIWLDGKg0C359syK073euM8tuN5Sl/8WYF11lclUeYyAUpMT
-         hAGRMYI/iF5fhJver2jb4sWSYvtAFyiBKJIPjFvWpjnoUJwPU0kqPytUKfvSHAYHbAg2
-         M09YNljijJZij+Yr4ZSoVYpX0jHEwLPIiBY9qadnh3wJ0BvnRF1uG1ci8Ku87aTVb1aO
-         81XWgOzFKio+DbidG2VtE3NpZSUFQFw5KG2e47GfYfbWHge6uJXUOgMZ4f80jBrT9T8b
-         1Jfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ayL3I3lSJXQSr5Jm+VXTau51rl41gfRsh35PsMQ4l4=;
-        b=DoOrkA8LiNj8tBHnr3og63bOv+vOJt6A04E4FL87XvjKnYzpJ3aC4njqlfLM9AwiPw
-         uk8aiCH/svvC+pYYFGwl5nYo+GS6c+pQF2hitC6ZES4MyJDr3066rsTAEXxOzBnYl6H8
-         XdJnopjXltqvc7mbukwPLpKDn9MA+UlwM+u26VAk/Uav5R6wvVecoDmJDv2uUEz5SsYi
-         no3TjF8k4vSUuvwcOQ4mt5LSbgwxaRC0OHpkPwiO0jsUTzIXJUCbylBbE2zUB5EIEO5Y
-         m+0oZu0HIgV/lpIi5RzOl/fgxXgjywbIMt6a4/2uK5DRMlw1tPEeKDHpNe3m2ts7ixve
-         9L0Q==
-X-Gm-Message-State: AO0yUKV2fMkzYH052VVS+ZXwVGJfSWK5ywKfEZOKTYmziRdB0xdQQOnh
-        GryyKA96DIjNkLD6dPBXRHeWKxvCMIGILeeoO9zUaA==
-X-Google-Smtp-Source: AK7set/mxOKdHn92cBwjyApj3R28pXKEhuPBGovIRR6cczvfLCLR3WjxmhojkFsLR3cVOKM9zEYVw0ts4tZUpyJ11zo=
-X-Received: by 2002:a0d:f5c4:0:b0:52e:c93a:bb36 with SMTP id
- e187-20020a0df5c4000000b0052ec93abb36mr319927ywf.277.1676393257997; Tue, 14
- Feb 2023 08:47:37 -0800 (PST)
+        Tue, 14 Feb 2023 11:48:17 -0500
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6501D3C0E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:11 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PGRwT0VT7zMqdTZ;
+        Tue, 14 Feb 2023 17:48:09 +0100 (CET)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4PGRwP613lzMrY8P;
+        Tue, 14 Feb 2023 17:48:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1676393288;
+        bh=StyQV5VlfkbUqiAvO0zOrs/9byjjPFA4+fUSOycYmmE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=1/F48u5CG0IsU99YnekoUmb0RzF7DmvDMzBOukyFkT6iIJhdfpZmTt71ylV0xLMF7
+         K8IhQ8TUc/LZ4Bpb8nN8nk5YnxzoIsT93HzI1QjaKfBkYrmTDveT2QHfb6BlyqnwS4
+         TNaemjyBVXrPwG1xleOajIUz73mJQrjML+N2qesE=
+Message-ID: <b25a6279-2531-4711-1876-b181fce4acbe@digikod.net>
+Date:   Tue, 14 Feb 2023 17:48:05 +0100
 MIME-Version: 1.0
-References: <20230127194110.533103-1-surenb@google.com> <20230127145138.8cc44bf00ebf289dffec0975@linux-foundation.org>
- <Y9Rdmy5h2F1z5yR3@casper.infradead.org> <CAJuCfpEq2F4EwWAeP6nLqS9m9XLpUss8n=35ZTgYgtiAJyvsxQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpEq2F4EwWAeP6nLqS9m9XLpUss8n=35ZTgYgtiAJyvsxQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 14 Feb 2023 08:47:26 -0800
-Message-ID: <CAJuCfpG8Lq9xOce4yaNm1XzdAxVWTJYA85zjDbcpJ5MxxHr+4g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/33] Per-VMA locks
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH v5 4/8] LSM: lsm_get_self_attr syscall for LSM self
+ attributes
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, Kees Cook <keescook@chromium.org>,
+        john.johansen@canonical.com,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org
+References: <20230109180717.58855-1-casey@schaufler-ca.com>
+ <20230109180717.58855-5-casey@schaufler-ca.com>
+ <f8dca9d2-6e5e-4584-88b3-f71f62988dab@app.fastmail.com>
+ <CAHC9VhRRRo9V-q8jT7AbSh1eTPGN7OmxP9hrPz=GTPQa80RjCg@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <CAHC9VhRRRo9V-q8jT7AbSh1eTPGN7OmxP9hrPz=GTPQa80RjCg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 4:00 PM Suren Baghdasaryan <surenb@google.com> wrot=
-e:
->
-> On Fri, Jan 27, 2023 at 3:26 PM Matthew Wilcox <willy@infradead.org> wrot=
-e:
-> >
-> > On Fri, Jan 27, 2023 at 02:51:38PM -0800, Andrew Morton wrote:
-> > > On Fri, 27 Jan 2023 11:40:37 -0800 Suren Baghdasaryan <surenb@google.=
-com> wrote:
-> > >
-> > > > Per-vma locks idea that was discussed during SPF [1] discussion at =
-LSF/MM
-> > > > last year [2], which concluded with suggestion that =E2=80=9Ca read=
-er/writer
-> > > > semaphore could be put into the VMA itself; that would have the eff=
-ect of
-> > > > using the VMA as a sort of range lock. There would still be content=
-ion at
-> > > > the VMA level, but it would be an improvement.=E2=80=9D This patchs=
-et implements
-> > > > this suggested approach.
-> > >
-> > > I think I'll await reviewer/tester input for a while.
 
-Over the last two weeks I did not receive any feedback on the mailing
-list but off-list a couple of people reported positive results in
-their tests and Punit reported a regression on his NUMA machine when
-running pft-threads workload. I found the source of that regression
-and have two small fixes which were confirmed to improve the
-performance (hopefully Punit will share the results here).
-I'm planning to post v3 sometime this week. If anyone has additional
-feedback, please let me know soon so that I can address it in the v3.
-Thanks,
-Suren.
+On 12/01/2023 22:39, Paul Moore wrote:
+> On Thu, Jan 12, 2023 at 9:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>> On Mon, Jan 9, 2023, at 19:07, Casey Schaufler wrote:
+>>> +/**
+>>> + * struct lsm_ctx - LSM context
+>>> + * @id: the LSM id number, see LSM_ID_XXX
+>>> + * @flags: context specifier and LSM specific flags
+>>> + * @ctx_len: the size of @ctx
+>>> + * @ctx: the LSM context, a nul terminated string
+>>> + *
+>>> + * @ctx in a nul terminated string.
+>>> + *   (strlen(@ctx) < @ctx_len) is always true.
+>>> + *   (strlen(@ctx) == @ctx_len + 1) is not guaranteed.
+>>> + */
+>>> +struct lsm_ctx {
+>>> +     __u32           id;
+There is a hole here for 64-bit architectures.
 
+>>> +     __u64           flags;
+>>> +     __kernel_size_t ctx_len;
 
->
-> Sure, I don't expect the review to be very quick considering the
-> complexity, however I would appreciate any testing that can be done.
->
-> > >
-> > > > The patchset implements per-VMA locking only for anonymous pages wh=
-ich
-> > > > are not in swap and avoids userfaultfs as their implementation is m=
-ore
-> > > > complex. Additional support for file-back page faults, swapped and =
-user
-> > > > pages can be added incrementally.
-> > >
-> > > This is a significant risk.  How can we be confident that these as ye=
-t
-> > > unimplemented parts are implementable and that the result will be goo=
-d?
-> >
-> > They don't need to be implementable for this patchset to be evaluated
-> > on its own terms.  This patchset improves scalability for anon pages
-> > without making file/swap/uffd pages worse (or if it does, I haven't
-> > seen the benchmarks to prove it).
->
-> Making it work for all kinds of page faults would require much more
-> time. So, this incremental approach, when we tackle the mmap_lock
-> scalability problem part-by-part seems more doable. Even with
-> anonymous-only support, the patch shows considerable improvements.
-> Therefore I would argue that the patch is viable even if it does not
-> support the above-mentioned cases.
->
-> >
-> > That said, I'm confident that I have a good handle on how to make
-> > file-backed page faults work under RCU.
->
-> Looking forward to collaborating on that!
-> Thanks,
-> Suren.
+This is an architecture-related size, which makes the struct size 
+different according to architectures. We should avoid that.
+
+>>> +     __u8            ctx[];
+>>> +};
+
+I suggest packing this struct.
+
+>>
+>> I think this should be changed to be the same layout on
+>> all architectures regardless of __u64 alignment and
+>> sizeof(__kernel_size_t) differences, to avoid the need
+>> for compat syscalls and explicit clearing of the
+>> internal padding.
+>>
+>> Maybe just use __u64 fields for all three integers?
+> 
+> I have no problem with that ... the ctx[] field is variable length
+> anyway so keeping it as a __u8 should be fine.
+> 
+
+For Landlock, we make sure the UAPI structs don't contain holes,  are 
+packed, and have the same size for all architectures. We can check that 
+with pahole but for strong guarantee I suggest the same build check as 
+for Landlock's build_check_abi(): 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/landlock/syscalls.c#n68
+We don't need to use 64-bit fields everywhere.
