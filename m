@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D76A695FB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08326695FB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBNJsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S232123AbjBNJsR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 04:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjBNJrg (ORCPT
+        with ESMTP id S230087AbjBNJrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:47:36 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877A61E9DD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:47:33 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-166-6a79sXmNOAaHxqbszdMW8w-1; Tue, 14 Feb 2023 09:47:30 +0000
-X-MC-Unique: 6a79sXmNOAaHxqbszdMW8w-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Tue, 14 Feb
- 2023 09:47:29 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Tue, 14 Feb 2023 09:47:29 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'maobibo' <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-CC:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] LoongArch: add checksum optimization for 64-bit system
-Thread-Topic: [PATCH v2] LoongArch: add checksum optimization for 64-bit
- system
-Thread-Index: AQHZPDrPjnYkuPc3GUK7DnTa61yn8K7GU7lQgAAunoCAAAOYoIABcE8jgAAK1MCABa59gIAAfSag
-Date:   Tue, 14 Feb 2023 09:47:29 +0000
-Message-ID: <5dc1c39bbaf149f78c132f4467cdb365@AcuMS.aculab.com>
-References: <20230209035839.2610277-1-maobibo@loongson.cn>
- <e6bb59c32134477aa4890047ae5ad51b@AcuMS.aculab.com>
- <741b2246-d609-ccc6-bf55-d6b0b5e54b54@loongson.cn>
- <2aa6243491784e74960182dc12968170@AcuMS.aculab.com>
- <CAAhV-H7BgBASt_CpSQgS6MNbzxODhoq8ykK5ZAn2y3ZOekXM9g@mail.gmail.com>
- <0fe7ed7c-7161-65d5-a09f-12db6ccda05a@loongson.cn>
- <b17430342e9e4c39b53004d842ea9c55@AcuMS.aculab.com>
- <ec49593a-60a4-be91-0fb2-af517eaf6d6a@loongson.cn>
-In-Reply-To: <ec49593a-60a4-be91-0fb2-af517eaf6d6a@loongson.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 14 Feb 2023 04:47:47 -0500
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8061F5C7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:47:44 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 23131642ECB2;
+        Tue, 14 Feb 2023 10:47:42 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id swn-jqLBS7hb; Tue, 14 Feb 2023 10:47:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id C36D6642ECCC;
+        Tue, 14 Feb 2023 10:47:41 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id uXkoR1TOLuRd; Tue, 14 Feb 2023 10:47:41 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 9F80B642ECB2;
+        Tue, 14 Feb 2023 10:47:41 +0100 (CET)
+Date:   Tue, 14 Feb 2023 10:47:41 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     harshit m mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit m mogalapalli <harshit.m.mogalapalli@gmail.com>,
+        error27@gmail.com, hch <hch@lst.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <2138680093.127537.1676368061456.JavaMail.zimbra@nod.at>
+In-Reply-To: <20230214093801.1267044-1-harshit.m.mogalapalli@oracle.com>
+References: <20230214093801.1267044-1-harshit.m.mogalapalli@oracle.com>
+Subject: Re: [PATCH linux-next] ubi: block: Fix a possible use-after-free
+ bug in ubiblock_create()
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: block: Fix a possible use-after-free bug in ubiblock_create()
+Thread-Index: iOg5GBWw/6+vOMMkTA/Bpi1ap7bSZw==
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogbWFvYmlibw0KPiBTZW50OiAxNCBGZWJydWFyeSAyMDIzIDAxOjMxDQouLi4NCj4gUGFy
-dCBvZiBhc20gY29kZSBkZXBlbmRzIG9uIHByZXZpb3VzIGludHIgaW4gd2Vic2l0ZQ0KPiBodHRw
-czovL2dpdGh1Yi5jb20vbG9vbmdzb24vbGludXgvY29tbWl0LzkyYTZkZjQ4Y2NiNzNkZDJjM2Rj
-MTc5OWFkZDA4YWRmMGUwYjBkZWIsDQo+IHN1Y2ggYXMgbWFjcm8gQUREQw0KPiAjZGVmaW5lIEFE
-REMoc3VtLHJlZykgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0K
-PiAgICAgICAgIEFERCAgICAgc3VtLCBzdW0sIHJlZzsgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXA0KPiAgICAgICAgIHNsdHUgICAgdDgsIHN1bSwgcmVnOyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgIEFERCAgICAgc3VtLCBzdW0sIHQ4OyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiB0aGVzZSB0aHJlZSBpbnN0cnVj
-dGlvbnMgZGVwZW5kcyBvbiBlYWNoIG90aGVyLCBhbmQgY2FuIG5vdCBleGVjdXRlDQo+IGluIHBh
-cmFsbGVsLg0KDQpSaWdodCwgYnV0IHlvdSBjYW4gYWRkIHRoZSBjYXJyeSBiaXRzIGludG8gYSBk
-aWZmZXJlbnQgcmVnaXN0ZXIuDQpTaW5jZSB0aGUgYWltIGlzIDggYnl0ZXMvY2xvY2sgbGltaXRl
-ZCBieSAxIG1lbW9yeSByZWFkL2Nsb2NrDQp5b3UgY2FuIChwcm9iYWJseSkgbWFuYWdlIHdpdGgg
-YWxsIHRoZSB3b3JkIGFkZHMgZ29pbmcgdG8gb25lDQpyZWdpc3RlciBhbmQgYWxsIHRoZSBjYXJy
-eSBhZGRzIHRvIGEgc2Vjb25kLiBTbzoNCiNkZWZpbmUgQUREQyhjYXJyeSwgc3VtLCByZWcpIFwN
-CglhZGQJc3VtLCBzdW0sIHJlZwlcDQoJc2x0dQlyZWcsIHN1bSwgcmVnCVwNCglhZGQJY2Fycnks
-IGNhcnJ5LCByZWcNCg0KPiANCj4gVGhlIG9yaWdpbmFsIG9mIG1haW4gbG9vcCBhYm91dCBMbW92
-ZV8xMjhieXRlcyBpczoNCj4gI2RlZmluZSBDU1VNX0JJR0NIVU5LKHNyYywgb2Zmc2V0LCBzdW0s
-IF90MCwgX3QxLCBfdDIsIF90MykgICAgIFwNCj4gICAgICAgICBMT0FEICAgIF90MCwgc3JjLCAo
-b2Zmc2V0ICsgVU5JVCgwKSk7ICAgICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICBMT0FEICAg
-IF90MSwgc3JjLCAob2Zmc2V0ICsgVU5JVCgxKSk7ICAgICAgICAgICAgICAgICAgIFwNCj4gICAg
-ICAgICBMT0FEICAgIF90Miwgc3JjLCAob2Zmc2V0ICsgVU5JVCgyKSk7ICAgICAgICAgICAgICAg
-ICAgIFwNCj4gICAgICAgICBMT0FEICAgIF90Mywgc3JjLCAob2Zmc2V0ICsgVU5JVCgzKSk7ICAg
-ICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICBBRERDKF90MCwgX3QxKTsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICBBRERDKF90MiwgX3QzKTsg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICBBRERD
-KHN1bSwgX3QwKTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4g
-ICAgICAgICBBRERDKHN1bSwgX3QyKQ0KPiANCj4gLkxtb3ZlXzEyOGJ5dGVzOg0KPiAgICAgICAg
-IENTVU1fQklHQ0hVTksoc3JjLCAweDAwLCBzdW0sIHQwLCB0MSwgdDMsIHQ0KQ0KPiAgICAgICAg
-IENTVU1fQklHQ0hVTksoc3JjLCAweDIwLCBzdW0sIHQwLCB0MSwgdDMsIHQ0KQ0KPiAgICAgICAg
-IENTVU1fQklHQ0hVTksoc3JjLCAweDQwLCBzdW0sIHQwLCB0MSwgdDMsIHQ0KQ0KPiAgICAgICAg
-IENTVU1fQklHQ0hVTksoc3JjLCAweDYwLCBzdW0sIHQwLCB0MSwgdDMsIHQ0KQ0KPiAgICAgICAg
-IGFkZGkuZCAgdDUsIHQ1LCAtMQ0KPiAgICAgICAgIGFkZGkuZCAgc3JjLCBzcmMsIDB4ODANCj4g
-ICAgICAgICBibmV6ICAgIHQ1LCAuTG1vdmVfMTI4Ynl0ZXMNCj4gDQo+IEkgbW9kaWZpZWQgdGhl
-IG1haW4gbG9vcCB3aXRoIGxhYmVsIC5MbW92ZV8xMjhieXRlcyB0byByZWR1Y2UNCj4gZGVwZW5k
-ZW5jeSBiZXR3ZWVuIGluc3RydWN0aW9ucyBsaWtlIHRoaXMsIGl0IGNhbiBpbXByb3ZlIHRoZQ0K
-PiBwZXJmb3JtYW5jZS4NCj4gY2FuIGltcHJvdmUgdGhlIHBlcmZvcm1hbmNlLg0KPiAuTG1vdmVf
-MTI4Ynl0ZXM6DQo+ICAgICAgICAgTE9BRCAgICB0MCwgc3JjLCAwDQo+ICAgICAgICAgTE9BRCAg
-ICB0MSwgc3JjLCA4DQo+ICAgICAgICAgTE9BRCAgICB0Mywgc3JjLCAxNg0KPiAgICAgICAgIExP
-QUQgICAgdDQsIHNyYywgMjQNCj4gICAgICAgICBMT0FEICAgIGEzLCBzcmMsIDAgKyAweDIwDQo+
-ICAgICAgICAgTE9BRCAgICBhNCwgc3JjLCA4ICsgMHgyMA0KPiAgICAgICAgIExPQUQgICAgYTUs
-IHNyYywgMTYgKyAweDIwDQo+ICAgICAgICAgTE9BRCAgICBhNiwgc3JjLCAyNCArIDB4MjANCj4g
-ICAgICAgICBBREQgICAgIHQwLCB0MCwgIHQxDQo+ICAgICAgICAgQUREICAgICB0MywgdDMsICB0
-NA0KPiAgICAgICAgIEFERCAgICAgYTMsIGEzLCAgYTQNCj4gICAgICAgICBBREQgICAgIGE1LCBh
-NSwgIGE2DQo+ICAgICAgICAgc2x0dSAgICB0OCwgdDAsICB0MQ0KPiAgICAgICAgIHNsdHUgICAg
-YTcsIHQzLCAgdDQNCj4gICAgICAgICBBREQgICAgIHQwLCB0MCwgIHQ4DQo+ICAgICAgICAgQURE
-ICAgICB0MywgdDMsICBhNw0KPiAgICAgICAgIHNsdHUgICAgdDEsIGEzLCAgYTQNCj4gICAgICAg
-ICBzbHR1ICAgIHQ0LCBhNSwgIGE2DQo+ICAgICAgICAgQUREICAgICBhMywgYTMsICB0MQ0KPiAg
-ICAgICAgIEFERCAgICAgYTUsIGE1LCAgdDQNCj4gICAgICAgICBBREQgICAgIHQwLCB0MCwgdDMN
-Cj4gICAgICAgICBBREQgICAgIGEzLCBhMywgYTUNCj4gICAgICAgICBzbHR1ICAgIHQxLCB0MCwg
-dDMNCj4gICAgICAgICBzbHR1ICAgIHQ0LCBhMywgYTUNCj4gICAgICAgICBBREQgICAgIHQwLCB0
-MCwgdDENCj4gICAgICAgICBBREQgICAgIGEzLCBhMywgdDQNCj4gICAgICAgICBBREQgICAgIHN1
-bSwgc3VtLCB0MA0KPiAgICAgICAgIHNsdHUgICAgdDgsICBzdW0sIHQwDQo+ICAgICAgICAgQURE
-ICAgICBzdW0sIHN1bSwgIHQ4DQo+ICAgICAgICAgQUREICAgICBzdW0sIHN1bSwgYTMNCj4gICAg
-ICAgICBzbHR1ICAgIHQ4LCAgc3VtLCBhMw0KPiAgICAgICAgIGFkZGkuZCAgdDUsIHQ1LCAtMQ0K
-PiAgICAgICAgIEFERCAgICAgc3VtLCBzdW0sIHQ4DQo+IA0KPiBIb3dldmVyIHRoZSByZXN1bHQg
-YW5kIHByaW5jaXBsZSBpcyBhbG1vc3QgdGhlIHNpbWlsYXIgd2l0aA0KPiB1aW50MTI4IGMgY29k
-ZS4gQW5kIHRoZXJlIGlzIG5vIHBlcmZvcm1hbmNlIGltcGFjdCBpbnRlcmxlYXZpbmcNCj4gdGhl
-IHJlYWRzIGFuZCBhbHUgb3BlcmF0aW9ucy4NCg0KWW91IGFyZSBzdGlsbCByZWx5aW5nIG9uIHRo
-ZSAnb3V0IG9mIG9yZGVyJyBsb2dpYyB0byBleGVjdXRlDQpBTFUgaW5zdHJ1Y3Rpb25zIHdoaWxl
-IHRoZSBtZW1vcnkgcmVhZHMgYXJlIGdvaW5nIG9uLg0KVHJ5IHNvbWV0aGluZyBsaWtlOg0KCWNv
-bXBsZXggc2V0dXAgOi0pDQpsb29wOg0KCXNsdHUJYzAsIHN1bSwgdjANCglsb2FkCXYwLCBzcmMs
-IDANCglhZGQJc3VtLCB2MQ0KCWFkZAljYXJyeSwgYzMNCg0KCXNsdHUJYzEsIHN1bSwgdjENCgls
-b2FkCXYxLCBzcmMsIDgNCglhZGQJc3VtLCB2Mg0KCWFkZAljYXJyeSwgYzANCg0KCXNsdHUJYzIs
-IHN1bSwgdjINCglsb2FkCXYyLCBzcmMsIDE2DQoJYWRkaQlzcmMsIDMyDQoJYWRkCXN1bSwgdjMN
-CglhZGQJY2FycnksIGMxDQoNCglzbHR1CWMzLCBzdW0sIHYzDQoJbG9hZAl2Mywgc3JjLCAyNA0K
-CWFkZAlzdW0sIHYwDQoJYWRkCWNhcnJ5LCBjMg0KCWJuZQlzcmMsIGxpbWl0LCBsb29wDQoNCglj
-b21wbGV4IGZpbmFsaXNlDQoNClRoZSBpZGVhIGJlaW5nIHRoYXQgZWFjaCBncm91cCBvZiBpbnN0
-cnVjdGlvbnMgZXhlY3V0ZXMNCmluIG9uZSBjbG9jayAtIHNvIHRoZSBsb29wIGlzIDQgY2xvY2tz
-Lg0KVGhlIGFib3ZlIGNvZGUgYWxsb3dzIGZvciAyIGRlbGF5IGNsb2NrcyBvbiByZWFkcy4NClRo
-ZXkgbWF5IG5vdCBiZSBuZWVkZWQsIGluIHRoYXQgY2FzZSB0aGUgYWJvdmUgbWF5IHJ1bg0KYXQg
-OCBieXRlcy9jbG9jayB3aXRoIGp1c3QgMiBibG9ja3Mgb2YgaW5zdHJ1Y3Rpb25zLg0KDQpZb3Un
-ZCBnaXZlIHRoZSBjcHUgYSBiaXQgbW9yZSBsZWV3YXkgYnkgdXNpbmcgdHdvIHN1bSBhbmQNCmNh
-cnJ5IHJlZ2lzdGVycy4NCg0KSSdkIHRpbWUgdGhlIGxvb3Agd2l0aG91dCB3b3JyeWluZyBhYm91
-dCB0aGUgc2V0dXAvZmluYWxpc2UNCmNvZGUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFk
-ZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywg
-TUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+----- Ursprüngliche Mail -----
+> Von: "harshit m mogalapalli" <harshit.m.mogalapalli@oracle.com>
+> Smatch warns:
+>	drivers/mtd/ubi/block.c:438 ubiblock_create()
+>	warn: '&dev->list' not removed from list
+> 
+> 'dev' is freed in 'out_free_dev:, but it is still on the list.
+> 
+> To fix this, delete the list item before freeing.
+> 
+> Fixes: 91cc8fbcc8c7 ("ubi: block: set BLK_MQ_F_BLOCKING")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+> Found by static analysis(smatch). Only Compile tested.
+> ---
+> drivers/mtd/ubi/block.c | 1 +
+> 1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+> index f5d036203fe7..763704c8d05c 100644
+> --- a/drivers/mtd/ubi/block.c
+> +++ b/drivers/mtd/ubi/block.c
+> @@ -429,6 +429,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
+> 	return 0;
+> 
+> out_remove_minor:
+> +	list_del(&dev->list);
+> 	idr_remove(&ubiblock_minor_idr, gd->first_minor);
+> out_cleanup_disk:
+> 	put_disk(dev->gd);
 
+Good catch!
+
+Thanks,
+//richard
