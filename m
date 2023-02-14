@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7F36958E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABD76958EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjBNGNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 01:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S231287AbjBNGNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 01:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjBNGM7 (ORCPT
+        with ESMTP id S231211AbjBNGNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 01:12:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62585B771;
-        Mon, 13 Feb 2023 22:12:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG9qX5S9Kz4x7w;
-        Tue, 14 Feb 2023 17:12:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676355176;
-        bh=wWjOzCsGqomhwugnRB9+/uFRB4wXCtiwDrBMDMUTWT4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tH6/Erb/bv3eoP8xKOwBu8vTjaMKlxhtQ3Ao/Vzy2ORviLcPlDuiEiGZF9EuxJkYV
-         VMqSsGNcZMPggr86yxNTJ0f1zv4yeXU5AzAlh6JTqv760oQD0YOzuqEnyOZuXw9hlk
-         0BpmccLJFlpFOmBaHpwQmD+xZ7ONz70K8S5QKaet7KKmZPXJloyyIZjuKyAjYsk9aH
-         O+sMncM+akclNXaRux/GLwmWlkMfxdxsUMhEW4B62dcz2uYK80jNoP2tNOLD9KJAd2
-         FiGoT1jHfqerv8WtRWyssTvANOUNA2gSoMxKHACS8YOsFD1LCAawAfUDZNcm/fHbLa
-         nj5pNVpt3uUYA==
-Date:   Tue, 14 Feb 2023 17:12:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: qemu boot log difference today
-Message-ID: <20230214171256.556defbb@canb.auug.org.au>
-In-Reply-To: <878rh0aknk.fsf@linux.ibm.com>
-References: <20230214143150.7c7fdd05@canb.auug.org.au>
-        <878rh0aknk.fsf@linux.ibm.com>
+        Tue, 14 Feb 2023 01:13:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E61F1CF72;
+        Mon, 13 Feb 2023 22:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N1+Q6ehlZzyNk+5II3GHXDdllKQVwZxvOeW2m7AQVX0=; b=NzZRxjtUrAT7Z7LuVDOPBP8bjk
+        lgwVXa2ovuAfrtPW/mPGRVXCMLqStQGG3l+AinjualcyNAoLQ1jcCY0PhFjAue8CCzmgGdXcpPw9l
+        svvXjvlUIX7qEbNZfMPqnCNv56cKM797oO9qAotys/TSuZFNDDpUbDztbHrMdl7EZTsY85oXvB197
+        +0Ziy3ymW7cQJq1K0K1oq1DT7hePAQ7IzN8zPZJtd0Md1dyys880YcAIh3iANB2nxMuMOmKgGTUS7
+        +6eYwr9ny5CyTpOD//imvA4ErCc43kCoAiqG/81BMj+U8XVCXAxlzuqvf0MIlcAybxPhcvar95mGS
+        MoQyoDdQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRoYj-0001Ng-GA; Tue, 14 Feb 2023 06:12:57 +0000
+Date:   Mon, 13 Feb 2023 22:12:57 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     JiaJie Ho <jiajie.ho@starfivetech.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Message-ID: <Y+smaRL9f7g9RWEB@infradead.org>
+References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+ <20230130154242.112613-5-jiajie.ho@starfivetech.com>
+ <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
+ <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
+ <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0YtnMci.O9bXV5csRpD7yI6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0YtnMci.O9bXV5csRpD7yI6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Nathan,
-
-On Mon, 13 Feb 2023 23:19:43 -0600 Nathan Lynch <nathanl@linux.ibm.com> wro=
-te:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+On Thu, Feb 09, 2023 at 05:43:34PM +0800, Herbert Xu wrote:
+> On Thu, Feb 09, 2023 at 09:33:06AM +0000, JiaJie Ho wrote:
 > >
-> > Today's qemu boot log shows 256k extra in reserved memory:
-> >
-> > - Memory: 2046080K/2097152K available (14720K kernel code, 2944K rwdata=
-, 18048K rodata, 5184K init, 1431K bss, 51072K reserved, 0K cma-reserved)
-> > + Memory: 2045824K/2097152K available (14720K kernel code, 2944K rwdata=
-, 18048K rodata, 5184K init, 1439K bss, 51328K reserved, 0K cma-reserved)
-> >
-> > I don't know what has caused this. =20
->=20
-> Assuming it's pseries, it's the RTAS work area allocator reserving the
-> memory.
->=20
-> 43033bc62d34 powerpc/pseries: add RTAS work area allocator
+> > The DMA can only support 32-bit addressing.
+> > So, I am copying everything in case kernel allocated memory region >32-bit for a user app.
+> 
+> Does your hardware support scatter-and-gather? If so you should
+> at least allocate individual pages rather than one contiguous buffer.
+> 
+> Then you can allocate them on-demand rather than before-hand.
+> 
+> It would also be nice to not do the copy if the input you were
+> given was in low memory (and contiguous if your hardware doesn't
+> do SG).
 
-Yeah, pseries_le_defconfig.  Thanks, I will stop worrying about it.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0YtnMci.O9bXV5csRpD7yI6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPrJmgACgkQAVBC80lX
-0GxxFQf6A7pXQn80RvrHINP1N5fdDkJtGfgLJZcQodnwkrUFZkPBpFxVw83PAyWj
-DDSIHLRd7DCVs32qs2l2wQvy43o/3G/tMBlUmKxjdBcQGEdj2N10qICfLxHhZGkt
-7r/YiSDC1AUVV78099tuVJuCrS+LM112YWEsWizVDYT/zUdOK8SEFyF2GGxm6dtl
-eRYqqSnrdzaUACY+ACJlNX8qubYHwayX579/sr8+5iG0mxlSY7qonZ3FGA+ED6Kl
-Y1YbYC3Bgt3aJe0wJC+MxvOyfcFQEow6uC2RYkMVZ3xS9JKechRAUqD5YoDSe4WW
-HLyjQuTGGcti3Wpm0DKHeL/5v7b5RQ==
-=UyxE
------END PGP SIGNATURE-----
-
---Sig_/0YtnMci.O9bXV5csRpD7yI6--
+All of that is done by the DMA API, or more specifically swiotlb and
+does not need to be duplicated in individual drivers.
