@@ -2,622 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9994695751
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE4F695755
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbjBNDQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S231356AbjBNDSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjBNDQk (ORCPT
+        with ESMTP id S229958AbjBNDSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:16:40 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7631C5BC;
-        Mon, 13 Feb 2023 19:16:18 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E2Z0Pe025253;
-        Tue, 14 Feb 2023 03:15:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=hlUepngCwLl2SoSO+JgPrpP4HaYuAOsNFxoSgGEwdWY=;
- b=PRq/IrGBF48YdXjE34ECGrD4ToYCtS1Lv5oK8PiANdlJ4z8lVAxlMc4N9BcWquOgrVwO
- 1zJcCA+AE/B1mmZfjKQpcHt4DOQUERtHfNvBxjeie7p+ftjwZRG2UrS4e0z7440FDqsQ
- Sn/D6mHdAq3OCL2engPDzKzMq4BOXBNo4yduvFe9FVL8BwmakXHLa3JBp7tTXHXsHdg4
- WiTHlsmDfDqWAvIvMc0xpnPkYfPjqYsotKWtz2lCDM5NoremaJDTKKn8OQcDoKTy42bn
- sq2PbclHySKqOq/j2VNCqF/kdBnDNqm6DmlZIM31NcoOn2OS/QWgfz2ef+u+hzcJ0NSh lA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np4agdmmm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 03:15:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31E3FCPj003643
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 03:15:12 GMT
-Received: from [10.242.243.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
- 2023 19:15:02 -0800
-Message-ID: <5b3f05bf-151b-288d-894e-cd179428e1fd@quicinc.com>
-Date:   Tue, 14 Feb 2023 08:44:54 +0530
+        Mon, 13 Feb 2023 22:18:30 -0500
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C1A4694;
+        Mon, 13 Feb 2023 19:18:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vbe-fxI_1676344705;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vbe-fxI_1676344705)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Feb 2023 11:18:26 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, baolin.wang@linux.alibaba.com,
+        damon@lists.linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Some cleanups for page isolation
+Date:   Tue, 14 Feb 2023 11:18:05 +0800
+Message-Id: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V3 1/7] dt-bindings: Add ipq9574 clock and reset
- definitions
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
-        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230130125528.11509-1-quic_devipriy@quicinc.com>
- <20230130125528.11509-2-quic_devipriy@quicinc.com>
- <20230208231131.3oq4iffgc2c2f64l@ripper>
- <f3410a51-b4b7-b262-7632-34c3224478bd@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <f3410a51-b4b7-b262-7632-34c3224478bd@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: eItgPcuikprBr-u733r1hhXwPiecGkSE
-X-Proofpoint-GUID: eItgPcuikprBr-u733r1hhXwPiecGkSE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_01,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0 bulkscore=0
- suspectscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140025
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+The page isolation functions did not return a boolean to indicate
+success or not, instead it will return a negative error when failed
+to isolate a page. So it's better to check the negative error explicitly
+for isolation to make the code more clear per Linus's suggestion in [1].
 
-On 2/13/2023 7:57 PM, Devi Priya wrote:
-> 
-> 
-> On 2/9/2023 4:41 AM, Bjorn Andersson wrote:
->> On Mon, Jan 30, 2023 at 06:25:22PM +0530, devi priya wrote:
->>> Add clock and reset ID definitions for ipq9574
->>>
->>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->>> ---
->>>   Changes in V3:
->>>          - Added a separate clock binding for ipq9574 and reverted the
->>>            changes from qcom,gcc-other.yaml
->>>
->>>   Changes in V2:
->>>          - Updated subject prefix to match the subsystem
->>>          - Updated gcc compatible string to match new naming style
->>>          - Reverted the changes from qcom,gcc.yaml
->>>          - Added clock and clock-names to qcom,gcc-other.yaml for 
->>> ipq9574
->>>          - Removed the clock macro definitions for unused clocks
->>>
->>>   .../bindings/clock/qcom,ipq9574-gcc.yaml      |  72 ++++++
->>>   include/dt-bindings/clock/qcom,ipq9574-gcc.h  | 213 ++++++++++++++++++
->>>   include/dt-bindings/reset/qcom,ipq9574-gcc.h  | 164 ++++++++++++++
->>>   3 files changed, 449 insertions(+)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>>   create mode 100644 include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>>   create mode 100644 include/dt-bindings/reset/qcom,ipq9574-gcc.h
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml 
->>> b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>> new file mode 100644
->>> index 000000000000..7a98469b197c
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>> @@ -0,0 +1,72 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/qcom,ipq9574-gcc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Global Clock & Reset Controller on IPQ9574
->>> +
->>> +maintainers:
->>> +  - Stephen Boyd <sboyd@kernel.org>
->>
->> I can be maintainer instead...
-> As per Stephen's suggestion in V3, we have added the author as the 
-> maintainter in V4 series. Please suggest us if some changes are to be 
-> made..
-> https://lore.kernel.org/linux-arm-kernel/20230201060319.20434-2-quic_devipriy@quicinc.com/
->>
->>> +
->>> +description: |
->>> +  Qualcomm global clock control module provides the clocks, resets 
->>> and power
->>> +  domains on IPQ9574
->>> +
->>> +  See also::
->>> +    include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> +    include/dt-bindings/reset/qcom,ipq9574-gcc.h
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: qcom,ipq9574-gcc
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: Board XO source
->>> +      - description: Sleep clock source
->>> +      - description: Bias PLL ubi clock source
->>> +      - description: PCIE30 PHY0 pipe clock source
->>> +      - description: PCIE30 PHY1 pipe clock source
->>> +      - description: PCIE30 PHY2 pipe clock source
->>> +      - description: PCIE30 PHY3 pipe clock source
->>> +      - description: USB3 PHY pipe clock source
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: xo
->>> +      - const: sleep_clk
->>> +      - const: bias_pll_ubi_nc_clk
->>> +      - const: pcie30_phy0_pipe_clk
->>> +      - const: pcie30_phy1_pipe_clk
->>> +      - const: pcie30_phy2_pipe_clk
->>> +      - const: pcie30_phy3_pipe_clk
->>> +      - const: usb3phy_0_cc_pipe_clk
->>
->> "clock-names" gives the impression that the order of clocks can be
->> modified, but we use .index in the driver. So please drop clock-names,
->> just to avoid the possible confusion.
->>
-Sure, will drop it in next spin.
-Missed to respond in the previous thread
->> Thanks,
->> Bjorn
->>
->>> +
->>> +required:
->>> +  - compatible
->>> +  - clocks
->>> +
->>> +allOf:
->>> +  - $ref: qcom,gcc.yaml#
->>> +
->>> +unevaluatedProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    clock-controller@1800000 {
->>> +      compatible = "qcom,ipq9574-gcc";
->>> +      reg = <0x01800000 0x80000>;
->>> +      clocks = <&xo_board_clk>,
->>> +               <&sleep_clk>,
->>> +               <&bias_pll_ubi_nc_clk>,
->>> +               <&pcie30_phy0_pipe_clk>,
->>> +               <&pcie30_phy1_pipe_clk>,
->>> +               <&pcie30_phy2_pipe_clk>,
->>> +               <&pcie30_phy3_pipe_clk>,
->>> +               <&usb3phy_0_cc_pipe_clk>;
->>> +      #clock-cells = <1>;
->>> +      #reset-cells = <1>;
->>> +      #power-domain-cells = <1>;
->>> +    };
->>> +...
->>> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h 
->>> b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> new file mode 100644
->>> index 000000000000..feedfdd5e00a
->>> --- /dev/null
->>> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> @@ -0,0 +1,213 @@
->>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>> +/*
->>> + * Copyright (c) 2018-2023 The Linux Foundation. All rights reserved.
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_CLOCK_IPQ_GCC_9048_H
->>> +#define _DT_BINDINGS_CLOCK_IPQ_GCC_9048_H
->>> +
->>> +#define GPLL0_MAIN                    0
->>> +#define GPLL0                        1
->>> +#define GPLL2_MAIN                    2
->>> +#define GPLL2                        3
->>> +#define GPLL4_MAIN                    4
->>> +#define GPLL4                        5
->>> +#define GCC_SLEEP_CLK_SRC                6
->>> +#define APSS_AHB_CLK_SRC                7
->>> +#define APSS_AXI_CLK_SRC                8
->>> +#define BLSP1_QUP1_I2C_APPS_CLK_SRC            9
->>> +#define BLSP1_QUP1_SPI_APPS_CLK_SRC            10
->>> +#define BLSP1_QUP2_I2C_APPS_CLK_SRC            11
->>> +#define BLSP1_QUP2_SPI_APPS_CLK_SRC            12
->>> +#define BLSP1_QUP3_I2C_APPS_CLK_SRC            13
->>> +#define BLSP1_QUP3_SPI_APPS_CLK_SRC            14
->>> +#define BLSP1_QUP4_I2C_APPS_CLK_SRC            15
->>> +#define BLSP1_QUP4_SPI_APPS_CLK_SRC            16
->>> +#define BLSP1_QUP5_I2C_APPS_CLK_SRC            17
->>> +#define BLSP1_QUP5_SPI_APPS_CLK_SRC            18
->>> +#define BLSP1_QUP6_I2C_APPS_CLK_SRC            19
->>> +#define BLSP1_QUP6_SPI_APPS_CLK_SRC            20
->>> +#define BLSP1_UART1_APPS_CLK_SRC            21
->>> +#define BLSP1_UART2_APPS_CLK_SRC            22
->>> +#define BLSP1_UART3_APPS_CLK_SRC            23
->>> +#define BLSP1_UART4_APPS_CLK_SRC            24
->>> +#define BLSP1_UART5_APPS_CLK_SRC            25
->>> +#define BLSP1_UART6_APPS_CLK_SRC            26
->>> +#define GCC_APSS_AHB_CLK                27
->>> +#define GCC_APSS_AXI_CLK                28
->>> +#define GCC_BLSP1_QUP1_I2C_APPS_CLK            29
->>> +#define GCC_BLSP1_QUP1_SPI_APPS_CLK            30
->>> +#define GCC_BLSP1_QUP2_I2C_APPS_CLK            31
->>> +#define GCC_BLSP1_QUP2_SPI_APPS_CLK            32
->>> +#define GCC_BLSP1_QUP3_I2C_APPS_CLK            33
->>> +#define GCC_BLSP1_QUP3_SPI_APPS_CLK            34
->>> +#define GCC_BLSP1_QUP4_I2C_APPS_CLK            35
->>> +#define GCC_BLSP1_QUP4_SPI_APPS_CLK            36
->>> +#define GCC_BLSP1_QUP5_I2C_APPS_CLK            37
->>> +#define GCC_BLSP1_QUP5_SPI_APPS_CLK            38
->>> +#define GCC_BLSP1_QUP6_I2C_APPS_CLK            39
->>> +#define GCC_BLSP1_QUP6_SPI_APPS_CLK            40
->>> +#define GCC_BLSP1_UART1_APPS_CLK            41
->>> +#define GCC_BLSP1_UART2_APPS_CLK            42
->>> +#define GCC_BLSP1_UART3_APPS_CLK            43
->>> +#define GCC_BLSP1_UART4_APPS_CLK            44
->>> +#define GCC_BLSP1_UART5_APPS_CLK            45
->>> +#define GCC_BLSP1_UART6_APPS_CLK            46
->>> +#define PCIE0_AXI_M_CLK_SRC                47
->>> +#define GCC_PCIE0_AXI_M_CLK                48
->>> +#define PCIE1_AXI_M_CLK_SRC                49
->>> +#define GCC_PCIE1_AXI_M_CLK                50
->>> +#define PCIE2_AXI_M_CLK_SRC                51
->>> +#define GCC_PCIE2_AXI_M_CLK                52
->>> +#define PCIE3_AXI_M_CLK_SRC                53
->>> +#define GCC_PCIE3_AXI_M_CLK                54
->>> +#define PCIE0_AXI_S_CLK_SRC                55
->>> +#define GCC_PCIE0_AXI_S_BRIDGE_CLK            56
->>> +#define GCC_PCIE0_AXI_S_CLK                57
->>> +#define PCIE1_AXI_S_CLK_SRC                58
->>> +#define GCC_PCIE1_AXI_S_BRIDGE_CLK            59
->>> +#define GCC_PCIE1_AXI_S_CLK                60
->>> +#define PCIE2_AXI_S_CLK_SRC                61
->>> +#define GCC_PCIE2_AXI_S_BRIDGE_CLK            62
->>> +#define GCC_PCIE2_AXI_S_CLK                63
->>> +#define PCIE3_AXI_S_CLK_SRC                64
->>> +#define GCC_PCIE3_AXI_S_BRIDGE_CLK            65
->>> +#define GCC_PCIE3_AXI_S_CLK                66
->>> +#define PCIE0_PIPE_CLK_SRC                67
->>> +#define PCIE1_PIPE_CLK_SRC                68
->>> +#define PCIE2_PIPE_CLK_SRC                69
->>> +#define PCIE3_PIPE_CLK_SRC                70
->>> +#define PCIE_AUX_CLK_SRC                71
->>> +#define GCC_PCIE0_AUX_CLK                72
->>> +#define GCC_PCIE1_AUX_CLK                73
->>> +#define GCC_PCIE2_AUX_CLK                74
->>> +#define GCC_PCIE3_AUX_CLK                75
->>> +#define PCIE0_RCHNG_CLK_SRC                76
->>> +#define GCC_PCIE0_RCHNG_CLK                77
->>> +#define PCIE1_RCHNG_CLK_SRC                78
->>> +#define GCC_PCIE1_RCHNG_CLK                79
->>> +#define PCIE2_RCHNG_CLK_SRC                80
->>> +#define GCC_PCIE2_RCHNG_CLK                81
->>> +#define PCIE3_RCHNG_CLK_SRC                82
->>> +#define GCC_PCIE3_RCHNG_CLK                83
->>> +#define GCC_PCIE0_AHB_CLK                84
->>> +#define GCC_PCIE1_AHB_CLK                85
->>> +#define GCC_PCIE2_AHB_CLK                86
->>> +#define GCC_PCIE3_AHB_CLK                87
->>> +#define USB0_AUX_CLK_SRC                88
->>> +#define GCC_USB0_AUX_CLK                89
->>> +#define USB0_MASTER_CLK_SRC                90
->>> +#define GCC_USB0_MASTER_CLK                91
->>> +#define GCC_SNOC_USB_CLK                92
->>> +#define GCC_ANOC_USB_AXI_CLK                93
->>> +#define USB0_MOCK_UTMI_CLK_SRC                94
->>> +#define USB0_MOCK_UTMI_DIV_CLK_SRC            95
->>> +#define GCC_USB0_MOCK_UTMI_CLK                96
->>> +#define USB0_PIPE_CLK_SRC                97
->>> +#define GCC_USB0_PHY_CFG_AHB_CLK            98
->>> +#define SDCC1_APPS_CLK_SRC                99
->>> +#define GCC_SDCC1_APPS_CLK                100
->>> +#define SDCC1_ICE_CORE_CLK_SRC                101
->>> +#define GCC_SDCC1_ICE_CORE_CLK                102
->>> +#define GCC_SDCC1_AHB_CLK                103
->>> +#define PCNOC_BFDCD_CLK_SRC                104
->>> +#define GCC_NSSCFG_CLK                    105
->>> +#define GCC_NSSNOC_NSSCC_CLK                106
->>> +#define GCC_NSSCC_CLK                    107
->>> +#define GCC_NSSNOC_PCNOC_1_CLK                108
->>> +#define GCC_QDSS_DAP_AHB_CLK                109
->>> +#define GCC_QDSS_CFG_AHB_CLK                110
->>> +#define GCC_QPIC_AHB_CLK                111
->>> +#define GCC_QPIC_CLK                    112
->>> +#define GCC_BLSP1_AHB_CLK                113
->>> +#define GCC_MDIO_AHB_CLK                114
->>> +#define GCC_PRNG_AHB_CLK                115
->>> +#define GCC_UNIPHY0_AHB_CLK                116
->>> +#define GCC_UNIPHY1_AHB_CLK                117
->>> +#define GCC_UNIPHY2_AHB_CLK                118
->>> +#define GCC_CMN_12GPLL_AHB_CLK                119
->>> +#define GCC_CMN_12GPLL_APU_CLK                120
->>> +#define SYSTEM_NOC_BFDCD_CLK_SRC            121
->>> +#define GCC_NSSNOC_SNOC_CLK                122
->>> +#define GCC_NSSNOC_SNOC_1_CLK                123
->>> +#define GCC_QDSS_ETR_USB_CLK                124
->>> +#define WCSS_AHB_CLK_SRC                125
->>> +#define GCC_Q6_AHB_CLK                    126
->>> +#define GCC_Q6_AHB_S_CLK                127
->>> +#define GCC_WCSS_ECAHB_CLK                128
->>> +#define GCC_WCSS_ACMT_CLK                129
->>> +#define GCC_SYS_NOC_WCSS_AHB_CLK            130
->>> +#define WCSS_AXI_M_CLK_SRC                131
->>> +#define GCC_ANOC_WCSS_AXI_M_CLK                132
->>> +#define QDSS_AT_CLK_SRC                    133
->>> +#define GCC_Q6SS_ATBM_CLK                134
->>> +#define GCC_WCSS_DBG_IFC_ATB_CLK            135
->>> +#define GCC_NSSNOC_ATB_CLK                136
->>> +#define GCC_QDSS_AT_CLK                    137
->>> +#define GCC_SYS_NOC_AT_CLK                138
->>> +#define GCC_PCNOC_AT_CLK                139
->>> +#define GCC_USB0_EUD_AT_CLK                140
->>> +#define GCC_QDSS_EUD_AT_CLK                141
->>> +#define QDSS_STM_CLK_SRC                142
->>> +#define GCC_QDSS_STM_CLK                143
->>> +#define GCC_SYS_NOC_QDSS_STM_AXI_CLK            144
->>> +#define QDSS_TRACECLKIN_CLK_SRC                145
->>> +#define GCC_QDSS_TRACECLKIN_CLK                146
->>> +#define QDSS_TSCTR_CLK_SRC                147
->>> +#define GCC_Q6_TSCTR_1TO2_CLK                148
->>> +#define GCC_WCSS_DBG_IFC_NTS_CLK            149
->>> +#define GCC_QDSS_TSCTR_DIV2_CLK                150
->>> +#define GCC_QDSS_TS_CLK                    151
->>> +#define GCC_QDSS_TSCTR_DIV4_CLK                152
->>> +#define GCC_NSS_TS_CLK                    153
->>> +#define GCC_QDSS_TSCTR_DIV8_CLK                154
->>> +#define GCC_QDSS_TSCTR_DIV16_CLK            155
->>> +#define GCC_Q6SS_PCLKDBG_CLK                156
->>> +#define GCC_Q6SS_TRIG_CLK                157
->>> +#define GCC_WCSS_DBG_IFC_APB_CLK            158
->>> +#define GCC_WCSS_DBG_IFC_DAPBUS_CLK            159
->>> +#define GCC_QDSS_DAP_CLK                160
->>> +#define GCC_QDSS_APB2JTAG_CLK                161
->>> +#define GCC_QDSS_TSCTR_DIV3_CLK                162
->>> +#define QPIC_IO_MACRO_CLK_SRC                163
->>> +#define GCC_QPIC_IO_MACRO_CLK                           164
->>> +#define Q6_AXI_CLK_SRC                    165
->>> +#define GCC_Q6_AXIM_CLK                    166
->>> +#define GCC_WCSS_Q6_TBU_CLK                167
->>> +#define GCC_MEM_NOC_Q6_AXI_CLK                168
->>> +#define Q6_AXIM2_CLK_SRC                169
->>> +#define NSSNOC_MEMNOC_BFDCD_CLK_SRC            170
->>> +#define GCC_NSSNOC_MEMNOC_CLK                171
->>> +#define GCC_NSSNOC_MEM_NOC_1_CLK            172
->>> +#define GCC_NSS_TBU_CLK                    173
->>> +#define GCC_MEM_NOC_NSSNOC_CLK                174
->>> +#define LPASS_AXIM_CLK_SRC                175
->>> +#define LPASS_SWAY_CLK_SRC                176
->>> +#define ADSS_PWM_CLK_SRC                177
->>> +#define GCC_ADSS_PWM_CLK                178
->>> +#define GP1_CLK_SRC                    179
->>> +#define GP2_CLK_SRC                    180
->>> +#define GP3_CLK_SRC                    181
->>> +#define DDRSS_SMS_SLOW_CLK_SRC                182
->>> +#define GCC_XO_CLK_SRC                    183
->>> +#define GCC_XO_CLK                    184
->>> +#define GCC_NSSNOC_QOSGEN_REF_CLK            185
->>> +#define GCC_NSSNOC_TIMEOUT_REF_CLK            186
->>> +#define GCC_XO_DIV4_CLK                    187
->>> +#define GCC_UNIPHY0_SYS_CLK                188
->>> +#define GCC_UNIPHY1_SYS_CLK                189
->>> +#define GCC_UNIPHY2_SYS_CLK                190
->>> +#define GCC_CMN_12GPLL_SYS_CLK                191
->>> +#define GCC_NSSNOC_XO_DCD_CLK                192
->>> +#define GCC_Q6SS_BOOT_CLK                193
->>> +#define UNIPHY_SYS_CLK_SRC                194
->>> +#define NSS_TS_CLK_SRC                    195
->>> +#define GCC_ANOC_PCIE0_1LANE_M_CLK            196
->>> +#define GCC_ANOC_PCIE1_1LANE_M_CLK            197
->>> +#define GCC_ANOC_PCIE2_2LANE_M_CLK            198
->>> +#define GCC_ANOC_PCIE3_2LANE_M_CLK            199
->>> +#define GCC_SNOC_PCIE0_1LANE_S_CLK            200
->>> +#define GCC_SNOC_PCIE1_1LANE_S_CLK            201
->>> +#define GCC_SNOC_PCIE2_2LANE_S_CLK            202
->>> +#define GCC_SNOC_PCIE3_2LANE_S_CLK            203
->>> +#endif
->>> diff --git a/include/dt-bindings/reset/qcom,ipq9574-gcc.h 
->>> b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
->>> new file mode 100644
->>> index 000000000000..a11adbda45ec
->>> --- /dev/null
->>> +++ b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
->>> @@ -0,0 +1,164 @@
->>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>> +/*
->>> + * Copyright (c) 2018-2023, The Linux Foundation. All rights reserved.
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_RESET_IPQ_GCC_9048_H
->>> +#define _DT_BINDINGS_RESET_IPQ_GCC_9048_H
->>> +
->>> +#define GCC_ADSS_BCR                        0
->>> +#define GCC_APC0_VOLTAGE_DROOP_DETECTOR_BCR            1
->>> +#define GCC_BLSP1_BCR                        2
->>> +#define GCC_BLSP1_QUP1_BCR                    3
->>> +#define GCC_BLSP1_QUP2_BCR                    4
->>> +#define GCC_BLSP1_QUP3_BCR                    5
->>> +#define GCC_BLSP1_QUP4_BCR                    6
->>> +#define GCC_BLSP1_QUP5_BCR                    7
->>> +#define GCC_BLSP1_QUP6_BCR                    8
->>> +#define GCC_BLSP1_UART1_BCR                    9
->>> +#define GCC_BLSP1_UART2_BCR                    10
->>> +#define GCC_BLSP1_UART3_BCR                    11
->>> +#define GCC_BLSP1_UART4_BCR                    12
->>> +#define GCC_BLSP1_UART5_BCR                    13
->>> +#define GCC_BLSP1_UART6_BCR                    14
->>> +#define GCC_BOOT_ROM_BCR                    15
->>> +#define GCC_MDIO_BCR                        16
->>> +#define GCC_NSS_BCR                        17
->>> +#define GCC_NSS_TBU_BCR                        18
->>> +#define GCC_PCIE0_BCR                        19
->>> +#define GCC_PCIE0_LINK_DOWN_BCR                    20
->>> +#define GCC_PCIE0_PHY_BCR                    21
->>> +#define GCC_PCIE0PHY_PHY_BCR                    22
->>> +#define GCC_PCIE1_BCR                        23
->>> +#define GCC_PCIE1_LINK_DOWN_BCR                    24
->>> +#define GCC_PCIE1_PHY_BCR                    25
->>> +#define GCC_PCIE1PHY_PHY_BCR                    26
->>> +#define GCC_PCIE2_BCR                        27
->>> +#define GCC_PCIE2_LINK_DOWN_BCR                    28
->>> +#define GCC_PCIE2_PHY_BCR                    29
->>> +#define GCC_PCIE2PHY_PHY_BCR                    30
->>> +#define GCC_PCIE3_BCR                        31
->>> +#define GCC_PCIE3_LINK_DOWN_BCR                    32
->>> +#define GCC_PCIE3_PHY_BCR                    33
->>> +#define GCC_PCIE3PHY_PHY_BCR                    34
->>> +#define GCC_PRNG_BCR                        35
->>> +#define GCC_QUSB2_0_PHY_BCR                    36
->>> +#define GCC_SDCC_BCR                        37
->>> +#define GCC_TLMM_BCR                        38
->>> +#define GCC_UNIPHY0_BCR                        39
->>> +#define GCC_UNIPHY1_BCR                        40
->>> +#define GCC_UNIPHY2_BCR                        41
->>> +#define GCC_USB0_PHY_BCR                    42
->>> +#define GCC_USB3PHY_0_PHY_BCR                    43
->>> +#define GCC_USB_BCR                        44
->>> +#define GCC_ANOC0_TBU_BCR                    45
->>> +#define GCC_ANOC1_TBU_BCR                    46
->>> +#define GCC_ANOC_BCR                        47
->>> +#define GCC_APSS_TCU_BCR                    48
->>> +#define GCC_CMN_BLK_BCR                        49
->>> +#define GCC_CMN_BLK_AHB_ARES                    50
->>> +#define GCC_CMN_BLK_SYS_ARES                    51
->>> +#define GCC_CMN_BLK_APU_ARES                    52
->>> +#define GCC_DCC_BCR                        53
->>> +#define GCC_DDRSS_BCR                        54
->>> +#define GCC_IMEM_BCR                        55
->>> +#define GCC_LPASS_BCR                        56
->>> +#define GCC_MPM_BCR                        57
->>> +#define GCC_MSG_RAM_BCR                        58
->>> +#define GCC_NSSNOC_MEMNOC_1_ARES                59
->>> +#define GCC_NSSNOC_PCNOC_1_ARES                    60
->>> +#define GCC_NSSNOC_SNOC_1_ARES                    61
->>> +#define GCC_NSSNOC_XO_DCD_ARES                    62
->>> +#define GCC_NSSNOC_TS_ARES                    63
->>> +#define GCC_NSSCC_ARES                        64
->>> +#define GCC_NSSNOC_NSSCC_ARES                    65
->>> +#define GCC_NSSNOC_ATB_ARES                    66
->>> +#define GCC_NSSNOC_MEMNOC_ARES                    67
->>> +#define GCC_NSSNOC_QOSGEN_REF_ARES                68
->>> +#define GCC_NSSNOC_SNOC_ARES                    69
->>> +#define GCC_NSSNOC_TIMEOUT_REF_ARES                70
->>> +#define GCC_NSS_CFG_ARES                    71
->>> +#define GCC_UBI0_DBG_ARES                    72
->>> +#define GCC_PCIE0_AHB_ARES                    73
->>> +#define GCC_PCIE0_AUX_ARES                    74
->>> +#define GCC_PCIE0_AXI_M_ARES                    75
->>> +#define GCC_PCIE0_AXI_M_STICKY_ARES                76
->>> +#define GCC_PCIE0_AXI_S_ARES                    77
->>> +#define GCC_PCIE0_AXI_S_STICKY_ARES                78
->>> +#define GCC_PCIE0_CORE_STICKY_ARES                79
->>> +#define GCC_PCIE0_PIPE_ARES                    80
->>> +#define GCC_PCIE1_AHB_ARES                    81
->>> +#define GCC_PCIE1_AUX_ARES                    82
->>> +#define GCC_PCIE1_AXI_M_ARES                    83
->>> +#define GCC_PCIE1_AXI_M_STICKY_ARES                84
->>> +#define GCC_PCIE1_AXI_S_ARES                    85
->>> +#define GCC_PCIE1_AXI_S_STICKY_ARES                86
->>> +#define GCC_PCIE1_CORE_STICKY_ARES                87
->>> +#define GCC_PCIE1_PIPE_ARES                    88
->>> +#define GCC_PCIE2_AHB_ARES                    89
->>> +#define GCC_PCIE2_AUX_ARES                    90
->>> +#define GCC_PCIE2_AXI_M_ARES                    91
->>> +#define GCC_PCIE2_AXI_M_STICKY_ARES                92
->>> +#define GCC_PCIE2_AXI_S_ARES                    93
->>> +#define GCC_PCIE2_AXI_S_STICKY_ARES                94
->>> +#define GCC_PCIE2_CORE_STICKY_ARES                95
->>> +#define GCC_PCIE2_PIPE_ARES                    96
->>> +#define GCC_PCIE3_AHB_ARES                    97
->>> +#define GCC_PCIE3_AUX_ARES                    98
->>> +#define GCC_PCIE3_AXI_M_ARES                    99
->>> +#define GCC_PCIE3_AXI_M_STICKY_ARES                100
->>> +#define GCC_PCIE3_AXI_S_ARES                    101
->>> +#define GCC_PCIE3_AXI_S_STICKY_ARES                102
->>> +#define GCC_PCIE3_CORE_STICKY_ARES                103
->>> +#define GCC_PCIE3_PIPE_ARES                    104
->>> +#define GCC_PCNOC_BCR                        105
->>> +#define GCC_PCNOC_BUS_TIMEOUT0_BCR                106
->>> +#define GCC_PCNOC_BUS_TIMEOUT1_BCR                107
->>> +#define GCC_PCNOC_BUS_TIMEOUT2_BCR                108
->>> +#define GCC_PCNOC_BUS_TIMEOUT3_BCR                109
->>> +#define GCC_PCNOC_BUS_TIMEOUT4_BCR                110
->>> +#define GCC_PCNOC_BUS_TIMEOUT5_BCR                111
->>> +#define GCC_PCNOC_BUS_TIMEOUT6_BCR                112
->>> +#define GCC_PCNOC_BUS_TIMEOUT7_BCR                113
->>> +#define GCC_PCNOC_BUS_TIMEOUT8_BCR                114
->>> +#define GCC_PCNOC_BUS_TIMEOUT9_BCR                115
->>> +#define GCC_PCNOC_TBU_BCR                    116
->>> +#define GCC_Q6SS_DBG_ARES                    117
->>> +#define GCC_Q6_AHB_ARES                        118
->>> +#define GCC_Q6_AHB_S_ARES                    119
->>> +#define GCC_Q6_AXIM2_ARES                    120
->>> +#define GCC_Q6_AXIM_ARES                    121
->>> +#define GCC_QDSS_BCR                        122
->>> +#define GCC_QPIC_BCR                        123
->>> +#define GCC_QPIC_AHB_ARES                    124
->>> +#define GCC_QPIC_ARES                        125
->>> +#define GCC_RBCPR_BCR                        126
->>> +#define GCC_RBCPR_MX_BCR                    127
->>> +#define GCC_SEC_CTRL_BCR                    128
->>> +#define GCC_SMMU_CFG_BCR                    129
->>> +#define GCC_SNOC_BCR                        130
->>> +#define GCC_SPDM_BCR                        131
->>> +#define GCC_TME_BCR                        132
->>> +#define GCC_UNIPHY0_SYS_RESET                    133
->>> +#define GCC_UNIPHY0_AHB_RESET                    134
->>> +#define GCC_UNIPHY0_XPCS_RESET                    135
->>> +#define GCC_UNIPHY1_SYS_RESET                    136
->>> +#define GCC_UNIPHY1_AHB_RESET                    137
->>> +#define GCC_UNIPHY1_XPCS_RESET                    138
->>> +#define GCC_UNIPHY2_SYS_RESET                    139
->>> +#define GCC_UNIPHY2_AHB_RESET                    140
->>> +#define GCC_UNIPHY2_XPCS_RESET                    141
->>> +#define GCC_USB_MISC_RESET                    142
->>> +#define GCC_WCSSAON_RESET                    143
->>> +#define GCC_WCSS_ACMT_ARES                    144
->>> +#define GCC_WCSS_AHB_S_ARES                    145
->>> +#define GCC_WCSS_AXI_M_ARES                    146
->>> +#define GCC_WCSS_BCR                        147
->>> +#define GCC_WCSS_DBG_ARES                    148
->>> +#define GCC_WCSS_DBG_BDG_ARES                    149
->>> +#define GCC_WCSS_ECAHB_ARES                    150
->>> +#define GCC_WCSS_Q6_BCR                        151
->>> +#define GCC_WCSS_Q6_TBU_BCR                    152
->>> +#define GCC_TCSR_BCR                        153
->>> +
->>> +#endif
->>> -- 
->>> 2.17.1
->>>
+No functional changes intended in this patch series.
+
+[1] https://lore.kernel.org/all/CAHk-=wiBrY+O-4=2mrbVyxR+hOqfdJ=Do6xoucfJ9_5az01L4Q@mail.gmail.com/
+
+Baolin Wang (3):
+  mm: check negative error of folio_isolate_lru() when failed to isolate
+    a folio
+  mm: check negative error of isolate_lru_page() when failed to isolate
+    a page
+  mm: mempolicy: check negative error of isolate_hugetlb() when failed
+    to isolate a hugetlb
+
+ mm/damon/paddr.c    | 2 +-
+ mm/gup.c            | 2 +-
+ mm/khugepaged.c     | 4 ++--
+ mm/memcontrol.c     | 2 +-
+ mm/mempolicy.c      | 2 +-
+ mm/migrate.c        | 4 ++--
+ mm/migrate_device.c | 2 +-
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+
+-- 
+2.27.0
+
