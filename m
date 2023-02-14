@@ -2,68 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506CF69658F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9C8696596
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbjBNN7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S233071AbjBNOAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjBNN7J (ORCPT
+        with ESMTP id S233132AbjBNN74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:59:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F5C6EBA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 05:58:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52C3161645
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:58:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA492C433EF;
-        Tue, 14 Feb 2023 13:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676383131;
-        bh=TuC8tVpk0ce89vVUZF/r2/zcJ2fwuxq2ofOc0pDWTUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mEdMixvQH6GYnKwYTbKMCAQ5sE0YeusakgZq/+lF5rgjV54hqv8LC8kot2Ro/Yv8l
-         Zn5CBd41N5U2UcEfywQyEbpaGkqkrKd85jyIlnrnDDw3smsJ2qGnpezDsSfsriTL8k
-         oH9twYbLBhGrTt0j7Gb/IggQlNLcQg2XPUw8T/aufPb46HB6os2tzrMMiaL53Nv8ac
-         bNFp+Ti/FwE11NsgmKu/v2CiNfPO6u6AFb/RcImKSOkaItz3AgDNsqgrG5v76giOGG
-         0EEb+okFxm3GnPsmeyjBC2pd88vZYZMYNOdpZLGdC98u0OcUdiWXypHv1+KTPcvz4q
-         PtZj6vJE0onGw==
-Date:   Tue, 14 Feb 2023 19:28:45 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     kishon@kernel.org, heiko@sntech.de, p.zabel@pengutronix.de,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2] phy: rockchip-typec: Fix unsigned comparison with
- less than zero
-Message-ID: <Y+uTlWpKKaXY+57P@matsya>
-References: <20230213035709.99027-1-jiapeng.chong@linux.alibaba.com>
+        Tue, 14 Feb 2023 08:59:56 -0500
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6518C;
+        Tue, 14 Feb 2023 05:59:45 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VbgTJ0R_1676383178;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VbgTJ0R_1676383178)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Feb 2023 21:59:39 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
+        mike.kravetz@oracle.com, willy@infradead.org,
+        baolin.wang@linux.alibaba.com, damon@lists.linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] Change the return value for page isolation functions
+Date:   Tue, 14 Feb 2023 21:59:28 +0800
+Message-Id: <cover.1676382188.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213035709.99027-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-02-23, 11:57, Jiapeng Chong wrote:
-> The dp and ufp are defined as bool type, the return value type of
-> function extcon_get_state should be int, so the type of dp and ufp
-> are modified to int.
-> 
+Now the page isolation functions did not return a boolean to indicate
+success or not, instead it will return a negative error when failed
+to isolate a page. So below code used in most places seem a boolean
+success/failure thing, which can confuse people whether the isolation
+is successful.
 
-Applied, thanks
+if (folio_isolate_lru(folio))
+        continue;
+
+Moreover the page isolation functions only return 0 or -EBUSY, and
+most users did not care about the negative error except for few users,
+thus we can convert all page isolation functions to return a boolean
+value, which can remove the confusion to make code more clear.
+
+No functional changes intended in this patch series.
+
+Changes from v1:
+ - Convert all isolation functions to return bool.
+
+Baolin Wang (4):
+  mm: change to return bool for folio_isolate_lru()
+  mm: change to return bool for isolate_lru_page()
+  mm: hugetlb: change to return bool for isolate_hugetlb()
+  mm: change to return bool for isolate_movable_page()
+
+ include/linux/hugetlb.h |  6 +++---
+ include/linux/migrate.h |  6 +++---
+ mm/compaction.c         |  2 +-
+ mm/damon/paddr.c        |  2 +-
+ mm/folio-compat.c       |  4 ++--
+ mm/gup.c                |  2 +-
+ mm/hugetlb.c            | 12 ++++++++----
+ mm/internal.h           |  4 ++--
+ mm/khugepaged.c         |  4 ++--
+ mm/madvise.c            |  4 ++--
+ mm/memcontrol.c         |  4 ++--
+ mm/memory-failure.c     | 10 +++++-----
+ mm/memory_hotplug.c     |  2 +-
+ mm/mempolicy.c          |  4 ++--
+ mm/migrate.c            | 17 ++++++++++-------
+ mm/migrate_device.c     |  2 +-
+ mm/vmscan.c             | 10 +++++-----
+ 17 files changed, 51 insertions(+), 44 deletions(-)
 
 -- 
-~Vinod
+2.27.0
+
