@@ -2,138 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD81696D48
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E17696D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjBNSs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S232996AbjBNSuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjBNSs0 (ORCPT
+        with ESMTP id S231624AbjBNSuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:48:26 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3780A2FCDE;
-        Tue, 14 Feb 2023 10:48:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h5FOd1BOfUv15AQyvz6ECE5c4FMci9D18EmN0jA5hMvGAueg71A9n26MR4ofg5SYj6UOt3k+Z5dXQdSDuSXV5qTF6aXrJFuO8Xz941q94/MCnDv5b7mihTALqMtOmO5LjMKuX4eJKluJwW0PVnmndGiiY9rRND/A2LTu7kkMqf8gEv3aCvreTV66rL6HekLrKrf1io+DZYCfdY5sZHvEOUa+ZIWecHdBbjqTYrzrCdd85MRqjHDec8OcfnQIO0GmZD8CtOzHitpw7UyOcTPmzkLrNdEPrV6RN29eKvqS3NDKpwFJ0SfyP/tJBecyuSKZR9sR3H45fP24s/5AF6RfBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AZyrWR7ypFyt0tMcoQYU76mj6jOQMdtNlPmWJsNhxhc=;
- b=OLyQLZsS8QoENve18kDITO12hXHDanTddbrjBdSVHRvZ7G2jffsd0qlBzoI8oGwgrpFJnGXxzjWBcB0gIq7MgyE0X0+4bQGpg1cWFtHpbk4HmXLvJ1f+WPE7rs5XvDWhjgH+rbkbq8GZGSLx71ufimTBXU2Q3H8RCKloK7N5E9OfuRwmt2o5jFEUG7m0emP8ircb4ycxPqU7WIrkj/2pcyLQY7xPvt8hbB+4ZUzwZ61TElfdMIJMhXH+CYr7L3vXh4XeIkG8sJAuYrJthWEDdwr1oWZds5MfBHDD3ETPzF/d1nI38i98EnxnMbvKBtlSwXJBBhYwA+Oq62PB2qQMvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AZyrWR7ypFyt0tMcoQYU76mj6jOQMdtNlPmWJsNhxhc=;
- b=R4j1zzn0owR+iePDWIRJXpkZv90YDaVpt3yykR+SmdO+ICjGWLBcbTMISdVP1EtrzjqM8CITXmFRflS+OzP3dOf0RpzZiy9gKwoCFcUp6fJsG5hl+m2neZvsKMsdBtFDNm8CZ/aBzHuDWqHnz9Nji83cZ6zpsKP8MftIjDkJjLhxnT821c03XwjBP/tlYGM7lrIxrN+1AbGdcDdOEkRRE+SKiVK/7KvRf6zCVMG9hq6chOSoGC54EVyW5moElf7skpdfqakSkH6zAwAFwV8/BdOZLtTaaj3PCbEvlEefbARBNo01Z5xyfWcfyNdf54sK78ZBrgxR2UV/NgBC0DHtlA==
-Received: from DM6PR07CA0110.namprd07.prod.outlook.com (2603:10b6:5:330::26)
- by SA1PR12MB6824.namprd12.prod.outlook.com (2603:10b6:806:25f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
- 2023 18:47:39 +0000
-Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::74) by DM6PR07CA0110.outlook.office365.com
- (2603:10b6:5:330::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
- Transport; Tue, 14 Feb 2023 18:47:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.10 via Frontend Transport; Tue, 14 Feb 2023 18:47:36 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 10:47:30 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 10:47:29 -0800
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 14 Feb 2023 10:47:29 -0800
-Date:   Tue, 14 Feb 2023 10:47:27 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-CC:     <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 02/17] iommu: Add nested domain support
-Message-ID: <Y+vXP3OJ4hqNvA+S@Asurada-Nvidia>
-References: <20230209043153.14964-1-yi.l.liu@intel.com>
- <20230209043153.14964-3-yi.l.liu@intel.com>
+        Tue, 14 Feb 2023 13:50:09 -0500
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96584213;
+        Tue, 14 Feb 2023 10:50:05 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pS0N1-003KS1-3V; Tue, 14 Feb 2023 19:49:39 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=2C4aeKAe8VY8+pv0anL8fCqEXWngPgoeMUda/EN7w8E=; b=LL5LUcmQ/eG9FYZMk/N4hTTFNQ
+        XtKDSrpv2MCyBU8fEF/+/VtUkN+TZdiONWWs12XCsNEgompxkWaDHRskvZtZfa9rTb/32ABkbz0lj
+        CMxUtkMHORsgH6NyUd3BwFKGYxclLWoo3vFjjM7VBEZLkvItd03c3qPtQNzYgNCVR0RFnmjWg8pwa
+        3qPiILWti9UHaNFyB2EWdmNoK01YKS0h1RzHCZdvJFkifbrOeJYzShQMqtZzjRba0SXhTi+cZyYuj
+        JaUfAe8XU8iC9ZQmWzHcTC0RuxsJ62d2B3He+0UPz3Hm8QCNnPujww8WSyuufvKdnaAnhCbxxOVvs
+        g7qfreYw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=2C4aeKAe8VY8+pv0anL8fCqEXWngPgoeMUda/EN7w8E=; b=J8A+WU+1RszoFo/SYXYucB+Oxy
+        GSEdtFDaNeYXvru7Z2cxPg9e/LMrXkXEJXBp8AHzR+938MCnEBf0Z9ebfqwMvffQZ6TsWACHnuK/z
+        gEmygxN1YcRJurYAEufm0eqhceZazgDYGICqnqrKCzVh+fZZ1USAksAOkT71T4gaXJ7KupIzgbACM
+        Ql0QnIcweieVhEHwtOKHmIRNdhNWZM1H6cYsbS7caVu+X1HOWFxVz7DxYrp4c8McHtPwL6ffL3eTX
+        dp9EZmawhi/q3Eh5cogCpNVCswV6SIy9eqzmz5fwP4sskLlcoHN9UptY0wTgmJYjlNBIE/DlifGvS
+        nrJuqnwQ==;
+Received: from [2a02:908:1b0:8800:fde1:4058:38b:64cf]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pS0Mz-0004Ik-5r; Tue, 14 Feb 2023 19:49:38 +0100
+Message-ID: <9e7c91d0-d818-7990-2eb4-af02515098ec@flying-snail.de>
+Date:   Tue, 14 Feb 2023 19:49:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230209043153.14964-3-yi.l.liu@intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT107:EE_|SA1PR12MB6824:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fb77bd7-681d-4c22-2a07-08db0ebbf120
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z0h/Lo4AF5cImwu2M+9srsPOWixg4Ge5X0Qk1omksK8bLPQ3zcvefDDyNovsHPTR8egtVulQUfMDPKCu+TvpTYcpTsqcdlF+PUJlRyrglIa5Bsn1JKG0BEhqus1Qqi18b92GlNHy5drNpvr4tjgicrG3K379F0pY28SUTf/24qSvMh70PmyjdaxBRwNvLcUEpF5SmDC5gI1RcPkYfur2G+sk//tS2vFMoFNcr1Q1/SBZpgzCireL9XKS34vKGQmGlo5G3Fdq597oDvewev+fZUPYzPG/CrmDhesgBWOgdENmLKw9w1BYQRqIcw5DotW0e4U9L1mIQGnV8/rOnTi3U3VH5/U9Lpxy4jIvGr0lE3B7A//ICBtozASoo1R7uchF0OjOUbNUDb4nfwHpViJAcAEioBnBal8kwsHrSdeQ/TWe1hDkP0rELgjnfGnmVk5H/B3L63M2JbUbFHD/WdHE2mM5w3YiczibpsUBI5luG2nQ5MsKl6puwzB2MSBGQiyQ4gsRBbl/mbYlyOLj417fW0Kr2F1AOLtXGxMIyZaMJ26A5azQtsIIyI8Ng99TsQnX79GERMQlxlu3FM9FfO4r+qFPo9Vfsaovx2e/EpvDodsIxf2Cqs2tceljWulglFsAmzrtM8HE9lamdnlaf2EJ9a5eIK8VDa0CNwIDog0AjKmdp31+Gho9hiSsbx6pskyu1bcTyp3TDzbFSYbVVjk26Q==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(82310400005)(478600001)(40460700003)(86362001)(47076005)(4326008)(83380400001)(426003)(55016003)(356005)(40480700001)(2906002)(36860700001)(41300700001)(8936002)(8676002)(6916009)(70586007)(54906003)(5660300002)(70206006)(26005)(186003)(9686003)(7636003)(82740400003)(33716001)(336012)(7416002)(316002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 18:47:36.8740
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fb77bd7-681d-4c22-2a07-08db0ebbf120
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6824
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+ <20230207011608.2ce24d17@slackpad.lan>
+ <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
+ <20230209202952.673d5a60@slackpad.lan>
+ <20230210082936.qefzz4fsp3jpalvp@houat>
+ <20230210094425.474cfba5@donnerap.cambridge.arm.com>
+ <20230210100620.z6j7rvkiwyu7paij@houat>
+ <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
+ <20230213084329.ulckaigwd7dof37u@houat>
+ <c3dda403-6963-040a-3827-443edf0a377a@flying-snail.de>
+ <20230213091803.bxle6ly2sapodsbs@houat>
+ <20230213115652.3ab4f25c@donnerap.cambridge.arm.com>
+From:   pelzi@flying-snail.de
+In-Reply-To: <20230213115652.3ab4f25c@donnerap.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:31:38PM -0800, Yi Liu wrote:
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> 
-> Introduce a new domain type for a user space I/O address, which is nested
-> on top of another user space address represented by a UNMANAGED domain. The
-> mappings of a nested domain are managed by user space software, therefore
-> it's unnecessary to have map/unmap callbacks. But the updates of the PTEs
-> in the nested domain page table must be propagated to the caches on both
-> IOMMU (IOTLB) and devices (DevTLB).
-> 
-> The nested domain is allocated by the domain_alloc_user op, and attached
-> to the device through the existing iommu_attach_device/group() interfaces.
-> 
-> An new domain op, named iotlb_sync_user is added for the userspace to flush
-> the hardware caches for a nested domain through iommufd. No wrapper for it
-> as it's only supposed to be used by iommufd.
+Am 13.02.23 um 12:56 schrieb Andre Przywara:
+> On Mon, 13 Feb 2023 10:18:03 +0100
+> Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> Hi,
+>
+>> On Mon, Feb 13, 2023 at 09:49:55AM +0100, pelzi@flying-snail.de wrote:
+>>> Am 13.02.23 um 09:43 schrieb Maxime Ripard:
+>>>> On Fri, Feb 10, 2023 at 10:18:14AM +0000, Andre Przywara wrote:
+>>>>>>> Not sure if you were actually arguing this, but the change I sketched
+>>>>>>> above (interpreting 0 as 24MHz/1) is separate though, as the current
+>>>>>>> default is "no DT property", and not 0. There is no input-debounce
+>>>>>>> property user in the kernel tree at the moment, so we wouldn't break
+>>>>>>> anyone. The only thing that would change is if a downstream user was
+>>>>>>> relying on "0" being interpreted as "skip the setup", which isn't
+>>>>>>> really documented and could be argued to be an implementation detail.
+>>>>>>>
+>>>>>>> So I'd suggest to implement 0 as "lowest possible", and documenting that
+>>>>>>> and the 32KHz/1 default if no property is given.
+>>>>>> Ah, my bad.
+>>>>>>
+>>>>>> There's another thing to consider: there's already a generic per-pin
+>>>>>> input-debounce property in pinctrl.
+>>>>>>
+>>>>>> Since we can't control it per pin but per bank, we moved it to the
+>>>>>> controller back then, but there's always been this (implicit)
+>>>>>> expectation that it was behaving the same way.
+>>>>>>
+>>>>>> And the generic, per-pin, input-debounce documentation says:
+>>>>>>    
+>>>>>>> Takes the debounce time in usec as argument or 0 to disable debouncing
+>>>>>> I agree that silently ignoring it is not great, but interpreting 0 as
+>>>>>> the lowest possible is breaking that behaviour which, I believe, is a
+>>>>>> worse outcome.
+>>>>> Is it really? If I understand the hardware manuals correctly, we cannot
+>>>>> really turn that feature off, so isn't the lowest possible time period (24
+>>>>> MHz/1 at the moment) the closest we can get to "turn it off"? So
+>>>>> implementing this would bring us actually closer to the documented
+>>>>> behaviour? Or did I get the meaning of this time period wrong?
+>>>>> At least that's my understanding of how it fixed Andreas' problem: 1µs
+>>>>> is still not "off", but much better than the 31µs of the default. The new
+>>>>> 0 would then be 0.041µs.
+>>>> My point was that the property we share the name (and should share the
+>>>> semantics with) documents 0 as disabled. We would have a behavior that
+>>>> doesn't disable it. It's inconsistent.
+>>>>
+>>>> The reason doesn't really matter, we would share the same name but have
+>>>> a completely different behavior, this is super confusing to me.
+>>> I got the point. As far as I can tell from the datasheet, it is not possible
+>>> to actually switch off input-debounce. But as a debounce filter is actually
+>>> a low-pass filter, setting the cut-off frequency as high as possible,
+>>> appears to be the equivalent to switching it off.
+>> It's not really a matter of hardware here, it's a matter of driver
+>> behavior vs generic behavior from the framework. The hardware obviously
+>> influences the former, but it's marginal in that discussion.
+>>
+>> As that whole discussion shows, whether the frequency would be high
+>> enough is application dependent, and thus we cannot just claim that it's
+>> equivalent in all circumstances.
+>>
+>> Making such an assumption will just bite someone else down the road,
+>> except this time we will have users (you, I'd assume) relying on that
+>> behavior so we wouldn't be able to address it.
+>>
+>> But I also agree with the fact that doing nothing with 0 is bad UX and
+>> confusing as well.
+>>
+>> I still think that we can address both by just erroring out on 0 /
+>> printing an error message so that it's obvious that we can't support it,
+>> and we wouldn't change the semantics of the property either.
+>>
+>> And then you can set the actual debouncing time you need instead of
+>> "whatever" in the device tree.
+> I am on the same page with regards to discouraging 0 as a proper value, and
+> that we should warn if this is being used.
+> However I think we should at the same time try to still get as low as
+> possible when 0 is specified. The debounce property uses microseconds as
+> the unit, but even the AW hardware allows us to go lower than this. So we
+> would leave that on the table, somewhat needlessly: input-debounce = <1>
+> would give us 1333 ns, when the lowest possible is about 42 ns (1/24MHz).
+>
+> So what about the following:
+> We document that 0 does not mean off, but tries to get as low as possible.
+> If the driver sees 0, it issues a warning, but still tries to lower the
+> debounce period as much as possible, and reports that, like:
+> [1.2345678] 1c20800.pinctrl: cannot turn off debouncing, setting to 41.7 ns
+That would be trivial to implement. My only concern: this
+leaves no way to configure the minimum setting without getting a
+warning.
 
-Following the remarks from Jason and Robin in their first looks
-at the nested SMMU changes, perhaps we should rename this op
-"iotlb_sync_user" back to "cache_invalidate_user" or so, since
-the type for the caches on VT-d isn't confined to IOTLB either.
+I'd like to show the acutally selected timing for values >= 1 as well (level
+info, though), as it hardly ever exactly matches the value given.
+> Alternatively we use a different property name, if that is a concern. We
+> could then use nanoseconds as a unit value, and then can error out on 0.
+> Re-using input-debounce is somewhat dodgy anyway, since the generic
+> property is for a single value only, per pin (in the pinmux DT node, not
+> in the controller node), whereas we use an array of some non-obvious
+> subset of ports.
 
-Thanks
-Nic
+How to avoid breaking existing devicetrees? Wouldn't it be required to
+handle input-debounce as well, but somehow obsolete it?
+
+Cheers,
+
+Andreas
+
+
