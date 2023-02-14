@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6181D696971
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE97B696975
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjBNQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S229970AbjBNQ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBNQ1P (ORCPT
+        with ESMTP id S229710AbjBNQ15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:27:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A5D93C3;
-        Tue, 14 Feb 2023 08:27:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E2FB61791;
-        Tue, 14 Feb 2023 16:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 222BBC433D2;
-        Tue, 14 Feb 2023 16:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676392032;
-        bh=A5H2iiVeSQ6i9nVrap8N9RgTt/AO1rS8cU67Vf+b9p0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o/WPX2ua74wIkK4ppZqvSEinZUHEEl0jhpJ/jN5EFU5PcDYyCUAcFeXOZN0gzUPVM
-         Iu5ATdHnsJpISta/njzF6i48mo3ZExRzi/siM2EIKVu40KMipf5U/x8+EbrJGmusTY
-         w8dZnhVmeAY9G6SNWmg/g8S7yWSTNGdaL2ff1Xs/DHl6m3A852Bge9l2b+XyozW7cH
-         Ld9NgefaD+6BzWlwxlI442fX5JwvVJ0uJo+e9zOKUFQXLYsraoIBoR+HxFewExOA8v
-         WwCoFlTVWWaL68yPXCU3BjQ8reWlQUWHtX7wu8UDZwLsKRud/uj5vK7bPx1cxIzoHd
-         fW5MJx2JkMSrQ==
-Date:   Tue, 14 Feb 2023 09:27:10 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Tom Rix <trix@redhat.com>,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized
- clang false positive
-Message-ID: <Y+u2XipFSIadP3IP@dev-arch.thelio-3990X>
-References: <20230213191510.2237360-1-trix@redhat.com>
- <Y+qZthCMRL1m0p4B@yaz-fattaah>
- <Y+qcU2M5gchfzbky@zn.tnic>
- <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
- <03b91ce8-c6d0-63e7-561c-8cada0ece2fe@redhat.com>
- <Y+q1mhrAKTobp3fa@yaz-fattaah>
- <Y+q2pXYI02qAje8N@dev-arch.thelio-3990X>
- <Y+tapzerW7h9vMvp@zn.tnic>
- <Y+ubhHlWFv4ifmGn@dev-arch.thelio-3990X>
- <Y+ujA+Kr05Adky1l@yaz-fattaah>
+        Tue, 14 Feb 2023 11:27:57 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EDAC179
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:27:54 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ml19so41625961ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fvNHQRlfXDnwN7/aozLZXMLlUQIZLqbXP/Yn1Rtm2eI=;
+        b=DeEMDg2dlwqcy+oZi20ihpgqzr5qkR8phwgck4GlvbMhS3jOnC9PjN78z6N68T6Tiv
+         WAsKXcfJNYjZdi8IQ9u8QmXHfzWLb1GPforuCOv5D7qYJOJ5s9Qx16HpqNd2Q4HpSLl5
+         ZJszlcznEEKrNTRqV4bmtuw/FeYDh77SmimqvLF1KbA0hH2WN+Fqr5/1q9BJpzj+Wdfb
+         TtAZgufQKkxplCzeBjF/9PAmmu2uoN7qEZ8URZ9Hs66mBJ99t15/VQHEI2BkOOmMpJWj
+         lePNteSv+cOaidUY5xLYxn3swJ7KSQY9Ae6d8JfGqRp3miRAnIpW69Qw8fhpaBOUpKqY
+         eEeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvNHQRlfXDnwN7/aozLZXMLlUQIZLqbXP/Yn1Rtm2eI=;
+        b=PTvFg1KOLazTnYj1eAPeTxPWWnju0WwBlUgbYtcLZUIe5nBHCp+ShyLM+vAIdJAXnR
+         xPBgdqTV1pCPTl/ebnlvzyrEh8HTxt1pz94ekmCQljapG0DL/dHJU1b7KTXGVQMGDWF4
+         W+5m5pPJKY7qyaSZf2y7mUmUwKi8tiL1zcUNutuIpFq4Rw9qjd4eoGYggznOUMuNDdTM
+         Z1i6avWN+EIo+Tiz6m9Tld/1ZXlo9DgIo65hW8BPp/fhLG46tlbQMJzLMAEwKz/aRpaB
+         E/Cj3A2iynF33oKqlf9AkGCj94bU25X6GCf9rY69vtffT4E7nVh/AlNwIgTlvNmQzltp
+         3FFg==
+X-Gm-Message-State: AO0yUKWP+Fwc1sJJxLERbgasybbJlFaJsok18J77uQ0Y/xHA8+MIeBeZ
+        8NoA4KF5bek8vicRRd7voXVqMA==
+X-Google-Smtp-Source: AK7set/BAV4TZmiXAFRIXk8igD4wwJ7rJ9t/fiQLbdJ8E/KSeSl+5/e4kFNdvIYXEl92r4d745nreA==
+X-Received: by 2002:a17:906:616:b0:878:4a5e:3a56 with SMTP id s22-20020a170906061600b008784a5e3a56mr3387532ejb.15.1676392072613;
+        Tue, 14 Feb 2023 08:27:52 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id p18-20020a170906839200b008b112db78f9sm2725072ejx.51.2023.02.14.08.27.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 08:27:52 -0800 (PST)
+Message-ID: <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
+Date:   Tue, 14 Feb 2023 17:27:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+ujA+Kr05Adky1l@yaz-fattaah>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 00/12] The great interconnecification fixation
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,77 +75,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 03:04:35PM +0000, Yazen Ghannam wrote:
-> On Tue, Feb 14, 2023 at 07:32:36AM -0700, Nathan Chancellor wrote:
-> > On Tue, Feb 14, 2023 at 10:55:51AM +0100, Borislav Petkov wrote:
-> > > From: Yazen Ghannam <yazen.ghannam@amd.com>
-> > > 
-> > > Yeah, the code's fine even without this.
-> > > 
-> > > What this is fixing is a compiler which is overeager to report false
-> > > positives which then get automatically enabled in -Wall builds and when
-> > > CONFIG_WERROR is set in allmodconfig builds, the build fails.
-> > > 
-> > > It doesn't happen with gcc.
-> > > 
-> > > Maybe clang should be more conservative when enabling such warnings
-> > > under -Wall as, apparently, this has an impact beyond just noisy output.
-> > 
-> > For the record, this is the first false positive that I have seen from
-> > this warning in quite some time. You can flip through our issue tracker
-> > and see how many instances of the uninitialized warnings there have been
-> > and the vast majority of the ones in 2022 at least are all true
-> > positives:
-> > 
-> > https://github.com/ClangBuiltLinux/linux/issues?q=label%3A-Wsometimes-uninitialized%2C-Wuninitialized
-> > 
-> > So I disagree with the characterization that clang is "overeager to
-> > report false positives" and I think the opinionated parts of the commit
-> > message could be replaced with some of the technical analysis that Tom
-> > and I did to show why this is a false positive but not one clang can
-> > reason about with the way the code is structured (since the warning does
-> > not perform interprocedural analysis). However, not my circus, not my
-> > monkeys, so feel free to ignore all this :)
-> > 
-> > Regardless, my review still stands and thank you again for the fix.
-> >
++CC Georgi, linux-pm, linux-kernel (thanks git send-email for not including these)
+
+On 14.02.2023 15:37, Konrad Dybcio wrote:
+> Hi!
 > 
-> Thanks Nathan for the feedback and thanks Boris for the patch.
+> v3 -> v4 changelog:
+> - Drop "Always set QoS params on QNoC", it only causes issues.. this
+>   can be investigated another day, as it's not necessary for operation
 > 
-> Nathan,
-> I see there's a ClangBuiltLinux/continuous-integration2 project on github.
-> Is this something developers should try to leverage? Maybe just fork it and
-> update the action/workflows to use test branches?
-
-Our continuous integration relies on TuxSuite [1], which in turn
-requires access to their service. TuxMake [2] is the backend for
-TuxSuite, which is what I use doing a lot of my build testing. It can
-use your local toolchains or it can use Docker/Podman to build in their
-curated containers, which have a wide variety of versions, if that
-matters to you.
-
-I have thought about writing a wrapper around tuxmake to build our
-TuxSuite configurations (the tuxsuite/ folder within our repo) locally,
-maybe this is time to do so :) it would be useful to have something like
-
-  $ scripts/build-local.py tuxsuite/tip-clang-15.yml tuxsuite/tip-clang-16.yml
-
-which would allow people to easily test the configurations that we
-generally care about for -tip with recent/stable versions of clang/LLVM.
-Otherwise, a simple
-
-  $ tuxmake -a x86_64 -k allmodconfig -t llvm default
-
-or
-
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 allmodconfig all
-
-is generally good enough to catch the majority of problems visible with
-clang, assuming your distribution has a version of LLVM that the kernel
-supports (11.x+).
-
-[1]: https://tuxsuite.com
-[2]: https://tuxmake.org
-
-Cheers,
-Nathan
+> - Drop "Add a way to always set QoS registers", same as /\
+> 
+> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
+>   as at least msm8996 has a bus (A0NoC) that doesn't have any and does
+>   all the scaling through RPM requests
+> 
+> - Promote 8996 icc to core_initcall
+> 
+> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
+> 
+> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
+> 
+> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
+> 
+> v2 -> v3 changelog:
+> - Drop "Don't set QoS params before non-zero bw is requested"
+> 
+> - Rebase on next
+> 
+> - [1/9] ("..make QoS INVALID default.."): remove unused define for
+>   MODE_INVALID_VAL
+> 
+> - Pick up tags
+> 
+> v1 -> v2 changelog:
+> - reorder "make QoS INVALID default", makes more sense to have it
+>   before "Always set QoS params on QNoC"
+> 
+> - Limit ap_owned-independent QoS setting to QNoC only
+> 
+> - Add new patches for handling the 8996-and-friends clocks situation
+>   and optional BIMC regardless-of-ap_owned QoS programming
+> 
+> 
+> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
+> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
+> 
+> This series grew quite a bit bigger than the previous [1] attempt, so
+> I decided to also add a cover letter.
+> 
+> Link to v2: [2]
+> 
+> It addresses a few things that were not quite right:
+> 
+> - Setting QoS params before a "real" (non-zero) bandwidth request
+>   makes little sense (since there's no data supposed to flow through
+>   the bus, why would the QoS matter) and (at least newer) downstream
+>   prevents that from happening. Do the same in Patch 1.
+> 
+> - QNoC type buses expect to always have their QoS registers set as long
+>   as there's a non-INVALID QoS mode set; ap_owned is not really a thing
+>   on these anymore, Patch 3 handles that.
+> 
+> - The recent MSM8996 boot fix was done quickly and not quite properly,
+>   leading to possibly setting the aggregate bus rate on "normal"
+>   hardware interface clocks; this series handles that by limiting the
+>   number of bus_clocks to 2 (which is the maximum that makes sense,
+>   anyway) and handling the rest as "intf_clocks", which are required
+>   to access the   hardware at the other end. Patches 5-8 take care of
+>   that and Patch 10 reverts the _optional moniker in clk_get_ to make
+>   sure we always have the bus scaling clocks, as they're well, kind
+>   of important ;)
+> 
+> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
+>   by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
+>   always receive QoS programming, whereas BIMC on "older" SoCs cries
+>   like a wild boar and crashes the platform when trying to do so
+>   unconditionally. Patch 9 adds a way to take care of that for newer
+>   SoCs (like SM6375)
+> 
+> - QoS mode INVALID was assumed by developers before to be the default
+>   ("I didn't specify any QoS settings, so the driver can't assume I
+>   did.. right? right!?" - wrong, partial struct initialization led to
+>   0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
+>   that's the logical choice. This allows the "Always set QoS params
+>   on QNoC" patch to work without setting tons of what-should-
+>   -obviously-be-the-default values everywhere, as well as fixes older
+>   drivers that set ap_owned = true but left the QoS mode field unset.
+>   Patch 2 cleans that up.
+> 
+> - Some nodes are physically connected over more than one channel
+>   (usually DDR or other high-throughput paths). Patch 4 allows that
+>   to be reflected in calculations. This will be required for at least
+>   MSM8998 and SM6375 (which will be submitted soon after this lands)
+> 
+> 
+> Konrad Dybcio (12):
+>   interconnect: qcom: rpm: make QoS INVALID default, separate out driver
+>     data
+>   interconnect: qcom: rpm: Add support for specifying channel num
+>   interconnect: qcom: Sort kerneldoc entries
+>   interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+>   interconnect: qcom: rpm: Rename icc provider num_clocks to
+>     num_bus_clocks
+>   interconnect: qcom: rpm: Handle interface clocks
+>   interconnect: qcom: icc-rpm: Allow negative num_bus_clocks
+>   interconnect: qcom: msm8996: Specify no bus clock scaling on A0NoC
+>   interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks
+>     anymore
+>   interconnect: qcom: msm8996: Promote to core_initcall
+>   interconnect: qcom: icc-rpm: Introduce keep_alive
+>   interconnect: qcom: icc-rpm: Allow negative QoS offset
+> 
+>  drivers/interconnect/qcom/icc-rpm.c | 101 ++++++++++++++++++++--------
+>  drivers/interconnect/qcom/icc-rpm.h |  41 +++++++----
+>  drivers/interconnect/qcom/msm8996.c |  35 ++++++----
+>  drivers/interconnect/qcom/sdm660.c  |  16 ++---
+>  4 files changed, 126 insertions(+), 67 deletions(-)
+> 
