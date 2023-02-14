@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BCF696275
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEC269627A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbjBNL1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S232675AbjBNL2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjBNL1i (ORCPT
+        with ESMTP id S232312AbjBNL2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:27:38 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5847EEC50
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:27:26 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 14 Feb 2023 06:28:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CB022A16
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:28:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676374087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TgvLb/I5kjbbxPz95TkbVUH4AnpMDD8c4k9xDghATcg=;
+        b=PBKJuAtLYRvcqb3UmCfyA1V9w96C12VMzPnx/VKh39Mq+CKrMzlvroEWcrtM1GbriKG2R7
+        bN1Ebrj2Zf4LIBkmHw04noFvWsqsAmb72bSJ55TUwQF3UtyLc5RcD5PHT3SI4ddFF4UVYG
+        kWDjJDK0Cho6GVW/x4VsDiJeFLP3Jqs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-625hxeStNqafWUydeF3aWg-1; Tue, 14 Feb 2023 06:28:04 -0500
+X-MC-Unique: 625hxeStNqafWUydeF3aWg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D680F1FDE8;
-        Tue, 14 Feb 2023 11:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676374044; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A/E4T/3OgJIGaRj6v5QXzyfbS6qThchNv1eejOnY2zU=;
-        b=UY+jWwu4L0V9mLO99cjbsGHFQvCfxHrL6X8+PdAlx3zzXowR0i5usO7EMuRxHCP/jZy2yA
-        kQ7Ld5CLKwsJStp50IdSMtbNK/48RQnXAAMgyi7wh+ZAAA/ndGrTqfnvVC+5vY4/XogUnE
-        vHvKZ1sqttfBkFAU628ZgilWDvhbCZY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676374044;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A/E4T/3OgJIGaRj6v5QXzyfbS6qThchNv1eejOnY2zU=;
-        b=yuWfitZ20+sV1t3gvx48/EO39y8roFdOh9HHjzxQ7buJVp6HmhUs6bxa3OCMCAhVCzEg3c
-        nCJwIExa90JFpWCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71A48138E3;
-        Tue, 14 Feb 2023 11:27:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5TB+Ghxw62OxewAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 14 Feb 2023 11:27:24 +0000
-Date:   Tue, 14 Feb 2023 12:27:23 +0100
-Message-ID: <87sff88p2c.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Andy Chi <andy.chi@canonical.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Meng Tang <tangmeng@uniontech.com>,
-        Philipp Jungkamp <p.jungkamp@gmx.net>,
-        Kacper =?ISO-8859-2?Q?Michaj=B3ow?= <kasper93@gmail.com>,
-        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-        Yuchi Yang <yangyuchi66@gmail.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
-In-Reply-To: <20230214103757.36624-1-andy.chi@canonical.com>
-References: <87y1p08rxp.wl-tiwai@suse.de>
-        <20230214103757.36624-1-andy.chi@canonical.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B5E5971092;
+        Tue, 14 Feb 2023 11:28:03 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-208-27.brq.redhat.com [10.40.208.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 53D86140EBF6;
+        Tue, 14 Feb 2023 11:27:58 +0000 (UTC)
+From:   Mohammed Gamal <mgamal@redhat.com>
+To:     decui@microsoft.com, linux-hyperv@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, mikelley@microsoft.com,
+        parri.andrea@gmail.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        vkuznets@redhat.com, xxiong@redhat.com,
+        Mohammed Gamal <mgamal@redhat.com>
+Subject: [PATCH v2] Drivers: vmbus: Check for channel allocation before looking up relids
+Date:   Tue, 14 Feb 2023 13:27:41 +0200
+Message-Id: <20230214112741.133900-1-mgamal@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 11:37:56 +0100,
-Andy Chi wrote:
-> 
-> On HP Laptops, requires the same ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
-> make its audio LEDs work.
+relid2channel() assumes vmbus channel array to be allocated when called.
+However, in cases such as kdump/kexec, not all relids will be reset by the host.
+When the second kernel boots and if the guest receives a vmbus interrupt during
+vmbus driver initialization before vmbus_connect() is called, before it finishes,
+or if it fails, the vmbus interrupt service routine is called which in turn calls
+relid2channel() and can cause a null pointer dereference.
 
-Well, this quirk is not only about mute/mic LED but rather mainly for
-enabling the Cirrus amp.  I suppose the speaker didn't work without
-this quirk, too?
+So Make relid2channel() check if vmbus channels is allocated first, and if not
+print a warning and return NULL to the caller.
 
+Fixes: 8b6a877c060e ("Drivers: hv: vmbus: Replace the per-CPU channel lists with a global array of channels")
 
-Takashi
+Signed-off-by: Mohammed Gamal <mgamal@redhat.com>
+---
+Changes from v1:
+	* Corrected and detailed description in commit message
+	* Added detailed warning message
+---
+ drivers/hv/connection.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index 9dc27e5d367a..82876e84f719 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -409,6 +409,10 @@ void vmbus_disconnect(void)
+  */
+ struct vmbus_channel *relid2channel(u32 relid)
+ {
++	if (vmbus_connection.channels == NULL) {
++		WARN(1, "Requested relid=%u, but channel mapping not allocated!\n", relid);
++		return NULL;
++	}
+ 	if (WARN_ON(relid >= MAX_CHANNEL_RELIDS))
+ 		return NULL;
+ 	return READ_ONCE(vmbus_connection.channels[relid]);
+-- 
+2.38.1
+
