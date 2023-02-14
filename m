@@ -2,240 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6082695808
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C03C69580D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjBNEzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S229796AbjBNE6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBNEzi (ORCPT
+        with ESMTP id S229597AbjBNE6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:55:38 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3A2B457
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:55:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iaHMQfcU+xGW1QNTdtbqFAFTZvkIRzCNCTbZyQQlE4hKQZdT+f9wEaKDzOimy93/40f3/1k8b8+gsSG7reFwBwiMwCv0L1FlH2OHIiwKC9XB9pau1NfpdvZWoo0MunI/TW61yrC5tsDOF7atbtE8Di00+K3ilznKYXNwnWjZsF4KTZWboz7xJsj5EKsOA0MnW9MKCwZwyn32gaUj63k6XjcmkFMoXl+59vWt99c2gzyplzQcjMAZpFMzOhnEbPIg4YbC59BFSp7R6dbff8pvC6uWmzLeAz2z2cuqC54Lhq+BFyJ7OLt2ksteLkzLBROn0VWiSoO54VUiPtHgM15Dow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r6fYPt1zSrgnBaW+gaxJU/otgbmy180qcEN6wAFPkWI=;
- b=ch7Cd92jAUP7h/uzfbA4butRpL1z49lQLhZUOM7vXuuIyHxM4xqLh3MRYRGS4qcUpptP32t+K+FUdEZ8ihCu6Z/gFIHwVUVrmTEYVYi5Gv1cKO2IhF9KUZTWipF1I9082HVtVHikgmeNCutKJDdeKnPwCvMAGHmSij4NXacUMZyryaNAPMxEIFW5LvSq7KJiXKc7Rn6UzQlzSf+NrEYP/KbWRdlhBnzL8oQxBMtoHMQvllc+NdjR6XD7eXBypmp3PYzK0NnEIKyUcCMQXWwkRPdn9myKHhzxcoyZxRGzWpXbet5B1U3RC3gNCo7CoizTR0oZIJ4bo3R3Phlhw7iFCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r6fYPt1zSrgnBaW+gaxJU/otgbmy180qcEN6wAFPkWI=;
- b=LhZNj2FlfJs3XiwsGMhwiMOImi6/aSqKrRbPvWJvroPSmZXJqYp/2b4RZvll/YrOHmFwBJXe0bImUVMxxnehusX2g3OToyz4QzgQpUizMCMYXsRP+vA95pKwNZqtsjUnlTOd0lZGhCfsHNtXNKr9o0fHfMtbuiWtVvryYmvOGRk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
- by BY5PR12MB4968.namprd12.prod.outlook.com (2603:10b6:a03:1d2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
- 2023 04:55:35 +0000
-Received: from IA1PR12MB6434.namprd12.prod.outlook.com
- ([fe80::422f:19e8:faa4:eb05]) by IA1PR12MB6434.namprd12.prod.outlook.com
- ([fe80::422f:19e8:faa4:eb05%9]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
- 04:55:34 +0000
-Message-ID: <1547d291-1512-faae-aba5-0f84c3502be4@amd.com>
-Date:   Tue, 14 Feb 2023 10:25:16 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
-        peterz@infradead.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        akpm@linux-foundation.org, luto@kernel.org, tglx@linutronix.de,
-        yue.li@memverge.com, Ravikumar.Bangoria@amd.com
-References: <20230208073533.715-1-bharata@amd.com>
- <878rh2b5zt.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <72b6ec8b-f141-3807-d7f2-f853b0f0b76c@amd.com>
- <87zg9i9iw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Language: en-US
-From:   Bharata B Rao <bharata@amd.com>
-In-Reply-To: <87zg9i9iw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0167.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26::22) To IA1PR12MB6434.namprd12.prod.outlook.com
- (2603:10b6:208:3ae::10)
+        Mon, 13 Feb 2023 23:58:19 -0500
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DDB1041E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:58:17 -0800 (PST)
+Received: by mail-io1-f78.google.com with SMTP id l15-20020a05660227cf00b0074065ea437aso707029ios.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:58:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FtU6VmT/Bmi1VOgJWA1PDC6Gjq0Dh9pUAmLLSr3qlsk=;
+        b=NgRJ7FrYb5ROZiAbmFxT41WrxWbXxtCWhJwtM6k/PnE3UQfzjx+kpQ36toQObkFWZd
+         6VqnGAbVBj5TCRjE8j76rkpIOkhhV4+2FI+2MTWi5M2Xa4dBUufGPt0icT/2ZaZyjD7o
+         fV+B2Q0Lto5xXwA7rhjnrvKThbDInjwKFkToRS6QkM27ppYAz8/vSErpxYB9uP0cPfGn
+         kqMTjoKDGn1cbLUjibFpMgfwnWdZjFwlXBoHzT3NXgjHmefhTSM6UTtV99ZreVNfBvkg
+         O5sMCM959ZPYkP3i7fZtTCExsW5AtpEz4Sw84HaV18TxZWQ2152RbT0ZsxEr1dvGfvQB
+         lgfw==
+X-Gm-Message-State: AO0yUKVkWOY0y28ve0SHwgIX87vNSEDpsdb5pwBnNm4Tp3r0hZ946OZ5
+        d+T+E87yVeU1+bgZALwmeGRJ/SJ6q4QT+nJvZyt1fDGOPd9v
+X-Google-Smtp-Source: AK7set+CO1eepW5P7vGz298OPFKY/8M2YQzv/Sj4KVeFZLAllJ3OytYs62f45LEbhocxSvSnci1Hsa3FpC996k2at3CY/aYYBzpF
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6434:EE_|BY5PR12MB4968:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8526d525-95a7-41e3-9310-08db0e47b4f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vtKpf2TFyNerQH9E4bgmF+NXmVhELoLsaGES81DRr6jvxtlW8WbMJe/hJ3FukUnDNlREKvFf/KEb5jWAXV8iFoRMsCqnWWsisOiJqzvx02fliCAtPeWekFUPWZowdh31LpC4lEM34HA4ODIm+OIhuNt2+nkB2DennbrtHJC2LysIZSXJUAVKpy2GdgVny6ADy6/DtSrx2pqe4NxM84mDBAa2qfAA9k95NcJ1bP0rzY1WEP8zA9nwamiaJRaj6YkqQ2Oy6SFJ3DzrKTZBScjgxGQklZG8aTvU1nHTfEtaN6ZLw0joi6TzD1yUxK6i0OCp9hqQRwxRzUTHcb224dsnPt8CX+t4YFM1V2YUjgwtvrNGm5dhS7vO1qYpzOpX9e7QLWk5Y4taPgDN6H/C6O/DRIzEFm9d1MQh/7a2higjUawAgCJmGVjlxHY8xPa10SSkgMmT4JPGrTmdxtYTGrzT0g83MArcqRD0kIw8CCC7SNcNTHP5kXMcy9lfpTL12wJQJs16zirmScKbSkRUDLAjJTUeN1ZCrZnywOtKF23zWGWoGSLjs06eItHgAN+uD4UOvVk5YAhbZaHDIbTaqeTqV8ARsu5Ve6ZIL/tjY2nDcQn+iGgdrDYw9OWOil2FrMjzDelhBxVNnfvXPX9hPvKM4mbZuH8IStM/amF6qvcNLSae2MoxKTG0M7+NnVWqSVY76TMh5zrymzAiFqVbcdp3Z8nti+BAiQgCSLziH97Uu7M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(396003)(136003)(376002)(39860400002)(451199018)(2906002)(7416002)(36756003)(5660300002)(6512007)(83380400001)(186003)(26005)(2616005)(38100700002)(6916009)(8676002)(4326008)(66946007)(66476007)(316002)(8936002)(66556008)(6666004)(41300700001)(478600001)(6506007)(53546011)(31696002)(86362001)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHBaSHdEYXN2eEVsV0J5M2xTejhKTS91eXlPaTcyM1Z5bXp3QVpvd29ySCt2?=
- =?utf-8?B?L0xlcEpuUWs0Y08xMW04OWlVRXlFNUZhbXZhR1k5T0M1azlaeUY4ekNhSkpB?=
- =?utf-8?B?SVpLcTlqT0JhT0h4REtSYVJCUTVtbEFLRnFFd2VxQUJQckRmV3NSUWxrMTlS?=
- =?utf-8?B?eDQ5QmdzNlF6S3RLblU5ZTFpa054VFZRVVpheFBFeVRsYndGZXB0SUlERXcw?=
- =?utf-8?B?UXhsb1lOV1dydFhrV010Zk05bkVtZmhlczJOV25qRFQ3aDFRZnFSUEsvTG1t?=
- =?utf-8?B?WDU5R0p1bE1WQlEwRUJMWlRMR2h5S3ZVdnIwM3VPMVBRQ2I5Q1UySkdTbnVG?=
- =?utf-8?B?VUtHUWRLakpNMmZLdVJnNlVSRStqZi92eGd6V3FvTk94NG9xUWQvWXFWNlNn?=
- =?utf-8?B?d3FNSTFnVWJqREhLS20yWmQzaktUMGl1TjlVTzFxQURlR3E0ZVFpSm12Nm1H?=
- =?utf-8?B?VHNsYWhPUFNUcXhWNDd2c2N6ckNOYW5GVDRZeVhQb3hyQlFldnduNlBoblFq?=
- =?utf-8?B?VGVvbys4bDFzN0k5TG1Da0syeGFsVGdOYmxGd1hxQkJ0amdWNWNka3BpRXhj?=
- =?utf-8?B?YTYyNDIxUWIrQnhoekV1cVNhQXNsMWZLdEM0dUdCQ1g3MWlGWFJDMWtlWWU3?=
- =?utf-8?B?Um5nRXJaM1piMVAwOXVCaFhqaVRYTTJNdklJV1dqdG1nVEUxNkxaVG1KUTVr?=
- =?utf-8?B?TCtLZWo1eHYxTmJYbitwUUFuSWdVSUtoNktieG5Jem82NCtrTERDNjdOOXEw?=
- =?utf-8?B?ZHhrbUZ6YkxOdmVKLzRTbncreFdsNHRDdlBQL1R0U1AzK1pDanZjTXlWSjZm?=
- =?utf-8?B?aG5rR1dONnNrb3QxTUxUYmJzeXk2VlRGT01rd0FDN2ZXNGFKc3g2MWgvVGM0?=
- =?utf-8?B?N0tXeHdCYWNJUXU4TSs0UDdKdkpoRFkrVlRmMyt6Zlp5YzZsSWF4REhrcWNP?=
- =?utf-8?B?cGkyWnRWaHpROUNoeHFEM1pPaUhoTUgzKzgwTndLR2h4VWJWa2RRZXdkeUpH?=
- =?utf-8?B?ak1KQk5mMjBTSEo0c2IxTkFFK1NZZGJNZTNqbFpkOENweCt5R2pmQjRHWlVq?=
- =?utf-8?B?Qnk0aTBlcWhrQiszaUZMMC80MG9vc3pUUWNCRHBBZDFpNHNtZGtybnA3c3My?=
- =?utf-8?B?a3BtTkpLVTFSRElhTnlrbmwrUlVZVW9zOWJwWlJQTnhSQXlyb1p4Nk9VWnpm?=
- =?utf-8?B?U3hSUzFKTDJ3ZEg2MDVqNnpQaFVGY3lzZFk2c0tuTXQ0SHZsWnhHUnBvRDc2?=
- =?utf-8?B?U0ZCQVBuSVdoekh0eFAvV2owT2pUK3dxL0ZILzdsYXZXVFZjSnJ6VTVZNmFl?=
- =?utf-8?B?WUxpZFA0bEtUQTBIaTlmTThxdDlxSVR4bDFHbERQekpXNGJXZVRqM1ViNXVq?=
- =?utf-8?B?MytnWHhPbldCWkdIbFBqVGN4aFVvMFpvQ3YwemxyOWlWc0NCMlNGczVaMlpa?=
- =?utf-8?B?bVRhTHV3MkFoZldnLzVmdzc5Z1MrV1ROODhJdm1Gc0NUK0hUUkx5N09WVHBU?=
- =?utf-8?B?dk1wU1RrSUFlRmt4M2pNS0Yra0Jtc3BERU1kTmxzcDM0SXR6Z3FnbXZmTmtn?=
- =?utf-8?B?VlU2MWE3UDV2MDVYOFhXcVZaQUUzalBNUXIwNUtVS0dIalh1Vmp5UWozc1dj?=
- =?utf-8?B?aEhHSUJJTFkrN0t5dWx1NVFDNTh4TlZwdFRjSkFMYXQ4clhxY3pUeWEvVlpy?=
- =?utf-8?B?OTNqeHRXTTZyOEdHNkRLWVQzTjh6ZXVYVEZDTGVsSDdWc05YOTQ0dS9RVU9E?=
- =?utf-8?B?Sk04V3RMMEZ2blo0M0xaNWtua0k3OFJmMEZxVnl1YSt1bFNueEl4R0d3STJC?=
- =?utf-8?B?R0lHanZUUmNZSlEzTWZIcUNncGMrVlNnNGdBYnF1cmV5N2VZVUx6eGZCRlJt?=
- =?utf-8?B?cUNFa0xmUUs4T0NmRUtkY2NTUjZsdVk5VytFeEVUN1pTdndxb0ZXWkk4S0dr?=
- =?utf-8?B?bnpjK3dsSEZWMlNaWjBMZ3F6ZHovTnRhK1NmOHRRVmRvQjI0L042NWhOc0xv?=
- =?utf-8?B?R1VkMm94YkRzYkVaSkU2aVplOUZjREczcDRnbDdJaS9jYWNJdEdvQThacVAy?=
- =?utf-8?B?b1E3WSt5TGR1aDFXaStXN0R2dW42N243VzEzRFh2aU9oc3hHNlcwdlpOMWtD?=
- =?utf-8?Q?GlIzptxmVk9hyEx325E3H0zK3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8526d525-95a7-41e3-9310-08db0e47b4f2
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 04:55:34.7600
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ljyJGnZ3Oh+QgUYsbHXPhsrPvhgWL4vo1wDjuNEFgyfzd5+KA9KC1cdM7ZOH0o8nh2al3MHeXfDONjGXOiCS4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4968
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:663:b0:313:fa72:d9aa with SMTP id
+ l3-20020a056e02066300b00313fa72d9aamr233892ilt.0.1676350697234; Mon, 13 Feb
+ 2023 20:58:17 -0800 (PST)
+Date:   Mon, 13 Feb 2023 20:58:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d3ea0505f4a1cf71@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in blkg_destroy_all
+From:   syzbot <syzbot+a45b868a1ffcd86bc989@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, cgroups@vger.kernel.org, josef@toxicpanda.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-Feb-23 12:00 PM, Huang, Ying wrote:
->> I have a microbenchmark where two sets of threads bound to two 
->> NUMA nodes access the two different halves of memory which is
->> initially allocated on the 1st node.
->>
->> On a two node Zen4 system, with 64 threads in each set accessing
->> 8G of memory each from the initial allocation of 16G, I see that
->> IBS driven NUMA balancing (i,e., this patchset) takes 50% less time
->> to complete a fixed number of memory accesses. This could well
->> be the best case and real workloads/benchmarks may not get this much
->> uplift, but it does show the potential gain to be had.
-> 
-> Can you find a way to show the overhead of the original implementation
-> and your method?  Then we can compare between them?  Because you think
-> the improvement comes from the reduced overhead.
+Hello,
 
-Sure, will measure the overhead.
+syzbot found the following issue on:
 
-> 
-> I also have interest in the pages migration throughput per second during
-> the test, because I suspect your method can migrate pages faster.
+HEAD commit:    3ebb0ac55efa Add linux-next specific files for 20230214
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=175f3600c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c6c7c56590b54128
+dashboard link: https://syzkaller.appspot.com/bug?extid=a45b868a1ffcd86bc989
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I have some data on pages migrated over time for the benchmark I mentioned
-above.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/45dd3fc90f5f/disk-3ebb0ac5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ebf0c2d1789a/vmlinux-3ebb0ac5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6a27fab195b7/bzImage-3ebb0ac5.xz
 
-                                                                                
-                                Pages migrated vs Time(s)                       
-    2500000 +---------------------------------------------------------------+   
-            |       +       +       +       +       +       +       +       |   
-            |                                               Default ******* |   
-            |                                                   IBS ####### |   
-            |                                                               |   
-            |                                   ****************************|   
-            |                                  *                            |   
-    2000000 |-+                               *                           +-|   
-            |                                *                              |   
-            |                              **                               |   
- P          |                             *  ##                             |   
- a          |                            *###                               |   
- g          |                          **#                                  |   
- e  1500000 |-+                       *##                                 +-|   
- s          |                        ##                                     |   
-            |                       #                                       |   
- m          |                      #                                        |   
- i          |                    *#                                         |   
- g          |                   *#                                          |   
- r          |                  ##                                           |   
- a  1000000 |-+               #                                           +-|   
- t          |                #                                              |   
- e          |               #*                                              |   
- d          |              #*                                               |   
-            |             # *                                               |   
-            |            # *                                                |   
-     500000 |-+         #  *                                              +-|   
-            |          #  *                                                 |   
-            |         #   *                                                 |   
-            |        #   *                                                  |   
-            |      ##    *                                                  |   
-            |     #     *                                                   |   
-            |    #  +  *    +       +       +       +       +       +       |   
-          0 +---------------------------------------------------------------+   
-            0       20      40      60      80     100     120     140     160  
-                                        Time (s)                                
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a45b868a1ffcd86bc989@syzkaller.appspotmail.com
 
-So acting upon the relevant accesses early enough seem to result in
-pages migrating faster in the beginning.
+floppy0: no floppy controllers found
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 12 Comm: kworker/u4:1 Not tainted 6.2.0-rc8-next-20230214-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Workqueue: events_unbound async_run_entry_fn
+RIP: 0010:blkg_destroy_all+0xa6/0x260 block/blk-cgroup.c:529
+Code: 08 e8 7e 87 14 06 48 8b 44 24 10 80 38 00 0f 85 a5 01 00 00 48 8b 04 24 48 8b 98 80 05 00 00 48 8d 6b f8 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 77 01 00 00 48 8b 03 49 39 dd 4c 8d 78 f8 0f
+RSP: 0000:ffffc90000117ad0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff81667f94
+RDX: 1ffff11003cb8019 RSI: 0000000000000004 RDI: ffffc90000117a60
+RBP: fffffffffffffff8 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52000022f4c R11: 0000000000000001 R12: dffffc0000000000
+R13: ffff88801e5b5580 R14: ffff88801e5b5090 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c571000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ blkcg_exit_disk+0x15/0x50 block/blk-cgroup.c:1352
+ disk_release+0xe3/0x490 block/genhd.c:1167
+ device_release+0xa3/0x240 drivers/base/core.c:2436
+ kobject_cleanup lib/kobject.c:681 [inline]
+ kobject_release lib/kobject.c:712 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c2/0x4d0 lib/kobject.c:729
+ put_device+0x1f/0x30 drivers/base/core.c:3701
+ put_disk+0x45/0x60 block/genhd.c:1453
+ do_floppy_init drivers/block/floppy.c:4758 [inline]
+ floppy_async_init+0x39e/0x2cc0 drivers/block/floppy.c:4767
+ async_run_entry_fn+0x9c/0x530 kernel/async.c:127
+ process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:blkg_destroy_all+0xa6/0x260 block/blk-cgroup.c:529
+Code: 08 e8 7e 87 14 06 48 8b 44 24 10 80 38 00 0f 85 a5 01 00 00 48 8b 04 24 48 8b 98 80 05 00 00 48 8d 6b f8 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 77 01 00 00 48 8b 03 49 39 dd 4c 8d 78 f8 0f
+RSP: 0000:ffffc90000117ad0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff81667f94
+RDX: 1ffff11003cb8019 RSI: 0000000000000004 RDI: ffffc90000117a60
+RBP: fffffffffffffff8 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52000022f4c R11: 0000000000000001 R12: dffffc0000000000
+R13: ffff88801e5b5580 R14: ffff88801e5b5090 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c571000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	08 e8                	or     %ch,%al
+   2:	7e 87                	jle    0xffffff8b
+   4:	14 06                	adc    $0x6,%al
+   6:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+   b:	80 38 00             	cmpb   $0x0,(%rax)
+   e:	0f 85 a5 01 00 00    	jne    0x1b9
+  14:	48 8b 04 24          	mov    (%rsp),%rax
+  18:	48 8b 98 80 05 00 00 	mov    0x580(%rax),%rbx
+  1f:	48 8d 6b f8          	lea    -0x8(%rbx),%rbp
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	0f 85 77 01 00 00    	jne    0x1ac
+  35:	48 8b 03             	mov    (%rbx),%rax
+  38:	49 39 dd             	cmp    %rbx,%r13
+  3b:	4c 8d 78 f8          	lea    -0x8(%rax),%r15
+  3f:	0f                   	.byte 0xf
 
-Here is the actual data in case the above ascii graph gets jumbled up:
 
-numa_pages_migrated vs time in seconds
-======================================
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Time	Default		IBS
----------------------------
-5	2639		511
-10	2639		17724
-15	2699		134632
-20	2699		253485
-25	2699		386296
-30	159805		524651
-35	450678		667622
-40	741762		811603
-45	971848		950691
-50	1108475		1084537
-55	1246229		1215265
-60	1385920		1336521
-65	1508354		1446950
-70	1624068		1544890
-75	1739311		1629162
-80	1854639		1700068
-85	1979906		1759025
-90	2099857		<end>
-95	2099857
-100	2099857
-105	2099859
-110	2099859
-115	2099859
-120	2099859
-125	2099859
-130	2099859
-135	2099859
-140	2099859
-145	2099859
-150	2099859
-155	2099859
-160	2099859
-
-Regards,
-Bharata.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
