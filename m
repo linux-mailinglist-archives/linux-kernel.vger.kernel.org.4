@@ -2,195 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E3B695701
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9E3695709
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjBNC55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 21:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S231607AbjBNC65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 21:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbjBNC5C (ORCPT
+        with ESMTP id S231480AbjBNC6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 21:57:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF301BAD2;
-        Mon, 13 Feb 2023 18:56:59 -0800 (PST)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8DxF9l6+Opj4FcAAA--.917S3;
-        Tue, 14 Feb 2023 10:56:58 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axeb1w+OpjmZwyAA--.28802S26;
-        Tue, 14 Feb 2023 10:56:58 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH v1 24/24] LoongArch: KVM: Enable kvm config and add the makefile
-Date:   Tue, 14 Feb 2023 10:56:48 +0800
-Message-Id: <20230214025648.1898508-25-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
-References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axeb1w+OpjmZwyAA--.28802S26
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFW3Ww4DWry3Cr48KFy7GFg_yoW5KF1DpF
-        s7Ar1kGr4xWFn3JrZ3t34kWrs8CFn7Kr47u3Waya48Cry7Z34kur1ktr9rXFyUA393JrW0
-        gr1rGa1agayUJw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1s
-        IEY20_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_
-        JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4
-        AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26w1j6s0DMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj4RKpBTUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 21:58:45 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4D91E1DB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:57:38 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-52ec2c6b694so131918057b3.19
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1X2XjCSWTS0Xt2U+9FcjOG0KGHQAkV0L4y9jO00ul8=;
+        b=Jz3B8vjWMIfiSGvdijtz0pIAF82oGmD5/LXxTrKb6i7o7aCfKOxBSwLCVJCW6ZTOy3
+         VWjY/bODigfBmyu8XjTUieBoX0zFJnOGdsJ9sF0+RPcn+2vWmYX/hr8rUmnvA6D0GrYH
+         oHfbkr86mE/99Z4f6+k04v45m/VI1uaOjIGwDJflH9OeBcI0c3HprDPWQTOflTpl2Qrh
+         NdkK2oBCKKzESCHRHfGZ8uZSV9OViMmkyOiV3OQQuh5EOXCRFPaa9dy+qzUJKyAKSHsB
+         VqyQLMsmBhHkfNOmPcyERQjM7kx8uhqLS5uE1xhGrnL11U0xOXon2FhHrtkPvu6jO59x
+         Ajcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1X2XjCSWTS0Xt2U+9FcjOG0KGHQAkV0L4y9jO00ul8=;
+        b=z1jE76/1Ho7uhaMesp15/edD+WxnQST6PwsofH59OgLAQ5btqfmMPAQP+3E9SWyHCm
+         rzkkYAteZ93zhihkUlvRjGoPEdbzcnrk7fOs3g+t9jf15wrxAbbWgBRSwC0wA2jLU68o
+         efzMUkeYkTjjhCh9Gv7IoooE5YDfZX57amjci1VTXISwF1ZDShYBe3FrxMPPHyu8mQwy
+         NsM9+dV5oUp77D71+DSIX1C/ONMkjYrmCnblhzrDjqInRI6cGbdmFiHUAZHprTXueqCU
+         0poiI940y1tOrk2qMr0sP4FAjRf5baX81HCN1RYwEsY6geb4tIjZ+dk4Mg8oGGqErs9z
+         +ohA==
+X-Gm-Message-State: AO0yUKWwgdkIUwDGYvWDb/O6xloLMbL3lKiQXgsHFboCgeWW++Z0qGHK
+        rYTx7rDwL3JrdZ8xfpYVilpJKOc=
+X-Google-Smtp-Source: AK7set+FZ6PYjIp0Bd4DuvC/w1q7HcNzSItU1Q3y6Mdoc+9GjxsosAUtZgOMTkm9xgLpVb0KYY44BSY=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a0d:ef42:0:b0:52f:7c8:c195 with SMTP id
+ y63-20020a0def42000000b0052f07c8c195mr45214ywe.258.1676343438180; Mon, 13 Feb
+ 2023 18:57:18 -0800 (PST)
+Date:   Mon, 13 Feb 2023 18:57:16 -0800
+In-Reply-To: <20230213221835.592763-1-zwisler@google.com>
+Mime-Version: 1.0
+References: <20230213221835.592763-1-zwisler@google.com>
+Message-ID: <Y+r4jLwWvhcvyuih@google.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: use canonical ftrace path
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Ross Zwisler <zwisler@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable loongarch kvm config and add the makefile to support build kvm
-module.
+On 02/13, Ross Zwisler wrote:
+> The canonical location for the tracefs filesystem is at  
+> /sys/kernel/tracing.
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- arch/loongarch/Kbuild                      |  1 +
- arch/loongarch/Kconfig                     |  2 ++
- arch/loongarch/configs/loongson3_defconfig |  2 ++
- arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
- arch/loongarch/kvm/Makefile                | 21 ++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 arch/loongarch/kvm/Kconfig
- create mode 100644 arch/loongarch/kvm/Makefile
+> But, from Documentation/trace/ftrace.rst:
 
-diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
-index b01f5cdb2..40be8a169 100644
---- a/arch/loongarch/Kbuild
-+++ b/arch/loongarch/Kbuild
-@@ -2,6 +2,7 @@ obj-y += kernel/
- obj-y += mm/
- obj-y += net/
- obj-y += vdso/
-+obj-y += kvm/
- 
- # for cleaning
- subdir- += boot
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 9cc8b84f7..424ad9392 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -142,6 +142,7 @@ config LOONGARCH
- 	select USE_PERCPU_NUMA_NODE_ID
- 	select USER_STACKTRACE_SUPPORT
- 	select ZONE_DMA32
-+	select HAVE_KVM
- 
- config 32BIT
- 	bool
-@@ -541,3 +542,4 @@ source "drivers/acpi/Kconfig"
- endmenu
- 
- source "drivers/firmware/Kconfig"
-+source "arch/loongarch/kvm/Kconfig"
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index eb84cae64..9a6e31b43 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -62,6 +62,8 @@ CONFIG_EFI_ZBOOT=y
- CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
- CONFIG_EFI_CAPSULE_LOADER=m
- CONFIG_EFI_TEST=m
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_KVM=m
- CONFIG_MODULES=y
- CONFIG_MODULE_FORCE_LOAD=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
-new file mode 100644
-index 000000000..8a999b4c0
---- /dev/null
-+++ b/arch/loongarch/kvm/Kconfig
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# KVM configuration
-+#
-+
-+source "virt/kvm/Kconfig"
-+
-+menuconfig VIRTUALIZATION
-+	bool "Virtualization"
-+	help
-+	  Say Y here to get to see options for using your Linux host to run
-+	  other operating systems inside virtual machines (guests).
-+	  This option alone does not add any kernel code.
-+
-+	  If you say N, all options in this submenu will be skipped and
-+	  disabled.
-+
-+if VIRTUALIZATION
-+
-+config KVM
-+	tristate "Kernel-based Virtual Machine (KVM) support"
-+	depends on HAVE_KVM
-+	select MMU_NOTIFIER
-+	select ANON_INODES
-+	select PREEMPT_NOTIFIERS
-+	select KVM_MMIO
-+	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-+	select HAVE_KVM_VCPU_ASYNC_IOCTL
-+	select HAVE_KVM_EVENTFD
-+	select SRCU
-+	help
-+	  Support hosting virtualized guest machines using hardware
-+	  virtualization extensions. You will need a fairly processor
-+	  equipped with virtualization extensions.
-+
-+	  If unsure, say N.
-+
-+endif # VIRTUALIZATION
-diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
-new file mode 100644
-index 000000000..42e9dcc18
---- /dev/null
-+++ b/arch/loongarch/kvm/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for LOONGARCH KVM support
-+#
-+
-+ccflags-y += -I $(srctree)/$(src)
-+
-+include $(srctree)/virt/kvm/Makefile.kvm
-+
-+obj-$(CONFIG_KVM) += kvm.o
-+
-+kvm-y += main.o
-+kvm-y += vm.o
-+kvm-y += vmid.o
-+kvm-y += tlb.o
-+kvm-y += mmu.o
-+kvm-y += vcpu.o
-+kvm-y += exit.o
-+kvm-y += interrupt.o
-+kvm-y += timer.o
-+kvm-y += switch.o
--- 
-2.31.1
+>    Before 4.1, all ftrace tracing control files were within the debugfs
+>    file system, which is typically located at /sys/kernel/debug/tracing.
+>    For backward compatibility, when mounting the debugfs file system,
+>    the tracefs file system will be automatically mounted at:
+
+>    /sys/kernel/debug/tracing
+
+> Many comments and samples in the bpf code still refer to this older
+> debugfs path, so let's update them to avoid confusion.  There are a few
+> spots where the bpf code explicitly checks both tracefs and debugfs
+> (tools/bpf/bpftool/tracelog.c and tools/lib/api/fs/fs.c) and I've left
+> those alone so that the tools can continue to work with both paths.
+
+Doesn't seem to apply cleanly to bpf-next?
+
+https://github.com/kernel-patches/bpf/pull/4584
+
+> Signed-off-by: Ross Zwisler <zwisler@google.com>
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+
+> [ Per Alexei's request, resending towards bpf-next ]
+
+>   include/uapi/linux/bpf.h            | 8 ++++----
+>   samples/bpf/cpustat_kern.c          | 4 ++--
+>   samples/bpf/hbm.c                   | 4 ++--
+>   samples/bpf/ibumad_kern.c           | 4 ++--
+>   samples/bpf/lwt_len_hist.sh         | 2 +-
+>   samples/bpf/offwaketime_kern.c      | 2 +-
+>   samples/bpf/task_fd_query_user.c    | 4 ++--
+>   samples/bpf/test_lwt_bpf.sh         | 2 +-
+>   samples/bpf/test_overhead_tp_kern.c | 4 ++--
+>   tools/include/uapi/linux/bpf.h      | 8 ++++----
+>   10 files changed, 21 insertions(+), 21 deletions(-)
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..44387b31cbde 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1642,17 +1642,17 @@ union bpf_attr {
+>    * 	Description
+>    * 		This helper is a "printk()-like" facility for debugging. It
+>    * 		prints a message defined by format *fmt* (of size *fmt_size*)
+> - * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
+> + * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+>    * 		available. It can take up to three additional **u64**
+>    * 		arguments (as an eBPF helpers, the total number of arguments is
+>    * 		limited to five).
+>    *
+>    * 		Each time the helper is called, it appends a line to the trace.
+> - * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+> - * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
+> + * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
+> + * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+>    * 		The format of the trace is customizable, and the exact output
+>    * 		one will get depends on the options set in
+> - * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
+> + * 		*\/sys/kernel/tracing/trace_options* (see also the
+>    * 		*README* file under the same directory). However, it usually
+>    * 		defaults to something like:
+>    *
+> diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
+> index 5aefd19cdfa1..944f13fe164a 100644
+> --- a/samples/bpf/cpustat_kern.c
+> +++ b/samples/bpf/cpustat_kern.c
+> @@ -76,8 +76,8 @@ struct {
+
+>   /*
+>    * The trace events for cpu_idle and cpu_frequency are taken from:
+> - * /sys/kernel/debug/tracing/events/power/cpu_idle/format
+> - * /sys/kernel/debug/tracing/events/power/cpu_frequency/format
+> + * /sys/kernel/tracing/events/power/cpu_idle/format
+> + * /sys/kernel/tracing/events/power/cpu_frequency/format
+>    *
+>    * These two events have same format, so define one common structure.
+>    */
+> diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+> index 516fbac28b71..ff58ec43f56a 100644
+> --- a/samples/bpf/hbm.c
+> +++ b/samples/bpf/hbm.c
+> @@ -65,7 +65,7 @@ static void Usage(void);
+>   static void read_trace_pipe2(void);
+>   static void do_error(char *msg, bool errno_flag);
+
+> -#define DEBUGFS "/sys/kernel/debug/tracing/"
+> +#define TRACEFS "/sys/kernel/tracing/"
+
+>   static struct bpf_program *bpf_prog;
+>   static struct bpf_object *obj;
+> @@ -77,7 +77,7 @@ static void read_trace_pipe2(void)
+>   	FILE *outf;
+>   	char *outFname = "hbm_out.log";
+
+> -	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
+> +	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
+>   	if (trace_fd < 0) {
+>   		printf("Error opening trace_pipe\n");
+>   		return;
+> diff --git a/samples/bpf/ibumad_kern.c b/samples/bpf/ibumad_kern.c
+> index 9b193231024a..f07474c72525 100644
+> --- a/samples/bpf/ibumad_kern.c
+> +++ b/samples/bpf/ibumad_kern.c
+> @@ -39,8 +39,8 @@ struct {
+>   /* Taken from the current format defined in
+>    * include/trace/events/ib_umad.h
+>    * and
+> - * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_read/format
+> - * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_write/format
+> + * /sys/kernel/tracing/events/ib_umad/ib_umad_read/format
+> + * /sys/kernel/tracing/events/ib_umad/ib_umad_write/format
+>    */
+>   struct ib_umad_rw_args {
+>   	u64 pad;
+> diff --git a/samples/bpf/lwt_len_hist.sh b/samples/bpf/lwt_len_hist.sh
+> index 0eda9754f50b..11fa0a087db6 100755
+> --- a/samples/bpf/lwt_len_hist.sh
+> +++ b/samples/bpf/lwt_len_hist.sh
+> @@ -5,7 +5,7 @@ NS1=lwt_ns1
+>   VETH0=tst_lwt1a
+>   VETH1=tst_lwt1b
+
+> -TRACE_ROOT=/sys/kernel/debug/tracing
+> +TRACE_ROOT=/sys/kernel/tracing
+
+>   function cleanup {
+>   	# To reset saved histogram, remove pinned map
+> diff --git a/samples/bpf/offwaketime_kern.c  
+> b/samples/bpf/offwaketime_kern.c
+> index eb4d94742e6b..23f12b47e9e5 100644
+> --- a/samples/bpf/offwaketime_kern.c
+> +++ b/samples/bpf/offwaketime_kern.c
+> @@ -110,7 +110,7 @@ static inline int update_counts(void *ctx, u32 pid,  
+> u64 delta)
+>   }
+
+>   #if 1
+> -/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format  
+> */
+> +/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+>   struct sched_switch_args {
+>   	unsigned long long pad;
+>   	char prev_comm[TASK_COMM_LEN];
+> diff --git a/samples/bpf/task_fd_query_user.c  
+> b/samples/bpf/task_fd_query_user.c
+> index a33d74bd3a4b..1e61f2180470 100644
+> --- a/samples/bpf/task_fd_query_user.c
+> +++ b/samples/bpf/task_fd_query_user.c
+> @@ -235,7 +235,7 @@ static int test_debug_fs_uprobe(char *binary_path,  
+> long offset, bool is_return)
+>   	struct bpf_link *link;
+>   	ssize_t bytes;
+
+> -	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/%s_events",
+> +	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/%s_events",
+>   		 event_type);
+>   	kfd = open(buf, O_WRONLY | O_TRUNC, 0);
+>   	CHECK_PERROR_RET(kfd < 0);
+> @@ -252,7 +252,7 @@ static int test_debug_fs_uprobe(char *binary_path,  
+> long offset, bool is_return)
+>   	close(kfd);
+>   	kfd = -1;
+
+> -	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/events/%ss/%s/id",
+> +	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/events/%ss/%s/id",
+>   		 event_type, event_alias);
+>   	efd = open(buf, O_RDONLY, 0);
+>   	CHECK_PERROR_RET(efd < 0);
+> diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
+> index 65a976058dd3..db5691e6637f 100755
+> --- a/samples/bpf/test_lwt_bpf.sh
+> +++ b/samples/bpf/test_lwt_bpf.sh
+> @@ -19,7 +19,7 @@ IPVETH3="192.168.111.2"
+
+>   IP_LOCAL="192.168.99.1"
+
+> -TRACE_ROOT=/sys/kernel/debug/tracing
+> +TRACE_ROOT=/sys/kernel/tracing
+
+>   function lookup_mac()
+>   {
+> diff --git a/samples/bpf/test_overhead_tp_kern.c  
+> b/samples/bpf/test_overhead_tp_kern.c
+> index 80edadacb692..a1d53b0d8476 100644
+> --- a/samples/bpf/test_overhead_tp_kern.c
+> +++ b/samples/bpf/test_overhead_tp_kern.c
+> @@ -8,7 +8,7 @@
+>   #include <uapi/linux/bpf.h>
+>   #include <bpf/bpf_helpers.h>
+
+> -/* from /sys/kernel/debug/tracing/events/task/task_rename/format */
+> +/* from /sys/kernel/tracing/events/task/task_rename/format */
+>   struct task_rename {
+>   	__u64 pad;
+>   	__u32 pid;
+> @@ -22,7 +22,7 @@ int prog(struct task_rename *ctx)
+>   	return 0;
+>   }
+
+> -/* from /sys/kernel/debug/tracing/events/random/urandom_read/format */
+> +/* from /sys/kernel/tracing/events/random/urandom_read/format */
+>   struct urandom_read {
+>   	__u64 pad;
+>   	int got_bits;
+> diff --git a/tools/include/uapi/linux/bpf.h  
+> b/tools/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..44387b31cbde 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -1642,17 +1642,17 @@ union bpf_attr {
+>    * 	Description
+>    * 		This helper is a "printk()-like" facility for debugging. It
+>    * 		prints a message defined by format *fmt* (of size *fmt_size*)
+> - * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
+> + * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+>    * 		available. It can take up to three additional **u64**
+>    * 		arguments (as an eBPF helpers, the total number of arguments is
+>    * 		limited to five).
+>    *
+>    * 		Each time the helper is called, it appends a line to the trace.
+> - * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+> - * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
+> + * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
+> + * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+>    * 		The format of the trace is customizable, and the exact output
+>    * 		one will get depends on the options set in
+> - * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
+> + * 		*\/sys/kernel/tracing/trace_options* (see also the
+>    * 		*README* file under the same directory). However, it usually
+>    * 		defaults to something like:
+>    *
+> --
+> 2.39.1.581.gbfd45094c4-goog
 
