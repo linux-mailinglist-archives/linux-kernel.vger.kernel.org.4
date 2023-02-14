@@ -2,204 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582AF696D94
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF42696D9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjBNTGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 14:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S229739AbjBNTNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 14:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBNTGx (ORCPT
+        with ESMTP id S229515AbjBNTNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 14:06:53 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35659AF;
-        Tue, 14 Feb 2023 11:06:52 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 24so10903367pgt.7;
-        Tue, 14 Feb 2023 11:06:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tR/3i49sq5hz9XtCZE+PWBTV406btHq8pkhmC0xJBgE=;
-        b=kRXCfHvnVjapwi015b0xlR827EdxddRsUAxsIADH90lYdHsP3qc5xUijELcU47v5DP
-         RKhwxn/KRl3n6lCNAchGzTRGaXFTazeQUYYDaLbgg/4v9jjtNlV+eMiQEkHmKx/ELiMa
-         eFJAbuQ2f2QTiy/inbPj6O3YLNor8m7xNX3yCXP8j5nvVi151z1mZTF5eZzazTvgpplt
-         2NlX6HDlCapdFRNgDhjHarJCwA0doM2TJJTXcytjM4zFHphszSKaFbrAJNP8xgmk1JLX
-         aKncV6CBNTaSkfXSKXWx/HwNUD/7wIcUMIVjk3jYSkL57Y5VGcRZX00EZL/f3/vhRdHK
-         baXQ==
+        Tue, 14 Feb 2023 14:13:11 -0500
+Received: from mail-oo1-f97.google.com (mail-oo1-f97.google.com [209.85.161.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD7E25E1D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 11:13:10 -0800 (PST)
+Received: by mail-oo1-f97.google.com with SMTP id r192-20020a4a37c9000000b00517677496d0so1631915oor.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 11:13:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tR/3i49sq5hz9XtCZE+PWBTV406btHq8pkhmC0xJBgE=;
-        b=yC6ZxBjsksztdIn7IuAmSNCBwm1bkmAiciRdhkWdbNxyngvJCYhRAYFtzVXU7O6uug
-         2CkUhLjBL0ZSPGL0BRfeycSWQ612geFGlVtLibnPyplQBACcYV22yARWg+58YNS21stL
-         nw1lctaZi3s6db2BxScsFjy45m8E8kYGOwtmvY6d3gpE/n5yJnDNQ2TaUfZINXAP7UF6
-         rY+t1x+m/ZefHUO0mdTYWkRvEoUUrtZF5Jb1N8Rvlw0T3zfPa0+jQ4mNQT8gYH69rudF
-         f6j8ZYmfWT3gbhTVU7L0YTzE5FBWSj8UldjClkzfyuspJeU+5bY0cZPOsN42sMBcjr7k
-         m5ew==
-X-Gm-Message-State: AO0yUKUoLdnIKU/jTW+4o3uFpPJCrchSjs0UXJtr2xkZS5QvJc0nkzSD
-        tczPsINi7FNQ2N011M00+8Q=
-X-Google-Smtp-Source: AK7set9KDqtSpLuf4DjmW649rLWZQ9WMurHdl9XlWBl5a0mpXl+jxH6VIQhqsW0P4nmezUIMvrdTSQ==
-X-Received: by 2002:a05:6a00:cf:b0:5a8:ac19:8f42 with SMTP id e15-20020a056a0000cf00b005a8ac198f42mr2623706pfj.14.1676401610866;
-        Tue, 14 Feb 2023 11:06:50 -0800 (PST)
-Received: from strix-laptop (2001-b011-20e0-1465-11be-7287-d61f-f938.dynamic-ip6.hinet.net. [2001:b011:20e0:1465:11be:7287:d61f:f938])
-        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005a852450b14sm10172153pff.183.2023.02.14.11.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 11:06:50 -0800 (PST)
-Date:   Wed, 15 Feb 2023 03:06:39 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Barret Rhoden <brho@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
-Message-ID: <Y+vbv2O6GtlKAJll@strix-laptop>
-References: <20230207035139.272707-1-shiyn.lin@gmail.com>
- <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
- <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
- <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
- <Y+Z8ymNYc+vJMBx8@strix-laptop>
- <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
- <Y+uv3iTajGoOuNMO@strix-laptop>
- <a02714ee-3223-ba53-09eb-33f7b03ef038@redhat.com>
- <Y+vK3tXWHCgTC8qk@strix-laptop>
- <28f1e75a-a1fc-a172-3628-83575e387f9a@redhat.com>
+        h=content-transfer-encoding:mime-version:date:subject:from:reply-to
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SHNedO5KuH+p/e/vc8sOVGTErzEaxPyT/hyhGtc45Ag=;
+        b=46ei4svl2rUKlYdsz5KRk8SuVC8seyElIgsfMn2ks/w4qShnb6FBHuuFKEWTsk24Fb
+         FqyEikP6+rnFEjRctFq0m9efzHqgufWe59h0HeNXLcLyEB+faeuQ/fgX2X+CmlihV3kM
+         nrzipg7/YCGbTJy2y/fe+NC+UwhN5QeD7jOwiJoUhK47SdwIYtFJvx0/XpKYPW07lMsw
+         HmG6+3+ikcjDHRjiCMCaZxLkQuOzRKUKhGgvHlXQxSlYV5npdT9orU0Iw2jL6DSTDaTa
+         slM6PSH9ybTyz19pEZ6OckIGYU3PWjYrnKfgRLKvrKcKl6c1Lm2mt0E+QuQwOQEzy1du
+         uW2w==
+X-Gm-Message-State: AO0yUKVv8SNZAva3gY3Sca/gK+dckR6yPt3i7BaC164zzBf6OXYRX2kb
+        REuJePQXkKA3aTea8F907Bo0k1KqZwb4X4p6Qtc7fOHerI3SpA==
+X-Google-Smtp-Source: AK7set+Fb99Lr7Fa54KN5SQ43v/eWXuXd1diayAn8QX74X/ZDVCLbI3CMndEAIik7RpuhSIsc/JvNxELOdDF
+X-Received: by 2002:a4a:bb8f:0:b0:502:a732:f8f5 with SMTP id h15-20020a4abb8f000000b00502a732f8f5mr1388765oop.5.1676401989440;
+        Tue, 14 Feb 2023 11:13:09 -0800 (PST)
+Received: from gcsdo.greenville.k12.sc.us (gcsdo.greenville.k12.sc.us. [204.116.209.127])
+        by smtp-relay.gmail.com with ESMTPS id p6-20020a4aac06000000b004f95ada6cbfsm979591oon.27.2023.02.14.11.13.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Feb 2023 11:13:09 -0800 (PST)
+X-Relaying-Domain: greenville.k12.sc.us
+Received: from User (57.11.84.34.bc.googleusercontent.com [34.84.11.57])
+        by gcsdo.greenville.k12.sc.us with ESMTP
+        ; Tue, 14 Feb 2023 14:13:07 -0500
+Message-ID: <BE8A78EC-86BA-48FE-A53D-B709CB5DD4E7@gcsdo.greenville.k12.sc.us>
+Reply-To: <nationalbureau@kakao.com>
+From:   "Mrs. Reem E. Al-Hashimi" <yuji.nakagawa@ap-bioresearch.com>
+Subject: REQUEST
+Date:   Tue, 14 Feb 2023 19:13:06 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28f1e75a-a1fc-a172-3628-83575e387f9a@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
+        BAYES_50,FORGED_MUA_OUTLOOK,FSL_NEW_HELO_USER,
+        HEADER_FROM_DIFFERENT_DOMAINS,MISSING_HEADERS,MSM_PRIO_REPTO,
+        NSL_RCVD_FROM_USER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_MR_MRS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [209.85.161.97 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 NSL_RCVD_FROM_USER Received from User
+        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
+        *      [209.85.161.97 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
+        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
+        *  1.0 MSM_PRIO_REPTO MSMail priority header + Reply-to + short
+        *      subject
+        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 06:59:50PM +0100, David Hildenbrand wrote:
-> On 14.02.23 18:54, Chih-En Lin wrote:
-> > > > 
-> > > > > (2) break_cow_pte() can fail, which means that we can fail some
-> > > > >       operations (possibly silently halfway through) now. For example,
-> > > > >       looking at your change_pte_range() change, I suspect it's wrong.
-> > > > 
-> > > > Maybe I should add WARN_ON() and skip the failed COW PTE.
-> > > 
-> > > One way or the other we'll have to handle it. WARN_ON() sounds wrong for
-> > > handling OOM situations (e.g., if only that cgroup is OOM).
-> > 
-> > Or we should do the same thing like you mentioned:
-> > "
-> > For example, __split_huge_pmd() is currently not able to report a
-> > failure. I assume that we could sleep in there. And if we're not able to
-> > allocate any memory in there (with sleeping), maybe the process should
-> > be zapped either way by the OOM killer.
-> > "
-> > 
-> > But instead of zapping the process, we just skip the failed COW PTE.
-> > I don't think the user will expect their process to be killed by
-> > changing the protection.
-> 
-> The process is consuming more memory than it is capable of consuming. The
-> process most probably would have died earlier without the PTE optimization.
-> 
-> But yeah, it all gets tricky ...
-> 
-> > 
-> > > > 
-> > > > > (3) handle_cow_pte_fault() looks quite complicated and needs quite some
-> > > > >       double-checking: we temporarily clear the PMD, to reset it
-> > > > >       afterwards. I am not sure if that is correct. For example, what
-> > > > >       stops another page fault stumbling over that pmd_none() and
-> > > > >       allocating an empty page table? Maybe there are some locking details
-> > > > >       missing or they are very subtle such that we better document them. I
-> > > > >      recall that THP played quite some tricks to make such cases work ...
-> > > > 
-> > > > I think that holding mmap_write_lock may be enough (I added
-> > > > mmap_assert_write_locked() in the fault function btw). But, I might
-> > > > be wrong. I will look at the THP stuff to see how they work. Thanks.
-> > > > 
-> > > 
-> > > Ehm, but page faults don't hold the mmap lock writable? And so are other
-> > > callers, like MADV_DONTNEED or MADV_FREE.
-> > > 
-> > > handle_pte_fault()->handle_pte_fault()->mmap_assert_write_locked() should
-> > > bail out.
-> > > 
-> > > Either I am missing something or you didn't test with lockdep enabled :)
-> > 
-> > You're right. I thought I enabled the lockdep.
-> > And, why do I have the page fault will handle the mmap lock writable in my mind.
-> > The page fault holds the mmap lock readable instead of writable.
-> > ;-)
-> > 
-> > I should check/test all the locks again.
-> > Thanks.
-> 
-> Note that we have other ways of traversing page tables, especially, using
-> the rmap which does not hold the mmap lock. Not sure if there are similar
-> issues when suddenly finding no page table where there logically should be
-> one. Or when a page table gets replaced and modified, while rmap code still
-> walks the shared copy. Hm.
+Hello Sir/Ma,
 
-It seems like I should take carefully for the page table entry in page
-fault with rmap. ;)
-While the rmap code walks the page table, it will hold the pt lock.
-So, maybe I should hold the old (shared) PTE table's lock in
-handle_cow_pte_fault() all the time.
+My name is Mrs. Reem E. Al-Hashimi, The Emirates Minister of State  United Arab Emirates.I have a great business proposal to discuss with you, if you are interested in Foreign Investment/Partnership please reply with your line of interest.
 
-Thanks,
-Chih-En Lin
+
+PLEASE REPLY ME : rrrhashimi2022@kakao.com
+
+Reem
+
