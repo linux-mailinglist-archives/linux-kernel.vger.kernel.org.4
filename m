@@ -2,185 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753D3696E95
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2824C696E9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjBNUay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S230028AbjBNUhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBNUaw (ORCPT
+        with ESMTP id S229722AbjBNUhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:30:52 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196EF35B0;
-        Tue, 14 Feb 2023 12:30:51 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qb15so40980055ejc.1;
-        Tue, 14 Feb 2023 12:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cOpI50IRSP+tpFzJsKqCTjkUrvRMXY4+JeOnanNhycY=;
-        b=qh6SpbhrML9jYXByaI0wmEXwSjxM++62szbAucqjj3RKxv4ZV/7NbmywEHXzgfVu2z
-         37gsduzBGKYkrT6tp9lTOYXaw6bQ6XO9a5Ycf1nWBMAgr4xnI11YP+Fb7WdT+J49SdxR
-         Zv7ah9Zap4aBt4xkipVcOcnOdV3e1kZifAPEt2M4LSsTVDDf7zXe66C5s1Hg6sV88a2A
-         T0l3W+pSX1L9gWQeW+1Y0Gpm+aKYk36oBy9Ira44DJX3Ns/9YxmpelxQ7MIFxN1Em3vx
-         Bg8sMNLTJyP36P2hsV8oo8zOpp6ieU/0Ldu8ZCj80IBvEmDfjyRFlqsjrN2af8ot68E/
-         zVfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cOpI50IRSP+tpFzJsKqCTjkUrvRMXY4+JeOnanNhycY=;
-        b=chno0c3+/zmkXNWCGyF9u1srcOj0GNAgkZV/ku4GM+V1Y6oq+M1DuPfW5tx7+qOr2v
-         ZrYmxHGQckgEqf4z9EssVcyrZZsi5ncZ+mhrldfwInVw9V1xlC1nNYoN9UeYLK6sMfPf
-         td19xMbFv9WH21Ca7cyuS1pFKPvcQUDfj7XfiFBwJRcc6w49ooladteMrFZh3rFLdDhq
-         TR+XcbMFN2P2PvgmfjcQinhGaBabz+rl0bLPl7QxeJ0B/4aKUSeiW+LX6RWG7ucRHzlf
-         5j3IUQfbrSpFzYsu6TDPwaKFvp+A5WMnBjXj22LzcgaqNX2Dor981hv7nWafQPS4RUcA
-         6j3g==
-X-Gm-Message-State: AO0yUKWiPOdAdJhMqcYUTOJWCqIMqbQ+x1UaP6goiXbPAjLNEkVl7wPc
-        VeaEEg/+nNU330I5C5MJZE4=
-X-Google-Smtp-Source: AK7set8K7TKDeiDhACB6bO5sVmIqhSarHiJfap/WC8YJUGjbe7STej9JU7THtj/iCBuSzJSFnBlODA==
-X-Received: by 2002:a17:906:b753:b0:8af:2b57:b80f with SMTP id fx19-20020a170906b75300b008af2b57b80fmr4007892ejb.55.1676406649582;
-        Tue, 14 Feb 2023 12:30:49 -0800 (PST)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170906584700b008a9e585786dsm8584782ejs.64.2023.02.14.12.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 12:30:48 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id E8812BE2DE0; Tue, 14 Feb 2023 21:30:47 +0100 (CET)
-Date:   Tue, 14 Feb 2023 21:30:47 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Guenter Roeck <linux@roeck-us.net>, gregkh@linuxfoundation.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Message-ID: <Y+vvd+lHl3nd2PRu@eldamar.lan>
-References: <20230213144745.696901179@linuxfoundation.org>
- <Y+vk638j8tpx9peU@eldamar.lan>
- <7352502a-37a0-6813-7c06-dce1cea1bfd7@roeck-us.net>
+        Tue, 14 Feb 2023 15:37:22 -0500
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33352B2B1;
+        Tue, 14 Feb 2023 12:37:18 -0800 (PST)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1676407035; bh=7NTTF1kLzfeo6YgWmyC0TGDDQBoMcJiRgRJtMLKbBkE=;
+        h=From:To:Cc:Subject:Date;
+        b=euK5lAe8FtR7ZhlIURVk+pBH97EIWaBejgibr164EAO+8lKl/3nmf6QSJSe+l8woN
+         yuRJPuFkaJucdG5aDZLjGW7XbaIlOjxMuQk2zISFTbMkHyin5tf6A7AK5oxXBEyYZQ
+         e9nnlECOQwcYZCnu2HS1nMvwZZ1Ba41iw1nSXNr8=
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+Subject: [RFC PATCH v2] dt-bindings: dma: apple,sio: Add schema
+Date:   Tue, 14 Feb 2023 21:36:37 +0100
+Message-Id: <20230214203637.43630-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7352502a-37a0-6813-7c06-dce1cea1bfd7@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Describe the SIO coprocessor which serves as pretend DMA controller on
+recent Apple platforms.
 
-On Tue, Feb 14, 2023 at 11:57:04AM -0800, Guenter Roeck wrote:
-> On 2/14/23 11:45, Salvatore Bonaccorso wrote:
-> > Hi Greg,
-> > 
-> > On Mon, Feb 13, 2023 at 03:49:05PM +0100, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.10.168 release.
-> > > There are 139 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
-> > > or in the git tree and branch at:
-> > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > > and the diffstat can be found below.
-> > 
-> > Not pinpointed the exact cause, but booting 5.10.168-rc1 here on a
-> > x86_64 system:
-> > 
-> > [    0.853375] rtc_cmos 00:03: RTC can wake from S4
-> > [    0.854150] rtc_cmos 00:03: registered as rtc0
-> > [    0.854694] rtc_cmos 00:03: setting system clock to 2023-02-14T19:44:16 UTC (1676403856)
-> > [    0.855555] list_add double add: new=ffff90df87f15810, prev=ffff90df87f15810, next=ffff90df80145420.
-> > [    0.856513] ------------[ cut here ]------------
-> > [    0.857023] kernel BUG at lib/list_debug.c:33!
-> > [    0.857519] invalid opcode: 0000 [#1] SMP NOPTI
-> > [    0.858024] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.10.168-rc1+ #1
-> > [    0.858713] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> > [    0.859562] RIP: 0010:__list_add_valid.cold+0x23/0x5b
-> > [    0.860112] Code: 01 00 e9 5c c9 bb ff 48 c7 c7 e8 35 52 ac e8 94 10 ff ff 0f 0b 48 89 f2 4c 89 c1 48 89 fe 48 c7 c7 e8 36 52 ac e8 7d 10 ff ff <0f> 0b 48 89 d1 4c 89 c6 4c 89 ca 48 c7 c7 90 36 52 ac e8 66 10 ff
-> > [    0.860502] RSP: 0018:ffffa8db40013a78 EFLAGS: 00010246
-> > [    0.860502] RAX: 0000000000000058 RBX: ffff90dfefaf4c00 RCX: ffffffffac8b3648
-> > [    0.860502] RDX: 0000000000000000 RSI: 00000000ffffefff RDI: 0000000000000246
-> > [    0.860502] RBP: ffff90df87f15808 R08: 0000000000000000 R09: ffffa8db400138a0
-> > [    0.860502] R10: ffffa8db40013898 R11: ffffffffac8cb688 R12: ffff90df80145420
-> > [    0.860502] R13: ffff90df87f15810 R14: ffff90df87f15810 R15: 0000000000000000
-> > [    0.860502] FS:  0000000000000000(0000) GS:ffff90dffbc00000(0000) knlGS:0000000000000000
-> > [    0.860502] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.860502] CR2: 0000000000000000 CR3: 000000016ee0a000 CR4: 0000000000350ef0
-> > [    0.860502] Call Trace:
-> > [    0.860502]  kobject_add_internal+0x7e/0x2d0
-> > [    0.860502]  ? rpm_idle+0x1d/0x310
-> > [    0.860502]  kobject_add+0x7e/0xb0
-> > [    0.860502]  ? _cond_resched+0x16/0x50
-> > [    0.860502]  device_add+0x118/0x840
-> > [    0.860502]  nvmem_register+0x547/0x720
-> > [    0.860502]  ? nvmem_unregister+0x40/0x40
-> > [    0.860502]  devm_nvmem_register+0x3b/0x80
-> > [    0.860502]  rtc_nvmem_register+0x33/0xe0
-> > [    0.860502]  cmos_do_probe+0x3cc/0x5d0
-> > [    0.860502]  ? cmos_validate_alarm+0x1c0/0x1c0
-> > [    0.860502]  ? rtc_handler+0xd0/0xd0
-> > [    0.860502]  ? cmos_do_probe+0x5d0/0x5d0
-> > [    0.860502]  pnp_device_probe+0xb3/0x150
-> > [    0.860502]  really_probe+0x222/0x480
-> > [    0.860502]  driver_probe_device+0xe5/0x150
-> > [    0.860502]  device_driver_attach+0xa9/0xb0
-> > [    0.860502]  __driver_attach+0xa7/0x150
-> > [    0.860502]  ? device_driver_attach+0xb0/0xb0
-> > [    0.860502]  bus_for_each_dev+0x78/0xc0
-> > [    0.860502]  bus_add_driver+0x13a/0x200
-> > [    0.860502]  driver_register+0x8b/0xe0
-> > [    0.860502]  ? rtc_dev_init+0x34/0x34
-> > [    0.860502]  cmos_init+0x13/0x74
-> > [    0.860502]  do_one_initcall+0x44/0x1d0
-> > [    0.860502]  kernel_init_freeable+0x21e/0x280
-> > [    0.860502]  ? rest_init+0xb4/0xb4
-> > [    0.860502]  kernel_init+0xa/0x10c
-> > [    0.860502]  ret_from_fork+0x22/0x30
-> > [    0.860502] Modules linked in:
-> > [    0.881782] ---[ end trace 15ab58632cc3d5c4 ]---
-> > [    0.882291] RIP: 0010:__list_add_valid.cold+0x23/0x5b
-> > [    0.882839] Code: 01 00 e9 5c c9 bb ff 48 c7 c7 e8 35 52 ac e8 94 10 ff ff 0f 0b 48 89 f2 4c 89 c1 48 89 fe 48 c7 c7 e8 36 52 ac e8 7d 10 ff ff <0f> 0b 48 89 d1 4c 89 c6 4c 89 ca 48 c7 c7 90 36 52 ac e8 66 10 ff
-> > [    0.884708] RSP: 0018:ffffa8db40013a78 EFLAGS: 00010246
-> > [    0.885274] RAX: 0000000000000058 RBX: ffff90dfefaf4c00 RCX: ffffffffac8b3648
-> > [    0.886021] RDX: 0000000000000000 RSI: 00000000ffffefff RDI: 0000000000000246
-> > [    0.886767] RBP: ffff90df87f15808 R08: 0000000000000000 R09: ffffa8db400138a0
-> > [    0.887518] R10: ffffa8db40013898 R11: ffffffffac8cb688 R12: ffff90df80145420
-> > [    0.888266] R13: ffff90df87f15810 R14: ffff90df87f15810 R15: 0000000000000000
-> > [    0.889454] FS:  0000000000000000(0000) GS:ffff90dffbc00000(0000) knlGS:0000000000000000
-> > [    0.890295] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.890916] CR2: 0000000000000000 CR3: 000000016ee0a000 CR4: 0000000000350ef0
-> > [    0.891670] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > [    0.892493] Kernel Offset: 0x2a400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> > [    0.893451] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> > 
-> 
-> This is caused by the bad nvmem patch in -rc1. -rc2 has the fix.
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+---
+Since v1:
+ - formatting fixes requested by Rob
+ - dropped provider nodes from example
+ - added 'memory-region' items range
+ - tweaked 'apple,sio-firmware-params' description
 
-Confirmed; -rc3 boots fine.
+Since the schema mentions a loader preparing the binding appropriately,
+here's a PR with the relevant (WIP) loader code, if anyone wants to look:
+https://github.com/AsahiLinux/m1n1/pull/286
 
-For 5.10.168-rc3:
 
-Tested-by: Salvatore Bonaccorso <carnil@debian.org>
+ .../devicetree/bindings/dma/apple,sio.yaml    | 111 ++++++++++++++++++
+ 1 file changed, 111 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/dma/apple,sio.yaml
 
-Regards,
-Salvatore
+diff --git a/Documentation/devicetree/bindings/dma/apple,sio.yaml b/Documentation/devicetree/bindings/dma/apple,sio.yaml
+new file mode 100644
+index 000000000000..0e3780ad9dd7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dma/apple,sio.yaml
+@@ -0,0 +1,111 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dma/apple,sio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple SIO Coprocessor
++
++description:
++  SIO is a coprocessor on Apple M1 and later chips (and maybe also on earlier
++  chips). Its role is to offload SPI, UART and DisplayPort audio transfers,
++  being a pretend DMA controller.
++
++maintainers:
++  - Martin Povišer <povik+lin@cutebit.org>
++
++allOf:
++  - $ref: dma-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - apple,t6000-sio
++          - apple,t8103-sio
++      - const: apple,sio
++
++  reg:
++    maxItems: 1
++
++  '#dma-cells':
++    const: 1
++    description:
++      DMA clients specify a single cell that corresponds to the RTKit endpoint
++      number used for arranging the transfers in question
++
++  dma-channels:
++    maximum: 128
++
++  mboxes:
++    maxItems: 1
++
++  iommus:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  memory-region:
++    minItems: 2
++    maxItems: 8
++    description:
++      A number of references to reserved memory regions among which are the DATA/TEXT
++      sections of coprocessor executable firmware and also auxiliary firmware data
++      describing the available DMA-enabled peripherals
++
++  apple,sio-firmware-params:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description: |
++      Parameters in the form of opaque key/value pairs that are to be sent to the SIO
++      coprocesssor once it boots. These parameters can point into the reserved memory
++      regions (in device address space).
++
++      Note that unlike Apple's firmware, we treat the parameters, and the data they
++      refer to, as opaque. Apple embed short data blobs into their SIO devicetree node
++      that describe the DMA-enabled peripherals (presumably with defined semantics).
++      Their driver processes those blobs and sets up data structure in mapped device
++      memory, then references this memory in the parameters sent to the SIO. At the
++      level of description we are opting for in this binding, we assume the job of
++      constructing those data structures has been done in advance, leaving behind an
++      opaque list of key/value parameter pairs to be sent by a prospective driver.
++
++      This approach is chosen for two reasons:
++
++       - It means we don't need to try to understand the semantics of Apple's blobs
++         as long as we know the transformation we need to do from Apple's devicetree
++         data to SIO data (which can be shoved away into a loader). It also means the
++         semantics of Apple's blobs (or of something to replace them) need not be part
++         of the binding and be kept up with Apple's firmware changes in the future.
++
++       - It leaves less work for the driver attaching on this binding. Instead the work
++         is done upfront in the loader which can be better suited for keeping up with
++         Apple's firmware changes.
++
++required:
++  - compatible
++  - reg
++  - '#dma-cells'
++  - dma-channels
++  - mboxes
++  - iommus
++  - power-domains
++
++additionalProperties: false
++
++examples:
++  - |
++    sio: dma-controller@36400000 {
++      compatible = "apple,t8103-sio", "apple,sio";
++      reg = <0x36400000 0x8000>;
++      dma-channels = <128>;
++      #dma-cells = <1>;
++      mboxes = <&sio_mbox>;
++      iommus = <&sio_dart 0>;
++      power-domains = <&ps_sio_cpu>;
++      memory-region = <&sio_text>, <&sio_data>,
++                      <&sio_auxdata1>, <&sio_auxdata2>; /* Filled by loader */
++      apple,sio-firmware-params = <0xb 0x10>, <0xc 0x1b80>, <0xf 0x14>,
++                                  <0x10 0x1e000>, <0x30d 0x34>, <0x30e 0x4000>,
++                                  <0x1a 0x38>, <0x1b 0x50>; /* Filled by loader */
++    };
+-- 
+2.33.0
+
