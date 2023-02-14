@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA70E69720D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40A9697210
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjBNXqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S229660AbjBNXs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjBNXqA (ORCPT
+        with ESMTP id S230028AbjBNXsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:46:00 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FF630EA1;
-        Tue, 14 Feb 2023 15:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676418359; x=1707954359;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eiS3IxaAsk6x7BayF1DCQxveYExshrK1kKyFW8zL/CQ=;
-  b=hp3GBOYZqwZ3M6mPyYU86CkDWifK7aevTJV4n52mu0YSqmcJESltHjpg
-   U00N6YESJvCTosSEPuM9EVuK8u9ECZ6Oc8eYDGvfZylx36S7tMyOa5/MI
-   NtdVxV/gY4ufK1o4QqGM9qy1pt1Cm5GfEt/9W8UV3alA1mnCxUwc6RWsy
-   mgU5EHLmRE/RbVhUMYBJxm3D/oRCtVEVHP4R6N5Ja3YFjbB/oGqGkeO/r
-   8MwUBARMuTaXt1faeHXotPlQAUM435DY5SDRK3Cr779p2VgI8tAXgdvdN
-   B5f19DtKhR70HtybFLfNW4NMX5UDgRjaonl2i3pGoPLy3GdxmEAPbKjUy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="417523061"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="417523061"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 15:45:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="669391026"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="669391026"
-Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 15:45:58 -0800
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, rostedt@goodmis.org,
-        jithu.joseph@intel.com, ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-Subject: [PATCH v2 7/7] Documentation/ABI: Update IFS ABI doc
-Date:   Tue, 14 Feb 2023 15:44:26 -0800
-Message-Id: <20230214234426.344960-8-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230214234426.344960-1-jithu.joseph@intel.com>
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
- <20230214234426.344960-1-jithu.joseph@intel.com>
+        Tue, 14 Feb 2023 18:48:06 -0500
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8EB303F7;
+        Tue, 14 Feb 2023 15:47:40 -0800 (PST)
+Received: by mail-il1-f177.google.com with SMTP id u8so6933935ilq.13;
+        Tue, 14 Feb 2023 15:47:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VpPZszrCAS+I7Dsv6vN6PL8MO3yZHHAYUe2N+KaH1dA=;
+        b=kX+MykXd38F34UKqHUnptRhi5AvOG9nM3731hF2Bqfos2cMvvIymSRFfPN5uNj1xQP
+         V4KLotmRyThiw7uopa/+6qxGFURTkedJz28dhNFLZCKxFPTHWjzk1kqeZE6r4fLph1O6
+         wv4TTEGE2Ltrnu8cOXMToz6uRf1PQYH+i4ATjypHltGSma/Nyx7D5uF5DDbux+7Sw/bw
+         uMwiyey0HGeF8qWwglkQoEayIYDEhqq2yRjC3n/wpP4YBFZ8q8PmnM7v7z35eFoKzjEL
+         IKY7uaQA4RRLu5WtMO3Vh7hY3Io5ioXsgSeZvxWWtRLFrq7GLPWbAR4rjw42CxIgrlNt
+         v4ig==
+X-Gm-Message-State: AO0yUKWyGvWOX1I8g1mFlU9vXHIBNn8vtTBdY435A9wIWeVl7nUUCiIH
+        cHm4GapI2sXbL6LGm3dJzg==
+X-Google-Smtp-Source: AK7set9gngvgX1v9SjvKei6xXJ7wLaQx5dvigMVGlW8OG7IGyqQEP8OzuFk6CUd6HxYoWN/3kSsTMQ==
+X-Received: by 2002:a05:6e02:20c5:b0:315:4f67:7054 with SMTP id 5-20020a056e0220c500b003154f677054mr460708ilq.19.1676418456717;
+        Tue, 14 Feb 2023 15:47:36 -0800 (PST)
+Received: from robh_at_kernel.org ([65.158.198.5])
+        by smtp.gmail.com with ESMTPSA id y20-20020a02c014000000b003a4419ba0c2sm5084450jai.139.2023.02.14.15.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 15:47:35 -0800 (PST)
+Received: (nullmailer pid 42204 invoked by uid 1000);
+        Tue, 14 Feb 2023 23:47:34 -0000
+Date:   Tue, 14 Feb 2023 17:47:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: qcom,rpmh: Correct PM8550 family
+ supplies
+Message-ID: <167641845356.42141.15153738219686589662.robh@kernel.org>
+References: <20230210155930.549082-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210155930.549082-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Array BIST test doesn't need an IFS test image to operate unlike
-the SCAN test. Consequently current_batch and image_version
-files are not applicable for Array BIST IFS device instance,
-clarify this in the ABI doc.
 
-Also given that multiple tests are supported, take the opportunity
-to generalize descriptions wherever applicable.
+On Fri, 10 Feb 2023 16:59:30 +0100, Krzysztof Kozlowski wrote:
+> PM8550 is different than PM8550VE/VS, because the latter has much
+> smaller amount of supplies (l1-3 and s1-6) and regulators.  The PM8550
+> has on theh other hand one pin for vdd-l1-l4-l10 supplies.  Correct the
+> if:then: clause with their supplies.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/regulator/qcom,rpmh-regulator.yaml  | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+> 
 
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
- Documentation/ABI/testing/sysfs-platform-intel-ifs | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-platform-intel-ifs b/Documentation/ABI/testing/sysfs-platform-intel-ifs
-index 55991983d0d0..c0cc5ef0739a 100644
---- a/Documentation/ABI/testing/sysfs-platform-intel-ifs
-+++ b/Documentation/ABI/testing/sysfs-platform-intel-ifs
-@@ -21,15 +21,16 @@ Date:		Nov 16 2022
- KernelVersion:	6.2
- Contact:	"Jithu Joseph" <jithu.joseph@intel.com>
- Description:	Additional information regarding the last test. The details file reports
--		the hex value of the SCAN_STATUS MSR. Note that the error_code field
-+		the hex value of the STATUS MSR for this test. Note that the error_code field
- 		may contain driver defined software code not defined in the Intel SDM.
- 
- What:		/sys/devices/virtual/misc/intel_ifs_<N>/image_version
- Date:		Nov 16 2022
- KernelVersion:	6.2
- Contact:	"Jithu Joseph" <jithu.joseph@intel.com>
--Description:	Version (hexadecimal) of loaded IFS binary image. If no scan image
--		is loaded reports "none".
-+Description:	Version (hexadecimal) of loaded IFS test image. If no test image
-+		is loaded reports "none". Only present for device instances where a test image
-+		is applicable.
- 
- What:		/sys/devices/virtual/misc/intel_ifs_<N>/current_batch
- Date:		Nov 16 2022
-@@ -39,3 +40,4 @@ Description:	Write a number less than or equal to 0xff to load an IFS test image
- 		The number written treated as the 2 digit suffix in the following file name:
- 		/lib/firmware/intel/ifs_<N>/ff-mm-ss-02x.scan
- 		Reading the file will provide the suffix of the currently loaded IFS test image.
-+		This file is present only for device instances where a test image is applicable.
--- 
-2.25.1
+Acked-by: Rob Herring <robh@kernel.org>
 
