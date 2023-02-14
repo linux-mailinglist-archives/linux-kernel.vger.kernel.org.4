@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8304369574A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9764569574B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjBNDOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        id S231344AbjBNDPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjBNDOl (ORCPT
+        with ESMTP id S230526AbjBNDPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:14:41 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3501C582;
-        Mon, 13 Feb 2023 19:14:11 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676344425;
-        bh=lUBQv/gxbu9SY9YrTLi2niEa4rAG6aaQal1onFRL2K0=;
-        h=From:Date:Subject:To:Cc:From;
-        b=fHiwu9Nkh1OA406ptS5CCA4B5NxL5QMbqTHkDFViGUH9shajemAjgLr5I8pvuwXdi
-         oEKuRcCGxH/wfzhrU0xg2Ph9BL7jZUGnrdnUU6q4m3rT3KGtqd2n7udJOQYCH4b+OG
-         /lC6duSKqXg8SU9J1+bEuMqon4XRUBgFCIjDoIbc=
-Date:   Tue, 14 Feb 2023 03:13:39 +0000
-Subject: [PATCH] bcache: make kobj_type structures constant
+        Mon, 13 Feb 2023 22:15:21 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0FA1C5AB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:14:30 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id t17so9326042pfj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112; t=1676344466;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YcO98EaaP2Vt6Bx7DAhKU0bvqdQdkVskAmGJ59c7fLw=;
+        b=JC5B2GN3HgDkaeXf31ttwVTosjyR/HxUuh6yQ669J1TUmCICIxT0I2q03+Ng2i7wSj
+         Wy+TQnLT6msP2IGkAWu4n4oUQd5KyssSW3O2Dwe2IZBfF0mCjwvsi6qKFo2HSOPVW9Cx
+         SDb2a1xO8ml9RgFRKIhOwLMayIJMEG9swZkhIs0wje8eTOAtowuNgTSindnK+U5r4zCG
+         sXi4rtRLRjjNBLrQLb07GyKvLKVTscC7MZMPFeAtH0rIFX1UhRqutms7MuJaFPI6bW7o
+         9q0tLr3VM10M83fgz0zo38GtLOMxFrheEnsJnJjy/VIrcoVKCvBza5XnXCGVKHplhiah
+         6L1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676344466;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YcO98EaaP2Vt6Bx7DAhKU0bvqdQdkVskAmGJ59c7fLw=;
+        b=Ek+9i6TQfbhjJYEvKRAFiRbHBQsesdf7YytDp+8itTWyZX0HafXiEx3UmUPM7NbrQd
+         C9/JNE8dxw0CVQ2TG9hRgGUwIGG8CgDlaLeZTCzCQEW+9tnwdI4GblDoTGYhuORHMp3F
+         h/O5RLz5938JtgBdm2FmnHv4VfM/cB11DMl870izPGD6ecRvbI8eUyaBNfAbOtDUTAL2
+         wUDUd7cpUqVfNYJl2hT2ciHNR6RZFRMO/RN+A/Wgmq/11afD2EJWGVSUyBfb7iRC8gWt
+         akr/+G8+sRASA6nNmr2+hnb3nxNkFpB/c33XXYZIlwU8peFgfJp+ij5/cEFjM1fkmCLG
+         kziw==
+X-Gm-Message-State: AO0yUKWw+cYvKFAgXiS3NpBN8IbBJLwkgV2n0vKcFkEM1TIXZjr08EoP
+        qNWL3gwq2wI9q+IQeS13bbOzblMyIa08+3S+
+X-Google-Smtp-Source: AK7set9Viz27eQMVUiiJE4l1hll8LjkSCr+aTtoaIhq/LKztRqhwOzomiTGrSM0LxLL46zAtl2Mf/A==
+X-Received: by 2002:a62:ce4c:0:b0:5a8:bbd7:d7aa with SMTP id y73-20020a62ce4c000000b005a8bbd7d7aamr648131pfg.1.1676344465750;
+        Mon, 13 Feb 2023 19:14:25 -0800 (PST)
+Received: from [10.200.11.190] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id i25-20020aa787d9000000b005a8ae0c52cfsm2363248pfo.16.2023.02.13.19.14.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 19:14:25 -0800 (PST)
+Message-ID: <89da1ae8-3062-1fd9-a389-de4791c117e3@bytedance.com>
+Date:   Tue, 14 Feb 2023 11:14:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230214-kobj_type-bcache-v1-1-cf00ead7bee7@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAGL86mMC/x2N0QrCMAxFf2Xk2UIbh6C/IiJJm9no6EY7xTH27
- wYfz7kc7gZNqkqDS7dBlY82nYpBOHQQM5WHOE3GgB6PHkPvXhM/78s6i+NIMYs7JeQU8Mx+ILC
- MqdlWqcRsYXmPo8m5yqDf/8/1tu8/HKS1BXcAAAA=
-To:     Coly Li <colyli@suse.de>,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676344423; l=2027;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=lUBQv/gxbu9SY9YrTLi2niEa4rAG6aaQal1onFRL2K0=;
- b=TlvCX16r4S6MNFq0EVBI7VxgI64XDdViGztU1MHvVmy1roWeuLrCuLGERPS8MaF51wIKVWMIq
- 5OeMD9RebRSCWX575Rs360ss1izfQdHDKDQ84ZnJSJPB3jv3i0pXxtf
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] mm: page_alloc: call panic() when memoryless node
+ allocation fails
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230212111027.95520-1-zhengqi.arch@bytedance.com>
+ <20230213105318.e2a83d60c12e734d45dccf1a@linux-foundation.org>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230213105318.e2a83d60c12e734d45dccf1a@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,58 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
 
-Take advantage of this to constify the structure definitions to prevent
-modification at runtime.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/md/bcache/bcache.h | 10 +++++-----
- drivers/md/bcache/sysfs.h  |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+On 2023/2/14 02:53, Andrew Morton wrote:
+> On Sun, 12 Feb 2023 19:10:27 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+> 
+>> In free_area_init(), we will continue to run after pgdat of memoryless
+>> node allocation fails. However, in the subsequent process (such as when
+>> initializing zonelist), the case that NODE_DATA(nid) is NULL is not
+>> handled, which will cause panic. Instead of this, it's better to call
+>> panic() directly when the memory allocation fails during system boot.
+>>
+>> ...
+>>
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -8360,11 +8360,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>>   
+>>   			/* Allocator not initialized yet */
+>>   			pgdat = arch_alloc_nodedata(nid);
+>> -			if (!pgdat) {
+>> -				pr_err("Cannot allocate %zuB for node %d.\n",
+>> -						sizeof(*pgdat), nid);
+>> -				continue;
+>> -			}
+>> +			if (!pgdat)
+>> +				panic("Cannot allocate %zuB for node %d.\n",
+>> +				       sizeof(*pgdat), nid);
+>>   			arch_refresh_nodedata(nid, pgdat);
+>>   			free_area_init_memoryless_node(nid);
+> 
+> Have you actually hit this at runtime?  If so, is there something we
 
-diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
-index aebb7ef10e63..a522f4f1f992 100644
---- a/drivers/md/bcache/bcache.h
-+++ b/drivers/md/bcache/bcache.h
-@@ -1004,11 +1004,11 @@ extern struct workqueue_struct *bch_flush_wq;
- extern struct mutex bch_register_lock;
- extern struct list_head bch_cache_sets;
- 
--extern struct kobj_type bch_cached_dev_ktype;
--extern struct kobj_type bch_flash_dev_ktype;
--extern struct kobj_type bch_cache_set_ktype;
--extern struct kobj_type bch_cache_set_internal_ktype;
--extern struct kobj_type bch_cache_ktype;
-+extern const struct kobj_type bch_cached_dev_ktype;
-+extern const struct kobj_type bch_flash_dev_ktype;
-+extern const struct kobj_type bch_cache_set_ktype;
-+extern const struct kobj_type bch_cache_set_internal_ktype;
-+extern const struct kobj_type bch_cache_ktype;
- 
- void bch_cached_dev_release(struct kobject *kobj);
- void bch_flash_dev_release(struct kobject *kobj);
-diff --git a/drivers/md/bcache/sysfs.h b/drivers/md/bcache/sysfs.h
-index a2ff6447b699..65b8bd975ab1 100644
---- a/drivers/md/bcache/sysfs.h
-+++ b/drivers/md/bcache/sysfs.h
-@@ -3,7 +3,7 @@
- #define _BCACHE_SYSFS_H_
- 
- #define KTYPE(type)							\
--struct kobj_type type ## _ktype = {					\
-+const struct kobj_type type ## _ktype = {					\
- 	.release	= type ## _release,				\
- 	.sysfs_ops	= &((const struct sysfs_ops) {			\
- 		.show	= type ## _show,				\
+No, I just quickly tested the following code and found that it will
+immediately crash in the subsequent position (many paths do not handle
+this case):
 
----
-base-commit: f6feea56f66d34259c4222fa02e8171c4f2673d1
-change-id: 20230214-kobj_type-bcache-6d2bd129b0fa
+@@ -8368,6 +8368,7 @@ void __init free_area_init(unsigned long 
+*max_zone_pfn)
+                                                 sizeof(*pgdat), nid);
+                                 continue;
+                         }
++                       continue;
+                         arch_refresh_nodedata(nid, pgdat);
+                         free_area_init_memoryless_node(nid);
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+> can do to handle this failure more gracefully?
+
+My consideration is that if the memory of the size of the pgdat
+structure (so small) cannot be allocated at the boot time, there
+is no need to continue running. So I choose to call the panic()
+directly.
+
+Thanks,
+Qi
+
+> 
 
