@@ -2,113 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C122696CE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DAD696CEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjBNS2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S232097AbjBNS3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjBNS2h (ORCPT
+        with ESMTP id S231687AbjBNS3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28282E0DF;
-        Tue, 14 Feb 2023 10:28:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95ABC617B3;
-        Tue, 14 Feb 2023 18:28:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5279BC433D2;
-        Tue, 14 Feb 2023 18:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676399315;
-        bh=FbF6sDzVu8IYeXRzBwpTRcd2V9cyuwcFeFjq0Ymm7Do=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bHhn4MxW4jaWFJ2rWLLTx3PrN1UgQYhr8rIIi09a5nKp9q1ESDXYN6B61WfPK+RCk
-         kGOo0Ttnppg2I0ImN2NZWVnYn5Hj3XaN0LDcyDf/bwqXXcmVPP3k8vhBjHFmJR2Bwl
-         59QsKYYCyuVJKOZH8QhykBvzswD6lxU5Dm7UQEUn/f61z0n0wk0iCLguGpDT9BQtko
-         BMamtHKjb0Kw6J2wXAyHy1UIJAIQSjMfecn63l73DrJUySuInHCUTNK20Fu4b0MRwy
-         oFsYNMAp0xS4VwbLeGrloRppo8ZqhdA7joLLtCUVdDhIWqqYlEK1n6Wnc+Yaj98vfY
-         KvhcfOKc0ivxg==
-Date:   Tue, 14 Feb 2023 10:28:31 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: Re: [PATCH v2 13/24] sh/cpu: Make sure play_dead() doesn't return
-Message-ID: <20230214182831.7l73rzoeqjowbyly@treble>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <d0c3ff5349adfe8fd227acc236ae2c278a05eb4c.1676358308.git.jpoimboe@kernel.org>
- <2575e5f7-b11a-020f-06ef-ba42301d7415@linaro.org>
+        Tue, 14 Feb 2023 13:29:17 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E362ED56;
+        Tue, 14 Feb 2023 10:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=l8eNA24fiwwfGPSZyYQZ3w2UcUTVfrcUMih4l9bY7F8=; b=YfM14wEWMwnmcdR95BE45AyqSC
+        n2+PVmQ5PNuaBIdrKI5czHVOGWrsNsd9myLmY32sO/aK63k5JKGbF5rzE2CLJkww4W6SexbProjYR
+        g6crMqUXgrWJwYm0ZPxnxM5UOqUNrkcj45RG6cDMlRSIgHGQyScQ3quZOM92Lz4BO/1LEQu4FTjs5
+        m76E0ckJQM9GhvGjxaz7UlcIRtgUX4Yr6YmTXofXwysaHuspqmS2lpAHHRO14h8a607P9govAJozb
+        nbC8FoJI/wLWQ41CwYyttPJGcKxcUsO3KkaENfI9ArNGFQ8LMPtiAADrYOEkMcBw2AQuFrf8GMiPk
+        d2Lw34gg==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pS03I-003AzF-1o; Tue, 14 Feb 2023 18:29:16 +0000
+Message-ID: <3284be35-be54-411b-206e-389fb0605622@infradead.org>
+Date:   Tue, 14 Feb 2023 10:29:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
+Content-Language: en-US
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Qais Yousef <qyousef@layalina.io>
+References: <20230214010942.25143-1-rdunlap@infradead.org>
+ <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2575e5f7-b11a-020f-06ef-ba42301d7415@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:57:39AM +0100, Philippe Mathieu-Daudé wrote:
-> On 14/2/23 08:05, Josh Poimboeuf wrote:
-> > play_dead() doesn't return.  Make that more explicit with a BUG().
-> > 
-> > BUG() is preferable to unreachable() because BUG() is a more explicit
-> > failure mode and avoids undefined behavior like falling off the edge of
-> > the function into whatever code happens to be next.
-> > 
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > ---
-> >   arch/sh/include/asm/smp-ops.h | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/sh/include/asm/smp-ops.h b/arch/sh/include/asm/smp-ops.h
-> > index e27702130eb6..63866b1595a0 100644
-> > --- a/arch/sh/include/asm/smp-ops.h
-> > +++ b/arch/sh/include/asm/smp-ops.h
-> > @@ -27,6 +27,7 @@ static inline void plat_smp_setup(void)
-> >   static inline void play_dead(void)
-> >   {
-> >   	mp_ops->play_dead();
-> > +	BUG();
-> >   }
+Hi,
+
+On 2/13/23 23:40, Philippe Mathieu-Daudé wrote:
+> Hi Randy,
 > 
-> Shouldn't we decorate plat_smp_ops::play_dead() as noreturn first?
+> On 14/2/23 02:09, Randy Dunlap wrote:
+>> When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
+>> declared. This causes the build to fail with:
+>>
+>> mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
+>> arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
+>>
+>> Fix this by declaring a 0-value physical_memsize with neither LANTIQ
+>> nor MIPS_MALTA is set, like LANTIQ does.
+>>
+>> Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
+>> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+>> Cc: John Crispin <john@phrozen.org>
+>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>> Cc: linux-mips@vger.kernel.org
+>> ---
+>> How has this build error not been detected for 10 years?
+>>
+>>   arch/mips/kernel/vpe-mt.c |    9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
+>> --- a/arch/mips/kernel/vpe-mt.c
+>> +++ b/arch/mips/kernel/vpe-mt.c
+>> @@ -22,6 +22,15 @@ static int major;
+>>   /* The number of TCs and VPEs physically available on the core */
+>>   static int hw_tcs, hw_vpes;
+>>   +#if !defined(CONFIG_MIPS_MALTA) && !defined(CONFIG_LANTIQ)
+>> +/* The 2 above provide their own 'physical_memsize' variable. */
+> 
+> Which seems dubious. The variable should be defined once, likely in
+> arch/mips/kernel/vpe-mt.c, since arch/mips/include/asm/vpe.h declares
+> it.
+> 
+> I'm surprised CONFIG_MIPS_MALTA always links malta-dtshim.o, but
+> malta-dtshim.o depends on MIPS_VPE_LOADER_MT, and I can't find a
+> CONFIG_MIPS_MALTA -> MIPS_VPE_LOADER_MT Kconfig dep.
+> 
+>> +/*
+>> + * This is needed by the vpe-mt loader code, just set it to 0 and assume
+>> + * that the firmware hardcodes this value to something useful.
+>> + */
+>> +unsigned long physical_memsize = 0L;
+> 
+> I agree this is where this variable has be be declared / initialized,
+> but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
+> doesn't seem right.
+> 
+>> +#endif
+>> +
+>>   /* We are prepared so configure and start the VPE... */
+>>   int vpe_run(struct vpe *v)
+>>   {
 
-I guess it really depends on how far we want to go down the __noreturn
-rabbit hole.  To keep the patch set constrained yet still useful I
-stopped when I got to a function pointer, as I think it still needs a
-BUG() afterwards either way.
+OK, I'll try to consolidate all of these into one location.
 
-That said, there would still be benefits of adding __noreturn to
-function pointers, I just wanted to keep the patch set down to a
-manageable size ;-)
-
+Thanks.
 -- 
-Josh
+~Randy
