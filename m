@@ -2,102 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E7D695D1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB809695D36
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjBNIjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S232088AbjBNIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjBNIjW (ORCPT
+        with ESMTP id S232116AbjBNIk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:39:22 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19BDE07B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:39:00 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso10929669wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OdH7YLxEU7+x8TyQ0RXRl7vlHPOb2AyhEBJfEDpogjo=;
-        b=lITFePx0X9STU/PRv8RDKM8fExAWDzy+jpqFd3F3EclEeeKm9oieIjWHpPqGQzwS22
-         5EqMTMMmWcQpnYnPydUELQ4hmXI6jQ9wIU7NIhNrE2bb/Ycvjz7xP0M/5mKcSOiu7bsZ
-         6TsOLG9rDvJWCE+8oAtVWbXOJzkqsZf9lgb3PVpo6EsLPiF+Fznp415kzttWXcQB9tai
-         ahYWr+46hGgG5r48Qc9c2y6Vu1i4oosb0vCrvNqO2RnLrESe7zITRzK+VioTUZT/YyrW
-         jWIMMlqks/G7q3WK+Hgrn7sUXrq5x2nUruqzS5Z5CdiTrfPNvvbrw17CCB6Hy9c7Lhbh
-         gUeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OdH7YLxEU7+x8TyQ0RXRl7vlHPOb2AyhEBJfEDpogjo=;
-        b=Kp968RUYLBfF8Xvl+cXcYohzy68YDk2DR/1E39veQC38n+YFjXBeP6JazX57PKH10h
-         BUlQbnNRTaPKo7Njy0WbobR7mjMY6Dt/K1PYOY6gAm5KhnWDCZktyJzoMBViy9nhHeXI
-         zMfovaZDWvVmLFg1QKpmtwiCYBgoofDL0MaUKSqtiV1XpOYTemb/NamIVuhnNi8oq1++
-         mOQgpgywoYPersesqpSdpftduG427ZO1qX3P1cs/GdjwdB+VnILzKsjDaeEsJdIggMN0
-         YeXc5C/6laghL9tnjqWATMHrHV0aQujvvbOpFzIJVXMb+JON11mt64LJaU6y/y5SGaZM
-         DNLA==
-X-Gm-Message-State: AO0yUKURrka7tJFEdvLGQa3FTBfLEdDqA9c3muGML4F8hglwwceLUQlx
-        LmvlvTc1SnX+PXUd7+psxEbAVQ==
-X-Google-Smtp-Source: AK7set8Xv+PaDkPwK7Ad72LiOBjQMRKpFOmBm3jnVG+RLVPqeMcL5mOLrs6RINnQJmrORpuEV3G7VQ==
-X-Received: by 2002:a05:600c:705:b0:3d9:fb89:4e3d with SMTP id i5-20020a05600c070500b003d9fb894e3dmr1952389wmn.28.1676363939287;
-        Tue, 14 Feb 2023 00:38:59 -0800 (PST)
-Received: from localhost.localdomain ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1c5445000000b003dc492e4430sm16215536wmi.28.2023.02.14.00.38.58
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Feb 2023 00:38:58 -0800 (PST)
-From:   =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-To:     jpoimboe@kernel.org, linux-kernel@vger.kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH v2 25/24] x86/cpu: Expose arch_cpu_idle_dead()'s prototype definition
-Date:   Tue, 14 Feb 2023 09:38:57 +0100
-Message-Id: <20230214083857.50163-1-philmd@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1676358308.git.jpoimboe@kernel.org>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
+        Tue, 14 Feb 2023 03:40:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758E6527C;
+        Tue, 14 Feb 2023 00:40:20 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E85KMA016338;
+        Tue, 14 Feb 2023 08:39:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=3e4b4Rni1cp9StPkR6N/CJwkiYWDOKhSZUT/2WythB0=;
+ b=GOxNWp3htVQrNUNLfrGizBR8RavJ37vmbHMTKXVP4gAM11PPtpkCuKZ9emGs3JRxX2fN
+ J7bzzUYTvhrT4vKlgp8xlKf+ZnlSAt7jPCe+6Lr/9kIICZuGn84VgZ1LM529qplNKzWS
+ 8L3a9akufoA+2uPo6TWe30dNvWgdWQ+fnNgE0TrcWcbq8Pn3U9YEL3sfBAuA2YnLkHVQ
+ xxWdNg4IlKgT+kNwQcG863WQb02sgCPeIB3DAaKRry79R1xg12OSN0lpWHka3Q8pKZNX
+ tJDoeoqAvLdZgfZTO8yIdFQLQJ/YpiLdqor9dHvTk/YWxWtyAdpGNmAZEqsf0DV6NlLk Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr64t98tv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:39:25 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31E8cEhu031934;
+        Tue, 14 Feb 2023 08:39:24 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr64t98sh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:39:23 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E56Qaq029819;
+        Tue, 14 Feb 2023 08:39:20 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3np29fkrmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:39:20 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31E8dGFU46661998
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 08:39:17 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF2C420043;
+        Tue, 14 Feb 2023 08:39:16 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48A4C20040;
+        Tue, 14 Feb 2023 08:39:15 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.244])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 14 Feb 2023 08:39:15 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 09:39:14 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v3 24/24] s390: Remove empty <uapi/asm/setup.h>
+Message-ID: <Y+tIsha0koPDqKX+@osiris>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+ <20230214074925.228106-25-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214074925.228106-25-alexghiti@rivosinc.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GYJrqdQmitIYPLW_tVQtzRHinhbL2gUE
+X-Proofpoint-ORIG-GUID: 13oX7n54GA0vqeg0E0WiK11FJlvCETjS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_05,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=628 adultscore=0 suspectscore=0
+ clxscore=1011 phishscore=0 malwarescore=0 impostorscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140067
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include <linux/cpu.h> to make sure arch_cpu_idle_dead() matches its
-prototype going forward.
+On Tue, Feb 14, 2023 at 08:49:25AM +0100, Alexandre Ghiti wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  arch/s390/include/asm/setup.h      | 1 -
+>  arch/s390/include/uapi/asm/setup.h | 1 -
+>  2 files changed, 2 deletions(-)
+>  delete mode 100644 arch/s390/include/uapi/asm/setup.h
 
-Inspired-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Philippe Mathieu-Daudé <philmd@linaro.org>
----
-Josh, feel free to include in your v3.
----
- arch/x86/kernel/process.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 40d156a31676..7d27181a2518 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -5,6 +5,7 @@
- #include <linux/kernel.h>
- #include <linux/mm.h>
- #include <linux/smp.h>
-+#include <linux/cpu.h>
- #include <linux/prctl.h>
- #include <linux/slab.h>
- #include <linux/sched.h>
--- 
-2.38.1
-
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
