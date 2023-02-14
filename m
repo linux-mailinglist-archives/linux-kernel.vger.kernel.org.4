@@ -2,424 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD91696A46
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F563696A31
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjBNQtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S229597AbjBNQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbjBNQs4 (ORCPT
+        with ESMTP id S232011AbjBNQrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:48:56 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AE3868A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:54 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id kw4-20020a17090b220400b00233d236c7b4so3594434pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2LFbXrVP9Dj/xYoFXQbnLbIxOP+xAIoRkXou7v2xxU=;
-        b=ColOKHmzMbt7S8y1t6aIYYaRqHap+hjj4p10jQEDh/HKAzDbcd2DVw1qkVT0tnedmM
-         mcwIY47+JarUIUsSICtduL8igFVNBnA/tUv+Zaq6USD2B53RIaj30/mn0LAlBKyqw1eD
-         DMJYn4s2fPx7Av4YMbKcwVfYZnhcx7FMIZ3e0GxHlvyjBrvZIwQhw7Z6gZ3mE04rY76B
-         T4dVLeFVaU0x1Poh5TU6CkcOJX1Qo6j0wwQwPw0hHiWGPVc3+WDae7xynl4byRlPYaEt
-         0+u5Xroto5qP2iMfVoRuzSzl66MAFxm6rRyauBKheoVCxlfVB36+P3eYeA5jYdkxf+Tt
-         7V8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2LFbXrVP9Dj/xYoFXQbnLbIxOP+xAIoRkXou7v2xxU=;
-        b=0XAmCHMWLofUG3QJGO68hGkWVV+AfuwdjoB/AceAFtdT4a2tqO4GFDEIonBXSloK0D
-         b85ObST83ZT6mvOByq5OQRGNuM36AgHJ8H6Waigd/9Dq5yqALPGBBLGjdqR9bs2Z6Gej
-         3z6jdoLdx1kFfGU7UYnH2LDAhG0Ri02Wl/5C67aXwxV7wiCdG09bJgrpfQaCp5KfDwVY
-         dulWQxHUJGsTCfqEL56Q+EwXuB7B14O4e1+Z/1mWkofWl+DdhylPTDE8kLMVNOqICTXc
-         iwpSxUYq63KGfBCTTo6aQqU4EMLYqo/AMHIT/APAMJtnTNiNCUaoJCeydu5o1Ay6/HC3
-         CTYw==
-X-Gm-Message-State: AO0yUKXdGexzRnuDqhW71ztkv5PKcb6vtohj9Rv7iD2kzX3kwn3qW6JY
-        5v5nPWiaaLF9G2AW+AxT8bfeniiJnj7aBoYbqvySQb9D+TiWggb6NtG5YpE968AKUujRwH/fIm5
-        6caHyVpNOd5Oiul2/GSWx5zyMGnG9STV86F+bRDbmTOwJmO03KuFTrY4afGPb1VX5VSIxdlqIp6
-        YCSzKvUbc=
-X-Google-Smtp-Source: AK7set+6qEJB647Zln1jr2hm300knwZrdL4JildH4P/tNsQN5eXyRNmjeiJUZSgbrdI6MpDAHB/B9HgLkm4irfpHzg==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:90a:64c1:b0:233:d985:1eae with
- SMTP id i1-20020a17090a64c100b00233d9851eaemr47238pjm.10.1676393333824; Tue,
- 14 Feb 2023 08:48:53 -0800 (PST)
-Date:   Tue, 14 Feb 2023 16:46:38 +0000
-In-Reply-To: <20230214164638.1189804-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20230214164638.1189804-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
-Message-ID: <20230214164638.1189804-5-dionnaglaze@google.com>
-Subject: [PATCH v15 4/4] x86/sev: Change snp_guest_issue_request's fw_err
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <Borislav.Petkov@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 11:47:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F0865A0;
+        Tue, 14 Feb 2023 08:47:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676393253; x=1707929253;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FarIrdgbNfdQJdvo70c92FVGcmQ5ZjGJ3VbPCq/dnv4=;
+  b=HiQs0lS5M57MQ14V7plfoZDnysEs1NdIb54f0x1OplAFqSE9Rrg0yA9k
+   QMReFdNhuAF+pX6mqHCQGADddHzo9E2+xxRvEc+IoWAI54VoY/SRqc5+d
+   nt5tPIBdTAIiVRLwlfwbVV8YjXqTo1nHPFNLaIe+uuhHjq1qbyZ2QjFuy
+   lXzCwc+gERF8wL/Nn34FEs6DcgG39Va1kdEWru3IHLH6dVzg8qiuZ+06z
+   WPN6c0+uRiLufqLCkPJkGZDq2r0CiUZMNcswy+fi5UVAzCUKVPNln4ROZ
+   Boua4topkRGaYoUv47PsQYrYOm11uik1apz1DimHfWEEh0VQQKLnc561O
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="332515372"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="332515372"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 08:47:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812103280"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="812103280"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2023 08:47:32 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 08:47:31 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 08:47:31 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 08:47:31 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.43) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 14 Feb 2023 08:47:30 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SWCl/rS5LnJs5WYWwcDDS9X/sF1VrDyvUTs55P18/+zulm2CwJ+WRnZir+9Jb1KwgvvvpwcpTOhitOD6DuMY1ybKYvkPHsl2FgTUB/B2sfP7g8KtkFM4wqSLeyrKVx9LKey10IWFoz0gsHpaocaBv8I13x2CSzOQfSm/TOe6geLXXCcQc3FpGVQeWgM7wILtkx8ofDMGfVkILHU6fkXSSRrh2Io8S2dYGo1UIExLoraggtYO18kAn3I85Xr6dqabP6pY8s5sf3Y4KEEQ29cf2YoTbppE74gXX99hj8MPpciYUJPA+PdCDvYbx3zd9L/dfE1nT96ydmNwrd7gN7iWrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8xYqTxnRqueF8Qs6KYqHkSgrgUGWaaGn7IgMATqlLJI=;
+ b=Scq3x3f+uEeCni8r/xrfvSfE5VxTMX7yGpgNuLJdXI1+N0XnTWAg7WtmtpYChhLT7xpPVaFsULHHLavQp+jp0weAeqClGP9JGHXKk2pVDEzNYFeYAJqrRG6shZF7bAnBHf/J9ouQ8Scs2DdRvDZIAGkQq/6MwbPTZq6CR48tD00MjZV1Yl8baaQJwNbKpg2rs7cDSUS1uN/F/XuDFc1bQPcwJZj4BcL8hKkm/4WN2MUZ2uNyH2vgndj/6JfnZMae+u5DVbhTZ7KXjcHTKhPRjC2orgNH35WQEbEKlibEPQ+38ETVXaH71VnnSGGGBCWy9i9Txgkiz99R+qcuf9aV+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by SA1PR11MB6895.namprd11.prod.outlook.com (2603:10b6:806:2b2::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 16:47:24 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::8836:6aeb:e872:30c3]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::8836:6aeb:e872:30c3%4]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
+ 16:47:23 +0000
+Message-ID: <eade11f9-22a2-1e7b-93da-d52b63cf9a5f@intel.com>
+Date:   Tue, 14 Feb 2023 17:47:16 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: linux-next: duplicate patch in the driver-core tree
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230214125700.606a89d7@canb.auug.org.au>
+ <Y+suRQBtzCWx+mjo@kroah.com>
+Content-Language: en-US
+From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <Y+suRQBtzCWx+mjo@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0206.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a5::13) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|SA1PR11MB6895:EE_
+X-MS-Office365-Filtering-Correlation-Id: 919e9de3-250d-4bc0-ee27-08db0eab2543
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qg4DOfr0UJggCHpRWD5+6QFlBd79LwEoXA8sj+NmxOW8wiC5G7BhEixCOlZa4onTvReBOob3zV3p6YVe+MxEsAySl5mdiK8KACpAfQalc4VlTniUngj5PkHyG8cV4PYr8kVQo4WaxV80oLTwdNsLhppYPSD2GvDO5fuDd0AL6e34uSi4uwroDxdQd8Pf2VqKeBfmhA7oaylAw9vKk+w5WPyy3zio/l0PBFSZr4Hgw6ib4A4whfsKcE0qbnosVDyl9cdArVabuY/C6lwMYtRmR1em/7pI5EsTcKvDp8fkDux7UiELxUZoBGCHNVSuw0lwVcU0UeFIKTMfDu7LogtB4TjS1gHReu+q+XdKus5vy61BIRpe85D8Kbmp/05ezOpmIyrhlRvD0tLSBXQXT0dxszjYsZjJMaotPEZ7pGX/EYyBzbEcty9TNUvhJ98X4Bj1MIu674W7xSzBbER64x1FxBHTkDUptfyT/SXUdPn9CSfV7mSPm+NgbAouYvzBgiLLc6751tdC1aKwtniKwfUu3PPewxGSFVSA5PNjnKqZBmlZRr48j7xmJvnqVA5DsxeLPLa2Ebpr8vhfjjcPcvc5+OVLOktfACwHlaAglroMRVpLyTrzjIdGLDOwyYRnMzgEZ5zqJcsQrivBf0l3BBXomHcDSvfRBw2wKwuvD7Zhe1FWEfWppBKMk8V7eNjVbixIrD86NLNXu2/yIJqi0YoyNXPelKzOM9oLfAuN7MKUh+4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199018)(31686004)(83380400001)(478600001)(6486002)(31696002)(36756003)(86362001)(8676002)(38100700002)(2616005)(26005)(6512007)(186003)(82960400001)(66556008)(53546011)(6666004)(6506007)(66476007)(41300700001)(54906003)(110136005)(8936002)(66946007)(5660300002)(2906002)(316002)(4326008)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RWswcm1kL1VlVERQVWd0dkdEQTMxSGZadyt0UVdBcFF4aEhLV20zMXVMWnc0?=
+ =?utf-8?B?SmJPTEg3N3NQODdHaG1KN1NzbnpEMk00MDVzdUtMTi8xdEtsN2JtU3BucXR1?=
+ =?utf-8?B?dDJKQTBEU2F3OGE0RGtreTYyOWo2aHJmN2h0WXlaVzliaUZheXJQNnlhTUMz?=
+ =?utf-8?B?cmgyR0dkc2ZLSDVUbldCM29DQzRLeEFLaVh5dy9haU83NXJ0b3paZjJhRzJI?=
+ =?utf-8?B?NDF1bWl3NTd0cWp3MWREaVZnM1dLMW5QNlVjWXR0NUVDdmxCOFhGL2dnUjN4?=
+ =?utf-8?B?U2dBd0hQejloNkJ1LytvNlNmcFZydmtLTm5YVkc5ZjVzKzVIWnNYeG9ESUY3?=
+ =?utf-8?B?TGlwd3ZteFN5SmRlcXBPTmsvSXlLWnpHRXpDcjlFY2hDdG5ueWQ1SU1kcUxu?=
+ =?utf-8?B?anJWWWI3OFh2OGdKY3crNkY5Qk5UQzRwSUtPUHFLLzdQUjU5WHVWTG9FTnA1?=
+ =?utf-8?B?dHBuZGNPMmhjK1lmeklJWVpjMjBYTXovd0ZhUnVjYnk5QWVkUGFxQUs1YVgz?=
+ =?utf-8?B?UW8rUnplUXM3YTdHZWFzVDYvalFKandwOUZCdHJMZ2YySklXZXR6bE5KaW1M?=
+ =?utf-8?B?SGpxQ3pCeHZNdlM1WmZma1lLNE1wQkxNUlpuWWsxRUI0WjRVODh3OFVUdHhM?=
+ =?utf-8?B?UDE4Rlc5dy9WTDZqbWtsczVZMytDY1NlQStzdHJpSlVYY01PNk53ME9iQi9P?=
+ =?utf-8?B?cnBEM001WVE5d09GdkRvaWl1ZkNSejRtN2dJZVpxV0ZmQzhVdlJBM1htQTBZ?=
+ =?utf-8?B?RjkwdXFjMUdrSFg0ZmcyaW1FNTYvNXRNZ3dNVWZxK25iZGVtYXFZdjdsbisz?=
+ =?utf-8?B?SXBOenluaXVzUmRaRXR1dE93R2ZmaGNPZmY1eXJVL0NFb0VoUlVsL3UxWFBT?=
+ =?utf-8?B?ekpMcElQTUVNQ3A1NmF3bmkzd1JtNGlrQ0ZXZ0xjK0lFVHB3WU1BSk9ESzVQ?=
+ =?utf-8?B?ejRxc3RhallaMk9Bb1JrbFZxMTJxTFFBYkNuQ3NUY2l5NjYzN3F1Z1Y3V2xa?=
+ =?utf-8?B?Q3NOSEdJVnlJMCs4aXR3eW5KWDdtUHM0cmFDTENIK1Y5U2tmOFJwNkhjV3lT?=
+ =?utf-8?B?ZXNnUXlLZjlhQXJ4dDlsZkRVWnVLM0l1cDk1VVJ1b0RCNVRIS2s2ajBlalBY?=
+ =?utf-8?B?SzhxTXY1cHRrci9Qak91TlFxRjR5UDUwVmYvMHhpdXhsVHVrbWhiZnNGRW40?=
+ =?utf-8?B?eWpEMkxGS2Jta2RHb1VxdHJYd0g5STVKS2E5aDQ2WnR5citsWU1QVnQ4ZDJ2?=
+ =?utf-8?B?aHlJbytpNHZCUmdNSG5qREp2akNKbkJubnVzZUJDVHcyQWtpbFVNaWx1NnZ4?=
+ =?utf-8?B?c29xdnY2VUhhSzV1SnlhbFNoV2lYRy9FVHRwMGNqMjJzK0dGd042ZVJVQ3dl?=
+ =?utf-8?B?ZG9SYkFqWDZXQVZ3WGM1RSt1eHo1NE1iNUpwSXBuY05nMlk1TjBvbDNENXRx?=
+ =?utf-8?B?dFUvMS83cldkQzRKcGdjRVhyQ3F3R3d1dENFaWpNVDhlYlBDWndsbTc2STRt?=
+ =?utf-8?B?dno5K3UzS1lzQmxtWHlybitiamxuU3VBWG45NDNPS1NoUVlSY0RkcUFpc0E2?=
+ =?utf-8?B?OGlqRFAvcU9mV2ZZOWRJYWp3TzU5azZXRWk1Mk5NeVZYRXBVWVAzVEhnYTNs?=
+ =?utf-8?B?a1J3aXZxVUZPYkY5TlJnZzZ1QWsxSVV1ZStiU1NyS3o0MUh4QWs5V0xRSHB3?=
+ =?utf-8?B?UysyRGJ2RDBhU3dtRS9zeEQyaGZmbGc4cmZaOFFuREozN1ppTDhrOFF0NW1I?=
+ =?utf-8?B?V2FmYWh3RHB1K0ZGSjNvUStlc2NxbVZVSUl0Q2dZQTFSUmIwRDh3QTZLM1RO?=
+ =?utf-8?B?ZjRIbThKeUZLWFVrSW5NTThEZkEvN2FFbDN0YmRuaHB0YjNIYm90ODZuWG1W?=
+ =?utf-8?B?ZHU1MndKWWhyTGhCOVU5N05ZSVc1SHRYRUhRblBzb1JlUHlxNVNiUzd2cXIw?=
+ =?utf-8?B?MjNPbzJRdy95elNoME9DNFBIeUxWckc3c0d6VDUrZCtuOVhEenBQWlM1TDRP?=
+ =?utf-8?B?cW1UamJhUDY2UUFJUk9FQ1M4Skhhd21RZ2swWnFJaEFZK1ZFTTJsT29wc3JU?=
+ =?utf-8?B?R2s1THdieXA2UThPbGJWR1BvNElicGdGaVBEdng5UU4xcW5HdE5rZkdGUy9F?=
+ =?utf-8?B?ZnB1WWtzWmZXMXRRSEZ6ZWNXSEpqdGE1aExRNko1WFpsbHQ3czhtTXluLzVP?=
+ =?utf-8?B?cHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 919e9de3-250d-4bc0-ee27-08db0eab2543
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 16:47:23.4057
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M4PWnMOqcv6MuQyoYNqWEq8LXdv+5TBuadITKga5kDHW/ixsYlFxPCktzihRVV7CUgJ1xtgyt443pciWHcwbJwEwZFEmECAIreqSEKf0AmQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6895
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GHCB specification declares that the firmware error value for a
-guest request will be stored in the lower 32 bits of EXIT_INFO_2.
-The upper 32 bits are for the VMM's own error code. The fw_err argument
-is thus a misnomer, and callers will need access to all 64 bits.
 
-The type of unsigned long also causes problems, since sw_exit_info2 is
-u64 (unsigned long long) vs the argument's unsigned long*. This type
-is changed for issuing the guest request. The ioctl command struct's
-error field is passed directly instead of a local variable, since an
-incomplete guest request may not set the error code, and uninitialized
-stack memory would be written back to user space.
+On 2/14/2023 7:46 AM, Greg KH wrote:
+> On Tue, Feb 14, 2023 at 12:57:00PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> The following commit is also in the pm tree as a different commit (but
+>> the same patch):
+>>
+>>    a0bc3f78d0ff ("kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()")
+>>
+>> This is commit
+>>
+>>    a0e8c13ccd6a ("PM: EM: fix memory leak with using debugfs_lookup()")
+>>
+>> in the pm tree.
+> That will be fine, thanks for the warning.
 
-The firmware might not even be called, so the call is bookended with
-the no firmware call error and clearing the error.
+I can drop the EM change, though, if you are going to carry it.
 
-Since the "fw_err" field is really exitinfo2 split into the upper bits'
-vmm error code and lower bits' firmware error code, sev-guest.h is
-updated to represent the 64 bit value as a union.
+Cheers!
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <Borislav.Petkov@amd.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Venu Busireddy <venu.busireddy@oracle.com>
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Michael Sterritt <sterritt@google.com>
-
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- Documentation/virt/coco/sev-guest.rst   | 21 +++++++----
- arch/x86/include/asm/sev-common.h       |  4 ---
- arch/x86/include/asm/sev.h              |  4 +--
- arch/x86/kernel/sev.c                   | 12 ++++---
- drivers/virt/coco/sev-guest/sev-guest.c | 47 ++++++++++++-------------
- include/uapi/linux/sev-guest.h          | 18 ++++++++--
- 6 files changed, 62 insertions(+), 44 deletions(-)
-
-diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
-index e76393e389eb..48e89ea2a618 100644
---- a/Documentation/virt/coco/sev-guest.rst
-+++ b/Documentation/virt/coco/sev-guest.rst
-@@ -37,11 +37,12 @@ along with a description:
-       the return value.  General error numbers (-ENOMEM, -EINVAL)
-       are not detailed, but errors with specific meanings are.
- 
--The guest ioctl should be issued on a file descriptor of the /dev/sev-guest device.
--The ioctl accepts struct snp_user_guest_request. The input and output structure is
--specified through the req_data and resp_data field respectively. If the ioctl fails
--to execute due to a firmware error, then fw_err code will be set otherwise the
--fw_err will be set to 0x00000000ffffffff, i.e., the lower 32-bits are -1.
-+The guest ioctl should be issued on a file descriptor of the
-+/dev/sev-guest device.  The ioctl accepts struct
-+snp_user_guest_request. The input and output structure is specified
-+through the req_data and resp_data field respectively. If the ioctl
-+fails to execute due to a firmware error, then the fw_error code will
-+be set, otherwise fw_error will be set to -1.
- 
- The firmware checks that the message sequence counter is one greater than
- the guests message sequence counter. If guest driver fails to increment message
-@@ -57,8 +58,14 @@ counter (e.g. counter overflow), then -EIO will be returned.
-                 __u64 req_data;
-                 __u64 resp_data;
- 
--                /* firmware error code on failure (see psp-sev.h) */
--                __u64 fw_err;
-+                /* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+                union {
-+                        __u64 exitinfo2;
-+                        struct {
-+                                __u32 fw_error;
-+                                __u32 vmm_error;
-+                        };
-+                };
-         };
- 
- 2.1 SNP_GET_REPORT
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b63be696b776..0759af9b1acf 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -128,10 +128,6 @@ struct snp_psc_desc {
- 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
- } __packed;
- 
--/* Guest message request error codes */
--#define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
--#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
--
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
- #define GHCB_MSR_TERM_REASON_SET_MASK	0xf
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index ebc271bb6d8e..05de34d10d89 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
- static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
--					  unsigned long *fw_err)
-+					  u64 *exitinfo2)
- {
- 	return -ENOTTY;
- }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index a908ffc2dfba..82aa81fafb71 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -22,6 +22,8 @@
- #include <linux/efi.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/psp-sev.h>
-+#include <uapi/linux/sev-guest.h>
- 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2175,7 +2177,7 @@ static int __init init_sev_config(char *str)
- }
- __setup("sev=", init_sev_config);
- 
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
- {
- 	struct ghcb_state state;
- 	struct es_em_ctxt ctxt;
-@@ -2186,9 +2188,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return -ENODEV;
- 
--	if (!fw_err)
-+	if (!exitinfo2)
- 		return -EINVAL;
- 
-+	*exitinfo2 = SEV_RET_NO_FW_CALL;
-+
- 	/*
- 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
- 	 * a per-CPU GHCB.
-@@ -2212,11 +2216,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (ret)
- 		goto e_put;
- 
--	*fw_err = ghcb->save.sw_exit_info_2;
-+	*exitinfo2 = ghcb->save.sw_exit_info_2;
- 	if (ghcb->save.sw_exit_info_2) {
- 		/* Number of expected pages are returned in RBX */
- 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
--		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
-+			ghcb->save.sw_exit_info_2 == SNP_GUEST_VMM_ERR(SNP_GUEST_VMM_ERR_INVALID_LEN))
- 			input->data_npages = ghcb_get_rbx(ghcb);
- 
- 		ret = -EIO;
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 9f6c5ca40d3b..04d71bb67975 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -329,11 +329,11 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
- 	return __enc_payload(snp_dev, req, payload, sz);
- }
- 
--static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
--				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
--				u32 resp_sz, __u64 *fw_err)
-+static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
-+				struct snp_guest_request_ioctl *arg,
-+				u8 type, void *req_buf, size_t req_sz,
-+				void *resp_buf, u32 resp_sz)
- {
--	unsigned long err = 0xff;
- 	unsigned long start_time = jiffies;
- 	u64 orig_exit_code = exit_code;
- 	u64 seqno;
-@@ -349,7 +349,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
- 
- 	/* Encrypt the userspace provided payload in snp_dev->secret_request. */
--	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
-+	rc = enc_payload(snp_dev, seqno, arg->msg_version, type, req_buf, req_sz);
- 	if (rc)
- 		return rc;
- 
-@@ -367,14 +367,15 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	 * sequence number must be incremented or the VMPCK must be deleted to
- 	 * prevent reuse of the IV.
- 	 */
--	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-+	rc = snp_issue_guest_request(exit_code, &snp_dev->input,
-+				     &arg->exitinfo2);
- 
- 	/*
--	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
-+	 * The host may return SNP_GUEST_VMM_ERR_BUSY if the request has been
- 	 * throttled. Retry in the driver to avoid returning and reusing the
- 	 * message sequence number on a different message.
- 	 */
--	if (err == SNP_GUEST_REQ_ERR_BUSY) {
-+	if (arg->vmm_error == SNP_GUEST_VMM_ERR_BUSY) {
- 		if (jiffies - start_time > ACCEPTABLE_REQUEST_RETRY_DURATION) {
- 			rc = -ETIMEDOUT;
- 			/*
-@@ -394,7 +395,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	 * and thus avoid IV reuse.
- 	 */
- 	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
--	    err == SNP_GUEST_REQ_INVALID_LEN) {
-+	    arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
- 		certs_npages = snp_dev->input.data_npages;
- 
- 		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
-@@ -418,17 +419,14 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		 * request buffer size was too small and give the caller the
- 		 * required buffer size.
- 		 */
--		err = SNP_GUEST_REQ_INVALID_LEN;
-+		arg->vmm_error = SNP_GUEST_VMM_ERR_INVALID_LEN;
- 		snp_dev->input.data_npages = certs_npages;
- 	}
- 
--	if (fw_err)
--		*fw_err = err;
--
- 	if (rc) {
- 		dev_alert(snp_dev->dev,
--			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
--			  rc, *fw_err);
-+			  "Detected error from ASP request. rc: %d, exitinfo2: %llx\n",
-+			  rc, arg->exitinfo2);
- 		goto disable_vmpck;
- 	}
- 
-@@ -475,9 +473,9 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
- 	if (!resp)
- 		return -ENOMEM;
- 
--	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
-+	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
- 				  SNP_MSG_REPORT_REQ, &req, sizeof(req), resp->data,
--				  resp_len, &arg->fw_err);
-+				  resp_len);
- 	if (rc)
- 		goto e_free;
- 
-@@ -515,9 +513,8 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
- 	if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
- 		return -EFAULT;
- 
--	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
--				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
--				  &arg->fw_err);
-+	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
-+				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len);
- 	if (rc)
- 		return rc;
- 
-@@ -577,12 +574,12 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 		return -ENOMEM;
- 
- 	snp_dev->input.data_npages = npages;
--	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
-+	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg,
- 				   SNP_MSG_REPORT_REQ, &req.data,
--				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
-+				   sizeof(req.data), resp->data, resp_len);
- 
- 	/* If certs length is invalid then copy the returned length */
--	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
-+	if (arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
- 		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
- 
- 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
-@@ -617,7 +614,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 	if (copy_from_user(&input, argp, sizeof(input)))
- 		return -EFAULT;
- 
--	input.fw_err = 0xff;
-+	input.exitinfo2 = 0xff;
- 
- 	/* Message version must be non-zero */
- 	if (!input.msg_version)
-@@ -648,7 +645,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 
- 	mutex_unlock(&snp_cmd_mutex);
- 
--	if (input.fw_err && copy_to_user(argp, &input, sizeof(input)))
-+	if (input.exitinfo2 && copy_to_user(argp, &input, sizeof(input)))
- 		return -EFAULT;
- 
- 	return ret;
-diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
-index 256aaeff7e65..2aa39112cf8d 100644
---- a/include/uapi/linux/sev-guest.h
-+++ b/include/uapi/linux/sev-guest.h
-@@ -52,8 +52,14 @@ struct snp_guest_request_ioctl {
- 	__u64 req_data;
- 	__u64 resp_data;
- 
--	/* firmware error code on failure (see psp-sev.h) */
--	__u64 fw_err;
-+	/* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+	union {
-+		__u64 exitinfo2;
-+		struct {
-+			__u32 fw_error;
-+			__u32 vmm_error;
-+		};
-+	};
- };
- 
- struct snp_ext_report_req {
-@@ -77,4 +83,12 @@ struct snp_ext_report_req {
- /* Get SNP extended report as defined in the GHCB specification version 2. */
- #define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
- 
-+/* Guest message request EXIT_INFO_2 constants */
-+#define SNP_GUEST_FW_ERR_MASK		GENMASK_ULL(31, 0)
-+#define SNP_GUEST_VMM_ERR_SHIFT		32
-+#define SNP_GUEST_VMM_ERR(x)		(((u64)x) << SNP_GUEST_VMM_ERR_SHIFT)
-+
-+#define SNP_GUEST_VMM_ERR_INVALID_LEN	1
-+#define SNP_GUEST_VMM_ERR_BUSY		2
-+
- #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
--- 
-2.39.1.637.g21b0678d19-goog
 
