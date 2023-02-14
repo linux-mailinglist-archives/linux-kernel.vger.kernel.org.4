@@ -2,259 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8C6696D11
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAC4696D14
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjBNSiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S232889AbjBNSiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBNSiB (ORCPT
+        with ESMTP id S229686AbjBNSiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:38:01 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF1621A13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:38:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1676399880; x=1707935880;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PqlyFJZV286hXh8z0W5ItxrQqsNBYD/TcX64vV41qwo=;
-  b=MliDekUz+ZdeATEPQT8NJDUHbna+B69ikWV5RGAhTY5aANClnTABQcSO
-   8EOTvAyus4IZc5EBq6I5l3OhxuSt6q9RD2WqBnF6tlS0MnJT39yCLZkN2
-   hT+oYmlYqRpSh4hKNLyF/BNITuUUXmETiAaQZ3C/UdiZehLm9bxXG2dIE
-   g=;
-X-IronPort-AV: E=Sophos;i="5.97,297,1669075200"; 
-   d="scan'208";a="298628991"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 18:37:58 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id BA2FDA2E89;
-        Tue, 14 Feb 2023 18:37:57 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 14 Feb 2023 18:37:57 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.161.198) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.24; Tue, 14 Feb 2023 18:37:56 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <surenb@google.com>
-CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
-        <kamatam@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <mengcc@amazon.com>
-Subject: Re: [PATCH v2] sched/psi: fix use-after-free in ep_remove_wait_queue()
-Date:   Tue, 14 Feb 2023 10:37:45 -0800
-Message-ID: <20230214183745.3958175-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
-References: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
+        Tue, 14 Feb 2023 13:38:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747629411;
+        Tue, 14 Feb 2023 10:38:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF57961838;
+        Tue, 14 Feb 2023 18:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A869C433EF;
+        Tue, 14 Feb 2023 18:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676399892;
+        bh=zt9X2BlD/QOFBvRUFyEoYRvv/imLE4lhcxhq2FsN23c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c2AxS9jdnAKlYBFm3nSbGQDuJ0oGooeAZsCyLpqVsNLok/afypKqCjByA/SahuY5Y
+         S9fNSdimTPh/1S3wd0K69PKmTBTltQ/M5tQhKn+dKEoOcaazHFoPmcCFYaV3cOsD19
+         Z13ioOcCI8ZaAwkvWDXi1Ji55Wkh4783uSCfm9CX+wWiWF2mr9gIA3lZfbd71xx7tV
+         pDV0kGrcqSiCQAuINQpz/v/ozifElLMSzPqU+zIAVx6/LzY+wiTsgGwiQ3ck7+bRK7
+         2TH4gMeHX3xsLCu0rIDXgf0ur8W6Cpw+xWDiQWkLp2Hz3sijjiAvbFQVQ0v9NaqH+i
+         YUHR4tVDCkzuQ==
+Received: by mail-lj1-f172.google.com with SMTP id a9so19409929ljr.13;
+        Tue, 14 Feb 2023 10:38:12 -0800 (PST)
+X-Gm-Message-State: AO0yUKV2fNlydsD2xJxS4suhMfA6WNxKb6DiDh76Q443V0P2yKYOZtfS
+        UwPYsgkTzbtTRbmM3aocfVCr8BMVLp/eyShSxxw=
+X-Google-Smtp-Source: AK7set+CEG1WyNimA3QHERrbdHXEAIa/PyvekCI7ilROesupJOlW3Q4HK3XV52LdR4NIHD6WF+TSUEv1MtZSJfbRjm4=
+X-Received: by 2002:a2e:a36a:0:b0:292:8597:6142 with SMTP id
+ i10-20020a2ea36a000000b0029285976142mr495470ljn.5.1676399890282; Tue, 14 Feb
+ 2023 10:38:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.198]
-X-ClientProxiedBy: EX13D36UWA002.ant.amazon.com (10.43.160.24) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CACsaVZJvXpCt37nQOoe8qd1EPUpfdMM1HwHk9tVO8HdU_Azhhw@mail.gmail.com>
+ <25578.37401.314298.238192@quad.stoffel.home> <CACsaVZJ-5y7U5xqwL9bof69EKbTk+wrHWFcBFYyP_BwVSt+CNA@mail.gmail.com>
+In-Reply-To: <CACsaVZJ-5y7U5xqwL9bof69EKbTk+wrHWFcBFYyP_BwVSt+CNA@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 14 Feb 2023 10:37:58 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4XPqY18k4DB2YXqaNgABp3HYYQtS7u0bGfjBcTgkpXkQ@mail.gmail.com>
+Message-ID: <CAPhsuW4XPqY18k4DB2YXqaNgABp3HYYQtS7u0bGfjBcTgkpXkQ@mail.gmail.com>
+Subject: Re: RAID4 with no striping mode request
+To:     Kyle Sanderson <kyle.leet@gmail.com>
+Cc:     John Stoffel <john@stoffel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        linux-raid@vger.kernel.org,
+        Linux-Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-14 17:10:58 +0000, Suren Baghdasaryan <surenb@google.com> wrote:
+Hi Kyle,
+
+On Mon, Feb 13, 2023 at 1:12 PM Kyle Sanderson <kyle.leet@gmail.com> wrote:
 >
-> Thanks!
-> Overall LGTM, just a couple of nits (simplifications):
-> 
-> On Mon, Feb 13, 2023 at 11:04 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> >
-> > If a non-root cgroup gets removed when there is a thread that registered
-> > trigger and is polling on a pressure file within the cgroup, the polling
-> > waitqueue gets freed without clearing the queue and reference in the
-> > following path.
-> 
-> Let's remove "without clearing the queue and reference" in the above
-> sentence. The next section explains why this is problematic, therefore
-> mentioning that here is unnecessary IMHO.
- 
-Applied in v3.
+[...]
 
 > >
-> >  do_rmdir
-> >    cgroup_rmdir
-> >      kernfs_drain_open_files
-> >        cgroup_file_release
-> >          cgroup_pressure_release
-> >            psi_trigger_destroy
-> >
-> > However, the polling thread can keep having the last reference to the
-> > pressure file that is tied to the freed waitqueue until explicit close or
-> > exit later.
-> 
-> Suggest replacing: However, the polling thread still has a reference
-> to the pressure file it is polling and will access the freed waitqueue
-> when file is closed or upon exit:
+> > > The benefit of this can be the data disks are all zoned, and you can
+> > > have a fast parity disk and still maintain excellent performance in
+> > > the array (limited only by the speed of the disk in question +
+> > > parity). Additionally, should 2 disks fail, you've either lost the
+> > > parity and data disk, or 2 data disks with the parity and other disks
+> > > not lost.
 
-Applied in v3.
+I think I understand the high level idea here. But I think we need a lot more
+details on how to implement this, and what the system would look like.
+Also, I don't quite follow why the data disks can be zoned devices and
+still maintain excellent performance.
 
-> >
-> >  fput
-> >    ep_eventpoll_release
-> >      ep_free
-> >        ep_remove_wait_queue
-> >          remove_wait_queue
-> >
-> > Then, the thread accesses to the already-freed waitqueue when dropping the
-> > reference and results in use-after-free as pasted below.
-> 
-> Suggest replacing: This results is use-after-free as pasted below.
+> > > I was reading through the DM and MD code and it looks like everything
+> > > may already be there to do this, just needs (significant) stubs to be
+> > > added to support this mode (or new code). Snapraid is a friendly (and
+> > > respectable) implementation of this. Unraid and Synology SHR compete
+> > > in this space, as well as other NAS and enterprise SAN providers.
 
-Applied in v3.
+Assume we figure out all the details. I will be happy to review patches in
+MD code. But I won't be able to develop this feature myself.
 
-> >
-> > The fundamental problem here is that the lifetime of the waitqueue is not
-> > tied to the file's real lifetime as shown above.
-> 
-> The fundamental problem here is that cgroup_file_release() (and
-> consequently waitqueue's lifetime) is not tied to the file's real
-> lifetime.
-
-Applied in v3 as well.
-
-> > Using wake_up_pollfree()
-> > here might be less than ideal, but it also is not fully contradicting the
-> > comment at commit 42288cb44c4b ("wait: add wake_up_pollfree()") since the
-> > waitqueue's lifetime is not tied to file's one and can be considered as
-> > another special case. While this would be fixable by somehow making
-> > cgroup_file_release() be tied to the fput(), it would require sizable
-> > refactoring at cgroups or higher layer which might be more justifiable if
-> > we identify more cases like this.
-> >
-> >  BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
-> >  Write of size 4 at addr ffff88810e625328 by task a.out/4404
-> >
-> >  CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
-> >  Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
-> >  Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x73/0xa0
-> >  print_report+0x16c/0x4e0
-> >  ? _printk+0x59/0x80
-> >  ? __virt_addr_valid+0xb8/0x130
-> >  ? _raw_spin_lock_irqsave+0x60/0xc0
-> >  kasan_report+0xc3/0xf0
-> >  ? _raw_spin_lock_irqsave+0x60/0xc0
-> >  kasan_check_range+0x2d2/0x310
-> >  _raw_spin_lock_irqsave+0x60/0xc0
-> >  remove_wait_queue+0x1a/0xa0
-> >  ep_free+0x12c/0x170
-> >  ep_eventpoll_release+0x26/0x30
-> >  __fput+0x202/0x400
-> >  task_work_run+0x11d/0x170
-> >  do_exit+0x495/0x1130
-> >  ? update_cfs_rq_load_avg+0x2c2/0x2e0
-> >  do_group_exit+0x100/0x100
-> >  get_signal+0xd67/0xde0
-> >  ? finish_task_switch+0x15f/0x3a0
-> >  arch_do_signal_or_restart+0x2a/0x2b0
-> >  exit_to_user_mode_prepare+0x94/0x100
-> >  syscall_exit_to_user_mode+0x20/0x40
-> >  do_syscall_64+0x52/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >  RIP: 0033:0x7f8e392bfb91
-> >  Code: Unable to access opcode bytes at 0x7f8e392bfb67.
-> >  RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
-> >  RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
-> >  RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
-> >  RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
-> >  R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
-> >  R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
-> >  </TASK>
-> >
-> >  Allocated by task 4404:
-> >  kasan_set_track+0x3d/0x60
-> >  __kasan_kmalloc+0x85/0x90
-> >  psi_trigger_create+0x113/0x3e0
-> >  pressure_write+0x146/0x2e0
-> >  cgroup_file_write+0x11c/0x250
-> >  kernfs_fop_write_iter+0x186/0x220
-> >  vfs_write+0x3d8/0x5c0
-> >  ksys_write+0x90/0x110
-> >  do_syscall_64+0x43/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> >  Freed by task 4407:
-> >  kasan_set_track+0x3d/0x60
-> >  kasan_save_free_info+0x27/0x40
-> >  ____kasan_slab_free+0x11d/0x170
-> >  slab_free_freelist_hook+0x87/0x150
-> >  __kmem_cache_free+0xcb/0x180
-> >  psi_trigger_destroy+0x2e8/0x310
-> >  cgroup_file_release+0x4f/0xb0
-> >  kernfs_drain_open_files+0x165/0x1f0
-> >  kernfs_drain+0x162/0x1a0
-> >  __kernfs_remove+0x1fb/0x310
-> >  kernfs_remove_by_name_ns+0x95/0xe0
-> >  cgroup_addrm_files+0x67f/0x700
-> >  cgroup_destroy_locked+0x283/0x3c0
-> >  cgroup_rmdir+0x29/0x100
-> >  kernfs_iop_rmdir+0xd1/0x140
-> >  vfs_rmdir+0xfe/0x240
-> >  do_rmdir+0x13d/0x280
-> >  __x64_sys_rmdir+0x2c/0x30
-> >  do_syscall_64+0x43/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > v2: updated commit message
-> >
-> > Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
-> > Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-> > Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
-> > ---
-> >  kernel/sched/psi.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > index 8ac8b81bfee6..6e66c15f6450 100644
-> > --- a/kernel/sched/psi.c
-> > +++ b/kernel/sched/psi.c
-> > @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
-> >
-> >         group = t->group;
-> >         /*
-> > -        * Wakeup waiters to stop polling. Can happen if cgroup is deleted
-> > -        * from under a polling process.
-> > +        * Wakeup waiters to stop polling and clear the queue to prevent it from
-> > +        * being accessed later. Can happen if cgroup is deleted from under a
-> > +        * polling process otherwise.
-> 
-> This "otherwise" at the end seems extra. Was there a continuation of
-> this comment which was removed without removing this "otherwise" ?
- 
-Removed it in v3. The subject of the original sentense was a bit unclear to
-me and I think I tried to have a simplified version of  "[Otherwise an
-unexpected free of the queue] can happen if ... " there.
-
-Thanks for all the suggestions.
-
-
-Regards,
-Munehisa
-
-> >          */
-> > -       wake_up_interruptible(&t->event_wait);
-> > +       wake_up_pollfree(&t->event_wait);
-> >
-> >         mutex_lock(&group->trigger_lock);
-> >
-> > --
-> > 2.38.1
-> >
-> 
+Thanks,
+Song
