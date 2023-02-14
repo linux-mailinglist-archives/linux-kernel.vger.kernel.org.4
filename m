@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E1F697070
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953F9697072
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjBNWIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
+        id S233352AbjBNWJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjBNWIx (ORCPT
+        with ESMTP id S229826AbjBNWJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:08:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73FB23858;
-        Tue, 14 Feb 2023 14:08:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Feb 2023 17:09:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1622327D62;
+        Tue, 14 Feb 2023 14:09:17 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F7DC6193C;
-        Tue, 14 Feb 2023 22:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C77C433D2;
-        Tue, 14 Feb 2023 22:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676412531;
-        bh=prcFuWx4Xr14c0+3/mZoX//3CQyLBA0Y2sg4l+NivoE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fw3m/OLV8E59WGFBpaOIlT4HhkWhfYKOjE2KCS06OXR7TzGtuUk567OVkqv4IpmRu
-         KdUBwxik3V5Up/o2XW6X5OBTAAt7iYTHhS72NQpSuL9A5H86Neh1kwbR8CIbhT3qsR
-         dvpa/+UzSrTvWxs6YWQwmNQhRe3HbNgO1UCP53cjlojQmyH6ktrbLtWTrPWLDQD3k/
-         CyNA4a3pquJF9rfylG2aFZ+HBGcM6Ljqn6TbwpnMn+89BRaOM8IZXW+LVEPX0OP7Sb
-         xKqpT83luOx3tUOhrDUU4YWDnFndYMWusWeoPZFmZ5Dt7Fx8DJeh4NMfvJLnBRGyRb
-         CG39qGSwJM0qw==
-Date:   Tue, 14 Feb 2023 16:08:49 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] PCI/P2PDMA: Annotate RCU dereference
-Message-ID: <20230214220849.GA3088019@bhelgaas>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 84B776602173;
+        Tue, 14 Feb 2023 22:09:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676412556;
+        bh=alXr5cFGo6ZX+NcmH0aKeKPUofQn3NagXbNvEpCcFf8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LzHQaH3ubU12gc9D9ci87g24fmc54eqPFhD+EtZwabcZuvw0+vuX1iQl9/tixjQ2D
+         AKsttnxf+pobj/u8QQlgfdcKRzOYalua5A64v9j5CxhkOHy1BjH/gLZsuenKy/qZfn
+         LzvwTVTLNyD2Gb3ZS5P5L3Dg946+6K3Em6nfCLNY5aAZCfMaHqs7kPCxvHptV+47Sj
+         5/bjxp8J/WJnvH++W1kfWwreVk19FRxzZi8x6zVfWUw7KsibIWZ4RPlqA0lTRMv+yU
+         tFd1d1deoxTCjpZjOvOH8gWsMlWjn2j7w/Ac1OPMXRsCfW0SzIB27Tjyomxq5SohB7
+         Cpw954tuXwFYA==
+Received: by mercury (Postfix, from userid 1000)
+        id B492310603FE; Tue, 14 Feb 2023 23:09:08 +0100 (CET)
+Date:   Tue, 14 Feb 2023 23:09:08 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v4] power: reset: add Odroid Go Ultra poweroff driver
+Message-ID: <20230214220908.vpzlduyhfcoqzenb@mercury.elektranox.org>
+References: <20230126-b4-odroid-go-ultra-poweroff-v4-1-979efb6eb3fb@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t46mdvvr7bb4ua2l"
 Content-Disposition: inline
-In-Reply-To: <20230209172953.4597-1-logang@deltatee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126-b4-odroid-go-ultra-poweroff-v4-1-979efb6eb3fb@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 10:29:53AM -0700, Logan Gunthorpe wrote:
-> A dereference of the __rcu pointer was noticed by sparse:
-> 
->   drivers/pci/p2pdma.c:199:44: sparse: sparse: dereference of noderef expression
-> 
-> The __rcu pointer should be dereferenced using
-> rcu_dereference_protected() instead of accessed directly. Its safe
-> to use rcu_derference_protected() seeing a reference is held on
-> the pgmap's percpu reference counter and thus it cannot disappear.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 
-Applied with Chaitanya's reviewed-by to pci/p2pdma for v6.3, thanks!
+--t46mdvvr7bb4ua2l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
+On Tue, Feb 14, 2023 at 05:41:18PM +0100, Neil Armstrong wrote:
+> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a powe=
+roff
+> to its two PMICs in order, this represents the poweroff scheme needed to =
+complete
+> a clean poweroff of the system.
+>=20
+> This implement this scheme by implementing a self registering driver to p=
+ermit
+> using probe defer until both pmics are finally probed.
+>=20
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
-> 
-> Based on v6.2-rc7
-> 
->  drivers/pci/p2pdma.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 86812d2073ea..9e8205572830 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -194,11 +194,13 @@ static const struct attribute_group p2pmem_group = {
->  static void p2pdma_page_free(struct page *page)
->  {
->  	struct pci_p2pdma_pagemap *pgmap = to_p2p_pgmap(page->pgmap);
-> +	/* safe to dereference while a reference is held to the percpu ref */
-> +	struct pci_p2pdma *p2pdma =
-> +		rcu_dereference_protected(pgmap->provider->p2pdma, 1);
->  	struct percpu_ref *ref;
-> 
-> -	gen_pool_free_owner(pgmap->provider->p2pdma->pool,
-> -			    (uintptr_t)page_to_virt(page), PAGE_SIZE,
-> -			    (void **)&ref);
-> +	gen_pool_free_owner(p2pdma->pool, (uintptr_t)page_to_virt(page),
-> +			    PAGE_SIZE, (void **)&ref);
->  	percpu_ref_put(ref);
->  }
-> 
-> 
-> base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
-> --
-> 2.30.2
+> Previous submission was at [1], but I converted it to an independent
+> platform device with device auto registration to permit waiting for
+> both the PMICs drivers to probe.
+>=20
+> [1] https://lore.kernel.org/all/20221031-b4-odroid-go-ultra-initial-v1-2-=
+42e3dbea86d5@linaro.org/
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+--t46mdvvr7bb4ua2l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPsBoQACgkQ2O7X88g7
++pqYSQ//ZQ7xDk9zbf/G8rWnumQwSRBpGvVYR8J5b4sfxFtcH5CmlDYXAtIrYyq5
+pjcSnkQk6/v3g+hTX9yBcqLKtGUcC7xfk++QujipQKq2JNbVmq+0W3/A4dGlv+u/
+b1fTXfXOfU1PxJ46NwXzj391GEFbsAFljwhpkfIcncU6LJsOknalZ35YXths/Woi
+EDvxSkfbC01PV+JyFqd3lMzj1EPLlMBjHkVeVpQjj0EgGtaLIoi5t5w2w3euPm4C
+6fsniaL7DwunQeqhB7L9bjekD9zyNjHyboB/IJg5YKnLNRj8y1g7DD4nVrhcWqpu
+U6LRa1e5Y4D+Mgi8F4kkaS96A++gtMhWtwsXFzIy5OBP947kM3TQlNbufSMsEVOm
+zTwk+yjohrNKygBrhJazt+tWO9vub1nEs9hEnlpLlOvEVpz4dRqKOUuS9boqbEgG
+rOkxRLOvO0nnBhpKtwqXebJg/AZ7rctuqTnbsQnMtdIxZ0/jbzwObAtDf5C2xsG2
+T6EwKSJrJZ+45i/9k9SrJirbNKgJsVM6I9V0Tr7m30pD7CbGciBvy/STvwb2PRDX
+sjyWRm07aXPvSs+aYCfTr5fD3HPB310mXnYdVGhZ+bwFczOWiPifYnY1AZ4KVfp2
+Yc5yDhollHdA9ptAvhs70YFPMPT7r6kVOT1QjplNcdeeFDduEPk=
+=j0ok
+-----END PGP SIGNATURE-----
+
+--t46mdvvr7bb4ua2l--
