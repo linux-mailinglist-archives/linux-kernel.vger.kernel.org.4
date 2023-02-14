@@ -2,127 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A856A6965AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D036965A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjBNOBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
+        id S233142AbjBNOAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbjBNOBN (ORCPT
+        with ESMTP id S233174AbjBNOAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:01:13 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D0425E0D;
-        Tue, 14 Feb 2023 06:00:38 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pRvqg-0004pq-28;
-        Tue, 14 Feb 2023 14:59:58 +0100
-Date:   Tue, 14 Feb 2023 13:59:49 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Guenter Roeck <groeck7@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Hugh Dickins <hughd@google.com>,
-        Jan Harkes <jaharkes@cs.cmu.edu>,
-        Arnd Bergmann <arnd@arndb.de>, coda@cs.cmu.edu,
-        codalist@coda.cs.cmu.edu, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] shmem, overlayfs, coda, tty, proc, kernfs,
- random: Fix splice-read
-Message-ID: <Y+uT1SGEzjMrUbFI@makrotopia.org>
-References: <20230214083710.2547248-1-dhowells@redhat.com>
- <20230214083710.2547248-6-dhowells@redhat.com>
- <Y+tMMAEiKUEDzZMa@kroah.com>
+        Tue, 14 Feb 2023 09:00:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235512A143
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:00:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78F3061614
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55B0EC433A0;
+        Tue, 14 Feb 2023 14:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676383213;
+        bh=mBTD57A30/LvcZnwFqjcP9HsmHOnRFYQxkmV8hVd5Fw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eEcUGLmTTaI9Iqgb81PXHajzB0u+y2Sc3bj5iiwGhYrmyPgN2k5j/7WkEKPX88o/g
+         JpBdwhZ/YckttBYaOVYZs50doO8ujqXMZdFjYC/9M7PF6RNLjcWFTVA3u26WsYVrZ0
+         Ro8HmkWRC+x53l7iw9+m2qxR9/8M4FpBhY2I2O6spbVITzhZzmqnKj6zPkwy2pvfbJ
+         MBUyl79rOhYdEugYO3+V3Jo1tgj+x16XmD0mppJ3VDGP86WHP7jxUUt+wmXE6MPC+q
+         aYZ03abiyTbHFKuKlZwtR41bR9m0xHIQy7cIR3ryTr53B30n2FftrHA9jLjaZl4AJ+
+         hHv5tEQFycgxw==
+Date:   Tue, 14 Feb 2023 19:30:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Chunfeng Yun =?utf-8?B?KOS6keaYpeWzsCk=?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eddie Hung =?utf-8?B?KOa0quato+mRqyk=?= 
+        <Eddie.Hung@mediatek.com>
+Subject: Re: [PATCH v8] phy: mediatek: tphy: add debugfs files
+Message-ID: <Y+uT6VoJra+056zj@matsya>
+References: <20230210085827.7970-1-chunfeng.yun@mediatek.com>
+ <Y+ZjPYDEbC9iblsj@matsya>
+ <4e5d86502cc6b2278d7079dfca688af63bbcb523.camel@mediatek.com>
+ <eec940a49f4f9ec9e5bd7ad763e436d34b42be22.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+tMMAEiKUEDzZMa@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eec940a49f4f9ec9e5bd7ad763e436d34b42be22.camel@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 09:54:08AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 14, 2023 at 08:37:10AM +0000, David Howells wrote:
-> > The new filemap_splice_read() has an implicit expectation via
-> > filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
-> > fully populate the pagecache of the file it is reading from[1], potentially
-> > leading to a jump to NULL if this doesn't exist.
+On 13-02-23, 08:22, Chunfeng Yun (云春峰) wrote:
+> On Mon, 2023-02-13 at 16:21 +0800, chunfeng yun wrote:
+> > On Fri, 2023-02-10 at 21:01 +0530, Vinod Koul wrote:
+> > > On 10-02-23, 16:58, Chunfeng Yun wrote:
+> > > > These debugfs files are mainly used to make eye diagram test
+> > > > easier,
+> > > > especially helpful to do HQA test for a new IC without efuse
+> > > > enabled.
+> > > > 
+> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > ---
+> > > > v8: abandon patch to create phy debug root file
+> > > >     /sys/kernel/debug/phy/ suggested by Vinod
+> > > 
+> > > Sorry that was not my suggestion
 > > 
-> > A filesystem or driver shouldn't suffer from this if:
+> > Sorry, I misunderstood you means
+> > > 
+> > > > 
+> > > > v6~v7: no changes
+> > > > 
+> > > > v5: using common debugfs config CONFIG_DEBUG_FS
+> > > > 
+> > > > v4: fix build warning of sometimes uninitialized variable
+> > > > 
+> > > > v3: fix typo of "debugfs" suggested by AngeloGioacchino
+> > > > 
+> > > > v2: add CONFIG_PHY_MTK_TPHY_DEBUGFS suggested by AngeloGioacchino
+> > > > ---
+> > > >  drivers/phy/mediatek/phy-mtk-tphy.c | 405
+> > > > +++++++++++++++++++++++++++-
+> > > >  1 file changed, 404 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c
+> > > > b/drivers/phy/mediatek/phy-mtk-tphy.c
+> > > > index e906a82791bd..65a95c3726bf 100644
+> > > > --- a/drivers/phy/mediatek/phy-mtk-tphy.c
+> > > > +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
+> > > > @@ -7,6 +7,7 @@
+> > > >  
+> > > >  #include <dt-bindings/phy/phy.h>
+> > > >  #include <linux/clk.h>
+> > > > +#include <linux/debugfs.h>
+> > > >  #include <linux/delay.h>
+> > > >  #include <linux/iopoll.h>
+> > > >  #include <linux/mfd/syscon.h>
+> > > > @@ -264,6 +265,8 @@
+> > > >  
+> > > >  #define TPHY_CLKS_CNT	2
+> > > >  
+> > > > +#define USER_BUF_LEN(count) min_t(size_t, 8, (count))
+> > > > +
+> > > >  enum mtk_phy_version {
+> > > >  	MTK_PHY_V1 = 1,
+> > > >  	MTK_PHY_V2,
+> > > > @@ -310,6 +313,7 @@ struct mtk_phy_instance {
+> > > >  	struct clk_bulk_data clks[TPHY_CLKS_CNT];
+> > > >  	u32 index;
+> > > >  	u32 type;
+> > > > +	struct dentry *dbgfs;
+> > > >  	struct regmap *type_sw;
+> > > >  	u32 type_sw_reg;
+> > > >  	u32 type_sw_index;
+> > > > @@ -332,10 +336,391 @@ struct mtk_tphy {
+> > > >  	const struct mtk_phy_pdata *pdata;
+> > > >  	struct mtk_phy_instance **phys;
+> > > >  	int nphys;
+> > > > +	struct dentry *dbgfs_root;
+> > > >  	int src_ref_clk; /* MHZ, reference clock for slew rate
+> > > > calibrate */
+> > > >  	int src_coef; /* coefficient for slew rate calibrate */
+> > > >  };
+> > > 
+> > > I asked the struct dentry *debugfs be part of struct phy. Debugfs
+> > > would
+> > > be created by core but rather than exported, it should be populated
+> > > in
+> > > phy and you can use it here in the driver
+> > > 
+> > > >  
 > > 
-> >   - It doesn't set ->splice_read()
-> >   - It implements ->read_folio()
-> >   - It implements its own ->splice_read()
+> > Ok, I'll do the following steps:
 > > 
-> > Note that some filesystems set generic_file_splice_read() and
-> > generic_file_read_iter() but don't set ->read_folio().  g_f_read_iter()
-> > will fall back to filemap_read_iter() which looks like it should suffer
-> > from the same issue.
-> > 
-> > Certain drivers, can just use direct_splice_read() rather than
-> > generic_file_splice_read() as that creates an output buffer and then just
-> > calls their ->read_iter() function:
-> > 
-> >   - random & urandom
-> >   - tty
-> >   - kernfs
-> >   - proc
-> >   - proc_namespace
-> > 
-> > Stacked filesystems just need to pass the operation down a layer:
-> > 
-> >   - coda
-> >   - overlayfs
-> > 
-> > And finally, there's shmem (used in tmpfs, ramfs, rootfs).  This needs its
-> > own splice-read implementation, based on filemap_splice_read(), but able to
-> > paste in zero_page when there's a page missing.
-> > 
-> > Fixes: d9722a475711 ("splice: Do splice read from a buffered file without using ITER_PIPE")
-> > Signed-off-by: David Howells <dhowells@redhat.com>
-> > cc: Daniel Golle <daniel@makrotopia.org>
-> > cc: Guenter Roeck <groeck7@gmail.com>
-> > cc: Christoph Hellwig <hch@lst.de>
-> > cc: Jens Axboe <axboe@kernel.dk>
-> > cc: Al Viro <viro@zeniv.linux.org.uk>
-> > cc: John Hubbard <jhubbard@nvidia.com>
-> > cc: David Hildenbrand <david@redhat.com>
-> > cc: Matthew Wilcox <willy@infradead.org>
-> > cc: Miklos Szeredi <miklos@szeredi.hu>
-> > cc: Hugh Dickins <hughd@google.com>
-> > cc: Jan Harkes <jaharkes@cs.cmu.edu>
-> > cc: Arnd Bergmann <arnd@arndb.de>
-> > cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > cc: coda@cs.cmu.edu
-> > cc: codalist@coda.cs.cmu.edu
-> > cc: linux-unionfs@vger.kernel.org
-> > cc: linux-block@vger.kernel.org
-> > cc: linux-fsdevel@vger.kernel.org
-> > cc: linux-mm@kvack.org
-> > Link: https://lore.kernel.org/r/Y+pdHFFTk1TTEBsO@makrotopia.org/ [1]
-> > ---
-> 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 0. put a struct dentry *debugfs in struct phy;
+> > 1. define a static struct dentry *phy_debugfs_root in phy-core.c,
+> > then
+> >    create a root directory (/sys/kernel/debug/phy/) for phy
+> > subsystem 
+> > in phy_core_init();
+> > 2. create directory for each phy under the root directory
+> > (/sys/kernel/debug/phy/);
+> >    this step has two ways:
+> >    A: create the directory @debugfs of struct phy in phy_create() by
+> > default;
 
-Confirming that the above indeed fixes the NULL pointer bug.
+That sounds good to me
 
-Tested-by: Daniel Golle <daniel@makrotopia.org>
+> >    B: provide some api for user to create/destory the directory
+> > @debugfs or others when need;
+> > 3. add private debugfs files in @debugfs of struct phy;
+> > 
+> > For the case in tphy driver, it provides some struct phy, the driver
+> > may want to create debugfs files which not belongs to any struct phy
+> > in
+> > the root directory (/sys/kernel/debug/phy/), then need provide a api.
+> > 
+> >    Do you have any suggestions?
+> >    Which way do you prefer to use in step 2?
+> > 
+> >    Thanks a lot;
+> > 
+> > > <skip>
+> > > > +
+> > > >  static struct platform_driver mtk_tphy_driver = {
+> > > >  	.probe		= mtk_tphy_probe,
+> > > > +	.remove		= mtk_tphy_remove,
+> > > >  	.driver		= {
+> > > >  		.name	= "mtk-tphy",
+> > > >  		.of_match_table = mtk_tphy_id_table,
+> > > > -- 
+> > > > 2.18.0
+> > > 
+> > > 
+
+-- 
+~Vinod
