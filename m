@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4022696071
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03503696075
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjBNKNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S231960AbjBNKOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjBNKNc (ORCPT
+        with ESMTP id S231992AbjBNKOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:13:32 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A1612060;
-        Tue, 14 Feb 2023 02:13:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 26A643FB17;
-        Tue, 14 Feb 2023 10:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1676369609; bh=9ARKBS2BLb3SQDMqYwXHHJ/ad4zlSKBNm78PMBM76Z4=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=YEfRnqpO2v1Li81PVVndaPkc2kk/nhlZGTTUz9eyR9SLmv2GTp7pEqdfthpLTY+1z
-         hGdSy/RpQvQmWhL0lQJc9cANdB0yS6mOhwQ/bhZEDjZfdbgvQIYVovcn+SYrlZywgZ
-         iXNa2waeIBA0z3MMT3izvM+DWFFx9FqxdlwMr2j498HWWLUmGkS1Xetd3qrDdTmzSc
-         Z1vwOYkoFSw3g4DZBaMmiXmycEVpjusQ9Gxlydx3NOrelAU+QM2zXB5Pm3oD4AuvXK
-         +FBJKmHNajT4rmqh7oWmsTVQUG1XRw9GNqGy2W6MEpuzF8GjM2Qq/Pjt9tG1GbuD+Q
-         dAcstv8Fa4ljQ==
-Message-ID: <e1672fff-8a46-1fe7-9873-031eaa7c8cf1@marcan.st>
-Date:   Tue, 14 Feb 2023 19:13:23 +0900
+        Tue, 14 Feb 2023 05:14:05 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485EF16AED;
+        Tue, 14 Feb 2023 02:13:58 -0800 (PST)
+Received: from ip4d148da6.dynamic.kabel-deutschland.de ([77.20.141.166] helo=truhe.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1pRsJr-0007xD-TO; Tue, 14 Feb 2023 11:13:51 +0100
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Subject: [PATCH v1] docs: recommend using Link: whenever using Reported-by:
+Date:   Tue, 14 Feb 2023 11:13:51 +0100
+Message-Id: <9a07ec640d809723492f8ade4f54705914e80419.1676369564.git.linux@leemhuis.info>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Janne Grunau <j@jannau.net>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
- <20230202-asahi-t8112-dt-v1-1-cb5442d1c229@jannau.net>
- <3287867a-456c-ddc3-adbf-90001950c926@linaro.org>
- <0a33fa04-039f-9a7e-f2a3-2a1a6abc98d4@marcan.st>
- <5ff55f1c-8f02-abec-2320-c2e0b7db8904@linaro.org>
- <391ae107-8c10-b14e-c1ad-0fac74951432@marcan.st>
- <af7fb166-64e3-6fcd-c270-6dd53bbe96c0@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 01/17] dt-bindings: power: apple,pmgr-pwrstate: Add t8112
- compatible
-In-Reply-To: <af7fb166-64e3-6fcd-c270-6dd53bbe96c0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1676369638;b6cccbd2;
+X-HE-SMSGID: 1pRsJr-0007xD-TO
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 18.39, Krzysztof Kozlowski wrote:
-> On 14/02/2023 09:43, Hector Martin wrote:
->> On 14/02/2023 16.50, Krzysztof Kozlowski wrote:
->>> On 14/02/2023 03:24, Hector Martin wrote:
->>>> On 13/02/2023 20.09, Krzysztof Kozlowski wrote:
->>>>> On 12/02/2023 16:41, Janne Grunau wrote:
->>>>>> From: Hector Martin <marcan@marcan.st>
->>>>>>
->>>>>> Add the apple,t8112-pmgr-pwrstate compatible for the Apple M2 SoC.
->>>>>>
->>>>>> This goes after t8103. The sort order logic here is having SoC numeric
->>>>>> code families in release order, and SoCs within each family in release
->>>>>> order:
->>>>>>
->>>>>> - t8xxx (Apple HxxP/G series, "phone"/"tablet" chips)
->>>>>>   - t8103 (Apple H13G/M1)
->>>>>>   - t8112 (Apple H14G/M2)
->>>>>> - t6xxx (Apple HxxJ series, "desktop" chips)
->>>>>>   - t6000 (Apple H13J(S)/M1 Pro)
->>>>>>   - t6001 (Apple H13J(C)/M1 Max)
->>>>>>   - t6002 (Apple H13J(D)/M1 Ultra)
->>>>>>
->>>>>> Note that t600[0-2] share the t6000 compatible where the hardware is
->>>>>> 100% compatible, which is usually the case in this highly related set
->>>>>> of SoCs.
->>>>>>
->>>>>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>>>>>
->>>>>
->>>>> Missing SoB.
->>>>>
->>>>
->>>> I'd rather get an r-b, since this is going back into my tree ;)
->>>
->>> Please follow Linux process which requires SoB chain.
->>
->> A SoB is not an r-b. I do not upstream patches that are unreviewed. I
->> wrote the patch. Someone needs to review it.
->>
->> The extra SoB is redundant because this is going back into my tree, I
->> wrote it, and I will be the committer when I apply it. It's a one-liner
->> patch. I know what I wrote. Sure we could record Janne's SoB as a
->> technicality, but it feels silly. What matters more is that the patch
->> gets reviewed, not that on a patch series technicality it ended up being
->> Janne who sent it to the list. I could just pull the patch from my own
->> branch and then it didn't go through Janne so it doesn't need his SoB.
->> But it does need someone's review (because I absolutely refuse to merge
->> my own patches without review, although not every maintainer has that
->> policy unfortunately, which means there's lots of unreviewed code in the
->> kernel).
->>
->> Please. Let's cut down on the silliness. Please. We're trying to get
->> stuff done here. I'm tired of having to explain every little thing over
->> and over and over again. I really am.
-> 
-> Listen, I have no clue whether Janne changed the patch or not. 
+Encourage developers to place Link: tag pointing to the report when they
+are using Reported-by: tags. Those links are often extremely useful for
+any code archaeologist that wants to know more about the backstory of a
+change than the commit message provides. That includes maintainers
+higher up in the patch-flow hierarchy, which is why Linus asks
+developers to add such links [1, 2, 3]. To quote [1]:
 
-I do, which is why I asked for an r-b and not an SoB.
+> Again, the commit has a link to the patch *submission*, which is
+> almost entirely useless. There's no link to the actual problem the
+> patch fixes.
+>
+> [...]
+>
+> Put another way: I can see that
+>
+> Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+>
+> in the commit, but I don't have a clue what the actual report was, and
+> there really isn't enough information in the commit itself, except for
+> a fairly handwavy "Device drivers might, for instance, still need to
+> flush operations.."
+>
+> I don't want to know what device drivers _might_ do. I would want to
+> have an actual pointer to what they do and where.
 
-> She might
-> have rebased it or not. 
+Another reason why these links are wanted: the ongoing regression
+tracking efforts can only scale with them, as they allow the regression
+tracking bot 'regzbot' to automatically connect tracked reports with
+patches that are posted or committed to fix tracked regressions.
 
-The patch is identical to what is in my asahi tree already.
+Link: https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/ [1]
+Link: https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/ [2]
+Link: https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/ [3]
+Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
 
-> The chain expects that anyone touching the patch
-> must leave SoB.
+---
+Hi! Just small change for two texts. Note, the change to
+submitting-patches.rst looks bigger than it is, as I reshuffled the
+sentences in that area. The new flow afaics makes more sense then it
+would have if I had added the 'use Link: tag' recommendation at the end
+of the current text.
 
-And clearly it wasn't touched here.
+Ciao, Thorsten
+---
+ Documentation/process/5.Posting.rst          | 3 ++-
+ Documentation/process/submitting-patches.rst | 9 +++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-> I am not providing my reviewes for patches breaking the
-> process we have clearly described.
+diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
+index d87f1fee4cbc..7a670a075ab6 100644
+--- a/Documentation/process/5.Posting.rst
++++ b/Documentation/process/5.Posting.rst
+@@ -251,7 +251,8 @@ The tags in common use are:
+  - Reported-by: names a user who reported a problem which is fixed by this
+    patch; this tag is used to give credit to the (often underappreciated)
+    people who test our code and let us know when things do not work
+-   correctly.
++   correctly. Note, this tag should be followed by a Link: tag pointing to the
++   report, unless the report is not available on the web.
+ 
+  - Cc: the named person received a copy of the patch and had the
+    opportunity to comment on it.
+diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+index 7dc94555417d..1e009dbe6991 100644
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -496,10 +496,11 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
+ ----------------------------------------------------------------------
+ 
+ The Reported-by tag gives credit to people who find bugs and report them and it
+-hopefully inspires them to help us again in the future.  Please note that if
+-the bug was reported in private, then ask for permission first before using the
+-Reported-by tag. The tag is intended for bugs; please do not use it to credit
+-feature requests.
++hopefully inspires them to help us again in the future. The tag is intended for
++bugs; please do not use it to credit feature requests. The tag should be
++followed by a Link: tag pointing to the report, unless the report is not
++available on the web. Please note that if the bug was reported in private, then
++ask for permission first before using the Reported-by tag.
+ 
+ A Tested-by: tag indicates that the patch has been successfully tested (in
+ some environment) by the person named.  This tag informs maintainers that
 
-Good thing we don't need your review for simple compatible additions then!
+base-commit: e076f253283c3e55a128fa9665c0e6cd8146948d
+-- 
+2.39.1
 
->  I also do not see any problem in
-> following the process we have - adding SoB whenever you play with a
-> patch and send it. Entire discussion is silly indeed, instead of just
-> following the process.
-
-Or you could just stop nitpicking and doubling down on things that don't
-even concern you, since it is *my* tree and *my* job to worry about the
-signoffs being kosher, not yours, as *I* am upstream in the submission
-path and you are not.
-
-- Hector
