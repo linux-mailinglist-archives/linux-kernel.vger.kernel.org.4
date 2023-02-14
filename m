@@ -2,81 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93545695FFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC8696004
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjBNJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S232643AbjBNJ6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjBNJ4d (ORCPT
+        with ESMTP id S232558AbjBNJ5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:56:33 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB75E38D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:56:31 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id cr22so16806472qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:56:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KHPa2vXJ5ZEOEfblmF+vjBZsC6JF5+aTYk4/8+SF1F0=;
-        b=Olb70A88UsaOFs/do6434zj4YDk9SNLhq17kQELS5OYOWaCBlkiCvBOQ4ip7fVLmt1
-         zAo9IItb98MZ/jaIerKtnqaaQGgxanzqePQnP2Q4vAsC+evq49TrYgYmw45wPxivNElQ
-         d8QvT2w1lUhE3KVAW3qAQSQtzVN3vzEp6IGjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KHPa2vXJ5ZEOEfblmF+vjBZsC6JF5+aTYk4/8+SF1F0=;
-        b=DA2ZWoexCe7tlx0Vk2bve+3fwWAS+Tm9dxTwt54Avjojzn95YHQ147I6bhLx+Y3P1V
-         gJYFui7lviLc20hcO+Rm9UKGVUwoNDS0vDaL9XhoBXlVPGeDk+iq1OF3W1TOoPZRF0KS
-         re2YeCbk7zDqnFLTVN/ew4MpIKcsTxIdAUpOvIU1jquf54jqhJDqJtxVKs4Yr69L1Wdd
-         vc0BW19DvB7t1Oug7XyqAH7TkTOnAL+SHuhYtvKRX3FYeNZTb7x1d+cAbA2HecPMykWQ
-         rJiqpZEFbo1NzPu+NhZ/bXIlqgsR8Oo+gDHhyjxan7exi/nES2+G+2GQn6LxJJxUCBwM
-         BXOQ==
-X-Gm-Message-State: AO0yUKVyWE/tnVx9VOWJymeReJU7k6OR5fPciIou5JgK4UNIp0dCkJLC
-        P6BoXOGRqWkWxrRTmdUfBUxSpA==
-X-Google-Smtp-Source: AK7set9BdNERVuy3swNTAgzXesrYzeOqqd2uR0yMXq5yEsNA2Unt0BW7pgWAJJGpqH1v/IxlKD4ZLg==
-X-Received: by 2002:ac8:5816:0:b0:3b8:ea00:7021 with SMTP id g22-20020ac85816000000b003b8ea007021mr2836330qtg.28.1676368590423;
-        Tue, 14 Feb 2023 01:56:30 -0800 (PST)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac83d41000000b003b643951117sm10983851qtf.38.2023.02.14.01.56.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:56:29 -0800 (PST)
-Message-ID: <ae62d079-94e8-3c1d-7ac9-5e1b3a3b4614@broadcom.com>
-Date:   Tue, 14 Feb 2023 10:56:26 +0100
-MIME-Version: 1.0
+        Tue, 14 Feb 2023 04:57:40 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2060.outbound.protection.outlook.com [40.107.22.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABF825E22;
+        Tue, 14 Feb 2023 01:57:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I6uKifruEzLMPD3qwoxVgJvfdBO6syHh4FMDxSJCaaKPvs+w4OZy3GgFIOoj2kK8KjukGU6t10dTkiizw6zFpH+6Lt+L9uXNymZND7PJvp8uFl6heYg5/IIpNyIheOk3yKdm3VXWIm2tn8t1rGZqxXYImvzUGbqaf2OmZNmVI6+/RrPrvud5J1AYG41CAUFWd5/AdsZ6kNqiniqjI6em5TMjOR5Cz2jkRxu7ztXRCchygQQTK4XSMRft6KYijsb6R1uclgM1OjGgxZNOtW5GQnV52eYKms/3ilOWTQKELdQLbYjP1pV7iASBF+Dnp0dSUXrI3nQRj9Gciajmyx2q4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JOcLj9Ms5Pf9C+vQCwgJZnA3joYYg90R3vd4FYNYrxc=;
+ b=IJBysDfbCwmlyEniCmWmexf0dfy3s4pbgD77kyRXGPi5RYCS1zvySI4Tb1kwZRlhcwxt5/+nq2ffsD0V/xW7E60b/ibtuZO1sh/fvPYy/WT95449sKzz9hs3w3K05lQGuzb248etyanj6BqmTmHCfwcPoxL/IiOPtZKHPuJbYs3SLDSDvMNYfr8BTyPAGksfk8A0s/OqGoGLzHNGdYZKG/mTywFx7Ko1ByiLxF0zfBgUpPKCd2ho1dCcso19reoMcIpguqwTh8IAH/J0BMXv6rAO25dGB8IEOhjBIlslFM/pRkvpn8i9PYqlIwCJ10o3XDmeGVbuVfwMMLyE3pN1EA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JOcLj9Ms5Pf9C+vQCwgJZnA3joYYg90R3vd4FYNYrxc=;
+ b=ihH9BRotAd5CIB04ORmtEFDKJok1beUqHY7bVQ+Fs6kJMoXsIx5gXt7HrAbIKhDRm7LfiDuagfgvq4cK9bgqnXENEUxbqtXCrfvKlye2evoq6EXdS47AyjQB5Tk/wenTD7Y6cVjMevzV4Q0ij1JDfzC2XljD5BDMeR62xHrPy3s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
+ by PAXPR04MB9089.eurprd04.prod.outlook.com (2603:10a6:102:225::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 14 Feb
+ 2023 09:57:11 +0000
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886]) by DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886%5]) with mapi id 15.20.6086.022; Tue, 14 Feb 2023
+ 09:57:11 +0000
+Message-ID: <a608cb04-66e8-85ca-6cb2-651116583479@nxp.com>
+Date:   Tue, 14 Feb 2023 11:56:30 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 03/10] brcmfmac: cfg80211: Add support for scan params v2
-To:     Hector Martin <marcan@marcan.st>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230214091651.10178-1-marcan@marcan.st>
- <20230214092423.15175-3-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20230214092423.15175-3-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005dd62b05f4a5fae0"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
+ <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
+ <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com> <20230213175006.GA310433@p14s>
+Content-Language: en-US
+From:   Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <20230213175006.GA310433@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P191CA0001.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d5::14) To DB9PR04MB9628.eurprd04.prod.outlook.com
+ (2603:10a6:10:30b::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9628:EE_|PAXPR04MB9089:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8b9679d-2cf5-43b2-eb1c-08db0e71d783
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vt+HpnU27TLjpxq7zISp0rcf/tly+oLLm91/3/y3l0Glem4rqM3k5LUM6HH9FblEXTOJKNZIdD3TzZ1RT2sUF1lncPSrjymv5XKRm2WPzUFNyJBMSyFgP8CAP+3P1o4jT/u9LihRzmP0VJHrDpxhKhxD3hK1s2MEiphCL2VnqlDr/2a2+NHpu902ut4w81abbwpNx1T4oNk45M1uS5Lk+3A4qRJ9zJB9csaIMv8VLLd+y+GKZh60+hkPgwyvmADJjnieLbicCignFGdC+UnH1Dj4ZK8FhHrKcU5BEhrAO1aSGaq+aZJT9voL5qPC5K2fmEmoCVzblor98E8eGtHodhCTqW5xDjHr4vPQDw63jhmGYnGIhXgYB8I/CX29DHN4oEdoeXnTSMDhCqKIjm43dpIBgEpmsrNfBvLXddSS9ghSErdHnMIpv49AG5nl84f9cz5Emx7YoRrSf8PkNIHD7xGo8NSdDCoRuMKUWOviZXx8gh+hCcCR/Y3o4nX+0c4Fsf8F5LnyWZh+AzWCjknAFLM/7BKFQh4Y+h3vby7xEXNAVUIHvnEWvq0TKDUs/Xa+HP7RezULMZ5ZoFut2OdtdmE0NeA0dGlHPWxDumO7q5Lszq9aDyYyIzunNEmlLoNjAiJkYlfpbTSEtSiDQkHCHpMkpFgPPXB6R+hzVl/mswGc+L1JK03eg6blNSpBu23oxe2FzSLXtFqe2rU7yPovAFS7aERyRlfp4cJRnM1SWrc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199018)(66476007)(66556008)(86362001)(186003)(66946007)(2906002)(6486002)(2616005)(36756003)(6512007)(41300700001)(6666004)(44832011)(316002)(54906003)(4326008)(478600001)(6916009)(8676002)(38100700002)(26005)(7416002)(83380400001)(53546011)(55236004)(31686004)(8936002)(5660300002)(31696002)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3l6M2I4Y1JRZ1BDSzE4M255MVY1NHlFa0hqUnFWSmlxMC85N1Z1TGtMYjZE?=
+ =?utf-8?B?eFcrTFViMzQxb1hGOGVjNmFiTUU3YURLSDdZV2RVMi85U21aWGZsNDhpUEk5?=
+ =?utf-8?B?cnVFa1RoM2FTeW1mTDV3ZllUSkltYTZwR0hYTm5KdHgxUUY4MVI4dXhpWCs0?=
+ =?utf-8?B?UVJlK01RV0VLejI1aWhROUhLTE9iNGczWXhyTVMrOUxpZmtJZ2FuM0VjOTJK?=
+ =?utf-8?B?Nzk5L2cveVh1RkpwNXVqY1VoM2ROUEVld3dEdnZzVVFNRlJyZS9KcjQ4dC9Z?=
+ =?utf-8?B?TDZjb1ZjbncwMHFHdTJSU1JEcEM3cjZVRG9tODgyMmNzeDArZDcwZzJhQ3U0?=
+ =?utf-8?B?Q0c0ZXhhb2VmZStXa0o0VG01TFpPUHloWGZvYi9MZjJsVnhhaG5vUGZaUy9G?=
+ =?utf-8?B?MFhwejFtVkc4ZWF4Y3NlczlSUWt0M0hSTWN4QjRMMXFqUW1GOFc1S2xFbUls?=
+ =?utf-8?B?Wmg4bFJUMk5ScnlJY2U0TGUvbGhKTGpDS3dReVIyTkYweHd2dEtacjdVaERV?=
+ =?utf-8?B?WGwyTG4veFlmQ1dSck00QTBFc0VzL0VUTUdIRU0zMWpmYnl4MVVNQzBuN0kw?=
+ =?utf-8?B?SlRsVFR4aVRiM2lWMUxzZGFxaEF4TUpMTjVEc1lKUnlNdHY3Z2h2eUpHU2lT?=
+ =?utf-8?B?b3BXaXA2RmFkd21IQXBVck1LM3U0MTlwSlNFMWtreTl0ZnkrcXNWZSs2bzM5?=
+ =?utf-8?B?RE1ja2plYkdEL0dHd1hTK21ieVZsQWYwMGUxRElIdFhIUExZV2VjdXErbU1u?=
+ =?utf-8?B?Y1RQZ1ZIbWtPSExub0pibWhiSDdvRHpCTGRGRkJqRzRwQmplV2VmWTFteUVl?=
+ =?utf-8?B?WEZLYWY1cTF3MkJ5d29ISmdHc0FwSHhxYXBvWHJVZi9iLzVIZEZnUTg2Skpw?=
+ =?utf-8?B?U0dSUVkyQnRVd1lOM0o3SDJzYXpoUDNwY0QvZE40ZGZ2RnJySEpUTk4wZStE?=
+ =?utf-8?B?aDd6WkxjQmFMdm5NR1dmWmVSclpKa3pESGprQ0IyTzFyQXhXTHJYL09hOEZz?=
+ =?utf-8?B?RVdVY0l4d0cxbkg2ZjBONTZxWUQycnlmQmd4WmRqL2prVlJ3MDdLT2VzY3h1?=
+ =?utf-8?B?ZCtzMUhIREVHWThLazVOb0RNZ2p3S2pPSnJJdVNhaW80c2hJOHRaeE0veTFh?=
+ =?utf-8?B?enc0QzZZekh0UTFxZmwrUEkzSTlnWEphcUZKOFl1L3hJd1JxUHdFTmdPRUNn?=
+ =?utf-8?B?cndCbDFoaFZrMEVJVi9qWUpuWlZXWWt2Y3QrV2lkUW1oMTc2SFVocGNJN0Yx?=
+ =?utf-8?B?YmpGWHJWRldRdmswZTFoYmFyMnhPR3VFWlJIeWRIeHIzbUMwVEJpbG5TWjkw?=
+ =?utf-8?B?alJnUFJFcGxjT2tucWpxVitNWWJFQTY4dVFXRFZHc2ZYZ1pjN0lNbmhTUGFv?=
+ =?utf-8?B?MG9vWklLam53aE9lZnZ5Y2NNeXVaZmFtSVIyV0lvUDg5b0ZUbnpCOXh0RGhL?=
+ =?utf-8?B?Nis3SnFsc1p4S3pNTUZHYWQ2UEtiZnZjd2Zva2ROT2xobndCSEl4YVdnWmVh?=
+ =?utf-8?B?bGxqbkV5dS9hT2sySjliQklLVmRIQmgxbjJqOWIrUmN2a2tZNGFtRldxUkNq?=
+ =?utf-8?B?SWFBODBja0o1bkUwaDJNVlVlN09mbDVwUHRYSFIvR3J5U3FJQ2UrUnBLbGFY?=
+ =?utf-8?B?WmEyUVU1OVd0TUNMb2xCc1ZpSnlVMitCNjRTei8yeWdGa2VUQnpxcVZ3YWY0?=
+ =?utf-8?B?K096eFExNTFDMTFSU2ZnTmFSUklGV0t0anM5RVh6RG80Znd4WUZQZDBYMXBN?=
+ =?utf-8?B?TVJUUWhPL05QNjdrc1VEVnJWWjVSVVgrclA1VWlQZW1ybGVUMm1Demgzd0I5?=
+ =?utf-8?B?VzZOckJ1N1ZlNDJneXlGL1kxZ0NzWEwwaFQybXo1bFNLOWRuaWJQQUpFaUVK?=
+ =?utf-8?B?MU84YkkxU3pTVmRDNll4cDRrL3hUUWFjaXNNT3kxQmw0WDZ3cGh0K2crRnZI?=
+ =?utf-8?B?YVlYS2NScUhWa0gyZ0YrOWEwekgzTDVyVnlnczFOcjBaTzBQblVLdFV5cWN3?=
+ =?utf-8?B?S0phOFZjSDVqSG9md3Jpbk5LdkJHdnNqbnBmNFljYklSMTZvR0FzcnVtVmJT?=
+ =?utf-8?B?K1VjN3FRZFczVmF5eXVHbWttUjNwWTg4dlpTQitCUjRuNHlYdGFsYU1Sa1RP?=
+ =?utf-8?B?MVZXWkFxdllEemlKWDhTZGx0VlFFc1BXNVduSFhBbXl0L0NNc3pKWVM0d2NV?=
+ =?utf-8?B?ZlE9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8b9679d-2cf5-43b2-eb1c-08db0e71d783
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 09:57:11.5396
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s2jIV8hYVE2wMco6nczJ6b55/i4njFBU2jMyO8LrG46ZzsE3inFvuSgFlgr2ZnkOBtHuI1uUzod5cKW9xfkZUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9089
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,515 +140,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000005dd62b05f4a5fae0
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 2/13/2023 7:50 PM, Mathieu Poirier wrote:
+> On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
+>> On 2/12/2023 9:43 AM, Peng Fan wrote:
+>>> Hi Iuliana,
+>>>
+>>>> Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
+>>>> DDR
+>>>>
+>>>>
+>>>> On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
+>>>>> From: Peng Fan <peng.fan@nxp.com>
+>>>>>
+>>>>> V3:
+>>>>>
+>>>>>     Daniel, Iuliana
+>>>>>
+>>>>>       Please help review this patchset per Mathieu's comments.
+>>>>>
+>>>>>     Thanks,
+>>>>>     Peng.
+>>>>>
+>>>>>     Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
+>>>>>     IMX_RPROC_ANY in patch 3 Per Mathieu
+>>>>>     Update comment and commit log in patch 5, 6.
+>>>>>
+>>>>>     NXP SDK provides ".interrupts" section, but I am not sure how others
+>>>>>     build the firmware. So I still keep patch 6 as v2, return bootaddr
+>>>>>     if there is no ".interrupts" section.
+>>>>>
+>>>>> V2:
+>>>>>     patch 4 is introduced for sparse check warning fix
+>>>>>
+>>>>> This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
+>>>>> could be in DDR, not just the default TCM.
+>>>>>
+>>>>> i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
+>>>>> initial value could be got from firmware first section ".interrupts".
+>>>>> i.MX93 is a bit different, it just needs the address of .interrupts
+>>>>> section. NXP SDK always has .interrupts section.
+>>>>>
+>>>>> So first we need find the .interrupts section from firmware, so patch
+>>>>> 1 is to reuse the code of find_table to introduce a new API
+>>>>> rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
+>>>>>
+>>>>> Patch 2 is introduce devtype for i.MX8M/93
+>>>>>
+>>>>> Although patch 3 is correct the mapping, but this area was never used
+>>>>> by NXP SW team, we directly use the DDR region, not the alias region.
+>>>>> Since this patchset is first to support firmware in DDR, mark this
+>>>>> patch as a fix does not make much sense.
+>>>>>
+>>>>> patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
+>>>>> .interrupts section. Detailed information in each patch commit message.
+>>>>>
+>>>>> Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
+>>>> If one can build their firmware as they want, then the .interrupt section can
+>>>> also be called differently.
+>>>> I don't think is a good idea to base all your implementation on this
+>>>> assumption.
+>>>>
+>>>> It's clear there's a limitation when linking firmware in DDR, so this should be
+>>>> well documented so one can compile their firmware and put the needed
+>>>> section (interrupt as we call it in NXP SDK) always in TCML - independently
+>>>> where the other section go.
+>>> Ok, so .interrupt section should be a must in elf file if I understand correctly.
+>>>
+>>> I could add a check in V4 that if .interrupt section is not there, driver will report
+>>> failure.
+>>>
+>>> How do you think?
+>> Peng, I stand by my opinion that the limitation of linking firmware in DDR
+>> should be documented in an Application Note, or maybe there are other
+>> documents where how to use imx_rproc is explained.
+>>
+>> The implementation based on the .interrupt section is not robust.
+>> Maybe a user linked his firmware correctly in TCML, but the section is not
+>> called .interrupt so the firmware loading will work.
+>>
+>> So, instead of using the section name, you should use the address.
+> Can you be more specific on the above?
+Yes, I was thinking of the same thing you proposed below, to have a 
+section in TCML.
+>> First, check whether there is a section linked to TCML.
+>> If there is none, check for section name - as you did.
+>> If there is no section called .interrupt, give an error message.
+> We have two ways of booting, one that puts the firmware image in the TCML and
+> another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
+> to include the address for the stack and PC value.
+>
+> I think the first thing to do is have two different firmware images, one for
+> i.MX8M and another one for i.MX93.  That should greatly simplify things.
+Yes, definitely, there should be firmware images for each platform.
+>
+> Second, there should always be a segment that adds the right information to the
+> TMCL.  That segment doesn't need a name, it simply have to be part of the
+> segments that are copied to memory (any kind of memory) so that function
+> rproc_elf_load_segments() can do its job.
+I totally agree!
 
-On 2/14/2023 10:24 AM, Hector Martin wrote:
-> This new API version is required for at least the BCM4387 firmware. Add
-> support for it, with a fallback to the v1 API.
-
-This one is on my TODO list because both WCC and BCA chips have a 
-scanv2, but they are different. Anyway, I will have to sort that out 
-afterwards ;-)
-
-Thanks,
-Arend
-
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->   .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 245 +++++++++++-------
->   .../broadcom/brcm80211/brcmfmac/feature.c     |   1 +
->   .../broadcom/brcm80211/brcmfmac/feature.h     |   4 +-
->   .../broadcom/brcm80211/brcmfmac/fwil_types.h  |  49 +++-
->   4 files changed, 209 insertions(+), 90 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-> index a9690ec4c850..3e006b783f3f 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-> @@ -1039,12 +1039,134 @@ void brcmf_set_mpc(struct brcmf_if *ifp, int mpc)
->   	}
->   }
->   
-> +static void brcmf_scan_params_v2_to_v1(struct brcmf_scan_params_v2_le *params_v2_le,
-> +				       struct brcmf_scan_params_le *params_le)
-> +{
-> +	size_t params_size;
-> +	u32 ch;
-> +	int n_channels, n_ssids;
-> +
-> +	memcpy(&params_le->ssid_le, &params_v2_le->ssid_le,
-> +	       sizeof(params_le->ssid_le));
-> +	memcpy(&params_le->bssid, &params_v2_le->bssid,
-> +	       sizeof(params_le->bssid));
-> +
-> +	params_le->bss_type = params_v2_le->bss_type;
-> +	params_le->scan_type = le32_to_cpu(params_v2_le->scan_type);
-> +	params_le->nprobes = params_v2_le->nprobes;
-> +	params_le->active_time = params_v2_le->active_time;
-> +	params_le->passive_time = params_v2_le->passive_time;
-> +	params_le->home_time = params_v2_le->home_time;
-> +	params_le->channel_num = params_v2_le->channel_num;
-> +
-> +	ch = le32_to_cpu(params_v2_le->channel_num);
-> +	n_channels = ch & BRCMF_SCAN_PARAMS_COUNT_MASK;
-> +	n_ssids = ch >> BRCMF_SCAN_PARAMS_NSSID_SHIFT;
-> +
-> +	params_size = sizeof(u16) * n_channels;
-> +	if (n_ssids > 0) {
-> +		params_size = roundup(params_size, sizeof(u32));
-> +		params_size += sizeof(struct brcmf_ssid_le) * n_ssids;
-> +	}
-> +
-> +	memcpy(&params_le->channel_list[0],
-> +	       &params_v2_le->channel_list[0], params_size);
-> +}
-> +
-> +static void brcmf_escan_prep(struct brcmf_cfg80211_info *cfg,
-> +			     struct brcmf_scan_params_v2_le *params_le,
-> +			     struct cfg80211_scan_request *request)
-> +{
-> +	u32 n_ssids;
-> +	u32 n_channels;
-> +	s32 i;
-> +	s32 offset;
-> +	u16 chanspec;
-> +	char *ptr;
-> +	int length;
-> +	struct brcmf_ssid_le ssid_le;
-> +
-> +	eth_broadcast_addr(params_le->bssid);
-> +
-> +	length = BRCMF_SCAN_PARAMS_V2_FIXED_SIZE;
-> +
-> +	params_le->version = cpu_to_le16(BRCMF_SCAN_PARAMS_VERSION_V2);
-> +	params_le->bss_type = DOT11_BSSTYPE_ANY;
-> +	params_le->scan_type = cpu_to_le32(BRCMF_SCANTYPE_ACTIVE);
-> +	params_le->channel_num = 0;
-> +	params_le->nprobes = cpu_to_le32(-1);
-> +	params_le->active_time = cpu_to_le32(-1);
-> +	params_le->passive_time = cpu_to_le32(-1);
-> +	params_le->home_time = cpu_to_le32(-1);
-> +	memset(&params_le->ssid_le, 0, sizeof(params_le->ssid_le));
-> +
-> +	/* Scan abort */
-> +	if (!request) {
-> +		length += sizeof(u16);
-> +		params_le->channel_num = cpu_to_le32(1);
-> +		params_le->channel_list[0] = cpu_to_le16(-1);
-> +		params_le->length = cpu_to_le16(length);
-> +		return;
-> +	}
-> +
-> +	n_ssids = request->n_ssids;
-> +	n_channels = request->n_channels;
-> +
-> +	/* Copy channel array if applicable */
-> +	brcmf_dbg(SCAN, "### List of channelspecs to scan ### %d\n",
-> +		  n_channels);
-> +	if (n_channels > 0) {
-> +		length += roundup(sizeof(u16) * n_channels, sizeof(u32));
-> +		for (i = 0; i < n_channels; i++) {
-> +			chanspec = channel_to_chanspec(&cfg->d11inf,
-> +						       request->channels[i]);
-> +			brcmf_dbg(SCAN, "Chan : %d, Channel spec: %x\n",
-> +				  request->channels[i]->hw_value, chanspec);
-> +			params_le->channel_list[i] = cpu_to_le16(chanspec);
-> +		}
-> +	} else {
-> +		brcmf_dbg(SCAN, "Scanning all channels\n");
-> +	}
-> +
-> +	/* Copy ssid array if applicable */
-> +	brcmf_dbg(SCAN, "### List of SSIDs to scan ### %d\n", n_ssids);
-> +	if (n_ssids > 0) {
-> +		offset = offsetof(struct brcmf_scan_params_v2_le, channel_list) +
-> +				n_channels * sizeof(u16);
-> +		offset = roundup(offset, sizeof(u32));
-> +		length += sizeof(ssid_le) * n_ssids,
-> +		ptr = (char *)params_le + offset;
-> +		for (i = 0; i < n_ssids; i++) {
-> +			memset(&ssid_le, 0, sizeof(ssid_le));
-> +			ssid_le.SSID_len =
-> +					cpu_to_le32(request->ssids[i].ssid_len);
-> +			memcpy(ssid_le.SSID, request->ssids[i].ssid,
-> +			       request->ssids[i].ssid_len);
-> +			if (!ssid_le.SSID_len)
-> +				brcmf_dbg(SCAN, "%d: Broadcast scan\n", i);
-> +			else
-> +				brcmf_dbg(SCAN, "%d: scan for  %.32s size=%d\n",
-> +					  i, ssid_le.SSID, ssid_le.SSID_len);
-> +			memcpy(ptr, &ssid_le, sizeof(ssid_le));
-> +			ptr += sizeof(ssid_le);
-> +		}
-> +	} else {
-> +		brcmf_dbg(SCAN, "Performing passive scan\n");
-> +		params_le->scan_type = cpu_to_le32(BRCMF_SCANTYPE_PASSIVE);
-> +	}
-> +	params_le->length = cpu_to_le16(length);
-> +	/* Adding mask to channel numbers */
-> +	params_le->channel_num =
-> +		cpu_to_le32((n_ssids << BRCMF_SCAN_PARAMS_NSSID_SHIFT) |
-> +			(n_channels & BRCMF_SCAN_PARAMS_COUNT_MASK));
-> +}
-> +
->   s32 brcmf_notify_escan_complete(struct brcmf_cfg80211_info *cfg,
->   				struct brcmf_if *ifp, bool aborted,
->   				bool fw_abort)
->   {
->   	struct brcmf_pub *drvr = cfg->pub;
-> -	struct brcmf_scan_params_le params_le;
-> +	struct brcmf_scan_params_v2_le params_v2_le;
->   	struct cfg80211_scan_request *scan_request;
->   	u64 reqid;
->   	u32 bucket;
-> @@ -1063,20 +1185,23 @@ s32 brcmf_notify_escan_complete(struct brcmf_cfg80211_info *cfg,
->   	if (fw_abort) {
->   		/* Do a scan abort to stop the driver's scan engine */
->   		brcmf_dbg(SCAN, "ABORT scan in firmware\n");
-> -		memset(&params_le, 0, sizeof(params_le));
-> -		eth_broadcast_addr(params_le.bssid);
-> -		params_le.bss_type = DOT11_BSSTYPE_ANY;
-> -		params_le.scan_type = 0;
-> -		params_le.channel_num = cpu_to_le32(1);
-> -		params_le.nprobes = cpu_to_le32(1);
-> -		params_le.active_time = cpu_to_le32(-1);
-> -		params_le.passive_time = cpu_to_le32(-1);
-> -		params_le.home_time = cpu_to_le32(-1);
-> -		/* Scan is aborted by setting channel_list[0] to -1 */
-> -		params_le.channel_list[0] = cpu_to_le16(-1);
-> +
-> +		brcmf_escan_prep(cfg, &params_v2_le, NULL);
-> +
->   		/* E-Scan (or anyother type) can be aborted by SCAN */
-> -		err = brcmf_fil_cmd_data_set(ifp, BRCMF_C_SCAN,
-> -					     &params_le, sizeof(params_le));
-> +		if (brcmf_feat_is_enabled(ifp, BRCMF_FEAT_SCAN_V2)) {
-> +			err = brcmf_fil_cmd_data_set(ifp, BRCMF_C_SCAN,
-> +						     &params_v2_le,
-> +						     sizeof(params_v2_le));
-> +		} else {
-> +			struct brcmf_scan_params_le params_le;
-> +
-> +			brcmf_scan_params_v2_to_v1(&params_v2_le, &params_le);
-> +			err = brcmf_fil_cmd_data_set(ifp, BRCMF_C_SCAN,
-> +						     &params_le,
-> +						     sizeof(params_le));
-> +		}
-> +
->   		if (err)
->   			bphy_err(drvr, "Scan abort failed\n");
->   	}
-> @@ -1295,83 +1420,13 @@ brcmf_cfg80211_change_iface(struct wiphy *wiphy, struct net_device *ndev,
->   	return err;
->   }
->   
-> -static void brcmf_escan_prep(struct brcmf_cfg80211_info *cfg,
-> -			     struct brcmf_scan_params_le *params_le,
-> -			     struct cfg80211_scan_request *request)
-> -{
-> -	u32 n_ssids;
-> -	u32 n_channels;
-> -	s32 i;
-> -	s32 offset;
-> -	u16 chanspec;
-> -	char *ptr;
-> -	struct brcmf_ssid_le ssid_le;
-> -
-> -	eth_broadcast_addr(params_le->bssid);
-> -	params_le->bss_type = DOT11_BSSTYPE_ANY;
-> -	params_le->scan_type = BRCMF_SCANTYPE_ACTIVE;
-> -	params_le->channel_num = 0;
-> -	params_le->nprobes = cpu_to_le32(-1);
-> -	params_le->active_time = cpu_to_le32(-1);
-> -	params_le->passive_time = cpu_to_le32(-1);
-> -	params_le->home_time = cpu_to_le32(-1);
-> -	memset(&params_le->ssid_le, 0, sizeof(params_le->ssid_le));
-> -
-> -	n_ssids = request->n_ssids;
-> -	n_channels = request->n_channels;
-> -
-> -	/* Copy channel array if applicable */
-> -	brcmf_dbg(SCAN, "### List of channelspecs to scan ### %d\n",
-> -		  n_channels);
-> -	if (n_channels > 0) {
-> -		for (i = 0; i < n_channels; i++) {
-> -			chanspec = channel_to_chanspec(&cfg->d11inf,
-> -						       request->channels[i]);
-> -			brcmf_dbg(SCAN, "Chan : %d, Channel spec: %x\n",
-> -				  request->channels[i]->hw_value, chanspec);
-> -			params_le->channel_list[i] = cpu_to_le16(chanspec);
-> -		}
-> -	} else {
-> -		brcmf_dbg(SCAN, "Scanning all channels\n");
-> -	}
-> -	/* Copy ssid array if applicable */
-> -	brcmf_dbg(SCAN, "### List of SSIDs to scan ### %d\n", n_ssids);
-> -	if (n_ssids > 0) {
-> -		offset = offsetof(struct brcmf_scan_params_le, channel_list) +
-> -				n_channels * sizeof(u16);
-> -		offset = roundup(offset, sizeof(u32));
-> -		ptr = (char *)params_le + offset;
-> -		for (i = 0; i < n_ssids; i++) {
-> -			memset(&ssid_le, 0, sizeof(ssid_le));
-> -			ssid_le.SSID_len =
-> -					cpu_to_le32(request->ssids[i].ssid_len);
-> -			memcpy(ssid_le.SSID, request->ssids[i].ssid,
-> -			       request->ssids[i].ssid_len);
-> -			if (!ssid_le.SSID_len)
-> -				brcmf_dbg(SCAN, "%d: Broadcast scan\n", i);
-> -			else
-> -				brcmf_dbg(SCAN, "%d: scan for  %.32s size=%d\n",
-> -					  i, ssid_le.SSID, ssid_le.SSID_len);
-> -			memcpy(ptr, &ssid_le, sizeof(ssid_le));
-> -			ptr += sizeof(ssid_le);
-> -		}
-> -	} else {
-> -		brcmf_dbg(SCAN, "Performing passive scan\n");
-> -		params_le->scan_type = BRCMF_SCANTYPE_PASSIVE;
-> -	}
-> -	/* Adding mask to channel numbers */
-> -	params_le->channel_num =
-> -		cpu_to_le32((n_ssids << BRCMF_SCAN_PARAMS_NSSID_SHIFT) |
-> -			(n_channels & BRCMF_SCAN_PARAMS_COUNT_MASK));
-> -}
-> -
->   static s32
->   brcmf_run_escan(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp,
->   		struct cfg80211_scan_request *request)
->   {
->   	struct brcmf_pub *drvr = cfg->pub;
-> -	s32 params_size = BRCMF_SCAN_PARAMS_FIXED_SIZE +
-> -			  offsetof(struct brcmf_escan_params_le, params_le);
-> +	s32 params_size = BRCMF_SCAN_PARAMS_V2_FIXED_SIZE +
-> +			  offsetof(struct brcmf_escan_params_le, params_v2_le);
->   	struct brcmf_escan_params_le *params;
->   	s32 err = 0;
->   
-> @@ -1391,8 +1446,22 @@ brcmf_run_escan(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp,
->   		goto exit;
->   	}
->   	BUG_ON(params_size + sizeof("escan") >= BRCMF_DCMD_MEDLEN);
-> -	brcmf_escan_prep(cfg, &params->params_le, request);
-> -	params->version = cpu_to_le32(BRCMF_ESCAN_REQ_VERSION);
-> +	brcmf_escan_prep(cfg, &params->params_v2_le, request);
-> +
-> +	params->version = cpu_to_le32(BRCMF_ESCAN_REQ_VERSION_V2);
-> +
-> +	if (!brcmf_feat_is_enabled(ifp, BRCMF_FEAT_SCAN_V2)) {
-> +		struct brcmf_escan_params_le *params_v1;
-> +
-> +		params_size -= BRCMF_SCAN_PARAMS_V2_FIXED_SIZE;
-> +		params_size += BRCMF_SCAN_PARAMS_FIXED_SIZE;
-> +		params_v1 = kzalloc(params_size, GFP_KERNEL);
-> +		params_v1->version = cpu_to_le32(BRCMF_ESCAN_REQ_VERSION);
-> +		brcmf_scan_params_v2_to_v1(&params->params_v2_le, &params_v1->params_le);
-> +		kfree(params);
-> +		params = params_v1;
-> +	}
-> +
->   	params->action = cpu_to_le16(WL_ESCAN_ACTION_START);
->   	params->sync_id = cpu_to_le16(0x1234);
->   
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.c
-> index 10bac865d724..b6797f800e55 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.c
-> @@ -290,6 +290,7 @@ void brcmf_feat_attach(struct brcmf_pub *drvr)
->   		ifp->drvr->feat_flags |= BIT(BRCMF_FEAT_SCAN_RANDOM_MAC);
->   
->   	brcmf_feat_iovar_int_get(ifp, BRCMF_FEAT_FWSUP, "sup_wpa");
-> +	brcmf_feat_iovar_int_get(ifp, BRCMF_FEAT_SCAN_V2, "scan_ver");
->   
->   	if (drvr->settings->feature_disable) {
->   		brcmf_dbg(INFO, "Features: 0x%02x, disable: 0x%02x\n",
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.h
-> index f1b086a69d73..549298c55b55 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/feature.h
-> @@ -30,6 +30,7 @@
->    * SAE: simultaneous authentication of equals
->    * FWAUTH: Firmware authenticator
->    * DUMP_OBSS: Firmware has capable to dump obss info to support ACS
-> + * SCAN_V2: Version 2 scan params
->    */
->   #define BRCMF_FEAT_LIST \
->   	BRCMF_FEAT_DEF(MBSS) \
-> @@ -53,7 +54,8 @@
->   	BRCMF_FEAT_DEF(DOT11H) \
->   	BRCMF_FEAT_DEF(SAE) \
->   	BRCMF_FEAT_DEF(FWAUTH) \
-> -	BRCMF_FEAT_DEF(DUMP_OBSS)
-> +	BRCMF_FEAT_DEF(DUMP_OBSS) \
-> +	BRCMF_FEAT_DEF(SCAN_V2)
->   
->   /*
->    * Quirks:
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
-> index 04e1beedfd81..b3844d0d1adb 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil_types.h
-> @@ -48,6 +48,10 @@
->   
->   /* size of brcmf_scan_params not including variable length array */
->   #define BRCMF_SCAN_PARAMS_FIXED_SIZE	64
-> +#define BRCMF_SCAN_PARAMS_V2_FIXED_SIZE	72
-> +
-> +/* version of brcmf_scan_params structure */
-> +#define BRCMF_SCAN_PARAMS_VERSION_V2	2
->   
->   /* masks for channel and ssid count */
->   #define BRCMF_SCAN_PARAMS_COUNT_MASK	0x0000ffff
-> @@ -67,6 +71,7 @@
->   #define BRCMF_PRIMARY_KEY		(1 << 1)
->   #define DOT11_BSSTYPE_ANY		2
->   #define BRCMF_ESCAN_REQ_VERSION		1
-> +#define BRCMF_ESCAN_REQ_VERSION_V2	2
->   
->   #define BRCMF_MAXRATES_IN_SET		16	/* max # of rates in rateset */
->   
-> @@ -386,6 +391,45 @@ struct brcmf_scan_params_le {
->   	__le16 channel_list[1];	/* list of chanspecs */
->   };
->   
-> +struct brcmf_scan_params_v2_le {
-> +	__le16 version;		/* structure version */
-> +	__le16 length;		/* structure length */
-> +	struct brcmf_ssid_le ssid_le;	/* default: {0, ""} */
-> +	u8 bssid[ETH_ALEN];	/* default: bcast */
-> +	s8 bss_type;		/* default: any,
-> +				 * DOT11_BSSTYPE_ANY/INFRASTRUCTURE/INDEPENDENT
-> +				 */
-> +	u8 pad;
-> +	__le32 scan_type;	/* flags, 0 use default */
-> +	__le32 nprobes;		/* -1 use default, number of probes per channel */
-> +	__le32 active_time;	/* -1 use default, dwell time per channel for
-> +				 * active scanning
-> +				 */
-> +	__le32 passive_time;	/* -1 use default, dwell time per channel
-> +				 * for passive scanning
-> +				 */
-> +	__le32 home_time;	/* -1 use default, dwell time for the
-> +				 * home channel between channel scans
-> +				 */
-> +	__le32 channel_num;	/* count of channels and ssids that follow
-> +				 *
-> +				 * low half is count of channels in
-> +				 * channel_list, 0 means default (use all
-> +				 * available channels)
-> +				 *
-> +				 * high half is entries in struct brcmf_ssid
-> +				 * array that follows channel_list, aligned for
-> +				 * s32 (4 bytes) meaning an odd channel count
-> +				 * implies a 2-byte pad between end of
-> +				 * channel_list and first ssid
-> +				 *
-> +				 * if ssid count is zero, single ssid in the
-> +				 * fixed parameter portion is assumed, otherwise
-> +				 * ssid in the fixed portion is ignored
-> +				 */
-> +	__le16 channel_list[1];	/* list of chanspecs */
-> +};
-> +
->   struct brcmf_scan_results {
->   	u32 buflen;
->   	u32 version;
-> @@ -397,7 +441,10 @@ struct brcmf_escan_params_le {
->   	__le32 version;
->   	__le16 action;
->   	__le16 sync_id;
-> -	struct brcmf_scan_params_le params_le;
-> +	union {
-> +		struct brcmf_scan_params_le params_le;
-> +		struct brcmf_scan_params_v2_le params_v2_le;
-> +	};
->   };
->   
->   struct brcmf_escan_result_le {
-
---0000000000005dd62b05f4a5fae0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBtJMHbKNofjN+pYfnq
-M6OwsxiOHrL8Dm7TV0/V1VIc0DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMzAyMTQwOTU2MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEA4XpZvTmy7U0gEdcivjg4sVaNGik7EdopnI94
-+TW+MQrd2CepZpyH1TNmuANRznsUPlMB1uy2+PCm6k2ZbOFrgBxQvqIW8tutCelSQ2e92K6HsbtH
-+fq2FaYT+TBcgiQdc4/9IJFrfZwl1dfsafizPTrPDMy/j6sTKmGC+PbA/U5ax3JtJ7P1eEixrh/o
-qNO88dqzqEMqraP6DDWoHyakZ0FFTzjRWe1HTQ1RX0JIvNfOMIayoD6MRMoUGr2UtavgHarFWdld
-uDABlLewSIBU/ysHGcoNkRbwsWlWyU+4rQVtOQoQ96pCdnih868KrYZfxC0V5ES+NwIVQKJ2bNkl
-aA==
---0000000000005dd62b05f4a5fae0--
+> That pushes the complexity to the tool that generates the firmware image,
+> exactly where it should be.
+>
+> This is how I think we should solve this problem based on the very limited
+> information provided with this patchset.  Please let me know if I missed
+> something and we'll go from there.
+>
+>> For all the above options please add comments in code, explaining each step.
+>>
