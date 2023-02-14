@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93CC6960A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CC16960A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjBNKY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S232249AbjBNKZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbjBNKYp (ORCPT
+        with ESMTP id S232206AbjBNKZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:24:45 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ED523C59
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:24:44 -0800 (PST)
+        Tue, 14 Feb 2023 05:25:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED6C23643
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:25:25 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 337FE21AB7;
-        Tue, 14 Feb 2023 10:24:43 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B637121AB7;
+        Tue, 14 Feb 2023 10:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676370283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1676370323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ddKpLCie8SrphQTBEbjvDVOF+x0PREeROSkbPvx0csA=;
-        b=NZs8DFRxTbLlqe9qBzLxiMOpu3D/6Fyjov8WetNL541kPOWQaRYV3rhGZWx7BiOmhhz4Ze
-        6aJ9l+QxargQSFCZwgEJxK0GfISx2ebVPABIZCOFY61j4ivsKP8FMMnQ0gv5xXgUH2Kt3G
-        5BMH7zdG3nde94z0MCij7k1EhDmxvjo=
+        bh=FLHBkRY+L1xpNsmbz5ptnUy0dOk12hcQPFC+umha1Gc=;
+        b=wqdLB2KJODUyfYA8VLRlnGJivl2njpEmKDIRh/KELuHaeUfGNL4fL/PCkBji86O+HkPWvo
+        aKUFYiTuk2GcViiLeBym5uTF6mGqK7eZGg9CgbmNZD6qv4C81W2LsLszcvwN+7Q+5Kz0a1
+        xOBq7i9Eamrgm9aj1iRVZFTz25L+Fbg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676370283;
+        s=susede2_ed25519; t=1676370323;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ddKpLCie8SrphQTBEbjvDVOF+x0PREeROSkbPvx0csA=;
-        b=VfPD76bXzzJTP7r8RWPqnfhGsCIYp8owwqC/VXjeD6ufVOce+B1NE7tN1NeQLoIleRLyjd
-        KVoSl1/OP65KuCCg==
+        bh=FLHBkRY+L1xpNsmbz5ptnUy0dOk12hcQPFC+umha1Gc=;
+        b=Dks2P7kHwRoe/xv74Vaytc2KJHFVUUvwfixBrIK3sSLatpBRWYdqbLaLUT4xCf1VQowW3q
+        nKuIXryyW6gbUQCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E683913A21;
-        Tue, 14 Feb 2023 10:24:42 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7883E13A21;
+        Tue, 14 Feb 2023 10:25:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id smYNN2ph62MUYAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 14 Feb 2023 10:24:42 +0000
-Date:   Tue, 14 Feb 2023 11:24:42 +0100
-Message-ID: <87zg9g8ryt.wl-tiwai@suse.de>
+        id 2iBqFZNh62NZYAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 14 Feb 2023 10:25:23 +0000
+Date:   Tue, 14 Feb 2023 11:25:22 +0100
+Message-ID: <87y1p08rxp.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Andy Chi <andy.chi@canonical.com>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
@@ -60,10 +60,9 @@ Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Gabriele Mazzotta <gabriele.mzt@gmail.com>,
         Yuchi Yang <yangyuchi66@gmail.com>,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
-In-Reply-To: <20230214035853.31217-2-andy.chi@canonical.com>
+Subject: Re: [PATCH 1/2] ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform.
+In-Reply-To: <20230214035853.31217-1-andy.chi@canonical.com>
 References: <20230214035853.31217-1-andy.chi@canonical.com>
-        <20230214035853.31217-2-andy.chi@canonical.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -76,41 +75,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 04:58:52 +0100,
+On Tue, 14 Feb 2023 04:58:51 +0100,
 Andy Chi wrote:
 > 
-> On HP Laptops, requires the same ALC285_FIXUP_HP_GPIO_LED quirk to
-> make its audio LEDs work.
-
-This doesn't match with the actual change?  It appears to be the
-additional quirk for Cirrus amps.
-
-
-Takashi
-
+> There is a HP platform needs ALC236_FIXUP_HP_GPIO_LED quirk to
+> make mic-mute/audio-mute working.
 > 
 > Signed-off-by: Andy Chi <andy.chi@canonical.com>
-> ---
->  sound/pci/hda/patch_realtek.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-> index 7b9fb38ff732..e2cd5456f2a6 100644
-> --- a/sound/pci/hda/patch_realtek.c
-> +++ b/sound/pci/hda/patch_realtek.c
-> @@ -9432,6 +9432,12 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
->  	 SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
->  	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
->  	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b42, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b43, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b44, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b45, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b46, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
->  	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
->  	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
->  	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
-> -- 
-> 2.34.1
-> 
+
+Applied this one (but the second one looks dubious).
+
+
+thanks,
+
+Takashi
