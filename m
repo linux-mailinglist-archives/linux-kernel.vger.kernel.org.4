@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ABD695CAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0730695AF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjBNIPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S230188AbjBNHub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjBNIOy (ORCPT
+        with ESMTP id S230512AbjBNHuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:14:54 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7796974F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:14:51 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id by3so13417876wrb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:14:51 -0800 (PST)
+        Tue, 14 Feb 2023 02:50:25 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1351E29E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:50:15 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso5482526wmo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OjnDXT2YCrpWOoVnrYNkTuZIq4oC+7zvNAb1MUNa5/c=;
-        b=doj3ihw2ryLRC8f29i99NL2fwaGqn4CpXMd97+dwyictmuXkOTVA3vSN+VHk/PL0kf
-         FxQRafQ1Jt/CNIN6lVBhNNArczrIy10FqfWYvnAbdsShwiby/3DTFWhrBeUy18cY73Eu
-         E3vQL2utHUsfq64MZdoEZbAML53OwZSFv1czAWyM31Shgci31oFfy6gfRTZFzd55RXjO
-         XSWJuB7qGztVLm0ISy6iV/oGFJm6s+0D0JcCtuAy6rPxbA8LU7KapUgGY7jLMRciHJGu
-         tSDQUfV66Cg6ku0ogdvTEqZppDCuIdWj8dYNveiHQUMsl6bUb56BPhszaqAKgBoZrOa/
-         fCZQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=djdHAVln+AB2xhAhADB7258N4a54s6i/NOfx5xKCAa0=;
+        b=lm1v8G+kaRGHJL1jn1yjFpUJLkhhaJyo45U/hf4zhAr2yisAWhCbUhrHkbqa/x2WJU
+         5FPl0jvF659R+HbsBtqWgjgXCz8UUGpUhEbVexSCCNqGspS52NCg0qM+ocr9Yfvuocir
+         lUP4OujwvK7JB04WEhjvAwIMETbB7F452KcQKcE//CT6Q3+OqrlBt2/S0ryKMY9xB6Fh
+         VUpBhHfXoZIAx7v//iyHGoVl6Yhr3ZXuglptV6ZdGpRZm4u7hd5ARPG/zLV164z3ynr6
+         8bVK/PxSzhnuJ1I4cpWnZyL3nEv3l2f2czCWTIyuQSgL2eXCFFp7N0gkUzZO0gzieWDK
+         38Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OjnDXT2YCrpWOoVnrYNkTuZIq4oC+7zvNAb1MUNa5/c=;
-        b=LGY61ObJaEkruIdgj3PIMhFuRyrTQIdyOq3FGveTQnNfzQxtVKAwmu8vsik0EhqETu
-         N4kb6AEsUN8W/9F/uyAmVF2mJ7/duUjpiqHwpdT9js0oLimdog6bUBSlUlCl/oR09zLn
-         4rJeNvBQ+dLWQzMwAnOcBSEyYM9iAvVYw3tm9U5TSi5QJuHEMY+Awr2p3zvZWeXXTyAW
-         1xLdtoX5Pjr8rA7aujP/bqR85PiGyiRGoBr1PXYiS+AnhhyUcsfosNgYMCcpHg7g11H0
-         jrhPA8FHcDHJRsrf4BPZZ8ayRktcRnjVEbVVxdrCQSje4GsC5fB5maYAzxVtTBUM3Dbb
-         PD+A==
-X-Gm-Message-State: AO0yUKXPY+dyelXawwsHt0+JZlR+q5ESDPWStce1NPMxyrUSZZ+VRloe
-        FeaN7+a+tOGtnymsbe5rXzbeCQ==
-X-Google-Smtp-Source: AK7set/msAZJj448Cov5vdV+SLyxrlNLKv4T+REkQ+fV1an22f34T0IiaHil6N7s6KZj8YpicdZPqA==
-X-Received: by 2002:adf:f04e:0:b0:2bf:dcdc:afb8 with SMTP id t14-20020adff04e000000b002bfdcdcafb8mr1245734wro.64.1676362490423;
-        Tue, 14 Feb 2023 00:14:50 -0800 (PST)
-Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id n2-20020a5d67c2000000b002c53f6c7599sm11659511wrw.29.2023.02.14.00.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 00:14:50 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v3 24/24] s390: Remove empty <uapi/asm/setup.h>
-Date:   Tue, 14 Feb 2023 08:49:25 +0100
-Message-Id: <20230214074925.228106-25-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230214074925.228106-1-alexghiti@rivosinc.com>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=djdHAVln+AB2xhAhADB7258N4a54s6i/NOfx5xKCAa0=;
+        b=ts9JOPTnznkH8PWmK/y8i0YnDHBVhGKVMV6tUZsosk/oSOfiCZ7PMiaUTXhQsb2A0D
+         tc5/u6O5gxkoaKunodSHjg9Bj+DOYqD/EVsa6pjUXg6qGoZE+QWh1WEI4Hfa2fq2cR7U
+         ZIDDOcK5XJyBTL0ef3YSnEQm6FsIxVtWHmMPusneEVgJEHNW3lYBOl6cxB9X3Mdim1kH
+         7Y780dVgbtKRU1jCBnAvvd3GCw/9VOTsqO4qPSHJZywUfuAP9tv7sSKp1uOA9mMdxZ7Q
+         4CJTtMvgpcdEmpY85sPKhsbhT1OmRd+4sbCiup2d6+Ew0E2Lz+0UfHFX0Ou7odNOGNbZ
+         y9Rw==
+X-Gm-Message-State: AO0yUKVI+xb73zxXffux4F1BE9UOg4VG82UKFJWMAwrmcTfFirNaP6SW
+        LsBu39F7UZWaslcdoSj7V0Q77w==
+X-Google-Smtp-Source: AK7set/cuDzzDpUt3VCNgzvRaDkw3gqxacuqi/RcH7fwRcbpfHBoaTriqDu+KDhMGHNgjnVsznfL7Q==
+X-Received: by 2002:a05:600c:a293:b0:3df:ee64:4814 with SMTP id hu19-20020a05600ca29300b003dfee644814mr1350022wmb.20.1676361014082;
+        Mon, 13 Feb 2023 23:50:14 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003daf7721bb3sm20933827wms.12.2023.02.13.23.50.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 23:50:13 -0800 (PST)
+Message-ID: <5ff55f1c-8f02-abec-2320-c2e0b7db8904@linaro.org>
+Date:   Tue, 14 Feb 2023 08:50:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 01/17] dt-bindings: power: apple,pmgr-pwrstate: Add t8112
+ compatible
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+ <20230202-asahi-t8112-dt-v1-1-cb5442d1c229@jannau.net>
+ <3287867a-456c-ddc3-adbf-90001950c926@linaro.org>
+ <0a33fa04-039f-9a7e-f2a3-2a1a6abc98d4@marcan.st>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0a33fa04-039f-9a7e-f2a3-2a1a6abc98d4@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+On 14/02/2023 03:24, Hector Martin wrote:
+> On 13/02/2023 20.09, Krzysztof Kozlowski wrote:
+>> On 12/02/2023 16:41, Janne Grunau wrote:
+>>> From: Hector Martin <marcan@marcan.st>
+>>>
+>>> Add the apple,t8112-pmgr-pwrstate compatible for the Apple M2 SoC.
+>>>
+>>> This goes after t8103. The sort order logic here is having SoC numeric
+>>> code families in release order, and SoCs within each family in release
+>>> order:
+>>>
+>>> - t8xxx (Apple HxxP/G series, "phone"/"tablet" chips)
+>>>   - t8103 (Apple H13G/M1)
+>>>   - t8112 (Apple H14G/M2)
+>>> - t6xxx (Apple HxxJ series, "desktop" chips)
+>>>   - t6000 (Apple H13J(S)/M1 Pro)
+>>>   - t6001 (Apple H13J(C)/M1 Max)
+>>>   - t6002 (Apple H13J(D)/M1 Ultra)
+>>>
+>>> Note that t600[0-2] share the t6000 compatible where the hardware is
+>>> 100% compatible, which is usually the case in this highly related set
+>>> of SoCs.
+>>>
+>>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>>>
+>>
+>> Missing SoB.
+>>
+> 
+> I'd rather get an r-b, since this is going back into my tree ;)
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/s390/include/asm/setup.h      | 1 -
- arch/s390/include/uapi/asm/setup.h | 1 -
- 2 files changed, 2 deletions(-)
- delete mode 100644 arch/s390/include/uapi/asm/setup.h
+Please follow Linux process which requires SoB chain.
 
-diff --git a/arch/s390/include/asm/setup.h b/arch/s390/include/asm/setup.h
-index 177bf6deaa27..99c1cc97350a 100644
---- a/arch/s390/include/asm/setup.h
-+++ b/arch/s390/include/asm/setup.h
-@@ -7,7 +7,6 @@
- #define _ASM_S390_SETUP_H
- 
- #include <linux/bits.h>
--#include <uapi/asm/setup.h>
- #include <linux/build_bug.h>
- 
- #define PARMAREA		0x10400
-diff --git a/arch/s390/include/uapi/asm/setup.h b/arch/s390/include/uapi/asm/setup.h
-deleted file mode 100644
-index 598d769e76df..000000000000
---- a/arch/s390/include/uapi/asm/setup.h
-+++ /dev/null
-@@ -1 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--- 
-2.37.2
+Best regards,
+Krzysztof
 
