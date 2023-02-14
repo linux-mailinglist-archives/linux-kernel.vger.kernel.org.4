@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBF3695A5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB84B695A74
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjBNHLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S231833AbjBNHRG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 02:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjBNHLH (ORCPT
+        with ESMTP id S231774AbjBNHQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:11:07 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5DB21292
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:07:56 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id m10so5684982wrn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:07:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2CrTfSdCZ8kL9Y45Dpaj6OWp5Cgjxivq7kfQiy/YkcU=;
-        b=PeWqRzzvm0ugtXQYxWSFo8ZVorGdIZZljysgCm3eYjurJcaIWpSn8GwMtTPYRJHsNv
-         PtP3q/m54YcM1A28lJkwfD3oKK77uCmcCo5CS0NX1fbtTUlme3NSrq2fc/ngj1ro1ySi
-         +8LoHJhQV1S3kDa2Y7OoUVyPan1wl7fWPHttYnhmCCOdT0JF9tYw3drFEvDW8ALBF/Rs
-         gTSAa430eVUqHGO5aNnU+kgVaebS9S/39riM/N+edh1f+j5OKGUlZTW8UmtCXbVYKxAM
-         I3CbUm1kGZen7DB3knjEgHSd4YfsUvVCimoRx9RLHN7E3tb+7lvU/doisOLYl4NBYv/R
-         b4tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2CrTfSdCZ8kL9Y45Dpaj6OWp5Cgjxivq7kfQiy/YkcU=;
-        b=vLqFlT03jZ/DXSdFAHdJfeaJb/YzFyxZ1VYD9qwx4AAnCJF4BXT8jvV9fH6PFZsAOz
-         6tgVi7vvWIxfKfo/YUff+J7xD5Qv0wFuj4IRtfVn6pCDLf6koYxDf0DmNqpu5JleKZ6U
-         gprEJFHAAhFz/3t1QMT3x3+jsP95mkDT7/l457l3vnjfWH+IqD9IrfNwsMNhYzT9QfwE
-         kXABJ0f/rEhUCzbTkd0KOOUlXMau5aHLNIeoH6WTlf0IrKkmpL8vGe6XrDys2F8wyfbW
-         F/SZW4xfKszdjs3cs5EDvPwB1SagUjrUi3N0m/f0P044V5vgyOVPOFiyts9OFPRFzKOE
-         NF8w==
-X-Gm-Message-State: AO0yUKWKe/8Fx04kKPvbW81uVGj3ftpO+XYJy7cD+m7JVw6hiwap9hcO
-        muwnfwXcdG8umaKTU7aq/dI=
-X-Google-Smtp-Source: AK7set/u/EeB7g/2bx9z/lATJMIlaAtUQfjrmqR25IF5wouTdISjba3Bb4V91UDgzB/5S5dbZ2bOJg==
-X-Received: by 2002:a5d:6091:0:b0:2c5:5847:7374 with SMTP id w17-20020a5d6091000000b002c558477374mr1143867wrt.67.1676358474534;
-        Mon, 13 Feb 2023 23:07:54 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d13-20020adfe88d000000b002c54f4d0f71sm7246984wrm.38.2023.02.13.23.07.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 23:07:53 -0800 (PST)
-Date:   Tue, 14 Feb 2023 10:07:50 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: r8188eu: Revert "staging: r8188eu: simplify
- rtw_get_ff_hwaddr"
-Message-ID: <Y+szRoaj2rEz/0KN@kadam>
-References: <20230211183205.426820-1-martin@kaiser.cx>
- <20230213195407.15085-1-martin@kaiser.cx>
+        Tue, 14 Feb 2023 02:16:48 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27429234E5;
+        Mon, 13 Feb 2023 23:14:06 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 411AD24E39A;
+        Tue, 14 Feb 2023 15:11:03 +0800 (CST)
+Received: from EXMBX164.cuchost.com (172.16.7.74) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
+ 2023 15:11:03 +0800
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX164.cuchost.com
+ (172.16.6.74) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
+ 2023 15:11:02 +0800
+Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
+ EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
+ 15.00.1497.044; Tue, 14 Feb 2023 15:11:02 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Topic: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Index: AQHZNMIM/vLXVq3JgUiER7vBRC/T367F3jsAgACIQGD//3/YAIAHoM+AgACWCMA=
+Date:   Tue, 14 Feb 2023 07:11:02 +0000
+Message-ID: <d3ca1ec350d2442fb71eb006f8b57c45@EXMBX168.cuchost.com>
+References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+ <20230130154242.112613-5-jiajie.ho@starfivetech.com>
+ <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
+ <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
+ <Y+TARjfzt2FMG6oJ@gondor.apana.org.au> <Y+smaRL9f7g9RWEB@infradead.org>
+In-Reply-To: <Y+smaRL9f7g9RWEB@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.190.105.77]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213195407.15085-1-martin@kaiser.cx>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 08:54:08PM +0100, Martin Kaiser wrote:
-> This reverts commit fd48124e0982 ("staging: r8188eu: simplify
-> rtw_get_ff_hwaddr").
-> 
-> The cleanup in this commit removes the qsel to addr mappings in
-> rtw_get_ff_hwaddr. The underlying assumption is that rtw_write_port
-> uses its addr parameter only for the high_queue check.
-> 
-> This is obviously incorrect as rtw_write_port calls
-> ffaddr2pipehdl(pdvobj, addr);
-> where addr is mapped to a usb bulk endpoint.
-> 
-> Unfortunately, testing did not show any problems. The Edimax V2 on which I
-> tested has two bulk out endpoints. I guess that with the incorrect patch,
-> addr could only be 0 (no high queue) or 6 (high queue), both of which were
-> mapped to the first bulk out endpoint. Data transfers did still work...
-> 
-> Fixes: fd48124e0982 ("staging: r8188eu: simplify rtw_get_ff_hwaddr")
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
-> v2:
->  - use correct patch prefix
->  - add a Fixes tag
->  - use 12-digit hash to refer to the reverted commit
 
-Thanks, Martin!
 
-regards,
-dan carpenter
+> -----Original Message-----
+> From: Christoph Hellwig <hch@infradead.org>
+> Sent: 14 February, 2023 2:13 PM
+> To: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: JiaJie Ho <jiajie.ho@starfivetech.com>; David S . Miller
+> <davem@davemloft.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Emil Renner Berthing
+> <kernel@esmil.dk>; Conor Dooley <conor.dooley@microchip.com>; linux-
+> crypto@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-riscv@lists.infradead.org
+> Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+> 
+> On Thu, Feb 09, 2023 at 05:43:34PM +0800, Herbert Xu wrote:
+> > On Thu, Feb 09, 2023 at 09:33:06AM +0000, JiaJie Ho wrote:
+> > >
+> > > The DMA can only support 32-bit addressing.
+> > > So, I am copying everything in case kernel allocated memory region >32-
+> bit for a user app.
+> >
+> > Does your hardware support scatter-and-gather? If so you should at
+> > least allocate individual pages rather than one contiguous buffer.
+> >
+> > Then you can allocate them on-demand rather than before-hand.
+> >
+> > It would also be nice to not do the copy if the input you were given
+> > was in low memory (and contiguous if your hardware doesn't do SG).
+> 
+> All of that is done by the DMA API, or more specifically swiotlb and does not
+> need to be duplicated in individual drivers.
 
+I'll update the driver accordingly.
+Thanks Christoph and Herbert for the pointers.
+
+Regards
+Jia Jie
