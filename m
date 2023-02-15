@@ -2,165 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA0D6979F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69D9697A03
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbjBOKdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S234104AbjBOKhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjBOKdw (ORCPT
+        with ESMTP id S234078AbjBOKgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:33:52 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD1D186;
-        Wed, 15 Feb 2023 02:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6Eof4phdzg0sVPR1E2iDoi4OzJcyEI7Sur+1QspzK5I=; b=LCWAXdK1dYhry4jZhKLy6rQmC2
-        OpJcSYakbeunDdt8HS/PCtBl5/MLLfRk7WUAfkVJK8m1S2neUNL9aJ6/MVgl4Y5I8kbK/VbZrirsa
-        qMJJbFhnm89CrjdBkxVaR8eGhqG4qur01OodEvWNgh8DDnppYn/aPnZi5OeEaPbEVRAQwP23+m+PE
-        X0NDeFUKO3U1dHxH6qK2bcG943vCDPXw501Frlu6nsRKbtAS5TT/JRABkNrEr214J9y267pmN15mM
-        VpufD/jdSY1YTD5mMMcQJd0C1qY4G5zKVDPe2NzCCwtgAIg4l3sw6OZS1OExX5KiqNyEsLs4IqbQ/
-        F2IHfd2g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pSF5d-009uqX-0h;
-        Wed, 15 Feb 2023 10:33:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67FBF3001E7;
-        Wed, 15 Feb 2023 11:33:20 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4407B23884781; Wed, 15 Feb 2023 11:33:20 +0100 (CET)
-Date:   Wed, 15 Feb 2023 11:33:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+y08ObKvxqRrAsA@hirez.programming.kicks-ass.net>
-References: <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
- <Y+qFc7Q2NfXERwYT@moria.home.lan>
- <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
- <Y+vplu7H8k4OjlL5@rowland.harvard.edu>
+        Wed, 15 Feb 2023 05:36:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911321717E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676457369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0DULdTVfIZoN5gfe54AIlB0FglUr8CaQBCm49yRWhdM=;
+        b=CgZ+cYfjvhwVCBJ8SgIa1eNrfT6zqK72UN/T4nPtWYtu+4zIjF+/lHu1fK/4iMUjUC3fyC
+        c+FJI30UogSeYIKiacMetXAtVFzK59LuDiHkoKaBqwln1W0RqnAcaaU7EGCknm+A1hQ3lL
+        NSS9yEAQJcsZEqQMPlTZQuT19GGwtac=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-352-F7oLIIarNgK249DGkv2PWA-1; Wed, 15 Feb 2023 05:36:08 -0500
+X-MC-Unique: F7oLIIarNgK249DGkv2PWA-1
+Received: by mail-pf1-f198.google.com with SMTP id u18-20020a62ed12000000b00593cc641da4so9373558pfh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DULdTVfIZoN5gfe54AIlB0FglUr8CaQBCm49yRWhdM=;
+        b=s9RtPk66N4mIKI0tjZLJNMtiInP4ojRQtwUrMSCnVHmNHwDT6L3VKKs8eV1NR0NIE2
+         fsRY10PEmrNelBDBJmKMrsZ+ilPHovtxGX0Wmhdd6dyZPrixylqOOW0igZYLB4uv+S7h
+         3B03mTtcrcnLMJpBRJRNoL4JIIUCcg7TLfKyEgJnwo/rARexhlb4TVhIZ5useRCTuhyS
+         yZrTADEYOmnL1JY26cRb/GQWP4xmdoNMZgECtcyr4z+aALHQyg4dyKNT5vvc29P/mBGs
+         5+TwQcufTjJni8dkUETe3QE52Mo6Kvtfv1HoYGj5pek1oeDIrAEiWqEA8y91Tc9tpP7s
+         pc6g==
+X-Gm-Message-State: AO0yUKX3vTK9zpuhMXr8qjmde/enES+it0ISgdbheTf3gv9YKIKKPDOJ
+        Kf/KbIe1Y+7jUzqjlH6tTbNYfQV/cv1lSI8cgZudLvIBzVNWRsuQ0vvIo5wQO6SRD1DS+Z8c6fK
+        KN4kt/f7rvJKdHJEdB73D11Ed
+X-Received: by 2002:a62:6386:0:b0:5a8:d774:b1bb with SMTP id x128-20020a626386000000b005a8d774b1bbmr1242719pfb.17.1676457367428;
+        Wed, 15 Feb 2023 02:36:07 -0800 (PST)
+X-Google-Smtp-Source: AK7set9LIdiV+BZC34EN4XzgfYunSTZ8ydX5eez16+K7fnvylsGll/d6Y1RhpFXInG2c+mL+K9q5gA==
+X-Received: by 2002:a62:6386:0:b0:5a8:d774:b1bb with SMTP id x128-20020a626386000000b005a8d774b1bbmr1242709pfb.17.1676457367110;
+        Wed, 15 Feb 2023 02:36:07 -0800 (PST)
+Received: from [10.72.12.170] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id j21-20020aa78d15000000b00581c741f95csm11322638pfe.46.2023.02.15.02.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 02:36:06 -0800 (PST)
+Message-ID: <90147a2b-982e-ae57-9b7c-062bee0fab07@redhat.com>
+Date:   Wed, 15 Feb 2023 18:36:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+vplu7H8k4OjlL5@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: cgroup: deadlock between cpu_hotplug_lock and freezer_mutex
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230215072501.3764-1-hdanton@sina.com>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <20230215072501.3764-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 03:05:42PM -0500, Alan Stern wrote:
-> On Tue, Feb 14, 2023 at 12:05:27PM +0100, Peter Zijlstra wrote:
-> > Every class gets a fixed 8 subclasses (0-7) given by the unique byte
-> > addresses inside the actual key object.
-> > 
-> > Subclasses will let you create nesting order of the same class that are
-> > acceptable. Typically lock/1 nests inside lock/0, but that's not
-> > hard-coded, simply convention.
-> 
-> Can you explain in more detail how this works in the lockdep checking 
-> algorithm?  (For simplicity, let's leave out issues of interrupt status 
-> and other environmental things.)
-> 
-> I've been assuming that lockdep builds up a set of links between the 
-> classes -- namely, a link is created from A to B whenever a thread holds 
-> a lock of class A while acquiring a lock of class B.  The checking part 
-> would then amount to just making sure that these links don't form any 
-> cycles.
-> 
-> So then how do subclasses fit into the picture?  Is it just that now the 
-> links are between subclasses rather than classes, so it's not 
-> automatically wrong to hold a lock while acquiring another lock of the 
-> same class as long as the two acquisitions are in different subclasses?  
-> But you can still provoke a violation if there's a cycle among the 
-> subclasses?
+Hi Hillf,
 
-For all intents and purposes the subclasses are fully distinct classes
-from the validation pov.
+On 15/02/2023 15:25, Hillf Danton wrote:
+> On Wed, 15 Feb 2023 10:07:23 +0800 Xiubo Li <xiubli@redhat.com>
+>> Hi
+>>
+>> Recently when running some test cases for ceph we hit the following
+>> deadlock issue in cgroup code. Has this been fixed ? I have checked the
+>> latest code and it seems no any commit is fixing this.
+>>
+>> This call trace could also be found in
+>> https://tracker.ceph.com/issues/58564#note-4, which is more friendly to
+>> read.
+>>
+>>    ======================================================
+>>    WARNING: possible circular locking dependency detected
+>>    6.1.0-rc5-ceph-gc90f64b588ff #1 Tainted: G S
+>>    ------------------------------------------------------
+>>    runc/90769 is trying to acquire lock:
+>>    ffffffff82664cb0 (cpu_hotplug_lock){++++}-{0:0}, at:
+>> static_key_slow_inc+0xe/0x20
+>>    #012but task is already holding lock:
+>>    ffffffff8276e468 (freezer_mutex){+.+.}-{3:3}, at: freezer_write+0x89/0x530
+>>    #012which lock already depends on the new lock.
+>>    #012the existing dependency chain (in reverse order) is:
+>>    #012-> #2 (freezer_mutex){+.+.}-{3:3}:
+>>          __mutex_lock+0x9c/0xf20
+>>          freezer_attach+0x2c/0xf0
+>>          cgroup_migrate_execute+0x3f3/0x4c0
+>>          cgroup_attach_task+0x22e/0x3e0
+>>          __cgroup1_procs_write.constprop.12+0xfb/0x140
+>>          cgroup_file_write+0x91/0x230
+>>          kernfs_fop_write_iter+0x137/0x1d0
+>>          vfs_write+0x344/0x4d0
+>>          ksys_write+0x5c/0xd0
+>>          do_syscall_64+0x34/0x80
+>>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>    #012-> #1 (cgroup_threadgroup_rwsem){++++}-{0:0}:
+>>          percpu_down_write+0x45/0x2c0
+>>          cgroup_procs_write_start+0x84/0x270
+>>          __cgroup1_procs_write.constprop.12+0x57/0x140
+>>          cgroup_file_write+0x91/0x230
+>>          kernfs_fop_write_iter+0x137/0x1d0
+>>          vfs_write+0x344/0x4d0
+>>          ksys_write+0x5c/0xd0
+>>          do_syscall_64+0x34/0x80
+>>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>    #012-> #0 (cpu_hotplug_lock){++++}-{0:0}:
+>>          __lock_acquire+0x103f/0x1de0
+>>          lock_acquire+0xd4/0x2f0
+>>          cpus_read_lock+0x3c/0xd0
+>>          static_key_slow_inc+0xe/0x20
+>>          freezer_apply_state+0x98/0xb0
+>>          freezer_write+0x307/0x530
+>>          cgroup_file_write+0x91/0x230
+>>          kernfs_fop_write_iter+0x137/0x1d0
+>>          vfs_write+0x344/0x4d0
+>>          ksys_write+0x5c/0xd0
+>>          do_syscall_64+0x34/0x80
+>>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>    #012other info that might help us debug this:
+>>    Chain exists of:#012  cpu_hotplug_lock --> cgroup_threadgroup_rwsem
+>> --> freezer_mutex
+>>    Possible unsafe locking scenario:
+>>          CPU0                    CPU1
+>>          ----                    ----
+>>     lock(freezer_mutex);
+>>                                  lock(cgroup_threadgroup_rwsem);
+>>                                  lock(freezer_mutex);
+>>     lock(cpu_hotplug_lock);
+>>    #012 *** DEADLOCK ***
+> Thanks for your report.
+>
+> Change locking order if it is impossible to update freezer_active in atomic manner.
+>
+> Only for thoughts.
 
-	mutex_lock(L);
-	mutex_lock_nested(L, 0);
+Sure, I will test this.
 
-are equivalent (ignoring lockdep_set_subclass()), and
+Thanks
 
-	mutex_lock_nested(L, 1);
 
-is a distinct class, validation wise. So if you write:
+>
+> Hillf
+> +++ linux-6.1.3/kernel/cgroup/legacy_freezer.c
+> @@ -350,7 +350,7 @@ static void freezer_apply_state(struct f
+>   
+>   	if (freeze) {
+>   		if (!(freezer->state & CGROUP_FREEZING))
+> -			static_branch_inc(&freezer_active);
+> +			static_branch_inc_cpuslocked(&freezer_active);
+>   		freezer->state |= state;
+>   		freeze_cgroup(freezer);
+>   	} else {
+> @@ -361,7 +361,7 @@ static void freezer_apply_state(struct f
+>   		if (!(freezer->state & CGROUP_FREEZING)) {
+>   			freezer->state &= ~CGROUP_FROZEN;
+>   			if (was_freezing)
+> -				static_branch_dec(&freezer_active);
+> +				static_branch_dec_cpuslocked(&freezer_active);
+>   			unfreeze_cgroup(freezer);
+>   		}
+>   	}
+> @@ -379,6 +379,7 @@ static void freezer_change_state(struct
+>   {
+>   	struct cgroup_subsys_state *pos;
+>   
+> +	cpus_read_lock();
+>   	/*
+>   	 * Update all its descendants in pre-order traversal.  Each
+>   	 * descendant will try to inherit its parent's FREEZING state as
+> @@ -407,6 +408,7 @@ static void freezer_change_state(struct
+>   	}
+>   	rcu_read_unlock();
+>   	mutex_unlock(&freezer_mutex);
+> +	cpus_read_unlock();
+>   }
+>   
+>   static ssize_t freezer_write(struct kernfs_open_file *of,
+>
+-- 
+Best Regards,
 
-	mutex_lock(L1);
-	mutex_lock_nested(L2, 1);
+Xiubo Li (李秀波)
 
-you explicitly create a lock order between the distinct validation
-classes: L/0,  L/1
-
-> > Then there's that nesting lock, that requires two classes and at least 3
-> > locks to make sense:
-> > 
-> >   P, C1, C2
-> > 
-> > Where we posit that any multi-lock of Cn is fully serialized by P
-> 
-> Assuming the speculations above are correct, how does the algorithm take 
-> lockdep nesting into account?  Does it simply avoid creating a link from 
-> subclass C to itself if both C1 and C2 were acquired while holding a 
-> lock of the parent subclass and both acquisitions were annotated with 
-> mutex_lock_next_lock()?
-
-Basically this; it will explicitly ignore the nesting.
-
-Given:
-
-	mutex_lock(P);
-	mutex_lock_nest_lock(C1, P);
-	mutex_lock_nest_lock(C2, P);
-
-mutex_lock_nest_lock() basically does:
-
- - validate that the instance of P is actually held.
-   (as such, mutex_lock_nest_lock(C1, P1); mutex_lock_nest_lock(C2, P2);
-   will cause objections).
-
- - either:
-
-   * establish P->C in the held-lock stack
-     and update the graph if so required
-
-   * find the existing C in the held-lock stack
-     and instead of complaining about class recursion, increment a
-     refcount, and leave the held-stack and thus the graph unmodified.
-
-subsequent mutex_unlock() will decrement the refcount and only when 0
-'pop' the actual entry from the held stack.
-
+Email: xiubli@redhat.com/xiubli@ibm.com
+Slack: @Xiubo Li
 
