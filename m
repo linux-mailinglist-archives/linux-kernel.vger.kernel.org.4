@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D61698100
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CD1698108
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjBOQhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S229523AbjBOQin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjBOQhQ (ORCPT
+        with ESMTP id S229446AbjBOQil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:37:16 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8933C22
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:37:01 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C7F40339B4;
-        Wed, 15 Feb 2023 16:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676479019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLQ6rU7zz0HJVa8gDPYeX8nHAvog15O6NivjpTe4eMg=;
-        b=V22reOGYwN8altkRfmZtMUKWNeSgDcBVzdOC0Hr3wEuoEoy0wGsweVJs3DNGsXb/laMCxi
-        eJcEyb3ZYfM/4XAC7sp+B7TlegjIguX+8s0OSkwtyhIRTrdd9oPLStd1PXRmSbK2SQYFqX
-        Hg0/L3wlLblgW56Mys652DTmw2HNGqw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FBC713483;
-        Wed, 15 Feb 2023 16:36:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9JcYJCsK7WP+QwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 15 Feb 2023 16:36:59 +0000
-Date:   Wed, 15 Feb 2023 17:36:58 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, david@redhat.com,
-        rppt@kernel.org, willy@infradead.org, mgorman@techsingularity.net,
-        osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] handle memoryless nodes more appropriately
-Message-ID: <Y+0KKnN8BU6ky6oP@dhcp22.suse.cz>
-References: <20230215152412.13368-1-zhengqi.arch@bytedance.com>
+        Wed, 15 Feb 2023 11:38:41 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14F3646A;
+        Wed, 15 Feb 2023 08:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QZeyTraFcbeI8aImDYPVhypwmRLT7NN7Q/wvF36P66g=; b=BHsVl7A524f3kv4ggnOjMEgTCt
+        nTWCHvpzbdA7vN5WRjbrUIP8FKU6vrfpCJOMyxWbLsZdVI37pR6sLVkuPkp7L+vzrc2DTQe+ewmoW
+        8/tGaxmbdcq0ZcCr0I9zU4lwsAHnWlvZUEEyRneL8dU/T31xB7LGcsqAUbiyQyuV5s7DxKLpCB70M
+        aeAWNtUxxh9pjh5jWbSp7lksq3T/ijwisTgu/jqhocFzpJy16H2S2PlwjGkF6oksn2ygpTPXMF47z
+        vw726UOpzqbPcNE5o0tKli9d/JFmVhUbU6hV1c0b3zJEqg40h6jWlg6oA7JTCuxDYODGVfF/jWoGM
+        LgjZpHUw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pSKnB-006Y5G-Rx; Wed, 15 Feb 2023 16:38:01 +0000
+Date:   Wed, 15 Feb 2023 08:38:01 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v15 05/17] overlayfs: Implement splice-read
+Message-ID: <Y+0KaXocK57OrGTS@infradead.org>
+References: <20230214171330.2722188-1-dhowells@redhat.com>
+ <20230214171330.2722188-6-dhowells@redhat.com>
+ <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com>
+ <3370085.1676475658@warthog.procyon.org.uk>
+ <CAJfpegt5OurEve+TvzaXRVZSCv0in8_7whMYGsMDdDd2EjiBNQ@mail.gmail.com>
+ <Y+z/85HqpEceq66f@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230215152412.13368-1-zhengqi.arch@bytedance.com>
+In-Reply-To: <Y+z/85HqpEceq66f@casper.infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-02-23 23:24:10, Qi Zheng wrote:
-> Hi all,
+On Wed, Feb 15, 2023 at 03:53:23PM +0000, Matthew Wilcox wrote:
+> On Wed, Feb 15, 2023 at 04:50:04PM +0100, Miklos Szeredi wrote:
+> > Looks good.  One more suggestion: add a vfs_splice() helper and use
+> > that from do_splice_to() as well.
 > 
-> Currently, in the process of initialization or offline memory, memoryless
-> nodes will still be built into the fallback list of itself or other nodes.
-> 
-> This is not what we expected, so this patch series removes memoryless
-> nodes from the fallback list entirely.
-> 
-> Comments and suggestions are welcome.
+> I really hate call_read_iter() etc.  Please don't perpetuate that
+> pattern.
 
-This is a tricky area full of surprises and it is really easy to
-introduce new problems. What kind of problem/issue are you trying to
-solve/handle by these changes?
+I think it's time to kill it.  I'll prepare a patch for it.
 
--- 
-Michal Hocko
-SUSE Labs
