@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB786698141
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98C9698148
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBOQu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        id S229791AbjBOQua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBOQuW (ORCPT
+        with ESMTP id S229812AbjBOQuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:50:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD349747;
-        Wed, 15 Feb 2023 08:50:18 -0800 (PST)
+        Wed, 15 Feb 2023 11:50:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1071CADF;
+        Wed, 15 Feb 2023 08:50:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBAEB61CED;
-        Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52076C4339E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7AE9B82315;
+        Wed, 15 Feb 2023 16:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A011C4339C;
         Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1676479817;
-        bh=Ppg5Lw0syIaOQbx7tKQT6J+9i/+U/v5NnOvPAfvJ8xE=;
+        bh=FelCGJSMNmD0q/gthNIR8bM7VlU6iPsJJYGJXrDNBXc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S4oGPt1wk8hTblliNjEUQP8rIKGwTdyIQS7lZ29BlBXGIlXQwHujXk2Ye1h3Gl7H7
-         hOPi4q05VdQ8MQNFwTHOCMYf7LT/XbWF/vDgpQyxKV5KvRjF1HsXMh6+71ZALKl3DP
-         lfnKjMEwzIZgU3VmKI3Ou3Y33dCg54Lj0LTj06TdL4m0B0B1EizKLk3lyF5UT0P+wl
-         1fxIa/ZoPDtWtvn+52Ez5D1sXaizs0azo/2BvqFPXvOU7RByGu8BknPJOVLnEBdn1/
-         66xqBhkLzQPmW0vyVmhNdy7cgA+UVsANxfETVQ76s32BL5y4kfC3dkUn/xDPuEmP4e
-         HB46uLqCV9DSw==
+        b=oiO2YcE53phhkGP4mQAXZ2XWkLpK3VD9fNFZp/rVqHtZJMs8HWgkmriFQv7EWHQMS
+         rjHjY/kaM66vRYV0R/SuT7FMOIQyzi5+T+MiOt+Eq6qkCDfx4B1vjnKa4IxWXHnkRH
+         lNfJOgtl//LgvKGPrr3PZZBavSI4SCtY0kuglyHJ2Or/I/BH7MvVmXEXKckOBt/Ajl
+         1XaO40raqOYYEv02s4qBauSI3t9lr9WZGQo4h1czhSjERvIrbJJUkY+TQoJYn6hERb
+         Z3Lmw0LLNH2XPCvwJYWH7fPK/ibMt+ejDfM/Kb3acOA/V0pIzAnP9nzFffUilGeMUN
+         ZNAsR8FHH7jBg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A42FE29F41;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32E14C4166F;
         Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf, docs: Add myself to BPF docs MAINTAINERS entry
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build error for LoongArch
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167647981723.6958.10599726108070077422.git-patchwork-notify@kernel.org>
+Message-Id: <167647981720.6958.16652341885651438279.git-patchwork-notify@kernel.org>
 Date:   Wed, 15 Feb 2023 16:50:17 +0000
-References: <20230214223553.78353-1-void@manifault.com>
-In-Reply-To: <20230214223553.78353-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, bpf@ietf.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, dthaler@microsoft.com
+References: <1676458867-22052-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1676458867-22052-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,21 +61,23 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 14 Feb 2023 16:35:53 -0600 you wrote:
-> In commit 7e2a9ebe8126 ("docs, bpf: Ensure IETF's BPF mailing list gets
-> copied for ISA doc changes"), a new MAINTAINERS entry was added for any
-> BPF IETF documentation updates for the ongoing standardization process.
-> I've been making it a point to try and review as many BPF documentation
-> patches as possible, and have made a committment to Alexei to
-> consistently review BPF standardization patches going forward. This
-> patch adds my name as a reviewer to the MAINTAINERS entry for the
-> standardization effort.
+On Wed, 15 Feb 2023 19:01:07 +0800 you wrote:
+> There exists build error when make -C tools/testing/selftests/bpf/
+> on LoongArch:
+> 
+>   BINARY   test_verifier
+> In file included from test_verifier.c:27:
+> tools/include/uapi/linux/bpf_perf_event.h:14:28: error: field 'regs' has incomplete type
+>    14 |         bpf_user_pt_regs_t regs;
+>       |                            ^~~~
+> make: *** [Makefile:577: tools/testing/selftests/bpf/test_verifier] Error 1
+> make: Leaving directory 'tools/testing/selftests/bpf'
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf, docs: Add myself to BPF docs MAINTAINERS entry
-    https://git.kernel.org/bpf/bpf-next/c/213aacb8a27b
+  - [bpf-next] selftests/bpf: Fix build error for LoongArch
+    https://git.kernel.org/bpf/bpf-next/c/524581d12164
 
 You are awesome, thank you!
 -- 
