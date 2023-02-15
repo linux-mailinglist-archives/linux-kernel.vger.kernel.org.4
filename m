@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE53698530
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAD569853B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjBOUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S229570AbjBOUHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBOUGV (ORCPT
+        with ESMTP id S229436AbjBOUH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:06:21 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C3B3D93A;
-        Wed, 15 Feb 2023 12:06:16 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 15 Feb 2023 15:07:28 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D6A3A842;
+        Wed, 15 Feb 2023 12:07:26 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PH8GV4H1zz4x4r;
-        Thu, 16 Feb 2023 07:06:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676491571;
-        bh=nMAwoYxXPHrxlor3Q73lbTOHTIyT9RRacht71KH3FQw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GRAxPO0NEmrPLltFk4jntBZy/p81DcwBEeMNciAcxh3QJrPf8pgTsXFeqJ3iyFwGV
-         mRpQ4/62xi04Ac2wWkAwUCJ3TRZGuTvW1yBfGkIBrWCH1ynlp2uQMGIs8sxDdbuHMe
-         Wa5PXBe9Ry6MXJYvtvZegBE0nxB2ohwb8s1gR5uMzgJS/o8K0Svy9Ub8Z2yqq5CfLk
-         QenhunQn10FTtFZjw4Mav/9lzzcdAeZ7m51PhXsa8UzdH0YFgGmpWe+WBdGsW0AFtW
-         P+f8nyKpeicFIkkiIvqpXWNrZ+9q2aX0jWPmqnseHKvWIau7m6Ved+yRl6BEnkZGv0
-         V+kn4mP9WOeCQ==
-Date:   Thu, 16 Feb 2023 07:06:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the ntfs3 tree
-Message-ID: <20230216070609.7045e2e1@canb.auug.org.au>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A247F3F382;
+        Wed, 15 Feb 2023 20:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676491643;
+        bh=vtVE8Ky3NneEt+Iq5R+IRSpqPwVLHIVdo8Ja12YWLOY=;
+        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type;
+        b=aj0erkBhEPu4XhrfVhI79HNtbG1wy5S0kwwrJDrEJQAJBjU5Wf45TBLuntu28B9Yc
+         NYhLnlbagfkltjpEiSYA0PAXXVSNROaQ6SnzuOrxxr7kZ5cXbnJEFTcuko17iVbA+z
+         mzVaiGQi/73aC0D7vfv43b501LizCSv/Ed7QMv1U9t9edTUWLW43BJNKXNM6BgC9ad
+         gNagSo/vDAAxBzkxBUMm4QPa1Mg2E7hlRuarSjpdDK5DG5MxdHjZo4kk//doOH0Him
+         hvQZOXM5tq4MxyM9ks01eLOPQFfEwUUNGvx9T1JYcg4ALGRl+h/CFYgjanj5eqGTVp
+         xUVUi1moo5uPQ==
+Message-ID: <442b2890-7b94-e2a1-91c6-6dac18d67463@canonical.com>
+Date:   Wed, 15 Feb 2023 12:07:19 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   John Johansen <john.johansen@canonical.com>
+Subject: [GIT PULL] apparmor fix for v6.2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Content-Language: en-US
+Organization: Canonical
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Linus,
 
-Hi all,
+please pull the apparmor fix for v6.2
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
 
-  fca02f0f400b ("fs/ntfs3: Don't hold ni_lock when calling truncate_setsize=
-()")
+The following changes since commit e1c04510f521e853019afeca2a5991a5ef8d6a5b:
 
-This is commit
+   Merge tag 'pm-6.2-rc9' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm (2023-02-14 09:38:33 -0800)
 
-  0226635c304c ("fs/ntfs3: don't hold ni_lock when calling truncate_setsize=
-()")
+are available in the Git repository at:
 
-in Linus' tree.
+   git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-v6.2-rc9
 
---=20
-Cheers,
-Stephen Rothwell
+for you to fetch changes up to cbb13e12a5d3ecef400716ea7d12a9268b0f37ca:
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+   apparmor: Fix regression in compat permissions for getattr (2023-02-15 11:24:38 -0800)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Regression fix
+- getattr mediation of old policy
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtOzEACgkQAVBC80lX
-0GymNQf7BDoEuM/yXa7ZS0Yv/5d2mFSl2sRSuY4I0sF2+ilZiz9RhuoUrezTQ2T/
-fPR/EXE/Jk2mv5eFW5MNnquf+pthkMe3kCpcJgOxnaWXKKmkZaA+VsZ8ctiHpR+d
-VjyXq9Knu9TeWx+zjBEcv4McyHXTJr+wmJL4UidknjWhp1U9ZsLwu3cK8I/Pr6+T
-PcMjINsqvNI62/4aUIjAzTSMlhOM2hlU+LybfOn/ybLxkMa43yp3L1IkRYVG3v4Q
-KUodrtaYN/spR9/HXa7xD705mij2+nDkyTslGYUNk23h9vlluqii+KVVgiprYXQA
-sWLVgiyHKrlfA8rcwwHHH+glKF4bVQ==
-=B2+d
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+John Johansen (1):
+       apparmor: Fix regression in compat permissions for getattr
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O--
+  security/apparmor/policy_compat.c | 3 +--
+  1 file changed, 1 insertion(+), 2 deletions(-)
+
