@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BBF69845D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFB3698456
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjBOTTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S229840AbjBOTTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjBOTTu (ORCPT
+        with ESMTP id S229460AbjBOTTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:19:50 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0AE3E612
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:19:46 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id m14so20209900wrg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:19:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zVy/c+cEbMIt9TIoyvZusWRPHpRTQuTATF5cUQLqC4s=;
-        b=fBnHeZPLzrGTJ+GWgxhoUQ9ZzA3Lc7rxkwystan7qPiLYpBrQCaL3fRgz6836TNTHz
-         0iRj/kV9eAPZdwryApHfytig73xF31qAFfLDTc9kubaZor1EIr0Z4ie4gQz+lUrlq9C8
-         AbzlsY2hrUPX/PGGF9aXLRqydd36ogYo8YFWgcqwHh9CH5w+DORJybeyaXgCoKbLChWy
-         F27AGqX52xFaCy7uGk1ApL/r+Wq2TvTPkoGUqzLTpq5KcGP9D8E0rdPGmMBUSYI1XYIU
-         Zdy/18FoRvtaQwRvwIhC7xEJ77Dz4Y2eLbj3Q2uT101HaqUzNKO3k9nWcsBtikrlkHf8
-         pVpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVy/c+cEbMIt9TIoyvZusWRPHpRTQuTATF5cUQLqC4s=;
-        b=4AaVwRIqlMcRI1toyMR/n/tTfLAOX2NcroL8vDQwVEp+WmsE5YFGpjrbMOCwurp0tJ
-         Qm88Ejs8FLX/YHwAR5CgHNMkVbQArgzVi/BpCBSLAKbXWXdZ6oLI9Fi54iwlR3YUGt//
-         WcxPx/LE4P/4EUcdpnghY8qSRrEpMZm/uQ9gqApFjKhhU8wZpJ8alHNLquUilhBM8Kx1
-         FNbOCk9ql3Nir2Nng2ZaZ87EpHTOaLb9ofxHpLax4oUyxYfJflfzZeQRinnmDQ5nlsCC
-         lUKt/A8d/IsHxXn6XHhkOsBN7SCmZBkMD+q/gcFGGqxKs/2wT+GtmAl3Iaqid7NWEY5t
-         XdEg==
-X-Gm-Message-State: AO0yUKVofqYUfYcGc0aeaL9VZWs4lnq+Dpc1iHgp5aZEW0A/OdpbKO3k
-        Rr6jJoqsx9EZEO8qpNQQnLD6xQ==
-X-Google-Smtp-Source: AK7set/9DsbtaIrsocf96fJaGpubiBoTK5aOjMvOd3HgsZ49/Uzn8dJY8QA23em2CaUqweOCX9YRDw==
-X-Received: by 2002:a05:6000:1152:b0:2c5:52f5:c63b with SMTP id d18-20020a056000115200b002c552f5c63bmr2756520wrx.11.1676488784705;
-        Wed, 15 Feb 2023 11:19:44 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t15-20020a5d534f000000b002c55306f6edsm10284549wrv.54.2023.02.15.11.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 11:19:44 -0800 (PST)
-Message-ID: <2334035b-cc52-8dfb-9ba4-544081b98d6f@linaro.org>
-Date:   Wed, 15 Feb 2023 20:19:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97
- descriptions
-Content-Language: en-US
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 15 Feb 2023 14:19:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556C528D1A;
+        Wed, 15 Feb 2023 11:19:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E691961D32;
+        Wed, 15 Feb 2023 19:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22671C433D2;
+        Wed, 15 Feb 2023 19:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676488739;
+        bh=8GWjqreOHv2W/xsRv67Y//DXKDgBWI0OWSUAjgSvAVQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hnQg+Ob1o4x1ag1phNPXzCCPePM7FpcHoMw2E2NvCAKiZD8lJLVz8piHK+EUzctPG
+         9Z/veiyEXLSYwlG6xGUEuADeQiwaQWQyG6ZTDxAqYQ3C8dTZ+Y8UZPCvChRiA1kTpc
+         QVbkSBzS+FgL6gfGYpMOd8y3+Pd7BwMX+3IrsvdE7l0bOeftmZ+cW2LBfDoSkzhDP9
+         EC74qv/UIWtObUNzeEqMugqxSwAPmqlD3cc4nLq1Kwm9XoUxPJTmSH+7QbFln1z37W
+         PLIcEC0wh8SWJiX+P4hMnxdiPejTz7OUhFxNEbfcJHeLvNWNhjoqVgLtvCf85SZRjo
+         sNk4xeDcfOK4g==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
- <46d5b6af-23e1-4178-83bc-b4a435b1426e@linaro.org>
- <109868b9492aecaca0a7170cba9fb51e62de7116.camel@gmail.com>
- <c4f5f733-ce22-2dfa-30f7-cde309eadaf9@linaro.org>
- <ba51ecefb814115e977d90062ca5fe99859cb327.camel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ba51ecefb814115e977d90062ca5fe99859cb327.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Mark Brown <broonie@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: (subset) [PATCH v2 1/7] arm64: dts: qcom: ipq6018: align RPM G-Link node with bindings
+Date:   Wed, 15 Feb 2023 11:21:01 -0800
+Message-Id: <167648885791.1615253.5210458428567341276.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+References: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +64,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 15:26, Alexander Sverdlin wrote:
-> Hello Krzysztof!
+On Wed, 8 Feb 2023 11:15:39 +0100, Krzysztof Kozlowski wrote:
+> Bindings expect (and most of DTS use) the RPM G-Link node name to be
+> "rpm-requests".
 > 
-> On Tue, 2023-02-14 at 15:11 +0100, Krzysztof Kozlowski wrote:
->>>>> +  interrupts:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  clocks:
->>>>> +    minItems: 3
->>>>
->>>> maxItems instead
->>>
->>> reg and clocks are required, I suppose I should include both minItems
->>> and maxItems for both of them?
->>
->> No. minItems is implied.
 > 
-> I see. But I think minItems "3" should be included for clocks, right?
 
-No, why? It is implied when you provide maxItems. Therefore why would
-you need it to make it explicitly (although you can, but we avoid it for
-smaller code)?
+Applied, thanks!
+
+[4/7] dt-bindings: mailbox: qcom,apcs-kpss-global: drop mbox-names from example
+      commit: 7c855ef7137a67bcff0e039691b969428dd8ef6a
 
 Best regards,
-Krzysztof
-
+-- 
+Bjorn Andersson <andersson@kernel.org>
