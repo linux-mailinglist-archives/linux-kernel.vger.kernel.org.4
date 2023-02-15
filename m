@@ -2,143 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030E7697722
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624A8697730
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjBOHHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S233473AbjBOHOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbjBOHHS (ORCPT
+        with ESMTP id S229546AbjBOHOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:07:18 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A84E34F58
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676444806; x=1707980806;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v0HZJmds0TuG9z0N2FOHhx57xtypMjsdYvZDGJXnunQ=;
-  b=LFo8VcB4n/GW4JghwRQlLPgiFAQJxp7imQgZ/8hMyffqLLBlN0EIsqP7
-   NP0D5oF9TV0wbZdC50Y2A5rgFAPSQFyoBROTd/rsDkPl4zEPqiKh2nDOe
-   SBnM3No1GLUApVCbPICB5KKOfNsVgpdu7c00ERpYwBuxjsjbJZ8FZN1S3
-   vbrXPvpgJJKa1Ts0/gpt0CZLpadmO6FMlnBXEq5yfOX41fAMmYC4JIw4i
-   0jbScQKYjBaYnbxVMcWoIlJ5pXCMT7Gti47bvLGtYfap1sc6+LDIJotu2
-   RAiw17BIrVngbfaXg/k0rFPBQhOTK3KATar4qeSWSH4HDIaSEnwJb69id
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="329079743"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="329079743"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 23:05:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="758296074"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="758296074"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.112])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Feb 2023 23:05:48 -0800
-Date:   Wed, 15 Feb 2023 15:13:36 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Zhao Liu <zhao1.liu@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?utf-8?B?SGVsbHN0cu+/vW0=?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?utf-8?B?S++/vW5pZw==?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH 0/9] drm/i915: Replace kmap_atomic() with
- kmap_local_page()
-Message-ID: <Y+yGIPcTfirmdIdK@liuzhao-OptiPlex-7080>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
- <63ec5ea4d162d_18bf5929443@iweiny-mobl.notmuch>
+        Wed, 15 Feb 2023 02:14:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC74129E0A;
+        Tue, 14 Feb 2023 23:14:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68663618CD;
+        Wed, 15 Feb 2023 07:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52967C433D2;
+        Wed, 15 Feb 2023 07:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676445250;
+        bh=IFO9sYbIUX6Yq5A71YlDyaYjEk+QPXRW1MBebM0CY24=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ufPV1INsobzI+bbgACjVvUu4CWBA/JUPH1k//GKfsxCrR38knRH1n/PBVdWMtVpgh
+         Bf2bs/EaGC4WaxLgbgHx1XxorrV46MDaUNYwqLSKy25BExhNs+uSDm0xl6V0Sz5g9f
+         nFp03DiZF11ofiGs82NcVZr3v6PshcZxfS75qmayzoJ16GEMjLlbbg+0d0looZsMmo
+         Kaw1VgX/VAKIxvWInXXPC6QIzjOgOmRw63hyIC9leJ36+yEnuReFCc5uzI9a7hm3Pb
+         DmI9/xV1+QRuAQfuLS2bdRph9xgujPtcEvvL3jZOHiyIcLw3rPO12uSTi3I7T4WVCt
+         bMk7ShxaoM51A==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Vineet Gupta <vineetg@rivosinc.com>,
+        Andy Chiu <andy.chiu@sifive.com>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        anup@brainfault.org, atishp@atishpatra.org,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        greentime.hu@sifive.com, guoren@linux.alibaba.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v13 10/19] riscv: Allocate user's vector context
+ in the first-use trap
+In-Reply-To: <5e440cfa-27c5-f216-5529-350ac19c07ff@rivosinc.com>
+References: <20230125142056.18356-1-andy.chiu@sifive.com>
+ <20230125142056.18356-11-andy.chiu@sifive.com>
+ <875ycdy22c.fsf@all.your.base.are.belong.to.us>
+ <82551518-7b7e-8ac9-7325-5d99d3be0406@rivosinc.com>
+ <87sff8ags6.fsf@all.your.base.are.belong.to.us>
+ <CABgGipXSsqgtTx9bCy-gt7CTBkXN--t1wHgLfCxA3=vs6y+qUw@mail.gmail.com>
+ <873578faxg.fsf@all.your.base.are.belong.to.us>
+ <5e440cfa-27c5-f216-5529-350ac19c07ff@rivosinc.com>
+Date:   Wed, 15 Feb 2023 08:14:08 +0100
+Message-ID: <87wn4jjt8f.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63ec5ea4d162d_18bf5929443@iweiny-mobl.notmuch>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:25:08PM -0800, Ira Weiny wrote:
-> Date: Tue, 14 Feb 2023 20:25:08 -0800
-> From: Ira Weiny <ira.weiny@intel.com>
-> Subject: Re: [PATCH 0/9] drm/i915: Replace kmap_atomic() with
->  kmap_local_page()
-> 
-> Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > The use of kmap_atomic() is being deprecated in favor of
-> > kmap_local_page()[1].
-> 
-> Zhao,
-> 
-> Was there ever a v2 of this series?  I'm not finding it on Lore.
+Vineet Gupta <vineetg@rivosinc.com> writes:
 
-Sorry Ira, my delay is too long, I was busy with other patch work,
-I will refresh v2 soon, and push this forward!
+> On 2/14/23 08:50, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Andy Chiu <andy.chiu@sifive.com> writes:
+>>
+>>> Hey Bj=C3=B6rn,
+>>>
+>>> On Tue, Feb 14, 2023 at 2:43 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org=
+> wrote:
+>>>> So, two changes:
+>>>>
+>>>> 1. Disallow V-enablement if the existing altstack does not fit a V-siz=
+ed
+>>>>     frame.
+>>> This could potentially break old programs (non-V) that load new system
+>>> libraries (with V), If the program sets a small alt stack and takes
+>>> the fault in some libraries that use V. However, existing
+>>> implementation will also kill the process when the signal arrives,
+>>> finding insufficient stack frame in such cases. I'd choose the second
+>>> one if we only have these two options, because there is a chance that
+>>> the signal handler may not even run.
+>> I think we might have different views here. A process has a pre-V, a and
+>> post-V state. Is allowing a process to enter V without the correct
+>> preconditions a good idea? Allow to run with V turned on, but not able
+>> to correctly handle a signal (the stack is too small)?
+>
+> The requirement is sane, but the issue is user experience: User trying=20
+> to bring up some V code has no clue that deep in some startup code some=20
+> alt stack had been setup and causing his process to be terminated on=20
+> first V code.
+>
+>>
+>> This was the same argument that the Intel folks had when enabling
+>> AMX. Sure, AMX requires *explicit* enablement, but same rules should
+>> apply, no?
+>>
+>>>> 2. Sanitize altstack changes when V is enabled.
+>>> Yes, I'd like to have this. But it may be tricky when it comes to
+>>> deciding whether V is enabled, due to the first-use trap. If V is
+>>> commonly used in system libraries then it is likely that V will be
+>>> enabled before an user set an altstack. Sanitizing this case would be
+>>> easy and straightforward.
+>
+> Good. Lets have this in v14 as it seems reasonably easy to implement.
+>
+>>> But what if the user sets an altstack before
+>>> enabling V in the first-use trap? This could happen on a statically
+>>> program that has hand-written V routines. This takes us to the 1st
+>>> question above, should we fail the user program immediately if the
+>>> altstack is set too small?
+>
+> Please lets not cross threads. We discussed this already at top. While=20
+> ideally required, seems tricky so lets start with post-V alt stack check.
+>
+>> For me it's obvious to fail (always) "if the altstack is too small to
+>> enable V", because it allows to execute V without proper preconditions.
+>>
+>> Personally, I prefer a stricter model. Only enter V if you can, and
+>> after entering it disallow changing the altstack.
+>>
+>> Then again, this is *my* opinion and concern. What do other people
+>> think? I don't want to stall the series.
+>
+> I concur that the alt stack checking requirements are sensible in the=20
+> long run. We can add the obvious check for post-V case and see if there=20
+> is a sane way to flag pre-V case to.
 
-Best Regards,
-Zhao
+Reasonable. @Andy does this resonate with you as well?
 
-> 
-> Thanks,
-> Ira
-> 
-> > 
-> > In the following patches, we can convert the calls of kmap_atomic() /
-> > kunmap_atomic() to kmap_local_page() / kunmap_local(), which can
-> > instead do the mapping / unmapping regardless of the context.
-> > 
-> > With kmap_local_page(), the mapping is per thread, CPU local and not
-> > globally visible.
-> > 
-> > [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-> > ---
-> > Zhao Liu (9):
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_object.c
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_pyhs.c
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_shmem.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/huge_pages.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_coherency.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_context.c
-> >   drm/i915: Use memcpy_from_page() in gt/uc/intel_uc_fw.c
-> >   drm/i915: Use kmap_local_page() in i915_cmd_parser.c
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_execbuffer.c
-> > 
-> >  drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c       | 10 +++++-----
-> >  drivers/gpu/drm/i915/gem/i915_gem_object.c           |  8 +++-----
-> >  drivers/gpu/drm/i915/gem/i915_gem_phys.c             |  8 ++++----
-> >  drivers/gpu/drm/i915/gem/i915_gem_shmem.c            |  6 ++++--
-> >  drivers/gpu/drm/i915/gem/selftests/huge_pages.c      |  6 +++---
-> >  .../gpu/drm/i915/gem/selftests/i915_gem_coherency.c  | 12 ++++--------
-> >  .../gpu/drm/i915/gem/selftests/i915_gem_context.c    |  8 ++++----
-> >  drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c             |  5 +----
-> >  drivers/gpu/drm/i915/i915_cmd_parser.c               |  4 ++--
-> >  9 files changed, 30 insertions(+), 37 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> 
-> 
+
+Bj=C3=B6rn
