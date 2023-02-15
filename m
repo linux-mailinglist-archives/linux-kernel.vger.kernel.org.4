@@ -2,108 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA6D698194
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE0869819F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjBORFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S230010AbjBORIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjBORFG (ORCPT
+        with ESMTP id S229660AbjBORIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:05:06 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7569859DA;
-        Wed, 15 Feb 2023 09:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676480705; x=1708016705;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rOimDod//OCrW4INcjgAv6xJyq0ZxmoU28TD++6SzWw=;
-  b=EJvr2QE4SDnC0NgYijXHTzKlzyKbs/SfTsWrEFoKNWrk137d4vBImKOl
-   d0sc/Ak0HqmfV/IdAJF/C2lT6yr96Ky4Wj65ERvjIoW8cwzLu75AGPsNq
-   WQEEWeXafpr6K+4f7/peYKTTIjI5JCjCdu8DEX8JU//Th1j+6DSiCcV7W
-   DfoH+c7EXoQnNV0S//jh1fGNIKk1mTScbtQ4JhXmxGo74XIAMZeLtKKBD
-   riwvLllsHsOh+ZJKR8TXqUBBVubiVC/khXGbMpMB0YN6CXZkk4V25HOgr
-   Y8SaOdd2jra6NaOHPTkFFB2UqIZ9W6XklPhn7B1gjDKWEPVcfVflGF91c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="311847975"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="311847975"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 09:03:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="812539731"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="812539731"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2023 09:03:27 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AFAC91C5; Wed, 15 Feb 2023 19:04:07 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>
-Subject: [PATCH v1 2/2] leds: lp8860: Remove duplicate NULL checks
-Date:   Wed, 15 Feb 2023 19:04:03 +0200
-Message-Id: <20230215170403.84449-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230215170403.84449-1-andriy.shevchenko@linux.intel.com>
-References: <20230215170403.84449-1-andriy.shevchenko@linux.intel.com>
+        Wed, 15 Feb 2023 12:08:18 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD21724C98;
+        Wed, 15 Feb 2023 09:08:17 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id n132so16356886oih.7;
+        Wed, 15 Feb 2023 09:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q8zyelginURipRbxdGHjbh7QH9QsCpgBY23a1oeTuFM=;
+        b=hBVLBXWmcy6Vhm7U7T1Mt9zTvtTLPeP3D+4dKa4+lo3MhwuUJPFLiShr4SFqP7jzEL
+         Bg1YrZ2PlC1iE629VxyFtvpQhh0B10oLe3ahwbBJpFVu3Q07IE9SRQ2o94ObTZnGrG5o
+         /ArYjVLp0zrB33CSlqlnVI1hGIsKPj7Q4/8JPNeKHFEZwNdsDmqyPI9x5K+CCu3pDc7g
+         feUUD/qrE2r5pozl/v5CpI+CYf/C3JgvSpi22yKNoh0Kxr5pc9/5eYHRaYO93W1ThN7J
+         FYacqaZLBeIiacF6wfxB8+qSb6WuRO/kfBBr1dugmOYZg8c+GlNlMHcLnJtJufi2fhjK
+         iJuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q8zyelginURipRbxdGHjbh7QH9QsCpgBY23a1oeTuFM=;
+        b=wtfXsFHUXmGVY6ttfYFwxaYbjEZ7VfsQjgfqdfGc/SdhMn4kKpi+GOVZ6DG41kA0i7
+         GEeAbylQ7QsJC+ooWOFYcEkerNzW5f2gPYHUlaqL2tHSNtNMZygDT/0QeNC1WVhiZLAh
+         5euI6Q4FRfezrgeh3CtRB8vHK0yqsnmsl5Dz1bO7j3gJ72M0FZdjwvAsmbTs5m0F5Onk
+         PffT5TN9eJJe/4dBQxolfw0CI3+Fdc6VEv+zIBBRWryWT/ZGeqKqm15iB2P7QfUxrASi
+         p6p6SZcVFW93WxR8zqCqcNPMYK0DS2hUN/4f2LT7wiureMva+dZWJRwySIwIQXxhE0mE
+         0ErQ==
+X-Gm-Message-State: AO0yUKWhpyevC1t2FFK0kuM+uoF7Hns4+W0SzHqKVjT3zlPyzZ1R+ZCQ
+        tVC4dy4LN7BXsJ1NEZI1d6Y=
+X-Google-Smtp-Source: AK7set+vbwjn0W6ad8Z4+abxeNLlYtZT6+RzqRgEN3aEv6nLpfNL+sB/FdxIPUv997x/YsU0A1c8ww==
+X-Received: by 2002:a05:6808:8fa:b0:378:528:d83b with SMTP id d26-20020a05680808fa00b003780528d83bmr1122806oic.55.1676480897167;
+        Wed, 15 Feb 2023 09:08:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q185-20020acac0c2000000b0035a9003b8edsm7406252oif.40.2023.02.15.09.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 09:08:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Feb 2023 09:08:15 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Luck <tony.luck@intel.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: [RFC PATCH] MAINTAINERS: Mark Itanium/IA64 as 'dead'
+Message-ID: <20230215170815.GA3787950@roeck-us.net>
+References: <20230128122904.1345120-1-ardb@kernel.org>
+ <20230215151547.GA3766362@roeck-us.net>
+ <CAMj1kXEnoghSNpQFucmSCEhG3s_nyBCm+btgLHzOTiU56=XPfQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEnoghSNpQFucmSCEhG3s_nyBCm+btgLHzOTiU56=XPfQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gpiod_*() API check already for the NULL, no need
-to repeat that in the driver.
+On Wed, Feb 15, 2023 at 04:40:30PM +0100, Ard Biesheuvel wrote:
+> On Wed, 15 Feb 2023 at 16:15, Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On Sat, Jan 28, 2023 at 01:29:04PM +0100, Ard Biesheuvel wrote:
+> > > Create a new status 'dead' which conveys that a subsystem is
+> > > unmaintained and scheduled for removal, and developers are free to
+> > > behave as if it's already gone. Also, automated build tests should
+> > > ignore such subsystems, or at least notify only those who are known to
+> > > have an interest in the subsystem in particular.
+> > >
+> > > Given that Itanium/IA64 has no maintainer, is no longer supported in
+> > > QEMU (for boot testing under emulation) and does not seem to have a user
+> > > base beyond a couple of machines used by distros to churn out packages,
+> > > let's mark it as dead. This shall mean that any treewide changes (such
+> > > as changes to the EFI subsystem, which I maintain) can be made even if
+> > > they might cause build or boot time regressions on IA64 machines. Also,
+> > > mark the port as scheduled for removal after the next LTS release.
+> > >
+> >
+> > Since this just came up, I very much prefer complete removal. I don't
+> > see the point of keeping dead code in the tree. That is still hidden
+> > maintenance effort.
+> >
+> 
+> Can I take this as an ack on
+> 
+> https://lore.kernel.org/linux-kernel/20230215100008.2565237-1-ardb@kernel.org/
+>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/leds/leds-lp8860.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+I would not have considered myself important enough to make such a call,
+but from a testbed maintainer's perspective it is an enthusiastic yes.
 
-diff --git a/drivers/leds/leds-lp8860.c b/drivers/leds/leds-lp8860.c
-index 666f4d38214f..221b386443bc 100644
---- a/drivers/leds/leds-lp8860.c
-+++ b/drivers/leds/leds-lp8860.c
-@@ -249,8 +249,7 @@ static int lp8860_init(struct lp8860_led *led)
- 		}
- 	}
- 
--	if (led->enable_gpio)
--		gpiod_direction_output(led->enable_gpio, 1);
-+	gpiod_direction_output(led->enable_gpio, 1);
- 
- 	ret = lp8860_fault_check(led);
- 	if (ret)
-@@ -293,8 +292,7 @@ static int lp8860_init(struct lp8860_led *led)
- 
- out:
- 	if (ret)
--		if (led->enable_gpio)
--			gpiod_direction_output(led->enable_gpio, 0);
-+		gpiod_direction_output(led->enable_gpio, 0);
- 
- 	if (led->regulator) {
- 		ret = regulator_disable(led->regulator);
-@@ -448,8 +446,7 @@ static void lp8860_remove(struct i2c_client *client)
- 	struct lp8860_led *led = i2c_get_clientdata(client);
- 	int ret;
- 
--	if (led->enable_gpio)
--		gpiod_direction_output(led->enable_gpio, 0);
-+	gpiod_direction_output(led->enable_gpio, 0);
- 
- 	if (led->regulator) {
- 		ret = regulator_disable(led->regulator);
--- 
-2.39.1
+At the same time, again from a testbed maintainer's perspective,
+introducing a new "dead" state into the code base deserves a just as
+enthusiastic NACK.
 
+Thanks,
+Guenter
+
+
+> ?
+> 
+> > If this proliferates, we'll end up having to parse the MAINTAINERS file
+> > for code marked "Dead" to ensure that we don't accidentally send e-mails
+> > to the wrong people, or we risk getting complaints about sending reports
+> > for such code. That puts extra burden on maintainers of automated test
+> > beds, which I think is not really appropriate. If the code is dead,
+> > remove it, period.
+> >
+> > For my part, I'll drop my test bed support immediately after this patch
+> > made it in, following the guidance above.
+> >
+> 
+> Thanks for the insight. I think we should take the immediate removal route.
