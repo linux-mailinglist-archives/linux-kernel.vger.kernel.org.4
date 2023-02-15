@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E920697A6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85EF697A73
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjBOLJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S230418AbjBOLKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjBOLJh (ORCPT
+        with ESMTP id S229739AbjBOLKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:09:37 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D0366AE;
-        Wed, 15 Feb 2023 03:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676459375; x=1707995375;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FeD2gX27EYJ/o3bIBlV58bfyVjsGyOEA5W4Xd7KygKE=;
-  b=SqfPqukJK1cqlGtWvrS9xSN9k8xNOQBI1OtYMYF+Gw5mnhhqbnUyP/Jy
-   DYTgBy0kjg+Qforf/IjbTek2DZzLgK9nsRjcPZr9F3ztKimyblB8hBjz3
-   9i8v+tVi3JdVUyQpd8zmeNER1Z0NUBjZ3yWJJb1a64s76bpXg+0M8FPpy
-   gqsnQChk6YdODec51QIFb8+jqL95Hig/Ma45ah96buqScqa85FTuWzBIu
-   qCrRLLfWr+7Gz9SXFF53Dw0Vg7qpG3esSPYxqPV+VbJWOKeyR5A+n/eob
-   hShpdtOVCY1J/JqS1X3WMNbvI6xVjYZluap0FPaDSbDnQhRoMQt02+PDq
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,299,1669071600"; 
-   d="scan'208";a="29099139"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 15 Feb 2023 12:09:33 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 15 Feb 2023 12:09:33 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 15 Feb 2023 12:09:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676459373; x=1707995373;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FeD2gX27EYJ/o3bIBlV58bfyVjsGyOEA5W4Xd7KygKE=;
-  b=PF29jVYvhJCndbbd8WaQbs9eVxd6Sg/+kYuvgOSUFHBP8XFRO7JPFF9R
-   wSD0sF3J6ikLVs5cqUKVZ2ASuGPsMJDFp0X03KBaTO+JAOEDq98HKrGgh
-   j/cw4qVcFJw1s6JgAEFItNcyU3w5SZ9smCZBMUuxmqkZj4rS0ILdceYsX
-   s7AuGMEEYe+x0AkAjnBD4g2zqi2hi432LkMkiUGPaqNe/2tE+XqUAbcMI
-   M5JXEtX6LUscJenCu8XVjj6iJQc3/Ool4KVZ10ngT8Mujfev94HHXlGdy
-   +6gyESeh+YqmbWFW6wB/Qb92M+bwsP3Fn/sI+LWch3L0wsDK35fuzZT70
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,299,1669071600"; 
-   d="scan'208";a="29099138"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 Feb 2023 12:09:33 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 27CD6280056;
-        Wed, 15 Feb 2023 12:09:33 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     andy.shevchenko@gmail.com, Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] gpio: vf610: make irq_chip immutable
-Date:   Wed, 15 Feb 2023 12:09:32 +0100
-Message-ID: <4497001.LvFx2qVVIh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CACRpkdYHJOgO9K_H9QA1_VWgParbh+Xqh-oCmo3JAFtaMXYByg@mail.gmail.com>
-References: <20230214073638.571417-1-alexander.stein@ew.tq-group.com> <Y+tn3Y+SraIetn5X@surfacebook> <CACRpkdYHJOgO9K_H9QA1_VWgParbh+Xqh-oCmo3JAFtaMXYByg@mail.gmail.com>
+        Wed, 15 Feb 2023 06:10:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2B3645E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:10:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676459400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tIFgXh/l40GhiL7GOoC/0iUQI17ikABcGGlDWzu5xTA=;
+        b=PEOXnUUyjX6T9Zua1JhdxzriUUPXqmN+IB8B4TTregKmxOuyLX/kH7nRpAcJTM76V8lw1L
+        sYE1TODRUsMpFZh3001EGL+aYSq0dPM7ywC/2pqHMHTuGf4LW67S6dbLnIDm4RskSSCaxZ
+        LT3yD+Ij6dA2uyVp9DSfRjFHCUVdUsI=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-j8o_EtEGNl-xN-mcgWvcow-1; Wed, 15 Feb 2023 06:09:58 -0500
+X-MC-Unique: j8o_EtEGNl-xN-mcgWvcow-1
+Received: by mail-lj1-f199.google.com with SMTP id r17-20020a2eb891000000b00290658792ceso4603680ljp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:09:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tIFgXh/l40GhiL7GOoC/0iUQI17ikABcGGlDWzu5xTA=;
+        b=ll2MMRCZU/8Wv6CjKajz0QlcZ2dosa7Z/BkB79FIZZbh7wGNEHZtTzISZJb+wHvcbx
+         uuu0X3C+3ux89g4zEYPk0CkXNE/y17pH/puZxuQt9RfQ+zYyCA2g7DEin9B1f2oIv9Aa
+         2XcUhKB7lZml9gXDRoPwTAb3tkJOJnw50Q88x2VlAkYTvlWkC4gOcNm3ih3aphrxykrB
+         GkZ/1NvuMNOIhl1MdELv2JNL3ls5OKP1VxsgxQMbSW0IeJkOUCWMYBx5rj91p+ZgyLYE
+         1yQpLZRtdTKS9IlxXRyD7Mvewf1Pho00sBvzu7ptVHhSrXAoJIOrdwpLlod/1SzZaScs
+         B6xg==
+X-Gm-Message-State: AO0yUKU+AFT6w8XFHxghfNpBBDGbOSHQT3TRHPtqb7/15y5P8me/CS4G
+        l07yItKvxUActxGMu9kShRq9PCN6Ib1iI31ixWzmZxryqMuwoDFMoBGW5Z2YtKGJ/Oxx5dr30mr
+        /fkoWy5LtVx8m2p/Zwg6MbPwu7/Tkgp8NncDGUxmI
+X-Received: by 2002:a2e:b803:0:b0:293:5317:47ab with SMTP id u3-20020a2eb803000000b00293531747abmr433602ljo.8.1676459397210;
+        Wed, 15 Feb 2023 03:09:57 -0800 (PST)
+X-Google-Smtp-Source: AK7set/9H0SZhUW24BTzDKxz2i3Ak4kG4AuPlENkYIzHIEXR57C28xi1MjzNIGuWTJb6egEAxgh5LbogHsjJtJv3t7E=
+X-Received: by 2002:a2e:b803:0:b0:293:5317:47ab with SMTP id
+ u3-20020a2eb803000000b00293531747abmr433597ljo.8.1676459396916; Wed, 15 Feb
+ 2023 03:09:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com> <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
+ <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com> <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com> <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com> <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+ <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+ <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info> <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com> <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+In-Reply-To: <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Wed, 15 Feb 2023 12:09:45 +0100
+Message-ID: <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Chris Clayton <chris2553@googlemail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,44 +88,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 15. Februar 2023, 11:18:06 CET schrieb Linus Walleij:
-> On Tue, Feb 14, 2023 at 11:52 AM <andy.shevchenko@gmail.com> wrote:
-> > Tue, Feb 14, 2023 at 08:36:38AM +0100, Alexander Stein kirjoitti:
-> > > Since recently, the kernel is nagging about mutable irq_chips:
-> > >     "not an immutable chip, please consider fixing it!"
-> > >=20
-> > > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-> > > helper functions and call the appropriate gpiolib functions.
-> >=20
-> > ...
-> >=20
-> > > The overall changes are based on commit f1138dacb7ff
-> > > ("gpio: sch: make irq_chip immutable")
-> >=20
-> > Nice, but you forgot one crucial detail. You need to mark GPIO resuested
-> > whenever it's locked as IRQ and otherwise when unlocked.
->=20
-> +static const struct irq_chip vf610_irqchip =3D {
-> (...)
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
->=20
-> That's what this macro does ;)
+On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
+(Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> On 13.02.23 10:14, Chris Clayton wrote:
+> > On 13/02/2023 02:57, Dave Airlie wrote:
+> >> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+> >>>> On 10.02.23 20:01, Karol Herbst wrote:
+> >>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+> >>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+> >>>>>>
+> >>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+> >>>>>>>
+> >>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+> >>>>>>
+> >>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+> >>>>>> time to fix it and there is one thing I wonder:
+> >>>>>>
+> >>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+> >>>>>> posted more than a week ago to check if they somehow help to track down
+> >>>>>> the root of this problem?
+> >>>>>
+> >>>>> I did now and I can't spot anything. I think at this point it would
+> >>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+> >>>>> any is in a weird state preventing the machine from shutting down.
+> >>>>
+> >>>> Many thx for looking into it!
+> >>>
+> >>> Yes, thanks Karol.
+> >>>
+> >>> Attached is the output from dmesg when this block of code:
+> >>>
+> >>>         /bin/mount /dev/sda7 /mnt/sda7
+> >>>         /bin/mountpoint /proc || /bin/mount /proc
+> >>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+> >>>         /bin/echo t > /proc/sysrq-trigger
+> >>>         /bin/sleep 1
+> >>>         /bin/sync
+> >>>         /bin/sleep 1
+> >>>         kill $(pidof dmesg)
+> >>>         /bin/umount /mnt/sda7
+> >>>
+> >>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+> >>>
+> >>> I hope this is what you were looking for, but if not, please let me know what you need
+> >
+> > Thanks Dave. [...]
+> FWIW, in case anyone strands here in the archives: the msg was
+> truncated. The full post can be found in a new thread:
+>
+> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>
+> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+> my laptop." didn't bring us much further to a solution. :-/ I don't
+> really like it, but for regression tracking I'm now putting this on the
+> back-burner, as a fix is not in sight.
+>
+> #regzbot monitor:
+> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+> #regzbot backburner: hard to debug and apparently rare
+> #regzbot ignore-activity
+>
 
-Does this mean the calls to gpiochip_disable_irq/gpiochip_enable_irq in v2/=
-v3=20
-are not necessary?
+yeah.. this bug looks a little annoying. Sadly the only Turing based
+laptop I got doesn't work on Nouveau because of firmware related
+issues and we probably need to get updated ones from Nvidia here :(
 
-Best regards,
-Alexander
+But it's a bit weird that the kernel doesn't shutdown, because I don't
+see anything in the logs which would prevent that from happening.
+Unless it's waiting on one of the tasks to complete, but none of them
+looked in any way nouveau related.
 
-> Yours,
-> Linus Walleij
+If somebody else has any fancy kernel debugging tips here to figure
+out why it hangs, that would be very helpful...
 
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> That page also explains what to do if mails like this annoy you.
+>
+> #regzbot ignore-activity
+>
 
