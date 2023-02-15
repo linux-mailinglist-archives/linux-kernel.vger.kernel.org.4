@@ -2,93 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CDC69780F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B407697810
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbjBOIVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S232781AbjBOIXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbjBOIV3 (ORCPT
+        with ESMTP id S230489AbjBOIXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:21:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFC036445
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676449244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NTjdr0URf8+k0aGqfa33f30fcKRePSx8UOTbP633TXM=;
-        b=a2dXlgPwO/Nd1IztwuaTszcKmfUHErgR153Yo20E/sSujyFvEaegcQNfkYGttAquVRE6qT
-        GuzsHhja+yLAdc2d5mrEXp+Q8nilyjMA8tD9UEEukWjeq8Lgm5Xez4tDbgNZSWV855Vlwl
-        F6gjz0EhAXdlvfbUIw/fFb/klAmDktU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-KTsdpRjMNNiRuCFWP3CJew-1; Wed, 15 Feb 2023 03:20:31 -0500
-X-MC-Unique: KTsdpRjMNNiRuCFWP3CJew-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CE1A877CA0;
-        Wed, 15 Feb 2023 08:20:30 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E0412026D4B;
-        Wed, 15 Feb 2023 08:20:28 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2895995.1676448478@warthog.procyon.org.uk>
-References: <2895995.1676448478@warthog.procyon.org.uk> <867e1e3e-681b-843b-1704-effed736e13d@kernel.dk> <20230214171330.2722188-1-dhowells@redhat.com> <2877092.1676415412@warthog.procyon.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, smfrench@gmail.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just list)
+        Wed, 15 Feb 2023 03:23:11 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70A32CE7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:23:09 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s11so13092629edd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=elEpNM5pz79miW5z5H6E+G7XDsBRqGvMJmXjgI1ePc4=;
+        b=OYUw55pIxlaGMkeCPp9K6UOx1nSSdz4jOSzFTKp3QALhPgH/qJ5ealWeSQcXIQSaYy
+         ByfIvD4tnF843i5oRiuNOSG4OeCQww8qLpg+qCRkFVI3mMJbbYmgvaBXbUTpORE9GMEg
+         OKqZkgEhIhi6afIeyRfvyCvUFQo+tSqStdYXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=elEpNM5pz79miW5z5H6E+G7XDsBRqGvMJmXjgI1ePc4=;
+        b=YiHesftt6wBzBRuWgSHy/GVamds0Oiikbj94BQCto88Py+Pzce/HghEeeA3HLtEDXn
+         GgrbER4TpWf7kFMt09FFnmowWlaiOFhq35JcGpQKwpzA72WdenjfNWKwiqYfyXXTN/+W
+         VkZFSxG0Dfe41ITox7bh/4ZeqhP8whnGTAv+3CSLeEhoHVg/cYJ6owRZ77/eMOGsnvzc
+         jsbTTQR91YBZa+P2T4vzITdRJnapWhexR17uIYxAJIwpUuwI3+KOoG8/OM1GlwDFswlF
+         tK+IjN4endph6gbhdCQ1kO78o1XLwo5tAUCrgwW0QKrTO8V1Kpu04YKM4d8zYY5cuL1R
+         GSYg==
+X-Gm-Message-State: AO0yUKWHDeTY913WrNqv4zmVZ4EewCnWYIpgl2zjdzO7uiY19Ya3MRYz
+        YVLTXaTduSwRbC/UDenSCioqdS8YrD3yaQ8N0kaHtA==
+X-Google-Smtp-Source: AK7set+O2JySJmOfU+sugMmGBNWn2xBfCl31PX0jJV9K8IvqQsjXi6zyfMOSmF35H/SN/lqxxwJO+PNsjfgAzp/noAs=
+X-Received: by 2002:a50:c441:0:b0:4ac:b7c1:9109 with SMTP id
+ w1-20020a50c441000000b004acb7c19109mr577780edf.6.1676449388192; Wed, 15 Feb
+ 2023 00:23:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2905909.1676449227.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 15 Feb 2023 08:20:27 +0000
-Message-ID: <2905910.1676449227@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230211064527.3481754-1-jstultz@google.com> <20230211064527.3481754-2-jstultz@google.com>
+In-Reply-To: <20230211064527.3481754-2-jstultz@google.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Wed, 15 Feb 2023 09:22:57 +0100
+Message-ID: <CAOf5uwn4NPsXp91aUAwa0RFP9jFRyaNDzOQr6FzUHTC26Y6+bg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to cleanup
+ freezer handling
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+Hi John
 
-> Jens Axboe <axboe@kernel.dk> wrote:
-> =
+On Sat, Feb 11, 2023 at 7:45 AM John Stultz <jstultz@google.com> wrote:
+>
+> Instead of trying to handle the freezer waking up tasks from
+> schedule() in nanosleep on alarmtimers explicitly, use
+> TASK_FREEZABLE which marks the task freezable when it goes
+> to schedule, which prevents the signal wakeup.
+>
+> This allows for the freezer handling to be removed, simplifying
+> the code.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael <michael@mipisi.de>
+> Cc: Michael Trimarchi <michael@amarulasolutions.com>
+> Cc: kernel-team@android.com
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de/
+> [jstultz: Forward ported to 6.2-rc and split out from a separate
+>           fix.]
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+>  kernel/time/alarmtimer.c | 53 ++--------------------------------------
+>  1 file changed, 2 insertions(+), 51 deletions(-)
+>
+> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+> index f7b2128f64e2..15ecde8fcc1b 100644
+> --- a/kernel/time/alarmtimer.c
+> +++ b/kernel/time/alarmtimer.c
+> @@ -49,14 +49,6 @@ static struct alarm_base {
+>         clockid_t               base_clockid;
+>  } alarm_bases[ALARM_NUMTYPE];
+>
+> -#if defined(CONFIG_POSIX_TIMERS) || defined(CONFIG_RTC_CLASS)
+> -/* freezer information to handle clock_nanosleep triggered wakeups */
+> -static enum alarmtimer_type freezer_alarmtype;
+> -static ktime_t freezer_expires;
+> -static ktime_t freezer_delta;
+> -static DEFINE_SPINLOCK(freezer_delta_lock);
+> -#endif
+> -
+>  #ifdef CONFIG_RTC_CLASS
+>  /* rtc timer and device for setting alarm wakeups at suspend */
+>  static struct rtc_timer                rtctimer;
+> @@ -241,19 +233,12 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
+>   */
+>  static int alarmtimer_suspend(struct device *dev)
+>  {
+> -       ktime_t min, now, expires;
+> +       ktime_t now, expires, min = KTIME_MAX;
+>         int i, ret, type;
+>         struct rtc_device *rtc;
+>         unsigned long flags;
+>         struct rtc_time tm;
+>
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       min = freezer_delta;
+> -       expires = freezer_expires;
+> -       type = freezer_alarmtype;
+> -       freezer_delta = KTIME_MAX;
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -
+>         rtc = alarmtimer_get_rtcdev();
+>         /* If we have no rtcdev, just return */
+>         if (!rtc)
+> @@ -480,38 +465,6 @@ u64 alarm_forward_now(struct alarm *alarm, ktime_t interval)
+>  EXPORT_SYMBOL_GPL(alarm_forward_now);
+>
+>  #ifdef CONFIG_POSIX_TIMERS
+> -
+> -static void alarmtimer_freezerset(ktime_t absexp, enum alarmtimer_type type)
+> -{
+> -       struct alarm_base *base;
+> -       unsigned long flags;
+> -       ktime_t delta;
+> -
+> -       switch(type) {
+> -       case ALARM_REALTIME:
+> -               base = &alarm_bases[ALARM_REALTIME];
+> -               type = ALARM_REALTIME_FREEZER;
+> -               break;
+> -       case ALARM_BOOTTIME:
+> -               base = &alarm_bases[ALARM_BOOTTIME];
+> -               type = ALARM_BOOTTIME_FREEZER;
+> -               break;
+> -       default:
+> -               WARN_ONCE(1, "Invalid alarm type: %d\n", type);
+> -               return;
+> -       }
+> -
+> -       delta = ktime_sub(absexp, base->get_ktime());
+> -
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       if (delta < freezer_delta) {
+> -               freezer_delta = delta;
+> -               freezer_expires = absexp;
+> -               freezer_alarmtype = type;
+> -       }
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -}
+> -
+>  /**
+>   * clock2alarm - helper that converts from clockid to alarmtypes
+>   * @clockid: clockid.
+> @@ -750,7 +703,7 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         struct restart_block *restart;
+>         alarm->data = (void *)current;
+>         do {
+> -               set_current_state(TASK_INTERRUPTIBLE);
+> +               set_current_state(TASK_INTERRUPTIBLE | TASK_FREEZABLE);
 
-> > Let's update the branch and see how it goes... If there's more fallout=
-, then
-> > let's make a fallback plan for the first few.
-> =
+For kernel 5.10.x and lts is possible to use freezable_schedule and
+let this set_current_state as was before.
+I have seen patch that introduce the new state but I suppose that in
+order to be compatible to stable this should be the
+change. Am I right?
 
-> I forgot to export the new functions, as Steve found out.  Fix attached.
+Michael
 
-That said, nothing in your tree that calls these functions directly can be
-built as a module, so this can be left to the cifs tree for now.
+>                 alarm_start(alarm, absexp);
+>                 if (likely(alarm->data))
+>                         schedule();
+> @@ -765,8 +718,6 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         if (!alarm->data)
+>                 return 0;
+>
+> -       if (freezing(current))
+> -               alarmtimer_freezerset(absexp, type);
+>         restart = &current->restart_block;
+>         if (restart->nanosleep.type != TT_NONE) {
+>                 struct timespec64 rmt;
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
 
-David
 
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
