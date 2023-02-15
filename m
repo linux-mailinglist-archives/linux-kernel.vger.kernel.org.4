@@ -2,237 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86517697902
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B1E697921
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbjBOJcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S232139AbjBOJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbjBOJcE (ORCPT
+        with ESMTP id S232248AbjBOJkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:32:04 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4A093F7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:32:03 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id e3so3287608ual.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:32:03 -0800 (PST)
+        Wed, 15 Feb 2023 04:40:10 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2B24CB4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:40:07 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id a3so12625060ejb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:40:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSczsxLJDp871T8FxTcILfLyiC/JgETwP9EwHrfipw0=;
-        b=FMTqZSI5bRp4pcsrpew7HhChMbxixFNPJetCw0GixdJSrEFsnk8LcapIjEbF4qM9Nw
-         EkAM7lI1g1gbW68fCMsqrE9ZwW3SB9ysHI/oxtU8k1TjgF//gkSpBZAaqAHmbRiAZvwL
-         g6MRYCVSyE0yPLg5lEo43FQ22UQA2Xm5DjzfnuT9686eWj7d0NpHK4qDdI8cADWREIej
-         pB5GHzAzaBbYRNvc5bxE/Z0zuuZgOtHKnJnE67lRoU6dd0Oje2WZ04t0jTTyeUlNuKR2
-         CqEt6JRji0AZZCz+poMhx0qgNfcLEDYyNoNKZ7CN+ZI5IA0RRF9czwWOeUzJyzzu0DzZ
-         Pm1A==
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4h7mRTTh1xN8BYdij0sEqIon7qtDOntjn+pMJ2mDjXM=;
+        b=PlWW54zI7lqinYu/KN9jLkDOmzXKYySgWlQGwXC2oo0RJLnkSJar5NjbhsbKipZIsi
+         Havygvk4HK3itkQpjhdOx87t9CjZ1ZHMMpmXj8DniATp8lYJp30TyVTMt6boFHXMYLcX
+         waq2l8zML4vb/a487Wgd6STJrg1y65moXA27BLdpQ2eRb0/7VL3sx8+BOzxZYbS9i7RP
+         c2KDftzwEd6C+nPoDl1F5VExImkMjDnIdciov//x81Pxaddc3vfMeFW6DNorMl4h51nu
+         DUvVmHETrrN6UF1Uw6PzSSeaG2z459o8vJpXV1Yd5c2ZOc9ZrwsZgUQ//RYD6lZR0kIv
+         pzQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VSczsxLJDp871T8FxTcILfLyiC/JgETwP9EwHrfipw0=;
-        b=tZYjKkF3D6G5o4e5d2ARdfX4D2gRR2tE6MsYJm1XiTBNe8Gx2/+JVAz5oO4pEhHZv6
-         hMB1ROp7Jk0Vb4ADSK4Bz4zcEa8FLwsWaZSDKJk5x+VT7H6opXOjvVjIL/8JQIMNOLII
-         nX/6Mj7Te2ECWOLCcfGO2ROZsHXW7tguvCYBWmluyiNfQyr3yXFMVN35p8lwsAhYytAv
-         yqYeXf3WxU/mUfdTdCwqzMfLe5SqtMtAmssblAs6fBl1afIA+QqvHKqtu4g514oShZ4M
-         tCi95XK+IEwVEpgBJ/uAG7u/UqoanpJNhm5ZlVPnCIxdOidiN6wf9bPMImoi+If/DQCD
-         qAcw==
-X-Gm-Message-State: AO0yUKWZVvtdR3/MPpZsfJ0RbTZpJztXXx++fF50dHxEtK9Ry5V6+G01
-        eZed0nMShLw2gTP8eXMg2T+CYG8ca5uELSWthhHZBw==
-X-Google-Smtp-Source: AK7set9WWOEeiHBThTwUNguaTMOUHb/QkssNvX6+qWPO3NM0u5Nz3GV3Vk44Zl0CGnB7u7VpsTEArWl8moG7Hp7kH60=
-X-Received: by 2002:ab0:539d:0:b0:68a:6a41:c892 with SMTP id
- k29-20020ab0539d000000b0068a6a41c892mr178048uaa.2.1676453522024; Wed, 15 Feb
- 2023 01:32:02 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4h7mRTTh1xN8BYdij0sEqIon7qtDOntjn+pMJ2mDjXM=;
+        b=F6Dd/gXo93aeUvB+QcSynpoh34r1OTVMpAnFlZKzBRVB5kwSdrEc7k1aMgqCqCeXwb
+         efT+Kqoty/kJ+kVCdKqnxGzFUOz2eKB6G0fwVOy5pLb2SsKxPKZRYale2ziOLf0Cood+
+         nlIp11vsoG0P+DpIznuGCh8BbrcngwqDYrZxPF3Jzk0QHWKNk5UVEPMc+QxlMhNmiu1U
+         cQSAEHS4kNsiyw4m3rXsAZuX9GOpquCjyl1UoXI5jdcIdVaLIeytE583peSH4BZE+T4m
+         idFTdDsY6QiJhEdlFkh3CiHK8KJGsQRiMIioLfq2q7rTIiqdk5/yWIYOISiJTt7Narfj
+         lkxA==
+X-Gm-Message-State: AO0yUKXlQoCNsNHO0uTD19VlWeqI2mfpUQoVcn/3k4F6cyEyct+6j3OS
+        tW3Q2de7myAcKgCCS8Cscr6Edg==
+X-Google-Smtp-Source: AK7set/plGz1j3oh2R+HEybEKejC8zQ2i9LONd7kvl/P77E/MDokUgfCwXxedOTn3DVqp7xPpBmqHg==
+X-Received: by 2002:a17:906:8a50:b0:878:5f8e:26c0 with SMTP id gx16-20020a1709068a5000b008785f8e26c0mr1838206ejc.7.1676454006228;
+        Wed, 15 Feb 2023 01:40:06 -0800 (PST)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id rs1-20020a170907036100b008b12c318622sm2169484ejb.29.2023.02.15.01.40.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 01:40:05 -0800 (PST)
+Message-ID: <5171168c-ecf4-b8e9-48c8-b4345cdbc4a9@tessares.net>
+Date:   Wed, 15 Feb 2023 10:40:05 +0100
 MIME-Version: 1.0
-References: <20230214172549.450713187@linuxfoundation.org>
-In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Feb 2023 15:01:49 +0530
-Message-ID: <CA+G9fYv6p5phurrw7VABq-Tdg=92bW996M5+UkT7CY2o0GLFOw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 net-next] net: no longer support SOCK_REFCNT_DEBUG
+ feature
+Content-Language: en-GB
+To:     Jason Xing <kerneljasonxing@gmail.com>, kuniyu@amazon.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org,
+        willemdebruijn.kernel@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, lucien.xin@gmail.com,
+        kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com
+Cc:     bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sctp@vger.kernel.org, mptcp@lists.linux.dev,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
+References: <20230214041410.6295-1-kerneljasonxing@gmail.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230214041410.6295-1-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 at 23:11, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.168 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.168-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Jason,
 
+On 14/02/2023 05:14, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> Commit e48c414ee61f ("[INET]: Generalise the TCP sock ID lookup routines")
+> commented out the definition of SOCK_REFCNT_DEBUG in 2005 and later another
+> commit 463c84b97f24 ("[NET]: Introduce inet_connection_sock") removed it.
+> Since we could track all of them through bpf and kprobe related tools
+> and the feature could print loads of information which might not be
+> that helpful even under a little bit pressure, the whole feature which
+> has been inactive for many years is no longer supported.
+> 
+> Link: https://lore.kernel.org/lkml/20230211065153.54116-1-kerneljasonxing@gmail.com/
+> Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+(...)
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+> index 8cd6cc67c2c5..e913752df112 100644
+> --- a/net/mptcp/protocol.c
+> +++ b/net/mptcp/protocol.c
+> @@ -2876,7 +2876,6 @@ static void __mptcp_destroy_sock(struct sock *sk)
+>  	sk_stream_kill_queues(sk);
+>  	xfrm_sk_free_policy(sk);
+>  
+> -	sk_refcnt_debug_release(sk);
+>  	sock_put(sk);
+>  }
+>  
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thank you for the patch!
 
-## Build
-* kernel: 5.10.168-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: f90240a238a9596894598787d667151f6af55c58
-* git describe: v5.10.167-133-gf90240a238a9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.167-133-gf90240a238a9
+For the modification in MPTCP subtree:
 
-## Test Regressions (compared to v5.10.167)
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-## Metric Regressions (compared to v5.10.167)
-
-## Test Fixes (compared to v5.10.167)
-
-## Metric Fixes (compared to v5.10.167)
-
-## Test result summary
-total: 158564, pass: 132104, fail: 3591, skip: 22651, xfail: 218
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 46 passed, 3 failed
-* i386: 39 total, 37 passed, 2 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 32 total, 25 passed, 7 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
