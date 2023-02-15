@@ -2,282 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8845B698817
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6A469881A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjBOWtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S229649AbjBOWvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBOWtm (ORCPT
+        with ESMTP id S229506AbjBOWvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:49:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F0639CDB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676501306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Ls3rOlCkZIM9uqnTJAAjI8pZPeikDFz/SnN7vr7rRc=;
-        b=C+SjlAZkhbtmMS6X7ItSTTOU6I1CdNkHE8AqPOFqPDaI1P4qvOsHPoc3JyKyzAQz84m2IW
-        PrafnUn1B0DP9tGq7FDQFwCo2lFrD9re8TaoicDJgWHbI02vgDOkQnNeFIbhAtZYSee4OT
-        cSTEpBE8l0xLTgVqD/DwqrWq/OSoZhI=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-41-wdVXx3CROHqpJe1mvTVYpQ-1; Wed, 15 Feb 2023 17:48:22 -0500
-X-MC-Unique: wdVXx3CROHqpJe1mvTVYpQ-1
-Received: by mail-io1-f70.google.com with SMTP id d8-20020a6b6e08000000b00722d8d9c432so3752ioh.19
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:48:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676501301;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Ls3rOlCkZIM9uqnTJAAjI8pZPeikDFz/SnN7vr7rRc=;
-        b=p3n/eJ7xp0RvJo4VlMqaLFIHyW27TGmb8DAVKYbmsk+SncW49Rbxs04jXOt7qMzNCa
-         VR6yOoEUTtyG401PN4EWFC3PdkV2027YyTZqnE91Lcktlg3hvQv/5Ea8gsP9b5HJ5OWn
-         yPOl98CQ+MaBeKm2u7fUaSuLGvPcYK3vSwJxk+13nS9zOsmXr0FYmAJKjPuwBsC02Zab
-         OBFDuwoW0IJqvcUzkS4PUGzhcRQrORat4JcoJ+OC5K/rR9B3I0XGfSGEOqf7aEkSsx43
-         rAzeglYWDvxYEbUExTIzs1vou2Nuv5GJhGhi6gL+kSLB6PtdjZt3AJ8K+ONfxaQWtOqy
-         QE8w==
-X-Gm-Message-State: AO0yUKXP6aNsbssuV9/UqPzsqqzjBaSNAEYEc/GG+yMJdLGGSLuLXJkl
-        +I3nuKEyXEJTmZr3qFgrhgpTTyMFy16tAGSouR6oRfm7y5GR3llazqD4uXcF6LwP73fpTAuscU6
-        w+/11h9+U5UG0HUbEhkf98+yy
-X-Received: by 2002:a6b:b493:0:b0:718:2903:780f with SMTP id d141-20020a6bb493000000b007182903780fmr2657027iof.2.1676501301075;
-        Wed, 15 Feb 2023 14:48:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set/60ryARjkaiD7han0c7ITkzjNotMcDy8LYfAHruwaGVsnEhdIQpmfxfB0Ck29dRp73MUUJ2w==
-X-Received: by 2002:a6b:b493:0:b0:718:2903:780f with SMTP id d141-20020a6bb493000000b007182903780fmr2657020iof.2.1676501300735;
-        Wed, 15 Feb 2023 14:48:20 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id h198-20020a6bb7cf000000b006f8ee49c22dsm6577498iof.10.2023.02.15.14.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 14:48:20 -0800 (PST)
-Date:   Wed, 15 Feb 2023 17:48:18 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-Message-ID: <Y+1hMsm4eQIUtag5@x1n>
-References: <20230214075710.2401855-1-stevensd@google.com>
- <20230214075710.2401855-2-stevensd@google.com>
+        Wed, 15 Feb 2023 17:51:16 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849B52D5A;
+        Wed, 15 Feb 2023 14:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676501474; x=1708037474;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3M+hiPga4ES/I6q/eg87QVkzRFuqBoiE+TeHGZ8J2Ds=;
+  b=iKeJMp2WwXevitrDhHoAK/rv2qk/k7v8EolICcdwcY4IhSLHxGGQmvrh
+   IykS1AtG/Av7xvU3oVbLt6TfRgEJ8rB7vd+VAcmHoLIfSgBCARVM8qZxN
+   omczE+OlnhcDlMYeiu+KB9/gO2rgCDW2n5rQBKJyiETFskjNYa4tvLiee
+   PYXMZnGKHHemV60Wo5bImk+e/85dVbPlE+0nMadQtgEfY3ANyrDy6L/dM
+   4y56SV6KK8XOlGlnXdgFlE410/+RI3ZJiazXuzsVuD8Jz0QdFeZp1T+b1
+   FUDqXWJit7Czm0uhqYzOlDKYtQhdnBUSF44zYyyAyQU+abJanD8/i2z1H
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="319610556"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="319610556"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 14:51:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="812714012"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="812714012"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2023 14:51:09 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSQcG-0009r7-0R;
+        Wed, 15 Feb 2023 22:51:08 +0000
+Date:   Thu, 16 Feb 2023 06:50:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        Dmitry Safonov <dima@arista.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>
+Subject: Re: [PATCH v4 05/21] net/tcp: Calculate TCP-AO traffic keys
+Message-ID: <202302160619.lvY45Sx5-lkp@intel.com>
+References: <20230215183335.800122-6-dima@arista.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214075710.2401855-2-stevensd@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230215183335.800122-6-dima@arista.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 04:57:10PM +0900, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
-> 
-> Make sure that collapse_file respects any userfaultfds registered with
-> MODE_MISSING. If userspace has any such userfaultfds registered, then
-> for any page which it knows to be missing, it may expect a
-> UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
-> collapsing a shmem range would result in replacing an empty page with a
-> THP, so that it doesn't break userfaultfd.
-> 
-> Synchronization when checking for userfaultfds in collapse_file is
-> tricky because the mmap locks can't be used to prevent races with the
-> registration of new userfaultfds. Instead, we provide synchronization by
-> ensuring that userspace cannot observe the fact that pages are missing
-> before we check for userfaultfds. Although this allows registration of a
-> userfaultfd to race with collapse_file, it ensures that userspace cannot
-> observe any pages transition from missing to present after such a race.
-> This makes such a race indistinguishable to the collapse occurring
-> immediately before the userfaultfd registration.
-> 
-> The first step to provide this synchronization is to stop filling gaps
-> during the loop iterating over the target range, since the page cache
-> lock can be dropped during that loop. The second step is to fill the
-> gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
-> time, to avoid races with accesses to the page cache that only take the
-> RCU read lock.
-> 
-> This fix is targeted at khugepaged, but the change also applies to
-> MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
-> return EBUSY if there are any missing pages (instead of succeeding on
-> shmem and returning EINVAL on anonymous memory). There is also now a
-> window during MADV_COLLAPSE where a fault on a missing page will cause
-> the syscall to fail with EAGAIN.
-> 
-> The fact that intermediate page cache state can no longer be observed
-> before the rollback of a failed collapse is also technically a
-> userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
-> is exceedingly unlikely that anything relies on being able to observe
-> that transient state.
-> 
-> Signed-off-by: David Stevens <stevensd@chromium.org>
-> ---
->  mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 58 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index b648f1053d95..8c2e2349e883 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -55,6 +55,7 @@ enum scan_result {
->  	SCAN_CGROUP_CHARGE_FAIL,
->  	SCAN_TRUNCATED,
->  	SCAN_PAGE_HAS_PRIVATE,
-> +	SCAN_PAGE_FILLED,
+Hi Dmitry,
 
-PS: You may want to also touch SCAN_STATUS in huge_memory.h next time.
+Thank you for the patch! Perhaps something to improve:
 
->  };
->  
->  #define CREATE_TRACE_POINTS
-> @@ -1725,8 +1726,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
->   *  - allocate and lock a new huge page;
->   *  - scan page cache replacing old pages with the new one
->   *    + swap/gup in pages if necessary;
-> - *    + fill in gaps;
+[auto build test WARNING on e1c04510f521e853019afeca2a5991a5ef8d6a5b]
 
-IIUC it's not a complete removal, but just moved downwards:
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230216-023836
+base:   e1c04510f521e853019afeca2a5991a5ef8d6a5b
+patch link:    https://lore.kernel.org/r/20230215183335.800122-6-dima%40arista.com
+patch subject: [PATCH v4 05/21] net/tcp: Calculate TCP-AO traffic keys
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230216/202302160619.lvY45Sx5-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e93c86e7edccffd9992748d03591579a4ebc2731
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230216-023836
+        git checkout e93c86e7edccffd9992748d03591579a4ebc2731
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash net/ipv4/
 
->   *    + keep old pages around in case rollback is required;
-> + *  - finalize updates to the page cache;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302160619.lvY45Sx5-lkp@intel.com/
 
-         + fill in gaps with RETRY entries
-         + detect race conditions with userfaultfds
+All warnings (new ones prefixed by >>):
 
->   *  - if replacing succeeds:
->   *    + copy data over;
->   *    + free old pages;
-> @@ -1805,13 +1806,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  						result = SCAN_TRUNCATED;
->  						goto xa_locked;
->  					}
-> -					xas_set(&xas, index);
-> +					xas_set(&xas, index + 1);
->  				}
->  				if (!shmem_charge(mapping->host, 1)) {
->  					result = SCAN_FAIL;
->  					goto xa_locked;
->  				}
-> -				xas_store(&xas, hpage);
->  				nr_none++;
->  				continue;
->  			}
-> @@ -1970,6 +1970,56 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  		put_page(page);
->  		goto xa_unlocked;
->  	}
-> +
-> +	if (nr_none) {
-> +		struct vm_area_struct *vma;
-> +		int nr_none_check = 0;
-> +
-> +		xas_unlock_irq(&xas);
-> +		i_mmap_lock_read(mapping);
-> +		xas_lock_irq(&xas);
-> +
-> +		xas_set(&xas, start);
-> +		for (index = start; index < end; index++) {
-> +			if (!xas_next(&xas)) {
-> +				xas_store(&xas, XA_RETRY_ENTRY);
-> +				nr_none_check++;
-> +			}
-> +		}
-> +
-> +		if (nr_none != nr_none_check) {
-> +			result = SCAN_PAGE_FILLED;
-> +			goto immap_locked;
-> +		}
-> +
-> +		/*
-> +		 * If userspace observed a missing page in a VMA with an armed
-> +		 * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for
-> +		 * that page, so we need to roll back to avoid suppressing such
-> +		 * an event. Any userfaultfds armed after this point will not be
-> +		 * able to observe any missing pages due to the previously
-> +		 * inserted retry entries.
-> +		 */
-> +		vma_interval_tree_foreach(vma, &mapping->i_mmap, start, start) {
-> +			if (userfaultfd_missing(vma)) {
-> +				result = SCAN_EXCEED_NONE_PTE;
-> +				goto immap_locked;
-> +			}
-> +		}
-> +
-> +immap_locked:
-> +		i_mmap_unlock_read(mapping);
-> +		if (result != SCAN_SUCCEED) {
-> +			xas_set(&xas, start);
-> +			for (index = start; index < end; index++) {
-> +				if (xas_next(&xas) == XA_RETRY_ENTRY)
-> +					xas_store(&xas, NULL);
-> +			}
-> +
-> +			goto xa_locked;
-> +		}
-> +	}
-> +
+   net/ipv4/tcp_ao.c:59:20: warning: no previous prototype for 'tcp_ao_matched_key' [-Wmissing-prototypes]
+      59 | struct tcp_ao_key *tcp_ao_matched_key(struct tcp_ao_info *ao,
+         |                    ^~~~~~~~~~~~~~~~~~
+>> net/ipv4/tcp_ao.c:245:5: warning: no previous prototype for 'tcp_ao_calc_key_sk' [-Wmissing-prototypes]
+     245 | int tcp_ao_calc_key_sk(struct tcp_ao_key *mkt, u8 *key,
+         |     ^~~~~~~~~~~~~~~~~~
 
-Until here, all look fine to me (ignoring patch 1 for now; assuming the
-hpage is always uptodate).
 
-My question is after here we'll release page cache lock again before
-try_to_unmap_flush(), but is it safe to keep RETRY entries after releasing
-page cache lock?  It means other threads can be spinning.  I assume page
-lock is always safe and sleepable, but not sure about the page cache lock
-here.
+vim +/tcp_ao_calc_key_sk +245 net/ipv4/tcp_ao.c
 
->  	nr = thp_nr_pages(hpage);
->  
->  	if (is_shmem)
-> @@ -2068,15 +2118,13 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  		}
->  
->  		xas_set(&xas, start);
-> -		xas_for_each(&xas, page, end - 1) {
-> +		end = index;
-> +		for (index = start; index < end; index++) {
-> +			xas_next(&xas);
->  			page = list_first_entry_or_null(&pagelist,
->  					struct page, lru);
->  			if (!page || xas.xa_index < page->index) {
-> -				if (!nr_none)
-> -					break;
->  				nr_none--;
-> -				/* Put holes back where they were */
-> -				xas_store(&xas, NULL);
->  				continue;
->  			}
->  
-> @@ -2592,11 +2640,13 @@ static int madvise_collapse_errno(enum scan_result r)
->  	case SCAN_ALLOC_HUGE_PAGE_FAIL:
->  		return -ENOMEM;
->  	case SCAN_CGROUP_CHARGE_FAIL:
-> +	case SCAN_EXCEED_NONE_PTE:
->  		return -EBUSY;
->  	/* Resource temporary unavailable - trying again might succeed */
->  	case SCAN_PAGE_LOCK:
->  	case SCAN_PAGE_LRU:
->  	case SCAN_DEL_PAGE_LRU:
-> +	case SCAN_PAGE_FILLED:
->  		return -EAGAIN;
->  	/*
->  	 * Other: Trying again likely not to succeed / error intrinsic to
-> -- 
-> 2.39.1.581.gbfd45094c4-goog
-> 
+   244	
+ > 245	int tcp_ao_calc_key_sk(struct tcp_ao_key *mkt, u8 *key,
+   246			       const struct sock *sk,
+   247			       __be32 sisn, __be32 disn,
+   248			       bool send)
+   249	{
+   250		if (mkt->family == AF_INET)
+   251			return tcp_v4_ao_calc_key_sk(mkt, key, sk, sisn, disn, send);
+   252		else
+   253			return tcp_v6_ao_calc_key_sk(mkt, key, sk, sisn, disn, send);
+   254	}
+   255	
 
 -- 
-Peter Xu
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
