@@ -2,138 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24CF6979FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4120697A05
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbjBOKgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S234084AbjBOKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbjBOKgf (ORCPT
+        with ESMTP id S233786AbjBOKh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:36:35 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B146C40F2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:33 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSF9J-0005s3-Ku; Wed, 15 Feb 2023 11:36:29 +0100
-Message-ID: <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
-Date:   Wed, 15 Feb 2023 11:36:29 +0100
+        Wed, 15 Feb 2023 05:37:28 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D593B3647C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:37:20 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ENlbPE008365;
+        Wed, 15 Feb 2023 04:37:07 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=sHSvGYlnsISZ23PnykHZ2seFs84/4K/dAUTOh+6PFPM=;
+ b=D7VqkJFXxquJuzVJDIkRosicdkumxv8cxk7Pdu9nesH8bPIYEQkNcW596VWZ5m3GLeeh
+ fJjrC3uqmyJRE9+ueTveewFlIOKOWPmt6xpTdVFtwp2oYZLw3O2/DWN8cBhg4d/H23h3
+ cYSbmr6RZ/AWUc5PILAXeW/26PrJ3zLCj2diHCnkJbY6MV4I3dZJfmJD1sko2eigbCYb
+ hVOroamkcY5qxuy3mg6+fNImdftaJFK2maWqiVK9K2oDXMGk3EwHs107L3el3BcNNbkQ
+ jzvNN4WctDxfJytr3wbSvkAjrOkInW23OrMSy1/Vm26bmJdpv9Khp1YGsa+gpqDCjOhX /A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nrm8wgk07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 04:37:06 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Wed, 15 Feb
+ 2023 04:37:05 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
+ Transport; Wed, 15 Feb 2023 04:37:05 -0600
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5188D2A1;
+        Wed, 15 Feb 2023 10:37:05 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <lgirdwood@gmail.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: [PATCH] ASoC: cs35l45: Remove separate tables module
+Date:   Wed, 15 Feb 2023 10:37:05 +0000
+Message-ID: <20230215103705.3302716-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-Content-Language: en-US, de-DE
-To:     Chris Clayton <chris2553@googlemail.com>,
-        Dave Airlie <airlied@gmail.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
- <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
- <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
- <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
- <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
- <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
- <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
- <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
- <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
- <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676457393;5a3fea7a;
-X-HE-SMSGID: 1pSF9J-0005s3-Ku
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: YQ7upivJme4_0c-OB85oAMaHMIULGx21
+X-Proofpoint-ORIG-GUID: YQ7upivJme4_0c-OB85oAMaHMIULGx21
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.02.23 10:14, Chris Clayton wrote:
-> On 13/02/2023 02:57, Dave Airlie wrote:
->> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
->>>
->>>
->>>
->>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>> On 10.02.23 20:01, Karol Herbst wrote:
->>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
->>>>> Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>
->>>>>> On 08.02.23 09:48, Chris Clayton wrote:
->>>>>>>
->>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
->>>>>>
->>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
->>>>>> time to fix it and there is one thing I wonder:
->>>>>>
->>>>>> Did any of the nouveau developers look at the netconsole captures Chris
->>>>>> posted more than a week ago to check if they somehow help to track down
->>>>>> the root of this problem?
->>>>>
->>>>> I did now and I can't spot anything. I think at this point it would
->>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
->>>>> any is in a weird state preventing the machine from shutting down.
->>>>
->>>> Many thx for looking into it!
->>>
->>> Yes, thanks Karol.
->>>
->>> Attached is the output from dmesg when this block of code:
->>>
->>>         /bin/mount /dev/sda7 /mnt/sda7
->>>         /bin/mountpoint /proc || /bin/mount /proc
->>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
->>>         /bin/echo t > /proc/sysrq-trigger
->>>         /bin/sleep 1
->>>         /bin/sync
->>>         /bin/sleep 1
->>>         kill $(pidof dmesg)
->>>         /bin/umount /mnt/sda7
->>>
->>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
->>>
->>> I hope this is what you were looking for, but if not, please let me know what you need
-> 
-> Thanks Dave. [...]
-FWIW, in case anyone strands here in the archives: the msg was
-truncated. The full post can be found in a new thread:
+There is no reason to have a separate module for the tables file it just
+holds regmap callbacks and register patches used by the main part of the
+driver. Remove the separate module and merge it into the main driver
+module.
 
-https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ sound/soc/codecs/Kconfig  | 5 -----
+ sound/soc/codecs/Makefile | 4 +---
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-Sadly it seems the info "With runpm=0, both reboot and poweroff work on
-my laptop." didn't bring us much further to a solution. :-/ I don't
-really like it, but for regression tracking I'm now putting this on the
-back-burner, as a fix is not in sight.
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 4621674e68bf1..bd72c426a93d1 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -688,9 +688,6 @@ config SND_SOC_CS35L41_I2C
+ 	select SND_SOC_CS35L41
+ 	select REGMAP_I2C
+ 
+-config SND_SOC_CS35L45_TABLES
+-	tristate
+-
+ config SND_SOC_CS35L45
+ 	tristate
+ 
+@@ -699,7 +696,6 @@ config SND_SOC_CS35L45_SPI
+ 	depends on SPI_MASTER
+ 	select REGMAP
+ 	select REGMAP_SPI
+-	select SND_SOC_CS35L45_TABLES
+ 	select SND_SOC_CS35L45
+ 	help
+ 	  Enable support for Cirrus Logic CS35L45 smart speaker amplifier
+@@ -710,7 +706,6 @@ config SND_SOC_CS35L45_I2C
+ 	depends on I2C
+ 	select REGMAP
+ 	select REGMAP_I2C
+-	select SND_SOC_CS35L45_TABLES
+ 	select SND_SOC_CS35L45
+ 	help
+ 	  Enable support for Cirrus Logic CS35L45 smart speaker amplifier
+diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+index a0a61554548eb..f1ca18f7946ca 100644
+--- a/sound/soc/codecs/Makefile
++++ b/sound/soc/codecs/Makefile
+@@ -63,8 +63,7 @@ snd-soc-cs35l41-lib-objs := cs35l41-lib.o
+ snd-soc-cs35l41-objs := cs35l41.o
+ snd-soc-cs35l41-spi-objs := cs35l41-spi.o
+ snd-soc-cs35l41-i2c-objs := cs35l41-i2c.o
+-snd-soc-cs35l45-tables-objs := cs35l45-tables.o
+-snd-soc-cs35l45-objs := cs35l45.o
++snd-soc-cs35l45-objs := cs35l45.o cs35l45-tables.o
+ snd-soc-cs35l45-spi-objs := cs35l45-spi.o
+ snd-soc-cs35l45-i2c-objs := cs35l45-i2c.o
+ snd-soc-cs42l42-objs := cs42l42.o
+@@ -431,7 +430,6 @@ obj-$(CONFIG_SND_SOC_CS35L41)	+= snd-soc-cs35l41.o
+ obj-$(CONFIG_SND_SOC_CS35L41_LIB)	+= snd-soc-cs35l41-lib.o
+ obj-$(CONFIG_SND_SOC_CS35L41_SPI)	+= snd-soc-cs35l41-spi.o
+ obj-$(CONFIG_SND_SOC_CS35L41_I2C)	+= snd-soc-cs35l41-i2c.o
+-obj-$(CONFIG_SND_SOC_CS35L45_TABLES)	+= snd-soc-cs35l45-tables.o
+ obj-$(CONFIG_SND_SOC_CS35L45)	+= snd-soc-cs35l45.o
+ obj-$(CONFIG_SND_SOC_CS35L45_SPI)	+= snd-soc-cs35l45-spi.o
+ obj-$(CONFIG_SND_SOC_CS35L45_I2C)	+= snd-soc-cs35l45-i2c.o
+-- 
+2.30.2
 
-#regzbot monitor:
-https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
-#regzbot backburner: hard to debug and apparently rare
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
-#regzbot ignore-activity
