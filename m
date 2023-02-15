@@ -2,100 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA5F697EC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C9E697EC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjBOOw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S229918AbjBOOxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjBOOw4 (ORCPT
+        with ESMTP id S229574AbjBOOxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:52:56 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D9F751;
-        Wed, 15 Feb 2023 06:52:54 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSJ9L-00082i-9y; Wed, 15 Feb 2023 15:52:47 +0100
-Message-ID: <05f6936f-f8e0-d0e5-7f8f-d0278dc03753@leemhuis.info>
-Date:   Wed, 15 Feb 2023 15:52:46 +0100
+        Wed, 15 Feb 2023 09:53:09 -0500
+Received: from smtp.hosts.co.uk (smtp.hosts.co.uk [85.233.160.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B222439B8D;
+        Wed, 15 Feb 2023 06:53:06 -0800 (PST)
+Received: from host86-157-192-115.range86-157.btcentralplus.com ([86.157.192.115] helo=[192.168.1.218])
+        by smtp.hosts.co.uk with esmtpa (Exim)
+        (envelope-from <antlists@youngman.org.uk>)
+        id 1pSJ9d-0007e4-6t;
+        Wed, 15 Feb 2023 14:53:05 +0000
+Message-ID: <0f5aafed-7b1a-99ac-57fc-c5de9a269b92@youngman.org.uk>
+Date:   Wed, 15 Feb 2023 14:53:04 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
- <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
- <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
- <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
- <3af98200-7240-9e93-bd6a-d0e2f71ab1c4@leemhuis.info>
-In-Reply-To: <3af98200-7240-9e93-bd6a-d0e2f71ab1c4@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.6.1
+Subject: Re: [dm-devel] RAID4 with no striping mode request
+Content-Language: en-GB
+To:     Roger Heflin <rogerheflin@gmail.com>,
+        Heinz Mauelshagen <heinzm@redhat.com>
+Cc:     Kyle Sanderson <kyle.leet@gmail.com>, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        John Stoffel <john@stoffel.org>,
+        Linux-Kernel <linux-kernel@vger.kernel.org>
+References: <CACsaVZJvXpCt37nQOoe8qd1EPUpfdMM1HwHk9tVO8HdU_Azhhw@mail.gmail.com>
+ <25578.37401.314298.238192@quad.stoffel.home>
+ <CACsaVZJ-5y7U5xqwL9bof69EKbTk+wrHWFcBFYyP_BwVSt+CNA@mail.gmail.com>
+ <CAM23Vxr8LkkcVDFfW1=qEYGgo7JG1qx62eWSV4WOw4_MnD+TZA@mail.gmail.com>
+ <CAAMCDeeHxMBoVkNYAyssjgjo4=FYd2NonS-mqC7OUEL89B9Cig@mail.gmail.com>
+ <CAM23VxpzY6qYsdTYxe01FT7AJvEbODf8X_vq8ALL35TfyrB8xQ@mail.gmail.com>
+ <CAAMCDee2hV1YP=119Rorz1uGTnyBD5q9hb20PvMq89FHow2wPw@mail.gmail.com>
+From:   Wols Lists <antlists@youngman.org.uk>
+In-Reply-To: <CAAMCDee2hV1YP=119Rorz1uGTnyBD5q9hb20PvMq89FHow2wPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676472774;c077c2a6;
-X-HE-SMSGID: 1pSJ9L-00082i-9y
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux regression tracking. A
-change or fix related to the regression discussed in this thread was
-posted or applied, but it did not use a Link: tag to point to the
-report, as Linus and the documentation call for. Things happen, no
-worries -- but now the regression tracking bot needs to be told manually
-about the fix. See link in footer if these mails annoy you.]
+On 15/02/2023 11:44, Roger Heflin wrote:
+> WOL: current SSD's are rated for around 1000-2000 writes.  So a 1Tb
+> disk can sustain 1000-2000TB of total writes.  And writes to
+> filesystem blocks would get re-written more often than data blocks.
+>   How well it would work would depend on how often the data is deleted
+> and re-written.
 
-On 21.01.23 13:32, Linux kernel regression tracking (#adding) wrote:
-> On 19.01.23 02:54, Joel Stanley wrote:
->> On Fri, 26 Aug 2022 at 22:48, Andrew Jeffery <andrew@aj.id.au> wrote:
->>> On Sat, 27 Aug 2022, at 07:26, Linus Walleij wrote:
->>>> On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
->>>>
->>>>> When the driver want to disable the signal of the function, it doesn't
->>>>> need to query the state of the mux function's signal on a pin. The
->>>>> condition below will miss the disable of the signal:
->>
->>>> I can't see the verdict for this patch? Will there be a new
->>>> version, or are we in the middle of a discussion?
->>>> I'd really like Andrew's ACK on the result before merging.
->>>
->>> Apologies, it's been a bit of A Week :)
->>>
->>> Given the approach has been discussed with the IP designer and solves a bug I'm okay for it to be merged. If we run into issues it is easy enough to back it out.
->>
->> As foreseen by Andrew, this caused a regression. On the Romulus
->> machine the device tree contains a gpio hog for GPIO S7. With the
->> patch applied:
-> 
-> #regzbot ^introduced cf517fef601b
-> #regzbot title pinctrl: aspeed-g5-pinctrl 1e6e2080.pinctrl: Failed to
-> acquire regmap for IP block 1
-> #regzbot ignore-activity
+When did that guy do that study of SSDs? Basically hammered them to 
+death 24/7? I think it took about three years of continuous write/erase 
+cycles to destroy them.
 
-#regzbot fix: 606d4ef4922662
+Given that most drives are obsolete long before they've had three years 
+of writes ... the conclusion was that - for the same write load - 
+"modern" (as they were several years ago) SSDs would probably outlast 
+mechanical drives for the same workload.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+(Cheap SD cards, on the other hand ...)
 
-#regzbot ignore-activity
+Cheers,
+Wol
