@@ -2,97 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED25E697E93
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7845697E9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjBOOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S229831AbjBOOn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjBOOnE (ORCPT
+        with ESMTP id S229796AbjBOOnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:43:04 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2188714EAC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:43:04 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id lf10so16854055ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:43:04 -0800 (PST)
+        Wed, 15 Feb 2023 09:43:55 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B8F14EAC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:43:54 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-501c3a414acso274504927b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:43:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2YxWgvIJdD6AE8Ce+eEDzrC0gSnd+arQ9utE5ORXuyI=;
-        b=BPWBtXLJU8/K7MnmuGYBd5YKImci4poEidjDnCvt+FOW4XJi/qcp9QRyzdnfeygsul
-         gIukKDRLnE6tmLIjifpKRKkZokiZD1PgpZ8Ty/1OKC/9np+lVjScFCP0tYmEjbNGlUcv
-         UWi082WR5mGL6+Eb+75RMs6htZ237jZkYzlnuZZHSZV4uNJMprbGgCA8M17Lo9635LCe
-         FzwZCmFM3s1jvYAxATmgPdC1gIdCvCkQSJxzCmyIP8aaxpEG+qFHpgoemOQ63brtQ4pL
-         ub5UhZbT7AUZ6ckPA9RD741mSfEN+RpLKwyN3EFUfMjXpiBy+qLKJsdufb343kJCEBM4
-         T/Xg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ga39QTsy+z+m6NyTC7ZtkFH0kMl3HCJFlPDjuWsRCWk=;
+        b=U8p4AERjm1Lc3YZ7T+TlMGqRY40l2Na0nQvgNEMfY5Va6AhzuV+WvbVhijMw9eW2HY
+         1Ssw2ZRTxZD2a3aWcS4Bskkin0pC6SDjPXDirKJjQxHmgsr/LxtWia0H07SUueLe3cd0
+         Fz2CmKxy3z/KV363+Ni/976R0aiofLVVtzbJVDUUhQIFTWzqQ8yJu7TQONZ1DJ9DX6nz
+         7cy9vMpvsysDuhhTVa93efaKniU8TkUS27YVjqfFa4KPoWzgSqIjlM7kXlMe2wxwxi7n
+         JnF2o4yPbHwZgyYV4dq9FtCYsEjkC/IJwWGKxu3/lf9aHkUAiE5NITBHcEpWEnosuCEW
+         FFVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YxWgvIJdD6AE8Ce+eEDzrC0gSnd+arQ9utE5ORXuyI=;
-        b=3cpBlpu0hmFE2k9CIJnRvHcINIRfjHyjyjPYJEpQNzMVTxD02a7dDW/NCbJtqCtU5K
-         G+PPOGLdixqnsArD3UCeBcwPQlGoRCrxEf9oFvwNfZsKt5RODNS3UeIGOtjnqPAE6B8S
-         uHuSrpv3GGewxtG1SnlxglQ+4/WvDjTaazQoiIatBh2je+AxmjdRFX+oD2fk/GxPIDnF
-         viHgWSVOOwRrB2rXkruV8AH86qPru9802iXbEATSQ5KZMieFi+VS7JHTECd5EbEobYjU
-         cCK9t1mbAASrbxP27epeuOoliKLixYdLvcRh0Yko7dRAq2Jjn5oQHtJ04mX4gfiHHXn5
-         092g==
-X-Gm-Message-State: AO0yUKVrhQsRz9QewCgtlgwHhMaz+LvOokJqtZPP5y5aa5AS4wYRXacU
-        VWMSTYdvmHDoNvBHb0aH1vk41AQfq/OnGqArG9k=
-X-Google-Smtp-Source: AK7set9BTU8HGLG4e06U8lzvrrvnC0DEnwi/7m5YqqcYSVkVM0mbFr9e6c7MemyIhyvbiLql/HrcJ+9Xm6mPoF84bW4=
-X-Received: by 2002:a17:907:7ba3:b0:88d:ba79:4317 with SMTP id
- ne35-20020a1709077ba300b0088dba794317mr2110221ejc.7.1676472182609; Wed, 15
- Feb 2023 06:43:02 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ga39QTsy+z+m6NyTC7ZtkFH0kMl3HCJFlPDjuWsRCWk=;
+        b=kWzYgt2txLdyDOkUvD6OfRKmTuK/wHfKjUfMzGFv9y2lhiWIy1I3xRfXp+eFWxmk6i
+         QyaIdb+KnsnD3xDndzQsLmYY+PsUAzovN93QGU+TrcRIPUeosvhhEFb2HopsDC7AraMg
+         YQKkqmvpS1zb9XnsdH6Gw6CN165A4iNNSNF1yhKEyxXdy6Jpstxc12n65SJVM9f8WsFX
+         O8bjVfGG0fu5mf/xtxGN8PFuH5BEAo74Nkdu5YjglESAbVE4RXjMj5WvKfui1czPxxQF
+         hjKbT6eRTHNcCofabFQYAa6mN2gLv+v0NL9WODbAONVRUAvmJUzmbyZM+4f+kBaKoqz4
+         OdNA==
+X-Gm-Message-State: AO0yUKUELyk4vBFy8eGk5ZagxBUhwJArSkgQgEoD27neBLW+TvdD8Lbr
+        oJNAUepNoIykxkBhjetsnrOMkeeVOISfqQ3wnmcNow==
+X-Google-Smtp-Source: AK7set8QDwgi+2WYBs7jbHO1kq1hZku7IWBRjrps5059OlF1v3nu7z62weSmEN4CYag/RCS63I3P5y145+a8zVOVNwg=
+X-Received: by 2002:a5b:c3:0:b0:83a:dd71:5b70 with SMTP id d3-20020a5b00c3000000b0083add715b70mr324341ybp.35.1676472233624;
+ Wed, 15 Feb 2023 06:43:53 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:2296:b0:4ac:e0fc:e43f with HTTP; Wed, 15 Feb 2023
- 06:43:02 -0800 (PST)
-Reply-To: elvismorgan261@gmail.com
-From:   Elvis Morgan <jeoheo92@gmail.com>
-Date:   Wed, 15 Feb 2023 14:43:02 +0000
-Message-ID: <CAES27SHxgiKRw5=AmYYR=i-Obb7hCBWZH7RqmP6CAWykXcSGSw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <20230215092421.143199-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20230215092421.143199-1-alexander.stein@ew.tq-group.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 15 Feb 2023 15:43:41 +0100
+Message-ID: <CACRpkdZbcs4zgGtuF5U4_JghHJ=A31T8jp2NTcN68P2Eh2azxg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] gpiolib: allow device numbering using OF alias
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:634 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [elvismorgan261[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jeoheo92[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jeoheo92[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-How are you?
+Top-posting because important people are missing from the to:line.
+
+It seems you are trying to enforce topology here,
+i.e. hammering down what should come first, second etc, despite the
+probe order.
+
+First the DT people need to acknowledge that this is a valid way to use
+device tree aliases. I'm not so sure about that. Remember that DT
+is mostly OS neutral, but we do have aliases for some use cases that
+can be the same tricky in any OS.
+
+Second I want Johan Hovolds input on this from the Linux sysfs side, as
+he keeps reminding me that sysfs already has topology and should be
+discovered from there (loosely paraphrased from memory). It might
+be that you are fixing something that should not be fixed.
+
+Please keep the new respondents on subsequent postings.
+
+Yours,
+Linus Walleij
+
+On Wed, Feb 15, 2023 at 10:24 AM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+
+> From: Markus Niebel <Markus.Niebel@ew.tq-group.com>
+>
+> This is useful e.g. for the following cases
+>
+> - GPIO IP name order is not aligned with SOC addresses
+>   (i.MX93 from NXP)
+> - reproducible naming for GPIO expander chips
+>
+> The implementation is a mix of the one found for MMC and RTC.
+>
+> Signed-off-by: Markus Niebel <Markus.Niebel@ew.tq-group.com>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> imx93 specifies alias for 4 on-chip GPIO controllers. But they are
+> ignored:
+> $ ls -o -g /sys/bus/gpio/devices/
+> total 0
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip0 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0071/gpiochip0
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip1 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0072/gpiochip1
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip2 -> ../../../devices/platform/soc@0/43810080.gpio/gpiochip2
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip3 -> ../../../devices/platform/soc@0/43820080.gpio/gpiochip3
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip4 -> ../../../devices/platform/soc@0/43830080.gpio/gpiochip4
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip5 -> ../../../devices/platform/soc@0/47400080.gpio/gpiochip5
+> lrwxrwxrwx 1 0 Feb 15 10:03 gpiochip6 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0070/gpiochip6
+>
+> With this patch this becomes:
+> $ ls -o -g /sys/bus/gpio/devices/
+> total 0
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip0 -> ../../../devices/platform/soc@0/47400080.gpio/gpiochip0
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip1 -> ../../../devices/platform/soc@0/43810080.gpio/gpiochip1
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip2 -> ../../../devices/platform/soc@0/43820080.gpio/gpiochip2
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip3 -> ../../../devices/platform/soc@0/43830080.gpio/gpiochip3
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip4 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0071/gpiochip4
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip5 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0072/gpiochip5
+> lrwxrwxrwx 1 0 Feb 15 10:18 gpiochip6 -> ../../../devices/platform/soc@0/42000000.bus/42530000.i2c/i2c-2/2-0070/gpiochip6
+>
+>  drivers/gpio/gpiolib.c | 33 +++++++++++++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 19bd23044b01..4d606ad522ac 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -663,10 +663,25 @@ static void gpiochip_setup_devs(void)
+>         }
+>  }
+>
+> +/**
+> + * gpio_first_nonreserved_index() - get the first index that is not reserved
+> + */
+> +static int gpio_first_nonreserved_index(void)
+> +{
+> +       int max;
+> +
+> +       max = of_alias_get_highest_id("gpio");
+> +       if (max < 0)
+> +               return 0;
+> +
+> +       return max + 1;
+> +}
+> +
+>  int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>                                struct lock_class_key *lock_key,
+>                                struct lock_class_key *request_key)
+>  {
+> +       int index, alias_id, min_idx;
+>         struct fwnode_handle *fwnode = NULL;
+>         struct gpio_device *gdev;
+>         unsigned long flags;
+> @@ -696,12 +711,22 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>
+>         device_set_node(&gdev->dev, gc->fwnode);
+>
+> -       gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
+> -       if (gdev->id < 0) {
+> -               ret = gdev->id;
+> -               goto err_free_gdev;
+> +       alias_id = of_alias_get_id(to_of_node(gc->fwnode), "gpio");
+> +       if (alias_id >= 0) {
+> +               index = ida_simple_get(&gpio_ida, alias_id, alias_id + 1,
+> +                                      GFP_KERNEL);
+> +       } else {
+> +               min_idx = gpio_first_nonreserved_index();
+> +               index = ida_simple_get(&gpio_ida, min_idx, 0,
+> +                                      GFP_KERNEL);
+> +               if (index < 0) {
+> +                       ret = gdev->id;
+> +                       goto err_free_gdev;
+> +               }
+>         }
+>
+> +       gdev->id = index;
+> +
+>         ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
+>         if (ret)
+>                 goto err_free_ida;
+> --
+> 2.34.1
+>
