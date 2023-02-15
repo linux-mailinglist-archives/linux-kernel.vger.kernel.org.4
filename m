@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08BE697288
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCB1697289
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjBOAKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 19:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S232271AbjBOAK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 19:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjBOAKP (ORCPT
+        with ESMTP id S229765AbjBOAK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:10:15 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B779B311C8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:10:05 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a3so10174985ejb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:10:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8azonh6JuDM6yxIBz+UeUT9A+K1dkd2wXajwtSP1wNo=;
-        b=M81D30xtRjOeLl0/ENzu5hw5o44r66wXeRX9tMqeqWbvV5eTiAz6wRgQsVd4/yn6fe
-         SAKjUk0EPFpyoa8Dvqn3ZvIakxe7sLp0X+nspxQ5cTfv2bidV27zMg6BUMRgSsZlcuuw
-         TBTKWTzkzOJqsKkIc5C5wZDSGyhoyXGFeMz0RnLqa4VU8wgXO8Bd/iaewBWTWFYhhszM
-         qWRWxprx/WJG87+hRrYuXOKHioz/3aXutio53bdNErHWICAYbdDPhYY5+QcqodOBSNjs
-         b1iSINmG4DeIxZnvwm4Z0RhQVVE6oPERfmVh5tunqmLPIQP6j+OyF9f+jxHo04ct4LYM
-         j3PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8azonh6JuDM6yxIBz+UeUT9A+K1dkd2wXajwtSP1wNo=;
-        b=IbsdO81s+fXV2AzOBdDs7DEYLxzLOvLCv6qLM5plS+BrbjZSFEG7arsa70H8TebcEv
-         oyvtAVCggKsJ9dmdxh8K5SIve7gAbywp0VNc+zCa7cheOODpo7VVMxR9yvv3zXbZUTh2
-         IgHvGsF7YSF2U/WP2RiktY+hr6hwkmTr/XdtGQfuzlkzJmh4Fxt4M4j3bJ7uD570k5d4
-         w4ibhl29CzQHHBiTigZOhufI5jrpMlv6tmtwRNXDok27Y3YThOgEDJF/fLPDTb3xU6LR
-         Q3iKvC5F9pF6SRgkk9fRiuomccWTKe946p7a6F2x91P6MhYMXwTfdXw/qS7Z1o8qYQVb
-         FFqQ==
-X-Gm-Message-State: AO0yUKUNOww517BzP/DhKvjcfBvZ8skWoSI51GCIFoCtMCSmN9EvG3qJ
-        VNLrKuJlJXWl8PI6EIEN/YNqyw==
-X-Google-Smtp-Source: AK7set/gKNIqLXNJwW+JD/xwd56nsFrvF97bkqwOd4DklH3lI/hfm72F9UxypL4PvkVMgtm0dKAn9w==
-X-Received: by 2002:a17:906:9159:b0:866:6b08:946b with SMTP id y25-20020a170906915900b008666b08946bmr254841ejw.39.1676419804292;
-        Tue, 14 Feb 2023 16:10:04 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id kg3-20020a17090776e300b0088a2aebb146sm8848566ejc.52.2023.02.14.16.10.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 16:10:03 -0800 (PST)
-Message-ID: <a4627ca5-46e6-2f32-c0e2-a85990e02f54@linaro.org>
-Date:   Wed, 15 Feb 2023 02:10:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 10/14] drm/msm/a6xx: Fix up A6XX protected registers
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Tue, 14 Feb 2023 19:10:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F713311D4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:10:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24D30B81F62
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:10:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F240C433D2;
+        Wed, 15 Feb 2023 00:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676419827;
+        bh=3J6SK8xX///7h1Dumxc1Ibt18+tu5um71PTnl4nqrdk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o0v3agpCzjFLGmJpdUgnhyIzfE6pp51RRQykQEKv6MkKepWZ801Lqz0aYWlG45weu
+         38BLOunOHDEZEMJVJdLZVKwndv+gZNvEpC9MPFfIYmpxqlNZG2X9e2TOsnfQS632E1
+         Q/VXjydkCuwrieXtfrIMZf2SZA1qj4mDWX9Eu2l7+q4dkFTm7dcg6iSBcsD9K2tB8x
+         MeEDKYRZK7+tBofeQofVlCVSD5aWvcaKg6CsqcKCMZjVB+WKfG5VuycMnkd1jAmZCa
+         IJygfX1teQNAq7S0WtKhbdgHB3BzIWzkB5v60hImrl0eCC655i5RYcU2C48z5AxJtx
+         pX3QQjflyBYBA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     x86@kernel.org
+Cc:     Nadav Amit <nadav.amit@gmail.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         linux-kernel@vger.kernel.org
-References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
- <20230214173145.2482651-11-konrad.dybcio@linaro.org>
- <CAF6AEGva3ecxTOx3Yb+Wh-1K=jYA3tDo_aXg09jS9pzJupYExQ@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAF6AEGva3ecxTOx3Yb+Wh-1K=jYA3tDo_aXg09jS9pzJupYExQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: [PATCH -tip v2] x86/kprobes: Remove unneeded casting from immediate value
+Date:   Wed, 15 Feb 2023 09:10:24 +0900
+Message-Id:  <167641982421.1677831.18379341946856978545.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 23:56, Rob Clark wrote:
-> On Tue, Feb 14, 2023 at 9:32 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> One of the protected ranges was too small (compared to the data we
->> have downstream). Fix it.
->>
->> Fixes: 408434036958 ("drm/msm/a6xx: update/fix CP_PROTECT initialization")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> index 503c750216e6..d6b38bfdb3b4 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> @@ -690,7 +690,7 @@ static const u32 a6xx_protect[] = {
->>          A6XX_PROTECT_NORDWR(0x00800, 0x0082),
->>          A6XX_PROTECT_NORDWR(0x008a0, 0x0008),
->>          A6XX_PROTECT_NORDWR(0x008ab, 0x0024),
->> -       A6XX_PROTECT_RDONLY(0x008de, 0x00ae),
->> +       A6XX_PROTECT_RDONLY(0x008d0, 0x00bc),
-> 
-> Nak, this is intentional, we need userspace to be able to configure
-> the CP counters.  Otherwise this would break fdperf, perfetto, etc
-> 
-> (although maybe we should comment where we diverge from downstream)
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Yes, please. Otherwise it is extremely hard to understand the reason for 
-diversion between the vendor driver and our one.
+Remove unneeded casting from immediate value assignments for relative
+jump offset. Since the immediate values in the 'insn' data structure are
+assigned from immediate bytes as a signed value to insn.immediate.value
+by insn_field_set(). Thus, if we need to access that value as a signed
+value (in this kprobe's case), we don't need to cast it.
+This is a kind of clean up (should not change behavior) follows Nadav's
+bugfix.
 
-> 
-> BR,
-> -R
-> 
->>          A6XX_PROTECT_NORDWR(0x00900, 0x004d),
->>          A6XX_PROTECT_NORDWR(0x0098d, 0x0272),
->>          A6XX_PROTECT_NORDWR(0x00e00, 0x0001),
->> --
->> 2.39.1
->>
+Link: https://lore.kernel.org/all/20230208071708.4048-1-namit@vmware.com/
 
--- 
-With best wishes
-Dmitry
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+Changes in v2:
+  - Remove meaningless immediate size branches too.
+---
+ arch/x86/kernel/kprobes/core.c |   19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index 695873c0f50b..41ffdf04d9c4 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -606,20 +606,12 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+ 		break;
+ 	case 0xe8:	/* near call relative */
+ 		p->ainsn.emulate_op = kprobe_emulate_call;
+-		if (insn->immediate.nbytes == 2)
+-			p->ainsn.rel32 = *(s16 *)&insn->immediate.value;
+-		else
+-			p->ainsn.rel32 = *(s32 *)&insn->immediate.value;
++		p->ainsn.rel32 = insn->immediate.value;
+ 		break;
+ 	case 0xeb:	/* short jump relative */
+ 	case 0xe9:	/* near jump relative */
+ 		p->ainsn.emulate_op = kprobe_emulate_jmp;
+-		if (insn->immediate.nbytes == 1)
+-			p->ainsn.rel32 = *(s8 *)&insn->immediate.value;
+-		else if (insn->immediate.nbytes == 2)
+-			p->ainsn.rel32 = *(s16 *)&insn->immediate.value;
+-		else
+-			p->ainsn.rel32 = *(s32 *)&insn->immediate.value;
++		p->ainsn.rel32 = insn->immediate.value;
+ 		break;
+ 	case 0x70 ... 0x7f:
+ 		/* 1 byte conditional jump */
+@@ -633,10 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+ 			/* 2 bytes Conditional Jump */
+ 			p->ainsn.emulate_op = kprobe_emulate_jcc;
+ 			p->ainsn.jcc.type = opcode & 0xf;
+-			if (insn->immediate.nbytes == 2)
+-				p->ainsn.rel32 = *(s16 *)&insn->immediate.value;
+-			else
+-				p->ainsn.rel32 = *(s32 *)&insn->immediate.value;
++			p->ainsn.rel32 = insn->immediate.value;
+ 		} else if (opcode == 0x01 &&
+ 			   X86_MODRM_REG(insn->modrm.bytes[0]) == 0 &&
+ 			   X86_MODRM_MOD(insn->modrm.bytes[0]) == 3) {
+@@ -651,7 +640,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+ 		p->ainsn.emulate_op = kprobe_emulate_loop;
+ 		p->ainsn.loop.type = opcode & 0x3;
+ 		p->ainsn.loop.asize = insn->addr_bytes * 8;
+-		p->ainsn.rel32 = *(s8 *)&insn->immediate.value;
++		p->ainsn.rel32 = insn->immediate.value;
+ 		break;
+ 	case 0xff:
+ 		/*
 
