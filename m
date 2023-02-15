@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB0D69875A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C71698760
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBOVaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S230080AbjBOVau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjBOVaL (ORCPT
+        with ESMTP id S229879AbjBOVas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:30:11 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3443C2365A;
-        Wed, 15 Feb 2023 13:30:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHB7H3TQ3z4x5X;
-        Thu, 16 Feb 2023 08:30:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676496603;
-        bh=mG1gvaBbO8hTzuz96CL94P7Xf50HvLn1KywUiJJme8A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Eq9CiDZKzvf4iAgAUBtyVdXN3ae1cQ3Ur16K++R0noMVpFMThq+N0jL4vOX1ARZJ6
-         EKDx1uxSrtv2dUxK2JtDwW1hH2tNiMm+8qiZ9vsVtDoWbAHYvy2uI5jrGYRwLMyoxh
-         eQUiS1s/88VRcW4+4hBapeGrupph3nO2B76k8PbgeRdlstCwq0t8SRV5XHvMqzm+7a
-         X8nUvRStT9Hk9SzgnHnswBeoq+fb+nqNg3OwC6LazEpgdbZeIGRcC4BJG3q3mDAhGk
-         9Y6j3jKFBXNHxb/6mH8K+srfTeNcNTjt652LQdIpZ2VPN4KDktK2qssau+Ky0OydBq
-         6KqcInth2KBrw==
-Date:   Thu, 16 Feb 2023 08:30:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ntfs3 tree with the vfs-idmapping
- tree
-Message-ID: <20230216083002.6227ba81@canb.auug.org.au>
+        Wed, 15 Feb 2023 16:30:48 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119FF2313C;
+        Wed, 15 Feb 2023 13:30:46 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id he5so111819wmb.3;
+        Wed, 15 Feb 2023 13:30:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wwhRGKzzxRmhQ49hS4QWcVBIwbWV+s9hRRdXyP5iSY0=;
+        b=Z6PKgfElsvUztbaP1UgQEj8lPrM9wfGWphQUsc3B7ceB6XwV29NZos2LBs2XD/Lbea
+         OnFSLIPD0g7doJnmy2CzMuXfd+lZPEb9LxbrJHTvRK84geSiS420fnwq0kc5DTvFiHpI
+         p/JnQHxxwJTe7cLr1dto5kt5OgOO7Ua888nhaMysM49JWuCeLQu1sAtaLrN+Xkx8tdhc
+         atExoZ0RLXF7kRnVZmrqAIWuS/ErosDOatILyvTxC3Q5rlLn6Q1WE+OhL5+F1GK9daIc
+         XGKrnsJqQjUfcSl2riQyVsNgv3jc8OawoXWmxHkQvczv/ZhlrhuMgsXxyIvK6jXix4NO
+         1FDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wwhRGKzzxRmhQ49hS4QWcVBIwbWV+s9hRRdXyP5iSY0=;
+        b=6MSUthqonT5QQ0G8xk76FR/PDp06coIWWYTsqhiKL/fMSokl6o8MeiBO+CXPu4bUb0
+         BzI/u/oXusngwnvr7v5Lhq919clZmaACTtlQMGYffv+q13sgkoZSueP0NkXvcm3YMFma
+         UQc/DvFZAnVNuYT+x+Wjzn8dN0NWkLYKxS0kAqFQFd0qKTV+o8vkFsmE5ifl1i8bOOpU
+         Vy6bnJLmcCc5Npx6PbhO9JIu7akEwMhzvmGgBZHxsCD7bdpnAZGkmmJc1LlUqu0HBYye
+         zJ8LpDm0OK4Sm/EM8SFskuGLImjSyvh/CZRDwGAEhBOX4zX/UsQXONM++Xo7BpfCRfJu
+         GrMg==
+X-Gm-Message-State: AO0yUKXKhuLzbyjh0OYiRzztAKMJE4yXq4ySHy61Zl17YJ7hhghqRysc
+        uy13ys6ONDW7NfBMx7ytJ5o=
+X-Google-Smtp-Source: AK7set8iMEK3VVHdeN+zzhoqFRVgIYezADgMMKC3NNKrFZt2Pq9ug0Jwtc11+Mj5+wUNupHmjzygQg==
+X-Received: by 2002:a05:600c:816:b0:3dc:5390:6499 with SMTP id k22-20020a05600c081600b003dc53906499mr3444167wmp.1.1676496645352;
+        Wed, 15 Feb 2023 13:30:45 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m7-20020adfe947000000b002c559626a50sm7912740wrn.13.2023.02.15.13.30.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 13:30:44 -0800 (PST)
+Message-ID: <066340d4-adec-a4da-3b88-d52f10f8bceb@gmail.com>
+Date:   Wed, 15 Feb 2023 22:30:42 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fE1=pPJH3eojyBI4sc0.Zfe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH -next v2] wifi: mt76: mt7996: Remove unneeded semicolon
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, kuba@kernel.org
+Cc:     pabeni@redhat.com, angelogioacchino.delregno@collabora.com,
+        ryder.lee@mediatek.com, lorenzo@kernel.org, nbd@nbd.name,
+        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230215055650.88538-1-yang.lee@linux.alibaba.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230215055650.88538-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fE1=pPJH3eojyBI4sc0.Zfe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the ntfs3 tree got conflicts in:
+On 15/02/2023 06:56, Yang Li wrote:
+> ./drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3136:3-4: Unneeded semicolon
+> 
 
-  fs/ntfs3/file.c
+Please be more verbose in the commit message.
 
-between commit:
+Regards,
+Matthias
 
-  c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-
-from the vfs-idmapping tree and commit:
-
-  d1468d48fe7a ("fs/ntfs3: Remove noacsrules")
-
-from the ntfs3 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/ntfs3/file.c
-index e9bdc1ff08c9,a10a905ec7ce..000000000000
---- a/fs/ntfs3/file.c
-+++ b/fs/ntfs3/file.c
-@@@ -657,26 -653,16 +653,16 @@@ out
-  /*
-   * ntfs3_setattr - inode_operations::setattr
-   */
- -int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentr=
-y,
- +int ntfs3_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
-  		  struct iattr *attr)
-  {
-- 	struct super_block *sb =3D dentry->d_sb;
-- 	struct ntfs_sb_info *sbi =3D sb->s_fs_info;
-  	struct inode *inode =3D d_inode(dentry);
-  	struct ntfs_inode *ni =3D ntfs_i(inode);
-  	u32 ia_valid =3D attr->ia_valid;
-  	umode_t mode =3D inode->i_mode;
-  	int err;
- =20
-- 	if (sbi->options->noacsrules) {
-- 		/* "No access rules" - Force any changes of time etc. */
-- 		attr->ia_valid |=3D ATTR_FORCE;
-- 		/* and disable for editing some attributes. */
-- 		attr->ia_valid &=3D ~(ATTR_UID | ATTR_GID | ATTR_MODE);
-- 		ia_valid =3D attr->ia_valid;
-- 	}
--=20
- -	err =3D setattr_prepare(mnt_userns, dentry, attr);
- +	err =3D setattr_prepare(idmap, dentry, attr);
-  	if (err)
-  		goto out;
- =20
-
---Sig_/fE1=pPJH3eojyBI4sc0.Zfe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtTtoACgkQAVBC80lX
-0GwscQgAnGY2jw2hDLEhW12se8Zp6Fek6Sek6sYQ+7HFJI/HS/GqPa6jjOhv4o7L
-CHLpT0qFffu+HBXvfejAqVRREAn9L4oQiz/vnSx/mwxXN2Vxi11Do94mVlnMgVza
-W7Sw6uFfwaYw3wkXBAY/bx8B90Bt1BMhcUubq0a/OlvPIiQ+HrjlPgDDsbvTWcHf
-IzCSl5MIVhD/RCuqS5sdKULrOzX+zlLL8wt6uSFtSrKRT3sk28NIk/P5vEMLvOMW
-XbSGETTGHrduZ9HMFTIJqfdxlRDcsxjLKZqPak1U0Kwmk+Xpk3uZ4nQfQ5tEkWYh
-EPV7dCijDzAVl5YbARPnlg7ouMd59w==
-=jLdb
------END PGP SIGNATURE-----
-
---Sig_/fE1=pPJH3eojyBI4sc0.Zfe--
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4059
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+> 
+> change in v2:
+> Add the linux-wireless to cc list.
+> 
+>   drivers/net/wireless/mediatek/mt76/mt7996/mcu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+> index dbe30832fd88..8ad51cbfdbe8 100644
+> --- a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+> +++ b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+> @@ -3133,7 +3133,7 @@ int mt7996_mcu_get_chip_config(struct mt7996_dev *dev, u32 *cap)
+>   			break;
+>   		default:
+>   			break;
+> -		};
+> +		}
+>   
+>   		buf += le16_to_cpu(tlv->len);
+>   	}
