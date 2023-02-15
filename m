@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5D76983FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AA1698406
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBOS67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 13:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S229596AbjBOTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBOS65 (ORCPT
+        with ESMTP id S229478AbjBOTAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:58:57 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9DD3BD88;
-        Wed, 15 Feb 2023 10:58:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1676487532;
-        bh=fvEcUnHEx5ztRRI3eUizYkio/MyOz/x+Kw4OFi1gFXA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eLbyf4X11+peGKKsJWOzzT+wakEuiq4Vspyu43c/LAfYhmAmIqS8agwtaO6d5E2Ga
-         ePl+N8c9x4RFkGC7tQveKn2lyH5gfYnwJ0JkvIYrsd5IraZcUUhijhaHkPmFpOdq9k
-         cc8zc8F/xIRP9eijB7WkhZkiHqW4s1qGCR/KIHWEfELMXw6GaK/oqTzmSKrV2117yo
-         3GMuT1VMtjf9JBeYWP/7+4KGo0xQYF0wqDyqVarCP3PUx06xAakYq1YlzxHqZaDnoU
-         S1VginEGAm43JGhgiv4RFRNyyJq3ZZYdg1cqTiOd5MNSTBdF9DqN941kp+R1xSi0aI
-         CJUpG8VrcovfQ==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PH6mr3P0szlcF;
-        Wed, 15 Feb 2023 13:58:52 -0500 (EST)
-Message-ID: <f53d0ff8-5f46-ca89-ec3d-b88d8f2db187@efficios.com>
-Date:   Wed, 15 Feb 2023 13:58:52 -0500
+        Wed, 15 Feb 2023 14:00:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B9710D1;
+        Wed, 15 Feb 2023 11:00:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E2D3339F6;
+        Wed, 15 Feb 2023 19:00:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676487623; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q9MXy991oBVRpb6GnqmhHyO0/qmV1r3htDajWMoxvQ8=;
+        b=N4xQTAbnLwRgwCQBjoPceaeSqtRnnWbW+5RsHtICTCIb1hI+QHki5lvmgTmg7pCPj9dIQR
+        iaSN8ZLQoHVJe4/wyfQ08g9RxB6WNH5UbkgmeTpMVKfK+xzG0RJivvxNMqOLX4xQp40mg6
+        UrDutjEC4USYLM7FKMmUs5cGyW1fPbs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5ABF013483;
+        Wed, 15 Feb 2023 19:00:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hwvgE8cr7WPffQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 15 Feb 2023 19:00:23 +0000
+Date:   Wed, 15 Feb 2023 20:00:22 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <Y+0rxoM4w9nilUMZ@dhcp22.suse.cz>
+References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
+ <c7b5e502d1a3b9b8f6e96cbf9ca553b143c327e0.1675669136.git-series.apopple@nvidia.com>
+ <Y+Fttp1ozejoSQzl@slm.duckdns.org>
+ <CAJD7tkb_Cr7rTTpKc1VBpS8h=n3Hu+nGiV8dkLH-NdC1bSG9mg@mail.gmail.com>
+ <Y+GA6Y7SVhAW5Xm9@slm.duckdns.org>
+ <CAJD7tka6SC1ho-dffV0bK_acoZd-5DQzBOy0xg3TkOFG1zAPMg@mail.gmail.com>
+ <Y+GMbWWP/YhtJQqe@slm.duckdns.org>
+ <Y+GQB9I6MFN6BOFw@nvidia.com>
+ <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/1] rseq.2: New man page for the rseq(2) API
-Content-Language: en-US
-To:     Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-man <linux-man@vger.kernel.org>,
-        "G. Branden Robinson" <g.branden.robinson@gmail.com>
-References: <20230214195442.937586-1-mathieu.desnoyers@efficios.com>
- <669eb324-aef6-0583-c8a4-f54a93ee4d6d@gmail.com>
- <20230215012054.twzw4k5et6hxvi2j@illithid>
- <849b233c-b094-849d-a8fe-9b53cde33c80@efficios.com>
- <63b28ab6-1a5b-0031-8860-51bc66d80ee5@gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <63b28ab6-1a5b-0031-8860-51bc66d80ee5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-15 12:16, Alejandro Colomar wrote:
-[...]
->>>
->>>>> +user-space performs any side-effect
->>>>> +(e.g. storing to memory).
->>>>> +.IP
->>>>> +This field is always guaranteed to hold a valid CPU number in the range
->>>>> +[ 0 ..  nr_possible_cpus - 1 ].
->>>>
->>>> Please use interval notation:
->>>> 	[0, nr_possible_cpus)
->>>> or
->>>> 	[0, nr_possible_cpus - 1]
->>>> whichever looks better to you.
->>>>
->>>> We did some consistency fix recently:
->>>> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=147a60d792a5db8f3cb93ea16eefb73e16c1fb91>
->>>>
->>>> Also, do we have a more standard way of saying nr_possible_cpus?
->>>> Should we say nproc?
->>
->> nproc(1) means:
->>
->>          Print  the number of processing units available to the current
->>          process, which may be less than the number of online processors
->>
->> Which is the number of cpus currently available (AFAIU the result of the
->> cpuset and sched affinity).
->>
->> What I really mean here is the maximum value for possible cpus which can
->> be hotplugged into the system. So it's not the maximum number of
->> possible CPUs per se, but rather the maximum enabled bit in the possible
->> CPUs mask.
->>
->> Note that we could express this differently as well: rather than saying
->> that it guarantees a value in the range [0, nr_possible_cpus - 1], we
->> could say that the values are guaranteed to be part of the possible cpus
->> mask, which would actually more accurate in case the possible cpus mask
->> has a hole (it tends to happen with things like lxc containers nowadays).
->>
->> Do you agree that we should favor expressing this in terms of belonging
->> to the possible cpumask set rather than a range starting from 0 ?
+On Mon 06-02-23 14:32:37, Tejun Heo wrote:
+> Hello,
 > 
-> On 2/15/23 18:12, Mathieu Desnoyers wrote:
->> Actually, the field may contain the value 0 even if 0 is not part of the
->> possible cpumask. So forget what I just said about being guaranteed to
->> be part of the possible cpus mask.
->>
->> Thoughts ?
->>
->> Thanks,
->>
->> Mathieu
+> On Mon, Feb 06, 2023 at 07:40:55PM -0400, Jason Gunthorpe wrote:
+> > (a) kind of destroys the point of this as a sandboxing tool
+> > 
+> > It is not so harmful to use memory that someone else has been charged
+> > with allocating.
+> > 
+> > But it is harmful to pin memory if someone else is charged for the
+> > pin. It means it is unpredictable how much memory a sandbox can
+> > actually lock down.
+> > 
+> > Plus we have the double accounting problem, if 1000 processes in
+> > different cgroups open the tmpfs and all pin the memory then cgroup A
+> > will be charged 1000x for the memory and hit its limit, possibly
+> > creating a DOS from less priv to more priv
 > 
-> I don't have a full understanding, so I will trust you for deciding what is
-> best.  I'll try to understand it, but my kernel knowledge is rather limited :)
-> 
-> I suggest writing a detailed description, instead of (or complementary to it)
-> just using a range, since readers might wonder as I did, what nr_possible_cpus
-> is (it's not really described anywhere so far).  With a worded description,
-> we can later improve it if we find it not clear enough, but should be enough
-> for an initial page.
+> Let's hear what memcg people think about it. I'm not a fan of disassociating
+> the ownership and locker of the same page but it is true that actively
+> increasing locked consumption on a remote cgroup is awkward too.
 
-After giving it some thoughts, I think the most precise description 
-would be that the cpu number is guaranteed to be either 0, or the CPU 
-number on which the registered thread is running. Let's not bring in 
-notions of possible cpus (those come from 
-/sys/devices/system/cpu/possible) unless it's absolutely required.
+One thing that is not really clear to me is whether those pins do
+actually have any "ownership". The interface itself doesn't talk about
+anything like that and so it seems perfectly fine to unpin from a
+completely different context then pinning. If there is no enforcement
+then Tejun is right and relying on memcg ownership is likely the only
+reliable way to use for tracking. The downside is sharing obviously but
+this is the same problem we already do deal with with shared pages.
 
-Thanks,
+Another thing that is not really clear to me is how the limit is
+actually going to be used in practice. As there is no concept of a
+reclaim for pins then I can imagine that it would be quite easy to
+reach the hard limit and essentially DoS any further use of pins. Cross
+cgroup pinning would make it even worse because it could become a DoS
+vector very easily. Practically speaking what tends to be a corner case
+in the memcg limit world would be norm for pin based limit.
 
-Mathieu
-
+Or am I misunderstanding something here?
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Michal Hocko
+SUSE Labs
