@@ -2,131 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC74697FA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C796C697FC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjBOPjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S229819AbjBOPmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBOPjx (ORCPT
+        with ESMTP id S229560AbjBOPmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:39:53 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE25524E;
-        Wed, 15 Feb 2023 07:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i7LKngPzc/hrmVl4gzBZXU9fkDYg01lrfToW/TF07cs=; b=PYgxf7xd2iJA2O9fL3Ig5ZUpPY
-        fanBc6tEOZsGwe4k5hiiZnOqQG0z7GIX6jVRBbYCc3GnFncqzPVsYMWO/dAoqXVDFWTmsCtoLjwww
-        69PRVjORixfmCakpyMiRlZUdgYg9BYrmDMYcEiTQGUWaK8C+IUfHVuGtk+Y+nRaXPmvZDjhMz0/vX
-        IXF7XeVgQyJGVANG++EQmailfaE5FPUa36BymSLRhzPDguJlcZxmWMYl4FqYqpyEDHQQKuchvOmDz
-        6YJyNy0g9bCnH3WyCCV8b9L+0b9LVSEI5FhE/54LwGlkVMN0dBvIAjBbrHKXf2svDQ/7PGTynbBQT
-        nHJjhKqA==;
-Received: from [187.10.60.16] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pSJsZ-00372S-HW; Wed, 15 Feb 2023 16:39:31 +0100
-Message-ID: <b04fc583-c3d1-8c3d-3831-9c765a74a705@igalia.com>
-Date:   Wed, 15 Feb 2023 12:39:22 -0300
+        Wed, 15 Feb 2023 10:42:04 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5BA366B2;
+        Wed, 15 Feb 2023 07:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J1HP1AYxs+CPgeT/Uk3lsnz97zGE2SKFHAXmfCAw3bw=; b=Y0PKbb2GdfSnGd5GRhVnYZGNLK
+        S2B4glLdiOEykJBOnN/nU8lvfvyNknik1yQ8cOcv9q2fIz9pbnNOYxDhnhIx7ZHeQiWzsjqZCuaTa
+        JrddlddthRmAKYwpOF8TuJM0ngO8PaURDxPZTUMO46mwpNTH3bPdUohUwBwc/U4fCEkBEGeWl06U1
+        MDA2+xdslRl+t1aRvavQmvMMojmeVVeCG6meQe2Cgxk+Zc2cKz7EFOD2tmMciWoWjk8WhInFX08Ul
+        7aqG9lkcHfdkciRCtzifRVf33MBMXUGrjWkCu8rNNLTupObyC6B4bUQ05ytVIIVrpA/9Vmge97DkK
+        ecTx6fwg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pSJsY-007aAb-HO; Wed, 15 Feb 2023 15:39:30 +0000
+Date:   Wed, 15 Feb 2023 15:39:30 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
+        mike.kravetz@oracle.com, damon@lists.linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] mm: change to return bool for isolate_lru_page()
+Message-ID: <Y+z8suWLusQk8N3U@casper.infradead.org>
+References: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
+ <3074c1ab628d9dbf139b33f248a8bc253a3f95f0.1676424378.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] panic: Fixes the panic_print NMI backtrace setting
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        dyoung@redhat.com, d.hatayama@jp.fujitsu.com, feng.tang@intel.com,
-        hidehiro.kawai.ez@hitachi.com, keescook@chromium.org,
-        mikelley@microsoft.com, vgoyal@redhat.com, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, stable@vger.kernel.org
-References: <20230210203510.1734835-1-gpiccoli@igalia.com>
- <Y+ue4OsyrGSx5ujB@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Y+ue4OsyrGSx5ujB@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3074c1ab628d9dbf139b33f248a8bc253a3f95f0.1676424378.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 11:46, Petr Mladek wrote:
-> [...]
->> My understanding is that it's a mechanism to prevent some concurrency,
->> in case some other CPU modify this variable while panic() is running.
->> I find it very unlikely, hence I removed it - but if people consider
->> this copy needed, I can respin this patch and keep it, even providing a
->> comment about that, in order to be explict about its need.
+On Wed, Feb 15, 2023 at 06:39:35PM +0800, Baolin Wang wrote:
+> The isolate_lru_page() can only return 0 or -EBUSY, and most users did
+> not care about the negative error of isolate_lru_page(), except one user
+> in add_page_for_migration(). So we can convert the isolate_lru_page() to
+> return a boolean value, which can help to make the code more clear when
+> checking the return value of isolate_lru_page().
 > 
-> Yes, I think that it makes the behavior consistent even when the
-> global variable manipulated in parallel.
+> Also convert all users' logic of checking the isolation state.
 > 
-> I would personally prefer to keep the local copy. Better safe
-> than sorry.
+> No functional changes intended.
 > 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-Hi Petr, thanks for your review!
-OK, we could keep this local copy, makes sense...even adding a comment,
-to make its purpose really clear.
-
-
->> [...]
->> @@ -211,9 +211,6 @@ static void panic_print_sys_info(bool console_flush)
->>  		return;
->>  	}
->>  
->> -	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
->> -		trigger_all_cpu_backtrace();
->> -
-> 
-> Sigh, this is yet another PANIC_PRINT_ action that need special
-> timing. We should handle both the same way.
-> 
-> What about the following? The parameter @mask says what
-> actions are allowed at the given time.
-> < ..code..> 
-
-I think your approach is interesting, it's very "organized".
-
-But I think it's a bit conflicting with that purpose we had on notifiers
-refactor, to deprecate "bogus" usages of panic_print, as in
-https://lore.kernel.org/lkml/20220427224924.592546-26-gpiccoli@igalia.com/ .
-
-So, the idea of my approach is to allow:
-
-(a) Easy removal of panic_print_sys_info() of panic(), once we move it
-to a panic notifier;
-
-(b) Better separate and identify the "bogus" cases. The CPU backtrace
-one is less a bogus case in my opinion, more a "complicated" one, since
-it's related with the CPUs stop routines. But the console flush, as we
-discussed, it's clearly something that calls for a new parameter (and
-such param was added in the refactor patch).
-
-
-In the end, I think your approach is interesting but it's kinda like
-we're adding the fix to later, on refactor, entirely remove/rework it.
-With my approach we wouldn't be calling panic_print_sys_info() again
-(3rd time!) on panic(), and also would be more natural to move it later
-to a new panic notifier.
-
-What you / others think? If your approach is in the end preferred, it's
-fine by me - I'd just ask you to submit as a full patch so we can get it
-merged as a fix in 6.3, if possible (and backport it to the 6.1/6.2
-stable). Now, if my approach is fine, I can resubmit as a V5 keeping the
-local variable - lemme know.
-
-Cheers,
-
-
-Guilherme
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
