@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875276974E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1276974E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjBODZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 22:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S232761AbjBOD0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 22:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBODZ0 (ORCPT
+        with ESMTP id S229496AbjBOD0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:25:26 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD02C3C0F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:25:24 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PGk3k2kVdz4xyCY;
-        Wed, 15 Feb 2023 11:25:22 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl2.zte.com.cn with SMTP id 31F3P6TP010713;
-        Wed, 15 Feb 2023 11:25:06 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 15 Feb 2023 11:25:07 +0800 (CST)
-Date:   Wed, 15 Feb 2023 11:25:07 +0800 (CST)
-X-Zmail-TransId: 2af963ec50933a968cfb
-X-Mailer: Zmail v1.0
-Message-ID: <202302151125076179524@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <vkoul@kernel.org>
-Cc:     <nandhini.srikandan@intel.com>, <rashmi.a@intel.com>,
-        <kishon@kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBwaHk6IGludGVsOiBVc2UgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31F3P6TP010713
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63EC50A2.000/4PGk3k2kVdz4xyCY
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Feb 2023 22:26:01 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE216192;
+        Tue, 14 Feb 2023 19:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=25j3Cvtb3jyrlYLarvQrJDhy0gbj6s2LEEygL5odKS0=; b=RiwKIz4S5XpRyhYA3uSNdol4ed
+        zlnyv4sG0dgDhSJSR4+aPGbR1wac3nx+20O/vaLfTiIi2np8Nk2eGq8TJf90fJt9mZ09+pcv+9Xu6
+        VrYnTbperpk7xYWw6W80mgDkZm3VUGrUk/tA6qtraS3J9MnxD52KBxIToMlhtD4vgHRSLanKHxLlq
+        y5zoaYzhkwEqc6WwyUyZcJm8xxgIIEAcXowoYkJhTJWGlVXPOvJOSrSe/fk4+gTAyptH7mOQHRVmY
+        aF7nAjL9Qi6KmMY4gI0Inyk2ra+RIVUuiFN/oqsI58HbDRKC5yr+T9xSVZ5k6XscnqrAXs8dRwwBH
+        vByOZhlQ==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pS8QT-004Vwc-BZ; Wed, 15 Feb 2023 03:25:45 +0000
+Message-ID: <ca611ede-3797-b7b1-6261-80c7e8adde3f@infradead.org>
+Date:   Tue, 14 Feb 2023 19:25:44 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] fixed typos on selftests/bpf
+Content-Language: en-US
+To:     Taichi Nishimura <awkrail01@gmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, deso@posteo.net, haoluo@google.com,
+        hawk@kernel.org, joannelkoong@gmail.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, mykolal@fb.com,
+        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
+        yhs@fb.com, ytcoode@gmail.com
+References: <f8f3e8df-f707-28f3-ab0f-eec21686c940@infradead.org>
+ <20230215032122.417515-1-awkrail01@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230215032122.417515-1-awkrail01@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/phy/intel/phy-intel-thunderbay-emmc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 2/14/23 19:21, Taichi Nishimura wrote:
+> Hi Randy,
+> 
+> Thank you for your reviewing.
+> I fixed costant and it's to constant and its, respectively.
+> 
+> Best regards,
+> Taichi Nishimura
+> 
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
 
-diff --git a/drivers/phy/intel/phy-intel-thunderbay-emmc.c b/drivers/phy/intel/phy-intel-thunderbay-emmc.c
-index 593f6970b81e..4fe63240779f 100644
---- a/drivers/phy/intel/phy-intel-thunderbay-emmc.c
-+++ b/drivers/phy/intel/phy-intel-thunderbay-emmc.c
-@@ -461,7 +461,6 @@ static int thunderbay_emmc_phy_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	const struct of_device_id *id;
- 	struct phy *generic_phy;
--	struct resource *res;
+Looks good. Thanks.
 
- 	if (!dev->of_node)
- 		return -ENODEV;
-@@ -470,8 +469,7 @@ static int thunderbay_emmc_phy_probe(struct platform_device *pdev)
- 	if (!tbh_phy)
- 		return -ENOMEM;
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	tbh_phy->reg_base = devm_ioremap_resource(&pdev->dev, res);
-+	tbh_phy->reg_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(tbh_phy->reg_base))
- 		return PTR_ERR(tbh_phy->reg_base);
+
+> ---
+>  tools/testing/selftests/bpf/progs/test_cls_redirect.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> index a8ba39848bbf..66b304982245 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> @@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+>   *
+>   *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+>   *
+> - * clang will substitute a costant for sizeof, which allows the verifier
+> - * to track it's value. Based on this, it can figure out the constant
+> + * clang will substitute a constant for sizeof, which allows the verifier
+> + * to track its value. Based on this, it can figure out the constant
+>   * return value, and calling code works while still being "generic" to
+>   * IPv4 and IPv6.
+>   */
 
 -- 
-2.25.1
+~Randy
