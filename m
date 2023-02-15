@@ -2,177 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927EE698769
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38BB698767
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjBOVfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S229953AbjBOVdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBOVfB (ORCPT
+        with ESMTP id S229599AbjBOVdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:35:01 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2058.outbound.protection.outlook.com [40.107.102.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E8B769C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:35:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AQOd+2S2faj4hca5yPAsDSDeymVJMHrKkNzCATrHaH5Kxwj5fm7AmXtXKtvvSHmQvWFd3aI5PQOeXQdpWeLMni6hVB6FZ7AzpRgluj7kn/3e5XJTc/le/lzSi1uQvAexUGeH2LGzn4t4ZuFBl5rGUSXRhQX70AuKZO8uI1WkPgoLIaRKKfVPPW5He/J3+08WAksxDViqSLGLhYyAqM2PIztXB2HDIc+lJlhN2UveRejUoP8asE+X1Y6yOPPS6tKKNegJGYI20aVQNeRtOQjsTTe62itRijVwwpYfI2VuGRsDtlfywkxya6wGucq8KkrrWmVVb/Si9AKMxXTFEUmykg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y0DJx+oKrYFmZYTMQiY43ffEUZIFaSoj/e/nfesL16Y=;
- b=ICUrZifCd+oo+2+rIX0+vGMOr2ASwRn5KbtYYJQ0oh0yAmyOwxWLFOBqvmlTqZuqyw68dTU7B8f4vUHC3z2mqEwQPNcE7HrcJxeENClMcbB98W5mFQ4rf7d0ys5xRrTXDB8oruNaxW5qBk/2HljD+vlZvSf+I/b75jadUcg+tb5Ymc6sa4SwcUFiKBiI29u4cs+uLxMmKqSaneBCOi91klEWWu5znol/0GpPT+j+Wfy9XV/3b8IR4ATS+dr0B3WhfgzWpL+GpOe2zKaYm2I1x0CdhHCo8l75RvvMSCkmwFphkht54WBOfRFDbVJyHQw2WXAMgU1PTb+8kZZfu8rvrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y0DJx+oKrYFmZYTMQiY43ffEUZIFaSoj/e/nfesL16Y=;
- b=v0YVzgcVEFo1B9RsCDqPeU8cn+VvoL5ygt9XdPGrz6nu/v0aGcLwy39VRRntucC5z5OJ31GuZn58WW51o7RvPxL/GrxTbWSJb85kAPgeteQhn85RE6t4zaqeeVthqV4icX/1a02rX/3iFEkhRNPpHojFT4SSgzxi01VKxJC7zYw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CH2PR12MB4119.namprd12.prod.outlook.com (2603:10b6:610:aa::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
- 2023 21:34:57 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
- 21:34:57 +0000
-Message-ID: <a0934601-3a7c-dcb5-8d23-81a3cdfc2c4d@amd.com>
-Date:   Wed, 15 Feb 2023 16:34:48 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] drm/amd/display: only warn once in
- dce110_edp_wait_for_hpd_ready()
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Charlene Liu <Charlene.Liu@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        "Nagulendran, Iswara" <Iswara.Nagulendran@amd.com>,
-        Tony Tascioglu <tony.tascioglu@amd.com>,
-        zhikzhai <zhikai.zhai@amd.com>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        "Leung, Martin" <Martin.Leung@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230214211254.233468-1-hamza.mahfooz@amd.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20230214211254.233468-1-hamza.mahfooz@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR01CA0115.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:1::15) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Wed, 15 Feb 2023 16:33:19 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0CC769C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676496797; x=1708032797;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=lPohpjnYjmGKBqI3h/hmynytkCJLxEoHHjxFGeTY3OM=;
+  b=g+AojqM0UyCMO/it0Yqhdyh6J9ycPExXztefV2S3cFPOilqVyjkp14ig
+   kKYu2Y//oV6uiR6EjUhKUZqInbCVq6a5fJen0ZAu2m7nkybMZyDMnPznh
+   sClRzZGn5vWSVidB1VL1rCSkphXNNZLDa4DXB224HHn4hH2K/KqMoQrOa
+   qcqgyKSTXWLYymU67N3WWTS29ZHnolq/939Es9WAsKjOZtudzFEKArW4J
+   nFI7OKfn8xHB/0jgS1bBuxvF690S2G5uXVaSnDG6px8j4CfsmMND3r4AA
+   uMUnuHnRW1ZGRakxGdx3MD3mLBXCV8E/tGJnTf6cDgSu9p/vxyaZ6jbrX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="331545728"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="331545728"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:33:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="700187439"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="700187439"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:33:10 -0800
+Date:   Wed, 15 Feb 2023 13:36:51 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 2/3] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <20230215133651.776a1553@jacob-builder>
+In-Reply-To: <Y+tW3kxFeOMcELww@myrica>
+References: <20230214064414.1038058-1-jacob.jun.pan@linux.intel.com>
+        <20230214064414.1038058-3-jacob.jun.pan@linux.intel.com>
+        <Y+tW3kxFeOMcELww@myrica>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CH2PR12MB4119:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3f602e9-758f-44fd-073e-08db0f9c7bac
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fWcb3VU2r9yCIPjbMUHzO/CzvNrwbGSC4I1XqghTJs8M3CzSiCvJJF5jP7cNeDUmLDOFBkyQFyyBnHRQSbfHE5LuN5WLguo6AGqrywZf0HPMATsKntYAChWn5BwKunh7VZ7mZJPdVwS/2ublMdVHO9z5oZtY16jTMoVpp1Cemo3fVBEiDiSiAcpq3p2JIn7SAUXS6tt62yleEKX9AzznTYkIfAYq164k+0GDNk3Cirl3fDO4YV+9a5S2uH/yr/73c2JjFmeHsg44Vy801ZWTNm94p1oIa+YA4eq8XXO2hleSilf4No8CynVtNCD/2zgyEXbdZNVnv8pAAKoXmgDNR84fQhByXmeO7td02L16QMWB08Kqy5L88Fv9F26qy6zkKde0OhpiQbwGMWFy7alS9PA7sr/q55oZKw/eUc1avtqroiU2CESaladcJA5pHwWLuNL9Ep83LYRICwQDtwGRzi0DgJseMQhHSSik2zio5qOuY5E+N/AFCYcLabizjwWpexaYihP4sx3O6tWFV6pg7CRTRm1jL2EXJ9xk1wBZPZ0lP7ssCd1BGoioHyBII0bGBExw2W6iE27xdXh5de1K7JVpU50VG0SzKadQ8/43UJ2Y2yGgkBY9eC5ShJdSeTfrBDrMvZuBSxI2vQOx0sWbrMAXzCyqmBpXu7t/WXNtitIWSt0J2p4I+nAGxeNQPXmR2jPxY1eHjm2VKwJ99vjQFGfTltdidWMefnP5R/mEFak=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(451199018)(8676002)(316002)(66476007)(66556008)(8936002)(66946007)(4326008)(54906003)(5660300002)(44832011)(2906002)(31686004)(41300700001)(6486002)(478600001)(186003)(6506007)(6512007)(53546011)(2616005)(26005)(36756003)(6666004)(83380400001)(38100700002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUFMdGlRdTBqeUdMMVVseUF5WVYzdWsyVGpPN1pQOHRNd0s3ZHlYZzVNZjg4?=
- =?utf-8?B?TlVOZElZdll4bHlZdzR0cUl3aVZZdlJsWC9ENzJFZVNoSmF2WnhjTi9BTExp?=
- =?utf-8?B?VGcybzBzWmJodjdtT1Mwd2JRZEluZXAzMm9XeXNlbXRmYjJDalJHaWhvOERG?=
- =?utf-8?B?Nm9LWlNHODZOcWJOaG9OVkVJb2Vub3YwNW9LaHY1QTYwbzJqT2xYRXczS0VP?=
- =?utf-8?B?L0RnMzhJVENRK1VOYVhXSTAzNDNoNVZ6bHpCN0w2Ty91SWdYeitOOTlKcmxD?=
- =?utf-8?B?ajJ6QkZFa2wrbkVla2FYbTBRbzBPdXYxQUJ2OWt3M0FvV2pXOGVUQUlxdFQr?=
- =?utf-8?B?Wm41YktldFF6MVI4bG42aWdMUWpDYXcwUjBTY1RKTytiNGd5QStXclBsVHNU?=
- =?utf-8?B?eWtkZ210amIrbi9KdmM1WmFaejNLK2RtM2FzNVRNNS9TeXM4TDVpUlRGVTJt?=
- =?utf-8?B?ZFVHWW5QenJnUEYydUVLeWxXcFhqTEMyQTIyMHFsMVF0N25La1BEdCswck5L?=
- =?utf-8?B?RVRtQ0h4M0tXY0ROOXh6Q05OVjBzbGRlVkZHUno2RlB0bzhvajFZWnFtOXpm?=
- =?utf-8?B?ZjA2OFNKS2ZhTFQzMUlsWXo1VFFibDhYVkhxdDBzOGR6SFU0YmJWL2l3WlZv?=
- =?utf-8?B?b3NDZXVrSUh6S1VEK1h3SVVzdzhoOE42NFg0NUk2M2lrQXpqZGdSS3VWamVa?=
- =?utf-8?B?YnltRFJYZDhCNnhLODBGeGVDOGwrU0RuNEh3cDh1T3A0MndxYzE5cHc5eXZS?=
- =?utf-8?B?bVRzcTBKUmxLQXJGelJ4ckVZUHRyL0tXeHRBMVh1c2xzRU9xeWp1MUNzTldk?=
- =?utf-8?B?UDRicm1XWlBPWm05ZHliaHgrU2JDM2c1MzlIUE83QlQvQ3hUYVhrbzhNQzFz?=
- =?utf-8?B?RDltczRwS3REbkJzZzJURHVvcnQ1M3F3QW5IMlQ1YWV3YkVCRlluRW9YWFJE?=
- =?utf-8?B?QmdnZWhKaW96b2U5bzJDWjNpZnlLQTlueUN4WGhnUEd5dU4vMk9PS0tCVU96?=
- =?utf-8?B?RjhLNyswa1RHV2FETWl1elRRWnZVUjN2SGxSVG5RZ3BRSGg2VG05WTJYcWJ2?=
- =?utf-8?B?NSsvSU9HSnFDZWtFTTJwZHoxRGc2L3k0QVViRlBCNmkrajBqTldzZVI3WVRJ?=
- =?utf-8?B?VHRhQVF0ckpQbHMwZGZHdzA3NzNMT0RyVkV0NVMvKytNdGQzUVNwTEhBZFdK?=
- =?utf-8?B?Rk5Ed2hZZStCbVdTSU9vNGltOWNUSGwrVlVsMDQ1RVlCanAyR1JEZ3dnYmY0?=
- =?utf-8?B?akJpejVSZk1zMC94bnI1VTdIdnB3dFhSMjR3RXNxc2RkakVCbldPSUZjR1d4?=
- =?utf-8?B?ZFZnQ1dwRk5oUnRrM2lTQnE1dElleXV4N29sTjRkRS9BaFdFT0VBbnIwaTFr?=
- =?utf-8?B?S2djWWVhNXRkeExQTUFXUUM0SkZKaVlMOFlvcGlWcE96RHFlUDYzL2hlZHRs?=
- =?utf-8?B?OXExcThMd25IenQyRkJYL0dIeW1oQThDdXhXSlMvN1cyN01QbXI0ZVdTaXh6?=
- =?utf-8?B?QUlodk9pbmVTTVRXdjY3b1JWaHlrRWFod25ETGxtL0xsTUswQjhoZStiZk9z?=
- =?utf-8?B?U0E1dkNGVDhDU0pWT3czbllUMTgxc2V0YzZhYWVYT3FqUzdvQ255c2FTWHIy?=
- =?utf-8?B?YnhHdnZ0TGhxZlRrK2hiZ1pJRUljaGtGbG4zUUIybm1oR09jVGlENlpYSTFH?=
- =?utf-8?B?ZkpEa2VUZVlrRmxaMGhMMzVQOHhvNjB3NnRQSFhSaXhQYmlVWXRKV25XVmsx?=
- =?utf-8?B?T3VLaXlCVWEyTXc1OHFJUkFjVlF5MlR5VU1tUDQwL3U4RVo2VUFqWGJ1VkxH?=
- =?utf-8?B?Tnhlb3dmSjhFblZ5S0FqY2JYNkZ1SW9GcTM2NzQxMHBGRlZQSW5XMEoxOEE5?=
- =?utf-8?B?R2FhL3JhTG5IcEJ0NTdTbTZjZDdqbTdKWmwrOXNKeEhkay95N2VaajZ4djEx?=
- =?utf-8?B?MWl4KzQ0RVJEYVc1NWZ0RTh4Z2dBSjVlU1JFc0lubGwzL2JlalZlUVVsSGEw?=
- =?utf-8?B?QUptcnNuNVRoT3NqUUNlRm04T2VJMEdMN1BFTC9ybEdHY2F6T2ZkQ1FWNnRV?=
- =?utf-8?B?OFY1bmtpZU1aTmFsNHlPWVNDd3JXSEZlRWJ3djJBOFVRNENkakRVWVd5TFVY?=
- =?utf-8?Q?L16Jbd0CMjY55rEPsgjebvgEp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3f602e9-758f-44fd-073e-08db0f9c7bac
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 21:34:57.0999
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ty7RB9oJfqBEQ193o/0EUyDcXgH+UrC0NCqTQdSWCi0feasySkU5klGXKrgEtbeJ0a78oRkx5WUTmAb4dODETw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4119
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jean-Philippe,
 
+On Tue, 14 Feb 2023 09:39:42 +0000, Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
 
-On 2/14/23 16:12, Hamza Mahfooz wrote:
-> Since, hot plugging eDP displays isn't supported, it is sufficient for
-> us to warn about the lack of a connected display once. So, use ASSERT()
-> in dce110_edp_wait_for_hpd_ready() instead of DC_LOG_WARNING().
+> On Mon, Feb 13, 2023 at 10:44:13PM -0800, Jacob Pan wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > 
+> > Instead SVA drivers can use a simple global IDA to allocate PASIDs for
+> > each mm_struct.
+> > 
+> > Future work would be to allow drivers using the SVA APIs to reserve
+> > global PASIDs from this IDA for their internal use, eg with the DMA API
+> > PASID support.
+> > 
+> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> > v2: minor fixes
+> > 	- let idxd driver use iommu.h for ioasid_t
+> > 	- return 0 after mm_pasid_set()
+> > ---
+> >  drivers/dma/idxd/idxd.h   |  1 +
+> >  drivers/iommu/iommu-sva.c | 53 +++++++++++----------------------------
+> >  drivers/iommu/iommu-sva.h |  3 ---
+> >  include/linux/sched/mm.h  |  8 +-----
+> >  4 files changed, 17 insertions(+), 48 deletions(-)
+> > 
+> > diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+> > index 7ced8d283d98..417e602a46b6 100644
+> > --- a/drivers/dma/idxd/idxd.h
+> > +++ b/drivers/dma/idxd/idxd.h
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/ioasid.h>
+> >  #include <linux/bitmap.h>
+> >  #include <linux/perf_event.h>
+> > +#include <linux/iommu.h>  
 > 
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> Unrelated 
+this is for ioasid_t, won't compile without it 
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
-> ---
->   drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
+> >  #include <uapi/linux/idxd.h>
+> >  #include "registers.h"
+> >  
+> > diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> > index 24bf9b2b58aa..8fb6f1867af3 100644
+> > --- a/drivers/iommu/iommu-sva.c
+> > +++ b/drivers/iommu/iommu-sva.c
+> > @@ -9,24 +9,11 @@
+> >  #include "iommu-sva.h"
+> >  
+> >  static DEFINE_MUTEX(iommu_sva_lock);
+> > -static DECLARE_IOASID_SET(iommu_sva_pasid);
+> > +static DEFINE_IDA(iommu_global_pasid_ida);
+> >  
+> > -/**
+> > - * iommu_sva_alloc_pasid - Allocate a PASID for the mm
+> > - * @mm: the mm
+> > - * @min: minimum PASID value (inclusive)
+> > - * @max: maximum PASID value (inclusive)
+> > - *
+> > - * Try to allocate a PASID for this mm, or take a reference to the
+> > existing one
+> > - * provided it fits within the [@min, @max] range. On success the
+> > PASID is
+> > - * available in mm->pasid and will be available for the lifetime of
+> > the mm.
+> > - *
+> > - * Returns 0 on success and < 0 on error.
+> > - */
+> > -int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t
+> > max) +static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t
+> > min, ioasid_t max) {
+> > -	int ret = 0;
+> > -	ioasid_t pasid;
+> > +	int ret;
+> >  
+> >  	if (min == INVALID_IOASID || max == INVALID_IOASID ||
+> >  	    min == 0 || max < min)
+> > @@ -37,39 +24,29 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm,
+> > ioasid_t min, ioasid_t max) if (pasid_valid(mm->pasid)) {
+> >  		if (mm->pasid < min || mm->pasid >= max)
+> >  			ret = -EOVERFLOW;
+> > +		else
+> > +			ret = 0;
+> >  		goto out;
+> >  	}
+> >  
+> > -	pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
+> > -	if (!pasid_valid(pasid))
+> > -		ret = -ENOMEM;
+> > -	else
+> > -		mm_pasid_set(mm, pasid);
+> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> > GFP_KERNEL);
+> > +	if (ret < min)  
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> index fb3fd5b7c78b..0d4d3d586166 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> @@ -779,10 +779,8 @@ void dce110_edp_wait_for_hpd_ready(
->   
->   	dal_gpio_destroy_irq(&hpd);
->   
-> -	if (false == edp_hpd_high) {
-> -		DC_LOG_WARNING(
-> -				"%s: wait timed out!\n", __func__);
-> -	}
-> +	/* ensure that the panel is detected */
-> +	ASSERT(edp_hpd_high >   }
->   
->   void dce110_edp_power_control(
+> Just check ret < 0
+yes, but i thought < min is safe too. 
+
+> > +		goto out;
+> > +	mm_pasid_set(mm, ret);
+> > +	ret = 0;
+> >  out:
+> >  	mutex_unlock(&iommu_sva_lock);
+> >  	return ret;
+> >  }
+> > -EXPORT_SYMBOL_GPL(iommu_sva_alloc_pasid);
+> >  
+> > -/* ioasid_find getter() requires a void * argument */
+> > -static bool __mmget_not_zero(void *mm)
+> > +void mm_pasid_drop(struct mm_struct *mm)
+> >  {
+> > -	return mmget_not_zero(mm);
+> > -}
+> > +	pr_alert("%s %d", __func__, mm->pasid);  
+> 
+> Debug print
+will remove,
+Thanks a lot!
+
+
+Jacob
