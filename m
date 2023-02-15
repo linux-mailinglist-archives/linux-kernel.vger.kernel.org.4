@@ -2,144 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2535D697B2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032C9697B30
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbjBOLxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S233850AbjBOLxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbjBOLxg (ORCPT
+        with ESMTP id S233857AbjBOLxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:53:36 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E5B37702;
-        Wed, 15 Feb 2023 03:53:35 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id bw10so2591521pfb.0;
-        Wed, 15 Feb 2023 03:53:35 -0800 (PST)
+        Wed, 15 Feb 2023 06:53:45 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7EA3802A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:53:43 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso1345020wmo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L2pMCXc09R4Uny8y3qV44rEj4nyGTe53deetytJyiYk=;
-        b=GkxXvs92dofMVCg4+IPtoJt2huIDyUeA8Oyvwb7XxvbL1IWIA0UeXG/fNkDNagbpDq
-         skfzBDX7IguDZRrx6Bu7/shmRBhSK0CzHol6uPVmmwSWDTmagD8sxJgi858DYty0S954
-         MmHeuWSdWHP8HW1IhnHPMgPMt+ZDBwQBsOpKxKQNkkPOXkbtYDTq635AUTJryO99nKJV
-         pUBAAevskLKFnTKf7YrjQBA17Qxg+xzz3mjNVFHOFMnCI8krEgE5qQztGjEl82Z9xILR
-         CUHz6BHpbTsMAuxnS4mjhK+7hD5kMP8Nsivjzc43jaNF59mlltLfMIEpAzkCE+Mx57pg
-         4+xA==
+        bh=6qAEm60zAjYbidmJtLwfwM2R2OwVdISmEQiRde9avaQ=;
+        b=BsjRseDrYNS4oKcnPrCGGLjVNynZOev/qn7wCklDlouinViPLxTfg2NZ+0lK0A07pm
+         mVTswAoQ6Xi3ElhUByvwdp9W9nUgDIfVh43tMcDWg4K0YodVuVjfKc5kqTwmcvGqpFca
+         clsOIoQgUdhvfBr27BSJ8XP41WYmKTHoUXJodUZI8uUsn1GTfOEfSRCmkgqyK/13QLIL
+         G5fdGAnGA1+Kgccxc0jSUkWKC1b+wGhv6oeb5L4+oSe+CfgB8BTYz33R7mRugW8qBsw9
+         d03nCwgejUJh5Sa3Ytfiu4CDVXXq6vT/12cwKNiqDfJex6J3V8YNYXC2vxcaEmV5lzXz
+         wEGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L2pMCXc09R4Uny8y3qV44rEj4nyGTe53deetytJyiYk=;
-        b=m/m3lrv75nNRatQ8NL97SwTHqoZjIIpF+pECgSg2t8m6AMigOEUe5pROidDQgIVA8q
-         9hwPdHjrJK9sQxUG/xe4rp608Rxbvj2pL6rVlycgDr5RMIw35ThPjy81A7QJmjkeeBSK
-         LA72hely998Z9XvvlRK70VjItf56lq0phGGotyzF5axPtBbaM+zBDKPZClScwb1NDh7u
-         oK3TDk2oQieTc2YEtL12aAPtPZpI+BO72ncdEm9X9o6+grJwvhIXSvM5JsBMqbSln80z
-         8lrJe99wLmF7RnNZSk5h9CfaQDuIeamaLuO6VVo1wSLBhyEMvRK4TFyT57Jds9FWDP60
-         sr5Q==
-X-Gm-Message-State: AO0yUKUrjIQw7Vxb1b6irnbStLKBvxRfZhQbSoigzkHWJd0Avye8X2y7
-        VC+2VfzOMvo2wht32xnumck=
-X-Google-Smtp-Source: AK7set8Dw0HeCND/M2BuLpi3Na8t24gXTsdS59W28wA6RBbP9xpPN2j4aKHv7A26uWPoleFkpS9akg==
-X-Received: by 2002:aa7:96f7:0:b0:5a8:51bd:e0f4 with SMTP id i23-20020aa796f7000000b005a851bde0f4mr1590614pfq.18.1676462015326;
-        Wed, 15 Feb 2023 03:53:35 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id j24-20020aa78018000000b00593baab06dcsm11521471pfi.198.2023.02.15.03.53.33
+        bh=6qAEm60zAjYbidmJtLwfwM2R2OwVdISmEQiRde9avaQ=;
+        b=xC05xMfZfX5OtWkd9oZvf7mRa0YIMazG5ecY61bqFWquSidM6eIvWCz6kGR2gDiVSR
+         FRGwXlumNgltfmRQWW5opWd5OWuaYyixuTcvALo6KIePxfQN3wYXfWdUxc39q7+tyraI
+         KzRaXTnEUBesAWrOScEAGp5LxMSLyNnRSCduyqza/x/1ob3Ii5+cEbYgoqI6QIm9Oqdh
+         p/HhbWOP5UflQdConFAFqgmWqovCtGN86sBtp9GTsl02XFPRqYTX4UK0tJy94moJPttE
+         K1Y5j1jSgrI/75pFrhgqgln3/F9EAgc2DAoeTuFlS/5RJ10XuOXdM+YKDbvl45uGQ7+Q
+         WU8w==
+X-Gm-Message-State: AO0yUKVvkcpq1Xz3Hg6Ys4wPC5jTJv67HLq6AF9zRJj0bncPDt0rQI33
+        781dRMkzXgr2a3RMcxAe2dZj5A==
+X-Google-Smtp-Source: AK7set8Pf8ltr+gtEvF1S6oNXjt9R10oMEqRkPBeVcL7ka4NgaYK6sS3PXiv27//TZcVPUYhmg/EOw==
+X-Received: by 2002:a05:600c:13c3:b0:3e2:522:45f7 with SMTP id e3-20020a05600c13c300b003e2052245f7mr1127957wmg.13.1676462022351;
+        Wed, 15 Feb 2023 03:53:42 -0800 (PST)
+Received: from [192.168.0.108] ([82.77.80.113])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05600c459200b003dc4baaedd3sm2069483wmo.37.2023.02.15.03.53.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 03:53:34 -0800 (PST)
-Message-ID: <54d64f0e-871f-3004-d8a6-55c60affede0@gmail.com>
-Date:   Wed, 15 Feb 2023 19:53:27 +0800
+        Wed, 15 Feb 2023 03:53:42 -0800 (PST)
+Message-ID: <4e5fb36f-d234-1f94-5e6c-746aef612bb6@linaro.org>
+Date:   Wed, 15 Feb 2023 11:53:40 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 06/21] KVM: x86/pmu: WARN and bug the VM if PMU is
- refreshed after vCPU has run
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ext4: reject 1k block fs on the first block of disk
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230210003148.2646712-1-seanjc@google.com>
- <20230210003148.2646712-7-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20230210003148.2646712-7-seanjc@google.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     Theodore Ts'o <tytso@mit.edu>, Jun Nie <jun.nie@linaro.org>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <joneslee@google.com>
+References: <20221229014502.2322727-1-jun.nie@linaro.org>
+ <Y7R/QKIbYQ2TCP+W@magnolia>
+ <CABymUCPCT9KbMQDUTxwf6A+Cg9fWJNkefbMHD7SZD3Fc7FMFHg@mail.gmail.com>
+ <Y+xgQklC81XCB+q4@mit.edu> <d8f51f11-6942-51bd-7761-a356125d8e53@linaro.org>
+In-Reply-To: <d8f51f11-6942-51bd-7761-a356125d8e53@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/2/2023 8:31 am, Sean Christopherson wrote:
-> Now that KVM disallows changing feature MSRs, i.e. PERF_CAPABILITIES,
-> after running a vCPU, WARN and bug the VM if the PMU is refreshed after
-> the vCPU has run.
+
+
+On 2/15/23 11:46, Tudor Ambarus wrote:
+> Hi, Ted!
 > 
-> Note, KVM has disallowed CPUID updates after running a vCPU since commit
-> feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN"), i.e.
-> PERF_CAPABILITIES was the only remaining way to trigger a PMU refresh
-> after KVM_RUN.
+> On 2/15/23 04:32, Theodore Ts'o wrote:
+>> On Wed, Jan 04, 2023 at 09:58:03AM +0800, Jun Nie wrote:
+>>> Darrick J. Wong <djwong@kernel.org> 于2023年1月4日周三 03:17写道：
+>>>>
+>>>> On Thu, Dec 29, 2022 at 09:45:02AM +0800, Jun Nie wrote:
+>>>>> For 1k-block filesystems, the filesystem starts at block 1, not 
+>>>>> block 0.
+>>>>> If start_fsb is 0, it will be bump up to s_first_data_block. Then
+>>>>> ext4_get_group_no_and_offset don't know what to do and return garbage
+>>>>> results (blockgroup 2^32-1). The underflow make index
+>>>>> exceed es->s_groups_count in ext4_get_group_info() and trigger the 
+>>>>> BUG_ON.
+>>>>>
+>>>>> Fixes: 4a4956249dac0 ("ext4: fix off-by-one fsmap error on 1k block 
+>>>>> filesystems")
+>>>>> Link: 
+>>>>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
+>>>>> Reported-by: syzbot+6be2b977c89f79b6b153@syzkaller.appspotmail.com
+>>>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+>>>>> ---
+>>>>>   fs/ext4/fsmap.c | 6 ++++++
+>>>>>   1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+>>>>> index 4493ef0c715e..1aef127b0634 100644
+>>>>> --- a/fs/ext4/fsmap.c
+>>>>> +++ b/fs/ext4/fsmap.c
+>>>>> @@ -702,6 +702,12 @@ int ext4_getfsmap(struct super_block *sb, 
+>>>>> struct ext4_fsmap_head *head,
+>>>>>                if (handlers[i].gfd_dev > head->fmh_keys[0].fmr_device)
+>>>>>                        memset(&dkeys[0], 0, sizeof(struct 
+>>>>> ext4_fsmap));
+>>>>>
+>>>>> +             /*
+>>>>> +              * Re-check the range after above limit operation and 
+>>>>> reject
+>>>>> +              * 1K fs on block 0 as fs should start block 1. */
+>>>>> +             if (dkeys[0].fmr_physical ==0 && 
+>>>>> dkeys[1].fmr_physical == 0)
+>>>>> +                     continue;
+>>>>
+>>>> ...and if this filesystem has 4k blocks, and therefore *does* define a
+>>>> block 0?
+>>>
+>>> Yes, this is a real corner case test :-)
+>>
+>> So I'm really nervous about this change.  I don't understand the code;
+>> and I don't understand how the reproducer works.  I can certainly
+>> reproduce it using the reproducer found here[1], but it seems to
+>> require running multiple processes all creating loop devices and then
+>> running FS_IOC_GETMAP.
+>>
+>> [1] 
+>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
+>>
+>> If I change the reproducer to just run the execute_one() once, it
+>> doesn't trigger the bug.  It seems to only trigger when you have
+>> multiple processes all racing to create a loop device, mount the file
+>> system, try running FS_IOC_GETMAP --- and then delete the loop device
+>> without actually unmounting the file system.  Which is **weird***.
+>>
+>> I've tried taking the image, and just running "xfs_io -c fsmap /mnt",
+>> and that doesn't trigger it either.
+>>
+>> And I don't understand the reply to Darrick's question about why it's
+>> safe to add the check since for 4k block file systems, block 0 *is*
+>> valid.
+>>
+>> So if someone can explain to me what is going on here with this code
+>> (there are too many abstractions and what's going on with keys is just
+>> making my head hurt), *and* what the change actually does, and how to
+>> reproduce the problem with a ***simple*** reproducer -- the syzbot
+>> mess doesn't count, that would be great.  But applying a change that I
+>> don't understand to code I don't understand, to fix a reproducer which
+>> I also doesn't understand, just doesn't make me feel comfortable.
+>>
+> 
+> Let me share what I understood until now. The low key is zeroed. The
+> high key is defined and uses a fmr_physical of value zero, which is
+> smaller than the first data block for the 1k-block ext4 fs (which starts
+> at offset 1024).
+> 
+> -> ext4_getfsmap_datadev()
+>    keys[0].fmr_physical = 0, keys[1].fmr_physical = 0
+>    bofs = le32_to_cpu(sbi->s_es->s_first_data_block) = 1, eofs = 256
+>    start_fsb = keys[0].fmr_physical = 1, end_fsb = keys[1].fmr_physical = 0
+>    -> ext4_get_group_no_and_offset()
+>      blocknr = 1, le32_to_cpu(es->s_first_data_block) =1
+>    start_ag = 0, first_cluster = 0
+>    ->
+>      blocknr = 0, le32_to_cpu(es->s_first_data_block) =1
+>    end_ag = 4294967295, last_cluster = 8191
 
-A malicious user space could have saved the vcpu state and then deleted
-and recreated a new vcpu w/ previous state so that it would have a chance
-to re-set the features msr.
-
-The key to this issue may be focused on the KVM_CREATE_VM interface.
-
-How about the contract that when the first vcpu is created and "after
-KVM_RUN of any vcpu", the values of all feature msrs for all vcpus on
-the same guest cannot be changed, even if the (likely) first ever ran
-vcpu is deleted ?
+because of poor key validation we get a wrong end_ag which eventually
+causes the BUG_ON.
 
 > 
-> Cc: Like Xu <like.xu.linux@gmail.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/pmu.c |  3 +++
->   arch/x86/kvm/x86.c | 10 +++++++++-
->   2 files changed, 12 insertions(+), 1 deletion(-)
+>    Then there's a loop that stops when info->gfi_agno <= end_ag; that 
+> will trigger the BUG_ON in ext4_get_group_info() as the group nr exceeds 
+> EXT4_SB(sb)->s_groups_count)
+>    -> ext4_mballoc_query_range()
+>      -> ext4_mb_load_buddy()
+>        -> ext4_mb_load_buddy_gfp()
+>          -> ext4_get_group_info()
 > 
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 612e6c70ce2e..7e974c4e61b0 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -589,6 +589,9 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->    */
->   void kvm_pmu_refresh(struct kvm_vcpu *vcpu)
->   {
-> +	if (KVM_BUG_ON(kvm_vcpu_has_run(vcpu), vcpu->kvm))
-> +		return;
-> +
->   	static_call(kvm_x86_pmu_refresh)(vcpu);
->   }
->   
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 186cb6a81643..1b14632a94a3 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3626,9 +3626,17 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   		if (data & ~kvm_caps.supported_perf_cap)
->   			return 1;
->   
-> +		/*
-> +		 * Note, this is not just a performance optimization!  KVM
-> +		 * disallows changing feature MSRs after the vCPU has run; PMU
-> +		 * refresh will bug the VM if called after the vCPU has run.
-> +		 */
-> +		if (vcpu->arch.perf_capabilities == data)
-> +			break;
-> +
->   		vcpu->arch.perf_capabilities = data;
->   		kvm_pmu_refresh(vcpu);
-> -		return 0;
-> +		break;
->   	case MSR_EFER:
->   		return set_efer(vcpu, msr_info);
->   	case MSR_K7_HWCR:
+> It's an out of bounds request and Darrick suggested to not return any
+> mapping for the byte range 0-1023 for the 1k-block filesystem. The
+> alternative would be to return -EINVAL when the high key starts at
+> fmr_phisical of value zero for the 1k-block fs.
+> 
+> In order to reproduce this one would have to create an 1k-block ext4 fs
+> and to pass a high key with fmr_physical of value zero, thus I would
+> expect to reproduce it with something like this:
+> xfs_io -c 'fsmap -d 0 0' /mnt/scratch
+> 
+> However when doing this I notice that in
+> xfsprogs-dev/io/fsmap.c l->fmr_device and h->fmr_device will have value
+> zero, FS_IOC_GETFSMAP is called and then we receive no entries
+> (head->fmh_entries = 0). Now I'm trying to see what I do wrong, and how
+> to reproduce the bug.
+> 
+> Cheers,
+> ta
