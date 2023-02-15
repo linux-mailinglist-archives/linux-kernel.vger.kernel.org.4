@@ -2,169 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A542697388
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF594697392
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjBOBWo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 20:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S233615AbjBOBXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbjBOBWU (ORCPT
+        with ESMTP id S233610AbjBOBXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:22:20 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A926334C0A;
-        Tue, 14 Feb 2023 17:21:47 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 31F1LXAM0009995, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 31F1LXAM0009995
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 15 Feb 2023 09:21:33 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 15 Feb 2023 09:21:35 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 15 Feb 2023 09:21:34 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Wed, 15 Feb 2023 09:21:34 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: RE: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO) efuse parsing
-Thread-Topic: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO)
- efuse parsing
-Thread-Index: AQHZQLlVYRxFC8DYgUSIrrVEWedGBa7PLmvg
-Date:   Wed, 15 Feb 2023 01:21:34 +0000
-Message-ID: <ef11acd2c4054365b76d06966f40cc61@realtek.com>
-References: <20230214211421.2290102-1-martin.blumenstingl@googlemail.com>
- <20230214211421.2290102-5-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230214211421.2290102-5-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/2/14_=3F=3F_11:07:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 14 Feb 2023 20:23:04 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C7834C0D;
+        Tue, 14 Feb 2023 17:22:13 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 31B8E24E167;
+        Wed, 15 Feb 2023 09:22:06 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 09:22:06 +0800
+Received: from [192.168.125.74] (183.27.97.168) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 09:22:05 +0800
+Message-ID: <49e31cb3-4518-1ce8-3c7e-0ea6fb3da532@starfivetech.com>
+Date:   Wed, 15 Feb 2023 09:22:04 +0800
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v1 2/3] dma: dw-axi-dmac: Add support for StarFive DMA
+Content-Language: en-US
+To:     <linux-riscv@lists.infradead.org>, <dmaengine@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        <linux-kernel@vger.kernel.org>
+References: <20230206113811.23133-1-walker.chen@starfivetech.com>
+ <20230206113811.23133-3-walker.chen@starfivetech.com>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <20230206113811.23133-3-walker.chen@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.168]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Wednesday, February 15, 2023 5:14 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: tony0620emma@gmail.com; kvalo@kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Neo
-> Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
-> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO) efuse parsing
+On 2023/2/6 19:38, Walker Chen wrote:
+> Adding DMA reset operation in device probe, and using different
+> registers according to the hardware handshake number.
 > 
-> The efuse of the SDIO RTL8822BS chip has only one known member: the mac
-> address is at offset 0x11a. Add a struct rtw8822bs_efuse describing this
-> and use it for copying the mac address when the SDIO bus is used.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  drivers/net/wireless/realtek/rtw88/rtw8822b.c | 10 ++++++++++
->  drivers/net/wireless/realtek/rtw88/rtw8822b.h |  6 ++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822b.c
-> b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
-> index 74dfb89b2c94..4ed5b98fab23 100644
-> --- a/drivers/net/wireless/realtek/rtw88/rtw8822b.c
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
-> @@ -26,10 +26,17 @@ static void rtw8822be_efuse_parsing(struct rtw_efuse *efuse,
->         ether_addr_copy(efuse->addr, map->e.mac_addr);
->  }
-> 
-> +static void rtw8822bs_efuse_parsing(struct rtw_efuse *efuse,
-> +                                   struct rtw8822b_efuse *map)
-> +{
-> +       ether_addr_copy(efuse->addr, map->s.mac_addr);
-> +}
-> +
->  static void rtw8822bu_efuse_parsing(struct rtw_efuse *efuse,
->                                     struct rtw8822b_efuse *map)
->  {
->         ether_addr_copy(efuse->addr, map->u.mac_addr);
-> +
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
 
-Don't need to stir USB code.
+Hi Eugeniy Paltsev / Emil,
 
->  }
-> 
->  static int rtw8822b_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
-> @@ -62,6 +69,9 @@ static int rtw8822b_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
->         case RTW_HCI_TYPE_PCIE:
->                 rtw8822be_efuse_parsing(efuse, map);
->                 break;
-> +       case RTW_HCI_TYPE_SDIO:
-> +               rtw8822bs_efuse_parsing(efuse, map);
-> +               break;
->         case RTW_HCI_TYPE_USB:
->                 rtw8822bu_efuse_parsing(efuse, map);
->                 break;
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822b.h
-> b/drivers/net/wireless/realtek/rtw88/rtw8822b.h
-> index 01d3644e0c94..8d05805c046c 100644
-> --- a/drivers/net/wireless/realtek/rtw88/rtw8822b.h
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822b.h
-> @@ -65,6 +65,11 @@ struct rtw8822be_efuse {
->         u8 res7;
->  };
-> 
-> +struct rtw8822bs_efuse {
-> +       u8 res4[0x4a];                  /* 0xd0 */
-> +       u8 mac_addr[ETH_ALEN];          /* 0x11a */
-> +} __packed;
-> +
->  struct rtw8822b_efuse {
->         __le16 rtl_id;
->         u8 res0[0x0e];
-> @@ -94,6 +99,7 @@ struct rtw8822b_efuse {
->         union {
->                 struct rtw8822bu_efuse u;
->                 struct rtw8822be_efuse e;
-> +               struct rtw8822bs_efuse s;
+Could you please help to review and provide comments on this patch series?
+Any comments will be appreciated!
 
-No obvious problem in whole patchset. Only a nit about the order of PCIE-USB-SDIO.
-Can we have them in consistent order?
-
-Here, the order is USB-PCIE-SDIO, but patch 3/5 and 5/5 in different order.
-It seems like we messed up the order when adding USB, but we can correct them
-along with this patch. My prefer order is PCIE-USB-SDIO after adding SDIO,
-because the order of existing code of 'switch...case' is PCIE-USB.
-
-Apply this rule not only here also 'switch...case' and 'efuse parser'.
-
-Ping-Ke
-
+Best regards,
+Walker Chen
