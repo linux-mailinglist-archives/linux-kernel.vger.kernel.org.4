@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632236986EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9A36986F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBOVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S230348AbjBOVFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbjBOVDa (ORCPT
+        with ESMTP id S229706AbjBOVFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:03:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6F64740A;
-        Wed, 15 Feb 2023 13:01:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0060461D72;
-        Wed, 15 Feb 2023 21:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B77AC433EF;
-        Wed, 15 Feb 2023 21:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676494911;
-        bh=M6ZOoCl7jWICTgzLwXh9t/Dp/gETGHVOG4bryHSv4Sc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YWx3Z+N5LfxCD8fkfuIiM2xyRDjRLpTj4HKEHXJjoyzoe+qNYwqItdJphEBZhZEFL
-         798v4Fg+KQyyKQ2E5wcIJZy9iEbUc2lpAUUBqzspgioaD3/mFsrtnx84ZhGTOJC25J
-         uIKc5diPd40XXQZJOOMhhQtMJPaoQyCapFW0OI3BOCHlGLeAr9oGVbzmnSW22RuecA
-         TtQY6d7JwYY8IqOaN1oX4dx5tEN+Sn/aw1LSIaFcQ8bAOdgQEn7Xt/vNjtLayq6r7Z
-         xGYFKZXCmWIlJ3wEKvMdwQoQnGONrF/3QOs1Y2wrQolFCIlwkgajNTN4G/1BmRDtap
-         CbUC0AbIbLhlg==
-Date:   Wed, 15 Feb 2023 16:01:50 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        yifan1.zhang@amd.com, stylon.wang@amd.com, sunpeng.li@amd.com,
-        airlied@gmail.com, Xinhui.Pan@amd.com, Rodrigo.Siqueira@amd.com,
-        roman.li@amd.com, amd-gfx@lists.freedesktop.org, Jerry.Zuo@amd.com,
-        aurabindo.pillai@amd.com, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, Alex Deucher <alexander.deucher@amd.com>,
-        harry.wentland@amd.com, christian.koenig@amd.com
-Subject: Re: [PATCH AUTOSEL 6.1 24/24] drm/amd/display: disable S/G display
- on DCN 3.1.2/3
-Message-ID: <Y+1IPsPAJNKRA8IA@sashalap>
-References: <20230215204547.2760761-1-sashal@kernel.org>
- <20230215204547.2760761-24-sashal@kernel.org>
- <CADnq5_PEGUSTFAzPOQtJFpsBqWQMaox=E1AxE+-h3_FxSbHNzg@mail.gmail.com>
+        Wed, 15 Feb 2023 16:05:33 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6B4697;
+        Wed, 15 Feb 2023 13:03:41 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pSOwF-0003eU-12;
+        Wed, 15 Feb 2023 22:03:39 +0100
+Date:   Wed, 15 Feb 2023 21:02:04 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v7 06/12] net: ethernet: mtk_eth_soc: reset PCS state
+Message-ID: <63acf73a72905fb35182763de6566a3f1603a370.1676491901.git.daniel@makrotopia.org>
+References: <cover.1676491901.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CADnq5_PEGUSTFAzPOQtJFpsBqWQMaox=E1AxE+-h3_FxSbHNzg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1676491901.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 03:55:07PM -0500, Alex Deucher wrote:
->On Wed, Feb 15, 2023 at 3:46 PM Sasha Levin <sashal@kernel.org> wrote:
->>
->> From: Alex Deucher <alexander.deucher@amd.com>
->>
->> [ Upstream commit 077e9659581acab70f2dcc04b5bc799aca3a056b ]
->>
->> Causes flickering or white screens in some configurations.
->> Disable it for now until we can fix the issue.
->>
->> Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2352
->> Cc: roman.li@amd.com
->> Cc: yifan1.zhang@amd.com
->> Reviewed-by: Yifan Zhang <yifan1.zhang@amd.com>
->> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->This was reverted upstream and should be dropped.
+Reset PCS state when changing interface mode.
 
-Ack, I'll drop it. Thanks!
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Tested-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 4 ++++
+ drivers/net/ethernet/mediatek/mtk_sgmii.c   | 4 ++++
+ 2 files changed, 8 insertions(+)
 
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 7014c02ba2d4..142def8629c8 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -548,6 +548,10 @@
+ #define SGMII_SEND_AN_ERROR_EN		BIT(11)
+ #define SGMII_IF_MODE_MASK		GENMASK(5, 1)
+ 
++/* Register to reset SGMII design */
++#define SGMII_RESERVED_0	0x34
++#define SGMII_SW_RESET		BIT(0)
++
+ /* Register to set SGMII speed, ANA RG_ Control Signals III*/
+ #define SGMSYS_ANA_RG_CS3	0x2028
+ #define RG_PHY_SPEED_MASK	(BIT(2) | BIT(3))
+diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+index d7ffaaeaf9ab..d7e7352041a4 100644
+--- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+@@ -88,6 +88,10 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+ 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
+ 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
+ 
++		/* Reset SGMII PCS state */
++		regmap_update_bits(mpcs->regmap, SGMII_RESERVED_0,
++				   SGMII_SW_RESET, SGMII_SW_RESET);
++
+ 		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
+ 			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
+ 					   SGMII_PN_SWAP_MASK,
 -- 
-Thanks,
-Sasha
+2.39.1
+
