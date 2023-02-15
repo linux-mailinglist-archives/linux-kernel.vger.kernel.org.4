@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3EC697DDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8166C697DD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjBONwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S229636AbjBONt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBONvm (ORCPT
+        with ESMTP id S229763AbjBONty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:51:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61CE3A842
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676469036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kd160B/FX/7MKfFVMEY44JXFGF33xUGYuiKUdjlVIWg=;
-        b=NnCXHvuYt2n7u25te94rTytu2RL7ZE4aZB79FIx0gFuKL94TxRfX5+KbqgzBIpb45BqE8h
-        V7r7KiYWgrrhJblYPxVP1u343C2nq1Ae+sr5WD53Zmi2V5WD5bYL8dml00R48HiD7f5+q4
-        DIfPTu5DHmYkQfAZsZ2aRLlwqCAB8aY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-504-FIpgQbl_M5Spq-OqX01rZQ-1; Wed, 15 Feb 2023 08:50:32 -0500
-X-MC-Unique: FIpgQbl_M5Spq-OqX01rZQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C601F1C09048;
-        Wed, 15 Feb 2023 13:50:31 +0000 (UTC)
-Received: from plouf.local (ovpn-194-191.brq.redhat.com [10.40.194.191])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F290140EBF4;
-        Wed, 15 Feb 2023 13:50:30 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     linux-input@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-In-Reply-To: <20230209154916.462158-1-hadess@hadess.net>
-References: <20230209154916.462158-1-hadess@hadess.net>
-Subject: Re: [PATCH v3 1/2] HID: logitech-hidpp: Retry commands when device
- is busy
-Message-Id: <167646902999.1556507.14351237231391498913.b4-ty@redhat.com>
-Date:   Wed, 15 Feb 2023 14:50:29 +0100
+        Wed, 15 Feb 2023 08:49:54 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2C74C38;
+        Wed, 15 Feb 2023 05:49:53 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PGzwB6rC2z4f3l6s;
+        Wed, 15 Feb 2023 21:49:46 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP1 (Coremail) with SMTP id cCh0CgDnUSz64uxjC3LEDQ--.36740S2;
+        Wed, 15 Feb 2023 21:49:47 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v1 0/4] Support bpf trampoline for RV64
+Date:   Wed, 15 Feb 2023 21:52:01 +0800
+Message-Id: <20230215135205.1411105-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDnUSz64uxjC3LEDQ--.36740S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw17GrWfJw4xAr4fGF13twb_yoW8Wryfpa
+        yjkry3AryDu3W3JwnIya18ZryrKayvgw13Gw13t3yfJa1Yqry7ZrnYgayYyw15AF9xur1j
+        yrn0qryj9FyDAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        UQvtAUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Feb 2023 16:49:15 +0100, Bastien Nocera wrote:
-> Handle the busy error coming from the device or receiver. The
-> documentation says a busy error can be returned when:
-> "
-> Device (or receiver) cannot answer immediately to this request
-> for any reason i.e:
-> - already processing a request from the same or another SW
-> - pipe full
-> "
-> 
-> [...]
+BPF trampoline is the critical infrastructure of the bpf
+subsystem, acting as a mediator between kernel functions
+and BPF programs. Numerous important features, such as
+using ebpf program for zero overhead kernel introspection,
+rely on this key component. We can't wait to support bpf
+trampoline on RV64. Since RV64 does not support ftrace
+direct call yet, the current RV64 bpf trampoline is only
+used in bpf context.
 
-Applied to hid/hid.git (for-6.3/logitech), thanks!
+As most of riscv cpu support unaligned memory accesses,
+we temporarily use patch [1] to facilitate testing. The
+test results are as follow, and test_verifier with no
+new failure ceses.
 
-[1/2] HID: logitech-hidpp: Retry commands when device is busy
-      https://git.kernel.org/hid/hid/c/586e8fede795
-[2/2] HID: logitech-hidpp: Add myself to authors
-      https://git.kernel.org/hid/hid/c/1b136aeb3c4a
+- fexit_bpf2bpf:OK
+- dummy_st_ops:OK
+- xdp_bpf2bpf:OK
 
-Cheers,
+[1] https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuang5@huawei.com/
+
+v1:
+- Remove the logic of bpf_arch_text_poke supported for
+  kernel functions. (Kuohai and Björn)
+- Extend patch_text for multiple instructions. (Björn)
+- Fix OOB issue when image too big. (Björn)
+
+RFC:
+https://lore.kernel.org/bpf/20230103090756.1993820-1-pulehui@huaweicloud.com/
+
+Pu Lehui (4):
+  riscv: Extend patch_text for multiple instructions
+  riscv, bpf: Factor out emit_call for kernel and bpf context
+  riscv, bpf: Add bpf_arch_text_poke support for RV64
+  riscv, bpf: Add bpf trampoline support for RV64
+
+ arch/riscv/include/asm/patch.h     |   2 +-
+ arch/riscv/kernel/patch.c          |  19 +-
+ arch/riscv/kernel/probes/kprobes.c |  15 +-
+ arch/riscv/net/bpf_jit.h           |   5 +
+ arch/riscv/net/bpf_jit_comp64.c    | 437 +++++++++++++++++++++++++++--
+ 5 files changed, 444 insertions(+), 34 deletions(-)
+
 -- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
+2.25.1
 
