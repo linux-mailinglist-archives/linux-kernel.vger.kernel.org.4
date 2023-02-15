@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8521B69855E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AE6698567
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjBOUQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
+        id S229564AbjBOUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjBOUQC (ORCPT
+        with ESMTP id S229505AbjBOUSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:16:02 -0500
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88AA2D14D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:15:58 -0800 (PST)
-Received: by mail-il1-f205.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so43321ild.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:15:58 -0800 (PST)
+        Wed, 15 Feb 2023 15:18:02 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710F52942B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:18:01 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id r2so20382740wrv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eWNTWWkTsrwbHiQ47mdX5pMgCivT3DFoqhaaJ7ihy2A=;
+        b=CMTgnuiGwiQsea1Sd6odLVgvg1S5toQiP/KqfHF/kU8U1BTmaxTmcUgEBDrA935SDO
+         Gcs11rVgm9HQugH5nzsUDZ79NUA31L0DyszfiRHxmSiOWOAPFbLz0u6nwX3MzvhC3y8I
+         MArr8om3fCcsiDqpjR212tBg+Rrykid834KBSPQF+9hrybHxHe+ylKeTAGdsuMPalPs1
+         MhtmUTQb0LOAiVF5KiZf5Y+YtA+tu/MSIQYhRGZhpzSw3ao0aDlO47Uc0QDoCWcFJZsI
+         My7H1D9xXjz5ByD4/CZnUP3LLLXc8zQRci9we7+rXZbLhfNNQVqFSLnofy0yiXqB5mxs
+         bPwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGJcTiHWrNKcFZ/FgYQDSHGLDwlxXSUlxi8IsS9UpjM=;
-        b=Bjq9FBmiJSaMpoEy0F4n5JeevhwL7lMGpsDOOQIwSR2a4UBd0iT8NhYtbXuQjzLFFy
-         gTtyX1MoHP/NCFbon8J0pyRJ8SsT4NM6kii8M94Bj7Rq2Jw/K7Fjs4fAW6TdNW/lvDy/
-         qGv1hQr+hfgmgMJyEq0uGVXqRo+QuMSZE5EK2OwQjpnfM401Ong2avZquWsZC1aWmFmH
-         fqssKN6yrBWbpute9AWy9eb4GY/nmTUVMPPs65oYwZPB1Q4uyuCcW1bFyTdn1upTZz9l
-         bgHyKerxv5IhN07478Kkx9rzn05mKLA/VBntsG9AP2bhRvJGHUbayJEKpZc1GDLGDfAL
-         ze1A==
-X-Gm-Message-State: AO0yUKUxK1rcxkU/SZ4aTqPLlXT3qeHfeyDbCUIFT9EGyLuQ/2H3PNX+
-        Hd17NfVoA1nriGJSieJMLSH9SoVFu1Z37QKLBJYXs20T4H68
-X-Google-Smtp-Source: AK7set86i67dgAHYMXiQrl4jCFk5zyk/kVFx65aTW8VBAM0Flhxmc4ILyIoNouAVn2FLO0hKbWr+idG8IS0MjFFGK8gUMP3Dj/2m
+        bh=eWNTWWkTsrwbHiQ47mdX5pMgCivT3DFoqhaaJ7ihy2A=;
+        b=C/5Xs119ashr2/ywPBWk1FCyfLD9cJQAoQQZOGlRcwRTCxUJNdW8Nf7bYLX+8gGbiH
+         ZlaZ4FEClxs/aVZ/e1JPyeXWbxRO1UIKuRPe3ynQXu3OeW/N1w2g4j9476Npxr1Ijdnc
+         I/SM3Pl9ySITMIci8MYd0fJlmzj6rSzOuQSTSLmoGUDtmUxObphsEIavTHBPKtQxDkPM
+         JW7dIG2nRPohWPUOLkoMiDSyQTbETzRDv/HGmf3s3UUtdGRsqE5pN+dzaoz4vKXkBgmB
+         JOmZTLWS0N1RaqHCNjZalEUVXwTHP68Yr/hYR8ymh9VY93MV2YsfAhoa7HIbhp/jEMqZ
+         yjIQ==
+X-Gm-Message-State: AO0yUKU1oXqEISThtWC6phKnqfI8EILeQa/HmnK0QyIeebtIf/k/kRw/
+        CuKzLa8y7GZT95RFjOsmAr+vAQ==
+X-Google-Smtp-Source: AK7set8VH1qhZGFMpjgR8/ShMCOufa8CJRWa7LAZIqOnVqbqOnGICuSJcLOwC28dLybZKi72vOFs4w==
+X-Received: by 2002:adf:f40f:0:b0:2c5:512b:afc1 with SMTP id g15-20020adff40f000000b002c5512bafc1mr2641381wro.47.1676492279913;
+        Wed, 15 Feb 2023 12:17:59 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f6-20020a5d58e6000000b002c54c7153f0sm13479318wrd.1.2023.02.15.12.17.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 12:17:59 -0800 (PST)
+Message-ID: <b58fad13-12d5-346b-9452-d345c7bf5327@linaro.org>
+Date:   Wed, 15 Feb 2023 21:17:56 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c009:0:b0:73b:1230:331c with SMTP id
- u9-20020a5ec009000000b0073b1230331cmr1063621iol.98.1676492158111; Wed, 15 Feb
- 2023 12:15:58 -0800 (PST)
-Date:   Wed, 15 Feb 2023 12:15:58 -0800
-In-Reply-To: <000000000000a8c57205f1450921@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d9bd305f4c2bf45@google.com>
-Subject: Re: [syzbot] [f2fs?] kernel BUG in f2fs_abort_atomic_write
-From:   syzbot <syzbot+9b7be0f1263ed2dbfbba@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
+ i2C driver
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+ <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
+ <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
+ <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 15/02/2023 06:43, Ryan Chen wrote:
+>>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - aspeed,ast2600-i2c
+>>
+>> NAK. It's already there. Please do not waste our time in submitting duplicated
+>> drivers.
+> 
+> It is not duplicated, as my description in cover " This series add AST2600 i2c new register set driver"
+> So, this will be different driver compatible. 
+> The original compatible is 
+>       - aspeed,ast2400-i2c-bus
+>       - aspeed,ast2500-i2c-bus
+>       - aspeed,ast2600-i2c-bus
+> So the new register set compatible is "- aspeed,ast2600-i2c", remove "bus".
 
-HEAD commit:    e1c04510f521 Merge tag 'pm-6.2-rc9' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=172c6577480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d9381ac81f4ac15
-dashboard link: https://syzkaller.appspot.com/bug?extid=9b7be0f1263ed2dbfbba
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138e3977480000
+Bindings are documenting hardware, so I claim - we already have this
+hardware described and this is duplicated. Otherwise - what are these
+two I2C controllers and what are the differences? Why they do not have
+really different name? Bus looks more like a mistake than a
+differentiating name.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c3d836334e11/disk-e1c04510.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4cab8c36cdb8/vmlinux-e1c04510.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7f796941fe64/bzImage-e1c04510.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d6504ac6876e/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9b7be0f1263ed2dbfbba@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/inode.c:1763!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5237 Comm: syz-executor.0 Not tainted 6.2.0-rc8-syzkaller-00021-ge1c04510f521 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-RIP: 0010:iput+0x68/0x80 fs/inode.c:1763
-Code: ff 83 e3 40 48 89 de e8 b6 b6 9b ff 48 85 db 75 14 e8 dc b9 9b ff 48 89 ef e8 24 f7 ff ff 5b 5d e9 cd b9 9b ff e8 c8 b9 9b ff <0f> 0b e8 31 cd e9 ff eb c5 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-RSP: 0018:ffffc90004ddfbe0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000000
-RDX: ffff88801e0f9d40 RSI: ffffffff81e54e48 RDI: 0000000000000007
-RBP: ffff888072e68000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000040 R11: 0000000000000000 R12: ffff888072e278e0
-R13: 0000000000000000 R14: ffff888072e68000 R15: 0000000000000000
-FS:  00007f2cbc74c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2cb2b58000 CR3: 0000000027d2f000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- f2fs_abort_atomic_write+0xea/0x4f0 fs/f2fs/segment.c:196
- f2fs_ioc_commit_atomic_write+0x19f/0x260 fs/f2fs/file.c:2157
- __f2fs_ioctl+0x26f0/0xaaf0 fs/f2fs/file.c:4154
- f2fs_ioctl+0x18e/0x220 fs/f2fs/file.c:4242
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2cbba8c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2cbc74c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f2cbbbac050 RCX: 00007f2cbba8c0f9
-RDX: 0000000000000000 RSI: 000000000000f502 RDI: 0000000000000004
-RBP: 00007f2cbbae7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fffc60048ef R14: 00007f2cbc74c300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:iput+0x68/0x80 fs/inode.c:1763
-Code: ff 83 e3 40 48 89 de e8 b6 b6 9b ff 48 85 db 75 14 e8 dc b9 9b ff 48 89 ef e8 24 f7 ff ff 5b 5d e9 cd b9 9b ff e8 c8 b9 9b ff <0f> 0b e8 31 cd e9 ff eb c5 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-RSP: 0018:ffffc90004ddfbe0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000000
-RDX: ffff88801e0f9d40 RSI: ffffffff81e54e48 RDI: 0000000000000007
-RBP: ffff888072e68000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000040 R11: 0000000000000000 R12: ffff888072e278e0
-R13: 0000000000000000 R14: ffff888072e68000 R15: 0000000000000000
-FS:  00007f2cbc74c700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2cbc74c718 CR3: 0000000027d2f000 CR4: 0000000000350ee0
+Best regards,
+Krzysztof
 
