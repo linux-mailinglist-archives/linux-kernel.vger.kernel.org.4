@@ -2,178 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6835697906
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86517697902
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbjBOJcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S233983AbjBOJcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjBOJcY (ORCPT
+        with ESMTP id S233914AbjBOJcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:32:24 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C68B30D2;
-        Wed, 15 Feb 2023 01:32:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ij/YzEfi/8QY8yMgXUCLTIwtzJWD4h8dnxoLs0ehrgD10pqHUqqa5NwqXnW97BBWMefE+3xaef8oN4l45WZaFMkQfm+3bZIlVULh02ZLhJkanJyOyGnB8r87+y7PSOCP3LkwQKv0Y78Yl0EY8YyGPppjWY3EF3tbR8L+EjRWbUi8f0maSmAXL1OGXinMWebY3dogCu0dcthWFavrM5S9o39LlYuPmu4HUEqtTwpiNK/O3TRIaoUtqu8yQH8DkKq8XzIEM77JxSk/nVS3qwcDtmIwZiWs7gvAIPIFmrnc/PaXsNcfbBzs0R/dx+5Nfjg1Mgbb09OSRsWhyVjAQDYljg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M9pa1yxBJDFumHOLqoBb+j/zVFgq+h3dIUqCOkO27ok=;
- b=NttUcmj8EFffVb5KOOta/4pxl15PLVfv2Kfsg/zFSEiEzjXf8sE+CRZ9q6uswSW+DZGqKbQ1RO5UzlzMzGllmmoGREoWLiZM46ht1hSwi6oov8dpd3OiSvsxPWHlCL3FQ3C41d+GizVceAjdMYad/J9PTSJfEM1J5dseO2d5bW0G5PA4GxjH3tyJm8WabcBETixAWsKXJDsy8iZ4HsILqHy6nTPclkgJe9x11GAiQojegPIW72HPLQbcliOKhW3r4+sVxlR984n3HhQaV1XHc5rR9IRx4fujj4NshOmzCTpp9YFKDjjnWmAw4oiqqzL6YhHKo9mOqdmH7HtY/kDK9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M9pa1yxBJDFumHOLqoBb+j/zVFgq+h3dIUqCOkO27ok=;
- b=RpNRFJBT0RQ/cIAOvqzg0JgAgrODnTo4y6TLSU7FYBTbXnapGSIrfWtDBVXip8ie/k9Jcge1epmwJ5n7xRkAfbBmK9Sro4t7/jhuypi/CnbEWs1IE2Xjgnb3geSxxc6JLZlzd36xFQt/iXrFRCpQr3eDmZdEYj1Ton1lukq0okc=
-Received: from DS7PR06CA0037.namprd06.prod.outlook.com (2603:10b6:8:54::12) by
- DM6PR12MB4313.namprd12.prod.outlook.com (2603:10b6:5:21e::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.26; Wed, 15 Feb 2023 09:32:16 +0000
-Received: from DS1PEPF0000B07A.namprd05.prod.outlook.com
- (2603:10b6:8:54:cafe::5b) by DS7PR06CA0037.outlook.office365.com
- (2603:10b6:8:54::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
- Transport; Wed, 15 Feb 2023 09:32:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DS1PEPF0000B07A.mail.protection.outlook.com (10.167.17.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.8 via Frontend Transport; Wed, 15 Feb 2023 09:32:16 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 15 Feb
- 2023 03:32:15 -0600
-Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 15 Feb 2023 03:32:12 -0600
-From:   Piyush Mehta <piyush.mehta@amd.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <balbi@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
-        <siva.durga.prasad.paladugu@amd.com>, <git@amd.com>,
-        Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH 2/2] usb: dwc3: core: add external vBus supply support for ulpi phy
-Date:   Wed, 15 Feb 2023 15:01:46 +0530
-Message-ID: <20230215093146.5812-3-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230215093146.5812-1-piyush.mehta@amd.com>
-References: <20230215093146.5812-1-piyush.mehta@amd.com>
+        Wed, 15 Feb 2023 04:32:04 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4A093F7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:32:03 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id e3so3287608ual.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VSczsxLJDp871T8FxTcILfLyiC/JgETwP9EwHrfipw0=;
+        b=FMTqZSI5bRp4pcsrpew7HhChMbxixFNPJetCw0GixdJSrEFsnk8LcapIjEbF4qM9Nw
+         EkAM7lI1g1gbW68fCMsqrE9ZwW3SB9ysHI/oxtU8k1TjgF//gkSpBZAaqAHmbRiAZvwL
+         g6MRYCVSyE0yPLg5lEo43FQ22UQA2Xm5DjzfnuT9686eWj7d0NpHK4qDdI8cADWREIej
+         pB5GHzAzaBbYRNvc5bxE/Z0zuuZgOtHKnJnE67lRoU6dd0Oje2WZ04t0jTTyeUlNuKR2
+         CqEt6JRji0AZZCz+poMhx0qgNfcLEDYyNoNKZ7CN+ZI5IA0RRF9czwWOeUzJyzzu0DzZ
+         Pm1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VSczsxLJDp871T8FxTcILfLyiC/JgETwP9EwHrfipw0=;
+        b=tZYjKkF3D6G5o4e5d2ARdfX4D2gRR2tE6MsYJm1XiTBNe8Gx2/+JVAz5oO4pEhHZv6
+         hMB1ROp7Jk0Vb4ADSK4Bz4zcEa8FLwsWaZSDKJk5x+VT7H6opXOjvVjIL/8JQIMNOLII
+         nX/6Mj7Te2ECWOLCcfGO2ROZsHXW7tguvCYBWmluyiNfQyr3yXFMVN35p8lwsAhYytAv
+         yqYeXf3WxU/mUfdTdCwqzMfLe5SqtMtAmssblAs6fBl1afIA+QqvHKqtu4g514oShZ4M
+         tCi95XK+IEwVEpgBJ/uAG7u/UqoanpJNhm5ZlVPnCIxdOidiN6wf9bPMImoi+If/DQCD
+         qAcw==
+X-Gm-Message-State: AO0yUKWZVvtdR3/MPpZsfJ0RbTZpJztXXx++fF50dHxEtK9Ry5V6+G01
+        eZed0nMShLw2gTP8eXMg2T+CYG8ca5uELSWthhHZBw==
+X-Google-Smtp-Source: AK7set9WWOEeiHBThTwUNguaTMOUHb/QkssNvX6+qWPO3NM0u5Nz3GV3Vk44Zl0CGnB7u7VpsTEArWl8moG7Hp7kH60=
+X-Received: by 2002:ab0:539d:0:b0:68a:6a41:c892 with SMTP id
+ k29-20020ab0539d000000b0068a6a41c892mr178048uaa.2.1676453522024; Wed, 15 Feb
+ 2023 01:32:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B07A:EE_|DM6PR12MB4313:EE_
-X-MS-Office365-Filtering-Correlation-Id: f289ac6a-f07a-4dcd-dfdb-08db0f3786e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V8SiNH4sNsnz+fQecWE/h8fbkZ74/xu4vAphQrrqItqRvuBcwEhdwvzA+lugESQP152/o8ybe3Ft/kNTg+VyEcsBR4Igeg8/EwhtqNiF5Eu+fyWRSrGLzAZa0ory70VuFkhc+rmGtwXHmrgIEhHj2BaRHZgm22zE/FUWr8dTS64Ck3snWyETdFABBfhCLa/wyAbX57YRqihTCRRnEqUuxSMKQOAoJWMzwWv9yRldCAqJcWf5PC36GoB0JyMQeE+WZONDYXFaKGhDX45USVWtgMFsp0XRptduqQpzWPa865iqI8Ewefb3TTsY5/exOveV2owsKlwt66nMR+ZxrzfynNCNYshGdX9dWz44iJyK3vjWHZLmcLo2t68p6qLQ1VOsVZ2Y1z/RLDqtyzQ7tVi+06EwU1ynsl0iZ9gLGuFqdAinYX5gIN3+dkuo+pMClehKCcFugVlyhYtf++6w07kU4TffEBVw3ZLqdBm9MGGdQaxHby5QRPUlTV9SsImd9wxBxnbI3OT4m8loV2YHfwpaBSETe3W67JR6huwGBHjg6N1aRCg071XhD4YD/MPTCk5Gm45mkq5SDe0v6L9QOGkIg3zQ2/TUbG7MVdxkY4keldK8ZlnnIiv3vu0u5FUxGC9mmKRTElbxNIbrL3Ee0PK4L1qHM2+hkgSaF74xQzaabnpBZkr+LpVGgYbjxBOI7sOlm1ejjt0NQ2IgVoIpSWHq97r7PymUFdAY6oN+308+wjk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(2906002)(44832011)(5660300002)(426003)(83380400001)(8936002)(41300700001)(356005)(36860700001)(36756003)(70206006)(70586007)(8676002)(4326008)(316002)(40460700003)(110136005)(54906003)(47076005)(186003)(82310400005)(478600001)(40480700001)(336012)(1076003)(86362001)(82740400003)(2616005)(26005)(6666004)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 09:32:16.3038
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f289ac6a-f07a-4dcd-dfdb-08db0f3786e4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B07A.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4313
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230214172549.450713187@linuxfoundation.org>
+In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 15 Feb 2023 15:01:49 +0530
+Message-ID: <CA+G9fYv6p5phurrw7VABq-Tdg=92bW996M5+UkT7CY2o0GLFOw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some ULPI USB PHY does not support internal VBUS supply, to drive the CPEN
-pin, which requires the configuration of the ULPI DRVVBUSEXTERNAL bit of
-OTG_CTRL register.
+On Tue, 14 Feb 2023 at 23:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.168 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.168-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Added 'snps,ulpi-ext-vbus-drv' a DT property to configure the USB2 PHY to
-drive VBUS with an external supply, by setting the USB2 PHY ULPIEXTVBUSDRV
-bit[:17] of the GUSB2PHYCFG register to drive VBUS with an external supply.
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
----
- drivers/usb/dwc3/core.c | 12 ++++++++++++
- drivers/usb/dwc3/core.h |  4 ++++
- 2 files changed, 16 insertions(+)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 476b63618511..ed0ab90d3fac 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -800,6 +800,16 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	if (dwc->dis_u2_freeclk_exists_quirk || dwc->gfladj_refclk_lpm_sel)
- 		reg &= ~DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS;
- 
-+	/*
-+	 * Some ULPI USB PHY does not support internal VBUS supply, to drive
-+	 * the CPEN pin requires the configuration of the ULPI DRVVBUSEXTERNAL
-+	 * bit of OTG_CTRL register. Controller configures the USB2 PHY
-+	 * ULPIEXTVBUSDRV bit[17] of the GUSB2PHYCFG register to drive vBus
-+	 * with an external supply.
-+	 */
-+	if (dwc->ulpi_ext_vbus_drv)
-+		reg |= DWC3_GUSB2PHYCFG_ULPIEXTVBUSDRV;
-+
- 	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
- 
- 	return 0;
-@@ -1553,6 +1563,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 				"snps,dis-tx-ipgap-linecheck-quirk");
- 	dwc->resume_hs_terminations = device_property_read_bool(dev,
- 				"snps,resume-hs-terminations");
-+	dwc->ulpi_ext_vbus_drv = device_property_read_bool(dev,
-+				"snps,ulpi-ext-vbus-drv");
- 	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
- 				"snps,parkmode-disable-ss-quirk");
- 	dwc->gfladj_refclk_lpm_sel = device_property_read_bool(dev,
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 8f9959ba9fd4..9d5487b377b7 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -280,6 +280,7 @@
- /* Global USB2 PHY Configuration Register */
- #define DWC3_GUSB2PHYCFG_PHYSOFTRST	BIT(31)
- #define DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS	BIT(30)
-+#define DWC3_GUSB2PHYCFG_ULPIEXTVBUSDRV	BIT(17)
- #define DWC3_GUSB2PHYCFG_SUSPHY		BIT(6)
- #define DWC3_GUSB2PHYCFG_ULPI_UTMI	BIT(4)
- #define DWC3_GUSB2PHYCFG_ENBLSLPM	BIT(8)
-@@ -1100,6 +1101,8 @@ struct dwc3_scratchpad_array {
-  *			check during HS transmit.
-  * @resume-hs-terminations: Set if we enable quirk for fixing improper crc
-  *			generation after resume from suspend.
-+ * @ulpi_ext_vbus_drv: Set to confiure the upli chip to drives CPEN pin
-+ *			VBUS with an external supply.
-  * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
-  *			instances in park mode.
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-@@ -1316,6 +1319,7 @@ struct dwc3 {
- 	unsigned		dis_del_phy_power_chg_quirk:1;
- 	unsigned		dis_tx_ipgap_linecheck_quirk:1;
- 	unsigned		resume_hs_terminations:1;
-+	unsigned		ulpi_ext_vbus_drv:1;
- 	unsigned		parkmode_disable_ss_quirk:1;
- 	unsigned		gfladj_refclk_lpm_sel:1;
- 
--- 
-2.17.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.10.168-rc3
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: f90240a238a9596894598787d667151f6af55c58
+* git describe: v5.10.167-133-gf90240a238a9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.167-133-gf90240a238a9
+
+## Test Regressions (compared to v5.10.167)
+
+## Metric Regressions (compared to v5.10.167)
+
+## Test Fixes (compared to v5.10.167)
+
+## Metric Fixes (compared to v5.10.167)
+
+## Test result summary
+total: 158564, pass: 132104, fail: 3591, skip: 22651, xfail: 218
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
