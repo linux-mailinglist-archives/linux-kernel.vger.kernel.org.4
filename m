@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EEA69847E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AAE69848E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBOT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S229585AbjBOTbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBOT0v (ORCPT
+        with ESMTP id S229485AbjBOTbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:26:51 -0500
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4413B659;
-        Wed, 15 Feb 2023 11:26:51 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id n132so16732564oih.7;
-        Wed, 15 Feb 2023 11:26:51 -0800 (PST)
+        Wed, 15 Feb 2023 14:31:12 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0195F3C2AC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:31:11 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id fi26so24963411edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:31:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RED9+vAJdW3sKqtHeyKyIn11vo3x09LmIinPSfGfkd0=;
+        b=MoQe7iVa3MT5PDdVl/QDU0kTTLca4GFekIkTiTQ02LvSSx5UnCUFroMNyhzDT2vzH/
+         uw2jdnoctQ1jc2aut0ty7G6s2izwMb9t/kgqyDBge39MaCtw9m6s1fwN6quFCL6DkM8s
+         0jF5t3yNSunFrfCUAHvHrDmjKDiRsSSvdcJN8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=syPlRWp1XLJqpKi4d2zS5tmfk5ekFo7ezxwYvPO/kOc=;
-        b=P/OKmeMQGJfB3/Pfti9Vj83VJr3uuVprthBG3zeYFemOa7DH+ElRm6asiT4xZ8VBah
-         K2HcejL/eIgQr46ROGTUjXxSL42HshYvJ8g3OiCYzfGpKx6CC/zhmauoQERfxgM9tsiY
-         H/LDveKmsb4EFDvKZAJ4AzARzzcvMcI7/z9hIVto0ZN1xnhKaEIB8wu11RKwQn4pvXi6
-         3o9+ZSnhtZbsq0rIRAn+fcrwH3R951owvgV+Sai83ohInRCKWor7eHRVG8PGxJDM0J4P
-         DJnS9Kzyh+vs3+GOuXIGseCywI5r15/M18NRXIDbrDYQncnkHZ6FFLO5bVHOfRApjwh4
-         35oQ==
-X-Gm-Message-State: AO0yUKW9ZGiLUegvcMVm3k7scXbdR4/orsIkFTbzJvQDXPbNeqGGzjts
-        4ddVlv+QbcFfLG8EfXLSHEkmyCKcZQ==
-X-Google-Smtp-Source: AK7set+vLM9YaNIGwhZ6i/Qg//cSFLo/sNWhut07J5qaCIhhqGgnWCLhu3wZ5SddiuKUfEH8hx+zrA==
-X-Received: by 2002:aca:280b:0:b0:364:7541:f9cd with SMTP id 11-20020aca280b000000b003647541f9cdmr1550479oix.21.1676489210299;
-        Wed, 15 Feb 2023 11:26:50 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q185-20020acac0c2000000b0035a9003b8edsm7549366oif.40.2023.02.15.11.26.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 11:26:49 -0800 (PST)
-Received: (nullmailer pid 435570 invoked by uid 1000);
-        Wed, 15 Feb 2023 19:26:49 -0000
-Date:   Wed, 15 Feb 2023 13:26:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, pavel@ucw.cz, lee@kernel.org,
-        thunder.leizhen@huawei.com, festevam@gmail.com,
-        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] dt-bindings: leds: Document commonly used LED triggers
-Message-ID: <167648920872.435515.7644991846450817906.robh@kernel.org>
-References: <20230213072133.5977-1-manivannan.sadhasivam@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RED9+vAJdW3sKqtHeyKyIn11vo3x09LmIinPSfGfkd0=;
+        b=P63q2qHft8zeHTQQL39I/5odi82ZJrdnEF3GOJKmZjgZIUdGonCxCEXniqbEGcN/PK
+         wRvVf36jG7DSqppGCrI3TtVJF3cdNcW3pLkUYrp96Agufr57Or48BexpPpwv1wWGHuf9
+         wY4i4d3UMw4rrdq5AREiEMTAC74r7BsL4GQJ+/poZKuR+085KPw0wo++grEVGIVFqFiT
+         Zizq1GFfpKGA65xeKcwj1gzxvEYQ9Q8VMm/3m2ryosQLdKkwt7UG1jYrq92UlsvPZIig
+         LNvRR7/sXniY9mWBThJ4wxt60u8x1vj9NLQFkQfGpOY9D8G3Sw2Cc2HvNZrGMKcV3LGY
+         auVg==
+X-Gm-Message-State: AO0yUKWFPSje+EhOqiMoypVs77KseqZMzf08Ot9J+TyoP60nm24/G+uD
+        pygHBN3LBKF5G/R1ewPKKKv887EPJxzUzg40mLA=
+X-Google-Smtp-Source: AK7set/c45NWlLmsULWgeQl/+K/7Aw8oEfsTdHFpjM47ynXl65MEJf9fEIQkXdLPl3PAsqPiP3zjDg==
+X-Received: by 2002:a17:906:7312:b0:8b1:3422:ddb6 with SMTP id di18-20020a170906731200b008b13422ddb6mr4445517ejc.69.1676489468990;
+        Wed, 15 Feb 2023 11:31:08 -0800 (PST)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id jt26-20020a170906dfda00b008b14ca97d4esm503377ejc.10.2023.02.15.11.31.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 11:31:08 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id t16so2126793edd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:31:07 -0800 (PST)
+X-Received: by 2002:a17:907:cc12:b0:88f:a9ec:dfd7 with SMTP id
+ uo18-20020a170907cc1200b0088fa9ecdfd7mr1591050ejc.0.1676489467608; Wed, 15
+ Feb 2023 11:31:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213072133.5977-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230215100008.2565237-1-ardb@kernel.org> <534469b750e1847e1645f9ae5ed19dcc80b82be6.camel@physik.fu-berlin.de>
+In-Reply-To: <534469b750e1847e1645f9ae5ed19dcc80b82be6.camel@physik.fu-berlin.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 15 Feb 2023 11:30:50 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjEmZ19T4XpVb0_Hacm53xJG_w5ygcuorwC0xBoT-myUA@mail.gmail.com>
+Message-ID: <CAHk-=wjEmZ19T4XpVb0_Hacm53xJG_w5ygcuorwC0xBoT-myUA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] Retire IA64/Itanium support
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Luck <tony.luck@intel.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ia64@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 15, 2023 at 2:17 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+>
+> It's not that I don't care. I just haven't been able to bisect the bug .yet
 
-On Mon, 13 Feb 2023 12:51:33 +0530, Manivannan Sadhasivam wrote:
-> Document the commonly used LED triggers by the SoCs. Not all triggers
-> are documented as some of them are very application specific. Most of the
-> triggers documented here are currently used in devicetrees of many SoCs.
-> 
-> While at it, also place the comment above the triggers (hci, mmc, wlan)
-> to match the rest of the binding.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
-> 
-> Changes in v6:
-> 
-> * Rebased on top of lee/for-leds-next branch
-> * Fixed the comment location for few triggers
-> 
-> Changes in v5:
-> 
-> * Rebased on top of v6.2-rc1
-> 
-> Changes in v4:
-> 
-> * Removed the sorting of triggers
-> * Removed the "items" as they were not needed
-> * Reworded the description
-> * Dropped Zhen Lei's tested-by tag as the patch has changed
-> * Added kbd-capslock trigger
-> 
-> Changes in v3:
-> 
-> * Rebased on top of v6.1-rc1
-> * Added WLAN Rx trigger
-> * Added tested tag from Zhen Lei
-> 
-> Changes in v2:
-> 
-> * Added more triggers, fixed the regex
-> * Sorted triggers in ascending order
-> 
->  .../devicetree/bindings/leds/common.yaml      | 37 +++++++++++++++++--
->  1 file changed, 34 insertions(+), 3 deletions(-)
-> 
+I'm not a fan of ia64 as an architecture, but it's a bit sad to remove
+it entirely. It's not like it's been a huge maintenance burden in
+general.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+That said, if it doesn't work, and nobody has the time and/or
+inclination to figure out why, I don't really see any alternative.
 
+             Linus
