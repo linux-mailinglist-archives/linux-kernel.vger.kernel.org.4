@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562CE6987F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726926987EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBOWea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S229802AbjBOWeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjBOWeD (ORCPT
+        with ESMTP id S229522AbjBOWd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:34:03 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8556C43935
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:34:02 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id j4so8573iog.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9UkAnigxc8vfiP/xy4xUkyYLWp1v2oMPjYmrZI7ozKg=;
-        b=fNhSR/DpdhPdDoI56A3EhCdY7JWbS58+aiEICYVlA7gl+AWkUTNbIG/atjNRcl+sje
-         lyIqK6JaonmY3oxhEbmQPSEmpM0sQJdCA79+tz5MYxEs4BBI4xZSHObsXn9o/f+ekcvK
-         +jiV7lGBfGkDEmPwMzlaSo6sNkVwuy9caydNo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9UkAnigxc8vfiP/xy4xUkyYLWp1v2oMPjYmrZI7ozKg=;
-        b=VHVHVPY9KdaKW5r5rcxOc/DJ2nKyjnEpe+FKURkbqRm9d3UPdpAo57iuZC/jsB9sr6
-         8P8ruTxl15+xcPT7YuVyJwZJkd1V0VRKLLdg9PPwMwdd3PHM0VeUNQv8BkxDBenJnZnW
-         dtEd/gdaGD6FIY/1VTAFrRqc2BkEsgiRlBMSIGGuXEWDLsh9EUOnETblkeGG6tYVKCYc
-         SJ84abZVOMKOe7Hbnw8cycg2ZvaE/ITESEJ47FWMiufhraAW3mXugLRGbVH15vjN1lkv
-         1ilXOubkyICW1HNXtnznkQey9fCwA1PemvdwtaeClLmbFVAXIkUjRYpTq9J+MSJ8QTTq
-         ukUw==
-X-Gm-Message-State: AO0yUKXn3WGylQ7iRvqzR74bl6mzDft3gW6gtfCV0C/3qPXEei4DE9lo
-        GytEtKTDCRLHQqGSOPaFvjWJ4nMsJOU0sEc1
-X-Google-Smtp-Source: AK7set/e91kNoaIzB6xxvRfuTyHdyHPXybCM8qCEGiQAIuXpdlJLh2rV23A7rHMn8ApT6OzRpPB0MQ==
-X-Received: by 2002:a5d:890d:0:b0:71c:cf2e:92ec with SMTP id b13-20020a5d890d000000b0071ccf2e92ecmr3047559ion.0.1676500441795;
-        Wed, 15 Feb 2023 14:34:01 -0800 (PST)
-Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:6299:179b:a6e4:be59])
-        by smtp.gmail.com with ESMTPSA id b15-20020a92c14f000000b003141eddd283sm1131489ilh.22.2023.02.15.14.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 14:34:01 -0800 (PST)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH v2 6/6] tools/virtio: fix typo in README instructions
-Date:   Wed, 15 Feb 2023 15:33:50 -0700
-Message-Id: <20230215223350.2658616-7-zwisler@google.com>
-X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
-In-Reply-To: <20230215223350.2658616-1-zwisler@google.com>
-References: <20230215223350.2658616-1-zwisler@google.com>
+        Wed, 15 Feb 2023 17:33:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4D3252B2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:33:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 132B361DD6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE16DC433D2;
+        Wed, 15 Feb 2023 22:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676500437;
+        bh=683KEjyjJdGprwp6x/MvliefPwqxgwCTxqoPXal2rZ4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EUFbtrutIJyOZc8/SOR3PMPupt1r82zh365IH9L0Hra0teTwojAhfwbi1XdGGMZnK
+         PKlBHfNp0vj4A89piR2y3tvMmKgPUIx3bRkkYozH4ImTwZvYgN2NoXkWPexnMPQZem
+         38Qa3WXmxK+ePiRJiB7wygl8gVx9pblzTS7wqAdAsBpLzWXIgPOVq7l/BgsZBa4qlp
+         NhiUryFRPumaiin43OlJvMh2Aa9dE8MO8q4PCGFjVs/4HZMYHTaZCwy2jbvuzTDUN0
+         MXW/ptsFujDa5x1AJRA2ea/XABSvchJRug0iEZBAl6ueR2uboM8gCB7ktgjp0E8uUB
+         A2yBwaWMeWJcg==
+From:   SeongJae Park <sj@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
+        osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memory_hotplug: return zero from do_migrate_range() for only success
+Date:   Wed, 15 Feb 2023 22:33:55 +0000
+Message-Id: <20230215223355.102508-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1ddc2eff-f1bd-be62-3c62-abe6d539feef@redhat.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to have a unique chardev for each data path, else the chardevs
-will collide and qemu will die with this message:
+On Wed, 15 Feb 2023 21:00:50 +0100 David Hildenbrand <david@redhat.com> wrote:
 
-  qemu-system-x86_64: -device
-  virtserialport,bus=virtio-serial0.0,nr=2,chardev=charchannel0,
-  id=channel1,name=trace-path-cpu0:
-  Property 'virtserialport.chardev' can't take value 'charchannel0':
-  Device 'charchannel0' is in use
+> On 15.02.23 19:03, SeongJae Park wrote:
+> > On Wed, 15 Feb 2023 14:16:05 +0100 David Hildenbrand <david@redhat.com> wrote:
+> > 
+> >> On 14.02.23 23:32, SeongJae Park wrote:
+> >>> do_migrate_range() returns migrate_pages() return value, which zero
+> >>> means perfect success, in usual cases.  If all pages are failed to be
+> >>> isolated, however, it returns isolate_{lru,movalbe}_page() return
+> >>> values, or zero if all pfn were invalid, were hugetlb or hwpoisoned.  So
+> >>> do_migrate_range() returning zero means either perfect success, or
+> >>> special cases of isolation total failure.
+> >>>
+> >>> Actually, the return value is not checked by any caller, so it might be
+> >>> better to simply make it a void function.  However, there is a TODO for
+> >>> checking the return value.
+> >>
+> >> I'd prefer to not add more dead code ;) Let's not return an error instead.
+> > 
+> > Makes sense, I will send next spin soon.
+> > 
+> >>
+> >> It's still unclear which kind of fatal migration issues we actually care
+> >> about and how to really detect them.
+> > 
+> > What do you think about treating the isolation/migration rate limit
+> > (migrate_rs) hit in do_migrate_range() as fatal?  It warns for the event
+> > already, so definitely a bad sign.
+> > 
+> > If that's not that bad enough to be treated as fatal, I think we could have yet
+> > another rate limit to be considered fatal.
+> 
+> IIRC, there are some setups where offlining might take several minutes 
+> (e.g., heavy O_DIRECT load) and that's to be expected.
+> 
+> So the existing code warns for better debugging, but keeps trying. So 
+> the ratelimit is rather to not produce too much debug output, not to 
+> really indicate that something is fatal.
 
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- tools/virtio/virtio-trace/README | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for clarification, David!
 
-diff --git a/tools/virtio/virtio-trace/README b/tools/virtio/virtio-trace/README
-index cea29a2a4c0a..0127ff0c54b0 100644
---- a/tools/virtio/virtio-trace/README
-+++ b/tools/virtio/virtio-trace/README
-@@ -61,7 +61,7 @@ and
-       id=channel0,name=agent-ctl-path\
-  ##data path##
-      -chardev pipe,id=charchannel1,path=/tmp/virtio-trace/trace-path-cpu0\
--     -device virtserialport,bus=virtio-serial0.0,nr=2,chardev=charchannel0,\
-+     -device virtserialport,bus=virtio-serial0.0,nr=2,chardev=charchannel1,\
-       id=channel1,name=trace-path-cpu0\
-       ...
- 
--- 
-2.39.1.637.g21b0678d19-goog
 
+Thanks,
+SJ
+
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
