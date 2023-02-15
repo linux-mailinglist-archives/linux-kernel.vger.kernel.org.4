@@ -2,250 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8424A697849
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 159BF697865
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbjBOIgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S229908AbjBOIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbjBOIgO (ORCPT
+        with ESMTP id S229843AbjBOIlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:36:14 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45F72B282;
-        Wed, 15 Feb 2023 00:36:09 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9EF9F5C0048;
-        Wed, 15 Feb 2023 03:36:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 15 Feb 2023 03:36:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676450166; x=
-        1676536566; bh=XZK5UkyE7CjtpojrYc2FgpvA+SYcUllXqaeA4EFayKM=; b=U
-        kDor7El8E5FreYlWu+EXpGhMGbvNaaiKikFYEAEHodhtYXqzCYxw+65CWI6Qkpdv
-        6qQ6UCJ3hT+s3xlwtGvuMZLJGyGLOKCZ3CWAJ98357IE89oDDJQG498TU60JuLf6
-        ZrLZ7MVqlff5RaVQ2VaUnw/hWbxU2owRo5TIHAlb5OMhEEvumUUCqgutDUKFobed
-        IBGn35g2/4AgBNHFHGZ7ihSfQJFz0wM6CRDK1ab8mVcWMH9N+qVBTRDEqiwnhNXi
-        +YYNjub9l8trLcq0+5827hPO/KS8POenf9GTVbNVy5KzCzclyyINDqMQM5xSlZhX
-        VBCwWMGrk/1Z+AGRsYEiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676450166; x=
-        1676536566; bh=XZK5UkyE7CjtpojrYc2FgpvA+SYcUllXqaeA4EFayKM=; b=j
-        muEYldVia/EtWXAwmldCFwla/BTG6gX75lJJcXi/0pJdi365aN/OtbJU+NRx/DVg
-        7II/JlvgrRufjCXpaexxmiftmcu6KQGgYajm+yc2zPgyWxutf/xtfSeQQKUO0gYq
-        G9qcR7EKP7NajVKAtt209fpEkOJV5er11lVMpglwKQ7AuSbGq4RDjwmHzRY5yllj
-        rl87cJKlN+qYvdrH9jFk7Gkc2PJ35415himIaPCOOjK4gUbHckGaxpTX5CWc71vp
-        sYloQGEMpzfHw2I08FQ6NZlu4slc0FixOYKirK3pH62xBEF4UnV77vXJmEkuo/IX
-        WDgHyi4kuwS6C3bXTs7Og==
-X-ME-Sender: <xms:dZnsY3Z7mMf5i0b1jWUQRUbs4Bng7vmSDv0P-Rdx-o_C31Dds_THxw>
-    <xme:dZnsY2axlmfaZOtU1Gaws8kRLLHxVNZm671znzL29BwD1v2wjCfAYOPPEpLqnISwy
-    1ddDazl_aOpu_p9tg8>
-X-ME-Received: <xmr:dZnsY5-E83P8j8nMhh25Y0yT-ohlxRilKxtDaOyHaPb3uhQgGaTtOHPmp2D0IF5fo3Pd78aC_zQZRDAha-L1OeOJWPko_Mg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeigedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtudenucfhrhhomhepofgr
-    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
-    frrghtthgvrhhnpeelleefieelleetteefvdeikeeffeffvefhtdevgfehveduveehjedv
-    vdeiledtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:dZnsY9q9TZGKLfq5OEGxYw0_uJu__l2YGUBBzkNEIutmZ_0JdmKJcQ>
-    <xmx:dZnsYyp25wPyNICTeU4PA2oxON__90EhbEMbMokTrM958QWv6xpKyg>
-    <xmx:dZnsYzSoVXmcnQt6dT07UWskI_6DvAxRWEcHjgOqvJyExjPGOJCQbw>
-    <xmx:dpnsY2oC9v_OvQaA9SAxa3GcNHBuPP2nfJ5wRUl_xks48FLjZgZTcw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Feb 2023 03:36:05 -0500 (EST)
-Date:   Wed, 15 Feb 2023 09:36:02 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     pelzi@flying-snail.de, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
- default
-Message-ID: <20230215083602.ecvtoqbku2gu2dy4@houat>
-References: <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
- <20230209202952.673d5a60@slackpad.lan>
- <20230210082936.qefzz4fsp3jpalvp@houat>
- <20230210094425.474cfba5@donnerap.cambridge.arm.com>
- <20230210100620.z6j7rvkiwyu7paij@houat>
- <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
- <20230213084329.ulckaigwd7dof37u@houat>
- <c3dda403-6963-040a-3827-443edf0a377a@flying-snail.de>
- <20230213091803.bxle6ly2sapodsbs@houat>
- <20230213115652.3ab4f25c@donnerap.cambridge.arm.com>
+        Wed, 15 Feb 2023 03:41:31 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2050.outbound.protection.outlook.com [40.107.104.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251A71721;
+        Wed, 15 Feb 2023 00:41:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F96SpeDNGQm1g+Zftjl7z4t8ZAaa9nGPu5ytZvyvQqbgnMoLB1Yb+9oX1OmegqH+Tu2WjIle2cSRYGZ2WVVLPb2mX/TLTCWdBjfYt4TxoQhQkH/myM1na7EkNoYTBvjjDhUQJ+SXNIC3QT1+EtqpJwF5EfHBY0bTabvOt4QaKLGGX7wp1zs4xghDMvFzncBIQHUksmCVKLb1iaBqF7mQtk075nf9+nQaXZ7BxxACKnj5qcTHAvrEpdk6IY/52/xbllrHDIwaDses6MUFbzuaxqC4T9EBBTFA1rVg//+dlDldofqd6fg2GnlmWjwkUpMuq89auW3u7o4Ts0lEoLWQbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KOWFuV8HJVvJrD9M1sceX697/AmNyZadrWxh2tE+Gx0=;
+ b=iuAjpCWEz5nmd+KGqCTTwMLWYmdBa9X7yJ0w0dC2gj1+X/s2AJIssb0d4hm6Fd85wnFaoiRAkAiD9lQvm8sSBwdYjjwsurNwkRKSgxYsdj/b20yS/cYIw9ylKla1C1+U4eCg3yqmkAQSJ2jiDE/+edKjVCTdoP778tFA2oSG6MsEDzG2+k1BEwI2I57c123W5suVlqxmgvGa7WNtcC4UilgEbTv1u6sTNWnkSxwelB+hm3n2yufSHa1FTTyZTwwEdJKknHsWIuMLy2KxdpN0qbXFWhv8pV9LMcD/KQYU+RyZIGzRY78GxwyEbAUVx/bdpT5Zv+D3fnjbrNbuQqKSkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KOWFuV8HJVvJrD9M1sceX697/AmNyZadrWxh2tE+Gx0=;
+ b=fHKi/JNiM/VwrbFyVRNSGDy8mPUUqOUVsqdC/uypvdAFr9sj5+w9H5xYGZqSYmV8U/8x1tljn5ZDK7Qqhs3zL/wxfmchjFnEWqhQUD+Vx0D8RBI8iJSZ7NvMAzmval5bFTxSAAf04TnGNDJ8XWe60WKzFR6DGyHlJsbQ04EYVUQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by PA4PR04MB9342.eurprd04.prod.outlook.com (2603:10a6:102:2a6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Wed, 15 Feb
+ 2023 08:41:27 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 08:41:27 +0000
+Message-ID: <8ccdba247e1b3649af382b77039afa9d19bf81e2.camel@nxp.com>
+Subject: Re: [PATCH v3 4/6] drm: lcdif: Check consistent bus format and
+ flags across first bridges
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+Date:   Wed, 15 Feb 2023 16:40:48 +0800
+In-Reply-To: <2148647.Icojqenx9y@steina-w>
+References: <20230213085612.1026538-1-victor.liu@nxp.com>
+         <20230213085612.1026538-5-victor.liu@nxp.com> <2148647.Icojqenx9y@steina-w>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI1PR02CA0034.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::10) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230213115652.3ab4f25c@donnerap.cambridge.arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PA4PR04MB9342:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8072d6c-eab0-43df-e4d0-08db0f306d50
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iK2gVJQWFqR8WfQ8Ve86epdRNOrTnbCAoKds4FRRS/x2JqBMXvr37Qb2HmICn+mpy1s7FYNk0KahYJcWwZAyLHpW6O16i3Le7GzjxkLn3p1KZ12wFEtuMpuyxA03feAn4etTyzf/XMUYKjxboIwWgkMnN/IaeEG9BhLqnyjUpWIp5Nc5Vs+jKQD7+kFSySD8aNz1mpEPWwamlM21lIU5pY0FnwGfCQnyvhr3ZGkaJwc5hJvci1MFSZtfSeEArJCOSjHQ0NXKxaiznEnfVBfIBU8l6C/HvI+7IpuyXGJw88pZBIbJAHz93iqPFZXq07hFS4DxZ1T0cxLaKOcLIaEnY4MuTYl7SSBfV6Gy0Se85rBKgbp0wNVzoABrLu8jPRBqka6caZHXOQ3IP+Jf7KvNmkU8EVwjgOnLW3RQGRfVscjOOKE62SdxAq3i7Z5qJesg1CUV8aisNIsSJzV82w+W2BgskVTxBSEHxTwrDBzprqFOyJNVsLdkor0THaTEh/jZ4R/p55eegA5ZwzCr/YyuWR4QhfsjyjpsqbZC3aknpvpAr8Bz2AHIx6jvM5S7x7dE/pw535iFAwwcvNBfh7kmz6bIOx2T2VQBfVwXiFlKgiKSkidTQYSAXO5rBXgSdgWjeOOCPWUkTk6/5Am/d9L+ZYYaWsH8KwfaK9y8u2UhbdUfS2FZOSaDVDV+Gxmx8OTxxX7TU306g7fV2vNvP2cvOJi6aWOGY1ssQBf9+hiG+to=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(39860400002)(366004)(376002)(451199018)(186003)(86362001)(2906002)(36756003)(2616005)(7416002)(83380400001)(6486002)(26005)(38350700002)(38100700002)(316002)(66476007)(66946007)(66556008)(8676002)(8936002)(6506007)(52116002)(478600001)(6666004)(5660300002)(6512007)(41300700001)(4326008)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MGRkcW5NRUVhZkR0R1BubTFETkJLbTZCREtXditzZTMxTFdMR3JyTDhiUk1t?=
+ =?utf-8?B?ZGRDMnJScDkyMG1NVjlsRkN2OTlNM0F5N1l6UlZ3R1pvREgvYnRneVNEU0lP?=
+ =?utf-8?B?SkV3NUtBTi96RG5ybmM5RzNoVUgrbStlb2QwUWJVbUNEOFpMWFE0d0pLZm1k?=
+ =?utf-8?B?NE01VlNzaVJ1dGN1QXVmVUZUQXZrd2pmbTR4VktSSFFLOTErRXNpQjNEQy9y?=
+ =?utf-8?B?d3huTUV5Y0d2SEpSbkROQ0o3T1VmRHhvU1dzNExFdEliY3VwQXdmYmU3LzJ0?=
+ =?utf-8?B?VDRxM1NCaXhBNmZhcjBUU2pDN240S3FrdUQ4UkcyZ0haOGM1Q29vOERuNW9K?=
+ =?utf-8?B?U1l5MzBzaVBDUXNHVStyNFMyWTZJUGlBRWRUQ091TFNLdml5T2c2a3pCUkJ1?=
+ =?utf-8?B?QmU0NytORUsxUEJSTDlTTFgza1ZmTXZzakkzeWhGaVFtUGJQQnFidjBNaE9O?=
+ =?utf-8?B?Z3MweHMvU0VWNk9RTXZHUFlaNUU3MXRrQnZNempNRXBDUXRvMkRQeHJCdE5B?=
+ =?utf-8?B?ZjhWWHFCOVZTMVFkemc2RDZRSnZMVG9oQzVlK2s3Rlgyd3JBNVR2TFdaeTRa?=
+ =?utf-8?B?T3YrR0V2Zm91Z0pVQWZFYTRQVStORElrUERLVjZvVG1kR3U0RHlua3dUOENJ?=
+ =?utf-8?B?dU01cmIvdVA3bXlRd1lYWUx4VUI5YnQrSGhJN0FQM0ExcUdEU00rZGp2RzEw?=
+ =?utf-8?B?ZUtNYW41dWpoeTdIYlpyOEFFbE1nU21qOXljQ3FiTWdQYzJrNG9iYXJ0UWxi?=
+ =?utf-8?B?Y08wYUlycVVLTjl2ME8zd20zVGNPUXptdGdaa2xCVG9rTldrbzZIRXFuU2cy?=
+ =?utf-8?B?c28yYXI4Tkh3S2RTRHZMT0I0R0w3WmRZNU92M1NNcU9vUnhDTmhiZ1BzYnEy?=
+ =?utf-8?B?QmxHY1VFL0l6V2RzTE0zME1CWGlUTndlOXFvL0V5dFlvaVFxbkxzVVVzblR6?=
+ =?utf-8?B?eVl0SlIwL1FqYW5Sa2F1STRQUnVjQndSeFVmci9aSjZidmhlYnR2ZzdtUEI2?=
+ =?utf-8?B?MG84cm0zNHRkTERVR0JJc21RNFBCaXNwaU00S0tadUhSNnJTQVFtMUlvZUQ2?=
+ =?utf-8?B?MzRnUmVEdGx4UmwzdGRoSkZqNXFsZWJCV3RTMWRNVE9pU3h2eFdoS1JPdGxK?=
+ =?utf-8?B?dmJPTjErUnFXWjZmc0QrWWdLc1hhZURFS0RBa1N5ck1hYTJLVURTZ3lQQlNj?=
+ =?utf-8?B?MlNKL3FUWks5bUhISmFkbFcrQVozSk5zZS91N0hta1J4VFBoTlRXUFZuSXl2?=
+ =?utf-8?B?UGxzdWhkMVRpMHZJT0prNnk5Mjg2aXdiV3BFL3FFMDZqbkQyOHJJOU5EY01x?=
+ =?utf-8?B?eXRyMkYrQndxbTA3OGVNZmdpNTJpOUhScEFyQzdBYmE5aCtpejhrZmNTOEti?=
+ =?utf-8?B?RVpDdWtuSE5jWno2YklSY09ubjFTUVJMcFd4UU1wWW5iT0ZnbnhOeVNwZXZW?=
+ =?utf-8?B?Y0txOUE1UmNjN0xqTnFVemhqRTNWY3NwWkFLUXUvalBoS0hnZ2NsVGxQUFlJ?=
+ =?utf-8?B?Sk5TekpZcHBYM2NHTTRxNlNJWDAzOXh6a0pNeFgxYWZUWGV2S3RJVzBSbzRJ?=
+ =?utf-8?B?ZU02K2F4Ri9kbXFuajJPbEpaZGpnYTdadXplSkRVSFBHSllwT2dyMjIvOUN2?=
+ =?utf-8?B?NGxGNDNsdjc2RmpFZGVCd2xCQ0Q3RHZyRUJRK0R1eGVQMVZRb29YL1o2L0lz?=
+ =?utf-8?B?Sk1ERUVNUk9pS2VGdE81elJRc0JlNmY5cWVWU0NZaFBScmYrZFdtMXJLUEQw?=
+ =?utf-8?B?eU9qa3BXWmN0SCtYUGpIdnNGWW5uWHZQZ3dZaFVZNkh2bC9DUXl1ZDMwbnVM?=
+ =?utf-8?B?QXhmTE82OVRHaUk2RHhFQTB3RFBDeFY4SU9xK1liTjFybDFyZXptR0x2M3pW?=
+ =?utf-8?B?TlhVdGNCMXFDVTlML2pZV212aUZaOFJNRXE2d204KzcrOU41WndjMm9pMjdN?=
+ =?utf-8?B?NVNqcThaWkpYc0NpNlY5aFc0aGZVYTlhTGJEM1g5b1IyVUFwbWYzN3ZrY3dG?=
+ =?utf-8?B?MGNjcGlra3ludGZoWURGYmN5WU1Wc3E2N2xLQi9Ud1J4UmxVcTNDSFE1b3dt?=
+ =?utf-8?B?MkJOL2Uyb2ZIaFcrWE0wVEtuOUVERU9IVFUwM2Yra1hWVzhobWNRb2Q5ZjFL?=
+ =?utf-8?Q?mqPMKFD70zZUDLxTzH7GbhLfW?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8072d6c-eab0-43df-e4d0-08db0f306d50
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 08:41:27.1015
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mlx8eCRGdF7+8kgPvohakJRbtFy8K6tICEthj/75Bh7jnhj6RWoxNSFIS/H3tEcMpVnzjs190QzQPgfDx2gZPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9342
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:56:52AM +0000, Andre Przywara wrote:
-> On Mon, 13 Feb 2023 10:18:03 +0100
-> Maxime Ripard <maxime@cerno.tech> wrote:
-> > On Mon, Feb 13, 2023 at 09:49:55AM +0100, pelzi@flying-snail.de wrote:
-> > > Am 13.02.23 um 09:43 schrieb Maxime Ripard: =20
-> > > > On Fri, Feb 10, 2023 at 10:18:14AM +0000, Andre Przywara wrote: =20
-> > > > > > > Not sure if you were actually arguing this, but the change I =
-sketched
-> > > > > > > above (interpreting 0 as 24MHz/1) is separate though, as the =
-current
-> > > > > > > default is "no DT property", and not 0. There is no input-deb=
-ounce
-> > > > > > > property user in the kernel tree at the moment, so we wouldn'=
-t break
-> > > > > > > anyone. The only thing that would change is if a downstream u=
-ser was
-> > > > > > > relying on "0" being interpreted as "skip the setup", which i=
-sn't
-> > > > > > > really documented and could be argued to be an implementation=
- detail.
-> > > > > > >=20
-> > > > > > > So I'd suggest to implement 0 as "lowest possible", and docum=
-enting that
-> > > > > > > and the 32KHz/1 default if no property is given. =20
-> > > > > > Ah, my bad.
-> > > > > >=20
-> > > > > > There's another thing to consider: there's already a generic pe=
-r-pin
-> > > > > > input-debounce property in pinctrl.
-> > > > > >=20
-> > > > > > Since we can't control it per pin but per bank, we moved it to =
-the
-> > > > > > controller back then, but there's always been this (implicit)
-> > > > > > expectation that it was behaving the same way.
-> > > > > >=20
-> > > > > > And the generic, per-pin, input-debounce documentation says:
-> > > > > >  =20
-> > > > > > > Takes the debounce time in usec as argument or 0 to disable d=
-ebouncing =20
-> > > > > > I agree that silently ignoring it is not great, but interpretin=
-g 0 as
-> > > > > > the lowest possible is breaking that behaviour which, I believe=
-, is a
-> > > > > > worse outcome. =20
-> > > > > Is it really? If I understand the hardware manuals correctly, we =
-cannot
-> > > > > really turn that feature off, so isn't the lowest possible time p=
-eriod (24
-> > > > > MHz/1 at the moment) the closest we can get to "turn it off"? So
-> > > > > implementing this would bring us actually closer to the documented
-> > > > > behaviour? Or did I get the meaning of this time period wrong?
-> > > > > At least that's my understanding of how it fixed Andreas' problem=
-: 1=B5s
-> > > > > is still not "off", but much better than the 31=B5s of the defaul=
-t. The new
-> > > > > 0 would then be 0.041=B5s. =20
-> > > > My point was that the property we share the name (and should share =
-the
-> > > > semantics with) documents 0 as disabled. We would have a behavior t=
-hat
-> > > > doesn't disable it. It's inconsistent.
-> > > >=20
-> > > > The reason doesn't really matter, we would share the same name but =
-have
-> > > > a completely different behavior, this is super confusing to me. =20
-> > >=20
-> > > I got the point. As far as I can tell from the datasheet, it is not p=
-ossible
-> > > to actually switch off input-debounce. But as a debounce filter is ac=
-tually
-> > > a low-pass filter, setting the cut-off frequency as high as possible,
-> > > appears to be the equivalent to switching it off. =20
-> >=20
-> > It's not really a matter of hardware here, it's a matter of driver
-> > behavior vs generic behavior from the framework. The hardware obviously
-> > influences the former, but it's marginal in that discussion.
-> >=20
-> > As that whole discussion shows, whether the frequency would be high
-> > enough is application dependent, and thus we cannot just claim that it's
-> > equivalent in all circumstances.
-> >=20
-> > Making such an assumption will just bite someone else down the road,
-> > except this time we will have users (you, I'd assume) relying on that
-> > behavior so we wouldn't be able to address it.
-> >=20
-> > But I also agree with the fact that doing nothing with 0 is bad UX and
-> > confusing as well.
-> >=20
-> > I still think that we can address both by just erroring out on 0 /
-> > printing an error message so that it's obvious that we can't support it,
-> > and we wouldn't change the semantics of the property either.
-> >=20
-> > And then you can set the actual debouncing time you need instead of
-> > "whatever" in the device tree.
->=20
-> I am on the same page with regards to discouraging 0 as a proper value, a=
-nd
-> that we should warn if this is being used.
+On Wed, 2023-02-15 at 08:55 +0100, Alexander Stein wrote:
+> Hi Liu,
 
-Great :)
+Hi Alexander,
 
-> However I think we should at the same time try to still get as low as
-> possible when 0 is specified.
+> 
+> thanks for the update.
 
-It's still undefined behaviour though. It will be context dependent, and
-if we ever encounter a bug at 1/24MHz, we'll change that value to
-something else that might break other users that were relying on that
-value.
+Thanks for the review.
 
-> The debounce property uses microseconds as the unit, but even the AW
-> hardware allows us to go lower than this. So we would leave that on
-> the table, somewhat needlessly: input-debounce =3D <1> would give us
-> 1333 ns, when the lowest possible is about 42 ns (1/24MHz).
->=20
-> So what about the following:
-> We document that 0 does not mean off, but tries to get as low as possible.
+> 
+> Am Montag, 13. Februar 2023, 09:56:10 CET schrieb Liu Ying:
+> > The single LCDIF embedded in i.MX93 SoC may drive multiple displays
+> > simultaneously.  Check bus format and flags across first bridges in
+> > ->atomic_check() to ensure they are consistent.  This is a
+> > preparation
+> > for adding i.MX93 LCDIF support.
+> > 
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > v2->v3:
+> > * No change.
+> > 
+> > v1->v2:
+> > * Split from patch 2/2 in v1. (Marek, Alexander)
+> > * Drop a comment about bridge input bus format from
+> > lcdif_crtc_atomic_check().
+> > 
+> >  drivers/gpu/drm/mxsfb/lcdif_drv.c |  2 -
+> >  drivers/gpu/drm/mxsfb/lcdif_drv.h |  1 -
+> >  drivers/gpu/drm/mxsfb/lcdif_kms.c | 76 ++++++++++++++++++++++-----
+> > ----
+> >  3 files changed, 55 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> > b/drivers/gpu/drm/mxsfb/lcdif_drv.c index
+> > cc2ceb301b96..b5b9a8e273c6 100644
+> > --- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> > +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> > @@ -52,8 +52,6 @@ static int lcdif_attach_bridge(struct
+> > lcdif_drm_private
+> > *lcdif) if (ret)
+> >  		return dev_err_probe(drm->dev, ret, "Failed to attach 
+> 
+> bridge\n");
+> > 
+> > -	lcdif->bridge = bridge;
+> > -
+> >  	return 0;
+> >  }
+> > 
+> > diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> > b/drivers/gpu/drm/mxsfb/lcdif_drv.h index
+> > 6cdba6e20c02..aa6d099a1897 100644
+> > --- a/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> > +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> > @@ -31,7 +31,6 @@ struct lcdif_drm_private {
+> >  	} planes;
+> >  	struct drm_crtc			crtc;
+> >  	struct drm_encoder		encoder;
+> > -	struct drm_bridge		*bridge;
+> >  };
+> > 
+> >  static inline struct lcdif_drm_private *
+> > diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > b/drivers/gpu/drm/mxsfb/lcdif_kms.c index
+> > 294cecdf5439..4ea3d2b2cf61 100644
+> > --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > @@ -17,6 +17,7 @@
+> >  #include <drm/drm_atomic_helper.h>
+> >  #include <drm/drm_bridge.h>
+> >  #include <drm/drm_color_mgmt.h>
+> > +#include <drm/drm_connector.h>
+> >  #include <drm/drm_crtc.h>
+> >  #include <drm/drm_encoder.h>
+> >  #include <drm/drm_fb_dma_helper.h>
+> > @@ -424,15 +425,19 @@ static int lcdif_crtc_atomic_check(struct
+> > drm_crtc
+> > *crtc, struct drm_atomic_state *state)
+> >  {
+> >  	struct drm_device *drm = crtc->dev;
+> > -	struct lcdif_drm_private *lcdif = to_lcdif_drm_private(drm);
+> >  	struct drm_crtc_state *crtc_state = 
+> 
+> drm_atomic_get_new_crtc_state(state,
+> >  								
+> 
+> 	  crtc);
+> >  	struct lcdif_crtc_state *lcdif_crtc_state =
+> > to_lcdif_crtc_state(crtc_state); bool has_primary = crtc_state-
+> > >plane_mask
+> > &
+> >  			   drm_plane_mask(crtc->primary);
+> > +	struct drm_connector_state *connector_state;
+> > +	struct drm_connector *connector;
+> > +	struct drm_encoder *encoder;
+> >  	struct drm_bridge_state *bridge_state;
+> > -	struct drm_bridge *bridge = lcdif->bridge;
+> > -	int ret;
+> > +	struct drm_bridge *bridge;
+> > +	u32 bus_format, bus_flags;
+> > +	bool format_set = false, flags_set = false;
+> > +	int ret, i;
+> > 
+> >  	/* The primary plane has to be enabled when the CRTC is active.
+> > */
+> >  	if (crtc_state->active && !has_primary)
+> > @@ -442,26 +447,55 @@ static int lcdif_crtc_atomic_check(struct
+> > drm_crtc
+> > *crtc, if (ret)
+> >  		return ret;
+> > 
+> > -	bridge_state = drm_atomic_get_new_bridge_state(state, bridge);
+> > -	if (!bridge_state)
+> > -		lcdif_crtc_state->bus_format = MEDIA_BUS_FMT_FIXED;
+> > -	else
+> > -		lcdif_crtc_state->bus_format = bridge_state-
+> > input_bus_cfg.format;
+> > -
+> > -	if (lcdif_crtc_state->bus_format == MEDIA_BUS_FMT_FIXED) {
+> > -		dev_warn_once(drm->dev,
+> > -			      "Bridge does not provide bus format, 
+> 
+> assuming
+> > MEDIA_BUS_FMT_RGB888_1X24.\n" -			      "Please
+> > fix 
+> 
+> bridge driver by
+> > handling atomic_get_input_bus_fmts.\n"); -		lcdif_crtc_stat
+> > e-
+> > bus_format =
+> > MEDIA_BUS_FMT_RGB888_1X24;
+> > +	/* Try to find consistent bus format and flags across first
+> > bridges. 
+> 
+> */
+> > +	for_each_new_connector_in_state(state, connector,
+> > connector_state, 
+> 
+> i) {
+> > +		if (!connector_state->crtc)
+> > +			continue;
+> > +
+> > +		encoder = connector_state->best_encoder;
+> > +
+> > +		bridge = drm_bridge_chain_get_first_bridge(encoder);
+> > +		if (!bridge)
+> > +			continue;
+> > +
+> > +		bridge_state = drm_atomic_get_new_bridge_state(state, 
+> 
+> bridge);
+> > +		if (!bridge_state)
+> > +			bus_format = MEDIA_BUS_FMT_FIXED;
+> > +		else
+> > +			bus_format = bridge_state-
+> > >input_bus_cfg.format;
+> > +
+> > +		if (bus_format == MEDIA_BUS_FMT_FIXED) {
+> > +			dev_warn(drm->dev,
+> > +				 "[ENCODER:%d:%s]'s bridge does not 
+> 
+> provide bus format, assuming
+> > MEDIA_BUS_FMT_RGB888_1X24.\n" +				 
+> 
+> "Please fix bridge driver by handling
+> > atomic_get_input_bus_fmts.\n", +				 
+> 
+> encoder->base.id, encoder->name);
+> > +			bus_format = MEDIA_BUS_FMT_RGB888_1X24;
+> > +		}
+> > +
+> > +		if (!format_set) {
+> > +			lcdif_crtc_state->bus_format = bus_format;
+> > +			format_set = true;
+> > +		} else if (lcdif_crtc_state->bus_format != bus_format)
+> > {
+> > +			DRM_DEV_DEBUG_DRIVER(drm->dev, "inconsistent
+> > bus 
+> 
+> format\n");
+> 
+> Is there another way to know the actual reason the atomic_check
+> fails? Maybe 
+> this is worthy to be an error message instead.
 
-I still don't really like the fact that we're changing the semantics of
-that property.
+No, I don't think there is any other way.  -EINVAL is what we can tell 
+userspace about the reason why the atomic check fails, plus the debug
+message if userspace wants to look at it.
 
-> If the driver sees 0, it issues a warning, but still tries to lower the
-> debounce period as much as possible, and reports that, like:
-> [1.2345678] 1c20800.pinctrl: cannot turn off debouncing, setting to 41.7 =
-ns
+Error message is not appropriate here.  Userspace supposes to try
+another combination of output modes and hopes it passes atomic check.
+We don't want to give too much error message to userspace.
 
-I just thought about another thing that might be a solution: instead of
-checking/enforcing the input-debounce value at probe time, we can do so
-when the pin is configured.
+Regards,
+Liu Ying
 
-That way, the pinctrl driver will load without affecting the system boot
-too much, but we would still reject pin configurations whose bank are
-using 0.
-
-Actually configuring the debounce per bank each time is configured is
-probably going to complexify the driver, so we could set it up in the
-probe, and default to the lowest debouncing value if it's zero, but we
-would still actively check for that value to not be 0 as soon as a pin
-is configured which would effectively prevent anyone from using that
-value. I think this would be a good compromise?
-
-> Alternatively we use a different property name, if that is a concern. We
-> could then use nanoseconds as a unit value, and then can error out on 0.
-
-I mean, if that's a concern, we can also introduce an input-debounce-ns
-property that is mutually exclusive with input-debounce, with both
-erroring out on 0.
-
-Maxime
