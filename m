@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1266669754A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A1C69754D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjBOETk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 23:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S233348AbjBOETu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 23:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbjBOETV (ORCPT
+        with ESMTP id S233197AbjBOET0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 23:19:21 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717D134330;
-        Tue, 14 Feb 2023 20:17:30 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-16a7f5b6882so21586654fac.10;
-        Tue, 14 Feb 2023 20:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xmVeJ55I3Amn4MeSLLrEqjAfEnFaFqqmJFVHznJhXDg=;
-        b=f0JQ8yzg+FPR5y3CaNNne8QhAd3lAC+Iilmkc/1qKFQTVBnRvohkiTN/g+NPgq0Xz1
-         9D/AruKAIVYyH6eQMAt3KOsjYJDlzJKisFMpwfFA3ZkKBrySd1D6r50TnpU+1DYDQMhU
-         HTY/kh7NQ2N99B2VXolM/BaAF5uCePH0rJi5DR4vF3ANxwwnMU0MsrkyeLbZJ9shFQkD
-         p+a3x4w9MUXBQdKGtJ+fBOhybW5arybnxQL5cC6MZL4StEjiLu2s4bkg8jB9OteGxdPg
-         ANdpvz12ub8F7pCYPMzncSWFQUQe/2u6J+lT534u39ulfGTjd3B5CPSi2rXD1mEzF7IG
-         ICFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xmVeJ55I3Amn4MeSLLrEqjAfEnFaFqqmJFVHznJhXDg=;
-        b=Z8PSIe1yjBx/OgRApJPiJVJUnh7Gpb2i9ETa5C5UGHxMmVkJMAgOEM2CI7trASUPZV
-         px4/HzYdFtzzoLcUp0OtQGXfA0npq/60d35HQukQMt3CfMMZuoh9/rcwWWDgDodC+B31
-         lh0bSfVcVSpQ9Fib/IsqAAFIUy2iSK6BRHmfa5iSOzu8+KlCcQi5npcAeyGmf3Utz2cd
-         07SMw4Mx8+9elGXBa2oXbn8Xw225umOSu5yU28Eauqfnev+Qz6ZXguzRhQM2L81uK5Zr
-         wj7tiVPG/NSSFo5Zj/dalU63paw2+lv+WhqAINOl9H+d5ajpcGAW1PBRUQqIv5XL4Zi6
-         dEWA==
-X-Gm-Message-State: AO0yUKV0/0s8RRRHan8QAoRB/614BWL5EOAWdH/2lWqd2NCAS/ekaC9w
-        2YvapW1mkKKltU+tMbyAGS0cfk0GNK0=
-X-Google-Smtp-Source: AK7set9YxmE76VEtlEwSGDhLhrdacS37IAlGfOJedC4/nE6qBvViit+FXiWz6r49rMj3U8quEpIkWw==
-X-Received: by 2002:a05:6870:20c:b0:16d:d985:3363 with SMTP id j12-20020a056870020c00b0016dd9853363mr401941oad.36.1676434639838;
-        Tue, 14 Feb 2023 20:17:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ds41-20020a0568705b2900b0016db8833b2dsm5181674oab.52.2023.02.14.20.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 20:17:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 14 Feb 2023 20:17:17 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
-Message-ID: <20230215041717.GA1237270@roeck-us.net>
-References: <20230214172549.450713187@linuxfoundation.org>
+        Tue, 14 Feb 2023 23:19:26 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A39E34C25;
+        Tue, 14 Feb 2023 20:17:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGlCr19C7z4x1h;
+        Wed, 15 Feb 2023 15:17:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676434649;
+        bh=xvHGv3AUa1jLMT89wbFXdW021KIQIA0Mxn7RtBMvnDw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nrIxFQFcHFkVwdfLinUXKMualepMXkmrqDaKx4Bn8XXNNs4xe+gA2rV09pfdBERYU
+         ELynH41o2KIzu68TwMZmSqCsuNTc/d7G1oG7LMje3i7Dl9m42kjvbvOd6P9MOCfTNM
+         WvPmZRHQoUveaLx4AasGkNjj1S14qb3Cgp5eRjmkhMjd5Ds8V9XwAc/fd6hqrOP3bK
+         dsKdJhJe4+V9rAljowkL9jlGE0qRnXC7zWKYHpOtFCyk5p0sXHLiwjqWU144dEpk8g
+         mcs33+DrhOC728r/4mupfn09Gx2Lv41tmhwM9stBMvIMpHIlzseAxvXR6m+eB+oLqN
+         TXP+VJkG4lsOA==
+Date:   Wed, 15 Feb 2023 15:17:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the wireless-next tree
+Message-ID: <20230215151727.414d5655@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9VCKprA=_cIGlxmlyc4oHct";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 06:41:06PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.168 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
-> Anything received after that time might be too late.
-> 
+--Sig_/9VCKprA=_cIGlxmlyc4oHct
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-For v5.10.167-133-gf90240a:
+Hi all,
 
-Build results:
-	total: 162 pass: 162 fail: 0
-Qemu test results:
-	total: 478 pass: 478 fail: 0
+After merging the wireless-next tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+include/net/cfg80211.h:8958: warning: Excess function parameter 'gfp' descr=
+iption in 'cfg80211_obss_color_collision_notify'
 
-Guenter
+Introduced by commit
+
+  935ef47b16cc ("wifi: cfg80211: get rid of gfp in cfg80211_bss_color_notif=
+y")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9VCKprA=_cIGlxmlyc4oHct
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsXNcACgkQAVBC80lX
+0GziMQf+OWmiA8poBPN4UWIg+34kRSAV/Ak4ttuqRpm3Xhc/qDTLglMEUkuHnwE2
+1z/nYZyFqlVfHQzhIxwkhEHauWx1DnUNubqy66juYUiiP+CNW9Uc8emDLq5CP7u+
+vAf/hBT2j4zjY/rblUvHUevSLm0xliHw655yIP2vslBhGj9Swtm33901HnA2PizR
+QPC+5hSu8s+A/6v8tI9MQbBvTHmYeGs3Tg50RRmkRlvpmsxKuPII/a4YBNTS8g/9
+UZrDDztMwnfSC+ecIbwUp5KrGbSlT/yzwpPgDqC4YusQ6VBWWRbtBxKkA8UD/qPt
+iAWjRyNg6WjYNwj3QIYcHBVdb0I8Bw==
+=TlMp
+-----END PGP SIGNATURE-----
+
+--Sig_/9VCKprA=_cIGlxmlyc4oHct--
