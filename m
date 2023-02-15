@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C15698216
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FF8698217
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjBORcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S230104AbjBORc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjBORcV (ORCPT
+        with ESMTP id S229602AbjBORcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Feb 2023 12:32:21 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C5244A3;
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F532A154;
         Wed, 15 Feb 2023 09:32:19 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; t=1676482321; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=eoe67TwneMl/5/Tr/xoBlxst7yXuwE1u+Ibt8IaToVhkSnpCfVYUVDzgEy0WdBO1ls
-    Q1rmxrK9PbbIJN5IPyQ9JvokvVTelcDeMvch0NljASk7jINp7mCH7NZjAVIliZChl+dv
-    jyqpcVe0qAQcwIdG9csoIbj1S34efdiB48odYfGwbi2SgVQjpsV9+dS8pwhHI4XlurCi
-    wKUUUESrrZqJRffTDg1d1XdRkEVA77/RyyrD6fL0/nbkJ9fdFUnhV1HTgQKo/u5RsMb4
-    9bUUFIx6zolQUQnw8q7QmCiGYTQKWZ607AbDc35HrnT9CUJer6bv+/TYIwgHf5mhBiM1
-    Sszw==
+    b=rPLM5Xcac2m513xoxbe7CbXNY+eksezz2EH8vfK0XSh1jKjbkbhWHD0XQDpuFx5Arq
+    uXc5cHP2f7cG3QE+4ZMEQq+EUHABEX1VBiuLlxt2sN50TguobVJi+nIg7n3ft+KrvhTs
+    1QPKzMRvE1z9y1C2WzA7HpCZdQSa+jDy7GODpazcWWav2KZu8gas0vvFCUTCLwt/uRVJ
+    0VRnQ6ojvpLB40j2ZRvt7tBaq1qFuPP2zEQmu4cU+/9YFR9/D/rd9xburoZW2BSBasB7
+    HaT0Ssyw9ofmctB03QSWfqoWj5wEsYoUVb0JEU2/jk1NJIGZSOUbZkjUMc6gz4l5q6S1
+    PoPA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676482321;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=XW0+Qgb0myceiEMjaao1wM/4c+vauOGDaJPcYXWeNpY=;
-    b=to/2qoEPvVNMKm4lNj1Y0CHDXtYUr8VjJgHJlDP8maxS2DCIEezZNM0O+BPx10Wg5W
-    7cQTyymIN6wTCWa/ri5Ww+mL8Z/zJ9BSkwq1OV708Kb9DoMGmjIVQn4+JH1pcTwRt/NW
-    Se5fKO34E7WAoWEQV7qKjaYfFh4DlzBYqSLf9NH1kvUq6PEbMkYz49h3mqeCP3gJ8J3P
-    r+rPAqIZjdW0GJzTButZE6PSXjy+HKzDLNebfIYo/MIwdxjz3T9xz9l3xT+FFSHswii6
-    qB8M3/UwmUlzM5QQ+d/evsYtMFP3q3RaWy5AJfdEw+TsCjaN3Vjq9Uqm++Y4xhgcMs0P
-    XSgA==
+    bh=8fAdvo57eZc8KJao/TwLnUz6LYRm479MPxgqta+3GVI=;
+    b=fC3mjvh7LdQQJla+UJ+rwikleHYx2UVuLvMldagLkveZ0300oFFgFecNAWkSmLdwEH
+    a3znXc60QtG1wdq2QxuFKHnUQxTaeBDnVbLaVWrbSZdQghtad+JIIpcXvoyOMIduW5rT
+    gKQn9vpbitTSF/TWov6Dsd5DZJmhfohvw4NSek9ZGiNp2/mOgcn+fKyjwRfeIUw2VAaZ
+    VCfm/YyvR6U24XbJM+xRiBXY7tMt1Z/QkfgZDO7kJZ4kdmDrvb5rTR/fqeHLMQAQuHQA
+    yp3O8LqNqTaCUMduZY0i/WrZqw9p8nBPMjhKulb0IapSzVSeW9mi8HcbsyvIS9SMxuh9
+    MX/Q==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -42,20 +42,20 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676482321;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=XW0+Qgb0myceiEMjaao1wM/4c+vauOGDaJPcYXWeNpY=;
-    b=EjjNBSCLDRCmFyY86H/68RbYMcYvBVCt+di/I/VNDo+ZdiU620ACs2N4rEDsifyHDb
-    kN25Zj9L9v5EL6mQnb5QDgrW0m7F/O3GTogiUKOijZHOePqUuNK+2fEOjy3SvA/kA471
-    7qE9m7jNKA4z+F3wW0tiQFB8whNpMRxEe22LNBt6rcDq4JXVLRJC7HAwPXN8EpYDPGyW
-    7Bj++hieGlPS6zXRgG8SR5G2fnKE7U69szhN2GaNFsjuIbHikA00SnJ2H4ADXvUlTr+Z
-    Q0yFjYotT/YlJXDfO2lkavL2j9mzvQw6CbxW3ilZIfTta+XKwA3kCulLV1RAtYdLz1QO
-    s48Q==
+    bh=8fAdvo57eZc8KJao/TwLnUz6LYRm479MPxgqta+3GVI=;
+    b=HbLT82TzhXD9Ki5sbLMBLUsn9tMbinjMLuSXfBWCGe9rmCIZYMCLcBTaBcRD1s96Q7
+    DXtel95SmJLEUypDQax8O7nOErJ6B02wI9o+LsaqoOFWEkm73MKMNfVeQfZYwkPp57kv
+    Rrg/VDK1ji4t/9NNjxPpyq3IRyjBxHINGqQG7RAaldGUrHNOarS4hM7B3SBQyhNzFPkV
+    LKrjOXIGIcy53merFOlc/qhOC1cjharVkOI2MC67RIn1eQoCP2QbWqgmtCqE42DHZdVJ
+    g/8hx4rdVjOmTqOqXqWYN3xWfdC68c0E3ZT+lHAyDu/nDIAwVHvKKo4RxF106POwm5p2
+    hkYw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZrWLJ"
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
-    with ESMTPSA id 326d57z1FHW0ZCQ
+    with ESMTPSA id 326d57z1FHW1ZCR
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Wed, 15 Feb 2023 18:32:00 +0100 (CET)
+    Wed, 15 Feb 2023 18:32:01 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
@@ -72,9 +72,9 @@ Cc:     riccardo Mottola <riccardo.mottola@libero.it>, paul@boddie.org.uk,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com,
         "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [RFC 2/3] MIPS: DTS: CI20: fixes for WiFi/Bluetooth
-Date:   Wed, 15 Feb 2023 18:31:57 +0100
-Message-Id: <142872751b252b6028ea574593d53110d6e0c4a5.1676482318.git.hns@goldelico.com>
+Subject: [RFC 3/3] MIPS: configs: ci20: enable drivers we need for WiFi/Bluetooth
+Date:   Wed, 15 Feb 2023 18:31:58 +0100
+Message-Id: <5cc861c6df2fdc5c762408cbae118b90b9d579e9.1676482318.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1676482318.git.hns@goldelico.com>
 References: <cover.1676482318.git.hns@goldelico.com>
@@ -83,172 +83,66 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CI20 has a BCM4330 based WiFi and Bluetooth module.
+We need to add CONFIG to load the serdev Bluetooth driver
+from the DTS hints.
 
-- add proper power supply regulators
-- fix polarity of some GPIOs
-- add a simple pwrseq node for WiFi
-- reduce max-frequency for WiFi since 50 MHz seems not to work
-- add fixed regulators to activate the BT_WAKE and WL_WAKE gpios
-  before the chip is powered up.
-  This can not be done by the driver since it is not loaded if
-  compiled as kernel module before the WiFi/BT module responds.
-- add clock chain from the external i2c rtc through the clk32k
-  to the WiFi and Bluetooth module.
+Bluetooth must be configured as built into the kernel, otherwise
+some components will be loaded in the wrong order.
+
+WLAN must be configured as a kernel module, otherwise the driver will
+not be loaded properly by the SDIO subsystem. If it is started too early,
+there is no root file system (if initrd is not present) with the
+required brcm/BCM4330B1.hcd firmware.
+
+The pcf8563 driver should not be enabled because it can interrupt the
+32 kHz clock after the modules are already powered on, depending on the
+random driver probe sequence.
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 77 ++++++++++++++++++++++++-----
- 1 file changed, 65 insertions(+), 12 deletions(-)
+ arch/mips/configs/ci20_defconfig | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 8f21d2304737c..139507d8c26e3 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -97,13 +97,45 @@ ir: ir {
- 		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
- 	};
- 
-+	/* WORKAROUND: Keeping WLAN wake high before power on. No simple driver fix */
-+	wlan0_wake: fixedregulator@4 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "wlan0_wake";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpd 9 GPIO_ACTIVE_HIGH>;/* WL_WAKE */
-+		enable-active-high;
-+		regulator-always-on;
-+	};
-+
-+	/* WORKAROUND: Keeping BT wake high before power on. No simple driver fix */
-+	bt_wake: fixedregulator@7 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "bt_wake";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpf 5 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	wlan0_pwrseq: wlan0_pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpf 7 GPIO_ACTIVE_LOW>;
-+		clocks = <&rtc_dev>;
-+		clock-names = "clk32k";
-+		post-power-on-delay-ms = <150>;
-+	};
-+
- 	wlan0_power: fixedregulator@1 {
- 		compatible = "regulator-fixed";
- 
- 		regulator-name = "wlan0_power";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
- 
--		gpio = <&gpb 19 GPIO_ACTIVE_LOW>;
-+		gpio = <&gpb 19 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
-+		regulator-always-on;
- 	};
- 
- 	otg_power: fixedregulator@2 {
-@@ -159,6 +191,9 @@ &mmc0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pins_mmc0>;
- 
-+	vmmc-supply = <&vcc_33>;
-+	vqmmc-supply = <&vcc_33>;	/* VDDIOMSC */
-+
- 	cd-gpios = <&gpf 20 GPIO_ACTIVE_LOW>;
- };
- 
-@@ -166,21 +201,34 @@ &mmc1 {
- 	status = "okay";
- 
- 	bus-width = <4>;
--	max-frequency = <50000000>;
-+	max-frequency = <25000000>;
- 	non-removable;
- 
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pins_mmc1>;
- 
-+	vmmc-supply = <&wlan0_power>;
-+	vqmmc-supply = <&wlan0_io>;
-+
-+	mmc-pwrseq = <&wlan0_pwrseq>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
- 	brcmf: wifi@1 {
--/*		reg = <4>;*/
-+		reg = <1>;
- 		compatible = "brcm,bcm4330-fmac";
- 		vcc-supply = <&wlan0_power>;
--		device-wakeup-gpios = <&gpd 9 GPIO_ACTIVE_HIGH>;
--		shutdown-gpios = <&gpf 7 GPIO_ACTIVE_LOW>;
- 	};
- };
- 
-+&rtc_dev {
-+	clocks = <&ext_rtc 0>, <&ext_rtc 0>;
-+	clock-names = "rtc", "clk32k";
-+
-+	system-power-controller;
-+};
-+
- &uart0 {
- 	status = "okay";
- 
-@@ -204,11 +252,16 @@ &uart2 {
- 
- 	bluetooth {
- 		compatible = "brcm,bcm4330-bt";
--		reset-gpios = <&gpf 8 GPIO_ACTIVE_HIGH>;
--		vcc-supply = <&wlan0_power>;
--		device-wakeup-gpios = <&gpf 5 GPIO_ACTIVE_HIGH>;
--		host-wakeup-gpios = <&gpf 6 GPIO_ACTIVE_HIGH>;
--		shutdown-gpios = <&gpf 4 GPIO_ACTIVE_LOW>;
-+		vbat-supply = <&wlan0_power &bt_wake>;
-+		vddio-supply = <&wlan0_power>;
-+		max-speed = <115200>;	/* stay with default data rate */
-+		brcm,bt-pcm-int-params = [01 02 00 01 01];
-+		shutdown-gpios = <&gpf 4 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpf 8 GPIO_ACTIVE_LOW>;
-+		interrupt-parent = <&gpf>;
-+		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-+		clocks = <&rtc_dev>;
-+		clock-names = "clk32k";
- 	};
- };
- 
-@@ -270,7 +323,7 @@ vcc_25: LDO_REG5 {
- 				regulator-max-microvolt = <2500000>;
- 				regulator-always-on;
- 			};
--			wifi_io: LDO_REG6 {
-+			wlan0_io: LDO_REG6 {
- 				regulator-name = "LDO_REG6";
- 				regulator-min-microvolt = <2500000>;
- 				regulator-max-microvolt = <2500000>;
-@@ -344,7 +397,7 @@ &i2c4 {
- 
- 	clock-frequency = <400000>;
- 
--		rtc@51 {
-+		ext_rtc: rtc@51 {
- 			compatible = "nxp,pcf8563";
- 			reg = <0x51>;
- 
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index 11f08b6a3013f..2f58d4da30ffb 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -68,7 +68,17 @@ CONFIG_DM9000_FORCE_SIMPLE_PHY_POLL=y
+ # CONFIG_NET_VENDOR_STMICRO is not set
+ # CONFIG_NET_VENDOR_VIA is not set
+ # CONFIG_NET_VENDOR_WIZNET is not set
+-# CONFIG_WLAN is not set
++CONFIG_WLAN=y
++CONFIG_WLAN_VENDOR_BROADCOM=y
++CONFIG_WIRELESS_EXT=y
++CONFIG_WEXT_CORE=y
++CONFIG_WEXT_PROC=y
++CONFIG_WEXT_PRIV=y
++CONFIG_CFG80211=m
++CONFIG_CFG80211_WEXT=y
++CONFIG_MAC80211=m
++CONFIG_BRCMFMAC=m
++CONFIG_BRCMFMAC_SDIO=y
+ CONFIG_KEYBOARD_GPIO=m
+ # CONFIG_INPUT_MOUSE is not set
+ CONFIG_VT_HW_CONSOLE_BINDING=y
+@@ -211,3 +221,9 @@ CONFIG_STACKTRACE=y
+ # CONFIG_FTRACE is not set
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon console=ttyS4,115200 clk_ignore_unused"
++# CONFIG_RTC_DRV_PCF8563 is not set
++CONFIG_BT=y
++CONFIG_BT_HCIUART=y
++CONFIG_BT_HCIUART_BCM=y
++CONFIG_SERIAL_DEV_BUS=y
++CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
 -- 
 2.38.1
 
