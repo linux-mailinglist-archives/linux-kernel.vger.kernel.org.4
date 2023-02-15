@@ -2,206 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB606973AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC71F6973B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjBOBej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S233660AbjBOBhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBOBei (ORCPT
+        with ESMTP id S229520AbjBOBha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:34:38 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE23251C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:34:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676424876; x=1707960876;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=924sFE1g2peLp9NKsKxgM5DmB2kwoPIL6ZPhHqjTmPs=;
-  b=iCexVlT3he91HXo0I/3TFyj9DVArvdlPinP1hmDNcRK5xQTwhtN0aX7q
-   JHEBaT/sdNUDqIN12B0QYPSuq2+Ga04shfwTFgCAbZ6x3ShtBApu6cOpd
-   7NaN2Bwj+Vir/vJ7LugRhSa+3pWbqjd66nZxqFW7pNHY3R0Qm9+ZMR2cG
-   /XgxBtBAZ/mXn0+vWLm2b/WudVh6IJ4OtHzwq0DoySHAeUw4B9cMotHnF
-   hKWxHQgiL3wTE5hoscNQ9iJu30JdL0u4zLlc4lwXuuYM9ymPGB+ksHsP9
-   vfdZLPic0BS6rVtDRJ85jf/bqPsTbSO++miYlh185OIMIaE23e6CDy5Xv
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
-   d="scan'208";a="223343954"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:34:35 +0800
-IronPort-SDR: 381Ls8PPGAD32pLPr3WTIhVCclREd7N4RMbYLZOjcCG2lBLwZ6LnwFSnWyf1UasangvUW97KB5
- UkBDCUhrGRfI4KQrnUEWMfMgZ4QJt8z2QEvJGn+0O7eDVux8xfsRC2HDM1Ck4s4Vf8xQhd4883
- w27DflbU4jqOnRZmAtAbymCRvYQWkwv/uabkOM4esKBeM8RGb7VM9mzml3lqs8w3aFsBCIKef2
- 1+/YPyzLH+EBmFRY74VGzhHuaXthHHc9pCJKIupiTh41bYRcEd5q9swOar9/L+eRnj+LJPiVe5
- laQ=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 16:51:42 -0800
-IronPort-SDR: NHEsMfgOqlLUcG3DrzK+IeYOVgXnFDyv9n5L5wzH2voZlk27dDMcdZDMUvTgcCkAKjOo2yINbC
- sp/Ks+iOMtRZQluVwI7Fd9iQ8bqT1928/9mymZO3ANxD+xa+7BNhaI87jCSsYBlgoE49bdc5xQ
- GefUfk4tWUm7y9jgOLKBoRUcqQaHC3UNWWPNvGY1oRTQ/yADmbcyR0qHuM5UWxroShbqfc6MoM
- K9LwTmmEeuEvmW5Tx891R9TMWkTbXPtzjYquQuq/+2atgzR36x3LMD5EoTNpMG2c59JU7538+L
- Zoc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:34:35 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgbt3wh7z1RwtC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:34:34 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676424873; x=1679016874; bh=924sFE1g2peLp9NKsKxgM5DmB2kwoPIL6ZP
-        hHqjTmPs=; b=ijswNdQtEpnSj3rZ7vW8jwqI2i0ajTwkqJ8RRkCo5E3CBgPoEwu
-        44cpXVamtM19QJuNsgxKE4HyUh5WdOTFTVQHjGU29E5xifdfLdPciyzMQ6ijGDt7
-        /VgzVJc+fKdETixifpMU2X7R7MhrJw74aTHjwtyMvPs9LYWtW/Ay84ROojq34DDl
-        rCbkDXPwbvGfx9G40KYK4/IE5TCuvACfppMJns8SbnZv6qQZ/xjJTiVaTyUqplET
-        9zpCYpaEShHr5D+zvqXhvujcAGurgcZz5fV/Slcyjgu5H+nalFrHki9Udmq4nXUY
-        82Ct92oTgvFj7jP9EXnfuL9/+a9LudX+cOw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id W2SWes3ugvS3 for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Feb 2023 17:34:33 -0800 (PST)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgbn6kStz1RvLy;
-        Tue, 14 Feb 2023 17:34:29 -0800 (PST)
-Message-ID: <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
-Date:   Wed, 15 Feb 2023 10:34:28 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 8/9] PCI: rockchip: Use u32 variable to access 32-bit
- registers
+        Tue, 14 Feb 2023 20:37:30 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7B12B60B;
+        Tue, 14 Feb 2023 17:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676425049; x=1707961049;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7BhXrChjOUB00MgRbLRhVorwv1bG0dKf7+/gXeVE6cY=;
+  b=WqZHZRl7Sf8A2JBnpy4RK3U5vsc84gCJwYp27owyoob+QojWjTrcq2bc
+   damMcYy9P2GLQibdM5sdFOFTk4Ut8I+cmHNmRdjs7lgS0Xt8RH7NCKwOs
+   Vn+FaZVVc77MMq9r/bZWiHClTgMVjy3ewB6rpgju8cSwHdt6a1aXhD5tC
+   +UWscvLyF1dyUBkDpZJm4DEeQnKeb8NgecuFTu5hNjB8wR5pJ3kRyUJ2a
+   QhQyF/q/kPwcdf5ftBgnpWi+MzKOKEwt9vjXvjdf/vayGBbh2nfpfsCl0
+   lsEy17tuXRT2ybiLZ+eAiQ3VetbNM+7VEAwjjxNksFD6hJ8TaUPtIA8E1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="331324292"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="331324292"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 17:37:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812247490"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="812247490"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2023 17:37:28 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 17:37:28 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 17:37:27 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 17:37:27 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 14 Feb 2023 17:37:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=haLY1qyS9E7zoCNHckrlRmgSS7WGGACrGpaQMFMlbPN1Q2jugREE9+e3cq9EJeiyJRQBoTFA+xG66N/hCU4WjwsEHEmZQz940ySA3SUCCohFPZ0yC1pfQdtVkm4RzdSsD37hWr3jMFhdYWNRzancVwdnI0ZF40OS7Gz6iHkIWmoEur70LdspHfmDXI2Ns8SP5ucwPDbbvdYtcvwc64OQSt/w9Ys5KTMe2lQeysTdpRIX0reG//4gv3kxC/05gmoFjb1AnxS8w+QhMJVrH5E8mEAyAZVsaIo0LwYFhyeTZbMCqWK4gFgnBvXACQsBxuHTm/x4ga1bGxpn5mDS/A7pqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ciqki2KwenMLD6J8Cph82MvaHwrLiqQ22FpG/3ngHqY=;
+ b=aaGDO/YOwcubB/y/2jKhWzP7zG87ykypps8xzi/qoiyUwhihmjnGpTkk6AKIQvNvucOBvNVWxv+ZgIFI84u8yhIzpIRp67Wgaf981XA0ZgV9e0XtMx/aZ6OE6ZclGM14Qp77dNYUQlUaCzv1GsappysMIxm/SuWhJKsd//UohSBVOIp/5Mte4lYilpNRWeqeIdZsUZT2esCuM2mE6CTJ3/bbr6IvUE3ydF2Ca0XSnkOK5TbuHyM0c+9LVB9LlqW8sDd/PRlpBFsx4uTY5y159Of+cbqjzuj5N97UwzTC2Ih/1OPkd3FgJGrjNgwfKQ3AVQZwnPGiCvqjzrA2a48tcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DS0PR11MB7459.namprd11.prod.outlook.com (2603:10b6:8:144::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Wed, 15 Feb
+ 2023 01:37:20 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 01:37:20 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: RE: [PATCH v2 08/10] iommufd/device: Use iommu_group_replace_domain()
+Thread-Topic: [PATCH v2 08/10] iommufd/device: Use
+ iommu_group_replace_domain()
+Thread-Index: AQHZOzoV+UAbwLQwnEuO17sJd5b+0K7F+NzggAEnS4CAAE2/cIABdh8AgANLy2CAAFjcAIAAdaUAgAFQnACAAPZWYA==
+Date:   Wed, 15 Feb 2023 01:37:19 +0000
+Message-ID: <BN9PR11MB5276CBCF780BD7C61154BF8B8CA39@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <4653f009c3dacae8ebf3a4865aaa944aa9c7cc7e.1675802050.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
+ <BN9PR11MB5276268D3ED0360913A05C368CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y+bc8OrWfw3Fq57n@Asurada-Nvidia>
+ <BL1PR11MB5271180A1DE8C739455AD06D8CDD9@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <Y+nrTsIz2UHH/1lD@Asurada-Nvidia> <Y+pN/vtO8I/oiMOJ@nvidia.com>
+ <Y+toXAUa2Cbwn7I0@Asurada-Nvidia>
+In-Reply-To: <Y+toXAUa2Cbwn7I0@Asurada-Nvidia>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        stable@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-9-rick.wertenbroek@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230214140858.1133292-9-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB7459:EE_
+x-ms-office365-filtering-correlation-id: 549d0300-130a-48b0-c592-08db0ef52dbb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AyjJBhYFuCu2ZJ4UWtQn868XLwqut3wubxUBm5I7WXglMIzuCZEseciutbxkCeCUEpX4senoeLOSDC+/Ozw3M0S8JRQ19L2cj3i9Hijzt9QSCNIAyIdgHHYs2GD5lmxXFxAlItCJVNyqu8hWgz0Q8TUieBF7wEzHtEJHRk8KIdUxsctvm0dseJQsXGKYkShhrO2VAsYoVwKlww59ohnIpsz28YJLFr/R54RfT5wb3sjc6my/V8aoB26wcgNgGKwWKfXykMFRQR3JpEq/VVH+71op7AC25/E0I1STkfLi8RxHh0s4h5SH1vPK8zRNPxtH1emlzbzwzCsJls8oe2Mqv04XhN6oy1pfk36ZcwPwoKdhItaKTFRrI9HfaP38R2ooYDBNMFS2JuUFP3Vlg8MYe5NJPb9eDXAtlNy7ZaWN/LkDbrZ4sx46wavKFShC7tnxV7asnns9qJiDjD6rMVw+he+s4Scyzk38a8zIx7cEv4pP9C4WmqVmgkuoLdwjfchBQcnE61O9AzIYVgsDZ+Xc5BhfsCqBsWJcbznWArmoAzJq5H2W7oAJMGWp0vPm+Br4cxFiFnaXjjC0GWsKXvb+OWdY7nt5ADZYKQd2LkVGQ2LO8NEtR3yvx6OpWElZGsTgRWXHW7WATkLIqMty24JsgnZ4X0n/fA7zsGuSXWAuCX2xJwSS2OL01Cjk2lZKe9vRdS3aMLvk+HxvbhHtYwE6Iw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199018)(8936002)(6506007)(52536014)(41300700001)(5660300002)(4326008)(33656002)(38100700002)(82960400001)(66446008)(66946007)(64756008)(76116006)(66556008)(86362001)(8676002)(66476007)(478600001)(7416002)(38070700005)(55016003)(71200400001)(2906002)(122000001)(9686003)(316002)(110136005)(54906003)(7696005)(186003)(26005)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oi9aiQUwtUTD4m9f9Fv+GXYAlveN7kL0iSet0sTy39A8J6cQyd9GiT5c8U1U?=
+ =?us-ascii?Q?I4WgQOPsm+QZW0PZr/c8x1BYaFKKakxDPN8YYYpqy83NojNXa1fntlNmgCdy?=
+ =?us-ascii?Q?k422kZDw7cQMm+xSyvIgiwACK9dZWYuS2SGw+4B5OpprrbR2JBEHZnS+nGKR?=
+ =?us-ascii?Q?tZiIJs+6qhMaOPDrY28Q6baG63Z5/OB0ZUH2ynV4G/aHx2Z/2mX5M0bBj/2p?=
+ =?us-ascii?Q?TFk++Br9xrDy6yE7hEqAD6cEotssfTQxrmz6x5Dw0wqcUjWY0rCKj56wcDlu?=
+ =?us-ascii?Q?XpPp9o77dOf9JAydAmzY5Hm4SWD4ZbdjX+a6M5x6sGt1vWvkXlMMgbzo5jxY?=
+ =?us-ascii?Q?Z+CM3GKzn6dex8du55g6tiy1HQnhkBiaRYBSoWUvNI4twDOrrRCkIePlu1tj?=
+ =?us-ascii?Q?i/KSs7aM9y9H+wOT3UIox7ABXwIezfciUUSVoh8cGNUpizObhm1WewpN5NCX?=
+ =?us-ascii?Q?nkWXSHCQTvYpsk2WeAmtT+y3j2rxhM4gX+I3aMLA/T6ppn7lu0Pft0a1fRti?=
+ =?us-ascii?Q?VScJxacCRxuqPVYbLfguLLcmA9i9Flpir3EJxQhCEaaDr7EAE1QhkfVZPgGl?=
+ =?us-ascii?Q?FoRtnL/3AEZpvSNYnao15tqeUDyER8bfZJ5A692Ro5GNf9AUCzlj7+U2LhkJ?=
+ =?us-ascii?Q?Y1PJsYR/bWoEXoTCQlLqJEuTvjtOSJxIsm3KLLMB7Z7m0VVpMo9rDMqCWRQZ?=
+ =?us-ascii?Q?8x0fJ+lxloVidoKgLvHcPicAlquEHKXMvQcRHUgqvaSObbbzFmho0B9FhliV?=
+ =?us-ascii?Q?2njZOyZB0kvi5njt6kNo8bW5+aTXTtr5+A4NJIXH803bHayP36CgfRVP9yUE?=
+ =?us-ascii?Q?a2e1letvyHssdC3sF2KgCV5NUh3cFCMNt729dcpYt9IpcMlvArHmTi3Bdldk?=
+ =?us-ascii?Q?9jeLfuI2Csr6yck7FFLBg0v7I5bUrTQn2oxR5LW/yecKZpqpDPzr7LZHU1oE?=
+ =?us-ascii?Q?AC9xBXitmcF6kwYj1ZrIoIbOj0SEzKOiyXa3EufIFMVNCQIEJvmhNp1+lyIE?=
+ =?us-ascii?Q?rnINwbpsDQL5IkqYLi1ssOrUMZ73S0QL0mxvtqqcoDwQADfxVy4tnJ0JDsB9?=
+ =?us-ascii?Q?cS3Y3CFCAwptjHuVePb8l2XVkIhp3mrohnzkWtEmeuOGmo0iEC62kmoz8Q5i?=
+ =?us-ascii?Q?1/H1jVRx1qZgAqcmE4VX/1nNCZfuUFeLaScOBR9TaPv7sAwt3ktYDqdurw9F?=
+ =?us-ascii?Q?JWWhn9dMLPLP3EH1rkss7UoT5+SGrrYhBPH6ILKmyXby8RzncYY6Na3XGZJP?=
+ =?us-ascii?Q?1sLI8bPJDWjORojyCkiSEKLO9EYq3mrgn8zoEIy6kQ/0F+KDrsuwnw4R5OeU?=
+ =?us-ascii?Q?vMPLOQnAMNzUz8CuPHNE0W/Y8sj28oXpjVn7t/Lip27onFX17APfwTkJK+/b?=
+ =?us-ascii?Q?3ipiKGMlDm6SImCYOsboAklaPEqhOZ1PDIdeDwCSTD5Xlptt8DbMLIxvCvmX?=
+ =?us-ascii?Q?wd5vYfGyM+DLTUBW3fd7t0lkC/VOKeiYXYdJSCK2+fw41vZkFav+yPqJ8fep?=
+ =?us-ascii?Q?hzYSjBmOXpeBHwoHgyGC5Jq3R1qn++FmGSR/VquWnTukiUKQBvPT7vr/JXjb?=
+ =?us-ascii?Q?Rf3sjH1T/vRLcWTZtW48K1QLveGJBOyhcD7mJlAS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 549d0300-130a-48b0-c592-08db0ef52dbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2023 01:37:19.9488
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RN4yCimyKZC0ow59ra2gr9E4eL8xq9eE46ENEiDQEiJv/BscMFQ+Qp/uZbGuMFT97GLOBbNtitnbbIHGvVwF1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7459
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 23:08, Rick Wertenbroek wrote:
-> Previously u16 variables were used to access 32-bit registers, this
-> resulted in not all of the data being read from the registers. Also
-> the left shift of more than 16-bits would result in moving data out
-> of the variable. Use u32 variables to access 32-bit registers
-> 
-> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> ---
->  drivers/pci/controller/pcie-rockchip-ep.c | 10 +++++-----
->  drivers/pci/controller/pcie-rockchip.h    |  1 +
->  2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-> index ca5b363ba..b7865a94e 100644
-> --- a/drivers/pci/controller/pcie-rockchip-ep.c
-> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
-> @@ -292,15 +292,15 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
->  {
->  	struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
-> -	u16 flags;
-> +	u32 flags;
->  
->  	flags = rockchip_pcie_read(rockchip,
->  				   ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
->  				   ROCKCHIP_PCIE_EP_MSI_CTRL_REG);
->  	flags &= ~ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK;
->  	flags |=
-> -	   ((multi_msg_cap << 1) <<  ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET) |
-> -	   PCI_MSI_FLAGS_64BIT;
-> +	   (multi_msg_cap << ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET) |
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Tuesday, February 14, 2023 6:54 PM
+>=20
+> On Mon, Feb 13, 2023 at 10:49:34AM -0400, Jason Gunthorpe wrote:
+> > On Sun, Feb 12, 2023 at 11:48:30PM -0800, Nicolin Chen wrote:
+> >
+> > > What about point 1? If dev2 and dev3 are already replaced when
+> > > doing iommu_group_replace_domain() on dev1, their idev objects
+> > > still have the old hwpt/iopt until user space does another two
+> > > IOCTLs on them, right?
+> >
+> > We have a complicated model for multi-device groups...
+> >
+> > The first device in the group to change domains must move all the
+> > devices in the group
+> >
+> > But userspace is still expected to run through and change all the
+> > other devices
+> >
+> > So replace should be a NOP if the group is already linked to the right
+> > domain.
+> >
+> > This patch needs to make sure that incosistency in the view betwen the
+> > iommu_group and the iommufd model doesn't cause a functional
+> > problem.
+>=20
+> Yea, I was thinking that we'd need to block any access to the
+> idev->hwpt of a pending device's, before the kernel finishes
+> the "NOP" IOCTL from userspace, maybe with a helper:
+> 	(iommu_get_domain_for_dev(idev->dev) !=3D idev->hwpt->domain)
+>=20
 
-ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET is 17 and multi_msg_cap is a u8...
-Not nice.
+I didn't see what would be broken w/o such blocking measure.
 
-Locally, I added the local variable:
-
-u32 mmc = multi_msg_cap;
-
-And use mmc instead of multi_msg_cap to avoid issues. Also,
-
-> +	   (PCI_MSI_FLAGS_64BIT << ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET);
->  	flags &= ~ROCKCHIP_PCIE_EP_MSI_CTRL_MASK_MSI_CAP;
->  	rockchip_pcie_write(rockchip, flags,
->  			    ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
-> @@ -312,7 +312,7 @@ static int rockchip_pcie_ep_get_msi(struct pci_epc *epc, u8 fn, u8 vfn)
->  {
->  	struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
-> -	u16 flags;
-> +	u32 flags;
->  
->  	flags = rockchip_pcie_read(rockchip,
->  				   ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
-> @@ -374,7 +374,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
->  					 u8 interrupt_num)
->  {
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
-> -	u16 flags, mme, data, data_mask;
-> +	u32 flags, mme, data, data_mask;
->  	u8 msi_count;
->  	u64 pci_addr, pci_addr_mask = 0xff;
->  	u32 r;
-> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-> index e90c2a2b8..11dbf53cd 100644
-> --- a/drivers/pci/controller/pcie-rockchip.h
-> +++ b/drivers/pci/controller/pcie-rockchip.h
-> @@ -227,6 +227,7 @@
->  #define ROCKCHIP_PCIE_EP_CMD_STATUS			0x4
->  #define   ROCKCHIP_PCIE_EP_CMD_STATUS_IS		BIT(19)
->  #define ROCKCHIP_PCIE_EP_MSI_CTRL_REG			0x90
-> +#define   ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET			16
-
-You are not using this macro anywhere. The name is also not very
-descriptive. Better have it as:
-
-#define   ROCKCHIP_PCIE_EP_MSI_CTRL_ME		BIT(16)
-
-to match the TRM name and be clear that the bit indicates if MSI is
-enabled or not.
-
->  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET		17
->  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK		GENMASK(19, 17)
->  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MME_OFFSET		20
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Can you elaborate?
