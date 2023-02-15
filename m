@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112BA697AE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734F6697AF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjBOLhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S233614AbjBOLii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBOLhk (ORCPT
+        with ESMTP id S233470AbjBOLif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:37:40 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A867436FC0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:37:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1676461059;
-  x=1707997059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PEjpUWMbeln01XAviTHjoay8hTO1EQrZCx56ILrI2wE=;
-  b=JqI5t1uni7/1NJ2aFQVWHBaV0qDruwEXGdu6ZHIF7NAyknxBdSgnntgJ
-   uWwxKgDYXwLR/GMwspoOIUaCJtR8BLqUu1BNEtqACLhAq35LPl8P44dXm
-   JkettPD/VUncnrihZ/XePX+1nR4EC/JAcCossu/xikPMZFmkyrQ2zkM6f
-   GxbzkpiXTihloyPAxOgEspwmwmN95L8rzS/4IHFQA8gwH9MuDCONUHv0S
-   Bqq49WSwENWl0FsF2aDlP634k6jtVeH911RiKVktDTDC2X/PwYmTWr2tP
-   HcYqYE71hJoLCtYOjDWPxnNOm0YBHpJkHL6ILRCA5B5fksHvU48USRRCM
-   A==;
-Date:   Wed, 15 Feb 2023 12:37:36 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Michael Thalmeier <michael.thalmeier@hale.at>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <john.ogness@linutronix.de>, <pmladek@suse.com>
-Subject: Re: [PATCH v2] tty: ttynull: implement console write
-Message-ID: <Y+zEAA1hp+3guGxT@axis.com>
-References: <20230214115921.399608-1-michael.thalmeier@hale.at>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230214115921.399608-1-michael.thalmeier@hale.at>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 06:38:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7FA36456;
+        Wed, 15 Feb 2023 03:38:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF6B1B8212A;
+        Wed, 15 Feb 2023 11:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C6BC4339B;
+        Wed, 15 Feb 2023 11:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676461111;
+        bh=GEGhQBwJhKB5uGEZCrbVyvrQHlkEYa/oj3PzWMLqoO4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bYRwKeocL2Wd5g1fa/CYXYw73nHewgZ0f6UKIAVdN6VWGY9qYmCCiHiM6NtVSLiyB
+         jPu3MFqsHBglKV9jegSIwaRDCYaSFZOvl1QxODkLZOIaz1t76rkmwWuJDtDiUwW5LR
+         nswPB0Eu8xACOe/rBITCo8RxgiWzmufuV/5OUELXRIDBkTXKBJViDCRY8x/zKQ6WwC
+         /wu2i0hyDiYDk9Tzjo+sS7d6qjWJQh5mJ/B6satQZenHBNgqQ/cBoHvEGp5gZ8lM52
+         iprLOSNd8jeyKtp/jH2gQRIA2biVVCj4S61UXB1/jtgSChtPT8bh6DgW3/kJQupela
+         wtprqWAxFWj5Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pSG7J-00AZUw-7C;
+        Wed, 15 Feb 2023 11:38:29 +0000
+Date:   Wed, 15 Feb 2023 11:38:28 +0000
+Message-ID: <86v8k3xiob.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     neil.armstrong@linaro.org
+Cc:     Andy Gross <agross@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: Add compatible for SM8550
+In-Reply-To: <f6f81af2-00ec-a75b-0e9e-a1eaf649edf5@linaro.org>
+References: <20230127132558.1176730-1-abel.vesa@linaro.org>
+        <f6f81af2-00ec-a75b-0e9e-a1eaf649edf5@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: neil.armstrong@linaro.org, agross@kernel.org, abel.vesa@linaro.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, tglx@linutronix.de, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski@linaro.org, andersson@kernel.org, konrad.dybcio@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Cc: John, Petr
-
-On Tue, Feb 14, 2023 at 12:59:21PM +0100, Michael Thalmeier wrote:
-> Since commit a699449bb13b ("printk: refactor and rework printing logic"),
-> con->write is called without checking if it is implemented in the console
-> driver. This does make some sense, because for all "normal" consoles it
-> is vital to have a write function.
-> As the ttynull console driver does not need any console output the write
-> function was not implemented. This caused a "unable to handle kernel NULL
-> pointer dereference" when the write function is called now.
+On Wed, 15 Feb 2023 09:25:37 +0000,
+Neil Armstrong <neil.armstrong@linaro.org> wrote:
 > 
-> To fix this issue, implement an empty write function.
+> Hi Mark,
+
+Was this intended for me?
+
 > 
-> Fixes: a699449bb13b ("printk: refactor and rework printing logic")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michael Thalmeier <michael.thalmeier@hale.at>
+> On 27/01/2023 14:25, Abel Vesa wrote:
+> > Document the compatible for SM8550 PDC.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > 
+> > The v1 is here:
+> > https://lore.kernel.org/all/20221116114210.2673902-1-abel.vesa@linaro.org/
+> > 
+> > Changes since v1:
+> >   * rebased on next-20230125
+> >   * added Krzysztof's R-b tag
+> > 
+> >   .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
+> >   1 file changed, 1 insertion(+)
+> 
+> Do you think you can pick it for v6.3 ?
 
-Looking at the referenced commit, the only place I see it calling
-con->write() is from call_console_driver(), which is in turn only called
-from console_emit_next_record().  And console_flush_all(), the only
-caller of console_emit_next_record(), checks that con->write is not NULL
-using console_is_usable() before calling console_emit_next_record().
+In general, I don't take standalone DT updates. I'm happy to take them
+when they result in something material. But this is only churn, as
+nothing relies on these extra compatible strings.
 
-What am I missing?  Which code path in the referenced commit calls
-con->write without checking for NULL?
+This really should be routed via someone who cares (i.e not me).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
