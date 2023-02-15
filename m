@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C231E698598
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B986985A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjBOUdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S229790AbjBOUgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBOUdM (ORCPT
+        with ESMTP id S229489AbjBOUgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:33:12 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553E4367E5;
-        Wed, 15 Feb 2023 12:33:11 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 893453200900;
-        Wed, 15 Feb 2023 15:33:10 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 15 Feb 2023 15:33:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-transfer-encoding:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1676493190; x=1676579590; bh=BUDNZ68uRUNtVZa35o8Wuor6C
-        LvW1YtTpOzM6OuHyl4=; b=Yd+xtUGf6EcrVy5GyRv988NQK2dNattCbY3Dp9mUl
-        kkitD8Pw4/L5Q08c0PCtkV454bF16PkcV5XybKbOd1/xq8fZU31etMvj8FnlJBMn
-        d1UXPmwBOkUXD/m58UYovDNk0KdjjR4T8HLVDWFCMAa9bqh7bfhf01v2CJZy+Qhx
-        Qmkm/tkQMhZTyHfi7iAtqKeYNVQdi2tHRgRR9f8yj0HN6s3mHieHlpV2J8H5cf/2
-        i3cQ519Hz1eczH9/whol7V11AvAFkXLkxdMHXFfoQxHkUieJeczOXqKTNDxEYOTE
-        HNresvFBU2swzRWz2mQmCs6g8IdAuur76tDP3CZvumAUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676493190; x=
-        1676579590; bh=BUDNZ68uRUNtVZa35o8Wuor6CLvW1YtTpOzM6OuHyl4=; b=M
-        WHPKvAu2rXAyeSQ+biaijKHxHObyyQ4HK/6DwpA49wZsQhY+khj9vYbARIX+/hj8
-        5MT45xD4CCyqUanF5/OIQq3HQfD5mcBhs7pMLikcqjLupt0CwhjJOEhoM7FGw2g1
-        CRHp+Mm3ER1f11VzmAHbkrsBdR3FA94t+ziRaiSu3WOwCFzZ3CdRqMK4DFPvoRjF
-        a1Mq7Bd9i820ArFNamvRHZhX9+IvmjI5g1raMp5yitxjUzpGoP1tRUMH4OcWXq1N
-        1EbC+PzLCWS89AuyPxSDAWCJW+F8sm+ijSFoOiRxsc5F4iaEICpIERcUcryA+8kY
-        Qn7suqGkO8pO3IQ+Hk5HA==
-X-ME-Sender: <xms:hUHtY_eYO87S7d7auzBxsbVhMDFBj0Je4pNEbEo8h2HlL1ZmGiu8hQ>
-    <xme:hUHtY1MneNhXxj3kbBtQa4W7zdOTKk9KMVBav6faslrHHFgtuEclxsQ4GhfIQM2Ts
-    3HyApwE3ThmVXnz6EU>
-X-ME-Received: <xmr:hUHtY4ioYVCNpthIiyfw5fhqoeQAp8SsuKRoC5uGnaxtCYZHgNTIdRRVlMc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheplfho
-    shhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqe
-    enucggtffrrghtthgvrhhnpeegiefhvedvkeelgffgjeejuefguddugefghfejheekgeeh
-    ledtudejffejkeehfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:hUHtYw9eQonGh6iDlCj-4EclZqaVzYgq0FAaHZhjY4kbrC73gHnHkg>
-    <xmx:hUHtY7tK2wWTCQFRSA83rOoyPSCVC115IwJytvo6DNjSV4hRUj3GkQ>
-    <xmx:hUHtY_FvzRLwSZhTGKN-YMY5aNgqRQzolMAMR2DzkNZ6fkMlhlULtQ>
-    <xmx:hkHtY07UgKMgToKw9KUHoaAPNy6im0mDDleVUgT2fXksKqQP87lEQw>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Feb 2023 15:33:09 -0500 (EST)
-Date:   Wed, 15 Feb 2023 12:33:08 -0800
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
- registered ring fd
-Message-ID: <Y+1BhMgNJVoqYlYf@localhost>
-References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
- <03895f24-3540-dae9-1cdd-e3f6d901dec6@kernel.dk>
+        Wed, 15 Feb 2023 15:36:48 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46EE3B3C4;
+        Wed, 15 Feb 2023 12:36:47 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id m10so23570950ljp.3;
+        Wed, 15 Feb 2023 12:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=E5V1ZdTdvcE7drkxcFR/cP3t+37fXHswTkqQ+7j3RCA=;
+        b=ddce220YJIYbkdz1ID8+Z6NSXl8zDp1BJAgxC3+54RkwSQ/Fld8XCsxuy6yCULD3Un
+         KzvFoGDf41/j4yyeGdZ8IfnAQmSi3lBEq1pG+0knDHUnUdXhhBvYNldyKjovvYpgoAe/
+         GCQJjKAnVjSEl8ISCsisSZxLmIQDB5jzxu0JHMXrSJQKJFJLLDP3BQATyO3ukiqbCJ7b
+         sP/6sqy7mxFZZfTqxIQtUqhzU/jAUs1f9Ki3GDtDO2NE11Tihsy9eSF9QHzGZS8NJJV3
+         NqiwoWAlt6D7ytcsDQE3XeC2xg+cKqqZTJHN5OAXqWQK8FoGo6YvPgGsUh/Wro6fEQDv
+         aZCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E5V1ZdTdvcE7drkxcFR/cP3t+37fXHswTkqQ+7j3RCA=;
+        b=T+ct5YP//Y2uGncQGp4fOk/WSRxK/ev1T5vl+RUS/Wle8LF0tO3WkjcXMdog6JZ5O5
+         I3j2rL4Hucl7AehNunr69k8lR2DCqfw9Os/KtFolM2Sl1TKES/fpIzHaPFJ12GmuY6An
+         zn/N3lou5g/0xZUg698NSZ0KsCjM2HhBAFsoPbji0hu3Fz+LflZ4TjPpu8RBWZ90iGac
+         DlzwXnqJfsHz1x8dedJVGLOS3Kw/hUIWXXnr/PRNi3+JYxmGKEFMxVE3Vqm/hi14sSOP
+         vB1z33Q/PMUNOp4WZJxPfZTCYhewPTJAOVES+DF7WEa0w9WlZRjeJfVCnnmlARYKriXD
+         sw5g==
+X-Gm-Message-State: AO0yUKVBN9czLez1qaQT+oLNTDnZQML8HDVwYgzNPSyMqp+JWxZkSfft
+        +9pRwf1sBV4/9gL2LlVGdMJ0dK/NrwsNnM4hjJ0=
+X-Google-Smtp-Source: AK7set95pVLcVG5npoPY1aY8WLoZDkMtgDrncHbyQguMuWq7gDe08kZ5qkJWk+GGUPSBrCTMEbx02OGoGFdZN95Ajhs=
+X-Received: by 2002:a2e:8e21:0:b0:293:603a:7631 with SMTP id
+ r1-20020a2e8e21000000b00293603a7631mr983840ljk.9.1676493405842; Wed, 15 Feb
+ 2023 12:36:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <03895f24-3540-dae9-1cdd-e3f6d901dec6@kernel.dk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230213120926.8166-1-francesco@dolcini.it>
+In-Reply-To: <20230213120926.8166-1-francesco@dolcini.it>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Wed, 15 Feb 2023 12:36:34 -0800
+Message-ID: <CABBYNZ+y2jDi=0FFx31oB86skpDFTm5n+fDd5LBmvdxzOhqoSA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] Bluetooth: hci_mrvl: Add serdev support for 88W8997
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:44:38AM -0700, Jens Axboe wrote:
-> On 2/14/23 5:42 PM, Josh Triplett wrote:
-> > Add a new flag IORING_REGISTER_USE_REGISTERED_RING (set via the high bit
-> > of the opcode) to treat the fd as a registered index rather than a file
-> > descriptor.
-> > 
-> > This makes it possible for a library to open an io_uring, register the
-> > ring fd, close the ring fd, and subsequently use the ring entirely via
-> > registered index.
-> 
-> This looks pretty straight forward to me, only real question I had
-> was whether using the top bit of the register opcode for this is the
-> best choice. But I can't think of better ways to do it, and the space
-> is definitely big enough to do that, so looks fine to me.
+Hi Francesco,
 
-It seemed like the cleanest way available given the ABI of
-io_uring_register, yeah.
+On Mon, Feb 13, 2023 at 4:09 AM Francesco Dolcini <francesco@dolcini.it> wrote:
+>
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+>
+> Add serdev support for the 88W8997 from NXP (previously Marvell). It includes
+> support for changing the baud rate. The command to change the baud rate is
+> taken from the user manual UM11483 Rev. 9 in section 7 (Bring-up of Bluetooth
+> interfaces) from NXP.
+>
+> v3:
+>  - Use __hci_cmd_sync_status instead of __hci_cmd_sync
+>
+> v2:
+>  - Fix the subject as pointed out by Krzysztof. Thanks!
+>  - Fix indentation in marvell-bluetooth.yaml
+>  - Fix compiler warning for kernel builds without CONFIG_OF enabled
+>
+> Stefan Eichenberger (5):
+>   dt-bindings: bluetooth: marvell: add 88W8997
+>   dt-bindings: bluetooth: marvell: add max-speed property
+>   Bluetooth: hci_mrvl: use maybe_unused macro for device tree ids
+>   Bluetooth: hci_mrvl: Add serdev support for 88W8997
+>   arm64: dts: imx8mp-verdin: add 88W8997 serdev to uart4
+>
+>  .../bindings/net/marvell-bluetooth.yaml       | 20 ++++-
+>  .../dts/freescale/imx8mp-verdin-wifi.dtsi     |  5 ++
+>  drivers/bluetooth/hci_mrvl.c                  | 90 ++++++++++++++++---
+>  3 files changed, 104 insertions(+), 11 deletions(-)
+>
+> --
+> 2.25.1
 
-> One more comment below:
-> 
-> > +	if (use_registered_ring) {
-> > +		/*
-> > +		 * Ring fd has been registered via IORING_REGISTER_RING_FDS, we
-> > +		 * need only dereference our task private array to find it.
-> > +		 */
-> > +		struct io_uring_task *tctx = current->io_uring;
-> 
-> I need to double check if it's guaranteed we always have current->io_uring
-> assigned here. If the ring is registered we certainly will have it, but
-> what if someone calls io_uring_register(2) without having a ring setup
-> upfront?
-> 
-> IOW, I think we need a NULL check here and failing the request at that
-> point.
+There seems to be missing one patch 5/5:
 
-The next line is:
+https://patchwork.kernel.org/project/bluetooth/list/?series=721269
 
-+               if (unlikely(!tctx || fd >= IO_RINGFD_REG_MAX))
+Other than that the Bluetooth parts seem fine, and perhaps can be
+merged if the patch above is not really required.
 
-The first part of that condition is the NULL check you're looking for,
-right?
 
-- Josh Triplett
+-- 
+Luiz Augusto von Dentz
