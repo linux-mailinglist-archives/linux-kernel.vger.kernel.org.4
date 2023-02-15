@@ -2,158 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425EE69746C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A53069747D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbjBOCjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 21:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S233037AbjBOClE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 21:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbjBOCi6 (ORCPT
+        with ESMTP id S232979AbjBOClB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 21:38:58 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E0625E3D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676428737; x=1707964737;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LRGknKhxil6Qohqe+Jm3wtRMBjwrnnr85uMuaDhF6bI=;
-  b=L2Lc9J39N6VF0bBx+z/QBKgWz60ZRGRx7YSdNbzWtN2aizvUsTBz/IlP
-   gDTkJi2LsB9grqnhT0dIRCRLOizTEaPGD0W6k9wGE0dTS1pIqUUU03G9e
-   AZhWRAyAvtNMvbRIMC6PAYJrrGy/4J+/3dFiqDpAJwVkjwqca3ZrVszhT
-   7rLwQSIzHGJjeuaA7h3DUr7it2SGbCUHQ90JVm6y+xYNQxWJ1k8Lj6NEV
-   ukuSdMvtHhwSGi3S9bKVm/waWanS0a1VEcspQx39xRX57pGxFuimqx93U
-   HeLnxEXQOiadV5oj/ujTD7vbrjHndcD7z4SQ3JUx5jzZVFbAeCR905ZKe
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
-   d="scan'208";a="335295974"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 10:38:55 +0800
-IronPort-SDR: EJ1vCYnFyxA/DThckEL19W+eKV8mFiITnQCj00KKgHLnjoztZmNZsWriFA0ycIMR8um0wYTJMv
- 9L0OhvrrMinPx/cUC9F1S8E6NDt23eqcRM2shMql+Jrog63Hif/EuKS+tnYbsvKs8BI2Np5F3A
- 6Yz6aR4qZUfwa4gJ/O9OqiC4Urgl0bKO/AmWXf9CmcujGlvdVvRp6ZhpciCinjili4MM9VNgCf
- J56NZjIc1it/IWPMMpDFI4YgRNBoeDxt4dNW5wmDb/9NTp5oIopAksCim6rpXmzGJ+Ss9x+n92
- iUs=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:50:17 -0800
-IronPort-SDR: VJGt67YPKuXvFG78/bDoihYRAqXf/6NLRu2FI2zboQGui63yGsdqTdrPM0cuGTTX+vlGGht71R
- 7ZVRNekDdWavH+JxCLt0DsneBuGU+UwBHv2iaXpCKvfLIrrMfnjezBta9ThBjvpiQbz5JVk3Fn
- ErftwiSag0U4K+cC50Bh8hV01PqsC5kar+Bo2bhqFqNE2M30qNtC8lLz3GpdPb5I8VnoNTSeQL
- 0NNyKZeBC6jRXta45SKImIibhPJSjRKr54QMz5NgcZ50MQFCpNH1PXOcTugG9zBMrlzBvR+ui/
- 1SU=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 18:38:54 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGj2672Gcz1Rx15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:38:54 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676428733; x=1679020734; bh=LRGknKhxil6Qohqe+Jm3wtRMBjwrnnr85uM
-        uaDhF6bI=; b=HFn/XTBOmCRXwNl1rv11Q40ZgxO+WDnGEOvySfbGvYcTidahx62
-        0dVss0hxRSODx5fmEDRcNRrAHVRULPb3zexnP5C/mfGiyT6aeU3BOxWRtMwjOJ20
-        B2GOfq0VTpQeTF8/ZoDgSiQst/+PTxvXfh06iiHVdxMPDEaffExqQK3d6zbPOb/k
-        aJcrxb8uak5xKl3NmDtG0eMHfhOaCoDo67SwHXZbY4nVgVeQD6CutSyDih5ZtImx
-        5eh8YjmMo6I2absY993+zR8I2QAFKKlc2fVkSODrt/eTiSxshauQ8EXXvLSpw2Zm
-        oIr7IE34agdo4CiA1rbFyt7aWmy7dWyz3mw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xz6YzmeL8wxQ for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Feb 2023 18:38:53 -0800 (PST)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGj222VYbz1RvLy;
-        Tue, 14 Feb 2023 18:38:50 -0800 (PST)
-Message-ID: <ccdc6924-c35f-4a29-fabb-587271fc929c@opensource.wdc.com>
-Date:   Wed, 15 Feb 2023 11:38:48 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 7/9] PCI: rockchip: Fix legacy IRQ generation for
- RK3399 PCIe endpoint core
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        stable@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-8-rick.wertenbroek@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230214140858.1133292-8-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 14 Feb 2023 21:41:01 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EDC32531
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:40:59 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230215024058epoutp01fc6f16f0e8bf9864000d72aa74ec4e5f~D3yoi6pWq1136211362epoutp01S
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:40:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230215024058epoutp01fc6f16f0e8bf9864000d72aa74ec4e5f~D3yoi6pWq1136211362epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1676428858;
+        bh=dTVvHi0PSXlkaiJ8xKjPGGmEQywwSouz1POMk3kJ7r0=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=WcV7Iml3cQBk2xdmTt6DKzB3N0LqofAzcL9i439ju/04/YHetnE1C61dN9seGUcrw
+         /9whdyays8TxroKYRlVAwUDIp7skn99keWSJ8XaYRl9PkCRWlQYyWuICfew65E/fk3
+         lv3ShItg5ADep07USFNYOPxSjWR80w1pw0VrZzxQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230215024057epcas2p4cdedf47d18e6c9c14f9b2d02758c9e28~D3yoJfhBG1328813288epcas2p4-;
+        Wed, 15 Feb 2023 02:40:57 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PGj4T2nY2z4x9Q2; Wed, 15 Feb
+        2023 02:40:57 +0000 (GMT)
+X-AuditID: b6c32a46-4e1ff70000007a4b-35-63ec4639b2d7
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.70.31307.9364CE36; Wed, 15 Feb 2023 11:40:57 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH 5/6] clk: samsung: exynos850: Add AUD and HSI main gate
+ clocks
+Reply-To: chanho61.park@samsung.com
+Sender: CHANHO PARK <chanho61.park@samsung.com>
+From:   CHANHO PARK <chanho61.park@samsung.com>
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     David Virag <virag.david003@gmail.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230211064006.14981-6-semen.protsenko@linaro.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230215024056epcms2p28f04cf946f20343643faca944ea147ea@epcms2p2>
+Date:   Wed, 15 Feb 2023 11:40:56 +0900
+X-CMS-MailID: 20230215024056epcms2p28f04cf946f20343643faca944ea147ea
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmua6l25tkg9X/eSwezNvGZnH9y3NW
+        i/lHzrFa7H29ld1i0+NrrBYfe+6xWlzeNYfNYsb5fUwWF0+5WrTuPcJucfhNO6vFv2sbWSye
+        9wHFT939zG6xatcfRovj7x8zOgh4vL/Ryu6xc9Zddo9NqzrZPO5c28PmsXlJvUffllWMHp83
+        yQWwR2XbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDd
+        rqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIF
+        KkzIzng05SNTwVr9iluvrrM3MF7U6GLk5JAQMJHo27OEqYuRi0NIYAejxOlPL9m6GDk4eAUE
+        Jf7uEAapERYIkfj38QojSFhIQFli47ZYiLC+xPf+JhYQm01AV2L+h0+sIGNEBO4zSux++pUR
+        xGEWOM4iMevmcUaIZbwSM9qfskDY0hLbl28Fi3MKOEhMuN7BDhHXkPixrJcZwhaVuLn6LTuM
+        /f7YfKg5IhKt985C1QhKPPi5G+w4CQFJiUlvIiDCARJN90EOArFzJDYcnMQGYZtLfH86H6yV
+        V8BX4uniBUwgNouAqsSLHTdZIca4SFzqcQYJMwvIS2x/O4cZJMwsoCmxfpc+RIWyxJFbLBAV
+        fBIdh/+yw/y3Y94TJghbXeLA9ulQv8pKdM/5DHWMh0TH7L/sExgVZyGCeRaSXbMQdi1gZF7F
+        KJZaUJybnlpsVGAEj9nk/NxNjOA0rOW2g3HK2w96hxiZOBgPMUpwMCuJ8Ao/fZEsxJuSWFmV
+        WpQfX1Sak1p8iNEU6MmJzFKiyfnATJBXEm9oYmlgYmZmaG5kamCuJM4rbXsyWUggPbEkNTs1
+        tSC1CKaPiYNTqoFJfkaPzb/Dv3SZzxR81CpdYKw258jWDVf3fb3z+sclfdW2wp1vlu4viBHR
+        6lid5HB/p7+77ZP9TTwOL559kzETmKApFM7Q52TZl5i34XiDwTVzxcOv779ZKaiinuHrqag2
+        Y6PelZmsM+LO/VpmsdtdTHei2+nw6U633yrOZOJpPMX4s/X7TlP9Gb+aBHPZGgRuT66e3hr4
+        /MNJ9iRp9U9T0+otuquXrm9R7tDYKbbAZ++fjQeOlq/2v+WUzXXWb6XsyRPi8ifKGba8VDwn
+        doH9hNu6331Pb07scDO1Ubfd3L3+qInNvsPM5yJmPjVZuijX+YRcZ1Py/ruJTL7PTgs33j3x
+        nIXrxOttBXUCsZMqlViKMxINtZiLihMBEtTJwkwEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230211063956epcas2p423cb99655dcfdb34c6847bb228aa7324
+References: <20230211064006.14981-6-semen.protsenko@linaro.org>
+        <20230211064006.14981-1-semen.protsenko@linaro.org>
+        <CGME20230211063956epcas2p423cb99655dcfdb34c6847bb228aa7324@epcms2p2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 23:08, Rick Wertenbroek wrote:
-> Fix legacy IRQ generation for RK3399 PCIe endpoint core according to
-> the technical reference manual (TRM). Assert and deassert legacy
-> interrupt (INTx) through the legacy interrupt control register
-> ("PCIE_CLIENT_LEGACY_INT_CTRL") instead of manually generating a PCIe
-> message. The generation of the legacy interrupt was tested and validated
-> with the PCIe endpoint test driver.
+> -----Original Message-----
+> From: Sam Protsenko <semen.protsenko@linaro.org>
+> Sent: Saturday, February 11, 2023 3:40 PM
+> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Chanwoo Choi
+> <cw00.choi@samsung.com>; Sylwester Nawrocki <s.nawrocki@samsung.com>; Rob
+> Herring <robh+dt@kernel.org>
+> Cc: David Virag <virag.david003@gmail.com>; Chanho Park
+> <chanho61.park@samsung.com>; Alim Akhtar <alim.akhtar@samsung.com>; Sumit
+> Semwal <sumit.semwal@linaro.org>; Tomasz Figa <tomasz.figa@gmail.com>;
+> Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
+> <sboyd@kernel.org>; linux-samsung-soc@vger.kernel.org; linux-
+> clk@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH 5/6] clk: samsung: exynos850: Add AUD and HSI main gate
+> clocks
 > 
-> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> Add main gate clocks for controlling AUD and HSI CMUs:
+>   - gout_aud_cmu_aud_pclk
+>   - gout_hsi_cmu_hsi_pclk
+> 
+> Those clocks were marked as CLK_IGNORE_UNUSED, as system hangs on boot
+> otherwise.
+> 
+> While at it, add missing PPMU (Performance Profiling Monitor Unit) clocks
+> for CMU_HSI.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  drivers/pci/controller/pcie-rockchip-ep.c | 38 +++++------------------
->  drivers/pci/controller/pcie-rockchip.h    |  6 ++++
->  2 files changed, 14 insertions(+), 30 deletions(-)
+>  drivers/clk/samsung/clk-exynos850.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-> index cbc281a6a..ca5b363ba 100644
-> --- a/drivers/pci/controller/pcie-rockchip-ep.c
-> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
-> @@ -328,45 +328,23 @@ static void rockchip_pcie_ep_assert_intx(struct rockchip_pcie_ep *ep, u8 fn,
->  					 u8 intx, bool is_asserted)
->  {
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
-> -	u32 r = ep->max_regions - 1;
-> -	u32 offset;
-> -	u32 status;
-> -	u8 msg_code;
-> -
-> -	if (unlikely(ep->irq_pci_addr != ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR ||
-> -		     ep->irq_pci_fn != fn)) {
-> -		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
-> -					     AXI_WRAPPER_NOR_MSG,
-> -					     ep->irq_phys_addr, 0, 0);
-> -		ep->irq_pci_addr = ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR;
+> diff --git a/drivers/clk/samsung/clk-exynos850.c
+> b/drivers/clk/samsung/clk-exynos850.c
+> index a24eff42baae..3d776d57cc8f 100644
+> --- a/drivers/clk/samsung/clk-exynos850.c
+> +++ b/drivers/clk/samsung/clk-exynos850.c
+> @@ -674,6 +674,7 @@ static const struct samsung_cmu_info apm_cmu_info
+> __initconst = {
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF4	0x2014
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF5	0x2018
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF6	0x201c
+> +#define CLK_CON_GAT_CLK_AUD_CMU_AUD_PCLK	0x2020
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_ACLK		0x2048
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_SPDY	0x204c
+>  #define CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_ASB	0x2050
+> @@ -729,6 +730,7 @@ static const unsigned long aud_clk_regs[] __initconst
+> = {
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF4,
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF5,
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF6,
+> +	CLK_CON_GAT_CLK_AUD_CMU_AUD_PCLK,
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_ACLK,
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_SPDY,
+>  	CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_ASB,
+> @@ -848,6 +850,9 @@ static const struct samsung_div_clock aud_div_clks[]
+> __initconst = {  };
+> 
+>  static const struct samsung_gate_clock aud_gate_clks[] __initconst = {
+> +	GATE(CLK_GOUT_AUD_CMU_AUD_PCLK, "gout_aud_cmu_aud_pclk",
+> +	     "dout_aud_busd",
+> +	     CLK_CON_GAT_CLK_AUD_CMU_AUD_PCLK, 21, CLK_IGNORE_UNUSED, 0),
+>  	GATE(CLK_GOUT_AUD_CA32_CCLK, "gout_aud_ca32_cclk",
+> "mout_aud_cpu_hch",
+>  	     CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_CA32, 21, 0, 0),
+>  	GATE(CLK_GOUT_AUD_ASB_CCLK, "gout_aud_asb_cclk",
+> "dout_aud_cpu_aclk", @@ -1117,12 +1122,15 @@ static const struct
+> samsung_cmu_info g3d_cmu_info __initconst = {
+>  #define PLL_CON0_MUX_CLKCMU_HSI_MMC_CARD_USER			0x0610
+>  #define PLL_CON0_MUX_CLKCMU_HSI_USB20DRD_USER			0x0620
+>  #define CLK_CON_MUX_MUX_CLK_HSI_RTC				0x1000
+> +#define CLK_CON_GAT_CLK_HSI_CMU_HSI_PCLK			0x2000
+>  #define CLK_CON_GAT_HSI_USB20DRD_TOP_I_RTC_CLK__ALV		0x2008
+>  #define CLK_CON_GAT_HSI_USB20DRD_TOP_I_REF_CLK_50		0x200c
+>  #define CLK_CON_GAT_HSI_USB20DRD_TOP_I_PHY_REFCLK_26		0x2010
+>  #define CLK_CON_GAT_GOUT_HSI_GPIO_HSI_PCLK			0x2018
+>  #define CLK_CON_GAT_GOUT_HSI_MMC_CARD_I_ACLK			0x2024
+>  #define CLK_CON_GAT_GOUT_HSI_MMC_CARD_SDCLKIN			0x2028
+> +#define CLK_CON_GAT_GOUT_HSI_PPMU_ACLK				0x202c
+> +#define CLK_CON_GAT_GOUT_HSI_PPMU_PCLK				0x2030
+>  #define CLK_CON_GAT_GOUT_HSI_SYSREG_HSI_PCLK			0x2038
+>  #define CLK_CON_GAT_GOUT_HSI_USB20DRD_TOP_ACLK_PHYCTRL_20	0x203c
+>  #define CLK_CON_GAT_GOUT_HSI_USB20DRD_TOP_BUS_CLK_EARLY		0x2040
+> @@ -1132,12 +1140,15 @@ static const unsigned long hsi_clk_regs[]
+> __initconst = {
+>  	PLL_CON0_MUX_CLKCMU_HSI_MMC_CARD_USER,
+>  	PLL_CON0_MUX_CLKCMU_HSI_USB20DRD_USER,
+>  	CLK_CON_MUX_MUX_CLK_HSI_RTC,
+> +	CLK_CON_GAT_CLK_HSI_CMU_HSI_PCLK,
+>  	CLK_CON_GAT_HSI_USB20DRD_TOP_I_RTC_CLK__ALV,
+>  	CLK_CON_GAT_HSI_USB20DRD_TOP_I_REF_CLK_50,
+>  	CLK_CON_GAT_HSI_USB20DRD_TOP_I_PHY_REFCLK_26,
+>  	CLK_CON_GAT_GOUT_HSI_GPIO_HSI_PCLK,
+>  	CLK_CON_GAT_GOUT_HSI_MMC_CARD_I_ACLK,
+>  	CLK_CON_GAT_GOUT_HSI_MMC_CARD_SDCLKIN,
+> +	CLK_CON_GAT_GOUT_HSI_PPMU_ACLK,
+> +	CLK_CON_GAT_GOUT_HSI_PPMU_PCLK,
+>  	CLK_CON_GAT_GOUT_HSI_SYSREG_HSI_PCLK,
+>  	CLK_CON_GAT_GOUT_HSI_USB20DRD_TOP_ACLK_PHYCTRL_20,
+>  	CLK_CON_GAT_GOUT_HSI_USB20DRD_TOP_BUS_CLK_EARLY,
+> @@ -1163,6 +1174,9 @@ static const struct samsung_mux_clock hsi_mux_clks[]
+> __initconst = {  };
+> 
+>  static const struct samsung_gate_clock hsi_gate_clks[] __initconst = {
+> +	GATE(CLK_GOUT_HSI_CMU_HSI_PCLK, "gout_hsi_cmu_hsi_pclk",
+> +	     "mout_hsi_bus_user",
+> +	     CLK_CON_GAT_CLK_HSI_CMU_HSI_PCLK, 21, CLK_IGNORE_UNUSED, 0),
 
-By the way, ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR is now unused. Remove it
-too please.
+You'll need to put /* TODO: */ tag or use CLK_IS_CRITICAL if you make sure it is the critical clock.
 
--- 
-Damien Le Moal
-Western Digital Research
-
+>  	GATE(CLK_GOUT_USB_RTC_CLK, "gout_usb_rtc", "mout_hsi_rtc",
+>  	     CLK_CON_GAT_HSI_USB20DRD_TOP_I_RTC_CLK__ALV, 21, 0, 0),
+>  	GATE(CLK_GOUT_USB_REF_CLK, "gout_usb_ref", "mout_hsi_usb20drd_user",
+> @@ -1177,6 +1191,10 @@ static const struct samsung_gate_clock
+> hsi_gate_clks[] __initconst = {
+>  	GATE(CLK_GOUT_MMC_CARD_SDCLKIN, "gout_mmc_card_sdclkin",
+>  	     "mout_hsi_mmc_card_user",
+>  	     CLK_CON_GAT_GOUT_HSI_MMC_CARD_SDCLKIN, 21, CLK_SET_RATE_PARENT,
+> 0),
+> +	GATE(CLK_GOUT_HSI_PPMU_ACLK, "gout_hsi_ppmu_aclk",
+> "mout_hsi_bus_user",
+> +	     CLK_CON_GAT_GOUT_HSI_PPMU_ACLK, 21, 0, 0),
+> +	GATE(CLK_GOUT_HSI_PPMU_PCLK, "gout_hsi_ppmu_pclk",
+> "mout_hsi_bus_user",
+> +	     CLK_CON_GAT_GOUT_HSI_PPMU_PCLK, 21, 0, 0),
+>  	GATE(CLK_GOUT_SYSREG_HSI_PCLK, "gout_sysreg_hsi_pclk",
+>  	     "mout_hsi_bus_user",
+>  	     CLK_CON_GAT_GOUT_HSI_SYSREG_HSI_PCLK, 21, 0, 0),
+> --
+> 2.39.1
