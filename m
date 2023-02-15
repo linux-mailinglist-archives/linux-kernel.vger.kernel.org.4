@@ -2,107 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3376979F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA0D6979F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbjBOKdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S234068AbjBOKdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbjBOKdJ (ORCPT
+        with ESMTP id S230360AbjBOKdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:33:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE9E40F2;
-        Wed, 15 Feb 2023 02:33:06 -0800 (PST)
-Date:   Wed, 15 Feb 2023 10:33:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676457183;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f+EuqJvbhyQpxyfggv0E0bEdlA6kg9fC8C03DEZDIa4=;
-        b=wVVvjktf/TCDpvKOfCNsImh/AjGHL4abGkMwlz9k6mwWyOMuuNRDJqCt3sFlklMtlXd0iY
-        r5z0wGrFTUg8oiOTXVKvbnNzEk/xCqqAH6Uo5i2y47froFQEDIKxKT3owwVoQ2MkkpyBbU
-        enOB0bNDEfJCmCdpYTRZMsqEZ/t2OScn0+noR2TW8c7i0aIaNhjPdC9B36OlHXeVyrjSoT
-        6vUZLZvQGAB+g4el3BmWs4mNecC9c1VpsOck+ZlN/Ca6r1BU18Hf6nBB8g5JoItWB7tBwG
-        uF64TlypGDm8D1tLTJ2FZksGxb23PZUXRb1dYxaqlhjsc4KL1VDjNdmGKxmBvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676457183;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f+EuqJvbhyQpxyfggv0E0bEdlA6kg9fC8C03DEZDIa4=;
-        b=YL33ux51roOUiyXbqYoBxSyzMykqhJTZiLB3ylPoKMjeLs+V1drE/19Bk3f16ghtAL/2p2
-        9F9AAajdYdtxVIAA==
-From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/core: Fix a missed update of user_cpus_ptr
-Cc:     Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230203181849.221943-1-longman@redhat.com>
-References: <20230203181849.221943-1-longman@redhat.com>
+        Wed, 15 Feb 2023 05:33:52 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD1D186;
+        Wed, 15 Feb 2023 02:33:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6Eof4phdzg0sVPR1E2iDoi4OzJcyEI7Sur+1QspzK5I=; b=LCWAXdK1dYhry4jZhKLy6rQmC2
+        OpJcSYakbeunDdt8HS/PCtBl5/MLLfRk7WUAfkVJK8m1S2neUNL9aJ6/MVgl4Y5I8kbK/VbZrirsa
+        qMJJbFhnm89CrjdBkxVaR8eGhqG4qur01OodEvWNgh8DDnppYn/aPnZi5OeEaPbEVRAQwP23+m+PE
+        X0NDeFUKO3U1dHxH6qK2bcG943vCDPXw501Frlu6nsRKbtAS5TT/JRABkNrEr214J9y267pmN15mM
+        VpufD/jdSY1YTD5mMMcQJd0C1qY4G5zKVDPe2NzCCwtgAIg4l3sw6OZS1OExX5KiqNyEsLs4IqbQ/
+        F2IHfd2g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pSF5d-009uqX-0h;
+        Wed, 15 Feb 2023 10:33:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67FBF3001E7;
+        Wed, 15 Feb 2023 11:33:20 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4407B23884781; Wed, 15 Feb 2023 11:33:20 +0100 (CET)
+Date:   Wed, 15 Feb 2023 11:33:20 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+y08ObKvxqRrAsA@hirez.programming.kicks-ass.net>
+References: <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+qFc7Q2NfXERwYT@moria.home.lan>
+ <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
+ <Y+vplu7H8k4OjlL5@rowland.harvard.edu>
 MIME-Version: 1.0
-Message-ID: <167645718309.4906.12679309805756202231.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+vplu7H8k4OjlL5@rowland.harvard.edu>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On Tue, Feb 14, 2023 at 03:05:42PM -0500, Alan Stern wrote:
+> On Tue, Feb 14, 2023 at 12:05:27PM +0100, Peter Zijlstra wrote:
+> > Every class gets a fixed 8 subclasses (0-7) given by the unique byte
+> > addresses inside the actual key object.
+> > 
+> > Subclasses will let you create nesting order of the same class that are
+> > acceptable. Typically lock/1 nests inside lock/0, but that's not
+> > hard-coded, simply convention.
+> 
+> Can you explain in more detail how this works in the lockdep checking 
+> algorithm?  (For simplicity, let's leave out issues of interrupt status 
+> and other environmental things.)
+> 
+> I've been assuming that lockdep builds up a set of links between the 
+> classes -- namely, a link is created from A to B whenever a thread holds 
+> a lock of class A while acquiring a lock of class B.  The checking part 
+> would then amount to just making sure that these links don't form any 
+> cycles.
+> 
+> So then how do subclasses fit into the picture?  Is it just that now the 
+> links are between subclasses rather than classes, so it's not 
+> automatically wrong to hold a lock while acquiring another lock of the 
+> same class as long as the two acquisitions are in different subclasses?  
+> But you can still provoke a violation if there's a cycle among the 
+> subclasses?
 
-Commit-ID:     df14b7f9efcda35e59bb6f50351aac25c50f6e24
-Gitweb:        https://git.kernel.org/tip/df14b7f9efcda35e59bb6f50351aac25c50f6e24
-Author:        Waiman Long <longman@redhat.com>
-AuthorDate:    Fri, 03 Feb 2023 13:18:49 -05:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 13 Feb 2023 16:36:14 +01:00
+For all intents and purposes the subclasses are fully distinct classes
+from the validation pov.
 
-sched/core: Fix a missed update of user_cpus_ptr
+	mutex_lock(L);
+	mutex_lock_nested(L, 0);
 
-Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
-cpumask"), a successful call to sched_setaffinity() should always save
-the user requested cpu affinity mask in a task's user_cpus_ptr. However,
-when the given cpu mask is the same as the current one, user_cpus_ptr
-is not updated. Fix this by saving the user mask in this case too.
+are equivalent (ignoring lockdep_set_subclass()), and
 
-Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230203181849.221943-1-longman@redhat.com
----
- kernel/sched/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+	mutex_lock_nested(L, 1);
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index e838feb..2a4918a 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2951,8 +2951,11 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
- 	}
- 
- 	if (!(ctx->flags & SCA_MIGRATE_ENABLE)) {
--		if (cpumask_equal(&p->cpus_mask, ctx->new_mask))
-+		if (cpumask_equal(&p->cpus_mask, ctx->new_mask)) {
-+			if (ctx->flags & SCA_USER)
-+				swap(p->user_cpus_ptr, ctx->user_mask);
- 			goto out;
-+		}
- 
- 		if (WARN_ON_ONCE(p == current &&
- 				 is_migration_disabled(p) &&
+is a distinct class, validation wise. So if you write:
+
+	mutex_lock(L1);
+	mutex_lock_nested(L2, 1);
+
+you explicitly create a lock order between the distinct validation
+classes: L/0,  L/1
+
+> > Then there's that nesting lock, that requires two classes and at least 3
+> > locks to make sense:
+> > 
+> >   P, C1, C2
+> > 
+> > Where we posit that any multi-lock of Cn is fully serialized by P
+> 
+> Assuming the speculations above are correct, how does the algorithm take 
+> lockdep nesting into account?  Does it simply avoid creating a link from 
+> subclass C to itself if both C1 and C2 were acquired while holding a 
+> lock of the parent subclass and both acquisitions were annotated with 
+> mutex_lock_next_lock()?
+
+Basically this; it will explicitly ignore the nesting.
+
+Given:
+
+	mutex_lock(P);
+	mutex_lock_nest_lock(C1, P);
+	mutex_lock_nest_lock(C2, P);
+
+mutex_lock_nest_lock() basically does:
+
+ - validate that the instance of P is actually held.
+   (as such, mutex_lock_nest_lock(C1, P1); mutex_lock_nest_lock(C2, P2);
+   will cause objections).
+
+ - either:
+
+   * establish P->C in the held-lock stack
+     and update the graph if so required
+
+   * find the existing C in the held-lock stack
+     and instead of complaining about class recursion, increment a
+     refcount, and leave the held-stack and thus the graph unmodified.
+
+subsequent mutex_unlock() will decrement the refcount and only when 0
+'pop' the actual entry from the held stack.
+
+
