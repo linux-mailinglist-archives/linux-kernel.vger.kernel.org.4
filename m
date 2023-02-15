@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE4D698131
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C402698134
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjBOQrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S229791AbjBOQrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjBOQrU (ORCPT
+        with ESMTP id S229678AbjBOQru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:47:20 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A71F488;
-        Wed, 15 Feb 2023 08:47:19 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id c1so19380883edt.4;
-        Wed, 15 Feb 2023 08:47:19 -0800 (PST)
+        Wed, 15 Feb 2023 11:47:50 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C73120D13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso2030391wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=chrisdown.name; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gWUISe+0HJ9YU1Zk8I5ieMOKSVMFYOw4cw3Zj6d7n2s=;
-        b=C3Mgb3sIx6xX2jPwuKfRtQaIior7RYVYX08b7O46Ieeh37jS2SeyTCt7yGnGUxmXmS
-         hZnGh/uPnB40FGL4d/VnpaAmkHDW6KYgQXomkpbO1uHUsXwsh1nYJoOLWiYUSkxGGrCt
-         NofgdYJf+nMTLRjTx71WQ+r/bPcupTY/2/CX5TZ46CihnGT6Rnusj4U48vXuujcwAKXL
-         wCLmJcOuHn3IeSEuvMeQc4psEGNlBHiVhYw1R2UaGtD9k6s7Z4T11PLMkaY/FiGJmB4C
-         Pr8Hljw+phfFgIu0pH1GwKZo4k3IQe6Tli/omSPqTjpbP9engMOGahhJcdjQxvaeoBe4
-         44HA==
+        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
+        b=J/jK7AjKWop+Rl0aFS17ZsocQqSdyG1w5Ph6rCrHVj4dfmwrZUj8WVXY9XDg7gZMrA
+         vQoxexjnBVZU3MSWcWeLbtkg2EZd+EK5hpBv70HKajGab90wUbTNbtZ4/GxnC+G+f+EG
+         zOl45XKkBDDTN2JXq1NTuwEWpb1h3RC5w+bug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gWUISe+0HJ9YU1Zk8I5ieMOKSVMFYOw4cw3Zj6d7n2s=;
-        b=UKlG/us9eGsqXbfGm2P2Er8j6wOcjbqs65Bek+1QGFh5LbcVxCktY4rFle3RZxp4Qz
-         rdRWDvTKvNd7N+TkR2fTb7WW8KWyrnIvrnJWO2MsakUoO8m/tk6bNitNGsZC0SBUXQul
-         uWS/Etts2rtJxTbmVQ7fstuu/bxi1uswPxwvMx5UXfi3tZrqr6n2PZmHo4TP1323XYDn
-         qTMrpS5Dw1Yv3SbBxiWuyYH8IujPPupnwr7YRUqnd0t+jlMUWw/DOa0mMMHzl9RTQJg1
-         JJagZXN4fd0+nnAMGUCzsQ0yvRWIhaeUS70HUubwhzYL0RrTyYNunGEMLdoGWmZKoMsm
-         EfHw==
-X-Gm-Message-State: AO0yUKV8d8tKzc7qptVzj+mQYia8NA1rTfzbQv4oy+C0WQLJ6gapv97M
-        3sFPketcBWhH//FouM/g13zEupm3wvFv7xXV6/0=
-X-Google-Smtp-Source: AK7set86MN3jsbNFlFmIEMts91fMfvzW7bAkwAoBMxjT7ynQy+L/J2YSrZeR8z0+U8QTQmAF0s6EnZNWKpsjxtLhpQE=
-X-Received: by 2002:a50:bb4c:0:b0:4ac:b5d8:6b2d with SMTP id
- y70-20020a50bb4c000000b004acb5d86b2dmr1535972ede.4.1676479638430; Wed, 15 Feb
- 2023 08:47:18 -0800 (PST)
+        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
+        b=MGEZ5UhbYdzkmw50D7ZJhN9ZcqBBzFu30bAsb2gIMTfv7sUSlZRXVQOVjgBBC4dIM6
+         9+JI3PGRVdi9c826Sqxogd53oHMWA2TlG0/R8itskdDCxdhYQ56AGaxab5lpEhNAbrWU
+         Ss5Y8aGFh/sJ+m7pcwPHFHLLko9J3gSHcAHM42yDHHMI92oOFihvYi7NxPnXXmUtonQu
+         7N8M/LPIg9nBXvPGCklSPqEsXR/zUrb7vuhjC71piNj/KqUBMNi1PLW/eC3xQGFdOiSC
+         TbAf3rmQiv1ytZPw028wftlqUwvTin3tlguiuPCMrfeWPlisQfaAEi4auGI4f28jJLG5
+         FcUA==
+X-Gm-Message-State: AO0yUKUt6EG3BBTirnwDWziqFAVXL80x0C8x1Xi8OogWeLMSF4sLYdgT
+        jTCsXd9JkTzHTpWWTjdHoONSQA==
+X-Google-Smtp-Source: AK7set+MohFiDvkgUEA4Wr16OZCzBJtedjE0Hptcz9oaS3aTwTVVgZk8Ofwc7gmlHvDYCR8plie/NA==
+X-Received: by 2002:a05:600c:4747:b0:3dc:4042:5c21 with SMTP id w7-20020a05600c474700b003dc40425c21mr2562744wmo.6.1676479666061;
+        Wed, 15 Feb 2023 08:47:46 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::4:270c])
+        by smtp.gmail.com with ESMTPSA id he8-20020a05600c540800b003e208cec49bsm566397wmb.3.2023.02.15.08.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 08:47:45 -0800 (PST)
+Date:   Wed, 15 Feb 2023 16:47:44 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     mcgrof@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] module: Remove the unused function within
+Message-ID: <Y+0MsMomkcDBdjNI@chrisdown.name>
+References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230114132508.96600-1-fnkl.kernel@gmail.com> <20230114132508.96600-4-fnkl.kernel@gmail.com>
- <20230215111652.lyhebfntqlibtmex@pengutronix.de>
-In-Reply-To: <20230215111652.lyhebfntqlibtmex@pengutronix.de>
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-Date:   Wed, 15 Feb 2023 17:47:07 +0100
-Message-ID: <CAMT+MTRydNiYnhBJYVCoS5iXnhr7MywCV0t7FanHWwbwv2TrbQ@mail.gmail.com>
-Subject: Re: [PATCH v7 3/5] arm64: dts: apple: t8103: Add PWM controller
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
-        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 at 12:16, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+Jiapeng Chong writes:
+>The function within is defined in the main.c file, but not called
+>elsewhere, so remove this unused function.
+
+Huh? It's used by __module_text_address(), no?
+
+>kernel/module/main.c:3007:19: warning: unused function 'within'.
 >
-> This missing newline looks wrong.
+>Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
+>Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>---
+> kernel/module/main.c | 5 -----
+> 1 file changed, 5 deletions(-)
 >
-> Otherwise the patch looks fine to me.
+>diff --git a/kernel/module/main.c b/kernel/module/main.c
+>index c598f11e7016..062065568b40 100644
+>--- a/kernel/module/main.c
+>+++ b/kernel/module/main.c
+>@@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+> 	return load_module(&info, uargs, flags);
+> }
 >
-Do you want a respin, or can this be fixed when applying the patch?
+>-static inline int within(unsigned long addr, void *start, unsigned long size)
+>-{
+>-	return ((void *)addr >= start && (void *)addr < start + size);
+>-}
+>-
+> /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+> char *module_flags(struct module *mod, char *buf, bool show_state)
+> {
+>-- 
+>2.20.1.7.g153144c
+>
