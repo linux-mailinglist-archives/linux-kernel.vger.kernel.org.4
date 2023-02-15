@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8158069839F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC656983A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjBOSnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 13:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S229717AbjBOSoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 13:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBOSnA (ORCPT
+        with ESMTP id S229640AbjBOSoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:43:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C423E091
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:42:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85A76B82371
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E63C4339E;
-        Wed, 15 Feb 2023 18:41:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676486488;
-        bh=fc+5seqhTO5BvvY3isnCsCZbytpHZYKbkp6X0pw+tz0=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=KwKxexKOjWpIM62ogFQODLQ1bQsNzLet37om+7MP+97xaJyIyy2vgnIwKvqGHgSum
-         AK1HlTcMi+AvC332r/QIwE+/49lsjRtJJSV4BIXQMrnonWfh+22HtMsqqs7j8kwYyW
-         w1EKs81R8h99F0BIHuSoZfDAmS6VE5JSMLdZ+IFrjA4FhQ/WlqFpzGOvDUzu4ZTqOq
-         FYLfMowZLmq29qGViyPSz7myGFzjL33q7gGLhZfuv3GDwHSYvo80FQH+P2N8ItH8t1
-         EkSsDc48uZakeV8iEsThXGc2ro9ZjG3icqKXOi2XHl4Nf9kwmXsGAq9DohtR+CUXdi
-         ndi0MW4G87mvA==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 15 Feb 2023 11:41:17 -0700
-Subject: [PATCH 3/3] powerpc: Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with
- ld.lld 15+
+        Wed, 15 Feb 2023 13:44:01 -0500
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86B740CE;
+        Wed, 15 Feb 2023 10:43:25 -0800 (PST)
+Received: by mail-pj1-f48.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so4127586pjd.1;
+        Wed, 15 Feb 2023 10:43:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=upzzaOYHVMOiSh2W0MdocuQzyFziZ8qGn/UeRPfAQVI=;
+        b=NTG8tH5gBhkkEWrvBykmVJTM2OsGXLhBXGPvwyJy595QeCCd67kwiFhzU2+d24zNzb
+         6xSwu1GEVbSUJDzkSWphwRRj3BaP4cYPxUJCoojTY7UBmDZzJQlFFVYnogZOZki56eby
+         P5CiSGig2E5BDWDiZziSv5Syw+PcMVrbv77+Tq1DzqFc+YYMArT5DorsOeHlk6kxSkAb
+         MW0lfRrHEOWhsFU35eBrcKgMvIcd9VHAAj5+TtLpwsJwQ4zQNXn+4vJMw1IYUfvFJsaz
+         E91tmtwFUgsoLOu/dyGHn+vau/C9VwUUGH94ZKTSxGpMOJVT/HQZjDih32oTT4Qs5aIH
+         IdeA==
+X-Gm-Message-State: AO0yUKUT6seuB6zQpm+ZIhMitFJZtiCX6gAkBuSjGfMQozY6ZjWpq/T6
+        3WkxofKL7h9/Qtq/4Sj8SgE=
+X-Google-Smtp-Source: AK7set/LXHHDfN4gwzkO5CUp+FYEq1ZaxhCyLTWes+S+B4v5VF40uiT4MDOEx9nsP9jKhoYnApIdUg==
+X-Received: by 2002:a17:90b:3eca:b0:234:721e:51e5 with SMTP id rm10-20020a17090b3eca00b00234721e51e5mr840255pjb.10.1676486544333;
+        Wed, 15 Feb 2023 10:42:24 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:f2b7:9a62:c95d:fb83? ([2620:15c:211:201:f2b7:9a62:c95d:fb83])
+        by smtp.gmail.com with ESMTPSA id ku12-20020a17090b218c00b0022c326ad011sm1792371pjb.46.2023.02.15.10.42.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 10:42:23 -0800 (PST)
+Message-ID: <5b2a364e-0a8d-ffa6-139b-3e3e46a0213d@acm.org>
+Date:   Wed, 15 Feb 2023 10:42:20 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 1/1] ufs: mcq: fix incorrectly set queue depth
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        avri.altman@wdc.com, mani@kernel.org, beanhuo@micron.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <da085383bec5c08bf34220ec6cc577f7a1b49ba8.1676396928.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <da085383bec5c08bf34220ec6cc577f7a1b49ba8.1676396928.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230118-ppc64-elfv2-llvm-v1-3-b9e2ec9da11d@kernel.org>
-References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-In-Reply-To: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-To:     mpe@ellerman.id.au
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        erhard_f@mailbox.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1504; i=nathan@kernel.org;
- h=from:subject:message-id; bh=fc+5seqhTO5BvvY3isnCsCZbytpHZYKbkp6X0pw+tz0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMlv1UPn3nmjdiU36FOT54YGk9jbwdOfzrpwQ4Lldo2jh
- aTmydrijlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjAR3mCG/xFvgraEdZq6CVXX
- CPptLaiNF2zQ335f/duS/6bbGRO9lRgZHkb0V30yMWtbK9nNreCq1Vi8e/3F+z8LMgqXK/R7Bzh
- zAwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5017b4594672 ("powerpc/64: Option to build big-endian with ELFv2
-ABI") restricted the ELFv2 ABI configuration such that it can only be
-selected when linking with ld.bfd, due to lack of testing with LLVM.
+On 2/14/23 09:50, Asutosh Das wrote:
+> ufshcd_config_mcq() may change the can_queue value.
+> The current code invokes scsi_add_host() before ufshcd_config_mcq().
+> So the tags are limited to the old can_queue value.
+> 
+> Fix this by invoking scsi_add_host() after ufshcd_config_mcq().
 
-ld.lld can link ELFv2 kernels without any issues; in fact, it is the
-only ABI that ld.lld supports, as ELFv1 is not supported in ld.lld.
+Please add a Fixes: tag.
 
-As this has not seen a ton of real world testing yet, be conservative
-and only allow this option to be selected with the latest stable release
-of LLVM (15.x) and newer.
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 3b3cf78..04e42b2 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -8535,6 +8535,8 @@ static int ufshcd_device_init(struct ufs_hba *hba, bool init_dev_params)
+>   				use_mcq_mode = false;
+>   				dev_err(hba->dev, "MCQ mode is disabled, err=%d\n",
+>   					 ret);
+> +			} else {
+> +				ufshcd_config_mcq(hba);
+>   			}
 
-While in the area, remove 'default n', as it is unnecessary to specify
-it explicitly since all boolean/tristate configuration symbols default
-to n.
+Please rework this code such that the success case (ret == 0) is handled 
+first. That is the approach followed elsewhere in the Linux kernel.
 
-Tested-by: "Erhard F." <erhard_f@mailbox.org
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/powerpc/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Otherwise this patch looks good to me.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b8c4ac56bddc..f9f13029c98a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -603,8 +603,7 @@ config PPC64_BIG_ENDIAN_ELF_ABI_V2
- 	bool "Build big-endian kernel using ELF ABI V2 (EXPERIMENTAL)"
- 	depends on PPC64 && CPU_BIG_ENDIAN
- 	depends on CC_HAS_ELFV2
--	depends on LD_IS_BFD && LD_VERSION >= 22400
--	default n
-+	depends on LD_VERSION >= 22400 || LLD_VERSION >= 150000
- 	help
- 	  This builds the kernel image using the "Power Architecture 64-Bit ELF
- 	  V2 ABI Specification", which has a reduced stack overhead and faster
+Thanks,
 
--- 
-2.39.2
+Bart.
 
