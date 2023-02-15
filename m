@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2105698731
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E155698733
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjBOVO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S229849AbjBOVPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBOVO4 (ORCPT
+        with ESMTP id S229461AbjBOVPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:14:56 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C71ABD
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:14:55 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id br9so307589lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:14:54 -0800 (PST)
+        Wed, 15 Feb 2023 16:15:22 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5D62706
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:15:19 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso4673767pju.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:15:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1gQtmlRBhpSJ40ajJoTyktY/WnEFbQ+Gi+issmQ3qU=;
-        b=ZKZR82o1JYYe14j7LfX/wQTXfDrD3ih0AoR7f+3SDLTKATYgPzCMEAUnUkZzUA/+DX
-         QWYoRJG/TGiaTqb34QpT1WfKCZ+eYENcPkPiWeQE7I4AmUrCHVzeMVU25cDCmexT5f4C
-         1MOqUXvdkIhjDry1uM4ZR3ro2TI1L+F3IIiDJR8PIKsSF9ppE9FVhBsJmB7r0yuzvcc3
-         7wyHq/J4YfGovrsD+GApWNFljd6GXYMtkfdw+saKP7bI7kOWawLukydV6eXrxa9xQfTZ
-         9DxhRkVheK33LhW5CHDzJxkOzthCn81C82GL+SUnsDy0yK3zfDp+g0sBT9AJUI3y2cPN
-         kVnQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xyt90e59gy0D9v4MU/RGcEHWAuStwT4uR+WhtHVXIv8=;
+        b=V2G72BrVvPYmH/82LD20y64j3/WlzRD2lTSl5WCxusI0i1D2EMSCeje9wjUEhGhyMu
+         8G0XY3BF98G+drPxh6pbkbeiOIW+ysBrrqBHay3mrBlj3r12eXa3/prbsQBTfW/nvf5Z
+         YQjU/XPQHZgF8jmiESprlewk+Th6ZXkhg0Vmy1WIp67/SNZuVLp6TmrlkJN1ZDZ0kNrc
+         zgLipACBdf5xNz0gQUIS0RmIo2Ax38rtFf0ppcsk79w8Xg1JAjouqcFq+MtXyXDYP9SC
+         n6Cr8b+RaWhUrTMoB+yQ4W4XUD4kuX14ev5PV+N/qSeM+YNqOuEkobdpqVbLLVDFowU+
+         CRhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f1gQtmlRBhpSJ40ajJoTyktY/WnEFbQ+Gi+issmQ3qU=;
-        b=b9/SrK4ukuuf/mp3+KAYfQEAu3zEVqY9E2/ot7igz9zclgXE5apTBfnF2g4344fKg8
-         63gDmBek1pmJ6DTwU10ce/TvC2exXKHbHfg/tV2ne0asncc4g1GzzqyoKk2nA34WbEdG
-         lFCelkpgMs5+BWws9YDU8Hs1cr6HT1ebvDYpgoCd9JJ79aFL0e/dflgdjPWTY3O+RQgD
-         lJbYuFaNn1783ZijDGeWaRaBZmViEr6uxrMg2M9m8PBcli2pvTLnhP/xEvEtc1xDUik/
-         J2lSwAgEcIEEhzFP+BSDVl2cXO7mdJBPP64uOIQu3oi9lhmuKlSmLX8kteNdJyErgKhl
-         E60A==
-X-Gm-Message-State: AO0yUKWLHTQlTr7+YsxDxUxgXq09jci+zLIGE05ICLgsmc+MVBBQSGjz
-        c4TF5ii8gY8pOvabAupwtc3ghqn0XtJRbAKQQLXt4A==
-X-Google-Smtp-Source: AK7set9HNLqLqmvl/qQOOm2AvS5tnhyFklJKHOM0CSXZu5uWUVPpDBcsV7m40liFRQynQZO4GW6u4p+S+8fNfafnfzs=
-X-Received: by 2002:ac2:43b9:0:b0:4db:182b:2d74 with SMTP id
- t25-20020ac243b9000000b004db182b2d74mr1004018lfl.9.1676495693301; Wed, 15 Feb
- 2023 13:14:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyt90e59gy0D9v4MU/RGcEHWAuStwT4uR+WhtHVXIv8=;
+        b=7Rm+t/7nJYEFMRJfo6tRupw2VNpfo+mUh0KQMP+Vw4D4hXX8C/DDSLy5+5uSSZjHJF
+         /nV/diZ1zxmi9wLc4PVMoTa26wywd6ETuH1ZRBApFOTHiuFTe7GQHwxqYuEUnPbLkRe1
+         frIX9fH30sNfmBVhMYm/6kwam8ZfwHOlyLdwlteNLAz/vxlCx3sylPSM6ITSX8T/qLIP
+         W+tiKFvGZhCj60vwtiJU3fOUqIPQor8hEJGWXmXHDgtpE++WEWed98sWA9zJ2PDCNGBz
+         5ZeyAqdjBxNPrWp9e+ek2+8/v+axHQ3gZTtiDr3iCJ5XjONmD0ODMt1CPCnp7Aoi1ggh
+         hvTQ==
+X-Gm-Message-State: AO0yUKXWVcEv05+B/VCmQmkR2cm9xwckJ6vvTUG8QsF046m8XcX1Q+n9
+        mbepdTZ35GMJr+MGMem7D4uBbQ==
+X-Google-Smtp-Source: AK7set9+gfUn30gSlptLS4iRT6JV03k0TV0qY49Jqm8tt9Ym3C4ij/OdTO3MKy8fiBGx02btYak4UQ==
+X-Received: by 2002:a05:6a21:6d9e:b0:bd:1058:29b2 with SMTP id wl30-20020a056a216d9e00b000bd105829b2mr3904447pzb.58.1676495718545;
+        Wed, 15 Feb 2023 13:15:18 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id j14-20020aa7800e000000b00571cdbd0771sm12157675pfi.102.2023.02.15.13.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 13:15:17 -0800 (PST)
+Date:   Wed, 15 Feb 2023 13:15:13 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v3 4/7] KVM: x86/mmu: Optimize SPTE change for aging gfn
+ range
+Message-ID: <Y+1LYdjXu4H6PX1L@google.com>
+References: <20230211014626.3659152-1-vipinsh@google.com>
+ <20230211014626.3659152-5-vipinsh@google.com>
 MIME-Version: 1.0
-References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-3-evan@rivosinc.com>
- <ded4018d-c90f-41c7-9e54-da954bdef49e@app.fastmail.com>
-In-Reply-To: <ded4018d-c90f-41c7-9e54-da954bdef49e@app.fastmail.com>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Wed, 15 Feb 2023 13:14:17 -0800
-Message-ID: <CALs-HsuwOqR+y-GriKOiRx068bgOv3qTOpsJTaA02htiiynWmw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] RISC-V: Add a syscall for HW probing
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>,
-        Vineet Gupta <vineetg@rivosinc.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        slewis@rivosinc.com, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>, guoren <guoren@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230211014626.3659152-5-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,45 +74,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 1:57 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Feb 6, 2023, at 21:14, Evan Green wrote:
-> > We don't have enough space for these all in ELF_HWCAP{,2} and there's no
-> > system call that quite does this, so let's just provide an arch-specific
-> > one to probe for hardware capabilities.  This currently just provides
-> > m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
-> > the future.
-> >
-> > Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Signed-off-by: Evan Green <evan@rivosinc.com>
->
-> I'm not sure I understand the problem with
-> AT_HWCAP. While the bits in AT_HWCAP and AT_HWCAP2
-> are limited, I don't see us running out of new
-> AT_* words to use for additional bits. Presumably
-> the kernel would already have to know about the
-> name of each supported HW feature and could assign
-> a unique bit number to them.
+On Fri, Feb 10, 2023 at 05:46:23PM -0800, Vipin Sharma wrote:
+> No need to check all of the conditions in __handle_changed_spte(). Aging
+> a gfn range implies resetting access bit or marking spte for access
+> tracking.
 
-Palmer can probably speak to this with more authority, but my
-understanding about the motivation for an approach like this goes
-something like:
- * With the nature of RISC-V, we expect a lot of these types of bits
-and bobs, many more than we've seen with the likes of x86 and ARM.
- * We also expect in some cases these values to be inconsistent across CPUs.
- * While we could copy all that data into the aux vector every time,
-it starts to look like a lot of data, not all programs care about all
-of it, and a lot of it is static, making all the copying wasteful.
- * Another option that would solve most of this would be to point to a
-vDSO data area from the aux vector. This solves the copy complaints,
-but makes that vDSO data ABI, and requires it all to be known up
-front.
- * So, a syscall with a vDSO function in front of it seemed like a
-good combination of speed and flexibility.
+nit: State what the patch does first.
 
-You're certainly right that HWCAPn would work for what we're exposing
-today, so the question probably comes down to our relative predictions
-of how this data will grow.
+> 
+> Use atomic operation to only reset those bits. This avoids checking many
+> conditions in __handle_changed_spte() API. Also, clean up code by
+> removing dead code and API parameters.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
 
--Evan
+nits aside,
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 36 +++++++++++++++++++-----------------
+>  1 file changed, 19 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index c895560244de..5d6e77554797 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -758,13 +758,6 @@ static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+>  	_tdp_mmu_set_spte(kvm, iter, new_spte, true);
+>  }
+>  
+> -static inline void tdp_mmu_set_spte_no_acc_track(struct kvm *kvm,
+> -						 struct tdp_iter *iter,
+> -						 u64 new_spte)
+> -{
+> -	_tdp_mmu_set_spte(kvm, iter, new_spte, false);
+> -}
+> -
+>  #define tdp_root_for_each_pte(_iter, _root, _start, _end) \
+>  	for_each_tdp_pte(_iter, _root, _start, _end)
+>  
+> @@ -1251,32 +1244,41 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+>  /*
+>   * Mark the SPTEs range of GFNs [start, end) unaccessed and return non-zero
+>   * if any of the GFNs in the range have been accessed.
+> + *
+> + * No need to mark corresponding PFN as accessed as this call is coming from
+> + * the clear_young() or clear_flush_young() notifier, which uses the return
+> + * value to determine if the page has been accessed.
+>   */
+>  static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
+>  			  struct kvm_gfn_range *range)
+>  {
+> -	u64 new_spte = 0;
+> +	u64 new_spte;
+>  
+>  	/* If we have a non-accessed entry we don't need to change the pte. */
+>  	if (!is_accessed_spte(iter->old_spte))
+>  		return false;
+>  
+> -	new_spte = iter->old_spte;
+> -
+> -	if (spte_ad_enabled(new_spte)) {
+> -		new_spte &= ~shadow_accessed_mask;
+> +	if (spte_ad_enabled(iter->old_spte)) {
+> +		iter->old_spte  = tdp_mmu_clear_spte_bits(iter->sptep,
+
+nit: Extra space before =
