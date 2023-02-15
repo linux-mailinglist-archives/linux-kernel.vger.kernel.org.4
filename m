@@ -2,122 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD51C697B16
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDE3697B1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbjBOLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S233769AbjBOLtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbjBOLsD (ORCPT
+        with ESMTP id S233217AbjBOLtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:48:03 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4934332;
-        Wed, 15 Feb 2023 03:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1676461678; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 15 Feb 2023 06:49:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C7C13C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676461708;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=eK7FTufvvh/PUkMPLhMCuTLvlOakIRiSdHn809pGIAM=;
-        b=gt34pCB7dpTTgzPuIlKNZ9EszHHnoZQoVSn7txesg55cbL/5cgURvw71ZGr+OeLlUD3orH
-        a9e8gMsV+mHZbxv3FYnqPW4NRZnR3hTGkp9rLXcdGmtaCt1bbzFNuVhAEAkWNr/WwjjzQ5
-        stQeYpxs/6nMbC/q3iNPiKhKu21usq8=
-Message-ID: <d540965a25138772fa063d62e907ffd611f93205.camel@crapouillou.net>
-Subject: Re: Question: partial transfers of DMABUFs
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Date:   Wed, 15 Feb 2023 11:47:55 +0000
-In-Reply-To: <836d600a-bb1c-fbb2-89f5-7c79c3150e8c@linux.intel.com>
-References: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
-         <836d600a-bb1c-fbb2-89f5-7c79c3150e8c@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=Z/H0rotavd9oyHOO+0LmtN00go4zSs58DTjk4UZUpfA=;
+        b=NlW5WLJMq16QmlB2pywhowuom/JnkzhNhSTp77lO4ZvXkOB56BcIZcUnEYimau18VsKOv4
+        SN3mtgMyfAtpRUnzj7DzpThhscfWMJrtdmHtvu1R/qBPCyn14dB6/NyppHwDiXCylIzq38
+        Om7zVhaxxMw7ypUXjwyJ+dMwKE6085s=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-395-BswwD4nXP4GQGaJkcAOQBA-1; Wed, 15 Feb 2023 06:48:27 -0500
+X-MC-Unique: BswwD4nXP4GQGaJkcAOQBA-1
+Received: by mail-wm1-f70.google.com with SMTP id j37-20020a05600c1c2500b003deaf780ab6so1004715wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:48:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z/H0rotavd9oyHOO+0LmtN00go4zSs58DTjk4UZUpfA=;
+        b=ifIpq2plCVIi9KzvhiwmXfijUsgEhEgNTAX/SQRCfvOscIvdlNa9ovbPcD9pX+uJai
+         0+8PyCSd7lPGOiiZ9ZmYjSdeqn+/ttgh6iVgyzkuUn08BVBTCIhiTU0KaZvnH2g0aj70
+         Vg1MI5RWGiTr61+MQaNWrEvke0cQtgxQwiRGIAL/2XN6CS1hseDZTLc0y/z2uViId63F
+         7UA7hrAZIhP2KLLGxuAusOK9ABVJGS1kC9APpq0TZxiLfDCucrONjef+9d3VABLhSpYS
+         wEy/95JHhLrkN6ara1hfi/TI1hRz+s6AztH3jKFL3XANGXXGWUS9Mw+FD1fkafdXLqEK
+         e8Rw==
+X-Gm-Message-State: AO0yUKWWKpqZWD0I60w9QPvCigStSS+nuaIPEV2D63NT6STBogFWwQlF
+        EkH3JmjAyVVr00Su4Zp4vX75yGQK1CPbwkfohp5PA4eYFmDF2in4a6i903jxPgHipBHuUFNmaBd
+        UKx89y0K6L888LAnC0G53Rg6T
+X-Received: by 2002:a05:600c:318f:b0:3e1:f8af:8772 with SMTP id s15-20020a05600c318f00b003e1f8af8772mr2325070wmp.9.1676461706063;
+        Wed, 15 Feb 2023 03:48:26 -0800 (PST)
+X-Google-Smtp-Source: AK7set8OYAXBJzFVluU8HCwAVQMa/cFq9Nf1S2p+oFvhdxz8zS5w1AxVlAWS//WkraJpLlX5F/zY9Q==
+X-Received: by 2002:a05:600c:318f:b0:3e1:f8af:8772 with SMTP id s15-20020a05600c318f00b003e1f8af8772mr2325057wmp.9.1676461705784;
+        Wed, 15 Feb 2023 03:48:25 -0800 (PST)
+Received: from redhat.com ([2.52.5.34])
+        by smtp.gmail.com with ESMTPSA id c3-20020a1c3503000000b003dc522dd25esm1920544wma.30.2023.02.15.03.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 03:48:25 -0800 (PST)
+Date:   Wed, 15 Feb 2023 06:48:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Nanyong Sun <sunnanyong@huawei.com>
+Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        jasowang@redhat.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        wangrong68@huawei.com
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+Message-ID: <20230215064759-mutt-send-email-mst@kernel.org>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207120843.1580403-1-sunnanyong@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maarten,
+On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
+> From: Rong Wang <wangrong68@huawei.com>
+> 
+> Once enable iommu domain for one device, the MSI
+> translation tables have to be there for software-managed MSI.
+> Otherwise, platform with software-managed MSI without an
+> irq bypass function, can not get a correct memory write event
+> from pcie, will not get irqs.
+> The solution is to obtain the MSI phy base address from
+> iommu reserved region, and set it to iommu MSI cookie,
+> then translation tables will be created while request irq.
+> 
+> Change log
+> ----------
+> 
+> v1->v2:
+> - add resv iotlb to avoid overlap mapping.
 
-Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 12:30 +0100, Maarten Lankhorst a =
-=C3=A9crit=C2=A0:
-> Hey,
->=20
-> On 2023-02-15 11:48, Paul Cercueil wrote:
-> > Hi,
-> >=20
-> > I am working on adding support for DMABUFs in the IIO subsystem.
-> >=20
-> > One thing we want there, is the ability to specify the number of
-> > bytes
-> > to transfer (while still defaulting to the DMABUF size).
-> >=20
-> > Since dma_buf_map_attachment() returns a sg_table, I basically have
-> > two
-> > options, and I can't decide which one is the best (or the less
-> > ugly):
-> >=20
-> > - Either I add a new API function similar to
-> > dmaengine_prep_slave_sg(),
-> > which still takes a scatterlist as argument but also takes the
-> > number
-> > of bytes as argument;
-> >=20
-> > - Or I add a function to duplicate the scatterlist and then shrink
-> > it
-> > manually, which doesn't sound like a good idea either.
-> >=20
-> > What would be the recommended way?
->=20
-> Does this need an api change? If you create a DMA-BUF of size X, it
-> has=20
-> to be of size X. You can pad with a dummy page probably if you know
-> it=20
-> in advance. But after it has been imported, it cannot change size.
+put changelog after --- pls
 
-Yes, the sizes are fixed.
+> Signed-off-by: Rong Wang <wangrong68@huawei.com>
+> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+> ---
+>  drivers/iommu/iommu.c |  1 +
+>  drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 57 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 5f6a85aea501..af9c064ad8b2 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
+>  	if (ops->get_resv_regions)
+>  		ops->get_resv_regions(dev, list);
+>  }
+> +EXPORT_SYMBOL(iommu_get_resv_regions);
+>  
+>  /**
+>   * iommu_put_resv_regions - release resered regions
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index ec32f785dfde..a58979da8acd 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -49,6 +49,7 @@ struct vhost_vdpa {
+>  	struct completion completion;
+>  	struct vdpa_device *vdpa;
+>  	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
+> +	struct vhost_iotlb resv_iotlb;
+>  	struct device dev;
+>  	struct cdev cdev;
+>  	atomic_t opened;
+> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>  
+>  	v->in_batch = 0;
+>  
+> +	vhost_iotlb_reset(&v->resv_iotlb);
+> +
+>  	return vdpa_reset(vdpa);
+>  }
+>  
+> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
+>  	    msg->iova + msg->size - 1 > v->range.last)
+>  		return -EINVAL;
+>  
+> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
+> +					msg->iova + msg->size - 1))
+> +		return -EINVAL;
+> +
+>  	if (vhost_iotlb_itree_first(iotlb, msg->iova,
+>  				    msg->iova + msg->size - 1))
+>  		return -EEXIST;
+> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
+>  	return vhost_chr_write_iter(dev, from);
+>  }
+>  
+> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
+> +	struct vhost_iotlb *resv_iotlb)
+> +{
+> +	struct list_head dev_resv_regions;
+> +	phys_addr_t resv_msi_base = 0;
+> +	struct iommu_resv_region *region;
+> +	int ret = 0;
+> +	bool with_sw_msi = false;
+> +	bool with_hw_msi = false;
+> +
+> +	INIT_LIST_HEAD(&dev_resv_regions);
+> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	list_for_each_entry(region, &dev_resv_regions, list) {
+> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
+> +				region->start + region->length - 1,
+> +				0, 0, NULL);
+> +		if (ret) {
+> +			vhost_iotlb_reset(resv_iotlb);
+> +			break;
+> +		}
+> +
+> +		if (region->type == IOMMU_RESV_MSI)
+> +			with_hw_msi = true;
+> +
+> +		if (region->type == IOMMU_RESV_SW_MSI) {
+> +			resv_msi_base = region->start;
+> +			with_sw_msi = true;
+> +		}
+> +	}
+> +
+> +	if (!ret && !with_hw_msi && with_sw_msi)
+> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
+> +
+> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	return ret;
+> +}
+> +
+>  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  {
+>  	struct vdpa_device *vdpa = v->vdpa;
+> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  
+>  	ret = iommu_attach_device(v->domain, dma_dev);
+>  	if (ret)
+> -		goto err_attach;
+> +		goto err_alloc_domain;
+>  
+> -	return 0;
+> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
+> +	if (ret)
+> +		goto err_attach_device;
+>  
+> -err_attach:
+> +	return 0;
+> +err_attach_device:
+> +	iommu_detach_device(v->domain, dma_dev);
+> +err_alloc_domain:
+>  	iommu_domain_free(v->domain);
+>  	return ret;
+>  }
+> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
+>  		goto err;
+>  	}
+>  
+> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
+> +
+>  	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
+>  	if (r)
+>  		goto err;
+> -- 
+> 2.25.1
 
-> You don=C2=B4t have to write the entire dma-buf either, so if you want to=
-=20
-> create a 1GB buf and only use the first 4K, that is allowed. The=20
-> contents of=C2=A0 the remainder of the DMA-BUF are undefined. It's up to=
-=20
-> userspace to assign a meaning to it.
->=20
-> I think I'm missing something here that makes the whole question
-> m,ake=20
-> more sense.
-
-I want my userspace to be able to specify how much of the DMABUF is to
-be read from or written to.
-
-So in my new "dmabuf enqueue" IOCTL that I want to add to IIO, I added
-a parameter to specify the number of bytes to transfer (where 0 means
-the whole buffer).
-
-The problem I have now, is that the current dmaengine core does not
-have a API function that takes a scatterlist (returned by
-dma_map_attachment()) and a transfer size in bytes, it will always
-transfer the whole scatterlist.
-
-So my two options would be to add a new API function to support
-specifying a bytes count, or add a mechanism to duplicate a
-scatterlist, so that I can tweak it to the right size.
-
-> ~Maarten
-
-Cheers,
--Paul
