@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66BF698886
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A9369888A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjBOXCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S229940AbjBOXDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjBOXCj (ORCPT
+        with ESMTP id S229612AbjBOXDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:02:39 -0500
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802B63CE20;
-        Wed, 15 Feb 2023 15:02:33 -0800 (PST)
-Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 15 Feb 2023 18:03:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2C2A256
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:03:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6DC7420416;
-        Thu, 16 Feb 2023 00:02:31 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Thu, 16 Feb 2023 00:02:25 +0100
-Subject: [PATCH 3/3] drm/msm/dpu: Drop unused qseed_type from catalog
- dpu_caps
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADF59B82436
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F31C433D2;
+        Wed, 15 Feb 2023 23:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676502185;
+        bh=1fRnYhVnNIjn8JovKRry8izCjgQIpsfEwNzfXj5M8Kw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sUWhGnvybVG3yko93FDXga/kN8/c0bHWVgaKWGtIwjzR5h5HVfm49Erw3CVDiRmOl
+         bbyOCBsK8/U8uEgFsmeu0xumIW3TSPO7CQCO9n+3fm811qvkrxxNneqAolj3PKBkgc
+         OdLNs1xti2ljr/1VAqDfLJmM+EAUs31SCtSqTQjJ3ky2T9rmR3xNitJf/f6S1pV1P+
+         L7imGNXlkYYl7feVUZpy9FzXIiG/jCwXx7HZ9iOfI0q3NG1pI915IqMXvLE9oJut0P
+         CjsyOPpXxtG/ev+9wynfRR16thNzM25r+zhG9i9iO/o2hT6CKlcQL12siFwxCsb27v
+         cxtu8JhfThjlg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] mm/memory_hotplug: cleanup do_migrate_range()
+Date:   Wed, 15 Feb 2023 23:02:58 +0000
+Message-Id: <20230215230300.61125-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230215-sspp-scaler-version-v1-3-416b1500b85b@somainline.org>
-References: <20230215-sspp-scaler-version-v1-0-416b1500b85b@somainline.org>
-In-Reply-To: <20230215-sspp-scaler-version-v1-0-416b1500b85b@somainline.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Archit Taneja <architt@codeaurora.org>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,139 +53,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SSPP scaler subblk is responsible for reporting its version (via the
-.id field, feature bits on the parent SSPP block, and since recently
-also from reading a register to supersede a read-but-unset version field
-in the catalog), leaving this global qseed_type field logically unused.
-Remove this dead code to lighten the catalog and bringup-overhead.
+Make do_migrate_range() return value mechanism simple.
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 12 ------------
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  2 --
- 2 files changed, 14 deletions(-)
+Changes from v1
+(https://lore.kernel.org/linux-mm/20230214223236.58430-1-sj@kernel.org/)
+- Simply return nothing from do_migrate_range() (David Hildenbrand)
+- Add a cleanup for 'ret' variable
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index cf053e8f081e..bd57a4cce4a9 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -300,7 +300,6 @@ static const uint32_t wb2_formats[] = {
- static const struct dpu_caps msm8998_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0x7,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V1,
- 	.ubwc_version = DPU_HW_UBWC_VER_10,
- 	.has_src_split = true,
-@@ -327,7 +326,6 @@ static const struct dpu_caps qcm2290_dpu_caps = {
- static const struct dpu_caps sdm845_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2,
- 	.ubwc_version = DPU_HW_UBWC_VER_20,
- 	.has_src_split = true,
-@@ -343,7 +341,6 @@ static const struct dpu_caps sdm845_dpu_caps = {
- static const struct dpu_caps sc7180_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0x9,
--	.qseed_type = DPU_SSPP_SCALER_QSEED4,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2,
- 	.ubwc_version = DPU_HW_UBWC_VER_20,
- 	.has_dim_layer = true,
-@@ -355,7 +352,6 @@ static const struct dpu_caps sc7180_dpu_caps = {
- static const struct dpu_caps sm6115_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0x4,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_10,
- 	.has_dim_layer = true,
-@@ -367,7 +363,6 @@ static const struct dpu_caps sm6115_dpu_caps = {
- static const struct dpu_caps sm8150_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_30,
- 	.has_src_split = true,
-@@ -383,7 +378,6 @@ static const struct dpu_caps sm8150_dpu_caps = {
- static const struct dpu_caps sc8180x_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_30,
- 	.has_src_split = true,
-@@ -399,7 +393,6 @@ static const struct dpu_caps sc8180x_dpu_caps = {
- static const struct dpu_caps sc8280xp_dpu_caps = {
- 	.max_mixer_width = 2560,
- 	.max_mixer_blendstages = 11,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_40,
- 	.has_src_split = true,
-@@ -413,7 +406,6 @@ static const struct dpu_caps sc8280xp_dpu_caps = {
- static const struct dpu_caps sm8250_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_40,
- 	.has_src_split = true,
-@@ -427,7 +419,6 @@ static const struct dpu_caps sm8250_dpu_caps = {
- static const struct dpu_caps sm8350_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_40,
- 	.has_src_split = true,
-@@ -441,7 +432,6 @@ static const struct dpu_caps sm8350_dpu_caps = {
- static const struct dpu_caps sm8450_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED4,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_40,
- 	.has_src_split = true,
-@@ -455,7 +445,6 @@ static const struct dpu_caps sm8450_dpu_caps = {
- static const struct dpu_caps sm8550_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0xb,
--	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
- 	.ubwc_version = DPU_HW_UBWC_VER_40,
- 	.has_src_split = true,
-@@ -469,7 +458,6 @@ static const struct dpu_caps sm8550_dpu_caps = {
- static const struct dpu_caps sc7280_dpu_caps = {
- 	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
- 	.max_mixer_blendstages = 0x7,
--	.qseed_type = DPU_SSPP_SCALER_QSEED4,
- 	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2,
- 	.ubwc_version = DPU_HW_UBWC_VER_30,
- 	.has_dim_layer = true,
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 96ce1766f4a1..0f0332d4c5e3 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -390,7 +390,6 @@ struct dpu_rotation_cfg {
-  * @max_mixer_width    max layer mixer line width support.
-  * @max_mixer_blendstages max layer mixer blend stages or
-  *                       supported z order
-- * @qseed_type         qseed2 or qseed3 support.
-  * @smart_dma_rev      Supported version of SmartDMA feature.
-  * @ubwc_version       UBWC feature version (0x0 for not supported)
-  * @has_src_split      source split feature status
-@@ -405,7 +404,6 @@ struct dpu_rotation_cfg {
- struct dpu_caps {
- 	u32 max_mixer_width;
- 	u32 max_mixer_blendstages;
--	u32 qseed_type;
- 	u32 smart_dma_rev;
- 	u32 ubwc_version;
- 	bool has_src_split;
+SeongJae Park (2):
+  mm/memory_hotplug: return nothing from do_migrate_range()
+  mm/memory_hotplug: cleanup 'ret' variable usage in do_migrate_range()
+
+ mm/memory_hotplug.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 -- 
-2.39.2
+2.25.1
 
