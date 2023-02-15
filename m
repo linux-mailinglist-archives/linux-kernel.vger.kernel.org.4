@@ -2,267 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF27697744
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8E869774C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbjBOHRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        id S231174AbjBOHXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbjBOHRS (ORCPT
+        with ESMTP id S229551AbjBOHXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:17:18 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC122ED40;
-        Tue, 14 Feb 2023 23:17:11 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31F3acMQ010872;
-        Wed, 15 Feb 2023 07:17:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=TST6ruSoItHiXYyJMxR0h0nMha2zSb4vgPMLJWrEm4w=;
- b=LwgcZUryXjaNUe1MQIIAcePpF2Ej1KY4qtRhlgVzp5z+mDGhL1aAD770zfsFJF9rtyqY
- KOYUgB/B9ENARDTv7+OlwDLQKX38L0oWglDNB2XeYxnTe29h8jwPxv0JYLYD2+hxr7dS
- Td/7m6l4iN2VKKLZQQDs2tGikGOdPXXaoRkSL4uva9H8yUHu0TeOPacOPH59OL6tgqIT
- 1dpYU/XPX3Pp7I5kVe+rS/CMJ4TUUUMyUKu8viSkij8JuLaOkMOTL0CXVSClNfmJeCkf
- 3GkY8CbOHK8UbXIP1qbo3XNh7ayoqnH5Z8yK9HzDrq0QNtsQFU+XYBbURk9JquzB9rp8 Tw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nrf7v1mex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Feb 2023 07:17:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31F7H512010930
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Feb 2023 07:17:05 GMT
-Received: from hu-mkshah-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 23:17:02 -0800
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-To:     <andersson@kernel.org>, <ulf.hansson@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <wingers@google.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_lsrao@quicinc.com>, <quic_rjendra@quicinc.com>,
-        Maulik Shah <quic_mkshah@quicinc.com>
-Subject: [PATCH 1/1] arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
-Date:   Wed, 15 Feb 2023 12:46:49 +0530
-Message-ID: <20230215071649.9078-2-quic_mkshah@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230215071649.9078-1-quic_mkshah@quicinc.com>
-References: <20230215071649.9078-1-quic_mkshah@quicinc.com>
+        Wed, 15 Feb 2023 02:23:08 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7782128222
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:23:05 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8Cxf9tXiOxjedcAAA--.2283S3;
+        Wed, 15 Feb 2023 15:23:03 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC75WiOxjQawzAA--.30175S3;
+        Wed, 15 Feb 2023 15:23:03 +0800 (CST)
+Subject: Re: "kernel ade access" oops on LoongArch
+To:     Xi Ruoyao <xry111@xry111.site>
+References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
+ <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
+ <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
+Cc:     loongarch@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
+Date:   Wed, 15 Feb 2023 15:23:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hxmeKh9YMUQ_Wudo2FufcNk93JqtU625
-X-Proofpoint-GUID: hxmeKh9YMUQ_Wudo2FufcNk93JqtU625
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-15_03,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 bulkscore=0 mlxlogscore=828 suspectscore=0
- spamscore=0 phishscore=0 malwarescore=0 impostorscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302150065
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC75WiOxjQawzAA--.30175S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZFy7CFW8GFWDGF1DKryDJrb_yoW8CF18pr
+        WayryFgFW8AFyftrW2v3yUCF1rJw4UG347Gw43JwsIvFsxXFy3tay3tFyFgw42yas5X3Wj
+        grWkKFW5C3W8Gw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bOxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2
+        zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_WwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWl
+        kUUUUU=
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add power-domains for cpuidle states to use psci os-initiated idle states.
 
-Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 96 +++++++++++++++++++++-------
- 1 file changed, 72 insertions(+), 24 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index bdcb74925313..08ec96fc8eee 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -169,9 +169,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -194,9 +193,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x100>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_100>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -215,9 +213,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x200>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_200>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -236,9 +233,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x300>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_300>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -257,9 +253,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x400>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_400>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -278,9 +273,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x500>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_500>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -299,9 +293,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x600>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_600>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -320,9 +313,8 @@
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x700>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_700>;
- 			operating-points-v2 = <&cpu7_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -414,7 +406,9 @@
- 				min-residency-us = <5555>;
- 				local-timer-stop;
- 			};
-+		};
- 
-+		domain-idle-states {
- 			CLUSTER_SLEEP_0: cluster-sleep-0 {
- 				compatible = "arm,idle-state";
- 				idle-state-name = "cluster-power-down";
-@@ -782,6 +776,59 @@
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD1: cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD2: cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD3: cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD4: cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD5: cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD6: cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD7: cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CLUSTER_PD: cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_SLEEP_0>;
-+		};
- 	};
- 
- 	qspi_opp_table: opp-table-qspi {
-@@ -5262,6 +5309,7 @@
- 					  <SLEEP_TCS   3>,
- 					  <WAKE_TCS    3>,
- 					  <CONTROL_TCS 1>;
-+			power-domains = <&CLUSTER_PD>;
- 
- 			apps_bcm_voter: bcm-voter {
- 				compatible = "qcom,bcm-voter";
--- 
-2.17.1
+On 02/15/2023 01:35 PM, Xi Ruoyao wrote:
+> On Wed, 2023-02-15 at 12:52 +0800, Youling Tang wrote:
+>> ../stdlib/stdlib.h:141:8: error: ‘_Float32’ does not name a type
+>>    141 | extern _Float32 strtof32 (const char *__restrict __nptr,
+>>        |        ^~~~~~~~
+>
+> This is because Glibc expects GCC 13 to support _Float32, but early GCC
+> 13 snapshots did not.
+>
+>> /usr/bin/ld: /home/loongson/build_glibc/libc.a(dl-reloc-static-pie.o):
+>> in function `_dl_relocate_static_pie':
+>> /home/loongson/glibc/elf/dl-reloc-static-pie.c:44: undefined reference
+>> to `_DYNAMIC'
+>
+> Oh, this one is my fault.  The check for compiler static PIE support was
+> not written correctly.  I'll fix it for Glibc later, but now you can
+> update GCC to the latest git master to proceed.
+>
+
+Tested on Loongson-3C5000L-LL machine, using CLFS7.3 system.
+
+$ gcc -v
+gcc version 13.0.0 20221018 (experimental) (GCC)
+
+# make check -j32
+/home/loongson/build_glibc/math/test-tgmath3-atan2.c: 
+在函数‘test_atan2_84’中:
+/home/loongson/build_glibc/math/test-tgmath3-atan2.c:903:59: 
+错误：conflicting types for ‘var__Float32x’; have ‘double’
+   903 |   extern typeof (atan2 (vol_var__Float32x, vol_var_char)) 
+var__Float32x __attribute__ ((unused));
+       | 
+^~~~~~~~~~~~~
+
+There was a build error in make check, so only tst-mallocfork3-
+malloc-check was tested separately.
+
+# make test t=malloc/tst-mallocfork3-malloc-check
+make[2]: 离开目录“/home/loongson/glibc/malloc”
+PASS: malloc/tst-mallocfork3-malloc-check
+original exit status 0
+info: signals received during fork: 301
+info: signals received during free: 1693
+info: signals received during malloc: 119
+make[1]: 离开目录“/home/loongson/glibc”
+
+A total of five tests are PASS, and the serial port does not display
+CallTrace.
+
+Youling.
 
