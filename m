@@ -2,195 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC3B6988CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5E96988C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBOXgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S229676AbjBOXau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBOXgu (ORCPT
+        with ESMTP id S229536AbjBOXas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:36:50 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA9543469;
-        Wed, 15 Feb 2023 15:36:48 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so282434wmb.5;
-        Wed, 15 Feb 2023 15:36:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLWxglH8TvO+YjEnp0OsBiwCevBxF+hBx7Ea32u4U1s=;
-        b=XqP2qTHN3FxCW03V1fZuaqLV9dSsKSa5UCeHysLTZ6Z2ilvx3KPGTDbe0f1HqCMTrh
-         0QzhOvWMipm4pTrDTiEIKI6ATFUUAFDJkApr6U/0/xIgVwIpaCMYXlqx8/323YIG9sab
-         YoDWAJTWSVW+YexHbB9kS92EdUQxsO3p8HoQwlbG1xpHS8qWfizGZ76FpnYzjI58we6u
-         XI67WcJHrLfkxdJWpmDo7iC8gMO6oWc/lzkiDh1+VsiCWKg0FJpdgGjbB3KpLhmvo3Di
-         hDnJlFreRzTOXeRyc8LPVw2J7Eem2LfC9l3xss+UfCBIni4PmOyzBeLbTauIfKpGI9YU
-         yrog==
+        Wed, 15 Feb 2023 18:30:48 -0500
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF10A4345F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:30:46 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id e12so299544plh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:30:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KLWxglH8TvO+YjEnp0OsBiwCevBxF+hBx7Ea32u4U1s=;
-        b=FNBg2GofetG2wrbkKYjdr3CEvl/u/v2pN3aRBuUoBo6hMsECD+9Jk2/mmo+3nQuYg2
-         makUCCca/BnbrVSLw5RYHmYmbQ1wcBmY1sFv0gvuYGCOQ2CczUJBCF1TPNWbFSt8kB5b
-         n2dFfqpqnVUtqv0UPYA9NE+oaOXbxFZu9HQDf7uw2NK6Qp1NYSUyOjkDWtpMj93gWzN1
-         m0eMSZA6LPYX3+k1C29YPL6800R5gN1Tcvw1zco6wKAtCrwor6QP1phKwgVC+pxwKyhd
-         AI7husgMjZoV0LChgW45WsYKvvZA2QVVIoMtX8PWj/7URsf84k4uj4dRyWpQdRlq6Fb/
-         iPuQ==
-X-Gm-Message-State: AO0yUKWcj14FyU5zaE0cCmjOF2LitulhVkZAkFf1MKfFojT8+LiGP/Xn
-        QFnfBTmrgKFJh1javsiVyn4=
-X-Google-Smtp-Source: AK7set/0N26bH2pJeOZrfQ3amLrk+OGysrgVUNLdiap4mWIP9pBIBXj5sL9Q/8s3teDjjYS9FR3cVQ==
-X-Received: by 2002:a05:600c:44c4:b0:3da:fc30:bfc5 with SMTP id f4-20020a05600c44c400b003dafc30bfc5mr3259702wmo.13.1676504207100;
-        Wed, 15 Feb 2023 15:36:47 -0800 (PST)
-Received: from localhost.localdomain (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
-        by smtp.googlemail.com with ESMTPSA id m17-20020a05600c3b1100b003dd1bd0b915sm3702281wms.22.2023.02.15.15.36.46
+        bh=IYpOhhIEgwbdz7ErS+29oI5s4e0IJn1DFxOYnwu0yoA=;
+        b=B9htkcuJndLZVWFzaZa1dkZRsmhfvpELoKmeKqt1U1nueesqw4cd8/Nb01D4BoQ7pO
+         uBJjQraH3+Nw3h6FVkFMPcCquf//Y5zxzT0uqFpVWd5seltwvinUD3xIf3IoQ72af2DW
+         K2Ix0Uwg81CnZ61UlpLzLmMr1e5rfl+HF5rHn38EsHGMkhnJJKqn82rkg/tJdsh/9jFv
+         QdhWz/GqiO6YqjcbrdGZse/4J7ax/OHOMlTIWgYlE/DmpjdgGcMycrW9YQF1Pc63NTZf
+         404xfMW4Iknh018+/vMGN7fhjSxizuxHEmX6bX+PDPpKQ3fQ4370pmuSPsiTw3XM1RWt
+         pgWw==
+X-Gm-Message-State: AO0yUKV2PuTFRb3Tkmu25lu8TlVV1D9DM4JLlDQsJG2A1KK410ism9bN
+        E3l6T/cA+pJ4J8Wauw5ziyc=
+X-Google-Smtp-Source: AK7set80nWQi1yABYsXEpmQveB6bTjC86fHzmvynMFVBtJEhMPq8I2J4tlQtMfmFxO88DnSBw7il5Q==
+X-Received: by 2002:a17:90b:3806:b0:22c:7639:a910 with SMTP id mq6-20020a17090b380600b0022c7639a910mr4778626pjb.25.1676503845945;
+        Wed, 15 Feb 2023 15:30:45 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:e03a])
+        by smtp.gmail.com with ESMTPSA id x9-20020a63b349000000b004f1e87530cesm10788406pgt.91.2023.02.15.15.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 15:36:46 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Subject: [PATCH] clk: Fix wrong clock returned in parent_data with .name and no .index
-Date:   Thu, 16 Feb 2023 00:27:12 +0100
-Message-Id: <20230215232712.17072-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 15 Feb 2023 15:30:45 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, kernel-team@meta.com,
+        torvalds@linux-foundation.org, ebiederm@xmission.com,
+        oleg@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] tasks: Extract rcu_users out of union
+Date:   Wed, 15 Feb 2023 17:30:33 -0600
+Message-Id: <20230215233033.889644-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
-introduced a regression due to a "fragile" implementation present in some very
-corner case.
+In commit 3fbd7ee285b2b ("tasks: Add a count of task RCU users"), a
+count on the number of RCU users was added to struct task_struct. This
+was done so as to enable the removal of task_rcu_dereference(), and
+allow tasks to be protected by RCU even after exiting and being removed
+from the runqueue. In this commit, the 'refcount_t rcu_users' field that
+keeps track of this refcount was put into a union co-located with
+'struct rcu_head rcu', so as to avoid taking up any extra space in
+task_struct. This was possible to do safely, because the field was only
+ever decremented by a static set of specific callers, and then never
+incremented again.
 
-Such commit introduced the support for parents to be specified using
-clkspec index. The index is an int and should be -1 if the feature
-should not be used. This is the case with parent_hws or legacy
-parent_names used and the index value is set to -1 by default.
-With parent_data the situation is different, since it's a struct that
-can have multiple value (.index, .name, .fw_name), it's init to all 0 by
-default. This cause the index value to be set to 0 everytime even if not
-intended to be defined and used.
+While this restriction of there only being a small, static set of users
+of this field has worked fine, it prevents us from leveraging the field
+to use RCU to protect tasks in other contexts.
 
-This simple "fragile" implementation cause side-effect and unintended
-behaviour.
+During tracing, for example, it would be useful to be able to collect
+some tasks that performed a certain operation, put them in a map, and
+then periodically summarize who they are, which cgroup they're in, how
+much CPU time they've utilized, etc. While this can currently be done
+with 'usage', it becomes tricky when a task is already in a map, or if a
+reference should only be taken if a task is valid and will not soon be
+reaped. Ideally, we could do something like pass a reference to a map
+value, and then try to acquire a reference to the task in an RCU read
+region by using refcount_inc_not_zero().
 
-Assuming the following scenario (to repro the corner case and doesn't
-reflect real code):
+Similarly, in sched_ext, schedulers are using integer pids to remember
+tasks, and then looking them up with find_task_by_pid_ns(). This is
+slow, error prone, and adds complexity. It would be more convenient and
+performant if BPF schedulers could instead store tasks directly in maps,
+and then leverage RCU to ensure they can be safely accessed with low
+overhead.
 
-In dt we have a node like this:
-		acc1: clock-controller@2098000 {
-			compatible = "qcom,kpss-acc-v1";
-			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
-			clock-output-names = "acpu1_aux";
-			clocks = <&pxo_board>;
-			clock-names = "pxo";
-			#clock-cells = <0>;
-		};
+Finally, overloading fields like this is error prone. Someone that wants
+to use 'rcu_users' could easily overlook the fact that once the rcu
+callback is scheduled, the refcount will go back to being nonzero, thus
+precluding the use of refcount_inc_not_zero(). Furthermore, as described
+below, it's possible to extract the fields of the union without changing
+the size of task_struct.
 
-And on the relevant driver we have the parent data defined as such:
-		static const struct clk_parent_data aux_parents[] = {
-			{ .name = "pll8_vote" },
-			{ .fw_name = "pxo", .name = "pxo_board" },
-		};
+There are several possible ways to enable this:
 
-Someone would expect the first parent to be globally searched and set to
-point to the clock named "pll8_vote".
-But this is not the case and instead under the hood, the parent point to
-the pxo clock. This happen without any warning and was discovered on
-another platform while the gcc driver was converted to parent_data and
-only .name was defined.
+1. The lightest touch approach is likely the one proposed in this patch,
+   which is to simply extract 'rcu_users' and 'rcu' from the union, so
+   that scheduling the 'rcu' callback doesn't overwrite the 'rcu_users'
+   refcount. If we have a trusted task pointer, this would allow us to
+   use refcnt_inc_not_zero() inside of an RCU region to determine if we
+   can safely acquire a reference to the task and store it in a map. As
+   mentioned below, this can be done without changing the size of
+   task_struct, by moving the location of the union to another location
+   that has padding gaps we can fill in.
 
-The reason is hard to discover but very simple.
+2. Removing 'refcount_t rcu_users', and instead having the entire task
+   be freed in an rcu callback. This is likely the most sound overall
+   design, though it changes the behavioral semantics exposed to
+   callers, who currently expect that a task that's successfully looked
+   up in e.g. the pid_list with find_task_by_pid_ns(), can always have a
+   'usage' reference acquired on them, as it's guaranteed to be >
+   0 until after the next gp. In order for this approach to work, we'd
+   have to audit all callers. This approach also slightly changes
+   behavior observed by user space by not invoking
+   trace_sched_process_free() until the whole task_struct is actually being
+   freed, rather than just after it's exited. It also may change
+   timings, as memory will be freed in an RCU callback rather than
+   immediately when the final 'usage' refcount drops to 0. This also is
+   arguably a benefit, as it provides more predictable performance to
+   callers who are refcounting tasks.
 
-Due to the introduction of index support, clk_core_get() won't return
--ENOENT but insted will correctly return a clock.
-This is because of_parse_clkspec() will use the index (that is set to 0
-due to how things are allocated) and correctly find in the DT node a
-clock at index 0. That in the provided example is exactly the phandle to
-pxo_board.
+3. There may be other solutions as well that don't require changing the
+   layout of task_struct. For example, we could possibly do something
+   complex from the BPF side, such as listen for task exit and remove a
+   task from a map when the task is exiting. This would likely require
+   significant custom handling for task_struct in the verifier, so a
+   more generalizable solution is likely warranted.
 
-Clock is found so the parent is now wrongly linked to the pxo_board
-clock.
+As mentioned above, this patch proposes the lightest-touch approach
+which allows callers elsewhere in the kernel to use 'rcu_users' to
+ensure the lifetime of a task, by extracting 'rcu_users' and 'rcu' from
+the union. There is no size change in task_struct with this patch.
 
-This only happens in this specific scenario but it's still worth to be
-handled and currently there are some driver that hardcode the
-parent_data and may suffer from this.
-
-To fix this and handle it correctly we can use the following logic:
-1. With a .fw_name not defined (index searching is skipped if a named
-   clock is provided)
-2. Check if .name is provided
-3. Compare the provided .name with what clockspec found
-4. Return -ENOENT if the name doesn't match, return the clock if it does.
-
-Returning -ENOENT permit clk core code flow to fallback to global
-searching and correctly search the right clock.
-
-Fixes: 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Jeffrey Hugo <jhugo@codeaurora.org>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Eric W. Biederman <ebiederm@xmission.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Signed-off-by: David Vernet <void@manifault.com>
 ---
- drivers/clk/clk.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ include/linux/sched.h | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 998676d78029..42e297fcfe45 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -395,6 +395,7 @@ of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec)
-  */
- static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
- {
-+	const char *global_name = core->parents[p_index].name;
- 	const char *name = core->parents[p_index].fw_name;
- 	int index = core->parents[p_index].index;
- 	struct clk_hw *hw = ERR_PTR(-ENOENT);
-@@ -407,6 +408,23 @@ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
- 	    !of_parse_clkspec(np, index, name, &clkspec)) {
- 		hw = of_clk_get_hw_from_clkspec(&clkspec);
- 		of_node_put(clkspec.np);
-+
-+		/*
-+		 * The returned hw may be incorrect and extra check are required in
-+		 * some corner case.
-+		 *
-+		 * In case a .fw_name is not set of_parse_clkspec will use the index
-+		 * to search the related clock.
-+		 * But index may be never set and actually never intended to be used
-+		 * in the defined parent_data since a 0 value is also accepted and that
-+		 * is what by default each struct is initialized.
-+		 *
-+		 * In the following case check if we have .name and check if the returned
-+		 * clock name match the globally name defined for the parent in the
-+		 * parent_data .name value.
-+		 */
-+		if (!name && global_name && strcmp(global_name, hw->core->name))
-+			return ERR_PTR(-ENOENT);
- 	} else if (name) {
- 		/*
- 		 * If the DT search above couldn't find the provider fallback to
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 4df2b3e76b30..1ab082c9d562 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1318,11 +1318,6 @@ struct task_struct {
+ 
+ 	struct tlbflush_unmap_batch	tlb_ubc;
+ 
+-	union {
+-		refcount_t		rcu_users;
+-		struct rcu_head		rcu;
+-	};
+-
+ 	/* Cache last used pipe for splice(): */
+ 	struct pipe_inode_info		*splice_pipe;
+ 
+@@ -1459,6 +1454,8 @@ struct task_struct {
+ 	unsigned long			saved_state_change;
+ # endif
+ #endif
++	struct rcu_head			rcu;
++	refcount_t			rcu_users;
+ 	int				pagefault_disabled;
+ #ifdef CONFIG_MMU
+ 	struct task_struct		*oom_reaper_list;
 -- 
-2.38.1
+2.39.0
 
