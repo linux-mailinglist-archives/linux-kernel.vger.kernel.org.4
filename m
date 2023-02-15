@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6346979BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F536979B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbjBOKT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:19:56 -0500
+        id S233964AbjBOKTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:19:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbjBOKTp (ORCPT
+        with ESMTP id S233943AbjBOKTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:19:45 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ADA3346D;
-        Wed, 15 Feb 2023 02:19:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 903B1320099E;
-        Wed, 15 Feb 2023 05:19:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 15 Feb 2023 05:19:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676456378; x=1676542778; bh=q5E/e4i4oy
-        VGmRBU38c6Pkpr1j0okcfftjblOsGQyQI=; b=DRbk2b+FXi6SUP6W+ojrbicoD0
-        Ew5GnQj2LMnKFmCRAmxnCbOlLclnDxqX4J2XlCqfLANayML0rDX7SjfCk7mYvi3M
-        eEClWb+22zugY6/tg7S2NWv8w0DhJ4Es2Rf5K90L36HVNvOh2qUttliZnxA2myU5
-        b/c1he16qLicxbVJXJWSMEdkUnDaYoViYqSh9ENr+qo01Bl3O5MAL/tJ5sfEF4sv
-        KjnLzQbuwspJtQU3kvthN/FA7vvOXZO55huEmyELk/y/Y9gqvswRq4dMxECiV8BX
-        J2q8iDx1xGQm7Z8ZPR96Bl94DOSNHEahs8mlzua1Zw1Wyn4FkxDENSwb6sLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676456378; x=1676542778; bh=q5E/e4i4oyVGmRBU38c6Pkpr1j0o
-        kcfftjblOsGQyQI=; b=EjTkd0PifDzqDA3DcI0Bn05hfuiggvGkV4KtS0KJacYk
-        uGgl/r4aL5zcMu5OoadMNM1QIBM0Cuez1+DKOvIk+5eZhuzgFy7/74pHBRSIOUyX
-        zI4kTcvX53552K9GHia26DPIBDh5XDOTq4roHO+ZAZwLOwfCVQGO2oDezi3i5QWf
-        82TjmnJgxs5s4jIRzjivaQcyy8KjlSEO7TEhyGZDzOorsrpYpIru8s/NPzfueSuC
-        M7ubCwSMB0PoEbe4cTRQaV9u1TzOlHO2joffwlMb9LwCC7yDTYWAaSIdw8ZprYYo
-        X/IafuUnjL4yNGLDjtZAzd0VvCoztOBfv/9Dlptvkg==
-X-ME-Sender: <xms:ubHsYz0Hy6b6MO2hPBHBNcGvx-9acqkJES8AKca0PNzgyIT8YywKdQ>
-    <xme:ubHsYyH_JEekBQXrMboesMInvwjVnP4UGVatIiVNlTOKSW4S2C6dCtN0DI1IKTDdI
-    exLaEw4oUhlbT373aw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ubHsYz6fxE_-uzjtKjVWA5oMZhZBULmukf7QpH81xz9a4hG9np0LMA>
-    <xmx:ubHsY43t1HPi-3PMxM_1oyenvidCgB1HDVvMl0jQUnLlEAIPrrYpPw>
-    <xmx:ubHsY2GXVR97LalXWh1sdjlMQSw_YfoUFp8JBtWjd4T0NPQ9nwhe_Q>
-    <xmx:urHsY0bT8WlsSHiKtvoqsY_z6pDWP_GvYeHvTuomY2LMTL45sh9DlQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A2774B60089; Wed, 15 Feb 2023 05:19:37 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <ea12dd12-db17-44a8-8c29-6b0a129f355d@app.fastmail.com>
-In-Reply-To: <20230215100008.2565237-3-ardb@kernel.org>
-References: <20230215100008.2565237-1-ardb@kernel.org>
- <20230215100008.2565237-3-ardb@kernel.org>
-Date:   Wed, 15 Feb 2023 11:19:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ard Biesheuvel" <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     "Jonathan Corbet" <corbet@lwn.net>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Jessica Clarke" <jrtc27@jrtc27.com>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        linux-ia64@vger.kernel.org
-Subject: Re: [RFC PATCH 2/5] kernel: Drop IA64 support from sig_fault handlers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 05:19:44 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF2737577
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:19:40 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4a263c4ddbaso257403297b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:19:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RVe4n2guCkN77wNmksIatS/+asEPT2MRD6rguYoxF6s=;
+        b=PCdeAIr8THAY1l7JPPRZv64oTEfGmHyPM6gBpyUwXvh2+HRj8ZlKXd8pYSuATlTx/c
+         wK2K+8tfhHWJDn9Xh4i+7UTK2K8mOqDZqemaZjeoqiAX5TBjhneuRZlwE7JT9cC1Br1t
+         2eFkt92WEQWMJXrQAr3voTw067cqScYvszFl/KJiYVPqg9pm0L9itXSA52l6waimlr74
+         rK2F5qJTLzscYrFCOSUM+2uF5DTJ+4HD1rWPXk8zilox7qP9YARMSSvmKxKGpGvI0q5S
+         Fl2ZRQctuk25C+tefpNApe/tADH707p3kcTTtyQ7K0JeOTIUVfwryG+KATPsc0L5eRlU
+         iDSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RVe4n2guCkN77wNmksIatS/+asEPT2MRD6rguYoxF6s=;
+        b=xpSJptyurOMEfR13mqW/VMJ8gD3iXj+eCb12sEnQ64ECz85NPIUPYJ/j+lOqaAMFJu
+         k8UCU1y7yuznm/fgFQ1a86iySicRbiTqbiLqn9w1F5TkQwCCxSJYK58c11POc4n+igJ+
+         lYRWlhabBkY4/X6FdDP5LoN2uBlTe/A3MO9qpcHjyba3hlpcwmr6gn7sH/bIQwDIa3vk
+         3kOwuqSKzfeiBxIVsrt1qr2FPVTk0/EQDWpIwkwORIcnH07Ygm3+gw05AQBAVKN58Z0O
+         RKFoxvcP2mexEXyV+Eop6APoW1G1Mwy0TM8CDfIe40+IRduJxmJFoWMDBfoWnZlFcQxA
+         KBUw==
+X-Gm-Message-State: AO0yUKXJ/3YDQtJoQE+I2KlwlNM/apEWj+tCsQ8eH9FeWWZq81Gh7TG0
+        5gg5JZcXO09qTNIJr2a94FyPVlOIh4RMz+cENvCVCA==
+X-Google-Smtp-Source: AK7set8HcBJ9ltkOoWGhonkvU78QtPV0gE5DCXlJwMwgVLUa1iKBGsaH2he5xkm03TZ5jeDcrUyTwaK2WtAmmVBV3Yg=
+X-Received: by 2002:a05:6902:384:b0:921:b101:d37a with SMTP id
+ f4-20020a056902038400b00921b101d37amr226910ybs.411.1676456379746; Wed, 15 Feb
+ 2023 02:19:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20230214073638.571417-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20230214073638.571417-1-alexander.stein@ew.tq-group.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 15 Feb 2023 11:19:28 +0100
+Message-ID: <CACRpkdaV3Jv8=ynw5HUH8x7VGuCjFAiULbt-tRMZAU3T+Wo1Ug@mail.gmail.com>
+Subject: Re: [PATCH 1/1] gpio: vf610: make irq_chip immutable
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023, at 11:00, Ard Biesheuvel wrote:
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  include/linux/sched/signal.h | 17 ++++---------
->  kernel/signal.c              | 25 ++++----------------
->  2 files changed, 9 insertions(+), 33 deletions(-)
+On Tue, Feb 14, 2023 at 8:36 AM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
 
-The patch looks good, but I'd suggest adding a oneline description
-referencing that ia64 as a whole is removed.
+> Since recently, the kernel is nagging about mutable irq_chips:
+>
+>     "not an immutable chip, please consider fixing it!"
+>
+> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> helper functions and call the appropriate gpiolib functions.
+>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-I see that you created a couple of patches looking for __ia64__
-but not CONFIG_IA64. If we get consensus on patch 1, we should
-do that as well, let me know if you you want to add those or
-would like me to help here.
+Looks good to me, CC to Marc Z.
 
-I can probably do the same recursive check for removed Kconfig
-options that I used for finding dead code after the boardfile
-removal.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-     Arnd
+We fixed quite a few of these now, Marc do you have an idea about
+how much we have left until we can make immutable the default?
+
+Yours,
+Linus Walleij
