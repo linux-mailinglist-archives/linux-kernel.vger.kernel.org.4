@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2316984F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D676984FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBOTvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
+        id S229782AbjBOTyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBOTvq (ORCPT
+        with ESMTP id S229602AbjBOTx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:51:46 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD6341B43;
-        Wed, 15 Feb 2023 11:51:28 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id x24-20020a9d4598000000b00690bf2011b2so2461ote.6;
-        Wed, 15 Feb 2023 11:51:28 -0800 (PST)
+        Wed, 15 Feb 2023 14:53:58 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83D5FD3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:53:57 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id j4so7567009iog.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:53:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sT4ClNB23fZFU4XjrijJ0dWtSiTxl6Nd7yW2gogV88A=;
+        b=kOoXHaENCqaveZbRVos/KoMjQEYUTTe+cDvD6aZOVB4UUm+9O4E2ELQjImfT8ouZ0J
+         iELDS2mImUI4RYworlFqM7oaHyim/HvO25dDpiSyr7dtNtV+o8xuJalkoo5wJWQ5rTUg
+         +oDPdVMW56ZFzB1vW6+zCXGc+1wVSE96+kk52Q3f59Nf2L77oqW0yzuiC3HydTBOqKIc
+         MT7Qd14E5trSIKIU7J1kY2G2PdW2y4BYh+4O/dZPIz49zPNJmWGCH8JBD7pne/j3bIiB
+         OLQH70fIPNS+3xkyvdwHrUz4SUmR57AeqVf91aJC2bVurGUT0evfT6K4C6eFkgZu/Cnu
+         RAuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g+iuWlg41wdj9dsD9ORs/lnnSLbHgXl/OfpkvXkGtHs=;
-        b=U5Sdo59u0cs083SmSLQpSEdmDf+yTgO7sLNwPz6vf6Neq3oAZOpDPtcQdgFR2WtrP0
-         jk6gkmBQ8B19QkjC89Aoy/gaJ9HnPrskkqMvfvhLnyShn7yqNQZQ/gXBsW7IYVqkRxjF
-         alDgfLiW49GiYWTcP42QhSFK4iv6JDBSTbwhOIIAbp6LbcCd6WFXS8RDyB3B59Vw9Lnj
-         7GcycruoklEJtOdty7lTkR+0Caj+YqALeJN+iXww83mAP86iL5p0kTKHBC3lkXAwamle
-         m9hsgY0T/e7VeURDYTD2CABjSMQ81O/3uarGq4I0GrPnSw1bNKOVpYxjrwKYlZSfyATE
-         HQWQ==
-X-Gm-Message-State: AO0yUKW6uy6dJDdmsxRW9l5NKVZX1J3KiuWYaJFASqKJOmY2by6GhAQQ
-        yfBnSJO6ve13+i3IjImlOyVYEFZdJA==
-X-Google-Smtp-Source: AK7set9vg3F2/fpcnJD4aal3lfEtigJLUSjMzaiQ4iS1okk2WkDSxToxUr2UntVD7TP27C1xl5blSQ==
-X-Received: by 2002:a05:6830:129a:b0:68b:dc52:10f9 with SMTP id z26-20020a056830129a00b0068bdc5210f9mr1512185otp.5.1676490586196;
-        Wed, 15 Feb 2023 11:49:46 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z14-20020a05683020ce00b0068bb6043362sm7888188otq.11.2023.02.15.11.49.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sT4ClNB23fZFU4XjrijJ0dWtSiTxl6Nd7yW2gogV88A=;
+        b=g4nBf7dWRjCrfs6nyGfbRZdNUqzYlVxqf4pZfnHf+48fIPMXkwLcnwrJWis9sJFnBM
+         BRn+k6qvJt5eGerDGXdla6LqKaLK1GZgr+BDkpwDVdlM85dijS5B8k81K8A8Cwm/i0WL
+         gRVBAdUL0CwOgvZgfypTO5QjVPXxh/KROXIF1c+yp5KVgWZZ0fYuUZswRkjt+I8Hoyp+
+         xABOxsfcvgvPfHZB0455M5pw3+QN7l0OwnQ03101MUrIxO17VA8PtsOsXvh12fKNNPbh
+         g3E9WEUKciNYe7UMnBDQPBHxHWNmhy/Lz2pnar/jzMPrjyFIPTSmAjk7Cn4I1nhv+1W1
+         6Q0A==
+X-Gm-Message-State: AO0yUKVQ8b6Pjf7H786k63oyb/UUso5pu69vpY6Vj7H05zAD0dAp1oVN
+        dJadfURvga6g0JM3d5IAkalDSg==
+X-Google-Smtp-Source: AK7set8XLttl8lPSv2+iEOKoX0074zNwcBjXiQgyM56kXujYOubNht4kSI2UhSZzQoeaE5M2qpr1/g==
+X-Received: by 2002:a05:6602:370a:b0:734:ac8a:65d6 with SMTP id bh10-20020a056602370a00b00734ac8a65d6mr348465iob.10.1676490836388;
+        Wed, 15 Feb 2023 11:53:56 -0800 (PST)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5ed90a000000b0073a312aaae5sm6291847iop.36.2023.02.15.11.53.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 11:49:45 -0800 (PST)
-Received: (nullmailer pid 461289 invoked by uid 1000);
-        Wed, 15 Feb 2023 19:49:45 -0000
-Date:   Wed, 15 Feb 2023 13:49:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Message-ID: <20230215194945.GA458740-robh@kernel.org>
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
+        Wed, 15 Feb 2023 11:53:55 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/6] net: final GSI register updates
+Date:   Wed, 15 Feb 2023 13:53:46 -0600
+Message-Id: <20230215195352.755744-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 08:15:27PM +0800, Binbin Zhou wrote:
-> Add Loongson Extended I/O Interrupt controller binding with DT schema
-> format using json-schema.
-> 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> new file mode 100644
-> index 000000000000..88580297f955
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Loongson Extended I/O Interrupt Controller
-> +
-> +maintainers:
-> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> +
-> +description: |
-> +  This interrupt controller is found on the Loongson-3 family chips and
-> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
-> +  individual cores without forwarding them through the HT's interrupt line.
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,eiointc-1.0
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  interrupt-controller: true
-> +
-> +  interrupts:
-> +    description:
-> +      Interrupt source of the CPU interrupts.
-> +
-> +  interrupt-names:
-> +    description:
-> +      List of names for the parent interrupts.
-> +    items:
-> +      - const: int0
+I believe this is the last set of changes required to allow IPA v5.0
+to be supported.  There is a little cleanup work remaining, but that
+can happen in the next Linux release cycle.  Otherwise we just need
+config data and register definitions for IPA v5.0 (and DTS updates).
+These are ready but won't be posted without further testing.
 
-Why do you need this if there is only 1 interrupt?
+The first patch in this series fixes a minor bug in a patch just
+posted, which I found too late.  The second eliminates the GSI
+memory "adjustment"; this was done previously to avoid/delay the
+need to implement a more general way to define GSI register offsets.
+Note that this patch causes "checkpatch" warnings due to indentation
+that aligns with an open parenthesis.
 
-Rob
+The third patch makes use of the newly-defined register offsets, to
+eliminate the need for a function that hid a few details.  The next
+modifies a different helper function to work properly for IPA v5.0+.
+The fifth patch changes the way the event ring size is specified
+based on how it's now done for IPA v5.0+.  And the last defines a
+new register required for IPA v5.0+.
+
+					-Alex
+
+Alex Elder (6):
+  net: ipa: fix an incorrect assignment
+  net: ipa: kill gsi->virt_raw
+  net: ipa: kill ev_ch_e_cntxt_1_length_encode()
+  net: ipa: avoid setting an undefined field
+  net: ipa: support different event ring encoding
+  net: ipa: add HW_PARAM_4 GSI register
+
+ drivers/net/ipa/gsi.c                |  36 ++++-----
+ drivers/net/ipa/gsi.h                |   3 +-
+ drivers/net/ipa/gsi_reg.c            |  35 ++------
+ drivers/net/ipa/gsi_reg.h            |  23 ++++--
+ drivers/net/ipa/reg/gsi_reg-v3.1.c   |  22 ++---
+ drivers/net/ipa/reg/gsi_reg-v3.5.1.c |  22 ++---
+ drivers/net/ipa/reg/gsi_reg-v4.0.c   |  22 ++---
+ drivers/net/ipa/reg/gsi_reg-v4.11.c  | 116 ++++++++++++++-------------
+ drivers/net/ipa/reg/gsi_reg-v4.5.c   |  64 ++++++++-------
+ drivers/net/ipa/reg/gsi_reg-v4.9.c   |  74 ++++++++---------
+ 10 files changed, 205 insertions(+), 212 deletions(-)
+
+-- 
+2.34.1
+
