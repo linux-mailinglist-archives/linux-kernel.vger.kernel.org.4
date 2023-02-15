@@ -2,103 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB4F69778C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660F269778F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbjBOHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S229546AbjBOHu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbjBOHrg (ORCPT
+        with ESMTP id S233631AbjBOHu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:47:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCF935249
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:47:35 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSCVp-0006se-BM; Wed, 15 Feb 2023 08:47:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSCVn-0053mC-38; Wed, 15 Feb 2023 08:47:32 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSCVn-003giY-Jn; Wed, 15 Feb 2023 08:47:31 +0100
-Date:   Wed, 15 Feb 2023 08:47:31 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, Sumit Gupta <sumitg@nvidia.com>
-Subject: Re: [PATCH 3/3] soc: tegra: cbb: Drop empty platform remove function
-Message-ID: <20230215074731.xsfqkmtzrer7sfuj@pengutronix.de>
-References: <20221212222549.3779846-1-u.kleine-koenig@pengutronix.de>
- <20221212222549.3779846-4-u.kleine-koenig@pengutronix.de>
- <20230112215511.gjmplw4kcq55g6zy@pengutronix.de>
+        Wed, 15 Feb 2023 02:50:27 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2078.outbound.protection.outlook.com [40.107.104.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377147696;
+        Tue, 14 Feb 2023 23:50:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FKXLP/SExeGhe7NXSJg2XrLBv3SgjwdEC56ODV67tsOHr06agdeItMZYswKTOz3XOgFlcXXBRZFBpbNj/da9UVhqyTgScGEC/p3yFvWEcdWMukdwYqkEC7zoN81NvjhNI3dKcI76m7LEQLtGhZq+w5+BB7S0+sYTrkThQ08XEr4NqLI62RGVEP45GFjvhRczvwhiNK9naxZCDo38N/X9Wc6VnwAGRiyjGVEfNGWbfPwdNE9sBzJh6G0S7BbF6HHkK/ZssyAC7Vn7ZOcwzVd9c4+V1KEra35wRjsyvIqbvKAsU3v9O7jVw6oIcjpJBHDaLpMT761zKhApo59zDFoWTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7MFJ8W0jH5fCt8F4Yd+YqHbvNHRcTQGH79WtqfPf8Io=;
+ b=SsuHnggoS/tY3MEsIyx+28NdjRbH6QEM7nJtBDXl3JQX3jDRYWDZ1bsOGMbxEYIgEPPE5LYj84cDJ6gYLqmHjcO+6iBxYSPAVtsKi0pFNlNtmHu0WNr5Z4RSzX+Dux61WMLbeVBmtW9oGj9AWkK487EJAv/yexeYLf1jyCIJfsA6rKm6YtLrnI/wivBHffd3kcwN+uVn5N75vMtkHBJxcq+vUzubmz/Rkw+xOFAZ1J5/pEGj5I1knFyjy4J9G2pv2Y+K5A3dX8R1bOmOyBpAe97YWNgDmS85Xgpm3BqU0SxnJHNZLqSr8u/zSk/7bvNsJtRr3L1TJ3ePuCB/EddFig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7MFJ8W0jH5fCt8F4Yd+YqHbvNHRcTQGH79WtqfPf8Io=;
+ b=ljRJ1TpfZpyRNLLVLFLef+2EHB4HjID7UgFuV7lfFa7rcQOVwloGHao6pzQsbRni6Q4A3iAdbIuigWNAeR5YWIR8M6gqhuoEk7Du08WKm8HQTAn8dIQ+47VldcbEw+D16OoqQruPcygP22jNX9QAzgMIMM7OVwzR2ntdDijgMa4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM9PR04MB8177.eurprd04.prod.outlook.com (2603:10a6:20b:3b7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 07:50:22 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 07:50:22 +0000
+Message-ID: <41bc30ac7af4b0ce3ff608b604fb6ea762428680.camel@nxp.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: lcdif: Add i.MX93 LCDIF support
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+Date:   Wed, 15 Feb 2023 15:49:56 +0800
+In-Reply-To: <2551514.Lt9SDvczpP@steina-w>
+References: <20230213085612.1026538-1-victor.liu@nxp.com>
+         <20230213085612.1026538-2-victor.liu@nxp.com> <2551514.Lt9SDvczpP@steina-w>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0131.apcprd02.prod.outlook.com
+ (2603:1096:4:188::6) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dqinbp6fhph7umcv"
-Content-Disposition: inline
-In-Reply-To: <20230112215511.gjmplw4kcq55g6zy@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM9PR04MB8177:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f3fa30d-3f45-4480-b6cf-08db0f294a72
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QO7KpAA5Rh1G0iPyEZ5ay7FsTcUuuIFxSvVu9vxRB/D02gvdW7YksRYBT47aQIon2ZHVDR2XybBwBva5GRROvd6SO40n6p47fd+yuh/zqKFbZVXOkTNlk6v8l80cVu2aAIT8uIwyJ2HdhaCujWrXVIC6aYLuK3yeLpaE3pNGyNVCP76j0dmnSB3ooHe88PhNjR6fMZHlEVVhwsnCbAWM1HTbXicGDkVUKLfTQn3504wJ3/VGFlmmuYR+meZJVkDwQ+VnFOhCcWDPYC/Ar+gVyFXlmfAQ+NlvE750kz/FeIXShz1S8g1Nvk7PyaSuzIAWcO4WYrNSUIJVWmtVXkXq+sDDOcKWBVkXZnzQ+f7WNSiPWSJrqOXojKd72Ptrr2Q1fGxhjEoQyC0iQ64w6NDybITMXb4SMSGdAicdoFHjWEtyp0vqU/kCsjlKAFUOLS9BXMbWGpkXLwmr9SCMc9k9TK6GSGR8LlqDer3LnAmlbjiazfTYQYlqclsPwN6ajqS/repfOxxMHhDy50RHcD1PpnCpk9mg6GCNLlJc8megb82bAiSPxtlsjl7pXVtSxBv9ASJH5k7UH5MLeq1O8wcHsq5/OmnjZiGKixPT8FLtmaM+yqutnWUBwAadt8MPqTolAS8HtBQQ/ukQuWQ9OK1GRNAYGGpMdL8Qq0uQXmghHaY2pDzK+jSsxOWxOc5nnLxyiuYRm+mvdcTfMqDwgfApgA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(451199018)(2616005)(86362001)(6486002)(83380400001)(966005)(478600001)(186003)(52116002)(26005)(6512007)(6666004)(6506007)(36756003)(38100700002)(38350700002)(8936002)(41300700001)(5660300002)(7416002)(316002)(4326008)(66946007)(66476007)(66556008)(8676002)(2906002)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dlJMeEZnc2tWUjdKdUlYQ1NwQ25TaHplOEV6ak41SWQzS0ROVnRhV2RkY1cr?=
+ =?utf-8?B?QzBaS2x6RzdNNlV3U1A4dUEySUtFTkR2RE1EcUZSWklNekRvRjc4dVJvVjJX?=
+ =?utf-8?B?d3hPMG90NXlVNmg5a1BIbEljRFZBa1htaE5EbzBJdGx6ay8vZHhaV2NXWGV3?=
+ =?utf-8?B?N3lOSFN1U2pnV1U2b3hNU0pDMzBpa3pMWm1FbE1CdTYzMGpKcG9meXYxTk9a?=
+ =?utf-8?B?aDNPaWJpbkw1QnZzT05tUjJvenNVaW1WNGtnblBaMDNhNzZOUVNTaU5Dcm1n?=
+ =?utf-8?B?a2pOTm8rYXYveUFtdEpSQXdvWVRaOEVuNFFKYWxyeFNKelRpaWxXcXV3bGpM?=
+ =?utf-8?B?VW41V3p4TzFSUGdYdlVkSGV2R09tc1BITGZFMEFLeE04Y3ZNMlpXN216TlN1?=
+ =?utf-8?B?SWVOVm5WRkR0eDdralVBUmsvUlpOVkhGWEFSeTdlUExua0JGUnR1cCtmZG5S?=
+ =?utf-8?B?c21lMTNOTEp0Z0UrTmVKOGxRWXJKT1VKZnVDaFFKYlFiU0xTOElYOFU3bVdY?=
+ =?utf-8?B?UDJ5bENXZWd0d21nTDUyR0RkQkZ3NXo0aElUeGc1ZTRJRjdkS293b01HWGZX?=
+ =?utf-8?B?QVNCSmJjTXlPanB1eUNYNlFiYy91SlRxWHhtTjVmSWtST3poT2tjczFWYkta?=
+ =?utf-8?B?WVRKcmJOLzBabHgyZDZ0WlB2QWNUTW9MREg5bFN4akhBdzZQbjhmdmZZdnhs?=
+ =?utf-8?B?bVRJUnhLaGhxZFpnQklYalZvWWNmZHo3L291T0pWYnJENEtwYWZGQ3I3OXhj?=
+ =?utf-8?B?UFczVldyZ0tWRU1HKzFqV25iSEV5NXQwdVV4SW5XSmw5QVdjQnYxRndRZzVl?=
+ =?utf-8?B?S3kweUhqUzhsM041citpSFJZeDUrTlh1dEsyQm82Z0h6NStLSlZwbXp5TUtx?=
+ =?utf-8?B?d3FaR3FLQ0Jhc0FGNkNaRHJKUWZyMTlDRlNmL2k0Q2piVlNZSi9BRDVvNnhZ?=
+ =?utf-8?B?dHJaMk1yK3Q1cHJtMXk0SEZaK0o2aHRDUk9LNlozNDhYYlU5bm5QcEVCc21F?=
+ =?utf-8?B?Tm5GdTJhcmJyaVp6NE5SbjBtOVdsOS84eTRwSnJFS1FmVjdvVndTM1VHcGFB?=
+ =?utf-8?B?Rks4L0FhRENQaXZRT1Y1T1Q1eTV5VEI2Y0pEYUdWQmRqZHprSE14VzlzQkt0?=
+ =?utf-8?B?UFp4WnNrVVZMNmZWQjJoZjg3MDZ1UGtVQkpYVExSbnFvM2hTak1lSVV6Q3Na?=
+ =?utf-8?B?TFdaOE41Mm00aHBjRjZIRWxKeUIrVmRRSTBkS28ySnl0WElWZ2hPN0ZNcFJD?=
+ =?utf-8?B?bW01SHdTclBYcVExRS9sWldjUTFlTU04aERlVFVIdGV0cDJsQjRNSlEzN2hw?=
+ =?utf-8?B?SUFRQlMwbTBIcXAyTm8wYnM3MUMzb2VDZU9RQndRaDRCWGV6aWlSWVlRY1lO?=
+ =?utf-8?B?NVNUa1I2TFc1U29NcHF0Ly85WjU0QzNvaEZnVGtuSkczdExHY0ZreTFmSGRo?=
+ =?utf-8?B?UGY3dVlTa2pUODlQZDFLUHNUMlhDM3dFSXVJalRCbEEvRFRwd016cU5qb3dU?=
+ =?utf-8?B?RTQyQkJPVVVxZ2puR2JCdkV0dVExSmQwbnpTSTdHWWY5amQzcjZpdzZEUzR3?=
+ =?utf-8?B?elRjT21LSEhudVhqY2N0eXlKOTdwZm1nUm9Fc2pjckh4UE84WlJhY1RyUXNK?=
+ =?utf-8?B?OERnL2N3REpXRXlDbk9CL1V2dDRqNy81ancvMFZhNm40UGlYc2pGMWg5d2VR?=
+ =?utf-8?B?WkFoeW9hZi9JRlQ2QmRrVlRoY25MdzIxSElqV0k2aHdNdzhuWGRnbEJ2MTlL?=
+ =?utf-8?B?bHBzMG5VTWpVWGE2cmJSdGNhd1RrMnlSYmJVVlFSNUg4RjJQcW5YaEpjT2Fu?=
+ =?utf-8?B?OEhkSElPVm5ZRWFRRUhtWElHQnhOUnZ4TXRFeldDTmtTcFo4dU56WkFQM0tK?=
+ =?utf-8?B?VU1DeXIwalptZk8reGIybE03bUkxU2gwRFRkRmJicWdwR21qeDZNbC81Nm9E?=
+ =?utf-8?B?U25rVGdBQkRGWkY5M1dwNmZnTUlwdkk4amZKM3AwVXk0UHZKeEFweEFjcXRQ?=
+ =?utf-8?B?cU0yOVJWU2J1cklsWWZnakhHY3VmQXk3aDF0M3g4NDlyNlhLVy9pRHBoUjBh?=
+ =?utf-8?B?QWNlYUlRZUVPeTh2V29mSU1RT2gwb1A2a3psZHRVaVBMaS9BN1JvRFF0dlQ3?=
+ =?utf-8?Q?+dpvTCLjTb80m+VvwIRrt8BCT?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f3fa30d-3f45-4480-b6cf-08db0f294a72
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 07:50:22.7663
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wrkvfM008B1aGUcZsqCpZALpztu7ZGqmycH6qJydIEUxaBI/Eo+Pbg/XI5IzBtURI+1AQok8kwW8Rktchm2TnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8177
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-02-15 at 08:26 +0100, Alexander Stein wrote:
+> Hi Liu,
 
---dqinbp6fhph7umcv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Alexander,
 
-Hello,
+> 
+> thanks for the update.
 
-[adding Sumit Gupta to Cc who authored all commits to this driver so
-far, context available at
-https://lore.kernel.org/r/20221212222549.3779846-4-u.kleine-koenig@pengutro=
-nix.de]
+Thanks for the review.
 
-On Thu, Jan 12, 2023 at 10:55:11PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Mon, Dec 12, 2022 at 11:25:49PM +0100, Uwe Kleine-K=F6nig wrote:
-> > A remove callback just returning 0 is equivalent to no remove callback
-> > at all. So drop the useless function.
->=20
-> the other two patches in this series were applied individually to their
-> matching trees. For this one I didn't get feedback yet.
+> 
+> Am Montag, 13. Februar 2023, 09:56:07 CET schrieb Liu Ying:
+> > There is one LCDIF embedded in i.MX93 SoC to connect with
+> > MIPI DSI controller through LCDIF cross line pattern(controlled
+> > by mediamix blk-ctrl) or connect with LVDS display bridge(LDB)
+> > directly or connect with a parallel display through parallel
+> > display format(also controlled by mediamix blk-ctrl).  i.MX93
+> > LCDIF IP is essentially the same to i.MX8MP LCDIF IP.  Add device
+> > tree binding for i.MX93 LCDIF.
+> > 
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Marek Vasut <marex@denx.de>
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > v2->v3:
+> > * No change.
+> > 
+> > v1->v2:
+> > * Add Krzysztof's A-b and Marek's R-b tags on patch 1/6.
+> > 
+> >  Documentation/devicetree/bindings/display/fsl,lcdif.yaml | 7
+> > ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
+> > b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml index
+> > 75b4efd70ba8..fc11ab5fc465 100644
+> > --- a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
+> > +++ b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
+> > @@ -21,6 +21,7 @@ properties:
+> >            - fsl,imx28-lcdif
+> >            - fsl,imx6sx-lcdif
+> >            - fsl,imx8mp-lcdif
+> > +          - fsl,imx93-lcdif
+> >        - items:
+> >            - enum:
+> >                - fsl,imx6sl-lcdif
+> > @@ -88,7 +89,9 @@ allOf:
+> >        properties:
+> >          compatible:
+> >            contains:
+> > -            const: fsl,imx8mp-lcdif
+> > +            enum:
+> > +              - fsl,imx8mp-lcdif
+> > +              - fsl,imx93-lcdif
+> >      then:
+> >        properties:
+> >          clocks:
+> > @@ -107,6 +110,7 @@ allOf:
+> >                enum:
+> >                  - fsl,imx6sx-lcdif
+> >                  - fsl,imx8mp-lcdif
+> > +                - fsl,imx93-lcdif
+> >      then:
+> >        properties:
+> >          clocks:
+> > @@ -123,6 +127,7 @@ allOf:
+> >                - fsl,imx8mm-lcdif
+> >                - fsl,imx8mn-lcdif
+> >                - fsl,imx8mp-lcdif
+> > +              - fsl,imx93-lcdif
+> >      then:
+> >        required:
+> >          - power-domains
+> 
+> I would have expected that fsl,imx93-lcdif supports up to 3 endpoints
+> (MIPI 
+> DSI, LVDS, and parallel) in a 'ports' subnode. But this binding only
+> supports 
+> a single 'port' sub-node. Also an example for this case might be very
+> helpful.
 
-Did this patch fell through the cracks? Is it just -ENOMAINTAINERTIME?
+The port node allows multiple endpoints(See graph.yaml[1]).  It's
+enough to use the existing port node instead of using ports node.
 
-Best regards
-Uwe
+For i.MX93 LCDIF, the port node will be something like this:
+--------------------8<--------------------------
+port {
+        #address-cells = <1>;
+        #size-cells = <0>;
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+        lcdif_to_pdfc: endpoint@0 {
+                reg = <0>;
+        };
 
---dqinbp6fhph7umcv
-Content-Type: application/pgp-signature; name="signature.asc"
+        lcdif_to_ldb: endpoint@1 {
+                reg = <1>;
+        };
 
------BEGIN PGP SIGNATURE-----
+        lcdif_to_cross_line_pattern: endpoint@2 {
+                reg = <2>;
+        };
+};
+--------------------8<--------------------------
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPsjhAACgkQwfwUeK3K
-7Alwngf/fUXHd6rry3K+acBZQ+FyczcRZzJpvDrczWKTb5w+aCnqiiK1uh3Gc1vD
-uN6bf24jkFykbqrBPiyut9kx/i31M617WS9mltkZ/mcGflhqIzenNs3nq6g0uRCN
-SFSPYxoZpz0sXxvC9FjaMt2sjBlFQJA6kvyKS5ar4nhtyWy7FIaaKpd6Apwb/kYz
-ajH70K/WEClnRqdGGylI2uRtyzHTJRsXsAhueM16HQOqZT2RNHsLJl1jst2svVc5
-s0PmO4zTvofvTW9hdNvE/cRJk823DIk8jHUuBZHY7KNnPeNZ+oSMKSCPcwO8TOOP
-0EX4fuigNroU4+11nBGotlOS252Hpg==
-=hRjx
------END PGP SIGNATURE-----
+Looks like it's not necessary to add a specifc example for i.MX93
+LCDIF.
 
---dqinbp6fhph7umcv--
+[1] 
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L48
+
+Regards,
+Liu Ying
+
