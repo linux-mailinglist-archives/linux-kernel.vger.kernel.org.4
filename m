@@ -2,154 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602286979FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24CF6979FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbjBOKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S234087AbjBOKgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjBOKga (ORCPT
+        with ESMTP id S234071AbjBOKgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:36:30 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C6B186;
-        Wed, 15 Feb 2023 02:36:28 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7E85524E29A;
-        Wed, 15 Feb 2023 18:36:27 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 18:36:27 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 18:36:26 +0800
-Message-ID: <69b677fd-4e97-9d05-0703-0924719374b8@starfivetech.com>
-Date:   Wed, 15 Feb 2023 18:36:25 +0800
+        Wed, 15 Feb 2023 05:36:35 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B146C40F2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:33 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSF9J-0005s3-Ku; Wed, 15 Feb 2023 11:36:29 +0100
+Message-ID: <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+Date:   Wed, 15 Feb 2023 11:36:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/3] StarFive's SDIO/eMMC driver support
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230203081913.81968-1-william.qiu@starfivetech.com>
- <CAPDyKFqei-GjKpBUQnDZUbYnSyn-JS5f_EnTLOuA1U4PdYTyVA@mail.gmail.com>
- <CAJM55Z8gpBDu9818GPLRYJ9DBa+NfXW0uo76_bkwWm6RS1S9wg@mail.gmail.com>
- <3ee9b726-10db-5d05-b24a-010c8bf5b59d@starfivetech.com>
- <Y+yyZaBITDmEFUyB@spud>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <Y+yyZaBITDmEFUyB@spud>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-US, de-DE
+To:     Chris Clayton <chris2553@googlemail.com>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
+ <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
+ <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
+ <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
+ <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
+ <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+ <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+ <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+ <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
+ <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676457393;5a3fea7a;
+X-HE-SMSGID: 1pSF9J-0005s3-Ku
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/15 18:22, Conor Dooley wrote:
-> On Wed, Feb 15, 2023 at 06:16:35PM +0800, William Qiu wrote:
->> 
->> 
->> On 2023/2/15 18:00, Emil Renner Berthing wrote:
->> > On Tue, 14 Feb 2023 at 13:21, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->> >>
->> >> On Fri, 3 Feb 2023 at 09:19, William Qiu <william.qiu@starfivetech.com> wrote:
->> >> >
->> >> > Hi,
->> >> >
->> >> > This patchset adds initial rudimentary support for the StarFive
->> >> > designware mobile storage host controller driver. And this driver will
->> >> > be used in StarFive's VisionFive 2 board. The main purpose of adding
->> >> > this driver is to accommodate the ultra-high speed mode of eMMC.
->> >> >
->> >> > The last patch should be applied after the patchset [1]:
->> >> > [1] https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
->> >> >
->> >> > Changes since v2:
->> >> > - Wraped commit message according to Linux coding style.
->> >> > - Rephrased the description of the patches.
->> >> > - Changed the description of syscon regsiter.
->> >> > - Dropped redundant properties.
->> >> >
->> >> > The patch series is based on v6.1.
->> >> >
->> >> > William Qiu (3):
->> >> >   dt-bindings: mmc: Add StarFive MMC module
->> >> >   mmc: starfive: Add sdio/emmc driver support
->> >> >   riscv: dts: starfive: Add mmc node
->> >> >
->> >> >  .../bindings/mmc/starfive,jh7110-mmc.yaml     |  77 ++++++++
->> >> >  MAINTAINERS                                   |   6 +
->> >> >  .../jh7110-starfive-visionfive-2.dtsi         |  23 +++
->> >> >  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  37 ++++
->> >> >  drivers/mmc/host/Kconfig                      |  10 +
->> >> >  drivers/mmc/host/Makefile                     |   1 +
->> >> >  drivers/mmc/host/dw_mmc-starfive.c            | 185 ++++++++++++++++++
->> >> >  7 files changed, 339 insertions(+)
->> >> >  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->> >> >  create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
->> >> >
->> >>
->> >> Patch 1 and patch 2 applied for next, thanks!
->> >>
->> >> Note that I fixed some checkpatch errors/warnings. Next time, please
->> >> run ./scripts/checkpatch.pl before you submit your patches.
->> > 
->> > Hi,
->> > 
->> > Something here is not right. The bindings document "starfive,sysreg",
->> > but the code is looking for "starfive,syscon".
->> > William, did you test this and run dtbs_check before sending this series?
->> > 
->> > /Emil
->> 
->> Hi Emil,
->> 
->> Sorry about that, it's my negligence that I did dtbs_check without
+On 13.02.23 10:14, Chris Clayton wrote:
+> On 13/02/2023 02:57, Dave Airlie wrote:
+>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>
+>>>
+>>>
+>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>
+>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>>
+>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>>
+>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>>> time to fix it and there is one thing I wonder:
+>>>>>>
+>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>>> the root of this problem?
+>>>>>
+>>>>> I did now and I can't spot anything. I think at this point it would
+>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>>> any is in a weird state preventing the machine from shutting down.
+>>>>
+>>>> Many thx for looking into it!
+>>>
+>>> Yes, thanks Karol.
+>>>
+>>> Attached is the output from dmesg when this block of code:
+>>>
+>>>         /bin/mount /dev/sda7 /mnt/sda7
+>>>         /bin/mountpoint /proc || /bin/mount /proc
+>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>>         /bin/echo t > /proc/sysrq-trigger
+>>>         /bin/sleep 1
+>>>         /bin/sync
+>>>         /bin/sleep 1
+>>>         kill $(pidof dmesg)
+>>>         /bin/umount /mnt/sda7
+>>>
+>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>>
+>>> I hope this is what you were looking for, but if not, please let me know what you need
 > 
-> dtbs_check would be okay though, no? The binding and dts (from checking
-> with eyeballs!) are consistent & it is just the driver that is looking
-> for the wrong property name, no?
->
+> Thanks Dave. [...]
+FWIW, in case anyone strands here in the archives: the msg was
+truncated. The full post can be found in a new thread:
 
- 
-It was my negligence that I didn't test the function
+https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
 
->> checking the configuration of CONFIG_SOC_STARFIVE. I made a modification 
->> in the next version and add binding for all the syscon at the same time. Next
->> time I'll make sure the check is correct.I'm sorry again for this oversight.
->> I'll send v4 patch series today.
-> 
-> Ulf's subsystem & his rules, but I would just send a follow-on patch
-> fixing the driver to use the property that is in the dt-binding.
-> 
-> Sorta unrelated, but please remind me about the dts patch once the base
-> dts is merged. It's still in the RISC-V patchwork so *should* be fine,
-> but in case the base dts takes a while it may get automatically
-> archived.
-> 
-> Thanks,
-> Conor.
-> 
+Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+my laptop." didn't bring us much further to a solution. :-/ I don't
+really like it, but for regression tracking I'm now putting this on the
+back-burner, as a fix is not in sight.
 
-I'll do it then.
-Thanks,
-William
+#regzbot monitor:
+https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+#regzbot backburner: hard to debug and apparently rare
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+#regzbot ignore-activity
