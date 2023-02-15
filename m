@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FC56978F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C11A697937
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbjBOJ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S233918AbjBOJn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbjBOJ0y (ORCPT
+        with ESMTP id S234099AbjBOJnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:26:54 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDFB222D1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:26:22 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id bx25so2029157uab.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:26:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8JZ7cPQMzKcdcwW48N+uKI3jJsqc1Zm4J233qZzbj50=;
-        b=R+gC83k8XKNvKxK2e7FZ6xn9BdKpj6o3v/OEHn402y09PtX3uWtWWyLdVYxl8mKeNH
-         QfOFvgkE45GxvXRpiobhSx5Tp3A5oPgsIcfTyzTrmErpKGfdKByexf17uXMikb/Bzp4V
-         7yMBUGqy1/HxdMRlMQJk8VSqjXDboVdCVux4v0iTFWKn3knTY2YtH8ugxK8scWWSjL/W
-         7zyw7Aa7jrUIlhYT90xOkiwBWGqddlVbdD4OdIZaVdMB14TbSWt1W/3uoqIAxwokGDVn
-         WB0wvrPHwbRxMHltxHMuaX+lg5BIznJFNt6Q0zACvdSQI8/r+kCVeqltoSNpP5XoQ2hb
-         4Oew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8JZ7cPQMzKcdcwW48N+uKI3jJsqc1Zm4J233qZzbj50=;
-        b=HHumKNab0aBMoHmvt3AvAYEuavPF62dRFZBua9SwSVXqCEqE1U/RukhBFgzJ6HPulU
-         ebmGEGcgLWMYpSOqO6ZgxYfXD6gcyqX55PWkU66Fbdux8CGo7XKCvcvMJlyGaCyJMkPi
-         SPNnycciGoaaPf8w7CG/QkmvYtPsb9ucqskdb1BL0zow3RmKxdiu7kTyEoHsO1/qIFnf
-         xTreK0MNkWf4ZYKmCCwix7a+c4uy2nrT04WwVPGtrJw6+pjscuJZJXQS/UK+3neM8W8n
-         98uAYZRc48gLPPUGCiPFzXJMEuMjHYnFQi9qOuqkNrdZV+bDoZ3JRxBvaExb3YNPj4t5
-         RWYA==
-X-Gm-Message-State: AO0yUKWZz7OYJXX3+O8Gp9IE1T5gLBs/vLVrlsIyxx94r/mA2l9lv195
-        YkYjP9AkFG3zstgsqMRkSF9ecYhJoR4AtfPdkffBPC7EtETIeUJs
-X-Google-Smtp-Source: AK7set/RtoRfh2WTkzZlIUEXnVPW9gFOvFMFdmDxa2yP1SYxsLbCmAjCASPTcaSqtVyPJldtkwi2HZjvzOdF11ull9U=
-X-Received: by 2002:ab0:7442:0:b0:661:1837:aad7 with SMTP id
- p2-20020ab07442000000b006611837aad7mr174248uaq.45.1676453181317; Wed, 15 Feb
- 2023 01:26:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20230215091503.1490152-1-arnd@kernel.org>
-In-Reply-To: <20230215091503.1490152-1-arnd@kernel.org>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 15 Feb 2023 10:25:44 +0100
-Message-ID: <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
-Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 04:43:42 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Feb 2023 01:43:39 PST
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746FCB442;
+        Wed, 15 Feb 2023 01:43:37 -0800 (PST)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id E641BC02F6;
+        Wed, 15 Feb 2023 10:27:37 +0100 (CET)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1676453257;
+        bh=JcWAyn8q70xL4QFfQr72WF4KdrylqsGgjLNgZGECBXc=;
+        h=From:To:Cc:Subject:Date;
+        b=QqN6IbVuNl4SKsNs6n4H8RbcxzxkfupowKT9WfPrNyAtjKROJApNgXequyk1Si5wG
+         Bad48OGwDd94bD8bIHL57A6qi3eUQ6sSObzwKBg7E8duo15DyL22UyAxebudRd4v0W
+         yqtcipBlP5ckeQBEfaK9rZA1t+8kvF0qL8qDomh64duFXCh/bm6H7R1kqtWlB1H3px
+         G8B0iPDcS8M9vT2BRvVvJUgai/D8I5tj9mIqbrMYAP8WOiHnRQskRuVNITUL3gNn9O
+         SV5Pfr+uIArA+mmyyZigxb72eyT/sFNYdEUf7ErILfrnqAr4kzaNZi6zEguyHkWHur
+         DAGLNrD4yHMwVgWvZxQn7NhHj0ZpjSo1et+jphEpwtya3fJl9AeooG2bFLmwImUGIS
+         TLaUbKi5hZXTwGkm5iS6ITam11vhhZ4lnWNZ7m3040u1ovfOjcALAV2NNyDoHLnsHs
+         sa+V6hX3fLQsLeoRG/AmQyCaooCc3o+tdPhYQzlodt3/lCc8UO4JseCDctBT+U12v4
+         4Ag7nnLYWEhCNtR4bm1o8K2pVlWl8taYZgixKSBfRlf62VEzyRwLPxZLz51T/k8CQU
+         Gxhi/STUDwuaA0cF4IYDcGEfjvdSF09Ovfsp+Ea6dHLspmuC6UddusAr6ogbSsrx7b
+         7fsHPx4Vefkl4HCaCBDNZblo=
+Received: from localhost (eth1-9-167-demarc.sto-kn6.obe.net [195.128.255.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id A6460C015E;
+        Wed, 15 Feb 2023 10:27:37 +0100 (CET)
+From:   Morten Linderud <morten@linderud.pw>
+To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jgg@ziepe.ca, jarkko@kernel.org, peterhuewe@gmx.de
+Cc:     Morten Linderud <morten@linderud.pw>,
+        Erkki Eilonen <erkki@bearmetal.eu>
+Subject: [PATCH v3] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI address
+Date:   Wed, 15 Feb 2023 10:25:52 +0100
+Message-Id: <20230215092552.3004363-1-morten@linderud.pw>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Building a kcsan enabled kernel for x86_64 with gcc-11 results in a lot
-> of build warnings or errors without CONFIG_CONSTRUCTORS:
->
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/copy_mc.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/cpu.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/csum-partial_64.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/csum-wrappers_64.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/insn-eval.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/insn.o'
-> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/misc.o'
->
-> The same thing has been reported for mips64. I can't reproduce it for
-> any other compiler version, so I don't know if constructors are always
-> required here or if this is a gcc-11 specific implementation detail.
->
-> I see no harm in always enabling constructors here, and this reliably
-> fixes the build warnings for me.
->
-> Link: https://lore.kernel.org/lkml/202204181801.r3MMkwJv-lkp@intel.com/T/
-> Cc: Kees Cook <keescook@chromium.org>
-> See-also: 3e6631485fae ("vmlinux.lds.h: Keep .ctors.* with .ctors")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tpm_read_log_acpi() should return -ENODEV when no eventlog from the ACPI
+table is found. If the firmware vendor includes an invalid log address
+we are unable to map from the ACPI memory and tpm_read_log() returns -EIO
+which would abort discovery of the eventlog.
 
-Reviewed-by: Marco Elver <elver@google.com>
+Change the return value from -EIO to -ENODEV when acpi_os_map_iomem()
+fails to map the event log.
 
-Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
+The following hardware was used to test this issue:
+    Framework Laptop (Pre-production)
+    BIOS: INSYDE Corp, Revision: 3.2
+    TPM Device: NTC, Firmware Revision: 7.2
 
-Do you have a tree to take this through, or should it go through -rcu
-as usual for KCSAN patches?
+Dump of the faulty ACPI TPM2 table:
+    [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
+    [004h 0004   4]                 Table Length : 0000004C
+    [008h 0008   1]                     Revision : 04
+    [009h 0009   1]                     Checksum : 2B
+    [00Ah 0010   6]                       Oem ID : "INSYDE"
+    [010h 0016   8]                 Oem Table ID : "TGL-ULT"
+    [018h 0024   4]                 Oem Revision : 00000002
+    [01Ch 0028   4]              Asl Compiler ID : "ACPI"
+    [020h 0032   4]        Asl Compiler Revision : 00040000
 
-Thanks,
--- Marco
+    [024h 0036   2]               Platform Class : 0000
+    [026h 0038   2]                     Reserved : 0000
+    [028h 0040   8]              Control Address : 0000000000000000
+    [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
 
-> ---
->  lib/Kconfig.kcsan | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> index 4dedd61e5192..609ddfc73de5 100644
-> --- a/lib/Kconfig.kcsan
-> +++ b/lib/Kconfig.kcsan
-> @@ -14,6 +14,7 @@ menuconfig KCSAN
->         bool "KCSAN: dynamic data race detector"
->         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
->         depends on DEBUG_KERNEL && !KASAN
-> +       select CONSTRUCTORS
->         select STACKTRACE
->         help
->           The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
-> --
-> 2.39.1
->
+    [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+    [040h 0064   4]           Minimum Log Length : 00010000
+    [044h 0068   8]                  Log Address : 000000004053D000
+
+Fixes: 0cf577a03f21 ("tpm: Fix handling of missing event log")
+Tested-By: Erkki Eilonen <erkki@bearmetal.eu>
+Signed-off-by: Morten Linderud <morten@linderud.pw>
+
+---
+
+v2: Tweak commit message and opt to return -ENODEV instead of loosening up the
+    if condition in tpm_read_log()
+
+v3: Mention function name instead of "this" in the commit log. Added Tested-By
+    and Fixes tags
+
+---
+ drivers/char/tpm/eventlog/acpi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 0913d3eb8d51..cd266021d010 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -143,8 +143,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 
+ 	ret = -EIO;
+ 	virt = acpi_os_map_iomem(start, len);
+-	if (!virt)
++	if (!virt) {
++		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
++		/* try EFI log next */
++		ret = -ENODEV;
+ 		goto err;
++	}
+ 
+ 	memcpy_fromio(log->bios_event_log, virt, len);
+ 
+-- 
+2.39.1
