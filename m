@@ -2,138 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5200E6981E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC5F6981F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjBORZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S230061AbjBOR0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjBORZp (ORCPT
+        with ESMTP id S229629AbjBOR0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:25:45 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2046.outbound.protection.outlook.com [40.107.92.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFBCEC4B;
-        Wed, 15 Feb 2023 09:25:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nBNwRk0q9LWojR9zYhScH5LWdhZEPOmOi3MhHz5PSk7/YonWW/wAzRCb1ykTgm3zpZ9iFThMJDwWsf1sI7PSXoPbCLwRhPzaz71Pgi0NZQrs0KtBBUimc3QK9BRaujWde6wQcdNNNUMK6mYI8UvCjwxygmDZXPSR8r1OVMikxWOQ69odYHGaVQClrnKhtZbPJ4ZRcDgAdFZLT9wlcYM7eoKT9OiEdRonYE1ozhCx14IMzX2z3VfjGR738bEFdUi+zkq4N1KX67W1sgD/Lb+pos2WgF1ZPNMC8GxGfqZdsrvxSpYPZ3iEDL6qee9bGSgUkXUkZjAvubN8AdSaIrlhcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=URgtI+FFhjL41dItnndjjqhbgFoErg3/ObhvX551pHI=;
- b=R4Ahecm/WeP1ovbutu/Lk8wgu0QuBmjZEy1dAFSbmEJfrnZvD8Ynp/FvDkCZQfKjtrFCRXMga86FPZghnc3qLjtranKOGwKZo0r+tt/Hfp1tj5u14MFWqKEOLUUUtS/cMalySxQXsBi99UtIiHG1mZlaLYY6+TqZU1GrsjUn5j9y9yd4BuA8arXns5MFjMFVOT5YLFDgfqGttAz3512EgdG5WaOJHbXCgOwQTf1ozWT7G/WBUzoANMa+RnWQpleNG2AEVRG2gxbGgClJFTa+zM0R9Wy58Wbd2G9h4RA7W0hx4YTaQLyh5tAwFPYaIyMDdth6q0H0xO+pIq6e/gZ3CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=URgtI+FFhjL41dItnndjjqhbgFoErg3/ObhvX551pHI=;
- b=hB5VAa5swG+9EXjzyZGM82Htfey5Bhhmt/p+CmP/jFFcllyBYxmM532qKrAGudPG10EBxIBxS9C4ygBtzd5MEUNaeGp60ESdN8n/oiiOM2tKKJYWV9tMqx5IO/72jmcIDdXR5C+f7eYHXeI7xm9K5Mp7TrO0gn1vK4hlwVKB13E=
-Received: from BN8PR03CA0003.namprd03.prod.outlook.com (2603:10b6:408:94::16)
- by PH7PR12MB6585.namprd12.prod.outlook.com (2603:10b6:510:213::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Wed, 15 Feb
- 2023 17:25:37 +0000
-Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::9b) by BN8PR03CA0003.outlook.office365.com
- (2603:10b6:408:94::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
- Transport; Wed, 15 Feb 2023 17:25:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.12 via Frontend Transport; Wed, 15 Feb 2023 17:25:36 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 15 Feb
- 2023 11:25:36 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-CC:     <Sanju.Mehta@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
-Date:   Wed, 15 Feb 2023 11:25:20 -0600
-Message-ID: <20230215172520.8925-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230215172520.8925-1-mario.limonciello@amd.com>
-References: <20230215172520.8925-1-mario.limonciello@amd.com>
+        Wed, 15 Feb 2023 12:26:48 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801493BDB8;
+        Wed, 15 Feb 2023 09:26:32 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so28428596lfb.13;
+        Wed, 15 Feb 2023 09:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:signed-off-by:mime-version:message-id
+         :date:subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DQlRafljLF9Q9uLLS136Iq6uLJFEx7qxm5tkam05qzg=;
+        b=iLjS4lOZX/KVrpzmaicVmZgBMykWk8cTgH7vya1XHVB513g39ACTnCbs4UJDhgYYhZ
+         sjetls07+lNA4iIIopCSuPGrZpMRsQvY6ab5DncyQA0R+5rgEc7DXmCXdwJLM5eH8oIo
+         a094kHNoH9Wc8G7wDYTsZC9bR/QPcP4ngrh1x9L6QfJIzCnJaeqc5OEHKhvt3oDdg2Mt
+         8le9UgRKGi3VmZkMaNkMKzxR22pUwghtWJsfIHPqKzHxJkh79kpUd7SlNgx6dXR/RvTG
+         NHgeUCDYrYQvIagOsgFUgkuNvruoX5HaiFYRVtxLAQj0Y7vdbEaMGbnM7WAoRNAg1g6m
+         By9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:signed-off-by:mime-version:message-id
+         :date:subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DQlRafljLF9Q9uLLS136Iq6uLJFEx7qxm5tkam05qzg=;
+        b=12xJGqNvwGvWZfrtl6xkKyDYkMQpKlU5MO5cNdW6KzcPinJ+pTNw3saRyt9PP1Goo6
+         M28NQVUxca5BzpsXTnUSUKowUfjn9wKmY+fnpd2E6y27KRIzRgFY7noYdlPOF1MS/MMS
+         jWVBiVKwO8LYbS3fmejeoOLcax16vkRPav0UpgD+uPk+KmDkIfHs4Lx387n/Ae75iqus
+         owJdRuSMz6FwWOJQGlYnIIFwJGeSDeJ2Jv7/oW5+MrD6jh8Bnrs6J3sLQ6dHmsLdNN5x
+         P+ScdpIoidj196jH49YbX+DbBmHMdYRCNXWij3CRm6QxgGd0ivVhY8kd3Sc5L43tuFya
+         Qc5g==
+X-Gm-Message-State: AO0yUKWKdxO6dEMOEf4XWSFishicv60IGoeugDKmpD/HoxTEu+CYNPQf
+        58sk/MRxvf9z0f97CdCEnZCGnPLO3LjncySG
+X-Google-Smtp-Source: AK7set9gPL7L42GyeyJ+gu/w3H+9HxMa96M1/VcVKMAMU0zHrfuw8VGW7Fvr+NUNOfa09LxIukLcYQ==
+X-Received: by 2002:ac2:5a45:0:b0:4a4:68b8:c2ad with SMTP id r5-20020ac25a45000000b004a468b8c2admr661689lfn.4.1676481990772;
+        Wed, 15 Feb 2023 09:26:30 -0800 (PST)
+Received: from pc.. ([46.8.32.101])
+        by smtp.gmail.com with ESMTPSA id x12-20020a19f60c000000b004d988f59633sm1280502lfe.161.2023.02.15.09.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 09:26:30 -0800 (PST)
+From:   andybeg <andybeg@gmail.com>
+To:     jdelvare@suse.com
+Cc:     andybeg <andybeg@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: max34409 driver added
+Date:   Wed, 15 Feb 2023 20:26:12 +0300
+Message-Id: <20230215172613.359079-1-andybeg@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Signed-off-by: andybeg <andybeg@gmail.com>
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|PH7PR12MB6585:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55d91e9d-b628-4d70-4261-08db0f79a6f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J/+gMAi4AzyeqqjBqrTKwdP7UrGQ7U5wKd+SMsVzJs8m0StKAKq9bt/vXb+Ot06WiHz0v2S3CbaPwiJjwBzaDk2xnWTFx0HqxzBWrPwDicaXfTggbUIVKkAwRpNWOfCK1VGuBg7buspnx8VBp6+Kcfi1AhEdAF1x97iIYCZI7SmT3m+YiR0hW3dEEz1O5kreL62e6HfBnVmJwaMRdO+AWA7V+bJl2Rc1jMyO5ncQJSoxVpkG0ZIMbYsplnmDUn5m9V/iQFPUKOsNJLP/zkbm+E61S3TD1V6CvUQ4q85x0oxu7oyL9CGBrHho+Hj7EM0lVpCMxRe83sdNQF8MZ57rVrzlYBAYY/wUwp7NzA7Z9FxZslv6kIF4S2pKz/tk0PfT26iB6uDjGeNEHFGnzUMt+F86C1doPoIpCC+J4tq/EHYuoAXd/jnatfYSJDdxMXh1HC63eR4cBkjAtBh5SH/MCtXFYL9FweybXwMb3LUls8tQdNCmgcRnxR1ozf5bz/g6qhLVeHM4iPtXYiUDI9bUOwdJTpzHEMyk3a+RTCAyTEYETSOX4juAQeWkY1NFKjBoB8R43xf+jJbxQ6/gcppVhjQQT6hR7Y338QO/C/e80lGqgbcTuqK1avVKM8EKc642z1eFT6bId0L1MVPavPc9z30MzOmPtzAHPZBJaxA1HchGaiaLEfqoSP03QhRkEWdgcIABMWQwmstqPMsf9ns4vERPBc1J4bX1sHw+raLNnLphkLLDOeaHtxIGkSWXqZ0O
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(5660300002)(82740400003)(356005)(36756003)(41300700001)(36860700001)(81166007)(86362001)(82310400005)(2616005)(1076003)(336012)(83380400001)(40460700003)(2906002)(47076005)(186003)(426003)(44832011)(8936002)(6666004)(16526019)(26005)(4744005)(478600001)(110136005)(40480700001)(316002)(54906003)(8676002)(70206006)(7696005)(4326008)(70586007)(81973001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 17:25:36.9073
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55d91e9d-b628-4d70-4261-08db0f79a6f4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6585
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The static function `tb_eeprom_get_drom_offset` has more safety guards
-for the DROM offset fetching.  Use this instead of just `tb_sw_read`
-
-No intended functional changes.
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/thunderbolt/eeprom.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index d1be72b6afdb..b6572a893579 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -471,14 +471,13 @@ static int tb_drom_copy_efi(struct tb_switch *sw, u16 *size)
+diff --git a/Documentation/hwmon/max34409.rst b/Documentation/hwmon/max34409.rst
+new file mode 100644
+index 000000000000..91779c6a9163
+--- /dev/null
++++ b/Documentation/hwmon/max34409.rst
+@@ -0,0 +1,23 @@
++Kernel driver max34409
++=====================
++
++Supported chips:
++  * Analog Devices MAX34409
++    Prefix: 'max34409'
++    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX34408-MAX34409.pdf
++
++Author: Andrey Kononov <a.kononov@gagarin.me>
++
++
++Description
++-----------
++
++This driver for SMBus Dual/Quad Current Monitor MaximIntegrated MAX34409
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst
++for details.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 3176c33af6c6..de412f7dcad8 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1088,6 +1088,13 @@ config SENSORS_MAX31760
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called max31760.
  
- static int tb_drom_copy_nvm(struct tb_switch *sw, u16 *size)
- {
--	u32 drom_offset;
-+	u16 drom_offset;
- 	int ret;
- 
- 	if (!sw->dma_port)
- 		return -ENODEV;
- 
--	ret = tb_sw_read(sw, &drom_offset, TB_CFG_SWITCH,
--			 sw->cap_plug_events + 12, 1);
-+	ret = tb_eeprom_get_drom_offset(sw, &drom_offset);
- 	if (ret)
- 		return ret;
- 
++config SENSORS_MAX3440X
++	tristate "Maxim max3440x SMBus Dual/Quad Current Monitor"
++	depends on I2C
++	help
++	  Say yes here to build support for Maxim family of SMBus Dual/Quad Current Monitors.
++	  This driver is mutually exclusive with the HWMON version.
++
+ config SENSORS_MAX6620
+ 	tristate "Maxim MAX6620 fan controller"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index e2e4e87b282f..a4e24d2b03c1 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
+ obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
+ obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
+ obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
++obj-$(CONFIG_SENSORS_MAX3440X)  += max3440x.o
+ obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
+ obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
+ obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
+diff --git a/drivers/hwmon/max3440x.c b/drivers/hwmon/max3440x.c
+new file mode 100644
+index 000000000000..b62c34f9425c
+--- /dev/null
++++ b/drivers/hwmon/max3440x.c
+@@ -0,0 +1,213 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++*
++*/
++
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/slab.h>
++#include <linux/jiffies.h>
++#include <linux/i2c.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/err.h>
++#include <linux/mutex.h>
++#include <linux/sysfs.h>
++
++/*
++ * Registers description.
++ */
++#define MAX3440X_STATUS             0x00
++#define MAX3440X_CONTROL            0x01
++#define MAX3440X_OCDELAY            0x02
++#define MAX3440X_SDDELAY            0x03
++#define MAX3440X_ADC1               0x04	/* readonly */
++#define MAX3440X_ADC2               0x05	/* readonly */
++#define MAX3440X_ADC3               0x06	/* readonly */
++#define MAX3440X_ADC4               0x07	/* readonly */
++#define MAX3440X_OCT1               0x08
++#define MAX3440X_OCT2               0x09
++#define MAX3440X_OCT3               0x0A
++#define MAX3440X_OCT4               0x0B
++#define MAX3440X_DID                0x0C	/* readonly */
++#define MAX3440X_DCYY               0x0D	/* readonly */
++#define MAX3440X_DCWW               0x0E    /* readonly */
++
++//maximal current in mA throw RSENSE, that can be measured. see datasheet table 18
++static unsigned short imax[4];
++module_param_array(imax, short, NULL, 0);
++MODULE_PARM_DESC(imax,
++		 "maximal current in mA throw RSENSE, that can be measured. see datasheet table 18");
++struct max3440x_data {
++	struct i2c_client *client;
++	struct device *hwmon_dev;
++	const char *name;
++
++   struct mutex update_lock;
++   bool valid;
++
++	u16 adc[4];
++	u8 oct[4];
++};
++
++static const char * const input_names[] = {
++	[MAX3440X_ADC1]	=	"curr1",
++	[MAX3440X_ADC2]	=	"curr2",
++	[MAX3440X_ADC3]	=	"curr3",
++	[MAX3440X_ADC4]	=	"curr4",
++};
++
++static void max3440x_init_client(struct max3440x_data *data,
++				struct i2c_client *client)
++{
++	u8 status;
++   u16 val = 0;
++	/*
++	 * Start the conversions.
++	 */
++	status = i2c_smbus_read_byte_data(client, MAX3440X_STATUS);
++
++val = (u16)i2c_smbus_read_byte_data(client, MAX3440X_ADC1);
++	data->adc[0] = DIV_ROUND_CLOSEST((imax[0] * val), 256);
++	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC2);
++	data->adc[1] = DIV_ROUND_CLOSEST((imax[1] * val), 256);
++	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC3);
++	data->adc[2] = DIV_ROUND_CLOSEST((imax[2] * val), 256);
++	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC4);
++	data->adc[3] = DIV_ROUND_CLOSEST((imax[3] * val), 256);
++}
++
++static struct max3440x_data *max3440x_update_device(struct device *dev)
++{
++	struct max3440x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	u16 val;
++
++	mutex_lock(&data->update_lock);
++
++	dev_dbg(dev, "Updating max3440 data.\n");
++	val = (u16)i2c_smbus_read_byte_data(client,
++				MAX3440X_ADC1);
++	data->adc[0] = DIV_ROUND_CLOSEST((imax[0] * val), 256);
++	val =  (u16)i2c_smbus_read_byte_data(client,
++				MAX3440X_ADC2);
++	data->adc[1] = DIV_ROUND_CLOSEST((imax[1] * val), 256);
++	val = (u16)i2c_smbus_read_byte_data(client,
++				MAX3440X_ADC3);
++	data->adc[2] = DIV_ROUND_CLOSEST((imax[2] * val), 256);
++	val = (u16)i2c_smbus_read_byte_data(client,
++				MAX3440X_ADC4);
++	data->adc[3] = DIV_ROUND_CLOSEST((imax[3] * val), 256);
++
++	data->valid = 1;
++	mutex_unlock(&data->update_lock);
++
++	return data;
++}
++static ssize_t adc1_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
++	struct max3440x_data *data = max3440x_update_device(dev);
++
++	return sprintf(buf, "%d\n", data->adc[0]);
++}
++static ssize_t adc2_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
++	struct max3440x_data *data = max3440x_update_device(dev);
++
++	return sprintf(buf, "%d\n", data->adc[1]);
++}
++static ssize_t adc3_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
++	struct max3440x_data *data = max3440x_update_device(dev);
++
++	return sprintf(buf, "%d\n", data->adc[2]);
++}
++static ssize_t adc4_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
++	struct max3440x_data *data = max3440x_update_device(dev);
++
++	return sprintf(buf, "%d\n", data->adc[3]);
++}
++
++static ssize_t label_show(struct device *dev,
++			  struct device_attribute *devattr, char *buf)
++{
++	return sprintf(buf, "%s\n",
++		       input_names[to_sensor_dev_attr(devattr)->index]);
++}
++
++static SENSOR_DEVICE_ATTR_RO(curr1_input, adc1, 0);
++static SENSOR_DEVICE_ATTR_RO(curr1_label, label, MAX3440X_ADC1);
++static SENSOR_DEVICE_ATTR_RO(curr2_input, adc2, 0);
++static SENSOR_DEVICE_ATTR_RO(curr2_label, label, MAX3440X_ADC2);
++static SENSOR_DEVICE_ATTR_RO(curr3_input, adc3, 0);
++static SENSOR_DEVICE_ATTR_RO(curr3_label, label, MAX3440X_ADC3);
++static SENSOR_DEVICE_ATTR_RO(curr4_input, adc4, 0);
++static SENSOR_DEVICE_ATTR_RO(curr4_label, label, MAX3440X_ADC4);
++
++static struct attribute *max3440x_attrs[] = {
++	&sensor_dev_attr_curr1_input.dev_attr.attr,
++	&sensor_dev_attr_curr1_label.dev_attr.attr,
++	&sensor_dev_attr_curr2_input.dev_attr.attr,
++	&sensor_dev_attr_curr2_label.dev_attr.attr,
++	&sensor_dev_attr_curr3_input.dev_attr.attr,
++	&sensor_dev_attr_curr3_label.dev_attr.attr,
++	&sensor_dev_attr_curr4_input.dev_attr.attr,
++	&sensor_dev_attr_curr4_label.dev_attr.attr,
++	NULL
++};
++
++ATTRIBUTE_GROUPS(max3440x);
++
++static int max3440x_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct max3440x_data *data;
++	struct device *hwmon_dev;
++
++	data = devm_kzalloc(dev, sizeof(struct max3440x_data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->client = client;
++	mutex_init(&data->update_lock);
++
++	/* Initialize the MAX3440x chip */
++	max3440x_init_client(data, client);
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
++							   client->name, data,
++							   max3440x_groups);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++
++static const struct i2c_device_id max3440x_id[] = {
++	{ "max34409", 0 },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(i2c, max3440x_id);
++
++static const struct i2c_driver max3440x_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = "max3440x",
++	},
++	.probe = max3440x_probe,
++	.id_table	= max3440x_id,
++};
++
++module_i2c_driver(max3440x_driver);
++
++MODULE_AUTHOR("Andrey Kononov");
++MODULE_DESCRIPTION("I2C adc driver");
++MODULE_LICENSE("GPL");
 -- 
 2.34.1
-
