@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BDB698782
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2434F698784
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjBOVrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S229864AbjBOVtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjBOVrh (ORCPT
+        with ESMTP id S229568AbjBOVs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:47:37 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AF636472;
-        Wed, 15 Feb 2023 13:47:30 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-16e2c22c3baso393144fac.8;
-        Wed, 15 Feb 2023 13:47:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=q4BxVGyZRgRm7Y+yG+ffS0kZl38wYlTSPFaznatrum4=;
-        b=YXN/JRa+0PTiE8pF+7xU4s5HnUbnIFc5i7RuwFaQiz99pnOvx0cqIlAgiLD7PDS1R1
-         pqG1NZkWVqUAufZTzyb24UY4ESvWD2G0PDz56Pk/a3I9qDwRmUF/Ry1fKlspc1hWMAcO
-         s5p67/yOIRKAH2SUwlr+f8azgjWTnPt44qrlxzedZ/JHqb0tpvMFnhI9jnrkjsgegzh9
-         kA9RKUuGMTKqj4NQV8lLdCjXUA6oukd4W3htVTi7P/qBK6XBZkiGTcspOrzE6roJNz9k
-         W5lSq6M8KTXjYbeU9bN3CoP5Q2dLtr0uJDt4bhHoHOERbDqPpn5hoGvkZHy3bTymHJMT
-         DakQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q4BxVGyZRgRm7Y+yG+ffS0kZl38wYlTSPFaznatrum4=;
-        b=H9UpNyeRxwf1gW99QkzKURZfwESlDDrq2K4y/txto3Sf8Mb+eqjo9NAAEKmtwssuPc
-         Jp82fJ/QJFTj6eNtt42BCinhHkCdmp6KCR7XPRuxQWY6Gyz9dbJihteQglrluxkN7NoS
-         7tA1Rg++4raS8+77oOou38ZW64jKQ96eHoNzGlzallw5yQagYaAm9Pvn/G7OAY3t4D4T
-         nA+LWqjDnskj/AgozocKN+AXEq5bzVq9jFEbEUJSH9bld/IsxgRrcm2FX86ap9bpFpL0
-         rr4h7jed2MEJbx8AGL0G8GMWn+aAwgaqGO1P1uBNhy99TAqr+xImN2KkSY7nw4Y/+d5C
-         c+UA==
-X-Gm-Message-State: AO0yUKXxWnvNewYH4A796uov0jq7uLjtH30GzZrNKM2L3GUpUOP1FVRJ
-        kw2FfXbjsn9YGPLfkaoJdTgF0zcnnC4=
-X-Google-Smtp-Source: AK7set+hLDBdlWtkDx+h4YNI2bTu0I+wENBpAOvA21sl4txWqywqERsCHQ61JZsrW6sgZCrb1jE9zQ==
-X-Received: by 2002:a05:6870:82a8:b0:16e:23e5:5b69 with SMTP id q40-20020a05687082a800b0016e23e55b69mr2211927oae.52.1676497649000;
-        Wed, 15 Feb 2023 13:47:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j17-20020a056870d45100b0016e5ad3e892sm805619oag.14.2023.02.15.13.47.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 13:47:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joe Tessler <jrt@google.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Joshua Pius <joshuapius@google.com>
-Subject: [PATCH v2] media: cec: i2c: ch7322: Drop of_match_ptr
-Date:   Wed, 15 Feb 2023 13:47:24 -0800
-Message-Id: <20230215214724.3798917-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.1
+        Wed, 15 Feb 2023 16:48:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228E9A244
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:48:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676497692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u8Ps7KgJ0Bbhv4F8g4MkmlHXdKUo/8YcDvGuJM+sj5M=;
+        b=e7Kr4L4+oDMS5yBlquVhwKhrPbJpYyB5hM38iRBGOxCU1Xul7RJbGFpolB5vc7G5nplgvG
+        cnoB366PgHdoJs13I4ZdTzapkag74NZPYWFTC74T+VDGLzkyUsTA3CmauPQVbiSULZ6TAo
+        VdyiYTsd059WlteXwqIOKi8to6VbscM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-Ddr-0pwyMLK_fDHvgn5R1g-1; Wed, 15 Feb 2023 16:48:07 -0500
+X-MC-Unique: Ddr-0pwyMLK_fDHvgn5R1g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44155101A55E;
+        Wed, 15 Feb 2023 21:48:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 19BA02026D68;
+        Wed, 15 Feb 2023 21:48:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] rxrpc: Fix overproduction of wakeups to recvmsg()
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3386148.1676497685.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 15 Feb 2023 21:48:05 +0000
+Message-ID: <3386149.1676497685@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,32 +68,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver does not instantiate on ACPI based systems if OF is disabled.
-Fix the problem by dropping of_match_ptr.
+Fix three cases of overproduction of wakeups:
 
-Cc: Joshua Pius <joshuapius@google.com>
-Tested-by: Joshua Pius <joshuapius@google.com>
-Fixes: 21b9a47e0ec7 ("media: cec: i2c: ch7322: Add ch7322 CEC controller driver")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+ (1) rxrpc_input_split_jumbo() conditionally notifies the app that there's
+     data for recvmsg() to collect if it queues some data - and then its
+     only caller, rxrpc_input_data(), goes and wakes up recvmsg() anyway.
+
+     Fix the rxrpc_input_data() to only do the wakeup in failure cases.
+
+ (2) If a DATA packet is received for a call by the I/O thread whilst
+     recvmsg() is busy draining the call's rx queue in the app thread, the
+     call will left on the recvmsg() queue for recvmsg() to pick up, even
+     though there isn't any data on it.
+
+     This can cause an unexpected recvmsg() with a 0 return and no MSG_EOR
+     set after the reply has been posted to a service call.
+
+     Fix this by discarding pending calls from the recvmsg() queue that
+     don't need servicing yet.
+
+ (3) Not-yet-completed calls get requeued after having data read from them=
+,
+     even if they have no data to read.
+
+     Fix this by only requeuing them if they have data waiting on them; if
+     they don't, the I/O thread will requeue them when data arrives or the=
+y
+     fail.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
 ---
-v2: Added Joshua's Tested-by: tag
+ include/trace/events/rxrpc.h |    1 +
+ net/rxrpc/input.c            |    2 +-
+ net/rxrpc/recvmsg.c          |   16 +++++++++++++++-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
- drivers/media/cec/i2c/ch7322.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
+index c3c0b0aa8381..4c53a5ef6257 100644
+--- a/include/trace/events/rxrpc.h
++++ b/include/trace/events/rxrpc.h
+@@ -318,6 +318,7 @@
+ 	EM(rxrpc_recvmsg_return,		"RETN") \
+ 	EM(rxrpc_recvmsg_terminal,		"TERM") \
+ 	EM(rxrpc_recvmsg_to_be_accepted,	"TBAC") \
++	EM(rxrpc_recvmsg_unqueue,		"UNQU") \
+ 	E_(rxrpc_recvmsg_wait,			"WAIT")
+ =
 
-diff --git a/drivers/media/cec/i2c/ch7322.c b/drivers/media/cec/i2c/ch7322.c
-index 34fad7123704..3c6e6496a001 100644
---- a/drivers/media/cec/i2c/ch7322.c
-+++ b/drivers/media/cec/i2c/ch7322.c
-@@ -589,7 +589,7 @@ MODULE_DEVICE_TABLE(of, ch7322_of_match);
- static struct i2c_driver ch7322_i2c_driver = {
- 	.driver = {
- 		.name = "ch7322",
--		.of_match_table = of_match_ptr(ch7322_of_match),
-+		.of_match_table = ch7322_of_match,
- 	},
- 	.probe_new	= ch7322_probe,
- 	.remove		= ch7322_remove,
--- 
-2.39.1
+ #define rxrpc_rtt_tx_traces \
+diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
+index d68848fce51f..030d64f282f3 100644
+--- a/net/rxrpc/input.c
++++ b/net/rxrpc/input.c
+@@ -606,7 +606,7 @@ static void rxrpc_input_data(struct rxrpc_call *call, =
+struct sk_buff *skb)
+ 		rxrpc_proto_abort(call, sp->hdr.seq, rxrpc_badmsg_bad_jumbo);
+ 		goto out_notify;
+ 	}
+-	skb =3D NULL;
++	return;
+ =
+
+ out_notify:
+ 	trace_rxrpc_notify_socket(call->debug_id, serial);
+diff --git a/net/rxrpc/recvmsg.c b/net/rxrpc/recvmsg.c
+index 76eb2b9cd936..a482f88c5fc5 100644
+--- a/net/rxrpc/recvmsg.c
++++ b/net/rxrpc/recvmsg.c
+@@ -334,10 +334,23 @@ int rxrpc_recvmsg(struct socket *sock, struct msghdr=
+ *msg, size_t len,
+ =
+
+ 	/* Find the next call and dequeue it if we're not just peeking.  If we
+ 	 * do dequeue it, that comes with a ref that we will need to release.
++	 * We also want to weed out calls that got requeued whilst we were
++	 * shovelling data out.
+ 	 */
+ 	spin_lock(&rx->recvmsg_lock);
+ 	l =3D rx->recvmsg_q.next;
+ 	call =3D list_entry(l, struct rxrpc_call, recvmsg_link);
++
++	if (!rxrpc_call_is_complete(call) &&
++	    skb_queue_empty(&call->recvmsg_queue)) {
++		list_del_init(&call->recvmsg_link);
++		spin_unlock(&rx->recvmsg_lock);
++		release_sock(&rx->sk);
++		trace_rxrpc_recvmsg(call->debug_id, rxrpc_recvmsg_unqueue, 0);
++		rxrpc_put_call(call, rxrpc_call_put_recvmsg);
++		goto try_again;
++	}
++
+ 	if (!(flags & MSG_PEEK))
+ 		list_del_init(&call->recvmsg_link);
+ 	else
+@@ -402,7 +415,8 @@ int rxrpc_recvmsg(struct socket *sock, struct msghdr *=
+msg, size_t len,
+ 	if (rxrpc_call_has_failed(call))
+ 		goto call_failed;
+ =
+
+-	rxrpc_notify_socket(call);
++	if (!skb_queue_empty(&call->recvmsg_queue))
++		rxrpc_notify_socket(call);
+ 	goto not_yet_complete;
+ =
+
+ call_failed:
 
