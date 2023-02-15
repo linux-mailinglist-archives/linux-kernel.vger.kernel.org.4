@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EFF697AF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791F0697AF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbjBOLlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S233644AbjBOLmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjBOLlW (ORCPT
+        with ESMTP id S229927AbjBOLmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:41:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF34CA3B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:40:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676461233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bP0bXUiaDH/boozQCsBpj6Xk/aGxK9UqogMEXux8y/Y=;
-        b=brksby3zKizpsYmBpESE8Ek6lfNCW1eFO/rIcZBKxNAXRIORyJvFW085oQSSO69WQpZmlW
-        tqlo3Hc33qa0YapMrRsnDK8hH5+83e1ErWsUs2n25ArBx9tHHaVDMblE18qGXcaUizR3IG
-        LQacDRjgVFCdSodZnABg7XufMf69Ryg=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-639-GXZR54EXPP-PKtP6aQc3Hw-1; Wed, 15 Feb 2023 06:40:31 -0500
-X-MC-Unique: GXZR54EXPP-PKtP6aQc3Hw-1
-Received: by mail-vk1-f197.google.com with SMTP id x197-20020a1f7cce000000b00401684aa41aso3890052vkc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:40:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bP0bXUiaDH/boozQCsBpj6Xk/aGxK9UqogMEXux8y/Y=;
-        b=VCgODEPRasKY1xxiJc/CUVpzWwSwjKXQaDKHSX8Pi1EfjDUXM24z+wgyaM5OZNmzsq
-         kEQqxfFF/H08dmMMRyYy0F7BJOvWPstI2uQIPqBEPtYnYqF7qVk/HWATd02GbNo4C60r
-         BAXjO+jFAUxAno3r6kdwuURSg4e2DHbl+z1/yQSU79tnL3QFOzaJXhxWSFmuaW0HxRlr
-         nZegyKIl3GhAXZhPsToTfA3p+SmFQs/zOI/XmbNNkHiikHq70ijTDZN+zckhuUTUsInx
-         EGU7m7f8Smr1qkEsS9sRLtGOFxT0QOYPMWogZvqnU0FvpRul/DAT/toz9meFiicJsxnM
-         WZtg==
-X-Gm-Message-State: AO0yUKWn5XvsD8gDvZK5nwIVFn2jzfI12KlcPf0edcvMCcsZ14y10R9f
-        rtUM29GrDECLeK2IqBjApRDzXelpsZENaClu0li/33QAvmwrR7y2D3yFbBVp7pfZAiTCV9pITfu
-        8HmfI7/OFEz1IvJS3fzWztMr5j24Q9OB21TH3wVIE
-X-Received: by 2002:a05:6102:34c7:b0:411:bd2e:11ac with SMTP id a7-20020a05610234c700b00411bd2e11acmr286376vst.75.1676461231215;
-        Wed, 15 Feb 2023 03:40:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set/ec/Q3TOlkRzgnxVJ/+TUUmx2nTPikt2SH7K2yD2bJse3Fds41BApWtp1vT1H9cn99iNHGJGfx8IKaZowROyE=
-X-Received: by 2002:a05:6102:34c7:b0:411:bd2e:11ac with SMTP id
- a7-20020a05610234c700b00411bd2e11acmr286371vst.75.1676461230930; Wed, 15 Feb
- 2023 03:40:30 -0800 (PST)
+        Wed, 15 Feb 2023 06:42:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064E83645F;
+        Wed, 15 Feb 2023 03:41:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DBF561B36;
+        Wed, 15 Feb 2023 11:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EEC5C433EF;
+        Wed, 15 Feb 2023 11:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676461317;
+        bh=SWJlG8P6p6sS5hqYjQmZBGBDQEFTQITPRH6dSryBgpw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YScuwj+rpZ+NvsZH0JsuUlQ+5HNXT5EBVkV4j80X9GAFlSMZqMEtQPElrt6fLkWh7
+         K7J3u6WZAB/y8WGYiEoY8YfsHWvA4GTG+OfAnOgygs6t6MCJ4/Pc7xlkV7CBiUnZDh
+         OBe1ejWe0KJp/SaiLKWO0kw7d0o0IDl5UI0XTGpY=
+Date:   Wed, 15 Feb 2023 12:41:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     heyuqiang <heyuqiang1@huawei.com>
+Cc:     anshuman.khandual@arm.com, catalin.marinas@arm.com,
+        james.morse@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        stable@vger.kernel.org, will@kernel.org, yuzenghui@huawei.com,
+        nixiaoming@huawei.com, lijiahuan5@huawei.com
+Subject: Re: [PATCH 5.10 88/91] arm64/kexec: Test page size support with new
+ TGRAN range values
+Message-ID: <Y+zFA1JuAcjhAogm@kroah.com>
+References: <e1daca8f-46d5-d5b0-8152-23b172d5e63a@huawei.com>
 MIME-Version: 1.0
-References: <20230215-arm_pmu_m1_regression-v1-1-f5a266577c8d@jannau.net>
-In-Reply-To: <20230215-arm_pmu_m1_regression-v1-1-f5a266577c8d@jannau.net>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Wed, 15 Feb 2023 11:40:15 +0000
-Message-ID: <CAOgh=FwCk1qMUAqkv+aih_=6vJ0SjqyzS9-gW+v+YjEse6V0Yw@mail.gmail.com>
-Subject: Re: [PATCH] arm_pmu: Invert fallback armpmu_filter() return value
-To:     Janne Grunau <j@jannau.net>
-Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e1daca8f-46d5-d5b0-8152-23b172d5e63a@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 at 11:36, Janne Grunau <j@jannau.net> wrote:
->
-> Fixes a regression in "perf: Rewrite core context handling" for arm_pmu
-> based drivers without a filter function pointer as the Apple M1 PMU.
-> The event is ignored if filter() returns 'true' opposite to
-> filter_match(). The refactoring failed to invert the return value if
-> arm_pmu has no filter() function pointer of its own.
->
-> Fixes: bd2756811766 ("perf: Rewrite core context handling")
-> Signed-off-by: Janne Grunau <j@jannau.net>
+On Wed, Feb 15, 2023 at 06:58:13PM +0800, heyuqiang wrote:
+> There is an error
+> 
+> tree: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> master
+> head: c911f03f8d444e623724fddd82b07a7e1af42338
+> commit: d5924531dd8ad012ad13eb4d6a5e120c3dadfc05 arm64/kexec: Test page size
+> support with new TGRAN range values
+> # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d5924531dd8ad012ad13eb4d6a5e120c3dadfc05
+> 
+> When I compile the ko file, I add [-Werror=type-limits] compilation options,
+> an error is reported during compilation.
 
-Makes sense we return the inverse of armpmu_filter everywhere else in the code.
+Why add that option?  Is that a valid option for the 5.10.y kernel?  Is
+this something new?
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+And note, you are responding to a commit from last November, with no
+context at all.  Is this an issue in Linus's tree too?
 
-Is mise le meas/Regards,
+> 
+> The log is as follows:
+> 
+> ./arch/arm64/include/asm/cpufeature.h: In function
+> ‘system_supports_4kb_granule’:
+> ./arch/arm64/include/asm/cpufeature.h:653:14: error:
+> comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+> return (val >= ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN) &&
+> ^~
+> ./arch/arm64/include/asm/cpufeature.h: In function
+> ‘system_supports_64kb_granule’:
+> ./arch/arm64/include/asm/cpufeature.h:666:14: error:
+> comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+> return (val >= ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN) &&
+> ^~
+> 
+> "val" variable type is "u32"
+> "#define ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN 0x0"
+> "#define ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN 0x0"
+> comparison of val >= 0 is always true.
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: heyuqiang <heyuqiang1@huawei.com>
 
-Eric Curtin
+Please provide a valid fix for this if you wish for it to be resolved.
 
-> ---
->  drivers/perf/arm_pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 9b593f985805..9cb22f36cf66 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -556,7 +556,7 @@ static bool armpmu_filter(struct pmu *pmu, int cpu)
->         if (ret && armpmu->filter)
->                 return armpmu->filter(pmu, cpu);
->
-> -       return ret;
-> +       return !ret;
->  }
->
->  static ssize_t cpus_show(struct device *dev,
->
-> ---
-> base-commit: ceaa837f96adb69c0df0397937cd74991d5d821a
-> change-id: 20230215-arm_pmu_m1_regression-b6dd48d0c792
->
-> Best regards,
-> --
-> Janne Grunau <j@jannau.net>
->
->
+thanks,
 
+greg k-h
