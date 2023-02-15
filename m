@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60739697786
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FCD697789
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbjBOHpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        id S229618AbjBOHqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjBOHpk (ORCPT
+        with ESMTP id S232212AbjBOHqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:45:40 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44514BB9E;
-        Tue, 14 Feb 2023 23:45:38 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSCTt-0003nC-IK; Wed, 15 Feb 2023 08:45:33 +0100
-Message-ID: <c681b612-eda0-e8ed-8be0-ac74867bf8da@leemhuis.info>
-Date:   Wed, 15 Feb 2023 08:45:31 +0100
+        Wed, 15 Feb 2023 02:46:44 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C681423F;
+        Tue, 14 Feb 2023 23:46:42 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5027E24E28B;
+        Wed, 15 Feb 2023 15:46:12 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 15:46:12 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 15:46:11 +0800
+Message-ID: <e066920c-26a9-0f0e-3304-2b9940274d57@starfivetech.com>
+Date:   Wed, 15 Feb 2023 15:46:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev, Greg KH <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-References: <8cfcf069d48c1b8d7b83aafe0132f8dad0f1d0ea.1676400947.git.linux@leemhuis.info>
- <Y+xWxpuRdtuCpsO6@debian.me>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v2] docs: describe how to quickly build a trimmed kernel
-In-Reply-To: <Y+xWxpuRdtuCpsO6@debian.me>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-3-yanhong.wang@starfivetech.com>
+ <15a87640-d8c7-d7aa-bdfb-608fa2e497cb@linaro.org>
+ <c9ab22b5-3ffb-d034-b8b8-b056b82a96ce@starfivetech.com>
+ <aa85caa3-6051-46ab-d927-8c552d5a718d@linaro.org>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <aa85caa3-6051-46ab-d927-8c552d5a718d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1676447138;d12e6dda;
-X-HE-SMSGID: 1pSCTt-0003nC-IK
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thx for your feedback, much appreciated.
 
-On 15.02.23 04:51, Bagas Sanjaya wrote:
-> On Tue, Feb 14, 2023 at 07:58:09PM +0100, Thorsten Leemhuis wrote:
->> +   Execute the following command to retrieve a fresh mainline codebase::
->> +
->> +     git clone --no-checkput --depth 1 -b master \
->> +       https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git \
->> +       ~/linux/sources/
->> +     cd ~/linux/sources/
->> +
->> +   If you want to access recent mainline releases and pre-releases, deepen you
->> +   clone's history to the oldest version you are interested in::
->> +
->> +     git fetch --shallow-exclude=v6.0
+
+On 2023/2/7 15:59, Krzysztof Kozlowski wrote:
+> On 07/02/2023 03:43, yanhong wang wrote:
+>> 
+>> 
+>> On 2023/1/18 23:47, Krzysztof Kozlowski wrote:
+>>> On 18/01/2023 07:16, Yanhong Wang wrote:
+>>>> Some boards(such as StarFive VisionFive v2) require more than one value
+>>>> which defined by resets property, so the original definition can not
+>>>> meet the requirements. In order to adapt to different requirements,
+>>>> adjust the maxitems number definition.
+>>>>
+>>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 9 +++------
+>>>>  1 file changed, 3 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> index e26c3e76ebb7..baf2c5b9e92d 100644
+>>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> @@ -133,12 +133,9 @@ properties:
+>>>>          - ptp_ref
+>>>>  
+>>>>    resets:
+>>>> -    maxItems: 1
+>>>
+>>> Also, this does not make sense on its own and messes constraints for all
+>>> other users. So another no for entire patch.
+>>>
+>> 
+>> Thanks. Change the properties of 'resets' and reset-names like this:
+>> 
+>>   resets:
+>>     minItems: 1
+>>     maxItems: 2
+>> 
+>>   reset-names:
+>>     minItems: 1
+>>     maxItems: 2
+>> 
+>> Is it right?  Do you have any other better suggestions?
 > 
-> For me, another way is to use `git fetch --shallow-since="<some-date>"
-
-Well, that's described in the reference section as an alternative. Did
-you miss that, or do you think that --shallow-since should be used by
-default for some reasons? If so: which?
-
-> && git repack -a -d`.
-
-`git repack -d` (also mentioned in the reference section of the
-submitted text) seems to suffice in my (limited!) testing.
-
-> This requires knowing version release date.
-
-Which is why I (for now!) settled on using "--shallow-exclude=" by default.
-
-> If
-> you want that version, the date used should be one or two days before
-> that version's release date. Repacking is important!
+> Isn't this allowing two reset items for every variant of snps,dwmac?
 > 
-> Nevertheless, you need to go to Git ML and ask why repacking is required
-> in that case (I have tried searching threads there, but inconclusive).
 
-Yeah, I also wonder why the repacking is needed, but chose to not
-investigate... Maybe I should have, but writing that text already took
-quite some time and effort. :-/
+Sorry for not getting back to you faster.
+After referring to the above modification, i used the command 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+to check all the bindings(including 'starfive,jh7110-dwmac.yaml'), no errors are reported,
+and the errors reported by Rob Herring are gone.
 
->> +The make target olddefconfig and the ``yes "" |`` used when utilizing
->> +localmodconfig will set any undefined build options to their default value. This
->> +among others will disable many kernel features that were introduced after your
->> +base kernel was released.
->> +
->> +If you want to set these configurations options manually, use ``oldconfig``
->> +instead of ``olddefconfig`` or omit the ``yes "" |`` when utilizing
->> +localmodconfig. Then for each undefined configuration option you will be asked
->> +how to proceed. In case you are unsure what to answer, simply hit 'enter' to
->> +apply the default value.
+> Best regards,
+> Krzysztof
 > 
-> olddefconfig and `yes "" | make localmodconfig` can produce different
-> config, since the default value for new config symbols may not be Y.
-> Often, for new drivers, the default is N.
-
-Are you sure? A `yes ""` doesn't set everything unset to Y, it afaics
-just sends an "enter" -- and then the default should be used (as
-explained in the documents reference section). Shouldn't the end result
-thus be similar? Or am I missing something?
-
->> + * Remove a stale reference to a certificate file that would cause your build to
->> +   fail::
->> +
->> +    ./scripts/config --file ~/linux/build/.config --set-str SYSTEM_TRUSTED_KEYS ''
->> +
->> +   Alternatively, download the needed certificate and make that configuration
->> +   option point to it, as `the Debian handbook explains in more detail
->> +   <https://debian-handbook.info/browse/stable/sect.kernel-compilation.html>`_ .
->> +
-> 
-> Another way is to generate the certificate yourself (see
-> Documentation/admin-guide/module-signing.rst for the instructions).
-
-Ohh, thx, yeah, I guess I should refer to that file here and in another
-place, even if it requires a lot more from the reader. :-/
-
-Ciao, Thorsten
