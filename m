@@ -2,242 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBCF697817
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2C6697816
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbjBOIZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S233847AbjBOIZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjBOIZw (ORCPT
+        with ESMTP id S230489AbjBOIZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:25:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06AF34F44
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:25:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676449509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 15 Feb 2023 03:25:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414D727D5D;
+        Wed, 15 Feb 2023 00:25:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AA8B122445;
+        Wed, 15 Feb 2023 08:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676449514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dLL/jCAxo1iTynmaOCVM0EshLOHE+/3byUzGHaiGWw8=;
-        b=IdukhZi+qIveYtCn7lx6uksLGEdSk0MbF+dxoKfRRfe7NgUkKuF3B/d1wknvFoYKvEEhU+
-        8AP1JRmx/HpIdQenqcDwK9sXr5fk+mWRvx2Fgz+VnwXNC3pGUhWwJ5ou3WYOPaJ17PeOgO
-        I3VoRcZ+g+jrafcbJ4TB1PtWl2kTf7s=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-139-hK-x43AzMQetMr37xEAsXw-1; Wed, 15 Feb 2023 03:25:08 -0500
-X-MC-Unique: hK-x43AzMQetMr37xEAsXw-1
-Received: by mail-ed1-f69.google.com with SMTP id bo27-20020a0564020b3b00b004a6c2f6a226so12047937edb.15
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:25:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dLL/jCAxo1iTynmaOCVM0EshLOHE+/3byUzGHaiGWw8=;
-        b=Lj7Gj9ThBxoX3bghPjQOgvo1JjEoBi0s5m/3E+0jXotLhOfP4wfzue8sqCVyck15M+
-         M8DzyJIAICe/ZihG1tUSiMgbSzOLDA3y/TDpcpTf2eAqHVDvGKF0qAwo2i2N0RUL1A3v
-         fyokIaJywt+S+p5QUQnXe4Mt7aiUsp7vgT2rQxz6ep+0kRzsPVmSyekSFIKUXgbJ7WyB
-         JgRhbEOt4/AS1ynYFfkxVzffiwz93Q4RdPNPN6A7S1HwDMR5z6iyBAR2xcr5YGFEkGvd
-         NCXfqz+P/HP4LE7i9Y1P9jayxZ8otn38qbZbzoWJdyYSCXPyEdaO5gU2tXnuooE+n8st
-         qcHg==
-X-Gm-Message-State: AO0yUKWyFXQyNEuLJ5iuStO8mrJjBXO6jl1pT4twxVo1BdCKhutw7Ldx
-        c7x0ZuNftitVSgjIOsdY9HFse88sOT6W/lqqG2j/d+8NMU9rIw2XJmsHwzA6HyNV27GMYYoMB+G
-        3eGA1T+zhybiDgj4tTDjyrHOY0aZEFTITjAQ6fKBL
-X-Received: by 2002:a50:c050:0:b0:4ab:470c:b4a3 with SMTP id u16-20020a50c050000000b004ab470cb4a3mr599869edd.7.1676449504475;
-        Wed, 15 Feb 2023 00:25:04 -0800 (PST)
-X-Google-Smtp-Source: AK7set/GmkKDYtqV7NGA9sYuMn9pb+nzZeWIYwfXpgPZMpLAxt0mUXovp45ZN+BImiVqhSE1RDvJq4g+bCHEaQfBY50=
-X-Received: by 2002:a50:c050:0:b0:4ab:470c:b4a3 with SMTP id
- u16-20020a50c050000000b004ab470cb4a3mr599861edd.7.1676449504224; Wed, 15 Feb
- 2023 00:25:04 -0800 (PST)
+        bh=MbmE1Wtf4VhJiNMsgNW161fRTJXwfvCu/qIcBv8rhJ8=;
+        b=N8bAgZlT5CzJ4qtwDHxrh80O/TpQicMlmbvAmR5MFYug4BXTiRtAhWIQ4Up5xFv6aMohth
+        KeKLVA9snMRhFie7NVOcNuQo+spizSEfoheLFsGLNVIw2tHo8yEQPKX0W3sW4y+mc/blxP
+        k6GwMTgHbAKnQIuC8N90m5JKHYiohZc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2027B134BA;
+        Wed, 15 Feb 2023 08:25:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id u0zoBeqW7GMwWgAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 15 Feb 2023 08:25:14 +0000
+Message-ID: <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
+Date:   Wed, 15 Feb 2023 09:25:13 +0100
 MIME-Version: 1.0
-References: <CA+QYu4qkVzZaB2OTaTLniZB9OCbTYUr2qvvvCmAnMkaq43OOLA@mail.gmail.com>
- <Y+ubkJtpmc6l0gOt@yury-laptop>
-In-Reply-To: <Y+ubkJtpmc6l0gOt@yury-laptop>
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Wed, 15 Feb 2023 09:24:52 +0100
-Message-ID: <CA+QYu4rBbstxtewRVF2hSaVK1i3-CzifPnchfSaxe_EALhR1rA@mail.gmail.com>
-Subject: Re: [6.2.0-rc7] BUG: KASAN: slab-out-of-bounds in hop_cmp+0x26/0x110
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, alan.maguire@oracle.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CKI Project <cki-project@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Cc:     "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "lists@nerdbynature.de" <lists@nerdbynature.de>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "Cui, Dexuan" <decui@microsoft.com>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
+ <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com>
+ <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
+In-Reply-To: <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Cy0WWPGNbvl0tW06hginDkL7"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 at 15:32, Yury Norov <yury.norov@gmail.com> wrote:
->
-> On Tue, Feb 14, 2023 at 02:23:06PM +0100, Bruno Goncalves wrote:
-> > Hello,
-> >
-> > recently when testing kernel with debug options set from net-next [1]
-> > and bpf-next [2] the following call trace happens:
-> >
-> Hi Bruno,
->
-> Thanks for report.
->
-> This looks weird, because the hop_cmp() spent for 3 month in -next till
-> now. Anyways, can you please share your NUMA configuration so I'll try
-> to reproduce the bug locally? What 'numactl -H' outputs?
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Cy0WWPGNbvl0tW06hginDkL7
+Content-Type: multipart/mixed; boundary="------------csYOMHbl1Sx3jSwy8ZxhWIsg";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Cc: "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "Torvalds, Linus" <torvalds@linux-foundation.org>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "kys@microsoft.com" <kys@microsoft.com>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "lists@nerdbynature.de" <lists@nerdbynature.de>,
+ "hpa@zytor.com" <hpa@zytor.com>, "mingo@redhat.com" <mingo@redhat.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>, "Lutomirski, Andy"
+ <luto@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+ "Cui, Dexuan" <decui@microsoft.com>,
+ "mikelley@microsoft.com" <mikelley@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+Message-ID: <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
+Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
+References: <20230209072220.6836-1-jgross@suse.com>
+ <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
+ <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com>
+ <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
+In-Reply-To: <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
 
-Here is the output:
+--------------csYOMHbl1Sx3jSwy8ZxhWIsg
+Content-Type: multipart/mixed; boundary="------------fgjKDAC69fRYEMdiwCrziqqt"
 
-numactl -H
-available: 4 nodes (0-3)
-node 0 cpus: 0 1 2 3 4 5 6 7 32 33 34 35 36 37 38 39
-node 0 size: 32063 MB
-node 0 free: 31610 MB
-node 1 cpus: 8 9 10 11 12 13 14 15 40 41 42 43 44 45 46 47
-node 1 size: 32248 MB
-node 1 free: 31909 MB
-node 2 cpus: 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55
-node 2 size: 32248 MB
-node 2 free: 31551 MB
-node 3 cpus: 24 25 26 27 28 29 30 31 56 57 58 59 60 61 62 63
-node 3 size: 32239 MB
-node 3 free: 31468 MB
-node distances:
-node   0   1   2   3
-  0:  10  21  31  21
-  1:  21  10  21  31
-  2:  31  21  10  21
-  3:  21  31  21  10
+--------------fgjKDAC69fRYEMdiwCrziqqt
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Bruno
+T24gMTMuMDIuMjMgMTk6MjEsIEVkZ2Vjb21iZSwgUmljayBQIHdyb3RlOg0KPiBPbiBNb24s
+IDIwMjMtMDItMTMgYXQgMDc6MTIgKzAxMDAsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+Pg0K
+Pj4gVGhhbmtzIGZvciB0aGUgcmVwb3J0Lg0KPj4NCj4+IEknbGwgaGF2ZSBhIGxvb2suIFBy
+b2JhYmx5IEknbGwgbmVlZCB0byByZS1hZGQgdGhlIGNoZWNrIGZvciBXQiBpbg0KPj4gcGF0
+Y2ggNy4NCj4gDQo+IFN1cmUsIGxldCBtZSBrbm93IGlmIHlvdSBuZWVkIGFueSBtb3JlIGRl
+dGFpbHMgYWJvdXQgYnkgc2V0dXAuDQoNCkkgaGF2ZSByZXByb2R1Y2VkIHRoZSBpc3N1ZS4N
+Cg0KQWRkaW5nIGJhY2sgdGhlIHRlc3QgZm9yIFdCIHdpbGwgZml4IGl0LCBidXQgSSdtIG5v
+dCBzdXJlIHRoaXMgaXMgcmVhbGx5DQp3aGF0IEkgc2hvdWxkIGRvLg0KDQpUaGUgcHJvYmxl
+bSBhcmlzZXMgaW4gY2FzZSBhIGxhcmdlIG1hcHBpbmcgaXMgc3Bhbm5pbmcgbXVsdGlwbGUg
+TVRSUnMsDQpldmVuIGlmIHRoZXkgZGVmaW5lIHRoZSBzYW1lIGNhY2hpbmcgdHlwZSAodW5p
+Zm9ybSBpcyBzZXQgdG8gMCBpbiB0aGlzDQpjYXNlKS4NCg0KU28gdGhlIGJhc2ljIHF1ZXN0
+aW9uIGZvciBtZSBpczogc2hvdWxkbid0IHRoZSBzZW1hbnRpY3Mgb2YgdW5pZm9ybSBiZQ0K
+YWRwYXRlZD8gVG9kYXkgaXQgbWVhbnMgInRoZSByYW5nZSBpcyBjb3ZlcmVkIGJ5IG9ubHkg
+b25lIE1UUlIgb3IgYnkNCm5vbmUiLiBMb29raW5nIGF0IHRoZSB1c2UgY2FzZXMgSSdtIHdv
+bmRlcmluZyB3aGV0aGVyIGl0IHNob3VsZG4ndCBiZQ0KInRoZSB3aG9sZSByYW5nZSBoYXMg
+dGhlIHNhbWUgY2FjaGluZyB0eXBlIi4NCg0KVGhvdWdodHM/DQoNCg0KSnVlcmdlbg0K
+--------------fgjKDAC69fRYEMdiwCrziqqt
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> Thanks,
-> Yury
->
-> > [   92.539335] be2net 0000:04:00.0: FW config: function_mode=0x10003,
-> > function_caps=0x7
-> > [   92.559345] scsi host1: BC_356 : error in cmd completion: Subsystem
-> > : 1 Opcode : 191 status(compl/extd)=2/30
-> > [   92.560448] scsi host1: BG_1597 : HBA error recovery not supported
-> > [   92.587657] be2net 0000:04:00.0: Max: txqs 16, rxqs 17, rss 16, eqs 16, vfs 0
-> > [   92.588471] be2net 0000:04:00.0: Max: uc-macs 30, mc-macs 64, vlans 64
-> > [   93.731235] be2net 0000:04:00.0: enabled 8 MSI-x vector(s) for NIC
-> > [   93.749741] ==================================================================
-> > [   93.750521] BUG: KASAN: slab-out-of-bounds in hop_cmp+0x26/0x110
-> > [   93.751233] Read of size 8 at addr ffff888104719758 by task kworker/0:2/108
-> > [   93.751601]
-> > [   93.752087] CPU: 0 PID: 108 Comm: kworker/0:2 Tainted: G          I
-> >        6.2.0-rc7 #1
-> > [   93.752549] Hardware name: HP ProLiant BL460c Gen8, BIOS I31 11/02/2014
-> > [   93.752884] Workqueue: events work_for_cpu_fn
-> > [   93.753510] Call Trace:
-> > [   93.753687]  <TASK>
-> > [   93.754215]  dump_stack_lvl+0x55/0x71
-> > [   93.754449]  print_report+0x184/0x4b1
-> > [   93.754697]  ? __virt_addr_valid+0xe8/0x160
-> > [   93.754972]  ? hop_cmp+0x26/0x110
-> > [   93.755533]  kasan_report+0xa5/0xe0
-> > [   93.756193]  ? hop_cmp+0x26/0x110
-> > [   93.756767]  ? __pfx_hop_cmp+0x10/0x10
-> > [   93.756990]  ? hop_cmp+0x26/0x110
-> > [   93.757556]  ? __pfx_hop_cmp+0x10/0x10
-> > [   93.757774]  ? bsearch+0x53/0x80
-> > [   93.758838]  ? sched_numa_find_nth_cpu+0x128/0x360
-> > [   93.759492]  ? __pfx_sched_numa_find_nth_cpu+0x10/0x10
-> > [   93.759792]  ? alloc_cpumask_var_node+0x38/0x60
-> > [   93.760419]  ? rcu_read_lock_sched_held+0x3f/0x80
-> > [   93.761060]  ? trace_kmalloc+0x33/0xf0
-> > [   93.761306]  ? __kmalloc_node+0x76/0xc0
-> > [   93.761528]  ? cpumask_local_spread+0x44/0xc0
-> > [   93.762192]  ? be_setup_queues+0x13b/0x3c0 [be2net]
-> > [   93.762957]  ? be_setup+0x663/0xa60 [be2net]
-> > [   93.763795]  ? __pfx_be_setup+0x10/0x10 [be2net]
-> > [   93.764523]  ? is_module_address+0x2b/0x50
-> > [   93.764744]  ? is_module_address+0x2b/0x50
-> > [   93.764996]  ? static_obj+0x6b/0x80
-> > [   93.765865]  ? lockdep_init_map_type+0xcf/0x370
-> > [   93.766527]  ? be_probe+0x825/0xcd0 [be2net]
-> > [   93.767224]  ? __pfx_be_probe+0x10/0x10 [be2net]
-> > [   93.767932]  ? preempt_count_sub+0xb7/0x100
-> > [   93.768181]  ? _raw_spin_unlock_irqrestore+0x35/0x60
-> > [   93.768450]  ? __pfx_be_probe+0x10/0x10 [be2net]
-> > [   93.769162]  ? local_pci_probe+0x77/0xc0
-> > [   93.769392]  ? __pfx_local_pci_probe+0x10/0x10
-> > [   93.770007]  ? work_for_cpu_fn+0x29/0x40
-> > [   93.770253]  ? process_one_work+0x543/0xa20
-> > [   93.770490]  ? __pfx_process_one_work+0x10/0x10
-> > [   93.797773pin_lock+0x10/0x10
-> > [   93.871656]  ? __list_add_valid+0x3f/0x70
-> > [   93.871874]  ? move_linked_works+0x103/0x140
-> > [   93.872487]  ? worker_thread+0x364/0x630
-> > [   93.872704]  ? __kthread_parkme+0xd8/0xf0
-> > [   93.872919]  ? __pfx_worker_thread+0x10/0x10
-> > [   93.873513]  ? kthread+0x17e/0x1b0
-> > [   93.874055]  ? __pfx_kthread+0x10/0x10
-> > [   93.874290]  ? ret_from_fork+0x2c/0x50
-> > [   93.874541]  </TASK>
-> > [   93.874727]
-> > [   93.875188] Allocated by task 1:
-> > [   93.875733]  kasan_save_stack+0x34/0x60
-> > [   93.875942]  kasan_set_track+0x21/0x30
-> > [   93.876164]  __kasan_kmalloc+0xa9/0xb0
-> > [   93.876373]  __kmalloc+0x57/0xd0
-> > [   93.876918]  sched_init_numa+0x21f/0x7e0
-> > [   93.877146]  sched_init_smp+0x6d/0x113
-> > [   93.877358]  kernel_init_freeable+0x2a3/0x4a0
-> > [   93.877993]  kernel_init+0x18/0x160
-> > [   93.878592]  ret_from_fork+0x2c/0x50
-> > [   93.878811]
-> > [   93.879278] The buggy address belongs to the object at ffff888104719760
-> > [   93.879278]  which belongs to the cache kmalloc-16 of size 16
-> > [   93.879926] The buggy address is located 8 bytes to the left of
-> > [   93.879926]  16-byte region [ffff888104719760, ffff888104719770)
-> > [   94.363686] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-> > [   94.381131] raw: 0017ffffc0000200 ffff88810004c580 ffffea000400df50
-> > ffffea0004165190
-> > [   94.381554] raw: 0000000000000000 00000000001c001c 00000001ffffffff
-> > 0000000000000000
-> > [   94.381958] page dumped because: kasan: bad access detected
-> > [   94.382249]
-> > [   94.382710] Memory state around the buggy address:
-> > [   94.383319]  ffff888104719600: fc fc fc fc fc fc fc fc fa fb fc fc
-> > fc fc fc fc
-> > [   94.384066]  ffff888104719680: fc fc fc fc fc fc fc fc fc fc 00 00
-> > fc fc fc fc
-> > [   94.384841] >ffff888104719700: fc fc fc fc fc fc fc fc fc fc fc fc
-> > 00 00 fc fc
-> > [   94.385573]                                                     ^
-> > [   94.386251]  ffff888104719780: fc fc fc fc fc fc fc fc fc fc fc fc
-> > fc fc 00 00
-> > [   94.386989]  ffff888104719800: fc fc fc fc fc fc fc fc fc fc fc fc
-> > fc fc fc fc
-> > [   94.387710] ==================================================================
-> >
-> > full console log:
-> > https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/3762562309/redhat:776235046/build_x86_64_redhat:776235046-x86_64-kernel-debug/tests/1/results_0001/job.01/recipes/13385613/tasks/5/logs/test_console.log
-> >
-> > test logs: https://datawarehouse.cki-project.org/kcidb/tests/7075911
-> > cki issue tracker: https://datawarehouse.cki-project.org/issue/1896
-> >
-> > kernel config: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/776235046/build%20x86_64%20debug/3762562279/artifacts/kernel-bpf-next-redhat_776235046-x86_64-kernel-debug.config
-> > kernel tarball:
-> > https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/776235046/publish%20x86_64%20debug/3762562289/artifacts/kernel-bpf-next-redhat_776235046-x86_64-kernel-debug.tar.gz
-> >
-> > The first commit we tested that we hit the problem is [3], but we
-> > didn't bisect it to know what commit introduced the issue.
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=0243d3dfe274832aa0a16214499c208122345173
-> >
-> > Thanks,
-> > Bruno Goncalves
->
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------fgjKDAC69fRYEMdiwCrziqqt--
+
+--------------csYOMHbl1Sx3jSwy8ZxhWIsg--
+
+--------------Cy0WWPGNbvl0tW06hginDkL7
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPslukFAwAAAAAACgkQsN6d1ii/Ey/R
+hgf8CPaUEeIsGvhWfpmpcguxPSsjWCyiWLtx7t0ih4cAeHPW5vU/XF2PRT+03qGfHYkbo881k6ar
+cqov9iEr2bj5NpReSfCjr7ia6/V+24pUfr0MgT+oOWmG+G7FAYM4bp03YgFpqm7JdVe1j+DkL500
+FNX5FbhXmnz3oARUOWhhNcx/8od4JygkktvDvroLtRLwkRbnNvclplLWOXu8bGOxquk2EBC7zzTf
+H/qjRx/38Um8Oe8S1ytJaS8+m6ioNzxCRv7YwuyDFHnsJMWScyjg0bLwcex6vbBRvG1SpObFpPBY
+tm/yIiJpZIcj/x1iYyzpgGvMvbHLaYkRplgePePxvg==
+=ufOE
+-----END PGP SIGNATURE-----
+
+--------------Cy0WWPGNbvl0tW06hginDkL7--
