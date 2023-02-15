@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77F9698737
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA29169873C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBOVQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S229783AbjBOVSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBOVQ0 (ORCPT
+        with ESMTP id S229461AbjBOVSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:16:26 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB7F119;
-        Wed, 15 Feb 2023 13:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KTC5DH0M+FnWN1wBfrds1kCpF1LuzwfMQP3NHMnS3eU=; b=z1HkbK6nn9hiJSv3SObZsqJNc9
-        gW1SoZZzMNBIlNGov/HfdFuUWJreChoGD76Ny89nPcNzspP525Hpcnkj6oLoc/tfvRSQAhv28TvKT
-        Mnq6Sfld1kZbUXm9/Ayd2XzQ2uuRSe7FwN3mhkBWmYL4A+pgJnUMYJ7dHX9qVdS+g2DR7I+ta51ru
-        YvP34u5Cf0zug1a6Tg8TfD+IS1etVxgnABA1W5RyTCOzxeuwy5plWGc3UTEOf8wIcSMxpUfphV1C8
-        k1Koo3FKL02L0t3gPLfPGWFA2ojmNje8g/xF3hE9va5gOeJjmJLooS07JALiNIA0GGiYDWTQJnVON
-        Qa/4bagA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57210)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pSP8T-0007G7-8u; Wed, 15 Feb 2023 21:16:17 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pSP8N-0005Ct-2U; Wed, 15 Feb 2023 21:16:11 +0000
-Date:   Wed, 15 Feb 2023 21:16:11 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v6 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert
- to DT schema
-Message-ID: <Y+1Lm8XZVrtSGTLT@shell.armlinux.org.uk>
-References: <cover.1676323692.git.daniel@makrotopia.org>
- <f4b378f4b19064df85d529973ed6c73ae7aa9f2d.1676323692.git.daniel@makrotopia.org>
- <20230215204318.GA517744-robh@kernel.org>
+        Wed, 15 Feb 2023 16:18:23 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752C726879;
+        Wed, 15 Feb 2023 13:18:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676495902; x=1708031902;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GTT4gNma+UDtlhtKszlXJRnKYRr1ieBb5P4RGFVL3g0=;
+  b=O2PD86DQpQbToHdsSVAk/I6AvSf8DvKYqY9HGW8yWGpblpkq8LhpOO6h
+   lEwuop5DjeSu01Me3KwjCrRdg/43OPMRvndvBcmeo5NdM7GtWZd+PCaT8
+   XecGls5/s27q5KEtzS6tLuV7sQMGFcuW5LUAAee8yJwheMl49cB/XyRwP
+   r0vfRCfJvpXMVolGg5QEThG9WoJSTwO4Sd/8Hac7Wpnjnv8Mv3oF6RenM
+   /4Ip5NWIkhBmAUTA53R0z1ogvjq8sOV8Iw/nenoBzIiWzcapR/f2662s/
+   l9XP2iMj2O+raf9/nbgh5QIY5pame77Nm6yJUmRW3ygyNnReq8rDlblSj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="330186706"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="330186706"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:18:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="733558396"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="733558396"
+Received: from chakanog-mobl.amr.corp.intel.com (HELO [10.209.64.107]) ([10.209.64.107])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:18:21 -0800
+Message-ID: <76c527e3-b376-18df-bc93-f5a75e029d76@intel.com>
+Date:   Wed, 15 Feb 2023 13:18:20 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215204318.GA517744-robh@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] platform/x86/intel/ifs: Implement Array BIST test
+Content-Language: en-US
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+ <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230214234426.344960-5-jithu.joseph@intel.com>
+ <a24c65f8-978d-8968-7874-6b83e14b01ba@intel.com>
+ <d9d18954-8434-4c85-88b8-8e1d99cd6a4b@intel.com>
+ <dd501d6a-e7e9-be82-24fb-33b18fb6192b@intel.com>
+ <b67d2125-4075-4eac-4cad-8e315b866144@intel.com>
+ <5d57f42a-1bfc-5e6a-bb49-556ecb7402af@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <5d57f42a-1bfc-5e6a-bb49-556ecb7402af@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 02:43:18PM -0600, Rob Herring wrote:
-> On Mon, Feb 13, 2023 at 09:34:43PM +0000, Daniel Golle wrote:
-> > Convert mediatek,sgmiiisys bindings to DT schema format.
-> > Add maintainer Matthias Brugger, no maintainers were listed in the
-> > original documentation.
-> > As this node is also referenced by the Ethernet controller and used
-> > as SGMII PCS add this fact to the description.
-> > 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >  .../arm/mediatek/mediatek,sgmiisys.txt        | 27 ----------
-> >  .../arm/mediatek/mediatek,sgmiisys.yaml       | 49 +++++++++++++++++++
-> >  2 files changed, 49 insertions(+), 27 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> >  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
+On 2/15/23 13:13, Joseph, Jithu wrote:
 > 
-> If you respin or as a follow-up, can you move this to bindings/clock/?
+> On 2/15/2023 12:26 PM, Dave Hansen wrote:
+>> On 2/15/23 12:22, Joseph, Jithu wrote:
+>>> 		trace_ifs_array(cpu, *((u64 *)&before), *((u64 *)&command));
+>> Uhh, you control the types in the tracepoint.  Just make them compatible
+>> so you don't need casts.
+> will change it to:
+> trace_ifs_array(cpu, before.array_bitmask, before.array_bank,  *((u64 *)&command));
+> 
+> i.e will pass compatible types for array_list and array_bank. And for the last argument, we need to dump the whole 64 bits within "command"
+> into trace output . Since the suggested change replaced the union with a struct, it is simplest to cast it to u64 needed by traceoutput.
+> So I would prefer to keep the cast for the last argument alone.
 
-I'm not sure that's appropriate. Let's take the MT7622 as an example,
-here is the extract from the device tree for this:
+<sigh>
 
-        sgmiisys: sgmiisys@1b128000 {
-                compatible = "mediatek,mt7622-sgmiisys",
-                             "syscon";
-                reg = <0 0x1b128000 0 0x3000>;
-                #clock-cells = <1>;
-        };
+Your trace even can literally be:
 
-This makes it look primarily like a clock controller, but when I look
-at the MT7622 documentation, this region is described as the
-"Serial Gigabit Media Independent Interface".
++	TP_STRUCT__entry(
++		__field(struct ifs_foo,	before	)
++		__field(struct ifs_foo,	after	)
++		__field(	int,	cpu	)
++	),
 
-If we delve a little deeper and look at the code we have in the kernel,
-yes, there is a clock driver, but there is also the SGMII code which is
-wrapped up into the mtk_eth_soc driver - and the only user of the
-clocks provided by the sgmiisys is the ethernet driver.
+and then you can just use structure assignment or a memcpy.  *That* is
+what I mean by compatible types.
 
-To me, this looks very much like a case of "lets use the clock API
-because it says we have clocks inside this module" followed by "now
-how can we make it work with DT with a separate clock driver".
-
-In other words, I believe that describing this hardware as something
-that is primarily to do with clocks is wrong. It looks to me more
-like the hardware is primarily a PCS that happens to provide some
-clocks to the ethernet subsystem that is attached to it.
-
-Why do I say this? There are 23 documented PCS registers in the
-0x1b128000 block, and there is one single register which has a bunch
-of bits that enable the various clocks that is used by its clock
-driver.
-
-Hence, I put forward that:
-
-"The MediaTek SGMIISYS controller provides various clocks to the system."
-
-is quite misleading, and it should be described as:
-
-"The MediaTek SGMIISYS controller provides a SGMII PCS and some clocks
-to the ethernet subsystem to which it is attached."
-
-and a PCS providing clocks to the ethernet subsystem is nothing
-really new - we just don't use the clk API to describe them, and
-thus don't normally need to throw a syscon thing in there to share
-the register space between two drivers.
-
-So, in summary, I don't think moving this to "bindings/clock/" makes
-any sense what so ever, and that is probably being based on a
-misleading description of what this hardware is and the code structure
-adopted in the kernel.
-
-Yes, DT describes the hardware. That's exactly the point I'm making.
-It seems that the decision here to classify it has a clock driver is
-being made based off the kernel implementation, not what the hardware
-actually is.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+But, also, I'm not sure these tracepoints even make any sense.  You're
+passing raw MSR contents back and forth.  Why not just use the MSR
+tracepoints?  They'll give you the same data.
