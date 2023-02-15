@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0219C698583
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A38698585
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjBOU0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S229771AbjBOU0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjBOU0G (ORCPT
+        with ESMTP id S229607AbjBOU0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:26:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01371C7D0;
-        Wed, 15 Feb 2023 12:25:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 16DC6CE26FE;
-        Wed, 15 Feb 2023 20:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2FBC433D2;
-        Wed, 15 Feb 2023 20:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676492751;
-        bh=os1l2QpY3JmJBjUKP58QMx61GxEfMBxX9wW/qhau3Wc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=se8sumWAp4cC6xYEvZm0k/vTiSQ5XuMVkJ5esfyL9vk8I7RlFF6ai7V1E3jZtBRLc
-         Bo3gpsa6aDzKYdqhFYfcVcwCotOIi6qZoeKMMUTMPUnbzPC5pnOB0dy74FSMfLij37
-         vHVqCj7ejNc1HvWWfKN/rkVt2NQim6+7Oab4AF9vbqcVCkg9ximutnuxZ0SB0hroOu
-         iol6UlKKhsGXSGaPMukXtraayv4cKe4cjvO/nk76IQRLkVC3ABAxMbIbj8mmWKoMlk
-         qZvnipkjfdfe6xjVAQkaI0vPIL0ELw3ZkLZE8nCE9GsFvxOG+QPHxDZwizBmgcz+RF
-         DYBmr2aIWSREQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        damon@lists.linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mm: hugetlb: change to return bool for isolate_hugetlb()
-Date:   Wed, 15 Feb 2023 20:25:48 +0000
-Message-Id: <20230215202548.92462-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <12a287c5bebc13df304387087bbecc6421510849.1676424378.git.baolin.wang@linux.alibaba.com>
-References: 
+        Wed, 15 Feb 2023 15:26:46 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7FB5B98;
+        Wed, 15 Feb 2023 12:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676492805; x=1708028805;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WF3CaZbwQ4TXLGhrjWkUVfdj5s5xigdAxwgewUYHvoA=;
+  b=OxTVqxbajfMW3zlneRNat+aLU7u8sfZH9RzkdV0Ajm3GcsQXF44VFZ55
+   7t97B3O1Kj5PBxCGiBkTRe2GcosOtc3yxEYG+CpCvIGuvXOVJT7fVnmB0
+   PsKTffTcOTkQdyAavXoNw5k6JnvSBEeo9V8fKhh6vq/xvuddZH2dr4pq8
+   vEsi72jkUaupf5uR3WXZSpPFVH9P9Xg+7V/6YKBYkPoaaSNE3Au4Vffk4
+   u1MCU4AVIlPNH4dh9DsPNA4GwIXxXUJ/N6I5hPq9DqsrQ+0alfzQCbOlf
+   0ce9uVdIKKD27gzbmbYl0T/1hekRDN3kSchMeKnBMLnYi+1Wmk01md5Dc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="396171997"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="396171997"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 12:26:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="758614547"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="758614547"
+Received: from chakanog-mobl.amr.corp.intel.com (HELO [10.209.64.107]) ([10.209.64.107])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 12:26:44 -0800
+Message-ID: <b67d2125-4075-4eac-4cad-8e315b866144@intel.com>
+Date:   Wed, 15 Feb 2023 12:26:43 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] platform/x86/intel/ifs: Implement Array BIST test
+Content-Language: en-US
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+ <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230214234426.344960-5-jithu.joseph@intel.com>
+ <a24c65f8-978d-8968-7874-6b83e14b01ba@intel.com>
+ <d9d18954-8434-4c85-88b8-8e1d99cd6a4b@intel.com>
+ <dd501d6a-e7e9-be82-24fb-33b18fb6192b@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <dd501d6a-e7e9-be82-24fb-33b18fb6192b@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 18:39:36 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+On 2/15/23 12:22, Joseph, Jithu wrote:
+> 		trace_ifs_array(cpu, *((u64 *)&before), *((u64 *)&command));
 
-> Now the isolate_hugetlb() only returns 0 or -EBUSY, and most users did not
-> care about the negative value, thus we can convert the isolate_hugetlb()
-> to return a boolean value to make code more clear when checking the
-> hugetlb isolation state. Moreover converts 2 users which will consider
-> the negative value returned by isolate_hugetlb().
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> ---
-[...]
->  include/linux/hugetlb.h |  6 +++---
->  mm/hugetlb.c            | 13 ++++++++-----
->  mm/memory-failure.c     |  2 +-
->  mm/mempolicy.c          |  2 +-
->  mm/migrate.c            |  7 +++----
->  5 files changed, 16 insertions(+), 14 deletions(-)
-> 
-[...]
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 3a01a9dbf445..16513cd23d5d 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -2925,13 +2925,16 @@ static int alloc_and_dissolve_hugetlb_folio(struct hstate *h,
->  		 */
->  		goto free_new;
->  	} else if (folio_ref_count(old_folio)) {
-> +		bool isolated;
-> +
->  		/*
->  		 * Someone has grabbed the folio, try to isolate it here.
->  		 * Fail with -EBUSY if not possible.
->  		 */
->  		spin_unlock_irq(&hugetlb_lock);
-> -		ret = isolate_hugetlb(old_folio, list);
-> +		isolated = isolate_hugetlb(old_folio, list);
->  		spin_lock_irq(&hugetlb_lock);
-> +		ret = isolated ? 0 : -EBUSY;
->  		goto free_new;
-
-Nit.  I'd personally prefer to set 'ret' before entering this critical section
-to keep the section short, but this would be just a mean comment that wouldn't
-worth request respin.
-
-
-Thanks,
-SJ
-
-[...]
+Uhh, you control the types in the tracepoint.  Just make them compatible
+so you don't need casts.
