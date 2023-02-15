@@ -2,88 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE685697B93
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3694697B95
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbjBOMQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S234031AbjBOMRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbjBOMQj (ORCPT
+        with ESMTP id S233894AbjBOMRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:16:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994D99EF3;
-        Wed, 15 Feb 2023 04:16:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Feb 2023 07:17:05 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD332B62C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:17:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35FEF60D34;
-        Wed, 15 Feb 2023 12:16:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E81DC433D2;
-        Wed, 15 Feb 2023 12:16:35 +0000 (UTC)
-Message-ID: <c990e632-4e2e-3942-0fe3-4b7a2e636ff7@linux-m68k.org>
-Date:   Wed, 15 Feb 2023 22:16:32 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGxs575mQz4x5Z;
+        Wed, 15 Feb 2023 23:16:57 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20230204172206.7662-1-rdunlap@infradead.org>
+References: <20230204172206.7662-1-rdunlap@infradead.org>
+Subject: Re: [PATCH] powerpc/kexec_file: fix implicit decl error
+Message-Id: <167646340183.1415779.1023703853117043648.b4-ty@ellerman.id.au>
+Date:   Wed, 15 Feb 2023 23:16:41 +1100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] m68k/nommu: add missing definition of ARCH_PFN_OFFSET
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org
-References: <20230214140729.1649961-1-rppt@kernel.org>
- <20230214140729.1649961-2-rppt@kernel.org>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <20230214140729.1649961-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 15/2/23 00:07, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Sat, 4 Feb 2023 09:22:06 -0800, Randy Dunlap wrote:
+> kexec (PPC64) code calls memory_hotplug_max(). Add the header declaration
+> for it from <asm/mmzone.h>. Using <linux/mmzone.h> does not work since
+> the #include for <asm/mmzone.h> depends on CONFIG_NUMA=y, which is not
+> set in this kernel config file.
 > 
-> On m68k/nommu RAM does not necessarily start at 0x0 and when it does not
-> pfn_valid() uses a wrong offset into the memory map which causes silent
-> boot failures.
+> Fixes this build error/warning:
 > 
-> Define ARCH_PFN_OFFSET to make pfn_valid() use the correct offset.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: d82f07f06cf8 ("m68k: use asm-generic/memory_model.h for both MMU and !MMU")
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> [...]
 
-Acked-by: Greg Ungerer <gerg@linux-m68k.org>
+Applied to powerpc/fixes.
 
+[1/1] powerpc/kexec_file: fix implicit decl error
+      https://git.kernel.org/powerpc/c/97e45d469eb180a7bd2809e4e079331552c73e42
 
-> ---
->   arch/m68k/include/asm/page_no.h | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/m68k/include/asm/page_no.h b/arch/m68k/include/asm/page_no.h
-> index 43ff6b109ebb..060e4c0e7605 100644
-> --- a/arch/m68k/include/asm/page_no.h
-> +++ b/arch/m68k/include/asm/page_no.h
-> @@ -28,6 +28,8 @@ extern unsigned long memory_end;
->   #define	virt_addr_valid(kaddr)	(((unsigned long)(kaddr) >= PAGE_OFFSET) && \
->   				((unsigned long)(kaddr) < memory_end))
->   
-> +#define ARCH_PFN_OFFSET PHYS_PFN(PAGE_OFFSET_RAW)
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _M68K_PAGE_NO_H */
+cheers
