@@ -2,167 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C22697FC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB2C697FBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBOPmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S229527AbjBOPlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjBOPmQ (ORCPT
+        with ESMTP id S229668AbjBOPld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:42:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FE43669B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676475667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 15 Feb 2023 10:41:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4A3B0EA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:21 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CD79833744;
+        Wed, 15 Feb 2023 15:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676475679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Us0zCop2bZgqcPW/JXsl5O/r2nwlZx53CdefM19JIrA=;
-        b=PTZhOUiBWB/5ykVlxxnLYC+UggT+G+Q6btEZ/m0wgZO/vg9qAlhyD0BGTpXAKg9FF3/Xaj
-        ruWWB4SBFA2eQM5w0WHjqwmvmYiMwRoBnax6KT3xfIDSEFSSziWsNEziheqDrbIGisiuRy
-        bYdl5CgFeyOI1XWsoI69e4GkXZZH9E4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-LVpfoPQGNw6GNKM_irhueg-1; Wed, 15 Feb 2023 10:41:02 -0500
-X-MC-Unique: LVpfoPQGNw6GNKM_irhueg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=ds4a8MZXrTFQmvFjd/tW04lFHt9bdke4Re2KrEs3co4=;
+        b=dWZgHCZtsVhD1UMyX1ZivgNCtkEmrlpAsMr4MqeOXDNNnmT4c49lAv3nLSDt5bXPyzPFS5
+        0AlYula7qvYN66bzCNygcTLowG6UQYR0NMDEA4neTqZrUWTLlOJaubZYnVYqpsET6hfKhV
+        3j00+wt/Oian9eow24Z/xlO5AWaJWQE=
+Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2A5E885620;
-        Wed, 15 Feb 2023 15:41:01 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BF9418EC1;
-        Wed, 15 Feb 2023 15:40:58 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com>
-References: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com> <20230214171330.2722188-1-dhowells@redhat.com> <20230214171330.2722188-6-dhowells@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-unionfs@vger.kernel.org
-Subject: [PATCH v15 05/17] overlayfs: Implement splice-read
+        by relay2.suse.de (Postfix) with ESMTPS id 29F842C141;
+        Wed, 15 Feb 2023 15:41:19 +0000 (UTC)
+Date:   Wed, 15 Feb 2023 16:41:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [RESEND v4] printf: fix errname.c list
+Message-ID: <Y+z9G1VJx9jeCSgr@alley>
+References: <20230206194126.380350-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3370084.1676475658.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 15 Feb 2023 15:40:58 +0000
-Message-ID: <3370085.1676475658@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230206194126.380350-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-How about the attached then?
+On Mon 2023-02-06 20:40:57, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> On most architectures, gcc -Wextra warns about the list of error
+> numbers containing both EDEADLK and EDEADLOCK:
+> 
+> lib/errname.c:15:67: warning: initialized field overwritten [-Woverride-init]
+>    15 | #define E(err) [err + BUILD_BUG_ON_ZERO(err <= 0 || err > 300)] = "-" #err
+>       |                                                                   ^~~
+> lib/errname.c:172:2: note: in expansion of macro 'E'
+>   172 |  E(EDEADLK), /* EDEADLOCK */
+>       |  ^
+> 
+> On parisc, a similar error happens with -ECANCELLED, which is an
+> alias for ECANCELED.
+> 
+> Make the EDEADLK printing conditional on the number being distinct
+> from EDEADLOCK, and remove the -ECANCELLED bit completely as it
+> can never be hit.
+> 
+> To ensure these are correct, add static_assert lines that verify
+> all the remaining aliases are in fact identical to the canonical
+> name.
+> 
+> Fixes: 57f5677e535b ("printf: add support for printing symbolic error names")
+> Cc: Petr Mladek <pmladek@suse.com>
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Acked-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Link: https://lore.kernel.org/all/20210514213456.745039-1-arnd@kernel.org/
+> Link: https://lore.kernel.org/all/20210927123409.1109737-1-arnd@kernel.org/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-David
----
-overlayfs: Implement splice-read
+I have just pushed the patch into printk/linux.git, branch for-6.3.
 
-Implement splice-read for overlayfs by passing the request down a layer
-rather than going through generic_file_splice_read() which is going to be
-changed to assume that ->read_folio() is present on buffered files.
+> I sent this a few times, but it never made it in so far. The warning
+> still shows up when enabling extra warnings, and this is an actual bug.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: David Hildenbrand <david@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Miklos Szeredi <miklos@szeredi.hu>
-cc: linux-unionfs@vger.kernel.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-mm@kvack.org
----
-Notes:
-    ver #15)
-     - Remove redundant FMODE_CAN_ODIRECT check on real file.
-     - Do rw_verify_area() on the real file, not the overlay file.
-     - Fix a file leak.
+I am sorry for the delay, v3 somehow fallen under cracks. Anyway, v4
+seems to be the only resend that I got. v3 was needed because of a
+problem reported in v2.
 
- fs/overlayfs/file.c |   33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-index c9d0c362c7ef..72a545da51a2 100644
---- a/fs/overlayfs/file.c
-+++ b/fs/overlayfs/file.c
-@@ -419,6 +419,37 @@ static ssize_t ovl_write_iter(struct kiocb *iocb, str=
-uct iov_iter *iter)
- 	return ret;
- }
- =
-
-+static ssize_t ovl_splice_read(struct file *in, loff_t *ppos,
-+			       struct pipe_inode_info *pipe, size_t len,
-+			       unsigned int flags)
-+{
-+	const struct cred *old_cred;
-+	struct fd real;
-+	ssize_t ret;
-+
-+	ret =3D ovl_real_fdget(in, &real);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D -EINVAL;
-+	if (!real.file->f_op->splice_read)
-+		goto out_fdput;
-+
-+	ret =3D rw_verify_area(READ, real.file, ppos, len);
-+	if (unlikely(ret < 0))
-+		goto out_fdput;
-+
-+	old_cred =3D ovl_override_creds(file_inode(in)->i_sb);
-+	ret =3D real.file->f_op->splice_read(real.file, ppos, pipe, len, flags);
-+
-+	revert_creds(old_cred);
-+	ovl_file_accessed(in);
-+out_fdput:
-+	fdput(real);
-+
-+	return ret;
-+}
-+
- /*
-  * Calling iter_file_splice_write() directly from overlay's f_op may dead=
-lock
-  * due to lock order inversion between pipe->mutex in iter_file_splice_wr=
-ite()
-@@ -695,7 +726,7 @@ const struct file_operations ovl_file_operations =3D {
- 	.fallocate	=3D ovl_fallocate,
- 	.fadvise	=3D ovl_fadvise,
- 	.flush		=3D ovl_flush,
--	.splice_read    =3D generic_file_splice_read,
-+	.splice_read    =3D ovl_splice_read,
- 	.splice_write   =3D ovl_splice_write,
- =
-
- 	.copy_file_range	=3D ovl_copy_file_range,
-
+Best Regards,
+Petr
