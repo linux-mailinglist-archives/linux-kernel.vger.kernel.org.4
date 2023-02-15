@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702FC697384
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFF4697389
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbjBOBWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S233603AbjBOBWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbjBOBWU (ORCPT
+        with ESMTP id S233519AbjBOBWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Feb 2023 20:22:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBD432CD2;
-        Tue, 14 Feb 2023 17:21:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88534329;
+        Tue, 14 Feb 2023 17:21:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED1076199C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEE0F61995;
+        Wed, 15 Feb 2023 01:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17A1C4339B;
         Wed, 15 Feb 2023 01:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DBCC433D2;
-        Wed, 15 Feb 2023 01:21:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676424108;
-        bh=WszWYo1Dp3gtPmdsDTDcLO4U185HID5tYaADLVl+YJ8=;
+        s=k20201202; t=1676424110;
+        bh=6sFDo6FafZi154G+JCbShxczRgVL1UN+FRTvqIYv8wI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tuXS3J3lUbtayvg3n33el4JAI3hK8xT9eZMWTj6IPX1KusGuisadhyvWNeu5MGZh5
-         wFDikPC6YAbtPrvVF0ls/l2XO93KH2ogMTlvoRm8g3//MatM+WVGiEy1dqnsETc6bE
-         qiHXJrxo5cCvqh/lHPXO+fFmOot3/DrhSXEbUo0i6K2lqjBs15VYDMxobws3pweOuG
-         dqkl2/QnvzWD9h6wgefhNvPpg7Hf3M4hGpsnTfqyIhZIMRYEvsOTvT2FusR7JvHpUp
-         y7cV2B5Xh83kEp3LuFB4DWn9+9+QqdhJq7rLSOBwHcl+TBNzp+DPq2H8amFcQNprLJ
-         3hmB9vs4eI7PQ==
+        b=ZDqGKl+e1zll1x7Oa+77V7fifFvYMVKuuRpY6xxqqIzJVqVtCivlOHhSKJ4fjYL8c
+         V63fs825mPcRJFVNaUUYLfKKUm38cmk8uFwnZbZxmp2yspSz9nfBGPqJrjgdp5kNGv
+         byQ9pJEpJ27i21kmv+qi8JK3yKHTyl3Lcpb0p+ULApO5Zl+DocQ5cNOSmcu/1GN2b6
+         p1P4tNdwogGihrezA+m5GgRt1uByym4FcNE+spKDypMkJFOjsxAEko3btGW+IcvJRI
+         opWem93UZ1WKTc5SWkLHnX+aplDKVTd5ESJtlsgmykFeo411uTMycO+YyAImm6iPks
+         yPlF1EaZSK8ZA==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
@@ -39,9 +39,9 @@ Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v6 09/12] kbuild: tar-pkg: use tar rules in scripts/Makefile.package
-Date:   Wed, 15 Feb 2023 10:20:31 +0900
-Message-Id: <20230215012034.403356-9-masahiroy@kernel.org>
+Subject: [PATCH v6 10/12] kbuild: deb-pkg: fix binary-arch and clean in debian/rules
+Date:   Wed, 15 Feb 2023 10:20:32 +0900
+Message-Id: <20230215012034.403356-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230215012034.403356-1-masahiroy@kernel.org>
 References: <20230215012034.403356-1-masahiroy@kernel.org>
@@ -56,127 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use %.tar, %.tar.gz, %.tar.bz2, %.tar.xz, %.tar.zst rules in
-scripts/Makefile.package.
+The clean target needs ARCH=${ARCH} to clean up the tree for the correct
+architecture. 'make (bin)deb-pkg' skips cleaning, but the preclean hook
+may be executed if dpkg-buildpackage is directly used.
+
+The binary-arch target does not need KERNELRELEASE because it is not
+updated during the installation. KBUILD_BUILD_VERSION is not needed
+either because binary-arch does not build vmlinux.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
 Changes in v6:
- - New patch
+  - New patch
 
- scripts/Makefile.package | 29 +++++++++++++++++-----
- scripts/package/buildtar | 52 +---------------------------------------
- 2 files changed, 24 insertions(+), 57 deletions(-)
+ scripts/package/mkdebian | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index 50b86b325d7a..b941e6341b36 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -145,13 +145,30 @@ snap-pkg:
- 	cd $(objtree)/snap && \
- 	snapcraft --target-arch=$(UTS_MACHINE)
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index 22fc73a5e4f2..eef20d5dc288 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -251,12 +251,10 @@ build: build-arch
  
--# tarball targets
-+# dir-pkg tar*-pkg - tarball targets
- # ---------------------------------------------------------------------------
--tar-pkgs := dir-pkg tar-pkg targz-pkg tarbz2-pkg tarxz-pkg tarzst-pkg
--PHONY += $(tar-pkgs)
--$(tar-pkgs):
--	$(MAKE) -f $(srctree)/Makefile
--	+$(CONFIG_SHELL) $(srctree)/scripts/package/buildtar $@
-+
-+tar-pkg-tarball = linux-$(KERNELRELEASE)-$(ARCH).$(1)
-+tar-pkg-phony = $(subst .,,$(1))-pkg
-+
-+tar-install: FORCE
-+	$(Q)$(MAKE) -f $(srctree)/Makefile
-+	+$(Q)$(srctree)/scripts/package/buildtar $@
-+
-+PHONY += dir-pkg
-+dir-pkg: tar-install
-+	@echo "Kernel tree successfully created in $<"
-+
-+define tar-pkg-rule
-+PHONY += $(tar-pkg-phony)
-+$(tar-pkg-phony): $(tar-pkg-tarball)
-+	@:
-+
-+$(tar-pkg-tarball): private tar-rootdir := tar-install
-+$(tar-pkg-tarball): tar-install
-+endef
-+
-+$(foreach x, tar tar.gz tar.bz2 tar.xz tar.zst, $(eval $(call tar-pkg-rule,$(x))))
+ binary-indep:
+ binary-arch: build-arch
+-	\$(MAKE) KERNELRELEASE=${version} ARCH=${ARCH} \
+-	KBUILD_BUILD_VERSION=${revision} -f \$(srctree)/Makefile intdeb-pkg
+-
++	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} intdeb-pkg
+ clean:
+ 	rm -rf debian/files debian/linux-*
+-	\$(MAKE) clean
++	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} clean
  
- # perf-tar*-src-pkg - generate a source tarball with perf source
- # ---------------------------------------------------------------------------
-diff --git a/scripts/package/buildtar b/scripts/package/buildtar
-index 4d6f0b128efd..65b4ea502962 100755
---- a/scripts/package/buildtar
-+++ b/scripts/package/buildtar
-@@ -16,39 +16,7 @@ set -e
- #
- # Some variables and settings used throughout the script
- #
--tmpdir="${objtree}/tar-install"
--tarball="${objtree}/linux-${KERNELRELEASE}-${ARCH}.tar"
--
--
--#
--# Figure out how to compress, if requested at all
--#
--case "${1}" in
--	dir-pkg|tar-pkg)
--		opts=
--		;;
--	targz-pkg)
--		opts="-I ${KGZIP}"
--		tarball=${tarball}.gz
--		;;
--	tarbz2-pkg)
--		opts="-I ${KBZIP2}"
--		tarball=${tarball}.bz2
--		;;
--	tarxz-pkg)
--		opts="-I ${XZ}"
--		tarball=${tarball}.xz
--		;;
--	tarzst-pkg)
--		opts="-I ${ZSTD}"
--		tarball=${tarball}.zst
--		;;
--	*)
--		echo "Unknown tarball target \"${1}\" requested, please add it to ${0}." >&2
--		exit 1
--		;;
--esac
--
-+tmpdir=$1
- 
- #
- # Clean-up and re-create the temporary directory
-@@ -148,21 +116,3 @@ case "${ARCH}" in
- 		sleep 5
- 		;;
- esac
--
--if [ "${1}" = dir-pkg ]; then
--	echo "Kernel tree successfully created in $tmpdir"
--	exit 0
--fi
--
--#
--# Create the tarball
--#
--if tar --owner=root --group=root --help >/dev/null 2>&1; then
--	opts="$opts --owner=root --group=root"
--fi
--
--tar cf $tarball -C $tmpdir $opts $dirs
--
--echo "Tarball successfully created in $tarball"
--
--exit 0
+ binary: binary-arch
+ EOF
 -- 
 2.34.1
 
