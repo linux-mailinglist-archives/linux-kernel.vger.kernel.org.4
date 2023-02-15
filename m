@@ -2,206 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A499697B3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D36F697B3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbjBOL6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S233843AbjBOL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbjBOL6d (ORCPT
+        with ESMTP id S230360AbjBOL7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:58:33 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA12FF04
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:58:31 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id n2so12357377pgb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:58:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676462310;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iyovd/Dha7A89L4EPh+Q/qSsUwAvTTMJN53nXu7zGys=;
-        b=XTpqPwh3gWAnki95S8puPpl0H0S0gBF60yF3WHrqCBqLn0o+VDDhANTe9lHwTNjcMS
-         7WJiiyT+RY9khmZWAwK1F6+wJxO8Sx3qJm5M1O+4Inn5H3161J41uSCJzfUqmcNO+CcK
-         wNWfo8z3D4uUytw+O2ZoWUR9Mwvc/5vUgqX3NBQdGBQkzG863+c2psSxVIibpLhuyGeV
-         vTy2mh9WlZVbwpZv0HurX0fZ83el9A0coEEILUs45wzM5Mpq2RALS5knxVMMMP7bZJj1
-         0d02Fz7jz8ERWhpIZXeioDf9qPmjW021HHBGYoexFMUhCW3KwiZggzeY/gdPNMfWfiH9
-         FFMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676462310;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iyovd/Dha7A89L4EPh+Q/qSsUwAvTTMJN53nXu7zGys=;
-        b=emdqol+kf/epP1/KbKWryMqbygHIL6n27rnBsybPQKp/nONdmsk10NeInBAVvQ4Bqp
-         y6lHzK/KQobcZtwcY4H/Q6yeCLnF/Yx+vrwnhXiMpggaSdc4TA4jkJXYhwILU4m3txFb
-         vacb6L+5F/QQNPAakq+KVxmDUfq+jSMBQr559tcuy6Mcuy4bXzxbn6S6Qf2iZ2DQW06d
-         Zz18JThuufgGUS7NFLgHt3DntesevA8vPFSaXpNlmTS6qhx0ZgCDkgyUnxxhAq1CCe0Q
-         GKG34XSLOc5WMwRfrplSELRWiwDZC0kOKzmD9YmqerG8tSR7eLLeaOshnbBMRYKLY5k3
-         KLbA==
-X-Gm-Message-State: AO0yUKUFikSVlYdLcDLHBaaOCKedOFVCKyRnT4/QnKl33WhM9urD0Ms9
-        uGL3tA7JkBBaIhSR/uqAHtoMUtX1B540xI5D2WEnyQ==
-X-Google-Smtp-Source: AK7set/Za4Jn0WPzezUn7SAUozXl4zWfHmxQz0ZodvbDSjFH2tNr7+Xm6nfUZRG6LQdURmj8BSJSj7zwQGERdeBpaOw=
-X-Received: by 2002:aa7:95a9:0:b0:5a8:ba5b:575 with SMTP id
- a9-20020aa795a9000000b005a8ba5b0575mr279345pfk.40.1676462310487; Wed, 15 Feb
- 2023 03:58:30 -0800 (PST)
+        Wed, 15 Feb 2023 06:59:15 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2105.outbound.protection.outlook.com [40.92.53.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B14A5243;
+        Wed, 15 Feb 2023 03:59:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dtvgZU77oG2CRQV0LWRNvMNWnV0mBvFDSX5HM+/pn8P5pLFnWMafAnVIb/R12B9kH2B6GK4Lc7Ii7uufSs7rgf0OBrKO5RrKIpiHUp/iSfS6thFX0EXHjAQO3CaJBWDMp36ZxVF8dQXMXZQritrg7ssFgJRyhCVBiuSnwSiyd5iYQ7NeW7iwWr7YF06KIrMvvGIEf3UZy9vmFc8H8iqTWl6Ac5S7OLJN9ogbFwnc7L7iVi+yN2M26NghIn73kd0H0N7xBTNR+xG6zc7+6BbhLs2ntl/d+RdQ43nB4qFwLDG4qT4iZESgUUh2KFU51oj6epTjzWjXCOreu/18NkbHmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1ZFj9EPvcwmqLNbiBBtE1iY3EV4T/skqCRfOPHDs5Fo=;
+ b=YhGHF88riCkV8WBJpdDZui0fxFty7LG28qsDrkVOlt95HOGrRS8C+d45s/F8dJf9SZWOA+1kc8B2nRmZHY+/n8pyyC0pXX029wb24MKocCGlsqNaIgzLtQkFcSPq8GFLqo+AemhuwOscxqBWkXLw9/PkYTqvQvafmolyMmHPGNE5aw5qQVJ4fDdnebp+4ytb6xVogZceOwKXy6JPyeRYIJfRqtS+fapVJNqTl0bbWr+tSHwpIOX/HjEYvRSOshqVdUaOycxQlOKxCugiw8FdaNGjsa7QGhoVuKYhwmBPXcU/X8TxV7YCkAtKp6Sq0bebfnqzqQKjVpQlZHAgOpL5Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1ZFj9EPvcwmqLNbiBBtE1iY3EV4T/skqCRfOPHDs5Fo=;
+ b=YFwCbCJXJmz0Ygb3kmiglNI3+Z633+SpioVg9ww+V2DF1mAstwpJdDORlGE+MIoLypjj9eGT5kdsmcHjQxQhvkgE77tqSwKq0Mi89cX9GFczGo7wFOpWkd0BFiMr8kb9eXWUfJ3kODrUBdctlCTpC4FQclsR1DchPg2qKa2zwuRvQOnPKZInGJeokEfvvp1S1fNQsbsKnrsRK5Mz1IV1l2d/8un8cISFLsHy/CbtgqnG2g/XJ7AB0RgsOyjDk9H4JqdIprCC6I09LDQF1685iyCHCGBNxRQjwSLpFJYPHlGBaeejlsRUbDiZs1fDzv8eWfBHXugtCTQuDRi6lVB+TQ==
+Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:252::12)
+ by TYYP286MB1620.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:113::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 11:59:09 +0000
+Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::cd65:1f1c:ceda:5979]) by TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::cd65:1f1c:ceda:5979%6]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 11:59:09 +0000
+Message-ID: <TY3P286MB26111053410F3F96C9C71D2798A39@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Date:   Wed, 15 Feb 2023 19:59:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+To:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <20230215113249.47727-2-william.qiu@starfivetech.com>
+From:   Shengyu Qu <wiagn233@outlook.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mmc: Add StarFive MMC module
+In-Reply-To: <20230215113249.47727-2-william.qiu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [66UNmE9ydAT2S9fAzU7upqQEYzoxHKB+ygarNKDTJHPrI5x+5wBJCB6vi02PrWEZ]
+X-ClientProxiedBy: SG2PR02CA0027.apcprd02.prod.outlook.com
+ (2603:1096:3:18::15) To TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:252::12)
+X-Microsoft-Original-Message-ID: <a7b51602-3ba4-d822-4da0-f6e51e7dddea@outlook.com>
 MIME-Version: 1.0
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
-In-Reply-To: <20230127104054.895129-1-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 15 Feb 2023 12:57:54 +0100
-Message-ID: <CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY3P286MB2611:EE_|TYYP286MB1620:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67be4b3d-c5e2-4ef7-9ef7-08db0f4c0b86
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wHoOVsd3eHVL61NTZ1h4rsKqVmDdEKaUxa+Iu9Yw9Q1TP6vpxnwS/ndgX+njNe+36C0f6+mJNztdMpavs8NJL96tJ3MWFiqRMJfpzmHNC7HRZS4vmzDTu5Nf2wQOTbDVmcHh9wuBaLtrAI4LZSfPrUWz3U40rRvJA7COEYUovhyAuD01qEsmArs6M4arN6Degx2VQS3BPlv+8LoQjHSWn/AmcBd9ZG+QNdJ/JHUnAudf8fJuxxZK/E+EWdZm6nJ3YpmwGN4F9S8m7t3kZIoa3/NKNcuha6dv6jOQvin7PhFqyqDYSK1w3CJNQXOebNdoxKczbSzI5AM9b2SqrWywSNgWywwhngibIm62IbjEnYeq1HJwucPTUfaJz1netFPQpod++P+e+ueLvGA1CmBIRCsOjmGcwRgldUvxIx9nJ4ngOtSWF9ltsxdmNFawNFJLwL0shKVezR0GkTYEjKQFHIEombmtDO5OYy20VsAaGyaKFBH+meL9JxGa76onkWoMgIFD3u/R/bCG2BrbGsDay80UqF/HCRcIvBESXHOOQVs5N3bdrxSb7mOi2mZwo5HZvvaRTN3NN6T2pYRvQ2btJSggIt5pLrayAq2Anbu4K/RGJx8qFsADF9bPdAki6JlR
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0l3YzlDdk1LTFE4OWdzZWZKclNkbmFPWGhKVWNHdUYwRFphL1h5YzJ2MVBO?=
+ =?utf-8?B?UHJPSHFvT0YzQjlnTFhiTTIyMEtxOVl3ZjFOWDYxOFJYVlk3YWpsZW56VnZy?=
+ =?utf-8?B?Y2FGSGYrajdSRHRkQlJtL203T1YyV2xhcERTTnRlY05aTHhCTTU1QWR0elZI?=
+ =?utf-8?B?V1lqRTM5YjVYQ0QzYlAzb3FwdE9RSzUvVDBHdXNHYWFZcEVPZkxETnpwb3E5?=
+ =?utf-8?B?QlVRc3lKVHd2QU5tZ085WlRBRXB4aUF3TDlwT3huZ2lXWlNLVW55OFloQStS?=
+ =?utf-8?B?NXJWQm4za1ZpMHdpSSt2QXZyWVRGZTdDTFNGUFZsM1NyZm5nRFB4ZHBuYnR5?=
+ =?utf-8?B?K01EVm5qdkxSSVJ2L2tTdXRnUGxTNDcxb2RLNWFJL1d6SExHSVp1cXVRamdh?=
+ =?utf-8?B?eUpXQThrL3J5TFlyYjlTdzRqd25SeVNpQTZCaWRlS2hlUWRVTlA0YkJFM090?=
+ =?utf-8?B?M0VHR1dya1YvdVByeDJ6WnA1WnNjT1FwNWZOdmM0RUdjZFpZZ2Y1S251d2J6?=
+ =?utf-8?B?RUx3WHlvdUVCNE9DOC82QnZHdlFocDdXazlJeXVrSEhDd0ZObENTVzFBcU9J?=
+ =?utf-8?B?QVhucE1WdHF2bG9HbTByQTFLMUpZME1PbXBMNCtOWEE2L1dpMnVMTjF0OFMv?=
+ =?utf-8?B?TTArNjVvKzJyemZWa2VQZDlwb3Z6Z3dodUlncGppakhDalRCNU40RlpHZlow?=
+ =?utf-8?B?czJDQmhtTWdyUWZBUWowQndzeitiN24xS0U0ZVY2Ny9XMy9MUUVHb2ZxSmd4?=
+ =?utf-8?B?TzV0dncyREo3QnFJNGU2cU9pdUJpVHpxUFd0R1ZoUnFDRmx4UktEUW5PU2Yx?=
+ =?utf-8?B?NVNMM1N3NDVDa09ORU9nc3Vrd1RXTDk1NVc2Z3Jra3Z3SG92SWVKSnFEMlFw?=
+ =?utf-8?B?Z3NKWjkzWUR5OTNtSENMQk5taG5CeDVUVG9wd3BRRXZPbm1XcjE2SGpmcEFr?=
+ =?utf-8?B?RGVNbVZzR0pZWSsraElIcDNHYTBidzBJYWVTalBKTitBMFFxbFVMbFRLb0JW?=
+ =?utf-8?B?alZNOExuYldVWkVGMFZoc2F5SlVXcVkvYjF1WmVUY1hYQ3EzY3ZRZFFveDdI?=
+ =?utf-8?B?S21rcGFnUlVoU0ViNmJkenNGRk81R3U2TVlVcE82MjRpbk1mQ0dnS3A4NW43?=
+ =?utf-8?B?V01PVTNhejdkUWtsYWV3akpiUTllaU5IRjF4V2VLU29CTCtSUDZsV1YwazJP?=
+ =?utf-8?B?S2tSb2t5WkJXb01MbmNQVVZqSGZLRWVUVTZRdWMyTGZkaE5MWkUwSjhYbkx6?=
+ =?utf-8?B?RzBoQVlHeXZvcTRpRnlmeUlIN2dEcTNhNklBNWJPQThjeU5hK3JzN0ExUVZh?=
+ =?utf-8?B?WVRlWVV0QkhMUE8zR210dUxOdDJ2N205SkpOZElCajdlUXhtMFhNd3VXMnBM?=
+ =?utf-8?B?b2JEL0VmR3RKOXN3d3dITEt1RThNbUhIWWNOc2Nqby9hV2VaMlBtV29FQVgw?=
+ =?utf-8?B?UUhCUThSN1FQSldteDNjL1FhTG9rYW9YYURta3RvSDRKS2VTNnFDdTJGT3Mw?=
+ =?utf-8?B?VmdOY3Q1UHFxSU0yQjY3eFhCam4zZWp2ZGlwb2pYSUlQdzIxZm5nOGxBWjRs?=
+ =?utf-8?B?VTVKSTdvK0VrVzA5U0h2bjVkRG1uV3JpQTRucThSNHY0amFZVExLMnplWTVk?=
+ =?utf-8?B?WXhZNnZkMWErODBhNnE2Mks3NUYvR1dLMllad2Y5OWR2YkVjZWxjYkYxdFBh?=
+ =?utf-8?B?MEs1bUloSFJzVGpteTNONmJZRVhCT2w1d2RCMGpSRm82U29EZHZlbjZNWG5X?=
+ =?utf-8?B?a0VLUHZ5empVaHg3aFFjRlpvNHZIOGtqVkhaVkdHUnVlTUxSZFRoYncvbmE1?=
+ =?utf-8?B?SkQ2L0ppZVJxV1NsbEo0Zz09?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67be4b3d-c5e2-4ef7-9ef7-08db0f4c0b86
+X-MS-Exchange-CrossTenant-AuthSource: TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 11:59:09.1484
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB1620
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 11:40, Abel Vesa <abel.vesa@linaro.org> wrote:
+Hello William,
+
+Are you sure changing driver is better than changing yaml bindings? All
+
+previous version sent was syscon and sysreg seems not consistent with
+
+other codes.
+
+Best regards,
+
+Shengyu
+
+> Add documentation to describe StarFive designware mobile storage
+> host controller driver.
 >
-> Currently, there are cases when a domain needs to remain enabled until
-> the consumer driver probes. Sometimes such consumer drivers may be built
-> as modules. Since the genpd_power_off_unused is called too early for
-> such consumer driver modules to get a chance to probe, the domain, since
-> it is unused, will get disabled. On the other hand, the best time for
-> an unused domain to be disabled is on the provider's sync_state
-> callback. So, if the provider has registered a sync_state callback,
-> assume the unused domains for that provider will be disabled on its
-> sync_state callback. Also provide a generic sync_state callback which
-> disables all the domains unused for the provider that registers it.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
+>   .../bindings/mmc/starfive,jh7110-mmc.yaml     | 77 +++++++++++++++++++
+>   1 file changed, 77 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
 >
-> This approach has been applied for unused clocks as well.
-> With this patch merged in, all the providers that have sync_state
-> callback registered will leave the domains enabled unless the provider's
-> sync_state callback explicitly disables them. So those providers will
-> need to add the disabling part to their sync_state callback. On the
-> other hand, the platforms that have cases where domains need to remain
-> enabled (even if unused) until the consumer driver probes, will be able,
-> with this patch in, to run without the pd_ignore_unused kernel argument,
-> which seems to be the case for most Qualcomm platforms, at this moment.
-
-My apologies for the somewhat late reply. Please see my comments below.
-
->
-> The v1 is here:
-> https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
->
-> Changes since v1:
->  * added a generic sync state callback to be registered by providers in
->    order to disable the unused domains on their sync state. Also
->    mentioned this in the commit message.
->
->  drivers/base/power/domain.c | 17 ++++++++++++++++-
->  include/linux/pm_domain.h   |  3 +++
->  2 files changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 84662d338188..c2a5f77c01f3 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
->         mutex_lock(&gpd_list_lock);
->
->         list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> -               genpd_queue_power_off_work(genpd);
-> +               if (!dev_has_sync_state(genpd->provider->dev))
-
-Unfortunately, this doesn't really help, due to the fact that a
-genpd's ->power_off() callback may get called anyway. At power off,
-the genpd core only cares about those consumers that are currently
-attached, not those that might get attached at some point later in
-time.
-
-In other words, it's the responsibility for each specific genpd
-provider to cope with the condition that its ->sync_state() callback
-may *not* have been called, while its ->power_off() callback is being
-called.
-
-In these cases, the genpd provider should probably make the
-->power_off() callback to return -EBUSY. This is what we do in
-psci_pd_power_off(), for example.
-
-> +                       genpd_queue_power_off_work(genpd);
->
->         mutex_unlock(&gpd_list_lock);
->
-> @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
->  }
->  late_initcall(genpd_power_off_unused);
->
-> +void genpd_power_off_unused_sync_state(struct device *dev)
-> +{
-> +       struct generic_pm_domain *genpd;
+> diff --git a/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+> new file mode 100644
+> index 000000000000..51e1b04e799f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+> @@ -0,0 +1,77 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/starfive,jh7110-mmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +       mutex_lock(&gpd_list_lock);
+> +title: StarFive Designware Mobile Storage Host Controller
 > +
-> +       list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> +               if (genpd->provider->dev == dev)
-> +                       genpd_queue_power_off_work(genpd);
+> +description:
+> +  StarFive uses the Synopsys designware mobile storage host controller
+> +  to interface a SoC with storage medium such as eMMC or SD/MMC cards.
 > +
-> +       mutex_unlock(&gpd_list_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
-
-I don't think this function is needed at all.
-
-In fact, this part of the problem that you are trying to solve should
-already be managed by the driver core, as it calls
-dev->pm_domain->sync() (which is assigned to genpd_dev_pm_sync()) , in
-really_probe(). Or isn't that taking care of the problem for you?
-
+> +allOf:
+> +  - $ref: synopsys-dw-mshc-common.yaml#
 > +
->  #ifdef CONFIG_PM_SLEEP
->
->  /**
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index f776fb93eaa0..1fd5aa500c81 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
->                                          unsigned int index);
->  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->                                            const char *name);
-> +void genpd_power_off_unused_sync_state(struct device *dev);
->  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
->  static inline int of_genpd_add_provider_simple(struct device_node *np,
->                                         struct generic_pm_domain *genpd)
-> @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->  {
->         return ERR_PTR(-EOPNOTSUPP);
->  }
+> +maintainers:
+> +  - William Qiu <william.qiu@starfivetech.com>
 > +
-> +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
->  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->
->  #ifdef CONFIG_PM
-> --
-> 2.34.1
->
-
-Kind regards
-Uffe
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-mmc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: biu clock
+> +      - description: ciu clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: biu
+> +      - const: ciu
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  starfive,sysreg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to System Register Controller syscon node
+> +          - description: offset of SYS_SYSCONSAIF__SYSCFG register for MMC controller
+> +          - description: shift of SYS_SYSCONSAIF__SYSCFG register for MMC controller
+> +          - description: mask of SYS_SYSCONSAIF__SYSCFG register for MMC controller
+> +    description:
+> +      Should be four parameters, the phandle to System Register Controller
+> +      syscon node and the offset/shift/mask of SYS_SYSCONSAIF__SYSCFG register
+> +      for MMC controller.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - starfive,sysreg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mmc@16010000 {
+> +        compatible = "starfive,jh7110-mmc";
+> +        reg = <0x16010000 0x10000>;
+> +        clocks = <&syscrg 91>,
+> +                 <&syscrg 93>;
+> +        clock-names = "biu","ciu";
+> +        resets = <&syscrg 64>;
+> +        reset-names = "reset";
+> +        interrupts = <74>;
+> +        fifo-depth = <32>;
+> +        fifo-watermark-aligned;
+> +        data-addr = <0>;
+> +        starfive,sysreg = <&sys_syscon 0x14 0x1a 0x7c000000>;
+> +    };
