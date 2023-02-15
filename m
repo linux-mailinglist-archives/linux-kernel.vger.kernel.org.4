@@ -2,251 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CA66981A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA876981B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjBORJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S230029AbjBORQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjBORJZ (ORCPT
+        with ESMTP id S230019AbjBORQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:09:25 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BEF7A9E;
-        Wed, 15 Feb 2023 09:09:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1676480963;
-        bh=eiSYp3CWa9f5+5UCPUS1CMqGZs9fj9OtcbZW+higofY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D+11Ayfy6w51aezry8N6+/JDX6p+k2xSEAToS+GTO49Ix2LfFLT0Yx/mgw3EJ5VPq
-         XOpCDh1dgxxSOwKe89Zk8nd8HFWN0kdDDIOWwzwnPk25gOsM2nRlJGCQLhjHtRRa4C
-         sKP3AGsF6D01ybPFaYPsNKwXZzOkxnYf/2bO48F5gnw09nRIkQX+bhMZdURsvGUI/P
-         D/y9VnkAOVCI8L9i4LI5f3lcqeH4npJ2uAcLQ+nn3Syx1pGr765CAvcEWjZUVaTfub
-         bJxZ2WEWJ4KklliH8Dln6SBeXa8xhRDQ5VhSTWZA2ZLfTJ/OhlxB9REdMDTc1TVFVh
-         tWSSA1ZUHjE8Q==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PH4LW2d36zlZV;
-        Wed, 15 Feb 2023 12:09:23 -0500 (EST)
-Message-ID: <849b233c-b094-849d-a8fe-9b53cde33c80@efficios.com>
-Date:   Wed, 15 Feb 2023 12:09:23 -0500
+        Wed, 15 Feb 2023 12:16:31 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C15A25BAB;
+        Wed, 15 Feb 2023 09:16:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676481390; x=1708017390;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=Re6lTdqWh6KrFv3eII8nENMCsO1LTov6DGFipWZOh58=;
+  b=DbQSlSqWzgN8BcI+ztjmiu+8aCyEv1oj1XkqsX3ig5ewevRqsX/bsDr1
+   3N0wwza91yUFN3bnIIafymCp9Mxo0WVjY7GkxY8kkDIEf9BQu6nyHqDlc
+   0qmk4tbDfh5yc/zLTF37VZAFWEE+DIi7272AkZFVtrQc0fwneEQeRzg6O
+   SUrjUjDXjc/LjUand8inmJprrBUi5ed/mZICIiCEVrBH3MABmhRf/8m+E
+   2/K2My/LiRUL8FBERF3UCa74Iy5m7/4NPoSxZSzJQZcuy7BUJUf1yiugB
+   L63ocY24AV5ms3VlDq19/Pe2veCPQj4s3nVI+B5CehYpx3EhUod+jk/x2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="393890125"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="393890125"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 09:11:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="998588989"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="998588989"
+Received: from chakanog-mobl.amr.corp.intel.com (HELO [10.209.64.107]) ([10.209.64.107])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 09:11:57 -0800
+Content-Type: multipart/mixed; boundary="------------V56RL2ZG2Z0KQ0aAmFAITuEA"
+Message-ID: <d9d18954-8434-4c85-88b8-8e1d99cd6a4b@intel.com>
+Date:   Wed, 15 Feb 2023 09:11:56 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/1] rseq.2: New man page for the rseq(2) API
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] platform/x86/intel/ifs: Implement Array BIST test
 Content-Language: en-US
-To:     "G. Branden Robinson" <g.branden.robinson@gmail.com>,
-        Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-man <linux-man@vger.kernel.org>
-References: <20230214195442.937586-1-mathieu.desnoyers@efficios.com>
- <669eb324-aef6-0583-c8a4-f54a93ee4d6d@gmail.com>
- <20230215012054.twzw4k5et6hxvi2j@illithid>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230215012054.twzw4k5et6hxvi2j@illithid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Jithu Joseph <jithu.joseph@intel.com>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+ <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230214234426.344960-5-jithu.joseph@intel.com>
+ <a24c65f8-978d-8968-7874-6b83e14b01ba@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <a24c65f8-978d-8968-7874-6b83e14b01ba@intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-14 20:20, G. Branden Robinson wrote:
-> [CC list violently trimmed; for those who remain, this is mostly man
-> page style issues]
+This is a multi-part message in MIME format.
+--------------V56RL2ZG2Z0KQ0aAmFAITuEA
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[ Gently added linux-man to CC list. ;-) ]
+On 2/15/23 08:58, Dave Hansen wrote:
+> On 2/14/23 15:44, Jithu Joseph wrote:
+> I'd probably do something like the attached patch.  It gets rid of
+> 'data' and uses sane types for the bitfield.  It does away with separate
+> variables and munging into/out of the msr[] array and just passes a
+> single command struct to the work function.  It doesn't have any
+> uninitialized structure/bitfield fields.
 
-> 
-> At 2023-02-14T23:29:37+0100, Alejandro Colomar wrote:
->> On 2/14/23 20:54, Mathieu Desnoyers wrote:
->>> +per-thread data structure shared between kernel and user-space.
->>
->> This last 'user-space' is not adjectivated, so it should go without
->> a hyphen, according to common English rules.
-> 
-> +1
+Real patch attached now.
 
-done
+--------------V56RL2ZG2Z0KQ0aAmFAITuEA
+Content-Type: text/x-patch; charset=UTF-8; name="ifs-fun.patch"
+Content-Disposition: attachment; filename="ifs-fun.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVsL2lmcy9pZnMuaCBiL2Ry
+aXZlcnMvcGxhdGZvcm0veDg2L2ludGVsL2lmcy9pZnMuaAppbmRleCAwMGJjODZkYjExOTMu
+LmZhMTMzNTA5NzZjOSAxMDA2NDQKLS0tIGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvaW50ZWwv
+aWZzL2lmcy5oCisrKyBiL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVsL2lmcy9pZnMuaApA
+QCAtMTk5LDE0ICsxOTksMTEgQEAgdW5pb24gaWZzX3N0YXR1cyB7CiB9OwogCiAvKiBNU1Jf
+QVJSQVlfQklTVCBiaXQgZmllbGRzICovCi11bmlvbiBpZnNfYXJyYXkgewotCXU2NAlkYXRh
+OwotCXN0cnVjdCB7Ci0JCXUzMglhcnJheV9iaXRtYXNrCQk6MzI7Ci0JCXUzMglhcnJheV9i
+YW5rCQk6MTY7Ci0JCXUzMglyc3ZkCQkJOjE1OwotCQl1MzIJY3RybF9yZXN1bHQJCToxOwot
+CX07CitzdHJ1Y3QgaWZzX2FycmF5IHsKKwl1MzIJYXJyYXlfYml0bWFzazsKKwl1MTYJYXJy
+YXlfYmFuazsKKwl1MTYJcnN2ZAkJCToxNTsKKwl1MTYJY3RybF9yZXN1bHQJCToxOwogfTsK
+IAogLyoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVsL2lmcy9ydW50
+ZXN0LmMgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC9pZnMvcnVudGVzdC5jCmluZGV4
+IGU3NDAwNGZhYjFhYS4uMTU4NmJjNmY1NTI5IDEwMDY0NAotLS0gYS9kcml2ZXJzL3BsYXRm
+b3JtL3g4Ni9pbnRlbC9pZnMvcnVudGVzdC5jCisrKyBiL2RyaXZlcnMvcGxhdGZvcm0veDg2
+L2ludGVsL2lmcy9ydW50ZXN0LmMKQEAgLTI1Myw4ICsyNTMsOSBAQCBzdGF0aWMgdm9pZCB3
+YWl0X2Zvcl9zaWJsaW5nX2NwdShhdG9taWNfdCAqdCwgbG9uZyBsb25nIHRpbWVvdXQpCiAK
+IHN0YXRpYyBpbnQgZG9fYXJyYXlfdGVzdCh2b2lkICpkYXRhKQogeworCXN0cnVjdCBpZnNf
+YXJyYXkgKmNvbW1hbmQgPSBkYXRhOwogCWludCBjcHUgPSBzbXBfcHJvY2Vzc29yX2lkKCk7
+Ci0JdTY0ICptc3JzID0gZGF0YTsKKwogCWludCBmaXJzdDsKIAogCS8qCkBAIC0yNjMsOSAr
+MjY0LDkgQEAgc3RhdGljIGludCBkb19hcnJheV90ZXN0KHZvaWQgKmRhdGEpCiAJZmlyc3Qg
+PSBjcHVtYXNrX2ZpcnN0KGNwdV9zbXRfbWFzayhjcHUpKTsKIAogCWlmIChjcHUgPT0gZmly
+c3QpIHsKLQkJd3Jtc3JsKE1TUl9BUlJBWV9CSVNULCBtc3JzWzBdKTsKKwkJd3Jtc3JsKE1T
+Ul9BUlJBWV9CSVNULCAqKHU2NCAqKSZjb21tYW5kKTsKIAkJLyogUGFzcyBiYWNrIHRoZSBy
+ZXN1bHQgb2YgdGhlIHRlc3QgKi8KLQkJcmRtc3JsKE1TUl9BUlJBWV9CSVNULCBtc3JzWzFd
+KTsKKwkJcmRtc3JsKE1TUl9BUlJBWV9CSVNULCAodTY0ICopJmNvbW1hbmQpOwogCX0KIAog
+CS8qIFRlc3RzIGNvbXBsZXRlIGZhc3RlciBpZiB0aGUgc2libGluZyBpcyBzcGlubmluZyBo
+ZXJlICovCkBAIC0yNzYsNDMgKzI3NywzOCBAQCBzdGF0aWMgaW50IGRvX2FycmF5X3Rlc3Qo
+dm9pZCAqZGF0YSkKIAogc3RhdGljIHZvaWQgaWZzX2FycmF5X3Rlc3RfY29yZShpbnQgY3B1
+LCBzdHJ1Y3QgZGV2aWNlICpkZXYpCiB7Ci0JdW5pb24gaWZzX2FycmF5IGFjdGl2YXRlLCBz
+dGF0dXMgPSB7MH07CisJc3RydWN0IGlmc19hcnJheSBjb21tYW5kID0ge307CiAJYm9vbCB0
+aW1lZF9vdXQgPSBmYWxzZTsKIAlzdHJ1Y3QgaWZzX2RhdGEgKmlmc2Q7CiAJdW5zaWduZWQg
+bG9uZyB0aW1lb3V0OwotCXU2NCBtc3J2YWxzWzJdOwogCiAJaWZzZCA9IGlmc19nZXRfZGF0
+YShkZXYpOwogCi0JYWN0aXZhdGUuYXJyYXlfYml0bWFzayA9IH4wVTsKKwljb21tYW5kLmFy
+cmF5X2JpdG1hc2sgPSB+MFU7CiAJdGltZW91dCA9IGppZmZpZXMgKyBIWiAvIDI7CiAKIAlk
+byB7CisJCXN0cnVjdCBpZnNfYXJyYXkgYmVmb3JlID0gY29tbWFuZDsKKwogCQlpZiAodGlt
+ZV9hZnRlcihqaWZmaWVzLCB0aW1lb3V0KSkgewogCQkJdGltZWRfb3V0ID0gdHJ1ZTsKIAkJ
+CWJyZWFrOwogCQl9CiAKLQkJbXNydmFsc1swXSA9IGFjdGl2YXRlLmRhdGE7Ci0KIAkJYXRv
+bWljX3NldCgmYXJyYXlfY3B1c19vdXQsIDApOwotCQlzdG9wX2NvcmVfY3B1c2xvY2tlZChj
+cHUsIGRvX2FycmF5X3Rlc3QsIG1zcnZhbHMpOwotCQlzdGF0dXMuZGF0YSA9IG1zcnZhbHNb
+MV07CisJCXN0b3BfY29yZV9jcHVzbG9ja2VkKGNwdSwgZG9fYXJyYXlfdGVzdCwgJmNvbW1h
+bmQpOwogCi0JCXRyYWNlX2lmc19hcnJheShjcHUsIGFjdGl2YXRlLCBzdGF0dXMpOwotCQlp
+ZiAoc3RhdHVzLmN0cmxfcmVzdWx0KQorCQl0cmFjZV9pZnNfYXJyYXkoY3B1LCBiZWZvcmUs
+IGNvbW1hbmQpOworCQlpZiAoY29tbWFuZC5jdHJsX3Jlc3VsdCkKIAkJCWJyZWFrOwogCi0J
+CWFjdGl2YXRlLmFycmF5X2JpdG1hc2sgPSBzdGF0dXMuYXJyYXlfYml0bWFzazsKLQkJYWN0
+aXZhdGUuYXJyYXlfYmFuayA9IHN0YXR1cy5hcnJheV9iYW5rOworCX0gd2hpbGUgKGNvbW1h
+bmQuYXJyYXlfYml0bWFzayk7CiAKLQl9IHdoaWxlIChzdGF0dXMuYXJyYXlfYml0bWFzayk7
+Ci0KLQlpZnNkLT5zY2FuX2RldGFpbHMgPSBzdGF0dXMuZGF0YTsKKwlpZnNkLT5zY2FuX2Rl
+dGFpbHMgPSBjb21tYW5kLmRhdGE7CiAKLQlpZiAoc3RhdHVzLmN0cmxfcmVzdWx0KQorCWlm
+IChjb21tYW5kLmN0cmxfcmVzdWx0KQogCQlpZnNkLT5zdGF0dXMgPSBTQ0FOX1RFU1RfRkFJ
+TDsKLQllbHNlIGlmICh0aW1lZF9vdXQgfHwgc3RhdHVzLmFycmF5X2JpdG1hc2spCisJZWxz
+ZSBpZiAodGltZWRfb3V0IHx8IGNvbW1hbmQuYXJyYXlfYml0bWFzaykKIAkJaWZzZC0+c3Rh
+dHVzID0gU0NBTl9OT1RfVEVTVEVEOwogCWVsc2UKIAkJaWZzZC0+c3RhdHVzID0gU0NBTl9U
+RVNUX1BBU1M7Cg==
 
-> 
-> Also I like your coinage.  "Adjectivated yeast" is reflexive and
-> tautological!
-> 
->>> +.RB ( "struct rseq" )
->>
->> We format types in italics, so this should be '.RI'.
-> 
-> +1
-
-OK, so it's italics for both types and arguments.
-
-I will replace all the bold markers for "struct rseq" and "struct 
-rseq_cs" to italic in the description (but not in the synopsis section 
-and not in the code snippets).
-
-> 
->>> +Only one
->>> +.BR rseq ()
->>> +ABI can be registered per thread, so user-space libraries and
->>> +applications must follow a user-space ABI defining how to share this
->>> +resource.
->>
->> Please use semantic newlines.  See man-pages(7):
->>
->>     Use semantic newlines
->>         In  the source of a manual page, new sentences should be started on new
->>         lines, long sentences should be split into lines at clause breaks (com‐
->>         mas, semicolons, colons, and so on), and long clauses should  be  split
->>         at  phrase  boundaries.   This convention, sometimes known as "semantic
->>         newlines", makes it easier to see the effect of  patches,  which  often
->>         operate at the level of individual sentences, clauses, or phrases.
-> 
-> I think I've said this before, but, strictly, commas in particular can
-> separate things that are not clauses.  Clauses have subjects and
-> predicates.
-> 
-> Might it be better to say simply:
-> 
->    Start each sentence on a new line.  Split long sentences where
->    punctuated by commas, semicolons, and colons.
-> 
-> With this there is not even any need to discuss "phrase boundaries".
-> 
-
-I've modified to:
-
-Only one
-.BR rseq ()
-ABI can be registered per thread,
-so user-space libraries and applications must follow a user-space ABI
-defining how to share this resource.
-
-Hopefully that's correct.
-
-
->> In the above lines, that would mean breaking after the comma,
->> and not leaving resource in a line of its own.
-> 
-> The latter is inevitably going to happen from time to time simply due to
-> sentence length and structure and the line length used by one's text
-> editor.  I don't think an "orphan word" (what typographers call this) is
-> symptomatic of anything in *roff source when filling is enabled.
-> 
->>> +The ABI defining how to share this resource between applications and
->>> +libraries is defined by the C library.
->>> +Allocation of the per-thread
->>> +.BR rseq ()
->>> +ABI and its registration to the kernel is handled by glibc since version
->>> +2.35.
->>> +.PP
->>> +The
->>> +.BR rseq ()
->>> +ABI per-thread data structure contains a
->>> +.I rseq_cs
->>> +field which points to the currently executing critical section.
->>
->> currently-executing should probably use a hyphen
->> (if I understood the line correctly).
-> 
-> This is not the case, according to some style authorities.  Dave Kemper
-> convinced me of this on the groff list.
-> 
-> Here is one resource.
-> 
-> https://www.editorgroup.com/blog/to-hyphenate-or-not-to-hyphenate/
-> 
->> See an interesting discussion in the groff@ mailing list:
->> <https://lists.gnu.org/archive/html/groff/2022-10/msg00015.html>
-> 
-> That's not _squarely_ on point, as none of "block", "device", or "based"
-> is an adverb.  "Currently" is.
-
-Leaving unchanged based on this discussion.
-
-> 
->>> +For each thread, a single rseq critical section can run at any given
->>> +point.
->>> +Each critical section need to be implemented in assembly.
->>
->> needs?
-> 
-> +1
-
-done.
-
-> 
->>> +.TP
->>> +.B Structure alignment
->>
->> Let's remove the bold here.  It's not necessary for marking a constant
->> or something that needs bold.  And the indentation is already making
->> it stand out, so bold is a bit too much aggressive to the reader.
-> 
-> I agree; if it wouldn't be styled in running text, it doesn't need
-> styling as a paragraph tag; it already stands out by dint of its
-> placement as a tag.
-> 
->>> +Its value should always be confirmed by reading the cpu_id field before
->>
->> cpu_id should be formatted (.I).
-> 
-> +1
-
-done
-
-> 
->>> +user-space performs any side-effect
->>> +(e.g. storing to memory).
->>> +.IP
->>> +This field is always guaranteed to hold a valid CPU number in the range
->>> +[ 0 ..  nr_possible_cpus - 1 ].
->>
->> Please use interval notation:
->> 	[0, nr_possible_cpus)
->> or
->> 	[0, nr_possible_cpus - 1]
->> whichever looks better to you.
->>
->> We did some consistency fix recently:
->> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=147a60d792a5db8f3cb93ea16eefb73e16c1fb91>
->>
->> Also, do we have a more standard way of saying nr_possible_cpus?
->> Should we say nproc?
-
-nproc(1) means:
-
-        Print  the number of processing units available to the current
-        process, which may be less than the number of online processors
-
-Which is the number of cpus currently available (AFAIU the result of the
-cpuset and sched affinity).
-
-What I really mean here is the maximum value for possible cpus which can 
-be hotplugged into the system. So it's not the maximum number of 
-possible CPUs per se, but rather the maximum enabled bit in the possible 
-CPUs mask.
-
-Note that we could express this differently as well: rather than saying 
-that it guarantees a value in the range [0, nr_possible_cpus - 1], we 
-could say that the values are guaranteed to be part of the possible cpus 
-mask, which would actually more accurate in case the possible cpus mask 
-has a hole (it tends to happen with things like lxc containers nowadays).
-
-Do you agree that we should favor expressing this in terms of belonging 
-to the possible cpumask set rather than a range starting from 0 ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--------------V56RL2ZG2Z0KQ0aAmFAITuEA--
