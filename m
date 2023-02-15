@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE13C6986D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1D16986DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjBOVCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S229906AbjBOVDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjBOVB7 (ORCPT
+        with ESMTP id S230411AbjBOVCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:01:59 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2FBE399;
-        Wed, 15 Feb 2023 13:00:07 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso35938otq.9;
-        Wed, 15 Feb 2023 13:00:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l3uVftK7AZ/j+xhg5u645pp081Ha+YRGATJlUND6eME=;
-        b=O6OC55qTn4BrsU2DjL4ofMQXHHPsLTBovYkCwjuTP82SNcSzgeAwvWr4ZoPvr+sy07
-         qHQ51cWcMIWyQKJ2GX81tvEppzGhy5zrrLG8vmct8cmTM7ycviR7rwN4Wj3FcEPe3U8j
-         /u/DST5pZoevWKH9kHtmQRr2BlVJ3ciNdWKegy2PHRQWx4FJSebn3ZtcNLDAdAOFakd7
-         A/1PFzepj9ji7WPCJpp0WjpzmK40+5fqI69P7QVtVQ5Ef7yDbKFWVyNWlMjkU3uXm0kL
-         b76RtxPglrVtG9EaANQbJOpTPdhrFlzX2xrcjB2FttHaz4Ej240LEEYQDpW85yFj6kyf
-         W9tg==
-X-Gm-Message-State: AO0yUKXg+DdF7od/iCqmgCG29R9scGyZsDw5OjTwp41GPd3gbXiwmFbM
-        mj+95fNOuUKsB/rCqz0t1ZSNeRr7hA==
-X-Google-Smtp-Source: AK7set/pijDjIeoitlJ32GBaZQwniCNhKj363JGBlFK4HRuQv3IqcqwMaHMF7WTYU2MraGivSMXDsQ==
-X-Received: by 2002:a9d:6442:0:b0:68b:d40e:e21f with SMTP id m2-20020a9d6442000000b0068bd40ee21fmr1622868otl.34.1676494806408;
-        Wed, 15 Feb 2023 13:00:06 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i21-20020a056830011500b0068d51cb1fb7sm7854438otp.6.2023.02.15.13.00.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 13:00:06 -0800 (PST)
-Received: (nullmailer pid 540293 invoked by uid 1000);
-        Wed, 15 Feb 2023 21:00:05 -0000
-Date:   Wed, 15 Feb 2023 15:00:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Wed, 15 Feb 2023 16:02:52 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB3934616E;
+        Wed, 15 Feb 2023 13:01:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6140D4B3;
+        Wed, 15 Feb 2023 12:51:47 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2623F881;
+        Wed, 15 Feb 2023 12:51:02 -0800 (PST)
+Date:   Wed, 15 Feb 2023 20:49:06 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Bastian Germann <bage@debian.org>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] media: dt-bindings: samsung,s5c73m3: convert to
- dtschema
-Message-ID: <167649480484.540235.9433262097274757030.robh@kernel.org>
-References: <20230214104508.51955-1-krzysztof.kozlowski@linaro.org>
- <20230214104508.51955-8-krzysztof.kozlowski@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] dt-bindings: hwlock: sun6i: Add a64 compatible
+ string
+Message-ID: <20230215204906.511699f4@slackpad.lan>
+In-Reply-To: <20230215203711.6293-5-bage@debian.org>
+References: <20230215203711.6293-1-bage@debian.org>
+        <20230215203711.6293-5-bage@debian.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214104508.51955-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 15 Feb 2023 21:37:09 +0100
+Bastian Germann <bage@debian.org> wrote:
 
-On Tue, 14 Feb 2023 11:45:08 +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung S5C73M3 8Mp camera ISP bindings to DT schema.
+> Add an allwinner,sun50i-a64-hwspinlock compatible string to the device
+> tree binding. The A31 and A64 have compatible hwspinlocks.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bastian Germann <bage@debian.org>
 > ---
->  .../bindings/media/samsung,s5c73m3.yaml       | 165 ++++++++++++++++++
->  .../bindings/media/samsung-s5c73m3.txt        |  97 ----------
->  MAINTAINERS                                   |   1 +
->  3 files changed, 166 insertions(+), 97 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
->  delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
+>  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> index 6cdfe22deb3c..281c285282a1 100644
+> --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+> @@ -15,7 +15,9 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    const: allwinner,sun6i-a31-hwspinlock
+> +    items:
+> +      - const: allwinner,sun6i-a31-hwspinlock
+> +      - const: allwinner,sun50i-a64-hwspinlock
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+So this would not allow the previous single compatible string, which I
+think we should preserve?
+You can check out other bindings (like allwinner,sun6i-a31-spi.yaml) to
+get an idea of how this could be written.
+
+Cheers,
+Andre
+
+
+>  
+>    reg:
+>      maxItems: 1
 
