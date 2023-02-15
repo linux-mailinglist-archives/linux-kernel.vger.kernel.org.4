@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F282E697706
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887C2697705
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjBOHFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S233699AbjBOHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbjBOHE4 (ORCPT
+        with ESMTP id S233792AbjBOHFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:04:56 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5663526A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:36 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so1192554pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:36 -0800 (PST)
+        Wed, 15 Feb 2023 02:05:01 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EEC36445
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:40 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso1162970pjn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LHVr08cnTjJMehZboB/JWbeUqVs1oVn1lVODeozYst8=;
-        b=V3YYbHbtCDlii3ENqJOzqAykviuMJyzXsCZAiumNohLKBmLCWs8JPve2pj5RYqASXE
-         d2K66/UR3/FzV4CjEV+ms++BDzoJ5tfNe4++iO/zn4oqgwRX0BsXZLTUchoQxUxnG6tw
-         /AkJ+JeM3GkkbDyuNN4diG+I5xDDvnoaxN3lQfsf7Uj05ijiYMLv9cDn7QFaAuqWWEvd
-         ypTDp5/3WTQXQg8gim3uncHV8yPKsG+Ga4gzYIpIbxbqo8Y/Agxw9MTdvhnvJc9ykW7n
-         b+Boe5nWflRdQkHMh+1mqsPHM0lSBbCkpAn1nfyMd+TbAi3ZphtUhaqyaVyevJiYWzSG
-         FI+w==
+        bh=jtvgID8mNLGj3X1P+nHdIDZyTZvvt/sYgRm2r4KBSpE=;
+        b=hrTMbntn1H9DS+R4h9ejPTHiTQ197TAT4KHzEoBErnRQz7aZqXCNIqKgt2GzCThuTx
+         sxHoRvF96HHVgBz+cKvvZhGYTpTmzrWGF9YSTAbOj977PHE1MgKPFuzdqFh0BQuuj1sq
+         PjGK1JmhzburWZPkGaPdA5suejkLuJPrX9XrivTTknECLZMZd5s6iS8ds9A7oKVg0pnu
+         tXF4MSmitXaOIlsfFqbf4Tea1KH/7HQr5y9YZwL3+7EMg5bAsYXdfyAFVVQ2PfKqAwox
+         HbAKQDV/lmKrwTbcsXRqNYvPKXHK+63IKK/0VA8DMSCzxAJvJ02tTG0h4JvMrVtdwfK3
+         dVFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LHVr08cnTjJMehZboB/JWbeUqVs1oVn1lVODeozYst8=;
-        b=TzspmS54Ga9cigVsrgmipCm5AR96DUNV3I7OF3/4lPN2ipMtU6pOObAoOVbxrdHSaA
-         cNTavha0dYhyiocyvXKZNoTJJKemkFgWY8SCyLM95QUxmUxQNhKehWEX89wqr70HjFQX
-         D1fv2W8ft4oVqCzibyKUBEn5LppTFYWLlp09lrF2kLDYlGUpmBy8S+FpM1s/L+5zjXDi
-         ULk1q8Rll+iFwtnEoLjH6yVxPST08tDFjVwsPGpdO7tAXN/pKyhkv9O3svPFWwpafoE/
-         +GhibNHtYQvAWINJnMNvyqPsjJ04mZRLzsJoda6XD8Nmd3weZwOCdmhUOlSkGAWL9Hv5
-         SlwA==
-X-Gm-Message-State: AO0yUKWmL/D4mVSeauwg73sSd56LnoQUlnPxW5nGkx61KS01cipYFdvT
-        jUxMrfXgS5dy+dIfHsMUYJ3+
-X-Google-Smtp-Source: AK7set9F00g8NA24XkwVqhsFXZjW6kaf9EYJ0KzZu+qw/r/EktMSJyERqXyL+ge4Bhg7SI6GXsNhCQ==
-X-Received: by 2002:a17:903:2344:b0:19a:b801:13e9 with SMTP id c4-20020a170903234400b0019ab80113e9mr1645926plh.19.1676444676086;
-        Tue, 14 Feb 2023 23:04:36 -0800 (PST)
+        bh=jtvgID8mNLGj3X1P+nHdIDZyTZvvt/sYgRm2r4KBSpE=;
+        b=0VckYiBtCXY1tbPELoYZ7M/5q+nt7FAp9NBO21FIxCUfLWIdN7ipegdMRWnRuCtMBo
+         bF7HCtFnXQt6qzoYlZOtQvBaNMpxgXcEVwBeYtn8ot4epBg/9belfmsKeWgltSUbZl2P
+         zekoQ38aFDKVnjEok3IkuuIT2AIX9501215cnM3NfoKE0+uhF/PjmMjHJvn7nsWYVTR2
+         ffXr9tWpWLYSOG2RIUQ99In4ebFqvrWN6a+VAWRUDJSJiP35NDyL2XLNWBXF2nSFjXHI
+         2KYWkwgdn8tHSeVylxBzR1GJp0zTYBAmAwWbflk/1avcjioIuURGpEmn+kpeIrbPGlsw
+         hcwg==
+X-Gm-Message-State: AO0yUKXYs/Rd0ZfBEm/StlFGlc54vL3CMSj93sLnuymK96qErm2M9nxn
+        JWFHqnAxLehPiqk/OvTDSM7x
+X-Google-Smtp-Source: AK7set8exbcoSCRitiD+v2hd06tA5Sfyuj90HWimBLrEl1y/C3mFIU3cBapPvmKQw1iDBNjbyd0hxQ==
+X-Received: by 2002:a05:6a20:8f20:b0:c0:be63:75e5 with SMTP id b32-20020a056a208f2000b000c0be6375e5mr1110888pzk.33.1676444679823;
+        Tue, 14 Feb 2023 23:04:39 -0800 (PST)
 Received: from localhost.localdomain ([117.217.179.87])
-        by smtp.gmail.com with ESMTPSA id e23-20020a63db17000000b004fb26a80875sm9953795pgg.22.2023.02.14.23.04.32
+        by smtp.gmail.com with ESMTPSA id e23-20020a63db17000000b004fb26a80875sm9953795pgg.22.2023.02.14.23.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 23:04:35 -0800 (PST)
+        Tue, 14 Feb 2023 23:04:39 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org
 Cc:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
@@ -57,9 +57,9 @@ Cc:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         viresh.kumar@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [RESEND PATCH 06/12] arm64: dts: qcom: qdu1000: Supply clock from cpufreq node to CPUs
-Date:   Wed, 15 Feb 2023 12:33:54 +0530
-Message-Id: <20230215070400.5901-7-manivannan.sadhasivam@linaro.org>
+Subject: [RESEND PATCH 07/12] arm64: dts: qcom: sc7180: Supply clock from cpufreq node to CPUs
+Date:   Wed, 15 Feb 2023 12:33:55 +0530
+Message-Id: <20230215070400.5901-8-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
 References: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
@@ -84,53 +84,85 @@ domain index.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qdu1000.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-index f234159d2060..98a859ad5229 100644
---- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-@@ -27,6 +27,7 @@ CPU0: cpu@0 {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index ebfa21e9ed8a..53f0076f20f6 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -76,6 +76,7 @@ CPU0: cpu@0 {
  			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
+ 			compatible = "qcom,kryo468";
  			reg = <0x0 0x0>;
 +			clocks = <&cpufreq_hw 0>;
  			enable-method = "psci";
- 			power-domains = <&CPU_PD0>;
- 			power-domain-names = "psci";
-@@ -45,6 +46,7 @@ CPU1: cpu@100 {
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -103,6 +104,7 @@ CPU1: cpu@100 {
  			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
+ 			compatible = "qcom,kryo468";
  			reg = <0x0 0x100>;
 +			clocks = <&cpufreq_hw 0>;
  			enable-method = "psci";
- 			power-domains = <&CPU_PD1>;
- 			power-domain-names = "psci";
-@@ -60,6 +62,7 @@ CPU2: cpu@200 {
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -126,6 +128,7 @@ CPU2: cpu@200 {
  			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
+ 			compatible = "qcom,kryo468";
  			reg = <0x0 0x200>;
 +			clocks = <&cpufreq_hw 0>;
  			enable-method = "psci";
- 			power-domains = <&CPU_PD2>;
- 			power-domain-names = "psci";
-@@ -75,6 +78,7 @@ CPU3: cpu@300 {
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -149,6 +152,7 @@ CPU3: cpu@300 {
  			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
+ 			compatible = "qcom,kryo468";
  			reg = <0x0 0x300>;
 +			clocks = <&cpufreq_hw 0>;
  			enable-method = "psci";
- 			power-domains = <&CPU_PD3>;
- 			power-domain-names = "psci";
-@@ -1312,6 +1316,7 @@ cpufreq_hw: cpufreq@17d90000 {
- 			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -172,6 +176,7 @@ CPU4: cpu@400 {
+ 			device_type = "cpu";
+ 			compatible = "qcom,kryo468";
+ 			reg = <0x0 0x400>;
++			clocks = <&cpufreq_hw 0>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -195,6 +200,7 @@ CPU5: cpu@500 {
+ 			device_type = "cpu";
+ 			compatible = "qcom,kryo468";
+ 			reg = <0x0 0x500>;
++			clocks = <&cpufreq_hw 0>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+ 					   &LITTLE_CPU_SLEEP_1
+@@ -218,6 +224,7 @@ CPU6: cpu@600 {
+ 			device_type = "cpu";
+ 			compatible = "qcom,kryo468";
+ 			reg = <0x0 0x600>;
++			clocks = <&cpufreq_hw 1>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&BIG_CPU_SLEEP_0
+ 					   &BIG_CPU_SLEEP_1
+@@ -241,6 +248,7 @@ CPU7: cpu@700 {
+ 			device_type = "cpu";
+ 			compatible = "qcom,kryo468";
+ 			reg = <0x0 0x700>;
++			clocks = <&cpufreq_hw 1>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&BIG_CPU_SLEEP_0
+ 					   &BIG_CPU_SLEEP_1
+@@ -3578,6 +3586,7 @@ cpufreq_hw: cpufreq@18323000 {
  			clock-names = "xo", "alternate";
+ 
  			#freq-domain-cells = <1>;
 +			#clock-cells = <1>;
  		};
  
- 		gem_noc: interconnect@19100000 {
+ 		wifi: wifi@18800000 {
 -- 
 2.25.1
 
