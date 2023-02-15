@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C85F698511
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6708698514
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjBOTzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S229535AbjBOT6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjBOTyN (ORCPT
+        with ESMTP id S229436AbjBOT6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:54:13 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993FB410A3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:54:03 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id j17so7548893ioa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DnQVuU/Ffb7XPwxK0/WH5HNHpB1TwhXFIR6r6WJiun4=;
-        b=x+Q0WBgev0z4PqEyJQ3bCk7BlTMK7Ki8p3sxaZmBftko/MoaOJg8JSabbd5vSSUtT/
-         ZYW6N1GMAXDZfRbg+DTpK0LL36G8/VaosDPr4R2YCJ2zyVdBP54gko0Q91KtH+GkNbrs
-         AI5GUENdZLj6Fc8tNzBt+9Vh8uNY2lvLqXyKPFjL4sU3RvawBf6Se0sojbWPjlWIDrlt
-         bifZXCMH9HrL3OklY0cKnMY8xLtT05K6N1Hw9OYKsWgoAWI0KpIuJ6fuoVIUxMFQTq4X
-         MZKiY9Oq/ZyH1BrPn3IT9HcrRfgTEgR4lOZjeZPHDkXEOVkMhTAzXJYdcm5X35af887/
-         8BCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DnQVuU/Ffb7XPwxK0/WH5HNHpB1TwhXFIR6r6WJiun4=;
-        b=Ju7KpEjfrUm8lDPUNegCAFbxO6kPcVGz3Kjq5UodL9Knt19uw5koUABRDlxRDYkZuw
-         q0KMQYYSqSZf+TAyuajK5IFcGgV7aa5PHWDYX8xHSgPfmF9mlS4MihJ44HBwzcX0TOaT
-         zujX+WZ9POBvJjKfRtWptqlm7r/sgXik+oBdarGOUhncRBJR0Cyv+Bs59x8YcrOgi+/s
-         aMV03nlPo5X/ILPqp4BWXl7HjvHTjWdNYU/E4+slUb1EOV45EiV/RAd3Jcdr4VlDQuvT
-         eju0FHBhIq5sfWqNIWw5avFWAweL87Q2eBVffWh23bNyhXnNk9DDC9KRnhuM2/mZUPZq
-         6qsw==
-X-Gm-Message-State: AO0yUKV3a/pqkbpDIEO7TbsOof3HVjVbm1qGzotQVE0E2Ct6m2GWe5ak
-        fHj4zx2klDJAsVl29rT7lTlpSA==
-X-Google-Smtp-Source: AK7set8WIZc3ACpPQBhxeJQ5Gpuvyw0OTYHuYjJ/L9+UaDtUaM741BR7R5+D6Afq0mQFYuOBnuZGwQ==
-X-Received: by 2002:a05:6602:27c8:b0:73c:eadf:c6fb with SMTP id l8-20020a05660227c800b0073ceadfc6fbmr444018ios.6.1676490843263;
-        Wed, 15 Feb 2023 11:54:03 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5ed90a000000b0073a312aaae5sm6291847iop.36.2023.02.15.11.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 11:54:02 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 6/6] net: ipa: add HW_PARAM_4 GSI register
-Date:   Wed, 15 Feb 2023 13:53:52 -0600
-Message-Id: <20230215195352.755744-7-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230215195352.755744-1-elder@linaro.org>
-References: <20230215195352.755744-1-elder@linaro.org>
+        Wed, 15 Feb 2023 14:58:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73716A6C;
+        Wed, 15 Feb 2023 11:58:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 138F8B823A6;
+        Wed, 15 Feb 2023 19:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA22C433D2;
+        Wed, 15 Feb 2023 19:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676491093;
+        bh=HEs3ijSJ9Z1YToGd4T11LvIyBvbW09eo7oxaJ9H6xd8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RCI340uYvpdpCDHyOukhJQvtDVX6Ol1IO6hvwvvY/LJBUzhhUJG5NKIPV2QDPxKHH
+         7847vSrPglUGgYu2cITr5KKlW9zVylz0SI1NtAvX5dbLu777S9egXZgYudVJt52CB8
+         ClraFe4DPepmPaHGRRWrD5RiyMuBaTZsfDc8akk5zAjJTu04lOZe7feXYMdhNmGTPQ
+         qDcd6BEHPiayXa+UkIilbsqOoYM8R6cm3utsaQryVmzLbus1y7mCEBFUjrmxBQ876V
+         a8CJ6v9899+l6BIGY0covOLiS97+6GNJkfYwloz04fAM0Mf/sQ+Cq5bVKn1wi/NKCu
+         qKoMcGJuiyUfg==
+Date:   Wed, 15 Feb 2023 20:58:10 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Alain Volmat <avolmat@me.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] dt-bindings: i2c: i2c-st: convert to DT schema
+Message-ID: <Y+05Uv/izJ+YyY0U@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Alain Volmat <avolmat@me.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230213191608.16503-1-avolmat@me.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FvTABU9AZrnonJXa"
+Content-Disposition: inline
+In-Reply-To: <20230213191608.16503-1-avolmat@me.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,70 +63,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting at IPA v5.0, the number of event rings per EE is defined
-in a field in a new HW_PARAM_4 GSI register rather than HW_PARAM_2.
-Define this new register and its fields, and update the code that
-checks the number of rings supported by hardware to use the proper
-field based on IPA version.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/gsi.c     | 7 ++++++-
- drivers/net/ipa/gsi_reg.h | 9 ++++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+--FvTABU9AZrnonJXa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-index f128d5bd6956e..9a0b1fe4a93a8 100644
---- a/drivers/net/ipa/gsi.c
-+++ b/drivers/net/ipa/gsi.c
-@@ -2042,7 +2042,12 @@ static int gsi_ring_setup(struct gsi *gsi)
- 	}
- 	gsi->channel_count = count;
- 
--	count = reg_decode(reg, NUM_EV_PER_EE, val);
-+	if (gsi->version < IPA_VERSION_5_0) {
-+		count = reg_decode(reg, NUM_EV_PER_EE, val);
-+	} else {
-+		reg = gsi_reg(gsi, HW_PARAM_4);
-+		count = reg_decode(reg, EV_PER_EE, val);
-+	}
- 	if (!count) {
- 		dev_err(dev, "GSI reports zero event rings supported\n");
- 		return -EINVAL;
-diff --git a/drivers/net/ipa/gsi_reg.h b/drivers/net/ipa/gsi_reg.h
-index 2a19d9e34a10a..f62f0a5c653d1 100644
---- a/drivers/net/ipa/gsi_reg.h
-+++ b/drivers/net/ipa/gsi_reg.h
-@@ -71,6 +71,7 @@ enum gsi_reg_id {
- 	EV_CH_CMD,
- 	GENERIC_CMD,
- 	HW_PARAM_2,					/* IPA v3.5.1+ */
-+	HW_PARAM_4,					/* IPA v5.0+ */
- 	CNTXT_TYPE_IRQ,
- 	CNTXT_TYPE_IRQ_MSK,
- 	CNTXT_SRC_CH_IRQ,
-@@ -224,7 +225,7 @@ enum gsi_generic_cmd_opcode {
- enum gsi_hw_param_2_field_id {
- 	IRAM_SIZE,
- 	NUM_CH_PER_EE,
--	NUM_EV_PER_EE,
-+	NUM_EV_PER_EE,					/* Not IPA v5.0+ */
- 	GSI_CH_PEND_TRANSLATE,
- 	GSI_CH_FULL_LOGIC,
- 	GSI_USE_SDMA,					/* IPA v4.0+ */
-@@ -247,6 +248,12 @@ enum gsi_iram_size {
- 	IRAM_SIZE_FOUR_KB			= 0x5,
- };
- 
-+/* HW_PARAM_4 register */				/* IPA v5.0+ */
-+enum gsi_hw_param_4_field_id {
-+	EV_PER_EE,
-+	IRAM_PROTOCOL_COUNT,
-+};
-+
- /**
-  * enum gsi_irq_type_id: GSI IRQ types
-  * @GSI_CH_CTRL:		Channel allocation, deallocation, etc.
--- 
-2.34.1
+On Mon, Feb 13, 2023 at 08:16:06PM +0100, Alain Volmat wrote:
+> Convert i2c-st.txt into st,sti-i2c.yaml for the i2c-st driver.
+>=20
+> Signed-off-by: Alain Volmat <avolmat@me.com>
 
+Applied to for-next, thanks!
+
+
+--FvTABU9AZrnonJXa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPtOVIACgkQFA3kzBSg
+KbYTqhAAjkzeRVZmu6GrNxDuEVjGzJe6tFD2B5cP3zCtTJCL8mWEzNVzGtMYv8j1
+vIivTD/LZ+uJMD8mw4YGb+Lo7rWdvv79sAgoKoJjJuF5Z++GwflLQtz1+mwilKa4
+wjlXgwNKVkZjdI5OasLGnLeTvoIQWOa3ms8JGMarH80IP5lgbbM5RFfXUw7bF/oG
+sz48/ilJzEJqDuatW9YfSn1lhiwHL8FN+/ciZs06ejTGLXbnZdULfg0L1x/Xd4zt
+Xlz1V9xvcRL+g3RY1cPD7HzWqeK1YYV/+iMRm+cLq6hH7gw9yAPDI6n5fTwlD/a0
+5wmE8JLX+XbLwTXYXPb7our27lxUAzd3EBqSTTh75i3MpXioj3UJbBDtsZ70W5VV
+2GOuw4ViQhGwIYrkb+97dPDjJRBuNLm5Vc7WWReHk40IFqDu6UOdwcne2kAxbqNx
+9CgClfOtqk59oOIxmlV7u9VS8s3xkKOYaaRurs+MB0ag/vtbM+1DUWoXIff153+l
+LCEfqmBqw9VvMBUS8GfGdrU+u1NUnXHcLT6Y8Qr9VHd/ooQyIjJcJklNVdPPn65h
+yeZEfFuzH7DKgiSaftyHQ2Ndr66U0z9GTrJvRcCEx9P+oOgRWd0n3BNwhh/8Ki5v
+Hfsm4bvJ16nGNOo5YiAFxommPvbOxZ4k2YmvTVonKlqpkhidfHw=
+=zv87
+-----END PGP SIGNATURE-----
+
+--FvTABU9AZrnonJXa--
