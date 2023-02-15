@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FF76975BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DC86975BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbjBOFQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S232749AbjBOFRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 00:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjBOFQB (ORCPT
+        with ESMTP id S230212AbjBOFRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:16:01 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A276E80;
-        Tue, 14 Feb 2023 21:15:58 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PGmTF3l0TzJsN0;
-        Wed, 15 Feb 2023 13:14:09 +0800 (CST)
-Received: from [10.174.148.223] (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 15 Feb 2023 13:15:56 +0800
-Message-ID: <af95c38d-fdca-aef0-55ae-bbb0baee6029@huawei.com>
-Date:   Wed, 15 Feb 2023 13:15:55 +0800
+        Wed, 15 Feb 2023 00:17:10 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D106E80;
+        Tue, 14 Feb 2023 21:17:09 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31F1hgf7018371;
+        Wed, 15 Feb 2023 05:17:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oGCT/5IFWwFCKLzPtnIq0Q+X/5HAUDivyeTJBKdWj6k=;
+ b=f3c/TU25ZSEFeTr9eUhy2sma03vAshydzKIYpVyUACaOXPNE0NwX9hjARWew7Ugk7rps
+ rMSxBl3F0SuSEKofZIPeyxZhJW3hzhXhDzklQmiRoZNucT9UEygzPs68K225IQmI3xBh
+ cdf9Sjzu3jFFTs6JKXWY+sHUznps4pEXTSevy91eH3I0EVzNPK67iVqBvPF/sf4FzkeY
+ dJ3qsKTzOxvppjc449e3Y6T0eeq7hgj+mchDfLw9r3g6oy3mr4o7zaFjyAUbjC6vWXxI
+ nzDWiXUMSqQIUookx86BqVexrFzJ1+n6xgz7LtUFZy1lYHlFOqyWVYhU1GL8DHffaTtU 9g== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6qkjwe5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 05:17:05 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31F5H42T027026
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 05:17:04 GMT
+Received: from [10.216.8.213] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 21:17:01 -0800
+Message-ID: <8aeea3f5-7b90-f384-33ab-ba7b4afb5317@quicinc.com>
+Date:   Wed, 15 Feb 2023 10:46:58 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] vhost-vdpa: cleanup memory maps when closing vdpa fds
-To:     Jason Wang <jasowang@redhat.com>
-CC:     <mst@redhat.com>, <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
-        <huangzhichao@huawei.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-References: <20230131145310.2069-1-longpeng2@huawei.com>
- <db99245c-606a-2f24-52fe-836a6972437f@redhat.com>
- <35b94992-0c6b-a190-1fce-5dda9c8dcf4b@huawei.com>
- <CACGkMEt0Rgkcmt9k4dWsp-qqtPvrM40mtgmSERc0A7Ve1wzKHw@mail.gmail.com>
- <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
- <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-In-Reply-To: <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] remoteproc: qcom: replace kstrdup with kstrndup
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     <dmitry.baryshkov@linaro.org>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
+ <1676383691-29738-1-git-send-email-quic_mojha@quicinc.com>
+ <20230214163944.y5tkgdfmsycmpg7p@ripper>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230214163944.y5tkgdfmsycmpg7p@ripper>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9PlTnfRyFABlGgXrF7iH0q31QJ30WOon
+X-Proofpoint-ORIG-GUID: 9PlTnfRyFABlGgXrF7iH0q31QJ30WOon
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-15_02,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1015 bulkscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302150047
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,159 +84,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/2/15 10:56, Jason Wang 写道:
-> On Wed, Feb 15, 2023 at 10:49 AM Longpeng (Mike, Cloud Infrastructure
-> Service Product Dept.) <longpeng2@huawei.com> wrote:
+On 2/14/2023 10:09 PM, Bjorn Andersson wrote:
+> On Tue, Feb 14, 2023 at 07:38:11PM +0530, Mukesh Ojha wrote:
+>> Since, there is no guarantee that region.name will be 0-terminated
+>> from the firmware side, replace kstrdup with kstrndup.
 >>
->>
->>
->> 在 2023/2/15 10:00, Jason Wang 写道:
->>> On Tue, Feb 14, 2023 at 2:28 PM Longpeng (Mike, Cloud Infrastructure
->>> Service Product Dept.) <longpeng2@huawei.com> wrote:
->>>>
->>>>
->>>>
->>>> 在 2023/2/14 14:16, Jason Wang 写道:
->>>>>
->>>>> 在 2023/1/31 22:53, Longpeng(Mike) 写道:
->>>>>> From: Longpeng <longpeng2@huawei.com>
->>>>>>
->>>>>> We must cleanup all memory maps when closing the vdpa fds, otherwise
->>>>>> some critical resources (e.g. memory, iommu map) will leaked if the
->>>>>> userspace exits unexpectedly (e.g. kill -9).
->>>>>
->>>>>
->>>>> Sounds like a bug of the kernel, should we fix there?
->>>>>
->>>>
->>>> For example, the iommu map is setup when QEMU calls VHOST_IOTLB_UPDATE
->>>> ioctl and it'll be freed if QEMU calls VHOST_IOTLB_INVALIDATE ioctl.
->>>>
->>>> So maybe we release these resources in vdpa framework in kernel is a
->>>> suitable choice?
->>>
->>> I think I need understand what does "resources" mean here:
->>>
->>> For iommu mapping, it should be freed by vhost_vdpa_free_domain() in
->>> vhost_vdpa_release()?
->>>
->>
->> Please consider the following lifecycle of the vdpa device:
->>
->> 1. vhost_vdpa_open
->>       vhost_vdpa_alloc_domain
->>
->> 2. vhost_vdpa_pa_map
->>       pin_user_pages
->>       vhost_vdpa_map
->>         iommu_map
->>
->> 3. kill QEMU
->>
->> 4. vhost_vdpa_release
->>       vhost_vdpa_free_domain
->>
->> In this case, we have no opportunity to invoke unpin_user_pages or
->> iommu_unmap to free the memory.
+>> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > 
-> We do:
+> Please don't send additional patches in-reply-to another patch, it makes
+> it impossible to use b4 to pick up the first patch.
 > 
-> vhost_vdpa_cleanup()
->      vhost_vdpa_remove_as()
->          vhost_vdpa_iotlb_unmap()
->              vhost_vdpa_pa_unmap()
->                  unpin_user_pages()
->                  vhost_vdpa_general_unmap()
->                      iommu_unmap()
-> ?
+> And please don't send two patches which clearly will conflict with
+> each other. Now I had to manually apply the first patch...
 > 
-Oh, my codebase is linux-6.2-rc2 and the commit c070c1912a8 (vhost-vdpa: 
-fix an iotlb memory leak) already fixed this bug in linux-6.2-rc3.
 
-> Btw, it looks like we should call vhost_vdpa_free_domain() *after*
-> vhost_vdpa_cleanup() otherwise it's a UAF?
-> 
-I think so, the v->domain is set to NULL in vhost_vdpa_free_domain(), it 
-seems would trigger null-pointer access in my case.
+Really sorry, for the inconvenience.
+will keep in mind.
 
-> Thanks
+Thanks,
+-Mukesh
+
+> Regards,
+> Bjorn
 > 
+>> ---
+>>   drivers/remoteproc/qcom_common.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->>> static int vhost_vdpa_release(struct inode *inode, struct file *filep)
->>> {
->>>           struct vhost_vdpa *v = filep->private_data;
->>>           struct vhost_dev *d = &v->vdev;
->>>
->>>           mutex_lock(&d->mutex);
->>>           filep->private_data = NULL;
->>>           vhost_vdpa_clean_irq(v);
->>>           vhost_vdpa_reset(v);
->>>           vhost_dev_stop(&v->vdev);
->>>           vhost_vdpa_free_domain(v);
->>>           vhost_vdpa_config_put(v);
->>>           vhost_vdpa_cleanup(v);
->>>           mutex_unlock(&d->mutex);
->>>
->>>           atomic_dec(&v->opened);
->>>           complete(&v->completion);
->>>
->>>           return 0;
->>> }
->>>
->>>>
->>>> By the way, Jason, can you reproduce the problem in your machine?
->>>>
->>>
->>> Haven't got time in doing this but it should be the responsibility of
->>> the author to validate this anyhow.
->>>
->>> Thanks
->>>
->>>>> Thanks
->>>>>
->>>>>
->>>>>>
->>>>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
->>>>>> ---
->>>>>>     drivers/vhost/vdpa.c | 13 +++++++++++++
->>>>>>     1 file changed, 13 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->>>>>> index a527eeeac637..37477cffa5aa 100644
->>>>>> --- a/drivers/vhost/vdpa.c
->>>>>> +++ b/drivers/vhost/vdpa.c
->>>>>> @@ -823,6 +823,18 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
->>>>>>             vhost_vdpa_remove_as(v, asid);
->>>>>>     }
->>>>>> +static void vhost_vdpa_clean_map(struct vhost_vdpa *v)
->>>>>> +{
->>>>>> +    struct vhost_vdpa_as *as;
->>>>>> +    u32 asid;
->>>>>> +
->>>>>> +    for (asid = 0; asid < v->vdpa->nas; asid++) {
->>>>>> +        as = asid_to_as(v, asid);
->>>>>> +        if (as)
->>>>>> +            vhost_vdpa_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
->>>>>> +    }
->>>>>> +}
->>>>>> +
->>>>>>     static int vhost_vdpa_va_map(struct vhost_vdpa *v,
->>>>>>                      struct vhost_iotlb *iotlb,
->>>>>>                      u64 iova, u64 size, u64 uaddr, u32 perm)
->>>>>> @@ -1247,6 +1259,7 @@ static int vhost_vdpa_release(struct inode
->>>>>> *inode, struct file *filep)
->>>>>>         vhost_vdpa_clean_irq(v);
->>>>>>         vhost_vdpa_reset(v);
->>>>>>         vhost_dev_stop(&v->vdev);
->>>>>> +    vhost_vdpa_clean_map(v);
->>>>>>         vhost_vdpa_free_domain(v);
->>>>>>         vhost_vdpa_config_put(v);
->>>>>>         vhost_vdpa_cleanup(v);
->>>>>
->>>>> .
->>>>
->>>
->>> .
+>> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+>> index 020349f..7810f91 100644
+>> --- a/drivers/remoteproc/qcom_common.c
+>> +++ b/drivers/remoteproc/qcom_common.c
+>> @@ -124,7 +124,7 @@ static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsy
+>>   	for (i = 0; i < seg_cnt; i++) {
+>>   		memcpy_fromio(&region, ptr + i, sizeof(region));
+>>   		if (region.valid == MD_REGION_VALID) {
+>> -			name = kstrdup(region.name, GFP_KERNEL);
+>> +			name = kstrndup(region.name, MAX_REGION_NAME_LENGTH - 1, GFP_KERNEL);
+>>   			if (!name) {
+>>   				iounmap(ptr);
+>>   				return -ENOMEM;
+>> -- 
+>> 2.7.4
 >>
-> 
-> .
