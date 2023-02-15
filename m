@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350B8698587
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D304869858D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjBOU06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:26:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S229782AbjBOU2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBOU04 (ORCPT
+        with ESMTP id S229576AbjBOU2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:26:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6220B5B98;
-        Wed, 15 Feb 2023 12:26:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBAA6B82373;
-        Wed, 15 Feb 2023 20:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C26C433D2;
-        Wed, 15 Feb 2023 20:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676492811;
-        bh=2B6OYT9baMUmpj081N8ApuyZRaf3nEcY8nE/MG7VCLo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QiKfIFOoUtM5otYmOb4O15O0dd+y9jtdA0UPtxP+BzMwcPKnA86t78F5aDKbxDUNy
-         T/vJvHYUQfceohEwF4AHNCxD6Wpeq94+aTuEB8ZB7V1gqm8ntK5e2800CP2aoYKu7z
-         PhEemm418KOfo5AyZsrbrzzSzYXGiPvQMqxa2A6xlFUyhNYriVakJCZIIgYT6hGgve
-         jDL9lq9U8roY2wHXkAqsyNZ2JQeesizuQ20V8+zfX4b4cRB7U3qgwS2tqvpSIA6+Wi
-         MbGX5r3DSAjg5OEalCoR5xTSmn2WUTDPEPA8+IariufCKZFD2uRE9+nujtdOHnqfE2
-         xwXkeEd3X8gBw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        damon@lists.linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Change the return value for page isolation functions
-Date:   Wed, 15 Feb 2023 20:26:48 +0000
-Message-Id: <20230215202648.92523-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
-References: 
+        Wed, 15 Feb 2023 15:28:17 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D821F924;
+        Wed, 15 Feb 2023 12:28:16 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gd1so8629534pjb.1;
+        Wed, 15 Feb 2023 12:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iCF0rShrhjTZo+vj/lM4nPombRJwd5wcu/hQkQwVY84=;
+        b=c2p5Krc70fvqhISDXFNzyaE5N6FxoPIdUBrzskIjfAgdw7PFPikWZjqL1dFIR648bh
+         FRvsx7cpoVo7B4ne5ApyWokvYH3K/BeQoq7a6lzlL9/BpwL02XHBrByZv8p/7YzLvD2A
+         oPcX4RJN+CobB7Pf1OA9GwJRfVLfJOG28RAk2YslI+pAxHb1yfUxUFVTehJcjWBTmDsh
+         48fmZbh3rRHVnUb/XRaT8/6MjtShZtrxhU2uiIK0yk17Bvr7471+icgu91/eIGH35nYO
+         Wm01vrqEUEjRpoc/RqMoa69kLnzkwcfShOsP3LkpgHU+eTWKIxX+7wRoI4WwRgsgVtK1
+         x6sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCF0rShrhjTZo+vj/lM4nPombRJwd5wcu/hQkQwVY84=;
+        b=jFg1KxQNOdpy2S4PObhHm59/dzPBEq4qnwwF4s6ittIoq9v6AWMkKuLt9INskE83WV
+         WJ09zqhEwz+ZUWQ8LitcZus1s8HbBhwC1XiHoSMTQ2WtAqouLNICQkOjG0y8yU+9ofuI
+         eBUQ+1jKAMRk2w6Uxd7lIt7lkkMHzXUYwzr9ojjG3UBJw229sm7v1d6iBFhvPGTJsH5v
+         knBvAS1mt+eESvZszr0cFaInuGC4ww0wU4+pkwQwEZ686kWHNvl4XL07Br7cAhQ88lnN
+         oYIpZR/SzMd53llBFviPll/p6Tq8/HGUFCGt0P5kHCgcXFtX4CQhxrLzlVxEzQ7UIWyX
+         xxZg==
+X-Gm-Message-State: AO0yUKU31F1FN0A5S7Z7BCIN9Fw+MUdI9BzEad0hvyKVTFQJOlY8fmQ7
+        MCGav/sUyowf6twzi2DiFLA=
+X-Google-Smtp-Source: AK7set/5mlHCZ1a8WvZxsf5np8fWLUT0k4t+PtpGK2rLJWs1iplHzlICGCdFH6Fg2mXvhMt2AStaoA==
+X-Received: by 2002:a17:902:e882:b0:199:2a4f:be84 with SMTP id w2-20020a170902e88200b001992a4fbe84mr3903580plg.58.1676492895516;
+        Wed, 15 Feb 2023 12:28:15 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ik6-20020a170902ab0600b00192a04bc620sm8608294plb.295.2023.02.15.12.28.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 12:28:14 -0800 (PST)
+Message-ID: <3937ce28-e15d-1d40-caf4-b35ad6d5b0fa@gmail.com>
+Date:   Wed, 15 Feb 2023 12:28:12 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230214172549.450713187@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolin,
-
-On Wed, 15 Feb 2023 18:39:33 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-
-> Now the page isolation functions did not return a boolean to indicate
-> success or not, instead it will return a negative error when failed
-> to isolate a page. So below code used in most places seem a boolean
-> success/failure thing, which can confuse people whether the isolation
-> is successful.
+On 2/14/23 09:41, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.168 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> if (folio_isolate_lru(folio))
->         continue;
+> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
+> Anything received after that time might be too late.
 > 
-> Moreover the page isolation functions only return 0 or -EBUSY, and
-> most users did not care about the negative error except for few users,
-> thus we can convert all page isolation functions to return a boolean
-> value, which can remove the confusion to make code more clear.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> No functional changes intended in this patch series.
+> thanks,
+> 
+> greg k-h
 
-For the series,
+On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
+BMIPS_GENERIC:
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-
-Thanks,
-SJ
-
-[...]
