@@ -2,175 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AA46972DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF27A6972EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjBOAum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 19:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S231915AbjBOAzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 19:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBOAui (ORCPT
+        with ESMTP id S229660AbjBOAzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:50:38 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544C2BEE3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:50:36 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z8-20020a170902834800b001990ad8de5bso9996254pln.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:50:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jAtu+jAzoPXgZmgX0Gm/pPUfllI1EZc5ORAFaSSbbuE=;
-        b=L/+DzgtP0mxJhAdZ5Z/aVaM/bV88j5aAGhM00slMCuZIfD+STsib8GLR0j1uVV3RGR
-         dtA3VBBk5jqr92WFuvac+vtWgHA9axC9yGsdotN1s2zvptok+vXYQTN9VdjbJUigRS3O
-         2jZY5F7cgm/oyxFyh78x1KjMGS84KKZlOUGs6YwT05zphD47TUJZoNMNMn1v+XLRjeSK
-         rSh8mZTOHGk2MfbxNhVhiYQK3lh4+2xmCp2uAw2N1A6T0rO/ZsTPr+kcEit0Z/bi8vDo
-         Q2uYusX/6wxTlJTAAVRHOiWXIGmZtT5M0QHuzbFHJE61DGFFaGulvIopfgOxvaWpLaaP
-         39lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jAtu+jAzoPXgZmgX0Gm/pPUfllI1EZc5ORAFaSSbbuE=;
-        b=YLQBX3lp8pd4duPDlCWehvoQpQH29+C6NxXnPqtJqphiSvZOtvFyMHJxqK1VMShwEB
-         CZ2bRHFVKQhkCePG+f4kyfqM9q+0lHo5VnuhmMYRn3X082yKFhoJSTm5WZeDPA38zJe6
-         OEaO+j1fPdIuCQyw3hj3643wk2Ht5rCwZw3TAb68Zkzyib7oqqovVkkh7w88COxB9YnM
-         cQHF/ttYlm4gm1jkqk9QQNNaJcZTntgqnsR4RSPrhY27oGsZ4bzw18RTP/ok5j+ISenZ
-         A2Aa0CkiIO7NVvk4kJx84Sg5nh53k9f+QxXLQljIHpMKNPfN2SkYhj1YsQyY205cD6Et
-         ChlQ==
-X-Gm-Message-State: AO0yUKVkyYFItKOorUonHSM+SgvcsOIixxprCXx3G7RO6yjnqqKE7ECR
-        XuY+GGpNAlTTZoSI+mx5aviQQz8N8Zy+5pl68g==
-X-Google-Smtp-Source: AK7set/B9k2Ck9cwqCz3QkOM260/f27rO5NkJ+CBnzWZ5I7LICMI8IV8Q/zzgS1M+gU0YZA5XK2frvm7yadOvdfolw==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:90a:d908:b0:233:a844:1e9e with
- SMTP id c8-20020a17090ad90800b00233a8441e9emr272542pjv.60.1676422235601; Tue,
- 14 Feb 2023 16:50:35 -0800 (PST)
-Date:   Wed, 15 Feb 2023 00:50:33 +0000
-In-Reply-To: <Y88ylDFfMQNcUEw7@google.com> (message from Sean Christopherson
- on Tue, 24 Jan 2023 01:21:24 +0000)
-Mime-Version: 1.0
-Message-ID: <diqzlekzkazq.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
- stacks on function entry
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     erdemaktas@google.com, mail@maciej.szmigiero.name,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
-        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
-        maz@kernel.org, bgardon@google.com, jmattson@google.com,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
-        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
-        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
-        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
-        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
-        pshier@google.com, axelrasmussen@google.com,
-        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 19:55:03 -0500
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED01C2CFC4;
+        Tue, 14 Feb 2023 16:55:01 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VbhQfUe_1676422498;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbhQfUe_1676422498)
+          by smtp.aliyun-inc.com;
+          Wed, 15 Feb 2023 08:54:59 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, angelogioacchino.delregno@collabora.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] thermal/drivers/mediatek: Remove unneeded semicolon
+Date:   Wed, 15 Feb 2023 08:54:57 +0800
+Message-Id: <20230215005457.21242-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+./drivers/thermal/mediatek/lvts_thermal.c:520:2-3: Unneeded semicolon
 
-> On Mon, Jan 23, 2023, Erdem Aktas wrote:
-> > On Mon, Jan 23, 2023 at 10:53 AM Sean Christopherson  
-> <seanjc@google.com> wrote:
-> > >
-> > > On Mon, Jan 23, 2023, Maciej S. Szmigiero wrote:
-> > > > On 23.01.2023 19:30, Erdem Aktas wrote:
-> > > > > On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson  
-> <seanjc@google.com> wrote:
-> > > > > >
-> > > > > > On Sat, Jan 21, 2023, Ackerley Tng wrote:
-> > > > > > > Some SSE instructions assume a 16-byte aligned stack, and GCC  
-> compiles
-> > > > > > > assuming the stack is aligned:
-> > > > > > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This  
-> combination
-> > > > > > > results in a #GP in guests.
-> > > > > > >
-> > > > > > > Adding this compiler flag will generate an alternate prologue  
-> and
-> > > > > > > epilogue to realign the runtime stack, which makes selftest  
-> code
-> > > > > > > slower and bigger, but this is okay since we do not need  
-> selftest code
-> > > > > > > to be extremely performant.
-> > > > > >
-> > > > > > Huh, I had completely forgotten that this is why SSE is  
-> problematic.  I ran into
-> > > > > > this with the base UPM selftests and just disabled SSE.   
-> /facepalm.
-> > > > > >
-> > > > > > We should figure out exactly what is causing a misaligned  
-> stack.  As you've noted,
-> > > > > > the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm  
-> misreading vm_arch_vcpu_add(),
-> > > > > > the starting stack should be page aligned, which means  
-> something is causing the
-> > > > > > stack to become unaligned at runtime.  I'd rather hunt down  
-> that something than
-> > > > > > paper over it by having the compiler force realignment.
-> > > > >
-> > > > > Is not it due to the 32bit execution part of the guest code at  
-> boot
-> > > > > time. Any push/pop of 32bit registers might make it a 16-byte
-> > > > > unaligned stack.
-> > > >
-> > > > 32-bit stack needs to be 16-byte aligned, too (at function call  
-> boundaries) -
-> > > > see [1] chapter 2.2.2 "The Stack Frame"
-> > >
-> > > And this showing up in the non-TDX selftests rules that out as the  
-> sole problem;
-> > > the selftests stuff 64-bit mode, i.e. don't have 32-bit boot code.
-> >
-> > Thanks Maciej and Sean for the clarification. I was suspecting the
-> > hand-coded assembly part that we have for TDX tests but  it being
-> > happening in the non-TDX selftests disproves it.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4058
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Not necessarily, it could be both.  Goofs in the handcoded assembly and  
-> PEBKAC
-> on my end :-)
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index 84ba65a27acf..31d65fb50383 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -517,7 +517,7 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
+ 		 */
+ 		lvts_sensor[i].msr = lvts_ctrl_data->mode == LVTS_MSR_IMMEDIATE_MODE ?
+ 			imm_regs[i] : msr_regs[i];
+-	};
++	}
+ 
+ 	lvts_ctrl->num_lvts_sensor = lvts_ctrl_data->num_lvts_sensor;
+ 
+-- 
+2.20.1.7.g153144c
 
-I figured it out!
-
-GCC assumes that the stack is 16-byte aligned **before** the call
-instruction. Since call pushes rip to the stack, GCC will compile code
-assuming that on entrance to the function, the stack is -8 from a
-16-byte aligned address.
-
-Since for TDs we do a ljmp to guest code, providing a function's
-address, the stack was not modified by a call instruction pushing rip to
-the stack, so the stack is 16-byte aligned when the guest code starts
-running, instead of 16-byte aligned -8 that GCC expects.
-
-For VMs, we set rip to a function pointer, and the VM starts running
-with a 16-byte algined stack too.
-
-To fix this, I propose that in vm_arch_vcpu_add(), we align the
-allocated stack address and then subtract 8 from that:
-
-@@ -573,10 +573,13 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm,  
-uint32_t vcpu_id,
-         vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
-         vcpu_setup(vm, vcpu);
-
-+       stack_vaddr += (DEFAULT_STACK_PGS * getpagesize());
-+       stack_vaddr = ALIGN_DOWN(stack_vaddr, 16) - 8;
-+
-         /* Setup guest general purpose registers */
-         vcpu_regs_get(vcpu, &regs);
-         regs.rflags = regs.rflags | 0x2;
--       regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
-+       regs.rsp = stack_vaddr;
-         regs.rip = (unsigned long) guest_code;
-         vcpu_regs_set(vcpu, &regs);
