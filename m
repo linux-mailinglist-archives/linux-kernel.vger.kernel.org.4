@@ -2,331 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB68697FF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C47697FFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjBOPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S229841AbjBOPzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjBOPxk (ORCPT
+        with ESMTP id S229539AbjBOPzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:53:40 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D21E1AE;
-        Wed, 15 Feb 2023 07:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676476419; x=1708012419;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6kYLmkJS+SA3HwQaZJIQdOCzecN7RcboMQKxkKH6QG4=;
-  b=QxVuZoPS1HDNFCh+QLTUdrGN6HwuTkLv12XamGZFqx/KGQtctPe5k2TP
-   640F2p3UL7nzhv8dcfEQfyQsPnicT/id+b/C6XE/QeMgtUK9t1ybLTm4e
-   knQbnJoD01EmbK+Q1cMYqRVew0lO/Pg2N/+EYE45RQAbKLr5op4F/WGCZ
-   ZxR7tq4j4tk+A6YP33dfRCnL6kBkJnWjn2mXGIZfSpi5cgahiuQDaYMuj
-   fnSFaja88CFA7IyXFQBuS7cvKzDC9AaXD01R3gN/ABZ3qFazBQMyP1phZ
-   jb0qeLdJtGyVtv2GAtZMuSoY11VVWYFCN/Go5RdL26KzJHZtcnxf/EDW7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="393863391"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="393863391"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 07:53:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="619490483"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="619490483"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2023 07:53:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0B5A01C5; Wed, 15 Feb 2023 17:54:13 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Chas Williams <3chas3@gmail.com>
-Subject: [PATCH v1 2/2] mmc: atmel-mci: Convert to agnostic GPIO API
-Date:   Wed, 15 Feb 2023 17:54:10 +0200
-Message-Id: <20230215155410.80944-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230215155410.80944-1-andriy.shevchenko@linux.intel.com>
-References: <20230215155410.80944-1-andriy.shevchenko@linux.intel.com>
+        Wed, 15 Feb 2023 10:55:37 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B8D77DB2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:55:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27A271042;
+        Wed, 15 Feb 2023 07:56:18 -0800 (PST)
+Received: from [10.34.100.128] (pierre123.nice.arm.com [10.34.100.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CDA53F881;
+        Wed, 15 Feb 2023 07:55:33 -0800 (PST)
+Message-ID: <2af0ec8d-891c-f690-bfd6-b0e02597f391@arm.com>
+Date:   Wed, 15 Feb 2023 16:55:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Pierre Gondois <pierre.gondois@arm.com>
+Subject: Re: [PATCH v2] firmware: arm_sdei: Fix sleep from invalid context BUG
+To:     James Morse <james.morse@arm.com>, linux-kernel@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        WANG Xuerui <git@xen0n.name>, Qi Liu <liuqi115@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221018130456.1356081-1-pierre.gondois@arm.com>
+ <5813b8c5-ae3e-87fd-fccc-94c9cd08816d@arm.com>
+Content-Language: en-US
+In-Reply-To: <5813b8c5-ae3e-87fd-fccc-94c9cd08816d@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_gpio.h is going to be removed. In preparation of that convert
-the driver to the agnostic API.
+Hello James,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/mmc/host/atmel-mci.c | 106 ++++++++++++++++-------------------
- 1 file changed, 48 insertions(+), 58 deletions(-)
+On 2/10/23 18:42, James Morse wrote:
+> Hi Pierre,
+> 
+> Sorry its taken so long for me to catch up with this ...
 
-diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index fad5e6b4c654..79876e3152e6 100644
---- a/drivers/mmc/host/atmel-mci.c
-+++ b/drivers/mmc/host/atmel-mci.c
-@@ -11,7 +11,7 @@
- #include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-@@ -19,7 +19,6 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/platform_device.h>
- #include <linux/scatterlist.h>
- #include <linux/seq_file.h>
-@@ -44,8 +43,8 @@
- /**
-  * struct mci_slot_pdata - board-specific per-slot configuration
-  * @bus_width: Number of data lines wired up the slot
-- * @detect_pin: GPIO pin wired to the card detect switch
-- * @wp_pin: GPIO pin wired to the write protect sensor
-+ * @wp_gpio: GPIO pin wired to the write protect sensor
-+ * @detect_gpio: GPIO pin wired to the card detect switch
-  * @detect_is_active_high: The state of the detect pin when it is active
-  * @non_removable: The slot is not removable, only detect once
-  *
-@@ -60,8 +59,8 @@
-  */
- struct mci_slot_pdata {
- 	unsigned int		bus_width;
--	int			detect_pin;
--	int			wp_pin;
-+	struct gpio_desc	*wp_gpio;
-+	struct gpio_desc	*detect_gpio;
- 	bool			detect_is_active_high;
- 	bool			non_removable;
- };
-@@ -399,12 +398,12 @@ struct atmel_mci {
-  *	&struct atmel_mci.
-  * @clock: Clock rate configured by set_ios(). Protected by host->lock.
-  * @flags: Random state bits associated with the slot.
-- * @detect_pin: GPIO pin used for card detection, or negative if not
-- *	available.
-- * @wp_pin: GPIO pin used for card write protect sending, or negative
-+ * @wp_gpio: GPIO pin used for card write protect sending, or NULL
-  *	if not available.
-+ * @detect_gpio: GPIO pin used for card detection, or negative if not
-+ *	available.
-  * @detect_is_active_high: The state of the detect pin when it is active.
-- * @detect_timer: Timer used for debouncing @detect_pin interrupts.
-+ * @detect_timer: Timer used for debouncing @detect_gpio interrupts.
-  */
- struct atmel_mci_slot {
- 	struct mmc_host		*mmc;
-@@ -422,8 +421,9 @@ struct atmel_mci_slot {
- #define ATMCI_CARD_NEED_INIT	1
- #define ATMCI_SHUTDOWN		2
- 
--	int			detect_pin;
--	int			wp_pin;
-+	struct gpio_desc	*wp_gpio;
-+
-+	struct gpio_desc	*detect_gpio;
- 	bool			detect_is_active_high;
- 
- 	struct timer_list	detect_timer;
-@@ -637,7 +637,8 @@ MODULE_DEVICE_TABLE(of, atmci_dt_ids);
- static struct mci_platform_data*
- atmci_of_init(struct platform_device *pdev)
- {
--	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct device_node *cnp;
- 	struct mci_platform_data *pdata;
- 	u32 slot_id;
-@@ -669,8 +670,10 @@ atmci_of_init(struct platform_device *pdev)
- 		                         &pdata->slot[slot_id].bus_width))
- 			pdata->slot[slot_id].bus_width = 1;
- 
--		pdata->slot[slot_id].detect_pin =
--			of_get_named_gpio(cnp, "cd-gpios", 0);
-+		pdata->slot[slot_id].detect_gpio = devm_gpiod_get_optional(dev, "cd", GPIOD_IN);
-+		if (!pdata->slot[slot_id].detect_gpio)
-+			dev_dbg(dev, "no detect pin available\n");
-+		gpiod_set_consumer_name(pdata->slot[slot_id].detect_gpio, "mmc_detect");
- 
- 		pdata->slot[slot_id].detect_is_active_high =
- 			of_property_read_bool(cnp, "cd-inverted");
-@@ -678,8 +681,10 @@ atmci_of_init(struct platform_device *pdev)
- 		pdata->slot[slot_id].non_removable =
- 			of_property_read_bool(cnp, "non-removable");
- 
--		pdata->slot[slot_id].wp_pin =
--			of_get_named_gpio(cnp, "wp-gpios", 0);
-+		pdata->slot[slot_id].wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_IN);
-+		if (!pdata->slot[slot_id].wp_gpio)
-+			dev_dbg(dev, "no WP pin available\n");
-+		gpiod_set_consumer_name(pdata->slot[slot_id].wp_gpio, "mmc_wp");
- 	}
- 
- 	return pdata;
-@@ -1535,8 +1540,8 @@ static int atmci_get_ro(struct mmc_host *mmc)
- 	int			read_only = -ENOSYS;
- 	struct atmel_mci_slot	*slot = mmc_priv(mmc);
- 
--	if (gpio_is_valid(slot->wp_pin)) {
--		read_only = gpio_get_value(slot->wp_pin);
-+	if (slot->wp_gpio) {
-+		read_only = gpiod_get_value(slot->wp_gpio);
- 		dev_dbg(&mmc->class_dev, "card is %s\n",
- 				read_only ? "read-only" : "read-write");
- 	}
-@@ -1544,14 +1549,18 @@ static int atmci_get_ro(struct mmc_host *mmc)
- 	return read_only;
- }
- 
-+static bool is_card_present(struct atmel_mci_slot *slot)
-+{
-+	return !(gpiod_get_raw_value(slot->detect_gpio) ^ slot->detect_is_active_high);
-+}
-+
- static int atmci_get_cd(struct mmc_host *mmc)
- {
- 	int			present = -ENOSYS;
- 	struct atmel_mci_slot	*slot = mmc_priv(mmc);
- 
--	if (gpio_is_valid(slot->detect_pin)) {
--		present = !(gpio_get_value(slot->detect_pin) ^
--			    slot->detect_is_active_high);
-+	if (slot->detect_gpio) {
-+		present = is_card_present(slot);
- 		dev_dbg(&mmc->class_dev, "card is %spresent\n",
- 				present ? "" : "not ");
- 	}
-@@ -1663,9 +1672,8 @@ static void atmci_detect_change(struct timer_list *t)
- 	if (test_bit(ATMCI_SHUTDOWN, &slot->flags))
- 		return;
- 
--	enable_irq(gpio_to_irq(slot->detect_pin));
--	present = !(gpio_get_value(slot->detect_pin) ^
--		    slot->detect_is_active_high);
-+	enable_irq(gpiod_to_irq(slot->detect_gpio));
-+	present = is_card_present(slot);
- 	present_old = test_bit(ATMCI_CARD_PRESENT, &slot->flags);
- 
- 	dev_vdbg(&slot->mmc->class_dev, "detect change: %d (was %d)\n",
-@@ -2254,18 +2262,18 @@ static int atmci_init_slot(struct atmel_mci *host,
- 	slot = mmc_priv(mmc);
- 	slot->mmc = mmc;
- 	slot->host = host;
--	slot->detect_pin = slot_data->detect_pin;
--	slot->wp_pin = slot_data->wp_pin;
-+	slot->wp_gpio = slot_data->wp_gpio;
-+	slot->detect_gpio = slot_data->detect_gpio;
- 	slot->detect_is_active_high = slot_data->detect_is_active_high;
- 	slot->sdc_reg = sdc_reg;
- 	slot->sdio_irq = sdio_irq;
- 
- 	dev_dbg(&mmc->class_dev,
--	        "slot[%u]: bus_width=%u, detect_pin=%d, "
--		"detect_is_active_high=%s, wp_pin=%d\n",
--		id, slot_data->bus_width, slot_data->detect_pin,
-+	        "slot[%u]: bus_width=%u, detect_gpio=%d, "
-+		"detect_is_active_high=%s, wp_gpio=%d\n",
-+		id, slot_data->bus_width, desc_to_gpio(slot_data->detect_gpio),
- 		slot_data->detect_is_active_high ? "true" : "false",
--		slot_data->wp_pin);
-+		desc_to_gpio(slot_data->wp_gpio));
- 
- 	mmc->ops = &atmci_ops;
- 	mmc->f_min = DIV_ROUND_UP(host->bus_hz, 512);
-@@ -2301,32 +2309,16 @@ static int atmci_init_slot(struct atmel_mci *host,
- 
- 	/* Assume card is present initially */
- 	set_bit(ATMCI_CARD_PRESENT, &slot->flags);
--	if (gpio_is_valid(slot->detect_pin)) {
--		if (devm_gpio_request(&host->pdev->dev, slot->detect_pin,
--				      "mmc_detect")) {
--			dev_dbg(&mmc->class_dev, "no detect pin available\n");
--			slot->detect_pin = -EBUSY;
--		} else if (gpio_get_value(slot->detect_pin) ^
--				slot->detect_is_active_high) {
-+	if (slot->detect_gpio) {
-+		if (!is_card_present(slot))
- 			clear_bit(ATMCI_CARD_PRESENT, &slot->flags);
--		}
--	}
--
--	if (!gpio_is_valid(slot->detect_pin)) {
-+	} else {
- 		if (slot_data->non_removable)
- 			mmc->caps |= MMC_CAP_NONREMOVABLE;
- 		else
- 			mmc->caps |= MMC_CAP_NEEDS_POLL;
- 	}
- 
--	if (gpio_is_valid(slot->wp_pin)) {
--		if (devm_gpio_request(&host->pdev->dev, slot->wp_pin,
--				      "mmc_wp")) {
--			dev_dbg(&mmc->class_dev, "no WP pin available\n");
--			slot->wp_pin = -EBUSY;
--		}
--	}
--
- 	host->slot[id] = slot;
- 	mmc_regulator_get_supply(mmc);
- 	ret = mmc_add_host(mmc);
-@@ -2335,18 +2327,18 @@ static int atmci_init_slot(struct atmel_mci *host,
- 		return ret;
- 	}
- 
--	if (gpio_is_valid(slot->detect_pin)) {
-+	if (slot->detect_gpio) {
- 		timer_setup(&slot->detect_timer, atmci_detect_change, 0);
- 
--		ret = request_irq(gpio_to_irq(slot->detect_pin),
-+		ret = request_irq(gpiod_to_irq(slot->detect_gpio),
- 				atmci_detect_interrupt,
- 				IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
- 				"mmc-detect", slot);
- 		if (ret) {
- 			dev_dbg(&mmc->class_dev,
- 				"could not request IRQ %d for detect pin\n",
--				gpio_to_irq(slot->detect_pin));
--			slot->detect_pin = -EBUSY;
-+				gpiod_to_irq(slot->detect_gpio));
-+			slot->detect_gpio = NULL;
- 		}
- 	}
- 
-@@ -2365,10 +2357,8 @@ static void atmci_cleanup_slot(struct atmel_mci_slot *slot,
- 
- 	mmc_remove_host(slot->mmc);
- 
--	if (gpio_is_valid(slot->detect_pin)) {
--		int pin = slot->detect_pin;
--
--		free_irq(gpio_to_irq(pin), slot);
-+	if (slot->detect_gpio) {
-+		free_irq(gpiod_to_irq(slot->detect_gpio), slot);
- 		del_timer_sync(&slot->detect_timer);
- 	}
- 
--- 
-2.39.1
+No worries.
 
+> 
+> On 18/10/2022 14:04, Pierre Gondois wrote:
+>> On an Ampere Altra,
+>> Running a preemp_rt kernel based on v5.19-rc3-rt5 on an
+>> Ampere Altra triggers:
+>> [   15.683141] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+>> [   15.683154] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
+>> [   15.683157] preempt_count: 0, expected: 0
+>> [   15.683159] RCU nest depth: 0, expected: 0
+>> [   15.683163] 3 locks held by cpuhp/0/24:
+>> [   15.683167]  #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+>> [   15.683201]  #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+>> [   15.683205]  #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
+>> [   15.683224] irq event stamp: 36
+>> [   15.683226] hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
+>> [   15.683236] hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
+>> [   15.683238] softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
+>> [   15.683245] softirqs last disabled at (0): [<0000000000000000>] 0x0
+>> [   15.683258] CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
+>> [   15.683265] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+>> [   15.683268] Call trace:
+>> [   15.683271]  dump_backtrace+0x114/0x120
+>> [   15.683277]  show_stack+0x20/0x70
+>> [   15.683279]  dump_stack_lvl+0x9c/0xd8
+>> [   15.683288]  dump_stack+0x18/0x34
+>> [   15.683289]  __might_resched+0x188/0x228
+>> [   15.683292]  rt_spin_lock+0x70/0x120
+>> [   15.683301]  sdei_cpuhp_up+0x3c/0x130
+>> [   15.683303]  cpuhp_invoke_callback+0x250/0xf08
+>> [   15.683305]  cpuhp_thread_fun+0x120/0x248
+>> [   15.683308]  smpboot_thread_fn+0x280/0x320
+>> [   15.683315]  kthread+0x130/0x140
+>> [   15.683321]  ret_from_fork+0x10/0x20
+> 
+>> sdei_cpuhp_up() is called in the STARTING hotplug section,
+>> which runs whith interrupts disabled. Move CPUHP_AP_ARM_SDEI_
+>> state to the _ONLINE section to execute the cpuhp cb with
+>> preemption enabled.
+> 
+> The background to this is SDEI got its own cpuhp slot because 'perf NMI' support
+> was one of the use-cases, but this got superseded by pNMI. Without an interaction with
+> perf, the slot doesn't need to be that early.
+> 
+> 
+>> Some SDEI calls (e.g. SDEI_1_0_FN_SDEI_PE_MASK) take actions on the
+>> calling CPU. It is checked that preemption is disabled for them.
+>> _ONLINE cpuhp cb are executed in the 'per CPU hotplug thread'.
+>> Preemption is enabled in those threads, but their cpumask is limited
+>> to 1 CPU.
+> 
+>> Move 'WARN_ON_ONCE(preemptible())' statements so that SDEI cpuhp cb
+>> don't trigger them. This means that no check will be done for some
+>> cases, e.g. sdei_mask_local_cpu() invocations.
+> 
+> (these things are documentation anyway)
+> 
+> 
+>> Also add a check for the SDEI_1_0_FN_SDEI_PRIVATE_RESET SDEI call
+>> which acts on the calling CPU.
+> 
+>> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+>> index 1e1a51510e83..9b03e164a37a 100644
+>> --- a/drivers/firmware/arm_sdei.c
+>> +++ b/drivers/firmware/arm_sdei.c
+> 
+>> @@ -401,6 +399,8 @@ int sdei_event_enable(u32 event_num)
+>>   	int err = -EINVAL;
+>>   	struct sdei_event *event;
+>>   
+>> +	WARN_ON_ONCE(preemptible());
+>> +
+>>   	mutex_lock(&sdei_events_lock);
+>>   	event = sdei_event_find(event_num);
+>>   	if (!event) {
+> 
+> This doesn't look right. How can this code take a mutex if its in a non-preemptable context?
+> 
+>> @@ -492,6 +490,7 @@ int sdei_event_unregister(u32 event_num)
+>>   	struct sdei_event *event;
+>>   
+>>   	WARN_ON(in_nmi());
+>> +	WARN_ON_ONCE(preemptible());
+>>   
+>>   	mutex_lock(&sdei_events_lock);
+>>   	event = sdei_event_find(event_num);
+> 
+> Same again.
+> 
+>> @@ -576,6 +573,7 @@ int sdei_event_register(u32 event_num, sdei_event_callback *cb, void *arg)
+>>   	struct sdei_event *event;
+>>   
+>>   	WARN_ON(in_nmi());
+>> +	WARN_ON_ONCE(preemptible());
+>>   
+>>   	mutex_lock(&sdei_events_lock);
+>>   	if (sdei_event_find(event_num)) {
+> 
+> Same again.
+> 
+> I think you've copied these here because they called _local_event_unregister(), but they
+> did that via on_each_cpu(), which is what made _local_event_unregister() non-preemtable.
+
+Yes right, these 3 warnings don't really make sense. They will be removed.
+
+> 
+> You can just remove these three, the original warnings were mostly documentation, and to
+> catch myself out. (before RT moved the goal posts).
+> 
+> With that:
+> Reviewed-by: James Morse <james.morse@arm.com>
+> 
+> (could you trim the [timestamps] out of the commit log?)
+
+Yes sure.
+
+> 
+> 
+>> @@ -765,7 +765,7 @@ static int sdei_device_freeze(struct device *dev)
+>>   	int err;
+>>   
+>>   	/* unregister private events */
+>> -	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_STARTING);
+>> +	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_ONLINE);
+> 
+> Is there any mileage in making this CPUHP_AP_ONLINE_DYN ?
+> Perf really was the only reason that this needed to happen in any particular order.
+
+Ok I will do that.
+
+Thanks for the review,
+Regards,
+Pierre
+
+> 
+> 
+> Thanks,
+> 
+> James
