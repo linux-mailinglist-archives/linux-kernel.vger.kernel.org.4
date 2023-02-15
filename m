@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEA96978E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B7B6978F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbjBOJZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S234051AbjBOJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbjBOJZm (ORCPT
+        with ESMTP id S233947AbjBOJ0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:25:42 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 032153770B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:25:02 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxldjspOxjRuAAAA--.1656S3;
-        Wed, 15 Feb 2023 17:25:00 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHuTopOxj3MczAA--.59761S2;
-        Wed, 15 Feb 2023 17:24:56 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] LoongArch: ptrace: Add function argument access API
-Date:   Wed, 15 Feb 2023 17:24:56 +0800
-Message-Id: <20230215092456.30446-1-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Wed, 15 Feb 2023 04:26:25 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A483757B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:25:43 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso990161wmo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:25:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lRaz9F2ndu1/Zzg0HAXs4+stqA3VUbDuTuUhJDAoGm0=;
+        b=oZDj+NVqsSmEJ5xdIf2TEYmmgUNCK6zQP03WEdPsHXYTmzbEg77rO75MQ1ymaqHtkK
+         u8t7eOltDCyuMAndy09UOb2WYFu/beEnNT8JcnvuZUiUFH50NYqbyeP4SOqqPxqLFPtr
+         IzWTR0DZderEsuIHzDLvEZcJl2Plcb6Y8URrctPSeIWS4qZ+AuvbiDspjn9Npj8am/dQ
+         XhOHi3ZKE/MqOnYhlSMkvRh7MGGJLHmiet+xq6zgt4/rWbSMSRCfpnIiC/48goxqgG7W
+         mTYQKQ59JXmjtSzXXr43XG6lAc65VQ7YBm16Qd7peAQDfaI+vhC9OiAiE025LZn5L8fS
+         t2pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lRaz9F2ndu1/Zzg0HAXs4+stqA3VUbDuTuUhJDAoGm0=;
+        b=g7QDeswB8p778qTNO3oqcgBJbI/x6p/df91TBtp7F/rrrTwIv64J0eF2oNsjoFpqc7
+         JDu7zH8Hw0y3zeLauJdvt4yj7dfE4IIFQVmMF4i0g7VMRP/bYrLnb+hEolNSYDgTtM0J
+         cZb7GoSyJ4atQFxqRTaORBcsbH2LCC23pJmKInVh6+BOxRVUF6PVuYJ58JXuA+o/KFrh
+         xUSA03sIBBIBiypDjdYYAFE2k8igThfqMTYEYZNNmHUIuHi2F1yib+0NgnKUuJaZKoLl
+         Usb2/GhUdogBU7UgM84w+r284YcUR4S6cvirSxGMwos6gfaly6PNKbpha2bajjzgKg+S
+         uriw==
+X-Gm-Message-State: AO0yUKVokPbhNMPMGkKH4zUczz2xrHapBx4B+I5AA4HWeOQI6Osz2xyX
+        A3F+hCDwzFfMMBhKNryLhFuEPoOJGrbaCGAw5Rc=
+X-Google-Smtp-Source: AK7set+MPgZiuLq/e8s82IBTD7f+ZJIhVUc3Y4h6gzu5gjWm0PGQysGvJd756SDP8P0/8jSvtDzwcg==
+X-Received: by 2002:a05:600c:4d15:b0:3cf:7197:e68a with SMTP id u21-20020a05600c4d1500b003cf7197e68amr1675557wmp.18.1676453139517;
+        Wed, 15 Feb 2023 01:25:39 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:7fda:5fd:df14:bb65? ([2a01:e0a:982:cbb0:7fda:5fd:df14:bb65])
+        by smtp.gmail.com with ESMTPSA id b15-20020a5d550f000000b002c55ebe37ddsm5674783wrv.115.2023.02.15.01.25.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 01:25:38 -0800 (PST)
+Message-ID: <f6f81af2-00ec-a75b-0e9e-a1eaf649edf5@linaro.org>
+Date:   Wed, 15 Feb 2023 10:25:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxHuTopOxj3MczAA--.59761S2
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Kr1kZFyfCF4fWF1DurWrAFb_yoW5JFWrpa
-        4kA3ZxGr48urs3uFW3J3WrZryrZrs7CrWSkr1Ik34Syr9FqryrJFWkXr1qy3WktrWUJFWI
-        gF15t3yYgFs8Z3JanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        ba8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU0NJ57UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: Add compatible for SM8550
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+References: <20230127132558.1176730-1-abel.vesa@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230127132558.1176730-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add regs_get_argument() which returns N th argument of the function
-call, This enables ftrace kprobe events to access kernel function
-arguments via $argN syntax.
+Hi Mark,
 
-eg:
-echo 'p bio_add_page arg1=$arg1' > kprobe_events
-bash: echo: write error: Invalid argument
+On 27/01/2023 14:25, Abel Vesa wrote:
+> Document the compatible for SM8550 PDC.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> The v1 is here:
+> https://lore.kernel.org/all/20221116114210.2673902-1-abel.vesa@linaro.org/
+> 
+> Changes since v1:
+>   * rebased on next-20230125
+>   * added Krzysztof's R-b tag
+> 
+>   .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
+>   1 file changed, 1 insertion(+)
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/Kconfig              |  1 +
- arch/loongarch/include/asm/ptrace.h | 33 +++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+Do you think you can pick it for v6.3 ?
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index e3eba2eb4b44..103046966893 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -97,6 +97,7 @@ config LOONGARCH
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-+	select HAVE_FUNCTION_ARG_ACCESS_API
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_GENERIC_VDSO
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 66a0e6c480a3..f6ffcc00753c 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -120,6 +120,39 @@ static inline long regs_return_value(struct pt_regs *regs)
- 	return regs->regs[4];
- }
- 
-+/**
-+ * regs_get_kernel_argument() - get Nth function argument in kernel
-+ * @regs:       pt_regs of that context
-+ * @n:          function argument number (start from 0)
-+ *
-+ * regs_get_argument() returns @n th argument of the function call.
-+ * Note that this chooses most probably assignment, in some case
-+ * it can be incorrect.
-+ * This is expected to be called from kprobes or ftrace with regs
-+ * where the top of stack is the return address.
-+ */
-+static inline unsigned long regs_get_kernel_argument(struct pt_regs *regs,
-+						     unsigned int n)
-+{
-+	static const unsigned int argument_offs[] = {
-+		offsetof(struct pt_regs, regs[4]),
-+		offsetof(struct pt_regs, regs[5]),
-+		offsetof(struct pt_regs, regs[6]),
-+		offsetof(struct pt_regs, regs[7]),
-+		offsetof(struct pt_regs, regs[8]),
-+		offsetof(struct pt_regs, regs[9]),
-+		offsetof(struct pt_regs, regs[10]),
-+		offsetof(struct pt_regs, regs[11]),
-+#define NR_REG_ARGUMENTS 8
-+	};
-+
-+	if (n >= NR_REG_ARGUMENTS) {
-+		n -= NR_REG_ARGUMENTS;
-+		return regs_get_kernel_stack_nth(regs, n);
-+	} else
-+		return regs_get_register(regs, argument_offs[n]);
-+}
-+
- #define instruction_pointer(regs) ((regs)->csr_era)
- #define profile_pc(regs) instruction_pointer(regs)
- 
--- 
-2.36.0
+Thanks,
+Neil
+
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+> index 94791e261c42..5a733bd76b57 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+> @@ -37,6 +37,7 @@ properties:
+>             - qcom,sm8250-pdc
+>             - qcom,sm8350-pdc
+>             - qcom,sm8450-pdc
+> +          - qcom,sm8550-pdc
+>         - const: qcom,pdc
+>   
+>     reg:
 
