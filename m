@@ -2,127 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E80697340
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4450369735F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjBOBKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S233460AbjBOBRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbjBOBKs (ORCPT
+        with ESMTP id S229454AbjBOBRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:10:48 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4C932534;
-        Tue, 14 Feb 2023 17:10:18 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGg1m5Rn3z4x5Y;
-        Wed, 15 Feb 2023 12:08:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676423310;
-        bh=ZKbXdOdmE6f7w60ZaJODhhxN1ctwJAr53AJUudQVy20=;
-        h=Date:From:To:Cc:Subject:From;
-        b=unj+ltyhrNicgXv2hCgQJB7RnCjfEPKS30w13ftlk6f5JrNaj1Nk4nGpK6IpxakSm
-         F+w8HWJQikhrFOHFWAD6CptphkWf5g/UwMYRL993a5jdeS0+EWYyR2aeenS6glOyXX
-         8+5zawmbCx3NFAQwy7iC9aa3bIQfEUV8w8MYxaID8j2zY4iwXctKMsRB3sfJdnp3CD
-         bZVzepTHWozfRHv3q/vOOQqHmFFpZmz1aI9EjKEgfF4QiOGro5Jfyspqg/sXJMqS+1
-         hX4ExPqxHqJ82c0BUXuATRiCMyL7PL5CY6rIlKPz16C22jtwuidwq83QJa0jWcpGcR
-         41yY1YG9c/aSA==
-Date:   Wed, 15 Feb 2023 12:08:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20230215120827.4780b588@canb.auug.org.au>
+        Tue, 14 Feb 2023 20:17:30 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E52B3400D;
+        Tue, 14 Feb 2023 17:17:11 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id j17so25823882lfr.3;
+        Tue, 14 Feb 2023 17:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6xckzojwyNuatglXQ8YBBBb8WXJgZ0AoA0JB30UI/Xs=;
+        b=OgYp86eufa4KJDkPuznprFyD9bBb5XXjiNsIs6ic99AHYTTPSVR/1RXGmuIPcBnVZS
+         S2thwIhTULgtlMFbIaDQSlEPApuegu4bG6DVC4jyz/cF6PHIm7u1Dk8yQsuOmbXZiggP
+         T+S4q8Ma+sqAn6g5ffekiyI5OPuEZR3C0KVYxyjmE07jpiEm9Bjkx6upNOSuKv0aktoa
+         LGl+MK4WWemu2Ghtd9I8WVd1lIc9W600tp+BIMw1myFzATAX3r5bAHzXgYnUaMzQtW1W
+         +Pq4fPZbfDX50Utvo2d5I4SABLTUDlBdeQxaf9Gzjk4Xi1yBCOJppwI6bSfqhktn0XFv
+         nbWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6xckzojwyNuatglXQ8YBBBb8WXJgZ0AoA0JB30UI/Xs=;
+        b=Ajf45M47y+YR6m+y0XxwAPiMQM3ad5YHmowaXHa37i4cBiDLRveNFFrkwLtSFtP4qk
+         IW0X0HxIdBVLMeOrUwX7d2qNZ3X67JjakidKpdnK0ikbpRtYJbxSevH7rpzgzyPLBfJY
+         cshbAbxib8rjzMtuIHJVYz9WkOpMhfxqY7ZDFuehy2o1pK0XSn5cqK/j2MOp4jf2hJoS
+         JfRbc3IxGpN3EuQJDYDWm7CtRg4EEEx+68TOAY38JR3lh4Y81gfockjQjD9T7fnhk7/Z
+         sd6AdMF4E3AHDzA6HisNgzDRNxxGowZ7bmvM1WM/TBbwcGnTImpz7+Zd6K/Kwta3znNC
+         JAtg==
+X-Gm-Message-State: AO0yUKVNsHm6l9VLQB/8JbwuRIgE4Uk7JQksT92EtM6bjiTIFB+s4Q+K
+        7jSYefSdC+PtpNCQx3pnRp5Ej47WhBOxIQ==
+X-Google-Smtp-Source: AK7set+MASCAI4zdR7KY8dZVKqdEdoQgs6qmT0L36Iv2j549YbQiS8O883w1aFN1+K4OobCJghWHVg==
+X-Received: by 2002:adf:fece:0:b0:2c5:5ff8:6b01 with SMTP id q14-20020adffece000000b002c55ff86b01mr112414wrs.1.1676423357323;
+        Tue, 14 Feb 2023 17:09:17 -0800 (PST)
+Received: from archbox.v.cablecom.net (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id v15-20020adfebcf000000b002c3f81c51b6sm14198505wrn.90.2023.02.14.17.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 17:09:16 -0800 (PST)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: Always enable sd regulator on SOQuartz CM4IO
+Date:   Wed, 15 Feb 2023 02:09:14 +0100
+Message-Id: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/feiPFhMjDpNOFpg_tOwxHa_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/feiPFhMjDpNOFpg_tOwxHa_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The 3.3V line coming from the SDMMC regulator is required for USB
+on the CM4IO board. Without it, the USB mux (U13 in the CM4IO
+schematic[1]) that's used likely remains unpowered, and no USB
+devices show up.
 
-Hi all,
+The consequence of this was the behaviour of an inserted SD card
+allowing USB to work, while pulling it out turned off all USB
+devices.
 
-Today's linux-next merge of the tip tree got a conflict in:
+[1]: https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
 
-  arch/x86/kernel/cpu/common.c
+Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-between commit:
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+index 263ce40770dd..88a61fa8a95c 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+@@ -135,6 +135,12 @@ &sdmmc0 {
+ };
+ 
+ &sdmmc_pwr {
++	/*
++	 * USB also needs this regulator to work on this board, so just enable
++	 * it unconditionally.
++	 */
++	regulator-always-on;
++	regulator-boot-on;
+ 	regulator-min-microvolt = <3300000>;
+ 	regulator-max-microvolt = <3300000>;
+ 	status = "okay";
+-- 
+2.39.1
 
-  be8de49bea50 ("x86/speculation: Identify processors vulnerable to SMT RSB=
- predictions")
-
-from Linus' tree and commit:
-
-  e7862eda309e ("x86/cpu: Support AMD Automatic IBRS")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/kernel/cpu/common.c
-index f3cc7699e1e1,38646f1b5f14..000000000000
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@@ -1403,14 -1412,6 +1414,9 @@@ static void __init cpu_set_bug_bits(str
-  			setup_force_cpu_bug(X86_BUG_RETBLEED);
-  	}
- =20
-- 	if (cpu_has(c, X86_FEATURE_IBRS_ENHANCED) &&
-- 	    !cpu_matches(cpu_vuln_whitelist, NO_EIBRS_PBRSB) &&
-- 	    !(ia32_cap & ARCH_CAP_PBRSB_NO))
-- 		setup_force_cpu_bug(X86_BUG_EIBRS_PBRSB);
--=20
- +	if (cpu_matches(cpu_vuln_blacklist, SMT_RSB))
- +		setup_force_cpu_bug(X86_BUG_SMT_RSB);
- +
-  	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
-  		return;
- =20
-
---Sig_/feiPFhMjDpNOFpg_tOwxHa_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsMIsACgkQAVBC80lX
-0GypOwgAjr2kaRvkBEEcVar0hl3gdHJHpjKAb7Yb8E/YYZgt/L2vgNJ9cDld99Ma
-2IGzLcW7n0UspOEs7KNw9C7ECm10xKMCZ1B5nty1cu3931GBf7rS1a9HvtbG6zJS
-m98efkQSKhR4/RLtg4xoQjEnsq+nerOiygh9TM6KBCvesuDWbx1I30AQ1WeAM3O+
-3bFg8hYodgOFAUHkJYes0k7Ag5MD9Gb7bhRHPhtJP14R+6C6G9aJSFzVESz/evlH
-NL2r+e5m7azzpa1aFSyLsnc7cmDNGDMYiisgamOwIjGEfJ2lkDLqv9kzB8m1b5ZZ
-7UF51pb4Zie5OftJkodN2s9UKhCpFQ==
-=uR2J
------END PGP SIGNATURE-----
-
---Sig_/feiPFhMjDpNOFpg_tOwxHa_--
