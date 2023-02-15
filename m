@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA16697612
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D019697619
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 07:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjBOF5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S231476AbjBOGCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 01:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjBOF5f (ORCPT
+        with ESMTP id S229597AbjBOGCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:57:35 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051CD2CC72;
-        Tue, 14 Feb 2023 21:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676440652; x=1707976652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e8nh889BjnqXdYZ+OAErY7SDOX2M636IKwDAN8zzEuY=;
-  b=llK71/obOGTkOHIdGCNKmfh5v1/gA5otfrGo3kkyadwcpxas1uAoeyn5
-   8uNL5BWprKJoiNs54kb/FU/oH6NPiJ54vfBKJ0BCEluIEJDddITtUA2L/
-   olszwMSHIBi8AZmBRO7FJ53VinK6VOPecdsJhbibrcXCIYncm/0U01XLG
-   CnH2drEasOI/wW8xfCAGibHV6aZ5jieaRfi7oNIglM4MZBETAfrpmpQ08
-   J8IP+tmVq1LZu4iT6OpwNzKM/8e5MfhBmeCpBTYK0SjAeZcPSqVI35NzJ
-   tb9YaHOCy2/toMOlM0LATiZ8wWNfoJCEIkOB8KshyDBALAqtNELGiJAUG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311719779"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="311719779"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 21:57:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="733152193"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="733152193"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Feb 2023 21:57:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 52BDD1A6; Wed, 15 Feb 2023 07:58:09 +0200 (EET)
-Date:   Wed, 15 Feb 2023 07:58:09 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>, Sanju.Mehta@amd.com,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thunderbolt: Read DROM directly from NVM before
- trying bit banging
-Message-ID: <Y+x0cbSpnIPYjZJE@black.fi.intel.com>
-References: <20230214154647.874-1-mario.limonciello@amd.com>
- <20230214154647.874-2-mario.limonciello@amd.com>
+        Wed, 15 Feb 2023 01:02:41 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0155B1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 22:02:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h16so17895344wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 22:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cMA9E/Fk+zOFexE6LGH5wlHSQfv8PVAef4t1hJo5VsE=;
+        b=nDQluRYk4z497UGB+a+St+T8yu9W6tjAIItaENzcIY74IT505va6UvMlYRgh1TjQsB
+         thJCmQqYAD4o3mO+RL+Ywf3/Em26/dLsuKM6Cb1QmnjzfQIiX/WNM1K2rFdDWSGg6x/D
+         18whotwhdc5zpmpn5Fp3tZI9Y1IP1aVfYkzVpzSi8FdRmIlXXT4YuAYArhHMlF5Mfscu
+         IT5w8MYAV3QyGjuQXohoIuI3e89OjnsrppcIjA8iQ2IXnnsZQO+Lasc0tggnsMp0rD6d
+         EG3y1n0sWEdiKR4OO7Vrr2qtFCZP1ufbfwEqnapXmCTRe84VKJrkaylXyf2JyKj6iZEL
+         vBmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cMA9E/Fk+zOFexE6LGH5wlHSQfv8PVAef4t1hJo5VsE=;
+        b=y2bdqDwHNTRYisP+WBZElm9noV/+XpXctOs0jVjx37C6Im/YlMCFJ8rzXUNTI36ktL
+         Jc7OvXJWR4Rae0nbXBZBtIq/qACY39riqTWRzP4yKCJeYGcEJxrY++u3duJKpUDk/6LP
+         mp/PD3mcOWep3n5fkhrDFQ/nKQGMtsYWKR/JoKbPk8sKKRuwiWgOAs5vQTg5Fl2Cugmz
+         kgD7+wRoVwEehYUOyFXDRxdeXkQkj4kFISq0EPLAjXoeeb7barRiaQ2WWmEBtIiLgQKr
+         Zfubgaxyuc3xv8Fq9bwD1on/iNAHSD3s3b6SdlggtRLLRAV8aW0nJQMlpaPoOwCawOb5
+         YBQg==
+X-Gm-Message-State: AO0yUKXDfysgvdIOZClnG1FmXsIvGawOuW+CBc3TQ1MEnyAXpvmxvAlG
+        qAAW06jlkhmGcpE9Rt4m0FlPQyS3srVR5d4vHXqk3g==
+X-Google-Smtp-Source: AK7set+yowuM5clzipIw5kttFNpRCu8Sl95L/EX4K92hW+WW8leRnkI3oPQ5iO3W5KOvTM/8PioYNoQyS7BcIZgLH30=
+X-Received: by 2002:adf:f982:0:b0:2bf:bd46:908d with SMTP id
+ f2-20020adff982000000b002bfbd46908dmr12903wrr.580.1676440958716; Tue, 14 Feb
+ 2023 22:02:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230214154647.874-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000004e1dfa05f4a48e6b@google.com> <20230215015231.3646-1-hdanton@sina.com>
+In-Reply-To: <20230215015231.3646-1-hdanton@sina.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 14 Feb 2023 23:02:02 -0700
+Message-ID: <CAOUHufYzJoh=Pvican+c8E5-5vyv_TuVaa27nDKXw3CLR=ca5A@mail.gmail.com>
+Subject: Re: [syzbot] [nilfs2?] INFO: task hung in nilfs_segctor_thread
+To:     Hillf Danton <hdanton@sina.com>, Dmitry Vyukov <dvyukov@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Feb 14, 2023 at 6:52 PM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Tue, 14 Feb 2023 00:14:42 -0800
+> > syzbot has found a reproducer for the following issue on:
+> >
+> > HEAD commit:    f6feea56f66d Merge tag 'mm-hotfixes-stable-2023-02-13-13-5..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=165ee62b480000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f0c4082ce5ebebdac63b
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ba7207480000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fd30d0c80000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/1ae0143f08d5/disk-f6feea56.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/18b8a23fa0cb/vmlinux-f6feea56.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/d915f4c5c8c0/bzImage-f6feea56.xz
+> > mounted in repro: https://storage.googleapis.com/syzbot-assets/1acd3b288433/mount_0.gz
+> >
 
-On Tue, Feb 14, 2023 at 09:46:45AM -0600, Mario Limonciello wrote:
-> Some TBT3 devices have a hard time reliably responding to bit banging
-> requests correctly when connected to AMD USB4 hosts running Linux.
-> 
-> These problems are not reported in any other CM, and comparing the
-> implementations the Linux CM is the only one that utilizes bit banging
-> to access the DROM. Other CM implementations access the DROM directly
-> from the NVM instead of bit banging.
+> >  folio_mark_accessed+0x51c/0xf00 mm/swap.c:515
+>
+> Syzbot was launched without MGLRU enabled [1].
+> Dmitry could you turn it on by default?
 
-I'm sure Apple CM uses bitbanging because it is what Andreas reverse
-engineered when he added the initial Linux Thunderbolt support ;-) I
-guess this is then only Window CM? The problem with reading NVM directly
-is that we may lose things like UUID, so I'm wondering if there is
-something else going on.
+Thanks for the heads up!
 
-Can you give some details, like what is the device in question?
-
-> Adjust the flow to try this on TBT3 devices before resorting to bit
-> banging.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/thunderbolt/eeprom.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-> index c90d22f56d4e1..d9d9567bb938b 100644
-> --- a/drivers/thunderbolt/eeprom.c
-> +++ b/drivers/thunderbolt/eeprom.c
-> @@ -640,6 +640,10 @@ int tb_drom_read(struct tb_switch *sw)
->  		return 0;
->  	}
->  
-> +	/* TBT3 devices have the DROM as part of NVM */
-> +	if (tb_drom_copy_nvm(sw, &size) == 0)
-> +		goto parse;
-> +
->  	res = tb_drom_read_n(sw, 14, (u8 *) &size, 2);
->  	if (res)
->  		return res;
-> -- 
-> 2.25.1
+(I should have followed up with Dmitry earlier... doing it now.)
