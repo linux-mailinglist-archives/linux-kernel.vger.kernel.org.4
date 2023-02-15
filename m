@@ -2,181 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8174697494
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCA369749B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjBOC4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 21:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S232733AbjBOC5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 21:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBOC4J (ORCPT
+        with ESMTP id S229515AbjBOC5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 21:56:09 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FB42B639
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:56:04 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id f10so7051846ilc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AMRBoKkOIVB/WviH4IgQy3fBGZ0k4cThtcao32eLZ1A=;
-        b=A42/UHcaUhHPECfMYj5xgYJtsyhU4ROtGUkJy2oFLsEYPH+s90qmrG/FRdIJC+dlWM
-         48jVLQLFVG/R7lad6zuuNJkOExrByeoic6UAtbNPT6kwK6OACS01t6ld+rJ0Ze2ECL+a
-         VbfBNc21x39cruzKn5ZEZUePdJa++g7QXKGmIXViWWvbwggtHgAWZcFNmbusCgTj4gsk
-         R4lKlJob+E4p2WBi/BaCQVQ8r3Y1yRpnZH5xlUrs++vKPik3cxMWXOXme3MQ+T28C6JR
-         6qomFUwjduRyT6EcYM+Cg2ArIVXRFrl9SsQk6Rb+RWNjTWpo/780wou34iawXzbKMQC1
-         O5fg==
+        Tue, 14 Feb 2023 21:57:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E17301A9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676429820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mXtgX5Vk2h3WIcUJAdVP4BZOumGxRu9HOZsfurPg6EA=;
+        b=XDEWIhYzkC7VF7mywTTuuDRUEhmDv/7Z+TW5ASR0vLOMgAeHswwp0IxxzuEY3sYgCyjh/0
+        qSV8W/CKo5Y3tkjn3XNuML2rjzHy5l3Je9bidR/iPmc3tsUwGoEvpfYDh2dCW4MrqQmcG6
+        monQe2Ur17Va02RvfLnAV9Y9CQELD40=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-626-bHy9SHxQP9K9ZjkOiMQcjg-1; Tue, 14 Feb 2023 21:56:58 -0500
+X-MC-Unique: bHy9SHxQP9K9ZjkOiMQcjg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-16df7d9c780so4209794fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:56:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AMRBoKkOIVB/WviH4IgQy3fBGZ0k4cThtcao32eLZ1A=;
-        b=Wrf13qlaA5wfg79Si4rWlB+9PpCcZOSKbD3IsDtsc78vF5TkwUayYHladv7WDKSSwh
-         KaulN72wIwgGvGDzDE6+DytAY/MzuZGYMR3Emokauej2jAIw/Ke10FYgn96bRF/AkCdy
-         wvla1Oyo/iwB/U3LOp/AlbWO99p8PFWevQ2aGqa/JfMDS26G/O60x2jDll2peT6zZ5Hr
-         rjLio4fpfJUudFj/IkEi9F+liglACuY9sHoOQTmssEdQQDhLJDbphnoExrC3eZjIL5bU
-         Be+6OCIJMfSlruJPeYnQa5O09MdCUOrXdJd4r1uG7TyBS3aN4pwYN7iqJmZd9mO9pKYM
-         H0ew==
-X-Gm-Message-State: AO0yUKX/Q9wyV96CTFmZ2LfM65d4IgufAU+IKssVFREgDWMx7TGd2rVb
-        wmk7E13vZajaX0IRNRpel0kHMoF3eFHBtvKGSNx39g==
-X-Google-Smtp-Source: AK7set8FGsHT0Rx9AJqcFaozjnLIXwCSODu3xXgw8RpWVwuU4EfG5MEbrWWU3xDNgpPxVioaX3AcAdcmB0SIRtlFY1w=
-X-Received: by 2002:a92:8e04:0:b0:310:9d77:6063 with SMTP id
- c4-20020a928e04000000b003109d776063mr267413ild.5.1676429763604; Tue, 14 Feb
- 2023 18:56:03 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mXtgX5Vk2h3WIcUJAdVP4BZOumGxRu9HOZsfurPg6EA=;
+        b=GrCteRojlsui+GA3RngR3f28QnIFDcbgplh/LTH180/VsblCB2yzjEbotHm8v+jvDk
+         kpxW67c7qShryG63ydwckxwDBMzNlP5Tck3jgRswmEMcr0GCNIBDt/2KOe1Xkh4myDfn
+         QaYKntfiL0rJKsiSb7RVt+X7A9EpctQY+qW7urcTI89b6a02IEjvCtY+yeXi1Gu2BEd5
+         eMo8LEFLlI/UItFQO9uRGVH67B4cmbJhQIAJJJEuygQQrJNJq8WU/37z34f4hPgbbGFX
+         qOqe5vTnR4qYh7YfFzugYoxHc6rdE/3LRS/br04Y+tA1nwyFEDq98dWF+3eNUZ8+vhp/
+         lO3Q==
+X-Gm-Message-State: AO0yUKViOU3TWc0EMmP5iplTIljISm9KU1H/fS9q6HTe35oHSue8ibxs
+        11ct4U7DMDQ08CBpjw/DF6olGXA5RXGPyMRJ3Z9pn49PfoTsfa6PL+E+MEsF0HsOVIS3mwvcBSN
+        gz2Y4Nvz1Q1PoWhgd2wc5Nvbopnh3EKzIQfd1GAgy
+X-Received: by 2002:a9d:62e:0:b0:68b:cbcf:c24b with SMTP id 43-20020a9d062e000000b0068bcbcfc24bmr38212otn.4.1676429818127;
+        Tue, 14 Feb 2023 18:56:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set+DrpHnZ9E7DqN5CM1RUFJnBP54MzJQLr0RZB9+OZFABcaKeLjC/2nGjj6vR1Zfy1ETJ3ecoA4Ek43x1WjGjeA=
+X-Received: by 2002:a9d:62e:0:b0:68b:cbcf:c24b with SMTP id
+ 43-20020a9d062e000000b0068bcbcfc24bmr38208otn.4.1676429817882; Tue, 14 Feb
+ 2023 18:56:57 -0800 (PST)
 MIME-Version: 1.0
-References: <ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com>
- <CAMn1gO7Ve4-d6vP4jvASQsTZ2maHsMF6gKHL3RXSuD9N3tAOfQ@mail.gmail.com> <CANpmjNNvGL--j-20UxqX_WjeXGiAcjfDAQpfds+Orajz0ZeBsg@mail.gmail.com>
-In-Reply-To: <CANpmjNNvGL--j-20UxqX_WjeXGiAcjfDAQpfds+Orajz0ZeBsg@mail.gmail.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Tue, 14 Feb 2023 18:55:52 -0800
-Message-ID: <CAMn1gO6reT+MTmogLOrOVoNqzLH+fKmQ2JRAGy-tDOTLx-fpyw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] kasan: switch kunit tests to console tracepoints
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+References: <20230131145310.2069-1-longpeng2@huawei.com> <db99245c-606a-2f24-52fe-836a6972437f@redhat.com>
+ <35b94992-0c6b-a190-1fce-5dda9c8dcf4b@huawei.com> <CACGkMEt0Rgkcmt9k4dWsp-qqtPvrM40mtgmSERc0A7Ve1wzKHw@mail.gmail.com>
+ <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
+In-Reply-To: <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 15 Feb 2023 10:56:46 +0800
+Message-ID: <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
+Subject: Re: [PATCH] vhost-vdpa: cleanup memory maps when closing vdpa fds
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     mst@redhat.com, arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:08 PM Marco Elver <elver@google.com> wrote:
+On Wed, Feb 15, 2023 at 10:49 AM Longpeng (Mike, Cloud Infrastructure
+Service Product Dept.) <longpeng2@huawei.com> wrote:
 >
-> On Tue, 14 Feb 2023 at 02:21, Peter Collingbourne <pcc@google.com> wrote:
-> >
-> > On Tue, Oct 18, 2022 at 10:17 AM <andrey.konovalov@linux.dev> wrote:
-> > >
-> > > From: Andrey Konovalov <andreyknvl@google.com>
-> > >
-> > > Switch KUnit-compatible KASAN tests from using per-task KUnit resources
-> > > to console tracepoints.
-> > >
-> > > This allows for two things:
-> > >
-> > > 1. Migrating tests that trigger a KASAN report in the context of a task
-> > >    other than current to KUnit framework.
-> > >    This is implemented in the patches that follow.
-> > >
-> > > 2. Parsing and matching the contents of KASAN reports.
-> > >    This is not yet implemented.
-> > >
-> > > Reviewed-by: Marco Elver <elver@google.com>
-> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > >
-> > > ---
-> > >
-> > > Changed v2->v3:
-> > > - Rebased onto 6.1-rc1
-> > >
-> > > Changes v1->v2:
-> > > - Remove kunit_kasan_status struct definition.
-> > > ---
-> > >  lib/Kconfig.kasan     |  2 +-
-> > >  mm/kasan/kasan.h      |  8 ----
-> > >  mm/kasan/kasan_test.c | 85 +++++++++++++++++++++++++++++++------------
-> > >  mm/kasan/report.c     | 31 ----------------
-> > >  4 files changed, 63 insertions(+), 63 deletions(-)
-> > >
-> > > diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> > > index ca09b1cf8ee9..ba5b27962c34 100644
-> > > --- a/lib/Kconfig.kasan
-> > > +++ b/lib/Kconfig.kasan
-> > > @@ -181,7 +181,7 @@ config KASAN_VMALLOC
-> > >
-> > >  config KASAN_KUNIT_TEST
-> > >         tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
-> > > -       depends on KASAN && KUNIT
-> > > +       depends on KASAN && KUNIT && TRACEPOINTS
-> >
-> > My build script for a KASAN-enabled kernel does something like:
-> >
-> > make defconfig
-> > scripts/config -e CONFIG_KUNIT -e CONFIG_KASAN -e CONFIG_KASAN_HW_TAGS
-> > -e CONFIG_KASAN_KUNIT_TEST
-> > yes '' | make syncconfig
-> >
-> > and after this change, the unit tests are no longer built. Should this
-> > use "select TRACING" instead?
 >
-> I think we shouldn't select TRACING, which should only be selected by
-> tracers. You'd need CONFIG_FTRACE=y.
-
-Doesn't CONFIG_FTRACE=y mean "function tracing", i.e. function
-entry/exit tracing using compiler instrumentation? As far as I can
-tell, the KASAN tests do not make use of this feature. They only use
-the kernel tracepoint infrastructure to trace the "console" tracepoint
-defined in include/trace/events/printk.h, which is not associated with
-function entry/exit.
-
-I have yet to find any evidence that TRACING ought to only be selected
-by tracers. As far as I can tell, TRACING appears to be the minimal
-config required in order for it to be possible to trace pre-defined
-(i.e. defined with TRACE_EVENT) tracepoints, which is all that KASAN
-needs. (I also tried selecting TRACEPOINTS, but this led to a number
-of link failures.) If select TRACING is only used by tracers, it could
-just mean that only tracers are making use of this functionality
-inside the kernel. From that perspective the KASAN tests can
-themselves be considered a "tracer" (albeit a very specialized one).
-
-If I locally revert the change to lib/Kconfig.kasan and add the
-TRACING select, the KASAN tests pass when using my kernel build
-script, which suggests that TRACING is all that is needed.
-
-> Since FTRACE is rather big, we probably also shouldn't implicitly
-> select it. Instead, at least when using kunit.py tool, we could add a
-> mm/kasan/.kunitconfig like:
 >
-> CONFIG_KUNIT=y
-> CONFIG_KASAN=y
-> CONFIG_KASAN_KUNIT_TEST=y
-> # Additional dependencies.
-> CONFIG_FTRACE=y
+> =E5=9C=A8 2023/2/15 10:00, Jason Wang =E5=86=99=E9=81=93:
+> > On Tue, Feb 14, 2023 at 2:28 PM Longpeng (Mike, Cloud Infrastructure
+> > Service Product Dept.) <longpeng2@huawei.com> wrote:
+> >>
+> >>
+> >>
+> >> =E5=9C=A8 2023/2/14 14:16, Jason Wang =E5=86=99=E9=81=93:
+> >>>
+> >>> =E5=9C=A8 2023/1/31 22:53, Longpeng(Mike) =E5=86=99=E9=81=93:
+> >>>> From: Longpeng <longpeng2@huawei.com>
+> >>>>
+> >>>> We must cleanup all memory maps when closing the vdpa fds, otherwise
+> >>>> some critical resources (e.g. memory, iommu map) will leaked if the
+> >>>> userspace exits unexpectedly (e.g. kill -9).
+> >>>
+> >>>
+> >>> Sounds like a bug of the kernel, should we fix there?
+> >>>
+> >>
+> >> For example, the iommu map is setup when QEMU calls VHOST_IOTLB_UPDATE
+> >> ioctl and it'll be freed if QEMU calls VHOST_IOTLB_INVALIDATE ioctl.
+> >>
+> >> So maybe we release these resources in vdpa framework in kernel is a
+> >> suitable choice?
+> >
+> > I think I need understand what does "resources" mean here:
+> >
+> > For iommu mapping, it should be freed by vhost_vdpa_free_domain() in
+> > vhost_vdpa_release()?
+> >
 >
-> Which mirrors the KFENCE mm/kfence/.kunitconfig. But that doesn't help
-> if you want to run it with something other than KUnit tool.
+> Please consider the following lifecycle of the vdpa device:
+>
+> 1. vhost_vdpa_open
+>      vhost_vdpa_alloc_domain
+>
+> 2. vhost_vdpa_pa_map
+>      pin_user_pages
+>      vhost_vdpa_map
+>        iommu_map
+>
+> 3. kill QEMU
+>
+> 4. vhost_vdpa_release
+>      vhost_vdpa_free_domain
+>
+> In this case, we have no opportunity to invoke unpin_user_pages or
+> iommu_unmap to free the memory.
 
-In any case, I'm not sure I'm in favor of adding yet another config
-that folks need to know to enable in order to avoid silently disabling
-the unit tests. Many developers will maintain their own scripts for
-kernel development if the existing ones do not meet their needs. It's
-possible that kunit.py will work out for me now (when I looked at it
-before, it was useless for me because it only supported UML, but it
-looks like it supports QEMU now), but there's no guarantee that it
-will, so I might stick with my scripts for a while.
+We do:
 
-Peter
+vhost_vdpa_cleanup()
+    vhost_vdpa_remove_as()
+        vhost_vdpa_iotlb_unmap()
+            vhost_vdpa_pa_unmap()
+                unpin_user_pages()
+                vhost_vdpa_general_unmap()
+                    iommu_unmap()
+?
+
+Btw, it looks like we should call vhost_vdpa_free_domain() *after*
+vhost_vdpa_cleanup() otherwise it's a UAF?
+
+Thanks
+
+>
+> > static int vhost_vdpa_release(struct inode *inode, struct file *filep)
+> > {
+> >          struct vhost_vdpa *v =3D filep->private_data;
+> >          struct vhost_dev *d =3D &v->vdev;
+> >
+> >          mutex_lock(&d->mutex);
+> >          filep->private_data =3D NULL;
+> >          vhost_vdpa_clean_irq(v);
+> >          vhost_vdpa_reset(v);
+> >          vhost_dev_stop(&v->vdev);
+> >          vhost_vdpa_free_domain(v);
+> >          vhost_vdpa_config_put(v);
+> >          vhost_vdpa_cleanup(v);
+> >          mutex_unlock(&d->mutex);
+> >
+> >          atomic_dec(&v->opened);
+> >          complete(&v->completion);
+> >
+> >          return 0;
+> > }
+> >
+> >>
+> >> By the way, Jason, can you reproduce the problem in your machine?
+> >>
+> >
+> > Haven't got time in doing this but it should be the responsibility of
+> > the author to validate this anyhow.
+> >
+> > Thanks
+> >
+> >>> Thanks
+> >>>
+> >>>
+> >>>>
+> >>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
+> >>>> ---
+> >>>>    drivers/vhost/vdpa.c | 13 +++++++++++++
+> >>>>    1 file changed, 13 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> >>>> index a527eeeac637..37477cffa5aa 100644
+> >>>> --- a/drivers/vhost/vdpa.c
+> >>>> +++ b/drivers/vhost/vdpa.c
+> >>>> @@ -823,6 +823,18 @@ static void vhost_vdpa_unmap(struct vhost_vdpa =
+*v,
+> >>>>            vhost_vdpa_remove_as(v, asid);
+> >>>>    }
+> >>>> +static void vhost_vdpa_clean_map(struct vhost_vdpa *v)
+> >>>> +{
+> >>>> +    struct vhost_vdpa_as *as;
+> >>>> +    u32 asid;
+> >>>> +
+> >>>> +    for (asid =3D 0; asid < v->vdpa->nas; asid++) {
+> >>>> +        as =3D asid_to_as(v, asid);
+> >>>> +        if (as)
+> >>>> +            vhost_vdpa_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+> >>>> +    }
+> >>>> +}
+> >>>> +
+> >>>>    static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+> >>>>                     struct vhost_iotlb *iotlb,
+> >>>>                     u64 iova, u64 size, u64 uaddr, u32 perm)
+> >>>> @@ -1247,6 +1259,7 @@ static int vhost_vdpa_release(struct inode
+> >>>> *inode, struct file *filep)
+> >>>>        vhost_vdpa_clean_irq(v);
+> >>>>        vhost_vdpa_reset(v);
+> >>>>        vhost_dev_stop(&v->vdev);
+> >>>> +    vhost_vdpa_clean_map(v);
+> >>>>        vhost_vdpa_free_domain(v);
+> >>>>        vhost_vdpa_config_put(v);
+> >>>>        vhost_vdpa_cleanup(v);
+> >>>
+> >>> .
+> >>
+> >
+> > .
+>
+
