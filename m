@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2783A6973A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7336973AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbjBOBbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
+        id S233010AbjBOBdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjBOBbU (ORCPT
+        with ESMTP id S229520AbjBOBdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:31:20 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE4534334
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id sa10so44493980ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
+        Tue, 14 Feb 2023 20:33:31 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8879C2B601
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:33:28 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j17so25855220lfr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:33:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
-        b=S49ZflQkLg9ERIdpEIQNGiz/7fet4Zb9lqjgchR4MB/5/G5iaYwX7MEfUs05Hso+Hk
-         qEsZlhe8+ZoE2mcsSeYTAcr+5gBVJF2cU3HPRniC5lVTHOa4v1nRJACalNys5UYw1N8j
-         BKVSWT/UPiY2a9KFD19JvE9xrlQNM63fYvCABmZHJiuoINiMvqekmXVmDRNftEFmoD5E
-         gJpufNyxEJsiRFucmXCT3YLFayLWnIebdhnQrRq6Umckijv0aJf4Fykd/vbyNQYw14oQ
-         6pyipPM8dPZlpwKuJ1cir0uJCVZ3bL8QCl86GbVFvDoYfGHDj0Ek7RZ2esigTdsYbX27
-         QXMQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+w3LbzPvMWbBgPnILe+wwnZS5ZiKny6OZv0ppYywUgw=;
+        b=Xd/LxmxL18xkn4GKKw+kk7nmN9AhtdRkFtuyCLu5gaPLEeY4wMTyXXr6/OJTD5jDUW
+         j4yLBrPdNX1ZSPZxQfJ3d9d5ue5mXWNb5pzwRS+1tzEu+Ue9qu7VqJW4s8Yheq4vMVnG
+         K8Qu6JmM1GXlNcprcCCPy0t2SGKaLfdDfp/Sk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
-        b=5v5ZHYNQm8lA6wxQUlJdOeX5eeaIhXBC6tXeDtCis0ef9y6LfIFwAg72xuI1I85BI+
-         181z8jEDJUYr+OozGqY3MCEcfn8YEd7w9xBQ/bPyJ/HZO35ZBEeLl1dwFsfRPLJJV763
-         gQN29xAW57gGWSh+xRaFgpCePXpqOI2eE9TuwXoZvhejOQlhPdssK1oTQkgvR9tq1sjQ
-         m/v2Cf6TodKn+niYoL0ICNrJURdDy/f2SjasweARZgaYx5AGKE8QA57KLrNMkQ1WdmAi
-         TYBK9bjzx3+l6rhK/6pwBl6iN661v0ulZjfvGHe96qjSagmNFf63LXXuYP2D/+cMgKvq
-         auww==
-X-Gm-Message-State: AO0yUKV71hn6ovLVGgu17nglScZEea3okF6JQLzDyVpdfiuFpX/KhQkH
-        baMtihf1cPrc90hNP4Q3YGCA/Q==
-X-Google-Smtp-Source: AK7set8pRGei2+FRstywE9fQuZ72lLtkEmAf+QHtzKXmanwLQzCyeF5Y+c4I5Yv5fzFKWfUqffXo4Q==
-X-Received: by 2002:a17:906:5a90:b0:8b1:3f5b:af5f with SMTP id l16-20020a1709065a9000b008b13f5baf5fmr392899ejq.73.1676424676077;
-        Tue, 14 Feb 2023 17:31:16 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170907914600b008b138528a53sm880912ejs.224.2023.02.14.17.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 17:31:15 -0800 (PST)
-Message-ID: <585c6e42-bc59-5a6a-b3e8-0a4e1841c5b0@linaro.org>
-Date:   Wed, 15 Feb 2023 02:31:14 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+w3LbzPvMWbBgPnILe+wwnZS5ZiKny6OZv0ppYywUgw=;
+        b=GmypOiNIJHZa5wUNCuUHM7RfsSbZfmD53aor05eyPRGapQCaysELiix3T+reZ5zUCJ
+         Bk7fBqnRpWk4taNg8a+bofOkig8ZtvVNhRBUvuLnFhD5/1TTke5vkE94ht36Hgd2aDsa
+         ibvrSza3/IVDW72F9E/FC2dJNIGEEy8+KDg776V9iy9WJMqMpEi4UtgW6UKbssdCQDDV
+         KUAEQuvnz8B/E419EEYYcHo4lcUrC5LTe+Fr3Azs6t8IbNTuzC1sFcPVmO2zG8F++A4a
+         4MrjbQR7shRSFlLvwYqIRbcF4BmrMnKKRqy0kEDuyvYg0tT7v5wtIzPncIrILxKF3fE6
+         PraQ==
+X-Gm-Message-State: AO0yUKXMbyi/1LDhtFE+T+cPN955l7PutvlbxExNJchk3/2f6VFmnLyI
+        RwQK4YwbRJ9AF2vTRZgx2YbgQUNivNylcMaB1Q1HeA==
+X-Google-Smtp-Source: AK7set8TzUas9M+ScnKwXa648gIhE0hdrmRXlNPvZPSxcsb71Aal/1Q2wrlPhyHfQxfYupVzc3m1smfnLm4FF/3jdyk=
+X-Received: by 2002:ac2:5296:0:b0:4db:266c:433b with SMTP id
+ q22-20020ac25296000000b004db266c433bmr32291lfm.1.1676424806799; Tue, 14 Feb
+ 2023 17:33:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4 12/12] interconnect: qcom: icc-rpm: Allow negative QoS
- offset
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
- <20230214143720.2416762-13-konrad.dybcio@linaro.org>
- <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230214075710.2401855-1-stevensd@google.com> <Y+usdhfguWr/aD5x@casper.infradead.org>
+In-Reply-To: <Y+usdhfguWr/aD5x@casper.infradead.org>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Wed, 15 Feb 2023 10:33:15 +0900
+Message-ID: <CAD=HUj76eeScAKkX=uf03KnGcVvyzz_kJ4sYVx8XeFqwTVhDow@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm/khugepaged: set THP as uptodate earlier for shmem
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 15, 2023 at 12:44 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Feb 14, 2023 at 04:57:09PM +0900, David Stevens wrote:
+> >       /*
+> > -      * At this point the hpage is locked and not up-to-date.
+> > -      * It's safe to insert it into the page cache, because nobody would
+> > -      * be able to map it or use it in another way until we unlock it.
+> > +      * Mark hpage as up-to-date before inserting it into the page cache to
+> > +      * prevent it from being mistaken for an fallocated but unwritten page.
+> > +      * Inserting the unfinished hpage into the page cache is safe because
+> > +      * it is locked, so nobody can map it or use it in another way until we
+> > +      * unlock it.
+>
+> No, that's not true.  The data has to be there before we mark it
+> uptodate.  See filemap_get_pages() for example, used as part of
+> read().  We don't lock the page unless we need to bring it uptodate
+> ourselves.
 
+I've been focusing on the shmem case for collapse_file and forgot to
+think about the !is_shmem case. As far as I could tell, shmem doesn't
+use filemap_get_pages() and everything else in filemap.c/shmem.c that
+checks folio_test_uptodate also locks the folio. But yeah, this would
+break the !is_shmem case and is kind of sketchy anyway. I'll put
+together a better patch.
 
-On 15.02.2023 02:16, Dmitry Baryshkov wrote:
-> On 14/02/2023 16:37, Konrad Dybcio wrote:
->> In some very very very very unfortunate cases, the correct offset of
->> the QoS registers will be.. negative. One such case is MSM8998, where
->> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
->> take into account with the register calculation, making the actual
->> BIMC node start at what-would-be-the-BIMC-base+0x300.
->>
->> In order to keep the calculation code sane, the simplest - however
->> ugly it may be - solution is to allow the offset to be negative.
-> 
-> I'm not sure how does this work, as e.g. qcom_icc_set_qnoc_qos() will try to access an address before the first register. Most probably this patch should go together with the rest of msm8998 patches.
-In our case BIMC is the offender and its defines all base on
-M_BKE_REG_BASE(n) (0x300 + (0x4000 * n)), so removing 0x300
-is perfectly ok.
-
-> 
-> A slightly better solution to making qos_offset negative might be to make bwmon a child node of the icc.
-That sounds like a lot of complex changes and accounting for old
-/ different DTs who don't have the bwmon as a child of icc :/
-
-Konrad
-> 
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.h | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 77e263b93c27..5e4215f25c2e 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -39,7 +39,7 @@ struct qcom_icc_provider {
->>       int num_intf_clks;
->>       enum qcom_icc_type type;
->>       struct regmap *regmap;
->> -    unsigned int qos_offset;
->> +    int qos_offset;
->>       u64 bus_clk_rate[2];
->>       bool keep_alive;
->>       struct clk_bulk_data bus_clks[2];
->> @@ -105,7 +105,7 @@ struct qcom_icc_desc {
->>       bool keep_alive;
->>       enum qcom_icc_type type;
->>       const struct regmap_config *regmap_cfg;
->> -    unsigned int qos_offset;
->> +    int qos_offset;
->>   };
->>     /* Valid for all bus types */
-> 
+-David
