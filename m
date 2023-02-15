@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADE76988D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F586988DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjBOXmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
+        id S229737AbjBOXnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBOXmX (ORCPT
+        with ESMTP id S229485AbjBOXnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:42:23 -0500
+        Wed, 15 Feb 2023 18:43:39 -0500
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A52E80D;
-        Wed, 15 Feb 2023 15:42:21 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so3357291wms.0;
-        Wed, 15 Feb 2023 15:42:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46F22ED45;
+        Wed, 15 Feb 2023 15:43:37 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m20-20020a05600c3b1400b003e1e754657aso2895441wms.2;
+        Wed, 15 Feb 2023 15:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+ybmLDCWMfPyfiTtsVa8IGPymIM7ZxA5t8F8E2tAsk=;
-        b=e6PostQ7Pm1XUYk7VcyETj2TGIkE9KGyAeEs+RSuBF2qF0FltnhEwdGlp4gzvQS7YI
-         vhV9nFmiAP5K3BFfN1dqyJX6/Y4muYW4fFfJL/1qRQtSfyiKW6TmeRJjHoBNRcjw6fuw
-         EE5UZYwiIwnw5HdX7QzTVAKUpzQt9B44NOIwmUpuQYssoapDdijrUWCImUB7HfVJH8YA
-         PntLzYDB8OPA8hmSv45As6TS//cI/n1QyF3ult7sOiqQx75xt9nxl4Jha7zU/Bz6e7rM
-         zyyuQv5AmxcyxGzOFLZbnFejs6Bbpe+1YWrnpJ1rT4nyOfSTlNO0iLPIlroctxRptnhC
-         D/eg==
+        bh=Lcyca8KM+39QRTpE76FUCpFnsYSePDx0T/C4Ew+RwlY=;
+        b=hDoF3j9LF4Aqw1xHEdk3Pr3yfElKBh67JP2/YsonJdHz271ZQR1JfDoJeLNH47hk+u
+         UOzxtMUujk7G8zhIryr2HYUmm4eKzH7e30oLrJEbzf7GB3xykYYoMhttLNquFTUz3aDm
+         ZtvT56QzLYVaYrVD7AhGZbO1WBYtc9fMql0hBj2gbDAlZa3aLTZ7JixLK25YLfGV3mLi
+         FrSLRtGl1Lrx65ARZfezgg3gv7GA2+p/pn4t/Ya+kCRA6V+RmKHmTVesvaz0ZPktH2OW
+         T+HG05SHix+gL6Gsxq4xtAXIf6uiCKVBbipH+Y0Y3BqKwjLsjel5HcPAgUu2OV5NEf+R
+         U5eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C+ybmLDCWMfPyfiTtsVa8IGPymIM7ZxA5t8F8E2tAsk=;
-        b=tElBdFZ/EnpxjQ0K3+diB1LSQCx7FXz2FFuA5U8vEECO5zVj/y7tBi83FxWmBxX2gt
-         UD7rlT5G/aomcemLND8L+9M3IIIYe4UxJZkKdieiK1qyCJsWuEOab+PflORIHLTqfg1d
-         uZkbeGooqAvTkAV4/2+sGeDkLeB3G8ru4a4tHcE6KN6emQ3YwgqDYPmn8k3dPUatJ84u
-         QTrl6RjWC9xRM4X9nE6d70ssR+lkIK3kqAKA0a7YgieQVdaqMyZalMZPy94C6OlM6ZOI
-         71gPmwCRvLIdCZncqDYcc4L0N5mV54tgPM4YyTMVqDgG9qZrq4851q7+mR8U+2+C2S0I
-         Yakg==
-X-Gm-Message-State: AO0yUKUvedHRnwEKluQHp2zsnvfXJGUxDYf5NtH4q6sC8oJeTjTfZXL9
-        MvrbOyVfCfNi/fEXCK5S7vg=
-X-Google-Smtp-Source: AK7set+Seub3lM8LHEzXSEILBWFg2v+gSabmJWb2pNvNVTO/aVo2LUUtrKJZSWVyKzh/SolRpTJ+cQ==
-X-Received: by 2002:a05:600c:2ed2:b0:3df:eda1:43b9 with SMTP id q18-20020a05600c2ed200b003dfeda143b9mr3444779wmn.4.1676504540187;
-        Wed, 15 Feb 2023 15:42:20 -0800 (PST)
+        bh=Lcyca8KM+39QRTpE76FUCpFnsYSePDx0T/C4Ew+RwlY=;
+        b=t14T3C4hWUclpwXL4aLCEiToEauXUuY3GCs/0Dqlrujk5jFW/6Y57LqTeXNlqtSD4x
+         boaG2qwRXqi1ddslvJc+W8zKRBHh8WGhN/H9ItQxEYsLXG6asqiTFfPtwSvlD3F4svaP
+         zbhNH/2/DJnU6w6JfOXPDyj/v99QkD/q/eR66ZPrTQNUu/azXxW+yYhKYZuRiRd9EEn+
+         y6CFnpqv/bRgPs2VZbmn0f/xOXkcV0QEbcQjiqzh/2oQog3KN1ZFfpw9BbJVfzNThrKw
+         jm9/R3vdljVTkqrT6LCLv/vxlvyj0QwWcfigROMnV6o7O5AGxHTK4QJ8lFPsExEpx9Jp
+         +U0w==
+X-Gm-Message-State: AO0yUKXP4yzgY4X/lgolpm+ecuTZMofF36Sc1fvrY6G+lMwpDy4b3XkL
+        xlLo3ICzJs6wS9XacimqNVoY9UBoEWw=
+X-Google-Smtp-Source: AK7set9pOekd3gkQzFc9O4F4XJyzbxbrZpcf1HuaYNYZK/I+rrkmTmJuNhVYY4huFJfLw2UM/SuC+Q==
+X-Received: by 2002:a05:600c:181d:b0:3e0:99:b59d with SMTP id n29-20020a05600c181d00b003e00099b59dmr3416150wmp.21.1676504616035;
+        Wed, 15 Feb 2023 15:43:36 -0800 (PST)
 Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05600c45c900b003db06224953sm3791806wmo.41.2023.02.15.15.42.19
+        by smtp.gmail.com with ESMTPSA id c16-20020a05600c0ad000b003e1f9b633fcsm3436256wmr.16.2023.02.15.15.43.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 15:42:19 -0800 (PST)
-Message-ID: <63ed6ddb.050a0220.beb77.bf66@mx.google.com>
-X-Google-Original-Message-ID: <Y+1ryQsemKb6pHKs@Ansuel-xps.>
-Date:   Thu, 16 Feb 2023 00:33:29 +0100
+        Wed, 15 Feb 2023 15:43:35 -0800 (PST)
+Message-ID: <63ed6e27.050a0220.ed51a.aae8@mx.google.com>
+X-Google-Original-Message-ID: <Y+1sG72iwKdDIsPm@Ansuel-xps.>
+Date:   Thu, 16 Feb 2023 00:34:51 +0100
 From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] clk: Warn and add workaround on misuse of
- .parent_data with .name only
-References: <20230131160829.23369-1-ansuelsmth@gmail.com>
- <e5b71c243022d341022b4f172060268b.sboyd@kernel.org>
- <63e6e809.050a0220.af3df.d908@mx.google.com>
- <96040456fd5c127497de93980eb7db83.sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH] clk: Fix wrong clock returned in parent_data with .name
+ and no .index
+References: <20230215232712.17072-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <96040456fd5c127497de93980eb7db83.sboyd@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230215232712.17072-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,108 +78,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:54:56AM -0800, Stephen Boyd wrote:
-> Quoting Christian Marangi (2023-02-10 10:34:11)
-> > On Fri, Feb 10, 2023 at 04:40:29PM -0800, Stephen Boyd wrote:
-> > > Quoting Christian Marangi (2023-01-31 08:08:28)
-> > > > By a simple mistake in a .parent_names to .parent_data conversion it was
-> > > > found that clk core assume fw_name is always provided with a parent_data
-> > > > struct for each parent and never fallback to .name to get parent name even
-> > > > if declared.
-> > > 
-> > > It sounds like you have clk_parent_data and the .index member is 0? Can
-> > > you show an example structure? I'm guessing it is like this:
-> > > 
-> > >       struct clk_parent_data pdata = { .name = "global_name" };
-> > >
-> > 
-> > An example of this problem and the relative fix is here
-> > 35dc8e101a8e08f69f4725839b98ec0f11a8e2d3
-> > 
-> > You example is also ok and this patch wants to handle just a case like
-> > that.
+On Thu, Feb 16, 2023 at 12:27:12AM +0100, Christian Marangi wrote:
+> Commit 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+> introduced a regression due to a "fragile" implementation present in some very
+> corner case.
 > 
-> Ok, so you have a firmware .index of 0. The .name is a fallback. I
-> suppose you want the .name to be a fallback if there isn't a clocks
-> property in the registering device node? I thought that should already
-> work but maybe there is a bug somewhere. Presumably you have a gcc node
-> that doesn't have a clocks property
+> Such commit introduced the support for parents to be specified using
+> clkspec index. The index is an int and should be -1 if the feature
+> should not be used. This is the case with parent_hws or legacy
+> parent_names used and the index value is set to -1 by default.
+> With parent_data the situation is different, since it's a struct that
+> can have multiple value (.index, .name, .fw_name), it's init to all 0 by
+> default. This cause the index value to be set to 0 everytime even if not
+> intended to be defined and used.
 > 
->                 gcc: gcc@1800000 {
->                         compatible = "qcom,gcc-ipq8074";
->                         reg = <0x01800000 0x80000>;
->                         #clock-cells = <0x1>;
->                         #power-domain-cells = <1>;
->                         #reset-cells = <0x1>;
->                 };	
+> This simple "fragile" implementation cause side-effect and unintended
+> behaviour.
 > 
-> Looking at clk_core_get() we'll call of_parse_clkspec() and that should fail
+> Assuming the following scenario (to repro the corner case and doesn't
+> reflect real code):
 > 
-> 	struct clk_hw *hw = ERR_PTR(-ENOENT);
+> In dt we have a node like this:
+> 		acc1: clock-controller@2098000 {
+> 			compatible = "qcom,kpss-acc-v1";
+> 			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+> 			clock-output-names = "acpu1_aux";
+> 			clocks = <&pxo_board>;
+> 			clock-names = "pxo";
+> 			#clock-cells = <0>;
+> 		};
 > 
-> 	...
+> And on the relevant driver we have the parent data defined as such:
+> 		static const struct clk_parent_data aux_parents[] = {
+> 			{ .name = "pll8_vote" },
+> 			{ .fw_name = "pxo", .name = "pxo_board" },
+> 		};
 > 
->         if (np && (name || index >= 0) &&
->             !of_parse_clkspec(np, index, name, &clkspec)) {
-> 		...
-> 	} else if (name) {
-> 		...
-> 	}
+> Someone would expect the first parent to be globally searched and set to
+> point to the clock named "pll8_vote".
+> But this is not the case and instead under the hood, the parent point to
+> the pxo clock. This happen without any warning and was discovered on
+> another platform while the gcc driver was converted to parent_data and
+> only .name was defined.
 > 
->         if (IS_ERR(hw))
->                 return ERR_CAST(hw);
+> The reason is hard to discover but very simple.
 > 
-> so we should have a -ENOENT clk_hw pointer in
-> clk_core_fill_parent_index(). That should land in this if condition in
-> clk_core_fill_parent_index()
+> Due to the introduction of index support, clk_core_get() won't return
+> -ENOENT but insted will correctly return a clock.
+> This is because of_parse_clkspec() will use the index (that is set to 0
+> due to how things are allocated) and correctly find in the DT node a
+> clock at index 0. That in the provided example is exactly the phandle to
+> pxo_board.
 > 
->                 parent = clk_core_get(core, index);
->                 if (PTR_ERR(parent) == -ENOENT && entry->name)
->                         parent = clk_core_lookup(entry->name);
+> Clock is found so the parent is now wrongly linked to the pxo_board
+> clock.
 > 
-> and then entry->name should be used. 
->
+> This only happens in this specific scenario but it's still worth to be
+> handled and currently there are some driver that hardcode the
+> parent_data and may suffer from this.
+> 
+> To fix this and handle it correctly we can use the following logic:
+> 1. With a .fw_name not defined (index searching is skipped if a named
+>    clock is provided)
+> 2. Check if .name is provided
+> 3. Compare the provided .name with what clockspec found
+> 4. Return -ENOENT if the name doesn't match, return the clock if it does.
+> 
+> Returning -ENOENT permit clk core code flow to fallback to global
+> searching and correctly search the right clock.
+> 
+> Fixes: 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Jeffrey Hugo <jhugo@codeaurora.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Hi, thanks for making me give this an extra check... I think I found
-the real cause.
-I send a patch that should suppress this and give an extensive
-explaination of the problem.
-This is the ID: 20230215232712.17072-1-ansuelsmth@gmail.com
+Think this should also be backported to stable kernel just like it was
+done with 4f8c6aba37da199155a121c6cdc38505a9eb0259 ?
 
-The hint that made me get what was wrong was a problem with index and
-the fact that it should have returned -ENOENT... Fun to discover a clock
-was actually returned and the function never returned an error.
-
-> > 
-> > > > 
-> > > > This is caused by clk_core_get that only checks for parent .fw_name and
-> > > > doesn't handle .name.
-> > > 
-> > > clk_core_get() is not supposed to operate on the .name member. It is a
-> > > firmware based lookup with clkdev as a fallback because clkdev is a
-> > > psudeo-firmware interface to assign a name to a clk when some device
-> > > pointer is used in conjunction with it.
-> > > 
-> > 
-> > And the problem is just that. We currently permit to have a
-> > configuration with .name but no .fw_name. In a case like that a dev may
-> > think that this configuration is valid but in reality the clk is
-> > silently ignored/not found and cause clk problem with selecting a
-> > parent.
+> ---
+>  drivers/clk/clk.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> It is valid though.
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index 998676d78029..42e297fcfe45 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -395,6 +395,7 @@ of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec)
+>   */
+>  static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+>  {
+> +	const char *global_name = core->parents[p_index].name;
+>  	const char *name = core->parents[p_index].fw_name;
+>  	int index = core->parents[p_index].index;
+>  	struct clk_hw *hw = ERR_PTR(-ENOENT);
+> @@ -407,6 +408,23 @@ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+>  	    !of_parse_clkspec(np, index, name, &clkspec)) {
+>  		hw = of_clk_get_hw_from_clkspec(&clkspec);
+>  		of_node_put(clkspec.np);
+> +
+> +		/*
+> +		 * The returned hw may be incorrect and extra check are required in
+> +		 * some corner case.
+> +		 *
+> +		 * In case a .fw_name is not set of_parse_clkspec will use the index
+> +		 * to search the related clock.
+> +		 * But index may be never set and actually never intended to be used
+> +		 * in the defined parent_data since a 0 value is also accepted and that
+> +		 * is what by default each struct is initialized.
+> +		 *
+> +		 * In the following case check if we have .name and check if the returned
+> +		 * clock name match the globally name defined for the parent in the
+> +		 * parent_data .name value.
+> +		 */
+> +		if (!name && global_name && strcmp(global_name, hw->core->name))
+> +			return ERR_PTR(-ENOENT);
+>  	} else if (name) {
+>  		/*
+>  		 * If the DT search above couldn't find the provider fallback to
+> -- 
+> 2.38.1
 > 
-> > 
-> > Took some good hours to discover this and to me it seems an error that
-> > everybody can do since nowhere is specificed that the following
-> > parent_data configuration is illegal. 
-> > 
-> 
-> I'll look at adding a test. Seems to be the best way to solve this.
-
-Eh probably a test may have made this more clear. The main problem  here
-was that the function never returned an error but under the hood the
-parent was pointing to another clock.
 
 -- 
 	Ansuel
