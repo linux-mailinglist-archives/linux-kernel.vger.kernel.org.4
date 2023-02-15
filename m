@@ -2,113 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C306981B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83906981B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjBORPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S230025AbjBORQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBORPD (ORCPT
+        with ESMTP id S229645AbjBORQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:15:03 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3A41A677;
-        Wed, 15 Feb 2023 09:15:01 -0800 (PST)
-Received: from [192.168.1.103] (31.173.83.250) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 15 Feb
- 2023 20:14:52 +0300
-Subject: Re: [PATCH v2 0/18] pata_parport: protocol drivers fixes and cleanups
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ondrej Zary <linux@zary.sk>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230214230010.20318-1-linux@zary.sk>
- <6ce57b8c-7f0c-f3d1-6938-c87fa4ab650d@opensource.wdc.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <8a0bd9fb-c667-8871-1955-3e4eb880f43d@omp.ru>
-Date:   Wed, 15 Feb 2023 20:14:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 15 Feb 2023 12:16:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E225963
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 09:15:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676481348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N2aYOOiv3MCMF+ppBroJDJcViaHR7pn3uVnoU3fQha0=;
+        b=cDsglyPFYzLCa7qpan9FoDQvI36KvJvJlQ4lQRqrQAKAE1//YlQOgT24XAyIW5Jerai3Qu
+        6nCLD7ATNMgSgDzhdmj8B+Dv/yBlj2JEh4kSvPVbc3MUTknhtEJ+1nS9uy/dESzitSmWRz
+        6p0NVUp1vNp4HMalu1BMolbv38xUlZg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-218-MeHWDk9XN3qOrWz4HE_7NA-1; Wed, 15 Feb 2023 12:15:43 -0500
+X-MC-Unique: MeHWDk9XN3qOrWz4HE_7NA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EE05183B3C1;
+        Wed, 15 Feb 2023 17:15:42 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-194-191.brq.redhat.com [10.40.194.191])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DAE1018EC1;
+        Wed, 15 Feb 2023 17:15:40 +0000 (UTC)
+Date:   Wed, 15 Feb 2023 18:15:38 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Rishi Gupta <gupt21@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: mcp-2221: prevent UAF in delayed work
+Message-ID: <20230215171538.dnpl2gbwb77ffurf@mail.corp.redhat.com>
+References: <20230215-wip-mcp2221-v1-1-d7d1da261a5c@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <6ce57b8c-7f0c-f3d1-6938-c87fa4ab650d@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.83.250]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/15/2023 16:49:39
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 175554 [Feb 15 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.250 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.250 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.250
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/15/2023 16:53:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/15/2023 2:45:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215-wip-mcp2221-v1-1-d7d1da261a5c@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 2:50 AM, Damien Le Moal wrote:
-[...]
->> This patch series fixes two bugs and cleans up pata_parport protocol drivers,
->> making the code simpler with no changes in behavior (except logged messages).
->>
->> Signed-off-by: Ondrej Zary <linux@zary.sk>
+On Feb 15 2023, Benjamin Tissoires via B4 Submission Endpoint wrote:
+> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 > 
-> Sergey did send you some reviewed-by tags for some of the patches. But I
-> do not see any in this v2. Did you forget to add the tags to the reviewed
-> patches ? That is nice to do so that I do not have to keep track of
-> reviews across series versions...
+> If the device is plugged/unplugged without giving time for mcp_init_work()
+> to complete, we might kick in the devm free code path and thus have
+> unavailable struct mcp_2221 while in delayed work.
+> 
+> Add a boolean and a spinlock to prevent scheduling the deleyed work if
+> we are in the operation of removing the device.
+> 
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> ---
+> Similar to Pietro's series, we can see the pattern in hid-mcp2221,
+> except that this time the ledclass is not involved.
+> 
+> Link: https://lore.kernel.org/linux-input/20230125-hid-unregister-leds-v4-5-7860c5763c38@diag.uniroma1.it/
+> ---
+>  drivers/hid/hid-mcp2221.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+> index e61dd039354b..de8b988f4a48 100644
+> --- a/drivers/hid/hid-mcp2221.c
+> +++ b/drivers/hid/hid-mcp2221.c
+> @@ -95,6 +95,8 @@ struct mcp2221 {
+>  	struct mutex lock;
+>  	struct completion wait_in_report;
+>  	struct delayed_work init_work;
+> +	spinlock_t init_work_lock;
+> +	bool removing;
+>  	u8 *rxbuf;
+>  	u8 txbuf[64];
+>  	int rxbuf_idx;
+> @@ -922,6 +924,14 @@ static void mcp2221_hid_unregister(void *ptr)
+>  /* This is needed to be sure hid_hw_stop() isn't called twice by the subsystem */
+>  static void mcp2221_remove(struct hid_device *hdev)
+>  {
+> +	struct mcp2221 *mcp = hid_get_drvdata(hdev);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&mcp->init_work_lock, flags);
+> +	mcp->removing = true;
+> +	spin_unlock_irqrestore(&mcp->init_work_lock, flags);
+> +
+> +	cancel_delayed_work_sync(&mcp->init_work);
 
-   Yes, it would also simplify my further reviews (I have low bandwidth currently
-due to being somewhat overload at work)...
+Actually, given that the only re-submission of this work is from the
+work item itself, I wonder if I really need the boolean and the
+spinlock. cancel_delayed_work_sync() might already prevent a
+resubmission by itself as it does in cancel_work_sync().
 
->> ---
->> Changes in v2:
->>  - added two bugfixes (first two patches)
->>  - addressed Sergey's comments (mostly split patches)
+Cheers,
+Benjamin
 
-   Well, you're supposed to be more detailed about what you really
-did to the series, preferably listing the changes in each patch (usually
-after the --- tearline)...
+>  }
+>  
+>  #if IS_REACHABLE(CONFIG_IIO)
+> @@ -1040,6 +1050,7 @@ static void mcp_init_work(struct work_struct *work)
+>  	struct mcp2221_iio *data;
+>  	static int retries = 5;
+>  	int ret, num_channels;
+> +	unsigned long flags;
+>  
+>  	hid_hw_power(mcp->hdev, PM_HINT_FULLON);
+>  	mutex_lock(&mcp->lock);
+> @@ -1090,7 +1101,10 @@ static void mcp_init_work(struct work_struct *work)
+>  		return;
+>  
+>  	/* Device is not ready to read SRAM or FLASH data, try again */
+> -	schedule_delayed_work(&mcp->init_work, msecs_to_jiffies(100));
+> +	spin_lock_irqsave(&mcp->init_work_lock, flags);
+> +	if (!mcp->removing)
+> +		schedule_delayed_work(&mcp->init_work, msecs_to_jiffies(100));
+> +	spin_unlock_irqrestore(&mcp->init_work_lock, flags);
+>  }
+>  #endif
+>  
+> @@ -1131,6 +1145,7 @@ static int mcp2221_probe(struct hid_device *hdev,
+>  	}
+>  
+>  	mutex_init(&mcp->lock);
+> +	spin_lock_init(&mcp->init_work_lock);
+>  	init_completion(&mcp->wait_in_report);
+>  	hid_set_drvdata(hdev, mcp);
+>  	mcp->hdev = hdev;
+> 
+> ---
+> base-commit: d883fd110dc17308a1506c5bf17e00ce9fe7b2a2
+> change-id: 20230215-wip-mcp2221-979d4115efb5
+> 
+> Best regards,
+> -- 
+> Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> 
 
-[...]
-
-MBR, Sergey
