@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052CE697E4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DE8697E57
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBOOZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S229627AbjBOO35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBOOZI (ORCPT
+        with ESMTP id S229663AbjBOO3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:25:08 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28382385A;
-        Wed, 15 Feb 2023 06:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9NoGUR70O0zSCDF7awBC8PY/0Nfb60M+m7+9Kbbdg7g=; b=BlpEO19R+dBG07jw5IxBPhz2S2
-        Y3fNFYKWHzgpYk1Mpwnx3to/ur0AKtVSruwGS2XeVpLTIFd84jcf59fLHhs4uY/Fd6+CEc8MVtInF
-        nPvc8Q2013EBQhuR3k+R+jC6DAY5yg/vsJiFgTo1Kjy0aJ1mQEUS0a2Yqoew1ArW4t0dxVQZad3Cl
-        pk563FCHmr3eiNyXPPwtkWkVhCCRAETC4Ct5WjNsvyq9B16FKy0r3IMut6Yeuq9UQV+hnZut0L+M6
-        36DQFRuCK8zV9X6btdVnYkkV/EbPjLdcK6asnlai+GgxxrfIALwVONXp3C6ydqDuGOM8BUxEjY59P
-        U2s9jG4A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSIiM-006CaN-Ru; Wed, 15 Feb 2023 14:24:54 +0000
-Date:   Wed, 15 Feb 2023 06:24:54 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v14 01/12] splice: Fix O_DIRECT file read splice to avoid
- reversion of ITER_PIPE
-Message-ID: <Y+zrNiDsC0Mt7JAc@infradead.org>
-References: <Y+nzO2H8AizX4lAQ@infradead.org>
- <Y+UJAdnllBw+uxK+@casper.infradead.org>
- <20230209102954.528942-1-dhowells@redhat.com>
- <20230209102954.528942-2-dhowells@redhat.com>
- <909202.1675959337@warthog.procyon.org.uk>
- <3057147.1676467076@warthog.procyon.org.uk>
+        Wed, 15 Feb 2023 09:29:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D43431D;
+        Wed, 15 Feb 2023 06:29:54 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D0E966020E0;
+        Wed, 15 Feb 2023 14:29:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676471393;
+        bh=7q+8dNYL/2VORRV49y6U9IKXin8dzr+DqWZ4K1xflFk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d2TOQnXU3I/RFS5jqXtPVt5fMugZiiKfs0qaBwzNvTsQSRY8PiWKwVK5/1CM3R2Or
+         6OWLEgVcRtuIdGWOZdn0eV7qjB+h+oLs9M2KG2P/3d1HabS9hodgqbDDMCUkOvXpwi
+         /z8ROm7vcXhjhJyh/Poj9AFABj2f9OsZCfF4ctrtOqCP4PID8jGbEAD2o4uYtwGlIr
+         yqpS5hZLOrVIuQpIQ++j+TrcJSaoNnX7GLFvHfWJCPt8xkPWWT6v92jLCIKzPM5C/N
+         HimyhpY4TqA3qNNZZRa762rqfRtExa+ktT2o/L0JcXYFIkUe+QITjG5XHvk8Y3DpOr
+         tfRlQvxukAtFA==
+Message-ID: <deefed32-f675-5f71-3eae-6ef3f07ed5f2@collabora.com>
+Date:   Wed, 15 Feb 2023 15:29:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3057147.1676467076@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending
+ on it
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Peter Rosin <peda@axentia.se>
+References: <20230213041535.12083-1-rdunlap@infradead.org>
+ <20230213041535.12083-4-rdunlap@infradead.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230213041535.12083-4-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 01:17:56PM +0000, David Howells wrote:
-> Probably not, but I don't want to fiddle with that right now.  I can send a
-> follow up patch for it.
+Il 13/02/23 05:15, Randy Dunlap ha scritto:
+> IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
+> it directly thru "make *config", so drivers should select it instead
+> of depending on it if they need it.
+> Relying on it being set for a dependency is risky.
+> 
+> Consistently using "select" or "depends on" can also help reduce
+> Kconfig circular dependency issues.
+> 
+> Therefore, change the use of "depends on" for IRQ_DOMAIN to
+> "select" for RTC_DRV_MT6397.
+> 
+> Fixes: 04d3ba70a3c9 ("rtc: mt6397: add IRQ domain dependency")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-Honestly, I think this rush for 6.3 inclusion is a really bad idea.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-This series fundamentally changes how splice reads work, and has only
-been out for about a week.  It hasn't even been Cc'ed to Al and Linus
-which generally have a good knowledge of the splice code and an opinion
-on it.
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Eddie Huang <eddie.huang@mediatek.com>
+> Cc: Sean Wang <sean.wang@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: linux-rtc@vger.kernel.org
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Peter Rosin <peda@axentia.se>
+> ---
+> I have a similar patch (should be a series) for REGMAP.
+> 
+>   drivers/rtc/Kconfig |    3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 
-I think it is a good change, but I'd feel much more comfortable with
-it for the next merge window rather than rushing it.
