@@ -2,230 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA096980D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A7A6980DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjBOQ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S229715AbjBOQ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBOQ0p (ORCPT
+        with ESMTP id S229536AbjBOQ3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:26:45 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1800536FFE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:26:43 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m20-20020a05600c3b1400b003e1e754657aso2008113wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:26:43 -0800 (PST)
+        Wed, 15 Feb 2023 11:29:10 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2117.outbound.protection.outlook.com [40.107.212.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5F73A87E;
+        Wed, 15 Feb 2023 08:29:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=amBl8Jl59R3bYRAwa3X+yeukzc6Swwnq55AE3NY+iwA8qpPcY9ExAQ9lcsHR6J3lhJucOO63/pX1ukPoXw2tbJ5Yql4wq8yoT4s/vPGU/q18Sb8RUDv1HIEo97Z8zVaGFHYS1fiRLkmKJy32TSF61BIxglErRRui9AxYbbG7N08RKJOfgBQSw3zGxJl8CVbBc+N9GHGnB/W88Efq86tWN4b5TSSNE5mNIoj0hMI4u/qPbc86ocWbMRFc5im7rKp5xHH+411wHJ6OaiW7Eo1wjZQ6c/BVzphG/Xl+iO40P9644/6aoTSyJeIzmSbXwDHfQonBdJrfQYqC5OU9SrTIwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7YnfpIje7GUKnPvACkIQSK2pcsLn2buXtDaFx5HybIw=;
+ b=jZH4MrlvkHxFQLtJQTuIiYISlKbtqpAMMMMj7ElfCSHWyxMqvuBYQIyvGpwKehiGYGpwQVZFqz7bOt5jsnxCBe4HX2SO4PK4nFsLLVuXYlLnNrXzup9uEqsaCNiCOoKX7wZnH8/noIpamRpykNC2t4B/Zt1JEZYapjRwXk4YKkLUFrUmxKCd8aPN7JxGOc7kQ5hEOxda0ePAcRYiFsTMQWUgTsd2babogn1nxHDYt7tPn4vEpqA/LFl+oIeJvvNzQK8ohjiD1UYkSAIESnhJJvUbTeqKQIpMVvueAEBQ6ud4sCmqkKBYqYd66fQ4UbSdHxBHChoA+YrdfnBvbWuj7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A4BMU3XQ0reGvzDThfdy2mEqaIcU6fwOoymI2H0wZKc=;
-        b=Se1fp/1BW7CM5DwzKF/3Tfxm/QDWge2BVoJGdxId9aMi4UFC9qPsTSTcSYyiTzKlZU
-         dFwHFztBvtMWuEA2wK53ZGl/BjxDwDogpSKaQqsAal6E81a35CefxbEwXJEAhxjKIgWA
-         577ewTFhPmvb9lKLIi5CmurN+FX60MeTS4L4Hw/uZ3dQ7M1qQGQcnz+zGL5s1oi/MWyZ
-         VfaVKgGQZdmWUkKOcW1u/qP74q+CyloGedNtsbctzKDVdqEoghBdFXkuAx8lDcYNoK/h
-         IgdAJy0CxDtWRrjtzAiYVTbLhRgxo2EaQC0VucuA5MrGWO6bYFLP7bIfUPpxSYTU7ZrQ
-         EPRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4BMU3XQ0reGvzDThfdy2mEqaIcU6fwOoymI2H0wZKc=;
-        b=qmxN3/DCrKG8ri9Ixe9sVVfNtxcrk7PzMBI5dM+DMlBeFB3y2kR5HVzGdrQISI86qr
-         bUgGQsv57Q/N16byZmJqbdCB+Lxy34SQhI9h3hUQW6KdHQ/a6TVigWFmf7C37sAgZS2T
-         ilBVBfQW0QIwbPMCAI2GdXRDsy57MM+FJn6tRGR2gvWdKFJAQMzSCQyJwM9DrbJr3qQm
-         wzSuEmWbrIzsjohXjdZJLC9dCCdPnQHCu75wO5eKrW/3gDP5XGdMgREnFgZSrJ9YrH0q
-         jW446AEp1xGkIdvVl1CfWraY1TG/xUnHsiG/GG0h8Z+yQd6ClChMClRlP/MU+NQr1TCE
-         SRFw==
-X-Gm-Message-State: AO0yUKWMkhBRyRSJPOGpWaL9EoIEcyabnOG5/Gpx1x+Lj2BheHENJBcq
-        JVU5sdLg8yJr6m4fvrTwah0Bzw==
-X-Google-Smtp-Source: AK7set/NwxyHV3oP30BR0hQR2HAJmg5+rVxSa9ZdWxZ6QUjKL3e4M6hbMy/7HBswvepp+uNEz4cNXQ==
-X-Received: by 2002:a05:600c:3414:b0:3dc:4042:5c30 with SMTP id y20-20020a05600c341400b003dc40425c30mr2537055wmp.10.1676478401645;
-        Wed, 15 Feb 2023 08:26:41 -0800 (PST)
-Received: from [192.168.0.108] ([82.77.80.113])
-        by smtp.gmail.com with ESMTPSA id d1-20020adffd81000000b002bfe08c566fsm15625331wrr.106.2023.02.15.08.26.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 08:26:41 -0800 (PST)
-Message-ID: <dbd7cd6f-5d1d-7fcf-bd19-d22fef4db746@linaro.org>
-Date:   Wed, 15 Feb 2023 16:26:39 +0000
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7YnfpIje7GUKnPvACkIQSK2pcsLn2buXtDaFx5HybIw=;
+ b=MWNJA96q3gOPpuyXUzdM0Y6IwPQRbMS1xMHHP5sw5pzoHWHQLDtsV+8jystkj7F5rLv/v4fPgGlhpIDSD9KCgDz/pPRf5OcSs00gKQk52oRAlpGypOZ8IK/tKgJpFlui55UWRsNDHHPQPosWWV3HXY6zW/6ztnncewUloYvJPcA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BLAPR10MB5315.namprd10.prod.outlook.com
+ (2603:10b6:208:324::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Wed, 15 Feb
+ 2023 16:29:06 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6111.010; Wed, 15 Feb 2023
+ 16:29:06 +0000
+Date:   Wed, 15 Feb 2023 08:29:03 -0800
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: ocelot: fix selecting MFD_OCELOT
+Message-ID: <Y+0IT/bV7snqCmnF@COLIN-DESKTOP1.localdomain>
+References: <20230215104631.31568-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215104631.31568-1-lukas.bulwahn@gmail.com>
+X-ClientProxiedBy: BYAPR04CA0016.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ext4: reject 1k block fs on the first block of disk
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     Theodore Ts'o <tytso@mit.edu>, Jun Nie <jun.nie@linaro.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <joneslee@google.com>
-References: <20221229014502.2322727-1-jun.nie@linaro.org>
- <Y7R/QKIbYQ2TCP+W@magnolia>
- <CABymUCPCT9KbMQDUTxwf6A+Cg9fWJNkefbMHD7SZD3Fc7FMFHg@mail.gmail.com>
- <Y+xgQklC81XCB+q4@mit.edu> <d8f51f11-6942-51bd-7761-a356125d8e53@linaro.org>
- <4e5fb36f-d234-1f94-5e6c-746aef612bb6@linaro.org>
-In-Reply-To: <4e5fb36f-d234-1f94-5e6c-746aef612bb6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|BLAPR10MB5315:EE_
+X-MS-Office365-Filtering-Correlation-Id: fe2c9531-9398-4d5a-dca6-08db0f71c198
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QYBubiLRXbccHt16MMXcvat8m5hnTvT6bJi55+DrLcRV2m1G0nADwPIFXWwpPBm5L++o1NxCGguAoBOLm0bNhlJOEpQ4KIMs1/49nZIh1AvzZrx4hEJSBryG7C+e940WyObXI18Ov2WlMheTaCXITfIEqQPPYg/URnZsBbBGdIzD3m1hTOycC/92aOPqB6WuJFgs7ZjhAgR+gyImjPl1F3KXJJUGBQpCurxh9SB1GJwJtezUg+wMxGrxh61WU6bbZ4l2gEaLhzi2VUGbODXfqKjQTQz+DEUj3APCkyp3R47XlmdDCr1iCBh0v9dte/WWyPc9vL48znvWSXL7hhkeebFdcfjgWs0vt+VX1Lp4R+o0EpWO2Tc5hjhsxEcnMiT9fFhlpNBiq62pEJwwWXmjrPofOzn1pkl1Xie4UDBOvsKxcQfqQAYOvf41N9VG0A25W/Vpqzb2uF8Vphvn+YkvWmWaPmcv7BL0hn8EHI35mpFUmx8UkdGsyeSxScaKejY5yKaO3coYUczl9xSCEQeK1KKn8bC9OuAsT4BTkvDffadtrZdNehyVq11S/KomcSffSOhBl9Sutx5BlRDBOWXkrtC9qjvpBety3TQlv9To0kQ09vvkIYRhynhjN0HXtz/KbRYAFGJ7szob89/Vw18iKg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(366004)(39830400003)(136003)(451199018)(66556008)(2906002)(6916009)(66946007)(8676002)(66476007)(8936002)(7416002)(5660300002)(4326008)(54906003)(44832011)(41300700001)(316002)(9686003)(6486002)(6512007)(478600001)(6506007)(6666004)(186003)(26005)(38100700002)(86362001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7DZgUzEJXa07p1S3vs5HsYV7DjnvpolsPS+1LiWxVzhdLC/IrjihANf5KjQt?=
+ =?us-ascii?Q?6845hijJkPfs91Iw7ZOoyPb1+G+m/7pj7CdhOIrsNGeMXdF4l/gR18+xVu+4?=
+ =?us-ascii?Q?ozvPQnURyUVd3mBDjG/hWpRUE2S4eTngSqK+nNuY/nIWCgvQfUg5H4iVJjCS?=
+ =?us-ascii?Q?hwkxKMGgZMQdFshoxw4fvnSF/JG5XgINo7q3Ie7wAbzKuEMZUNyt4fDYp15q?=
+ =?us-ascii?Q?rg7tzSmEpxgLKPenFRtlrCJY89t7LT3gdWoITJvJC0NeUg2cZzBuTxXbe0NX?=
+ =?us-ascii?Q?4Up203EcC/R5a//55i1rgWDc+f2QMU3fnxWO9LPhUQ0EeEDN6AKllKH/RCkS?=
+ =?us-ascii?Q?ynjdIMD9pf8QwL6nLPzi/z9yTr4+SFy1nQ2d2M8L0s+Vf8CT5NmWsJ4T64OR?=
+ =?us-ascii?Q?is4pUcp56zv7vb9W7lGPw2NkdQ2wiuSfIGnXYA+TiRqLo6KPzIlnJDG0fwe9?=
+ =?us-ascii?Q?0Zd4HZ2hv5iOBDkn5jwvl2mzppFwlQeuGuGfFC23SwoFRrq2G3oNkp6Tq0Gt?=
+ =?us-ascii?Q?M85ufgIZPKSou4IgTGVSKaCTdBcIaOLBz+CSZYWzGiidiEEkmSVdtHm67YLq?=
+ =?us-ascii?Q?Jb/H2lgZE7S1fPBffS+KRjxQOi/c1DbXmnkj44iBzmi7zDI10OfKvL3Yrp/y?=
+ =?us-ascii?Q?sirTFW2HcRzTVw1rNiWWcQugdmSP4aJAzE72ibcvpQ7wOS8f9K+yq8+h5h3I?=
+ =?us-ascii?Q?tgpPa/mVss0foEbPZWyCaTw/CB8fmu2SJB+KG+ILdJH4M9NJFAWHMGPm/iMh?=
+ =?us-ascii?Q?238Su7+3gQR6IHpR3OJNHFPfYSCO/ur/VxdxoYyeKLAJR4oksvdWo8KccIml?=
+ =?us-ascii?Q?9YjqtlHdhhrX2Q2JvFTXtsJ2VrqnOyvjkuXd9zcIt1NXI2KKReTYlb76TODC?=
+ =?us-ascii?Q?qNtr7aLd45oDa0RFj0hbjP4+5HLhqiBOmoM65kC5roJTzqeaa2q45riwOBmY?=
+ =?us-ascii?Q?D2Yr32c4s6Jj4voUH/VKH7OGD4/69zIdrbvMwQozetmC1vMXp7xdBP1Md4dW?=
+ =?us-ascii?Q?91Kuy/hspq/3ZB2ISBHVDEbaJpWK5LXBPsnBjGbZS2i4/3gT92ofAzN8mDz9?=
+ =?us-ascii?Q?2bCZZipzf2QhkpSG6T7HsKXjK8m5vZGMi2uUA1LwaO3RCFRD4E4D2y282+hZ?=
+ =?us-ascii?Q?8xWBnPv2JrkQrco5zTMGxzo4wt9JEWf1YnxZq7q8CQ2WM4jGrfEh/B3HIxu0?=
+ =?us-ascii?Q?dRC8T3h76TRLWZwOCZckcTgEQ10Iw9QFEEb7BN3XNe6nRDlwtRbYzadiyLFE?=
+ =?us-ascii?Q?BnO94dWAaClb/GwJUX7dKD2QcuQVz9NaPoGdsndJ62Sbb3KR6QvUUIa7jP3Q?=
+ =?us-ascii?Q?noWebBSfPi7boIhWVTWpvvJB5voJqW0q5KV0yAF8uC6xb4qgNHFrcpFMMw5r?=
+ =?us-ascii?Q?1GnhbqW8VqolMnZoVDVehEmDPauleE5YHqrY+3aklzs7K7Uh+ZU+PMX1HrFt?=
+ =?us-ascii?Q?QNUDvzXLNh+lMTSaVriSOtPOuoyi62VWvDhXlns8oeMB4l0wKtx03rrZaU9i?=
+ =?us-ascii?Q?G/YUOvWH+ozbU0debmM8hee+QOPm3MwA4z2ZQBC3wzR7yCWrAr7hLEYXcba2?=
+ =?us-ascii?Q?2zeQPNfwZ7mSSEYbqAVVEAztcX5UjJA/EcG/rWSWTXHN7y8FgtNz5xK6me2X?=
+ =?us-ascii?Q?qIaRp+8Rx40hmte5QfJvPAo=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe2c9531-9398-4d5a-dca6-08db0f71c198
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 16:29:06.0861
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GrU8/TiluaMSui2CblA88Dj4NSOSAPcUCPI7yx8mUA9t3esER4HbaKV+VgLJ/HbZv2y80QHhkzN3AZyjboE1SgLyGSKe/63btrx65CRdzg0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5315
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lukas,
 
-
-On 2/15/23 11:53, Tudor Ambarus wrote:
+On Wed, Feb 15, 2023 at 11:46:31AM +0100, Lukas Bulwahn wrote:
+> Commit 3d7316ac81ac ("net: dsa: ocelot: add external ocelot switch
+> control") adds config NET_DSA_MSCC_OCELOT_EXT, which selects the
+> non-existing config MFD_OCELOT_CORE.
 > 
+> Replace this select with the intended and existing MFD_OCELOT.
+
+Thanks for this. We pivoted away from *_CORE a while back and I clearly
+missed this. It can go through net-next this week.
+
+Acked-by: Colin Foster <colin.foster@in-advantage.com>
+
 > 
-> On 2/15/23 11:46, Tudor Ambarus wrote:
->> Hi, Ted!
->>
->> On 2/15/23 04:32, Theodore Ts'o wrote:
->>> On Wed, Jan 04, 2023 at 09:58:03AM +0800, Jun Nie wrote:
->>>> Darrick J. Wong <djwong@kernel.org> 于2023年1月4日周三 03:17写道：
->>>>>
->>>>> On Thu, Dec 29, 2022 at 09:45:02AM +0800, Jun Nie wrote:
->>>>>> For 1k-block filesystems, the filesystem starts at block 1, not 
->>>>>> block 0.
->>>>>> If start_fsb is 0, it will be bump up to s_first_data_block. Then
->>>>>> ext4_get_group_no_and_offset don't know what to do and return garbage
->>>>>> results (blockgroup 2^32-1). The underflow make index
->>>>>> exceed es->s_groups_count in ext4_get_group_info() and trigger the 
->>>>>> BUG_ON.
->>>>>>
->>>>>> Fixes: 4a4956249dac0 ("ext4: fix off-by-one fsmap error on 1k 
->>>>>> block filesystems")
->>>>>> Link: 
->>>>>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
->>>>>> Reported-by: syzbot+6be2b977c89f79b6b153@syzkaller.appspotmail.com
->>>>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
->>>>>> ---
->>>>>>   fs/ext4/fsmap.c | 6 ++++++
->>>>>>   1 file changed, 6 insertions(+)
->>>>>>
->>>>>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
->>>>>> index 4493ef0c715e..1aef127b0634 100644
->>>>>> --- a/fs/ext4/fsmap.c
->>>>>> +++ b/fs/ext4/fsmap.c
->>>>>> @@ -702,6 +702,12 @@ int ext4_getfsmap(struct super_block *sb, 
->>>>>> struct ext4_fsmap_head *head,
->>>>>>                if (handlers[i].gfd_dev > 
->>>>>> head->fmh_keys[0].fmr_device)
->>>>>>                        memset(&dkeys[0], 0, sizeof(struct 
->>>>>> ext4_fsmap));
->>>>>>
->>>>>> +             /*
->>>>>> +              * Re-check the range after above limit operation 
->>>>>> and reject
->>>>>> +              * 1K fs on block 0 as fs should start block 1. */
->>>>>> +             if (dkeys[0].fmr_physical ==0 && 
->>>>>> dkeys[1].fmr_physical == 0)
->>>>>> +                     continue;
->>>>>
->>>>> ...and if this filesystem has 4k blocks, and therefore *does* define a
->>>>> block 0?
->>>>
->>>> Yes, this is a real corner case test :-)
->>>
->>> So I'm really nervous about this change.  I don't understand the code;
->>> and I don't understand how the reproducer works.  I can certainly
->>> reproduce it using the reproducer found here[1], but it seems to
->>> require running multiple processes all creating loop devices and then
->>> running FS_IOC_GETMAP.
->>>
->>> [1] 
->>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
->>>
->>> If I change the reproducer to just run the execute_one() once, it
->>> doesn't trigger the bug.  It seems to only trigger when you have
->>> multiple processes all racing to create a loop device, mount the file
->>> system, try running FS_IOC_GETMAP --- and then delete the loop device
->>> without actually unmounting the file system.  Which is **weird***.
->>>
->>> I've tried taking the image, and just running "xfs_io -c fsmap /mnt",
->>> and that doesn't trigger it either.
->>>
->>> And I don't understand the reply to Darrick's question about why it's
->>> safe to add the check since for 4k block file systems, block 0 *is*
->>> valid.
->>>
->>> So if someone can explain to me what is going on here with this code
->>> (there are too many abstractions and what's going on with keys is just
->>> making my head hurt), *and* what the change actually does, and how to
->>> reproduce the problem with a ***simple*** reproducer -- the syzbot
->>> mess doesn't count, that would be great.  But applying a change that I
->>> don't understand to code I don't understand, to fix a reproducer which
->>> I also doesn't understand, just doesn't make me feel comfortable.
->>>
->>
->> Let me share what I understood until now. The low key is zeroed. The
->> high key is defined and uses a fmr_physical of value zero, which is
->> smaller than the first data block for the 1k-block ext4 fs (which starts
->> at offset 1024).
->>
->> -> ext4_getfsmap_datadev()
->>    keys[0].fmr_physical = 0, keys[1].fmr_physical = 0
->>    bofs = le32_to_cpu(sbi->s_es->s_first_data_block) = 1, eofs = 256
->>    start_fsb = keys[0].fmr_physical = 1, end_fsb = 
->> keys[1].fmr_physical = 0
->>    -> ext4_get_group_no_and_offset()
->>      blocknr = 1, le32_to_cpu(es->s_first_data_block) =1
->>    start_ag = 0, first_cluster = 0
->>    ->
->>      blocknr = 0, le32_to_cpu(es->s_first_data_block) =1
->>    end_ag = 4294967295, last_cluster = 8191
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  drivers/net/dsa/ocelot/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> because of poor key validation we get a wrong end_ag which eventually
-> causes the BUG_ON.
+> diff --git a/drivers/net/dsa/ocelot/Kconfig b/drivers/net/dsa/ocelot/Kconfig
+> index eff0a7dfcd21..081e7a88ea02 100644
+> --- a/drivers/net/dsa/ocelot/Kconfig
+> +++ b/drivers/net/dsa/ocelot/Kconfig
+> @@ -14,7 +14,7 @@ config NET_DSA_MSCC_OCELOT_EXT
+>  	depends on NET_VENDOR_MICROSEMI
+>  	depends on PTP_1588_CLOCK_OPTIONAL
+>  	select MDIO_MSCC_MIIM
+> -	select MFD_OCELOT_CORE
+> +	select MFD_OCELOT
+>  	select MSCC_OCELOT_SWITCH_LIB
+>  	select NET_DSA_MSCC_FELIX_DSA_LIB
+>  	select NET_DSA_TAG_OCELOT_8021Q
+> -- 
+> 2.17.1
 > 
->>
->>    Then there's a loop that stops when info->gfi_agno <= end_ag; that 
->> will trigger the BUG_ON in ext4_get_group_info() as the group nr 
->> exceeds EXT4_SB(sb)->s_groups_count)
->>    -> ext4_mballoc_query_range()
->>      -> ext4_mb_load_buddy()
->>        -> ext4_mb_load_buddy_gfp()
->>          -> ext4_get_group_info()
->>
->> It's an out of bounds request and Darrick suggested to not return any
->> mapping for the byte range 0-1023 for the 1k-block filesystem. The
->> alternative would be to return -EINVAL when the high key starts at
->> fmr_phisical of value zero for the 1k-block fs.
->>
->> In order to reproduce this one would have to create an 1k-block ext4 fs
->> and to pass a high key with fmr_physical of value zero, thus I would
->> expect to reproduce it with something like this:
->> xfs_io -c 'fsmap -d 0 0' /mnt/scratch
->>
->> However when doing this I notice that in
->> xfsprogs-dev/io/fsmap.c l->fmr_device and h->fmr_device will have value
->> zero, FS_IOC_GETFSMAP is called and then we receive no entries
->> (head->fmh_entries = 0). Now I'm trying to see what I do wrong, and how
->> to reproduce the bug.
->>
-
-
-What I think it happens for the reproducer that I proposed, is that when
-both {l, h}->fmr_device have value zero, the code exits early before
-getting the fsmap:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/fsmap.c?h=v6.2-rc8#n691
-
-Also, to my untrained fs eye it seems that the [-d|-l|-r] xfs_io's fsmap
-options are intended only for XFS, as the {data, log, realtime} sections
-are XFS specific. I wonder why "struct fs_path" from libfrog/paths.h is
-not renamed to "struct xfs_path", it would have been less confusing.
-
-It looks there's no support for xfs_io to query for a start and end
-offset when asking for a fsmap on an ext4 fs. I'm checking how I can
-extend the xfs_io fsmap ext4 support to validate my assumptions.
-
-Cheers,
-ta
