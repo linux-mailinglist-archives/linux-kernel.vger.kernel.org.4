@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C796C697FC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86468697FA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBOPmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S230139AbjBOPkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBOPmE (ORCPT
+        with ESMTP id S230056AbjBOPkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:42:04 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5BA366B2;
-        Wed, 15 Feb 2023 07:41:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J1HP1AYxs+CPgeT/Uk3lsnz97zGE2SKFHAXmfCAw3bw=; b=Y0PKbb2GdfSnGd5GRhVnYZGNLK
-        S2B4glLdiOEykJBOnN/nU8lvfvyNknik1yQ8cOcv9q2fIz9pbnNOYxDhnhIx7ZHeQiWzsjqZCuaTa
-        JrddlddthRmAKYwpOF8TuJM0ngO8PaURDxPZTUMO46mwpNTH3bPdUohUwBwc/U4fCEkBEGeWl06U1
-        MDA2+xdslRl+t1aRvavQmvMMojmeVVeCG6meQe2Cgxk+Zc2cKz7EFOD2tmMciWoWjk8WhInFX08Ul
-        7aqG9lkcHfdkciRCtzifRVf33MBMXUGrjWkCu8rNNLTupObyC6B4bUQ05ytVIIVrpA/9Vmge97DkK
-        ecTx6fwg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSJsY-007aAb-HO; Wed, 15 Feb 2023 15:39:30 +0000
-Date:   Wed, 15 Feb 2023 15:39:30 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
-        mike.kravetz@oracle.com, damon@lists.linux.dev,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] mm: change to return bool for isolate_lru_page()
-Message-ID: <Y+z8suWLusQk8N3U@casper.infradead.org>
-References: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
- <3074c1ab628d9dbf139b33f248a8bc253a3f95f0.1676424378.git.baolin.wang@linux.alibaba.com>
+        Wed, 15 Feb 2023 10:40:12 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEEF3669F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:40:09 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id p5so1222646wmg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:40:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtGI9J/URlQIzhyslQIJ/PtbIdSSsHxe7OMQrunObcE=;
+        b=XywXSQatpWGLBbnf+u8TcuVykvY+r6jAMWSv6w7lnW/83eLmPLI3GIitWwEETFfgcT
+         +Ta1HrXH24igqMqrnEYiYeSmHPmZ16/LsuHqSZG/GbIdpbid3u74j30hvEn1xON5AdQ0
+         q08JmEBI9ZqMEo8PDIBXS82K9/BMgRgXFdBYSTHC2dXk1tV0tNO8+gBQfNcy+bP6oC63
+         GG+s/A6W/W0Ghst1NU3wzsx1mmw3UsxV/qYKfDOxebiN6dHQ7Weuulzw7MNBZVbVPB7t
+         HyuEiHKWE/s59VzA+I6PR4DrWv9x2+y33cwYirX0CB9yM2kVEayJRj0se6zwiILN9ASt
+         CGgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MtGI9J/URlQIzhyslQIJ/PtbIdSSsHxe7OMQrunObcE=;
+        b=Ag8RuGziQefEkje5858yogst8Mh1Efd+VLlmc+mxQI3P6+38HXi+7VTg5bWM/0r3iP
+         IMSRQfily/vsbmGK253lQx3hn2TiOtyIq4bl0fPoQQpwybz2RNhZBj8qVIx/bQ6aQsQO
+         t3toy60iT05ClY7rgpm/J6vWyjkZdkaFfGeCfzY8hCD1TTZTL0lnfDy5xwlBly7ROOwT
+         PF08ZBWKGmo5Bn1a92BfuaVATvY1mDwn61wT0Wq9VNPyKk1Z9MINTZ73P6XyHiyczeuj
+         KgAHHdtBZokRrJfmPnNLm/RGXcVHn+Bq1ztcbGjhINsJoUiXQw4ivxysO2QWCNDK1yaB
+         eeVw==
+X-Gm-Message-State: AO0yUKV2dF+eslAzYECbN9lbIKl2D0xzp2Wb4Jhegx+eatX9fqx98caV
+        FPz4/TP/8Uzt073cTzCPyBRnuQ==
+X-Google-Smtp-Source: AK7set95w/zG5u61+FNnYv5RUlfIseziLuMFGGTLdZmQSPq7E1qnaOIyhOgeJ7RFGm4KwjY84mBjOQ==
+X-Received: by 2002:a05:600c:180a:b0:3df:e41f:8396 with SMTP id n10-20020a05600c180a00b003dfe41f8396mr2327708wmp.37.1676475608523;
+        Wed, 15 Feb 2023 07:40:08 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:ea02:3f39:48c0:67ce])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05600c191100b003dd1c45a7b0sm2808877wmq.23.2023.02.15.07.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 07:40:08 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2 0/4] arm64: dts: qcom: sa8775p-ride: enable relevant QUPv3 IPs
+Date:   Wed, 15 Feb 2023 16:39:58 +0100
+Message-Id: <20230215154002.446808-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3074c1ab628d9dbf139b33f248a8bc253a3f95f0.1676424378.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 06:39:35PM +0800, Baolin Wang wrote:
-> The isolate_lru_page() can only return 0 or -EBUSY, and most users did
-> not care about the negative error of isolate_lru_page(), except one user
-> in add_page_for_migration(). So we can convert the isolate_lru_page() to
-> return a boolean value, which can help to make the code more clear when
-> checking the return value of isolate_lru_page().
-> 
-> Also convert all users' logic of checking the isolation state.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
+board: I2C, SPI and the Bluetooth and GNSS UART ports.
+
+v1 -> v2:
+- uart17 is the Bluetooth port, not GNSS
+- add uart12 for GNSS too in that case
+
+Bartosz Golaszewski (4):
+  arm64: dts: qcom: sa8775p: add the i2c node for sa8775p-ride
+  arm64: dts: qcom: sa8775p: add the SPI node for sa8775p-ride
+  arm64: dts: qcom: sa8775p: add the GNSS high-speed UART for
+    sa8775p-ride
+  arm64: dts: qcom: sa8775p: add the BT high-speed UART for sa8775p-ride
+
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 100 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi     |  87 +++++++++++++++++++
+ 2 files changed, 187 insertions(+)
+
+-- 
+2.37.2
+
