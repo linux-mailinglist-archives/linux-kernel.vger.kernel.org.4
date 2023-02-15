@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26411698412
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCC2698416
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjBOTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S229524AbjBOTE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBOTEH (ORCPT
+        with ESMTP id S229850AbjBOTEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:04:07 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C1A3A872
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:04:04 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id n20so9712422edy.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X7zbGW5iAUlXThWXfRt9N53+MyaLgWUvpH0idsYoAA8=;
-        b=Q/WlpCc5GwVyDGXb7yVHctZ8yCyIajh/9OzRAzhykG6wruaJzjKyxEkIToxj1bv4j9
-         0xlBFNxzywNp36TkBwlDQm6qkGMzy/lXrySqwPIMHOjRhVedYjMBQ99nIIVIxC+BNYH+
-         LF3Xt6Fx8bjjjoh2QMffYAk2G60oxdcTwMmqhAYZmt2ZgSx/bhv1nsLXi+EVsckc7J7d
-         QoXLdcAQ4cHqu3AdfOd3EvXrJi7EunrzHRiLs5lL/dj7v0nv4m7khqzkDrGserob+Udx
-         j7ojaYPjGeZCvVmP7PfqO5jZdeBQB+c/QGwqGg2/3eRr/x6Fewm5DSeCA1DsfXgi7Ynn
-         5E5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X7zbGW5iAUlXThWXfRt9N53+MyaLgWUvpH0idsYoAA8=;
-        b=7Sod7p6Yzla6jzpR/XroOwmkp0ETuYICj1qMFF2N4LD5f1yGKt6YU25yYr4qAKEneD
-         HfkpRI4WwYKFsSWFOtjc2IdTmrgE8/3KZl0AkSVzDCOOvfRyYyam7jaaMCfa7CQuvv5O
-         CA65LNJNMNe51Up/1N/DWeq4kHgxNr14ChCqwXTtwkRNIlegS3cu3SFb5zc8NbM5luqc
-         paZnocn6xwe8cr4uphW36NBu4/zuAV2/SUGAHAWXzQkFqJFuG+zqDx6QzJAiRhI4U1Lr
-         1Ep4+JZzwPDCP2MQCTFkpFPjWAvNSpBroRst9yLMuObr+61L0HplmJABhgtrTXwuiHDc
-         fHdg==
-X-Gm-Message-State: AO0yUKU9ib+Y6pxmtpESd/th0opSzKY9W8Krr8fLgGPkjZTHRpNo1sBy
-        ZJV6RLLNz9J/asyJMZLOR7pgJw==
-X-Google-Smtp-Source: AK7set9AV76QtsFNv6eXKfMRqN81TnxQ66Lv36o+uSxtRPbLCEgtP0RIcqdAs8sBhsiz8iinFCOBfQ==
-X-Received: by 2002:a50:fa8a:0:b0:4aa:a4ea:cdc9 with SMTP id w10-20020a50fa8a000000b004aaa4eacdc9mr3088933edr.16.1676487842990;
-        Wed, 15 Feb 2023 11:04:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z16-20020a5096d0000000b004aad0a9144fsm9903671eda.51.2023.02.15.11.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 11:04:02 -0800 (PST)
-Message-ID: <27866ba4-ea82-68b9-fa10-5c7687bcaf17@linaro.org>
-Date:   Wed, 15 Feb 2023 20:04:00 +0100
+        Wed, 15 Feb 2023 14:04:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F6E39BB5;
+        Wed, 15 Feb 2023 11:04:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 298B0B8236D;
+        Wed, 15 Feb 2023 19:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A5EC433EF;
+        Wed, 15 Feb 2023 19:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676487890;
+        bh=FaRNhtG1pjZ8L7eZVmPD5vLGCZlfxjcuMkgF3wWZ6e4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pXCYJZ+b4a3P4bmJdT1ZZzw0DLBFCMTsfnN0V1uJMhdBT8zBZ/eMJfihC6nXXgNqa
+         RrhVaRueDseaJcz7khXZYClYpq30BXgNXAuuJ9VMIOyQCoXTe0ao2d00PxMAzenUv1
+         yLhSufoiL59X2Peh7kMzyf5Mf3rPgR79FlJU7Tnci/vCetZaRNYDRX+xnO2JMWzJoY
+         zpoOncr7PYnS3bHA6yUe45K3UoN2CjW3kMgc1oAEeQQ8ZfjPJwxaH1E67RrTh9t+nV
+         cNdWHAyyKHInOdXvnWVQCebmcOS7sbZJga6fUywLfQ9V+SdEX5wM6eGhNi99TyA/Xc
+         NSt/HfeQRAraw==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>
+Cc:     Jaegeuk Kim <jaegeuk@google.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH] scsi: ufs: support IO traces for zoned block device
+Date:   Wed, 15 Feb 2023 11:04:48 -0800
+Message-Id: <20230215190448.1687786-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: supply: pm8941-coincell: Don't
- require charging properties
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
- <20230214090849.2186370-2-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214090849.2186370-2-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,17 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 10:08, Konrad Dybcio wrote:
-> It's fine for these properties to be absent, as the driver doesn't fail
-> without them and functions with settings inherited from the reset/previous
-> stage bootloader state.
-> 
-> Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Convert to DT schema format")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+From: Jaegeuk Kim <jaegeuk@google.com>
 
+Let's support WRITE_16, READ_16, ZBC_IN, ZBC_OUT.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ drivers/ufs/core/ufshcd.c  | 8 ++++----
+ include/trace/events/ufs.h | 4 +++-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index e18c9f4463ec..235d2e2d828a 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -402,15 +402,15 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 
+ 	opcode = cmd->cmnd[0];
+ 
+-	if (opcode == READ_10 || opcode == WRITE_10) {
+-		/*
+-		 * Currently we only fully trace read(10) and write(10) commands
+-		 */
++	if (opcode == READ_10 || opcode == WRITE_10 ||
++				opcode == READ_16 || opcode == WRITE_16) {
+ 		transfer_len =
+ 		       be32_to_cpu(lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
+ 		lba = scsi_get_lba(cmd);
+ 		if (opcode == WRITE_10)
+ 			group_id = lrbp->cmd->cmnd[6];
++		if (opcode == WRITE_16)
++			group_id = lrbp->cmd->cmnd[14];
+ 	} else if (opcode == UNMAP) {
+ 		/*
+ 		 * The number of Bytes to be unmapped beginning with the lba.
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739ee7b20..f82a9e15fd78 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -18,7 +18,9 @@
+ 		{ READ_16,		"READ_16" },			\
+ 		{ READ_10,		"READ_10" },			\
+ 		{ SYNCHRONIZE_CACHE,	"SYNC" },			\
+-		{ UNMAP,		"UNMAP" })
++		{ UNMAP,		"UNMAP" },			\
++		{ ZBC_IN,		"ZBC_IN" },			\
++		{ ZBC_OUT,		"ZBC_OUT" })
+ 
+ #define UFS_LINK_STATES						\
+ 	EM(UIC_LINK_OFF_STATE,		"UIC_LINK_OFF_STATE")		\
+-- 
+2.39.1.581.gbfd45094c4-goog
 
