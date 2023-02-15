@@ -2,233 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F41697988
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3D769798D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjBOKIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S233721AbjBOKLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBOKIo (ORCPT
+        with ESMTP id S231788AbjBOKLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:08:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DDA2ED57
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:08:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 451FC61AF5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:08:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E31C433D2;
-        Wed, 15 Feb 2023 10:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676455722;
-        bh=+ErR1mhwcLA7orp3FBuWvTJemO2srg6qY9UPnHKqXGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aaeJnWow7IaVfAqAjP1aeJwDUxiiZsV1ZF1vT4/WQ06fxSvJsuNHYvB2u6iTbRf2a
-         PxjrEEjMuHXBNYvcFGrEAGg7YViLPG4jd3CQ61cjAgT+IWpJ/vOkuzu3yluuKz9dyd
-         lblUsWv/Z5Ran8LmUJu/NDSdi9gdQK+7XtXrLHiMz0V5QUKd8kuTrvd3RMKQr6xCXG
-         lEAgn/2GtO+f2MFYqL6PNHyWjM2PicmZzUDjoFu9Oi/4Xtuqpfgj7ytOLTO6mTo7kd
-         SLTUCXhKBKPlUVi33GRTkkEPwrDX6WDM/aWMJkskLQAWIQ8Pm65StJclhzFLnYqMMj
-         t5m6wK3bPGfkA==
-Date:   Wed, 15 Feb 2023 12:08:27 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Teng Hu <huteng.ht@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <muchun.song@linux.dev>, x86@kernel.org
-Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
-Message-ID: <Y+yvG66aalD0x9W3@kernel.org>
-References: <67240e55-af49-f20a-2b4b-b7d574cd910d@gmail.com>
- <22f0e262-982e-ea80-e52a-a3c924b31d58@redhat.com>
- <dbfbd982-27f3-0d72-49e0-d3dd5fe636a8@bytedance.com>
- <4386151c-0328-d207-9a71-933ef61817f9@redhat.com>
- <Y+t0Bhu7BCzH2Dp4@kernel.org>
- <a7f8be91-32c1-bfbe-7e81-5b1e818ba01d@redhat.com>
- <a09bfe3a-87e4-f8ce-89bb-c5fde8cc33c9@redhat.com>
- <Y+uO5IE7boORqsne@dhcp22.suse.cz>
- <Y+ymKw1eJaRcmDNN@kernel.org>
- <b030ec03-c214-276f-4a9d-c1bf7439e8f5@bytedance.com>
+        Wed, 15 Feb 2023 05:11:18 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2127.outbound.protection.outlook.com [40.107.117.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDBC2ED57
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:11:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XzrdSfGBcBSOPC7zfvqlb1Ac+pgDdMQuR9dcE/xr0UzoItsUxfof6nKEb35vaWIbizaIF88P6ceGxY2xTDqu3o3VilTXTA1Q2DdnQgg3eC7Cnz93UjG7pUzsRcVTDXCBABv+AKlgDP4BP8LwLNPoekLUHdUeUNb9BPp6WV2mppwOzyFSVlqBP5fV6X+kBl7YG3YW4LS3l+IAm2FpQsUilKgcScgtZDifLePbdVrH4GtLMOKMFUusbjZAhplYVWGioJSNn2WYzPQSMuWk1YLFdIw9tHMp606xmzExEyYGfrHdp0na13OBP+PUlm2SNyWk2zv0ou6Ajr7tV1NSFky6QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zf9hMf10tFpYIOg6ykVmNjOgfYGkvW5d9YodsJqKm2w=;
+ b=Kaq6ushtDnu+THgO2Rp2ajRGcnIKaVvI/j6oUaTCh/IrFZpEiGIDLDWv+mgGBC6iCtSKpW/wkcBx9AVwzaF7SM5w28/RcVFD07dXnT76aEXGkZgq9ojmZL2vgIeRk1kUOzLagNfUvAL66Y4JOHBUIylj42Wawd+MhGhLG2cCFt5VEZOzVdFm5I4Z7n6T8Fk4mrqj6NGkwY+woDfonkVAu0FHzqLhIyDpwZvf5Z04Dx/PuCPxiJB2U0f3VFFnFPqJUYc8RKAkUgewn8jElgRYtxCBwQfzC+wnMKYxcW74r1nmvH+ncQ8doFHnwyUtuokWJeYc+fMzOOep4UHjvAAVeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
+ header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zf9hMf10tFpYIOg6ykVmNjOgfYGkvW5d9YodsJqKm2w=;
+ b=BFyOjrnZZOwaeNEgLPRObS3JfjM8albf+clKCJAl9jRgYkOvyRedkDORIf3bVcWOBrbk7zRdxh6V8kOpeKBlIY51uZ0oV9DMQVaDnpXnls7DEipwYeZd7ivaZ198xUNcG9ZS17du/uhEUI5QrhZVcDy04EMwQK3li7TGdGTCMO4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dm.renesas.com;
+Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com (2603:1096:604:10b::11)
+ by TYWPR01MB10791.jpnprd01.prod.outlook.com (2603:1096:400:2a7::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 10:11:13 +0000
+Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com
+ ([fe80::9438:5139:7952:d8b0]) by OS3PR01MB6641.jpnprd01.prod.outlook.com
+ ([fe80::9438:5139:7952:d8b0%8]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 10:11:13 +0000
+From:   David Rau <David.Rau.opensource@dm.renesas.com>
+To:     broonie@kernel.org
+Cc:     support.opensource@diasemi.com, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, bailideng@google.com,
+        David Rau <David.Rau.opensource@dm.renesas.com>
+Subject: [PATCH] ASoC: da7219: Improve the IRQ process to increase the stability
+Date:   Wed, 15 Feb 2023 10:10:45 +0000
+Message-Id: <20230215101045.21456-1-David.Rau.opensource@dm.renesas.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0092.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b4::10) To OS3PR01MB6641.jpnprd01.prod.outlook.com
+ (2603:1096:604:10b::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b030ec03-c214-276f-4a9d-c1bf7439e8f5@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3PR01MB6641:EE_|TYWPR01MB10791:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8088117-26bf-4072-5609-08db0f3cf7b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UrIlbD8S9kqQ/YIYPz1E5yHvYScaNsECXMrgj2it7ABXmayE0ANpFIWnh9GhqhfHF4Iar8jw6wNIK+pTtyIQ8wCj+ZG+1sqOGF4dzg0EmBoqoS82V9qR3nZ7g7Fo3osj0PfcH1AEm95+3HM9YdVcYubYzKyX1eMomSey9rSYNTwhKmNpAWZr37pBr17JHF5loDTx5hVqKXCSLH825Agrg/ig6AcXWy2ySAN8kFRP9IB8O0L4PrySuEqYJJG9aYg0XsVwCryE6hf/xSjkLchZxBNfF23h5HCIwDkbBRU1P0GoEOlHFHAU1e5no7XDcayOMMNitzIIyh/U+BryhZhwl7FYXNdn0gykerDAjr+Kb8p8IcPQ8D1rzo3CGNg5Rp/3R/08oDI3iyfCRpxoIIhR2uMMtWnv6sT8OqR5v1XhI+93xBoMdCe41ADS6J+sHBqNeClhAf6btcRPHb52t7nlw1QXLgQWbIZQFzU34f0g2VmzEc4qy5Zjh5/IRaW4I7/fQISzNHo8bDS/3MBj9d95snjrzflP93pEFHBkv5GR6W+5frPhR9m/KTlIwyS0+YTLlMMVlRWnZuw5YlGGjG8Lh2JLxoG8HVLV36t8NahKx55RFpa732RP009aGhLWN+R6uIbhaP1wh+eOVsRTRDaiooSIC1ikBMief14bnVcGCc/r1YqXxIPD1CWMjM4YtvHWUS/BSBvkLDxW06rD6brRhw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6641.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(451199018)(186003)(6512007)(26005)(8936002)(41300700001)(316002)(86362001)(38350700002)(38100700002)(103116003)(2616005)(5660300002)(83380400001)(8676002)(478600001)(6486002)(66556008)(66476007)(66946007)(4326008)(6916009)(2906002)(52116002)(1076003)(6506007)(107886003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jlQk8h0x+7V/dRxtFyHDm4EkA3kQRJJYZRVc5C3yCLW5kzETZlyl1dsy3LQE?=
+ =?us-ascii?Q?DvVbPL6r0DHwhh/NlnmuhpRADCHkk/MNUWN0VtrnmvHqpQSNJ+m/60w9PBfO?=
+ =?us-ascii?Q?bxZ2bMQJ92bn87YtqyUOluLndJZ5LTF+ybjm67Lq3GasPt+zvhgtCrQB5j9z?=
+ =?us-ascii?Q?hke6BJLwWOkSwEtWGZdHdvPfZ+I9PtZ0UepPWOOz9s4cisFYpTU26esM7TaM?=
+ =?us-ascii?Q?UAWeFbIGG7BCcDOhxAITAN3+NO/CJn7UxgUHeQ/BJkVJ+Fn7rBttfdI4TRds?=
+ =?us-ascii?Q?lyUph/f9jcabf/NaTqmokUCuH4LYPR/RuE004vOWMiAcrps2yE4/MkZi0V0S?=
+ =?us-ascii?Q?MZawxzdLaR8VX9fSUu70Zy/PsLMWKMJk4kODykW5MNRvenrhSnhbI/78l9bv?=
+ =?us-ascii?Q?+T6H6o9SgzcmM8wXYMrPwUBlb6hF5carGNx/hBUUF6pWA+pxnNhFH3hOZF8+?=
+ =?us-ascii?Q?LhfFg/rdOQlikWB0Br7wJNS0iyO3hJuvZiBfl1TWMhSRaMw/2daf1yFAWi6h?=
+ =?us-ascii?Q?Iw+3nWRsTfHYBLBI5oMe5vkhpscyBw1sc5lpzb5rK84U4nvVm/HZJNoGqEES?=
+ =?us-ascii?Q?B3kN0aLuSDMO63SztnSaJD0RVlO/hkLZHeKmfUN2FXQh8rj4PZbqzGmNiw8H?=
+ =?us-ascii?Q?iZnyUSiIfvhi/7BMGKlobeBFOU9SvCOK5LLJpAKHrKz9Y2oR+ipSKh0aCcnI?=
+ =?us-ascii?Q?jMK4RdivLpBc8oAjRejX8NHkC28Dx87jZxhYXST/Id/Pk1v6tH8SygVsDtnC?=
+ =?us-ascii?Q?zEXbgIK+p5sK8Z/8v3QYmP/NwZQad/rF7SaAQgpwhTmrLTS68sYbYK/AqS4a?=
+ =?us-ascii?Q?VQ2UgLEL1IOvPtCe63Sa6/adtGE1nBqoJyCdC77gSGrnrSXlSA/vDi30n7Go?=
+ =?us-ascii?Q?0PX6DYbHZ0cnY6PYfazIJbJUGtbxka5RhVViujc5+WgbeKVPTnnEeNl6aiQ5?=
+ =?us-ascii?Q?ypjaeQv+pVKH/m3eGlacalFB92d4rjQHIaVottGzXiVexmoXWO8S5P97YOi4?=
+ =?us-ascii?Q?4nkBTz0vdtaNcJYMaoIERmSdSqi/BmTK0uRbJCzud4iFHtE0Ba1T2k7slUlt?=
+ =?us-ascii?Q?FixfsYeKbDwSFgYIynb5wv3/OCMe0FQgHhrvSoTUEZjbyP82G/Ry5bdvRloC?=
+ =?us-ascii?Q?GxPfPY1MH7dFxGh2H+vJmKw8WHYZNm/tQ+pRXp2K7IgWPvAobUqLQs5usdj2?=
+ =?us-ascii?Q?zMLuquo2G+kmY/uhjcuF8IVkDRfK2paYkWIdcwbTQazs/0JhR0YdcRp+UJo0?=
+ =?us-ascii?Q?wluNDk5cY66c3M/T2/vXUP0oKmkNjzGvW5vGQr200SD1eqkj3VFmClgUM5D6?=
+ =?us-ascii?Q?17KAoLuU6wac7PcSqS3trQWBQhrNbvd7IiWc2L1vbqHazHIZOVc+l3iS+6Au?=
+ =?us-ascii?Q?wyZBHO20Z9Ejq7U0P25ERIxZvTsxzz9SCQ3vSddgcDt9DFgvBfW0EbLBwwis?=
+ =?us-ascii?Q?Rieobm4pNzTVzYuTsKkhbseoTuhgjs3rH/k/KUBk/m4QjtaLZGCiblei7WZa?=
+ =?us-ascii?Q?oWMCtxsZLQm3XYMzRGeTtLS78HfC9LjLVUT4d4iv6m2wNYd+GKKyY5ZX0dja?=
+ =?us-ascii?Q?o0Dzr+rP1GP63qdnwMPHbSI/DljHnKhzplZcw92A2hphtU7vdB+3g0dABMd5?=
+ =?us-ascii?Q?HQ=3D=3D?=
+X-OriginatorOrg: dm.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8088117-26bf-4072-5609-08db0f3cf7b5
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6641.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 10:11:13.2930
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TIWbfe3YqU4XviwSW16M3A9uFvRPku8x7pyeKoDkTYGFXCU/qBwh7r7BLs2IXOkoBNNer8FlM7L+px75IwgtIo8WEGRIKI6NZjmUbXJVP2Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10791
+X-Spam-Status: No, score=0.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 05:41:52PM +0800, Qi Zheng wrote:
-> 
-> 
-> On 2023/2/15 17:30, Mike Rapoport wrote:
-> > On Tue, Feb 14, 2023 at 02:38:44PM +0100, Michal Hocko wrote:
-> > > On Tue 14-02-23 12:58:39, David Hildenbrand wrote:
-> > > > On 14.02.23 12:48, David Hildenbrand wrote:
-> > > > > On 14.02.23 12:44, Mike Rapoport wrote:
-> > > > > > (added x86 folks)
-> > > > > > 
-> > > > > > On Tue, Feb 14, 2023 at 12:29:42PM +0100, David Hildenbrand wrote:
-> > > > > > > On 14.02.23 12:26, Qi Zheng wrote:
-> > > > > > > > On 2023/2/14 19:22, David Hildenbrand wrote:
-> > > > > > > > > 
-> > > > > > > > > TBH, this is the first time I hear of NODE_MIN_SIZE and it seems to be a
-> > > > > > > > > pretty x86 specific thing.
-> > > > > > > > > 
-> > > > > > > > > Are we sure we want to get NODE_MIN_SIZE involved?
-> > > > > > > > 
-> > > > > > > > Maybe add an arch_xxx() to handle it?
-> > > > > > > 
-> > > > > > > I still haven't figured out what we want to achieve with NODE_MIN_SIZE at
-> > > > > > > all. It smells like an arch-specific hack looking at
-> > > > > > > 
-> > > > > > > "Don't confuse VM with a node that doesn't have the minimum amount of
-> > > > > > > memory"
-> > > > > > > 
-> > > > > > > Why shouldn't mm-core deal with that?
-> > > > > > 
-> > > > > > Well, a node with <4M RAM is not very useful and bears all the overhead of
-> > > > > > an extra live node.
-> > > > > 
-> > > > > And totally not with 4.1M, haha.
-> > > > > 
-> > > > > I really like the "Might fix boot" in the commit description.
-> > > > > 
-> > > > > > 
-> > > > > > But, hey, why won't we just drop that '< NODE_MIN_SIZE' and let people with
-> > > > > > weird HW configurations just live with this?
-> > > > > 
-> > > > > 
-> > > > > ;)
-> > > > > 
-> > > > 
-> > > > Actually, remembering 09f49dca570a ("mm: handle uninitialized numa nodes
-> > > > gracefully"), this might be the right thing to do. That commit assumes that
-> > > > all offline nodes would get the pgdat allocated in free_area_init(). So that
-> > > > we end up with an allocated pgdat for all possible nodes. The reasoning IIRC
-> > > > was that we don't care about wasting memory in weird VM setups.
-> > > 
-> > > Yes, that is the case indeed. I suspect the NODE_MIN_SIZE is a relict of
-> > > the past when some PXM entries were incorrect or fishy. I would just
-> > > drop the check and see whether something breaks. Or make those involved
-> > > back then remember whether this is addressing something that is relevant
-> > > these days. Even 5MB node makes (as the memmap is allocated for the
-> > > whole memory section anyway and that is 128MB) a very little sense if you ask me.
-> > 
-> > How about we try this:
-> 
-> I'm curious how we can test this? I guess no one remembers the
-> historical background of NODE_MIN_SIZE. :(
- 
-At the very least we can verify that your setup works fine with this ;-)
+Remove the sleep control in IRQ thread
+and create an individual task to handel it for Jack plug in event.
 
-Of course we cannot test the exact same configuration that NODE_MIN_SIZE
-was supposed to fix, but there was a lot of effort to make core mm
-initialization robust to cope with weird memory layouts and I'm quite
-confident this won't break anything.
- 
-> >  From b670120bcacd3fe34a40d7179c70ca2ab69279e0 Mon Sep 17 00:00:00 2001
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > Date: Wed, 15 Feb 2023 11:12:18 +0200
-> > Subject: [PATCH] x86/mm: drop 4MB restriction on minimal NUMA node size
-> > 
-> > Qi Zheng reports crashes in a production environment and provides a
-> > simplified example as a reproducer:
-> > 
-> >    For example, if we use qemu to start a two NUMA node kernel,
-> >    one of the nodes has 2M memory (less than NODE_MIN_SIZE),
-> >    and the other node has 2G, then we will encounter the
-> >    following panic:
-> > 
-> >    [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> >    [    0.150783] #PF: supervisor write access in kernel mode
-> >    [    0.151488] #PF: error_code(0x0002) - not-present page
-> >    <...>
-> >    [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
-> >    <...>
-> >    [    0.169781] Call Trace:
-> >    [    0.170159]  <TASK>
-> >    [    0.170448]  deactivate_slab+0x187/0x3c0
-> >    [    0.171031]  ? bootstrap+0x1b/0x10e
-> >    [    0.171559]  ? preempt_count_sub+0x9/0xa0
-> >    [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
-> >    [    0.172735]  ? bootstrap+0x1b/0x10e
-> >    [    0.173236]  bootstrap+0x6b/0x10e
-> >    [    0.173720]  kmem_cache_init+0x10a/0x188
-> >    [    0.174240]  start_kernel+0x415/0x6ac
-> >    [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
-> >    [    0.175417]  </TASK>
-> >    [    0.175713] Modules linked in:
-> >    [    0.176117] CR2: 0000000000000000
-> > 
-> > The crashes happen because of inconsistency between nodemask that has
-> > nodes with less than 4MB as memoryless and the actual memory fed into
-> > core mm.
-> > 
-> > The commit 9391a3f9c7f1 ("[PATCH] x86_64: Clear more state when ignoring
-> > empty node in SRAT parsing") that introduced minimal size of a NUMA node
-> > does not explain why a node size cannot be less than 4MB and what boot
-> > failures this restriction might fix.
-> > 
-> > Since then a lot has changed and core mm won't confuse badly about small
-> > node sizes.
-> > 
-> > Drop the limitation for the minimal node size.
-> > 
-> > Link: https://lore.kernel.org/all/20230212110305.93670-1-zhengqi.arch@bytedance.com/
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > ---
-> >   arch/x86/include/asm/numa.h | 7 -------
-> >   arch/x86/mm/numa.c          | 7 -------
-> >   2 files changed, 14 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
-> > index e3bae2b60a0d..ef2844d69173 100644
-> > --- a/arch/x86/include/asm/numa.h
-> > +++ b/arch/x86/include/asm/numa.h
-> > @@ -12,13 +12,6 @@
-> >   #define NR_NODE_MEMBLKS		(MAX_NUMNODES*2)
-> > -/*
-> > - * Too small node sizes may confuse the VM badly. Usually they
-> > - * result from BIOS bugs. So dont recognize nodes as standalone
-> > - * NUMA entities that have less than this amount of RAM listed:
-> > - */
-> > -#define NODE_MIN_SIZE (4*1024*1024)
-> > -
-> >   extern int numa_off;
-> >   /*
-> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> > index 2aadb2019b4f..55e3d895f15c 100644
-> > --- a/arch/x86/mm/numa.c
-> > +++ b/arch/x86/mm/numa.c
-> > @@ -601,13 +601,6 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
-> >   		if (start >= end)
-> >   			continue;
-> > -		/*
-> > -		 * Don't confuse VM with a node that doesn't have the
-> > -		 * minimum amount of memory:
-> > -		 */
-> > -		if (end && (end - start) < NODE_MIN_SIZE)
-> > -			continue;
-> > -
-> >   		alloc_node_data(nid);
-> >   	}
-> 
-> -- 
-> Thanks,
-> Qi
+This commit improves the control of ground switches in the AAD IRQ.
 
+Signed-off-by: David Rau <David.Rau.opensource@dm.renesas.com>
+---
+ sound/soc/codecs/da7219-aad.c | 41 +++++++++++++++++++++++++++++------
+ sound/soc/codecs/da7219-aad.h |  4 ++++
+ 2 files changed, 38 insertions(+), 7 deletions(-)
+
+diff --git a/sound/soc/codecs/da7219-aad.c b/sound/soc/codecs/da7219-aad.c
+index c55b033d89da..4a4f09f924bc 100644
+--- a/sound/soc/codecs/da7219-aad.c
++++ b/sound/soc/codecs/da7219-aad.c
+@@ -339,11 +339,39 @@ static void da7219_aad_hptest_work(struct work_struct *work)
+ 				    SND_JACK_HEADSET | SND_JACK_LINEOUT);
+ }
+ 
++static void da7219_aad_jack_det_work(struct work_struct *work)
++{
++	struct da7219_aad_priv *da7219_aad =
++		container_of(work, struct da7219_aad_priv, jack_det_work);
++	struct snd_soc_component *component = da7219_aad->component;
++	u8 srm_st;
++
++	mutex_lock(&da7219_aad->jack_det_mutex);
++
++	srm_st = snd_soc_component_read(component, DA7219_PLL_SRM_STS) & DA7219_PLL_SRM_STS_MCLK;
++	msleep(da7219_aad->gnd_switch_delay * ((srm_st == 0x0) ? 2 : 1) - 4);
++	/* Enable ground switch */
++	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
++
++	mutex_unlock(&da7219_aad->jack_det_mutex);
++}
++
+ 
+ /*
+  * IRQ
+  */
+ 
++static irqreturn_t da7219_aad_pre_irq_thread(int irq, void *data)
++{
++
++	struct da7219_aad_priv *da7219_aad = data;
++
++	if (!da7219_aad->jack_inserted)
++		schedule_work(&da7219_aad->jack_det_work);
++
++	return IRQ_WAKE_THREAD;
++}
++
+ static irqreturn_t da7219_aad_irq_thread(int irq, void *data)
+ {
+ 	struct da7219_aad_priv *da7219_aad = data;
+@@ -351,14 +379,9 @@ static irqreturn_t da7219_aad_irq_thread(int irq, void *data)
+ 	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
+ 	struct da7219_priv *da7219 = snd_soc_component_get_drvdata(component);
+ 	u8 events[DA7219_AAD_IRQ_REG_MAX];
+-	u8 statusa, srm_st;
++	u8 statusa;
+ 	int i, report = 0, mask = 0;
+ 
+-	srm_st = snd_soc_component_read(component, DA7219_PLL_SRM_STS) & DA7219_PLL_SRM_STS_MCLK;
+-	msleep(da7219_aad->gnd_switch_delay * ((srm_st == 0x0) ? 2 : 1) - 4);
+-	/* Enable ground switch */
+-	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
+-
+ 	/* Read current IRQ events */
+ 	regmap_bulk_read(da7219->regmap, DA7219_ACCDET_IRQ_EVENT_A,
+ 			 events, DA7219_AAD_IRQ_REG_MAX);
+@@ -377,6 +400,9 @@ static irqreturn_t da7219_aad_irq_thread(int irq, void *data)
+ 		events[DA7219_AAD_IRQ_REG_A], events[DA7219_AAD_IRQ_REG_B],
+ 		statusa);
+ 
++	if (!da7219_aad->jack_inserted)
++		cancel_work_sync(&da7219_aad->jack_det_work);
++
+ 	if (statusa & DA7219_JACK_INSERTION_STS_MASK) {
+ 		/* Jack Insertion */
+ 		if (events[DA7219_AAD_IRQ_REG_A] &
+@@ -940,8 +966,9 @@ int da7219_aad_init(struct snd_soc_component *component)
+ 
+ 	INIT_WORK(&da7219_aad->btn_det_work, da7219_aad_btn_det_work);
+ 	INIT_WORK(&da7219_aad->hptest_work, da7219_aad_hptest_work);
++	INIT_WORK(&da7219_aad->jack_det_work, da7219_aad_jack_det_work);
+ 
+-	ret = request_threaded_irq(da7219_aad->irq, NULL,
++	ret = request_threaded_irq(da7219_aad->irq, da7219_aad_pre_irq_thread,
+ 				   da7219_aad_irq_thread,
+ 				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+ 				   "da7219-aad", da7219_aad);
+diff --git a/sound/soc/codecs/da7219-aad.h b/sound/soc/codecs/da7219-aad.h
+index 21fdf53095cc..be87ee47edde 100644
+--- a/sound/soc/codecs/da7219-aad.h
++++ b/sound/soc/codecs/da7219-aad.h
+@@ -11,6 +11,7 @@
+ #define __DA7219_AAD_H
+ 
+ #include <linux/timer.h>
++#include <linux/mutex.h>
+ #include <sound/soc.h>
+ #include <sound/jack.h>
+ #include <sound/da7219-aad.h>
+@@ -196,6 +197,9 @@ struct da7219_aad_priv {
+ 
+ 	struct work_struct btn_det_work;
+ 	struct work_struct hptest_work;
++	struct work_struct jack_det_work;
++
++	struct mutex  jack_det_mutex;
+ 
+ 	struct snd_soc_jack *jack;
+ 	bool micbias_resume_enable;
 -- 
-Sincerely yours,
-Mike.
+2.17.1
+
