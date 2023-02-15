@@ -2,114 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0BE6986B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E0B6986B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjBOU6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S229674AbjBOVA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjBOU6e (ORCPT
+        with ESMTP id S229648AbjBOVAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:58:34 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E543253543;
-        Wed, 15 Feb 2023 12:55:53 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id c15so16992544oic.8;
-        Wed, 15 Feb 2023 12:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmbh1f8KIAJa4cfe7gLSSbxP1FhhqTnT01uu/QY3KeI=;
-        b=bPW9aaLh1JaW0780UTgBkKiZwSdh4bZKO9tcXjlNHjGyhyih6rrW2OiaGWHn9GGrzo
-         g4u2uJkYpOenZCoRHvtM+r1WPAg4N9NoB7sQIp2XXtNPsbBo6L2tyP/gIKtnULWcj0kf
-         bxhhlMkvfKJg3kel4LDav48JbtUKK/hR2DAdP9dDCXcjHFgUz9WyPcWUCt0F8RQgZD7a
-         FpP0MRSXQ262bYC2J63HxT5FAaeErd6fo3WKRaqw+8bWeLeBoNqfRbHdqL008vBqRbhy
-         PnJpD2z6IEZ3fKibiG7042N+GjXjdDa9K3ax4VSAACfC702VSwGtsMma35HmfEIg17u5
-         6NWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zmbh1f8KIAJa4cfe7gLSSbxP1FhhqTnT01uu/QY3KeI=;
-        b=Wn5EmuWZ47keMyA3AoyWFMwlUFNWycPlbfyXNfhsMlI1AjD+3fG2ocx7cVUrWK1iEh
-         FF9Dl9jTCVR8r7oFhbQ4rxIVV+jOSL0txIVv/JqzXUwolmSreeqU5KgSVmvI2ll05cBa
-         9qXKv2kKsGn8vLs5jz2BzjZdvPraQwDIavrpQ7noNw/sap/QRalGUTVvwnix/Wt8R3EK
-         5XAoJUQg9Z3rbojnZe6ITHQO7/JGmvokv83SCBM3c+RdRmWcKjCkugb/1xzcVbv/pWdz
-         GgeNYRioC0QRKvgHGzRBpkZdrydS1MRpnJzJGO/Jdp1WLSnlRFEM0OwsAQGln9S2xmvZ
-         HAhw==
-X-Gm-Message-State: AO0yUKXYIDeGQsBuxwjmlzLp/KiEw6kze5yww1IyiKEOpULqrjMLSaLm
-        T1JXGhIdcTjTEjol4gcwD6FAc2yfC+vqOD8sISE=
-X-Google-Smtp-Source: AK7set8ABtTTUiS8oZK3RlDNhc5D2N8SMW1l2Ck93cqJrlRu9e68Rq3rGmBhaheeQUX2zCR4+IThgziKrKlEI8GPdmo=
-X-Received: by 2002:a05:6808:1b09:b0:35b:d93f:cbc4 with SMTP id
- bx9-20020a0568081b0900b0035bd93fcbc4mr56498oib.96.1676494518455; Wed, 15 Feb
- 2023 12:55:18 -0800 (PST)
+        Wed, 15 Feb 2023 16:00:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFB73D0A1;
+        Wed, 15 Feb 2023 12:57:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 325C1B823B0;
+        Wed, 15 Feb 2023 20:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC14FC433EF;
+        Wed, 15 Feb 2023 20:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676494647;
+        bh=L7iL02aPlYxbwnt1oXsjVxdLXXr3uFE8b+MsguWRWfA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=NFwJFk8a2PU4AbCXca0VIbTRRKa6Kq3ZwDubDgOFTLh9mxLpU8Ct0EfmjeWLca8x6
+         obnGL5bIaMYp1+zQ/DfoFm1SGK4aNBuwkuYD8x0TPP3n5aWZQKFtioUceb5H1XUlk/
+         jgkyTy6OgNlv/XUEj9PVpPW99QpgB7Arlw4HlFEGLZwrfDjhT3ZGZ/m6RBr5A92KfI
+         Ek21aBhMrHRKJOzJQ2T2N4znNHEWXzFrCQr+HgpxLRsmAZxAhSa7dnG7thY6KeQ3OK
+         kUXGVh9G6wq4ufrmPmGaYFqt8DFWbTKYwxyMHZVl6Cqe4Ce8v8STY0Wqvq4+XGlHfU
+         tESLFGGLRIOZg==
+Date:   Wed, 15 Feb 2023 14:57:26 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        bhelgaas@google.com, jean-philippe@linaro.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
+Subject: Re: [PATCH] PCI/ATS:  Allow to enable ATS on VFs even if it is not
+ enabled on PF
+Message-ID: <20230215205726.GA3213227@bhelgaas>
 MIME-Version: 1.0
-References: <20230215204547.2760761-1-sashal@kernel.org> <20230215204547.2760761-24-sashal@kernel.org>
-In-Reply-To: <20230215204547.2760761-24-sashal@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 15 Feb 2023 15:55:07 -0500
-Message-ID: <CADnq5_PEGUSTFAzPOQtJFpsBqWQMaox=E1AxE+-h3_FxSbHNzg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.1 24/24] drm/amd/display: disable S/G display on
- DCN 3.1.2/3
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        yifan1.zhang@amd.com, stylon.wang@amd.com, sunpeng.li@amd.com,
-        airlied@gmail.com, Xinhui.Pan@amd.com, Rodrigo.Siqueira@amd.com,
-        roman.li@amd.com, amd-gfx@lists.freedesktop.org, Jerry.Zuo@amd.com,
-        aurabindo.pillai@amd.com, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, Alex Deucher <alexander.deucher@amd.com>,
-        harry.wentland@amd.com, christian.koenig@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+ksmNWJdWNkGAU9@unreal>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 3:46 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> From: Alex Deucher <alexander.deucher@amd.com>
->
-> [ Upstream commit 077e9659581acab70f2dcc04b5bc799aca3a056b ]
->
-> Causes flickering or white screens in some configurations.
-> Disable it for now until we can fix the issue.
->
-> Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2352
-> Cc: roman.li@amd.com
-> Cc: yifan1.zhang@amd.com
-> Reviewed-by: Yifan Zhang <yifan1.zhang@amd.com>
-> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+[+cc Will, Robin, Joerg for arm-smmu-v3 page size question]
 
-This was reverted upstream and should be dropped.
-
-Alex
-
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 --
->  1 file changed, 2 deletions(-)
+On Sun, Feb 12, 2023 at 08:14:48PM +0200, Leon Romanovsky wrote:
+> On Wed, Feb 08, 2023 at 10:43:21AM -0800, Ganapatrao Kulkarni wrote:
+> > As per PCIe specification(section 10.5), If a VF implements an
+> > ATS capability, its associated PF must implement an ATS capability.
+> > The ATS Capabilities in VFs and their associated PFs are permitted to
+> > be enabled independently.
+> > Also, it states that the Smallest Translation Unit (STU) for VFs must be
+> > hardwired to Zero and the associated PF's value applies to VFs STU.
+> > 
+> > The current code allows to enable ATS on VFs only if it is already
+> > enabled on associated PF, which is not necessary as per the specification.
+> > 
+> > It is only required to have valid STU programmed on PF to enable
+> > ATS on VFs. Adding code to write the first VFs STU to a PF's STU
+> > when PFs ATS is not enabled.
 >
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 988b1c947aefc..c026ba532b733 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -1524,8 +1524,6 @@ static int amdgpu_dm_init(struct amdgpu_device *adev)
->                         break;
->                 case IP_VERSION(2, 1, 0):
->                 case IP_VERSION(3, 0, 1):
-> -               case IP_VERSION(3, 1, 2):
-> -               case IP_VERSION(3, 1, 3):
->                 case IP_VERSION(3, 1, 6):
->                         init_data.flags.gpu_vm_support = true;
->                         break;
-> --
-> 2.39.0
->
+> Can you please add here quotes from the spec and its version? I don't see
+> anything like this in my version of PCIe specification.
+
+See PCIe r6.0, sec 10.5.1.
+
+> > Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> > ---
+> >  drivers/pci/ats.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> > index f9cc2e10b676..a97ec67201d1 100644
+> > --- a/drivers/pci/ats.c
+> > +++ b/drivers/pci/ats.c
+> > @@ -67,13 +67,20 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
+> >  	if (ps < PCI_ATS_MIN_STU)
+> >  		return -EINVAL;
+> >  
+> > -	/*
+> > -	 * Note that enabling ATS on a VF fails unless it's already enabled
+> > -	 * with the same STU on the PF.
+> > -	 */
+> >  	ctrl = PCI_ATS_CTRL_ENABLE;
+> >  	if (dev->is_virtfn) {
+> >  		pdev = pci_physfn(dev);
+> > +
+> > +		if (!pdev->ats_enabled &&
+> > +				(pdev->ats_stu < PCI_ATS_MIN_STU)) {
+> > +			u16 ctrl2;
+> > +
+> > +			/* Associated PF's STU value applies to VFs. */
+> > +			pdev->ats_stu = ps;
+> > +			ctrl2 = PCI_ATS_CTRL_STU(pdev->ats_stu - PCI_ATS_MIN_STU);
+> > +			pci_write_config_word(pdev, pdev->ats_cap + PCI_ATS_CTRL, ctrl2);
+> > +		}
+
+For reference, it is this way because of edc90fee916b ("PCI: Allocate
+ATS struct during enumeration").  The rationale was that since the PF
+STU applies to all VFs, we should require that the PF STU be
+programmed before enabling ATS on any of the VFs.
+
+This patch relaxes that so the PF STU would be set either by (a)
+enabling ATS on the PF or (b) enabling ATS on the first VF.
+
+This looks racy because theoretically drivers for VF A and VF B could
+independently call pci_enable_ats() with different IOMMU page sizes,
+and we don't know which will get there first.
+
+Most callers supply a compile-time constant (PAGE_SHIFT or
+VTD_PAGE_SHIFT), so it won't matter.  arm_smmu_enable_ats() is
+fancier, but I *assume* it would still supply the same IOMMU page size
+for all VFs of a given PF.
+
+But it's still kind of ugly to call pci_enable_ats(dev_A) and have it
+muck with the configuration of dev_B.  Maybe we should configure the
+PF STU (without enabling ATS) at enumeration-time in pci_ats_init()?
+Is there some way to get the IOMMU page size at that time?
+
+> >  		if (pdev->ats_stu != ps)
+> >  			return -EINVAL;
+> >  	} else {
+> > -- 
+> > 2.39.1
+> > 
