@@ -2,104 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB2C697FBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF16697FC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjBOPlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S229593AbjBOPly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBOPld (ORCPT
+        with ESMTP id S229909AbjBOPlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:41:33 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4A3B0EA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:21 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CD79833744;
-        Wed, 15 Feb 2023 15:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676475679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ds4a8MZXrTFQmvFjd/tW04lFHt9bdke4Re2KrEs3co4=;
-        b=dWZgHCZtsVhD1UMyX1ZivgNCtkEmrlpAsMr4MqeOXDNNnmT4c49lAv3nLSDt5bXPyzPFS5
-        0AlYula7qvYN66bzCNygcTLowG6UQYR0NMDEA4neTqZrUWTLlOJaubZYnVYqpsET6hfKhV
-        3j00+wt/Oian9eow24Z/xlO5AWaJWQE=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 29F842C141;
-        Wed, 15 Feb 2023 15:41:19 +0000 (UTC)
-Date:   Wed, 15 Feb 2023 16:41:15 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [RESEND v4] printf: fix errname.c list
-Message-ID: <Y+z9G1VJx9jeCSgr@alley>
-References: <20230206194126.380350-1-arnd@kernel.org>
+        Wed, 15 Feb 2023 10:41:46 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57543B0D6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:42 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l2so2959191wry.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull.eu; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLvaMoa9MrI3Z7l2TQNfZp8HXv5vwrbeWjwMUNnrfB4=;
+        b=heaaXyGJoKe/z2CXsf0Awel/ppDlB0AGgfmdPsTqgmB1lrLUi2i4H8qvST+LS267m4
+         Tfhx/QsWcKvEC6VyTtd6+x1RvFuCZa3ALpbi9X+ey2hWWmcfHFSuyNLQ/ilnwiSmLZOG
+         5WBHa4u0TRHOwH5JYQ2RMwjIVfZkfCqqdoKAPlnKpVNPt+qZ3KE3Kt2ZU+2PC/0VuC4+
+         6m/wqRMs3NQ9EGscfSiRDgefDKPWwnHdRaGnow99/vEWThy0anzB9HY7N1ud3Rp/+TVv
+         tsV5hR2mmCMdtHK5xqSmm2GU+XCPObAzm+/jmWobquYrwdt3+vQCMUvG2k7JXUBsI/tJ
+         IeuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hLvaMoa9MrI3Z7l2TQNfZp8HXv5vwrbeWjwMUNnrfB4=;
+        b=J3cQwoY7Rx6wy581lsh0Qx8Woy+WxYjnecaKd8NvL7CwC/Sr1DiTa9GgByGVfDL8nG
+         l3/ANY5qyJe1boP0qKLT6GvjFJhb7XHl5hpjZxrgBwDQugAI9Y5PrFobRA0JQcByWGpj
+         B90LI57m3abgU2bxWQ2u7U+8h489sxTE+fSvLbP3OfDJk0QTymAY/UIDaCi40XmROTbi
+         TlBVmDlJ03hyqhMR+TxbpCjd08rzh3zrETZVpg/ctwGHveOwZUWfAjblftFKc4vWdnSm
+         bGikXSSGCst5Z/uSOxAyshcs7fIHUQQUCu5LO+bs1UsZTESfDHyKq17fLufNoTDO2B6r
+         RrnQ==
+X-Gm-Message-State: AO0yUKVNt8pnMR0gsMZGEGMBPJ5OIet+Z4TribeS1vwV5akBrfn8HYJg
+        6NadOGmC6GK8V7qD8XTOPLwG9mqvjHmbLxeU8Bp5Ew==
+X-Google-Smtp-Source: AK7set+b9/UowKKmxsgaPubC/BZ5DrJE7eXauwJzSkgN8VPP8Hkk1DrwXc+anhjALud5xSPlL3U86yuYqSjKTtJD6bU=
+X-Received: by 2002:adf:e3c7:0:b0:2c5:4dbd:e8ac with SMTP id
+ k7-20020adfe3c7000000b002c54dbde8acmr59927wrm.120.1676475701345; Wed, 15 Feb
+ 2023 07:41:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230206194126.380350-1-arnd@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128072737.2995881-3-apatel@ventanamicro.com> <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+In-Reply-To: <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+From:   =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>
+Date:   Wed, 15 Feb 2023 16:41:29 +0100
+Message-ID: <CAEg0e7hrQFu+cdZy+3QO1ML9FNTPBehZwOOBnr1F-5ABYDnkGg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     apatel@ventanamicro.com, pbonzini@redhat.com,
+        atishp@atishpatra.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-02-06 20:40:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> On most architectures, gcc -Wextra warns about the list of error
-> numbers containing both EDEADLK and EDEADLOCK:
-> 
-> lib/errname.c:15:67: warning: initialized field overwritten [-Woverride-init]
->    15 | #define E(err) [err + BUILD_BUG_ON_ZERO(err <= 0 || err > 300)] = "-" #err
->       |                                                                   ^~~
-> lib/errname.c:172:2: note: in expansion of macro 'E'
->   172 |  E(EDEADLK), /* EDEADLOCK */
->       |  ^
-> 
-> On parisc, a similar error happens with -ECANCELLED, which is an
-> alias for ECANCELED.
-> 
-> Make the EDEADLK printing conditional on the number being distinct
-> from EDEADLOCK, and remove the -ECANCELLED bit completely as it
-> can never be hit.
-> 
-> To ensure these are correct, add static_assert lines that verify
-> all the remaining aliases are in fact identical to the canonical
-> name.
-> 
-> Fixes: 57f5677e535b ("printf: add support for printing symbolic error names")
-> Cc: Petr Mladek <pmladek@suse.com>
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Acked-by: Uwe Kleine-König <uwe@kleine-koenig.org>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Link: https://lore.kernel.org/all/20210514213456.745039-1-arnd@kernel.org/
-> Link: https://lore.kernel.org/all/20210927123409.1109737-1-arnd@kernel.org/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Feb 3, 2023 at 1:25 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote:
+> > We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
+> > and Ssaia (S-mode AIA CSRs).
+>
+> This has pretty much the same problem that we had with the other
+> AIA-related ISA string patches, where there's that ambiguity with the
+> non-ratified chapters.  IIRC when this came up in GCC the rough idea was
+> to try and document that we're going to interpret the standard ISA
+> strings that way, but now that we're doing custom ISA extensions it
+> seems saner to just define on here that removes the ambiguity.
 
-I have just pushed the patch into printk/linux.git, branch for-6.3.
 
-> I sent this a few times, but it never made it in so far. The warning
-> still shows up when enabling extra warnings, and this is an actual bug.
+To avoid the impression that I did not work on that, here is the v2
+from November,
+that attempts to document this:
+  https://gcc.gnu.org/pipermail/gcc-patches/2022-November/607326.html
 
-I am sorry for the delay, v3 somehow fallen under cracks. Anyway, v4
-seems to be the only resend that I got. v3 was needed because of a
-problem reported in v2.
+My proposed text was:
++Note, that AIA support (@samp{Smaia} and @samp{Ssaia}) is based on an AIA
++specification, which is frozen but contains draft chapters ("Duo-PLIC" and
++"IOMMU Support").
 
-Best Regards,
-Petr
+Btw, I did not get any feedback on that patch.
+
+I also tried to address this on spec level (the PR has been linked) and raised
+that to tech-aia (the conversation has been linked).
+
+Another thing that I want to highlight, since it was discussed a lot recently
+(e.g. just a few minutes ago in tech-chairs).
+There is a chance of a last-minute spec change of AIA:
+  https://github.com/riscv/riscv-aia/pull/37
+
+BR
+Christoph
+
+
+
+>
+>
+> I just sent
+> <https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/>
+> which documents that.
+>
+> > We extend the ISA string parsing to detect Smaia and Ssaia extensions.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 2 ++
+> >  arch/riscv/kernel/cpu.c        | 2 ++
+> >  arch/riscv/kernel/cpufeature.c | 2 ++
+> >  3 files changed, 6 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 86328e3acb02..341ef30a3718 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
+> >       RISCV_ISA_EXT_ZIHINTPAUSE,
+> >       RISCV_ISA_EXT_SSTC,
+> >       RISCV_ISA_EXT_SVINVAL,
+> > +     RISCV_ISA_EXT_SMAIA,
+> > +     RISCV_ISA_EXT_SSAIA,
+> >       RISCV_ISA_EXT_ID_MAX
+> >  };
+> >  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index 1b9a5a66e55a..a215ec929160 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
+> >   *    extensions by an underscore.
+> >   */
+> >  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+> > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+>
+> This will conflict with that ISA string refactoring I just merged.  It
+> should be a pretty mechanical merge conflict, but if you want we can do
+> a shared tag with the first few patches and I can handle the merge
+> conflict locally.
+>
+> >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+> >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 93e45560af30..3c5b51f519d5 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
+> >                               SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+> >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
+> >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
+> > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
+> > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
+> >                       }
+> >  #undef SET_ISA_EXT_MAP
+> >               }
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
