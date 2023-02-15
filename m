@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33456973A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2783A6973A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbjBOBbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S233640AbjBOBbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbjBOBbL (ORCPT
+        with ESMTP id S233641AbjBOBbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:31:11 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042DA3431A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:10 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EL3sSL016207;
-        Wed, 15 Feb 2023 01:31:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=2YN4NPMiVZ/gada3XBxhbQ0i3hT/Rjk5A5hzVtCsjdg=;
- b=sPlF2buO8XvUausytVmYxSYbaBi81Zle5UZCvB00wHrbKLptZG/U6DMCynb5GRXdwuBj
- vBfBEyHqIRaiGmpy+ILUh1Kj9h62Tva5Odjlpboo0MRzlT8QPHbJfE1AsCRwoRRFkpxP
- 7FMRCARGDPB1AmmwGt8zuwQZ3yTu47HyUDmVkMNpfRORYuqgkH4hEgkT8pB9b94flKIY
- AXtp4rqkQBjXPnczZVPbjH22+Nts/3PvXSP3C9AkOAvzx7ORgeQUJ1mRqFyZUKCWdzC3
- cBI4tcm5iHQJ/liSECrcubDkn+SheKU602oXJnvIAkiyX34CmGQDA2YRY5QdyIcjT1KA JQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1t3f0dk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Feb 2023 01:31:05 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31F06NYd013576;
-        Wed, 15 Feb 2023 01:31:05 GMT
-Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3np1f64m55-1;
-        Wed, 15 Feb 2023 01:31:04 +0000
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com
-Cc:     parav@nvidia.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, eperezma@redhat.com
-Subject: [PATCH v3] vdpa/mlx5: should not activate virtq object when suspended
-Date:   Tue, 14 Feb 2023 17:30:40 -0800
-Message-Id: <1676424640-11673-1-git-send-email-si-wei.liu@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_17,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302150012
-X-Proofpoint-GUID: X8IRcncblieIcEQ_6it949XjhE64ri01
-X-Proofpoint-ORIG-GUID: X8IRcncblieIcEQ_6it949XjhE64ri01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 20:31:20 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE4534334
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id sa10so44493980ejc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
+        b=S49ZflQkLg9ERIdpEIQNGiz/7fet4Zb9lqjgchR4MB/5/G5iaYwX7MEfUs05Hso+Hk
+         qEsZlhe8+ZoE2mcsSeYTAcr+5gBVJF2cU3HPRniC5lVTHOa4v1nRJACalNys5UYw1N8j
+         BKVSWT/UPiY2a9KFD19JvE9xrlQNM63fYvCABmZHJiuoINiMvqekmXVmDRNftEFmoD5E
+         gJpufNyxEJsiRFucmXCT3YLFayLWnIebdhnQrRq6Umckijv0aJf4Fykd/vbyNQYw14oQ
+         6pyipPM8dPZlpwKuJ1cir0uJCVZ3bL8QCl86GbVFvDoYfGHDj0Ek7RZ2esigTdsYbX27
+         QXMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aI/i5jy/3RaQrerUAILzjzBlGYFwOaVfy4rEAxzIvBw=;
+        b=5v5ZHYNQm8lA6wxQUlJdOeX5eeaIhXBC6tXeDtCis0ef9y6LfIFwAg72xuI1I85BI+
+         181z8jEDJUYr+OozGqY3MCEcfn8YEd7w9xBQ/bPyJ/HZO35ZBEeLl1dwFsfRPLJJV763
+         gQN29xAW57gGWSh+xRaFgpCePXpqOI2eE9TuwXoZvhejOQlhPdssK1oTQkgvR9tq1sjQ
+         m/v2Cf6TodKn+niYoL0ICNrJURdDy/f2SjasweARZgaYx5AGKE8QA57KLrNMkQ1WdmAi
+         TYBK9bjzx3+l6rhK/6pwBl6iN661v0ulZjfvGHe96qjSagmNFf63LXXuYP2D/+cMgKvq
+         auww==
+X-Gm-Message-State: AO0yUKV71hn6ovLVGgu17nglScZEea3okF6JQLzDyVpdfiuFpX/KhQkH
+        baMtihf1cPrc90hNP4Q3YGCA/Q==
+X-Google-Smtp-Source: AK7set8pRGei2+FRstywE9fQuZ72lLtkEmAf+QHtzKXmanwLQzCyeF5Y+c4I5Yv5fzFKWfUqffXo4Q==
+X-Received: by 2002:a17:906:5a90:b0:8b1:3f5b:af5f with SMTP id l16-20020a1709065a9000b008b13f5baf5fmr392899ejq.73.1676424676077;
+        Tue, 14 Feb 2023 17:31:16 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170907914600b008b138528a53sm880912ejs.224.2023.02.14.17.31.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 17:31:15 -0800 (PST)
+Message-ID: <585c6e42-bc59-5a6a-b3e8-0a4e1841c5b0@linaro.org>
+Date:   Wed, 15 Feb 2023 02:31:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v4 12/12] interconnect: qcom: icc-rpm: Allow negative QoS
+ offset
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+ <20230214143720.2416762-13-konrad.dybcio@linaro.org>
+ <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <24167f9e-328c-0201-7eea-de201bed4b6a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise the virtqueue object to instate could point to invalid address
-that was unmapped from the MTT:
 
-  mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
-  CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
-  bad parameter(0x3), syndrome (0x5fa1c), err(-22)
 
-Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
-Cc: Eli Cohen <elic@nvidia.com>
-Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Reviewed-by: Eli Cohen <elic@nvidia.com>
+On 15.02.2023 02:16, Dmitry Baryshkov wrote:
+> On 14/02/2023 16:37, Konrad Dybcio wrote:
+>> In some very very very very unfortunate cases, the correct offset of
+>> the QoS registers will be.. negative. One such case is MSM8998, where
+>> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
+>> take into account with the register calculation, making the actual
+>> BIMC node start at what-would-be-the-BIMC-base+0x300.
+>>
+>> In order to keep the calculation code sane, the simplest - however
+>> ugly it may be - solution is to allow the offset to be negative.
+> 
+> I'm not sure how does this work, as e.g. qcom_icc_set_qnoc_qos() will try to access an address before the first register. Most probably this patch should go together with the rest of msm8998 patches.
+In our case BIMC is the offender and its defines all base on
+M_BKE_REG_BASE(n) (0x300 + (0x4000 * n)), so removing 0x300
+is perfectly ok.
 
----
-v3: move suspended to struct mlx5_vdpa_dev
-v2: removed the change for improving warning message
----
- drivers/vdpa/mlx5/core/mlx5_vdpa.h | 1 +
- drivers/vdpa/mlx5/net/mlx5_vnet.c  | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> A slightly better solution to making qos_offset negative might be to make bwmon a child node of the icc.
+That sounds like a lot of complex changes and accounting for old
+/ different DTs who don't have the bwmon as a child of icc :/
 
-diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-index 058fbe2..25fc412 100644
---- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-+++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-@@ -96,6 +96,7 @@ struct mlx5_vdpa_dev {
- 	struct mlx5_control_vq cvq;
- 	struct workqueue_struct *wq;
- 	unsigned int group2asid[MLX5_VDPA_NUMVQ_GROUPS];
-+	bool suspended;
- };
- 
- int mlx5_vdpa_alloc_pd(struct mlx5_vdpa_dev *dev, u32 *pdn, u16 uid);
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 3a6dbbc6..daac3ab 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -2411,7 +2411,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
- 	if (err)
- 		goto err_mr;
- 
--	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-+	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || mvdev->suspended)
- 		goto err_mr;
- 
- 	restore_channels_info(ndev);
-@@ -2579,6 +2579,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 	clear_vqs_ready(ndev);
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
- 	ndev->mvdev.status = 0;
-+	ndev->mvdev.suspended = false;
- 	ndev->cur_num_vqs = 0;
- 	ndev->mvdev.cvq.received_desc = 0;
- 	ndev->mvdev.cvq.completed_desc = 0;
-@@ -2815,6 +2816,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
- 	struct mlx5_vdpa_virtqueue *mvq;
- 	int i;
- 
-+	mlx5_vdpa_info(mvdev, "suspending device\n");
-+
- 	down_write(&ndev->reslock);
- 	ndev->nb_registered = false;
- 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
-@@ -2824,6 +2827,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
- 		suspend_vq(ndev, mvq);
- 	}
- 	mlx5_vdpa_cvq_suspend(mvdev);
-+	mvdev->suspended = true;
- 	up_write(&ndev->reslock);
- 	return 0;
- }
--- 
-1.8.3.1
-
+Konrad
+> 
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/icc-rpm.h | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+>> index 77e263b93c27..5e4215f25c2e 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.h
+>> +++ b/drivers/interconnect/qcom/icc-rpm.h
+>> @@ -39,7 +39,7 @@ struct qcom_icc_provider {
+>>       int num_intf_clks;
+>>       enum qcom_icc_type type;
+>>       struct regmap *regmap;
+>> -    unsigned int qos_offset;
+>> +    int qos_offset;
+>>       u64 bus_clk_rate[2];
+>>       bool keep_alive;
+>>       struct clk_bulk_data bus_clks[2];
+>> @@ -105,7 +105,7 @@ struct qcom_icc_desc {
+>>       bool keep_alive;
+>>       enum qcom_icc_type type;
+>>       const struct regmap_config *regmap_cfg;
+>> -    unsigned int qos_offset;
+>> +    int qos_offset;
+>>   };
+>>     /* Valid for all bus types */
+> 
