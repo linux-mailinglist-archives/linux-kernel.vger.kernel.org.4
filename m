@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B37C697A54
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ECB697A5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjBOK7F convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Feb 2023 05:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S233287AbjBOLBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbjBOK7B (ORCPT
+        with ESMTP id S229684AbjBOLBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:59:01 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB97038014
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:58:50 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-247-_tHePesBO6agGi7ci4R_tw-1; Wed, 15 Feb 2023 10:58:47 +0000
-X-MC-Unique: _tHePesBO6agGi7ci4R_tw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 15 Feb
- 2023 10:58:46 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Wed, 15 Feb 2023 10:58:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Martyna Szapar-Mudlaw" <martyna.szapar-mudlaw@linux.intel.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Marcin Szycik <marcin.szycik@linux.intel.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ethernet: ice: avoid gcc-9 integer overflow warning
-Thread-Topic: [PATCH] ethernet: ice: avoid gcc-9 integer overflow warning
-Thread-Index: AQHZQHcTjgyLfxurwEKHiQFStKAE+67P1n2g
-Date:   Wed, 15 Feb 2023 10:58:46 +0000
-Message-ID: <abc3ba4b46f942d595b6c5fa164bc4f8@AcuMS.aculab.com>
-References: <20230214132002.1498163-1-arnd@kernel.org>
-In-Reply-To: <20230214132002.1498163-1-arnd@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 06:01:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FD7B728B;
+        Wed, 15 Feb 2023 03:01:14 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxC9p5u+xjpuUAAA--.2271S3;
+        Wed, 15 Feb 2023 19:01:13 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+R4u+xjg9UzAA--.61731S2;
+        Wed, 15 Feb 2023 19:01:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Fix build error for LoongArch
+Date:   Wed, 15 Feb 2023 19:01:07 +0800
+Message-Id: <1676458867-22052-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cxf+R4u+xjg9UzAA--.61731S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tF1kGryxWF47Gr1rCFykKrg_yoW8Jw4fpa
+        ykCrs0kr4FgrW7Cwn5Ar12qryUG395Wr40qFy8Zw1DCFWFq3yDXF4xKFnIyF1fJa10qFyr
+        A347Kry3Zw1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJV
+        W8JbIYCTnIWIevJa73UjIFyTuYvjxU2ID7UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann
-> Sent: 14 February 2023 13:20
-> 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With older compilers like gcc-9, the calculation of the vlan
-> priority field causes a warning from the byteswap:
-> 
-...
-> 
-> Fixes: 34800178b302 ("ice: Add support for VLAN priority filters in switchdev")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/net/ethernet/intel/ice/ice_tc_lib.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_tc_lib.c b/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-> index 6b48cbc049c6..e9932446185c 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_tc_lib.c
-> @@ -1453,10 +1453,9 @@ ice_parse_cls_flower(struct net_device *filter_dev, struct ice_vsi *vsi,
->  		}
-> 
->  		if (match.mask->vlan_priority) {
-> +			u16 prio = (match.key->vlan_priority << VLAN_PRIO_SHIFT) & VLAN_PRIO_MASK;
->  			fltr->flags |= ICE_TC_FLWR_FIELD_VLAN_PRIO;
-> -			headers->vlan_hdr.vlan_prio =
-> -				cpu_to_be16((match.key->vlan_priority <<
-> -					     VLAN_PRIO_SHIFT) & VLAN_PRIO_MASK);
-> +			headers->vlan_hdr.vlan_prio = cpu_to_be16(prio);
->  		}
+There exists build error when make -C tools/testing/selftests/bpf/
+on LoongArch:
 
-Is there something that will do:
-	unsigned int pri = match.key->vlan_priority & (VLAN_PRIO_MASK >> VLAN_PRIO_SHIFT);
-	headers->vlan_hdr.vlan_prio = pri << (VLAN_PRIO_SHIFT ^ (le ? 8 : 0));
+  BINARY   test_verifier
+In file included from test_verifier.c:27:
+tools/include/uapi/linux/bpf_perf_event.h:14:28: error: field 'regs' has incomplete type
+   14 |         bpf_user_pt_regs_t regs;
+      |                            ^~~~
+make: *** [Makefile:577: tools/testing/selftests/bpf/test_verifier] Error 1
+make: Leaving directory 'tools/testing/selftests/bpf'
 
-	David
+Add missing uapi header for LoongArch to use the following definition:
+typedef struct user_pt_regs bpf_user_pt_regs_t;
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/include/uapi/asm/bpf_perf_event.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/include/uapi/asm/bpf_perf_event.h b/tools/include/uapi/asm/bpf_perf_event.h
+index d7dfeab..ff52668 100644
+--- a/tools/include/uapi/asm/bpf_perf_event.h
++++ b/tools/include/uapi/asm/bpf_perf_event.h
+@@ -6,6 +6,8 @@
+ #include "../../arch/s390/include/uapi/asm/bpf_perf_event.h"
+ #elif defined(__riscv)
+ #include "../../arch/riscv/include/uapi/asm/bpf_perf_event.h"
++#elif defined(__loongarch__)
++#include "../../arch/loongarch/include/uapi/asm/bpf_perf_event.h"
+ #else
+ #include <uapi/asm-generic/bpf_perf_event.h>
+ #endif
+-- 
+2.1.0
 
