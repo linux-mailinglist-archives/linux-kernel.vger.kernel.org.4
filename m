@@ -2,254 +2,1307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E4269736A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0775B69737B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBOBUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S233492AbjBOBWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjBOBUs (ORCPT
+        with ESMTP id S229923AbjBOBWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:20:48 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D548D728E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:20:29 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EL43WM027174;
-        Wed, 15 Feb 2023 01:20:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=sDKqaUwXT1wcGY62Cfv0WQkVvVtB9V4etjyorc3AOJg=;
- b=uks5A1rUYQjk71inOfBYSv0xwoTwUk/Qxi8rkQ+AzqIT9zBDAEy3J/4oERRUQmrfm1ez
- XmYHiR1KZMbhpVa5g0kPwkEB92oct0WrFQUX9UMPgigDCqvlZSupTJcYG/a2O4YrCuFf
- hSxIqgYjwlpRz2BrkjVUk+3ijxz6vGaYnPLqv5R4XBJNQldgdjWvSnU+qZTtFULU+tQF
- 6d/KR8Ti66gaiN1RVqayzI1Nixgnx7PI7OHVYf7wIvJb5mF9PVr9Xttiqlz3Ra4pyC4M
- eZPIPa1sOMkkyRBm9T9qcbyWMs6K7IH2krlCqOa7hA/raZ5ctTl5o06oEs5PlT5jXCA1 7Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1xb71rk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Feb 2023 01:20:21 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31F07jv9024588;
-        Wed, 15 Feb 2023 01:20:20 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2043.outbound.protection.outlook.com [104.47.57.43])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f6we8g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Feb 2023 01:20:20 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NqoGQPIXG2ZCwF7dyMz5t8GmZTa4COvlVjYe9jI5JBpumyLsf95vvCBO/HvCmiW5iuQrYmXNzJZYZYsvAytNRD7LwoO3Tidq+vL8JJg2kNpitgYEvkFmMmC0K365TPrdDNbuvUApn3mMv40E7shGvVpj8sDh4uH4wRApMLp/7HPgvHibPdJVnV6+6t33i17TAUz//rMIzsgxVRsbNhemWp0cVVWYVj7HrP4DIFhmv5dbYx+nsZrivKmpDzThpR4HUVPZRRmv1cq/FqA/2ocitsMXTISAeEnbR14RLF89TP57uIFoD+zezfmg1QVYxhHEq0oEXx5LsG9mh0U96wUKSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sDKqaUwXT1wcGY62Cfv0WQkVvVtB9V4etjyorc3AOJg=;
- b=NNh32UEeDZvnO/cYalnHb0oACM5pA4XWn6HcgIabdcplgHUSB+WkRd+d8zfoqZStOo3kyl57G+1Dci/hZyAJUGYwz9+yvN4WHf/XLIa5NdYgMC3d7Z70KHsgcbPYwojL0JIHSUFf7f1Q+KLsTlYS802jh5HSEIFxEHQjvNxOFIO0k9QtIJtZNiCyHjKOws3UKoZI/B/AMDF+Y46V6a9wkvQQDie95sjKJpI72X8iu4saIu2BtkVwZgRXLko0cHPaj/mS9QblQzNAh+QDSvOWgougGeJJqx31EMtJ203W7Y4zA8aW7DjpG01pTSbRksaxXzhTf4LjLYqjw5LqNUZQ3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sDKqaUwXT1wcGY62Cfv0WQkVvVtB9V4etjyorc3AOJg=;
- b=W1/KJWURy94Ib89X/Gr6AmLu88dysDTYCJLSM2KRg13zOv+dsyiUQGq7+Oxw3oyNDs2Ckx6gY0PgxchimyFD7LIkZ7H3SrijUpPs4d4YWWN+x6KYNfQP12LxB2G6AYRppDZjThEP3NUqNgKSZVc0sZPfMpWvGQTzU+IWnZ9CV5E=
-Received: from MW4PR10MB6535.namprd10.prod.outlook.com (2603:10b6:303:225::12)
- by BN0PR10MB5333.namprd10.prod.outlook.com (2603:10b6:408:115::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Wed, 15 Feb
- 2023 01:20:18 +0000
-Received: from MW4PR10MB6535.namprd10.prod.outlook.com
- ([fe80::25da:8594:cf75:8ef3]) by MW4PR10MB6535.namprd10.prod.outlook.com
- ([fe80::25da:8594:cf75:8ef3%9]) with mapi id 15.20.6111.010; Wed, 15 Feb 2023
- 01:20:17 +0000
-Message-ID: <cacf446e-4ad0-5a59-b118-1fc3632bd86a@oracle.com>
-Date:   Tue, 14 Feb 2023 17:20:14 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] vdpa/mlx5: should not activate virtq object when
- suspended
-Content-Language: en-US
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, elic@nvidia.com, parav@nvidia.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, eperezma@redhat.com
-References: <1676328489-16842-1-git-send-email-si-wei.liu@oracle.com>
- <CACGkMEvCCNGeWb0DsExM+fxC23yGOwKuJ24auSujWTQpZEPw7A@mail.gmail.com>
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <CACGkMEvCCNGeWb0DsExM+fxC23yGOwKuJ24auSujWTQpZEPw7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR03CA0102.namprd03.prod.outlook.com
- (2603:10b6:5:333::35) To MW4PR10MB6535.namprd10.prod.outlook.com
- (2603:10b6:303:225::12)
+        Tue, 14 Feb 2023 20:22:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE973403D;
+        Tue, 14 Feb 2023 17:21:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0079B81F41;
+        Wed, 15 Feb 2023 01:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF35C4339B;
+        Wed, 15 Feb 2023 01:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676424093;
+        bh=NRW+95kklKn9VOfFLptRsV2/h0nXYJrNW+qc67RxyAk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QmkkmFspZR/it2qxNF9/cVq+LPeoZMpETLuQ3VfNjupnpHJeZkQ3Jsqe0oDmSx+QG
+         ukKg3srdhD2OWS3bpKYvlTkQq8n52L9Dymu4yXdl5ibgi3GwEdXYHSAte6DFVFQCHF
+         KSfA2Kbkv3HlfqMyZOBj80hVtToSkkavJMwYBDNUjxWNHpUKgyYlLGCuR9sr6nj2g0
+         Q7Pshp698iLqDvXy3EI1ZF0qjgBsoP8gT/W85ta0B3x1jLlhdS99vvxr55oIpXzkm+
+         o3JwwH5YtzhRsPjGBaP1FmS8rjXUV3xIpziAUaTIy70a2hR23tPRBbzqcoJJZjfFrB
+         juB+iA4D6FhFw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH v6 01/12] kbuild: add a tool to list files ignored by git
+Date:   Wed, 15 Feb 2023 10:20:23 +0900
+Message-Id: <20230215012034.403356-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR10MB6535:EE_|BN0PR10MB5333:EE_
-X-MS-Office365-Filtering-Correlation-Id: aceb4d6a-23e9-4a1d-8b43-08db0ef2cc41
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: quFRTOVMbnANTO9W4xuaUfUeWyW+iw8jBfZtXSh0lMpAqloEQUfLjOP5+XDQ/j73ZE70XIn2Z7uyJl/dMo5pVBn50kQq/fq+RntNROuAcXKWj1kHmgruHcIz0/TTk+TIkUIaQYiFJ28ngdYIt/c7cwgVol4mpv6BRIF6TgSGrUw3JRYulgVKqR9wPq2OF5gL6l6RJyUPD59jzC8K2KnhsQPMYG/EIKJjb1+N2K6HQ0M3uKDQecH3/zkGHaNmIlzNyy64DzOpQfXF1SPlkR31onGPaxmNwL3yJEwW0+BjPlQlvL8Ot8pGd2gXEtRYsXBMMIoSyK7qXQXhev0BuymWbYZcB/AZGDS5satIUyXWFwb9ByjDaCo/nlrDTm6QhU8t9x6LLrEZzgKY76VxeDVJq/y3wonr68POpsXzURLOc0lC9Gv832I2xLTPZ43rUKoeYIHDGJ5Otw9jG+v9n4+0Aj1df+pkWu0M6HcN2FlxYfNnhVqgT/VnJdnuqFCuwoiG8IG00rMDZfP6twG3VXO4xVilflEfheo5TUZs8kgrzmsEjkGHQYyOdnVgcUT05Ruqpn8swaHcBoXu2tdo4HX2QxD6w8XlrEwSS/4loDZkoKpmXA4B1wlQsv//K5GIjqICXcivUJpMwjuvjpOJARmZeFxkXFta0FjviC7tJgVYs00wRK3QypY1tmN7QDR/fZi0XCFi0U5o+kRxT28jB6ZBpyxV2W3/dsruP9J5HoFpxBI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR10MB6535.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199018)(31686004)(36756003)(86362001)(31696002)(6916009)(66946007)(66556008)(66476007)(15650500001)(41300700001)(5660300002)(8676002)(8936002)(4326008)(2906002)(38100700002)(36916002)(6486002)(478600001)(316002)(6512007)(2616005)(53546011)(6506007)(26005)(186003)(6666004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VkdGZHo1Q1lUbGFEcEh6bjJlYi9oZ3hQY25na1kyanlJYWtLU3lrUlFVR3cy?=
- =?utf-8?B?S1RTMDdTWHZPRUFqRVlFWThmYVdXbHcyTXgwRjR1azBIU1k3TjJXZEd1cUZD?=
- =?utf-8?B?VTNXeHhrZUFjL1FZODV4QXlvdWJGV29jSGY0YmRqK2VsSEZCY0Zvd2dlVVVp?=
- =?utf-8?B?OVFmU2dKeEh6L0NXaXpaeHdaZWxIZ05vVnBMMEFIZEVac1phc0hySVZodnlt?=
- =?utf-8?B?dnVCQmhkU0VkbE5nbnJtRStTSVhjekxzRG9WK3BPQnlkb25UZ0xBeThKVHY2?=
- =?utf-8?B?K2F2dTVlaDV4TFJadGpVUjQ5QzBPdmtXUmluMlJCSmd3RkRqYmd5T0k4d2h6?=
- =?utf-8?B?MXRwdWNpTGprVUd4ZlhmRFI0WjRVdkRCYnVINHY1TXR6YW9vb1NRTDgvOWZM?=
- =?utf-8?B?Wk5mdVB3cXQzS0JMMkpEUUl3aXZBRS9Oa1R3QzArRmxNWE9OZjZMMHlzOGxv?=
- =?utf-8?B?RWZIeHoyN2FnU3N1S1BmRXdJMG1kV3luZFhrMGFOK1F2bkdNbDdRRkczemNH?=
- =?utf-8?B?b2JDWkhkbjhNUWNORDZjRXdFdGJGckJVOFFjQ252K0twbkdiMkJ0aTdMSkN1?=
- =?utf-8?B?c0l0YTAwbXFFNWNhU3JPVWF1S2JvZGs5WlNONk44STgrVWtwaUhnNXpUczNZ?=
- =?utf-8?B?QmdCN1liWkhLQ2xjL0F5TXl6RzJBNUgvQWZuMHJ6U1B3dDJoK3NIZDM4eFBH?=
- =?utf-8?B?SjJsdXQxOHpBeHdoL1VoSmNEZU04dTRaNEZoYkVlNTFLSmtjT01tRzQwWVpj?=
- =?utf-8?B?ci8wYkhpUmxaQVJZait2b3JPSDgycGZkeTBXNUhiNW0vV2NsOFN1b3dTYXZN?=
- =?utf-8?B?bERTNWhtN1BnaE9HaFhuTll0UU0zcjZITmhwb3paeFRPQitRK1FzYisrZW12?=
- =?utf-8?B?blhmYmQxNHNzM1YyYTlsYWZrTHBMeWx0SHNpUlFRdTlFZEh5bDFFL3N0ZGRp?=
- =?utf-8?B?L3hjSUZBZTY0Y0lFZjRtZlBXRkxHbkdHUXZSZ2g2Y1B1Y3BVcE9yL3ZMMFg2?=
- =?utf-8?B?Yk9Kbnh0dFZpY3crQzl1Mk9DU1dvamdDM01JTTlJazNaQjVmNkcrVlVpNHpB?=
- =?utf-8?B?WHc0ekZqL0syK3NMbkFXd2cyOU5BT25lTDNrZzlvUDBsQ2JiTzVCNml1ZWVy?=
- =?utf-8?B?bDhDMi9OdXJRMi81ZCt0Qk43K2YwL25qYW1zQVZnamdQWmkzYmR0bkJLWTFP?=
- =?utf-8?B?dUVQYTRmMFlRQkVMeVFjd1JNZXNDZG1scjVURmhwdlIrcEtvTHhTckhvR2pX?=
- =?utf-8?B?amNSblUzMG1TNmN6WklyWHVMVkFuS3M0VUlkb2V4UE54K1ZqRmplTWZKOWIv?=
- =?utf-8?B?T2FEU2V6NVZ1WXZ1NkFUMUFmYzFjVkYzUDNKakxJVDE0U1hncjJjZlp3Nm5s?=
- =?utf-8?B?OEVhQitpSHVTWnh5UlhySWxzUk56QWwzUTVrWU9XNmsrMlFWU3ZJMEVNWmpH?=
- =?utf-8?B?SGRBY21KUHdoNG1VQXVpeVIzMkttY01YaTVONHdWQjlYOHlxLzgwRjNDQ3NK?=
- =?utf-8?B?N1E0NmhuYldLVFRCbWxpZCtqdWIyWUUvb1l1RXgyTzgvL0ZpS2NxQnFwdTJq?=
- =?utf-8?B?ZGxOUFhaYytjYW84TUpKMU1OMXBjYTdpR0dvMldrV2pFY3Qvd25qTjlxSzVx?=
- =?utf-8?B?dng0ZUt5Y3J3TU5JcG5XYm1qQ1FuZzZ6MktIVHNGWEg1RVg2VFpocGcwSURh?=
- =?utf-8?B?YlBjOHFCS2NPM2hxV2g5ZnBNSlpNTll3eWd2czlQdFB2a3pla1VLZ3F5YzJs?=
- =?utf-8?B?L0NDMnlIdUFPTC9yTEVCQ1E1ckZ4UVdsdE9XRS9RbDBTSWhaSHViSWUvWGk2?=
- =?utf-8?B?dEpqbTZZMXh3TVJuOXMrck9IUStLaThrY2NJUFBPcHU2bmx3d01KZ0h4MHhU?=
- =?utf-8?B?RnRhaDRUSVFXSUZkMVBKRGVWdUNZYnVzbG9PQ2lKdnJnOGY2RC84WVdlbElW?=
- =?utf-8?B?MTViU2k1ZE41T2JRWVdDQmVZcitpNEVDT3BqWS9lcXpwdGQ3QWIrdVlobXJq?=
- =?utf-8?B?SjFhbHJhRlIvNDZXMWw0a1dmZ2g2OU1FaUtiWUgzc1MrWm9aQ25UV1FJM0NI?=
- =?utf-8?B?UUZrcENiaGtaNHlESWQrWE5leTVINjhEZnFMazdVUHFyTWs1dW9QSy9DRDZj?=
- =?utf-8?Q?vsWNY1klOL1gXRYPK4A4/RSwe?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: c32GDELoRcTyq5LXuVYwwP2FI8cdYYVR433HQ041b3JN7IRX791F7w+IDXcouEwdXVaeLErlcu0r4UdFb8o4lG5C1wQ95ynmUCnKPKBhMXj0d7bv65Z9RjKji6RzOHwkDG1I1lkBwGTGR9C6qSENxNKoCUO0xKeLk2ALZL0a5JMmT2wiGe35x/vVsCya0NRxdksD0dDcYrnhtQdKLsKU0hqOJAgQ6bt/+oo0488XW1xwaGERo/FOvpf0b4/DVXaFrY2aTJ9w/XIpUNagYAn+HcvPbyY2kmHtRiku0FvXAjGH1VNdFYP9G11zJjBlVBhM4MRs476bSz8VfRpHn2qk3qPhNT9OoyGKclqtyywkwh8HPURu/aLxmX0x4uw3ta2Y9MYxxcHQldWRKr/Hoz3ivXuGW/fQDNuZnrzb999gLkgy2NhF9ZgO3ExyQrACmV7nFfgCn5lMYLbXMSQIx5vABqZEKjUF7YwgnkM1YlLYZCcAkXM6vj9qNcs/Qa/j6Li8KBPRNmWW/oBOpRsw2qu9c9B9aKz5/TnVC3DliqedQPrW2wV3HuGG9SJc51j1diebd9j6LSUnITq1GRkfAxfIOt+2YI4l9QO4dZwcKJZeckfvBgssv3qh9VVfAFM9bWhDIKS6ny7S0bILRwwBo7B/kc9UWtF/Sf7gF6jj6BAkwaFIfGOgUKamQ1pq62UM1BFkR9rdIDvNRvHVrnz7GWb+j60+Tgez86HzCW/QbyGsu2X76n53QejUqw1y3AaF9X/OTl7PI2kDhJMN61+Q/iqumGATwSYCdCU5+bh/xPv/EnlJjRvBI2rRuMQVPoDkBQic7/Du0nEQ+gd2ZvPlqadRWCq0jFKPSNqWavM/ehcLhxTswlFeUn7fZ6VYnLJq9u4gOYop2Ya1ihfV7njDM+RfkQ==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aceb4d6a-23e9-4a1d-8b43-08db0ef2cc41
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR10MB6535.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 01:20:17.6341
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nehM3/SpokpkhkbIMJDPmoRo2XJl3GtXR27Tc/gMS9rLECTbKQsugkvZQF5+4HE8VN8TmtNePkmaekUyDeDK1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5333
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_17,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302150010
-X-Proofpoint-ORIG-GUID: msJckaLrQFUVVtZXF82GkgIvLT-kTPkV
-X-Proofpoint-GUID: msJckaLrQFUVVtZXF82GkgIvLT-kTPkV
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In short, the motivation of this commit is to build a source package
+without cleaning the source tree.
 
+The deb-pkg and (src)rpm-pkg targets first run 'make clean' before
+creating a source tarball. Otherwise build artifacts such as *.o,
+*.a, etc. would be included in the tarball. Yet, the tarball ends up
+containing several garbage files since 'make clean' does not clean
+everything.
 
-On 2/13/2023 10:20 PM, Jason Wang wrote:
-> On Tue, Feb 14, 2023 at 6:48 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->> Otherwise the virtqueue object to instate could point to invalid address
->> that was unmapped from the MTT:
->>
->>    mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
->>    CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
->>    bad parameter(0x3), syndrome (0x5fa1c), err(-22)
->>
->> Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
->> Cc: Eli Cohen <elic@nvidia.com>
->> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
->>
->> ---
->> v2: removed the change for improving warning message
->> ---
->>   drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> index 3a6dbbc6..d7e8ca0 100644
->> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> @@ -165,6 +165,7 @@ struct mlx5_vdpa_net {
->>          u32 cur_num_vqs;
->>          u32 rqt_size;
->>          bool nb_registered;
->> +       bool suspended;
-> Any reason we make this net specific? (or is it better to use
-> mlx5_vdpa_dev structure?)
-Yep, I can make this change, suspend should not be net specific.
+Cleaning the tree every time is annoying since it makes the incremental
+build impossible. It is desirable to create a source tarball without
+cleaning the tree.
 
->
->
->>          struct notifier_block nb;
->>          struct vdpa_callback config_cb;
->>          struct mlx5_vdpa_wq_ent cvq_ent;
->> @@ -2411,7 +2412,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
->>          if (err)
->>                  goto err_mr;
->>
->> -       if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
->> +       if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || ndev->suspended)
->>                  goto err_mr;
->>
->>          restore_channels_info(ndev);
->> @@ -2580,6 +2581,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
->>          mlx5_vdpa_destroy_mr(&ndev->mvdev);
->>          ndev->mvdev.status = 0;
->>          ndev->cur_num_vqs = 0;
->> +       ndev->suspended = false;
->>          ndev->mvdev.cvq.received_desc = 0;
->>          ndev->mvdev.cvq.completed_desc = 0;
->>          memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
->> @@ -2815,6 +2817,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
->>          struct mlx5_vdpa_virtqueue *mvq;
->>          int i;
->>
->> +       mlx5_vdpa_info(mvdev, "suspending device\n");
->> +
-> Is this better to show the info after the device has been suspended?
-I'm not sure, the current convention of this driver (for e.g. 
-mlx5_vdpa_reset) is to log info at the function entry to inform some 
-action is about to happen, and log a warning if running into any 
-failure; otherwise if no subsequent warning but other logs following the 
-info notice, it means the action has been successfully done. I thought 
-at least there's some value to log at the start of the function just in 
-case it's getting stuck in the middle.
+In fact, there are some ways to achieve this.
 
-Thanks,
--Siwei
+The easiest solution is 'git archive'. 'make perf-tar*-src-pkg' uses
+it, but I do not like it because it works only when the source tree is
+managed by git, and all files you want in the tarball must be committed
+in advance.
 
->
-> Thanks
->
->>          down_write(&ndev->reslock);
->>          ndev->nb_registered = false;
->>          mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
->> @@ -2824,6 +2828,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
->>                  suspend_vq(ndev, mvq);
->>          }
->>          mlx5_vdpa_cvq_suspend(mvdev);
->> +       ndev->suspended = true;
->>          up_write(&ndev->reslock);
->>          return 0;
->>   }
->> --
->> 1.8.3.1
->>
+I want to make it work without relying on git. We can do this.
+
+Files that are ignored by git are generated files, so should be excluded
+from the source tarball. We can list them out by parsing the .gitignore
+files. Of course, .gitignore does not cover all the cases, but it works
+well enough.
+
+tar(1) claims to support it:
+
+  --exclude-vcs-ignores
+
+    Exclude files that match patterns read from VCS-specific ignore files.
+    Supported files are: .cvsignore, .gitignore, .bzrignore, and .hgignore.
+
+The best scenario would be to use 'tar --exclude-vcs-ignores', but this
+option does not work. --exclude-vcs-ignore does not understand any of
+the negation (!), preceding slash, following slash, etc.. So, this option
+is just useless.
+
+Hence, I wrote this gitignore parser. The previous version [1], written
+in Python, was so slow. This version is implemented in C, so it works
+much faster.
+
+I imported the code from git (commit: 23c56f7bd5f1), so we get the same
+result.
+
+This tool traverses the source tree, parsing all .gitignore files, and
+prints file paths that are ignored by git.
+
+The output is similar to 'git ls-files --ignored --directory --others
+--exclude-per-directory=.gitignore', except
+
+  [1] Not sorted
+  [2] No trailing slash for directories
+
+[2] is intentional because tar's --exclude-from option cannot handle
+trailing slashes.
+
+[How to test this tool]
+
+  $ git clean -dfx
+  $ make -s -j$(nproc) defconfig all                       # or allmodconifg or whatever
+  $ git archive -o ../linux1.tar --prefix=./ HEAD
+  $ tar tf ../linux1.tar | LANG=C sort > ../file-list1     # files emitted by 'git archive'
+  $ make scripts_package
+    HOSTCC  scripts/list-gitignored
+  $ scripts/list-gitignored  --prefix=./ -o ../exclude-list
+  $ tar cf ../linux2.tar --exclude-from=../exclude-list .
+  $ tar tf ../linux2.tar | LANG=C sort > ../file-list2     # files emitted by 'tar'
+  $ diff  ../file-list1 ../file-list2 | grep -E '^(<|>)'
+  < ./Documentation/devicetree/bindings/.yamllint
+  < ./drivers/clk/.kunitconfig
+  < ./drivers/gpu/drm/tests/.kunitconfig
+  < ./drivers/hid/.kunitconfig
+  < ./fs/ext4/.kunitconfig
+  < ./fs/fat/.kunitconfig
+  < ./kernel/kcsan/.kunitconfig
+  < ./lib/kunit/.kunitconfig
+  < ./mm/kfence/.kunitconfig
+  < ./tools/testing/selftests/arm64/tags/
+  < ./tools/testing/selftests/arm64/tags/.gitignore
+  < ./tools/testing/selftests/arm64/tags/Makefile
+  < ./tools/testing/selftests/arm64/tags/run_tags_test.sh
+  < ./tools/testing/selftests/arm64/tags/tags_test.c
+  < ./tools/testing/selftests/kvm/.gitignore
+  < ./tools/testing/selftests/kvm/Makefile
+  < ./tools/testing/selftests/kvm/config
+  < ./tools/testing/selftests/kvm/settings
+
+The source tarball contains most of files that are tracked by git. You
+see some diffs, but it is just because some .gitignore files are wrong.
+
+  $ git ls-files -i -c --exclude-per-directory=.gitignore
+  Documentation/devicetree/bindings/.yamllint
+  drivers/clk/.kunitconfig
+  drivers/gpu/drm/tests/.kunitconfig
+  drivers/hid/.kunitconfig
+  fs/ext4/.kunitconfig
+  fs/fat/.kunitconfig
+  kernel/kcsan/.kunitconfig
+  lib/kunit/.kunitconfig
+  mm/kfence/.kunitconfig
+  tools/testing/selftests/arm64/tags/.gitignore
+  tools/testing/selftests/arm64/tags/Makefile
+  tools/testing/selftests/arm64/tags/run_tags_test.sh
+  tools/testing/selftests/arm64/tags/tags_test.c
+  tools/testing/selftests/kvm/.gitignore
+  tools/testing/selftests/kvm/Makefile
+  tools/testing/selftests/kvm/config
+  tools/testing/selftests/kvm/settings
+
+[1]: https://lore.kernel.org/all/20230128173843.765212-1-masahiroy@kernel.org/
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+(no changes since v5)
+
+Changes in v5:
+ - Import a lot of code from GIT
+ - Fix a bug that the output file is relative to --rootdir
+ - Check ENOENT when open() fails to open .gitignore
+ - add more options, --ignore-case, --stat
+
+Changes in v3:
+ - Various code refactoring: remove struct gitignore, remove next: label etc.
+ - Support --extra-pattern option
+
+Changes in v2:
+ - Reimplement in C
+
+ Makefile                  |    7 +-
+ scripts/.gitignore        |    1 +
+ scripts/Makefile          |    2 +-
+ scripts/list-gitignored.c | 1055 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 1063 insertions(+), 2 deletions(-)
+ create mode 100644 scripts/list-gitignored.c
+
+diff --git a/Makefile b/Makefile
+index 2faf872b6808..7c726fd26540 100644
+--- a/Makefile
++++ b/Makefile
+@@ -274,7 +274,8 @@ no-dot-config-targets := $(clean-targets) \
+ 			 cscope gtags TAGS tags help% %docs check% coccicheck \
+ 			 $(version_h) headers headers_% archheaders archscripts \
+ 			 %asm-generic kernelversion %src-pkg dt_binding_check \
+-			 outputmakefile rustavailable rustfmt rustfmtcheck
++			 outputmakefile rustavailable rustfmt rustfmtcheck \
++			 scripts_package
+ # Installation targets should not require compiler. Unfortunately, vdso_install
+ # is an exception where build artifacts may be updated. This must be fixed.
+ no-compiler-targets := $(no-dot-config-targets) install dtbs_install \
+@@ -1652,6 +1653,10 @@ distclean: mrproper
+ %pkg: include/config/kernel.release FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.package $@
+ 
++PHONY += scripts_package
++scripts_package: scripts_basic
++	$(Q)$(MAKE) $(build)=scripts scripts/list-gitignored
++
+ # Brief documentation of the typical targets used
+ # ---------------------------------------------------------------------------
+ 
+diff --git a/scripts/.gitignore b/scripts/.gitignore
+index 6e9ce6720a05..feb43045d1b1 100644
+--- a/scripts/.gitignore
++++ b/scripts/.gitignore
+@@ -3,6 +3,7 @@
+ /generate_rust_target
+ /insert-sys-cert
+ /kallsyms
++/list-gitignored
+ /module.lds
+ /recordmcount
+ /sign-file
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 32b6ba722728..e8917975905c 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -38,7 +38,7 @@ HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
+ endif
+ 
+ # The following programs are only built on demand
+-hostprogs += unifdef
++hostprogs += list-gitignored unifdef
+ 
+ # The module linker script is preprocessed on demand
+ targets += module.lds
+diff --git a/scripts/list-gitignored.c b/scripts/list-gitignored.c
+new file mode 100644
+index 000000000000..525c987c0e25
+--- /dev/null
++++ b/scripts/list-gitignored.c
+@@ -0,0 +1,1055 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// Traverse the source tree, parsing all .gitignore files, and print file paths
++// that are ignored by git.
++// The output is suitable to the --exclude-from option of tar.
++// This is useful until the --exclude-vcs-ignores option gets working correctly.
++//
++// Copyright (C) 2023 Masahiro Yamada <masahiroy@kernel.org>
++//                      (a lot of code imported from GIT)
++
++#include <assert.h>
++#include <dirent.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <stdarg.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
++
++//---------------------------(IMPORT FROM GIT BEGIN)---------------------------
++
++// Copied from environment.c
++
++static bool ignore_case;
++
++// Copied from git-compat-util.h
++
++/* Sane ctype - no locale, and works with signed chars */
++#undef isascii
++#undef isspace
++#undef isdigit
++#undef isalpha
++#undef isalnum
++#undef isprint
++#undef islower
++#undef isupper
++#undef tolower
++#undef toupper
++#undef iscntrl
++#undef ispunct
++#undef isxdigit
++
++static const unsigned char sane_ctype[256];
++#define GIT_SPACE 0x01
++#define GIT_DIGIT 0x02
++#define GIT_ALPHA 0x04
++#define GIT_GLOB_SPECIAL 0x08
++#define GIT_REGEX_SPECIAL 0x10
++#define GIT_PATHSPEC_MAGIC 0x20
++#define GIT_CNTRL 0x40
++#define GIT_PUNCT 0x80
++#define sane_istest(x,mask) ((sane_ctype[(unsigned char)(x)] & (mask)) != 0)
++#define isascii(x) (((x) & ~0x7f) == 0)
++#define isspace(x) sane_istest(x,GIT_SPACE)
++#define isdigit(x) sane_istest(x,GIT_DIGIT)
++#define isalpha(x) sane_istest(x,GIT_ALPHA)
++#define isalnum(x) sane_istest(x,GIT_ALPHA | GIT_DIGIT)
++#define isprint(x) ((x) >= 0x20 && (x) <= 0x7e)
++#define islower(x) sane_iscase(x, 1)
++#define isupper(x) sane_iscase(x, 0)
++#define is_glob_special(x) sane_istest(x,GIT_GLOB_SPECIAL)
++#define iscntrl(x) (sane_istest(x,GIT_CNTRL))
++#define ispunct(x) sane_istest(x, GIT_PUNCT | GIT_REGEX_SPECIAL | \
++		GIT_GLOB_SPECIAL | GIT_PATHSPEC_MAGIC)
++#define isxdigit(x) (hexval_table[(unsigned char)(x)] != -1)
++#define tolower(x) sane_case((unsigned char)(x), 0x20)
++#define toupper(x) sane_case((unsigned char)(x), 0)
++
++static inline int sane_case(int x, int high)
++{
++	if (sane_istest(x, GIT_ALPHA))
++		x = (x & ~0x20) | high;
++	return x;
++}
++
++static inline int sane_iscase(int x, int is_lower)
++{
++	if (!sane_istest(x, GIT_ALPHA))
++		return 0;
++
++	if (is_lower)
++		return (x & 0x20) != 0;
++	else
++		return (x & 0x20) == 0;
++}
++
++// Copied from ctype.c
++
++enum {
++	S = GIT_SPACE,
++	A = GIT_ALPHA,
++	D = GIT_DIGIT,
++	G = GIT_GLOB_SPECIAL,	/* *, ?, [, \\ */
++	R = GIT_REGEX_SPECIAL,	/* $, (, ), +, ., ^, {, | */
++	P = GIT_PATHSPEC_MAGIC, /* other non-alnum, except for ] and } */
++	X = GIT_CNTRL,
++	U = GIT_PUNCT,
++	Z = GIT_CNTRL | GIT_SPACE
++};
++
++static const unsigned char sane_ctype[256] = {
++	X, X, X, X, X, X, X, X, X, Z, Z, X, X, Z, X, X,		/*   0.. 15 */
++	X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,		/*  16.. 31 */
++	S, P, P, P, R, P, P, P, R, R, G, R, P, P, R, P,		/*  32.. 47 */
++	D, D, D, D, D, D, D, D, D, D, P, P, P, P, P, G,		/*  48.. 63 */
++	P, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A,		/*  64.. 79 */
++	A, A, A, A, A, A, A, A, A, A, A, G, G, U, R, P,		/*  80.. 95 */
++	P, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A,		/*  96..111 */
++	A, A, A, A, A, A, A, A, A, A, A, R, R, U, P, X,		/* 112..127 */
++	/* Nothing in the 128.. range */
++};
++
++// Copied from hex.c
++
++static const signed char hexval_table[256] = {
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 00-07 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 08-0f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 10-17 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 18-1f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 20-27 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 28-2f */
++	  0,  1,  2,  3,  4,  5,  6,  7,		/* 30-37 */
++	  8,  9, -1, -1, -1, -1, -1, -1,		/* 38-3f */
++	 -1, 10, 11, 12, 13, 14, 15, -1,		/* 40-47 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 48-4f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 50-57 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 58-5f */
++	 -1, 10, 11, 12, 13, 14, 15, -1,		/* 60-67 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 68-67 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 70-77 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 78-7f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 80-87 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 88-8f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 90-97 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* 98-9f */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* a0-a7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* a8-af */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* b0-b7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* b8-bf */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* c0-c7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* c8-cf */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* d0-d7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* d8-df */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* e0-e7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* e8-ef */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* f0-f7 */
++	 -1, -1, -1, -1, -1, -1, -1, -1,		/* f8-ff */
++};
++
++// Copied from wildmatch.h
++
++#define WM_CASEFOLD 1
++#define WM_PATHNAME 2
++
++#define WM_NOMATCH 1
++#define WM_MATCH 0
++#define WM_ABORT_ALL -1
++#define WM_ABORT_TO_STARSTAR -2
++
++// Copied from wildmatch.c
++
++typedef unsigned char uchar;
++
++// local modification: remove NEGATE_CLASS(2)
++
++#define CC_EQ(class, len, litmatch) ((len) == sizeof (litmatch)-1 \
++				    && *(class) == *(litmatch) \
++				    && strncmp((char*)class, litmatch, len) == 0)
++
++// local modification: simpilify macros
++#define ISBLANK(c) ((c) == ' ' || (c) == '\t')
++#define ISGRAPH(c) (isprint(c) && !isspace(c))
++#define ISPRINT(c) isprint(c)
++#define ISDIGIT(c) isdigit(c)
++#define ISALNUM(c) isalnum(c)
++#define ISALPHA(c) isalpha(c)
++#define ISCNTRL(c) iscntrl(c)
++#define ISLOWER(c) islower(c)
++#define ISPUNCT(c) ispunct(c)
++#define ISSPACE(c) isspace(c)
++#define ISUPPER(c) isupper(c)
++#define ISXDIGIT(c) isxdigit(c)
++
++/* Match pattern "p" against "text" */
++static int dowild(const uchar *p, const uchar *text, unsigned int flags)
++{
++	uchar p_ch;
++	const uchar *pattern = p;
++
++	for ( ; (p_ch = *p) != '\0'; text++, p++) {
++		int matched, match_slash, negated;
++		uchar t_ch, prev_ch;
++		if ((t_ch = *text) == '\0' && p_ch != '*')
++			return WM_ABORT_ALL;
++		if ((flags & WM_CASEFOLD) && ISUPPER(t_ch))
++			t_ch = tolower(t_ch);
++		if ((flags & WM_CASEFOLD) && ISUPPER(p_ch))
++			p_ch = tolower(p_ch);
++		switch (p_ch) {
++		case '\\':
++			/* Literal match with following character.  Note that the test
++			 * in "default" handles the p[1] == '\0' failure case. */
++			p_ch = *++p;
++			/* FALLTHROUGH */
++		default:
++			if (t_ch != p_ch)
++				return WM_NOMATCH;
++			continue;
++		case '?':
++			/* Match anything but '/'. */
++			if ((flags & WM_PATHNAME) && t_ch == '/')
++				return WM_NOMATCH;
++			continue;
++		case '*':
++			if (*++p == '*') {
++				const uchar *prev_p = p - 2;
++				while (*++p == '*') {}
++				if (!(flags & WM_PATHNAME))
++					/* without WM_PATHNAME, '*' == '**' */
++					match_slash = 1;
++				else if ((prev_p < pattern || *prev_p == '/') &&
++				    (*p == '\0' || *p == '/' ||
++				     (p[0] == '\\' && p[1] == '/'))) {
++					/*
++					 * Assuming we already match 'foo/' and are at
++					 * <star star slash>, just assume it matches
++					 * nothing and go ahead match the rest of the
++					 * pattern with the remaining string. This
++					 * helps make foo/<*><*>/bar (<> because
++					 * otherwise it breaks C comment syntax) match
++					 * both foo/bar and foo/a/bar.
++					 */
++					if (p[0] == '/' &&
++					    dowild(p + 1, text, flags) == WM_MATCH)
++						return WM_MATCH;
++					match_slash = 1;
++				} else /* WM_PATHNAME is set */
++					match_slash = 0;
++			} else
++				/* without WM_PATHNAME, '*' == '**' */
++				match_slash = flags & WM_PATHNAME ? 0 : 1;
++			if (*p == '\0') {
++				/* Trailing "**" matches everything.  Trailing "*" matches
++				 * only if there are no more slash characters. */
++				if (!match_slash) {
++					if (strchr((char *)text, '/'))
++						return WM_NOMATCH;
++				}
++				return WM_MATCH;
++			} else if (!match_slash && *p == '/') {
++				/*
++				 * _one_ asterisk followed by a slash
++				 * with WM_PATHNAME matches the next
++				 * directory
++				 */
++				const char *slash = strchr((char*)text, '/');
++				if (!slash)
++					return WM_NOMATCH;
++				text = (const uchar*)slash;
++				/* the slash is consumed by the top-level for loop */
++				break;
++			}
++			while (1) {
++				if (t_ch == '\0')
++					break;
++				/*
++				 * Try to advance faster when an asterisk is
++				 * followed by a literal. We know in this case
++				 * that the string before the literal
++				 * must belong to "*".
++				 * If match_slash is false, do not look past
++				 * the first slash as it cannot belong to '*'.
++				 */
++				if (!is_glob_special(*p)) {
++					p_ch = *p;
++					if ((flags & WM_CASEFOLD) && ISUPPER(p_ch))
++						p_ch = tolower(p_ch);
++					while ((t_ch = *text) != '\0' &&
++					       (match_slash || t_ch != '/')) {
++						if ((flags & WM_CASEFOLD) && ISUPPER(t_ch))
++							t_ch = tolower(t_ch);
++						if (t_ch == p_ch)
++							break;
++						text++;
++					}
++					if (t_ch != p_ch)
++						return WM_NOMATCH;
++				}
++				if ((matched = dowild(p, text, flags)) != WM_NOMATCH) {
++					if (!match_slash || matched != WM_ABORT_TO_STARSTAR)
++						return matched;
++				} else if (!match_slash && t_ch == '/')
++					return WM_ABORT_TO_STARSTAR;
++				t_ch = *++text;
++			}
++			return WM_ABORT_ALL;
++		case '[':
++			p_ch = *++p;
++			if (p_ch == '^')
++				p_ch = '!';
++			/* Assign literal 1/0 because of "matched" comparison. */
++			negated = p_ch == '!' ? 1 : 0;
++			if (negated) {
++				/* Inverted character class. */
++				p_ch = *++p;
++			}
++			prev_ch = 0;
++			matched = 0;
++			do {
++				if (!p_ch)
++					return WM_ABORT_ALL;
++				if (p_ch == '\\') {
++					p_ch = *++p;
++					if (!p_ch)
++						return WM_ABORT_ALL;
++					if (t_ch == p_ch)
++						matched = 1;
++				} else if (p_ch == '-' && prev_ch && p[1] && p[1] != ']') {
++					p_ch = *++p;
++					if (p_ch == '\\') {
++						p_ch = *++p;
++						if (!p_ch)
++							return WM_ABORT_ALL;
++					}
++					if (t_ch <= p_ch && t_ch >= prev_ch)
++						matched = 1;
++					else if ((flags & WM_CASEFOLD) && ISLOWER(t_ch)) {
++						uchar t_ch_upper = toupper(t_ch);
++						if (t_ch_upper <= p_ch && t_ch_upper >= prev_ch)
++							matched = 1;
++					}
++					p_ch = 0; /* This makes "prev_ch" get set to 0. */
++				} else if (p_ch == '[' && p[1] == ':') {
++					const uchar *s;
++					int i;
++					for (s = p += 2; (p_ch = *p) && p_ch != ']'; p++) {} /*SHARED ITERATOR*/
++					if (!p_ch)
++						return WM_ABORT_ALL;
++					i = p - s - 1;
++					if (i < 0 || p[-1] != ':') {
++						/* Didn't find ":]", so treat like a normal set. */
++						p = s - 2;
++						p_ch = '[';
++						if (t_ch == p_ch)
++							matched = 1;
++						continue;
++					}
++					if (CC_EQ(s,i, "alnum")) {
++						if (ISALNUM(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "alpha")) {
++						if (ISALPHA(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "blank")) {
++						if (ISBLANK(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "cntrl")) {
++						if (ISCNTRL(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "digit")) {
++						if (ISDIGIT(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "graph")) {
++						if (ISGRAPH(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "lower")) {
++						if (ISLOWER(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "print")) {
++						if (ISPRINT(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "punct")) {
++						if (ISPUNCT(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "space")) {
++						if (ISSPACE(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "upper")) {
++						if (ISUPPER(t_ch))
++							matched = 1;
++						else if ((flags & WM_CASEFOLD) && ISLOWER(t_ch))
++							matched = 1;
++					} else if (CC_EQ(s,i, "xdigit")) {
++						if (ISXDIGIT(t_ch))
++							matched = 1;
++					} else /* malformed [:class:] string */
++						return WM_ABORT_ALL;
++					p_ch = 0; /* This makes "prev_ch" get set to 0. */
++				} else if (t_ch == p_ch)
++					matched = 1;
++			} while (prev_ch = p_ch, (p_ch = *++p) != ']');
++			if (matched == negated ||
++			    ((flags & WM_PATHNAME) && t_ch == '/'))
++				return WM_NOMATCH;
++			continue;
++		}
++	}
++
++	return *text ? WM_NOMATCH : WM_MATCH;
++}
++
++/* Match the "pattern" against the "text" string. */
++static int wildmatch(const char *pattern, const char *text, unsigned int flags)
++{
++	// local modification: move WM_CASEFOLD here
++	if (ignore_case)
++		flags |= WM_CASEFOLD;
++
++	return dowild((const uchar*)pattern, (const uchar*)text, flags);
++}
++
++// copied from dir.h
++
++#define PATTERN_FLAG_NODIR 1
++#define PATTERN_FLAG_ENDSWITH 4
++#define PATTERN_FLAG_MUSTBEDIR 8
++#define PATTERN_FLAG_NEGATIVE 16
++
++// Copied from dir.c
++
++static int fspathncmp(const char *a, const char *b, size_t count)
++{
++	return ignore_case ? strncasecmp(a, b, count) : strncmp(a, b, count);
++}
++
++static int simple_length(const char *match)
++{
++	int len = -1;
++
++	for (;;) {
++		unsigned char c = *match++;
++		len++;
++		if (c == '\0' || is_glob_special(c))
++			return len;
++	}
++}
++
++static int no_wildcard(const char *string)
++{
++	return string[simple_length(string)] == '\0';
++}
++
++static void parse_path_pattern(const char **pattern,
++			       int *patternlen,
++			       unsigned *flags,
++			       int *nowildcardlen)
++{
++	const char *p = *pattern;
++	size_t i, len;
++
++	*flags = 0;
++	if (*p == '!') {
++		*flags |= PATTERN_FLAG_NEGATIVE;
++		p++;
++	}
++	len = strlen(p);
++	if (len && p[len - 1] == '/') {
++		len--;
++		*flags |= PATTERN_FLAG_MUSTBEDIR;
++	}
++	for (i = 0; i < len; i++) {
++		if (p[i] == '/')
++			break;
++	}
++	if (i == len)
++		*flags |= PATTERN_FLAG_NODIR;
++	*nowildcardlen = simple_length(p);
++	/*
++	 * we should have excluded the trailing slash from 'p' too,
++	 * but that's one more allocation. Instead just make sure
++	 * nowildcardlen does not exceed real patternlen
++	 */
++	if (*nowildcardlen > len)
++		*nowildcardlen = len;
++	if (*p == '*' && no_wildcard(p + 1))
++		*flags |= PATTERN_FLAG_ENDSWITH;
++	*pattern = p;
++	*patternlen = len;
++}
++
++static void trim_trailing_spaces(char *buf)
++{
++	char *p, *last_space = NULL;
++
++	for (p = buf; *p; p++)
++		switch (*p) {
++		case ' ':
++			if (!last_space)
++				last_space = p;
++			break;
++		case '\\':
++			p++;
++			if (!*p)
++				return;
++			/* fallthrough */
++		default:
++			last_space = NULL;
++		}
++
++	if (last_space)
++		*last_space = '\0';
++}
++
++static int match_basename(const char *basename, int basenamelen,
++			  const char *pattern, int prefix, int patternlen,
++			  unsigned flags)
++{
++	if (prefix == patternlen) {
++		if (patternlen == basenamelen &&
++		    !fspathncmp(pattern, basename, basenamelen))
++			return 1;
++	} else if (flags & PATTERN_FLAG_ENDSWITH) {
++		/* "*literal" matching against "fooliteral" */
++		if (patternlen - 1 <= basenamelen &&
++		    !fspathncmp(pattern + 1,
++				   basename + basenamelen - (patternlen - 1),
++				   patternlen - 1))
++			return 1;
++	} else {
++		// local modification: call wildmatch() directly
++		if (!wildmatch(pattern, basename, flags))
++			return 1;
++	}
++	return 0;
++}
++
++static int match_pathname(const char *pathname, int pathlen,
++			  const char *base, int baselen,
++			  const char *pattern, int prefix, int patternlen)
++{
++	// local modification: remove local variables
++
++	/*
++	 * match with FNM_PATHNAME; the pattern has base implicitly
++	 * in front of it.
++	 */
++	if (*pattern == '/') {
++		pattern++;
++		patternlen--;
++		prefix--;
++	}
++
++	/*
++	 * baselen does not count the trailing slash. base[] may or
++	 * may not end with a trailing slash though.
++	 */
++	if (pathlen < baselen + 1 ||
++	    (baselen && pathname[baselen] != '/') ||
++	    fspathncmp(pathname, base, baselen))
++		return 0;
++
++	// local modification: simplified because always baselen > 0
++	pathname += baselen + 1;
++	pathlen -= baselen + 1;
++
++	if (prefix) {
++		/*
++		 * if the non-wildcard part is longer than the
++		 * remaining pathname, surely it cannot match.
++		 */
++		if (prefix > pathlen)
++			return 0;
++
++		if (fspathncmp(pattern, pathname, prefix))
++			return 0;
++		pattern += prefix;
++		patternlen -= prefix;
++		pathname += prefix;
++		pathlen -= prefix;
++
++		/*
++		 * If the whole pattern did not have a wildcard,
++		 * then our prefix match is all we need; we
++		 * do not need to call fnmatch at all.
++		 */
++		if (!patternlen && !pathlen)
++			return 1;
++	}
++
++	// local modification: call wildmatch() directly
++	return !wildmatch(pattern, pathname, WM_PATHNAME);
++}
++
++// Copied from git/utf8.c
++
++static const char utf8_bom[] = "\357\273\277";
++
++//----------------------------(IMPORT FROM GIT END)----------------------------
++
++struct pattern {
++	unsigned int flags;
++	int nowildcardlen;
++	int patternlen;
++	int dirlen;
++	char pattern[];
++};
++
++static struct pattern **pattern_list;
++static int nr_patterns, alloced_patterns;
++
++// Remember the number of patterns at each directory level
++static int *nr_patterns_at;
++// Track the current/max directory level;
++static int depth, max_depth;
++static bool debug_on;
++static FILE *out_fp, *stat_fp;
++static char *prefix = "";
++static char *progname;
++
++static void __attribute__((noreturn)) perror_exit(const char *s)
++{
++	perror(s);
++
++	exit(EXIT_FAILURE);
++}
++
++static void __attribute__((noreturn)) error_exit(const char *fmt, ...)
++{
++	va_list args;
++
++	fprintf(stderr, "%s: error: ", progname);
++
++	va_start(args, fmt);
++	vfprintf(stderr, fmt, args);
++	va_end(args);
++
++	exit(EXIT_FAILURE);
++}
++
++static void debug(const char *fmt, ...)
++{
++	va_list args;
++	int i;
++
++	if (!debug_on)
++		return;
++
++	fprintf(stderr, "[DEBUG] ");
++
++	for (i = 0; i < depth * 2; i++)
++		fputc(' ', stderr);
++
++	va_start(args, fmt);
++	vfprintf(stderr, fmt, args);
++	va_end(args);
++}
++
++static void *xrealloc(void *ptr, size_t size)
++{
++	ptr = realloc(ptr, size);
++	if (!ptr)
++		perror_exit(progname);
++
++	return ptr;
++}
++
++static void *xmalloc(size_t size)
++{
++	return xrealloc(NULL, size);
++}
++
++// similar to last_matching_pattern_from_list() in GIT
++static bool is_ignored(const char *path, int pathlen, int dirlen, bool is_dir)
++{
++	int i;
++
++	// Search in the reverse order because the last matching pattern wins.
++	for (i = nr_patterns - 1; i >= 0; i--) {
++		struct pattern *p = pattern_list[i];
++		unsigned int flags = p->flags;
++		const char *gitignore_dir = p->pattern + p->patternlen + 1;
++		bool ignored;
++
++		if ((flags & PATTERN_FLAG_MUSTBEDIR) && !is_dir)
++			continue;
++
++		if (flags & PATTERN_FLAG_NODIR) {
++			if (!match_basename(path + dirlen + 1,
++					    pathlen - dirlen - 1,
++					    p->pattern,
++					    p->nowildcardlen,
++					    p->patternlen,
++					    p->flags))
++				continue;
++		} else {
++			if (!match_pathname(path, pathlen,
++					    gitignore_dir, p->dirlen,
++					    p->pattern,
++					    p->nowildcardlen,
++					    p->patternlen))
++				continue;
++		}
++
++		debug("%s: matches %s%s%s (%s/.gitignore)\n", path,
++		      flags & PATTERN_FLAG_NEGATIVE ? "!" : "", p->pattern,
++		      flags & PATTERN_FLAG_MUSTBEDIR ? "/" : "",
++		      gitignore_dir);
++
++		ignored = (flags & PATTERN_FLAG_NEGATIVE) == 0;
++		if (ignored)
++			debug("Ignore: %s\n", path);
++
++		return ignored;
++	}
++
++	debug("%s: no match\n", path);
++
++	return false;
++}
++
++static void add_pattern(const char *string, const char *dir, int dirlen)
++{
++	struct pattern *p;
++	int patternlen, nowildcardlen;
++	unsigned int flags;
++
++	parse_path_pattern(&string, &patternlen, &flags, &nowildcardlen);
++
++	if (patternlen == 0)
++		return;
++
++	p = xmalloc(sizeof(*p) + patternlen + dirlen + 2);
++
++	memcpy(p->pattern, string, patternlen);
++	p->pattern[patternlen] = 0;
++	memcpy(p->pattern + patternlen + 1, dir, dirlen);
++	p->pattern[patternlen + 1 + dirlen] = 0;
++
++	p->patternlen = patternlen;
++	p->nowildcardlen = nowildcardlen;
++	p->dirlen = dirlen;
++	p->flags = flags;
++
++	debug("Add pattern: %s%s%s\n",
++	      flags & PATTERN_FLAG_NEGATIVE ? "!" : "", p->pattern,
++	      flags & PATTERN_FLAG_MUSTBEDIR ? "/" : "");
++
++	if (nr_patterns >= alloced_patterns) {
++		alloced_patterns += 128;
++		pattern_list = xrealloc(pattern_list,
++					sizeof(*pattern_list) * alloced_patterns);
++	}
++
++	pattern_list[nr_patterns++] = p;
++}
++
++// similar to add_patterns_from_buffer() in GIT
++static void add_patterns_from_gitignore(const char *dir, int dirlen)
++{
++	struct stat st;
++	char path[PATH_MAX], *buf, *entry;
++	size_t size;
++	int fd, pathlen, i;
++
++	pathlen = snprintf(path, sizeof(path), "%s/.gitignore", dir);
++	if (pathlen >= sizeof(path))
++		error_exit("%s: too long path was truncated\n", path);
++
++	fd = open(path, O_RDONLY | O_NOFOLLOW);
++	if (fd < 0) {
++		if (errno != ENOENT)
++			return perror_exit(path);
++		return;
++	}
++
++	if (fstat(fd, &st) < 0)
++		perror_exit(path);
++
++	size = st.st_size;
++
++	buf = xmalloc(size + 1);
++	if (read(fd, buf, st.st_size) != st.st_size)
++		perror_exit(path);
++
++	buf[st.st_size] = '\n';
++	if (close(fd))
++		perror_exit(path);
++
++	debug("Parse %s\n", path);
++
++	entry = buf;
++
++	// skip utf8 bom
++	if (!strncmp(entry, utf8_bom, strlen(utf8_bom)))
++		entry += strlen(utf8_bom);
++
++	for (i = entry - buf; i < size; i++) {
++		if (buf[i] == '\n') {
++			if (entry != buf + i && entry[0] != '#') {
++				buf[i - (i && buf[i-1] == '\r')] = 0;
++				trim_trailing_spaces(entry);
++				add_pattern(entry, dir, dirlen);
++			}
++			entry = buf + i + 1;
++		}
++	}
++
++	free(buf);
++}
++
++// Save the current number of patterns and increment the depth
++static void increment_depth(void)
++{
++	if (depth >= max_depth) {
++		max_depth += 1;
++		nr_patterns_at = xrealloc(nr_patterns_at,
++					  sizeof(*nr_patterns_at) * max_depth);
++	}
++
++	nr_patterns_at[depth] = nr_patterns;
++	depth++;
++}
++
++// Decrement the depth, and free up the patterns of this directory level.
++static void decrement_depth(void)
++{
++	depth--;
++	assert(depth >= 0);
++
++	while (nr_patterns > nr_patterns_at[depth])
++		free(pattern_list[--nr_patterns]);
++}
++
++static void print_path(const char *path)
++{
++	// The path always starts with "./"
++	assert(strlen(path) >= 2);
++
++	// Replace the root directory with a preferred prefix.
++	// This is useful for the tar command.
++	fprintf(out_fp, "%s%s\n", prefix, path + 2);
++}
++
++static void print_stat(const char *path, struct stat *st)
++{
++	if (!stat_fp)
++		return;
++
++	if (!S_ISREG(st->st_mode) && !S_ISLNK(st->st_mode))
++		return;
++
++	assert(strlen(path) >= 2);
++
++	fprintf(stat_fp, "%c %9ld %10ld %s\n",
++		S_ISLNK(st->st_mode) ? 'l' : '-',
++		st->st_size, st->st_mtim.tv_sec, path + 2);
++}
++
++// Traverse the entire directory tree, parsing .gitignore files.
++// Print file paths that are not tracked by git.
++//
++// Return true if all files under the directory are ignored, false otherwise.
++static bool traverse_directory(const char *dir, int dirlen)
++{
++	bool all_ignored = true;
++	DIR *dirp;
++
++	debug("Enter[%d]: %s\n", depth, dir);
++	increment_depth();
++
++	add_patterns_from_gitignore(dir, dirlen);
++
++	dirp = opendir(dir);
++	if (!dirp)
++		perror_exit(dir);
++
++	while (1) {
++		struct dirent *d;
++		struct stat st;
++		char path[PATH_MAX];
++		int pathlen;
++		bool ignored;
++
++		errno = 0;
++		d = readdir(dirp);
++		if (!d) {
++			if (errno)
++				perror_exit(dir);
++			break;
++		}
++
++		if (!strcmp(d->d_name, "..") || !strcmp(d->d_name, "."))
++			continue;
++
++		pathlen = snprintf(path, sizeof(path), "%s/%s", dir, d->d_name);
++		if (pathlen >= sizeof(path))
++			error_exit("%s: too long path was truncated\n", path);
++
++		if (lstat(path, &st) < 0)
++			perror_exit(path);
++
++		if ((!S_ISREG(st.st_mode) && !S_ISDIR(st.st_mode) && !S_ISLNK(st.st_mode)) ||
++		    is_ignored(path, pathlen, dirlen, S_ISDIR(st.st_mode))) {
++			ignored = true;
++		} else {
++			if (S_ISDIR(st.st_mode) && !S_ISLNK(st.st_mode))
++				// If all the files in a directory are ignored,
++				// let's ignore that directory as well. This
++				// will avoid empty directories in the tarball.
++				ignored = traverse_directory(path, pathlen);
++			else
++				ignored = false;
++		}
++
++		if (ignored) {
++			print_path(path);
++		} else {
++			print_stat(path, &st);
++			all_ignored = false;
++		}
++	}
++
++	if (closedir(dirp))
++		perror_exit(dir);
++
++	decrement_depth();
++	debug("Leave[%d]: %s\n", depth, dir);
++
++	return all_ignored;
++}
++
++static void usage(void)
++{
++	fprintf(stderr,
++		"usage: %s [options]\n"
++		"\n"
++		"Show files that are ignored by git\n"
++		"\n"
++		"options:\n"
++		"  -d, --debug                  print debug messages to stderr\n"
++		"  -e, --exclude PATTERN        add the given exclude pattern\n"
++		"  -h, --help                   show this help message and exit\n"
++		"  -i, --ignore-case            Ignore case differences between the patterns and the files\n"
++		"  -o, --output FILE            output the ignored files to a file (default: '-', i.e. stdout)\n"
++		"  -p, --prefix PREFIX          prefix added to each path (default: empty string)\n"
++		"  -r, --rootdir DIR            root of the source tree (default: current working directory)\n"
++		"  -s, --stat FILE              output the file stat of non-ignored files to a file\n",
++		progname);
++}
++
++static void open_output(const char *pathname, FILE **fp)
++{
++	if (strcmp(pathname, "-")) {
++		*fp = fopen(pathname, "w");
++		if (!*fp)
++			perror_exit(pathname);
++	} else {
++		*fp = stdout;
++	}
++}
++
++static void close_output(const char *pathname, FILE *fp)
++{
++	fflush(fp);
++
++	if (ferror(fp))
++		error_exit("not all data was written to the output\n");
++
++	if (fclose(fp))
++		perror_exit(pathname);
++}
++
++int main(int argc, char *argv[])
++{
++	const char *output = "-";
++	const char *rootdir = ".";
++	const char *stat = NULL;
++
++	progname = strrchr(argv[0], '/');
++	if (progname)
++		progname++;
++	else
++		progname = argv[0];
++
++	while (1) {
++		static struct option long_options[] = {
++			{"debug",       no_argument,       NULL, 'd'},
++			{"help",        no_argument,       NULL, 'h'},
++			{"ignore-case", no_argument,       NULL, 'i'},
++			{"output",      required_argument, NULL, 'o'},
++			{"prefix",      required_argument, NULL, 'p'},
++			{"rootdir",     required_argument, NULL, 'r'},
++			{"stat",        required_argument, NULL, 's'},
++			{"exclude",     required_argument, NULL, 'x'},
++			{},
++		};
++
++		int c = getopt_long(argc, argv, "dhino:p:r:s:x:", long_options, NULL);
++
++		if (c == -1)
++			break;
++
++		switch (c) {
++		case 'd':
++			debug_on = true;
++			break;
++		case 'h':
++			usage();
++			exit(0);
++		case 'i':
++			ignore_case = true;
++			break;
++		case 'o':
++			output = optarg;
++			break;
++		case 'p':
++			prefix = optarg;
++			break;
++		case 'r':
++			rootdir = optarg;
++			break;
++		case 's':
++			stat = optarg;
++			break;
++		case 'x':
++			add_pattern(optarg, ".", strlen("."));
++			break;
++		case '?':
++			usage();
++			/* fallthrough */
++		default:
++			exit(EXIT_FAILURE);
++		}
++	}
++
++	open_output(output, &out_fp);
++	if (stat && stat[0])
++		open_output(stat, &stat_fp);
++
++	if (chdir(rootdir))
++		perror_exit(rootdir);
++
++	add_pattern(".git/", ".", strlen("."));
++
++	if (traverse_directory(".", strlen(".")))
++		print_path("./");
++
++	assert(depth == 0);
++
++	while (nr_patterns > 0)
++		free(pattern_list[--nr_patterns]);
++	free(pattern_list);
++	free(nr_patterns_at);
++
++	close_output(output, out_fp);
++	if (stat_fp)
++		close_output(stat, stat_fp);
++
++	return 0;
++}
+-- 
+2.34.1
 
