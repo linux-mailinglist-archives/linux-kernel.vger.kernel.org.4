@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C3B6987AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AE06987B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjBOWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S229684AbjBOWQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBOWNO (ORCPT
+        with ESMTP id S229568AbjBOWQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:13:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBD85588
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:13:13 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676499191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzh4TQ+fta7VIY1UwZYzch6Mdg/KrAuVcR3w4kN5x0U=;
-        b=z0BAUasrxMO/f0q8CHq2d1NSNFWwfFR/kJQFpnUwlOYFWLCYaqD3BRY3GtOz/cMkLlzZ7O
-        m92QIxtbcAUYTxb4YC0T6dwMcNn9fQ9zwwO36cpXDyAjFPq2Q4agwD9c11tZMIxmfeV71V
-        i/9sQXjkgHYbGno20QHOs7xEh0VlaANDEoMmu9R6zM5QP41yYzRUEXU/3wr0osBwkZOdiy
-        ou46W5cIuw1da4DZNC4bwizbUI+QGbWQ1PkGlz4lNcb0iIj/ZjgYFnIqOHYJV4CEOYNjCM
-        hOabNZ9e2F1HEVpKEa/RTc7+daW/SwItMD6BWU/Bt6tbEYwA8qY1/yzuTXCvLQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676499191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzh4TQ+fta7VIY1UwZYzch6Mdg/KrAuVcR3w4kN5x0U=;
-        b=V22trob5T6GOULblczQVDserdWaV9cHN5zr1j2kcKU9OYVE1nTR91yiinz/jTdIMQUCX0X
-        nr/IrYbkfNn+5wBQ==
-To:     Michael Thalmeier <michael.thalmeier@hale.at>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tty: ttynull: implement console write
-In-Reply-To: <1831554214.546921.1676479103702.JavaMail.zimbra@hale.at>
-References: <20230214115921.399608-1-michael.thalmeier@hale.at>
- <Y+zEAA1hp+3guGxT@axis.com> <Y+ztReOGJwAbpv52@alley>
- <1831554214.546921.1676479103702.JavaMail.zimbra@hale.at>
-Date:   Wed, 15 Feb 2023 23:17:58 +0106
-Message-ID: <878rgy37f5.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 15 Feb 2023 17:16:11 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF31C4390B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:16:10 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4c11ae6ab25so235452367b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:16:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrCcxlLanE1hw5a0xpT0A8Dl5UAfprFd59vy3LFZr7U=;
+        b=dufJ2caSE7pFyPwErBK72yheI6BZZubW5yttXJiCleUurjqI1LdcOFnLRJEucAOC8N
+         kiPpkUsSj7pevYLtxNzxDUqK27tZ49f22RF6mmoNtfWPnMIdz+GPO96fG+B9OQX2R6Qw
+         9JdPj3S9/VwZF8Md99zWuwkHulC+8rStLL9J1k9A62mJ/JuvnCStL4NTJwoU+R4WVIyS
+         nEP7SiGCDp1bz9MiOEEiYfvBY3t+xv5prj49IFk7yePPMChOrT0xmNOcwZtX8QEqlHYR
+         VVssn+QEDpqM5cUS+0tHavgKKf16cTPNZECAS/bhuarkPkUefaExERGxFJReGRXBL0ki
+         377A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrCcxlLanE1hw5a0xpT0A8Dl5UAfprFd59vy3LFZr7U=;
+        b=d4Gw/OsGo1AdhkTj/zkW/HD4WImQxfQQmJQ5zHoLCbvLQpUM019m5Ci7+SanUQla+5
+         ltD3E9ifRhxJklDgR3xhcePEq5Z/ZQXTMvFdJyUFdZAUk4DniCw158408WorV9v5Hx/H
+         d+gHog3UUpa4/FTmuEi7c1OjdcALTv4PTo8tmHUutWvwqL54FdJNbB5PFfw846U4alV9
+         XHnc7J7GhcZJ5p5KzM8+lxlnmnw2SnegnLFvQCGiSQs8SonruvAeEaQ+sZIO8Rc2+gTb
+         yCHFseE5QtYr7oXdZt96Rqa36QqLO4j8KtdroCjwRhlny8PMnpBgLx19DNSwbdf0D6hR
+         cUBA==
+X-Gm-Message-State: AO0yUKVISCGeVsvzRC96koKKTI65oX69/3vMeAmioa+T2nd2iYdDQIel
+        S/7Qz13g0fkSZvdvE2XlUyVttHEx8ts=
+X-Google-Smtp-Source: AK7set9RveR7cZTWuYyYEu3ndpHZHwVU9G84NUcj4gM2LYDO3EY5laHoBKVkf7tYCQur1RoShx22rpfXEpI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1024:b0:8fc:686c:cf87 with SMTP id
+ x4-20020a056902102400b008fc686ccf87mr0ybt.4.1676499369677; Wed, 15 Feb 2023
+ 14:16:09 -0800 (PST)
+Date:   Wed, 15 Feb 2023 14:16:07 -0800
+In-Reply-To: <20d189fc-8d20-8083-b448-460cc0420151@linux.microsoft.com>
+Mime-Version: 1.0
+References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
+ <Y+p1j7tYT+16MX6B@google.com> <35ff8f48-2677-78ea-b5f3-329c75ce65c9@redhat.com>
+ <Y+qLe42h9ZPRINrG@google.com> <CABgObfaZQOvt6v0yGz3MR7FBU7DcrTTGmS6M8RWCX0uy6WML1Q@mail.gmail.com>
+ <20d189fc-8d20-8083-b448-460cc0420151@linux.microsoft.com>
+Message-ID: <Y+1ZpxAkome9s1Ve@google.com>
+Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
+ on Hyper-V
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tianyu Lan <ltykernel@gmail.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,17 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-15, Michael Thalmeier <michael.thalmeier@hale.at> wrote:
-> You are right. I have encountered this problem with the RT-patchset.
-> We currently are using the latest v5.15-rt kernel which had this
-> problem.
+On Tue, Feb 14, 2023, Jeremi Piotrowski wrote:
+> On 13/02/2023 20:56, Paolo Bonzini wrote:
+> > On Mon, Feb 13, 2023 at 8:12 PM Sean Christopherson <seanjc@google.com> wrote:
+> >>> Depending on the performance results of adding the hypercall to
+> >>> svm_flush_tlb_current, the fix could indeed be to just disable usage of
+> >>> HV_X64_NESTED_ENLIGHTENED_TLB.
+> >>
+> >> Minus making nested SVM (L3) mutually exclusive, I believe this will do the trick:
+> >>
+> >> +       /* blah blah blah */
+> >> +       hv_flush_tlb_current(vcpu);
+> >> +
+> > 
+> > Yes, it's either this or disabling the feature.
+> > 
+> > Paolo
+> 
+> Combining the two sub-threads: both of the suggestions:
+> 
+> a) adding a hyperv_flush_guest_mapping(__pa(root->spt) after kvm_tdp_mmu_get_vcpu_root_hpa's call to tdp_mmu_alloc_sp()
+> b) adding a hyperv_flush_guest_mapping(vcpu->arch.mmu->root.hpa) to svm_flush_tlb_current()
+> 
+> appear to work in my test case (L2 vm startup until panic due to missing rootfs).
+> 
+> But in both these cases (and also when I completely disable HV_X64_NESTED_ENLIGHTENED_TLB)
+> the runtime of an iteration of the test is noticeably longer compared to tdp_mmu=0.
 
-The 5.15-rt kernel is based on an implementation of printk that has
-since been abandoned. I will provide a patch for 5.15-rt to fix this
-issue.
+Hmm, what is test doing?
 
-The new printk implementation is currently being finalized for inclusion
-in the latest PREEMPT_RT-development version and for submission to
-mainline.
-
-John Ogness
+> So in terms of performance the ranking is (fastest to slowest):
+> 1. tdp_mmu=0 + enlightened TLB
+> 2. tdp_mmu=0 + no enlightened TLB
+> 3. tdp_mmu=1 (enlightened TLB makes minimal difference)
