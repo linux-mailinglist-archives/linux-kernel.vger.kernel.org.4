@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5E8697D15
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D23697D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbjBONYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S233438AbjBONY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbjBONYG (ORCPT
+        with ESMTP id S234212AbjBONYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:24:06 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A6310DB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:24:05 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so19147692wrd.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:24:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPG3Ps5bQsYanoFaHsSUnU9dtAfpghrnqTZxU5VJQd8=;
-        b=PLl8BqJHUnqbarza30vH1AysNBawltXZawto7JnNQcDHp+P8jsodXp0q2uemiChwQv
-         8C/R10D+4620hJflYFMRB5s4FrRF9Uk8ZmjIGvGyp7RYyxhwqWyE0QIZsWKcMfwBFjJj
-         PicpT/xJV/t8u0FWGpU58n+QCDwJd+W0dse5eYDzwQGUOFQ2Ow0rGZ/6XRknb3k7eXMC
-         kl88/oySe45x/dfTlvBxzgn6JX6jjDYfCdXmqG824EiQM3NrvnoykKg9RAidkA156B09
-         3yhpd1CBPddLi0NcTqMlRCQnVZAd6xBxfjUrdDu2FbqyK+JUhml1CRh8/5xrSCL/+F+J
-         EQ7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UPG3Ps5bQsYanoFaHsSUnU9dtAfpghrnqTZxU5VJQd8=;
-        b=Ehdky7RH2ANBlZ3lwnUWDiwD70Rx9kQh3Ou8WxCiwMmw+kFAT31IhhXhGaorciRLm4
-         725lOMyZAf9dR8EUALxtfhIenDmDTFMhL0sPhs9ytD6trMpG2fi0iT8xePlb0KWfqRqs
-         5rxaurNxKSXIV3fiuIyRENJctPUPKtJkAfGXvfBLEhxLO5B5T3GlON84JOfnPK+z6rPY
-         9L7DotRdB2VSZXUh287FcOSat6uI3eTXTZI8xBqCaC6Jhhp9Bs+M200YeHTvjRaoEzbI
-         oesfQNkRvaARVRQnM6v/LVTs87J+A4vbB9ZWRWxWOeraghCo6B0OfVPJgvZfOWif0THU
-         2Lsw==
-X-Gm-Message-State: AO0yUKVAFC3djcejga7wyu1uZD7WvDxOAkmMFO+JH3Bvjgqw+1ABtznA
-        r1DVGSQwoEdx2wmKtOgSOumhbA==
-X-Google-Smtp-Source: AK7set9ASCujwkfYbmtvORKI+VoJdJbLWwudLIdBRAKAKGZf+TAiDHd4SsNl8Obo7bzM70kGVst4tA==
-X-Received: by 2002:adf:f6c8:0:b0:2be:34fb:673 with SMTP id y8-20020adff6c8000000b002be34fb0673mr1479401wrp.52.1676467443642;
-        Wed, 15 Feb 2023 05:24:03 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:77be:c518:6ccc:9a53? ([2a01:e0a:982:cbb0:77be:c518:6ccc:9a53])
-        by smtp.gmail.com with ESMTPSA id i8-20020a5d4388000000b002c5493a17efsm13431166wrq.25.2023.02.15.05.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 05:24:02 -0800 (PST)
-Message-ID: <3e9cd799-48ee-51b8-f969-303690ca626a@linaro.org>
-Date:   Wed, 15 Feb 2023 14:24:01 +0100
+        Wed, 15 Feb 2023 08:24:52 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981CA38E86;
+        Wed, 15 Feb 2023 05:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1676467467; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FEyXmPy0b4Lc8uWvpDYsGz83becDnInwGO3EaqxRFUk=;
+        b=T50XxDNIkK9Jr/7I9BBsd9GHLn2cecKVyqr2xeGtQ8IA38nxEFb3mQ+ofgeumWqBvInmxm
+        5KwiyF3++QQZpDR5UTyo0oaxfKfnSSgo9mp1P0ccekk9gb8jWvz+dcZ49zn3rHvBfBZgtT
+        P8wOXw7B/fVRCQLp6LDGFeyyCf0lZdc=
+Message-ID: <db4d83f3c3c8dc4f3ef5f850fe4c1c04aa648d47.camel@crapouillou.net>
+Subject: Re: Question: partial transfers of DMABUFs
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-media@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Wed, 15 Feb 2023 13:24:24 +0000
+In-Reply-To: <c5fe8089-49e9-2bec-eac5-e8a035412cf3@amd.com>
+References: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
+         <c5fe8089-49e9-2bec-eac5-e8a035412cf3@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] power: reset: odroid-go-ultra: fix I2C dependency
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Sebastian Reichel <sre@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Asmaa Mnebhi <asmaa@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230215124714.2872813-1-arnd@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230215124714.2872813-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2023 13:47, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Since this driver can only be built-in, it fails to link when
-> the I2C layer is in a loadable module:
-> 
-> x86_64-linux-ld: drivers/power/reset/odroid-go-ultra-poweroff.o: in function `odroid_go_ultra_poweroff_get_pmic_device':
-> odroid-go-ultra-poweroff.c:(.text+0x30): undefined reference to `i2c_find_device_by_fwnode'
-> 
-> Tighten the dependency to only allow enabling
-> POWER_RESET_ODROID_GO_ULTRA_POWEROFF is I2C is built-in as well.
-> 
-> Fixes: cec3b46b8bda ("power: reset: add Odroid Go Ultra poweroff driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Christian,
 
-Thanks for the fix !
+Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 13:58 +0100, Christian K=C3=B6nig a=
+ =C3=A9crit=C2=A0:
+> Hi Paul,
+>=20
+> Am 15.02.23 um 11:48 schrieb Paul Cercueil:
+> > Hi,
+> >=20
+> > I am working on adding support for DMABUFs in the IIO subsystem.
+> >=20
+> > One thing we want there, is the ability to specify the number of
+> > bytes
+> > to transfer (while still defaulting to the DMABUF size).
+> >=20
+> > Since dma_buf_map_attachment() returns a sg_table,
+>=20
+> Please don't assume that this is an sg_table. We just used it as=20
+> container for DMA addresses, but this has proven to be a mistake.
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+TL/DR, why was it a mistake? Just curious.
 
-> ---
->   drivers/power/reset/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 7059bd1f2ee7..8c87eeda0fec 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -144,7 +144,7 @@ config POWER_RESET_OCELOT_RESET
->   config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
->   	bool "Odroid Go Ultra power-off driver"
->   	depends on ARCH_MESON || COMPILE_TEST
-> -	depends on I2C && OF
-> +	depends on I2C=y && OF
->   	help
->   	  This driver supports Power off for Odroid Go Ultra device.
->   
+> There is work underway to replace the sg_table with (for example)
+> just=20
+> an array of DMA addresses.
 
+Ok, so I believe at some point we will need an equivalent of
+dmaengine_prep_slave_sg() which takes an array of DMA addresses.
+
+> > I basically have two options, and I can't decide which one is the
+> > best (or the less ugly):
+> >=20
+> > - Either I add a new API function similar to
+> > dmaengine_prep_slave_sg(),
+> > which still takes a scatterlist as argument but also takes the
+> > number
+> > of bytes as argument;
+> >=20
+> > - Or I add a function to duplicate the scatterlist and then shrink
+> > it
+> > manually, which doesn't sound like a good idea either.
+> >=20
+> > What would be the recommended way?
+>=20
+> I strongly recommend to come up with a new function which only takes
+> DMA=20
+> addresses and separate segment length.
+
+Alright, thanks for your input.
+
+So I would add a new dma_device.dma_prep_slave_dma_array() callback
+with a corresponding API function, and then the drivers can be
+converted from using .dma_prep_slave_sg() to this new function in due
+time.
+
+Vinod, that works for you?
+
+Cheers,
+-Paul
