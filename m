@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3936E697C4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1819697C53
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbjBOMv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S233789AbjBOMwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbjBOMv5 (ORCPT
+        with ESMTP id S232736AbjBOMwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:51:57 -0500
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA653864F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:51:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1676465507;
-        bh=MUWUkL8rO981gmCLrVOjPwLtUdMwE5KMREDb1Q0ZIhE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SIBsXnczOMXEUFhFmrpm9Xs6N1S62dfK/3vfnOEK4KN/5UacNTPtt8b6UjzCVf++b
-         JF+7EejyL2Tc1TZUwJAXtXn4Wcr0SSF47qRxpOknQmjOa7o63kdbooiEcVcpjwXbyB
-         4Za5nDMv5X+3OQe0gtIt+30bKwEW02QxvYDPL+yE=
-Received: from [IPv6:240e:358:111b:f00:dc73:854d:832e:3] (unknown [IPv6:240e:358:111b:f00:dc73:854d:832e:3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id EE16166220;
-        Wed, 15 Feb 2023 07:51:43 -0500 (EST)
-Message-ID: <6268f221cfca8b7550ad0673246f09cd439ede05.camel@xry111.site>
-Subject: Re: "kernel ade access" oops on LoongArch
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Jinyang He <hejinyang@loongson.cn>, loongarch@lists.linux.dev,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
-Date:   Wed, 15 Feb 2023 20:51:38 +0800
-In-Reply-To: <bf0e57db317d7061ecaaf928ce6cf40941b1740c.camel@xry111.site>
-References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
-         <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
-         <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
-         <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
-         <5403e5eb-5792-7d6f-df74-ca3fab82ecd5@loongson.cn>
-         <818419c03037bda833a5b281588a4b331c34ae8c.camel@xry111.site>
-         <74fb1e24-36c0-c642-5bab-3646ba7790df@loongson.cn>
-         <21b0e60dac8bedf9e389645ec103aa4241b35f8d.camel@xry111.site>
-         <bf0e57db317d7061ecaaf928ce6cf40941b1740c.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Wed, 15 Feb 2023 07:52:23 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8AA3644D;
+        Wed, 15 Feb 2023 04:52:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=WOYSFfQ0jaebxOnsbFhwjuQF7/Ba3lkdLaUdw2j21OU=; b=YW
+        9DTzbhY2DetOrcc4Hed33WxxEKGNvz0hK6keVtjE5/ERT0v+4gUFRND5ckuuXGd4aFj2b3hYyd5P1
+        wtPRv6SfTLZdggSPlNEcfSE5P+5t+F06Gwa44BPyXT8Xvxuvxs8JvVuHQ8YQas+MpgTTgxD7me6Ok
+        lAHiNqbw2ixbsxc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pSHGO-0053CA-4X; Wed, 15 Feb 2023 13:51:56 +0100
+Date:   Wed, 15 Feb 2023 13:51:56 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 08/12] net: stmmac: Add glue layer for StarFive JH7100 SoC
+Message-ID: <Y+zVbPppy7jvWF5r@lunn.ch>
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
+ <Y+e+N/aiqCctIp6e@lunn.ch>
+ <d1769dac-9e80-2f0d-6a5c-386ef70e1547@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d1769dac-9e80-2f0d-6a5c-386ef70e1547@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -60,75 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-15 at 19:52 +0800, Xi Ruoyao wrote:
-> On Wed, 2023-02-15 at 16:35 +0800, Xi Ruoyao wrote:
-> > On Wed, 2023-02-15 at 16:25 +0800, Youling Tang wrote:
-> > > Can you modify the kernel as follows and test it, so as to avoid
-> > > possible relationship with the exception table data link position
-> > > and
-> > > alignment rules (or use EXCEPTION_TABLE(12))?
-> > >=20
-> > > --- a/arch/loongarch/kernel/vmlinux.lds.S
-> > > +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> > > @@ -4,7 +4,6 @@
-> > > =C2=A0 #include <asm/thread_info.h>
-> > >=20
-> > > =C2=A0 #define PAGE_SIZE _PAGE_SIZE
-> > > -#define RO_EXCEPTION_TABLE_ALIGN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- 4
-> > >=20
-> > > =C2=A0 /*
-> > > =C2=A0=C2=A0 * Put .bss..swapper_pg_dir as the first thing in .bss. T=
-his
-> > > will
-> > > @@ -54,6 +53,8 @@ SECTIONS
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 . =3D ALIGN(PECOFF_S=
-EGMENT_ALIGN);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 _etext =3D .;
-> > >=20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 EXCEPTION_TABLE(16)
+On Wed, Feb 15, 2023 at 02:08:01AM +0200, Cristian Ciocaltea wrote:
+> On 2/11/23 18:11, Andrew Lunn wrote:
 > > > +
-> >=20
-> > It seems the kernel refuses to boot after the change, but I'm not
-> > completely sure: I'm 5 km away from the board and operating it via
-> > ssh
-> > so maybe it's a reboot failure or network failure.=C2=A0 I'll report
-> > again in
-> > the evening.
->=20
-> It was a reboot failure.
->=20
-> Now it has booted successfully, but the stack trace still shows (during
-> the 25th run of the make test t=3D... command).
+> > > +#define JH7100_SYSMAIN_REGISTER28 0x70
+> > > +/* The value below is not a typo, just really bad naming by StarFive ¯\_(ツ)_/¯ */
+> > > +#define JH7100_SYSMAIN_REGISTER49 0xc8
+> > 
+> > Seems like the comment should be one line earlier?
+> > 
+> > There is value in basing the names on the datasheet, but you could
+> > append something meaningful on the end:
+> > 
+> > #define JH7100_SYSMAIN_REGISTER49_DLYCHAIN 0xc8
+> > 
+> > ???
+> 
+> Unfortunately the JH7100 datasheet I have access to doesn't provide any
+> information regarding the SYSCTRL-MAINSYS related registers. Maybe Emil
+> could provide some details here?
 
-Ouch, I know what's happening...
+If you have no reliable source of naming, just make a name up from how
+the register is used. This is why i suggested adding _DLYCHAIN,
+because that is what is written to it. You should be able to do the
+same with register 28.
 
-In the architecture-independent code we have something like
-
-extern struct exception_table_entry a[], b[];
-bsearch(a, b - a);
-
-According to the C standard, when you write "b - a" where a and b are
-pointers to type T, "b" and "a" must be pointers to elements in the same
-array of T.  So the compiler can assume ((uintptr_t)b - (uintptr_t)a) %
-12 =3D=3D 0 and optimize "b - a" to something like
-
-(((uintptr_t)b - (uintptr_t)a) >> 2) * inv3
-
-Here inv3 is the inversion of 3 in the modulo-2**64 integer ring, so the
-compiler can avoid an expensive divide instruction.  But in my vmlinux
-((uintptr_t)b - (uintptr_t)a) is somehow not a multiple of 12:
-
-(gdb) p ((uintptr_t)__stop___ex_table - (uintptr_t)__start___ex_table) % si=
-zeof(struct exception_table_entry)
-$9 =3D 8
-
-So I guess
-
-#define RO_EXCEPTION_TABLE_ALIGN       12
-
-will work.  I'll take a try...
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+     Andrew
