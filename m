@@ -2,156 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A62698780
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B7B69877F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjBOVrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S229631AbjBOVqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBOVrP (ORCPT
+        with ESMTP id S229506AbjBOVqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:47:15 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E6FE06F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676497634; x=1708033634;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Oj1bw71PYeLkmYTebgOxDfB7bOfhVieYNVUIM5fFOAM=;
-  b=kBXnAfR+pVfd+eeT2enOmNF1CMm5b0Cm7x1cMeGhRbvlyQS66pz/n9s+
-   rGecXcw3leMTkXTYOWY0hS9sXC/7HS2vcjtTqnPZ3A1gKc7TzjH9Lvzn5
-   k3jkWV2u45ykxRNLLVWtZtTD3zpwlnj1Vm4dG21sJgzXFdcw3AgomsrIC
-   mHMaNulA5AOp4MfVtTUc40Si7nFHobOUkELFgNsfvmKsfWKR9vgHlE/Gj
-   GLMJZkJimldfNrYC6Yw+2piDZHbjrROGmQTiRWwC1P78VgA4Ubsmh1QQa
-   6foLM8gHMkg6nhArf5Iq+fwFKL4plCW4s5//Zh4hoivGf9oaT95FVmA9t
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="329273351"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="329273351"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:47:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="915398921"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="915398921"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Feb 2023 13:47:13 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 15 Feb 2023 13:47:13 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 15 Feb 2023 13:47:13 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 15 Feb 2023 13:47:12 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=grdxZuF5H1LjmWEilSyS0JJ244qfPU8GtMEaud4jInio42LU1uyqYniFMROa/Rjg0YOZLJY5TsZCr2M9xL6KPD2r+ag3P3enZ3OPZ2vgQXjMZUduLst1msfrUTGgKh0HxUU8gJwXREQiBj3iIXSVTmQH6lyNovVQ2tnNLXs0SuL/3zcZ0J0C5YkC5bretwuUFUWdE/3CvAb9sDnB43ONJHwX1hzF8Ya/M8QitjuKZF5+ar7fRuQLAGKaBKbqRt3HPVpO2zZXjit7OLVGf3a9eYcb4aiYPr2IxIHxBokze0BqyLGi5APiYZedcw6nRVNB3AHF8p5ebPkdxM9DwhyKIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yrhHsR5MNhrP5u6O6tTcP5/zqteSEHjiFeagUmgXTCE=;
- b=dyY748djUZFGpdcSwNDzI+XVt/4pGOT2ic7MqoCQSuVmATlhyuYqmnujnaksiSPFcB9rQlR1AoeG/vt5HNOebS5QR/YT6dRwm4sjT2FZxLi3Bz81Oc3crux7lgE+bTn36ku+TmIaVan1QAKKSmZlvyaGQ7gVtjGuUn0Dv7WXZ52IFy1aN4yJ2z+BxD52BnL1kTbUfHwiAGCuTtwAIF4+tWbzAk84HbM/kjfCrLtHncisomFTeN3O+9vlu01/Na7DsW0vqnLGXJN6SaHqYJT/cSwqRPNfGKg9BKsSxWdQXMV/63AvdxehJ5/pAjDOzqJTNiUyqs4sAi2pwBssSl1isw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by IA1PR11MB7270.namprd11.prod.outlook.com (2603:10b6:208:42a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
- 2023 21:47:10 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6086.026; Wed, 15 Feb
- 2023 21:47:10 +0000
-Message-ID: <95fca7d1-d473-e9e2-b6c8-c4ae3d44d2df@intel.com>
-Date:   Wed, 15 Feb 2023 13:43:28 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.2
-Subject: Re: [PATCH] x86/resctrl: Only show tasks' pids in current pid
- namespace
-Content-Language: en-US
-To:     Shawn Wang <shawnwang@linux.alibaba.com>, <fenghua.yu@intel.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <james.morse@arm.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-References: <20230116071246.97717-1-shawnwang@linux.alibaba.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230116071246.97717-1-shawnwang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR03CA0008.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::21) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Wed, 15 Feb 2023 16:46:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B2C32E6D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:45:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676497529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YLMdyZmn80WpmG8m05BTAMPyO+GHG3WIT2eX6VL0e/A=;
+        b=WU5Las3wF2uF56iG2Egqnz9t6p/9SWnBuKB/eVCFHWpZJiC5FBZH3BpPHNWk2EIQejrC8K
+        6VkPNljRBKzlR7MpYXj1kviyyG+mPzVL9Z1PpStOWyDDkCCk2GcjIvol8qCMIj2lZzBcO5
+        vTXdVKYSNfdyCAqTPGYtJieAyXEi5Pk=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-307-5ughzYE-PXaOyKjXOnk2UQ-1; Wed, 15 Feb 2023 16:45:28 -0500
+X-MC-Unique: 5ughzYE-PXaOyKjXOnk2UQ-1
+Received: by mail-io1-f72.google.com with SMTP id y22-20020a5d94d6000000b007076e06ba3dso12863940ior.20
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:45:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676497527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YLMdyZmn80WpmG8m05BTAMPyO+GHG3WIT2eX6VL0e/A=;
+        b=jrvZIwVSkNBhdRXEIYOO05ofC047Qk9bZRVrPEsKbA8pmX68kCAkkXAC0myoORWjqf
+         YYG+H2UKzpiORwMtfCoIZc5t/V7GBBnD7m3c1T0lpvIwQ6jfEmXgFZ2jt5NmU8swdzFj
+         zopgDOf4/PUXVQ6Dxvy3lCQVfPE7+zviLrcrJGCi/65p8Ph9IPLMN68+KxRObDVCOHAd
+         bFdG8ieN6wY7xM4WELPJEi2DFxFYllPYKXmtKidZgr1LZjdyRWOVIfcmYqAO2i2AR9pw
+         qQI+KimMqzQTDpDtodokKIHepY4QRRHQ5IEWoek/A4z5Vs6iINC4xaqnq4T4A9e72DHl
+         oMjQ==
+X-Gm-Message-State: AO0yUKWO50SCxbQhz1p73Q3o1GsffC7N7XUB10M8D74o7jgTK8j7Dqxq
+        OYoHm8dw6ZQ6MSrtDefKNr744n3vCYEVWjP/32dXs8oSMHUwht3LvnpyyF4QWpQGgC8F7h0jaam
+        A1sruZ0C2nG6ycuTeuMlSczQs
+X-Received: by 2002:a5d:96d7:0:b0:719:6a2:99d8 with SMTP id r23-20020a5d96d7000000b0071906a299d8mr2389134iol.0.1676497527426;
+        Wed, 15 Feb 2023 13:45:27 -0800 (PST)
+X-Google-Smtp-Source: AK7set/poBZqwxrZhqsUtAvoivMd3CckLL1QKeZYrew1DdP1xDLd424dq890l3ZiAY5Ca6x3bNV8UQ==
+X-Received: by 2002:a5d:96d7:0:b0:719:6a2:99d8 with SMTP id r23-20020a5d96d7000000b0071906a299d8mr2389120iol.0.1676497526988;
+        Wed, 15 Feb 2023 13:45:26 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id u8-20020a02cb88000000b003c4d7bc7a78sm1771296jap.87.2023.02.15.13.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 13:45:26 -0800 (PST)
+Date:   Wed, 15 Feb 2023 16:45:25 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Paul Gofman <pgofman@codeweavers.com>, david@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
+Message-ID: <Y+1SdZqwS7LbcfaQ@x1n>
+References: <20230213163124.2850816-1-usama.anjum@collabora.com>
+ <Y+prUgFQqmytC/5M@x1n>
+ <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
+ <Y+qnb/Ix8P5J3Kl4@x1n>
+ <0549bd0e-85c4-1547-3eaa-16c8a8883837@collabora.com>
+ <Y+wCDUpuDcSDSQAK@x1n>
+ <c9d3a306-0c5e-ad58-cffc-3c4c6b8b7433@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|IA1PR11MB7270:EE_
-X-MS-Office365-Filtering-Correlation-Id: 910096b2-7c3a-4488-4458-08db0f9e3092
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DCK7rzl5+8UdNhKc8I+ilh0xErnFoCJYhI8bxLggNcybcCZHaPZc3S5W8j63s/2t/gP8jGe0CMRS7vwzx667ReZkapQVmS5YVxZQ39D16yOxzbofFOZqZ7ItcHVSw7osF4ZV/ES5GNrlDkWc7Andb06fDweo9tGqOjWVa3lLPnYSuGr4n4MoIva0c68IPHFMmubOypRe+DruxJOZkSOg+5yGIp72pMHxYqdmqiDVu60cDbWnZlSHQt+kWmXXPHoerMW9VjITGocXKdlB8BOhZ7roHwtm65Ydnpw33mECjxZgRVV1JsiSdjqMAxS6r4RZULLYueMhiamzJN2jQG++AgQhMvpqPegI2G1+SK2Xx60VdDeDLMwPUWwbSy+ggrNFz6GuOtSk1XS/DaEnymjJBskqma+PIY9k9uzuzGbD2HadZsnOJJIe1xowEro09t59rJAZ1ZY+8B4jtvaJF2rVE3zW9DZEVBC7ihQ229rdJtBdw5whW0ZmsihDsDoOEGDIPpwcIqf9kVDfcRrKfPn0WN6vNTXVR07d76VIFtaP59U2Ns8MqZrkMQW1Wm3tNl90HoPocvPS/6iGM74y+jr/GxLzzjHffZPfSWSyxW56YS4oiNFyRb9gn+Ad2Gujw9lvCExmcEjpIO/+jPEPSuZXar8U3KIitRYn76SdKlNMB52hkVvUemb1SMiMi0KVo0CP63yKeqXnlF4eWpIt+V57Z6ZHKKqvOmk4Q8cbd91mBbY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(136003)(366004)(376002)(39860400002)(451199018)(6636002)(316002)(478600001)(6486002)(31686004)(31696002)(86362001)(38100700002)(82960400001)(2616005)(36756003)(53546011)(83380400001)(26005)(6666004)(186003)(6512007)(6506007)(41300700001)(2906002)(5660300002)(8936002)(4326008)(66946007)(8676002)(66556008)(66476007)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0RqajVZVUovVVY1cm5OSTRQRFJMeVd2d3EzOUJZZkxqeFN5cSttUUFYQzV4?=
- =?utf-8?B?d2ltU2w5WDNDS00vV25HNG1NOVhpNmR3YkxLWFdNMktHVjJ4YzRrMVByQXR3?=
- =?utf-8?B?aUxCbWtrenJqbnFpQVhrOXp0SEpoWVJ4UTVSNlh6djdHQnZFTExzTG9JUk5R?=
- =?utf-8?B?SDVLc0JQbE8wSUZWNC9FbzJPQllNbTVueTIxUVMyZzdhMDFBTVJyTjZSWms3?=
- =?utf-8?B?Mm1JdkJKcmpyYVNpSWFmZVltaWVyZHNQRTMycW5EZ2xSZmJ4VVo3NWl4elNM?=
- =?utf-8?B?aER4V2pNVkw3dzVGMU80b2NGUERoRDNhanErL2FpdThSbmQ2S0xEYWp5TTB0?=
- =?utf-8?B?Qjh5Ri9PUmlLeFJUL0ZlbmUyUGRyaHJISS8wd3J1ck91NTZXOTE2UDlFRDZm?=
- =?utf-8?B?VFRJS0kxK1dhSXU3OFF6NDV3NER1bW1kUnFaMHlualV5dm1kNnJLTzRYeFJ3?=
- =?utf-8?B?RHAyT2lkcXRwcHFuSDRCbkdxNWlmRlMySDNFeHRNRXhmdkVsT0wvb09LMVNH?=
- =?utf-8?B?a2NWR1I1LzZaeHZpTzZjWmtmc1ljcFVBMjB3cmQ1dlFtZXZTYWw4ckkzMUE2?=
- =?utf-8?B?RlpXMXA1UTMxQTllbjA2eVU3eXlGTnRaS3FReEV1YlN2cVdhK1NXRU1pSmEx?=
- =?utf-8?B?dENMSkc2aU5kZDRqWjcvWkJKUlI5NkVNcXFiZUZySFgvek5KMWtRZDJMb3JC?=
- =?utf-8?B?UGFVR1JvcDBBNEh4VmovQXlNcWRiMkdIcmhzbGNGOTBFbHA2ekJVdXpFZ1Zp?=
- =?utf-8?B?TFhUNUpSQ29TakJIdFAxdVZjUU9BUDNIYnNnbi91YkR6TUN6OE9XbkdDazVi?=
- =?utf-8?B?M3dIdXVGVjh4NmR3ZFBJclBrM1R5WGtneGVKbkI0UkRxQWpWejdVbm1oVVpF?=
- =?utf-8?B?YTZHS0g1OU11VXBjV3JjNTNUQWIrQUVzOFR2V2x1aDBxSis4NE1URWlkOWJn?=
- =?utf-8?B?MzNXaUVDVVZVd3lSNlVuc1B1TS90UkNyS3pLYi9MMTVOMTJnOXlnNDA2K2FP?=
- =?utf-8?B?MmR5eVJBd2xmaUFxekVJV2I1MkJmUEg4b2F5aXhzTU1uUEora0p4d1grempN?=
- =?utf-8?B?aEVMRHViSlYyMHRLc0g0QVNyQVpRcG9ZaVNRaVdkRlZ1Tm1Eb3lPN1QxRHAz?=
- =?utf-8?B?ZHMyMmFLbWNDTWNSVnNEQlNKMlFnNnJCSlNVWUFpRFpzbnAyRXNBTHZIRVdM?=
- =?utf-8?B?eXA0RmtXdDlLMEpTT2ZtU3lKbzBPblhWZ0VxcVYvcjlDd09NRmJvdFhQRUhL?=
- =?utf-8?B?UlBlVnZYSk5XYjhIL0gvbkQ0NHdFanVwNDVkMnFyMXdQZ0ErQ2pRL281SDhh?=
- =?utf-8?B?ZHRaZnloZkJKWEJQUGMvUFdWZWV5T2xFeWFCVDF4bXBiOEdHc20zdXJLbTlV?=
- =?utf-8?B?N1JDdmI3bjZjbmdqQnRUN3lsL1NjUmF3NU9ocVgxOFkyL1RXc2Q0VFNncy9R?=
- =?utf-8?B?Wm1YR0ZiK2R0alFEQzlWTytGWUIvc1BMRVpQajk0VDNZVHlPcFVjOFlIWlBE?=
- =?utf-8?B?WlFocTJ2cE1jbFpBN05ITTNzM0dRYnp5TFgwb1AyUTdIeURseFViSEViZ2d4?=
- =?utf-8?B?Q0o1K2JCa0R4U21tQmFZR1JmTkNrOEVNaFFRSkRuLzlLbm1SOXRLdGNTYk96?=
- =?utf-8?B?R2hvWWZhY1pHUUtuOGRvdHgzRm04bFp0NVZYRWt2OHJhQXVVWXZFL2QyWFVV?=
- =?utf-8?B?QjJuK3p3YlFJNlVqR1ZxNS8yQUNmTlo5SkxYRDBWM3FlaVJjQU5XV3B3UmJO?=
- =?utf-8?B?V3VhYjM1MHRBMlVadCtqR2I2SDRoRDdQR1VhYVZ0Z1ZCaVZCY0lGK1VDYUZ4?=
- =?utf-8?B?MFBZcTNSUk1YVlpxbktXbC8zRlM2bEZCTnVKeUpKVjZIWUd6S3YwMGpod0w3?=
- =?utf-8?B?aVR4QUQwQU1aNmI0dEdmZFd2aVJWVkpPU3BUVWZnOUFrdTVIVVVmb0RzVWJI?=
- =?utf-8?B?emcxSTlsS0NHNkxoenZ5cUQyMnlQQ0NTd2ZHNEVDZWd6ZUNDTkRtNTZhcmNt?=
- =?utf-8?B?eUVKOU5oc0Rnc2tjUmlmTnNOSkhOZWNEdU12MllDOWFFM21KblpzKytzSHVP?=
- =?utf-8?B?RGNsR0lYOWFUQUVHaC90ZVFIaTVjQ0dYdzQxdkxwdCs3b3U3QTNzclg3aEFn?=
- =?utf-8?B?OENnbjJpSjJNWm9ETzNzVi9MSnBOcmZzeUo2aXhRbHE1V1pkbkdleWRGWjdw?=
- =?utf-8?B?d0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 910096b2-7c3a-4488-4458-08db0f9e3092
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 21:47:10.0010
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ExYlVy4skyHp7dN3SDKdnX0KuUXyPC4ifBGreIwroKmIxvlJkMCZl1tS8WbVY0ZGEHHYNP1Wh+k1XTzzbCW9VaEq7yBLEJE+wb5N3h6m+Jc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7270
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c9d3a306-0c5e-ad58-cffc-3c4c6b8b7433@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,54 +87,507 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shawn,
-
-On 1/15/2023 11:12 PM, Shawn Wang wrote:
-> When writing a task id to the "tasks" file in an rdtgroup,
-> rdtgroup_tasks_write() treats the pid as a number in the current pid
-> namespace. But when reading the "tasks" file, rdtgroup_tasks_show() shows
-> the list of global pids from the init namespace. If current pid namespace
-> is not the init namespace, pids in "tasks" will be confusing and incorrect.
+On Wed, Feb 15, 2023 at 12:08:11PM +0500, Muhammad Usama Anjum wrote:
+> Hi Peter,
 > 
-> To be more robust, let the "tasks" file only show pids in the current pid
-> namespace.
+> Thank you for your review!
 > 
+> On 2/15/23 2:50 AM, Peter Xu wrote:
+> > On Tue, Feb 14, 2023 at 01:49:50PM +0500, Muhammad Usama Anjum wrote:
+> >> On 2/14/23 2:11 AM, Peter Xu wrote:
+> >>> On Mon, Feb 13, 2023 at 10:50:39PM +0500, Muhammad Usama Anjum wrote:
+> >>>> On 2/13/23 9:54 PM, Peter Xu wrote:
+> >>>>> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
+> >>>>>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
+> >>>>>> VMA. We are facing a use case where multiple VMAs are present in one
+> >>>>>> range of interest. For example, the following pseudocode reproduces the
+> >>>>>> error which we are trying to fix:
+> >>>>>>
+> >>>>>> - Allocate memory of size 16 pages with PROT_NONE with mmap
+> >>>>>> - Register userfaultfd
+> >>>>>> - Change protection of the first half (1 to 8 pages) of memory to
+> >>>>>>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+> >>>>>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+> >>>>>>   out.
+> >>>>>>
+> >>>>>> This is a simple use case where user may or may not know if the memory
+> >>>>>> area has been divided into multiple VMAs.
+> >>>>>>
+> >>>>>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+> >>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >>>>>> ---
+> >>>>>> Changes since v1:
+> >>>>>> - Correct the start and ending values passed to uffd_wp_range()
+> >>>>>> ---
+> >>>>>>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
+> >>>>>>  1 file changed, 22 insertions(+), 16 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> >>>>>> index 65ad172add27..bccea08005a8 100644
+> >>>>>> --- a/mm/userfaultfd.c
+> >>>>>> +++ b/mm/userfaultfd.c
+> >>>>>> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+> >>>>>>  			unsigned long len, bool enable_wp,
+> >>>>>>  			atomic_t *mmap_changing)
+> >>>>>>  {
+> >>>>>> +	unsigned long end = start + len;
+> >>>>>> +	unsigned long _start, _end;
+> >>>>>>  	struct vm_area_struct *dst_vma;
+> >>>>>>  	unsigned long page_mask;
+> >>>>>>  	int err;
+> >>>>>
+> >>>>> I think this needs to be initialized or it can return anything when range
+> >>>>> not mapped.
+> >>>> It is being initialized to -EAGAIN already. It is not visible in this patch.
+> >>>
+> >>> I see, though -EAGAIN doesn't look suitable at all.  The old retcode for
+> >>> !vma case is -ENOENT, so I think we'd better keep using it if we want to
+> >>> have this patch.
+> >> I'll update in next version.
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>>> +	VMA_ITERATOR(vmi, dst_mm, start);
+> >>>>>>  
+> >>>>>>  	/*
+> >>>>>>  	 * Sanitize the command parameters:
+> >>>>>> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+> >>>>>>  	if (mmap_changing && atomic_read(mmap_changing))
+> >>>>>>  		goto out_unlock;
+> >>>>>>  
+> >>>>>> -	err = -ENOENT;
+> >>>>>> -	dst_vma = find_dst_vma(dst_mm, start, len);
+> >>>>>> +	for_each_vma_range(vmi, dst_vma, end) {
+> >>>>>> +		err = -ENOENT;
+> >>>>>>  
+> >>>>>> -	if (!dst_vma)
+> >>>>>> -		goto out_unlock;
+> >>>>>> -	if (!userfaultfd_wp(dst_vma))
+> >>>>>> -		goto out_unlock;
+> >>>>>> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> >>>>>> -		goto out_unlock;
+> >>>>>> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
+> >>>>>> +			break;
+> >>>>>> +		if (!userfaultfd_wp(dst_vma))
+> >>>>>> +			break;
+> >>>>>> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> >>>>>> +			break;
+> >>>>>>  
+> >>>>>> -	if (is_vm_hugetlb_page(dst_vma)) {
+> >>>>>> -		err = -EINVAL;
+> >>>>>> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> >>>>>> -		if ((start & page_mask) || (len & page_mask))
+> >>>>>> -			goto out_unlock;
+> >>>>>> -	}
+> >>>>>> +		if (is_vm_hugetlb_page(dst_vma)) {
+> >>>>>> +			err = -EINVAL;
+> >>>>>> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> >>>>>> +			if ((start & page_mask) || (len & page_mask))
+> >>>>>> +				break;
+> >>>>>> +		}
+> >>>>>>  
+> >>>>>> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+> >>>>>> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
+> >>>>>> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
+> >>>>>>  
+> >>>>>> -	err = 0;
+> >>>>>> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
+> >>>>>> +		err = 0;
+> >>>>>> +	}
+> >>>>>>  out_unlock:
+> >>>>>>  	mmap_read_unlock(dst_mm);
+> >>>>>>  	return err;
+> >>>>>
+> >>>>> This whole patch also changes the abi, so I'm worried whether there can be
+> >>>>> app that relies on the existing behavior.
+> >>>> Even if a app is dependent on it, this change would just don't return error
+> >>>> if there are multiple VMAs under the hood and handle them correctly. Most
+> >>>> apps wouldn't care about VMAs anyways. I don't know if there would be any
+> >>>> drastic behavior change, other than the behavior becoming nicer.
+> >>>
+> >>> So this logic existed since the initial version of uffd-wp.  It has a good
+> >>> thing that it strictly checks everything and it makes sense since uffd-wp
+> >>> is per-vma attribute.  In short, the old code fails clearly.
+> >>>
+> >>> While the new proposal is not: if -ENOENT we really have no idea what
+> >>> happened at all; some ranges can be wr-protected but we don't know where
+> >>> starts to go wrong.
+> >> The return error codes can be made to return in better way somewhat. The
+> >> return error codes shouldn't block a correct functionality enhancement patch.
+> >>
+> >>>
+> >>> Now I'm looking at the original problem..
+> >>>
+> >>>  - Allocate memory of size 16 pages with PROT_NONE with mmap
+> >>>  - Register userfaultfd
+> >>>  - Change protection of the first half (1 to 8 pages) of memory to
+> >>>    PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+> >>>  - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+> >>>    out.
+> >>>
+> >>> Why the user app should wr-protect 16 pages at all?
+> >> Taking arguments from Paul here.
+> >>
+> >> The app is free to insert guard pages inside the range (with PROT_NONE) and
+> >> change the protection of memory freely. Not sure why it is needed to
+> >> complicate things by denying any flexibility. We should never restrict what
+> >> is possible and what not. All of these different access attributes and
+> >> their any combination of interaction _must_ work without question. The
+> >> application should be free to change protection on any sub-range and it
+> >> shouldn't break the PAGE_IS_WRITTEN + UFFD_WRITE_PROTECT promise which
+> >> PAGEMAP_IOCTL (patches are in progress) and UFFD makes.
+> > 
+> > Because uffd-wp has a limitation on e.g. it cannot nest so far.  I'm fine
+> > with allowing mprotect() happening, but just to mention so far it cannot do
+> > "any combinations" yet.
+> > 
+> >>
+> >>>
+> >>> If so, uffd_wp_range() will be ran upon a PROT_NONE range which doesn't
+> >>> make sense at all, no matter whether the user is aware of vma concept or
+> >>> not...  because it's destined that it's a vain effort.
+> >> It is not a vain effort. The user want to watch/find the dirty pages of a
+> >> range while working with it: reserve and watch at once while Write
+> >> protecting or un-protecting as needed. There may be several different use
+> >> cases. Inserting guard pages to catch out of range access, map something
+> >> only when it is needed; unmap or PROT_NONE pages when they are set free in
+> >> the app etc.
+> > 
+> > Fair enough.
+> > 
+> >>
+> >>>
+> >>> So IMHO it's the user app needs fixing here, not the interface?  I think
+> >>> it's the matter of whether the monitor is aware of mprotect() being
+> >>> invoked.
+> >> No. The common practice is to allocate a big memory chunk at once and have
+> >> own allocator over it (whether it is some specific allocator in a game or a
+> >> .net allocator with garbage collector). From the usage point of view it is
+> >> very limiting to demand constant memory attributes for the whole range.
+> >>
+> >> That said, if we do have the way to do exactly what we want with reset
+> >> through pagemap fd and it is just UFFD ioctl will be working differently,
+> >> it is not a blocker of course, just weird api design.
+> > 
+> > Do you mean you'll disable ENGAGE_WP && !GET in your other series?  Yes, if
+> > this will service your goal, it'll be perfect to remove that interface.
+> No, we cannot remove it.
 
-Is it possible to elaborate more on the use case that this is aiming to
-address? It is unexpected to me that resource management is approached from
-within a container. My expectation is that the resource management and monitoring
-is done from the host. 
+If this patch can land, I assume ioctl(UFFDIO_WP) can start to service the
+dirty tracking purpose, then why do you still need "ENGAGE_WP && !GET"?
 
-> Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
+Note, I'm not asking to drop ENGAGE_WP entirely, only when !GET.
+
+> 
+> > 
+> >>
+> >>>
+> >>> In short, I hope we're working on things that helps at least someone, and
+> >>> we should avoid working on things that does not have clear benefit yet.
+> >>> With the WP_ENGAGE new interface being proposed, I just didn't see any
+> >>> benefit of changing the current interface, especially if the change can
+> >>> bring uncertainties itself (e.g., should we fail upon !uffd-wp vmas, or
+> >>> should we skip?).
+> >> We can work on solving uncertainties in case of error conditions. Fail if
+> >> !uffd-wp vma comes.
+> > 
+> > Let me try to double check with you here:
+> > 
+> > I assume you want to skip any vma that is not mapped at all, as the loop
+> > already does so.  So it'll succeed if there're memory holes.
+> > 
+> > You also want to explicitly fail if some vma is not registered with uffd-wp
+> > when walking the vma list, am I right?  IOW, the tracee _won't_ ever have a
+> > chance to unregister uffd-wp itself, right?
+> Yes, fail if any VMA doesn't have uffd-wp. This fail means the
+> write-protection or un-protection failed on a region of memory with error
+> -ENOENT. This is already happening in this current patch. The unregister
+> code would remain same. The register and unregister ioctls are already
+> going over all the VMAs in a range. I'm not rigid on anything. Let me
+> define the interface below.
+> 
+> > 
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>> Is this for the new pagemap effort?  Can this just be done in the new
+> >>>>> interface rather than changing the old?
+> >>>> We found this bug while working on pagemap patches. It is already being
+> >>>> handled in the new interface. We just thought that this use case can happen
+> >>>> pretty easily and unknowingly. So the support should be added.
+> >>>
+> >>> Thanks.  My understanding is that it would have been reported if it
+> >>> affected any existing uffd-wp user.
+> >> I would consider the UFFD WP a recent functionality and it may not being
+> >> used in wide range of app scenarios.
+> > 
+> > Yes I think so.
+> > 
+> > Existing users should in most cases be applying the ioctl upon valid vmas
+> > somehow.  I think the chance is low that someone relies on the errcode to
+> > make other decisions, but I just cannot really tell because the user app
+> > can do many weird things.
+> Correct. The user can use any combination of operation
+> (mmap/mprotect/uffd). They must work in harmony.
+
+No uffd - that's exactly what I'm saying: mprotect is fine here, but uffd
+is probably not, not in a nested way.  When you try to UFFDIO_REGISTER upon
+some range that already been registered (by the tracee), it'll fail for you
+immediately:
+
+		/*
+		 * Check that this vma isn't already owned by a
+		 * different userfaultfd. We can't allow more than one
+		 * userfaultfd to own a single vma simultaneously or we
+		 * wouldn't know which one to deliver the userfaults to.
+		 */
+		ret = -EBUSY;
+		if (cur->vm_userfaultfd_ctx.ctx &&
+		    cur->vm_userfaultfd_ctx.ctx != ctx)
+			goto out_unlock;
+
+So if this won't work for you, then AFAICT uffd-wp won't work for you (just
+like soft-dirty but in another way, sorry), at least not until someone
+starts to work on the nested.
+
+> 
+> > 
+> >>
+> >>>
+> >>>>
+> >>>> Also mwriteprotect_range() gives a pretty straight forward way to WP or
+> >>>> un-WP a range. Async WP can be used in coordination with pagemap file
+> >>>> (PM_UFFD_WP flag in PTE) as well. There may be use cases for it. On another
+> >>>> note, I don't see any use cases of WP async and PM_UFFD_WP flag as
+> >>>> !PM_UFFD_WP flag doesn't give direct information if the page is written for
+> >>>> !present pages.
+> >>>
+> >>> Currently we do maintain PM_UFFD_WP even for swap entries, so if it was
+> >>> written then I think we'll know even if the page was swapped out:
+> >>>
+> >>> 	} else if (is_swap_pte(pte)) {
+> >>> 		if (pte_swp_uffd_wp(pte))
+> >>> 			flags |= PM_UFFD_WP;
+> >>> 		if (pte_marker_entry_uffd_wp(entry))
+> >>> 			flags |= PM_UFFD_WP;
+> >>>
+> >>> So it's working?
+> >>>
+> >>>>
+> >>>>>
+> >>>>> Side note: in your other pagemap series, you can optimize "WP_ENGAGE &&
+> >>>>> !GET" to not do generic pgtable walk at all, but use what it does in this
+> >>>>> patch for the initial round or wr-protect.
+> >>>> Yeah, it is implemented with some optimizations.
+> >>>
+> >>> IIUC in your latest public version is not optimized, but I can check the
+> >>> new version when it comes.
+> >> I've some optimizations in next version keeping the code lines minimum. The
+> >> best optimization would be to add a page walk dedicated for this engaging
+> >> write-protect. I don't want to do that. Lets try to improve this patch in
+> >> how ever way possible. So that WP from UFFD ioctl can be used.
+> > 
+> > If you want to do this there, I think it can be simply/mostly a copy-paste
+> > of this patch over there by looping over the vmas and apply the protections.
+> I wouldn't want to do this. PAGEMAP IOCTL performing an operation
+> anonymously to UFFD_WP wouldn't look good when we can improve UFFD_WP itself.
+> 
+> > 
+> > I think it's fine to do it with ioctl(UFFDIO_WP), but I want to be crystal
+> > clear on what interface you're looking for before changing it, and let's
+> > define it properly.
+> Thank you. Let me crystal clear why we have sent this patch and what
+> difference we want.
+> 
+> Just like UFFDIO_REGISTER and UFFDIO_UNREGISTER don't care if the requested
+> range has multiple VMAs in the memory region, we want the same thing with
+> UFFDIO_WRITEPROTCET. It looks more uniform and obvious to us as user
+> doesn't care about VMAs. The user only cares about the memory he wants to
+> write-protect. So just update the inside code of UFFDIO_WRITEPROTECT such
+> that it starts to act like UFFDIO_REGISTER/UFFDIO_UNREGISTER. It shouldn't
+> complain if there are multiple VMAs involved under the hood.
+> 
+> This patch is visiting all the VMAs in the memory range. The attached
+> patches are my wip v3. If you feel like there can be better way to achieve
+> this, please don't hesitate to send the v3 yourself.
+
+As I said I think you have a point, and let's cross finger this is fine
+(which I mostly agree with).
+
+We can fail on !uffd-wp vmas, sounds reasonable to me.  But let's sync up
+with above to make sure this works for you.
+
+Since you've got a patch here, let me comment directly below.
+
+> 
+> Thank you so much!
+> 
+> -- 
+> BR,
+> Muhammad Usama Anjum
+
+> From f69069dddda206b190706eef7b2dad3a67a6df10 Mon Sep 17 00:00:00 2001
+> From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Date: Thu, 9 Feb 2023 16:13:23 +0500
+> Subject: [PATCH v3 1/2] mm/userfaultfd: Support WP on multiple VMAs
+> To: peterx@redhat.com, david@redhat.com
+> Cc: usama.anjum@collabora.com, kernel@collabora.com
+> 
+> mwriteprotect_range() errors out if [start, end) doesn't fall in one
+> VMA. We are facing a use case where multiple VMAs are present in one
+> range of interest. For example, the following pseudocode reproduces the
+> error which we are trying to fix:
+> 
+> - Allocate memory of size 16 pages with PROT_NONE with mmap
+> - Register userfaultfd
+> - Change protection of the first half (1 to 8 pages) of memory to
+>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+>   out.
+> 
+> This is a simple use case where user may or may not know if the memory
+> area has been divided into multiple VMAs.
+> 
+> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> Changes since v2:
+> - Correct the return error code
 > 
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index 5993da21d822..9e97ae24c159 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -718,11 +718,15 @@ static ssize_t rdtgroup_tasks_write(struct kernfs_open_file *of,
->  static void show_rdt_tasks(struct rdtgroup *r, struct seq_file *s)
+> Changes since v1:
+> - Correct the start and ending values passed to uffd_wp_range()
+> ---
+>  mm/userfaultfd.c | 45 ++++++++++++++++++++++++++-------------------
+>  1 file changed, 26 insertions(+), 19 deletions(-)
+> 
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 65ad172add27..a3b48a99b942 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+>  			unsigned long len, bool enable_wp,
+>  			atomic_t *mmap_changing)
 >  {
->  	struct task_struct *p, *t;
-> +	pid_t pid;
+> +	unsigned long end = start + len;
+> +	unsigned long _start, _end;
+>  	struct vm_area_struct *dst_vma;
+>  	unsigned long page_mask;
+> -	int err;
+> +	int err = -ENOENT;
+> +	VMA_ITERATOR(vmi, dst_mm, start);
 >  
->  	rcu_read_lock();
->  	for_each_process_thread(p, t) {
-> -		if (is_closid_match(t, r) || is_rmid_match(t, r))
-> -			seq_printf(s, "%d\n", t->pid);
-> +		if (is_closid_match(t, r) || is_rmid_match(t, r)) {
-> +			pid = task_pid_vnr(t);
-> +			if (pid)
-> +				seq_printf(s, "%d\n", pid);
+>  	/*
+>  	 * Sanitize the command parameters:
+> @@ -758,30 +761,34 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+>  	 * operation (e.g. mremap) running in parallel, bail out and
+>  	 * request the user to retry later
+>  	 */
+> -	err = -EAGAIN;
+> -	if (mmap_changing && atomic_read(mmap_changing))
+> +	if (mmap_changing && atomic_read(mmap_changing)) {
+> +		err = -EAGAIN;
+>  		goto out_unlock;
+> +	}
+
+Let's keep the original code and simply set -ENOENT afterwards.
+
+>  
+> -	err = -ENOENT;
+> -	dst_vma = find_dst_vma(dst_mm, start, len);
+> +	for_each_vma_range(vmi, dst_vma, end) {
+> +		err = -ENOENT;
+>  
+> -	if (!dst_vma)
+> -		goto out_unlock;
+> -	if (!userfaultfd_wp(dst_vma))
+> -		goto out_unlock;
+> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> -		goto out_unlock;
+> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
+> +			break;
+
+What is this check for?
+
+> +		if (!userfaultfd_wp(dst_vma))
+> +			break;
+> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> +			break;
+
+I think this is not useful at all (even in the old code)?  It could have
+sneaked in somehow when I took the code over from Shaohua/Andrea.  Maybe we
+should clean it up since at it.
+
+>  
+> -	if (is_vm_hugetlb_page(dst_vma)) {
+> -		err = -EINVAL;
+> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> -		if ((start & page_mask) || (len & page_mask))
+> -			goto out_unlock;
+> -	}
+> +		if (is_vm_hugetlb_page(dst_vma)) {
+> +			err = -EINVAL;
+> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> +			if ((start & page_mask) || (len & page_mask))
+> +				break;
 > +		}
->  	}
->  	rcu_read_unlock();
->  }
+>  
+> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
+> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
 
-This looks like it would solve the stated problem. Does it slow down
-reading a tasks file in a measurable way?
+Maybe:
 
-Reinette
+                _start = MAX(dst_vma->vm_start, start);
+                _end = MIN(dst_vma->vm_end, end);
+
+?
+
+>  
+> -	err = 0;
+> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
+> +		err = 0;
+> +	}
+>  out_unlock:
+>  	mmap_read_unlock(dst_mm);
+>  	return err;
+> -- 
+> 2.39.1
+> 
+
+> From ac119b22aa00248ed67c7ac6e285a12391943b15 Mon Sep 17 00:00:00 2001
+> From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Date: Mon, 13 Feb 2023 21:15:01 +0500
+> Subject: [PATCH v3 2/2] mm/userfaultfd: add VM_WARN_ONCE()
+> To: peterx@redhat.com, david@redhat.com
+> Cc: usama.anjum@collabora.com, kernel@collabora.com
+> 
+> Add VM_WARN_ONCE() to uffd_wp_range() to detect range (start, len) abuse.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  mm/userfaultfd.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index a3b48a99b942..0536e23ba5f4 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -716,6 +716,8 @@ void uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
+>  	unsigned int mm_cp_flags;
+>  	struct mmu_gather tlb;
+>  
+> +	VM_WARN_ONCE(start < dst_vma->vm_start || start + len > dst_vma->vm_end,
+> +		     "The address range exceeds VMA boundary.\n");
+>  	if (enable_wp)
+>  		mm_cp_flags = MM_CP_UFFD_WP;
+>  	else
+> -- 
+> 2.39.1
+> 
+
+
+-- 
+Peter Xu
 
