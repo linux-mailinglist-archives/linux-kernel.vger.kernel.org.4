@@ -2,231 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDE3697B1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D900E697B20
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbjBOLtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S233785AbjBOLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbjBOLtX (ORCPT
+        with ESMTP id S233217AbjBOLu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:49:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C7C13C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676461708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z/H0rotavd9oyHOO+0LmtN00go4zSs58DTjk4UZUpfA=;
-        b=NlW5WLJMq16QmlB2pywhowuom/JnkzhNhSTp77lO4ZvXkOB56BcIZcUnEYimau18VsKOv4
-        SN3mtgMyfAtpRUnzj7DzpThhscfWMJrtdmHtvu1R/qBPCyn14dB6/NyppHwDiXCylIzq38
-        Om7zVhaxxMw7ypUXjwyJ+dMwKE6085s=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-395-BswwD4nXP4GQGaJkcAOQBA-1; Wed, 15 Feb 2023 06:48:27 -0500
-X-MC-Unique: BswwD4nXP4GQGaJkcAOQBA-1
-Received: by mail-wm1-f70.google.com with SMTP id j37-20020a05600c1c2500b003deaf780ab6so1004715wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:48:26 -0800 (PST)
+        Wed, 15 Feb 2023 06:50:27 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B23358A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:50:26 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id mc25so10178798ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXWh76ZOzYFRd6esdMOAt4hkIxVnYRNCOqay+82OtGw=;
+        b=s7pvKPiJ4H4PPAguWRsmZjQkfPHRQ3eLTZeRvxNYtDlCl5ES3D8PQgaf2FZfn1GQrS
+         b4QkC22CxQ2BnAtP0J6oaVpwF/npj++eIcZm6EW6yci+BqTALtaQfo1cP+spK6+7WWvz
+         bxVpnJ9NJaFjm4D5UMgWDAsbnlf/e8WEDZMDVzaFxFFW7p+VFzo9U6v6/6Umn57Oqnc/
+         3HdpRE5BADlGI1rema0ZD7LyfIz3fk6tVqL4JV20oSDxfhEYC3OEiEI4o9H03B/KucZV
+         T2/YC1TZHlAJN7Six6FO6ybcK3DIlBrHDdqg7OTcR6eckNlPErf0J0VjnM82vLsmtrOb
+         7GCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z/H0rotavd9oyHOO+0LmtN00go4zSs58DTjk4UZUpfA=;
-        b=ifIpq2plCVIi9KzvhiwmXfijUsgEhEgNTAX/SQRCfvOscIvdlNa9ovbPcD9pX+uJai
-         0+8PyCSd7lPGOiiZ9ZmYjSdeqn+/ttgh6iVgyzkuUn08BVBTCIhiTU0KaZvnH2g0aj70
-         Vg1MI5RWGiTr61+MQaNWrEvke0cQtgxQwiRGIAL/2XN6CS1hseDZTLc0y/z2uViId63F
-         7UA7hrAZIhP2KLLGxuAusOK9ABVJGS1kC9APpq0TZxiLfDCucrONjef+9d3VABLhSpYS
-         wEy/95JHhLrkN6ara1hfi/TI1hRz+s6AztH3jKFL3XANGXXGWUS9Mw+FD1fkafdXLqEK
-         e8Rw==
-X-Gm-Message-State: AO0yUKWWKpqZWD0I60w9QPvCigStSS+nuaIPEV2D63NT6STBogFWwQlF
-        EkH3JmjAyVVr00Su4Zp4vX75yGQK1CPbwkfohp5PA4eYFmDF2in4a6i903jxPgHipBHuUFNmaBd
-        UKx89y0K6L888LAnC0G53Rg6T
-X-Received: by 2002:a05:600c:318f:b0:3e1:f8af:8772 with SMTP id s15-20020a05600c318f00b003e1f8af8772mr2325070wmp.9.1676461706063;
-        Wed, 15 Feb 2023 03:48:26 -0800 (PST)
-X-Google-Smtp-Source: AK7set8OYAXBJzFVluU8HCwAVQMa/cFq9Nf1S2p+oFvhdxz8zS5w1AxVlAWS//WkraJpLlX5F/zY9Q==
-X-Received: by 2002:a05:600c:318f:b0:3e1:f8af:8772 with SMTP id s15-20020a05600c318f00b003e1f8af8772mr2325057wmp.9.1676461705784;
-        Wed, 15 Feb 2023 03:48:25 -0800 (PST)
-Received: from redhat.com ([2.52.5.34])
-        by smtp.gmail.com with ESMTPSA id c3-20020a1c3503000000b003dc522dd25esm1920544wma.30.2023.02.15.03.48.23
+        bh=DXWh76ZOzYFRd6esdMOAt4hkIxVnYRNCOqay+82OtGw=;
+        b=eJ0aeMige49FnLr0EoZ3+LdSyozpNo+gIqPxQdx61DKbGyVw0cPpXV+zFV5Y87R/ds
+         ddPZm8/h+xhAPYgwDUWFZLPN78USN3fo/6DI8rz5s9Zq79TyG5CNMl7oQK5Xffxpp7ke
+         r6v3KeP1H02GKqgew61wlv3vQI7Uu2Nu2XQIhxRbL71MYax0NvPiWoABYuh1MOltoIi5
+         +VYQpUwJzk2cwm+I4hhewntQKT/v/5UEnATktQ/BOpKGD4HrCueDwo2lzDHeGb5knf/d
+         9/EbC1SvpYrsgaNyJCSxCMulN1W9OP5/iNPddmquTIdo/peC6EloDaheTUTJdZKTNY16
+         ccEw==
+X-Gm-Message-State: AO0yUKWrFtXrzPUfDxCWmRp9YbZAVQpToK4xS32JJWQUtNVU6RWwdwZi
+        oefYVu+pnfmcyI38ejZW/Cd0LQ==
+X-Google-Smtp-Source: AK7set/IEI3xhUy1WY7RE1y5OAc+SoB5NiR1zTKweaU7e8AyRcPAqWfqHmXp4wcGscO11DtLloFdHA==
+X-Received: by 2002:a17:906:3bca:b0:8af:4dab:cf6c with SMTP id v10-20020a1709063bca00b008af4dabcf6cmr1743779ejf.23.1676461824304;
+        Wed, 15 Feb 2023 03:50:24 -0800 (PST)
+Received: from jade (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170906d10500b008784bc1dd05sm9514877ejz.76.2023.02.15.03.50.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 03:48:25 -0800 (PST)
-Date:   Wed, 15 Feb 2023 06:48:21 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Nanyong Sun <sunnanyong@huawei.com>
-Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        jasowang@redhat.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        wangrong68@huawei.com
-Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-Message-ID: <20230215064759-mutt-send-email-mst@kernel.org>
-References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+        Wed, 15 Feb 2023 03:50:23 -0800 (PST)
+Date:   Wed, 15 Feb 2023 12:50:22 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        op-tee@lists.trustedfirmware.org,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: Re: [PATCH v2 1/2] tee: system invocation
+Message-ID: <Y+zG/t3zkN3p2pXG@jade>
+References: <20230214152047.1143106-1-etienne.carriere@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230207120843.1580403-1-sunnanyong@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230214152047.1143106-1-etienne.carriere@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
-> From: Rong Wang <wangrong68@huawei.com>
+On Tue, Feb 14, 2023 at 04:20:46PM +0100, Etienne Carriere wrote:
+> Adds TEE system invocation context provisioning for a Linux driver
+> to provision execution contexts for invocation of system service
+> hosted in TEE. OP-TEE SMC ABI implements such invocation context
+> provisioning.
 > 
-> Once enable iommu domain for one device, the MSI
-> translation tables have to be there for software-managed MSI.
-> Otherwise, platform with software-managed MSI without an
-> irq bypass function, can not get a correct memory write event
-> from pcie, will not get irqs.
-> The solution is to obtain the MSI phy base address from
-> iommu reserved region, and set it to iommu MSI cookie,
-> then translation tables will be created while request irq.
+> This feature is needed when a TEE invocation cannot afford to wait for
+> a free TEE thread when all TEE threads context are used and suspended
+> as these may be suspended waiting for a system service, as an SCMI clock
+> or voltage regulator, to be enabled. An example is when OP-TEE invokes
+> a Linux OS remote service (RPC) to access an eMMC RPMB partition and
+> the eMMC device is supplied by an OP-TEE SCMI regulator.
 > 
-> Change log
-> ----------
-> 
-> v1->v2:
-> - add resv iotlb to avoid overlap mapping.
-
-put changelog after --- pls
-
-> Signed-off-by: Rong Wang <wangrong68@huawei.com>
-> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 > ---
->  drivers/iommu/iommu.c |  1 +
->  drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
->  2 files changed, 57 insertions(+), 3 deletions(-)
+> Change since v1
+> - Addressed comment on Linux client to claim reservation on TEE context.
+>   This brings 2 new operations from client to TEE to request and release
+>   system thread contexts: 2 new tee_drv.h API functions, 2 new ops
+>   functions in struct tee_driver_ops. The OP-TEE implement shall implement
+>   2 new fastcall SMC funcIDs.
+> - Fixed typos in commit message.
+> ---
+>  drivers/tee/optee/optee_smc.h | 60 +++++++++++++++++++++++++++++++++--
+>  drivers/tee/optee/smc_abi.c   | 34 +++++++++++++++++++-
+>  drivers/tee/tee_core.c        | 30 ++++++++++++++++++
+>  include/linux/tee_drv.h       | 21 ++++++++++++
+>  4 files changed, 141 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 5f6a85aea501..af9c064ad8b2 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
->  	if (ops->get_resv_regions)
->  		ops->get_resv_regions(dev, list);
->  }
-> +EXPORT_SYMBOL(iommu_get_resv_regions);
+> diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+> index 73b5e7760d10..75b19e1bd185 100644
+> --- a/drivers/tee/optee/optee_smc.h
+> +++ b/drivers/tee/optee/optee_smc.h
+> @@ -108,7 +108,8 @@ struct optee_smc_call_get_os_revision_result {
+>   * Call with struct optee_msg_arg as argument
+>   *
+>   * When called with OPTEE_SMC_CALL_WITH_RPC_ARG or
+> - * OPTEE_SMC_CALL_WITH_REGD_ARG in a0 there is one RPC struct optee_msg_arg
+> + * OPTEE_SMC_CALL_WITH_REGD_ARG or OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG
+> + * in a0 there is one RPC struct optee_msg_arg
+>   * following after the first struct optee_msg_arg. The RPC struct
+>   * optee_msg_arg has reserved space for the number of RPC parameters as
+>   * returned by OPTEE_SMC_EXCHANGE_CAPABILITIES.
+> @@ -130,8 +131,8 @@ struct optee_smc_call_get_os_revision_result {
+>   * a4-6	Not used
+>   * a7	Hypervisor Client ID register
+>   *
+> - * Call register usage, OPTEE_SMC_CALL_WITH_REGD_ARG:
+> - * a0	SMC Function ID, OPTEE_SMC_CALL_WITH_REGD_ARG
+> + * Call register usage, OPTEE_SMC_CALL_WITH_REGD_ARG and OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG:
+> + * a0	SMC Function ID, OPTEE_SMC_CALL_WITH_REGD_ARG or OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG
+>   * a1	Upper 32 bits of a 64-bit shared memory cookie
+>   * a2	Lower 32 bits of a 64-bit shared memory cookie
+>   * a3	Offset of the struct optee_msg_arg in the shared memory with the
+> @@ -175,6 +176,8 @@ struct optee_smc_call_get_os_revision_result {
+>  	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG)
+>  #define OPTEE_SMC_CALL_WITH_REGD_ARG \
+>  	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG)
+> +#define OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG \
+> +	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG)
 >  
->  /**
->   * iommu_put_resv_regions - release resered regions
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index ec32f785dfde..a58979da8acd 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -49,6 +49,7 @@ struct vhost_vdpa {
->  	struct completion completion;
->  	struct vdpa_device *vdpa;
->  	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
-> +	struct vhost_iotlb resv_iotlb;
->  	struct device dev;
->  	struct cdev cdev;
->  	atomic_t opened;
-> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>  /*
+>   * Get Shared Memory Config
+> @@ -254,6 +257,8 @@ struct optee_smc_get_shm_config_result {
+>  #define OPTEE_SMC_SEC_CAP_ASYNC_NOTIF		BIT(5)
+>  /* Secure world supports pre-allocating RPC arg struct */
+>  #define OPTEE_SMC_SEC_CAP_RPC_ARG		BIT(6)
+> +/* Secure world provisions thread for system service invocation */
+> +#define OPTEE_SMC_SEC_CAP_SYSTEM_THREAD		BIT(7)
 >  
->  	v->in_batch = 0;
+>  #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
+>  #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
+> @@ -426,6 +431,55 @@ struct optee_smc_disable_shm_cache_result {
+>  /* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
+>  #define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
 >  
-> +	vhost_iotlb_reset(&v->resv_iotlb);
+> +/* See OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG above */
+> +#define OPTEE_SMC_FUNCID_CALL_SYSTEM_WITH_REGD_ARG	20
 > +
->  	return vdpa_reset(vdpa);
+> +/*
+> + * Request reservation of a system invocation thread context in OP-TEE
+> + *
+> + * Call register usage:
+> + * a0	SMC Function ID: OPTEE_SMC_CALL_RESERVE_SYS_THREAD
+> + * a1-6	Not used
+> + * a7	Hypervisor Client ID register
+> + *
+> + * Normal return register usage:
+> + * a0	Return value, OPTEE_SMC_RETURN_*
+> + * a1-3	Not used
+> + * a4-7	Preserved
+> + *
+> + * Possible return values:
+> + * OPTEE_SMC_RETURN_UNKNOWN_FUNCTION	Trusted OS does not recognize this
+> + *                                      function.
+> + * OPTEE_SMC_RETURN_OK			Call successfully completed.
+> + * OPTEE_SMC_RETURN_ETHREAD_LIMIT	Number of Trusted OS threads exceeded
+> + *                                      for the request.
+> + */
+> +#define OPTEE_SMC_FUNCID_CALL_RESERVE_SYS_THREAD	21
+> +#define OPTEE_SMC_CALL_RESERVE_SYS_THREAD \
+> +	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_RESERVE_SYS_THREAD)
+> +
+> +/*
+> + * Unregister reservation of a system invocation thread context in OP-TEE
+> + *
+> + * Call register usage:
+> + * a0	SMC Function ID: OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD
+> + * a1-6	Not used
+> + * a7	Hypervisor Client ID register
+> + *
+> + * Normal return register usage:
+> + * a0	Return value, OPTEE_SMC_RETURN_*
+> + * a1-3	Not used
+> + * a4-7	Preserved
+> + *
+> + * Possible return values:
+> + * OPTEE_SMC_RETURN_UNKNOWN_FUNCTION	Trusted OS does not recognize this
+> + *                                      function.
+> + * OPTEE_SMC_RETURN_OK			Call successfully completed.
+> + */
+> +#define OPTEE_SMC_FUNCID_CALL_UNRESERVE_SYS_THREAD	22
+> +#define OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD \
+> +	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_UNRESERVE_SYS_THREAD)
+> +
+>  /*
+>   * Resume from RPC (for example after processing a foreign interrupt)
+>   *
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index a1c1fa1a9c28..013b5ae31c0e 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -889,7 +889,10 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+>  	}
+>  
+>  	if  (rpc_arg && tee_shm_is_dynamic(shm)) {
+> -		param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
+> +		if (ctx->system_ctx_count)
+> +			param.a0 = OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG;
+> +		else
+> +			param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
+>  		reg_pair_from_64(&param.a1, &param.a2, (u_long)shm);
+>  		param.a3 = offs;
+>  	} else {
+> @@ -1085,6 +1088,33 @@ static int optee_smc_open(struct tee_context *ctx)
+>  	return optee_open(ctx, sec_caps & OPTEE_SMC_SEC_CAP_MEMREF_NULL);
 >  }
 >  
-> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
->  	    msg->iova + msg->size - 1 > v->range.last)
->  		return -EINVAL;
->  
-> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
-> +					msg->iova + msg->size - 1))
+> +static int optee_request_sys_ctx(struct tee_context *ctx)
+> +{
+> +	struct optee *optee = tee_get_drvdata(ctx->teedev);
+> +	struct arm_smccc_res res;
+> +
+> +	if (!(optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD))
 > +		return -EINVAL;
 > +
->  	if (vhost_iotlb_itree_first(iotlb, msg->iova,
->  				    msg->iova + msg->size - 1))
->  		return -EEXIST;
-> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
->  	return vhost_chr_write_iter(dev, from);
->  }
->  
-> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
-> +	struct vhost_iotlb *resv_iotlb)
+> +	optee->smc.invoke_fn(OPTEE_SMC_CALL_RESERVE_SYS_THREAD,
+> +			     0, 0, 0, 0, 0, 0, 0, &res);
+> +
+> +	if (res.a0 != OPTEE_SMC_RETURN_OK)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static void optee_release_sys_ctx(struct tee_context *ctx)
 > +{
-> +	struct list_head dev_resv_regions;
-> +	phys_addr_t resv_msi_base = 0;
-> +	struct iommu_resv_region *region;
-> +	int ret = 0;
-> +	bool with_sw_msi = false;
-> +	bool with_hw_msi = false;
+> +	struct optee *optee = tee_get_drvdata(ctx->teedev);
+> +	struct arm_smccc_res res;
 > +
-> +	INIT_LIST_HEAD(&dev_resv_regions);
-> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+> +	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD)
+> +		optee->smc.invoke_fn(OPTEE_SMC_CALL_UNRESERVE_SYS_THREAD,
+> +				     0, 0, 0, 0, 0, 0, 0, &res);
+> +}
 > +
-> +	list_for_each_entry(region, &dev_resv_regions, list) {
-> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
-> +				region->start + region->length - 1,
-> +				0, 0, NULL);
-> +		if (ret) {
-> +			vhost_iotlb_reset(resv_iotlb);
-> +			break;
-> +		}
+>  static const struct tee_driver_ops optee_clnt_ops = {
+>  	.get_version = optee_get_version,
+>  	.open = optee_smc_open,
+> @@ -1095,6 +1125,8 @@ static const struct tee_driver_ops optee_clnt_ops = {
+>  	.cancel_req = optee_cancel_req,
+>  	.shm_register = optee_shm_register,
+>  	.shm_unregister = optee_shm_unregister,
+> +	.system_ctx_request = optee_request_sys_ctx,
+> +	.system_ctx_release = optee_release_sys_ctx,
+>  };
+>  
+>  static const struct tee_desc optee_clnt_desc = {
+> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> index 98da206cd761..a7dfdea5d85b 100644
+> --- a/drivers/tee/tee_core.c
+> +++ b/drivers/tee/tee_core.c
+> @@ -5,6 +5,7 @@
+>  
+>  #define pr_fmt(fmt) "%s: " fmt, __func__
+>  
+> +#include <linux/bug.h>
+>  #include <linux/cdev.h>
+>  #include <linux/cred.h>
+>  #include <linux/fs.h>
+> @@ -1141,10 +1142,39 @@ EXPORT_SYMBOL_GPL(tee_client_open_context);
+>  
+>  void tee_client_close_context(struct tee_context *ctx)
+>  {
+> +	while (ctx->system_ctx_count)
+> +		tee_client_release_system_context(ctx);
 > +
-> +		if (region->type == IOMMU_RESV_MSI)
-> +			with_hw_msi = true;
+>  	teedev_close_context(ctx);
+>  }
+>  EXPORT_SYMBOL_GPL(tee_client_close_context);
+>  
+> +int tee_client_request_system_context(struct tee_context *ctx)
+> +{
+> +	int ret;
 > +
-> +		if (region->type == IOMMU_RESV_SW_MSI) {
-> +			resv_msi_base = region->start;
-> +			with_sw_msi = true;
-> +		}
-> +	}
+> +	if (!ctx->teedev->desc->ops->system_ctx_request ||
+> +	    !ctx->teedev->desc->ops->system_ctx_release)
+> +		return -EINVAL;
 > +
-> +	if (!ret && !with_hw_msi && with_sw_msi)
-> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
-> +
-> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+> +	ret = ctx->teedev->desc->ops->system_ctx_request(ctx);
+> +	if (!ret)
+> +		ctx->system_ctx_count++;
 > +
 > +	return ret;
 > +}
+> +EXPORT_SYMBOL_GPL(tee_client_request_system_context);
 > +
->  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+> +void tee_client_release_system_context(struct tee_context *ctx)
+> +{
+> +	if (ctx->system_ctx_count &&
+> +	    ctx->teedev->desc->ops->system_ctx_release) {
+> +		ctx->teedev->desc->ops->system_ctx_release(ctx);
+> +		ctx->system_ctx_count--;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(tee_client_release_system_context);
+> +
+>  void tee_client_get_version(struct tee_context *ctx,
+>  			    struct tee_ioctl_version_data *vers)
 >  {
->  	struct vdpa_device *vdpa = v->vdpa;
-> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+> index 17eb1c5205d3..45577256bb71 100644
+> --- a/include/linux/tee_drv.h
+> +++ b/include/linux/tee_drv.h
+> @@ -47,6 +47,8 @@ struct tee_shm_pool;
+>   *              non-blocking in nature.
+>   * @cap_memref_null: flag indicating if the TEE Client support shared
+>   *                   memory buffer with a NULL pointer.
+> + * @system_ctx_count: Number of system invocation contexts provisioned for
+> + *                    this TEE client or 0.
+>   */
+>  struct tee_context {
+>  	struct tee_device *teedev;
+> @@ -55,6 +57,7 @@ struct tee_context {
+>  	bool releasing;
+>  	bool supp_nowait;
+>  	bool cap_memref_null;
+> +	unsigned int system_ctx_count;
+
+Does it make sense for a tee_context to reserve more than one system
+context/thread? I wonder if keeping track on this shouldn't be done in a
+driver specific struct, perhaps struct optee_context_data for OP-TEE.
+
+>  };
 >  
->  	ret = iommu_attach_device(v->domain, dma_dev);
->  	if (ret)
-> -		goto err_attach;
-> +		goto err_alloc_domain;
+>  struct tee_param_memref {
+> @@ -90,6 +93,8 @@ struct tee_param {
+>   * @supp_send:		called for supplicant to send a response
+>   * @shm_register:	register shared memory buffer in TEE
+>   * @shm_unregister:	unregister shared memory buffer in TEE
+> + * @system_ctx_request:	Request provisioning of a new system context in TEE
+> + * @system_ctx_release:	Release a provisioned system context in TEE
+>   */
+>  struct tee_driver_ops {
+>  	void (*get_version)(struct tee_device *teedev,
+> @@ -112,6 +117,8 @@ struct tee_driver_ops {
+>  			    struct page **pages, size_t num_pages,
+>  			    unsigned long start);
+>  	int (*shm_unregister)(struct tee_context *ctx, struct tee_shm *shm);
+> +	int (*system_ctx_request)(struct tee_context *ctx);
+> +	void (*system_ctx_release)(struct tee_context *ctx);
+>  };
 >  
-> -	return 0;
-> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
-> +	if (ret)
-> +		goto err_attach_device;
+>  /**
+> @@ -397,6 +404,20 @@ tee_client_open_context(struct tee_context *start,
+>   */
+>  void tee_client_close_context(struct tee_context *ctx);
 >  
-> -err_attach:
-> +	return 0;
-> +err_attach_device:
-> +	iommu_detach_device(v->domain, dma_dev);
-> +err_alloc_domain:
->  	iommu_domain_free(v->domain);
->  	return ret;
->  }
-> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->  		goto err;
->  	}
->  
-> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
+> +/**
+> + * tee_client_request_system_context() - Close a TEE context
+
+Copy & paste error
+
+> + * @ctx:	TEE context to close
+> + *
+> + * @return 0 on success else an error code
+> + */
+> +int tee_client_request_system_context(struct tee_context *ctx);
 > +
->  	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
->  	if (r)
->  		goto err;
+> +/**
+> + * tee_client_release_system_context() - Release a reserved system exec context
+
+Please drop "exec", it's not mentioned anywhere else.
+
+Thanks,
+Jens
+
+> + * @ctx:	TEE context reference
+> + */
+> +void tee_client_release_system_context(struct tee_context *ctx);
+> +
+>  /**
+>   * tee_client_get_version() - Query version of TEE
+>   * @ctx:	TEE context to TEE to query
 > -- 
 > 2.25.1
-
+> 
