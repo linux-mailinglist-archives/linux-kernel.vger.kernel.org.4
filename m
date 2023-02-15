@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8FC697AC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6D7697ACB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbjBOLa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S233470AbjBOLbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbjBOLa5 (ORCPT
+        with ESMTP id S233036AbjBOLbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:30:57 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83310F0;
-        Wed, 15 Feb 2023 03:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676460656; x=1707996656;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=w/8TxSnNAH+BRghrAQBoEx6mrAa67WDCH/JQ1gaizsc=;
-  b=S/DHfMMTUeBQkNhxynJdgXIdzcwqULztFr8PO6a1vES8YjaJaGxCKuyl
-   AzZpG1Z3Bv50YddG2P7zPOIqrxr34hTqqC04cfsT5HDmL7AxRDYVk7cEl
-   JG+2y3/0IE0s42ZCIXDatg0jECAYgIjJZxiJqpUTUPXd+hTrT3Qw4GKBn
-   UmEaeHKFmEs9KDxP0Sw1kXnaYzg39YQvgInTjOxHoDNSKbk5GFV23cuCJ
-   S2W56njlcMkEbY4DSnLqiUIcSY39e2zpg6M5jc4QZYA+hdg0RYtSUorvg
-   lj24Z4ybAAOGpHHyZoiWJ6lmDz7Xm33lo4kUeGBtLI7VsdxsVnZaDqgGH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="396027998"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="396027998"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 03:30:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="669577083"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="669577083"
-Received: from josefgel-mobl.ger.corp.intel.com (HELO [10.251.213.167]) ([10.251.213.167])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 03:30:53 -0800
-Message-ID: <836d600a-bb1c-fbb2-89f5-7c79c3150e8c@linux.intel.com>
-Date:   Wed, 15 Feb 2023 12:30:51 +0100
+        Wed, 15 Feb 2023 06:31:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9064910F0;
+        Wed, 15 Feb 2023 03:31:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE33F61B23;
+        Wed, 15 Feb 2023 11:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51ECC433D2;
+        Wed, 15 Feb 2023 11:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676460695;
+        bh=5TAYEJH09LJv4kHX38MSdb0hT+72Ljn17p1+0e1ea7c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ich2KCPrUUpQAyMk65Nj7qAwATF7dKnYYsw4vHmHlfxSW9pKLSKJCQvNQU7pMygtO
+         R4mgSTSfc8wbxBvNONrY3h0w3QYMbf2MPD6QGouCZ3woAkg+Bwhz/G/MLB8LK6XMFJ
+         mLUznTRf5wcokRkStbl9eOxpMU7AiZrTyW2bz+xdxjWML/CJ0bb8+h+wYvT2DHcuWp
+         KJBrJOlO4V1aW/6UXLBiodti1OWrwxuakDiABaBa6zfDYYLjAp1TNp/Yw/Fw/boSed
+         rdLlRFZfuAbPKQznxEytRuEUWQgV8Z0cajPafNZiisjgP+gdR01A0bwY+7iUnaOJlV
+         S6LqJpumZhdGA==
+Date:   Wed, 15 Feb 2023 13:31:31 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH] RDMA/restrack: Reorder fields in 'struct
+ rdma_restrack_entry'
+Message-ID: <Y+zCkwTgevj0zDFK@unreal>
+References: <d47800d9fd5ac7c33d01af04b12b6d43ad23c96e.1676379187.git.christophe.jaillet@wanadoo.fr>
+ <Y+uH0k0OBzPip1P8@ziepe.ca>
+ <75480cf9-8d06-7a7d-4624-6ddbb7d6053a@wanadoo.fr>
+ <Y+uiLCB7H2xVvQZW@ziepe.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: Question: partial transfers of DMABUFs
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-In-Reply-To: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y+uiLCB7H2xVvQZW@ziepe.ca>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Tue, Feb 14, 2023 at 11:01:00AM -0400, Jason Gunthorpe wrote:
+> On Tue, Feb 14, 2023 at 03:34:21PM +0100, Christophe JAILLET wrote:
+> > Le 14/02/2023 à 14:08, Jason Gunthorpe a écrit :
+> > > On Tue, Feb 14, 2023 at 01:53:52PM +0100, Christophe JAILLET wrote:
+> > > > diff --git a/include/rdma/restrack.h b/include/rdma/restrack.h
+> > > > index 8b7c46daeb07..da53fefe6f9e 100644
+> > > > --- a/include/rdma/restrack.h
+> > > > +++ b/include/rdma/restrack.h
+> > > > @@ -80,6 +80,10 @@ struct rdma_restrack_entry {
+> > > >   	 * query stage.
+> > > >   	 */
+> > > >   	u8			no_track : 1;
+> > > > +	/**
+> > > > +	 * @user: user resource
+> > > > +	 */
+> > > > +	bool			user;
+> > > 
+> > > Can we combine this into the bitfield above?
+> > > 
+> > > Jason
+> > > 
+> > Hi,
+> > 
+> > and even above, we have
+> > 	bool	valid;
+> > 
+> > I wanted to keep the changes as minimal as possible, but I can change them
+> > all in a single bitfield.
+> 
+> IIRC it needs to be checked, I vaugely remember valid can't be a
+> bitfield because it is an atomic
 
-On 2023-02-15 11:48, Paul Cercueil wrote:
-> Hi,
->
-> I am working on adding support for DMABUFs in the IIO subsystem.
->
-> One thing we want there, is the ability to specify the number of bytes
-> to transfer (while still defaulting to the DMABUF size).
->
-> Since dma_buf_map_attachment() returns a sg_table, I basically have two
-> options, and I can't decide which one is the best (or the less ugly):
->
-> - Either I add a new API function similar to dmaengine_prep_slave_sg(),
-> which still takes a scatterlist as argument but also takes the number
-> of bytes as argument;
->
-> - Or I add a function to duplicate the scatterlist and then shrink it
-> manually, which doesn't sound like a good idea either.
->
-> What would be the recommended way?
+I don't remember anything like this.
 
-Does this need an api change? If you create a DMA-BUF of size X, it has 
-to be of size X. You can pad with a dummy page probably if you know it 
-in advance. But after it has been imported, it cannot change size.
-
-You donÂ´t have to write the entire dma-buf either, so if you want to 
-create a 1GB buf and only use the first 4K, that is allowed. The 
-contents ofÂ  the remainder of the DMA-BUF are undefined. It's up to 
-userspace to assign a meaning to it.
-
-I think I'm missing something here that makes the whole question m,ake 
-more sense.
-
-~Maarten
-
+Thanks
