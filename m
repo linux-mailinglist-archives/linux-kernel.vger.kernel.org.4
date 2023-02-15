@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000D1697BAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFCB697BAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjBOMYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S233403AbjBOMYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjBOMY3 (ORCPT
+        with ESMTP id S230197AbjBOMYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:24:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B4934C1B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676463822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l3Cz4qPfh6SVniqMxzACvEnXSN4Vm6rhHNCN0GEcnwU=;
-        b=ihu1TWGI9o+N9LDiEQ9TO6/wDV28Y3/PygGcUW4HXDMDYFZma/2vno+ag/hI5Si2hxoh8B
-        67ct821kq/qk++Mkg55uy5C+6xT9heATru0lhtpouoLwJWfO7jck38Bnk/z8AG77wyV5Lo
-        csVDq724KVXMOchIeR3pOeVYdUgovS0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-VLzuZdXQN8OcPjdgrnXQkg-1; Wed, 15 Feb 2023 07:23:39 -0500
-X-MC-Unique: VLzuZdXQN8OcPjdgrnXQkg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71C503847980;
-        Wed, 15 Feb 2023 12:23:38 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E0C7492B0E;
-        Wed, 15 Feb 2023 12:23:38 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 31FCNcAQ007819;
-        Wed, 15 Feb 2023 07:23:38 -0500
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 31FCNbeX007815;
-        Wed, 15 Feb 2023 07:23:37 -0500
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Wed, 15 Feb 2023 07:23:37 -0500 (EST)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Yang Shi <shy828301@gmail.com>
-cc:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, akpm@linux-foundation.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        Wed, 15 Feb 2023 07:24:20 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D95C34F6C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:24:19 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1421221wmp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7YwajgLw5rpCnjJ1GWX04nnYlZlCptWHJUsJ8npJmLw=;
+        b=EMjtc5RoiZo7/FdVE1g8hyZrIFQZ6Pti6NqqN3Afza5mwQrjdmUMhW7oJtZF1QmELz
+         oAl8uB6JoRkG1XzRtPHSc6Im8vh/q9bRWUcS5LR24+HJDTVN287VuyriNrJ/vM2PKfsK
+         wg/hmVdfamOQhb1OjDckMPXoioKdrbGTVxbsWUy3JeYCkMsfvrubkomN/kfmV03/65TX
+         36uEjBo9DX1pxqE8vjyThVrCuGLeJFFZ2A4x8v2VZdoI6GMe5JtKGBM4+YST8cio5Mb2
+         1d/0KtmvkhvY76BSL0CBhb7vPg38pwtaIhbuIS8xv5IbuWCeo9zki1CSaERK2oDnz+Xs
+         j54w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7YwajgLw5rpCnjJ1GWX04nnYlZlCptWHJUsJ8npJmLw=;
+        b=VvnvWcVELoOCYc/ayhwNLTwUcAruDTPcqKXOS5S5M6nVT+PDAmKrp22UfR+pv9QMfT
+         T+3s6fOZ5Gmlfhj7UqWQ90LLJRdC3BpkMyBnoOAdg0TTxZXyk+ZGtKC6jh8pZxvMu96M
+         yiP6tlrI9LVz3S/+xaAQ+Pr+MDMUILDHPJkNp7jU8s7LlA69YHeRMm0FnOXf7EODyrjF
+         vsVDbJjDE9vmhFaYhEe8pC4TPD6InwI5UN9YoNG+AmtHvw/qklRrJKCzP5AzWA5a4sdg
+         lufGkrFPNjGNElneYldroBznsnRlqKvMSPIkpAltcyzlfkPdFChnOXmlM2elypDHGAga
+         s+XQ==
+X-Gm-Message-State: AO0yUKXcWymNHCLZpYU6b+baowRjwAmmDJsE5pq8t945xVQJALwyqqgl
+        +WFhXuh3WehtL7GtrwtwaHc1Vw==
+X-Google-Smtp-Source: AK7set+AhG1msf0SDthK44D5NExgEp0Wr5rtPccuuoGRlUviAuaA3sd3k1qgdVUDkbL5OHclJRzWAg==
+X-Received: by 2002:a05:600c:5386:b0:3df:9858:c039 with SMTP id hg6-20020a05600c538600b003df9858c039mr3047558wmb.14.1676463857583;
+        Wed, 15 Feb 2023 04:24:17 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003dc492e4430sm2015269wms.28.2023.02.15.04.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 04:24:17 -0800 (PST)
+Date:   Wed, 15 Feb 2023 14:24:15 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [dm-devel] [v2 PATCH 0/5] Introduce mempool pages bulk allocator
- and use it in dm-crypt
-In-Reply-To: <20230214190221.1156876-1-shy828301@gmail.com>
-Message-ID: <alpine.LRH.2.21.2302150716120.5940@file01.intranet.prod.int.rdu2.redhat.com>
-References: <20230214190221.1156876-1-shy828301@gmail.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+Subject: Re: [PATCH] clk: imx: pll14xx: fix recalc_rate for negative kdiv
+Message-ID: <Y+zO7/GBurZwihOJ@linaro.org>
+References: <20221210203835.9714-1-kgroeneveld@lenbrook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210203835.9714-1-kgroeneveld@lenbrook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Tue, 14 Feb 2023, Yang Shi wrote:
-
+On 22-12-10 15:38:35, Kevin Groeneveld wrote:
+> kdiv is a signed 16 bit value in the DEV_CTL1 register. Commit
+> 53990cf9d5b4 ("clk: imx: pll14xx: consolidate rate calculation") changed
+> the kdiv variable from a short int to just int. When the value read from
+> the DIV_CTL1 register is assigned directly to an int the sign of the value
+> is lost resulting in incorrect results when the value is negative. Adding
+> a s16 cast to the register value fixes the issue.
 > 
-> Changelog:
-> RFC -> v2:
->   * Added callback variant for page bulk allocator and mempool bulk allocator
->     per Mel Gorman.
->   * Used the callback version in dm-crypt driver.
->   * Some code cleanup and refactor to reduce duplicate code.
+> Fixes: 53990cf9d5b4 ("clk: imx: pll14xx: consolidate rate calculation")
+> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
+Stephen, can you pick this up through fixes?
+> ---
+>  drivers/clk/imx/clk-pll14xx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> rfc: https://lore.kernel.org/linux-mm/20221005180341.1738796-1-shy828301@gmail.com/
-
-Hi
-
-This seems like unneeded complication to me. We have alloc_pages(), it can 
-allocate multiple pages efficiently, so why not use it?
-
-I suggest to modify crypt_alloc_buffer() to use alloc_pages() and if 
-alloc_pages() fails (either because the system is low on memory or because 
-memory is too fragmented), fall back to the existing code that does 
-mempool_alloc().
-
-Mikulas
-
+> diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
+> index 1d0f79e9c346..d12194d17b10 100644
+> --- a/drivers/clk/imx/clk-pll14xx.c
+> +++ b/drivers/clk/imx/clk-pll14xx.c
+> @@ -254,7 +254,7 @@ static unsigned long clk_pll14xx_recalc_rate(struct clk_hw *hw,
+>  
+>  	if (pll->type == PLL_1443X) {
+>  		pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
+> -		kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
+> +		kdiv = (s16)FIELD_GET(KDIV_MASK, pll_div_ctl1);
+>  	} else {
+>  		kdiv = 0;
+>  	}
+> -- 
+> 2.17.1
+> 
