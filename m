@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DD1698871
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553B1698876
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjBOXBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S229804AbjBOXCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBOXBO (ORCPT
+        with ESMTP id S229512AbjBOXCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:01:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D66868C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:01:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AF2161DC0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63738C4339E;
-        Wed, 15 Feb 2023 23:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676502072;
-        bh=qUAQ4o1k3Tx16YTQ5EJjEyz2cYifF3N6njNHqinnFqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WCpefWQKqXBMBJNBJ/9+pRNem0PAWlKM61g89lD3yJ/ioHm1Sd3cHUz20oaDrU8q0
-         hmFi271nnK2TGxryySurJCjh8gsAPpY1TsRpnyh9tL+6+XLfCVYS1qXUooCXJrqXrG
-         VDPFtyNsrieJIpT/1/5Wx8trJiBJg6h4gGlLnFcKaFKG93JPSCKm1U5sgEdEQ9rbtk
-         P6xYMINwaww1aXpSAixISAsHC/tVGg5ySFRRPHAMkq+DvHpgdVA7ekjW3hweQMpEY5
-         pjdjmCvfPTqvSkFLU0kLMRsfW33OjnpGaUj7ctmzwDh9RRskxLTTE/cdGLNY9nXgp1
-         cnrNLV7KpdOoA==
-Date:   Wed, 15 Feb 2023 23:01:09 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Guenter Roeck <groeck@google.com>
-Cc:     David Rau <David.Rau.opensource@dm.renesas.com>,
-        support.opensource@diasemi.com, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, bailideng@google.com,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH] ASoC: da7219: Improve the IRQ process to increase the
- stability
-Message-ID: <Y+1kNa8KYCUzgAfo@sirena.org.uk>
-References: <20230215101045.21456-1-David.Rau.opensource@dm.renesas.com>
- <Y+zZwKFX1gMC5/ac@sirena.org.uk>
- <CABXOdTdv=+n8+UCgWUvyrZ6R0uAu48bODa3TA_2nUuMbUT7MUg@mail.gmail.com>
+        Wed, 15 Feb 2023 18:02:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F179CA5EC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676502094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bsYrZzYMtnpPy1dLr5xbLMKSM/UlrfB6vQQZ4rqlNLU=;
+        b=NiXaxVTK20gbeaP3qVDS4q5xLiKwCMIxLWiXEDZM0sR7HlNvstDGGg/dtuDFUPflaekL1B
+        AMXIAX7ujD0v3/RprwwZDbOqivIcYP+ksqWrbOyWaMlrApUn5fP++xNM+mt5CgYU2dncKt
+        dcVoclvt/UP5eq4dW1bN5mmkIU70RRs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-310-zO2lA7PFOX6_bUE2f0ELLw-1; Wed, 15 Feb 2023 18:01:32 -0500
+X-MC-Unique: zO2lA7PFOX6_bUE2f0ELLw-1
+Received: by mail-qk1-f200.google.com with SMTP id a6-20020a05620a102600b00729952b4c73so112489qkk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:01:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bsYrZzYMtnpPy1dLr5xbLMKSM/UlrfB6vQQZ4rqlNLU=;
+        b=sj0d5FESTyANXwy/+81O4q0j4yFHqbnzi09oIymuxbjMw1QS2WptROU+UvpIdgWHfS
+         cJ25NVKkXbJLBbNDDfp12UuQjJ2NLWns27aHJQTYoHYlGcq4ie/lvE6cy2tZVPhrCLaw
+         PHQ5ZGr4UApyh61UBFePq4OV1fexTKLuiQCOJDR5l0lzlJEf4QcwBbiqpDO3zerSNOSc
+         29xtdwQOVgdd+jN5JZ1F4soh4GQ6WJg9xf4InX0lWlcNSDP+K2Zy90eI2kEPWyO6Omy0
+         eXcTcoL2tXl+qdp1RrEcpjh5aA49OMgN4eYr2nbotkECtniSkKp7aEcDlQKtX3FdiDpx
+         oiYA==
+X-Gm-Message-State: AO0yUKVy1SzrFJdgvPWvYlcUlonVovbLWFBB9P1py8lflaiK5yCkfURL
+        coIvRz5v1ZaT7Bw1fCRY/61WddG34afCnVaxIaZjoB59TdcYeOVjTw2Xd4jJ4Y6BJDzt+ZPwi60
+        0daB2oDUs3iNsnsnWQGBcjbmC
+X-Received: by 2002:ac8:7f16:0:b0:3b9:b422:4d5b with SMTP id f22-20020ac87f16000000b003b9b4224d5bmr6282646qtk.26.1676502092426;
+        Wed, 15 Feb 2023 15:01:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set+qnHViHFdBUIjxUI6M3KrFKZ6NirVS+Cp47Y7N9ahccvHsZrp34JkpSRGEGSaqRlksgX+0TA==
+X-Received: by 2002:ac8:7f16:0:b0:3b9:b422:4d5b with SMTP id f22-20020ac87f16000000b003b9b4224d5bmr6282620qtk.26.1676502092198;
+        Wed, 15 Feb 2023 15:01:32 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
+        by smtp.gmail.com with ESMTPSA id o190-20020a375ac7000000b0073b45004754sm6662405qkb.34.2023.02.15.15.01.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 15:01:31 -0800 (PST)
+Message-ID: <d676862c180af8c5325fb00f0e2e469e6f600835.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/led: explicitly include linux/leds.h
+From:   Lyude Paul <lyude@redhat.com>
+To:     Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 15 Feb 2023 18:01:30 -0500
+In-Reply-To: <20230215-power_supply-leds-nouveau-v1-1-ea93bfa0ba7e@weissschuh.net>
+References: <20230215-power_supply-leds-nouveau-v1-1-ea93bfa0ba7e@weissschuh.net>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e1E9LnR+Ahmxjv3e"
-Content-Disposition: inline
-In-Reply-To: <CABXOdTdv=+n8+UCgWUvyrZ6R0uAu48bODa3TA_2nUuMbUT7MUg@mail.gmail.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
---e1E9LnR+Ahmxjv3e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will push to drm-misc-next in a moment
 
-On Wed, Feb 15, 2023 at 08:06:35AM -0800, Guenter Roeck wrote:
-> On Wed, Feb 15, 2023 at 5:10 AM Mark Brown <broonie@kernel.org> wrote:
-
-> > Copying in Guenter given the issues he raised with this, not
-> > deleting context for his benefit.  It looks like this should
-> > avoid the issues with the interrupt appearing locked up.
-
-> It should since it limits the delay to cases where jack_inserted is
-> false, but on the other side it hides the delay in an odd way.
+On Wed, 2023-02-15 at 01:04 +0000, Thomas Wei=C3=9Fschuh wrote:
+> Instead of relying on an accidental, transitive inclusion of linux/leds.h
+> use it directly.
 >=20
-=2E..
+> Also drop the forware definition of struct led_classdev that is now
+> provided by linux/leds.h.
+>=20
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_led.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_led.h b/drivers/gpu/drm/nouv=
+eau/nouveau_led.h
+> index 21a5775028cc..bc9bc7208da3 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_led.h
+> +++ b/drivers/gpu/drm/nouveau/nouveau_led.h
+> @@ -27,7 +27,7 @@
+> =20
+>  #include "nouveau_drv.h"
+> =20
+> -struct led_classdev;
+> +#include <linux/leds.h>
+> =20
+>  struct nouveau_led {
+>  	struct drm_device *dev;
+>=20
+> ---
+> base-commit: e1c04510f521e853019afeca2a5991a5ef8d6a5b
+> change-id: 20230215-power_supply-leds-nouveau-ff4995ba0794
+>=20
+> Best regards,
 
-> Effectively this seems to be quite similar to moving the conditional
-> sleep to the place where cancel_work_sync() is called. I would assume
-> that will fix the problem (after all, the msleep() is no longer called
-> unconditionally), but I don't see the benefit of introducing a worker
-> to do that. Also, since there is no guarantee that the worker actually
-> started by the time cancel_work_sync() is called, I would suspect that
-> it may result in unexpected behavior if the worker has not started by
-> that time, which I would assume can happen if the system is heavily
-> loaded. It also makes the use of the ground switch (i.e., when to set
-> and when to drop it) even more of a mystery than it is right now.
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-> Having said that, I don't really know or understand the code, so maybe
-> this all makes sense and my feedback should be ignored.
-
-Yes, I would certainly welcome more clarity especially around the
-ground switch.  OTOH it does seem like an improvement over the
-current situation so I think I'll go ahead and apply it for now,
-hopefully it can be improved upon in future.
-
---e1E9LnR+Ahmxjv3e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPtZDQACgkQJNaLcl1U
-h9D+3Qf7B/pdT2c5Gz6fLqeKbf9iXv7oOvDmvUhZUnPiTDyuuQ5fDNg+WDBp/i7K
-6Y7Je3c8seM0sdixYFrb3zG52ob3NMmU9a/cdcjpTaRGl7FI+BJDjApQPCY5Usbu
-7Sai0SVpv+mMPo5lzsyfAD7E0YjrfvvHWved7r8plXhsVCZK0Su4idwBczw6Axn4
-cCV7f0f0Vp2nihlDJQaSeX+j3qgkR4yq8Da33GJQnaapiens51aZDsmQrvuLOxUO
-cDr+kcKa5rlvXM77XHqX1N0xI0Ev+pESxSkcCGrOwq3CtgeWdXyeeATNEUn8rKXC
-pXmYs3mBaH3o3lywQLh9MITFtHuG/Q==
-=LJK/
------END PGP SIGNATURE-----
-
---e1E9LnR+Ahmxjv3e--
