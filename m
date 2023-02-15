@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB15D698524
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD11069852B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjBOUCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S229775AbjBOUFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBOUCQ (ORCPT
+        with ESMTP id S229644AbjBOUFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:02:16 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341686B5;
-        Wed, 15 Feb 2023 12:02:15 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id bh15so16832317oib.4;
-        Wed, 15 Feb 2023 12:02:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CnYwpFSiJkxoqAenwxBT3P5OhTg1ARQ8fjLNlY4RHZo=;
-        b=WaWqFpDWZmZYfsB0Zc/FLcA6YKYqPTlaPhkuU6yHjMSG7ZRYOQMGC1k4WIQEcpYGnC
-         cokZ8pNOVfmTuarAQuB0F+glZU3Y5hcd2OOTiXexkISmY90gDcUzQYC7KpWwa/aDrpPh
-         RZ3UEWyzvWK4HGuDNohuvvA0tYXRNgIYm7PLYbeTt9q8b6D8q/1bFRTXoyyvM0BIANDM
-         /uzSvromxtuqwvh65KiRyHaaH7qhf9Fy1+7QRyHOYyJ0YOMWXDV7RoR7cOCXi6FETF5Y
-         Cks40ah7L8/dSaqDNV8vlmnfXdELi06DEspDM28qJwpc1WeGGNa1aSLjO7fPe3vSVBmU
-         6ehQ==
-X-Gm-Message-State: AO0yUKW6UX6Yy6501H568Vr0PoOo0WiCM2G+Nh2ezYeIfRn8myc6W2D6
-        rlxn86wVpe+cm0W2+bh7cg==
-X-Google-Smtp-Source: AK7set8fP7f98bfSC9h4Mu+gzjVfDfd39Q/pkCbq9lmO3NEodl2mRI8121AZZ5n0n5Hy0GqB22i4LQ==
-X-Received: by 2002:a05:6808:1d0:b0:364:ca56:dd47 with SMTP id x16-20020a05680801d000b00364ca56dd47mr1586600oic.0.1676491334902;
-        Wed, 15 Feb 2023 12:02:14 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05683004b200b0068d59d15a93sm8060848otd.40.2023.02.15.12.02.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 12:02:14 -0800 (PST)
-Received: (nullmailer pid 477812 invoked by uid 1000);
-        Wed, 15 Feb 2023 20:02:13 -0000
-Date:   Wed, 15 Feb 2023 14:02:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Frieder Schrempf <frieder@fris.de>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Robin Gong <yibin.gong@nxp.com>, Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Per-Daniel Olsson <perdo@axis.com>,
-        Rickard x Andersson <rickaran@axis.com>
-Subject: Re: [PATCH 1/6] dt-bindings: regulator: pca9450: Document new usage
- of sd-vsel-gpios
-Message-ID: <20230215200213.GA467386-robh@kernel.org>
-References: <20230213155833.1644366-1-frieder@fris.de>
- <20230213155833.1644366-2-frieder@fris.de>
+        Wed, 15 Feb 2023 15:05:40 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9443A842;
+        Wed, 15 Feb 2023 12:05:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676491539; x=1708027539;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=42e2UJ+iAsNqiNqS5lhTz8+flRIvdRigNev83/sdLZM=;
+  b=M/yRUw1WugA6FUPlZumlxN8gY5+JJ26ssslNXUU2mIC2+zWVHJ3ko6/Y
+   qSuokorPINyIYICADNnarsWMdegNrLrSETtGxvLvvE+ei23CcwkuEEtRE
+   4yqsIW3NAvbavWfWZwNdQslzATymZ6PD2D9LQGMkZQnbJP+D5aD/079wf
+   25GXjvdqVR0qEPCXTPm4FuCQj15cgUeoQYw07oS2m1w4i0xqGdDtWUozi
+   2qy/grXLcI0XRmMjnxFR0lqLWlansGCW4WjMcuGZnRIXgl05Dvrmp1Nij
+   N/IQNMJI0dgg8rmbizsJP/cgij5PKxGyh/dt4FjmAqcZUmeVcbbIN2q/i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="331528151"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="331528151"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 12:05:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="663152992"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="663152992"
+Received: from amanjini-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.48.74])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 12:05:38 -0800
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v1] PCI/EDR: Clear PCIe Device Status errors after EDR error recovery
+Date:   Wed, 15 Feb 2023 12:05:32 -0800
+Message-Id: <20230215200532.3126937-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213155833.1644366-2-frieder@fris.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 04:58:19PM +0100, Frieder Schrempf wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> 
-> The sd-vsel-gpios property is abandoned in its current meaning as an
-> output. We now use it to specify an optional signal that can be
-> evaluated by the driver in order to retrieve the current status
-> of the SD_VSEL signal that is used to select the control register
-> of LDO5.
-> 
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
->  .../regulator/nxp,pca9450-regulator.yaml      | 23 ++++++++++++++-----
->  1 file changed, 17 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> index 835b53302db8..c86534538a4e 100644
-> --- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> @@ -40,8 +40,24 @@ properties:
->      description: |
->        list of regulators provided by this controller
->  
-> +    properties:
-> +      LDO5:
-> +        type: object
-> +        $ref: regulator.yaml#
-> +        description:
-> +          Properties for single LDO5 regulator.
-> +
-> +        properties:
-> +          sd-vsel-gpios:
+Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+OS owns AER") adds support to clear error status in the Device Status
+Register(DEVSTA) only if OS owns the AER support. But this change
+breaks the requirement of the EDR feature which requires OS to cleanup
+the error registers even if firmware owns the control of AER support.
 
-It is a pin on the device, right? Then it belongs in the device node as 
-it was.
+More details about this requirement can be found in PCIe Firmware
+specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
+If the OS supports the Error Disconnect Recover (EDR) feature and
+firmware sends the EDR event, then during the EDR recovery window, OS
+is responsible for the device error recovery and holds the ownership of
+the following error registers.
 
-Can't the direction of the signal tell you how it is used? Assuming the 
-pin is bidirectional?
+• Device Status Register
+• Uncorrectable Error Status Register
+• Correctable Error Status Register
+• Root Error Status Register
+• RP PIO Status Register
 
-The binding should support any possible way the device is wired, not 
-just what's been seen so far on some boards.
+So call pcie_clear_device_status() in edr_handle_event() if the error
+recovery is successful.
 
-Rob
+Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+ drivers/pci/pcie/edr.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
+index a6b9b479b97a..33d7776ea748 100644
+--- a/drivers/pci/pcie/edr.c
++++ b/drivers/pci/pcie/edr.c
+@@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
+ 	 */
+ 	if (estate == PCI_ERS_RESULT_RECOVERED) {
+ 		pci_dbg(edev, "DPC port successfully recovered\n");
++		pcie_clear_device_status(dev);
+ 		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
+ 	} else {
+ 		pci_dbg(edev, "DPC port recovery failed\n");
+-- 
+2.25.1
+
