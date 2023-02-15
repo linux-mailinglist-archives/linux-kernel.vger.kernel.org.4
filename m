@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99F96976E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8766976E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233633AbjBOHBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S232959AbjBOHER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbjBOHBJ (ORCPT
+        with ESMTP id S229877AbjBOHEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:01:09 -0500
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C291A0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:00:48 -0800 (PST)
-Received: by mail-il1-f206.google.com with SMTP id i17-20020a056e020ed100b003157534461aso84111ilk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:00:48 -0800 (PST)
+        Wed, 15 Feb 2023 02:04:15 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB33E234E9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:12 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id bg2so8043880pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dSwftWU2F5+UTSHoENK8S8rRksgligsrF8ZnqH0Z/+c=;
+        b=xw3/WRq4ksYn4+KjHibG+jFHzEFv9vvksIDHUEId/SKl5rEZB9mQu7iMZyguZbZcfn
+         z/pQ13ViWNpz7pfSS8GrsUqMRxcIdLTI9ldm1RM71UvqhkD4TGaDelLcxKNf4u/8h3KR
+         eXAnkHdiiHl99scHhi1Zey4tfeiPWK9j/ccg8LcLWAPx3OoefQg8Ouckq8AqJKfsNGwu
+         BivWJiAThGaMPzvdmwY8A7McOZJ0NnZ9Ogak2mZ0RD0G0sGvAJfYmwoMT6d9qYRRMwoZ
+         NaU2Qy48/tTuelg8TNJWg5ZeeHIRBviwlMg8LV2Jq54AtolYUKLSbGy6PhbvdmTzV5Ck
+         UfHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gkVHurq1Tzdby26mZNsHbKo1ABM0N0+6mPqsATRuffg=;
-        b=hrpyCEqKu2/PCX0PlmY45ZMTwEQvh0KyvPGclRmQ3PPOUU5TEQb2mJ16ef1mvmDAGI
-         bARd6jTPPB88R82ne4zHjEUWiB/kswPRLElUkwleDtNGacJdFiumVAH8OCU8pk7EOXV1
-         i8Gd27CMsmuFWt8NEvNg4++Uabj7WBdS7EVaIOdCqmmYHqgSUYxicM5r7np/OdvlfyXi
-         3FukxlrGgEuQIrvQ6ylIMd+4ZSD7IXMqAsFuTEADUlv6LK/OsrUppkYROXw4R6m+6xEa
-         eznFC6Q57lwxbIOALqiK3GnmFb3bTDMj3ZDlYJZsXUQjNu37VvzjYFcVvw/I2rn3IF74
-         o06w==
-X-Gm-Message-State: AO0yUKU7MVrdKHVrPlaztUQo6cTs4Z8G+0HPuqvnd90gWfyJ1PJX61At
-        svXiMbm1hXrh7iq/srOmHYgdm0yyhL7qRLGhuUfCnKZ5bqUy
-X-Google-Smtp-Source: AK7set/YbAqV35eJ0s0AwHJYpdfXhNJUM6wxJa28B5vW4JZa69HMknumDLuvr9kTy8lrWiwY4BD0vaschqtgNTo3CfnKnIFYsFcj
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dSwftWU2F5+UTSHoENK8S8rRksgligsrF8ZnqH0Z/+c=;
+        b=lQlhF3YrQbMIMJu7P9FmuZ7QGMg8Hu+wmYj6DlUlt8ZqsRfxv3YSeYCzU7ZRbA5i7m
+         WrOL6J/OGI9p7NYpDzlMcLH99CJCRbpoaUU5MOODtP6HBoI2waPKh8pcnZKcZR68U04g
+         9EYtfjNRCwhq4wtuwzmjRAOnStXM3x4/ne2o/SjkMPiXPXYf7JG5wJT5mDz258ustAYw
+         c5r52zZAcKmqIcvMBe/rvCeUhW2xvKfS7gyTHGVIYDU/aevZQmR1PU8lymvfEJGY4fS+
+         nb3ojK+nI7Cd6YnuJbcPB6fQRS6QI4Vs5vv74XsmyTIt7i7UbWa4+rscAWVebm/ty9AD
+         +BSw==
+X-Gm-Message-State: AO0yUKXfDY7UVezbeEXcsxMadz6qgNgIGVbmK8uVNHPJQAV60oHkrn78
+        MEhxVHuwPm2edTd0gB5p8ovi
+X-Google-Smtp-Source: AK7set9eiVSTAEYNuI+v+GGG6D4c2nh12FOt1d2hVkSxs6wNdRjAX8EyGozOE27ZKGxtIFtDyaOFOg==
+X-Received: by 2002:a05:6a20:7fa3:b0:b9:46a1:7f14 with SMTP id d35-20020a056a207fa300b000b946a17f14mr1085241pzj.56.1676444652322;
+        Tue, 14 Feb 2023 23:04:12 -0800 (PST)
+Received: from localhost.localdomain ([117.217.179.87])
+        by smtp.gmail.com with ESMTPSA id e23-20020a63db17000000b004fb26a80875sm9953795pgg.22.2023.02.14.23.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 23:04:11 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        viresh.kumar@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [RESEND PATCH 00/12] arm64: dts: qcom: Supply clock from cpufreq node to CPUs
+Date:   Wed, 15 Feb 2023 12:33:48 +0530
+Message-Id: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:9413:0:b0:310:fb90:b618 with SMTP id
- c19-20020a929413000000b00310fb90b618mr442977ili.0.1676444447808; Tue, 14 Feb
- 2023 23:00:47 -0800 (PST)
-Date:   Tue, 14 Feb 2023 23:00:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc25bd05f4b7a3d2@google.com>
-Subject: [syzbot] WARNING in usb_tx_block/usb_submit_urb
-From:   syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        kvalo@kernel.org, libertas-dev@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+As a follow-up of [1], this series adds support for supplying clock from
+cpufreq node to CPUs for rest of the SoCs.
 
-HEAD commit:    f87b564686ee dt-bindings: usb: amlogic,meson-g12a-usb-ctrl..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=119f3aaf480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6d59dd45f9349215
-dashboard link: https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db7007480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1670f2b3480000
+This series has been tested on SDM845, SM8450 and SC8280XP based boards.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/162f005fbb8d/disk-f87b5646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/868c38dbb85a/vmlinux-f87b5646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e560670dfb35/bzImage-f87b5646.xz
+Thanks,
+Mani
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com
+[1] https://lore.kernel.org/linux-arm-msm/20221117053145.10409-1-manivannan.sadhasivam@linaro.org/
 
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-URB ffff888112baaf00 submitted while active
-WARNING: CPU: 0 PID: 12 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14ec/0x1880 drivers/usb/core/urb.c:379
-Modules linked in:
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 6.2.0-rc7-syzkaller-00232-gf87b564686ee #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0x14ec/0x1880 drivers/usb/core/urb.c:379
-Code: 89 de e8 87 86 88 fd 84 db 0f 85 a3 f3 ff ff e8 0a 8a 88 fd 4c 89 fe 48 c7 c7 00 2d a8 86 c6 05 14 8a 14 05 01 e8 18 06 19 02 <0f> 0b e9 81 f3 ff ff 48 89 7c 24 40 e8 e3 89 88 fd 48 8b 7c 24 40
-RSP: 0018:ffffc900000cfa00 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8881002dd400 RSI: ffffffff812db84c RDI: fffff52000019f32
-RBP: ffff888112baaf00 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 00000000c0028200
-R13: 0000000000000010 R14: 00000000fffffff0 R15: ffff888112baaf00
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f165ac57130 CR3: 000000011215a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_tx_block+0x241/0x2e0 drivers/net/wireless/marvell/libertas/if_usb.c:436
- if_usb_issue_boot_command drivers/net/wireless/marvell/libertas/if_usb.c:766 [inline]
- if_usb_prog_firmware+0x531/0xe30 drivers/net/wireless/marvell/libertas/if_usb.c:859
- lbs_fw_loaded drivers/net/wireless/marvell/libertas/firmware.c:23 [inline]
- helper_firmware_cb drivers/net/wireless/marvell/libertas/firmware.c:80 [inline]
- helper_firmware_cb+0x1e9/0x2c0 drivers/net/wireless/marvell/libertas/firmware.c:64
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2ee/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+Manivannan Sadhasivam (12):
+  arm64: dts: qcom: sdm845: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sc7280: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm6350: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm8550: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm8250: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: qdu1000: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sc7180: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm8150: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm8350: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sc8280xp: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm6375: Supply clock from cpufreq node to CPUs
+  arm64: dts: qcom: sm6115: Supply clock from cpufreq node to CPUs
 
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi  | 5 +++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm6115.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm6350.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm6375.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi   | 9 +++++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi   | 9 +++++++++
+ 12 files changed, 104 insertions(+)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-- 
+2.25.1
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
