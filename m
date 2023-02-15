@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F476977BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA18A6977BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjBOICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S233803AbjBOICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjBOICK (ORCPT
+        with ESMTP id S230196AbjBOICh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:02:10 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA4130B09;
-        Wed, 15 Feb 2023 00:02:07 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id k16so14538601ejv.10;
-        Wed, 15 Feb 2023 00:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wYpuouRtqGGYmfeCWWTT/2rWXrPC61M4tuQYBc16990=;
-        b=Ewy3+ElsaB8wC+43QB/lfm6tQzdZpiyQ90g2dcojPYfreVDuUoUiZIX1QRFQ4ur+8d
-         YpynnM+VOqTiBoS2gcwOCQgRMBHEHRa7DDwYgt+9gFT3Ax5RR/fK88ZjaB4ShaijJJQd
-         pKAF0DuwZeJWtxQRb/as5Rpco5nFCUbGTlK3ZrPdCaN2FJeQWaiILYYaksPdcwGRaUjt
-         pZ3+WeMMQFf3l0iYpMZhFIRp/UzxlavSH8s97HpohyoB1Wiiq27aNfG58bV2FJ3bQe3r
-         eCjGzailwH8oX3hMJek/7Y3xI0sT2pD05SE07tn61F7FzTTQUB3rW0/C9gZNuqVWZSbV
-         ulrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wYpuouRtqGGYmfeCWWTT/2rWXrPC61M4tuQYBc16990=;
-        b=YzXuw1xYjm3gfiIpTVv0u+Mpn2h0ogSB5hjs9o7GP9Wn6Q3vYK7Sz+vRJwu6ewiCcx
-         XpAywwg1FHMrLCVpZS8XCxyNEoQkKS9wKaKVZbAECfCjgR4T+EfSqOT+bmG5biFNtB2K
-         AjDRUGXeV+ZVUKR6yuF4pCBLqC++2RDmy0+Nrnx+JSGZf4ZVURfFmOzkamBkiBtsDrFU
-         yCA9p2xwa+KLf4C5kcH6YUEHKh0opEZ/649QnWhzY3KXbewcckMdvBzpSYrb/633T8Xd
-         ZE+eCOXg7CauJLOc6JgOSrUK/JT0FHIVP8kfdPLApYSI5HM4EnqeHOTzcJfjPvynLH44
-         8C+A==
-X-Gm-Message-State: AO0yUKXKqZCobKW8ppcAidgYnR3RqVse1/7mLU6VBKVUBZPqloklekoG
-        2V9vYcgg3OpVJFKfltyqAkA=
-X-Google-Smtp-Source: AK7set8L1CiiJwryrzPT+bqNoU9kWn4IRGRjCWQD3hofSiPU02XlmrnSQ8929Pfwkl3yRRdX0hnQzg==
-X-Received: by 2002:a17:907:584:b0:870:d9a:9ebb with SMTP id vw4-20020a170907058400b008700d9a9ebbmr1578180ejb.38.1676448126256;
-        Wed, 15 Feb 2023 00:02:06 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:983e:41b3:46f3:e161])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1709066a8200b0087bdae9a1ebsm9394619ejr.94.2023.02.15.00.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 00:02:05 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     William Qiu <william.qiu@starfivetech.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: repair file entry for STARFIVE JH7110 MMC/SD/SDIO DRIVER
-Date:   Wed, 15 Feb 2023 09:02:03 +0100
-Message-Id: <20230215080203.27445-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 15 Feb 2023 03:02:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487623668F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:02:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8515F61A7B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF55C433EF;
+        Wed, 15 Feb 2023 08:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676448147;
+        bh=QDjPmZcGUSDtJoHRAZL8Zkp030l2cNP4ARA092+yGBA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qLtB8z4l/Av6UjfwI/XorTC/GS94J/S/RA+feMxvs3nli/F65LWibGxMDRZxmolkm
+         0q4E0UpkJuTLGc0NiaCedGVDJZ/PqyAl8AoA9cblsPzAhUrrrY4GNeosg3sIhH7tQ3
+         7u6bQaZj+smSuyPE3uwo3rXSmVZtsvLZg1vN9TJcsRBBzcK/0wKBaM6M35BHFBlXri
+         zecbrQpsn3Je51InFHWPeDf9PubTClJvAf1f+55YoF42Emp1gaXhWODxkhYNg3251H
+         mFr+IWYKcgx94BrX08JnkBEDO3BB5UsUFJWaSlnMLbwYnf+FTYh39YqjXbujvW+e9u
+         eWz4XsHlCR6ng==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pSCkC-00AX1J-M7;
+        Wed, 15 Feb 2023 08:02:25 +0000
+Date:   Wed, 15 Feb 2023 08:02:20 +0000
+Message-ID: <87o7pvz78z.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Subject: Re: [PATCH 3/3] irqchip/gic-v3: Save and restore distributor and re-distributor
+In-Reply-To: <20230214233426.2994501-4-f.fainelli@gmail.com>
+References: <20230214233426.2994501-1-f.fainelli@gmail.com>     <20230214233426.2994501-4-f.fainelli@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, linux-arm-kernel@lists.infradead.org, tglx@linutronix.de, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, sudeep.holla@arm.com, bcm-kernel-feedback-list@broadcom.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit bfde6b3869f5 ("mmc: starfive: Add sdio/emmc driver support") adds a
-section in MAINTAINERS refering to the file drivers/mmc/dw_mmc-starfive.c,
-but the file is actually located at drivers/mmc/host/dw_mmc-starfive.c.
+On Tue, 14 Feb 2023 23:34:26 +0000,
+Florian Fainelli <f.fainelli@gmail.com> wrote:
+> 
+> On platforms implementing Suspend to RAM where the GIC loses power, we
+> are not properly saving and restoring the GIC distributor and
+> re-distributor registers thus leading to the system resuming without any
+> functional interrupts.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+The real question is *why* we need any of this. On any decent system,
+this is the firmware's job.  It was *never* the OS GIC driver's job
+the first place.
 
-Repair this file entry in STARFIVE JH7110 MMC/SD/SDIO DRIVER.
+Importantly, the OS cannot save the full state: a large part of it is
+only accessible via secure, and Linux doesn't run in secure mode. How
+do you restore the group configuration, for example? Oh wait, you
+don't even save it.
 
-Fixes: bfde6b3869f5 ("mmc: starfive: Add sdio/emmc driver support")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So unless you have a single security state system, this cannot
+work. And apart from VMs (which by the way do not need any of this),
+there is no GICv3-based system without EL3. If you know of one, please
+let me know. And if it existed, then all the save/restore should
+happen only when GICD_CTLR.DS==1.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 945b86f93cf7..74a30e724f7c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19935,7 +19935,7 @@ STARFIVE JH7110 MMC/SD/SDIO DRIVER
- M:	William Qiu <william.qiu@starfivetech.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/mmc/starfive*
--F:	drivers/mmc/dw_mmc-starfive.c
-+F:	drivers/mmc/host/dw_mmc-starfive.c
- 
- STARFIVE JH71XX PMU CONTROLLER DRIVER
- M:	Walker Chen <walker.chen@starfivetech.com>
+To conclude, this patch doesn't do what it advertises, because it
+*cannot* do it, by definition. The secure firmware is the only place
+where this can be done.
+
+	M.
+
 -- 
-2.17.1
-
+Without deviation from the norm, progress is not possible.
