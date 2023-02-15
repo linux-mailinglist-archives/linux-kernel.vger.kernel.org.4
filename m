@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5243E6985B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8CC6985AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBOUhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S229815AbjBOUhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBOUhg (ORCPT
+        with ESMTP id S229483AbjBOUhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:37:36 -0500
+        Wed, 15 Feb 2023 15:37:35 -0500
 Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F433B3CE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34E83B3E1;
         Wed, 15 Feb 2023 12:37:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
         s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
         :References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=r49yZYmJjuE0DOdqDD4meHmGEzLhjIGb5mML7c5O7pA=; b=nWZitlbNhn+wFiicL3hw+i9Kp1
-        Qq8MR8kEy3UH/kxsk+U8NUazMQhqV2OaRN80F7T+XlgBDakte1VDsqn5Cmar5M9WDtRNOAjfzv3UL
-        PtxHF+WNi2w3jkpZRwgSXOWn27lh7exgg5B7QCG0Mzn53tqquCX098gxoljrQnoP1At5nnKYs50NX
-        2+FHOq45N504I4Xdx+QR4AIo+dHTlZN8A9Am7DIkzYDhaymRRBk8hYzw4LMTwmPAp9YhkP54jrnYA
-        jXUNQp1380Mb9fv3e1ej2R4bwDhPk1faA9CqHEM46W1uLi6weOec2GbMHku6yMMh3OqjLUdp8gUrw
-        AWSJQydw==;
+        bh=Wi+mMNtvFAWEOiS2DSrULuVNQaQXpbi0WtKy5bdJNlQ=; b=XH1oquDm7zORQgjVwY695ZEals
+        BPDJs1eOo9B0MGQglEDXBIMDByPNFfGv30lFRPZlkcGXdv3aryfiKVuPfCRQtwG3LOFCWj1vpKFB/
+        GQ7QQldPYLPx293B0q6kARrIel6AOyKUe4bUETebGFLQ9VeW2OR0Ff45EuqhoaGQDFYLG/uhMmrzJ
+        27d8w8LYvctSEW6ozXX3zwsDOldK05zZau3LXQmLzSU05Dre+f8vO8cuofkGE/B95CzehlRDZTtLU
+        pYIIiWkdF4IxQE6S/kry+SwPC8qxdJZQXrtvr/0VcO1Qo6OY2NmDgbxe96sM5gXFP1eG8GDLmo9EW
+        GjkqznWw==;
 Received: from authenticated user
         by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
         (Exim 4.94.2)
         (envelope-from <bage@debian.org>)
-        id 1pSOWj-002j5f-CM; Wed, 15 Feb 2023 20:37:17 +0000
+        id 1pSOWj-002j5f-Lm; Wed, 15 Feb 2023 20:37:17 +0000
 From:   Bastian Germann <bage@debian.org>
 To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
 Cc:     Bastian Germann <bage@debian.org>,
@@ -43,9 +43,9 @@ Cc:     Bastian Germann <bage@debian.org>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 3/5] dt-bindings: hwlock: sun6i: Add missing names
-Date:   Wed, 15 Feb 2023 21:37:08 +0100
-Message-Id: <20230215203711.6293-4-bage@debian.org>
+Subject: [PATCH v2 4/5] dt-bindings: hwlock: sun6i: Add a64 compatible string
+Date:   Wed, 15 Feb 2023 21:37:09 +0100
+Message-Id: <20230215203711.6293-5-bage@debian.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230215203711.6293-1-bage@debian.org>
 References: <20230215203711.6293-1-bage@debian.org>
@@ -62,57 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
-and reset-names set to "ahb" as required by the Linux driver.
+Add an allwinner,sun50i-a64-hwspinlock compatible string to the device
+tree binding. The A31 and A64 have compatible hwspinlocks.
 
-Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
 Signed-off-by: Bastian Germann <bage@debian.org>
 ---
- .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-index 38478dad8b25..6cdfe22deb3c 100644
+index 6cdfe22deb3c..281c285282a1 100644
 --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
 +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-@@ -23,9 +23,17 @@ properties:
-   clocks:
-     maxItems: 1
+@@ -15,7 +15,9 @@ description:
  
-+  clock-names:
+ properties:
+   compatible:
+-    const: allwinner,sun6i-a31-hwspinlock
 +    items:
-+      - const: ahb
-+
-   resets:
++      - const: allwinner,sun6i-a31-hwspinlock
++      - const: allwinner,sun50i-a64-hwspinlock
+ 
+   reg:
      maxItems: 1
- 
-+  reset-names:
-+    items:
-+      - const: ahb
-+
-   '#hwlock-cells':
-     const: 1
- 
-@@ -33,7 +41,9 @@ required:
-   - compatible
-   - reg
-   - clocks
-+  - clock-names
-   - resets
-+  - reset-names
-   - "#hwlock-cells"
- 
- additionalProperties: false
-@@ -47,7 +57,9 @@ examples:
-         compatible = "allwinner,sun6i-a31-hwspinlock";
-         reg = <0x01c18000 0x1000>;
-         clocks = <&ccu CLK_BUS_SPINLOCK>;
-+        clock-names = "ahb";
-         resets = <&ccu RST_BUS_SPINLOCK>;
-+        reset-names = "ahb";
-         #hwlock-cells = <1>;
-     };
- ...
 -- 
 2.39.1
 
