@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C2469738C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B7D69738D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbjBOBWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S233626AbjBOBW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbjBOBWg (ORCPT
+        with ESMTP id S233571AbjBOBWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:22:36 -0500
+        Tue, 14 Feb 2023 20:22:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B9C34C12;
-        Tue, 14 Feb 2023 17:21:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B1B3345A;
+        Tue, 14 Feb 2023 17:21:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A83B86197C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C72E6198D;
+        Wed, 15 Feb 2023 01:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8428FC4339B;
         Wed, 15 Feb 2023 01:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7EBC433D2;
-        Wed, 15 Feb 2023 01:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676424112;
-        bh=FeChVdeQN1bgxPs5mJTWw9fvEMDfbK6uQA/n72DiAws=;
+        s=k20201202; t=1676424113;
+        bh=3R0g8mH0HfVeY9FreGkKJ/GZs7e+F2BbvGb/IvPgPy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qt+Wbrl84eyJmA99AQr0Rc42SzoZMETg5jj+aNK2ecAcg9UgANmfkOzMx0T2tyv65
-         ocSizuZyPfTEP/xmMxWDl4W/eloh2O5XS3oa/CfxvSxMN84fBM9z6l6xl+ij6QN5Xi
-         vec+W3pKT/qGSrjvDAUiSrpbiJ3X9xMHrxmiZ/+aizfmYChNr2NNGmOJ0PehTYDBIB
-         4Kz3jnJiKsGyIt9z6zud54ybNgnKzhUW9ObsLR1Obon13/0gUN+DsA9x+L0/3al2IN
-         9Tf54kcEwAQBueHHZJ7zsnk+Oe6pg1eFi/rKCd4xxYpIF9rbh8bXh7Dbjd9ZkKMJys
-         ztUvcGsY3T/EQ==
+        b=D48JCem6bygp0I6spR8PbF1EHyZyFI1QA8uihjpdnRla/umK2r2AQKWIOL+OUlkyg
+         /Ym5JV1JbC+rVTGMNgWF1cNQSkxio2fXpXC/RabTQ0yjetzAWsuRrTgw9Wkfui3goI
+         AhyEXZB+tW701Oq5pO48CMnkU6wVyStlWWQt6MM7S4e3CVofMVk8fqcqbWWn/SrmJ8
+         64UV7VFJt6gUnWTgeqGaVe9NObLL98VRQZF06F4kkGCT7SfpB+rCrv1SFCTJHOcdZd
+         erCACdaLNtT56XUADTUlZcMth0LHEv6ecKlZLYtdVDRUyqvsMBjp2/y0nIKyjymxTr
+         G+SwMQa21l3WQ==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
@@ -39,9 +39,9 @@ Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v6 11/12] kbuild: deb-pkg: improve the usability of source package
-Date:   Wed, 15 Feb 2023 10:20:33 +0900
-Message-Id: <20230215012034.403356-11-masahiroy@kernel.org>
+Subject: [PATCH v6 12/12] kbuild: add srcdeb-pkg target
+Date:   Wed, 15 Feb 2023 10:20:34 +0900
+Message-Id: <20230215012034.403356-12-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230215012034.403356-1-masahiroy@kernel.org>
 References: <20230215012034.403356-1-masahiroy@kernel.org>
@@ -56,21 +56,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve the source package support in case the dpkg-buildpackage is
-directly used to build binary packages.
+This new target builds only the debian source package.
 
-For cross-compiling, you can set CROSS_COMPILE via the environment
-variable, but it is better to set it automatically - set it to
-${DEB_HOST_GNU_TYPE}- if we are cross-compiling but not from the top
-Makefile.
-
-The generated source package may be carried to a different build
-environment, which may have a different compiler installed.
-Run olddefconfig first to set new CONFIG options to their default
-values without prompting.
-
-Take KERNELRELEASE and KBUILD_BUILD_VERSION from the version field of
-debian/changelog in case it is updated afterwards.
+Factor similar code out to the 'build-deb-pkg' variable.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
@@ -78,61 +66,62 @@ Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Changes in v6:
   - New patch
 
- scripts/package/deb-build-option | 16 ++++++++++++++++
- scripts/package/mkdebian         |  9 ++++-----
- 2 files changed, 20 insertions(+), 5 deletions(-)
- create mode 100755 scripts/package/deb-build-option
+ scripts/Makefile.package | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/package/deb-build-option b/scripts/package/deb-build-option
-new file mode 100755
-index 000000000000..b079b0d121d4
---- /dev/null
-+++ b/scripts/package/deb-build-option
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index b941e6341b36..8650d9432c26 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -100,6 +100,9 @@ binrpm-pkg:
+ 	+rpmbuild $(RPMOPTS) --define "_builddir $(objtree)" --target \
+ 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
+ 
++# deb-pkg srcdeb-pkg bindeb-pkg
++# ---------------------------------------------------------------------------
 +
-+# Set up CROSS_COMPILE if we are cross-compiling, but not called from the
-+# kernel toplevel Makefile
-+if [ -z "${CROSS_COMPILE}${cross_compiling}" -a "${DEB_HOST_ARCH}" != "${DEB_BUILD_ARCH}" ]; then
-+	echo CROSS_COMPILE=${DEB_HOST_GNU_TYPE}-
-+fi
+ quiet_cmd_debianize = GEN     $@
+       cmd_debianize = $(srctree)/scripts/package/mkdebian
+ 
+@@ -117,14 +120,27 @@ debian-orig: linux.tar.gz debian
+ 		cp $< ../$(orig-name); \
+ 	fi
+ 
++build-deb-pkg = \
++        dpkg-buildpackage \
++        --build=$(build-type) --no-pre-clean --unsigned-changes \
++        $(if $(findstring source, $(build-type)), --unsigned-source) \
++        $(if $(findstring binary, $(build-type)), -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch)) \
++        $(DPKG_FLAGS)
 +
-+version=$(dpkg-parsechangelog -S Version)
-+version_upstream="${version%-*}"
-+debian_revision="${version#${version_upstream}}"
-+debian_revision="${debian_revision#*-}"
+ PHONY += deb-pkg
++deb-pkg: private build-type := source,binary
+ deb-pkg: debian-orig
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
+-		--build=source,binary -nc -us -uc
++	+$(build-deb-pkg)
 +
-+echo KERNELRELEASE=${version_upstream}
-+echo KBUILD_BUILD_VERSION=${debian_revision}
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index eef20d5dc288..f74380036bb5 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -90,10 +90,8 @@ rm -rf debian
- version=$KERNELRELEASE
- if [ -n "$KDEB_PKGVERSION" ]; then
- 	packageversion=$KDEB_PKGVERSION
--	revision=${packageversion##*-}
- else
--	revision=$($srctree/init/build-version)
--	packageversion=$version-$revision
-+	packageversion=$version-$($srctree/init/build-version)
- fi
- sourcename=${KDEB_SOURCENAME:-linux-upstream}
++PHONY += srcdeb-pkg
++srcdeb-pkg: private build-type := source
++srcdeb-pkg: debian-orig
++	+$(build-deb-pkg)
  
-@@ -244,8 +242,9 @@ srctree ?= .
+ PHONY += bindeb-pkg
++bindeb-pkg: private build-type := binary
+ bindeb-pkg: debian
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) -b -nc -uc
++	+$(build-deb-pkg)
  
- build-indep:
- build-arch:
--	\$(MAKE) KERNELRELEASE=${version} ARCH=${ARCH} \
--	KBUILD_BUILD_VERSION=${revision} -f \$(srctree)/Makefile
-+	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} \
-+	\$(shell \$(srctree)/scripts/package/deb-build-option) \
-+	olddefconfig all
- 
- build: build-arch
- 
+ PHONY += intdeb-pkg
+ intdeb-pkg:
+@@ -225,6 +241,7 @@ help:
+ 	@echo '  srcrpm-pkg          - Build only the source kernel RPM package'
+ 	@echo '  binrpm-pkg          - Build only the binary kernel RPM package'
+ 	@echo '  deb-pkg             - Build both source and binary deb kernel packages'
++	@echo '  binsrc-pkg          - Build only the source kernel deb package'
+ 	@echo '  bindeb-pkg          - Build only the binary kernel deb package'
+ 	@echo '  snap-pkg            - Build only the binary kernel snap package'
+ 	@echo '                        (will connect to external hosts)'
 -- 
 2.34.1
 
