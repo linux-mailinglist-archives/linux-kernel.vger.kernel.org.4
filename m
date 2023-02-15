@@ -2,163 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93291697B35
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8BF697B38
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbjBOL4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S231751AbjBOL5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjBOL4q (ORCPT
+        with ESMTP id S233887AbjBOL5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:56:46 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79583A264;
-        Wed, 15 Feb 2023 03:56:44 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PGxM16qywz16NZb;
-        Wed, 15 Feb 2023 19:54:21 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 15 Feb 2023 19:56:41 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
-        <davem@davemloft.net>, <mhiramat@kernel.org>, <ast@kernel.org>,
-        <peterz@infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH 3/3] x86/kprobes: Fix arch_check_optimized_kprobe check within optimized_kprobe range
-Date:   Wed, 15 Feb 2023 19:54:30 +0800
-Message-ID: <20230215115430.236046-4-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20230215115430.236046-1-yangjihong1@huawei.com>
-References: <20230215115430.236046-1-yangjihong1@huawei.com>
+        Wed, 15 Feb 2023 06:57:34 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924C838006
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:57:26 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id d73-20020a6bb44c000000b0072805fbd06aso11919858iof.17
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:57:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1YrA0X6k+ub77GDUxkXXwi3LzlEaPkZePD+VHVqlZro=;
+        b=cs29DLO6VCW2ewekcqn2tKIARu86WaGGbglhkfqZ3NFr04RvAyCXF3ERMSSbGqzE5T
+         +Pj9rsm1GgabIo0soiR/dMjC25ybTf/s0+mDWqLImZvGePFUEszR0PQaYVryI/++Z30M
+         2vldv9Jk+Ta1X2AMS4aFc8OmlCcjb/FYV6PgzWuoIkzjfC0aXWAl9Wr6K+LC72bqLV4Q
+         ls7NhlMC3VV0i3pW9dP7XON1U7EPNrG+EuWgLlHxzDyJ4S+l4/e31dHgt5upw8IdtD+o
+         olcY/kB5j5ExMbr+LFDSjeBDbr15FWmikEfqOS+DPzIxj/cjMwOy8K1dwI+N/rP7FDrP
+         tLXA==
+X-Gm-Message-State: AO0yUKWxPXYY+5cyXK7e9e1SzDDyT7RhQBEJ15+QnGhsc4JhAKY6K1Wh
+        o8slvz/+R4fWbItBEbXzvhdUolq/Gm0UVEfnXvYUUwJZn0XU
+X-Google-Smtp-Source: AK7set8MkDfCAq6TvEnp8CyJTK0TgcIVYSkaa8iRdFhN0yii+Tm6vm4j5kIp1MH80GnWtob2XSdVneFImaj2hXqQ5TKmInk/tq/G
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9bd8:0:b0:71e:2d29:aa48 with SMTP id
+ d24-20020a5d9bd8000000b0071e2d29aa48mr797488ion.29.1676462245888; Wed, 15 Feb
+ 2023 03:57:25 -0800 (PST)
+Date:   Wed, 15 Feb 2023 03:57:25 -0800
+In-Reply-To: <20230215110515.3833-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5488905f4bbc8f7@google.com>
+Subject: Re: [syzbot] WARNING in usb_tx_block/usb_submit_urb
+From:   syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When arch_prepare_optimized_kprobe calculating jump destination address,
-it copies original instructions from jmp-optimized kprobe (see
-__recover_optprobed_insn), and calculated based on length of original
-instruction.
+Hello,
 
-arch_check_optimized_kprobe does not check KPROBE_FLAG_OPTIMATED when
-checking whether jmp-optimized kprobe exists.
-As a result, setup_detour_execution may jump to a range that has been
-overwritten by jump destination address, resulting in an inval opcode error.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-For example, assume that register two kprobes whose addresses are
-<func+9> and <func+11> in "func" function.
-The original code of "func" function is as follows:
+Reported-and-tested-by: syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com
 
-   0xffffffff816cb5e9 <+9>:     push   %r12
-   0xffffffff816cb5eb <+11>:    xor    %r12d,%r12d
-   0xffffffff816cb5ee <+14>:    test   %rdi,%rdi
-   0xffffffff816cb5f1 <+17>:    setne  %r12b
-   0xffffffff816cb5f5 <+21>:    push   %rbp
+Tested on:
 
-1.Register the kprobe for <func+11>, assume that is kp1, corresponding optimized_kprobe is op1.
-  After the optimization, "func" code changes to:
+commit:         f87b5646 dt-bindings: usb: amlogic,meson-g12a-usb-ctrl..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c8d577480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6d59dd45f9349215
+dashboard link: https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=113a83d0c80000
 
-   0xffffffff816cc079 <+9>:     push   %r12
-   0xffffffff816cc07b <+11>:    jmp    0xffffffffa0210000
-   0xffffffff816cc080 <+16>:    incl   0xf(%rcx)
-   0xffffffff816cc083 <+19>:    xchg   %eax,%ebp
-   0xffffffff816cc084 <+20>:    (bad)
-   0xffffffff816cc085 <+21>:    push   %rbp
-
-Now op1->flags == KPROBE_FLAG_OPTIMATED;
-
-2. Register the kprobe for <func+9>, assume that is kp2, corresponding optimized_kprobe is op2.
-
-register_kprobe(kp2)
-  register_aggr_kprobe
-    alloc_aggr_kprobe
-      __prepare_optimized_kprobe
-        arch_prepare_optimized_kprobe
-          __recover_optprobed_insn    // copy original bytes from kp1->optinsn.copied_insn,
-                                      // jump address = <func+14>
-
-3. disable kp1:
-
-disable_kprobe(kp1)
-  __disable_kprobe
-    ...
-    if (p == orig_p || aggr_kprobe_disabled(orig_p)) {
-      ret = disarm_kprobe(orig_p, true)       // add op1 in unoptimizing_list, not unoptimized
-      orig_p->flags |= KPROBE_FLAG_DISABLED;  // op1->flags ==  KPROBE_FLAG_OPTIMATED | KPROBE_FLAG_DISABLED
-    ...
-
-4. unregister kp2
-__unregister_kprobe_top
-  ...
-  if (!kprobe_disabled(ap) && !kprobes_all_disarmed) {
-    optimize_kprobe(op)
-      ...
-      if (arch_check_optimized_kprobe(op) < 0) // because op1 has KPROBE_FLAG_DISABLED, here not return
-        return;
-      p->kp.flags |= KPROBE_FLAG_OPTIMIZED;   //  now op2 has KPROBE_FLAG_OPTIMIZED
-  }
-
-"func" code now is:
-
-   0xffffffff816cc079 <+9>:     int3
-   0xffffffff816cc07a <+10>:    push   %rsp
-   0xffffffff816cc07b <+11>:    jmp    0xffffffffa0210000
-   0xffffffff816cc080 <+16>:    incl   0xf(%rcx)
-   0xffffffff816cc083 <+19>:    xchg   %eax,%ebp
-   0xffffffff816cc084 <+20>:    (bad)
-   0xffffffff816cc085 <+21>:    push   %rbp
-
-5. if call "func", int3 handler call setup_detour_execution:
-
-  if (p->flags & KPROBE_FLAG_OPTIMIZED) {
-    ...
-    regs->ip = (unsigned long)op->optinsn.insn + TMPL_END_IDX;
-    ...
-  }
-
-The code for the destination address is
-
-   0xffffffffa021072c:  push   %r12
-   0xffffffffa021072e:  xor    %r12d,%r12d
-   0xffffffffa0210731:  jmp    0xffffffff816cb5ee <func+14>
-
-However, <func+14> is not a valid start instruction address. As a result, an error occurs.
-
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- arch/x86/kernel/kprobes/opt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 3718d6863555..e6d9bd038401 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -353,7 +353,7 @@ int arch_check_optimized_kprobe(struct optimized_kprobe *op)
- 
- 	for (i = 1; i < op->optinsn.size; i++) {
- 		p = get_kprobe(op->kp.addr + i);
--		if (p && !kprobe_disabled(p))
-+		if (p && (!kprobe_disabled(p) || kprobe_optimized(p)))
- 			return -EEXIST;
- 	}
- 
--- 
-2.30.GIT
-
+Note: testing is done by a robot and is best-effort only.
