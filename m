@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C13697600
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798869760E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjBOFvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S229527AbjBOF5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 00:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBOFvX (ORCPT
+        with ESMTP id S229526AbjBOF46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:51:23 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB7B2B0A1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:51:22 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 50CAD67373; Wed, 15 Feb 2023 06:51:19 +0100 (CET)
-Date:   Wed, 15 Feb 2023 06:51:19 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/i915: move a Kconfig symbol to unbreak the menu
- presentation
-Message-ID: <20230215055119.GA29717@lst.de>
-References: <20230215044533.4847-1-rdunlap@infradead.org>
+        Wed, 15 Feb 2023 00:56:58 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F82B0A1;
+        Tue, 14 Feb 2023 21:56:56 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VbizXb8_1676440611;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbizXb8_1676440611)
+          by smtp.aliyun-inc.com;
+          Wed, 15 Feb 2023 13:56:52 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     kuba@kernel.org
+Cc:     pabeni@redhat.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, ryder.lee@mediatek.com,
+        lorenzo@kernel.org, nbd@nbd.name, shayne.chen@mediatek.com,
+        sean.wang@mediatek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v2] wifi: mt76: mt7996: Remove unneeded semicolon
+Date:   Wed, 15 Feb 2023 13:56:50 +0800
+Message-Id: <20230215055650.88538-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215044533.4847-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:45:33PM -0800, Randy Dunlap wrote:
-> Inserting a Kconfig symbol that does not have a dependency (DRM_I915_GVT)
-> into a list of other symbols that do have a dependency (on DRM_I915)
-> breaks the driver menu presentation in 'make *config'.
-> 
-> Relocate the DRM_I915_GVT symbol so that it does not cause this
-> problem.
+./drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3136:3-4: Unneeded semicolon
 
-Looks good:
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4059
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+change in v2:
+Add the linux-wireless to cc list.
+
+ drivers/net/wireless/mediatek/mt76/mt7996/mcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+index dbe30832fd88..8ad51cbfdbe8 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+@@ -3133,7 +3133,7 @@ int mt7996_mcu_get_chip_config(struct mt7996_dev *dev, u32 *cap)
+ 			break;
+ 		default:
+ 			break;
+-		};
++		}
+ 
+ 		buf += le16_to_cpu(tlv->len);
+ 	}
+-- 
+2.20.1.7.g153144c
+
