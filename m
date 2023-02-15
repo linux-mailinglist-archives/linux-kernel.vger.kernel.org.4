@@ -2,28 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1D16986DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C3B698711
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjBOVDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S230357AbjBOVKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjBOVCw (ORCPT
+        with ESMTP id S229528AbjBOVKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:02:52 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB3934616E;
-        Wed, 15 Feb 2023 13:01:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6140D4B3;
-        Wed, 15 Feb 2023 12:51:47 -0800 (PST)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2623F881;
-        Wed, 15 Feb 2023 12:51:02 -0800 (PST)
-Date:   Wed, 15 Feb 2023 20:49:06 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Bastian Germann <bage@debian.org>
+        Wed, 15 Feb 2023 16:10:22 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A794484;
+        Wed, 15 Feb 2023 13:10:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Reply-To:Content-ID:Content-Description;
+        bh=bJ4XhLfeX5YRtgDDbsDogMT87rAGutSNEOEm7YHb434=; b=uiMhdPvn1NBtP5oMOSp+a7gMqv
+        Lh61I64BFZ2epzBcHSVoISW+weS2ffALOna+WUIUXrJAym+wmgugwmgtA24ZuaKiel5I0e4uNiwQm
+        B46hBTo3D5HIqb8Du5ka9fR6Aw+OETsWmhEqdCd/umw3QT+hXlD++lgE4vX00YbzRfTtY8M6LRco6
+        qdi9MoZ6t14+XOzURORF2/VcJq2/iwoj/kMiIS+rQWg8P4rVAb2rbxT6EQ3fhcvLLxNXt2Jx+7KGG
+        WGm/0YyCzUD3vVcK1oORGWAE314q4FGaP0jo6xAhuD2CU9qIW45FVjI8CU+kDlzUfuojVnxFfNPvD
+        RUPBjlSg==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+        (Exim 4.94.2)
+        (envelope-from <bage@debian.org>)
+        id 1pSOiP-002je6-UO; Wed, 15 Feb 2023 20:49:22 +0000
+Message-ID: <f1041e65-8058-ab82-3d6a-0bc2426b64bf@debian.org>
+Date:   Wed, 15 Feb 2023 21:49:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 3/5] dt-bindings: hwlock: sun6i: Add missing names
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>
 Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -35,59 +49,92 @@ Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] dt-bindings: hwlock: sun6i: Add a64 compatible
- string
-Message-ID: <20230215204906.511699f4@slackpad.lan>
-In-Reply-To: <20230215203711.6293-5-bage@debian.org>
 References: <20230215203711.6293-1-bage@debian.org>
-        <20230215203711.6293-5-bage@debian.org>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20230215203711.6293-4-bage@debian.org>
+ <20230215204514.613a9a96@slackpad.lan>
+From:   Bastian Germann <bage@debian.org>
+In-Reply-To: <20230215204514.613a9a96@slackpad.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Debian-User: bage
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 21:37:09 +0100
-Bastian Germann <bage@debian.org> wrote:
-
-> Add an allwinner,sun50i-a64-hwspinlock compatible string to the device
-> tree binding. The A31 and A64 have compatible hwspinlocks.
+Am 15.02.23 um 21:45 schrieb Andre Przywara:
+> On Wed, 15 Feb 2023 21:37:08 +0100
+> Bastian Germann <bage@debian.org> wrote:
 > 
-> Signed-off-by: Bastian Germann <bage@debian.org>
-> ---
->  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>> The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
+>> and reset-names set to "ahb" as required by the Linux driver.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-> index 6cdfe22deb3c..281c285282a1 100644
-> --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-> +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-> @@ -15,7 +15,9 @@ description:
->  
->  properties:
->    compatible:
-> -    const: allwinner,sun6i-a31-hwspinlock
-> +    items:
-> +      - const: allwinner,sun6i-a31-hwspinlock
-> +      - const: allwinner,sun50i-a64-hwspinlock
+> Mmmh, but I thought that Krzysztof pretty clearly NAKed this?
+> So we have to either reach consensus on this or find another solution,
+> like teaching the driver to comply with the existing binding.
+> We could for instance get the first clock, should the devm_clk_get()
+> call fail.
 
-So this would not allow the previous single compatible string, which I
-think we should preserve?
-You can check out other bindings (like allwinner,sun6i-a31-spi.yaml) to
-get an idea of how this could be written.
+Either way - I wanted to send a fix for the dt-binding example as Rob requested.
+This is not to say that I want to ignore the NAK.
 
-Cheers,
-Andre
-
-
->  
->    reg:
->      maxItems: 1
+> Cheers,
+> Andre
+> 
+> 
+>>
+>> Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
+>> Signed-off-by: Bastian Germann <bage@debian.org>
+>> ---
+>>   .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> index 38478dad8b25..6cdfe22deb3c 100644
+>> --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> @@ -23,9 +23,17 @@ properties:
+>>     clocks:
+>>       maxItems: 1
+>>   
+>> +  clock-names:
+>> +    items:
+>> +      - const: ahb
+>> +
+>>     resets:
+>>       maxItems: 1
+>>   
+>> +  reset-names:
+>> +    items:
+>> +      - const: ahb
+>> +
+>>     '#hwlock-cells':
+>>       const: 1
+>>   
+>> @@ -33,7 +41,9 @@ required:
+>>     - compatible
+>>     - reg
+>>     - clocks
+>> +  - clock-names
+>>     - resets
+>> +  - reset-names
+>>     - "#hwlock-cells"
+>>   
+>>   additionalProperties: false
+>> @@ -47,7 +57,9 @@ examples:
+>>           compatible = "allwinner,sun6i-a31-hwspinlock";
+>>           reg = <0x01c18000 0x1000>;
+>>           clocks = <&ccu CLK_BUS_SPINLOCK>;
+>> +        clock-names = "ahb";
+>>           resets = <&ccu RST_BUS_SPINLOCK>;
+>> +        reset-names = "ahb";
+>>           #hwlock-cells = <1>;
+>>       };
+>>   ...
+> 
 
