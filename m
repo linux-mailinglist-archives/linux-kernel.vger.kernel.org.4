@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85CB69750B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E5F69750C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBODpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 22:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S233010AbjBODqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 22:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBODpv (ORCPT
+        with ESMTP id S232353AbjBODp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:45:51 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2032311EB;
-        Tue, 14 Feb 2023 19:45:43 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(23460:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Wed, 15 Feb 2023 11:45:32 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 15 Feb
- 2023 11:45:31 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Wed, 15 Feb 2023 11:45:31 +0800
-Date:   Wed, 15 Feb 2023 11:45:31 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <peterwu.pub@gmail.com>
-Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
- compatible name
-Message-ID: <20230215034531.GA7407@linuxcarl2.richtek.com>
-References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
- <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
- <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
+        Tue, 14 Feb 2023 22:45:57 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1B134027
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:45:55 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PGkSj5JJLz16NgJ;
+        Wed, 15 Feb 2023 11:43:33 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 15 Feb
+ 2023 11:45:52 +0800
+Date:   Wed, 15 Feb 2023 11:45:32 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Guo Ren <guoren@kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Changbin Du <changbin.du@huawei.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hui Wang <hw.huiwang@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v4] riscv: patch: Fixup lockdep warning in stop_machine
+Message-ID: <20230215034532.xs726l7mp6xlnkdf@M910t>
+References: <20230202114116.3695793-1-changbin.du@huawei.com>
+ <Y+wlula69tYrSZjQ@spud>
+ <CAJF2gTQBiE7d_RiNjxoyx9gppYQxXBLeNhEsX04tjtjM_56gRQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJF2gTQBiE7d_RiNjxoyx9gppYQxXBLeNhEsX04tjtjM_56gRQ@mail.gmail.com>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Krzysztof/Sebastian:
+On Wed, Feb 15, 2023 at 09:24:33AM +0800, Guo Ren wrote:
+> On Wed, Feb 15, 2023 at 8:22 AM Conor Dooley <conor@kernel.org> wrote:
+> >
+> > Hey Changbin,
+> >
+> > On Thu, Feb 02, 2023 at 07:41:16PM +0800, Changbin Du wrote:
+> > > The task of ftrace_arch_code_modify(_post)_prepare() caller is
+> > > stop_machine, whose caller and work thread are of different tasks. The
+> > > lockdep checker needs the same task context, or it's wrong. That means
+> > > it's a bug here to use lockdep_assert_held because we don't guarantee
+> > > the same task context.
+> I'm trying to delete all stop_machine in riscv, from ftrace to kprobe.
+> When I have done, we needn't this patch.
+>
+Which approch would you use? I looked through the riscv-spec, but didn't find any
+description abount concurrent modification and execution.
 
-On Tue, Feb 14, 2023 at 09:14:37AM +0100, Krzysztof Kozlowski wrote:
-> On 13/02/2023 21:53, Sebastian Reichel wrote:
-> > Hi,
-> > 
-> > On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
-> >> Revise RT9467 compatible name from "richtek,rt9467-charger" to
-> >> "richtek,rt9467"
-> >>
-> >> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> >> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> >> ---
-> > 
-> > Is there a new version of this fixing the issues pointed out by Krzysztof?
-> > Also I think the filename and $id should be changed to richtek,rt9467.yaml
-> > in addition to the compatible change.
+> > >
+> > > 2.25.1
+> > >
 > 
-> Yes, indeed.
 > 
-From the current discussion, there're things to be fixed.
-1. In bindings, change compatible property from 'richtek,rt9467-charger' to 'richtek,rt9467'.
-2. Rename 'richtek,rt9467-charger.yaml' to 'richtek,rt9467.yaml'
-
-Anything else? like as changing source code filename from 'rt9467-charger.c' to only 'rt9467.c"?
-
-And we'll submit a new one to fix it in these two days.
-
-Thanks.
-
-> Best regards,
-> Krzysztof
 > 
+> -- 
+> Best Regards
+>  Guo Ren
+
+-- 
+Cheers,
+Changbin Du
