@@ -2,126 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B7D69738D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671BC69736C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbjBOBW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S233083AbjBOBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbjBOBWk (ORCPT
+        with ESMTP id S231876AbjBOBVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:22:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B1B3345A;
-        Tue, 14 Feb 2023 17:21:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C72E6198D;
-        Wed, 15 Feb 2023 01:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8428FC4339B;
-        Wed, 15 Feb 2023 01:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676424113;
-        bh=3R0g8mH0HfVeY9FreGkKJ/GZs7e+F2BbvGb/IvPgPy0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D48JCem6bygp0I6spR8PbF1EHyZyFI1QA8uihjpdnRla/umK2r2AQKWIOL+OUlkyg
-         /Ym5JV1JbC+rVTGMNgWF1cNQSkxio2fXpXC/RabTQ0yjetzAWsuRrTgw9Wkfui3goI
-         AhyEXZB+tW701Oq5pO48CMnkU6wVyStlWWQt6MM7S4e3CVofMVk8fqcqbWWn/SrmJ8
-         64UV7VFJt6gUnWTgeqGaVe9NObLL98VRQZF06F4kkGCT7SfpB+rCrv1SFCTJHOcdZd
-         erCACdaLNtT56XUADTUlZcMth0LHEv6ecKlZLYtdVDRUyqvsMBjp2/y0nIKyjymxTr
-         G+SwMQa21l3WQ==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v6 12/12] kbuild: add srcdeb-pkg target
-Date:   Wed, 15 Feb 2023 10:20:34 +0900
-Message-Id: <20230215012034.403356-12-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230215012034.403356-1-masahiroy@kernel.org>
-References: <20230215012034.403356-1-masahiroy@kernel.org>
+        Tue, 14 Feb 2023 20:21:02 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D996132CF0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:20:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676424051; x=1707960051;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NfIdZ5I7BKY0oDk8dlf2XVu+GiEDtbmIPu92tWOZ/Rs=;
+  b=WuUv18bV8A7s8lGYl0XKCwg2Csbq1wTXkWROV2lKHNmqds3jBktXBV/G
+   fydnXqNWXUEVxnn/4KXeX0NhcWYftS7KAj93FMNk8lprSWrSqBf2ZzpwH
+   lSUrAPYgqWbCk0wE0dYt9YEjaroQkCLboCvH4uFIpWP/bEYPzjJsc1D9B
+   hWrl2m3jGUcIHI7ivL6rykPz6g+5knY44ntkWsL5TIuQbJBg0SP/eU5Pe
+   1cIYF55HwwO023jbr/8SRMgjtAa3znjO2J5gzFkjlrL+IRcsgK+f2f5lQ
+   A/dFSjNskSckkFb6WSCkOsGSZ//Ffh1B2v5Ldk+yy4LG/aUVvstBnXBu0
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
+   d="scan'208";a="221622009"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:20:50 +0800
+IronPort-SDR: TW7Qjsk/2952/ugkTN/MKNRh1vUppizZEsaoBSH3jXPTnZRGRcf64h7h+kp2p3P0s4vi44scBd
+ FABuWiclBizIGFSIFQ8DrwTj4C8fVmctCMzDH3vP2bjTeLe0EIbJwkpet/w/X14DYqTslMLTGN
+ Kv0mDet49L5Tb2KigZVe9e+xhK2FPPKLZAyuwlbmuzjHR6WwLM4CGaIQ0jURJXWQT8zgAu6Tbd
+ /Lq0N1c+ZHJn82IU8T4Isc4faj+seuX4RDzgx+kijaGyxDNjQfmlsSki7Cyc/AZD/155cMIa/N
+ O3w=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 16:32:13 -0800
+IronPort-SDR: P+51s2lXu0TSZ4Llsp/5LFeLv/Yxcn/P0IWilsK4U0ygJUQxe+cwgcRFg7CPa7ZSQlKXg0kgjR
+ ZP2O2OUpH7ZeWy9oxZig2QAHMgXZtewgR+4NTDcI61ln3se2dtCJU1r5dm9S+yefCZjMrpdMCp
+ 6WRLrI4kOpmuCVpSOhLh394WhIyV7mUevDs/+kQ/PDd/Qem7eVcxfnrOHwPhjksBX4BBGa9wlu
+ efwm84Nc2Xrd4Q+tSDI0UVrWPrMOYujm0RNdu9J71TqvhE0dCxlCz1fB6qPmdcbyvUhIQ7AThN
+ wa8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:20:50 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgJ21kVmz1RwqL
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:20:49 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676424046; x=1679016047; bh=NfIdZ5I7BKY0oDk8dlf2XVu+GiEDtbmIPu9
+        2tWOZ/Rs=; b=qAF1nz17x1XXH8FJwNKspeIO7gQHGbEWZE3nkvSAX3MDzfpQ/tb
+        PBviiEsxph3MM5A84tFvaRfyo05Pg8+zuvuQJdsiG62n/FN8WpiEeYLakWKiMogm
+        BKsE4Py5Faa3vO7wA+X5R7yIVB7u3TgGJ1PUOk9CKjSTN/RpNPgWYMpiF9Ptay7I
+        KVveIw/4GxkBOri/F2RmeZ+3/HQWRcPayZxBaul/g1q8QrXefjTI4y84EuRH4AoN
+        cDvWfz6kb/WphR0O+6c7qXgkMmA2ydfv/3q0svL8QWsjyBb0varSAtR8VgMya/+j
+        bNLhWs+qsLBU6ZeiGJFjc3Z8e6eX3omVo0w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id lftHEB7V2_Lt for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Feb 2023 17:20:46 -0800 (PST)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgHv3jj9z1RvLy;
+        Tue, 14 Feb 2023 17:20:43 -0800 (PST)
+Message-ID: <4dd920dd-5e2c-2a00-17ae-61cf4d154ddd@opensource.wdc.com>
+Date:   Wed, 15 Feb 2023 10:20:42 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 6/9] PCI: rockchip: Fix window mapping and address
+ translation for endpoint
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        stable@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-7-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214140858.1133292-7-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new target builds only the debian source package.
+On 2/14/23 23:08, Rick Wertenbroek wrote:
+> The RK3399 PCI endpoint core has 33 windows for PCIe space, now in the
+> driver up to 32 fixed size (1M) windows are used and pages are allocated
+> and mapped accordingly. The driver first used a single window and allocated
+> space inside which caused translation issues (between CPU space and PCI
+> space) because a window can only have a single translation at a given
+> time, which if multiple pages are allocated inside will cause conflicts.
+> Now each window is a single region of 1M which will always guarantee that
+> the translation is not in conflict.
+> 
+> Set the translation register addresses for physical function. As documented
+> in the technical reference manual (TRM) section 17.5.5 "PCIe Address
+> Translation" and section 17.6.8 "Address Translation Registers Description"
+> 
+> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-rockchip-ep.c | 67 ++++++++++++-----------
+>  drivers/pci/controller/pcie-rockchip.h    | 25 +++++----
+>  2 files changed, 49 insertions(+), 43 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+> index 4c84e403e..cbc281a6a 100644
+> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+> @@ -76,11 +76,17 @@ static void rockchip_pcie_prog_ep_ob_atu(struct rockchip_pcie *rockchip, u8 fn,
+>  	if (num_pass_bits < 8)
+>  		num_pass_bits = 8;
+>  
+> -	cpu_addr -= rockchip->mem_res->start;
+> -	addr0 = ((is_nor_msg ? 0x10 : (num_pass_bits - 1)) &
+> -		PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> -		(lower_32_bits(cpu_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> -	addr1 = upper_32_bits(is_nor_msg ? cpu_addr : pci_addr);
+> +	if (is_nor_msg) {
+> +		dev_warn(rockchip->dev, "NOR MSG\n");
 
-Factor similar code out to the 'build-deb-pkg' variable.
+I do not think this warning is needed.
+In fact, if you move your patch 7 before this one, we could probably drop
+the is_nor_msg == true case entirely since with your patch 7, only the
+host driver uses AXI_WRAPPER_NOR_MSG. So warning and returning for that
+case should be enough.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+> +		cpu_addr -= rockchip->mem_res->start;
 
-Changes in v6:
-  - New patch
+This needs to be done for the !is_nor_msg case too.
 
- scripts/Makefile.package | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+> +		addr0 = (0x10 & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> +			(lower_32_bits(cpu_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> +		addr1 = upper_32_bits(cpu_addr);
+> +	} else {
+> +		addr0 = (num_pass_bits & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> +			(lower_32_bits(pci_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> +		addr1 = upper_32_bits(pci_addr);
+> +	}
+>  	desc0 = ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(fn) | type;
+>  	desc1 = 0;
+>  
+> @@ -103,12 +109,6 @@ static void rockchip_pcie_prog_ep_ob_atu(struct rockchip_pcie *rockchip, u8 fn,
+>  				    ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r));
+>  		rockchip_pcie_write(rockchip, desc1,
+>  				    ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r));
+> -
+> -		addr0 =
+> -		    ((num_pass_bits - 1) & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> -		    (lower_32_bits(cpu_addr) &
+> -		     PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> -		addr1 = upper_32_bits(cpu_addr);
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index b941e6341b36..8650d9432c26 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -100,6 +100,9 @@ binrpm-pkg:
- 	+rpmbuild $(RPMOPTS) --define "_builddir $(objtree)" --target \
- 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
- 
-+# deb-pkg srcdeb-pkg bindeb-pkg
-+# ---------------------------------------------------------------------------
-+
- quiet_cmd_debianize = GEN     $@
-       cmd_debianize = $(srctree)/scripts/package/mkdebian
- 
-@@ -117,14 +120,27 @@ debian-orig: linux.tar.gz debian
- 		cp $< ../$(orig-name); \
- 	fi
- 
-+build-deb-pkg = \
-+        dpkg-buildpackage \
-+        --build=$(build-type) --no-pre-clean --unsigned-changes \
-+        $(if $(findstring source, $(build-type)), --unsigned-source) \
-+        $(if $(findstring binary, $(build-type)), -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch)) \
-+        $(DPKG_FLAGS)
-+
- PHONY += deb-pkg
-+deb-pkg: private build-type := source,binary
- deb-pkg: debian-orig
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
--		--build=source,binary -nc -us -uc
-+	+$(build-deb-pkg)
-+
-+PHONY += srcdeb-pkg
-+srcdeb-pkg: private build-type := source
-+srcdeb-pkg: debian-orig
-+	+$(build-deb-pkg)
- 
- PHONY += bindeb-pkg
-+bindeb-pkg: private build-type := binary
- bindeb-pkg: debian
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) -b -nc -uc
-+	+$(build-deb-pkg)
- 
- PHONY += intdeb-pkg
- intdeb-pkg:
-@@ -225,6 +241,7 @@ help:
- 	@echo '  srcrpm-pkg          - Build only the source kernel RPM package'
- 	@echo '  binrpm-pkg          - Build only the binary kernel RPM package'
- 	@echo '  deb-pkg             - Build both source and binary deb kernel packages'
-+	@echo '  binsrc-pkg          - Build only the source kernel deb package'
- 	@echo '  bindeb-pkg          - Build only the binary kernel deb package'
- 	@echo '  snap-pkg            - Build only the binary kernel snap package'
- 	@echo '                        (will connect to external hosts)'
+This hunk should have been removed in patch 1. But as commented, this is
+needed, at least for me. Without setting the cpu addr to OB region cpu
+addr register, mmio/dma does not work for me, despite the TRM saying that
+these registers are unused.
+
+>  	}
+>  }
+>  
+> @@ -256,15 +256,7 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+>  	struct rockchip_pcie *pcie = &ep->rockchip;
+>  	u32 r;
+>  
+> -	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
+> -	/*
+> -	 * Region 0 is reserved for configuration space and shouldn't
+> -	 * be used elsewhere per TRM, so leave it out.
+> -	 */
+> -	if (r >= ep->max_regions - 1) {
+> -		dev_err(&epc->dev, "no free outbound region\n");
+> -		return -EINVAL;
+> -	}
+> +	r = (addr >> ilog2(SZ_1M)) & 0x1f;
+
+Locally, I added a smal helper:
+
+static inline int rockchip_ob_region(u64 addr)
+{
+        return (addr >> ilog2(SZ_1M)) & 0x1f;
+}
+
+That makes the code nicer and avoids having this open coded repeatedly in
+different places.
+
+>  
+>  	rockchip_pcie_prog_ep_ob_atu(pcie, fn, r, AXI_WRAPPER_MEM_WRITE, addr,
+>  				     pci_addr, size);
+> @@ -282,15 +274,11 @@ static void rockchip_pcie_ep_unmap_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+>  	u32 r;
+>  
+> -	for (r = 0; r < ep->max_regions - 1; r++)
+> +	for (r = 0; r < ep->max_regions; r++)
+>  		if (ep->ob_addr[r] == addr)
+>  			break;
+>  
+> -	/*
+> -	 * Region 0 is reserved for configuration space and shouldn't
+> -	 * be used elsewhere per TRM, so leave it out.
+> -	 */
+> -	if (r == ep->max_regions - 1)
+> +	if (r == ep->max_regions)
+>  		return;
+>  
+>  	rockchip_pcie_clear_ep_ob_atu(rockchip, r);
+> @@ -411,6 +399,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
+>  	u16 flags, mme, data, data_mask;
+>  	u8 msi_count;
+>  	u64 pci_addr, pci_addr_mask = 0xff;
+> +	u32 r;
+>  
+>  	/* Check MSI enable bit */
+>  	flags = rockchip_pcie_read(&ep->rockchip,
+> @@ -444,12 +433,12 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
+>  				       ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+>  				       ROCKCHIP_PCIE_EP_MSI_CTRL_REG +
+>  				       PCI_MSI_ADDRESS_LO);
+> -	pci_addr &= GENMASK_ULL(63, 2);
+>  
+>  	/* Set the outbound region if needed. */
+>  	if (unlikely(ep->irq_pci_addr != (pci_addr & ~pci_addr_mask) ||
+>  		     ep->irq_pci_fn != fn)) {
+> -		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, ep->max_regions - 1,
+> +		r = (ep->irq_phys_addr >> ilog2(SZ_1M)) & 0x1f;
+> +		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
+>  					     AXI_WRAPPER_MEM_WRITE,
+>  					     ep->irq_phys_addr,
+>  					     pci_addr & ~pci_addr_mask,
+> @@ -539,6 +528,8 @@ static int rockchip_pcie_parse_ep_dt(struct rockchip_pcie *rockchip,
+>  	if (err < 0 || ep->max_regions > MAX_REGION_LIMIT)
+>  		ep->max_regions = MAX_REGION_LIMIT;
+>  
+> +	ep->ob_region_map = 0;
+> +
+>  	err = of_property_read_u8(dev->of_node, "max-functions",
+>  				  &ep->epc->max_functions);
+>  	if (err < 0)
+> @@ -559,7 +550,10 @@ static int rockchip_pcie_ep_probe(struct platform_device *pdev)
+>  	struct rockchip_pcie *rockchip;
+>  	struct pci_epc *epc;
+>  	size_t max_regions;
+> +	struct pci_epc_mem_window *windows = NULL;
+>  	int err;
+> +	u32 cfg;
+> +	int i;
+
+Nit: instead of declaring this with another line, you could declare it
+together with "err" above.
+
+>  
+>  	ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
+>  	if (!ep)
+> @@ -606,15 +600,26 @@ static int rockchip_pcie_ep_probe(struct platform_device *pdev)
+>  	/* Only enable function 0 by default */
+>  	rockchip_pcie_write(rockchip, BIT(0), PCIE_CORE_PHY_FUNC_CFG);
+>  
+> -	err = pci_epc_mem_init(epc, rockchip->mem_res->start,
+> -			       resource_size(rockchip->mem_res), PAGE_SIZE);
+> +	windows = devm_kcalloc(dev, ep->max_regions, sizeof(struct pci_epc_mem_window), GFP_KERNEL);
+> +	if (!windows) {
+> +		err = -ENOMEM;
+> +		goto err_uninit_port;
+> +	}
+> +	for (i = 0; i < ep->max_regions; i++) {
+> +		windows[i].phys_base = rockchip->mem_res->start + (SZ_1M * i);
+> +		windows[i].size = SZ_1M;
+> +		windows[i].page_size = SZ_1M;
+> +	}
+> +	err = pci_epc_multi_mem_init(epc, windows, ep->max_regions);
+> +	devm_kfree(dev, windows);
+> +
+>  	if (err < 0) {
+>  		dev_err(dev, "failed to initialize the memory space\n");
+>  		goto err_uninit_port;
+>  	}
+>  
+>  	ep->irq_cpu_addr = pci_epc_mem_alloc_addr(epc, &ep->irq_phys_addr,
+> -						  SZ_128K);
+> +						  SZ_1M);
+
+The region for this needs to be marked as allocated in the ob_region_map. So:
+
+	set_bit(rockchip_ob_region(ep->irq_phys_addr),
+		&ep->ob_region_map);
+
+Of note though is that this ob_region_bitmap is used to set and clear bits
+*only*, it is actually never checked at all to see if there is a bug and a
+mapped region is being remapped without an unmap first. Not sure it is
+very useful in the end.
+
+>  	if (!ep->irq_cpu_addr) {
+>  		dev_err(dev, "failed to reserve memory space for MSI\n");
+>  		err = -ENOMEM;
+> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
+> index f3a5ff1cf..72e427a0f 100644
+> --- a/drivers/pci/controller/pcie-rockchip.h
+> +++ b/drivers/pci/controller/pcie-rockchip.h
+> @@ -134,6 +134,7 @@
+>  
+>  #define PCIE_RC_RP_ATS_BASE		0x400000
+>  #define PCIE_RC_CONFIG_NORMAL_BASE	0x800000
+> +#define PCIE_EP_PF_CONFIG_REGS_BASE	0x800000
+>  #define PCIE_RC_CONFIG_BASE		0xa00000
+>  #define PCIE_EP_CONFIG_BASE		0xa00000
+>  #define PCIE_EP_CONFIG_DID_VID		(PCIE_EP_CONFIG_BASE + 0x00)
+> @@ -228,13 +229,14 @@
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MASK_MSI_CAP	BIT(24)
+>  #define ROCKCHIP_PCIE_EP_DUMMY_IRQ_ADDR				0x1
+>  #define ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR		0x3
+> -#define ROCKCHIP_PCIE_EP_FUNC_BASE(fn)	(((fn) << 12) & GENMASK(19, 12))
+> +#define ROCKCHIP_PCIE_EP_FUNC_BASE(fn) \
+> +	(PCIE_EP_PF_CONFIG_REGS_BASE + (((fn) << 12) & GENMASK(19, 12)))
+> +#define ROCKCHIP_PCIE_EP_VIRT_FUNC_BASE(fn) \
+> +	(PCIE_EP_PF_CONFIG_REGS_BASE + 0x10000 + (((fn) << 12) & GENMASK(19, 12)))
+>  #define ROCKCHIP_PCIE_AT_IB_EP_FUNC_BAR_ADDR0(fn, bar) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0840 + (fn) * 0x0040 + (bar) * 0x0008)
+> +	(PCIE_CORE_AXI_CONF_BASE + 0x0828 + (fn) * 0x0040 + (bar) * 0x0008)
+>  #define ROCKCHIP_PCIE_AT_IB_EP_FUNC_BAR_ADDR1(fn, bar) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0844 + (fn) * 0x0040 + (bar) * 0x0008)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0000 + ((r) & 0x1f) * 0x0020)
+> +	(PCIE_CORE_AXI_CONF_BASE + 0x082c + (fn) * 0x0040 + (bar) * 0x0008)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_DEVFN_MASK	GENMASK(19, 12)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_DEVFN(devfn) \
+>  	(((devfn) << 12) & \
+> @@ -242,20 +244,19 @@
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS_MASK	GENMASK(27, 20)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS(bus) \
+>  		(((bus) << 20) & ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS_MASK)
+> +#define PCIE_RC_EP_ATR_OB_REGIONS_1_32 (PCIE_CORE_AXI_CONF_BASE + 0x0020)
+> +#define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r) \
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0000 + ((r) & 0x1f) * 0x0020)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0004 + ((r) & 0x1f) * 0x0020)
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0004 + ((r) & 0x1f) * 0x0020)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_HARDCODED_RID	BIT(23)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN_MASK	GENMASK(31, 24)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(devfn) \
+>  		(((devfn) << 24) & ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN_MASK)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0008 + ((r) & 0x1f) * 0x0020)
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0008 + ((r) & 0x1f) * 0x0020)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r)	\
+> -		(PCIE_RC_RP_ATS_BASE + 0x000c + ((r) & 0x1f) * 0x0020)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_CPU_ADDR0(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0018 + ((r) & 0x1f) * 0x0020)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_CPU_ADDR1(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x001c + ((r) & 0x1f) * 0x0020)
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x000c + ((r) & 0x1f) * 0x0020)
+>  
+>  #define ROCKCHIP_PCIE_CORE_EP_FUNC_BAR_CFG0(fn) \
+>  		(PCIE_CORE_CTRL_MGMT_BASE + 0x0240 + (fn) * 0x0008)
+
 -- 
-2.34.1
+Damien Le Moal
+Western Digital Research
 
