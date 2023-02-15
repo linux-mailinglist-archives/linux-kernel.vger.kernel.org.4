@@ -2,97 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A9F6982B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269AF6982B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjBORvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S229884AbjBORxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjBORvU (ORCPT
+        with ESMTP id S229561AbjBORxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:51:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA15A34F75;
-        Wed, 15 Feb 2023 09:51:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D425B82322;
-        Wed, 15 Feb 2023 17:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE6FC433D2;
-        Wed, 15 Feb 2023 17:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676483477;
-        bh=AEZxxUbcfqFLmNGLt+x9zQDOxw7fXxXJeNPUMFpz8i8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=YJUIFMyXS9DTDajJzDoq582aqatXX2g7eywxeQr/rR7rrDnW5RVPo707+urkrSJsC
-         UCHIf6kmqed1XvUclRf2v1f59jq2eYHFPO101BpbzpgfjDhfu5+EiA+Z3kCt9GPMkv
-         xd1HFxMf4CBmpCvbZoNzKNZgKcAmWEH6c8rEHaBtND9BPhctFQ3ZH6/mLWHWn48tHZ
-         sL9zWEytX/aDsqaF77Iq48yoKZtO85LV7QnUK/ia2cdYiBlBYroidtg6KXXZ61r5tQ
-         4dgYB1ZhSZ8u3PWBe/5MdwrmaDuguAvsw6Uv157rOuMM6HOGfz9d2AkevvmesQhdJM
-         Po8x6/KuuNb1g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
-References: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] spi: synquacer: Fix timeout handling in
- synquacer_spi_transfer_one()
-Message-Id: <167648347509.3558777.10506015723406529671.b4-ty@kernel.org>
-Date:   Wed, 15 Feb 2023 17:51:15 +0000
+        Wed, 15 Feb 2023 12:53:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6141BAC6;
+        Wed, 15 Feb 2023 09:53:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S+OnE5Otl4cKLCCRZAM92RTBgDsnX7rILCqnw0jQsUQ=; b=NnS+GjCmkIaYrFbh2ErZFUSENw
+        Lr+o5GAFEphnFRxibaerLyuH0d4qIn3fDl5bnQIMtYShqaAizjQTA2ovHFJ7sozbSvH2BwOLPv13C
+        L06VrKS6RTnfYnU0mTNUZYXGEzHDAhU1TZTxTHQ9BC21NZ4XaoMvo0fARMVC7O7Un9/MqZidBJ750
+        UJANkhTcKhAV1Jd1pJAESL+rjw8dPP79euJjcpyb3ZlVATd0ETfNnPG46ZNeL09EXznITPs3Y2GIv
+        xBxl/oxvgAOllvLffbtiLciZqDeJ6ImbR9oxc9eZqSSe9lSgdsTgKIGDnUwY1kez/P0b5L811wyY4
+        Q3QpEFzA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pSLxd-006lZh-P7; Wed, 15 Feb 2023 17:52:53 +0000
+Date:   Wed, 15 Feb 2023 09:52:53 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Po-Wen Kao <powen.kao@mediatek.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
+        mason.zhang@mediatek.com, quic_asutoshd@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/2] scsi: ufs: core: Export symbol ufshcd_mcq_read_cqis()
+Message-ID: <Y+0b9d+InjhKi7+H@infradead.org>
+References: <20230215123750.15785-1-powen.kao@mediatek.com>
+ <20230215123750.15785-2-powen.kao@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215123750.15785-2-powen.kao@mediatek.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 14:01:28 +0100, Christophe JAILLET wrote:
-> wait_for_completion_timeout() never returns a <0 value. It returns either
-> on timeout or a positive value (at least 1, or number of jiffies left
-> till timeout)
-> 
-> So, fix the error handling path and return -ETIMEDOUT should a timeout
-> occur.
-> 
-> [...]
+On Wed, Feb 15, 2023 at 08:37:46PM +0800, Po-Wen Kao wrote:
+> Export symbol for driver module
 
-Applied to
-
-   broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: synquacer: Fix timeout handling in synquacer_spi_transfer_one()
-      commit: e6a0b671880207566e1ece983bf989dde60bc1d7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Which one?  We don't export symbols without an actual user.
