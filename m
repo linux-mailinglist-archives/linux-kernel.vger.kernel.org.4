@@ -2,182 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDD86975F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15435697618
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjBOFn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S232349AbjBOF7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 00:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBOFnZ (ORCPT
+        with ESMTP id S231915AbjBOF7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:43:25 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2094.outbound.protection.outlook.com [40.107.215.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0CB1A94B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:43:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PUvyRzuEL5abzEChcA3lMjLperH2DpXWPVKwbkvcuNnEVJoKMxg9mbfAvw5Oy9y3VhORKYNqJ7EM56x8cs49FlczjSg4Hw7zdGbMh6D4BWK6LLtBZsJYjUmum66g+cE+oy92kJZmdSL7VsZ1aNopgHugeRCJqiqDnEeLWK41bieH/jHZFEHIzgzXDiyCMXbqqzUMJJ8U0c4Tfj/Te+bp7ryzQLFLpXMTyuDq56xnL0uV4okv9cWnsL9L2p6BHaja0KfoP7n+F1c/OA24oD8BewXkxeMbHL1wVynNQJC94R5Xb2cujJsBbmFPIUlhMqAYJQ3Y/hb2Sfr9JaM3prXCXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dpe1oit1HBJKq9SLmf7UAFAP+KpVAGJug1k6TSSoCwk=;
- b=Ajq3uOTlb86ukAC6SohWiaUhUHOU26VqD/qqQ+0IpRtgyOVIFW8XqpO34B3rmpdxDfBgvDYPVn9sv/ReM0ALkG7anaReezx7xbq5kJT0L4wBn9HirR2AwKQqRuQ6JhWLuoMUivXYGTCes/80qzIoScdLRqMIPOztmL4swycnk1Q4Ui680fTn9tLuTRMgl4nUbi9Qyf56ORItIIDMQix4rlEXdCfkx9x4pju9zH7BIPF2wotrvgT2yc8Fd1ULpcbxl08Xu6doz0U2jL77I83uLJ+qXorzKBP0eO52BQ5Zn+ZynuamROPKRntVwnZH9jB0ySzSwCvXY03nkKSlg2Gsjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dpe1oit1HBJKq9SLmf7UAFAP+KpVAGJug1k6TSSoCwk=;
- b=DVLdI+zlA9jvqEUnKT+kCAUp0C6ufuOOgpWunP/MkkxNdamz2xFvCBenyUG9oGqPF7+bAsemTrSTDkfVUMeolwcHwFSz8jWtneVJjbaebyFTcSEepy8HSW66ZghMEmA8U89YwncQmH105GGaBhWNJGG9ZK+FO3wFC/+4oxb+DroaccByCf1vC4e5rv+KpnmzuAqrSxdPueezEXitH429PRFvxaFmkXyTFMeTH5vwtYTuQZM/qU/2tzSm/rKcebdbWvaMonfLjsqsO0BIp7pdZ73I29jW7D6mzOkI/cRGZBdyucTKYvfJpBTKSSXlvnrzyp9H3+/i3t/SReSIjE93Xw==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYZPR06MB5251.apcprd06.prod.outlook.com (2603:1096:400:1fd::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.9; Wed, 15 Feb
- 2023 05:43:12 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6111.010; Wed, 15 Feb 2023
- 05:43:12 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
- i2C driver
-Thread-Topic: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
- i2C driver
-Thread-Index: AQHZNii3UFiZnjoVzEOnbd7WD7fD4K67XHWAgBQ23XA=
-Date:   Wed, 15 Feb 2023 05:43:12 +0000
-Message-ID: <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
- <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
- <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
-In-Reply-To: <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|TYZPR06MB5251:EE_
-x-ms-office365-filtering-correlation-id: c6a05455-e07f-4270-d727-08db0f178702
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iGiDnT5vZskCKOYm0JOqvT/jvKSGObfFI87/SXuKlhJ1WzAYWoE8CryKHwVQSgjHz6PV4S85u0QevsJfB6YfRprE7zMVVVYL6eg8tZon6doLm/5+FLpjMVK95LINZbU6qjTxQ8SQ+Ni9i/FdmBuMNECNAEOIlRfRYt3v0UjenmIaYG2UB/k4X4eUhVhgZXFzoRqEhcpusUNtBZV9kcnFootoxofF9ObFuNzv0L6fHM2RI0HGH0zsY2+VXsXEArt485SEe/dg9KtzS8VWdWCXl1OQ6YJHnUbrv+nRx+XdTlIee5Z3eYue1wfDM6ues6M3B/hfZKztkE49jSj66pGFSmxP8Fc8e6GyiwKpN8ESt/3F1HBzCwmnUxMnm/qgR6+7wwbm8PkJAe5Lx0IC7DTSrMojRBJ3Q16PCGl1DXZaUwoKrUR6cY+aoRIkqp5nKoST2z2SEieCYVBFfPNFMrTgsbBx3AslZy5VUu/oMDC2SjrC+x7WY5eAFXGHPumoshOgCtNcuvbl2YHEpYEzgKUp7vZ390PxHbHvnmCuq2Bry+DG6KtRDDBQK94Sq5zj1Bn8U74FGydkVVw36Mo9U/YjrSocpve+DdWImLv9j4DiaO8MBmk775bZOLW+ZuGa7NHkoemBS9OAmio8kJgMMJApPXW9g09uDnmQVWlbYkZptfjMgj+e0cueG3IkJGHtYn5aNiE74SDnDL8DOGCazAROg7yrxwDh2FOFbwk0NfxZ9kbzsSBHW3U1Wsgt5icu3JGh
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(39840400004)(396003)(376002)(451199018)(316002)(83380400001)(86362001)(110136005)(53546011)(71200400001)(186003)(6506007)(9686003)(26005)(478600001)(966005)(33656002)(55016003)(7696005)(2906002)(38100700002)(8936002)(52536014)(7416002)(921005)(38070700005)(5660300002)(66476007)(41300700001)(122000001)(76116006)(66556008)(66446008)(8676002)(64756008)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Sk96cWcxUFN5czNsQjhlSXRsbmZGY0Nhb28xdzJMTVdPc2Z6aGdEZjFLUXVN?=
- =?utf-8?B?Ty8xNjlQK3pWVkVkSEVxOWNLNlN1clJSVUdDUXhENlZYQXFqRmxZK1NKL052?=
- =?utf-8?B?SEZNZU1FcWV0c0QzS0FZcGl4NWxYa056dUI3dmpvaFVOSUlTMERUUTFLWmgx?=
- =?utf-8?B?ZjhoYmNXTkhUTFhoMXhCN2tnVTRaZktNdGhvdFYyOUdFMU1IOUJDc25UaXY3?=
- =?utf-8?B?dERlUlZQODZJVnpGZ0lHdlJoOGJkeXltNlo1Ky9UMUZFcjFRNk9IYmxnRDN5?=
- =?utf-8?B?ZDFVL1BlUXoybk9FQitzd3dDQjgrWFRaSVh4UjVrb09Lc2RCWWVDQ0FaL0pW?=
- =?utf-8?B?ejBwN2M3QlBUMUt5cUlOVEpWSGxDSmpOUUR6dDVmV1M1STJIQ0RXbHNIc1Bv?=
- =?utf-8?B?UDlLaThXb3FNTXJOMDZrWkxpZjVmVEFXNGZLQ0o4SXZDM1Bod2JKUWQycTZR?=
- =?utf-8?B?QkhiajdTMm50d1JPWXErKzJPK3c1SUdIaEVxNnZhVjA1OU5iOEd0bFBuSXFy?=
- =?utf-8?B?MjliVTVIVlNXbFllZjc0ODVRdHRjY0hMSEkzMXBLbHVaa2pNNjd3SVFaTFYv?=
- =?utf-8?B?TWNxNUozQ2lBNFRsTVBtVGpzaExCNFR3QStHRDVwQlJKVzk1aUdWRlFnVTJD?=
- =?utf-8?B?NlhoOXBUT2RtZCtqN1hLOWM5WE9rZVpSeVdHMFcwc0l1TWpCQ1cwd2pQT3Mw?=
- =?utf-8?B?VW9IejZpMG9NYkROYnNROUZyYnBKUmZNT3FIMFYyL0tkS21DZEJLTytoZXM5?=
- =?utf-8?B?cTh6dTZRN3VhYTdjdDRGS25mSklQNXpwaWY0d0wyaUZUbVI2OWRlOGJRcHZ0?=
- =?utf-8?B?ZnQzMmRzR3NwdUtycnBIK20yeHBDYThZT0tpNnNBTU02aW52ci9FUVN5Y0tx?=
- =?utf-8?B?K2x3eWJpVk9BWjFrVDY0YVlFeW5tT0p1RHcxTjNjQnRvMHE0V0J0Rmc1MmxB?=
- =?utf-8?B?WUoxb282TFRvd3NZdXdmZDlkbDYzTk5iK2dLZXJ4ejBjRkVlNXRreGxjalRM?=
- =?utf-8?B?QjM5VG9PbWp6eU1JckE2bnZWVW9jMGdCR3lxOXE2SmlTQi9jaVREWTlZVitz?=
- =?utf-8?B?Z2hvV20zaVNoL1RnWGNjbWEvNUhicitlNkk0ZzdKMDVRdmNzMkN2QmpVNmRD?=
- =?utf-8?B?dnVUSTdPQ0E4VG0zR3BiWW9INXMramtmWWNObjRBekdrN2JDNFJCN0k4d215?=
- =?utf-8?B?bmtaa2V6dnA2VHhDUkc2ZEx0UnYrdktaMU1YblZXeFpSY1pYUllvMFlWYnY4?=
- =?utf-8?B?emZ0Y1BjUWh1WUU0bmJtYlZubUtIRDBBVExLaG1qSTdCWE5oNnA3d0RrdEdy?=
- =?utf-8?B?cHN6cXplMkRnZmNkb3drcTFEdXJVQmNZZi85MEI5MHh1WTk4NWFZOXRHRzdZ?=
- =?utf-8?B?b3NwTzBJN2xHZCs2MWZZR1U2M2Z4NmswcERaSkl6Y2VTVVI1Y05uSTdLTHdP?=
- =?utf-8?B?dXRRa0FocVpOd01JS2g3b1BpZ1FYWUdtN0xNRVh4dTZCQy9BZ0lxdDhROHRk?=
- =?utf-8?B?aFBqamdvbFMyUmRua0lSWk9FMFR0T2s3TlBpSGVDbUtDQWovVnNsajFvWThn?=
- =?utf-8?B?eHJpWk55ZHZTOEdUUzRMakViKzRTb0N1cVprcy9Na3hkOEZ1Uk5XNk85enBn?=
- =?utf-8?B?M2I4WHJqc05vWitqVkdkZjlPbkVRNmwyNEhPZUNDMTJqU05Qekt0c0YwZndM?=
- =?utf-8?B?MTNPMndESVBXT1N0MWhjMGdLVXRObk1ab3lZRktFMWUvaWdST2t3R0NFSldl?=
- =?utf-8?B?azI3TzF0TXFpckdJbGZPNlFFWDR4TzFteGx3OEJNWnA0dTJYZDM5VEhwUlhq?=
- =?utf-8?B?VkFtK2IvUkhySUFMY2VNOTNUUi9UQW1YNjQ1WnhTQ0VvZ0oyUnI4Q2xHbmhG?=
- =?utf-8?B?TDlVVnphWTRIaFI5WVZOWVZQZjNvOUZaYTVmaHMrMmRxaWZ4TmtPNDRxMmVI?=
- =?utf-8?B?SDVJelJjdWVIMFBreEdOK0Y3R0IyR2hIbGk4NS9ITWJiOGFscFNnbGpnNDJn?=
- =?utf-8?B?TFA2Y2hoVW42c1ZCN0E4SWJveU9QbkI5b2x3Umd2Z0w1Wll4T1B4YnN2U1BI?=
- =?utf-8?B?ZDdQcys3L1RuS3RaSkhRMjNLSGhTR01wWUo5TWVVNTc2YTN0UUV0TS9lekRI?=
- =?utf-8?B?cDVRM1JKb3QyN1ZnbVBGcWNUaWtrNS9tdVlkSExlUUNnaUFGK21hdjNjR3lU?=
- =?utf-8?B?Ync9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 15 Feb 2023 00:59:51 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40765BA1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676440790; x=1707976790;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Nbi3mP9Kgb35UQ1cRJ+mP6vwRct3vE93ciQ5o3UA2Q=;
+  b=UI98H56Li/mDL08+7qeZPmgrZ/bve/wTo0bsWlfvWAKJPCMWbM9oWBE/
+   XI+t/qtb/hpUXS2Jue0qMHMkY/yRPPnxfWhanQNLUltzYMwdV2EY24PUr
+   07VUkeeOwEU8Dl7PCBe2Mrdkofk6TyJ9UKmcKTIZPoWKj4tQrMRei7ONE
+   0MRn+o8XIJNsIYtxLNfNM3PCy7okuzjsZe1B5MVymWKiatFyh0iuv4Zyh
+   82R0mVliykJroyKXunxrhXYEybZP0OtLA1Ullen59IwXeT+jnCt5/tyia
+   4nJsRMpLNhazIyMDqSmYCQVDqgO/nqn6392mOhgRDice3MFJdaJXBGY1K
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311719994"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="311719994"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 21:59:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="671499354"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="671499354"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Feb 2023 21:59:37 -0800
+Message-ID: <b7f501b0-42c4-5402-7bb1-b4681b6e624c@linux.intel.com>
+Date:   Wed, 15 Feb 2023 13:51:14 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6a05455-e07f-4270-d727-08db0f178702
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2023 05:43:12.6675
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IAOAGX0ktvK7J6Qwgw7v5o3pdH0qcmS/GdRCp+YiF6Xp07cGbvBxDO3QbXqgVdNZaroMFPgsk9PIjyunZCd249ONo95fkSHcEaZnjg/dM5w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5251
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] iommu: Use group ownership to avoid driver attachment
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20230213074941.919324-1-baolu.lu@linux.intel.com>
+ <20230213074941.919324-3-baolu.lu@linux.intel.com>
+ <Y+pG9kWzR2c5I9FU@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y+pG9kWzR2c5I9FU@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gS3J6eXN6dG9mLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
-IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4g
-U2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDIsIDIwMjMgNDo1OCBQTQ0KPiBUbzogUnlhbiBDaGVu
-IDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+OyBSb2IgSGVycmluZw0KPiA8cm9iaCtkdEBrZXJu
-ZWwub3JnPjsgS3J6eXN6dG9mIEtvemxvd3NraQ0KPiA8a3J6eXN6dG9mLmtvemxvd3NraStkdEBs
-aW5hcm8ub3JnPjsgSm9lbCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT47IEFuZHJldw0KPiBKZWZm
-ZXJ5IDxhbmRyZXdAYWouaWQuYXU+OyBQaGlsaXBwIFphYmVsIDxwLnphYmVsQHBlbmd1dHJvbml4
-LmRlPjsNCj4gb3BlbmJtY0BsaXN0cy5vemxhYnMub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3Rz
-LmluZnJhZGVhZC5vcmc7DQo+IGxpbnV4LWFzcGVlZEBsaXN0cy5vemxhYnMub3JnOyBsaW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjQgMi8zXSBkdC1i
-aW5kaW5nczogaTJjLWFzdDI2MDA6IEFkZCBzdXBwb3J0IGZvciBBU1QyNjAwDQo+IGkyQyBkcml2
-ZXINCj4gDQo+IE9uIDAxLzAyLzIwMjMgMTE6MzMsIFJ5YW4gQ2hlbiB3cm90ZToNCj4gPiBBU1Qy
-NjAwIHN1cHBvcnQgbmV3IHJlZ2lzdGVyIHNldCBmb3IgSTJDIGNvbnRyb2xsZXIsIGFkZCBiaW5k
-aW5ncw0KPiA+IGRvY3VtZW50IHRvIHN1cHBvcnQgZHJpdmVyIG9mIGkyYyBuZXcgcmVnaXN0ZXIg
-bW9kZSBjb250cm9sbGVyLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUnlhbiBDaGVuIDxyeWFu
-X2NoZW5AYXNwZWVkdGVjaC5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5ncy9pMmMvYXNw
-ZWVkLGkyYy1hc3QyNjAwLnlhbWwgICAgICB8IDc4DQo+ICsrKysrKysrKysrKysrKysrKysNCj4g
-PiAgMSBmaWxlIGNoYW5nZWQsIDc4IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAw
-NjQ0DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJj
-LWFzdDI2MDAueWFtbA0KPiA+DQo+ID4gZGlmZiAtLWdpdA0KPiA+IGEvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjLWFzdDI2MDAueWFtbA0KPiA+IGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjLWFzdDI2MDAueWFt
-bA0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5iN2Q3
-YmMzMDNlNzcNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjLWFzdDI2MDAueWFtbA0KPiA+IEBAIC0wLDAg
-KzEsNzggQEANCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBP
-UiBCU0QtMi1DbGF1c2UpICVZQU1MIDEuMg0KPiA+ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2
-aWNldHJlZS5vcmcvc2NoZW1hcy9pMmMvYXNwZWVkLGkyYy1hc3QyNjAwLnlhbWwjDQo+ID4gKyRz
-Y2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+
-ICsNCj4gPiArdGl0bGU6IEFTVDI2MDAgSTJDIENvbnRyb2xsZXIgb24gdGhlIEFTVDI2WFggU29D
-cyBEZXZpY2UgVHJlZQ0KPiA+ICtCaW5kaW5ncw0KPiA+ICsNCj4gPiArbWFpbnRhaW5lcnM6DQo+
-ID4gKyAgLSBSeWFuIENoZW4gPHJ5YW5fY2hlbkBhc3BlZWR0ZWNoLmNvbT4NCj4gPiArDQo+ID4g
-K2FsbE9mOg0KPiA+ICsgIC0gJHJlZjogL3NjaGVtYXMvaTJjL2kyYy1jb250cm9sbGVyLnlhbWwj
-DQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBl
-bnVtOg0KPiA+ICsgICAgICAtIGFzcGVlZCxhc3QyNjAwLWkyYw0KPiANCj4gTkFLLiBJdCdzIGFs
-cmVhZHkgdGhlcmUuIFBsZWFzZSBkbyBub3Qgd2FzdGUgb3VyIHRpbWUgaW4gc3VibWl0dGluZyBk
-dXBsaWNhdGVkDQo+IGRyaXZlcnMuDQoNCkl0IGlzIG5vdCBkdXBsaWNhdGVkLCBhcyBteSBkZXNj
-cmlwdGlvbiBpbiBjb3ZlciAiIFRoaXMgc2VyaWVzIGFkZCBBU1QyNjAwIGkyYyBuZXcgcmVnaXN0
-ZXIgc2V0IGRyaXZlciINClNvLCB0aGlzIHdpbGwgYmUgZGlmZmVyZW50IGRyaXZlciBjb21wYXRp
-YmxlLiANClRoZSBvcmlnaW5hbCBjb21wYXRpYmxlIGlzIA0KICAgICAgLSBhc3BlZWQsYXN0MjQw
-MC1pMmMtYnVzDQogICAgICAtIGFzcGVlZCxhc3QyNTAwLWkyYy1idXMNCiAgICAgIC0gYXNwZWVk
-LGFzdDI2MDAtaTJjLWJ1cw0KU28gdGhlIG5ldyByZWdpc3RlciBzZXQgY29tcGF0aWJsZSBpcyAi
-LSBhc3BlZWQsYXN0MjYwMC1pMmMiLCByZW1vdmUgImJ1cyIuDQoNCg0KQmVzdCByZWdhcmRzLA0K
-UnlhbiBDaGVuDQo=
+On 2/13/23 10:19 PM, Jason Gunthorpe wrote:
+> On Mon, Feb 13, 2023 at 03:49:39PM +0800, Lu Baolu wrote:
+>> The iommu_group_store_type() requires the devices in the iommu group are
+>> not bound to any device driver during the whole operation. The existing
+>> code locks the device with device_lock(dev) and use device_is_bound() to
+>> check whether any driver is bound to device.
+>>
+>> In fact, this can be achieved through the DMA ownership helpers. Replace
+>> them with iommu_group_claim/release_dma_owner() helpers.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/iommu.c | 27 +++++++++++++--------------
+>>   1 file changed, 13 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 4f71dcd2621b..6547cb38480c 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -2807,12 +2807,6 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
+>>   
+>>   	mutex_lock(&group->mutex);
+>>   
+>> -	if (group->default_domain != group->domain) {
+>> -		dev_err_ratelimited(prev_dev, "Group not assigned to default domain\n");
+>> -		ret = -EBUSY;
+>> -		goto out;
+>> -	}
+>> -
+>>   	/*
+>>   	 * iommu group wasn't locked while acquiring device lock in
+>>   	 * iommu_group_store_type(). So, make sure that the device count hasn't
+>> @@ -2971,6 +2965,7 @@ static void iommu_group_unfreeze_dev_ops(struct iommu_group *group)
+>>   static ssize_t iommu_group_store_type(struct iommu_group *group,
+>>   				      const char *buf, size_t count)
+>>   {
+>> +	bool group_owner_claimed = false;
+>>   	struct group_device *grp_dev;
+>>   	struct device *dev;
+>>   	int ret, req_type;
+>> @@ -2992,6 +2987,14 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+>>   	else
+>>   		return -EINVAL;
+>>   
+>> +	if (req_type != IOMMU_DOMAIN_DMA_FQ ||
+>> +	    group->default_domain->type != IOMMU_DOMAIN_DMA) {
+>> +		ret = iommu_group_claim_dma_owner(group, (void *)buf);
+>> +		if (ret)
+>> +			return ret;
+>> +		group_owner_claimed = true;
+>> +	}
+> 
+> I don't get it, this should be done unconditionally. If we couldn't
+> take ownership then we simply can't progress.
+
+The existing code allows the user to switch the default domain from
+strict to lazy invalidation mode. The default domain is not changed,
+hence it should be seamless and transparent to the device driver.
+
+> 
+> But there is more to it than that, a device that is owned should not
+> be release and to achieve this the general logic around the owner
+> scheme assumes that a driver is attached.
+
+Yes. Current ownership scheme was built on this assumption.
+
+> 
+> So if you call it from this non-driver context you have to hold the
+> group_mutex as previously discussed,
+
+Yes.
+
+> which also means this needs to be
+> an externally version of iommu_group_claim_dma_owner()
+
+Sorry! What does "an externally version of
+iommu_group_claim_dma_owner()" mean?
+
+My understanding is that we should limit iommu_group_claim_dma_owner()
+use in the driver context. For this non-driver context, we should not
+use iommu_group_claim_dma_owner() directly, but hold the group->mutex
+and check the group->owner_cnt directly:
+
+         mutex_lock(&group->mutex);
+         if (group->owner_cnt) {
+                 ret = -EPERM;
+                 goto unlock_out;
+         }
+
+the group->mutex should be held until everything is done.
+
+Best regards,
+baolu
