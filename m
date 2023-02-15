@@ -2,198 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A70069855D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8521B69855E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjBOUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S229761AbjBOUQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBOUPx (ORCPT
+        with ESMTP id S229763AbjBOUQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:15:53 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2086.outbound.protection.outlook.com [40.107.220.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1632597E;
-        Wed, 15 Feb 2023 12:15:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GCAtwNnyKfqpCIuTNpt3Lu5bvNpYWjYMV0PzNmq6WZ0zvPJInaZkNkmpihJ0Mt8XjQdTMjvg8sFF3u2LO9T5crDIVBS+9vzIveuTh6yHyysyZG1wb5Hd0S0KaepXn49WzKGsbqtqa4V+9joWoBjF4FLF1IaPL/zt6246nSOR6WbaLdnsOIiiI4oEgtuuKBPA1Nme3jjrLZaKojCc639YbGnblV0u3uwv2IXc03lCaQkCPfiUSZejODGgKJV+cj+jMMtgAFfRKhgkaYkOHgF4u/XpJ7T4SJrcmmnf8bD93GVFumYq0FmP9s/Bzf9hKyL6uASSLIXCDCKpEByxfpZBKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z4RHxLlFyauevz0FHwIOCFf+4+l/z7sVt5I07rOTRPs=;
- b=L77y/hnwTPW+wcTGLD3wQMW9DTF/4kuwaDCtqHun1JWCWotBrZ15140M2NgJf27i/WFo9dWDX1nidFtVBg1+I0vZyE4h73JKmqYk67cvFJAfwcF4loCIbNTkZ++bQyfQAsER8kSN56orEM25gALvK+VMTrkTPzF175bYA8H/RDSq/9z+edTSVYojLbDqoRub4dhXA9WR7gjKYrFbo5xBOYEAHwwqRCSqr2EB3um8T1YcW/kVlicqMJPAtFt9UJr0OIBerxRRFJPRRF/gbYPw6Rp8L5TULK6BurujjgdvwqwU8ag9Wn7M7XgGSK3rk0desaDoEjTxMgZi88Wsmqt61g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z4RHxLlFyauevz0FHwIOCFf+4+l/z7sVt5I07rOTRPs=;
- b=xXkCPqlhe3Itc5C/ohDG/xEB87goQHGm6sJv0SVL/UsA2ekq20N3tRmW7asFXYKrSPzRxxRXcXGl//1PNi5e89irsqZXUIxqcpjQWgY38Vi74XJUhTfnc4KM8oxn0S4G21rrKt90X54Mz3RQsEL8aW+GNx2V/5psh6kDM62S2rI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- SJ0PR12MB7082.namprd12.prod.outlook.com (2603:10b6:a03:4ae::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
- 2023 20:15:50 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::c4fa:4cd7:4538:e54b]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::c4fa:4cd7:4538:e54b%6]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
- 20:15:50 +0000
-Message-ID: <86c79601-2d3d-a6d7-a0a5-baba03e00709@amd.com>
-Date:   Thu, 16 Feb 2023 03:15:40 +0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/3] KVM: SVM: Modify AVIC GATag to support max number
- of 512 vCPUs
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Joao Martins <joao.m.martins@oracle.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-References: <20230207002156.521736-1-seanjc@google.com>
- <20230207002156.521736-3-seanjc@google.com>
- <20230207093350.5db155ca@imammedo.users.ipa.redhat.com>
- <0e12d654-d388-a0f9-e7f9-7e96921786b7@oracle.com>
- <Y+J+dS8ZRX07kgt7@google.com>
-From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-In-Reply-To: <Y+J+dS8ZRX07kgt7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
- (2603:1096:4:197::19) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Wed, 15 Feb 2023 15:16:02 -0500
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88AA2D14D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:15:58 -0800 (PST)
+Received: by mail-il1-f205.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so43321ild.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:15:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aGJcTiHWrNKcFZ/FgYQDSHGLDwlxXSUlxi8IsS9UpjM=;
+        b=Bjq9FBmiJSaMpoEy0F4n5JeevhwL7lMGpsDOOQIwSR2a4UBd0iT8NhYtbXuQjzLFFy
+         gTtyX1MoHP/NCFbon8J0pyRJ8SsT4NM6kii8M94Bj7Rq2Jw/K7Fjs4fAW6TdNW/lvDy/
+         qGv1hQr+hfgmgMJyEq0uGVXqRo+QuMSZE5EK2OwQjpnfM401Ong2avZquWsZC1aWmFmH
+         fqssKN6yrBWbpute9AWy9eb4GY/nmTUVMPPs65oYwZPB1Q4uyuCcW1bFyTdn1upTZz9l
+         bgHyKerxv5IhN07478Kkx9rzn05mKLA/VBntsG9AP2bhRvJGHUbayJEKpZc1GDLGDfAL
+         ze1A==
+X-Gm-Message-State: AO0yUKUxK1rcxkU/SZ4aTqPLlXT3qeHfeyDbCUIFT9EGyLuQ/2H3PNX+
+        Hd17NfVoA1nriGJSieJMLSH9SoVFu1Z37QKLBJYXs20T4H68
+X-Google-Smtp-Source: AK7set86i67dgAHYMXiQrl4jCFk5zyk/kVFx65aTW8VBAM0Flhxmc4ILyIoNouAVn2FLO0hKbWr+idG8IS0MjFFGK8gUMP3Dj/2m
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5445:EE_|SJ0PR12MB7082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4dfa35eb-e3b2-4d8a-bad6-08db0f916e6e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m3HIvKwQ1kdJdzwOwNKaql+ft24crWeV5BfflSBo1iiWnfABDK+g88iImFbduEKWd5vbqim0/5ggIp94EjbgEb+0yshK6W8Jdv332j1y5Chqinv21N2i9+hrgVy4Y12Hy84omA3q/J5OGQtLALLeqtzULwxtsL0D7iTCZFpN+YLO+rESKifpWNvW75vq8/g6UPuu3Xm8qJrF7BalrUU0l1OS8BSd0zgspOkr3iuMGn20bW9JyurhQ69ciIsBmbITEAGC5dr2K3BvQO4XIwg1uDJhoJaIDcB2kgug/trEMMzSSt0hgBZ/TrHhtajb4QO5JJswkhQ9NxPDD/KZEpJuyqHmw9bTgUR5w+bqahfSXFGbNvudK68o3aAsGA6wsmeECYDLsD2aqBuLtRJBjuYRb3U3eYK4kqHxLnQIRDSLpz22F+MzRflq2Rrw+co/E3tLTAbJDQ6hH7QrvF/3pnvfreCZaKg1aO+zCdxliICyePGOFVJeyAboFNQk8y4MqHwIj2hKbZaghdb9YuPPIb6xVJPjLfU/4cYTjL/1W0Dx+l44uWJt+M8WgaGKZSkuPrgklQGzvEkFldfW6wtnY27NBj23yCjXeQkRJtNYEJ0EUJBNafkAnOaKrhWqdBHaudEfEYoVTufUVKoaYT5gepI+kbcODCb7CULtvKC2PY8zJdcnhuY5/IZDTD8i432mI+G2GmbnxrIY6hl4Snm66d+g9Z08Jtbeu9geGYWBkkSY3Jg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199018)(83380400001)(110136005)(54906003)(478600001)(2616005)(6486002)(53546011)(6506007)(6666004)(36756003)(26005)(186003)(6512007)(38100700002)(41300700001)(5660300002)(86362001)(8936002)(31686004)(31696002)(316002)(4326008)(66476007)(66946007)(66556008)(2906002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDVMMXNGYmxoUWdKb1FWUDNoRTJYM1ZZWUFoaEMrTENEN3Vtd2gvdDE3SUFr?=
- =?utf-8?B?cEtqZUtpbjdXa3haeHB4emM1bTNoSDlmaXJRSUREaCtraGFIaHRXMjJPdXhT?=
- =?utf-8?B?N3I0L085QlB6d2dSM2w3bWV2U0N6cFBvV1NpRERMMmRWdVkwcmwwVm10eFpl?=
- =?utf-8?B?R1orS1VFSGpWVjVJd3o2Mkxpd0VPNlJ3Z053U2ZWQ3gyckt1K0pYbEU1aHZQ?=
- =?utf-8?B?U3RIa2c4Z3dvMkN6eHlBaVdyRnBrU0VRL2YvRmNPWTZKdG5rL3F2dXhkNFQy?=
- =?utf-8?B?YW5jWGFIaTc1WmZWR2gzUTJ6OXR5NWVNc3JHV1pKVUFjQW1Pa0NuMitaTEU5?=
- =?utf-8?B?MGVadS9UaDRRNGtkVG9RS216WCsvaXhtanZEZkdiVjY3Mk5qZ3U5VlA3Sktk?=
- =?utf-8?B?S3RlSkFNd01Ea1hOYkxYdVA2YkhuY3V2eDgrTmhzWld1QzBmTmZGVlhoYTk4?=
- =?utf-8?B?WkVHbUN0ZjdRem50SFNyUEkraVp0d2RXWFFkVDdiY3hqZ2VtY2R0UUVTN204?=
- =?utf-8?B?VFR3bG1NdmIwc0pyQ2RCd1M4bDdBWUw2ZWlQeFlVc3hPZ0d2WGtubE8xUEFh?=
- =?utf-8?B?MTh6WGZKTmZjTUtlaW5VTW5hNFlmeEdOanhUTXV5T2l6U1ZXNXVOOXFOREZr?=
- =?utf-8?B?bFJOci9UbVNMR1Azd1FtcE4yd3RuZmVyeCs2U21wV1krN2xjYUdyL0JlRHhL?=
- =?utf-8?B?R2l3dktYRFA3VjN5VHYyTnBtSVFDaGwrTHpjajFES2xvdWdtN3NwQjh2VUZT?=
- =?utf-8?B?NmIzWldhaUdGRitNYVh0aC8rM2x1cnpPei91ZENQS1NiSWZWZ0dmWWw4R2Fs?=
- =?utf-8?B?REFJUE5xTFZ5aUpJZ3dnQlVnek4waWV2dXRiWGtPZUJudVk0VWV5TXlwMFgy?=
- =?utf-8?B?Ti9YWFZUUWtueTNuRkZUcFdxb2tHNnBzMzk5RjBmQmlzcUxlMnMwWHlnV3hP?=
- =?utf-8?B?bTJtMW51YjgweUZlOXNwbTVYdjNSOTlCZVdBLzg4N2FJV2gzV3lhQXBCWDhm?=
- =?utf-8?B?cXhpRFpTT0hwdGc5TEpoRUVzQkVybU1Gb3ZhRzdkdUxVQ3ZxM2FIMHNpK1lK?=
- =?utf-8?B?WkZzb2ZPc2ZhNitCS1hrWmdIbkJKeXlsQjZKbFZsMGkzZUtjTWJzVm93MFhO?=
- =?utf-8?B?TEVJV2FTZ2hSWHNWN09jREl2TUVFTFRTdDI3SzVtOEY5c09MUHlmL3VUWTJI?=
- =?utf-8?B?YWsyejV5ZDMyLzZBaTV1VGJ2RnRSVU1SNWNLWXd4cm82ZmUzZmh6N2NrdGR1?=
- =?utf-8?B?aFJxdUtPKzJFYmkzVkJ1Q0RIaDEvMHBFaTU1ZDVpcEZ0R0dFVDNtNWNtYzRj?=
- =?utf-8?B?Uk9COGhiN3p2UWwzd2FhU0ZiWUJHaTNScFA2T1hpNm96QTNuckdjSlR4dUkx?=
- =?utf-8?B?dHYwMjltUzgyOHdENUpFL0FZZlZiQldxNkQ1TkNsWDhaajJBVG9Hdzc1MTNX?=
- =?utf-8?B?QnNzeEV6ZmRVbUM3Yk9sMlFQUUc1SkVvS2Zta1dIaE1RNGoyb2ZYQjBwVCsz?=
- =?utf-8?B?dUptVDgxMWRyaU5WY0RiRDRaRHVVRmF0TzhORE1qbG9UMXpiNm54TUJnR3hj?=
- =?utf-8?B?V09Ka29uV0lMWWp6bXdxQVZpbUNPdC9VNXVvQUFvTGc0R2UxbFV0WTF4K1dZ?=
- =?utf-8?B?OWdSYmg1VU9ramxZSUlsTkk1SFpmSVBxdU9sKzd3RjBjK0h5bGFpMFhaSWdU?=
- =?utf-8?B?SGFsejR1ZWlWVE1IeVNWNjR3NlE5dGFCZzJiVmNHdEFITWR2RUw2M3J3ZXc3?=
- =?utf-8?B?UmY2YWpUZW9VanlPdmZnYk5MZFpJVWUvY3BqMEJYOWtLNForblZWTWhKTzRS?=
- =?utf-8?B?NEhMcDdjMHF5MVlnRWRsenZsQ3hpcDhEcVFRSDErRW1PbjNpMDdtZjhXS2JG?=
- =?utf-8?B?WmVIOHo5WEpieHVyOGlWWUtIVTRYQzM1UTZ1QmZibXg0MTFlN3A5cVN3NUNw?=
- =?utf-8?B?UzFDVnEzVmlHRlJ3VEw2ektNZXJoSFBXV2RVT2QzVFhFNiswVWQwbmVraHcx?=
- =?utf-8?B?dDNXMndYMVBiWWJvYW5DUmJhK3ZRTytzamQwdC94MFpCbDVub0o4Sm1PYjB5?=
- =?utf-8?B?N0tvQjYrT1dESnNmSjh5Nm1IL2RyOVpTMEcyeEFuTEJBMkdCQ3A4d3lHZkV4?=
- =?utf-8?Q?zu/VCEB//Ezyt70cuH3hbtl8W?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dfa35eb-e3b2-4d8a-bad6-08db0f916e6e
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 20:15:50.4054
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FIEebas+jTdAfGSXa/EbtxcTyUYsp/2yQFp+ryhPreHvSMO7P8VSKjYnb40kmMHXRMayY24xgrXiWV2Q8vaK4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7082
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:c009:0:b0:73b:1230:331c with SMTP id
+ u9-20020a5ec009000000b0073b1230331cmr1063621iol.98.1676492158111; Wed, 15 Feb
+ 2023 12:15:58 -0800 (PST)
+Date:   Wed, 15 Feb 2023 12:15:58 -0800
+In-Reply-To: <000000000000a8c57205f1450921@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008d9bd305f4c2bf45@google.com>
+Subject: Re: [syzbot] [f2fs?] kernel BUG in f2fs_abort_atomic_write
+From:   syzbot <syzbot+9b7be0f1263ed2dbfbba@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    e1c04510f521 Merge tag 'pm-6.2-rc9' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=172c6577480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d9381ac81f4ac15
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b7be0f1263ed2dbfbba
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138e3977480000
 
-On 2/7/2023 11:38 PM, Sean Christopherson wrote:
-> On Tue, Feb 07, 2023, Joao Martins wrote:
->> On 07/02/2023 08:33, Igor Mammedov wrote:
->>> On Tue,  7 Feb 2023 00:21:55 +0000
->>> Sean Christopherson <seanjc@google.com> wrote:
->>>
->>>> From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
->>>>
->>>> Define AVIC_VCPU_ID_MASK based on AVIC_PHYSICAL_MAX_INDEX, i.e. the mask
->>>> that effectively controls the largest guest physical APIC ID supported by
->>>> x2AVIC, instead of hardcoding the number of bits to 8 (and the number of
->>>> VM bits to 24).
->>>
->>> Is there any particular reason not to tie it to max supported by KVM
->>> KVM_MAX_VCPU_IDS?
->>>
->>> Another question:
->>>   will guest fail to start when configured with more than 512 vCPUs
->>>   or it will start broken?
->>>
->>
->> I think the problem is not so much the GATag (which can really be anything at
->> the resolution you want). It's more of an SVM limit AIUI. Provided you can't
->> have GATAgs if you don't have guest-mode/AVIC active, then makes sense have the
->> same limit on both.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c3d836334e11/disk-e1c04510.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4cab8c36cdb8/vmlinux-e1c04510.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7f796941fe64/bzImage-e1c04510.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/d6504ac6876e/mount_0.gz
 
-Correct.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9b7be0f1263ed2dbfbba@syzkaller.appspotmail.com
 
-> Yep.  The physical ID table, which is needed to achieve full AVIC benefits for a
-> vCPU, is a single 4KiB page that holds 512 64-bit entries.  AIUI, the GATag is
-> used if and only if the interrupt target is in the physical ID table, so using
-> more GATag bits for vCPU ID is pointless.
+------------[ cut here ]------------
+kernel BUG at fs/inode.c:1763!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5237 Comm: syz-executor.0 Not tainted 6.2.0-rc8-syzkaller-00021-ge1c04510f521 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:iput+0x68/0x80 fs/inode.c:1763
+Code: ff 83 e3 40 48 89 de e8 b6 b6 9b ff 48 85 db 75 14 e8 dc b9 9b ff 48 89 ef e8 24 f7 ff ff 5b 5d e9 cd b9 9b ff e8 c8 b9 9b ff <0f> 0b e8 31 cd e9 ff eb c5 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
+RSP: 0018:ffffc90004ddfbe0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000000
+RDX: ffff88801e0f9d40 RSI: ffffffff81e54e48 RDI: 0000000000000007
+RBP: ffff888072e68000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000040 R11: 0000000000000000 R12: ffff888072e278e0
+R13: 0000000000000000 R14: ffff888072e68000 R15: 0000000000000000
+FS:  00007f2cbc74c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2cb2b58000 CR3: 0000000027d2f000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ f2fs_abort_atomic_write+0xea/0x4f0 fs/f2fs/segment.c:196
+ f2fs_ioc_commit_atomic_write+0x19f/0x260 fs/f2fs/file.c:2157
+ __f2fs_ioctl+0x26f0/0xaaf0 fs/f2fs/file.c:4154
+ f2fs_ioctl+0x18e/0x220 fs/f2fs/file.c:4242
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2cbba8c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2cbc74c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f2cbbbac050 RCX: 00007f2cbba8c0f9
+RDX: 0000000000000000 RSI: 000000000000f502 RDI: 0000000000000004
+RBP: 00007f2cbbae7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffc60048ef R14: 00007f2cbc74c300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:iput+0x68/0x80 fs/inode.c:1763
+Code: ff 83 e3 40 48 89 de e8 b6 b6 9b ff 48 85 db 75 14 e8 dc b9 9b ff 48 89 ef e8 24 f7 ff ff 5b 5d e9 cd b9 9b ff e8 c8 b9 9b ff <0f> 0b e8 31 cd e9 ff eb c5 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
+RSP: 0018:ffffc90004ddfbe0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000000
+RDX: ffff88801e0f9d40 RSI: ffffffff81e54e48 RDI: 0000000000000007
+RBP: ffff888072e68000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000040 R11: 0000000000000000 R12: ffff888072e278e0
+R13: 0000000000000000 R14: ffff888072e68000 R15: 0000000000000000
+FS:  00007f2cbc74c700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2cbc74c718 CR3: 0000000027d2f000 CR4: 0000000000350ee0
 
-Correct.
-
->> SVM seems to be limited to 256 vcpus in xAPIC mode or 512 vcpus in x2APIC
->> mode[0]. IIUC You actually won't be able to create guests with more than
->> 512vcpus as KVM bound checks those max limits very early in the vCPU init (see
->> avic_init_vcpu()). I guess the alternative would an AVIC inhibit if vCPU count
->> goes beyond those limits -- probably a must have once avic flips to 1 by default
->> like Intel.
-> 
-> I don't _think_ KVM would have to explicitly inhibit AVIC.  I believe the fallout
-> would be that vCPUs >= 512 would simply not be eligible for virtual interrupt
-> delivery, e.g. KVM would get a "Invalid Target in IPI" exit.  I haven't dug into
-> the IOMMU side of things though, so it's possible something in that world would
-> necessitate disabling (x2)AVIC.
-
-SVM-AVIC is independent of the IOMMU-AVIC. We can enable SVM-AVIC, and 
-use the legacy IOMMU interrupt remapping mode IRTE[GuestMode]=0.
-However, I have not explored the case of combining of the two modes. I 
-can look into it and experiment with this case.
-
-Thanks,
-Suravee
-
->> [0] in APM Volume 2 15.29.4.3 Physical Address Pointer Restrictions,
->>
->> * All the addresses point to 4-Kbyte aligned data structures. Bits 11:0 are
->> reserved (except for offset 0F8h) and should be set to zero. The lower 8 bits of
->> offset 0F8h are used for the field AVIC_PHYSICAL_MAX_INDEX. VMRUN fails with
->> #VMEXIT(VMEXIT_INVALID) if AVIC_PHYSICAL_MAX_INDEX is greater than 255 in xAVIC
->> mode or greater than 511 in x2AVIC mode.
