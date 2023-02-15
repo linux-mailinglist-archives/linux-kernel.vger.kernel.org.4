@@ -2,191 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5496697B0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3FE697B17
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjBOLrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S233780AbjBOLsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbjBOLrC (ORCPT
+        with ESMTP id S233554AbjBOLsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:47:02 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033E38006
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:46:55 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso1329094wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=faQZKHHFpLhX2wgy+xoL7jA6O/xdhku2u9VYP21BKzQ=;
-        b=DMlBNRQWEerjCWb6gYuuHDUgcuVG848i8WE5spCpMgOWN6dbI/zOuZ4bB7vy/mut9S
-         DwvLOlOJNehqx209gfp45uTElK7P9ZA9yok6IS/vZYl8+rEjjunpr7hyH1F0UxPhSiUl
-         jjBS1V5UvltaWK6a06JHTfqBlEu6SVpaybjygN/Cg4ApBL1g411UyXHDEnlEw4GbtYFs
-         VjcTzYYiq0HpzsxNbCgiol13RQgmGx0AUkxgQhJNAY22K0v8qPoquScWC0Rrcuw+tKbT
-         GQOztpqNhkuaPZcfWWa5MxRh73rbSjgxx25zE6oI87vDszrULLqziYhb3D1A7aChkqaX
-         cI0A==
+        Wed, 15 Feb 2023 06:48:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D136474
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676461631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
+        b=AovHE+nJ4dA01xPC1U6nlUxnvU0RCuhdZJlurF8yM4mrGJzaQcjvje4lQGpx06+EuBg2uF
+        vBUVv5AEIxbFxyS037XSpyjStjbWxHcsxlOKNSHo+8SNteyOOneEBMySk5OrYNZSaBdw6z
+        fFXTzjMxmcltPPE0oOhaX8wjc9iCI1Y=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-57-4b-Vee5zNL22AH25V0ZL2A-1; Wed, 15 Feb 2023 06:47:10 -0500
+X-MC-Unique: 4b-Vee5zNL22AH25V0ZL2A-1
+Received: by mail-qk1-f200.google.com with SMTP id x14-20020a05620a14ae00b0072f7f0f356bso11239871qkj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=faQZKHHFpLhX2wgy+xoL7jA6O/xdhku2u9VYP21BKzQ=;
-        b=eUqCrdva2aw32eQXBF0wyD8QDa3ZR+tmZevuFOt3tl/kovm48no9C+I/TPbpYDVfNQ
-         DfS9r6CWm0ypA1P8tVrkSg0sHD+ij2dnii59TMl1VA4N0gOtDjy8d5Wjna8JsjHewSRN
-         6L89yLEevtm6oZE+Uh4vSsSFE9MEE3/Nhkg96IS8zS4Cp28SChh5E3Hz4gJYz3me5HtE
-         sSYVPMkFGoG652KgEHS4zUZEnZZoDrQ5d+nqGPj6kFRzkpgmK+jeKr5AR7lfaETeOmcS
-         2iHrsaWqcDzBo1LXFYeZJ88wLtj1FpaAgl8ECuDDwvLoL602Z2f4Fp+KkdjnVOWI5zwv
-         D5SQ==
-X-Gm-Message-State: AO0yUKUWdKojRjNxQWjiShiaF//MuR8CYhtwq6wXr7Rwl3J/DKSIwGbV
-        u0HT/0jyqNlh4TdF4iIaKRWYQQ==
-X-Google-Smtp-Source: AK7set8TTOKrYTXUOswpD3TQmRosxuRBBeOH/SWuN4FeWbG6uJJq2udLpIeKWNWBHj1qlxQy5WA4aA==
-X-Received: by 2002:a05:600c:1c9a:b0:3df:fc69:e96b with SMTP id k26-20020a05600c1c9a00b003dffc69e96bmr1896344wms.5.1676461614254;
-        Wed, 15 Feb 2023 03:46:54 -0800 (PST)
-Received: from [192.168.0.108] ([82.77.80.113])
-        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003d9aa76dc6asm1851265wml.0.2023.02.15.03.46.53
+        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
+        b=BszGwPP8KhI1A94/v4JtvWfmB/vV3/GiCig+oJk2NyblIx4cIqcXKPiVC4yNBRLBKz
+         uzwnuSQkoYFXU4qk64XfCf6Kqvr7Blb8gdeqne2y0sgzBS2lJ3x6IvIlZKbEh8gudbfp
+         on7+06yMRMnmqf7H8iKhzoWWvB0Cr4GpWNCHoi99g8rBsYW6FwyBJUEfy7ZeJsCYFRst
+         XP9PGSiS3Vwugs8J9FNB0REMtv6ER79rnxS018gPpmki2NpYSsuUq8pEX3nYeU1q5SZ4
+         yhL7NTk0Gd4QlfrUSWM4UtTg0sYtej5itLHVSFhOd488OCakyFEZcw432ml68OnnXPke
+         NMAQ==
+X-Gm-Message-State: AO0yUKXPbTCxsig2vP3QK9qS2xsuTDWeRDnA/NF5O+SrszySDhPvRUb2
+        zhNkxs96aPpCame2788ESy9SqXOuEEwk7g7xiD+N3u3jdVafoxAjCZgTFGpLb372OCMEF9TOjg4
+        AaIqiUmVFazatcDUOTGytE6o=
+X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848991qtf.49.1676461630136;
+        Wed, 15 Feb 2023 03:47:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set+ONFsJKriqgRyboXfngZUgoqZTtSrpSfRrC8VyIHG33OdFC+XpiAkZDvoCkfM/mItot1Aa7Q==
+X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848979qtf.49.1676461629870;
+        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
+Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id cc5-20020a05622a410500b003995f6513b9sm5931170qtb.95.2023.02.15.03.47.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 03:46:53 -0800 (PST)
-Message-ID: <d8f51f11-6942-51bd-7761-a356125d8e53@linaro.org>
-Date:   Wed, 15 Feb 2023 11:46:52 +0000
+        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
+Message-ID: <93039f92-3462-e2a2-6052-830668419a4d@redhat.com>
+Date:   Wed, 15 Feb 2023 12:47:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] ext4: reject 1k block fs on the first block of disk
+Subject: Re: [RFC PATCH 1/4] fpga: add initial KUnit test suite
 Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>, Jun Nie <jun.nie@linaro.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <joneslee@google.com>
-References: <20221229014502.2322727-1-jun.nie@linaro.org>
- <Y7R/QKIbYQ2TCP+W@magnolia>
- <CABymUCPCT9KbMQDUTxwf6A+Cg9fWJNkefbMHD7SZD3Fc7FMFHg@mail.gmail.com>
- <Y+xgQklC81XCB+q4@mit.edu>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <Y+xgQklC81XCB+q4@mit.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20230203170653.414990-1-marpagan@redhat.com>
+ <20230203170653.414990-2-marpagan@redhat.com>
+ <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ted!
 
-On 2/15/23 04:32, Theodore Ts'o wrote:
-> On Wed, Jan 04, 2023 at 09:58:03AM +0800, Jun Nie wrote:
->> Darrick J. Wong <djwong@kernel.org> 于2023年1月4日周三 03:17写道：
->>>
->>> On Thu, Dec 29, 2022 at 09:45:02AM +0800, Jun Nie wrote:
->>>> For 1k-block filesystems, the filesystem starts at block 1, not block 0.
->>>> If start_fsb is 0, it will be bump up to s_first_data_block. Then
->>>> ext4_get_group_no_and_offset don't know what to do and return garbage
->>>> results (blockgroup 2^32-1). The underflow make index
->>>> exceed es->s_groups_count in ext4_get_group_info() and trigger the BUG_ON.
->>>>
->>>> Fixes: 4a4956249dac0 ("ext4: fix off-by-one fsmap error on 1k block filesystems")
->>>> Link: https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
->>>> Reported-by: syzbot+6be2b977c89f79b6b153@syzkaller.appspotmail.com
->>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
->>>> ---
->>>>   fs/ext4/fsmap.c | 6 ++++++
->>>>   1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
->>>> index 4493ef0c715e..1aef127b0634 100644
->>>> --- a/fs/ext4/fsmap.c
->>>> +++ b/fs/ext4/fsmap.c
->>>> @@ -702,6 +702,12 @@ int ext4_getfsmap(struct super_block *sb, struct ext4_fsmap_head *head,
->>>>                if (handlers[i].gfd_dev > head->fmh_keys[0].fmr_device)
->>>>                        memset(&dkeys[0], 0, sizeof(struct ext4_fsmap));
->>>>
->>>> +             /*
->>>> +              * Re-check the range after above limit operation and reject
->>>> +              * 1K fs on block 0 as fs should start block 1. */
->>>> +             if (dkeys[0].fmr_physical ==0 && dkeys[1].fmr_physical == 0)
->>>> +                     continue;
->>>
->>> ...and if this filesystem has 4k blocks, and therefore *does* define a
->>> block 0?
+
+On 2023-02-14 00:37, Russ Weight wrote:
+> 
+> 
+> On 2/3/23 09:06, Marco Pagani wrote:
+>> Introduce an initial KUnit suite to test the core components of the
+>> FPGA subsystem.
 >>
->> Yes, this is a real corner case test :-)
+>> The test suite consists of two test cases. The first test case checks
+>> the programming of a static image on a fake FPGA with a single hardware
+>> bridge. The FPGA is first programmed using a test image stored in a
+>> buffer, and then with the same image linked to a single-entry
+>> scatter-gather list.
+>>
+>> The second test case models dynamic partial reconfiguration. The FPGA
+>> is first configured with a static image that implements a
+>> reconfigurable design containing a sub-region controlled by two soft
+>> bridges. Then, the reconfigurable sub-region is reconfigured using
+>> a fake partial bitstream image. After the reconfiguration, the test
+>> checks that the soft bridges have been correctly activated.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/Kconfig            |   2 +
+>>  drivers/fpga/Makefile           |   3 +
+>>  drivers/fpga/tests/.kunitconfig |   5 +
+>>  drivers/fpga/tests/Kconfig      |  15 ++
+>>  drivers/fpga/tests/Makefile     |   6 +
+>>  drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
+>>  6 files changed, 295 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/.kunitconfig
+>>  create mode 100644 drivers/fpga/tests/Kconfig
+>>  create mode 100644 drivers/fpga/tests/Makefile
+>>  create mode 100644 drivers/fpga/tests/fpga-tests.c
+>>
+>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+>> index 0a00763b9f28..2f689ac4ba3a 100644
+>> --- a/drivers/fpga/Kconfig
+>> +++ b/drivers/fpga/Kconfig
+>> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+>>  	  FPGA manager driver support for Lattice FPGAs programming over slave
+>>  	  SPI sysCONFIG interface.
+>>  
+>> +source "drivers/fpga/tests/Kconfig"
+>> +
+>>  endif # FPGA
+>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+>> index 72e554b4d2f7..352a2612623e 100644
+>> --- a/drivers/fpga/Makefile
+>> +++ b/drivers/fpga/Makefile
+>> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+>>  
+>>  # Drivers for FPGAs which implement DFL
+>>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+>> +
+>> +# KUnit tests
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+>> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+>> new file mode 100644
+>> index 000000000000..a1c2a2974c39
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/.kunitconfig
+>> @@ -0,0 +1,5 @@
+>> +CONFIG_KUNIT=y
+>> +CONFIG_FPGA=y
+>> +CONFIG_FPGA_REGION=y
+>> +CONFIG_FPGA_BRIDGE=y
+>> +CONFIG_FPGA_KUNIT_TESTS=y
+>> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
+>> new file mode 100644
+>> index 000000000000..5198e605b38d
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/Kconfig
+>> @@ -0,0 +1,15 @@
+>> +config FPGA_KUNIT_TESTS
+>> +	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
+>> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
+>> +	default KUNIT_ALL_TESTS
+>> +	help
+>> +	  Builds unit tests for the FPGA subsystem. This option
+>> +	  is not useful for distributions or general kernels,
+>> +	  but only for kernel developers working on the FPGA
+>> +	  subsystem and its associated drivers.
+>> +
+>> +	  For more information on KUnit and unit tests in general,
+>> +	  please refer to the KUnit documentation in
+>> +	  Documentation/dev-tools/kunit/.
+>> +
+>> +	  If in doubt, say "N".
+>> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
+>> new file mode 100644
+>> index 000000000000..74346ae62457
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/Makefile
+>> @@ -0,0 +1,6 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
+>> diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
+>> new file mode 100644
+>> index 000000000000..33f04079b32f
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fpga-tests.c
+>> @@ -0,0 +1,264 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Test suite for the FPGA subsystem
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#include <kunit/test.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/scatterlist.h>
+>> +
+>> +#include <linux/fpga/fpga-mgr.h>
+>> +#include <linux/fpga/fpga-region.h>
+>> +#include <linux/fpga/fpga-bridge.h>
+>> +
+>> +#include "fake-fpga-region.h"
+>> +#include "fake-fpga-bridge.h"
+>> +#include "fake-fpga-mgr.h"
+>> +
+>> +#define FAKE_BIT_BLOCKS		16
+>> +#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
+>> +
+>> +static u8 fake_bit[FAKE_BIT_SIZE];
 > 
-> So I'm really nervous about this change.  I don't understand the code;
-> and I don't understand how the reproducer works.  I can certainly
-> reproduce it using the reproducer found here[1], but it seems to
-> require running multiple processes all creating loop devices and then
-> running FS_IOC_GETMAP.
+> I take it "bit" in fake_bit and sgt_bit is short for "bitstream". Initially,
+> I found this confusing as I tend to think of a bit as a single bit. It might
+> be better to expand that something like "fake_bitstream" or "fake_image".
 > 
-> [1] https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
-> 
-> If I change the reproducer to just run the execute_one() once, it
-> doesn't trigger the bug.  It seems to only trigger when you have
-> multiple processes all racing to create a loop device, mount the file
-> system, try running FS_IOC_GETMAP --- and then delete the loop device
-> without actually unmounting the file system.  Which is **weird***.
-> 
-> I've tried taking the image, and just running "xfs_io -c fsmap /mnt",
-> and that doesn't trigger it either.
-> 
-> And I don't understand the reply to Darrick's question about why it's
-> safe to add the check since for 4k block file systems, block 0 *is*
-> valid.
-> 
-> So if someone can explain to me what is going on here with this code
-> (there are too many abstractions and what's going on with keys is just
-> making my head hurt), *and* what the change actually does, and how to
-> reproduce the problem with a ***simple*** reproducer -- the syzbot
-> mess doesn't count, that would be great.  But applying a change that I
-> don't understand to code I don't understand, to fix a reproducer which
-> I also doesn't understand, just doesn't make me feel comfortable.
-> 
+> - Russ
 
-Let me share what I understood until now. The low key is zeroed. The
-high key is defined and uses a fmr_physical of value zero, which is
-smaller than the first data block for the 1k-block ext4 fs (which starts
-at offset 1024).
 
--> ext4_getfsmap_datadev()
-   keys[0].fmr_physical = 0, keys[1].fmr_physical = 0
-   bofs = le32_to_cpu(sbi->s_es->s_first_data_block) = 1, eofs = 256
-   start_fsb = keys[0].fmr_physical = 1, end_fsb = keys[1].fmr_physical = 0
-   -> ext4_get_group_no_and_offset()
-     blocknr = 1, le32_to_cpu(es->s_first_data_block) =1
-   start_ag = 0, first_cluster = 0
-   ->
-     blocknr = 0, le32_to_cpu(es->s_first_data_block) =1
-   end_ag = 4294967295, last_cluster = 8191
+You're right. Using "bit" in the name can be confusing. I'll change it
+to "fake_image" or maybe "fake_image_buf" to be consistent with the naming
+convention used in the subsystem. I'll also change "test_img_info"
+to "fake_img_info" to improve naming consistency.
 
-   Then there's a loop that stops when info->gfi_agno <= end_ag; that 
-will trigger the BUG_ON in ext4_get_group_info() as the group nr exceeds 
-EXT4_SB(sb)->s_groups_count)
-   -> ext4_mballoc_query_range()
-     -> ext4_mb_load_buddy()
-       -> ext4_mb_load_buddy_gfp()
-         -> ext4_get_group_info()
+Thanks,
+Marco
 
-It's an out of bounds request and Darrick suggested to not return any
-mapping for the byte range 0-1023 for the 1k-block filesystem. The
-alternative would be to return -EINVAL when the high key starts at
-fmr_phisical of value zero for the 1k-block fs.
-
-In order to reproduce this one would have to create an 1k-block ext4 fs
-and to pass a high key with fmr_physical of value zero, thus I would
-expect to reproduce it with something like this:
-xfs_io -c 'fsmap -d 0 0' /mnt/scratch
-
-However when doing this I notice that in
-xfsprogs-dev/io/fsmap.c l->fmr_device and h->fmr_device will have value
-zero, FS_IOC_GETFSMAP is called and then we receive no entries
-(head->fmh_entries = 0). Now I'm trying to see what I do wrong, and how
-to reproduce the bug.
-
-Cheers,
-ta
