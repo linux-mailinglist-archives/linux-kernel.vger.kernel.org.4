@@ -2,160 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEFC697B47
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3C7697B4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjBOMA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S233904AbjBOMAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjBOMA0 (ORCPT
+        with ESMTP id S233919AbjBOMAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:00:26 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B73525F;
-        Wed, 15 Feb 2023 04:00:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1676462423; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WE9ZsOz9nkCLMHmGO7Utnw1e7S4ivYjTnZ5PFRZQvVQ=;
-        b=pdXH5sfaJkR0EJBO6MZH5lk6QeDYb0fJU+J47GYDN2+d3pICMDjCdo8yU67nW8Mmd+RUra
-        Fvgt+lNqkiIGuYmTIKxMhp5P1duKZGQhLK/j3SgOXOniNJoVIMNgew+oKr7zX72xesBdxA
-        zBdJJjCg/OZqCTU63e0xdComHJPadr4=
-Message-ID: <77fc4dec6738d57ae6ca6232e502e3b228b1ae03.camel@crapouillou.net>
-Subject: Re: Question: partial transfers of DMABUFs
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Date:   Wed, 15 Feb 2023 12:00:20 +0000
-In-Reply-To: <05fb3949-d0aa-b653-d9a3-236a4c95a5a3@linux.intel.com>
-References: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
-         <836d600a-bb1c-fbb2-89f5-7c79c3150e8c@linux.intel.com>
-         <d540965a25138772fa063d62e907ffd611f93205.camel@crapouillou.net>
-         <05fb3949-d0aa-b653-d9a3-236a4c95a5a3@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 15 Feb 2023 07:00:36 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961FA38023;
+        Wed, 15 Feb 2023 04:00:34 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id w14-20020a17090a5e0e00b00233d3b9650eso1903433pjf.4;
+        Wed, 15 Feb 2023 04:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lolFf647qX9YrdZwkuBKlkltYDziYbSSD1kp+TXEm3I=;
+        b=Cf14aFmfEkI+hKh9/yYIP1Oa3rWOFsQKVlfWZuD1DnI17BXqULNjto4c4stYz6ZEsq
+         B00yOqbWlga6ZR5vyb57T9+L9PVNKLRzIgInXrARhfN1RUpwKvU/dLOD89BId+ulcwb+
+         ZiP/sGWilSFnKeuCE8fAVWCAFkd4pbG2gcsP3GjOWw0kL8bZIDVE07gr7rLwPGhFWMMy
+         hpTew/1xyEUapsXVUUVDSzwueXS90J3WjdfeHBIOySk00lutAnVcicXw5IOR4PLhyxDK
+         8NWWRfCEA7IZXKAJczyykhqsRNXgtQPhuf2FVzlFRIoq54AITjTdX4ANDkPB3+WEsYtf
+         fKOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lolFf647qX9YrdZwkuBKlkltYDziYbSSD1kp+TXEm3I=;
+        b=7FcM1sVP9ceazKnCU0somVIBbuChv5BvL06JHuLiaWIeEmrIO7XYi5+RFxeDYVD50l
+         wijQHHoqwMACmang5GgBnXE7IOMO4AjyUIm9zpaYfgAWZ3huxJhMgARqfOicE9fhcQyW
+         yXTAtAjR6QWMwUDWgMCoHNPjGvHq68+QP54klTU/6YF1raac/w/twh5zVdahY9YldiIm
+         qteo4iVb+245ObEk+tO8YEL9rzSpEaomgw+Jt+ym9b1SxzoSq3N2UbdMT/iPg+eUH9tY
+         yACyhQ7GBiXNY0cO2l/seerf0IWtEraOXqMfJRtjQrzh+V5DjeHPilb1dlWPE5TUxJFO
+         KuIA==
+X-Gm-Message-State: AO0yUKW+KMgWCFizJXid8nmF+ZYl5EP8MGm7Cd/gpwEncI5dwYYY1JlI
+        Z8i7KR3MDVWnAUNTZOrlgCo=
+X-Google-Smtp-Source: AK7set9cRg8gne7Ug36x4KfBI1KwQbCbQk4ZTo5dQP+lzL+3Wl9btYddHajWY6kQA+ulLlECvAM8TA==
+X-Received: by 2002:a17:902:c950:b0:19a:85a8:eb30 with SMTP id i16-20020a170902c95000b0019a85a8eb30mr2630871pla.10.1676462434009;
+        Wed, 15 Feb 2023 04:00:34 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902b71200b001930b189b32sm11947675pls.189.2023.02.15.04.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 04:00:33 -0800 (PST)
+Message-ID: <73545081-0d82-fce6-43f0-c50aee9416cb@gmail.com>
+Date:   Wed, 15 Feb 2023 20:00:27 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v2 07/21] KVM: x86/pmu: Zero out LBR capabilities during
+ PMU refresh
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230210003148.2646712-1-seanjc@google.com>
+ <20230210003148.2646712-8-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20230210003148.2646712-8-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maarten,
+On 10/2/2023 8:31 am, Sean Christopherson wrote:
+> Note, this is a very theoretical bug, there is no known use case where a
+> VMM would deliberately enable the vPMU via KVM_SET_CPUID2, and then later
+> disable the vPMU.
 
-Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 12:52 +0100, Maarten Lankhorst a =
-=C3=A9crit=C2=A0:
-> Hey,
->=20
-> On 2023-02-15 12:47, Paul Cercueil wrote:
-> > Hi Maarten,
-> >=20
-> > Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 12:30 +0100, Maarten Lankhorst =
-a
-> > =C3=A9crit=C2=A0:
-> > > Hey,
-> > >=20
-> > > On 2023-02-15 11:48, Paul Cercueil wrote:
-> > > > Hi,
-> > > >=20
-> > > > I am working on adding support for DMABUFs in the IIO
-> > > > subsystem.
-> > > >=20
-> > > > One thing we want there, is the ability to specify the number
-> > > > of
-> > > > bytes
-> > > > to transfer (while still defaulting to the DMABUF size).
-> > > >=20
-> > > > Since dma_buf_map_attachment() returns a sg_table, I basically
-> > > > have
-> > > > two
-> > > > options, and I can't decide which one is the best (or the less
-> > > > ugly):
-> > > >=20
-> > > > - Either I add a new API function similar to
-> > > > dmaengine_prep_slave_sg(),
-> > > > which still takes a scatterlist as argument but also takes the
-> > > > number
-> > > > of bytes as argument;
-> > > >=20
-> > > > - Or I add a function to duplicate the scatterlist and then
-> > > > shrink
-> > > > it
-> > > > manually, which doesn't sound like a good idea either.
-> > > >=20
-> > > > What would be the recommended way?
-> > > Does this need an api change? If you create a DMA-BUF of size X,
-> > > it
-> > > has
-> > > to be of size X. You can pad with a dummy page probably if you
-> > > know
-> > > it
-> > > in advance. But after it has been imported, it cannot change
-> > > size.
-> > Yes, the sizes are fixed.
-> >=20
-> > > You don=C2=B4t have to write the entire dma-buf either, so if you wan=
-t
-> > > to
-> > > create a 1GB buf and only use the first 4K, that is allowed. The
-> > > contents of=C2=A0 the remainder of the DMA-BUF are undefined. It's up
-> > > to
-> > > userspace to assign a meaning to it.
-> > >=20
-> > > I think I'm missing something here that makes the whole question
-> > > m,ake
-> > > more sense.
-> > I want my userspace to be able to specify how much of the DMABUF is
-> > to
-> > be read from or written to.
-> >=20
-> > So in my new "dmabuf enqueue" IOCTL that I want to add to IIO, I
-> > added
-> > a parameter to specify the number of bytes to transfer (where 0
-> > means
-> > the whole buffer).
-> >=20
-> > The problem I have now, is that the current dmaengine core does not
-> > have a API function that takes a scatterlist (returned by
-> > dma_map_attachment()) and a transfer size in bytes, it will always
-> > transfer the whole scatterlist.
-> >=20
-> > So my two options would be to add a new API function to support
-> > specifying a bytes count, or add a mechanism to duplicate a
-> > scatterlist, so that I can tweak it to the right size.
->=20
-> This doesn't have to happen through DMA-BUF. Presumably you are both
-> the=20
-> importer and the exporter, so after you know how much is read, you
-> can=20
-> tell this to the importer that X number of bytes can be read from
-> DMA-BUF Y.
-
-Yes, I do that already as it is an argument in my ioctl.
-
-> In your case, when enqueing you will get a full SG list, but if you
-> know=20
-> only X bytes are read/written you only have to map the first X bytes
-> to=20
-> your IIO device. The rest of the SG list could be ignored safely.
-
-Yes. But I don't know how to "ignore the rest of the SG list".
-
-- dma_buf_map_attachment() does not have a parameter to specify that I
-only need the first X bytes mapped;
-
-- if I map the whole thing, dmaengine_prep_slave_sg() does not have an
-option to specify that I only want the first X bytes transferred.
-
--Paul
+That's why we're getting more and more comfortable with selftests
+and fuzz testing on KVM interfaces. So is there a test for this ?
