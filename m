@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A026973F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B665A6973F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjBOB4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S231871AbjBOB4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBOB4i (ORCPT
+        with ESMTP id S229454AbjBOB4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:56:38 -0500
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 462736A54
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:56:37 -0800 (PST)
-HMM_SOURCE_IP: 172.18.0.188:34125.977757130
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-10.133.8.199 (unknown [172.18.0.188])
-        by chinatelecom.cn (HERMES) with SMTP id AF2932800C8;
-        Wed, 15 Feb 2023 09:56:16 +0800 (CST)
-X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
-Received: from  ([10.133.8.199])
-        by app0023 with ESMTP id 454c576e64d04c51b19a314c22b84e79 for mingo@redhat.com;
-        Wed, 15 Feb 2023 09:56:35 CST
-X-Transaction-ID: 454c576e64d04c51b19a314c22b84e79
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 10.133.8.199
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
-        sunshouxin@chinatelecom.cn
-Subject: [RESEND PATCH] sched: sd_llc_id initialized
-Date:   Tue, 14 Feb 2023 17:54:35 -0800
-Message-Id: <20230215015435.100559-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Tue, 14 Feb 2023 20:56:49 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B17DB9;
+        Tue, 14 Feb 2023 17:56:47 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id CE48E24E249;
+        Wed, 15 Feb 2023 09:56:45 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 09:56:45 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 09:56:45 +0800
+Message-ID: <c8e1e030-59a5-107b-d1a3-0ad7e289a419@starfivetech.com>
+Date:   Wed, 15 Feb 2023 09:56:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/3] StarFive's SDIO/eMMC driver support
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230203081913.81968-1-william.qiu@starfivetech.com>
+ <CAPDyKFqei-GjKpBUQnDZUbYnSyn-JS5f_EnTLOuA1U4PdYTyVA@mail.gmail.com>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <CAPDyKFqei-GjKpBUQnDZUbYnSyn-JS5f_EnTLOuA1U4PdYTyVA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In my test,I use isolcpus to isolate cpu for specific,
-and then I noticed different scenario when core binding.
 
-For example, the NUMA topology is as follows,
-NUMA node0 CPU(s):               0-15,32-47
-NUMA node1 CPU(s):               16-31,48-63
 
-and the 'isolcpus' is as follows,
-isolcpus=14,15,30,31,46,47,62,63
+On 2023/2/14 20:18, Ulf Hansson wrote:
+> On Fri, 3 Feb 2023 at 09:19, William Qiu <william.qiu@starfivetech.com> wrote:
+>>
+>> Hi,
+>>
+>> This patchset adds initial rudimentary support for the StarFive
+>> designware mobile storage host controller driver. And this driver will
+>> be used in StarFive's VisionFive 2 board. The main purpose of adding
+>> this driver is to accommodate the ultra-high speed mode of eMMC.
+>>
+>> The last patch should be applied after the patchset [1]:
+>> [1] https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
+>>
+>> Changes since v2:
+>> - Wraped commit message according to Linux coding style.
+>> - Rephrased the description of the patches.
+>> - Changed the description of syscon regsiter.
+>> - Dropped redundant properties.
+>>
+>> The patch series is based on v6.1.
+>>
+>> William Qiu (3):
+>>   dt-bindings: mmc: Add StarFive MMC module
+>>   mmc: starfive: Add sdio/emmc driver support
+>>   riscv: dts: starfive: Add mmc node
+>>
+>>  .../bindings/mmc/starfive,jh7110-mmc.yaml     |  77 ++++++++
+>>  MAINTAINERS                                   |   6 +
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  23 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  37 ++++
+>>  drivers/mmc/host/Kconfig                      |  10 +
+>>  drivers/mmc/host/Makefile                     |   1 +
+>>  drivers/mmc/host/dw_mmc-starfive.c            | 185 ++++++++++++++++++
+>>  7 files changed, 339 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+>>  create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
+>>
+> 
+> Patch 1 and patch 2 applied for next, thanks!
+> 
+> Note that I fixed some checkpatch errors/warnings. Next time, please
+> run ./scripts/checkpatch.pl before you submit your patches.
+> 
+> Kind regards
+> Uffe
+z
+Hi Uffe,
 
-One task initially running on the non-isolated core belong to NUMA0
-was bind to one isolated core on NUMA1, and then change its cpu affinity
-to all cores, I notice the task can be scheduled back to the
-non-isolated core on NUMA0.
+Sorry about that, I'll check the patches before submit next time.
+Thanks for taking time reviewing this patch series.
 
-1.taskset -pc 0-13 3512  (task running on core 1)
-2.taskset -pc 63 3512    (task running on isolated core 63)
-3.taskset -pc 0-63 3512  (task running on core 1)
-
-Another case, one task initially running on the non-isolated core
-belong to NUMA1 was bind to one isolated core on NUMA1,
-and then change its cpu affinity to  all cores,
-the task can not be scheduled out and always run on the isolated core.
-
-1.taskset -pc 16-29 3512 (task running on core 17)
-2.taskset -pc 63 3512    (task running on isolated core 63)
-3.taskset -pc 0-63 3512  (task still running on core 63
-                          and not schedule out)
-
-The root cause is isolcpu not initialized sd_llc_id,
-the default value is 0, and it causes cpus_share_cache doesn't work.
-  select_task_rq_fair()
-        select_idle_sibling()
-                cpus_share_cache()
-
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
- kernel/sched/topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..89e98d410a8f 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -663,7 +663,7 @@ static void destroy_sched_domains(struct sched_domain *sd)
-  */
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
- DEFINE_PER_CPU(int, sd_llc_size);
--DEFINE_PER_CPU(int, sd_llc_id);
-+DEFINE_PER_CPU(int, sd_llc_id) = -1;
- DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
--- 
-2.27.0
-
+Best Regards
+William
