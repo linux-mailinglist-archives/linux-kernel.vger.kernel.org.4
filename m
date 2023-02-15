@@ -2,235 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A473697A78
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455BC697A82
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjBOLNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S232544AbjBOLPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjBOLNP (ORCPT
+        with ESMTP id S232342AbjBOLPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:13:15 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAAF1B54C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:13:13 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id u20so3556224vsp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:13:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676459592;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9lP4MvG5k1EpDumXLwfDIbMIO5VvOfCG8n4ZwEIYRA=;
-        b=LrC6OAsRg8g1C233qVSu2aTQsjJukMSr9kJugX5eEv5xTztxZNBGMYdnJtZL4A3I20
-         FoLBUysjf9I+puYCWrbSuqo18hn0vqoPJL/cUrror+NRaNEDJyZ3FV73Mb3RKJ5gxrUm
-         doCRxywsnNkhtbu6FZMJIpFRgYhTSkEwnzvw8bRm76R+noLjOzx1LDCmPmiRSHG2fvso
-         ELFjfxQfq8GOCff+Anilfx36Xa62SovbSw6qbo8+Grwykib0TwZ2Cc5QFZJb/qgNfGhE
-         GfmbPEfktti6g6oROelZgHi/02PwL6GGew43sdomc4f8fWfJDqXSSIFCj1u96PRDbLcp
-         idQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676459592;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9lP4MvG5k1EpDumXLwfDIbMIO5VvOfCG8n4ZwEIYRA=;
-        b=cijwaaOIYui4Iwmj8/grCulGiScTfRP2RDDn16N+neLDH9Ia5JClNb0Ljd1ymNg2KY
-         ycVu7m9fCQPNkbuPAxbr006rCHFqo9xMq6RY3MwcHeRti2M53yCjU3Yfn9Ue4mDUM8v9
-         0pYMvB9MjVJ+1CKIipJnWzF202eHpNmBpjEWWSpHTCfpPofc+ecdzIoASkO3N4uBKpCS
-         Mvx8ma/w9LfKvLUtHqfzzmVK/ydzhcObm9C9oopi1X7ogoekYdW7o36fELvnUYYbN2mH
-         8CsJemiWHWid3+zpBBll6QqaiWwYB0aMEzbEgA6249BgAxEkLblDgLN3sq8Xlu2Pk04e
-         a0kA==
-X-Gm-Message-State: AO0yUKVofCgo23uTiquEPyA8cB0JanKM0FdkxoiG9J463447IWMuDGfs
-        x68Z1+oyruhQ+ZMo03I0sR99O5HobFgOku423l8jsA==
-X-Google-Smtp-Source: AK7set+3UZH4rvUHU7q81fVFwnGAXPrl5eO9z6mdY/NTSmUYUwUrPc1QZupIIazj9JL9bT4f4FTNcpxlotuAc3guJtA=
-X-Received: by 2002:a67:6081:0:b0:3ee:65e3:af84 with SMTP id
- u123-20020a676081000000b003ee65e3af84mr325407vsb.77.1676459592133; Wed, 15
- Feb 2023 03:13:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230209223811.4993-1-mario.limonciello@amd.com> <20230209223811.4993-3-mario.limonciello@amd.com>
-In-Reply-To: <20230209223811.4993-3-mario.limonciello@amd.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 15 Feb 2023 16:43:01 +0530
-Message-ID: <CAFA6WYMJosUrE0BzQe6xFOaofZZWGiRBPBqoGk4Cvhm5s30VEQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
-        Lendacky Thomas <Thomas.Lendacky@amd.com>,
-        herbert@gondor.apana.org.au,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        kvm@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 15 Feb 2023 06:15:44 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320B722A24;
+        Wed, 15 Feb 2023 03:15:43 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C1D5D3200920;
+        Wed, 15 Feb 2023 06:15:41 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 15 Feb 2023 06:15:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676459741; x=1676546141; bh=NuTkQV0e8+
+        yxV4WjDL8EFdkun0PggnWdbE3vS2mdeYk=; b=XSQ10jBGCyy//uwDjFC0Af9Axu
+        AhV55yyc1rb3YGN2KCuZRPdfdM7C56ikjcrbH7nQrMdCEBLTmTGW9knrk+yi/6gT
+        Lq+WX7D/PnEM1R954rURuYNt6iQYyi289UbDOqFFZ/LxCOE7FY2FGWxFK0Yty4dc
+        yK5Dsf88bqItGj0BxkzvtdpPB0DvBsSBcRM+uUDE5VrlVxiqnOvJQ8MXPCZsIULV
+        nitU51TUjUfvq4nHg+Zc0o/ciGEFzqIcggNKU/wbfaUfwx9hYWmNqJqWK8yqeIfq
+        xry3g4fWzYi6t3FXSErSYSKxRw2psZXEnXUG/Eu2obIr/gn0mEjII6L1GpDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676459741; x=1676546141; bh=NuTkQV0e8+yxV4WjDL8EFdkun0Pg
+        gnWdbE3vS2mdeYk=; b=CQ1BkJfp36FTrZsKmBGmunUXkxkeDU2Xb58+DjHfPYdX
+        SdgrsKHRXFXUkVgBvinH+cKmQPcajuI74nTEpPmqnU8EU/oGiH7a0AircFd45CFn
+        8tfA287xkK/mXctXW0Bi2d0IqVWae5vmevh6yBqaQpxxNAh8wUiQfxZDbEfqbr8P
+        JB90yqpiGBwtkelXe9hTYAxI39/CPcn6UaAGvO8k3y/hjeUfInEwOsTv6+eSfP2D
+        ZzTLCCockkZ6ZlwDdPrjlEgmAAR5uTQfgk/nLkehM489wF96PZEx5xcfp8RIHkkC
+        Cfgwj/t8GsF0THeA5j8SM1StBVqY6/HgA3kwAMcSRw==
+X-ME-Sender: <xms:3L7sYzok_-KkiOdF3XqAhdEqApT_-bfb5bLDBJuA9JQoSLvLbcb4Gw>
+    <xme:3L7sY9qknNqvrT9fYABQmOeKj0BVIFwMT_38UUU0vSoVtiSttFY1Z3Evu3nbHVuc6
+    rGdOodVcFckeTIUglI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:3L7sYwNlJs28QGNv6n3bf7a6kFlNxxicStNugRHWrcVukjpcBhAPAw>
+    <xmx:3L7sY24gwdXwJf0bW655SgYHjk7daJnbxtiaDt1tGOzd7MwhW1orHw>
+    <xmx:3L7sYy5nCQzPBpYOLoamZnTiLcuq_S0LMOCRRZVFP8oo-ZMqgjZCnA>
+    <xmx:3b7sY0uUlIDoEofP4QVJJ2sr9YeogJubwIYqsXVsYl0R6DXnZwyWnw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D112FB60086; Wed, 15 Feb 2023 06:15:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <62e7ab37-1148-4cf1-8d6a-3da440fa623f@app.fastmail.com>
+In-Reply-To: <ea12dd12-db17-44a8-8c29-6b0a129f355d@app.fastmail.com>
+References: <20230215100008.2565237-1-ardb@kernel.org>
+ <20230215100008.2565237-3-ardb@kernel.org>
+ <ea12dd12-db17-44a8-8c29-6b0a129f355d@app.fastmail.com>
+Date:   Wed, 15 Feb 2023 12:13:06 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Ard Biesheuvel" <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     "Jonathan Corbet" <corbet@lwn.net>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: [RFC PATCH 2/5] kernel: Drop IA64 support from sig_fault handlers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 at 04:08, Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Wed, Feb 15, 2023, at 11:19, Arnd Bergmann wrote:
 >
-> The TEE subdriver for CCP, the amdtee driver and the i2c-designware-amdpsp
-> drivers all include `psp-sev.h` even though they don't use SEV
-> functionality.
->
-> Move the definition of `__psp_pa` into a common header to be included
-> by all of these drivers.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c                     |  1 +
->  drivers/crypto/ccp/sev-dev.c               |  1 +
->  drivers/crypto/ccp/tee-dev.c               |  2 +-
->  drivers/i2c/busses/i2c-designware-amdpsp.c |  2 +-
+> I can probably do the same recursive check for removed Kconfig
+> options that I used for finding dead code after the boardfile
+> removal.
 
->  drivers/tee/amdtee/call.c                  |  2 +-
->  drivers/tee/amdtee/shm_pool.c              |  2 +-
+FWIW, here is the list from a bit of scripting. Symbols that
+are only defined in arch/ia64 but are referenced elsewhere are:
 
-For TEE subsystem bits:
+CONFIG_IA64
+CONFIG_IA64_PAGE_SIZE_64KB
+CONFIG_IA64_SGI_UV
+CONFIG_IA64_DEBUG_CMPXCHG
+CONFIG_MSPEC
 
-Acked-by: Sumit Garg <sumit.garg@linaro.org>
+Kconfig symbols that are only selected in arch/ia64 but
+defined elsewhere are
 
--Sumit
+CONFIG_ARCH_HAS_DMA_MARK_CLEAN
+CONFIG_ARCH_TASK_STRUCT_ALLOCATOR
+CONFIG_ARCH_TASK_STRUCT_ON_STACK
+CONFIG_ARCH_THREAD_STACK_ALLOCATOR
+CONFIG_GENERIC_IRQ_LEGACY
 
->  include/linux/psp-sev.h                    |  8 --------
->  include/linux/psp.h                        | 14 ++++++++++++++
->  8 files changed, 20 insertions(+), 12 deletions(-)
->  create mode 100644 include/linux/psp.h
->
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 86d6897f48068..ee8e9053f4468 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -11,6 +11,7 @@
->  #include <linux/kvm_host.h>
->  #include <linux/kernel.h>
->  #include <linux/highmem.h>
-> +#include <linux/psp.h>
->  #include <linux/psp-sev.h>
->  #include <linux/pagemap.h>
->  #include <linux/swap.h>
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index e2f25926eb514..28945ca7c8563 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -24,6 +24,7 @@
->  #include <linux/cpufeature.h>
->  #include <linux/fs.h>
->  #include <linux/fs_struct.h>
-> +#include <linux/psp.h>
->
->  #include <asm/smp.h>
->  #include <asm/cacheflush.h>
-> diff --git a/drivers/crypto/ccp/tee-dev.c b/drivers/crypto/ccp/tee-dev.c
-> index 5c9d47f3be375..f24fc953718a0 100644
-> --- a/drivers/crypto/ccp/tee-dev.c
-> +++ b/drivers/crypto/ccp/tee-dev.c
-> @@ -13,7 +13,7 @@
->  #include <linux/delay.h>
->  #include <linux/slab.h>
->  #include <linux/gfp.h>
-> -#include <linux/psp-sev.h>
-> +#include <linux/psp.h>
->  #include <linux/psp-tee.h>
->
->  #include "psp-dev.h"
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index 8f36167bce624..80f28a1bbbef6 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -4,7 +4,7 @@
->  #include <linux/bits.h>
->  #include <linux/i2c.h>
->  #include <linux/io-64-nonatomic-lo-hi.h>
-> -#include <linux/psp-sev.h>
-> +#include <linux/psp.h>
->  #include <linux/types.h>
->  #include <linux/workqueue.h>
->
-> diff --git a/drivers/tee/amdtee/call.c b/drivers/tee/amdtee/call.c
-> index cec6e70f0ac92..e8cd9aaa34675 100644
-> --- a/drivers/tee/amdtee/call.c
-> +++ b/drivers/tee/amdtee/call.c
-> @@ -8,7 +8,7 @@
->  #include <linux/tee_drv.h>
->  #include <linux/psp-tee.h>
->  #include <linux/slab.h>
-> -#include <linux/psp-sev.h>
-> +#include <linux/psp.h>
->  #include "amdtee_if.h"
->  #include "amdtee_private.h"
->
-> diff --git a/drivers/tee/amdtee/shm_pool.c b/drivers/tee/amdtee/shm_pool.c
-> index f87f96a291c99..f0303126f199d 100644
-> --- a/drivers/tee/amdtee/shm_pool.c
-> +++ b/drivers/tee/amdtee/shm_pool.c
-> @@ -5,7 +5,7 @@
->
->  #include <linux/slab.h>
->  #include <linux/tee_drv.h>
-> -#include <linux/psp-sev.h>
-> +#include <linux/psp.h>
->  #include "amdtee_private.h"
->
->  static int pool_op_alloc(struct tee_shm_pool *pool, struct tee_shm *shm,
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index 1595088c428b4..7fd17e82bab43 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -14,14 +14,6 @@
->
->  #include <uapi/linux/psp-sev.h>
->
-> -#ifdef CONFIG_X86
-> -#include <linux/mem_encrypt.h>
-> -
-> -#define __psp_pa(x)    __sme_pa(x)
-> -#else
-> -#define __psp_pa(x)    __pa(x)
-> -#endif
-> -
->  #define SEV_FW_BLOB_MAX_SIZE   0x4000  /* 16KB */
->
->  /**
-> diff --git a/include/linux/psp.h b/include/linux/psp.h
-> new file mode 100644
-> index 0000000000000..202162487ec3b
-> --- /dev/null
-> +++ b/include/linux/psp.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __PSP_H
-> +#define __PSP_H
-> +
-> +#ifdef CONFIG_X86
-> +#include <linux/mem_encrypt.h>
-> +
-> +#define __psp_pa(x)    __sme_pa(x)
-> +#else
-> +#define __psp_pa(x)    __pa(x)
-> +#endif
-> +
-> +#endif /* __PSP_H */
-> --
-> 2.34.1
->
+plus a few that have only one or two other places selecting them:
+
+CONFIG_ARCH_CLOCKSOURCE_DATA (sparc64)
+CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC (x86)
+CONFIG_ATA_NONSTANDARD (powerpc-maple)
+CONFIG_FUNCTION_ALIGNMENT_32B (i386)
+CONFIG_HUGETLB_PAGE_SIZE_VARIABLE (powerpc64)
+CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT (x86, loongarch)
+CONFIG_ARCH_BINFMT_ELF_EXTRA_PHDRS (arm64, arch/um 32-bit)
+CONFIG_HAVE_FUNCTION_DESCRIPTORS (ppc64be, parisc64)
+CONFIG_HAVE_UNSTABLE_SCHED_CLOCK (parisc, x86)
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING (powerpc, s390)
+CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN (arc, loongarch)
+
+      Arnd
