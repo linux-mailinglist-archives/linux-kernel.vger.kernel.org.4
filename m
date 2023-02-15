@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0D76987CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3026987CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBOWYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S229651AbjBOW2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBOWYh (ORCPT
+        with ESMTP id S229596AbjBOW2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:24:37 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810323754A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:24:36 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z8-20020a170902834800b001990ad8de5bso66452pln.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:24:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s//5Uv6g/H1dLOt9CacaL5SpVK997g6euR8d9ZQ4syk=;
-        b=YDSO0P0Qvyx3frZ2ts9vid4DFRViwUw2dtZ7jgOLfEYtsB/HX8o7eqx8rxU8BQljFp
-         VTskW9VS3N9bHyDbtyOR8MvhuMld59b/GLWpbU955Jgbq3smz8Uh+yi4RcxErKAJd+rA
-         18X9Ldrj6VtM/0z7a9ncEy+YEzJYeRRh28aZJgu8nPLjR0nwWK8E2bD4hGYXRgvaSIAj
-         fewWJlf0y1SHH7HPPDq+873IUYG1aDT/VzyFQ87e9nCcBYi99TmSb4ThtwPTPl/BBA+K
-         aqvSjEDutED/I3uJqCvSKPWEHnqsebcouvH8jnwBZFrVR+rKw6ON1PNOAFRPsfwN5OO8
-         tgfg==
+        Wed, 15 Feb 2023 17:28:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9519E15545
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:27:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676500076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vft1Qv3jLlAD1lBQ+InfzxWLMn34pjK5f9gIV8ktH5k=;
+        b=FOVg79UDSwWl7TJcfONvlnEhL8re4G1Nbj9XmC0gFjnEJ7COSQzY5HkejkBwWD4G4Qg9Kb
+        3YG+3li4qa2hSPdIzrZBE37lpukfm3/bqw1Dh/b3wztQrc7lDCRtbifI/9cnAH15ggG+hY
+        cE5OZbJYvRSGQ3Wc604A+lvCat3PaTs=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-287-w-C7pwiuO861969-9bjqmQ-1; Wed, 15 Feb 2023 17:27:55 -0500
+X-MC-Unique: w-C7pwiuO861969-9bjqmQ-1
+Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso222622ilj.17
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:27:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s//5Uv6g/H1dLOt9CacaL5SpVK997g6euR8d9ZQ4syk=;
-        b=mNaCOoC5mCumAnbDi7+2SjO6RHnX4IeX2RAwPUNbU86SEqiO/6t9Jr7wRXJt5RDwgy
-         0H+ACPadW5JO86xaI0gExHIyDtOkrZo53Zo1GZSFFxJ38WE2IqeLWlF5KXArbVEIU9MM
-         VVOy+WZuT7y4yI0W9rzaHfm2Hf/ZaQnU7Vbz9sm4JU7KvkpYueRF7HsBfsx+S9J6GFoN
-         rhH66KWQZHAJLWq4JPJKgyjsr+nm6NYdG5PHtdMpsx+oON0RCyP7J7z81/9Nhw048/+Z
-         xU4Zd5X3/WGQicYBkprTqh5MrOxtcqYd0b/TTc9mjue3LDiF7PK1mVI986QE8XzSdNip
-         g7DQ==
-X-Gm-Message-State: AO0yUKXr8EXiPK2EnjxZhrW8Aa3w0ckWsm3XSLbu0ZVVDeHSf6I6DA55
-        5+F7GtKwed5TINPB4eYj/NX2aD++c8w=
-X-Google-Smtp-Source: AK7set8+cJELyQfDuC8OsZoJxp2bYsU7jOHMj3zXQ7bW5gcnGsIBOSRWBr4NyZAD1Q1HwhutMmZ9nutd5e8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:9691:0:b0:5a8:ec16:85f3 with SMTP id
- f17-20020aa79691000000b005a8ec1685f3mr602638pfk.16.1676499875820; Wed, 15 Feb
- 2023 14:24:35 -0800 (PST)
-Date:   Wed, 15 Feb 2023 14:24:34 -0800
-In-Reply-To: <diqzlekzkazq.fsf@ackerleytng-cloudtop.c.googlers.com>
-Mime-Version: 1.0
-References: <Y88ylDFfMQNcUEw7@google.com> <diqzlekzkazq.fsf@ackerleytng-cloudtop.c.googlers.com>
-Message-ID: <Y+1bom6CMFeNGWmm@google.com>
-Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
- stacks on function entry
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     erdemaktas@google.com, mail@maciej.szmigiero.name,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
-        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
-        maz@kernel.org, bgardon@google.com, jmattson@google.com,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
-        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
-        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
-        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
-        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
-        pshier@google.com, axelrasmussen@google.com,
-        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vft1Qv3jLlAD1lBQ+InfzxWLMn34pjK5f9gIV8ktH5k=;
+        b=ahRKLBzzBaYnx332DV2UXf6rvIb5ScH7H3E+67qp7xti+e5xmnsVB1Se4DXU9t8Qeb
+         ISIIXAxR3CCej8jZfeulobY7hmw1L8vwbEjNtVqiGwbRsKDN5hqPatLQ+zGVSQCLbPHm
+         O4S1+7AcBW9PuSwWgLfmS6oKEEaLliN4HkY9w3HpZbp+FysoEk9Myyzk8oeokxBrvZEh
+         Rb8Gs2v1WShbIpzPR48/QFkqQZYwRegS6OEZibwW9VOUGORE5XPlTRgELU2uxAOTetgd
+         3q5ZokAtVa7img5Su5KPT/4o88LU+zRoFoPKn43SZyAEksX0HEyOCglZpD/SHEyL7tL2
+         dZbg==
+X-Gm-Message-State: AO0yUKVIHRxJKLBNEU4T96IA9IYYEUu13KmqsyYh3SB1v+OEHMA73yTG
+        otfjoovfjXjxSfjyX8z8XEw19MSg0Vho2OCuQEljz1CVkTQ98E+RjEXktDbGFtyT1sVj6j6oGyH
+        RXSVhYngCSnUPk0rfbMn6+N/u
+X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr2423120iox.0.1676500074420;
+        Wed, 15 Feb 2023 14:27:54 -0800 (PST)
+X-Google-Smtp-Source: AK7set8YQb9C6xFgZu/24UXnVJo7RqQebXMxXct5eaVPh3FRSWk6iqMS8w5jj8njEBwcZYSo5ASRlg==
+X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr2423104iox.0.1676500074087;
+        Wed, 15 Feb 2023 14:27:54 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id g2-20020a056602242200b007437276ae6dsm233214iob.3.2023.02.15.14.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 14:27:53 -0800 (PST)
+Date:   Wed, 15 Feb 2023 17:27:52 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
+Message-ID: <Y+1caMCj3AjEU7BK@x1n>
+References: <20230214075710.2401855-1-stevensd@google.com>
+ <20230214075710.2401855-2-stevensd@google.com>
+ <Y+wMvVjDpW0nlaPu@x1n>
+ <CAD=HUj6c0=-6GRR60up5Jq5CaYbRn8XfSuUvL70Lip6EDB_E-w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=HUj6c0=-6GRR60up5Jq5CaYbRn8XfSuUvL70Lip6EDB_E-w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,42 +84,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023, Ackerley Tng wrote:
-> I figured it out!
+On Wed, Feb 15, 2023 at 10:57:11AM +0900, David Stevens wrote:
+> On Wed, Feb 15, 2023 at 7:35 AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > Hi, David,
+> >
+> > On Tue, Feb 14, 2023 at 04:57:10PM +0900, David Stevens wrote:
+> > > From: David Stevens <stevensd@chromium.org>
+> > >
+> > > Make sure that collapse_file respects any userfaultfds registered with
+> > > MODE_MISSING. If userspace has any such userfaultfds registered, then
+> > > for any page which it knows to be missing, it may expect a
+> > > UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
+> > > collapsing a shmem range would result in replacing an empty page with a
+> > > THP, so that it doesn't break userfaultfd.
+> > >
+> > > Synchronization when checking for userfaultfds in collapse_file is
+> > > tricky because the mmap locks can't be used to prevent races with the
+> > > registration of new userfaultfds. Instead, we provide synchronization by
+> > > ensuring that userspace cannot observe the fact that pages are missing
+> > > before we check for userfaultfds. Although this allows registration of a
+> > > userfaultfd to race with collapse_file, it ensures that userspace cannot
+> > > observe any pages transition from missing to present after such a race.
+> > > This makes such a race indistinguishable to the collapse occurring
+> > > immediately before the userfaultfd registration.
+> > >
+> > > The first step to provide this synchronization is to stop filling gaps
+> > > during the loop iterating over the target range, since the page cache
+> > > lock can be dropped during that loop. The second step is to fill the
+> > > gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
+> > > time, to avoid races with accesses to the page cache that only take the
+> > > RCU read lock.
+> > >
+> > > This fix is targeted at khugepaged, but the change also applies to
+> > > MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
+> > > return EBUSY if there are any missing pages (instead of succeeding on
+> > > shmem and returning EINVAL on anonymous memory). There is also now a
+> > > window during MADV_COLLAPSE where a fault on a missing page will cause
+> > > the syscall to fail with EAGAIN.
+> > >
+> > > The fact that intermediate page cache state can no longer be observed
+> > > before the rollback of a failed collapse is also technically a
+> > > userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
+> > > is exceedingly unlikely that anything relies on being able to observe
+> > > that transient state.
+> > >
+> > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > ---
+> > >  mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
+> > >  1 file changed, 58 insertions(+), 8 deletions(-)
+> >
+> > Could you attach a changelog in your next post (probably with a cover
+> > letter when patches more than one)?
+> >
+> > Your patch 1 reminded me that, I think both lseek and mincore will not
+> > report DATA but HOLE on the thp holes during collapse, no matter we fill
+> > hpage in (as long as hpage being !uptodate) or not (as what you do with
+> > this one).
+> >
+> > However I don't understand how this new patch can avoid the same race issue
+> > I mentioned in the last version at all.
 > 
-> GCC assumes that the stack is 16-byte aligned **before** the call
-> instruction. Since call pushes rip to the stack, GCC will compile code
-> assuming that on entrance to the function, the stack is -8 from a
-> 16-byte aligned address.
+> If find_get_entry sees an XA_RETRY_ENTRY, then it will re-read from
+> the xarray. This means find_get_entry will loop while we're finalizing
+> the collapse - either until we finalize the collapse with the
+> multi-index hpage entry or abort the collapse and clear the retry
+> entry. This means that even if userspace registers a userfaultfd and
+> calls lseek after khugepage check for userfaultfd, the call to lseek
+> will block until the collapse is finished.
 > 
-> Since for TDs we do a ljmp to guest code, providing a function's
-> address, the stack was not modified by a call instruction pushing rip to
-> the stack, so the stack is 16-byte aligned when the guest code starts
-> running, instead of 16-byte aligned -8 that GCC expects.
-> 
-> For VMs, we set rip to a function pointer, and the VM starts running
-> with a 16-byte algined stack too.
-> 
-> To fix this, I propose that in vm_arch_vcpu_add(), we align the
-> allocated stack address and then subtract 8 from that:
-> 
-> @@ -573,10 +573,13 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm,
-> uint32_t vcpu_id,
->         vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
->         vcpu_setup(vm, vcpu);
-> 
-> +       stack_vaddr += (DEFAULT_STACK_PGS * getpagesize());
-> +       stack_vaddr = ALIGN_DOWN(stack_vaddr, 16) - 8;
+> There are a number of other places in filemap.c/shmem.c that do their
+> own iteration over the xarray, and they all retry on xas_retry() as
+> well.
 
-The ALIGN_DOWN should be unnecessary, we've got larger issues if getpagesize() isn't
-16-byte aligned and/or if __vm_vaddr_alloc() returns anything but a page-aligned
-address.  Maybe add a TEST_ASSERT() sanity check that stack_vaddr is page-aligned
-at this point?
+I've no problem on using RETRY entries (as long as others are fine with it
+:).  It seems your logic depends on patch 1 being there already, so right
+after the RETRY got replaced with the thp it'll show Uptodate==DATA.
 
-And in addition to the comment suggested by Maciej, can you also add a comment
-explaining the -8 adjust?  Yeah, someone can go read the changelog, but I think
-this is worth explicitly documenting in code.
+However I doubt whether patch 1 is correct at all..  Maybe that can be
+instead fixed by having:
 
-Lastly, can you post it as a standalone patch?
+		folio_mark_uptodate(folio);
 
-Many thanks!
+To be before:
+
+		xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+		xas_store(&xas, hpage);
+
+To replace patch 1, but I think there's still some issue in patch 2 even if
+it works.  Ouch, I cut the codes..  I'll comment inline in another reply.
+
+-- 
+Peter Xu
+
