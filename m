@@ -2,80 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451B2697CF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB27C697CFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbjBONQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S234027AbjBONRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbjBONQz (ORCPT
+        with ESMTP id S232055AbjBONRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:16:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14648241E4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676466971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 15 Feb 2023 08:17:52 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F60269F;
+        Wed, 15 Feb 2023 05:17:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1676467068; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJNFIuqu9Gce6zrkPruAO8JV/AMize9aNRnmeacl/AI=;
-        b=OIh2WN1Pmc4udyFHy9FJnuSxcpQedjAzd+GHvLAG/eXHJOLyX9WrKsdBtAG+S6eLzIRDVY
-        1rCaKpselfF2EsuYjT63OtJgEg4rgTS3xvBBum9EW/4auDJ9/ucFDY8MzcI0m5Jx8ayfTz
-        7bmriF4WEkPrijDZdGPrgllJG0ZuA3Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-att87qQWPNuKUv9VIvGTuw-1; Wed, 15 Feb 2023 08:16:08 -0500
-X-MC-Unique: att87qQWPNuKUv9VIvGTuw-1
-Received: by mail-wm1-f72.google.com with SMTP id j20-20020a05600c1c1400b003dc5dd44c0cso9223031wms.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:16:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rJNFIuqu9Gce6zrkPruAO8JV/AMize9aNRnmeacl/AI=;
-        b=3bZQinRbDGheTKSEw/fEo5wCfRNIVBmiHZh8jn3J6+yiLo5q/1PT5QbtWRr/Lv/F3j
-         01rMSiwlNOPLnDM2XE3+fX5UdlPVdOFJ3gOPUoxWvoW+s0kvQX6oGpkHN/lGNsOGjdjj
-         H0ks09HRqgvHGOFSXhM+qd5uyLChw/s4xNDboHJopBUSb8hFN68YHRqce9BLluB8cT1e
-         dt2geXReSUcj2ZZN0tiQ+JaUcr1DK7i1e5h36lFf0Cb/bZw1+VLB5SpsE06Vw5uDHfY2
-         wHO2ls0wVFfZALu28lubl1p77YJxSkpUvXbRnd1VwXSFb8XaYcurQKFRYgN0ux5qRNnW
-         GkUg==
-X-Gm-Message-State: AO0yUKWJgpqWeS6ByQuoex9qgZQszs8D1hWz0PVGIjM+CEcAViTBR+Z5
-        k11mneASxXhdTArCI8EA5Crbt9uK3lD/Jovk+2/q9fepuISD5wzwfxR7ZJmGWL5m7zWrzz1RyLQ
-        F1JPfNS/7KIALKRpYR2NAatZwewkhHw==
-X-Received: by 2002:adf:f386:0:b0:2c5:51ed:adf7 with SMTP id m6-20020adff386000000b002c551edadf7mr1378246wro.34.1676466966864;
-        Wed, 15 Feb 2023 05:16:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set+3D62A5OUeKxaOzFj+NPme2A9Cjv1hK7rqDP5aQKgXZLam7GroA2X4/AIzYrC/FzsLSyvWDw==
-X-Received: by 2002:adf:f386:0:b0:2c5:51ed:adf7 with SMTP id m6-20020adff386000000b002c551edadf7mr1378234wro.34.1676466966641;
-        Wed, 15 Feb 2023 05:16:06 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:1400:b7d:4122:28d:f4c3? (p200300cbc70714000b7d4122028df4c3.dip0.t-ipconnect.de. [2003:cb:c707:1400:b7d:4122:28d:f4c3])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056000101100b002c57475c375sm178787wrx.110.2023.02.15.05.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 05:16:06 -0800 (PST)
-Message-ID: <388b9a93-423f-33f8-0495-2a4a290fd1aa@redhat.com>
-Date:   Wed, 15 Feb 2023 14:16:05 +0100
+        bh=jo1hcFRAlyScdE9l1OosLx/8lHX5O2IFB6fOVnE2huo=;
+        b=dyI3tzY/o5ySfHS2uP9etLBRf86yxechHKW5lri8USdQRBHHrd0w/KLW0upLzNQcIJAtgD
+        DYCqbacZeOamgDEdoobPUajkTc8GRMAgpAAwvdrSUKR8E72yJ5Utyd+bMDGgFbcc1fstVA
+        kLIO0hpgIVwSprX9suKvFbufOz/fZ5w=
+Message-ID: <53753ec9589aeb1f7ce035414220c67f0c02c983.camel@crapouillou.net>
+Subject: Re: Question: partial transfers of DMABUFs
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+Date:   Wed, 15 Feb 2023 13:17:45 +0000
+In-Reply-To: <9e6b428e-81c0-4e2a-6825-43f022483013@linux.intel.com>
+References: <53ea4d2db570d3ca514a69015488bd5b849a5193.camel@crapouillou.net>
+         <836d600a-bb1c-fbb2-89f5-7c79c3150e8c@linux.intel.com>
+         <d540965a25138772fa063d62e907ffd611f93205.camel@crapouillou.net>
+         <05fb3949-d0aa-b653-d9a3-236a4c95a5a3@linux.intel.com>
+         <77fc4dec6738d57ae6ca6232e502e3b228b1ae03.camel@crapouillou.net>
+         <9e6b428e-81c0-4e2a-6825-43f022483013@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm/memory_hotplug: return zero from do_migrate_range()
- for only success
-Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230214223236.58430-1-sj@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230214223236.58430-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,25 +54,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 23:32, SeongJae Park wrote:
-> do_migrate_range() returns migrate_pages() return value, which zero
-> means perfect success, in usual cases.  If all pages are failed to be
-> isolated, however, it returns isolate_{lru,movalbe}_page() return
-> values, or zero if all pfn were invalid, were hugetlb or hwpoisoned.  So
-> do_migrate_range() returning zero means either perfect success, or
-> special cases of isolation total failure.
-> 
-> Actually, the return value is not checked by any caller, so it might be
-> better to simply make it a void function.  However, there is a TODO for
-> checking the return value.
+Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 13:13 +0100, Maarten Lankhorst a =
+=C3=A9crit=C2=A0:
+>=20
+> On 2023-02-15 13:00, Paul Cercueil wrote:
+> > Hi Maarten,
+> >=20
+> > Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 12:52 +0100, Maarten Lankhorst =
+a
+> > =C3=A9crit=C2=A0:
+> > > Hey,
+> > >=20
+> > > On 2023-02-15 12:47, Paul Cercueil wrote:
+> > > > Hi Maarten,
+> > > >=20
+> > > > Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 12:30 +0100, Maarten Lankho=
+rst a
+> > > > =C3=A9crit=C2=A0:
+> > > > > Hey,
+> > > > >=20
+> > > > > On 2023-02-15 11:48, Paul Cercueil wrote:
+> > > > > > Hi,
+> > > > > >=20
+> > > > > > I am working on adding support for DMABUFs in the IIO
+> > > > > > subsystem.
+> > > > > >=20
+> > > > > > One thing we want there, is the ability to specify the
+> > > > > > number
+> > > > > > of
+> > > > > > bytes
+> > > > > > to transfer (while still defaulting to the DMABUF size).
+> > > > > >=20
+> > > > > > Since dma_buf_map_attachment() returns a sg_table, I
+> > > > > > basically
+> > > > > > have
+> > > > > > two
+> > > > > > options, and I can't decide which one is the best (or the
+> > > > > > less
+> > > > > > ugly):
+> > > > > >=20
+> > > > > > - Either I add a new API function similar to
+> > > > > > dmaengine_prep_slave_sg(),
+> > > > > > which still takes a scatterlist as argument but also takes
+> > > > > > the
+> > > > > > number
+> > > > > > of bytes as argument;
+> > > > > >=20
+> > > > > > - Or I add a function to duplicate the scatterlist and then
+> > > > > > shrink
+> > > > > > it
+> > > > > > manually, which doesn't sound like a good idea either.
+> > > > > >=20
+> > > > > > What would be the recommended way?
+> > > > > Does this need an api change? If you create a DMA-BUF of size
+> > > > > X,
+> > > > > it
+> > > > > has
+> > > > > to be of size X. You can pad with a dummy page probably if
+> > > > > you
+> > > > > know
+> > > > > it
+> > > > > in advance. But after it has been imported, it cannot change
+> > > > > size.
+> > > > Yes, the sizes are fixed.
+> > > >=20
+> > > > > You don=C2=B4t have to write the entire dma-buf either, so if you
+> > > > > want
+> > > > > to
+> > > > > create a 1GB buf and only use the first 4K, that is allowed.
+> > > > > The
+> > > > > contents of=C2=A0 the remainder of the DMA-BUF are undefined. It'=
+s
+> > > > > up
+> > > > > to
+> > > > > userspace to assign a meaning to it.
+> > > > >=20
+> > > > > I think I'm missing something here that makes the whole
+> > > > > question
+> > > > > m,ake
+> > > > > more sense.
+> > > > I want my userspace to be able to specify how much of the
+> > > > DMABUF is
+> > > > to
+> > > > be read from or written to.
+> > > >=20
+> > > > So in my new "dmabuf enqueue" IOCTL that I want to add to IIO,
+> > > > I
+> > > > added
+> > > > a parameter to specify the number of bytes to transfer (where 0
+> > > > means
+> > > > the whole buffer).
+> > > >=20
+> > > > The problem I have now, is that the current dmaengine core does
+> > > > not
+> > > > have a API function that takes a scatterlist (returned by
+> > > > dma_map_attachment()) and a transfer size in bytes, it will
+> > > > always
+> > > > transfer the whole scatterlist.
+> > > >=20
+> > > > So my two options would be to add a new API function to support
+> > > > specifying a bytes count, or add a mechanism to duplicate a
+> > > > scatterlist, so that I can tweak it to the right size.
+> > > This doesn't have to happen through DMA-BUF. Presumably you are
+> > > both
+> > > the
+> > > importer and the exporter, so after you know how much is read,
+> > > you
+> > > can
+> > > tell this to the importer that X number of bytes can be read from
+> > > DMA-BUF Y.
+> > Yes, I do that already as it is an argument in my ioctl.
+> >=20
+> > > In your case, when enqueing you will get a full SG list, but if
+> > > you
+> > > know
+> > > only X bytes are read/written you only have to map the first X
+> > > bytes
+> > > to
+> > > your IIO device. The rest of the SG list could be ignored safely.
+> > Yes. But I don't know how to "ignore the rest of the SG list".
+> >=20
+> > - dma_buf_map_attachment() does not have a parameter to specify
+> > that I
+> > only need the first X bytes mapped;
+> >=20
+> > - if I map the whole thing, dmaengine_prep_slave_sg() does not have
+> > an
+> > option to specify that I only want the first X bytes transferred.
+>=20
+> sg_split apppears to allow you to split it? I'm not 100% sure whether
+> it=20
+> leaves the original SG untouched, but you can try to put it in
+> between=20
+> those 2 calls to get a smaller SG to pass to prep_slave_sg.
 
-I'd prefer to not add more dead code ;) Let's not return an error instead.
+I overlooked sg_split. It looks like it could work for me.
 
-It's still unclear which kind of fatal migration issues we actually care 
-about and how to really detect them.
+Thanks!
 
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers,
+-Paul
