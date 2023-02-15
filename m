@@ -2,244 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660F269778F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E262697793
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjBOHu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S233732AbjBOHup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjBOHu1 (ORCPT
+        with ESMTP id S233631AbjBOHun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:50:27 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2078.outbound.protection.outlook.com [40.107.104.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377147696;
-        Tue, 14 Feb 2023 23:50:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FKXLP/SExeGhe7NXSJg2XrLBv3SgjwdEC56ODV67tsOHr06agdeItMZYswKTOz3XOgFlcXXBRZFBpbNj/da9UVhqyTgScGEC/p3yFvWEcdWMukdwYqkEC7zoN81NvjhNI3dKcI76m7LEQLtGhZq+w5+BB7S0+sYTrkThQ08XEr4NqLI62RGVEP45GFjvhRczvwhiNK9naxZCDo38N/X9Wc6VnwAGRiyjGVEfNGWbfPwdNE9sBzJh6G0S7BbF6HHkK/ZssyAC7Vn7ZOcwzVd9c4+V1KEra35wRjsyvIqbvKAsU3v9O7jVw6oIcjpJBHDaLpMT761zKhApo59zDFoWTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7MFJ8W0jH5fCt8F4Yd+YqHbvNHRcTQGH79WtqfPf8Io=;
- b=SsuHnggoS/tY3MEsIyx+28NdjRbH6QEM7nJtBDXl3JQX3jDRYWDZ1bsOGMbxEYIgEPPE5LYj84cDJ6gYLqmHjcO+6iBxYSPAVtsKi0pFNlNtmHu0WNr5Z4RSzX+Dux61WMLbeVBmtW9oGj9AWkK487EJAv/yexeYLf1jyCIJfsA6rKm6YtLrnI/wivBHffd3kcwN+uVn5N75vMtkHBJxcq+vUzubmz/Rkw+xOFAZ1J5/pEGj5I1knFyjy4J9G2pv2Y+K5A3dX8R1bOmOyBpAe97YWNgDmS85Xgpm3BqU0SxnJHNZLqSr8u/zSk/7bvNsJtRr3L1TJ3ePuCB/EddFig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7MFJ8W0jH5fCt8F4Yd+YqHbvNHRcTQGH79WtqfPf8Io=;
- b=ljRJ1TpfZpyRNLLVLFLef+2EHB4HjID7UgFuV7lfFa7rcQOVwloGHao6pzQsbRni6Q4A3iAdbIuigWNAeR5YWIR8M6gqhuoEk7Du08WKm8HQTAn8dIQ+47VldcbEw+D16OoqQruPcygP22jNX9QAzgMIMM7OVwzR2ntdDijgMa4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM9PR04MB8177.eurprd04.prod.outlook.com (2603:10a6:20b:3b7::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
- 2023 07:50:22 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
- 07:50:22 +0000
-Message-ID: <41bc30ac7af4b0ce3ff608b604fb6ea762428680.camel@nxp.com>
-Subject: Re: [PATCH v3 1/6] dt-bindings: lcdif: Add i.MX93 LCDIF support
-From:   Liu Ying <victor.liu@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
-Date:   Wed, 15 Feb 2023 15:49:56 +0800
-In-Reply-To: <2551514.Lt9SDvczpP@steina-w>
-References: <20230213085612.1026538-1-victor.liu@nxp.com>
-         <20230213085612.1026538-2-victor.liu@nxp.com> <2551514.Lt9SDvczpP@steina-w>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0131.apcprd02.prod.outlook.com
- (2603:1096:4:188::6) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Wed, 15 Feb 2023 02:50:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9998532CD0;
+        Tue, 14 Feb 2023 23:50:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40A2861A71;
+        Wed, 15 Feb 2023 07:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6AEC433EF;
+        Wed, 15 Feb 2023 07:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676447438;
+        bh=XpvbBaK4xbaNhxlwvyVb04WeG3csNvfLcdKEuWJ14Gc=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=qGLKtYOC1JidZV0q21JkS8oN2oDMbFsSJLLSQ00irZHaYfD+x/CJLL2zI11TWPQao
+         n02MH7PytUN8YAgEmgGSclIZrUvWvyXW402uLQz65NATy640wjiqO1OaW5UbBPTk//
+         RkEdwANKDVVbNj6pcyxKxWGvuVytPRU2YlF91SyNadoup9t5bUL/2M9Su7W5Fwy6X8
+         lTO5Eg/kFUxdxImILs4tnuyo651QpTbRX5ucgc9KbYl004/ZE46v10lvbxA6CPR7gB
+         jbbMJCl3EhlWE+7yXoJfP5J7qEC++NKefFuovuO4XcDvkJ6mnb1pGsmD4PuQl2ik9h
+         4COw6XBFSjXNQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM9PR04MB8177:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f3fa30d-3f45-4480-b6cf-08db0f294a72
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QO7KpAA5Rh1G0iPyEZ5ay7FsTcUuuIFxSvVu9vxRB/D02gvdW7YksRYBT47aQIon2ZHVDR2XybBwBva5GRROvd6SO40n6p47fd+yuh/zqKFbZVXOkTNlk6v8l80cVu2aAIT8uIwyJ2HdhaCujWrXVIC6aYLuK3yeLpaE3pNGyNVCP76j0dmnSB3ooHe88PhNjR6fMZHlEVVhwsnCbAWM1HTbXicGDkVUKLfTQn3504wJ3/VGFlmmuYR+meZJVkDwQ+VnFOhCcWDPYC/Ar+gVyFXlmfAQ+NlvE750kz/FeIXShz1S8g1Nvk7PyaSuzIAWcO4WYrNSUIJVWmtVXkXq+sDDOcKWBVkXZnzQ+f7WNSiPWSJrqOXojKd72Ptrr2Q1fGxhjEoQyC0iQ64w6NDybITMXb4SMSGdAicdoFHjWEtyp0vqU/kCsjlKAFUOLS9BXMbWGpkXLwmr9SCMc9k9TK6GSGR8LlqDer3LnAmlbjiazfTYQYlqclsPwN6ajqS/repfOxxMHhDy50RHcD1PpnCpk9mg6GCNLlJc8megb82bAiSPxtlsjl7pXVtSxBv9ASJH5k7UH5MLeq1O8wcHsq5/OmnjZiGKixPT8FLtmaM+yqutnWUBwAadt8MPqTolAS8HtBQQ/ukQuWQ9OK1GRNAYGGpMdL8Qq0uQXmghHaY2pDzK+jSsxOWxOc5nnLxyiuYRm+mvdcTfMqDwgfApgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(451199018)(2616005)(86362001)(6486002)(83380400001)(966005)(478600001)(186003)(52116002)(26005)(6512007)(6666004)(6506007)(36756003)(38100700002)(38350700002)(8936002)(41300700001)(5660300002)(7416002)(316002)(4326008)(66946007)(66476007)(66556008)(8676002)(2906002)(99106002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dlJMeEZnc2tWUjdKdUlYQ1NwQ25TaHplOEV6ak41SWQzS0ROVnRhV2RkY1cr?=
- =?utf-8?B?QzBaS2x6RzdNNlV3U1A4dUEySUtFTkR2RE1EcUZSWklNekRvRjc4dVJvVjJX?=
- =?utf-8?B?d3hPMG90NXlVNmg5a1BIbEljRFZBa1htaE5EbzBJdGx6ay8vZHhaV2NXWGV3?=
- =?utf-8?B?N3lOSFN1U2pnV1U2b3hNU0pDMzBpa3pMWm1FbE1CdTYzMGpKcG9meXYxTk9a?=
- =?utf-8?B?aDNPaWJpbkw1QnZzT05tUjJvenNVaW1WNGtnblBaMDNhNzZOUVNTaU5Dcm1n?=
- =?utf-8?B?a2pOTm8rYXYveUFtdEpSQXdvWVRaOEVuNFFKYWxyeFNKelRpaWxXcXV3bGpM?=
- =?utf-8?B?VW41V3p4TzFSUGdYdlVkSGV2R09tc1BITGZFMEFLeE04Y3ZNMlpXN216TlN1?=
- =?utf-8?B?SWVOVm5WRkR0eDdralVBUmsvUlpOVkhGWEFSeTdlUExua0JGUnR1cCtmZG5S?=
- =?utf-8?B?c21lMTNOTEp0Z0UrTmVKOGxRWXJKT1VKZnVDaFFKYlFiU0xTOElYOFU3bVdY?=
- =?utf-8?B?UDJ5bENXZWd0d21nTDUyR0RkQkZ3NXo0aElUeGc1ZTRJRjdkS293b01HWGZX?=
- =?utf-8?B?QVNCSmJjTXlPanB1eUNYNlFiYy91SlRxWHhtTjVmSWtST3poT2tjczFWYkta?=
- =?utf-8?B?WVRKcmJOLzBabHgyZDZ0WlB2QWNUTW9MREg5bFN4akhBdzZQbjhmdmZZdnhs?=
- =?utf-8?B?bVRJUnhLaGhxZFpnQklYalZvWWNmZHo3L291T0pWYnJENEtwYWZGQ3I3OXhj?=
- =?utf-8?B?UFczVldyZ0tWRU1HKzFqV25iSEV5NXQwdVV4SW5XSmw5QVdjQnYxRndRZzVl?=
- =?utf-8?B?S3kweUhqUzhsM041citpSFJZeDUrTlh1dEsyQm82Z0h6NStLSlZwbXp5TUtx?=
- =?utf-8?B?d3FaR3FLQ0Jhc0FGNkNaRHJKUWZyMTlDRlNmL2k0Q2piVlNZSi9BRDVvNnhZ?=
- =?utf-8?B?dHJaMk1yK3Q1cHJtMXk0SEZaK0o2aHRDUk9LNlozNDhYYlU5bm5QcEVCc21F?=
- =?utf-8?B?Tm5GdTJhcmJyaVp6NE5SbjBtOVdsOS84eTRwSnJFS1FmVjdvVndTM1VHcGFB?=
- =?utf-8?B?Rks4L0FhRENQaXZRT1Y1T1Q1eTV5VEI2Y0pEYUdWQmRqZHprSE14VzlzQkt0?=
- =?utf-8?B?UFp4WnNrVVZMNmZWQjJoZjg3MDZ1UGtVQkpYVExSbnFvM2hTak1lSVV6Q3Na?=
- =?utf-8?B?TFdaOE41Mm00aHBjRjZIRWxKeUIrVmRRSTBkS28ySnl0WElWZ2hPN0ZNcFJD?=
- =?utf-8?B?bW01SHdTclBYcVExRS9sWldjUTFlTU04aERlVFVIdGV0cDJsQjRNSlEzN2hw?=
- =?utf-8?B?SUFRQlMwbTBIcXAyTm8wYnM3MUMzb2VDZU9RQndRaDRCWGV6aWlSWVlRY1lO?=
- =?utf-8?B?NVNUa1I2TFc1U29NcHF0Ly85WjU0QzNvaEZnVGtuSkczdExHY0ZreTFmSGRo?=
- =?utf-8?B?UGY3dVlTa2pUODlQZDFLUHNUMlhDM3dFSXVJalRCbEEvRFRwd016cU5qb3dU?=
- =?utf-8?B?RTQyQkJPVVVxZ2puR2JCdkV0dVExSmQwbnpTSTdHWWY5amQzcjZpdzZEUzR3?=
- =?utf-8?B?elRjT21LSEhudVhqY2N0eXlKOTdwZm1nUm9Fc2pjckh4UE84WlJhY1RyUXNK?=
- =?utf-8?B?OERnL2N3REpXRXlDbk9CL1V2dDRqNy81ancvMFZhNm40UGlYc2pGMWg5d2VR?=
- =?utf-8?B?WkFoeW9hZi9JRlQ2QmRrVlRoY25MdzIxSElqV0k2aHdNdzhuWGRnbEJ2MTlL?=
- =?utf-8?B?bHBzMG5VTWpVWGE2cmJSdGNhd1RrMnlSYmJVVlFSNUg4RjJQcW5YaEpjT2Fu?=
- =?utf-8?B?OEhkSElPVm5ZRWFRRUhtWElHQnhOUnZ4TXRFeldDTmtTcFo4dU56WkFQM0tK?=
- =?utf-8?B?VU1DeXIwalptZk8reGIybE03bUkxU2gwRFRkRmJicWdwR21qeDZNbC81Nm9E?=
- =?utf-8?B?U25rVGdBQkRGWkY5M1dwNmZnTUlwdkk4amZKM3AwVXk0UHZKeEFweEFjcXRQ?=
- =?utf-8?B?cU0yOVJWU2J1cklsWWZnakhHY3VmQXk3aDF0M3g4NDlyNlhLVy9pRHBoUjBh?=
- =?utf-8?B?QWNlYUlRZUVPeTh2V29mSU1RT2gwb1A2a3psZHRVaVBMaS9BN1JvRFF0dlQ3?=
- =?utf-8?Q?+dpvTCLjTb80m+VvwIRrt8BCT?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f3fa30d-3f45-4480-b6cf-08db0f294a72
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 07:50:22.7663
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wrkvfM008B1aGUcZsqCpZALpztu7ZGqmycH6qJydIEUxaBI/Eo+Pbg/XI5IzBtURI+1AQok8kwW8Rktchm2TnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8177
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 1/3] wifi: rtw88: usb: Set qsel correctly
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230210111632.1985205-2-s.hauer@pengutronix.de>
+References: <20230210111632.1985205-2-s.hauer@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Andreas Henriksson <andreas@fatal.se>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167644743063.2758.2777342637457592464.kvalo@kernel.org>
+Date:   Wed, 15 Feb 2023 07:50:35 +0000 (UTC)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-15 at 08:26 +0100, Alexander Stein wrote:
-> Hi Liu,
+Sascha Hauer <s.hauer@pengutronix.de> wrote:
 
-Hi Alexander,
-
+> We have to extract qsel from the skb before doing skb_push() on it,
+> otherwise qsel will always be 0.
 > 
-> thanks for the update.
+> Fixes: a82dfd33d1237 ("wifi: rtw88: Add common USB chip support")
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Thanks for the review.
+3 patches applied to wireless-next.git, thanks.
 
-> 
-> Am Montag, 13. Februar 2023, 09:56:07 CET schrieb Liu Ying:
-> > There is one LCDIF embedded in i.MX93 SoC to connect with
-> > MIPI DSI controller through LCDIF cross line pattern(controlled
-> > by mediamix blk-ctrl) or connect with LVDS display bridge(LDB)
-> > directly or connect with a parallel display through parallel
-> > display format(also controlled by mediamix blk-ctrl).  i.MX93
-> > LCDIF IP is essentially the same to i.MX8MP LCDIF IP.  Add device
-> > tree binding for i.MX93 LCDIF.
-> > 
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Marek Vasut <marex@denx.de>
-> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > ---
-> > v2->v3:
-> > * No change.
-> > 
-> > v1->v2:
-> > * Add Krzysztof's A-b and Marek's R-b tags on patch 1/6.
-> > 
-> >  Documentation/devicetree/bindings/display/fsl,lcdif.yaml | 7
-> > ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml index
-> > 75b4efd70ba8..fc11ab5fc465 100644
-> > --- a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > +++ b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > @@ -21,6 +21,7 @@ properties:
-> >            - fsl,imx28-lcdif
-> >            - fsl,imx6sx-lcdif
-> >            - fsl,imx8mp-lcdif
-> > +          - fsl,imx93-lcdif
-> >        - items:
-> >            - enum:
-> >                - fsl,imx6sl-lcdif
-> > @@ -88,7 +89,9 @@ allOf:
-> >        properties:
-> >          compatible:
-> >            contains:
-> > -            const: fsl,imx8mp-lcdif
-> > +            enum:
-> > +              - fsl,imx8mp-lcdif
-> > +              - fsl,imx93-lcdif
-> >      then:
-> >        properties:
-> >          clocks:
-> > @@ -107,6 +110,7 @@ allOf:
-> >                enum:
-> >                  - fsl,imx6sx-lcdif
-> >                  - fsl,imx8mp-lcdif
-> > +                - fsl,imx93-lcdif
-> >      then:
-> >        properties:
-> >          clocks:
-> > @@ -123,6 +127,7 @@ allOf:
-> >                - fsl,imx8mm-lcdif
-> >                - fsl,imx8mn-lcdif
-> >                - fsl,imx8mp-lcdif
-> > +              - fsl,imx93-lcdif
-> >      then:
-> >        required:
-> >          - power-domains
-> 
-> I would have expected that fsl,imx93-lcdif supports up to 3 endpoints
-> (MIPI 
-> DSI, LVDS, and parallel) in a 'ports' subnode. But this binding only
-> supports 
-> a single 'port' sub-node. Also an example for this case might be very
-> helpful.
+7869b834fb07 wifi: rtw88: usb: Set qsel correctly
+07ce9fa6ab0e wifi: rtw88: usb: send Zero length packets if necessary
+462c8db6a011 wifi: rtw88: usb: drop now unnecessary URB size check
 
-The port node allows multiple endpoints(See graph.yaml[1]).  It's
-enough to use the existing port node instead of using ports node.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230210111632.1985205-2-s.hauer@pengutronix.de/
 
-For i.MX93 LCDIF, the port node will be something like this:
---------------------8<--------------------------
-port {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        lcdif_to_pdfc: endpoint@0 {
-                reg = <0>;
-        };
-
-        lcdif_to_ldb: endpoint@1 {
-                reg = <1>;
-        };
-
-        lcdif_to_cross_line_pattern: endpoint@2 {
-                reg = <2>;
-        };
-};
---------------------8<--------------------------
-
-Looks like it's not necessary to add a specifc example for i.MX93
-LCDIF.
-
-[1] 
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L48
-
-Regards,
-Liu Ying
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
