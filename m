@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05D8697E9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426C7697E9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjBOOoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S229849AbjBOOpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjBOOoB (ORCPT
+        with ESMTP id S229806AbjBOOpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:44:01 -0500
+        Wed, 15 Feb 2023 09:45:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A2F3929B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:44:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F7E8A5A;
+        Wed, 15 Feb 2023 06:45:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B9861C3D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931DBC4339C;
-        Wed, 15 Feb 2023 14:43:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE0F61C3C;
+        Wed, 15 Feb 2023 14:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC86C433A7;
+        Wed, 15 Feb 2023 14:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676472239;
-        bh=ZYy2SiK9o8XAp9f39GoyiQzDdp41wQI4tr6oU4Ic9Fw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PlyxzAm1ZI1Fqk6aBTiXn0qDQdolDjA6CwWYTCIC0Sb1a+SeyN9An1jI8Ps5KIKWx
-         1BAq2Ii8lNEa2CtlMPrbvJd+gHG/G/VuWEn3+lQoDnLmOZWD/wd9HKYeM09oCPe7FS
-         ZzGn2DKBvAPk4rK9VMUFfgg/yhv8uJtYEngh8SrFpmIqKL9VukCPBFOxrmykZ3JyL5
-         REX9VbCE1dXnwmMFehnn8YIS/reX2jXIlNHpX5j1wdBzGty7MiqxVBuPZtik7pVX/I
-         ojuw7T7HGpWe6+ffqoPfvZ9wTT/zLwcZL6Zw1eh3aQVffZTFfR9H8v3SOoJbQsNytT
-         EPa48PS5od94A==
-Message-ID: <10a80557-50f6-f563-56ca-eb3df7e4ea93@kernel.org>
-Date:   Wed, 15 Feb 2023 22:43:54 +0800
+        s=k20201202; t=1676472301;
+        bh=J7FR16wSeO0h7U2Rx2QzFOI98aN6QgOwDZqATCeQYVQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lfElhBWLykO/IJQQRODB6ZD2kRjRd9ASIZp9f8lTKR1+9FgfwaFmqe0HnNRHT9Hl3
+         JkgU5v3vEdtLPgjeRRcJq3hv3Km6WJFocxQkgUlojqH7alhgWDMRAap4yyKNgWSlFM
+         VOKpNUIYYpHF2vVio8HrKf+q9cSvm2aoZha9llKLmKv0QphWJ/mxRv0vnCW8R6jklr
+         6/N5X7ZgJLm/dJ5bLJ2/oN/4kh2OUdKUkAp5UrVWyp3FdeUiiDJBhVtRjbFx85GCMO
+         FOoM69qE8ueaGL5qtN2q7B9tqqLreXbtKeazbacUgYNmZfg4npkiMi2Sg8mDYWsOhr
+         e3Fj94sQQv/6w==
+Received: by mail-vk1-f180.google.com with SMTP id i4so5108071vkn.13;
+        Wed, 15 Feb 2023 06:45:01 -0800 (PST)
+X-Gm-Message-State: AO0yUKWRxNVrkYU67FU8fZYkGWztrgBayDtmbx6BUB3/8dDceZjRwexI
+        v6YRg30pQvZI28f9FChM42EBwQg+U2USS8FoNQ==
+X-Google-Smtp-Source: AK7set/kjqpJSwgOPQgeLthfUJMRO50WEjm6M46aPnoKXLrEXKV0KxBlqDn2v26BG08pkp0X6ufGr+PEnWMps4WzT6E=
+X-Received: by 2002:a1f:1b83:0:b0:401:42f3:5657 with SMTP id
+ b125-20020a1f1b83000000b0040142f35657mr350241vkb.42.1676472300265; Wed, 15
+ Feb 2023 06:45:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] f2fs: make kobj_type structures constant
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230209-kobj_type-f2fs-v1-1-b6feedbdd4a8@weissschuh.net>
- <cc338b66-f0f5-d9b7-81d3-b15bccc9d463@kernel.org>
- <Y+p4jezz5asWoPhu@google.com>
- <abb12474-f338-dedf-115b-da70e4946cec@kernel.org>
- <Y+vN18flpTqWwvll@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y+vN18flpTqWwvll@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230214141053.92731-1-povik+lin@cutebit.org> <167638945429.3790.16067227881981242831.robh@kernel.org>
+ <6B75F1A1-E2DE-40D5-AA79-A764C65D8AD2@cutebit.org>
+In-Reply-To: <6B75F1A1-E2DE-40D5-AA79-A764C65D8AD2@cutebit.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 15 Feb 2023 08:44:49 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJTHy3ZGUKk1dv3aD+ToxdmvYrjq1JPjHYt7R7LVVZpGQ@mail.gmail.com>
+Message-ID: <CAL_JsqJTHy3ZGUKk1dv3aD+ToxdmvYrjq1JPjHYt7R7LVVZpGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] dt-bindings: dma: apple,sio: Add schema
+To:     =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Janne Grunau <j@jannau.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>, devicetree@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/15 2:07, Jaegeuk Kim wrote:
-> On 02/14, Chao Yu wrote:
->> On 2023/2/14 1:51, Jaegeuk Kim wrote:
->>> On 02/13, Chao Yu wrote:
->>>> On 2023/2/9 11:20, Thomas Weißschuh wrote:
->>>>> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
->>>>> the driver core allows the usage of const struct kobj_type.
->>>>>
->>>>> Take advantage of this to constify the structure definitions to prevent
->>>>> modification at runtime.
->>>>>
->>>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>>
->>>> Reviewed-by: Chao Yu <chao@kernel.org>
->>>
->>> Hi Chao,
->>>
->>> Note that, next time, I won't apply/modify any patches merged in -dev,
->>> unless it has a problem.
->>
->> Hi Jaegeuk,
->>
->> Oh, any particular reason, to avoid unneeded commit id change when the time is
->> close to merge window?
-> 
-> Hi Chao,
-> 
-> I'm trying to avoid breaking the -next branch.
+On Tue, Feb 14, 2023 at 1:18 PM Martin Povi=C5=A1er <povik+lin@cutebit.org>=
+ wrote:
+>
+>
+> > On 14. 2. 2023, at 17:12, Rob Herring <robh@kernel.org> wrote:
+> > On Tue, 14 Feb 2023 15:10:53 +0100, Martin Povi=C5=A1er wrote:
+> >> Describe the SIO coprocessor which serves as pretend DMA controller on
+> >> recent Apple platforms.
+> >>
+> >> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+> >> ---
+> >>
+> >> Since the schema mentions a loader preparing the binding appropriately=
+,
+> >> here's a PR with the relevant (WIP) loader code, if anyone wants to lo=
+ok:
+> >> https://github.com/AsahiLinux/m1n1/pull/286
+> >>
+> >> .../devicetree/bindings/dma/apple,sio.yaml    | 129 ++++++++++++++++++
+> >> 1 file changed, 129 insertions(+)
+> >> create mode 100644 Documentation/devicetree/bindings/dma/apple,sio.yam=
+l
+> >>
+> >
+> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
+k'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > Documentation/devicetree/bindings/dma/apple,sio.example.dts:24.35-27.11=
+: Warning (node_name_vs_property_name): /example-0/interrupt-controller: no=
+de name and property name conflict
+>
+> I saw the warning, but since I had copied that part of the example from
+> apple,admac.yaml I didn=E2=80=99t make much of it. Now that I look at it =
+again,
+> the example in apple,admac doesn=E2=80=99t raise the same warning, how co=
+me?
+>
+> This is just a curiosity since we don=E2=80=99t need the aic node in the =
+example
+> anyway (unlike in apple,admac where it=E2=80=99s needed because of empty =
+entries
+> in interrupts-extended).
 
-Jaegeuk, so why do we need to avoid breaking -next branch? I didn't get it. :-(
+'interrupts-extended' is why. If the example just has 'interrupts',
+then a fake parent is constructed. It's pretty hacky, but necessary to
+parse the interrupts later on for validation.
 
-> 
->>
->> Is there any period of grace before merging patches from dev-test branch into dev
->> branch? Maybe a week is reasonable? so I may have time to catch up in time.
-> 
-> No rule, but I'm trying to wait for several days while running my local tests.
-> If the patch looks okay, sometimes I'll queue it right away.
-
-Sure, not problem.
-
-Thanks,
-
-> 
-> Thanks,
-> 
->>
->> Thanks,
->>
->>>
->>> Thanks,
->>>
->>>>
->>>> Thanks,
+Rob
