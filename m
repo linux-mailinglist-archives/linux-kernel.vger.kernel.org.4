@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6EE69789C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C4869789F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjBOJF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S233446AbjBOJGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjBOJFY (ORCPT
+        with ESMTP id S233036AbjBOJF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:05:24 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7019829E12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:05:16 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PGsbt6DrMz8R03x;
-        Wed, 15 Feb 2023 17:05:14 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 31F954HP069480;
-        Wed, 15 Feb 2023 17:05:04 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 15 Feb 2023 17:05:06 +0800 (CST)
-Date:   Wed, 15 Feb 2023 17:05:06 +0800 (CST)
-X-Zmail-TransId: 2af963eca0425f780c34
-X-Mailer: Zmail v1.0
-Message-ID: <202302151705068837948@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <p.zabel@pengutronix.de>
-Cc:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSByZXNldDogYXRoNzk6IFVzZSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31F954HP069480
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63ECA04A.001 by FangMail milter!
-X-FangMail-Envelope: 1676451914/4PGsbt6DrMz8R03x/63ECA04A.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63ECA04A.001/4PGsbt6DrMz8R03x
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        Wed, 15 Feb 2023 04:05:58 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821B9298F9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:05:57 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id n26so2906570ual.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OK/Q/phuym1TfWPA1EBQC/91tXucWH+AbkqODxHd+vc=;
+        b=Ydmn7Xt5AYbZObMFlW/egeupY8qPMzmU1xlPaTedIdTaL5Ez0/yWJhFZIZ3aZXVvBg
+         nrdrAeik9VNFA7h2ki1EPQFikgu49LxPMUrmcd9F3sk+RrseVz/RFPOZ+kBo7dNxht+x
+         rDzU1+l1Utv8dlBbRI7I4zC/8valm/1auAciZ3SPUXpkbG4qqTC2zryrFlsI30ZyDoNb
+         wwfQYAEcjhFIVA+gSJqxHHOAiXNw1CeHIVi+0x9ECY46y7uQgA+OE+de9whr1yFj55dx
+         VDtys2BsD8LgZj4BWBOZZp5NWoxwPD7vM9EtdzOp1NkeWr8TEGQ6+9w9SkdQgovZef92
+         GU7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OK/Q/phuym1TfWPA1EBQC/91tXucWH+AbkqODxHd+vc=;
+        b=hLmNnwmhiTGioAAt2+//ewdjgMNg5VpsXXKJ+JOP6hlPFb3NbGnMcOuukvBRHQsxxI
+         mfDVHZiklYEWDI9OBVE/K6TZpNKIkTp8akbsbvTIo7FhdXZ45tJFNzQ603L++hC+98Cg
+         OhxzOU6+KTNdqNw+aqiEbBIS6TQlUyHBLzhDYsjNcmBXJ/fyLeWKJa3EHdraLwfP+GE5
+         My/hf2QIflyTfP1ukRE37Scf5PLK0z8EAVgCxsT2smbs8uLb3zb7ZOGHZjv2Mve0H/kW
+         XSCJVxNGiNq2hbhtRoQd6el9JJItsYadeFcPSh2/BWvQ2LohuRV9U5lB9b3zXCidFOHV
+         8q3g==
+X-Gm-Message-State: AO0yUKU7QNk9FfUCSS8+ro3TXt9RaQ4LCF5wJ3kaSNF1TabPrBZ3B4DZ
+        EDUT7KwuYAw8Hz4cgtd+xhm2YFjRRGaoG4K/iVN2Lg==
+X-Google-Smtp-Source: AK7set/IPQ3wITuV5FFkFXqZdGFftAn+e/QA1ZQpZsxkd41HqT4E0+lCOoPrmpxpG6MkxmVXzPQcZEQxKrYNFzi4IsE=
+X-Received: by 2002:ab0:654d:0:b0:68a:7054:58a6 with SMTP id
+ x13-20020ab0654d000000b0068a705458a6mr184058uap.22.1676451956432; Wed, 15 Feb
+ 2023 01:05:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20230214155715.451130-1-brgl@bgdev.pl> <602b1c64-db73-b6e3-020c-f2b24085a986@quicinc.com>
+In-Reply-To: <602b1c64-db73-b6e3-020c-f2b24085a986@quicinc.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Feb 2023 10:05:45 +0100
+Message-ID: <CAMRc=McUOSZiW8nRO-o32y0XL4i+LCF2Z380QX0uDgv2J=cuZA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] arm64: dts: qcom: sa8775p-ride: enable relevant QUPv3 IPs
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,38 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Wed, Feb 15, 2023 at 8:06 AM Shazad Hussain
+<quic_shazhuss@quicinc.com> wrote:
+>
+>
+>
+> On 2/14/2023 9:27 PM, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
+> > board: I2C, SPI and the GNSS UART.
+> >
+> > Bartosz Golaszewski (3):
+> >    arm64: dts: qcom: sa8775p: add the i2c node for sa8775p-ride
+> >    arm64: dts: qcom: sa8775p: add the SPI node for sa8775p-ride
+> >    arm64: dts: qcom: sa8775p: add the GNSS high-speed UART for
+>
+> Hi Bartosz,
+> This instance is for BT HS UART , not for GNSS.
+> For GNSS we have uart12 (0x00A94000).
+>
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Thanks, I'll rectify it in v2.
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/reset/reset-ath79.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/reset/reset-ath79.c b/drivers/reset/reset-ath79.c
-index e48d8fcb3133..801a65db2e15 100644
---- a/drivers/reset/reset-ath79.c
-+++ b/drivers/reset/reset-ath79.c
-@@ -86,7 +86,6 @@ static int ath79_reset_restart_handler(struct notifier_block *nb,
- static int ath79_reset_probe(struct platform_device *pdev)
- {
- 	struct ath79_reset *ath79_reset;
--	struct resource *res;
- 	int err;
-
- 	ath79_reset = devm_kzalloc(&pdev->dev,
-@@ -96,8 +95,7 @@ static int ath79_reset_probe(struct platform_device *pdev)
-
- 	platform_set_drvdata(pdev, ath79_reset);
-
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	ath79_reset->base = devm_ioremap_resource(&pdev->dev, res);
-+	ath79_reset->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(ath79_reset->base))
- 		return PTR_ERR(ath79_reset->base);
-
--- 
-2.25.1
+Bart
