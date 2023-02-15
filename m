@@ -2,176 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4913D698758
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB0D69875A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjBOV3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S229974AbjBOVaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBOV3q (ORCPT
+        with ESMTP id S229831AbjBOVaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:29:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDF22A1D;
-        Wed, 15 Feb 2023 13:29:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Feb 2023 16:30:11 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3443C2365A;
+        Wed, 15 Feb 2023 13:30:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 413EF61DD4;
-        Wed, 15 Feb 2023 21:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5D5C433B4;
-        Wed, 15 Feb 2023 21:29:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676496584;
-        bh=uqSZ7JhhYwZJmyBtc9GnGBSgXvgF8klnsV6Bi3CE/70=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HyzeZSYy1IGn0ylyeD9fHMqQtFPBtKi9dSmcfdlDTc2rPkFkVsD+itPzrBZj/iiFm
-         tAigRsnpNOOJwNgp35HQgsAsJ8kCasuHvf3Ogu2csYRq1CWtQa/mtOR+fhF/gfclEd
-         7n8ZEZ3GjE7EBXRm7sPGT9UrZ72pogYYwaWkirDzdf62Mfx3IRADvZkUialHq4PEt8
-         aAIFakiQ9bwEX2xcVx4nRkWEFg+1FvA96drKvkJ9Qf/kjeeG2tHQ1tCcqZ0wti0E0h
-         wn0miqLesWq7UEHRq5McoJ0hAUP0/mo81rWkw9SpDNURAWMAnYAKDiSr2iobXq/1Ba
-         JFld8y4pUPrRA==
-Received: by mail-ua1-f48.google.com with SMTP id v5so272uat.5;
-        Wed, 15 Feb 2023 13:29:44 -0800 (PST)
-X-Gm-Message-State: AO0yUKUcPdQOWTfbF6/FnFnftrqgR5DBrFwz/mmLXfpaCbJJ/OahJfFW
-        9XBWggafB+NB8zZosUhQFaP7Te2u/64rHpXdFQ==
-X-Google-Smtp-Source: AK7set+StJDjHRVXGKtdcRc0C4Tb6EItbseWIV1tkuIT46rt0i13kIUZLMEc71oCmoEfVGed3op2pEZ5a9IxG+cz5tg=
-X-Received: by 2002:a9f:3112:0:b0:689:cd52:101b with SMTP id
- m18-20020a9f3112000000b00689cd52101bmr576154uab.1.1676496583431; Wed, 15 Feb
- 2023 13:29:43 -0800 (PST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHB7H3TQ3z4x5X;
+        Thu, 16 Feb 2023 08:30:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676496603;
+        bh=mG1gvaBbO8hTzuz96CL94P7Xf50HvLn1KywUiJJme8A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Eq9CiDZKzvf4iAgAUBtyVdXN3ae1cQ3Ur16K++R0noMVpFMThq+N0jL4vOX1ARZJ6
+         EKDx1uxSrtv2dUxK2JtDwW1hH2tNiMm+8qiZ9vsVtDoWbAHYvy2uI5jrGYRwLMyoxh
+         eQUiS1s/88VRcW4+4hBapeGrupph3nO2B76k8PbgeRdlstCwq0t8SRV5XHvMqzm+7a
+         X8nUvRStT9Hk9SzgnHnswBeoq+fb+nqNg3OwC6LazEpgdbZeIGRcC4BJG3q3mDAhGk
+         9Y6j3jKFBXNHxb/6mH8K+srfTeNcNTjt652LQdIpZ2VPN4KDktK2qssau+Ky0OydBq
+         6KqcInth2KBrw==
+Date:   Thu, 16 Feb 2023 08:30:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the ntfs3 tree with the vfs-idmapping
+ tree
+Message-ID: <20230216083002.6227ba81@canb.auug.org.au>
 MIME-Version: 1.0
-References: <cover.1676323692.git.daniel@makrotopia.org> <f4b378f4b19064df85d529973ed6c73ae7aa9f2d.1676323692.git.daniel@makrotopia.org>
- <20230215204318.GA517744-robh@kernel.org> <Y+1Lm8XZVrtSGTLT@shell.armlinux.org.uk>
-In-Reply-To: <Y+1Lm8XZVrtSGTLT@shell.armlinux.org.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 15 Feb 2023 15:29:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLYQo9ZbraiHAnb3z5O86Cv4JoKf5HSnhvrRn95HwGkHQ@mail.gmail.com>
-Message-ID: <CAL_JsqLYQo9ZbraiHAnb3z5O86Cv4JoKf5HSnhvrRn95HwGkHQ@mail.gmail.com>
-Subject: Re: [PATCH v6 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert to
- DT schema
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fE1=pPJH3eojyBI4sc0.Zfe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 3:16 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Wed, Feb 15, 2023 at 02:43:18PM -0600, Rob Herring wrote:
-> > On Mon, Feb 13, 2023 at 09:34:43PM +0000, Daniel Golle wrote:
-> > > Convert mediatek,sgmiiisys bindings to DT schema format.
-> > > Add maintainer Matthias Brugger, no maintainers were listed in the
-> > > original documentation.
-> > > As this node is also referenced by the Ethernet controller and used
-> > > as SGMII PCS add this fact to the description.
-> > >
-> > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > > ---
-> > >  .../arm/mediatek/mediatek,sgmiisys.txt        | 27 ----------
-> > >  .../arm/mediatek/mediatek,sgmiisys.yaml       | 49 +++++++++++++++++++
-> > >  2 files changed, 49 insertions(+), 27 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
-> >
-> > If you respin or as a follow-up, can you move this to bindings/clock/?
->
-> I'm not sure that's appropriate. Let's take the MT7622 as an example,
-> here is the extract from the device tree for this:
->
->         sgmiisys: sgmiisys@1b128000 {
->                 compatible = "mediatek,mt7622-sgmiisys",
->                              "syscon";
->                 reg = <0 0x1b128000 0 0x3000>;
->                 #clock-cells = <1>;
->         };
->
-> This makes it look primarily like a clock controller, but when I look
-> at the MT7622 documentation, this region is described as the
-> "Serial Gigabit Media Independent Interface".
->
-> If we delve a little deeper and look at the code we have in the kernel,
-> yes, there is a clock driver, but there is also the SGMII code which is
-> wrapped up into the mtk_eth_soc driver - and the only user of the
-> clocks provided by the sgmiisys is the ethernet driver.
->
-> To me, this looks very much like a case of "lets use the clock API
-> because it says we have clocks inside this module" followed by "now
-> how can we make it work with DT with a separate clock driver".
->
-> In other words, I believe that describing this hardware as something
-> that is primarily to do with clocks is wrong. It looks to me more
-> like the hardware is primarily a PCS that happens to provide some
-> clocks to the ethernet subsystem that is attached to it.
->
-> Why do I say this? There are 23 documented PCS registers in the
-> 0x1b128000 block, and there is one single register which has a bunch
-> of bits that enable the various clocks that is used by its clock
-> driver.
->
-> Hence, I put forward that:
->
-> "The MediaTek SGMIISYS controller provides various clocks to the system."
->
-> is quite misleading, and it should be described as:
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Indeed I was...
+Hi all,
 
->
-> "The MediaTek SGMIISYS controller provides a SGMII PCS and some clocks
-> to the ethernet subsystem to which it is attached."
+Today's linux-next merge of the ntfs3 tree got conflicts in:
 
-+1
+  fs/ntfs3/file.c
 
-> and a PCS providing clocks to the ethernet subsystem is nothing
-> really new - we just don't use the clk API to describe them, and
-> thus don't normally need to throw a syscon thing in there to share
-> the register space between two drivers.
+between commit:
 
-Humm, yes. Just like phys that provide clocks.
+  c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
 
-If PCS is the main function, then it should go in the PCS directory:
-bindings/net/pcs/
+from the vfs-idmapping tree and commit:
 
-> So, in summary, I don't think moving this to "bindings/clock/" makes
-> any sense what so ever, and that is probably being based on a
-> misleading description of what this hardware is and the code structure
-> adopted in the kernel.
->
-> Yes, DT describes the hardware. That's exactly the point I'm making.
-> It seems that the decision here to classify it has a clock driver is
-> being made based off the kernel implementation, not what the hardware
-> actually is.
+  d1468d48fe7a ("fs/ntfs3: Remove noacsrules")
 
-Right. I'm just trying to get misc blocks out of bindings/arm/.
+from the ntfs3 tree.
 
-Rob
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ntfs3/file.c
+index e9bdc1ff08c9,a10a905ec7ce..000000000000
+--- a/fs/ntfs3/file.c
++++ b/fs/ntfs3/file.c
+@@@ -657,26 -653,16 +653,16 @@@ out
+  /*
+   * ntfs3_setattr - inode_operations::setattr
+   */
+ -int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentr=
+y,
+ +int ntfs3_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+  		  struct iattr *attr)
+  {
+- 	struct super_block *sb =3D dentry->d_sb;
+- 	struct ntfs_sb_info *sbi =3D sb->s_fs_info;
+  	struct inode *inode =3D d_inode(dentry);
+  	struct ntfs_inode *ni =3D ntfs_i(inode);
+  	u32 ia_valid =3D attr->ia_valid;
+  	umode_t mode =3D inode->i_mode;
+  	int err;
+ =20
+- 	if (sbi->options->noacsrules) {
+- 		/* "No access rules" - Force any changes of time etc. */
+- 		attr->ia_valid |=3D ATTR_FORCE;
+- 		/* and disable for editing some attributes. */
+- 		attr->ia_valid &=3D ~(ATTR_UID | ATTR_GID | ATTR_MODE);
+- 		ia_valid =3D attr->ia_valid;
+- 	}
+-=20
+ -	err =3D setattr_prepare(mnt_userns, dentry, attr);
+ +	err =3D setattr_prepare(idmap, dentry, attr);
+  	if (err)
+  		goto out;
+ =20
+
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtTtoACgkQAVBC80lX
+0GwscQgAnGY2jw2hDLEhW12se8Zp6Fek6Sek6sYQ+7HFJI/HS/GqPa6jjOhv4o7L
+CHLpT0qFffu+HBXvfejAqVRREAn9L4oQiz/vnSx/mwxXN2Vxi11Do94mVlnMgVza
+W7Sw6uFfwaYw3wkXBAY/bx8B90Bt1BMhcUubq0a/OlvPIiQ+HrjlPgDDsbvTWcHf
+IzCSl5MIVhD/RCuqS5sdKULrOzX+zlLL8wt6uSFtSrKRT3sk28NIk/P5vEMLvOMW
+XbSGETTGHrduZ9HMFTIJqfdxlRDcsxjLKZqPak1U0Kwmk+Xpk3uZ4nQfQ5tEkWYh
+EPV7dCijDzAVl5YbARPnlg7ouMd59w==
+=jLdb
+-----END PGP SIGNATURE-----
+
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe--
