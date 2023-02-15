@@ -2,74 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189D1698439
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFF9698445
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjBOTNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S229830AbjBOTQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBOTN3 (ORCPT
+        with ESMTP id S229508AbjBOTQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:13:29 -0500
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60E73AB2;
-        Wed, 15 Feb 2023 11:13:28 -0800 (PST)
-Received: by mail-pl1-f174.google.com with SMTP id b5so21239707plz.5;
-        Wed, 15 Feb 2023 11:13:28 -0800 (PST)
+        Wed, 15 Feb 2023 14:16:51 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4284537B67;
+        Wed, 15 Feb 2023 11:16:50 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-15ff0a1f735so24210003fac.5;
+        Wed, 15 Feb 2023 11:16:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UWTRjyxtvc0B3GvrSev36WvGpzJc/fNKHJWJ+vb4bhA=;
-        b=49ydPwBjz+WzsbRMnsSrTKtY7rUvpq6KqG/iIxkh1htk20la+6ooPGTsEzWiRt/u3X
-         m4fyJnWkhMrISuLQxf2IvgpYwq8oM1g2Dm2Pk5I1KyRhS4d1LmZ0HfufvRQHAJNfyPiZ
-         GZJl3YRTYvo979wAlNAnJNA2dqJ025hGWQqY2oLBx91hZoWuAbAW9QNqEqAF15J02TUE
-         21HAF3NiSD2Yi3xTmhGE7IDl4qy+TZYeaH+oLFP5cvlnOgjRtL0hSuwtIIJGUWUE/Z1G
-         mFX3EF9vKVWY8xkWREgMmLSlMdtC1qxq2HBfed4h0wJLqlme0gZyn/+i77eAKMinBgeY
-         1yoQ==
-X-Gm-Message-State: AO0yUKWTKJl3l+MNutu6GnVQOEh7NlDI7VpJI/J85mEv4UIVRM7pVqXF
-        15h+pgZrHAUZGYykPTxbN3s=
-X-Google-Smtp-Source: AK7set+RPel0IwOsNbPzqRd/rBjjcisz97M1b80sFVC+EpObXiag94SVGUKB9QQSQ9jnbThmLDE4ow==
-X-Received: by 2002:a17:90b:4a02:b0:233:f354:e7f6 with SMTP id kk2-20020a17090b4a0200b00233f354e7f6mr4027461pjb.46.1676488408130;
-        Wed, 15 Feb 2023 11:13:28 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:f2b7:9a62:c95d:fb83? ([2620:15c:211:201:f2b7:9a62:c95d:fb83])
-        by smtp.gmail.com with ESMTPSA id ob4-20020a17090b390400b00233790759cesm1808115pjb.47.2023.02.15.11.13.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 11:13:27 -0800 (PST)
-Message-ID: <20feb1ab-5515-66f4-25cc-297511e44556@acm.org>
-Date:   Wed, 15 Feb 2023 11:13:25 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PW1m1yQHM9XDpw4IOvOruehCKlPQgSONUVgmXhDIYf8=;
+        b=DmtfHShl3BgpBNdHv+KGWklz+TahdeWqQ4e9yanyPRLno846RzVixMhWRim4U+NukO
+         bo74e5TP20AK7Q+ofdeOLEWDf4Mis/g/NuGitKJrMzA2ITmO3+Yo1CrDjYraZrSdGzkE
+         V7/T0PubWWgy5BOpTClyuSCDaeN/sVwnexF5WTng6T2MppA0V1PlCDkuCHRDU+9pdPXo
+         a6FTvQHPYx4ic6ZMdAgZoJSTU2f1OsV5b4JmzW6YLL2Lwc6SxV9vgWCyoKFTms6Jyvg/
+         OghvnkyTk+/1j08ahft/QubfcsaZBUUN5xbJK4GC+TU9+yzAEzzQ3aMODl/trDDB0lBa
+         QaWw==
+X-Gm-Message-State: AO0yUKWwY82ibKTYlldD/yv+zsyVxVbZxYwesihW4u6gJjG0P8UO/WMm
+        hh48wewwGGOxGtD0gFEQww==
+X-Google-Smtp-Source: AK7set9i3pcpR00UkNEQS3Uh8VyZQHo+YJjV/Yrf/s71LptmDnJn6po1KLPiFeqH5Dnm4F9xM9ROwg==
+X-Received: by 2002:a05:6871:60e:b0:16d:2b42:811a with SMTP id w14-20020a056871060e00b0016d2b42811amr1849530oan.17.1676488609294;
+        Wed, 15 Feb 2023 11:16:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ec22-20020a0568708c1600b00143824af059sm7361240oab.7.2023.02.15.11.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 11:16:48 -0800 (PST)
+Received: (nullmailer pid 424169 invoked by uid 1000);
+        Wed, 15 Feb 2023 19:16:48 -0000
+Date:   Wed, 15 Feb 2023 13:16:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97
+ descriptions
+Message-ID: <20230215191648.GA408047-robh@kernel.org>
+References: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
+ <46d5b6af-23e1-4178-83bc-b4a435b1426e@linaro.org>
+ <109868b9492aecaca0a7170cba9fb51e62de7116.camel@gmail.com>
+ <c4f5f733-ce22-2dfa-30f7-cde309eadaf9@linaro.org>
+ <ba51ecefb814115e977d90062ca5fe99859cb327.camel@gmail.com>
+ <Y+uiaqvdIL4IpRlC@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] scsi: ufs: support IO traces for zoned block device
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>
-Cc:     Jaegeuk Kim <jaegeuk@google.com>
-References: <20230215190448.1687786-1-jaegeuk@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230215190448.1687786-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+uiaqvdIL4IpRlC@sirena.org.uk>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 11:04, Jaegeuk Kim wrote:
-> Let's support WRITE_16, READ_16, ZBC_IN, ZBC_OUT.
+On Tue, Feb 14, 2023 at 03:02:02PM +0000, Mark Brown wrote:
+> On Tue, Feb 14, 2023 at 03:26:14PM +0100, Alexander Sverdlin wrote:
+> > On Tue, 2023-02-14 at 15:11 +0100, Krzysztof Kozlowski wrote:
+> 
+> > > OK, but then I like the example - if datasheet would use name
+> > > "clk_clk_this_is_clk" would you still find it meaningful?
+> 
+> > > Every clock input in clocks is a clock. There is usually no need to say
+> > > that a clock is a clock...
+> 
+> > I see you point, but this is legacy code (sound/soc/cirrus/ep93xx-i2s.c)
+> > which took these names back in platform data times... I also see that
+> > rather majority of *i2s*.yaml use something "*clk", so maybe it could
+> > be accepted for legacy code?
+> 
+> Even ignoring the whole legacy thing these are industry standard
+> names for the clocks - they are pretty much universally named and
+> referred to with the clk suffix.  I can't see what removing it
+> would accomplish other than reducing clarity.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Agreed.
+
+If a clock is called "Nclk" then I think that is fine. If it is 
+foo_bar_clk, then yes, 'foo_bar' is preferred.
+
+Rob
