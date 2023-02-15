@@ -2,100 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F166978FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB4A697900
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbjBOJaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S233955AbjBOJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbjBOJaG (ORCPT
+        with ESMTP id S233914AbjBOJak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:30:06 -0500
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA70E93F7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:30:05 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id SE71pmycJOJaFSE71pRCYM; Wed, 15 Feb 2023 10:30:04 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 15 Feb 2023 10:30:04 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2] firmware: turris-mox-rwtm: Fix an error handling path in mox_get_board_info()
-Date:   Wed, 15 Feb 2023 10:30:02 +0100
-Message-Id: <fb3a73fd378582bf02e6c5eeabb61d3a3662cbdc.1676453328.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 15 Feb 2023 04:30:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37C30D2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:30:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1F4FB81F91
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 09:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01C3C433D2;
+        Wed, 15 Feb 2023 09:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676453436;
+        bh=E2W9f9EJFuKUNbaq3/Wsi+gC/V34nQVZS2TquwLH2As=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iGa+nLk6zFhZ1+w8/Tn5rOVh3JVKcE/j2ZGAPOOBxqrDw9gU0s81tesyIeKDDD6PQ
+         b3kWCnVv7rB4Hr4ZsbCsHyTwNJTAa7s5MQmUWgR6wJD683h8H2PpTEYbxQo1FtO9Zm
+         c3Jdnundxss6kqdYURjeojCou3fXDJxvzpvNACIe7k9h+2In8/KhLmyvEtrb0ZyGS3
+         QZlVpbwAMMqzCQVCXefDAfbwRfu4MrpGFZBeulN97kLa5pVVu1Lsh0XWBQovURZda8
+         KACGPBuxDe599dfmIGmTwuh618QJE0GIwDu5dKG8wfgC5ybf4q2bte32toUGJy8QEt
+         MTzWeQt6GfF9w==
+Date:   Wed, 15 Feb 2023 11:30:19 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Qi Zheng <arch0.zheng@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Teng Hu <huteng.ht@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <muchun.song@linux.dev>, x86@kernel.org
+Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
+Message-ID: <Y+ymKw1eJaRcmDNN@kernel.org>
+References: <eefc40e5-a14b-22c5-3480-6786afa1c8f4@redhat.com>
+ <Y+tXrK/g1Nrd/q1h@kernel.org>
+ <67240e55-af49-f20a-2b4b-b7d574cd910d@gmail.com>
+ <22f0e262-982e-ea80-e52a-a3c924b31d58@redhat.com>
+ <dbfbd982-27f3-0d72-49e0-d3dd5fe636a8@bytedance.com>
+ <4386151c-0328-d207-9a71-933ef61817f9@redhat.com>
+ <Y+t0Bhu7BCzH2Dp4@kernel.org>
+ <a7f8be91-32c1-bfbe-7e81-5b1e818ba01d@redhat.com>
+ <a09bfe3a-87e4-f8ce-89bb-c5fde8cc33c9@redhat.com>
+ <Y+uO5IE7boORqsne@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+uO5IE7boORqsne@dhcp22.suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wait_for_completion_timeout() returns 0 if timed out, and positive (at
-least 1, or number of jiffies left till timeout) if completed.
+On Tue, Feb 14, 2023 at 02:38:44PM +0100, Michal Hocko wrote:
+> On Tue 14-02-23 12:58:39, David Hildenbrand wrote:
+> > On 14.02.23 12:48, David Hildenbrand wrote:
+> > > On 14.02.23 12:44, Mike Rapoport wrote:
+> > > > (added x86 folks)
+> > > > 
+> > > > On Tue, Feb 14, 2023 at 12:29:42PM +0100, David Hildenbrand wrote:
+> > > > > On 14.02.23 12:26, Qi Zheng wrote:
+> > > > > > On 2023/2/14 19:22, David Hildenbrand wrote:
+> > > > > > > 
+> > > > > > > TBH, this is the first time I hear of NODE_MIN_SIZE and it seems to be a
+> > > > > > > pretty x86 specific thing.
+> > > > > > > 
+> > > > > > > Are we sure we want to get NODE_MIN_SIZE involved?
+> > > > > > 
+> > > > > > Maybe add an arch_xxx() to handle it?
+> > > > > 
+> > > > > I still haven't figured out what we want to achieve with NODE_MIN_SIZE at
+> > > > > all. It smells like an arch-specific hack looking at
+> > > > > 
+> > > > > "Don't confuse VM with a node that doesn't have the minimum amount of
+> > > > > memory"
+> > > > > 
+> > > > > Why shouldn't mm-core deal with that?
+> > > > 
+> > > > Well, a node with <4M RAM is not very useful and bears all the overhead of
+> > > > an extra live node.
+> > > 
+> > > And totally not with 4.1M, haha.
+> > > 
+> > > I really like the "Might fix boot" in the commit description.
+> > > 
+> > > > 
+> > > > But, hey, why won't we just drop that '< NODE_MIN_SIZE' and let people with
+> > > > weird HW configurations just live with this?
+> > > 
+> > > 
+> > > ;)
+> > > 
+> > 
+> > Actually, remembering 09f49dca570a ("mm: handle uninitialized numa nodes
+> > gracefully"), this might be the right thing to do. That commit assumes that
+> > all offline nodes would get the pgdat allocated in free_area_init(). So that
+> > we end up with an allocated pgdat for all possible nodes. The reasoning IIRC
+> > was that we don't care about wasting memory in weird VM setups.
+> 
+> Yes, that is the case indeed. I suspect the NODE_MIN_SIZE is a relict of
+> the past when some PXM entries were incorrect or fishy. I would just
+> drop the check and see whether something breaks. Or make those involved
+> back then remember whether this is addressing something that is relevant
+> these days. Even 5MB node makes (as the memmap is allocated for the
+> whole memory section anyway and that is 128MB) a very little sense if you ask me.
 
-In case of timeout, return -ETIMEDOUT.
+How about we try this:
 
-Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From b670120bcacd3fe34a40d7179c70ca2ab69279e0 Mon Sep 17 00:00:00 2001
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Date: Wed, 15 Feb 2023 11:12:18 +0200
+Subject: [PATCH] x86/mm: drop 4MB restriction on minimal NUMA node size
+
+Qi Zheng reports crashes in a production environment and provides a
+simplified example as a reproducer:
+
+  For example, if we use qemu to start a two NUMA node kernel,
+  one of the nodes has 2M memory (less than NODE_MIN_SIZE),
+  and the other node has 2G, then we will encounter the
+  following panic:
+
+  [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
+  [    0.150783] #PF: supervisor write access in kernel mode
+  [    0.151488] #PF: error_code(0x0002) - not-present page
+  <...>
+  [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
+  <...>
+  [    0.169781] Call Trace:
+  [    0.170159]  <TASK>
+  [    0.170448]  deactivate_slab+0x187/0x3c0
+  [    0.171031]  ? bootstrap+0x1b/0x10e
+  [    0.171559]  ? preempt_count_sub+0x9/0xa0
+  [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
+  [    0.172735]  ? bootstrap+0x1b/0x10e
+  [    0.173236]  bootstrap+0x6b/0x10e
+  [    0.173720]  kmem_cache_init+0x10a/0x188
+  [    0.174240]  start_kernel+0x415/0x6ac
+  [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
+  [    0.175417]  </TASK>
+  [    0.175713] Modules linked in:
+  [    0.176117] CR2: 0000000000000000
+
+The crashes happen because of inconsistency between nodemask that has
+nodes with less than 4MB as memoryless and the actual memory fed into
+core mm.
+
+The commit 9391a3f9c7f1 ("[PATCH] x86_64: Clear more state when ignoring
+empty node in SRAT parsing") that introduced minimal size of a NUMA node
+does not explain why a node size cannot be less than 4MB and what boot
+failures this restriction might fix.
+
+Since then a lot has changed and core mm won't confuse badly about small
+node sizes.
+
+Drop the limitation for the minimal node size.
+
+Link: https://lore.kernel.org/all/20230212110305.93670-1-zhengqi.arch@bytedance.com/
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
-Compile tested only.
+ arch/x86/include/asm/numa.h | 7 -------
+ arch/x86/mm/numa.c          | 7 -------
+ 2 files changed, 14 deletions(-)
 
-v2:
-   - Fix some other wait_for_completion_timeout() calls
-
----
- drivers/firmware/turris-mox-rwtm.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 6ea5789a89e2..d6fc37ba897d 100644
---- a/drivers/firmware/turris-mox-rwtm.c
-+++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -200,8 +200,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 		return ret;
+diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
+index e3bae2b60a0d..ef2844d69173 100644
+--- a/arch/x86/include/asm/numa.h
++++ b/arch/x86/include/asm/numa.h
+@@ -12,13 +12,6 @@
  
- 	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (ret == 0)
-+		return -ETIMEDOUT;
+ #define NR_NODE_MEMBLKS		(MAX_NUMNODES*2)
  
- 	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
- 	if (ret == -ENODATA) {
-@@ -236,8 +236,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 		return ret;
+-/*
+- * Too small node sizes may confuse the VM badly. Usually they
+- * result from BIOS bugs. So dont recognize nodes as standalone
+- * NUMA entities that have less than this amount of RAM listed:
+- */
+-#define NODE_MIN_SIZE (4*1024*1024)
+-
+ extern int numa_off;
  
- 	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (ret == 0)
-+		return -ETIMEDOUT;
+ /*
+diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+index 2aadb2019b4f..55e3d895f15c 100644
+--- a/arch/x86/mm/numa.c
++++ b/arch/x86/mm/numa.c
+@@ -601,13 +601,6 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+ 		if (start >= end)
+ 			continue;
  
- 	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
- 	if (ret == -ENODATA) {
-@@ -275,8 +275,8 @@ static int check_get_random_support(struct mox_rwtm *rwtm)
- 		return ret;
+-		/*
+-		 * Don't confuse VM with a node that doesn't have the
+-		 * minimum amount of memory:
+-		 */
+-		if (end && (end - start) < NODE_MIN_SIZE)
+-			continue;
+-
+ 		alloc_node_data(nid);
+ 	}
  
- 	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (ret == 0)
-+		return -ETIMEDOUT;
- 
- 	return mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
- }
 -- 
-2.34.1
+2.35.1
 
+
+> -- 
+> Michal Hocko
+> SUSE Labs
+
+-- 
+Sincerely yours,
+Mike.
