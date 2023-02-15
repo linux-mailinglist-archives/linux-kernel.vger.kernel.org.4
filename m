@@ -2,168 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71EF697DC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B075F697DC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjBONs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S229527AbjBONsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBONs0 (ORCPT
+        with ESMTP id S229436AbjBONsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:48:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4624C38
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:47:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676468859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=99QOKMb+AOrpDYfFG2DfoxFW2c4EvPytRBO6/OA6ny4=;
-        b=LaS7j33CiWDJdjRRuQYaCCLkeFs3pD+OF9NWaP3op71eQzttbLLIB30isFuZfFaJXHKUpw
-        5glZm4pXmn0tq7Ro1MetgCoM3Lt0gTGOolZts3Ce3oXFVKqahFIah3SKfC90xZd3VWy2JQ
-        6yQY9USlZVa6n6Ad67dvLgKcOJZxlwE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-375-9aaqLuwxPfmRX3fDSqVpVw-1; Wed, 15 Feb 2023 08:47:36 -0500
-X-MC-Unique: 9aaqLuwxPfmRX3fDSqVpVw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 15 Feb 2023 08:48:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BF02BF2E;
+        Wed, 15 Feb 2023 05:48:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4E8118A64E0;
-        Wed, 15 Feb 2023 13:47:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A22040B40E4;
-        Wed, 15 Feb 2023 13:47:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <3113838.1676468540@warthog.procyon.org.uk>
-References: <3113838.1676468540@warthog.procyon.org.uk> <Y+nzO2H8AizX4lAQ@infradead.org> <Y+UJAdnllBw+uxK+@casper.infradead.org> <20230209102954.528942-1-dhowells@redhat.com> <20230209102954.528942-2-dhowells@redhat.com> <909202.1675959337@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH] splice: Clean up direct_splice_read() a bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9788F61BC5;
+        Wed, 15 Feb 2023 13:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B81C433D2;
+        Wed, 15 Feb 2023 13:48:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676468928;
+        bh=FzvkYPFoxRq+Z4v9Y8PUVdK4V34sY3UHMMFGmRaXddQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ADp7m1Q4bYp7mRRdjkHUB5BmeDWxR/jpcLcUdwZ0JIQLgfQ2FHETCIFNwftmpEk+L
+         oBEjxrj2zHfgWWr3amY42rmHd7+uYHuOqwF1NeIPAtqc4PU4GzHx+ezUDG6hOwo9qX
+         mhh2qadjl3I+aCAv442px05C1tRdDQL+DGRLwOs4=
+Date:   Wed, 15 Feb 2023 14:48:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?0JDQvdCw0YHRgtCw0YHQuNGPINCR0LXQu9C+0LLQsA==?= 
+        <abelova@astralinux.ru>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
+Message-ID: <Y+zivah57216KcuB@kroah.com>
+References: <20230203101828.14799-1-abelova@astralinux.ru>
+ <Y9zly1vrj9z4c1qT@kroah.com>
+ <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3114483.1676468851.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 15 Feb 2023 13:47:31 +0000
-Message-ID: <3114484.1676468851@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I forgot to commit the cast change too.  Try the attached instead.
+On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
+> 
+> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
+> > On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+> > > Before dereferencing dev->driver check it for NULL.
+> > > 
+> > > If an interrupt handler is called after assigning
+> > > NULL to dev->driver, but before resetting dev->int_enable,
+> > > NULL-pointer will be dereferenced.
+> > > 
+> > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > > 
+> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > > Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> > > ---
+> > >   drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+> > >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+> > > index bdc56b24b5c9..896bba8b47f1 100644
+> > > --- a/drivers/usb/gadget/udc/goku_udc.c
+> > > +++ b/drivers/usb/gadget/udc/goku_udc.c
+> > > @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
+> > >   pm_next:
+> > >   		if (stat & INT_USBRESET) {		/* hub reset done */
+> > >   			ACK(INT_USBRESET);
+> > > -			INFO(dev, "USB reset done, gadget %s\n",
+> > > -				dev->driver->driver.name);
+> > > +			if (dev->driver)
+> > > +				INFO(dev, "USB reset done, gadget %s\n",
+> > > +					dev->driver->driver.name);
+> > How can this ever happen?  Can you trigger this somehow?  If not, I
+> > don't think this is going to be possible (also what's up with printk
+> > from an irq handler???)
+> 
+> Unfortunately, I can't find the way to trigger this at the moment.
 
-David
----
-splice: Clean up direct_splice_read() a bit
+Then the change should not be made.
 
-Do a couple of cleanups to direct_splice_read():
+> What about printk, should trace_printk be used instead?
 
- (1) Cast to struct page **, not void *.
+Why?
 
- (2) Simplify the calculation of the number of pages to keep/reclaim in
-     direct_splice_read().
+> > Odds are, no one actually has this hardware anymore, right?
+> 
+> Despite of this, such vulnerability should be fixed because
+> there is a possibility to exploit it.
 
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: David Hildenbrand <david@redhat.com>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: linux-mm@kvack.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
+How can this be "exploited" if it can not ever be triggered?
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 9e798c901087..e97f9aa30717 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -295,7 +295,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *pp=
-os,
- 	struct kiocb kiocb;
- 	struct page **pages;
- 	ssize_t ret;
--	size_t used, npages, chunk, remain, reclaim;
-+	size_t used, npages, chunk, remain, keep =3D 0;
- 	int i;
- =
+Also, this would cause a NULL dereference in an irq handler, how can you
+"exploit" that?
 
- 	/* Work out how much data we can actually add into the pipe */
-@@ -309,7 +309,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *pp=
-os,
- 	if (!bv)
- 		return -ENOMEM;
- =
+Please only submit patches that actually do something.  It is getting
+very hard to want to even review patches from this "project" based on
+the recent submissions.
 
--	pages =3D (void *)(bv + npages);
-+	pages =3D (struct page **)(bv + npages);
- 	npages =3D alloc_pages_bulk_array(GFP_USER, npages, pages);
- 	if (!npages) {
- 		kfree(bv);
-@@ -332,11 +332,8 @@ ssize_t direct_splice_read(struct file *in, loff_t *p=
-pos,
- 	kiocb.ki_pos =3D *ppos;
- 	ret =3D call_read_iter(in, &kiocb, &to);
- =
+thanks,
 
--	reclaim =3D npages * PAGE_SIZE;
--	remain =3D 0;
- 	if (ret > 0) {
--		reclaim -=3D ret;
--		remain =3D ret;
-+		keep =3D DIV_ROUND_UP(ret, PAGE_SIZE);
- 		*ppos =3D kiocb.ki_pos;
- 		file_accessed(in);
- 	} else if (ret < 0) {
-@@ -349,14 +346,12 @@ ssize_t direct_splice_read(struct file *in, loff_t *=
-ppos,
- 	}
- =
-
- 	/* Free any pages that didn't get touched at all. */
--	reclaim /=3D PAGE_SIZE;
--	if (reclaim) {
--		npages -=3D reclaim;
--		release_pages(pages + npages, reclaim);
--	}
-+	if (keep < npages)
-+		release_pages(pages + keep, npages - keep);
- =
-
- 	/* Push the remaining pages into the pipe. */
--	for (i =3D 0; i < npages; i++) {
-+	remain =3D ret;
-+	for (i =3D 0; i < keep; i++) {
- 		struct pipe_buffer *buf =3D pipe_head_buf(pipe);
- =
-
- 		chunk =3D min_t(size_t, remain, PAGE_SIZE);
-
+greg k-h
