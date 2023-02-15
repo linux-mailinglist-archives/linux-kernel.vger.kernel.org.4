@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962AD697EBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA5F697EC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjBOOvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S229905AbjBOOw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjBOOvu (ORCPT
+        with ESMTP id S229574AbjBOOw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:51:50 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143C639B90
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:51:48 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id cf42so27935574lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPNxk2yysrjzlbFSB5JvYKtr5KWLaNTWE26xdU6d35M=;
-        b=jcClCRX4DibG+AxF/B3x7mrMekpJZLC+16y8clhgAtBk+gdWef3KD2yxQilLQvl9sQ
-         hzwQ6A6SqHcZzpCQnsGn7a7WM0uUcI8+2WTG4Tr3QGYBlCATqbS0z5BJdJMm4Jp9OdgR
-         E0pnfPGLb9vJdbAENpFtnNXT2Vpe3UDjXGKkY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FPNxk2yysrjzlbFSB5JvYKtr5KWLaNTWE26xdU6d35M=;
-        b=uxGwViiQL6mPx/8J+U4zQSkeZSsFfbKECni4zfwaBOnvxlmO7tz7h4P6T5jlhDaikq
-         meHDWvX5W4ALCodRZm+C00YWHMAS2ikalomKmmXrexjaWJf8Wddc4Wzfk82haSdOgEYx
-         RyVql/jQ1qZ/q5v4LCaMf0/2Tm2yTXfo2cAe/IPtTf/HNJY57eXwCJojUMxr9ST0o21G
-         yyromY7Dzy4P6P6bScYxfq+9TQsG0xA+vsv7dLW/2ERAzXCz/rMpTX1q5tCk0dfVUdND
-         gZadsXgUI7jYxl+6f2u/yeoPdPGH9YVap7CcZHlG1BK8XFND6mdAQTQWDWTDQRtv0jit
-         pkKA==
-X-Gm-Message-State: AO0yUKXcc9AKfZKxoWgxc1P9xCqCd4e+LJw9JVxJLcntMN7RsEfZh3+S
-        sVPRN4tF3LhPEwJ9h3YWtoUtjgdTuplE9WYDkcCn+A==
-X-Google-Smtp-Source: AK7set9x3FvjDHQkCZvDNNbAYkvQDwhCUNHAVu3h9AFkckE2ot4i0GIDOv9xvK/wHwKb/r6AcA8gB418i0V3uN+ec/g=
-X-Received: by 2002:a19:5203:0:b0:4db:3fd1:6ac3 with SMTP id
- m3-20020a195203000000b004db3fd16ac3mr614165lfb.11.1676472706341; Wed, 15 Feb
- 2023 06:51:46 -0800 (PST)
+        Wed, 15 Feb 2023 09:52:56 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D9F751;
+        Wed, 15 Feb 2023 06:52:54 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSJ9L-00082i-9y; Wed, 15 Feb 2023 15:52:47 +0100
+Message-ID: <05f6936f-f8e0-d0e5-7f8f-d0278dc03753@leemhuis.info>
+Date:   Wed, 15 Feb 2023 15:52:46 +0100
 MIME-Version: 1.0
-References: <20230209102730.974465-1-qiang1.zhang@intel.com>
- <Y+WQkmiypKUUUfcj@lothringen> <PH0PR11MB58803E9D69F2FAC51C5E5589DADE9@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB58803E9D69F2FAC51C5E5589DADE9@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 15 Feb 2023 09:51:34 -0500
-Message-ID: <CAEXW_YS_CXbvhdu3EoaDB2zj3YGNUYXQ3C6xGOJ1cyvUJZZYjw@mail.gmail.com>
-Subject: Re: [PATCH v2] rcu: Keeping rcu-related kthreads running on
- housekeeping CPUS
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+ <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
+ <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
+ <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
+ <3af98200-7240-9e93-bd6a-d0e2f71ab1c4@leemhuis.info>
+In-Reply-To: <3af98200-7240-9e93-bd6a-d0e2f71ab1c4@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676472774;c077c2a6;
+X-HE-SMSGID: 1pSJ9L-00082i-9y
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:26 AM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
->
-> > For kernels built with CONFIG_NO_HZ_FULL=y and CONFIG_RCU_NOCB_CPU=y,
-> > when passing cpulist to "isolcpus=", "nohz_full=" and "rcu_nocbs="
-> > bootparams, after system starting, the rcu-related kthreads(include
-> > rcu_gp, rcuog*, rcuop* kthreads etc) will running on housekeeping
-> > CPUs, but for cpulist contains CPU0, the result will deferent, these
-> > rcu-related kthreads will be restricted to running on CPU0.
-> >
-> > Although invoke kthread_create() to spwan rcu-related kthreads and
-> > when it's starting, invoke set_cpus_allowed_ptr() to allowed cpumaks
-> > is housekeeping_cpumask(HK_TYPE_KTHREAD), but due to these rcu-related
-> > kthreads are created before starting other CPUS, that is to say, at
-> > this time, only CPU0 is online, when these rcu-related kthreads running
-> > and set allowed cpumaks is housekeeping cpumask, if find that only CPU0
-> > is online and CPU0 exists in "isolcpus=", "nohz_full=" and "rcu_nocbs="
-> > bootparams, invoke set_cpus_allowed_ptr() will return error.
-> >
-> > set_cpus_allowed_ptr()
-> >  ->__set_cpus_allowed_ptr()
-> >    ->__set_cpus_allowed_ptr_locked
-> >      {
-> >                 bool kthread = p->flags & PF_KTHREAD;
-> >                 ....
-> >                 if (kthread || is_migration_disabled(p))
-> >                         cpu_valid_mask = cpu_online_mask;
-> >                 ....
-> >                 dest_cpu = cpumask_any_and_distribute(cpu_valid_mask, ctx->new_mask);
-> >                 if (dest_cpu >= nr_cpu_ids) {
-> >                         ret = -EINVAL;
-> >                         goto out;
-> >                 }
-> >                 ....
-> >      }
-> >
-> > At this time, only CPU0 is set in the cpu_online_mask, the ctx->new_mask
-> > is housekeeping cpumask and not contains CPU0, this will result dest_cpu
-> > is illegal cpu value, the set_cpus_allowed_ptr() will return -EINVAL and
-> > failed to set housekeeping cpumask.
-> >
-> > This commit therefore add additional cpus_allowed_ptr() call in CPU hotplug
-> > path. and reset the CPU affinity of rcuboost, rcuog, rcuop kthreads after
-> > all other CPUs are online.
-> >
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >Good catch! But based on that and your other fix, I suspect that
-> >nohz_full=0... has never been seriously used.
-> >
-> >A few points:
-> >
-> >* This is a problem for kthreads in general. And since HK_TYPE_KTHREAD =
-> >  HK_TYPE_RCU and both are going to be merged in the future, I think we should
-> >  stop handling the RCU kthreads housekeeping affinity from RCU but let the
-> >  kthread code handle that and also fix the issue from the kthread code.
-> >  RCU boost may be an exception since we try to enforce some node locality
-> >  within the housekeeping range.
->
-> Agree.  indeed, these works that set housekeeping CPU affinity should not be handled by RCU,
-> and not only RCU-related kthreads are affected, other kthreads created earlier also have the
-> same problem.
+[TLDR: This mail in primarily relevant for Linux regression tracking. A
+change or fix related to the regression discussed in this thread was
+posted or applied, but it did not use a Link: tag to point to the
+report, as Linus and the documentation call for. Things happen, no
+worries -- but now the regression tracking bot needs to be told manually
+about the fix. See link in footer if these mails annoy you.]
 
-Agreed as well.
+On 21.01.23 13:32, Linux kernel regression tracking (#adding) wrote:
+> On 19.01.23 02:54, Joel Stanley wrote:
+>> On Fri, 26 Aug 2022 at 22:48, Andrew Jeffery <andrew@aj.id.au> wrote:
+>>> On Sat, 27 Aug 2022, at 07:26, Linus Walleij wrote:
+>>>> On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+>>>>
+>>>>> When the driver want to disable the signal of the function, it doesn't
+>>>>> need to query the state of the mux function's signal on a pin. The
+>>>>> condition below will miss the disable of the signal:
+>>
+>>>> I can't see the verdict for this patch? Will there be a new
+>>>> version, or are we in the middle of a discussion?
+>>>> I'd really like Andrew's ACK on the result before merging.
+>>>
+>>> Apologies, it's been a bit of A Week :)
+>>>
+>>> Given the approach has been discussed with the IP designer and solves a bug I'm okay for it to be merged. If we run into issues it is easy enough to back it out.
+>>
+>> As foreseen by Andrew, this caused a regression. On the Romulus
+>> machine the device tree contains a gpio hog for GPIO S7. With the
+>> patch applied:
+> 
+> #regzbot ^introduced cf517fef601b
+> #regzbot title pinctrl: aspeed-g5-pinctrl 1e6e2080.pinctrl: Failed to
+> acquire regmap for IP block 1
+> #regzbot ignore-activity
 
-> >* If CPU 0 is isolated and it is the boot CPU, we should wait for a secondary
-> >  CPU to boot before activating nohz_full at all. Unfortunately the nohz_full
-> >  code is not yet ready for runtime housekeeping cpumask change but work is
-> >  in progress (I'm saying that for 10 years...)
-> >
-> >* I'm tempted to revert 08ae95f4fd3b (nohz_full: Allow the boot CPU to be
-> >  nohz_full) since it doesn't work and nobody ever complained?
->
-> Yes if remove 08ae95f4fd3b, this problem will disappear.
+#regzbot fix: 606d4ef4922662
 
-Just checking. So what's the next step, revert this?
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
-Thanks.
+#regzbot ignore-activity
