@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FE16977C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FD06977C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbjBOIHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S233822AbjBOIHi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Feb 2023 03:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjBOIH2 (ORCPT
+        with ESMTP id S233816AbjBOIHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:07:28 -0500
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341934C10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1676448446;
-        bh=Ler2UBqqdij4bGpnF6QN771+SrKMZqCdjzRIMw2xagw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=A6KDhiiqd0L4VJRzg4GArfH3j0ztxAeP17Rn0tonxfU4DLnsGzXKceHRSkMFDKZOp
-         YOyFXkMmDEY0aeWHrPsQEiLzBAXz3Z6C1ghVmhE5o2IqkxgIjeFfiq3h9sVBKKbhUn
-         hFXQhRkNhBzzF4jBh/cfHcCUCBTMglx8lRDYZp9o=
-Received: from [IPv6:240e:456:1020:352:6860:35c9:52f4:b84b] (unknown [IPv6:240e:456:1020:352:6860:35c9:52f4:b84b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 2E00B65F1A;
-        Wed, 15 Feb 2023 03:07:21 -0500 (EST)
-Message-ID: <818419c03037bda833a5b281588a4b331c34ae8c.camel@xry111.site>
-Subject: Re: "kernel ade access" oops on LoongArch
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>
-Cc:     loongarch@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
-Date:   Wed, 15 Feb 2023 16:07:15 +0800
-In-Reply-To: <5403e5eb-5792-7d6f-df74-ca3fab82ecd5@loongson.cn>
-References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
-         <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
-         <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
-         <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
-         <5403e5eb-5792-7d6f-df74-ca3fab82ecd5@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Wed, 15 Feb 2023 03:07:36 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041053669D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:35 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id ch10so19843325qtb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rx6raGPVkjLOh5DBbFhiid2XbozsdzVzlVKzi7He69I=;
+        b=KsO0ehOj+ABHmIeTUMg/spvI3id4G/jkVp+U1VHxlb+2vFepKSo/2o5tCAN32d6JD2
+         ptlAS/+WZ2q0XgsIIudepF+HIDN/5zIb99XaT1xHSfP/l5XQnC40UVj4CZEPRZjYgZPx
+         7KdQkifB7AjnBiyRTWrGnLzkfxyY2RNNJl0ZSzsIdQjz7D++PHud1kztP+FqNs2EekU2
+         Pcngb4kbHao9EQeWt6JeBJc9feBrIDUHX7fSvXa9CKHTO3cJ7//ZWCEZbXPBPIMucPbA
+         hTHAt+5nProyo7xjN1XjIKbP3r7Yuu/4iRXx14yGu17n7VHfNtQeFfT64KdAExPwghhy
+         XYmA==
+X-Gm-Message-State: AO0yUKUzJIYJG3/rwbVlVFQRARauNTKetPnbvYkFSrcsaCE9JNmSy18i
+        rNOV32hdVXVtXZRf1+A9ew3t98cz6cldPbLV
+X-Google-Smtp-Source: AK7set80KUhYvnn7mPBFIMeZxLc5+K6SmYfWB1qQAr2ozhpDbDOP11mAVkwEyK5x21QLkmKkcigViw==
+X-Received: by 2002:ac8:5e53:0:b0:3a6:8f7c:5936 with SMTP id i19-20020ac85e53000000b003a68f7c5936mr2143324qtx.25.1676448453923;
+        Wed, 15 Feb 2023 00:07:33 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b0070383f1b6f1sm13544679qkd.31.2023.02.15.00.07.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 00:07:33 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-51ba4b1b9feso249110307b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:33 -0800 (PST)
+X-Received: by 2002:a81:6a03:0:b0:52f:972:e6a1 with SMTP id
+ f3-20020a816a03000000b0052f0972e6a1mr173556ywc.235.1676448452756; Wed, 15 Feb
+ 2023 00:07:32 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1676410243-10566-1-git-send-email-quic_c_spathi@quicinc.com>
+ <1950127775.130646.1676411821807.JavaMail.zimbra@nod.at> <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
+In-Reply-To: <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Feb 2023 09:07:21 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
+Message-ID: <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
+Subject: Re: [PATCH V1] um: Fix compilation warnings
+To:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-15 at 15:51 +0800, Jinyang He wrote:
+Hi Srinivasarao,
 
-> > There was a build error in make check, so only tst-mallocfork3-
-> > malloc-check was tested separately.
-> >=20
-> > # make test t=3Dmalloc/tst-mallocfork3-malloc-check
-> > make[2]: =E7=A6=BB=E5=BC=80=E7=9B=AE=E5=BD=95=E2=80=9C/home/loongson/gl=
-ibc/malloc=E2=80=9D
-> > PASS: malloc/tst-mallocfork3-malloc-check
-> > original exit status 0
-> > info: signals received during fork: 301
-> > info: signals received during free: 1693
-> > info: signals received during malloc: 119
-> > make[1]: =E7=A6=BB=E5=BC=80=E7=9B=AE=E5=BD=95=E2=80=9C/home/loongson/gl=
-ibc=E2=80=9D
-> >=20
-> > A total of five tests are PASS, and the serial port does not display
-> > CallTrace.
-> >=20
-> > Youling.
-> >=20
-> I had test it by using the cmd "while true..." Ruoyao gave on
->=20
-> Loongson-3A5000, CLFS 7.1, 6.2-rc8 kernel with those patches and
->=20
-> 6.2-rc7 kernel form loongson-next. No calltrace displayed, either.
+On Wed, Feb 15, 2023 at 6:36 AM Srinivasarao Pathipati
+<quic_c_spathi@quicinc.com> wrote:
+> On 2/15/2023 3:27 AM, Richard Weinberger wrote:
+> > ----- Ursprüngliche Mail -----
+> >> Von: "Srinivasarao Pathipati" <quic_c_spathi@quicinc.com>
+> >> static void sig_handler_common(int sig, struct siginfo *si, mcontext_t *mc)
+> >> {
+> >> -    struct uml_pt_regs r;
+> >> +    struct uml_pt_regs *r;
+> >>      int save_errno = errno;
+> >>
+> >> -    r.is_user = 0;
+> >> +    r = malloc(sizeof(struct uml_pt_regs));
+> > I fear this is not correct since malloc() is not async-signal safe.
+>
+> Thanks Richard for quick response. Could you please suggest alternative
+> function of malloc() with async-signal safe.
+>
+> if that is not possible Is there any other way to fix this warning? OR
+> do we need to live with that warning?
 
-Hmm... I've read the code for a while and I couldn't see how it could
-end up accessing a bad address too.  Maybe my hardware or compiler is
-really faulty?
+Does this limit actually apply to this file, which calls into the host OS?
 
+How come you even see this warning, as we have
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+    CFLAGS_signal.o += -Wframe-larger-than=4096
+
+since commit 517f60206ee5d5f7 ("um: Increase stack frame size threshold
+for signal.c") in v5.11?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
