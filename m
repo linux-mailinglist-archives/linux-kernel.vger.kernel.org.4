@@ -2,244 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885EA69797C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0B969797F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbjBOKDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S231938AbjBOKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjBOKDm (ORCPT
+        with ESMTP id S231264AbjBOKFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:03:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCDA10AA3;
-        Wed, 15 Feb 2023 02:03:21 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 15 Feb 2023 05:05:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927C7C5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:05:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57A146602180;
-        Wed, 15 Feb 2023 10:03:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676455399;
-        bh=X00el7p+dbNTAWPiS1YW1ebOoUoyaNwOhDYiwL1/FLY=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ijvylnSHQqn/Hrg59y3nIPoo9NYWq9fs5upS3FOuom+I/ikfB8SqOCyvSn3Wcjnzy
-         Hvpx7vDHAmj4/W87+tC51Wmoiym91Rody0QLIznvS+i9mj1bD7ZILp/ThpK48u7yTi
-         XXXa6KrAKcGZ4IHFqy/bwfDfUTvGq6HzOc85eubl4elY/VgxY1GwQxnBAxyris6u1F
-         rtv43eml3G5y2FJLofeUj6fh31Csy2PrxREwrliCtZGvN3Qr1Fnc+cwrm3OYagVDus
-         jrxqcm5B42Fu9bnHV8kB8VjWwNUHW0haRt5Jxe2DTNw8XR/ZV3KFpR6j5PtYC9I77W
-         oxydz1usFQgqA==
-Message-ID: <884f5aa6-5d12-eecc-ed71-7d653828ca20@collabora.com>
-Date:   Wed, 15 Feb 2023 15:03:09 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CD7BB81F81
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:05:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D08EC433D2;
+        Wed, 15 Feb 2023 10:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676455510;
+        bh=+40pgbNx1mfVdszd2dJGbIj51cHRI+hvUPY1VqaVb1c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B75bhV0SZSZkVkNzkLMg+bXOBR9kv/dwTgZcuqbbgC0MOOFVbXRLd5B4lOOfJyMfk
+         NHMDSSkgNkSJhIA7JY06MEJ0ZuOqfXPk3WE+sFpquBCC9Z3L4fLKEQEPdMO8qunsZ4
+         dT/4LRnxrQNrs4hPXOuuFbfYw+Fi+R6f+4E1S1sF9u5jTFHdQaRXSuwa++DEH9cAb8
+         TGPPt/BQ0AlgKlza1BZg0UiqPBiop8/5Z2ck5XFVnmQ+i2zFKZ2ZeaTIRBW9T9HKg3
+         G8JkNEawIUojXz1TcsNgY+cKwwKFZh3GQfZ/Qme13PGZK0kj4tnGVcOjn/2Dbt2eqA
+         OcwAG64AR5ZqQ==
+Date:   Wed, 15 Feb 2023 12:04:54 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Qi Zheng <arch0.zheng@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Teng Hu <huteng.ht@bytedance.com>,
         Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <Y+QfDN4Y5Q10x8GQ@x1n>
- <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com> <Y+qur8iIUQTLyE8f@x1n>
- <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com> <Y+v2HJ8+3i/KzDBu@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y+v2HJ8+3i/KzDBu@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <muchun.song@linux.dev>, x86@kernel.org
+Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
+Message-ID: <Y+yuRggjs0otCXFz@kernel.org>
+References: <67240e55-af49-f20a-2b4b-b7d574cd910d@gmail.com>
+ <22f0e262-982e-ea80-e52a-a3c924b31d58@redhat.com>
+ <dbfbd982-27f3-0d72-49e0-d3dd5fe636a8@bytedance.com>
+ <4386151c-0328-d207-9a71-933ef61817f9@redhat.com>
+ <Y+t0Bhu7BCzH2Dp4@kernel.org>
+ <a7f8be91-32c1-bfbe-7e81-5b1e818ba01d@redhat.com>
+ <a09bfe3a-87e4-f8ce-89bb-c5fde8cc33c9@redhat.com>
+ <Y+uO5IE7boORqsne@dhcp22.suse.cz>
+ <Y+ymKw1eJaRcmDNN@kernel.org>
+ <3a85b2b9-95fa-4123-a7a3-2bd6f8b35c13@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a85b2b9-95fa-4123-a7a3-2bd6f8b35c13@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 1:59 AM, Peter Xu wrote:
-[..]
->>>> static inline bool is_pte_written(pte_t pte)
->>>> {
->>>> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
->>>> 	    (pte_swp_uffd_wp_any(pte)))
->>>> 		return false;
->>>> 	return (pte_present(pte) || is_swap_pte(pte));
->>>> }
->>>
->>> Could you explain why you don't want to return dirty for !present?  A page
->>> can be written then swapped out.  Don't you want to know that happened
->>> (from dirty tracking POV)?
->>>
->>> The code looks weird to me too..  We only have three types of ptes: (1)
->>> present, (2) swap, (3) none.
->>>
->>> Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
->>> that what you're really looking for?
->> Yes, this is what I've been trying to do. I'll use !pte_none() to make it
->> simpler.
+On Wed, Feb 15, 2023 at 10:43:58AM +0100, David Hildenbrand wrote:
+> On 15.02.23 10:30, Mike Rapoport wrote:
+> > On Tue, Feb 14, 2023 at 02:38:44PM +0100, Michal Hocko wrote:
+> > > On Tue 14-02-23 12:58:39, David Hildenbrand wrote:
+> > > > On 14.02.23 12:48, David Hildenbrand wrote:
+> > > > > On 14.02.23 12:44, Mike Rapoport wrote:
+> > > > > > (added x86 folks)
+> > > > > > 
+> > > > > > On Tue, Feb 14, 2023 at 12:29:42PM +0100, David Hildenbrand wrote:
+> > > > > > > On 14.02.23 12:26, Qi Zheng wrote:
+> > > > > > > > On 2023/2/14 19:22, David Hildenbrand wrote:
+> > > > > > > > > 
+> > > > > > > > > TBH, this is the first time I hear of NODE_MIN_SIZE and it seems to be a
+> > > > > > > > > pretty x86 specific thing.
+> > > > > > > > > 
+> > > > > > > > > Are we sure we want to get NODE_MIN_SIZE involved?
+> > > > > > > > 
+> > > > > > > > Maybe add an arch_xxx() to handle it?
+> > > > > > > 
+> > > > > > > I still haven't figured out what we want to achieve with NODE_MIN_SIZE at
+> > > > > > > all. It smells like an arch-specific hack looking at
+> > > > > > > 
+> > > > > > > "Don't confuse VM with a node that doesn't have the minimum amount of
+> > > > > > > memory"
+> > > > > > > 
+> > > > > > > Why shouldn't mm-core deal with that?
+> > > > > > 
+> > > > > > Well, a node with <4M RAM is not very useful and bears all the overhead of
+> > > > > > an extra live node.
+> > > > > 
+> > > > > And totally not with 4.1M, haha.
+> > > > > 
+> > > > > I really like the "Might fix boot" in the commit description.
+> > > > > 
+> > > > > > 
+> > > > > > But, hey, why won't we just drop that '< NODE_MIN_SIZE' and let people with
+> > > > > > weird HW configurations just live with this?
+> > > > > 
+> > > > > 
+> > > > > ;)
+> > > > > 
+> > > > 
+> > > > Actually, remembering 09f49dca570a ("mm: handle uninitialized numa nodes
+> > > > gracefully"), this might be the right thing to do. That commit assumes that
+> > > > all offline nodes would get the pgdat allocated in free_area_init(). So that
+> > > > we end up with an allocated pgdat for all possible nodes. The reasoning IIRC
+> > > > was that we don't care about wasting memory in weird VM setups.
+> > > 
+> > > Yes, that is the case indeed. I suspect the NODE_MIN_SIZE is a relict of
+> > > the past when some PXM entries were incorrect or fishy. I would just
+> > > drop the check and see whether something breaks. Or make those involved
+> > > back then remember whether this is addressing something that is relevant
+> > > these days. Even 5MB node makes (as the memmap is allocated for the
+> > > whole memory section anyway and that is 128MB) a very little sense if you ask me.
+> > 
+> > How about we try this:
+> > 
+> >  From b670120bcacd3fe34a40d7179c70ca2ab69279e0 Mon Sep 17 00:00:00 2001
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > Date: Wed, 15 Feb 2023 11:12:18 +0200
+> > Subject: [PATCH] x86/mm: drop 4MB restriction on minimal NUMA node size
+> > 
+> > Qi Zheng reports crashes in a production environment and provides a
+> > simplified example as a reproducer:
+> > 
+> >    For example, if we use qemu to start a two NUMA node kernel,
+> >    one of the nodes has 2M memory (less than NODE_MIN_SIZE),
+> >    and the other node has 2G, then we will encounter the
+> >    following panic:
+> > 
+> >    [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> >    [    0.150783] #PF: supervisor write access in kernel mode
+> >    [    0.151488] #PF: error_code(0x0002) - not-present page
+> >    <...>
+> >    [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
+> >    <...>
+> >    [    0.169781] Call Trace:
+> >    [    0.170159]  <TASK>
+> >    [    0.170448]  deactivate_slab+0x187/0x3c0
+> >    [    0.171031]  ? bootstrap+0x1b/0x10e
+> >    [    0.171559]  ? preempt_count_sub+0x9/0xa0
+> >    [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
+> >    [    0.172735]  ? bootstrap+0x1b/0x10e
+> >    [    0.173236]  bootstrap+0x6b/0x10e
+> >    [    0.173720]  kmem_cache_init+0x10a/0x188
+> >    [    0.174240]  start_kernel+0x415/0x6ac
+> >    [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
+> >    [    0.175417]  </TASK>
+> >    [    0.175713] Modules linked in:
+> >    [    0.176117] CR2: 0000000000000000
+> > 
+> > The crashes happen because of inconsistency between nodemask that has
+> > nodes with less than 4MB as memoryless and the actual memory fed into
+> > core mm.
+> > 
+> > The commit 9391a3f9c7f1 ("[PATCH] x86_64: Clear more state when ignoring
+> > empty node in SRAT parsing") that introduced minimal size of a NUMA node
+> > does not explain why a node size cannot be less than 4MB and what boot
+> > failures this restriction might fix.
+> > 
+> > Since then a lot has changed and core mm won't confuse badly about small
+> > node sizes.
+> > 
+> > Drop the limitation for the minimal node size.
+> > 
+> > Link: https://lore.kernel.org/all/20230212110305.93670-1-zhengqi.arch@bytedance.com/
+> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > ---
+> >   arch/x86/include/asm/numa.h | 7 -------
+> >   arch/x86/mm/numa.c          | 7 -------
+> >   2 files changed, 14 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
+> > index e3bae2b60a0d..ef2844d69173 100644
+> > --- a/arch/x86/include/asm/numa.h
+> > +++ b/arch/x86/include/asm/numa.h
+> > @@ -12,13 +12,6 @@
+> >   #define NR_NODE_MEMBLKS		(MAX_NUMNODES*2)
+> > -/*
+> > - * Too small node sizes may confuse the VM badly. Usually they
+> > - * result from BIOS bugs. So dont recognize nodes as standalone
+> > - * NUMA entities that have less than this amount of RAM listed:
+> > - */
+> > -#define NODE_MIN_SIZE (4*1024*1024)
+> > -
+> >   extern int numa_off;
+> >   /*
+> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > index 2aadb2019b4f..55e3d895f15c 100644
+> > --- a/arch/x86/mm/numa.c
+> > +++ b/arch/x86/mm/numa.c
+> > @@ -601,13 +601,6 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+> >   		if (start >= end)
+> >   			continue;
+> > -		/*
+> > -		 * Don't confuse VM with a node that doesn't have the
+> > -		 * minimum amount of memory:
+> > -		 */
+> > -		if (end && (end - start) < NODE_MIN_SIZE)
+> > -			continue;
+> > -
+> >   		alloc_node_data(nid);
+> >   	}
 > 
-> Ah I think I see what you wanted to do now.. But I'm afraid it won't work
-> for all cases.
+> Hopefully it fixes the issue.
 > 
-> So IIUC the problem is anon pte can be empty, but since uffd-wp bit doesn't
-> persist on anon (but none) ptes, then we got it lost and we cannot identify
-> it from pages being written.  Your solution will solve problem for
-> anonymous, but I think it'll break file memories.
+> Acked-by: David Hildenbrand <david@redhat.com>
 > 
-> Example:
 > 
-> Consider one shmem page that got mapped, write protected (using UFFDIO_WP
-> ioctl), written again (removing uffd-wp bit automatically), then zapped.
-> The pte will be pte_none() but it's actually written, afaiu.
-> 
-> Maybe it's time we should introduce UFFD_FEATURE_WP_ZEROPAGE, so we'll need
-> to install pte markers for anonymous too (then it will work similarly like
-> shmem/hugetlbfs, that we'll report writting to zero pages), then you'll
-> need to have the new UFFD_FEATURE_WP_ASYNC depend on it.  With that I think
-> you can keep using the old check and it should start to work.
-> 
-> Please let me know if my understanding is correct above.
-Thank you for identifying it. Your understanding seems on point. I'll have
-research things up about PTE Markers. I'm looking at your patches about it
-[1]. Can you refer me to "mm alignment sessions" discussion in form of
-presentation or if any transcript is available?
+> The 4 MiB looks like the magical MAX_ORDER (and/or pageblock) thingy to me.
+> I recall that there were issues in the past when memory exposed to the buddy
+> would only be partially covering a pageblock. IIRC, memblock should already
+> take care to not expose memory to the buddy that is not aligned to MAX_ORDER
+> boundaries -- correct?
 
-> 
-> I'll see whether I can quickly play with UFFD_FEATURE_WP_ZEROPAGE with some
-> patch at the meantime.  That's something we wanted before too, when the app
-> cares about zero pages on anon.  We used to populate the pages before doing
-> ioctl(UFFDIO_WP) to make sure zero pages will be repoted too, but that flag
-> should be more efficient.
-Is this discussion public? For what application you were looking into this?
-I'll dig down to see how can I contribute to it.
+I don't remember those issues, but memblock does not align memory freed to
+the buddy.
 
-> 
->>
->>>
->>>>
->>>> static inline bool is_pmd_written(pmd_t pmd)
->>>> {
->>>> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
->>>> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
->>>> 		return false;
->>>> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
->>>> }
->>>
->>> [...]
->>>
->>>>>> +	bitmap = cur & p->return_mask;
->>>>>> +	if (cpy && bitmap) {
->>>>>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
->>>>>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
->>>>>> +			prev->len += len;
->>>>>> +			p->found_pages += len;
->>>>>> +		} else if (p->vec_index < p->vec_len) {
->>>>>> +			if (prev->len) {
->>>>>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
->>>>>> +				p->vec_index++;
->>>>>> +			}
->>>>>
->>>>> IIUC you can have:
->>>>>
->>>>>   int pagemap_scan_deposit(p)
->>>>>   {
->>>>>         if (p->vec_index >= p->vec_len)
->>>>>                 return -ENOSPC;
->>>>>
->>>>>         if (p->prev->len) {
->>>>>                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
->>>>>                 p->vec_index++;
->>>>>         }
->>>>>
->>>>>         return 0;
->>>>>   }
->>>>>
->>>>> Then call it here.  I think it can also be called below to replace
->>>>> export_prev_to_out().
->>>> No this isn't possible. We fill up prev until the next range doesn't merge
->>>> with it. At that point, we put prev into the output buffer and new range is
->>>> put into prev. Now that we have shifted to smaller page walks of <= 512
->>>> entries. We want to visit all ranges before finally putting the prev to
->>>> output. Sorry to have this some what complex method. The problem is that we
->>>> want to merge the consective matching regions into one entry in the output.
->>>> So to achieve this among multiple different page walks, the prev is being used.
->>>>
->>>> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
->>>> having length of 1024 pages and all of the memory has been written.
->>>> walk_page_range() will be called 2 times. In the first call, prev will be
->>>> set having length of 512. In second call, prev will be updated to 1024 as
->>>> the previous range stored in prev could be extended. After this, the prev
->>>> will be stored to the user output buffer consuming only 1 struct of page_range.
->>>>
->>>> If we store prev back to output memory in every walk_page_range() call, we
->>>> wouldn't get 1 struct of page_range with length 1024. Instead we would get
->>>> 2 elements of page_range structs with half the length.
->>>
->>> I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
->>> with such a pagemap_scan_deposit() you can rewrite it as:
->>>
->>> if (cpy && bitmap) {
->>>         if ((prev->len) && (prev->bitmap == bitmap) &&
->>>             (prev->start + prev->len * PAGE_SIZE == addr)) {
->>>                 prev->len += len;
->>>                 p->found_pages += len;
->>>         } else {
->>>                 if (pagemap_scan_deposit(p))
->>>                         return -ENOSPC;
->>>                 prev->start = addr;
->>>                 prev->len = len;
->>>                 prev->bitmap = bitmap;
->>>                 p->found_pages += len;
->>>         }
->>> }
->>>
->>> Then you can reuse pagemap_scan_deposit() when before returning to
->>> userspace, just to flush PREV to p->vec properly in a single helper.
->>> It also makes the code slightly easier to read.
->> Yeah, this would have worked as you have described. But in
->> pagemap_scan_output(), we are flushing prev to p->vec. But later in
->> export_prev_to_out() we need to flush prev to user_memory directly.
-> 
-> I think there's a loop to copy_to_user().  Could you use the new helper so
-> the copy_to_user() loop will work without export_prev_to_out()?
-> 
-> I really hope we can get rid of export_prev_to_out().  Thanks,
-I truly understand how you feel about export_prev_to_out(). It is really
-difficult to understand. Even I had to made a hard try to come up with the
-current code to avoid consuming a lot of kernel's memory while giving user
-the compact output. I can surely map both of these with a dirty looking
-macro. But I'm unable to find a decent macro to replace these. I think I'll
-put a comment some where to explain whats going-on.
+Still, this 4MB looks like a really old magic that was way before memblock
+and even SPARSEMEM was experimental back then.
 
+It's possible that the issues were with DISCONTIGMEM or with bootmem.
+ 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
 
 -- 
-BR,
-Muhammad Usama Anjum
+Sincerely yours,
+Mike.
