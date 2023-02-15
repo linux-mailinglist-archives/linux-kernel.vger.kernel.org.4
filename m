@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7FA6974B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754AC6974B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjBODQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 22:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S232031AbjBODRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 22:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBODQf (ORCPT
+        with ESMTP id S229553AbjBODRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:16:35 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF042A16B;
-        Tue, 14 Feb 2023 19:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676430994; x=1707966994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qN9JNqvO8efDhHVxxvUM6UWhSYbcjd/gf/y/wf4dMOI=;
-  b=Lo6ZzKXc11X/jPt9BUikEsisnJoKMk5v2iMPoYXlpwWYZR0nTKNhECgb
-   uFjiqOIseVcfimaR/0kV0BIoS/NagUeIm4cmgBij+oQQHBm0YDxxTs+G0
-   +76H2HLvEYCNb87CA/w34aIS1vbsyYK+7lpCLmPm8g3Zm42EyhGG+5Bp8
-   TiSTuhPB9SNeq7BzRrooM2ZGJSSJtC+ItPPOKdZQ7z+Y5zeBfwVxi3mzv
-   M/VTz4BXh5T29szeTJBjsGunZll/YYq4UBFwL6SVqJLbSDWPZEcY2b3hN
-   QnVmI8pyL+tIWjGngxGYZQChys3+i6Kc0jTRoGA028deVVRz2cK4G46HQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="358750930"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="358750930"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:16:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="662776464"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="662776464"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Feb 2023 19:16:30 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pS8HV-0008yf-2C;
-        Wed, 15 Feb 2023 03:16:29 +0000
-Date:   Wed, 15 Feb 2023 11:16:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yang Shi <shy828301@gmail.com>, mgorman@techsingularity.net,
-        agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        akpm@linux-foundation.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 3/5] mm: mempool: introduce page bulk allocator
-Message-ID: <202302151051.i9q3I0ia-lkp@intel.com>
-References: <20230214190221.1156876-4-shy828301@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214190221.1156876-4-shy828301@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 22:17:14 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39AA2B297
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:17:12 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id e12so1478693plh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3HoOW7mnikI/W6qgH9CzqhnH7tqIVURB7YzkTuqqxeg=;
+        b=yRLLo+Y2l9Rqw6rar1SCyG1SxgiM4k2LfTdR7HicsoJ3ot5+CNso463IU5kURN1h86
+         nSFxSUeaFV+/D+mlWEOgnks7/Y7ZVhJVAKTYCKDTrGq9/HdNNX1yUcykVibwEyQ9jpsq
+         fU2wTqpQfQzfy7JvALOZOQzvr7brLByl3XKurkcI3DHXCgcX79yvkS83ZaA37iqJpA4C
+         KDea2/o8hQGM0PGNNPafiUtTbhNWi6DCUjkL8d/7qDUr80FhqUKabcI2fl9lQK7gQu4M
+         02O+3gWIonFsGFOLw244Xs+ECHNZsDJtJA1ZejtNyupqPwLJb7iaz5xgprNxEmyL672c
+         dJKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3HoOW7mnikI/W6qgH9CzqhnH7tqIVURB7YzkTuqqxeg=;
+        b=Bk/Ti+bvX5q4ijNi41r9n/3i3JgOgs0PTnVurT+V0UYbBbivF8Xa95T7xW65ePitZ3
+         koUbvl1JpkYkGLlZ8W+mUIdcYcd/ciipFH0y/L6RCWnnc00vbZ9chxO29Oq1BxQXT/eE
+         DAQCxUbcwmaXd0ujIwAE95De1rPrXWGb/VP6pqjwESKRBv8HaPzlHNBVmPkizO1SKubJ
+         QV5qD3O16hJ7Eo7Rs8E0IzUWX4h/h2pDV53OeobSksvYiuCB/hNI3iAcz6ctdMGK+mCC
+         llW3NMMEl8HGvIOb5KydttoVbL7A3TLSvpniWSETg8Os7xmeGdyi+DmxiS0hdDUfSKyE
+         GfWg==
+X-Gm-Message-State: AO0yUKWw7QAVXaGv1Fdaiym9Nbr86tQAgXFb+ALcanarQJOHOP1b2Vtm
+        azuqSKalGGgPBPv5QNNCJw2yAQ==
+X-Google-Smtp-Source: AK7set+1aqVANLzDp5HMuErgCQtOQR3yuVXnnsXY/YD+E/CloFSoZS7gNIcwS34GPrlK9OomuYcunQ==
+X-Received: by 2002:a17:903:32c1:b0:19a:6b55:a453 with SMTP id i1-20020a17090332c100b0019a6b55a453mr1399170plr.9.1676431032105;
+        Tue, 14 Feb 2023 19:17:12 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b00198f2407ea1sm10792632plp.241.2023.02.14.19.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 19:17:11 -0800 (PST)
+Date:   Tue, 14 Feb 2023 19:17:11 -0800 (PST)
+X-Google-Original-Date: Tue, 14 Feb 2023 19:17:04 PST (-0800)
+Subject:     Re: [PATCH v16 0/9] RISC-V IPI Improvements
+In-Reply-To: <86357k1ihd.wl-maz@kernel.org>
+CC:     apatel@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        tglx@linutronix.de, daniel.lezcano@linaro.org, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, atishp@atishpatra.org,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        anup@brainfault.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Marc Zyngier <maz@kernel.org>
+Message-ID: <mhng-a886c4b4-d748-420f-889b-76ada4f9a432@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+On Sun, 05 Feb 2023 03:04:14 PST (-0800), Marc Zyngier wrote:
+> On Tue, 03 Jan 2023 14:12:12 +0000,
+> Anup Patel <apatel@ventanamicro.com> wrote:
+>>
+>> This series aims to improve IPI support in Linux RISC-V in following ways:
+>>  1) Treat IPIs as normal per-CPU interrupts instead of having custom RISC-V
+>>     specific hooks. This also makes Linux RISC-V IPI support aligned with
+>>     other architectures.
+>>  2) Remote TLB flushes and icache flushes should prefer local IPIs instead
+>>     of SBI calls whenever we have specialized hardware (such as RISC-V AIA
+>>     IMSIC and RISC-V SWI) which allows S-mode software to directly inject
+>>     IPIs without any assistance from M-mode runtime firmware.
+>
+> [...]
+>
+> I'm queuing patches 3 and 9 via the irqchip tree as they are
+> standalone.
+>
+> For the rest, I need an Ack from the riscv maintainers as they change
+> a large amount of arch-specific code, and the couple of irqchip
+> patches depend on these changes.
+>
+> Palmer, Paul?
 
-Thank you for the patch! Perhaps something to improve:
+I haven't gotten time to give this a proper review, but I think we've 
+got enough of a mess with our interrupt handling that it doesn't really 
+matter so
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc8 next-20230214]
-[cannot apply to device-mapper-dm/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Shi/mm-page_alloc-add-API-for-bulk-allocator-with-callback/20230215-030305
-patch link:    https://lore.kernel.org/r/20230214190221.1156876-4-shy828301%40gmail.com
-patch subject: [v2 PATCH 3/5] mm: mempool: introduce page bulk allocator
-config: loongarch-randconfig-r006-20230212 (https://download.01.org/0day-ci/archive/20230215/202302151051.i9q3I0ia-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ecf5ea78b27092c35d884fad653f53d599d9ddba
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yang-Shi/mm-page_alloc-add-API-for-bulk-allocator-with-callback/20230215-030305
-        git checkout ecf5ea78b27092c35d884fad653f53d599d9ddba
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/scsi/snic/
+if you want to take it for this cycle that's fine with me, but I'm also 
+fine holding off so it can have a while to bake in linux-next -- there's 
+no real rush for any of this, as there's no hardware yet.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302151051.i9q3I0ia-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/scsi/snic/snic_scsi.c:4:
->> include/linux/mempool.h:18:48: warning: 'struct page' declared inside parameter list will not be visible outside of this definition or declaration
-      18 |                                         struct page **page_array,
-         |                                                ^~~~
-   include/linux/mempool.h:71:51: warning: 'struct page' declared inside parameter list will not be visible outside of this definition or declaration
-      71 |                                            struct page **page_array);
-         |                                                   ^~~~
-   include/linux/mempool.h:74:59: warning: 'struct page' declared inside parameter list will not be visible outside of this definition or declaration
-      74 |                                         void (*cb)(struct page *, void *),
-         |                                                           ^~~~
-
-
-vim +18 include/linux/mempool.h
-
-    15	
-    16	typedef unsigned int (mempool_alloc_pages_bulk_t)(gfp_t gfp_mask,
-    17						unsigned int nr, void *pool_data,
-  > 18						struct page **page_array,
-    19						void (*cb)(struct page *, void *),
-    20						void *data);
-    21	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> Thanks,
+>
+> 	M.
