@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DB0697F6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB80697F6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjBOPVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S230014AbjBOPVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjBOPU7 (ORCPT
+        with ESMTP id S229767AbjBOPVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:20:59 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF5A5F2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:20:58 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id m12-20020a1709026bcc00b001963da9cc71so10957772plt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDukbJdwBzqD8cf3Dpo6Rb4XouWez9+Bscdl5lNP9jE=;
-        b=ohreeci2tmJfITEyOGUGkEKnrkaY1n0D9pgJXvMVz+Ilu2jbR8TAIlYP/R/MvfTqoH
-         Ke/LOWMGGHyEfy+IW2VArB3dtXeA4bi3uXACt8DqX1GWgBjY+uXq5j5yj1GtHhhUon4b
-         6k18Uc8Loq/buM60b3SNXw401AaLdyv5aAhnpmy4R+cLSAi2cm9QXcqTswhCwnEg8YQG
-         9hf5/D9JLV2TnBdAngWJEHUy6UDXLlG1/PY2bkNIJX0C9zaXP8G/CAvBsP/BnpKmOqA3
-         VzbsnDa/AjdZIzeJ+zy4K6WPPAnhrS2rSjwkFtkxW+40qSsoq39UkbPolqF4/jU93dil
-         JuQg==
+        Wed, 15 Feb 2023 10:21:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2544536455
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:21:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676474468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rfv7Rycn+rNU8ZwT5IAQ8tPoQPJy80nVLPsdVlq6m/k=;
+        b=bipCxhie1lLep0tCRJrDAetg96e+AKJFYBcW/vEqmmkwszkOlSlCjoj/k/8dEYgQxPhwTN
+        I7yiXzhRGWZylnQ4NWCErJzSz0YdDq9VTmmPcEtqqs+s6WkIrORhGjd+pkv4/h+l8eFfpi
+        UtJlmvLUGIgx6Gp1hv+KwOjskKVL0o4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-554-GH2DK3bSP1-pXj_9oGXBGA-1; Wed, 15 Feb 2023 10:21:04 -0500
+X-MC-Unique: GH2DK3bSP1-pXj_9oGXBGA-1
+Received: by mail-qt1-f198.google.com with SMTP id cr22-20020a05622a429600b003b694a9f291so11272206qtb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:21:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDukbJdwBzqD8cf3Dpo6Rb4XouWez9+Bscdl5lNP9jE=;
-        b=dHzKNWRvoa2xGm98X6udhZg3bjNaou3fG+s07s0seuvoWM9GOw0K2G/SUOOVhBI/X4
-         gHAyaqpWtAgwbr2xpBlnfqaCBRsQgu3SONlFGQaks602Ek/XvkgzW7Az/QYdnb7cXFy6
-         8MmbGzp99EeaF//t6boxhKlwxVSjfIskejazoBQBErmrYij/qi57d4fTpp+apW/03JXd
-         10m5hB18ehQdMVl2bXokhbN4CieV7wGjECY6CAGyzMAhzVj7CR9XhUpaJ9C5Utkee3PX
-         icM3aBNHBSU3k+hgoGFtc9NTYnssHj+vPeP3UFznhu2p7cRGIv4dCAJ1u6Zy7O1UWUTu
-         nyfQ==
-X-Gm-Message-State: AO0yUKXxN4Gapcl2Ad9jA1I51hZ5rvnDxuo/z3tsvaH0X1yE0HqgiZKs
-        gYRAj0swa1eivokvktURIb6nJTYseXU=
-X-Google-Smtp-Source: AK7set8S5SerR9f1nJdNDbGDT5znXEYryuJhEM9i7uc4EXq3U3S7jiJB/xHpbyswaGjzRWNCEa1V9zD4V/I=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:338f:0:b0:4fb:9b70:2bfe with SMTP id
- z137-20020a63338f000000b004fb9b702bfemr461308pgz.2.1676474458212; Wed, 15 Feb
- 2023 07:20:58 -0800 (PST)
-Date:   Wed, 15 Feb 2023 07:20:56 -0800
-In-Reply-To: <54d64f0e-871f-3004-d8a6-55c60affede0@gmail.com>
-Mime-Version: 1.0
-References: <20230210003148.2646712-1-seanjc@google.com> <20230210003148.2646712-7-seanjc@google.com>
- <54d64f0e-871f-3004-d8a6-55c60affede0@gmail.com>
-Message-ID: <Y+z4WF03dD/ytPl9@google.com>
-Subject: Re: [PATCH v2 06/21] KVM: x86/pmu: WARN and bug the VM if PMU is
- refreshed after vCPU has run
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rfv7Rycn+rNU8ZwT5IAQ8tPoQPJy80nVLPsdVlq6m/k=;
+        b=4QD6YkL2iQby2GmCGVya+u1qQt+AjAaJMk9VBof2N68PMZxStdm9fzU4X/FSYfsN/H
+         hwuCiJSsrkrrCAvRJ7PAjEGrzz8O+2V0YhIR4NKyGfKzIJSgkSRJj+r/OXYSwFsbuc1M
+         +ANltzglxmBFxNJM437MPD+Vb9bIGgycNE4LzAvj7bOp5A3vVgaGsyDW07QjPjBQtJY/
+         lCNbcglF9lMD0SZigPeH5dWDWdGeDJB6RtZiIcoRriosA+cEKkATOYaHRKgBvf1eKJ+B
+         u2XRTEJLp5YkDnOfQr7bBuRRXVOqr47ivvWsvNj0Ii1HfLygk/HYVlOmFqTn0LunCc7V
+         zC9Q==
+X-Gm-Message-State: AO0yUKXq+hL4QPh/1v0RO+CmmWgpR50HcMpp15lDFZT5nT1Ik+BHpEAw
+        8uHEaQPuk4N1rnWO9868nLol/YjR1iPri6GFg9o1C0uyF/8txyMwVWG3HgXLm3khwBRV8mYVBtt
+        1iAIYhR1ovyLamvQxsiGRLlHx
+X-Received: by 2002:ac8:5f4e:0:b0:3b8:695b:aad1 with SMTP id y14-20020ac85f4e000000b003b8695baad1mr4805416qta.1.1676474464234;
+        Wed, 15 Feb 2023 07:21:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set/bUBwJRT9nplisX7cCmXea98zUuaNhVa0ZTJCA74agqwEPC+rEotKS3qcPHLZRGk14AYlnHQ==
+X-Received: by 2002:ac8:5f4e:0:b0:3b8:695b:aad1 with SMTP id y14-20020ac85f4e000000b003b8695baad1mr4805379qta.1.1676474463947;
+        Wed, 15 Feb 2023 07:21:03 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id d22-20020ac86696000000b003b9a4a497a1sm13111453qtp.86.2023.02.15.07.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 07:21:03 -0800 (PST)
+Date:   Wed, 15 Feb 2023 10:21:02 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Nick Bowler <nbowler@draconx.ca>, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1
+ (regression)
+Message-ID: <Y+z4XlhDzokAMTI1@x1n>
+References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+ <Y9bvwz4FIOQ+D8c4@x1n>
+ <CADyTPEzsvdRC15+Z5T3oryofwRYqHmHzwqRmJKJoHB3d7Tdayw@mail.gmail.com>
+ <91b38494-f296-d01d-3b98-6bc51406cad0@leemhuis.info>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <91b38494-f296-d01d-3b98-6bc51406cad0@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +82,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023, Like Xu wrote:
-> On 10/2/2023 8:31 am, Sean Christopherson wrote:
-> > Now that KVM disallows changing feature MSRs, i.e. PERF_CAPABILITIES,
-> > after running a vCPU, WARN and bug the VM if the PMU is refreshed after
-> > the vCPU has run.
+On Wed, Feb 15, 2023 at 03:49:56PM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 31.01.23 02:46, Nick Bowler wrote:
+> > On 2023-01-29, Peter Xu <peterx@redhat.com> wrote:
+> >> On Sat, Jan 28, 2023 at 09:17:31PM -0500, Nick Bowler wrote:
+> >>> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
+> >>> unstable, with userspace processes randomly crashing with all kinds of
+> >>> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
+> >>> 6.0.y is OK.
+> > [...]
+> >> Could you try below patch to see whether it fixes your problem?  It should
+> >> cover the last piece of possible issue with dirty bit on sparc after that
+> >> patchset.  It's based on latest master branch (commit ab072681eabe1ce0).
 > > 
-> > Note, KVM has disallowed CPUID updates after running a vCPU since commit
-> > feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN"), i.e.
-> > PERF_CAPABILITIES was the only remaining way to trigger a PMU refresh
-> > after KVM_RUN.
+> > Haven't seen any failures yet, so it seems this patch on top of 6.2-rc6
+> > makes things much better.
+> > 
+> > I'll keep running this for a while to see if any other problems come up.
 > 
-> A malicious user space could have saved the vcpu state and then deleted
-> and recreated a new vcpu w/ previous state so that it would have a chance
-> to re-set the features msr.
-
-I don't follow.  vcpu->arch.perf_capabilities and kvm_vcpu_has_run() are per-vCPU,
-creating another vCPU will not let userspace trigger this WARN.
-
-> The key to this issue may be focused on the KVM_CREATE_VM interface.
+> Nick, I assume no other problems showed up?
 > 
-> How about the contract that when the first vcpu is created and "after
-> KVM_RUN of any vcpu", the values of all feature msrs for all vcpus on
-> the same guest cannot be changed, even if the (likely) first ever ran
-> vcpu is deleted ?
+> In that case Peter could send the patch in for merging. Or did you do
+> that already?
 
-I don't think that's necessary, as above the "freeze" happens per-vCPU.
+Thanks for raising this again.  Nop, I'm just waiting for a final ack from
+Nick to make sure that nothing went wrong after the longer run.
+
+-- 
+Peter Xu
+
