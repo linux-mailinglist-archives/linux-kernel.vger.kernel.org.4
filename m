@@ -2,110 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A633D697CDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BD4697CDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbjBONKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S234098AbjBONKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234165AbjBONJ4 (ORCPT
+        with ESMTP id S234047AbjBONK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:09:56 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45FB35A1;
-        Wed, 15 Feb 2023 05:09:54 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7F38024000E;
-        Wed, 15 Feb 2023 13:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676466592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tQNw6Dq9MEONpewdlcGZDEALhVDCV7c2JF/ae4aR+zc=;
-        b=Lb6Z+sWwhf/HaYVZ3oqF2F+/HNFVbkJEkNugc4G3shx/12OKTtKc5klA0fHtfIbLDXtikx
-        0SQXZEIsJHvp0zow7IFM7zVwR/eKFiW1RPS9iT7aMiYyUubB5g5NV+HYZAlr0WAGZ08W87
-        9QhkZlgVBCSqMvFSEriybxrKrG8vHYABGHcdMHewCooBcscnIG43XvHAXyLEgDAlmSUSa9
-        zr+eQs83f0PO0YHWzLH8f1XV0i+4+sD47/qSWwfu342iiHHhI3GX2HbEGhjkS+/w3Jmi6i
-        Mv4PQKDVufPvQoAfjE0dCxbR0gvlHqPOz/1v4FtorkW2/MhV/zANthyFvw5ldQ==
-Date:   Wed, 15 Feb 2023 14:09:50 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] mtd: nand: mxic-ecc: Fix
- mxic_ecc_data_xfer_wait_for_completion() when irq is used
-Message-ID: <20230215140950.2e7428b8@xps-13>
-In-Reply-To: <beddbc374557e44ceec897e68c4a5d12764ddbb9.1676459308.git.christophe.jaillet@wanadoo.fr>
-References: <beddbc374557e44ceec897e68c4a5d12764ddbb9.1676459308.git.christophe.jaillet@wanadoo.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Feb 2023 08:10:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9553A87
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:10:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A90161B8F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2A3C433EF;
+        Wed, 15 Feb 2023 13:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676466626;
+        bh=yGMYIvD8L9/V5mZqDcVK02ng1QBdRoo8WXJJ/Bb9AdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DYcnaAa+6SCgfyMXq8QIFDIjLUEJPmSRvyIscrjRNf7ZFZ/1wz4ftUzyAjOloE26f
+         Ihqj8lUZ6Erj4DtEbXanrGzb2cjOBZYKyrR6OmoVwXkr/e/6wl476U1lLxyHqkly4t
+         BRLGr+6058RbjMlsea0OMFAckTTvKEALuc/CxVKpsnRRZvOa50cY5B8g8fuF/fj+uQ
+         NBOWXsYXOrMTV51gYSHB4xmDXpkW9df1Ndv+8uAswW7yxCUQkRDK4WMh1fEori1gWn
+         Bc/3wBea7mVvugsOKYQB+OOqj5/zDSvsocPpnjVxdw1xfMrJ3tXMp/sc6jzTDyuRsi
+         9/rf5RSUKlO6g==
+Date:   Wed, 15 Feb 2023 13:10:24 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Rau <David.Rau.opensource@dm.renesas.com>
+Cc:     support.opensource@diasemi.com, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, bailideng@google.com,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH] ASoC: da7219: Improve the IRQ process to increase the
+ stability
+Message-ID: <Y+zZwKFX1gMC5/ac@sirena.org.uk>
+References: <20230215101045.21456-1-David.Rau.opensource@dm.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nNyJ0KxUtl0X7eDe"
+Content-Disposition: inline
+In-Reply-To: <20230215101045.21456-1-David.Rau.opensource@dm.renesas.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
 
-christophe.jaillet@wanadoo.fr wrote on Wed, 15 Feb 2023 12:08:45 +0100:
+--nNyJ0KxUtl0X7eDe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> wait_for_completion_timeout() and readl_poll_timeout() don't handle their
-> return value the same way.
+On Wed, Feb 15, 2023 at 10:10:45AM +0000, David Rau wrote:
+> Remove the sleep control in IRQ thread
+> and create an individual task to handel it for Jack plug in event.
 >=20
-> wait_for_completion_timeout() returns 0 on time out (and >0 in all other
-> cases)
-> readl_poll_timeout() returns 0 on success and -ETIMEDOUT upon a timeout.
+> This commit improves the control of ground switches in the AAD IRQ.
 
-That's a shame, but yeah, excellent catch!
+Copying in Guenter given the issues he raised with this, not
+deleting context for his benefit.  It looks like this should
+avoid the issues with the interrupt appearing locked up.
 
-> In order for the error handling path to work in both cases, the logic
-> against wait_for_completion_timeout() needs to be inverted.
->=20
-> Fixes: 48e6633a9fa2 ("mtd: nand: mxic-ecc: Add Macronix external ECC engi=
-ne support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: David Rau <David.Rau.opensource@dm.renesas.com>
 > ---
-> Compile tested only.
+>  sound/soc/codecs/da7219-aad.c | 41 +++++++++++++++++++++++++++++------
+>  sound/soc/codecs/da7219-aad.h |  4 ++++
+>  2 files changed, 38 insertions(+), 7 deletions(-)
 >=20
-> This is really spurious.
-> If I'm right, this means that it never worked!
+> diff --git a/sound/soc/codecs/da7219-aad.c b/sound/soc/codecs/da7219-aad.c
+> index c55b033d89da..4a4f09f924bc 100644
+> --- a/sound/soc/codecs/da7219-aad.c
+> +++ b/sound/soc/codecs/da7219-aad.c
+> @@ -339,11 +339,39 @@ static void da7219_aad_hptest_work(struct work_stru=
+ct *work)
+>  				    SND_JACK_HEADSET | SND_JACK_LINEOUT);
+>  }
+> =20
+> +static void da7219_aad_jack_det_work(struct work_struct *work)
+> +{
+> +	struct da7219_aad_priv *da7219_aad =3D
+> +		container_of(work, struct da7219_aad_priv, jack_det_work);
+> +	struct snd_soc_component *component =3D da7219_aad->component;
+> +	u8 srm_st;
+> +
+> +	mutex_lock(&da7219_aad->jack_det_mutex);
+> +
+> +	srm_st =3D snd_soc_component_read(component, DA7219_PLL_SRM_STS) & DA72=
+19_PLL_SRM_STS_MCLK;
+> +	msleep(da7219_aad->gnd_switch_delay * ((srm_st =3D=3D 0x0) ? 2 : 1) - 4=
+);
+> +	/* Enable ground switch */
+> +	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
+> +
+> +	mutex_unlock(&da7219_aad->jack_det_mutex);
+
+This mutex is only held by this work function - is it needed?
+
+> +}
+> +
+> =20
+>  /*
+>   * IRQ
+>   */
+> =20
+> +static irqreturn_t da7219_aad_pre_irq_thread(int irq, void *data)
+> +{
+> +
+> +	struct da7219_aad_priv *da7219_aad =3D data;
+> +
+> +	if (!da7219_aad->jack_inserted)
+> +		schedule_work(&da7219_aad->jack_det_work);
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+>  static irqreturn_t da7219_aad_irq_thread(int irq, void *data)
+>  {
+>  	struct da7219_aad_priv *da7219_aad =3D data;
+> @@ -351,14 +379,9 @@ static irqreturn_t da7219_aad_irq_thread(int irq, vo=
+id *data)
+>  	struct snd_soc_dapm_context *dapm =3D snd_soc_component_get_dapm(compon=
+ent);
+>  	struct da7219_priv *da7219 =3D snd_soc_component_get_drvdata(component);
+>  	u8 events[DA7219_AAD_IRQ_REG_MAX];
+> -	u8 statusa, srm_st;
+> +	u8 statusa;
+>  	int i, report =3D 0, mask =3D 0;
+> =20
+> -	srm_st =3D snd_soc_component_read(component, DA7219_PLL_SRM_STS) & DA72=
+19_PLL_SRM_STS_MCLK;
+> -	msleep(da7219_aad->gnd_switch_delay * ((srm_st =3D=3D 0x0) ? 2 : 1) - 4=
+);
+> -	/* Enable ground switch */
+> -	snd_soc_component_update_bits(component, 0xFB, 0x01, 0x01);
+> -
+>  	/* Read current IRQ events */
+>  	regmap_bulk_read(da7219->regmap, DA7219_ACCDET_IRQ_EVENT_A,
+>  			 events, DA7219_AAD_IRQ_REG_MAX);
+> @@ -377,6 +400,9 @@ static irqreturn_t da7219_aad_irq_thread(int irq, voi=
+d *data)
+>  		events[DA7219_AAD_IRQ_REG_A], events[DA7219_AAD_IRQ_REG_B],
+>  		statusa);
+> =20
+> +	if (!da7219_aad->jack_inserted)
+> +		cancel_work_sync(&da7219_aad->jack_det_work);
+> +
+>  	if (statusa & DA7219_JACK_INSERTION_STS_MASK) {
+>  		/* Jack Insertion */
+>  		if (events[DA7219_AAD_IRQ_REG_A] &
+> @@ -940,8 +966,9 @@ int da7219_aad_init(struct snd_soc_component *compone=
+nt)
+> =20
+>  	INIT_WORK(&da7219_aad->btn_det_work, da7219_aad_btn_det_work);
+>  	INIT_WORK(&da7219_aad->hptest_work, da7219_aad_hptest_work);
+> +	INIT_WORK(&da7219_aad->jack_det_work, da7219_aad_jack_det_work);
+> =20
+> -	ret =3D request_threaded_irq(da7219_aad->irq, NULL,
+> +	ret =3D request_threaded_irq(da7219_aad->irq, da7219_aad_pre_irq_thread,
+>  				   da7219_aad_irq_thread,
+>  				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+>  				   "da7219-aad", da7219_aad);
+> diff --git a/sound/soc/codecs/da7219-aad.h b/sound/soc/codecs/da7219-aad.h
+> index 21fdf53095cc..be87ee47edde 100644
+> --- a/sound/soc/codecs/da7219-aad.h
+> +++ b/sound/soc/codecs/da7219-aad.h
+> @@ -11,6 +11,7 @@
+>  #define __DA7219_AAD_H
+> =20
+>  #include <linux/timer.h>
+> +#include <linux/mutex.h>
+>  #include <sound/soc.h>
+>  #include <sound/jack.h>
+>  #include <sound/da7219-aad.h>
+> @@ -196,6 +197,9 @@ struct da7219_aad_priv {
+> =20
+>  	struct work_struct btn_det_work;
+>  	struct work_struct hptest_work;
+> +	struct work_struct jack_det_work;
+> +
+> +	struct mutex  jack_det_mutex;
+> =20
+>  	struct snd_soc_jack *jack;
+>  	bool micbias_resume_enable;
+> --=20
+> 2.17.1
 >=20
-> Can any one with the hardware test?
 
-The design I used for development and testing had no interrupt line
-available for that IIRC, so I only tested the polling case ('else'
-side) and completely overlooked that difference. I might have mentioned
-it in the cover letter, if I didn't, it's an oversight.
+--nNyJ0KxUtl0X7eDe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
->  drivers/mtd/nand/ecc-mxic.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/mtd/nand/ecc-mxic.c b/drivers/mtd/nand/ecc-mxic.c
-> index 8afdca731b87..6b487ffe2f2d 100644
-> --- a/drivers/mtd/nand/ecc-mxic.c
-> +++ b/drivers/mtd/nand/ecc-mxic.c
-> @@ -429,6 +429,7 @@ static int mxic_ecc_data_xfer_wait_for_completion(str=
-uct mxic_ecc_engine *mxic)
->  		mxic_ecc_enable_int(mxic);
->  		ret =3D wait_for_completion_timeout(&mxic->complete,
->  						  msecs_to_jiffies(1000));
-> +		ret =3D ret ? 0 : -ETIMEDOUT;
->  		mxic_ecc_disable_int(mxic);
->  	} else {
->  		ret =3D readl_poll_timeout(mxic->regs + INTRPT_STS, val,
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPs2b8ACgkQJNaLcl1U
+h9DmzAf/b0iZYV4mjBsAbKWuRquUakQQrSzDTy5BxiRkd0vtvdSIYthXkhTwfw2V
+9b6iL3JKJcfqX1FGMP+64wGBsZndF8UfpOHLtHN6QJEPnYbMkHiqzb0u8+Z/OiqK
+KtR3MvRcKa6D4Mb++rmQF0wdiESTkEkKqr60HsahnxCX7qyA1w0koWOGPHYb3Unk
+CVb3ecodxa99NQIxVcnPDLWlw0npXUQOl+JUWIXJ66iIZ2D0WyIIB48EG/gw5tk5
+QD49XA/WY0TdiLmi8LMFcNTfNqmhjCDRa52SyxP+3MfWC0Nxjo3R+CFPMLLvA+Iv
+B3sWOwytF9uM4qcVvsIegXmCiMgRNw==
+=sfnV
+-----END PGP SIGNATURE-----
 
-Thanks,
-Miqu=C3=A8l
+--nNyJ0KxUtl0X7eDe--
