@@ -2,72 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD36698495
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9092E698498
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBOTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S229550AbjBOTjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBOTeZ (ORCPT
+        with ESMTP id S229446AbjBOTjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:34:25 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CA139CC9;
-        Wed, 15 Feb 2023 11:34:23 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id w11so2083951oiv.5;
-        Wed, 15 Feb 2023 11:34:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fNYnekYPseeQguttIxXvyS88yPC9BRvYp0pTTXRcaPI=;
-        b=Bj29XicFXfr9qwUdrSchxSk0CooITWNgZ6gFgNgjEXkqrh0PzFJGSUkJhFpxHXnTTj
-         mDlvPbD75XkYLTn3AC/f9RY/CVwkfuccsM9QsT1eqjbW5xtM1CI6nut1Ocq49+jgU2Wa
-         rxIlCe7vCXOiH0E73B1zx8XJmxJSC846dR3vM0hNmn+mKydsDaqN2ViujpgLkCPaZxTJ
-         pm9CiIEE/pAr4DIL2QAEoiB3+za1szq84WBZ/GMBP72Tl/ZEQnOLncO+BJ/z6RNgCCgz
-         0j5yiaKmi8KIbS0Rtt2h7mUAxzOtaYdqW8sdtcASYal3c3tzHbuHh5C3Vi7eGxxTTgYI
-         oa2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fNYnekYPseeQguttIxXvyS88yPC9BRvYp0pTTXRcaPI=;
-        b=tS1JLMc+HHftKA16AT1SYTBoPI2UMGmJOklm3psAJ9qxFIYYOSPogPZbKr1j9x4FDY
-         Otq3Q3Dv62xiVAKr+v+9B6A6ODUJbMj5VZAfNi2IZQochSUhfugFkZOlj6be+QoG5/ei
-         4Dd3wTHWs3d7bTd8eEHjEQXJ4b75CYpW+9b79NHZzpVYu0hzKYPtgRoOu8rCaEmV5Ai5
-         HKZb07I64vV/NzG5YvEHX4Br2fkw+tguXj9gp3NNA6Pc8dZAiQdQ8BqGdnuOrsLLbr4E
-         ZKT6go5790RoLl/NpyfUvEG4HjprLZBk8mAsEGrOPbWfvdpE9IEuyRnLdp4FuGPbg4Xd
-         b1/Q==
-X-Gm-Message-State: AO0yUKWsA+T3Qt+J/6U2CgDcJbDQvLEi73hYI9iNfIBpkxD3uqsh8P4f
-        MUFG2YpIBKE/+BtoqSGhk8M=
-X-Google-Smtp-Source: AK7set+6oHYTJvgeuk7pH52iN5kpEuWxkkzJPuDwWcoEnNv4Ymt/Ek8CctHq+5MFj/E4HSkFvdHYiw==
-X-Received: by 2002:a05:6808:112:b0:36e:c24a:a620 with SMTP id b18-20020a056808011200b0036ec24aa620mr1261518oie.1.1676489662813;
-        Wed, 15 Feb 2023 11:34:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i126-20020acaea84000000b0037887ca2150sm7600031oih.22.2023.02.15.11.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 11:34:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Feb 2023 11:34:20 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     andybeg <andybeg@gmail.com>
-Cc:     jdelvare@suse.com, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: max34409 driver added
-Message-ID: <20230215193420.GC3786546@roeck-us.net>
-References: <20230215172613.359079-1-andybeg@gmail.com>
+        Wed, 15 Feb 2023 14:39:03 -0500
+Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazon11020021.outbound.protection.outlook.com [52.101.61.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBC3B657
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:39:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ihbCd/Rga//W/eggXkUuReXvbRr4PGzjR027NK5Feg1PBaqJK5+OhaLYVESTvROIg669sUb4XeS1S6fRP0GaPtDizeUF7wtRcy3NhZE9ZDKZVuCPfeLnr6tpnl7jUam15HYB2wsDraG1fUSYeo9TeG6kwK7P2wnf2Z+D4gpoPaUHt9RjL5W5mw/o41+Mjc0+mMO3/4PIyMWb/ZK+nR1Eb8JFxlAAJG7vOeU7V8cWG2JL1RCHL6vLoO6XZY6BKwKG+RsVxjyZOeXjysvmscatP/qL+bmBqAunmEJuZxXhYvhkQPYZim+JwFQjGObZTgsoWevLJEtwsw4iPSBoKB71Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CmTlN51RrzbxH1pOl5cjBJQ8T3e0P5I1ixW1KbbDUas=;
+ b=Ryjb2riUqrkG/7HG3C2sYTI+jbU/TPR/Q5k+lbD5wyeUVdw6HISi4tnnjzg4wcqdNtbKgUU8/EwyHlfPOCTVcR3r2T7GJPsYCKTlJTdXo0FtDyM4VojKc1uA08OVh2qsS2jpOLWMup2bw0MpjPLIm+H6YAJJUmlny7CFf54QsYn6KJI4Xx+VjSrv5leb34Va9yrATjBrllkY8muChILvJBhCAb2LyUujdn0RTIHlKWJL553OGsnPIZt2nfeB7tTJmmjJhe4P0sNwCDdJEIv4yCdeBSdArwY7rnohlVALm3jPrfcr6s42OTYZMq2kBjw7Yd0aCZDltoSo2og4j1jacw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CmTlN51RrzbxH1pOl5cjBJQ8T3e0P5I1ixW1KbbDUas=;
+ b=gKgn9Uu5vo3Oa1U5NdQp2qlE3YTwO6f8+ZuZHCkXwBHioyWbFjVPfVzmetSRR4sA0b1jtqtZ6SqlqFGPKfsdfFg6S3+kly5LBxGnW0LYUyTEzM2mMizn9/+gz8WPYYtktUr6O5lsFPw4rAQVOOffZ7lwA6ncl9Lpx2WVLyzxe14=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by LV2PR21MB3228.namprd21.prod.outlook.com (2603:10b6:408:175::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.1; Wed, 15 Feb
+ 2023 19:38:58 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a%7]) with mapi id 15.20.6134.006; Wed, 15 Feb 2023
+ 19:38:58 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Juergen Gross <jgross@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: RE: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+Thread-Topic: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+Thread-Index: AQHZPFdbFxstpbOX7kmH7AmnajmUt67LvPoAgARQXgCAAF++oA==
+Date:   Wed, 15 Feb 2023 19:38:58 +0000
+Message-ID: <BYAPR21MB1688180BD889936A9B7CCDE3D7A39@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-8-jgross@suse.com>
+ <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <7e4c5d0f-4cdc-8aca-0ce9-19b5f2371ea6@suse.com>
+In-Reply-To: <7e4c5d0f-4cdc-8aca-0ce9-19b5f2371ea6@suse.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=7b83c1f3-7ea9-45f0-9c2d-6fa498a46584;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-15T19:22:46Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|LV2PR21MB3228:EE_
+x-ms-office365-filtering-correlation-id: 920608cc-bc44-4454-f426-08db0f8c4869
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1yf63YfE0aR9n3/084seW2YfETRpp2sC2uC4nYkiKFB/zAgiSHNiOA/aTkbhD+qVH33r1/Nj6oxCYcRiSgpAtmZRJwW9kO0g/GnnWjcI2cTuLa8SKFnR4zF37YOad3wDRqDlhf6/6kvZAuCuwjo8oOlvwZYL/FJZvBE04ic7sE1EXhadBXNR53mQzjq5PRFNCgg4Nsc9ssYZ43kQdLCH6No4b3LOnFsXg/WbaUtozfxWYsBd6h1p2QlWU9S8NAaEw9AA+R4esNwElFlwR4bGBlXXGAXyzX11f2Hszzjrop9uZJ2jlXk9Y8EnZdRwAhsFbnUJ/C9C4wTrmTWhMsawLNsonO0dXOP/2GvZi8grJQh38GaqiJJttdpXRP+BI/7Z8rq8b4InzjrMTWEnWANjZZuYtavsd5MLtjBB/3gMSrwyvCPAXgOnJO/48KU54yPwUBhbJPrSVDq6VbuA6LafiSOEJKh0xR/h5sIRiIJ1gk4KFHIRWzP7u2jA5dgKeWIS7SfD6uV8lDtndZHtqrlgvT0Mc7vlhcWVG3VKgVQBBZsOnotfMaBjACUh+2V4Eswncuaiivvv78YS6pZbVsQfBu57XIoYWbaWdMz51ieWxklpnxTbcJ4uTrGbmvHh8ZKxDHSMueB4YaQnMOi3DyyDkmzi2ahiSx4yRceeQ08yVrcnh0nza4bQ3qmvj2QbWEdt7RaWjzLxaezqXYwHkhFg/WNNySaM5pE0sDKAkWtSYWJLdawBoWuPWX7hoSEH/5cy
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199018)(86362001)(38100700002)(33656002)(122000001)(54906003)(38070700005)(66476007)(4326008)(316002)(82960400001)(66446008)(52536014)(8676002)(64756008)(76116006)(66946007)(110136005)(8936002)(41300700001)(7416002)(66556008)(82950400001)(2906002)(55016003)(8990500004)(186003)(83380400001)(478600001)(6506007)(10290500003)(9686003)(53546011)(7696005)(5660300002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzhPTHBldHFBV1RGL0pyb2ZyaThaSitkZ3R6R2tLQmNYRHc4bGxmS3FySjNy?=
+ =?utf-8?B?bEYwSkpEbjRBeGdiUU0va2JDVVc0SisxR0pTa3R4cHp3eGZsMUxLN1h2MnNK?=
+ =?utf-8?B?ajZpQktDbUJtZ2hteW8zaGVIMDlFNWhsR2RhVkcwakx3ejg2M0dkaHNwd0pi?=
+ =?utf-8?B?M2QvRVpSekRCUnc1OW1QZ2RVbmwxd3NmL2xOTkh2MGZHRGltV0liOXM1NW1Z?=
+ =?utf-8?B?REwweGpvand6K0lJcC9WVXFRSk1yMi9ZRHpnUy9hWEhOWGtnd0dCcHRqcE9l?=
+ =?utf-8?B?cVgvTjVJOG8vcmcvMDhpRjFkRnI4U0tLRWtJWTBEV3l6MWNaR2NvaEd2OHd2?=
+ =?utf-8?B?SEwvQmFXejRESGNxb2lUcS9kREF1MUNnaEhuQytweDhaT09TcVhUM2QzaUFG?=
+ =?utf-8?B?STB4U281STN5WjdNZFVBYnZ6RVhabzI2Q21lV1AvRjduQXJRbjB1NXFOMG1u?=
+ =?utf-8?B?N3JtTzBBemw1K0ZJWVdUcGU2cXF2QmZHYS9LVGlwMXByc21CckhJY2o0c0c1?=
+ =?utf-8?B?M2VjY2loUTI1Q2V4dEsrbUpnMVJtWmJucjJXYWNjVWxOb3pNbHFkOTlnaUgv?=
+ =?utf-8?B?emRCdm5keHN3YjZ1TnRFVzJPd3FOOTZyN1hsdjJMSUhvRU0zTmVyb09QbW5P?=
+ =?utf-8?B?aGpRbk1PYlZyckZIRTNLNzBxcWhmbTQ5QnBlUmJQVTVsT2s3WG1MNElBNGh6?=
+ =?utf-8?B?VkltYURqbnNaeVo4NjhrZVBhZkV0WE1vRVN4TlliOStzbG9aMnNxbDlrYnIr?=
+ =?utf-8?B?OWs2UjByMlFDWndDL3pkcXVsRHVBLzdoMnJ4UjZXUzVTWFVVNkFBd29mMWg1?=
+ =?utf-8?B?dHo3Q2JnREFXUXRPQk14cGRGbzQ0bXJUR3IwcjFwTjNFZTdsUlNFeVdlQUlY?=
+ =?utf-8?B?Q0RiT3VCSU5TeUE3UUNzVzJUckh4SGtRUDZaUUthWjRYYzRHMHdZRnEzWDh6?=
+ =?utf-8?B?Rnc4Tm9jMm42elNzWFgvb0FaYXdZVEgwdzRnRlJzRTM3bmJndWhCNHE1SWhH?=
+ =?utf-8?B?RENvcmcrVFdERHBnUmVRVTZBK3A3TVAwN0laczVmdFRtNXcrY0poK25ITVMx?=
+ =?utf-8?B?aGZETjVLK2hTb3ZkMlRROEtvV0RtZENFQjFlb0szaXpBSzBwMUdVRURBY2Nm?=
+ =?utf-8?B?dFdQZjJ4UnhOdU5DN0RCdDNJc2Y2QUdSYThGU0tzWUI3bUp3RCtyTVZsS0do?=
+ =?utf-8?B?UXNDZlc3Vk4rRFdMZGxkSFFUYnpYZEg0djJicmc4aTZkQUpEeTcxSmR4RDNU?=
+ =?utf-8?B?NlZhVXl2bG5BT21zMkFsdndvbDJHT2V2UWtBQ0dLZ3lLU0szTW9id2lSdFQv?=
+ =?utf-8?B?N1Rpb0g5S29sU2U0ZU8rcnRmMWhuN1ZKYVh4S0JsajF3clhPZTJXb1g5QUt0?=
+ =?utf-8?B?YVBINi9jNWhGcGJsZkE4V0graFk3dDhVSGpwS0E5NVYyelM1ZTdubTFMNFJF?=
+ =?utf-8?B?bHpJUDIrZktrVC90SjBBeUdnYWt2cCsyZm5qNjVGOXRkdWFWc3dST1kxeVVY?=
+ =?utf-8?B?aDJkMUh6RVZzamhSQy8wbDRNWi9DTTVTcXVYeWxJOFJFYjRUWHNPb1JBMjNi?=
+ =?utf-8?B?Y0ZxWUdMa0Exdm1GNEdLekNQanEvWVpib0ZIWVQzZHpPNXZTUVB0TStJSWNz?=
+ =?utf-8?B?bC8wMDhNNWZnb0NzbmRaUjFyUjRoSVFZSVN1RU82T2NlNldaczkzbEJjQnFi?=
+ =?utf-8?B?SkpVRUxIaE9VdzVUZmh5Sll5am5SQjlBVEhLNUo3RHB4eHlIbFMyVUdHK1Vr?=
+ =?utf-8?B?TzZBQWhpcGdEVWVGRXRsN1RrdzNFMEZ1QWk3ZEdZNm1KaHhDSXEreU84M2pu?=
+ =?utf-8?B?bXUzWTRxMWdsTEpCU0d0dVNyTlFTNzlFSFF5U0pKdWt0NFJ6em1yVkV3dk1G?=
+ =?utf-8?B?Z2JyREJwVzRDdk81WmM4em8wSFdDQkVmaGUrd1c1a0NlWmJqck55RWk1eC9h?=
+ =?utf-8?B?WVEzYlprVFE0eW0zOENyNHZDcFFXYTRqemZNNHh6VklmZ1p0ZDVhUmRmL1Ja?=
+ =?utf-8?B?bUVWYTkyVDByODlRSFZMd1NkcUltS1Y5bCsyL3JNZWVraFl5YnptbndZaXRz?=
+ =?utf-8?B?THdIOHhia3JuNVRsYjM3RUFIQmNKUWxMMTI3MllpUUwvcFErQ1R4U0lBdmYx?=
+ =?utf-8?B?eDgrZzZiaW5ybmdvYzNSNDMzb3pobkcrTFlIRmV0MXVDRnZaTFkyWDIvYWRC?=
+ =?utf-8?B?Y1lNNHJRNUZMb1Z3a3NPdURsM1pwdVJPTDlCOC9HbWdEYmtUckR1OTZBUEtR?=
+ =?utf-8?B?MGU5NmxQcG9IbTJxM21NVmg4UmFBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215172613.359079-1-andybeg@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 920608cc-bc44-4454-f426-08db0f8c4869
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2023 19:38:58.7642
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CcQTvjotyIUzP7+LO5+3qQtxHecUB5SQVwX1T3dTBnNP0WUGdpgaLxr9ZNbIAi6EhHaBk4M1rTwX/GqT+qtdMdhJlPuRvNZSDbF6fp7GZKA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3228
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,376 +141,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 08:26:12PM +0300, andybeg wrote:
-
-Subject should be something like: "Add driver for MAX34409"
-
-checkpatch reports:
-
-total: 0 errors, 8 warnings, 12 checks, 256 lines checked
-
-Please fix.
-
-> diff --git a/Documentation/hwmon/max34409.rst b/Documentation/hwmon/max34409.rst
-> new file mode 100644
-> index 000000000000..91779c6a9163
-> --- /dev/null
-> +++ b/Documentation/hwmon/max34409.rst
-> @@ -0,0 +1,23 @@
-> +Kernel driver max34409
-> +=====================
-> +
-> +Supported chips:
-> +  * Analog Devices MAX34409
-> +    Prefix: 'max34409'
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX34408-MAX34409.pdf
-> +
-> +Author: Andrey Kononov <a.kononov@gagarin.me>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver for SMBus Dual/Quad Current Monitor MaximIntegrated MAX34409
-> +
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst
-> +for details.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 3176c33af6c6..de412f7dcad8 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1088,6 +1088,13 @@ config SENSORS_MAX31760
->  	  This driver can also be built as a module. If so, the module
->  	  will be called max31760.
->  
-> +config SENSORS_MAX3440X
-
-X -> 9
-
-This driver for sure does not and never will cover all of MAX3440[0-9].
-
-Same for the code itself.
-
-> +	tristate "Maxim max3440x SMBus Dual/Quad Current Monitor"
-> +	depends on I2C
-> +	help
-> +	  Say yes here to build support for Maxim family of SMBus Dual/Quad Current Monitors.
-> +	  This driver is mutually exclusive with the HWMON version.
-> +
->  config SENSORS_MAX6620
->  	tristate "Maxim MAX6620 fan controller"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index e2e4e87b282f..a4e24d2b03c1 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->  obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->  obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
->  obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
-> +obj-$(CONFIG_SENSORS_MAX3440X)  += max3440x.o
->  obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->  obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->  obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
-> diff --git a/drivers/hwmon/max3440x.c b/drivers/hwmon/max3440x.c
-> new file mode 100644
-> index 000000000000..b62c34f9425c
-> --- /dev/null
-> +++ b/drivers/hwmon/max3440x.c
-> @@ -0,0 +1,213 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> +*
-> +*/
-
-Completely useless comment.
-
-> +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/slab.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/i2c.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/err.h>
-> +#include <linux/mutex.h>
-> +#include <linux/sysfs.h>
-
-Alphabetic include file order, please.
-
-> +
-> +/*
-> + * Registers description.
-> + */
-> +#define MAX3440X_STATUS             0x00
-> +#define MAX3440X_CONTROL            0x01
-> +#define MAX3440X_OCDELAY            0x02
-> +#define MAX3440X_SDDELAY            0x03
-> +#define MAX3440X_ADC1               0x04	/* readonly */
-> +#define MAX3440X_ADC2               0x05	/* readonly */
-> +#define MAX3440X_ADC3               0x06	/* readonly */
-> +#define MAX3440X_ADC4               0x07	/* readonly */
-> +#define MAX3440X_OCT1               0x08
-> +#define MAX3440X_OCT2               0x09
-> +#define MAX3440X_OCT3               0x0A
-> +#define MAX3440X_OCT4               0x0B
-> +#define MAX3440X_DID                0x0C	/* readonly */
-> +#define MAX3440X_DCYY               0x0D	/* readonly */
-> +#define MAX3440X_DCWW               0x0E    /* readonly */
-> +
-> +//maximal current in mA throw RSENSE, that can be measured. see datasheet table 18
-
-No C++ comments, please.
-
-> +static unsigned short imax[4];
-> +module_param_array(imax, short, NULL, 0);
-> +MODULE_PARM_DESC(imax,
-> +		 "maximal current in mA throw RSENSE, that can be measured. see datasheet table 18");
-
-This is not an appropriate way to set limits or to provide scaling.
-The driver should assume a default for Rsense (such as 1 mOhm),
-and possibly provide the ability (via devicetree properties) to
-configure actual rsense values. Anything else should be done using
-sensors3.conf.
-
-> +struct max3440x_data {
-> +	struct i2c_client *client;
-> +	struct device *hwmon_dev;
-> +	const char *name;
-
-'name' and 'hwmon_dev' are unused.
-
-> +
-> +   struct mutex update_lock;
-> +   bool valid;
-> +
-
-valid is never read and pointless. 
-
-Obviously some formatting problems. See checkpatch output.
-
-> +	u16 adc[4];
-> +	u8 oct[4];
-
-'oct' is unused. I assume this is supposed to be for "Over Current Threshold",
-which should be implemented as curr[1-4]_max sysfs attributes.
-
-> +};
-> +
-> +static const char * const input_names[] = {
-> +	[MAX3440X_ADC1]	=	"curr1",
-> +	[MAX3440X_ADC2]	=	"curr2",
-> +	[MAX3440X_ADC3]	=	"curr3",
-> +	[MAX3440X_ADC4]	=	"curr4",
-
-Those names have no value. It is obvious that curr1_input is curr1.
-
-> +};
-> +
-> +static void max3440x_init_client(struct max3440x_data *data,
-> +				struct i2c_client *client)
-> +{
-> +	u8 status;
-> +   u16 val = 0;
-
-Pointless initialization
-
-> +	/*
-> +	 * Start the conversions.
-> +	 */
-
-There is nothing in the datasheet suggesting that it would be necessary
-to read the status register to start conversions.
-
-> +	status = i2c_smbus_read_byte_data(client, MAX3440X_STATUS);
-
-Please do not ignore errors. Anyway, "status" is neither used nor saved,
-and reading it is thus just pointless.
-
-> +
-> +val = (u16)i2c_smbus_read_byte_data(client, MAX3440X_ADC1);
-> +	data->adc[0] = DIV_ROUND_CLOSEST((imax[0] * val), 256);
-> +	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC2);
-> +	data->adc[1] = DIV_ROUND_CLOSEST((imax[1] * val), 256);
-> +	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC3);
-> +	data->adc[2] = DIV_ROUND_CLOSEST((imax[2] * val), 256);
-> +	val = i2c_smbus_read_byte_data(client, MAX3440X_ADC4);
-> +	data->adc[3] = DIV_ROUND_CLOSEST((imax[3] * val), 256);
-
-This function for the most part duplicates max3440x_update_device()
-and does not add any value.
-
-> +}
-> +
-> +static struct max3440x_data *max3440x_update_device(struct device *dev)
-> +{
-> +	struct max3440x_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	u16 val;
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-> +	dev_dbg(dev, "Updating max3440 data.\n");
-> +	val = (u16)i2c_smbus_read_byte_data(client,
-> +				MAX3440X_ADC1);
-
-i2c_smbus_read_byte_data() returns a negative error code. Please
-do not ignore.
-
-> +	data->adc[0] = DIV_ROUND_CLOSEST((imax[0] * val), 256);
-> +	val =  (u16)i2c_smbus_read_byte_data(client,
-> +				MAX3440X_ADC2);
-> +	data->adc[1] = DIV_ROUND_CLOSEST((imax[1] * val), 256);
-> +	val = (u16)i2c_smbus_read_byte_data(client,
-> +				MAX3440X_ADC3);
-> +	data->adc[2] = DIV_ROUND_CLOSEST((imax[2] * val), 256);
-> +	val = (u16)i2c_smbus_read_byte_data(client,
-> +				MAX3440X_ADC4);
-> +	data->adc[3] = DIV_ROUND_CLOSEST((imax[3] * val), 256);
-> +
-> +	data->valid = 1;
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return data;
-> +}
-> +static ssize_t adc1_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
-> +	struct max3440x_data *data = max3440x_update_device(dev);
-
-Reading all sensors to report one is a waste of i2c bandwidth. Please
-drop max3440x_update_device() entirely and only read the data for the
-sensor which is reported.
-
-> +
-> +	return sprintf(buf, "%d\n", data->adc[0]);
-> +}
-> +static ssize_t adc2_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
-> +	struct max3440x_data *data = max3440x_update_device(dev);
-> +
-> +	return sprintf(buf, "%d\n", data->adc[1]);
-> +}
-> +static ssize_t adc3_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
-> +	struct max3440x_data *data = max3440x_update_device(dev);
-> +
-> +	return sprintf(buf, "%d\n", data->adc[2]);
-> +}
-> +static ssize_t adc4_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *attr2 = to_sensor_dev_attr(attr);
-> +	struct max3440x_data *data = max3440x_update_device(dev);
-> +
-> +	return sprintf(buf, "%d\n", data->adc[3]);
-> +}
-> +
-> +static ssize_t label_show(struct device *dev,
-> +			  struct device_attribute *devattr, char *buf)
-> +{
-> +	return sprintf(buf, "%s\n",
-> +		       input_names[to_sensor_dev_attr(devattr)->index]);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR_RO(curr1_input, adc1, 0);
-> +static SENSOR_DEVICE_ATTR_RO(curr1_label, label, MAX3440X_ADC1);
-> +static SENSOR_DEVICE_ATTR_RO(curr2_input, adc2, 0);
-> +static SENSOR_DEVICE_ATTR_RO(curr2_label, label, MAX3440X_ADC2);
-> +static SENSOR_DEVICE_ATTR_RO(curr3_input, adc3, 0);
-> +static SENSOR_DEVICE_ATTR_RO(curr3_label, label, MAX3440X_ADC3);
-> +static SENSOR_DEVICE_ATTR_RO(curr4_input, adc4, 0);
-> +static SENSOR_DEVICE_ATTR_RO(curr4_label, label, MAX3440X_ADC4);
-
-Not that it matters because you should use the _with_info API, but the
-last parameter of SENSOR_DEVICE_ATTR_{RO,RW} is supposed to be the index,
-which is supposed to be used by the called function to determine
-which of the sensors should be accessed. This means that separate functions
-are not necessary.
-
-> +
-> +static struct attribute *max3440x_attrs[] = {
-> +	&sensor_dev_attr_curr1_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_label.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_label.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_label.dev_attr.attr,
-> +	&sensor_dev_attr_curr4_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr4_label.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(max3440x);
-> +
-> +static int max3440x_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max3440x_data *data;
-> +	struct device *hwmon_dev;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct max3440x_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->update_lock);
-> +
-> +	/* Initialize the MAX3440x chip */
-> +	max3440x_init_client(data, client);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
-> +							   client->name, data,
-> +							   max3440x_groups);
-
-Please rewrite to use devm_hwmon_device_register_with_info().
-
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +
-> +static const struct i2c_device_id max3440x_id[] = {
-> +	{ "max34409", 0 },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, max3440x_id);
-> +
-> +static const struct i2c_driver max3440x_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "max3440x",
-> +	},
-> +	.probe = max3440x_probe,
-> +	.id_table	= max3440x_id,
-> +};
-> +
-> +module_i2c_driver(max3440x_driver);
-> +
-> +MODULE_AUTHOR("Andrey Kononov");
-> +MODULE_DESCRIPTION("I2C adc driver");
-
-There is an emphasis on adc, not on hardware monitoring. The limit
-registers / attributes are not implemented, and neither is status
-reporting, making its value as hwmon driver quite limited.
-Are you sure you want/need a hardware monitoring driver ? If this
-is just used as an ADC and not as current monitor it may be better
-to implement it as an IIO driver.
-
-Guenter
-
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.34.1
+RnJvbTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPiBTZW50OiBXZWRuZXNkYXksIEZl
+YnJ1YXJ5IDE1LCAyMDIzIDU6NDAgQU0NCj4gDQo+IE9uIDEzLjAyLjIzIDAyOjA4LCBNaWNoYWVs
+IEtlbGxleSAoTElOVVgpIHdyb3RlOg0KPiA+IEZyb206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0Bz
+dXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBGZWJydWFyeSA4LCAyMDIzIDExOjIyDQo+IFBNDQo+
+ID4+DQo+ID4+IFRvZGF5IHB1ZF9zZXRfaHVnZSgpIGFuZCBwbWRfc2V0X2h1Z2UoKSB0ZXN0IGZv
+ciB0aGUgTVRSUiB0eXBlIHRvIGJlDQo+ID4+IFdCIG9yIElOVkFMSUQgYWZ0ZXIgY2FsbGluZyBt
+dHJyX3R5cGVfbG9va3VwKCkuIFRob3NlIHRlc3RzIGNhbiBiZQ0KPiA+PiBkcm9wcGVkLCBhcyB0
+aGUgb25seSByZWFzb24gdG8gbm90IHVzZSBhIGxhcmdlIG1hcHBpbmcgd291bGQgYmUNCj4gPj4g
+dW5pZm9ybSBiZWluZyAwLiBBbnkgTVRSUiB0eXBlIGNhbiBiZSBhY2NlcHRlZCBhcyBsb25nIGFz
+IGl0IGFwcGxpZXMNCj4gPj4gdG8gdGhlIHdob2xlIG1lbW9yeSByYW5nZSBjb3ZlcmVkIGJ5IHRo
+ZSBtYXBwaW5nLCBhcyB0aGUgYWx0ZXJuYXRpdmUNCj4gPj4gd291bGQgb25seSBiZSB0byBtYXAg
+dGhlIHNhbWUgcmVnaW9uIHdpdGggc21hbGxlciBwYWdlcyBpbnN0ZWFkIHVzaW5nDQo+ID4+IHRo
+ZSBzYW1lIFBBVCB0eXBlIGFzIGZvciB0aGUgbGFyZ2UgbWFwcGluZy4NCj4gPj4NCj4gPj4gU3Vn
+Z2VzdGVkLWJ5OiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRhdGlvbi5vcmc+
+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4g
+Pj4gLS0tDQo+ID4+ICAgYXJjaC94ODYvbW0vcGd0YWJsZS5jIHwgNiArKy0tLS0NCj4gPj4gICAx
+IGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiA+Pg0KPiA+
+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbW0vcGd0YWJsZS5jIGIvYXJjaC94ODYvbW0vcGd0YWJs
+ZS5jDQo+ID4+IGluZGV4IGU0ZjQ5OWViMGYyOS4uN2I5YzU0NDNkMTc2IDEwMDY0NA0KPiA+PiAt
+LS0gYS9hcmNoL3g4Ni9tbS9wZ3RhYmxlLmMNCj4gPj4gKysrIGIvYXJjaC94ODYvbW0vcGd0YWJs
+ZS5jDQo+ID4+IEBAIC03MjEsOCArNzIxLDcgQEAgaW50IHB1ZF9zZXRfaHVnZShwdWRfdCAqcHVk
+LCBwaHlzX2FkZHJfdCBhZGRyLCBwZ3Byb3RfdA0KPiBwcm90KQ0KPiA+PiAgIAl1OCBtdHJyLCB1
+bmlmb3JtOw0KPiA+Pg0KPiA+PiAgIAltdHJyID0gbXRycl90eXBlX2xvb2t1cChhZGRyLCBhZGRy
+ICsgUFVEX1NJWkUsICZ1bmlmb3JtKTsNCj4gPj4gLQlpZiAoKG10cnIgIT0gTVRSUl9UWVBFX0lO
+VkFMSUQpICYmICghdW5pZm9ybSkgJiYNCj4gPj4gLQkgICAgKG10cnIgIT0gTVRSUl9UWVBFX1dS
+QkFDSykpDQo+ID4+ICsJaWYgKCF1bmlmb3JtKQ0KPiA+PiAgIAkJcmV0dXJuIDA7DQo+ID4+DQo+
+ID4+ICAgCS8qIEJhaWwgb3V0IGlmIHdlIGFyZSB3ZSBvbiBhIHBvcHVsYXRlZCBub24tbGVhZiBl
+bnRyeTogKi8NCj4gPj4gQEAgLTc0OCw4ICs3NDcsNyBAQCBpbnQgcG1kX3NldF9odWdlKHBtZF90
+ICpwbWQsIHBoeXNfYWRkcl90IGFkZHIsDQo+IHBncHJvdF90IHByb3QpDQo+ID4+ICAgCXU4IG10
+cnIsIHVuaWZvcm07DQo+ID4+DQo+ID4+ICAgCW10cnIgPSBtdHJyX3R5cGVfbG9va3VwKGFkZHIs
+IGFkZHIgKyBQTURfU0laRSwgJnVuaWZvcm0pOw0KPiA+PiAtCWlmICgobXRyciAhPSBNVFJSX1RZ
+UEVfSU5WQUxJRCkgJiYgKCF1bmlmb3JtKSAmJg0KPiA+PiAtCSAgICAobXRyciAhPSBNVFJSX1RZ
+UEVfV1JCQUNLKSkgew0KPiA+PiArCWlmICghdW5pZm9ybSkgew0KPiA+PiAgIAkJcHJfd2Fybl9v
+bmNlKCIlczogQ2Fubm90IHNhdGlzZnkgW21lbSAlIzAxMGxseC0lIzAxMGxseF0gd2l0aCBhDQo+
+IGh1Z2UtcGFnZSBtYXBwaW5nIGR1ZSB0byBNVFJSIG92ZXJyaWRlLlxuIiwNCj4gPj4gICAJCQkg
+ICAgIF9fZnVuY19fLCBhZGRyLCBhZGRyICsgUE1EX1NJWkUpOw0KPiA+DQo+ID4gSSdtIHNlZWlu
+ZyB0aGlzIHdhcm5pbmcgdHJpZ2dlciBpbiBhIG5vcm1hbCBIeXBlci1WIGd1ZXN0IChpLmUuLCAq
+bm90KiBhbg0KPiA+IFNFVi1TTlAgQ29uZmlkZW50aWFsIFZNKS4gIFRoZSBvcmlnaW5hbCBmaWx0
+ZXJpbmcgaGVyZSBiYXNlZCBvbg0KPiA+IE1UUlJfVFlQRV9XUkJBQ0sgYXBwZWFycyB0byBiZSBo
+aWRpbmcgYSBidWcgaW4gbXRycl90eXBlX2xvb2t1cF92YXJpYWJsZSgpDQo+ID4gd2hlcmUgaXQg
+aW5jb3JyZWN0bHkgdGhpbmtzIGFuIGFkZHJlc3MgcmFuZ2UgbWF0Y2hlcyB0d28gZGlmZmVyZW50
+IHZhcmlhYmxlDQo+ID4gTVRSUnMsIGFuZCBoZW5jZSBjbGVhcnMgInVuaWZvcm0iLg0KPiA+DQo+
+ID4gSGVyZSBhcmUgdGhlIHZhcmlhYmxlIE1UUlJzIGluIHRoZSBub3JtYWwgSHlwZXItViBndWVz
+dCB3aXRoIDMyIEdpQnl0ZXMNCj4gPiBvZiBtZW1vcnk6DQo+ID4NCj4gPiBbICAgIDAuMDQzNTky
+XSBNVFJSIHZhcmlhYmxlIHJhbmdlcyBlbmFibGVkOg0KPiA+IFsgICAgMC4wNDgzMDhdICAgMCBi
+YXNlIDAwMDAwMDAwMDAwMCBtYXNrIEZGRkYwMDAwMDAwMCB3cml0ZS1iYWNrDQo+ID4gWyAgICAw
+LjA1NzQ1MF0gICAxIGJhc2UgMDAwMTAwMDAwMDAwIG1hc2sgRkZGMDAwMDAwMDAwIHdyaXRlLWJh
+Y2sNCj4gDQo+IEkndmUgcmVhZCB0aGUgU0RNIGNoYXB0ZXIgZm9yIE1UUlJzIGFnYWluLiBEb2Vz
+bid0ICMxIHZpb2xhdGUgdGhlIHJlcXVpcmVtZW50cw0KPiBmb3IgTVRSUiBzZXR0aW5ncz8gVGhl
+IFNETSBzYXlzOg0KPiANCj4gICAgRm9yIHJhbmdlcyBncmVhdGVyIHRoYW4gNCBLQnl0ZXMsIGVh
+Y2ggcmFuZ2UgbXVzdCBiZSBvZiBsZW5ndGggMl5uIGFuZCBpdHMNCj4gICAgYmFzZSBhZGRyZXNz
+IG11c3QgYmUgYWxpZ25lZCBvbiBhIDJebiBib3VuZGFyeSwgd2hlcmUgbiBpcyBhIHZhbHVlIGVx
+dWFsIHRvDQo+ICAgIG9yIGdyZWF0ZXIgdGhhbiAxMi4gVGhlIGJhc2UtYWRkcmVzcyBhbGlnbm1l
+bnQgdmFsdWUgY2Fubm90IGJlIGxlc3MgdGhhbiBpdHMNCj4gICAgbGVuZ3RoLiBGb3IgZXhhbXBs
+ZSwgYW4gOC1LQnl0ZSByYW5nZSBjYW5ub3QgYmUgYWxpZ25lZCBvbiBhIDQtS0J5dGUgYm91bmRh
+cnkuDQo+ICAgIEl0IG11c3QgYmUgYWxpZ25lZCBvbiBhdCBsZWFzdCBhbiA4LUtCeXRlIGJvdW5k
+YXJ5Lg0KPiANCj4gVGhpcyBtYWtlcyB0aGUgcmVhc29uaW5nIGJlbG93IHdyb25nLg0KDQpBcmdo
+LiAgSXQgc3VyZSBsb29rcyBsaWtlIHlvdSBhcmUgcmlnaHQuICBJIGp1c3QgYXNzdW1lZCB0aGUg
+TVRSUnMgY29taW5nIGZyb20NCkh5cGVyLVYgd2VyZSBnb29kLiAgU2hhbWUgb24gbWUuIDotKA0K
+DQpJJ3ZlIHBpbmcnZWQgdGhlIEh5cGVyLVYgdGVhbSB0byBzZWUgd2hhdCB0aGV5IHNheS4gIEJ1
+dCBpdCdzIGhhcmQgdG8gc2VlIGhvdw0KdGhleSBjb3VsZCBhcmd1ZSB0aGF0IHRoZXNlIE1UUlJz
+IGFyZSBjb3JyZWN0bHkgZm9ybWVkLiAgVGhlIEludGVsIHNwZWMgaXMNCnVuYW1iaWd1b3VzLg0K
+DQpFdmVuIGlmIEh5cGVyLVYgYWdyZWVzIHRoYXQgdGhlIE1UUlJzIGFyZSB3cm9uZywgYSBmaXgg
+d2lsbCB0YWtlIHRpbWUgdG8NCnByb3BhZ2F0ZS4gIEluIHRoZSBtZWFudGltZSwgaXQgc2VlbXMg
+bGlrZSB0aGUgTGludXggbWl0aWdhdGlvbnMgY291bGQgYmUNCmFueSBvZiB0aGUgZm9sbG93aW5n
+Og0KDQoxKSBLZWVwIHRoZSB0ZXN0IGZvciBXQiBpbiBwdWRfc2V0X2h1Z2UoKSBhbmQgcG1kX3Nl
+dF9odWdlKCkNCg0KMikgUmVtb3ZlIHRoZSB0ZXN0LCBidXQgaGF2ZSAidW5pZm9ybSIgc2V0IHRv
+IDEgd2hlbiBtdWx0aXBsZSBNVFJScyBhcmUNCiAgICBtYXRjaGVkIGJ1dCBhbGwgaGF2ZSB0aGUg
+c2FtZSBjYWNoaW5nIHR5cGUsIHdoaWNoIHlvdSBwcm9wb3NlZCB0bw0KICAgIHNvbHZlIFJpY2sg
+RWRnZWNvbWJlJ3MgcHJvYmxlbS4gIFRoaXMgaXMgbGlrZWx5IHRvIHBhcGVyIG92ZXIgdGhlDQog
+ICAgcHJvYmxlbSBJIHNhdyB3aXRoIHRoZSBIeXBlci1WIE1UUlJzIGJlY2F1c2UgdGhlIGluY29y
+cmVjdGx5IG1hdGNoaW5nDQogICAgTVRSUnMgd291bGQgYWxsIGJlIFdCLg0KDQozKSBJbiAqYWxs
+KiBIeXBlci1WIFZNcyAobm90IGp1c3QgQ29uZmlkZW50aWFsIFZNcyksIGRpc2FibGUgWDg2X0ZF
+QVRVUkVfTVRSUg0KICAgIGFuZCB1c2UgdGhlIG5ldyBvdmVycmlkZSB0byBzZXQgdGhlIGRlZmF1
+bHQgdHlwZSB0byBXQi4gICBIb3BlZnVsbHkgd2UgZG9uJ3QNCiAgICBoYXZlIHRvIGRvIHRoaXMs
+IGJ1dCBJIGNhbiBzdWJtaXQgYSBzZXBhcmF0ZSBwYXRjaCBpZiBpdCBiZWNvbWVzIG5lY2Vzc2Fy
+eS4NCg0KTWljaGFlbA0K
