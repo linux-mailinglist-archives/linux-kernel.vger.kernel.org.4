@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD00D6988B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAF26988BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjBOXQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S229670AbjBOXW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBOXQn (ORCPT
+        with ESMTP id S229504AbjBOXW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:16:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424713C28C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:16:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF16961DD0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF650C433D2;
-        Wed, 15 Feb 2023 23:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676502999;
-        bh=nn+XtUdUA9fUBtbMXv1HBnDv1Rsn0oB51la5XEORWrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JZ9umhwkM8nNdKnkvdFfKgVd+9ZvJK4CqzDVXyjsEOsAe2LF6NU1PhhvzFUjBXhLR
-         LjjvwkfLEY5CQrPbmp74HYxxabBwybZwEIw860ySc7JS/Oxq5lcAlTmrvwblRA4PcG
-         oZVRnfEt6Fn2U0GRfKU0Fe8SymntY51STxHm44FmbUEIWGWmLFCB5/mEG5+zM3LLmF
-         u7L6XGlYSO/iBg6F7j0SJcOIuOG5Tg6ygHxNMofoXYXqcekgWD7ke+2OARXFKAR7Wh
-         65fnP/sTGXFT0TggsoGVvQIgfGwu5Z8lhumtLHE2I/u4G2WPyEAlZWPwSAr1pEgjim
-         T+EsgzZMQeTBQ==
-Date:   Wed, 15 Feb 2023 15:16:37 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP
- instruction
-Message-ID: <20230215231637.laryjsua5p4wcd57@treble>
-References: <cover.1676068346.git.jpoimboe@kernel.org>
- <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
- <20230213234357.1fe194b2767d9bc431202d4c@kernel.org>
- <Y+tx6DZyoQ362lUM@hirez.programming.kicks-ass.net>
- <20230214170552.glhdytvunczyxxao@treble>
- <Y+yzMmL7gUprDru3@hirez.programming.kicks-ass.net>
+        Wed, 15 Feb 2023 18:22:57 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3665142BE9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:56 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ky6so1016102ejc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tabx9NVVhDi2NL80cED89hxZVqfHcpcD6w5gvEiG26Q=;
+        b=Q8cRbK9bsfMvz1Nn6UBM35NtrHJymdIg7nZkemYtGgv/3Q3yDTJhJG+X81qDdYabIf
+         xxrtKoM9CiUsnARz3yOk+5K7ZQQZ+AQV90O8Y3pMrOhGvrKc3sTzpKJ1yje35uhNEj4B
+         uqqN3W2f/CoTRayN0vR+ZkTzIuArxuwqNE2BU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tabx9NVVhDi2NL80cED89hxZVqfHcpcD6w5gvEiG26Q=;
+        b=LyY3Pgt9hJ9m+27xTeGdO7kibUvKV0uL0k4aSS59g8obw5C3v4dngrjCUigj8NzBph
+         Sx0GojiWQB2CvPXObJJnTYMGB/dloLNCwzXlG4slvQnZ91l48YalDJ/l/AYRWLFQd+M6
+         zW6frjREKYKrtavZwQshxaOEQgHSfuJpHH7dXKGc0IyfitPzrJanNsrpqZ2Lr1aFexru
+         vKb25kK+HgMsJW8g1AcIVNfSBrvuAmFAYDeujPDTR9Y/WTtUou1g2skojWWdC57vbmYs
+         aVPSWRdRP98Nr0b8FOByeK4PbjX5GIGSdR8nQt/lumkRl3jbXm4757drvFeNQj3zZ7eN
+         pTcw==
+X-Gm-Message-State: AO0yUKX/Hia5q5TB5uV6YMc/bg9IUYrw2hlF9PcQSkLV7rCNzNd6lXc6
+        3n73SzbBLprNlBbbMsowYaZCpcmqzjDmCXB6tJM=
+X-Google-Smtp-Source: AK7set8mhtvoZE5CQfZjnGl4uQNkDOtnnHwL2D1NnaTpZeU5s/pb8ZHM8R/QfQl1/qe6sG1H86ZFvA==
+X-Received: by 2002:a17:907:76b5:b0:8a4:e0a2:e77f with SMTP id jw21-20020a17090776b500b008a4e0a2e77fmr4229095ejc.34.1676503374220;
+        Wed, 15 Feb 2023 15:22:54 -0800 (PST)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id g16-20020a1709063b1000b008b1390ad11esm2072024ejf.216.2023.02.15.15.22.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 15:22:53 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id u21so519305edv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:52 -0800 (PST)
+X-Received: by 2002:a50:99cf:0:b0:4ab:4994:e648 with SMTP id
+ n15-20020a5099cf000000b004ab4994e648mr2049346edb.5.1676503372641; Wed, 15 Feb
+ 2023 15:22:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+yzMmL7gUprDru3@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230209072220.6836-1-jgross@suse.com> <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
+ <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com> <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
+ <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
+In-Reply-To: <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 15 Feb 2023 15:22:35 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
+Message-ID: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
+To:     Juergen Gross <jgross@suse.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "lists@nerdbynature.de" <lists@nerdbynature.de>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "Cui, Dexuan" <decui@microsoft.com>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 11:25:54AM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 14, 2023 at 09:05:52AM -0800, Josh Poimboeuf wrote:
-> > On Tue, Feb 14, 2023 at 12:35:04PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Feb 13, 2023 at 11:43:57PM +0900, Masami Hiramatsu wrote:
-> > > 
-> > > > > Fix it by annotating the #BP exception as a non-signal stack frame,
-> > > > > which tells the ORC unwinder to decrement the instruction pointer before
-> > > > > looking up the corresponding ORC entry.
-> > > > 
-> > > > Just to make it clear, this sounds like a 'hack' use of non-signal stack
-> > > > frame. If so, can we change the flag name as 'literal' or 'non-literal' etc?
-> > > > I concern that the 'signal' flag is used differently in the future.
-> > 
-> > Agreed, though I'm having trouble coming up with a succinct yet
-> > scrutable name.  If length wasn't an issue it would be something like
-> > 
-> >   "decrement_return_address_when_looking_up_the_next_orc_entry"
-> > 
-> > > Oooh, bike-shed :-) Let me suggest trap=1, where a trap is a fault with
-> > > a different return address, specifically the instruction after the
-> > > faulting instruction.
-> > 
-> > I think "trap" doesn't work because
-> > 
-> >  1) It's more than just traps, it's also function calls.  We have
-> >     traps/calls in one bucket (decrement IP); and everything else
-> >     (faults, aborts, irqs) in the other (don't decrement IP).
-> > 
-> >  2) It's not necessarily all traps which need the flag, just those that
-> >     affect a previously-but-now-overwritten stack-modifying instruction.
-> >     So #OF (which we don't use?) and trap-class #DB don't seem to be
-> >     affected.  In practice maybe this distinction doesn't matter, but
-> >     for example there's no reason for ORC try to distinguish trap #DB
-> >     from non-trap #DB at runtime.
-> 
-> Well, I was specifically thinking about #DB, why don't we need to
-> decrement when we put a hardware breakpoint on a stack modifying op?
+On Wed, Feb 15, 2023 at 12:25 AM Juergen Gross <jgross@suse.com> wrote:
+>
+> The problem arises in case a large mapping is spanning multiple MTRRs,
+> even if they define the same caching type (uniform is set to 0 in this
+> case).
 
-I assume you mean the INT1 instruction.  Yeah, maybe we should care
-about that.
+Oh, I think then you should fix uniform to be 1.
 
-I'm struggling to come up with any decent ideas about how to implement
-that.  Presumably the #DB handler would have to communicate to the
-unwinder somehow whether the given frame is a trap.
+IOW, we should not think "multiple MTRRs" means "non-uniform". Only
+"different actual memory types" should mean non-uniformity.
 
-Alternatively I was thinking the unwinder could read the instruction,
-but then it doesn't know whether to read regs->ip or the previous
-instruction.
+If I remember correctly, there were good reasons to have overlapping
+MTRR's. In fact, you can generate a single MTRR that described a
+memory ttype that wasn't even contiguous if you had odd memory setups.
 
--- 
-Josh
+Intel definitely defines how overlapping MTRR's work, and "same types
+overlaps" is documented as a real thing.
+
+            Linus
