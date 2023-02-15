@@ -2,48 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC592697377
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A542697388
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbjBOBWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S233521AbjBOBWo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 20:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBOBWN (ORCPT
+        with ESMTP id S233504AbjBOBWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:22:13 -0500
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C773F34309;
-        Tue, 14 Feb 2023 17:21:38 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VbhW-Bq_1676424093;
-Received: from 30.97.48.50(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VbhW-Bq_1676424093)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Feb 2023 09:21:34 +0800
-Message-ID: <208eb79f-d064-36be-fece-a91007802379@linux.alibaba.com>
-Date:   Wed, 15 Feb 2023 09:21:33 +0800
+        Tue, 14 Feb 2023 20:22:20 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A926334C0A;
+        Tue, 14 Feb 2023 17:21:47 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 31F1LXAM0009995, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 31F1LXAM0009995
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 15 Feb 2023 09:21:33 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 15 Feb 2023 09:21:35 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 15 Feb 2023 09:21:34 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Wed, 15 Feb 2023 09:21:34 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO) efuse parsing
+Thread-Topic: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO)
+ efuse parsing
+Thread-Index: AQHZQLlVYRxFC8DYgUSIrrVEWedGBa7PLmvg
+Date:   Wed, 15 Feb 2023 01:21:34 +0000
+Message-ID: <ef11acd2c4054365b76d06966f40cc61@realtek.com>
+References: <20230214211421.2290102-1-martin.blumenstingl@googlemail.com>
+ <20230214211421.2290102-5-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20230214211421.2290102-5-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/2/14_=3F=3F_11:07:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 0/4] Change the return value for page isolation
- functions
-To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
-Cc:     torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, osalvador@suse.de, mike.kravetz@oracle.com,
-        willy@infradead.org, damon@lists.linux.dev,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1676382188.git.baolin.wang@linux.alibaba.com>
- <5064ee08-792f-14f2-6f2d-26e81af8a239@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <5064ee08-792f-14f2-6f2d-26e81af8a239@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,49 +78,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/15/2023 1:52 AM, David Hildenbrand wrote:
-> On 14.02.23 14:59, Baolin Wang wrote:
->> Now the page isolation functions did not return a boolean to indicate
->> success or not, instead it will return a negative error when failed
->> to isolate a page. So below code used in most places seem a boolean
->> success/failure thing, which can confuse people whether the isolation
->> is successful.
->>
->> if (folio_isolate_lru(folio))
->>          continue;
->>
->> Moreover the page isolation functions only return 0 or -EBUSY, and
->> most users did not care about the negative error except for few users,
->> thus we can convert all page isolation functions to return a boolean
->> value, which can remove the confusion to make code more clear.
->>
->> No functional changes intended in this patch series.
->>
->> Changes from v1:
->>   - Convert all isolation functions to return bool.
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, February 15, 2023 5:14 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Neo
+> Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
+> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH v1 4/5] wifi: rtw88: rtw8822b: Implement RTL8822BS (SDIO) efuse parsing
 > 
-> Acked-by: David Hildenbrand <david@redhat.com>
+> The efuse of the SDIO RTL8822BS chip has only one known member: the mac
+> address is at offset 0x11a. Add a struct rtw8822bs_efuse describing this
+> and use it for copying the mac address when the SDIO bus is used.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  drivers/net/wireless/realtek/rtw88/rtw8822b.c | 10 ++++++++++
+>  drivers/net/wireless/realtek/rtw88/rtw8822b.h |  6 ++++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+> b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+> index 74dfb89b2c94..4ed5b98fab23 100644
+> --- a/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+> @@ -26,10 +26,17 @@ static void rtw8822be_efuse_parsing(struct rtw_efuse *efuse,
+>         ether_addr_copy(efuse->addr, map->e.mac_addr);
+>  }
+> 
+> +static void rtw8822bs_efuse_parsing(struct rtw_efuse *efuse,
+> +                                   struct rtw8822b_efuse *map)
+> +{
+> +       ether_addr_copy(efuse->addr, map->s.mac_addr);
+> +}
+> +
+>  static void rtw8822bu_efuse_parsing(struct rtw_efuse *efuse,
+>                                     struct rtw8822b_efuse *map)
+>  {
+>         ether_addr_copy(efuse->addr, map->u.mac_addr);
+> +
 
-Thanks.
+Don't need to stir USB code.
 
+>  }
 > 
-> Although it's controversial if
+>  static int rtw8822b_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
+> @@ -62,6 +69,9 @@ static int rtw8822b_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
+>         case RTW_HCI_TYPE_PCIE:
+>                 rtw8822be_efuse_parsing(efuse, map);
+>                 break;
+> +       case RTW_HCI_TYPE_SDIO:
+> +               rtw8822bs_efuse_parsing(efuse, map);
+> +               break;
+>         case RTW_HCI_TYPE_USB:
+>                 rtw8822bu_efuse_parsing(efuse, map);
+>                 break;
+> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822b.h
+> b/drivers/net/wireless/realtek/rtw88/rtw8822b.h
+> index 01d3644e0c94..8d05805c046c 100644
+> --- a/drivers/net/wireless/realtek/rtw88/rtw8822b.h
+> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822b.h
+> @@ -65,6 +65,11 @@ struct rtw8822be_efuse {
+>         u8 res7;
+>  };
 > 
-> if (!ret)
->      ret = -EBUSY;
-> else
->      ret = 0;
-> 
-> is really appealing to the readers eye :)
-> 
-> ret = ret ? 0 : -EBUSY;
-> 
-> It's still confusing.
-> 
-> would be better as
-> 
-> ret = isolated ? 0 : -EBUSY;
-> 
-> IOW, not reusing the "int ret" variable.
+> +struct rtw8822bs_efuse {
+> +       u8 res4[0x4a];                  /* 0xd0 */
+> +       u8 mac_addr[ETH_ALEN];          /* 0x11a */
+> +} __packed;
+> +
+>  struct rtw8822b_efuse {
+>         __le16 rtl_id;
+>         u8 res0[0x0e];
+> @@ -94,6 +99,7 @@ struct rtw8822b_efuse {
+>         union {
+>                 struct rtw8822bu_efuse u;
+>                 struct rtw8822be_efuse e;
+> +               struct rtw8822bs_efuse s;
 
-Yes, pretty clear. Will do in next version.
+No obvious problem in whole patchset. Only a nit about the order of PCIE-USB-SDIO.
+Can we have them in consistent order?
+
+Here, the order is USB-PCIE-SDIO, but patch 3/5 and 5/5 in different order.
+It seems like we messed up the order when adding USB, but we can correct them
+along with this patch. My prefer order is PCIE-USB-SDIO after adding SDIO,
+because the order of existing code of 'switch...case' is PCIE-USB.
+
+Apply this rule not only here also 'switch...case' and 'efuse parser'.
+
+Ping-Ke
+
