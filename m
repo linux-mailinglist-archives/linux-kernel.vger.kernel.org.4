@@ -2,124 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFA0697C9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFB5697CA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjBONCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S233836AbjBONDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbjBONCU (ORCPT
+        with ESMTP id S231872AbjBONDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:02:20 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721A01E291;
-        Wed, 15 Feb 2023 05:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=eRF7KZGWyAp2wUobvfy12AosGt3ryJM8iRWImzBIITg=; b=cS94lxxHZcrUCuuGzYJ4htZ3/i
-        LRXjsPFxOuWozRskJ5HLCWJMzSKKOAjWg8iAvoZlC9ErfbMrfsXA5UG2gU5cXJFIL7nnAMSYZR1mq
-        /bayB1PBehfeF237Nz6izZaVXSiuxAmvC5rci4ueLCEv9o6iji+GV2N+YbLdwQSBrccY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pSHPz-0053H4-FB; Wed, 15 Feb 2023 14:01:51 +0100
-Date:   Wed, 15 Feb 2023 14:01:51 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 07/12] dt-bindings: net: Add StarFive JH7100 SoC
-Message-ID: <Y+zXv90rGfQupjPP@lunn.ch>
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-8-cristian.ciocaltea@collabora.com>
- <Y+e74UIV/Td91lKB@lunn.ch>
- <586971af-2d78-456d-a605-6c7b2aefda91@collabora.com>
+        Wed, 15 Feb 2023 08:03:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00C132E7D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676466126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1kO8N6JLykhQ4YdfKs2d43b+gPORvqK7xPAz9ypT+Zk=;
+        b=ChQXqeMqdW+QnogcPSvUwwiVHsWkjON+7pvbwLVNRByY7t+xWvvnoUtFoKH8vOTdoV1g64
+        k7dRasoPguYkz1T9MaR1Nx5wO2wenWF4oYdV7QML8MacYAhyI5DNBgU3AkzB0XMt0BgNFn
+        4MD9edPySNGvBlDbDreZEXc6ridb0FE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-BxtiEXZhM5WJBsv1CLOnxg-1; Wed, 15 Feb 2023 08:02:02 -0500
+X-MC-Unique: BxtiEXZhM5WJBsv1CLOnxg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 842BD3C10691;
+        Wed, 15 Feb 2023 13:02:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57EA9140EBF4;
+        Wed, 15 Feb 2023 13:01:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230215-topic-next-20230214-revert-v1-2-c58cd87b9086@linaro.org>
+References: <20230215-topic-next-20230214-revert-v1-2-c58cd87b9086@linaro.org> <20230215-topic-next-20230214-revert-v1-0-c58cd87b9086@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     dhowells@redhat.com, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 2/2] Revert "splice: Do splice read from a buffered file without using ITER_PIPE"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <586971af-2d78-456d-a605-6c7b2aefda91@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3055588.1676466118.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 15 Feb 2023 13:01:58 +0000
+Message-ID: <3055589.1676466118@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 02:34:23AM +0200, Cristian Ciocaltea wrote:
-> On 2/11/23 18:01, Andrew Lunn wrote:
-> > > +  starfive,gtxclk-dlychain:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description: GTX clock delay chain setting
-> > 
-> > Please could you add more details to this. Is this controlling the
-> > RGMII delays? 0ns or 2ns?
-> 
-> This is what gets written to JH7100_SYSMAIN_REGISTER49 and it's currently
-> set to 4 in patch 12/12. As already mentioned, I don't have the register
-> information in the datasheet, but I'll update this as soon as we get some
-> details.
+Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 
-I have seen what happens to this value, but i have no idea what it
-actually means. And without knowing what it means, i cannot say if it
-is being used correctly or not. And it could be related to the next
-part of my comment...
+> next-20230213 introduced commit d9722a475711 ("splice: Do splice read fr=
+om
+> a buffered file without using ITER_PIPE") which broke booting on any
+> Qualcomm ARM64 device I grabbed, dereferencing a null pointer in
+> generic_filesplice_read+0xf8/x598. Revert it to make the devices
+> bootable again.
+> =
 
-> 
-> > > +    gmac: ethernet@10020000 {
-> > > +      compatible = "starfive,jh7100-dwmac", "snps,dwmac";
-> > > +      reg = <0x0 0x10020000 0x0 0x10000>;
-> > > +      clocks = <&clkgen JH7100_CLK_GMAC_ROOT_DIV>,
-> > > +               <&clkgen JH7100_CLK_GMAC_AHB>,
-> > > +               <&clkgen JH7100_CLK_GMAC_PTP_REF>,
-> > > +               <&clkgen JH7100_CLK_GMAC_GTX>,
-> > > +               <&clkgen JH7100_CLK_GMAC_TX_INV>;
-> > > +      clock-names = "stmmaceth", "pclk", "ptp_ref", "gtxc", "tx";
-> > > +      resets = <&rstgen JH7100_RSTN_GMAC_AHB>;
-> > > +      reset-names = "ahb";
-> > > +      interrupts = <6>, <7>;
-> > > +      interrupt-names = "macirq", "eth_wake_irq";
-> > > +      max-frame-size = <9000>;
-> > > +      phy-mode = "rgmii-txid";
-> > 
-> > This is unusual. Does your board have a really long RX clock line to
-> > insert the 2ns delay needed on the RX side?
-> 
-> Just tested with "rgmii" and didn't notice any issues. If I'm not missing
-> anything, I'll do the change in the next revision.
+> This reverts commit d9722a47571104f7fa1eeb5ec59044d3607c6070.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-rgmii-id is generally the value to be used. That indicates the board
-needs 2ns delays adding by something, either the MAC or the PHY. And
-then i always recommend the MAC driver does nothing, pass the value to
-the PHY and let the PHY add the delays.
+Commit d9722a47571104f7fa1eeb5ec59044d3607c6070 was part of v13 of my
+patches.  This got replaced yesterday by a newer version which may or may =
+not
+have made it into linux-next.
 
-So try both rgmii and rgmii-id and do a lot of bi directional
-transfers. Then look at the reported ethernet frame check sum error
-counts, both local and the link peer. I would expect one setting gives
-you lots of errors, and the other works much better.
+This is probably a known bug fixed in the v14 by making shmem have its own
+splice-read function.
 
-    Andrew
+Can you try this?
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
+/?h=3Diov-extract
+
+(Also, can you include me in the cc list as I'm the author of the patch yo=
+u
+reverted?)
+
+Thanks,
+David
+
