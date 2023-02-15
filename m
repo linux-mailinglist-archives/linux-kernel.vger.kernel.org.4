@@ -2,107 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03529697B81
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9833F697B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbjBOMK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S233894AbjBOMMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbjBOMK4 (ORCPT
+        with ESMTP id S233588AbjBOMMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:10:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F8AA2A987
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:10:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D8E3FEC;
-        Wed, 15 Feb 2023 04:11:37 -0800 (PST)
-Received: from bogus (unknown [10.57.10.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5253D3F703;
-        Wed, 15 Feb 2023 04:10:53 -0800 (PST)
-Date:   Wed, 15 Feb 2023 12:10:50 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Subject: Re: [PATCH 3/3] irqchip/gic-v3: Save and restore distributor and
- re-distributor
-Message-ID: <20230215121050.d57tnfh7wzpyqzti@bogus>
-References: <20230214233426.2994501-1-f.fainelli@gmail.com>
- <20230214233426.2994501-4-f.fainelli@gmail.com>
- <87o7pvz78z.wl-maz@kernel.org>
+        Wed, 15 Feb 2023 07:12:23 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3A2B0AE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:12:21 -0800 (PST)
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D4DC33F206
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676463139;
+        bh=d2HVhvClqqd8WHxTQTRIymEsBK4G3tyKOtWAvm3jRPM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=QhPZ1QoZz/LWBNLn6cSWQx/wvjpmTCGPPdhZJD/JOO1UzG/AC7Jc0md4qZm0cdgz2
+         FGm3hiCGnoMpd3rtdiuU5rq0Ulha1NBdgxuI9pZcn/qvi0afd9EACuKmD6wMWqi9ZD
+         TIzxqaM4ZHOMY606QP3JbOa3yBSY0LvqSnqkzlvl9+lSB0uAwBkql74z25e3DmxwEd
+         Sw4h+k5N/3r7fYRTQ7vlS0I758JMU4T572qmW3MmZXJZwsBGlI39a3MJeDxlUH4iq5
+         K3jRgyECzU+RPVdwt3xu94rvtPEmNCQx6FZHsYAEy3ds4X9ixZRBJblTxhfhIq+qt+
+         h33gaJ4PwPIeQ==
+Received: by mail-qk1-f197.google.com with SMTP id x14-20020a05620a14ae00b0072f7f0f356bso11270955qkj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:12:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676463139;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d2HVhvClqqd8WHxTQTRIymEsBK4G3tyKOtWAvm3jRPM=;
+        b=ilVuem5KnPaPyADC1yZhb7lVIX5NX6qGUHCKpFko+J7jnF3eMEvdxgCtEU+duIUz7n
+         YnLZRNRmlJbAk2xjoT1b9geIPXa/64rQrK3yoYyIMw35NH+arEz/PRG23pJV7OUDoLO3
+         JBKka0gHdvfHDUAoQgpocqZPXsJTd3o2fDZbQ5teW7eL87XglesPYSuMewV3XoRDymlW
+         MHMkWRcjDjNh9Rk/SA4hds01wT8+GSt4yRq6BNfmXNkucUql7tXGZYrciwIuNttQ3MHE
+         GkEwvuKjhncaHxRk/ZUGBWEH3TCb3opZmh9BrM3RKOYiH7OfZwdK4n84GLhTp06Zzr1S
+         2tUg==
+X-Gm-Message-State: AO0yUKUpwpHGDMugKGsUqNArwNl5XCwm0d9ywIiUHTR8P5jnE3kllcv7
+        4RmxSOANVzeh9FoigjOXFPVkDFOIaT91B4MPrKq38vimPf1Jbqjv1IdygSkqHqXjA+0EyqlmSdL
+        KVtrVN2yO3Orm94pSNEG2PWt52yZU/LJVYZj06LePxeM+AvHEZ8Pj1QgvDw==
+X-Received: by 2002:a0c:aa99:0:b0:56e:9a77:3d2c with SMTP id f25-20020a0caa99000000b0056e9a773d2cmr120700qvb.5.1676463138968;
+        Wed, 15 Feb 2023 04:12:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set94W4bHbLWyqqCBU/wia3LQtnIJnTfo8vvQ0Q6eIDjwkquQyW4opvnzwzhSgOt3jgiSN6xmjaU6v/LfsoIKTM0=
+X-Received: by 2002:a0c:aa99:0:b0:56e:9a77:3d2c with SMTP id
+ f25-20020a0caa99000000b0056e9a773d2cmr120692qvb.5.1676463138706; Wed, 15 Feb
+ 2023 04:12:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7pvz78z.wl-maz@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215113249.47727-1-william.qiu@starfivetech.com> <20230215113249.47727-4-william.qiu@starfivetech.com>
+In-Reply-To: <20230215113249.47727-4-william.qiu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 15 Feb 2023 13:12:01 +0100
+Message-ID: <CAJM55Z8gVEZS4Ws2Gi7_JbdkS-4y3_8mQvR4ZxLCWZ4A1y9X1g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] riscv: dts: starfive: Add mmc node
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 08:02:20AM +0000, Marc Zyngier wrote:
-> On Tue, 14 Feb 2023 23:34:26 +0000,
-> Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On platforms implementing Suspend to RAM where the GIC loses power, we
-> > are not properly saving and restoring the GIC distributor and
-> > re-distributor registers thus leading to the system resuming without any
-> > functional interrupts.
+On Wed, 15 Feb 2023 at 12:35, William Qiu <william.qiu@starfivetech.com> wrote:
 >
-> The real question is *why* we need any of this. On any decent system,
-> this is the firmware's job.  It was *never* the OS GIC driver's job
-> the first place.
+> Add the mmc node for the StarFive JH7110 SoC.
+> Set mmco node to emmc and set mmc1 node to sd.
 >
-
-Completely agreed on the points you have made here, no disagreement.
-However I would like to iterate some of the arguments/concerns the
-firmware teams I have interacted in the past have made around this.
-And this is while ago(couple of years) and they may have different
-views. I am repeating them as I think it may be still valid on some
-systems so that we can make some suggestions if we have here.
-
-> Importantly, the OS cannot save the full state: a large part of it is
-> only accessible via secure, and Linux doesn't run in secure mode. How
-> do you restore the group configuration, for example? Oh wait, you
-> don't even save it.
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> ---
+>  .../jh7110-starfive-visionfive-2.dtsi         | 23 +++++++++
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 47 +++++++++++++++++++
+>  2 files changed, 70 insertions(+)
 >
-
-Agreed, we can't manage secure side configurations. But one of the concern
-was about the large memory footprint to save the larger non-secure GIC
-context in the smaller secure memory.
-
-One of the suggestion at the time was to carve out a chunk of non-secure
-memory and let the secure side use the same for context save and restore.
-Not sure if this was tried out especially for the GIC. I may need to
-chase that with the concerned teams.
-
-Thanks Florian for starting this thread and sorry that I couldn't recollect
-lots of the information when we chatted in the private about this. Marc
-response triggered all the memory back.
-
-> So unless you have a single security state system, this cannot
-> work. And apart from VMs (which by the way do not need any of this),
-> there is no GICv3-based system without EL3. If you know of one, please
-> let me know. And if it existed, then all the save/restore should
-> happen only when GICD_CTLR.DS==1.
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> index c60280b89c73..e1a0248e907f 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> @@ -42,6 +42,29 @@ &rtc_osc {
+>         clock-frequency = <32768>;
+>  };
 >
+> +&mmc0 {
+> +       max-frequency = <100000000>;
+> +       bus-width = <8>;
+> +       cap-mmc-highspeed;
+> +       mmc-ddr-1_8v;
+> +       mmc-hs200-1_8v;
+> +       non-removable;
+> +       cap-mmc-hw-reset;
+> +       post-power-on-delay-ms = <200>;
+> +       status = "okay";
+> +};
+> +
+> +&mmc1 {
+> +       max-frequency = <100000000>;
+> +       bus-width = <4>;
+> +       no-sdio;
+> +       no-mmc;
+> +       broken-cd;
+> +       cap-sd-highspeed;
+> +       post-power-on-delay-ms = <200>;
+> +       status = "okay";
+> +};
+> +
+>  &gmac0_rmii_refin {
+>         clock-frequency = <50000000>;
+>  };
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> index 64d260ea1f29..17f7b3ee6ca3 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -314,6 +314,11 @@ uart2: serial@10020000 {
+>                         status = "disabled";
+>                 };
+>
+> +               stg_syscon: syscon@10240000 {
+> +                       compatible = "starfive,jh7110-stg-syscon", "syscon";
+> +                       reg = <0x0 0x10240000 0x0 0x1000>;
+> +               };
+> +
+>                 uart3: serial@12000000 {
+>                         compatible = "snps,dw-apb-uart";
+>                         reg = <0x0 0x12000000 0x0 0x10000>;
+> @@ -370,6 +375,11 @@ syscrg: clock-controller@13020000 {
+>                         #reset-cells = <1>;
+>                 };
+>
+> +               sys_syscon: syscon@13030000 {
+> +                       compatible = "starfive,jh7110-sys-syscon", "syscon";
+> +                       reg = <0x0 0x13030000 0x0 0x1000>;
+> +               };
+> +
+>                 gpio: gpio@13040000 {
+>                         compatible = "starfive,jh7110-sys-pinctrl";
+>                         reg = <0x0 0x13040000 0x0 0x10000>;
+> @@ -397,6 +407,11 @@ aoncrg: clock-controller@17000000 {
+>                         #reset-cells = <1>;
+>                 };
+>
+> +               aon_syscon: syscon@17010000 {
+> +                       compatible = "starfive,jh7110-aon-syscon", "syscon";
+> +                       reg = <0x0 0x17010000 0x0 0x1000>;
+> +               };
+> +
+>                 gpioa: gpio@17020000 {
+>                         compatible = "starfive,jh7110-aon-pinctrl";
+>                         reg = <0x0 0x17020000 0x0 0x10000>;
+> @@ -407,5 +422,37 @@ gpioa: gpio@17020000 {
+>                         gpio-controller;
+>                         #gpio-cells = <2>;
+>                 };
+> +
+> +               mmc0: mmc@16010000 {
+> +                       compatible = "starfive,jh7110-mmc";
+> +                       reg = <0x0 0x16010000 0x0 0x10000>;
+> +                       clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
+> +                                <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
+> +                       clock-names = "biu","ciu";
+> +                       resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
+> +                       reset-names = "reset";
+> +                       interrupts = <74>;
+> +                       fifo-depth = <32>;
+> +                       fifo-watermark-aligned;
+> +                       data-addr = <0>;
+> +                       starfive,sysreg = <&sys_syscon 0x14 0x1a 0x7c000000>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               mmc1: mmc@16020000 {
+> +                       compatible = "starfive,jh7110-mmc";
+> +                       reg = <0x0 0x16020000 0x0 0x10000>;
+> +                       clocks = <&syscrg JH7110_SYSCLK_SDIO1_AHB>,
+> +                                <&syscrg JH7110_SYSCLK_SDIO1_SDCARD>;
+> +                       clock-names = "biu","ciu";
+> +                       resets = <&syscrg JH7110_SYSRST_SDIO1_AHB>;
+> +                       reset-names = "reset";
+> +                       interrupts = <75>;
+> +                       fifo-depth = <32>;
+> +                       fifo-watermark-aligned;
+> +                       data-addr = <0>;
+> +                       starfive,sysreg = <&sys_syscon 0x9c 0x1 0x3e>;
+> +                       status = "disabled";
+> +               };
 
-Yes, now I remember the discussion we had probably almost 9-10 years
-back when I first added the CPU PM notifiers for GICv3. I am sure we
-would have discussed this at-least couple of times after that. Yet I
-just got carried away by the fact that GICv2 does the save/restore and
-this should also be possible. Sorry for that.
+Hi William,
 
---
-Regards,
-Sudeep
+These nodes still don't seem to be sorted by address, eg. by the
+number after the @
+Also please move the dt-binding patch before this one, so dtb_check
+won't fail no matter where git bisect happens to land.
+
+/Emil
+
+>         };
+>  };
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
