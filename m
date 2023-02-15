@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73F2697508
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85CB69750B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjBODpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 22:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S230028AbjBODpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 22:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbjBODpS (ORCPT
+        with ESMTP id S229881AbjBODpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:45:18 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B4E3346D;
-        Tue, 14 Feb 2023 19:45:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGkVV4jPhz4x1h;
-        Wed, 15 Feb 2023 14:45:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676432707;
-        bh=CRIFzpVkyuOkr+34RToeNN4kalv1EkVdunzNX/+rO68=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CWtlVs5kCJ4+NDRgz4XfnmzmRzNQbYgn/QUJ0SSD8U7MuzKnsKMaCWHyVL7J6mU/b
-         jm8rvN7bRMFatDWqzDuZmY2qCvPhj9Em2iFYqZZaMqMX09OFZ2RfFvHWAH/ccujS/y
-         8fuwkoXNlV7UCPtsqH2pNJVO56EKVXp2cplQz8NpbPoN2losqwdWCWOvH8seZR/4I7
-         HOq0WzF0vFyrgsx9qX90/mZEwY1fV3j+iPFlbCTxqv/uWEKFLzatcN+XaXnCTSKU7O
-         MRfEMNU6pnX7ddlRrXGl4s23087UiqIYo1aJTUpCV/lVA5XT4XBIpYKHQ3UV6uayrX
-         eB/QaJX0QD87Q==
-Date:   Wed, 15 Feb 2023 14:45:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the bpf-next tree
-Message-ID: <20230215144505.4751d823@canb.auug.org.au>
+        Tue, 14 Feb 2023 22:45:51 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2032311EB;
+        Tue, 14 Feb 2023 19:45:43 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(23460:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Wed, 15 Feb 2023 11:45:32 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 15 Feb
+ 2023 11:45:31 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Wed, 15 Feb 2023 11:45:31 +0800
+Date:   Wed, 15 Feb 2023 11:45:31 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <peterwu.pub@gmail.com>
+Subject: Re: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+Message-ID: <20230215034531.GA7407@linuxcarl2.richtek.com>
+References: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+ <20230213205321.xrhvrdqy5ksiagbv@mercury.elektranox.org>
+ <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+dqpjlbrDuqyM.GoP5Eh1NK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <75d37ae7-3632-a195-b12b-44e8a940be4a@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+dqpjlbrDuqyM.GoP5Eh1NK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Krzysztof/Sebastian:
 
-Hi all,
+On Tue, Feb 14, 2023 at 09:14:37AM +0100, Krzysztof Kozlowski wrote:
+> On 13/02/2023 21:53, Sebastian Reichel wrote:
+> > Hi,
+> > 
+> > On Wed, Feb 08, 2023 at 11:14:24AM +0800, ChiaEn Wu wrote:
+> >> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> >> "richtek,rt9467"
+> >>
+> >> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> >> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> >> ---
+> > 
+> > Is there a new version of this fixing the issues pointed out by Krzysztof?
+> > Also I think the filename and $id should be changed to richtek,rt9467.yaml
+> > in addition to the compatible change.
+> 
+> Yes, indeed.
+> 
+From the current discussion, there're things to be fixed.
+1. In bindings, change compatible property from 'richtek,rt9467-charger' to 'richtek,rt9467'.
+2. Rename 'richtek,rt9467-charger.yaml' to 'richtek,rt9467.yaml'
 
-After merging the bpf-next tree, today's linux-next build (htmldocs)
-produced this warning:
+Anything else? like as changing source code filename from 'rt9467-charger.c' to only 'rt9467.c"?
 
-Documentation/bpf/graph_ds_impl.rst:62: ERROR: Error in "code-block" direct=
-ive:
-maximum 1 argument(s) allowed, 12 supplied.
+And we'll submit a new one to fix it in these two days.
 
-.. code-block:: c
-        struct node_data {
-          long key;
-          long data;
-          struct bpf_rb_node node;
-        };
+Thanks.
 
-        struct bpf_spin_lock glock;
-        struct bpf_rb_root groot __contains(node_data, node);
-
-
-Introduced by commit
-
-  c31315c3aa09 ("bpf, documentation: Add graph documentation for non-owning=
- refs")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+dqpjlbrDuqyM.GoP5Eh1NK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsVUEACgkQAVBC80lX
-0GzDRQf/QmMclFZ2lTiLNLWSx5VZIGgPfi8rrrXh63awbM5icW8gJmouZofTLwXN
-/aA27CZHv7bHFQK1p7953F/gpOIabBRhtbWlgXPi0PIWa3M2RbFxTJc7lMl77DrI
-nSylufBCDSGh8zO5M5wcCSv04YOigTowiX8qnjmunvw1tvWdhCjlvCI38kv3MC43
-hWhSfJciTatygJjAlDVMIyVTup3Ucgc0WHJvCOo6AbI2jUlu4rKHe6WhpiEUWmnE
-blqEnfmLghhLsySrTVl8CVlXAHXt9qonk/4hhxC1lkcDA2+eMQJZdNUcC9bppok/
-mDq7ti6jMBIXOb3Cpgp1O9QWHPyRWQ==
-=Ug18
------END PGP SIGNATURE-----
-
---Sig_/+dqpjlbrDuqyM.GoP5Eh1NK--
+> Best regards,
+> Krzysztof
+> 
