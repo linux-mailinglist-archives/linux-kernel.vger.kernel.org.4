@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9467B697837
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC9B69784C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbjBOIc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S233965AbjBOIgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjBOIc0 (ORCPT
+        with ESMTP id S233099AbjBOIgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:32:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDE8B754;
-        Wed, 15 Feb 2023 00:32:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3977A61AA3;
-        Wed, 15 Feb 2023 08:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC14C433A0;
-        Wed, 15 Feb 2023 08:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676449944;
-        bh=bQGGlEBmjVutpcorhXwJevwUvhUxa0JVamvnHYFk4h4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=VUu9VxAzpQMAXU8UHSXFXy7oThyhwACCr8VBEK+2UavJvHtSjnGOAF7lodzLaYeYy
-         RxFxWbiNXd6j/YqHnUWyQSc4M/FZokn/lo4P8zPi5Bf9YdXkA7vRmcDle3s2chiMJs
-         O92xp2p378jaFKUZJux5mvw7yaCtGMjSzgihNuFK9ajhhU/viQG0/gUk0wiMtVc2Qo
-         kauqsrPYxhYkaGSNwDb9epgAmKiLW1buIdagoYL+zQnI+gW0jx+xbgd/XfUBwP2S5U
-         rIqsgwAcoRQ+/r/ME4QXwIci8lUqJy2MKBJermOW9gTx2pz1/OcOwqI4ZQi4EOvsOY
-         UTfSuUJlgtXww==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Marc Bornand <dev.mbornand@systemb.ch>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yohan Prod'homme <kernel@zoddo.fr>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] Set ssid when authenticating
-References: <20230214132009.1011452-1-dev.mbornand@systemb.ch>
-        <87ttzn4hki.fsf@kernel.org> <Y+yT2YUORRHY4bei@opmb2>
-Date:   Wed, 15 Feb 2023 10:32:18 +0200
-In-Reply-To: <Y+yT2YUORRHY4bei@opmb2> (Marc Bornand's message of "Wed, 15 Feb
-        2023 08:12:17 +0000")
-Message-ID: <87lekz49d9.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 15 Feb 2023 03:36:40 -0500
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29BB25B9C;
+        Wed, 15 Feb 2023 00:36:38 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="86108417"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669042800"; 
+   d="scan'208";a="86108417"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 17:36:37 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 2127CD3EA0;
+        Wed, 15 Feb 2023 17:36:34 +0900 (JST)
+Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 766BBD35E1;
+        Wed, 15 Feb 2023 17:36:33 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 531B0400C0298;
+        Wed, 15 Feb 2023 17:36:33 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v8 0/6] Some improvements of resctrl selftest
+Date:   Wed, 15 Feb 2023 17:32:24 +0900
+Message-Id: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marc Bornand <dev.mbornand@systemb.ch> writes:
+Hello,
 
-> On Wed, Feb 15, 2023 at 07:35:09AM +0200, Kalle Valo wrote:
->> Marc Bornand <dev.mbornand@systemb.ch> writes:
->>
->> > changes since v3:
->> > - add missing NULL check
->> > - add missing break
->> >
->> > changes since v2:
->> > - The code was tottaly rewritten based on the disscution of the
->> >   v2 patch.
->> > - the ssid is set in __cfg80211_connect_result() and only if the ssid is
->> >   not already set.
->> > - Do not add an other ssid reset path since it is already done in
->> >   __cfg80211_disconnected()
->> >
->> > When a connexion was established without going through
->> > NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
->> > Now we set it in __cfg80211_connect_result() when it is not already set.
->> >
->> > Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
->> > Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
->> > Cc: linux-wireless@vger.kernel.org
->> > Cc: stable@vger.kernel.org
->> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216711
->> > Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
->> > ---
->> >  net/wireless/sme.c | 17 +++++++++++++++++
->> >  1 file changed, 17 insertions(+)
->>
->> The change log ("changes since v3" etc) should be after "---" line and
->
-> Does it need another "---" after the change log?
-> something like:
->
-> "---"
-> "changes since v3:"
-> "(CHANGES)"
-> "---"
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-No need to add a second "---" line.
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] An error occurs whether in parents process or child process,
+	  the parents process always kills child process and runs
+	  umount_resctrlfs(), and the child process always waits to be
+	  killed by the parent process.
+[patch 5] If a signal received, to cleanup properly before exiting the
+	  parent process, commonize the signal handler registered for 
+	  CMT/MBM/MBA tests and reuse it in CAT, also unregister the 
+	  signal handler at the end of each test.
+[patch 6] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
 
->> the title should start with "wifi: cfg80211:". Please read the wiki link
->> below.
->
-> Should i start with the version 1 with the new title?
+This patch series is based on Linux v6.2-rc7.
 
-If you reset the version number that might confuse the reviewers, so my
-recommendation is to use v5 in the next version. That makes it more
-obvious that there are earlier versions available.
+Difference from v7:
+[patch 4] 
+  - Fix commitlog.
+[patch 5]
+  - Fix commitlog.
 
-> and since i am already changing the title, the following might better
-> discribe the patch, or should i keep the old title after the ":" ?
->
-> [PATCH wireless] wifi: cfg80211: Set SSID if it is not already set
+Pervious versions of this series:
+[v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
+[v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
+[v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
+[v4] https://lore.kernel.org/lkml/20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com/
+[v5] https://lore.kernel.org/lkml/20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com/
+[v6] https://lore.kernel.org/lkml/20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com/
+[v7] https://lore.kernel.org/lkml/20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com/
 
-Changing the title is fine.
+Shaopeng Tan (6):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Commonize the signal handler register/unregister
+    for all tests
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 29 ++++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 +-
+ tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+ tools/testing/selftests/resctrl/mba_test.c    | 23 +++----
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 +++---
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 --
+ tools/testing/selftests/resctrl/resctrl_val.c | 67 ++++++++++++++-----
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
+ 9 files changed, 96 insertions(+), 75 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.27.0
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
