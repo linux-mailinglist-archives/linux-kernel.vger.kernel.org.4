@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746D6697796
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684B1697799
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbjBOHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S233728AbjBOHwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjBOHvQ (ORCPT
+        with ESMTP id S229913AbjBOHwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:51:16 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB793769C;
-        Tue, 14 Feb 2023 23:51:14 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.231])
-        by gnuweeb.org (Postfix) with ESMTPSA id 91863830B9;
-        Wed, 15 Feb 2023 07:51:08 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676447474;
-        bh=4xu8nGWzIVAPVRMQcoYys7aWOHBc3DMFrZEQxIY6qhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XT3Vca4/rTY3BkZ5u9/RSK+ReBut+uMgsiLoRlLiu8IWdKvU4veubHXqKDXq9ZSz9
-         AkxqsN6qg/bkfitCw+Tju4eIplrpJ+VE7N0/MaKay6kRPKmhhjFJ3+7mSndn7yfXb8
-         FjKqCzPYnPQBzJYkw11RoZMJg5/ElK5kIzWq6GaW5ekcBmYtoOlp38SfJ6meoecIx1
-         K6VZuJOnCo7LR9Ybt/bqyjKY3TbTw+m8G50M8DjcAXP1DDJIDyirKNlrmBNwsRu34+
-         Q5zL5dnW3u6yNQCyyU0ltMUJ4WIQyV8nB1Bof8WurmjhfdkrTnUbuz1r3KzVQLQzPy
-         P1w5uIwbZCFNw==
-Date:   Wed, 15 Feb 2023 14:51:04 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
- architecture
-Message-ID: <Y+yO6Da4t0+pQQ03@biznet-home.integral.gnuweeb.org>
-References: <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
- <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org>
- <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
- <Y9FpxEz2+LJc7vJP@biznet-home.integral.gnuweeb.org>
- <SA1PR11MB673454F82DEBD8A1C7009C79A8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
+        Wed, 15 Feb 2023 02:52:02 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01DEA6E96
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:52:00 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8Axbdoej+xjWdkAAA--.2256S3;
+        Wed, 15 Feb 2023 15:51:58 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxqb0cj+xjgrEzAA--.30885S3;
+        Wed, 15 Feb 2023 15:51:58 +0800 (CST)
+Subject: Re: "kernel ade access" oops on LoongArch
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Xi Ruoyao <xry111@xry111.site>
+Cc:     loongarch@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
+References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
+ <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
+ <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
+ <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <5403e5eb-5792-7d6f-df74-ca3fab82ecd5@loongson.cn>
+Date:   Wed, 15 Feb 2023 15:51:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Dxqb0cj+xjgrEzAA--.30885S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZF4xCF1rZrykWrWkCryxGrg_yoW8tF1kpr
+        WSy3WFgFW5JFn3ArZIvrWUCFyrA34UG34DGw45GwnxZFZIvryYqa1agF1Fg3y7trZ5W3Wa
+        qrWkKay5u3W8GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bakYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1D
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIF
+        yTuYvjxU25EfUUUUU
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 07:42:47AM +0000, Li, Xin3 wrote:
-> Hi Faizi,
-> 
-> Any update on this patch set?
+On 2023-02-15 15:23, Youling Tang wrote:
 
-Xin,
+>
+>
+> On 02/15/2023 01:35 PM, Xi Ruoyao wrote:
+>> On Wed, 2023-02-15 at 12:52 +0800, Youling Tang wrote:
+>>> ../stdlib/stdlib.h:141:8: error: ‘_Float32’ does not name a type
+>>>    141 | extern _Float32 strtof32 (const char *__restrict __nptr,
+>>>        |        ^~~~~~~~
+>>
+>> This is because Glibc expects GCC 13 to support _Float32, but early GCC
+>> 13 snapshots did not.
+>>
+>>> /usr/bin/ld: /home/loongson/build_glibc/libc.a(dl-reloc-static-pie.o):
+>>> in function `_dl_relocate_static_pie':
+>>> /home/loongson/glibc/elf/dl-reloc-static-pie.c:44: undefined reference
+>>> to `_DYNAMIC'
+>>
+>> Oh, this one is my fault.  The check for compiler static PIE support was
+>> not written correctly.  I'll fix it for Glibc later, but now you can
+>> update GCC to the latest git master to proceed.
+>>
+>
+> Tested on Loongson-3C5000L-LL machine, using CLFS7.3 system.
+>
+> $ gcc -v
+> gcc version 13.0.0 20221018 (experimental) (GCC)
+>
+> # make check -j32
+> /home/loongson/build_glibc/math/test-tgmath3-atan2.c: 
+> 在函数‘test_atan2_84’中:
+> /home/loongson/build_glibc/math/test-tgmath3-atan2.c:903:59: 
+> 错误：conflicting types for ‘var__Float32x’; have ‘double’
+>   903 |   extern typeof (atan2 (vol_var__Float32x, vol_var_char)) 
+> var__Float32x __attribute__ ((unused));
+>       | ^~~~~~~~~~~~~
+>
+> There was a build error in make check, so only tst-mallocfork3-
+> malloc-check was tested separately.
+>
+> # make test t=malloc/tst-mallocfork3-malloc-check
+> make[2]: 离开目录“/home/loongson/glibc/malloc”
+> PASS: malloc/tst-mallocfork3-malloc-check
+> original exit status 0
+> info: signals received during fork: 301
+> info: signals received during free: 1693
+> info: signals received during malloc: 119
+> make[1]: 离开目录“/home/loongson/glibc”
+>
+> A total of five tests are PASS, and the serial port does not display
+> CallTrace.
+>
+> Youling.
+>
+I had test it by using the cmd "while true..." Ruoyao gave on
 
-Before I send the next version, I need an answer for this one:
-https://lore.kernel.org/lkml/Y9LfmQ%2Fr1%2FpEP+uv@biznet-home.integral.gnuweeb.org/
+Loongson-3A5000, CLFS 7.1, 6.2-rc8 kernel with those patches and
 
-I don't think the redzone problem is handled correctly here. Using
-"+r" (rsp) constraint doesn't solve the redzone problem.
+6.2-rc7 kernel form loongson-next. No calltrace displayed, either.
 
-HPA, Andrew, anybody?
-
--- 
-Ammar Faizi
+Jinyang
 
