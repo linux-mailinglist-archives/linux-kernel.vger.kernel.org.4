@@ -2,178 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41846979EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EE76979EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjBOKcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S233820AbjBOKdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBOKci (ORCPT
+        with ESMTP id S229461AbjBOKdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:32:38 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAE5367DD;
-        Wed, 15 Feb 2023 02:32:33 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DD11724E2A9;
-        Wed, 15 Feb 2023 18:32:30 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 18:32:31 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 18:32:30 +0800
-Message-ID: <8abe3cb3-3cae-9e22-1528-9c3bbbe8fb7d@starfivetech.com>
-Date:   Wed, 15 Feb 2023 18:32:29 +0800
+        Wed, 15 Feb 2023 05:33:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD18186;
+        Wed, 15 Feb 2023 02:33:06 -0800 (PST)
+Date:   Wed, 15 Feb 2023 10:33:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676457184;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QFD08+6x4LcuZWtbybKfkEqklRkLIIXjz6/O5w+ibSE=;
+        b=vLtBivGghk2AkZ3XPXI6uar0pc+bpNVfv5VpA60k380s77A4ptIpabGF10g+f5NDMOiFiB
+        lVpIw367RtIyeoCzJe0QflvoMKfllxsL2CwJIjypZv6cM5OA/Xar6UiMM07ZCJN9iKdH0n
+        AGUheN272AHc5GCBpALWbBWw6+cf9LRcwPKm8KyeFsbGXkGkBOCSDGvlO0BiNSBH67vVXW
+        ubqCHrJ0nCOk7WpNPaoY4BnRUU92dM19LQXXsltgJpRX9tkVKMYau7DiwgyP8yaKtIqmYY
+        W7J5O2AXiZJOyqvZtATvws8jh2ypmzgp1cRLPYEjuIucdstmDTnhjmsKF8Qu1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676457184;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QFD08+6x4LcuZWtbybKfkEqklRkLIIXjz6/O5w+ibSE=;
+        b=XQN9p7bY7Il7/5Tpi6r4R9gsXVgDkXjYzQR0kpEX9jLvQ+reEQt6pVrtlU+LhBYztKiTi4
+        CU5UtiAolZIcUaAA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/urgent] freezer,umh: Fix call_usermode_helper_exec() vs SIGKILL
+Cc:     syzbot+6cd18e123583550cf469@syzkaller.appspotmail.com,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net>
+References: <Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: Add mmc node
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230203081913.81968-1-william.qiu@starfivetech.com>
- <20230203081913.81968-4-william.qiu@starfivetech.com>
- <CAJM55Z8CRT_H-by=Nj0Nu1iWug1wdPMZceiE+RMJvE+q4RzQ7w@mail.gmail.com>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <CAJM55Z8CRT_H-by=Nj0Nu1iWug1wdPMZceiE+RMJvE+q4RzQ7w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <167645718365.4906.7791868073788545242.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the sched/urgent branch of tip:
 
+Commit-ID:     eedeb787ebb53de5c5dcf7b7b39d01bf1b0f037d
+Gitweb:        https://git.kernel.org/tip/eedeb787ebb53de5c5dcf7b7b39d01bf1b0f037d
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 03 Feb 2023 15:31:11 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Mon, 13 Feb 2023 16:36:14 +01:00
 
-On 2023/2/15 18:31, Emil Renner Berthing wrote:
-> On Fri, 3 Feb 2023 at 09:21, William Qiu <william.qiu@starfivetech.com> wrote:
->>
->> This adds the mmc node for the StarFive JH7110 SoC.
->> Set mmco node to emmc and set mmc1 node to sd.
->>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         | 23 ++++++++++++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 37 +++++++++++++++++++
->>  2 files changed, 60 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index c60280b89c73..e1a0248e907f 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -42,6 +42,29 @@ &rtc_osc {
->>         clock-frequency = <32768>;
->>  };
->>
->> +&mmc0 {
->> +       max-frequency = <100000000>;
->> +       bus-width = <8>;
->> +       cap-mmc-highspeed;
->> +       mmc-ddr-1_8v;
->> +       mmc-hs200-1_8v;
->> +       non-removable;
->> +       cap-mmc-hw-reset;
->> +       post-power-on-delay-ms = <200>;
->> +       status = "okay";
->> +};
->> +
->> +&mmc1 {
->> +       max-frequency = <100000000>;
->> +       bus-width = <4>;
->> +       no-sdio;ru
->> +       no-mmc;
->> +       broken-cd;
->> +       cap-sd-highspeed;
->> +       post-power-on-delay-ms = <200>;
->> +       status = "okay";
->> +};
-> 
-> Please add these so they're sorted alphabetically (but keep the clocks
-> at the top), so there's at least some sort of system.
-> 
->>  &gmac0_rmii_refin {
->>         clock-frequency = <50000000>;
->>  };
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index 64d260ea1f29..ae1a664e7af5 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -370,6 +370,11 @@ syscrg: clock-controller@13020000 {
->>                         #reset-cells = <1>;
->>                 };
->>
->> +               sysreg: syscon@13030000 {
->> +                       compatible = "starfive,sysreg", "syscon";
->> +                       reg = <0x0 0x13030000 0x0 0x1000>;
->> +               };
->> +
->>                 gpio: gpio@13040000 {
->>                         compatible = "starfive,jh7110-sys-pinctrl";
->>                         reg = <0x0 0x13040000 0x0 0x10000>;
->> @@ -407,5 +412,37 @@ gpioa: gpio@17020000 {
->>                         gpio-controller;
->>                         #gpio-cells = <2>;
->>                 };
->> +
->> +               mmc0: mmc@16010000 {
->> +                       compatible = "starfive,jh7110-mmc";
->> +                       reg = <0x0 0x16010000 0x0 0x10000>;
->> +                       clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
->> +                                <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
->> +                       clock-names = "biu","ciu";
->> +                       resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
->> +                       reset-names = "reset";
->> +                       interrupts = <74>;
->> +                       fifo-depth = <32>;
->> +                       fifo-watermark-aligned;
->> +                       data-addr = <0>;
->> +                       starfive,sysreg = <&sysreg 0x14 0x1a 0x7c000000>;
-> 
-> This may need updating depending on whether you fix the driver or bindings.
-> 
-I'll do it then
->> +                       status = "disabled";
->> +               };
->> +
->> +               mmc1: mmc@16020000 {
->> +                       compatible = "starfive,jh7110-mmc";
->> +                       reg = <0x0 0x16020000 0x0 0x10000>;
->> +                       clocks = <&syscrg JH7110_SYSCLK_SDIO1_AHB>,
->> +                                <&syscrg JH7110_SYSCLK_SDIO1_SDCARD>;
->> +                       clock-names = "biu","ciu";
->> +                       resets = <&syscrg JH7110_SYSRST_SDIO1_AHB>;
->> +                       reset-names = "reset";
->> +                       interrupts = <75>;
->> +                       fifo-depth = <32>;
->> +                       fifo-watermark-aligned;
->> +                       data-addr = <0>;
->> +                       starfive,sysreg = <&sysreg 0x9c 0x1 0x3e>;
->> +                       status = "disabled";
->> +               };
->>         };
->>  };
->> --
->> 2.34.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+freezer,umh: Fix call_usermode_helper_exec() vs SIGKILL
+
+Tetsuo-San noted that commit f5d39b020809 ("freezer,sched: Rewrite
+core freezer logic") broke call_usermodehelper_exec() for the KILLABLE
+case.
+
+Specifically it was missed that the second, unconditional,
+wait_for_completion() was not optional and ensures the on-stack
+completion is unused before going out-of-scope.
+
+Fixes: f5d39b020809 ("freezer,sched: Rewrite core freezer logic")
+Reported-by: syzbot+6cd18e123583550cf469@syzkaller.appspotmail.com
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Debugged-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net
+---
+ kernel/umh.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/umh.c b/kernel/umh.c
+index 8506315..fbf872c 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -438,21 +438,27 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+ 	if (wait == UMH_NO_WAIT)	/* task has freed sub_info */
+ 		goto unlock;
+ 
+-	if (wait & UMH_KILLABLE)
+-		state |= TASK_KILLABLE;
+-
+ 	if (wait & UMH_FREEZABLE)
+ 		state |= TASK_FREEZABLE;
+ 
+-	retval = wait_for_completion_state(&done, state);
+-	if (!retval)
+-		goto wait_done;
+-
+ 	if (wait & UMH_KILLABLE) {
++		retval = wait_for_completion_state(&done, state | TASK_KILLABLE);
++		if (!retval)
++			goto wait_done;
++
+ 		/* umh_complete() will see NULL and free sub_info */
+ 		if (xchg(&sub_info->complete, NULL))
+ 			goto unlock;
++
++		/*
++		 * fallthrough; in case of -ERESTARTSYS now do uninterruptible
++		 * wait_for_completion_state(). Since umh_complete() shall call
++		 * complete() in a moment if xchg() above returned NULL, this
++		 * uninterruptible wait_for_completion_state() will not block
++		 * SIGKILL'ed processes for long.
++		 */
+ 	}
++	wait_for_completion_state(&done, state);
+ 
+ wait_done:
+ 	retval = sub_info->retval;
