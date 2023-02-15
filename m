@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F59697FB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C22697FC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjBOPlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S229489AbjBOPmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBOPlO (ORCPT
+        with ESMTP id S229728AbjBOPmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:41:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1E03B0EC;
-        Wed, 15 Feb 2023 07:40:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Feb 2023 10:42:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FE43669B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:41:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676475667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Us0zCop2bZgqcPW/JXsl5O/r2nwlZx53CdefM19JIrA=;
+        b=PTZhOUiBWB/5ykVlxxnLYC+UggT+G+Q6btEZ/m0wgZO/vg9qAlhyD0BGTpXAKg9FF3/Xaj
+        ruWWB4SBFA2eQM5w0WHjqwmvmYiMwRoBnax6KT3xfIDSEFSSziWsNEziheqDrbIGisiuRy
+        bYdl5CgFeyOI1XWsoI69e4GkXZZH9E4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-LVpfoPQGNw6GNKM_irhueg-1; Wed, 15 Feb 2023 10:41:02 -0500
+X-MC-Unique: LVpfoPQGNw6GNKM_irhueg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB4ADB82262;
-        Wed, 15 Feb 2023 15:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B323C4339B;
-        Wed, 15 Feb 2023 15:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676475643;
-        bh=i9MhporBcJTt5xR2XfZDW6Mp8VsbL9YSV+PBt6/KRFQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u819VcjP9CgKrle8Zoejc8gjGbk6Rtsc4n8dvW47Nn3hTEbbRkvoGOyYUn439+uVU
-         B5+vUuA36oIk7V3L9JrBjZjq0n8eaINcDNpFCg+JeSinVmO9n5C17EWs+Pg1AmG22r
-         fraaTeZRF9pktxCtUCvN9X9tU9kvsAG9F7Y/C9qA4hqFj31LPYxIL8vhHvLJALBGXZ
-         46Z0mqbBmjE/ma2mWLMts13UUDtTGaY0+R30He3EqwRUwj/KjKkT/SsvIlXnNps2gL
-         s1P9jMu0weSpOGA4ZwtmcN6obA/hMHxgFte3+Dd6qMrTeFoYy7zqOqffVDurJSVdhl
-         RQRTUrRpOaOnw==
-Received: by mail-lj1-f171.google.com with SMTP id z37so12518148ljq.8;
-        Wed, 15 Feb 2023 07:40:43 -0800 (PST)
-X-Gm-Message-State: AO0yUKXm3oAjcOrDSQbMiw+3a7zsGY2W32ujYze8UVDEges62WmquHFJ
-        Kck+gp8mKigFGofz6xPCQoYJueYY+lR+9+2Xrvo=
-X-Google-Smtp-Source: AK7set+K9ujN/oASal1D74qjSBH58AN1Eqq2yKHtNRiSS8pT2VAt3YGzhssKKcT4fvYa3diWEMMROR24Jo9wsmlkbjg=
-X-Received: by 2002:a05:651c:39b:b0:293:4ff3:49ad with SMTP id
- e27-20020a05651c039b00b002934ff349admr692845ljp.2.1676475641650; Wed, 15 Feb
- 2023 07:40:41 -0800 (PST)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2A5E885620;
+        Wed, 15 Feb 2023 15:41:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BF9418EC1;
+        Wed, 15 Feb 2023 15:40:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com>
+References: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com> <20230214171330.2722188-1-dhowells@redhat.com> <20230214171330.2722188-6-dhowells@redhat.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-unionfs@vger.kernel.org
+Subject: [PATCH v15 05/17] overlayfs: Implement splice-read
 MIME-Version: 1.0
-References: <20230128122904.1345120-1-ardb@kernel.org> <20230215151547.GA3766362@roeck-us.net>
-In-Reply-To: <20230215151547.GA3766362@roeck-us.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 15 Feb 2023 16:40:30 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEnoghSNpQFucmSCEhG3s_nyBCm+btgLHzOTiU56=XPfQ@mail.gmail.com>
-Message-ID: <CAMj1kXEnoghSNpQFucmSCEhG3s_nyBCm+btgLHzOTiU56=XPfQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] MAINTAINERS: Mark Itanium/IA64 as 'dead'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, Tony Luck <tony.luck@intel.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-ia64@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3370084.1676475658.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 15 Feb 2023 15:40:58 +0000
+Message-ID: <3370085.1676475658@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 at 16:15, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Jan 28, 2023 at 01:29:04PM +0100, Ard Biesheuvel wrote:
-> > Create a new status 'dead' which conveys that a subsystem is
-> > unmaintained and scheduled for removal, and developers are free to
-> > behave as if it's already gone. Also, automated build tests should
-> > ignore such subsystems, or at least notify only those who are known to
-> > have an interest in the subsystem in particular.
-> >
-> > Given that Itanium/IA64 has no maintainer, is no longer supported in
-> > QEMU (for boot testing under emulation) and does not seem to have a user
-> > base beyond a couple of machines used by distros to churn out packages,
-> > let's mark it as dead. This shall mean that any treewide changes (such
-> > as changes to the EFI subsystem, which I maintain) can be made even if
-> > they might cause build or boot time regressions on IA64 machines. Also,
-> > mark the port as scheduled for removal after the next LTS release.
-> >
->
-> Since this just came up, I very much prefer complete removal. I don't
-> see the point of keeping dead code in the tree. That is still hidden
-> maintenance effort.
->
+How about the attached then?
 
-Can I take this as an ack on
+David
+---
+overlayfs: Implement splice-read
 
-https://lore.kernel.org/linux-kernel/20230215100008.2565237-1-ardb@kernel.org/
+Implement splice-read for overlayfs by passing the request down a layer
+rather than going through generic_file_splice_read() which is going to be
+changed to assume that ->read_folio() is present on buffered files.
 
-?
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: John Hubbard <jhubbard@nvidia.com>
+cc: David Hildenbrand <david@redhat.com>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Miklos Szeredi <miklos@szeredi.hu>
+cc: linux-unionfs@vger.kernel.org
+cc: linux-block@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+cc: linux-mm@kvack.org
+---
+Notes:
+    ver #15)
+     - Remove redundant FMODE_CAN_ODIRECT check on real file.
+     - Do rw_verify_area() on the real file, not the overlay file.
+     - Fix a file leak.
 
-> If this proliferates, we'll end up having to parse the MAINTAINERS file
-> for code marked "Dead" to ensure that we don't accidentally send e-mails
-> to the wrong people, or we risk getting complaints about sending reports
-> for such code. That puts extra burden on maintainers of automated test
-> beds, which I think is not really appropriate. If the code is dead,
-> remove it, period.
->
-> For my part, I'll drop my test bed support immediately after this patch
-> made it in, following the guidance above.
->
+ fs/overlayfs/file.c |   33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
-Thanks for the insight. I think we should take the immediate removal route.
+diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+index c9d0c362c7ef..72a545da51a2 100644
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -419,6 +419,37 @@ static ssize_t ovl_write_iter(struct kiocb *iocb, str=
+uct iov_iter *iter)
+ 	return ret;
+ }
+ =
+
++static ssize_t ovl_splice_read(struct file *in, loff_t *ppos,
++			       struct pipe_inode_info *pipe, size_t len,
++			       unsigned int flags)
++{
++	const struct cred *old_cred;
++	struct fd real;
++	ssize_t ret;
++
++	ret =3D ovl_real_fdget(in, &real);
++	if (ret)
++		return ret;
++
++	ret =3D -EINVAL;
++	if (!real.file->f_op->splice_read)
++		goto out_fdput;
++
++	ret =3D rw_verify_area(READ, real.file, ppos, len);
++	if (unlikely(ret < 0))
++		goto out_fdput;
++
++	old_cred =3D ovl_override_creds(file_inode(in)->i_sb);
++	ret =3D real.file->f_op->splice_read(real.file, ppos, pipe, len, flags);
++
++	revert_creds(old_cred);
++	ovl_file_accessed(in);
++out_fdput:
++	fdput(real);
++
++	return ret;
++}
++
+ /*
+  * Calling iter_file_splice_write() directly from overlay's f_op may dead=
+lock
+  * due to lock order inversion between pipe->mutex in iter_file_splice_wr=
+ite()
+@@ -695,7 +726,7 @@ const struct file_operations ovl_file_operations =3D {
+ 	.fallocate	=3D ovl_fallocate,
+ 	.fadvise	=3D ovl_fadvise,
+ 	.flush		=3D ovl_flush,
+-	.splice_read    =3D generic_file_splice_read,
++	.splice_read    =3D ovl_splice_read,
+ 	.splice_write   =3D ovl_splice_write,
+ =
+
+ 	.copy_file_range	=3D ovl_copy_file_range,
+
