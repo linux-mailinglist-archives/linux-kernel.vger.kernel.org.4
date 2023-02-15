@@ -2,162 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071CA6972A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D9C6972A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjBOAWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 19:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S230284AbjBOAYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 19:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjBOAW3 (ORCPT
+        with ESMTP id S231996AbjBOAYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:22:29 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86581303FD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676420548; x=1707956548;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PFwmI+OHlr+/yoLzPGZTpiYrpTVDYHBkbfCFQHpDPlI=;
-  b=O3VO0K14yf0QC31NGFUl70PTbKl4ci3Iit3iDnNFycSd7xX7UDd1IMnh
-   F+DwiSBWJPkinW23Vg5miAAtnYgVzsYkdu8N9fLyqlX2THhD9+WXYnOdY
-   3I4jhY8oPg4eC3MhY46Kk5oY4de7qSwJ/PnwUN4bL148pOGqSmW3WwYpE
-   FHfoMffNseS5QYzeETzW8Y4l/Ola3tDtsEtmz5SEhAy9Ew79ctlS/3DLK
-   DO0eZvWmAvku8Re/7iwDNVZ1hCuBGMWKeyrki4jpZZouMkK9ZlWn2HeoK
-   pvZJgMiofh1dqaYVMPnpWY41SnnU0KYk/9huVgfuiQHJTytDyIzc1M2PP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="417530404"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="417530404"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 16:22:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="646963222"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="646963222"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2023 16:22:26 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pS5Z3-0008sa-2K;
-        Wed, 15 Feb 2023 00:22:25 +0000
-Date:   Wed, 15 Feb 2023 08:22:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 5c2f8b5bf155188ea61b28295b59720a9a489238
-Message-ID: <63ec25bb.wbfJH1kjcFqN+qAn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 14 Feb 2023 19:24:49 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7272D14D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:24:45 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id d2-20020a056e02050200b0031567bedb09so1193590ils.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:24:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ro3IO5v8s0ZmI31rZ+/7uZhdNatRdqyjN3Q7MJ9bUDE=;
+        b=vFUsl+xPctC5nWBbFuk5S09NaZmJRgyH5OqjdhofImYMlekVS9hzJsaTntkuKxk39H
+         z+Pgdv72GMLb53ei9GCGzJ/s98WxIRtSwlGO23NzP5Iy7QJ6eC+/nAWQaLhsFNimELvW
+         NWmh7Nd7D7+iOlc4bwG0nFDc9xyaY7JiyM48t/pmRzhZuUM0jrwbiSQplKxkd3UJMzZP
+         iSXj5p3hwku+vhVfWX4e2Mu1jBJAlv6NG15tBitTjmpQc5hK+SfxpdnGf7tAGIZdsQJ7
+         Y1Nhp06267yMcFrnXEwS9KpEBz9+B3ex6XUgupao8/5qr7CxsHuy27WZygTBSMINJeEE
+         rFyA==
+X-Gm-Message-State: AO0yUKVfqydJV0Ax8Yo724sGwaba4VFfVnDZSx9HVELXMrpYzMj3Xckm
+        BfRFgXy84EwiwiEF5w3eEMiYNoMIxHfUL144p+6S2EHGccM4
+X-Google-Smtp-Source: AK7set9GCZdZeaKJmAxT+CSMD13tyiuHxwB3Hc3iPf09iLvoaW1NcFzTRdcnemPgGm6esp4cjSIC+H2OUftu5ThHdq5ub64KHvku
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:bd10:0:b0:314:1b0:1cfd with SMTP id
+ c16-20020a92bd10000000b0031401b01cfdmr183923ile.0.1676420684954; Tue, 14 Feb
+ 2023 16:24:44 -0800 (PST)
+Date:   Tue, 14 Feb 2023 16:24:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006bc5be05f4b21b7b@google.com>
+Subject: [syzbot] riscv/fixes boot error: INFO: rcu detected stall in corrupted
+From:   syzbot <syzbot+42670398d6ddb118138f@syzkaller.appspotmail.com>
+To:     aou@eecs.berkeley.edu, brauner@kernel.org, bristot@redhat.com,
+        bsegall@google.com, dietmar.eggemann@arm.com,
+        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, mgorman@suse.de, mingo@redhat.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, peterz@infradead.org,
+        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 5c2f8b5bf155188ea61b28295b59720a9a489238  Merge branch into tip/master: 'x86/urgent'
+Hello,
 
-elapsed time: 722m
+syzbot found the following issue on:
 
-configs tested: 79
-configs skipped: 3
+HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_clea..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=137aaec0c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b3cd714c8e9a6e01
+dashboard link: https://syzkaller.appspot.com/bug?extid=42670398d6ddb118138f
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+42670398d6ddb118138f@syzkaller.appspotmail.com
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230212
-arc                  randconfig-r043-20230213
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230212
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a011-20230213
-i386                 randconfig-a012-20230213
-i386                 randconfig-a013-20230213
-i386                 randconfig-a014-20230213
-i386                 randconfig-a015-20230213
-i386                 randconfig-a016-20230213
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230213
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230213
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64               randconfig-a011-20230213
-x86_64               randconfig-a012-20230213
-x86_64               randconfig-a013-20230213
-x86_64               randconfig-a014-20230213
-x86_64               randconfig-a015-20230213
-x86_64               randconfig-a016-20230213
-x86_64                               rhel-8.3
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	0-...0: (1 GPs behind) idle=36ec/1/0x4000000000000000 softirq=6589/6590 fqs=9960
+	(detected by 1, t=30504 jiffies, g=14713, q=4 ncpus=2)
+Task dump for CPU 0:
+task:cmp             state:R  running task     stack:0     pid:2746  ppid:2744   flags:0x00000008
+Call Trace:
+[<ffffffff834348b8>] context_switch kernel/sched/core.c:5244 [inline]
+[<ffffffff834348b8>] __schedule+0x624/0x1254 kernel/sched/core.c:6555
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	0-...0: (1 GPs behind) idle=36ec/1/0x4000000000000000 softirq=6589/6590 fqs=28261
+	(detected by 1, t=122009 jiffies, g=14713, q=4 ncpus=2)
+Task dump for CPU 0:
+task:cmp             state:R  running task     stack:0     pid:2746  ppid:2744   flags:0x00000008
+Call Trace:
+[<ffffffff834348b8>] context_switch kernel/sched/core.c:5244 [inline]
+[<ffffffff834348b8>] __schedule+0x624/0x1254 kernel/sched/core.c:6555
 
-clang tested configs:
-arm                  randconfig-r046-20230213
-hexagon              randconfig-r041-20230212
-hexagon              randconfig-r041-20230213
-hexagon              randconfig-r045-20230212
-hexagon              randconfig-r045-20230213
-i386                 randconfig-a001-20230213
-i386                 randconfig-a002-20230213
-i386                 randconfig-a003-20230213
-i386                 randconfig-a004-20230213
-i386                 randconfig-a005-20230213
-i386                 randconfig-a006-20230213
-riscv                randconfig-r042-20230212
-s390                 randconfig-r044-20230212
-x86_64               randconfig-a001-20230213
-x86_64               randconfig-a002-20230213
-x86_64               randconfig-a003-20230213
-x86_64               randconfig-a004-20230213
-x86_64               randconfig-a005-20230213
-x86_64               randconfig-a006-20230213
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
