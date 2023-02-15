@@ -2,209 +2,411 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8C2697592
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C71869759C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBOExG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 23:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S233057AbjBOE45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 23:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBOExB (ORCPT
+        with ESMTP id S229461AbjBOE4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 23:53:01 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2DDA2ED57
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 20:52:57 -0800 (PST)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8DxF9kmZexj9M0AAA--.1996S3;
-        Wed, 15 Feb 2023 12:52:54 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axfb4kZexj1pozAA--.35077S3;
-        Wed, 15 Feb 2023 12:52:54 +0800 (CST)
-Subject: Re: "kernel ade access" oops on LoongArch
-To:     Xi Ruoyao <xry111@xry111.site>
-References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
-Cc:     loongarch@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
-Date:   Wed, 15 Feb 2023 12:52:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 14 Feb 2023 23:56:55 -0500
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3119305D5;
+        Tue, 14 Feb 2023 20:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1676437014; x=1707973014;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=N67n0EQAQm+DUJNJ4Imhx9KFbs2DRD8zoaytDC7vlD4=;
+  b=FXtdzCi+OIV89c8/XKVYpOIvYAet4jsVxky1FkwiiBzWi6yNgDwo/tCW
+   yWH1KcEGqw407ya4tK/3U95chsh8Yt1Jdvn7WrBAbT3i9JVd6ocOAjmSS
+   YdSmqpwjvKeRkMtjv3gWmota0E3H53PixIH2Vpo2Y/nn9g6nyTt3fz8/B
+   w=;
+X-IronPort-AV: E=Sophos;i="5.97,298,1669075200"; 
+   d="scan'208";a="292950557"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 04:56:49 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id C7604810D0;
+        Wed, 15 Feb 2023 04:56:46 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Wed, 15 Feb 2023 04:56:46 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.119.90.83) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.24; Wed, 15 Feb 2023 04:56:41 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <kerneljasonxing@gmail.com>
+CC:     <bjorn@kernel.org>, <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <jaka@linux.ibm.com>,
+        <jonathan.lemon@gmail.com>, <kernelxing@tencent.com>,
+        <kgraul@linux.ibm.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-sctp@vger.kernel.org>, <lucien.xin@gmail.com>,
+        <maciej.fijalkowski@intel.com>, <magnus.karlsson@intel.com>,
+        <marcelo.leitner@gmail.com>, <matthieu.baerts@tessares.net>,
+        <mptcp@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <nhorman@tuxdriver.com>, <pabeni@redhat.com>,
+        <wenjia@linux.ibm.com>, <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH v2 net-next] net: no longer support SOCK_REFCNT_DEBUG feature
+Date:   Tue, 14 Feb 2023 20:56:30 -0800
+Message-ID: <20230215045630.85835-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230214041410.6295-1-kerneljasonxing@gmail.com>
+References: <20230214041410.6295-1-kerneljasonxing@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axfb4kZexj1pozAA--.35077S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3GFy8XF15Wry3uFy7JF1fWFg_yoW3Ww45pF
-        yUXr4rGr48Jr1Yyr4UA3WUAr4UtanrZF47Jr15Jw1xCryxZr1DJr17JFW7ury3Jw15J3W7
-        JryUKr1rKF4DG3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bOxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2
-        zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_WwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWl
-        kUUUUU=
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,LOTS_OF_MONEY,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.119.90.83]
+X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Tue, 14 Feb 2023 12:14:10 +0800
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> Commit e48c414ee61f ("[INET]: Generalise the TCP sock ID lookup routines")
+> commented out the definition of SOCK_REFCNT_DEBUG in 2005 and later another
+> commit 463c84b97f24 ("[NET]: Introduce inet_connection_sock") removed it.
+> Since we could track all of them through bpf and kprobe related tools
+> and the feature could print loads of information which might not be
+> that helpful even under a little bit pressure, the whole feature which
+> has been inactive for many years is no longer supported.
+> 
+> Link: https://lore.kernel.org/lkml/20230211065153.54116-1-kerneljasonxing@gmail.com/
+> Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
 
-On 02/14/2023 04:46 PM, Xi Ruoyao wrote:
-> This is a "help wanted" message :(.
->
-> I've recently run into some strange kernel oops testing Glibc for LoongArch.  A log looks like:
->
-> [11569.195043] Kernel ade access[#1]:
-> [11569.198441] CPU: 1 PID: 1132296 Comm: ld-linux-loonga Not tainted 6.2.0-rc8+ #61
-> [11569.205792] Hardware name: Loongson Loongson-3A5000-HV-7A2000-1w-V0.1-EVB/Loongson-LS3A5000-7A2000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V4.0.05383-beta10 1
-> [11569.219536] $ 0   : 0000000000000000 90000000005e3448 90000001113a0000 90000001113a3ab0
-> [11569.227505] $ 4   : 90000001113a3af8 1000000000cf16d0 5555555555555850 000000000000000c
-> [11569.235475] $ 8   : 90000000009caa10 0000000000000000 00000000000002ca 000000000000008b
-> [11569.243438] $12   : 0000000000000001 9000000000cf1258 ffffffffffffffff 00007ffffb93c000
-> [11569.251402] $16   : 0000000000000000 0000000000000140 0000000000000000 0000000000000020
-> [11569.259366] $20   : 90000001113a3ec8 9000000000a97ee0 00007ffffb93bfa0 1555555555555613
-> [11569.267334] $24   : 1000000000cf16d0 000000000000000c 9000000000cf1258 90000000009caa10
-> [11569.275303] $28   : 90000001113a3af8 0aaaaaaaaaaaab0a 00007ffffb93bde0 90000001113a3ec0
-> [11569.283268] era   : 90000000009caa10 cmp_ex_search+0x0/0x28
-> [11569.288814] ra    : 90000000005e3448 bsearch+0x58/0xa8
-> [11569.293921] CSR crmd: 000000b0	
-> [11569.293923] CSR prmd: 00000004	
-> [11569.297037] CSR euen: 00000000	
-> [11569.300152] CSR ecfg: 00071c1c	
-> [11569.303266] CSR estat: 00480000	
-> [11569.309587] ExcCode : 8 (SubCode 1)
-> [11569.313049] BadVA : 1000000000cf16d0
-> [11569.316596] PrId  : 0014c011 (Loongson-64bit)
-> [11569.320923] Modules linked in: amdgpu nls_cp936 vfat fat input_leds drm_ttm_helper ttm video gpu_sched drm_buddy snd_hda_codec_generic drm_display_helper ledtrig_audio drm_kms_helper led_class snd_hda_intel sha256_generic snd_intel_dspcfg cfbfillrect libsha256 snd_hda_codec syscopyarea snd_hda_core hid_generic cfbimgblt cfg80211 snd_pcm sysfillrect usbhid sysimgblt snd_timer cfbcopyarea hid snd igb soundcore efivarfs
-> [11569.357709] Process ld-linux-loonga (pid: 1132296, threadinfo=000000003cbd0caa, task=000000005bcd27a6)
-> [11569.366977] Stack : 00007ffffb93bd60 0000000000000000 9000000180a36a40 0000000000000001
-> [11569.374940]         90000001113a3bb0 00007ffffb93c000 9000000000224c94 90000000009cab2c
-> [11569.382899]         0000000000000001 9000000000224c94 00007ffff3258000 900000000025a1b4
-> [11569.390866]         90000001113a3bb0 900000000022f4cc 00007ffffb93c000 900000000022f74c
-> [11569.398834]         9000000180a36a40 0000000000000001 0000000000000000 00007ffffb93c000
-> [11569.406800]         90000001113a3bb0 900000000022f8f8 90000001113a3ec0 00007ffffb93bde0
-> [11569.414768]         00007ffffb93bd60 0000000000000000 0000000000000000 00007fffff7c4600
-> [11569.422734]         9000000182ebab70 9000000000d08000 0000000046505501 900000000022ee6c
-> [11569.430698]         0000000000000000 9000000000224b84 90000001113a0000 90000001113a3cf0
-> [11569.438661]         0000000000000000 00007ffffb93c0d0 0000000000000000 0000000000000040
-> [11569.446627]         ...
-> [11569.449058] Call Trace:
-> [11569.449062] [<90000000009caa10>] cmp_ex_search+0x0/0x28
-> [11569.456681] [<90000000005e3448>] bsearch+0x58/0xa8
-> [11569.461443] [<90000000009cab2c>] search_extable+0x28/0x34
-> [11569.466807] [<900000000025a1b4>] search_exception_tables+0x48/0x7c
-> [11569.472953] [<900000000022f4cc>] fixup_exception+0x18/0xcc
-> [11569.478410] [<900000000022f74c>] do_sigsegv+0x174/0x1b0
-> [11569.483605] [<900000000022f8f8>] do_page_fault+0x170/0x344
-> [11569.489058] [<900000000022ee6c>] tlb_do_page_fault_1+0x128/0x1c4
-> [11569.495029] [<9000000000224b84>] handle_signal+0x634/0x884
-> [11569.500487] [<9000000000225704>] arch_do_signal_or_restart+0xb4/0xe0
-> [11569.506808] [<90000000002b5b30>] exit_to_user_mode_prepare+0xbc/0x100
-> [11569.513214] [<9000000000a02628>] syscall_exit_to_user_mode+0x30/0x4c
-> [11569.519533] [<90000000002214a4>] handle_syscall+0xc4/0x160
->
-> [11569.526472] Code: 4c000020  02800404  4c000020 <240000ac> 26000084  0010b0a5  680014a4  00129484  00111004
->
-> [11569.537704] ---[ end trace 0000000000000000 ]---
->
-> "BadVA : 1000000000cf16d0" may suggest the highest bit of an address is
-> somehow cleared.
->
-> The issue is not deterministic, but it seems easily reproduced by:
->
-> 1. Compile Glibc:
->
-> ../glibc/configure --prefix=/usr                      \
->              --disable-werror                         \
->              --enable-kernel=5.19                     \
->              --enable-stack-protector=strong          \
->              --with-headers=/usr/include              \
->              libc_cv_slibdir=/usr/lib
-> make -j4
->
-> 2. Check Glibc:
->
-> make check -j4
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-When I try to build glibc, it fails like below :( .
+Thanks!
 
-git clone https://sourceware.org/git/glibc.git
-mkdir build_glibc
-cd build_glibc
-../glibc/configure --prefix=/usr --disable-werror --enable-kernel=5.19 
---enable-stack-protector=strong --with-headers=/usr/include 
-libc_cv_slibdir=/usr/lib
-make -j4
 
-log:
-/home/loongson/build_glibc/csu/crtn.o
-In file included from ../include/stdlib.h:15,
-                  from /home/loongson/build_glibc/cstdlib:79,
-                  from /usr/include/c++/13.0.0/ext/string_conversions.h:41,
-                  from /usr/include/c++/13.0.0/bits/basic_string.h:4040,
-                  from /usr/include/c++/13.0.0/string:52,
-                  from /usr/include/c++/13.0.0/bits/locale_classes.h:40,
-                  from /usr/include/c++/13.0.0/bits/ios_base.h:41,
-                  from /usr/include/c++/13.0.0/ios:42:
-../stdlib/stdlib.h:141:8: error: ‘_Float32’ does not name a type
-   141 | extern _Float32 strtof32 (const char *__restrict __nptr,
-       |        ^~~~~~~~
-../stdlib/stdlib.h:147:8: error: ‘_Float64’ does not name a type
-   147 | extern _Float64 strtof64 (const char *__restrict __nptr,
-       |        ^~~~~~~~
-...
-/usr/bin/ld: /home/loongson/build_glibc/libc.a(dl-reloc-static-pie.o): 
-in function `_dl_relocate_static_pie':
-/home/loongson/glibc/elf/dl-reloc-static-pie.c:44: undefined reference 
-to `_DYNAMIC'
-/usr/bin/ld: /home/loongson/glibc/elf/dl-reloc-static-pie.c:44: 
-undefined reference to `_DYNAMIC'
-/usr/bin/ld: /home/loongson/build_glibc/support/test-run-command: hidden 
-symbol `_DYNAMIC' isn't defined
-/usr/bin/ld: final link failed: bad value
-
-Youling.
->
-> 3. If the oops did not happen during the last step, run a specific test
-> in a dead loop:
->
-> while true; do make test t=malloc/tst-mallocfork3-malloc-check; done
->
-> Then an oops would likely show up in several minutes.
->
-> Though the oops is nondeterministic, I'm almost sure it's not a hardware
-> stability issue because I'm getting exactly same stack traces for each
-> oops message.  I cannot easily rule out the possibility about "the
-> compiler miscompiles kernel code" though.
->
-> I'm running 6.2-rc8 with the following patches from loongarch-next:
->
-> ACPI: Define ACPI_MACHINE_WIDTH to 64 for LoongArch
-> PCI: loongson: Improve the MRRS quirk for LS7A
-> PCI: Add quirk for LS7A to avoid reboot failure
-> irqchip/loongson-liointc: Save/restore int_edge/int_pol registers during S3/S4
-> LoongArch: Add vector extensions support
-> tools: Add LoongArch build infrastructure
-> libbpf: Add LoongArch support to bpf_tracing.h
-> selftests/seccomp: Add LoongArch selftesting support
-> SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-> LoongArch: Add CPU HWMon platform driver
->
-> Any idea to fix the issue or suggestion to debug it further?
->
-
+> ---
+> v2:
+> 1) change the title and body message.
+> 2) remove the whole feature instead suggested by Kuniyuki Iwashima.
+> ---
+>  include/net/sock.h              | 28 ----------------------------
+>  net/core/sock.c                 | 13 -------------
+>  net/ipv4/af_inet.c              |  3 ---
+>  net/ipv4/inet_connection_sock.c |  2 --
+>  net/ipv4/inet_timewait_sock.c   |  3 ---
+>  net/ipv6/af_inet6.c             | 10 ----------
+>  net/ipv6/ipv6_sockglue.c        | 12 ------------
+>  net/mptcp/protocol.c            |  1 -
+>  net/packet/af_packet.c          |  4 ----
+>  net/sctp/ipv6.c                 |  2 --
+>  net/sctp/protocol.c             |  2 --
+>  net/smc/af_smc.c                |  3 ---
+>  net/xdp/xsk.c                   |  4 ----
+>  13 files changed, 87 deletions(-)
+> 
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index dcd72e6285b2..e6369068a7bb 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1349,9 +1349,6 @@ struct proto {
+>  	char			name[32];
+>  
+>  	struct list_head	node;
+> -#ifdef SOCK_REFCNT_DEBUG
+> -	atomic_t		socks;
+> -#endif
+>  	int			(*diag_destroy)(struct sock *sk, int err);
+>  } __randomize_layout;
+>  
+> @@ -1359,31 +1356,6 @@ int proto_register(struct proto *prot, int alloc_slab);
+>  void proto_unregister(struct proto *prot);
+>  int sock_load_diag_module(int family, int protocol);
+>  
+> -#ifdef SOCK_REFCNT_DEBUG
+> -static inline void sk_refcnt_debug_inc(struct sock *sk)
+> -{
+> -	atomic_inc(&sk->sk_prot->socks);
+> -}
+> -
+> -static inline void sk_refcnt_debug_dec(struct sock *sk)
+> -{
+> -	atomic_dec(&sk->sk_prot->socks);
+> -	printk(KERN_DEBUG "%s socket %p released, %d are still alive\n",
+> -	       sk->sk_prot->name, sk, atomic_read(&sk->sk_prot->socks));
+> -}
+> -
+> -static inline void sk_refcnt_debug_release(const struct sock *sk)
+> -{
+> -	if (refcount_read(&sk->sk_refcnt) != 1)
+> -		printk(KERN_DEBUG "Destruction of the %s socket %p delayed, refcnt=%d\n",
+> -		       sk->sk_prot->name, sk, refcount_read(&sk->sk_refcnt));
+> -}
+> -#else /* SOCK_REFCNT_DEBUG */
+> -#define sk_refcnt_debug_inc(sk) do { } while (0)
+> -#define sk_refcnt_debug_dec(sk) do { } while (0)
+> -#define sk_refcnt_debug_release(sk) do { } while (0)
+> -#endif /* SOCK_REFCNT_DEBUG */
+> -
+>  INDIRECT_CALLABLE_DECLARE(bool tcp_stream_memory_free(const struct sock *sk, int wake));
+>  
+>  static inline int sk_forward_alloc_get(const struct sock *sk)
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index f954d5893e79..be7b29d97637 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -2338,17 +2338,6 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
+>  	smp_wmb();
+>  	refcount_set(&newsk->sk_refcnt, 2);
+>  
+> -	/* Increment the counter in the same struct proto as the master
+> -	 * sock (sk_refcnt_debug_inc uses newsk->sk_prot->socks, that
+> -	 * is the same as sk->sk_prot->socks, as this field was copied
+> -	 * with memcpy).
+> -	 *
+> -	 * This _changes_ the previous behaviour, where
+> -	 * tcp_create_openreq_child always was incrementing the
+> -	 * equivalent to tcp_prot->socks (inet_sock_nr), so this have
+> -	 * to be taken into account in all callers. -acme
+> -	 */
+> -	sk_refcnt_debug_inc(newsk);
+>  	sk_set_socket(newsk, NULL);
+>  	sk_tx_queue_clear(newsk);
+>  	RCU_INIT_POINTER(newsk->sk_wq, NULL);
+> @@ -3696,8 +3685,6 @@ void sk_common_release(struct sock *sk)
+>  
+>  	xfrm_sk_free_policy(sk);
+>  
+> -	sk_refcnt_debug_release(sk);
+> -
+>  	sock_put(sk);
+>  }
+>  EXPORT_SYMBOL(sk_common_release);
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index 6c0ec2789943..f46a3924c440 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -156,7 +156,6 @@ void inet_sock_destruct(struct sock *sk)
+>  	kfree(rcu_dereference_protected(inet->inet_opt, 1));
+>  	dst_release(rcu_dereference_protected(sk->sk_dst_cache, 1));
+>  	dst_release(rcu_dereference_protected(sk->sk_rx_dst, 1));
+> -	sk_refcnt_debug_dec(sk);
+>  }
+>  EXPORT_SYMBOL(inet_sock_destruct);
+>  
+> @@ -356,8 +355,6 @@ static int inet_create(struct net *net, struct socket *sock, int protocol,
+>  	inet->mc_list	= NULL;
+>  	inet->rcv_tos	= 0;
+>  
+> -	sk_refcnt_debug_inc(sk);
+> -
+>  	if (inet->inet_num) {
+>  		/* It assumes that any protocol which allows
+>  		 * the user to assign a number at socket
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
+> index d1f837579398..64be59d93b04 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
+> @@ -1178,8 +1178,6 @@ void inet_csk_destroy_sock(struct sock *sk)
+>  
+>  	xfrm_sk_free_policy(sk);
+>  
+> -	sk_refcnt_debug_release(sk);
+> -
+>  	this_cpu_dec(*sk->sk_prot->orphan_count);
+>  
+>  	sock_put(sk);
+> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+> index beed32fff484..40052414c7c7 100644
+> --- a/net/ipv4/inet_timewait_sock.c
+> +++ b/net/ipv4/inet_timewait_sock.c
+> @@ -77,9 +77,6 @@ void inet_twsk_free(struct inet_timewait_sock *tw)
+>  {
+>  	struct module *owner = tw->tw_prot->owner;
+>  	twsk_destructor((struct sock *)tw);
+> -#ifdef SOCK_REFCNT_DEBUG
+> -	pr_debug("%s timewait_sock %p released\n", tw->tw_prot->name, tw);
+> -#endif
+>  	kmem_cache_free(tw->tw_prot->twsk_prot->twsk_slab, tw);
+>  	module_put(owner);
+>  }
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index fee9163382c2..c93f2e865fea 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -238,16 +238,6 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
+>  		inet->pmtudisc = IP_PMTUDISC_DONT;
+>  	else
+>  		inet->pmtudisc = IP_PMTUDISC_WANT;
+> -	/*
+> -	 * Increment only the relevant sk_prot->socks debug field, this changes
+> -	 * the previous behaviour of incrementing both the equivalent to
+> -	 * answer->prot->socks (inet6_sock_nr) and inet_sock_nr.
+> -	 *
+> -	 * This allows better debug granularity as we'll know exactly how many
+> -	 * UDPv6, TCPv6, etc socks were allocated, not the sum of all IPv6
+> -	 * transport protocol socks. -acme
+> -	 */
+> -	sk_refcnt_debug_inc(sk);
+>  
+>  	if (inet->inet_num) {
+>  		/* It assumes that any protocol which allows
+> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+> index 9ce51680290b..2917dd8d198c 100644
+> --- a/net/ipv6/ipv6_sockglue.c
+> +++ b/net/ipv6/ipv6_sockglue.c
+> @@ -464,13 +464,6 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
+>  			__ipv6_sock_mc_close(sk);
+>  			__ipv6_sock_ac_close(sk);
+>  
+> -			/*
+> -			 * Sock is moving from IPv6 to IPv4 (sk_prot), so
+> -			 * remove it from the refcnt debug socks count in the
+> -			 * original family...
+> -			 */
+> -			sk_refcnt_debug_dec(sk);
+> -
+>  			if (sk->sk_protocol == IPPROTO_TCP) {
+>  				struct inet_connection_sock *icsk = inet_csk(sk);
+>  
+> @@ -507,11 +500,6 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
+>  
+>  			inet6_cleanup_sock(sk);
+>  
+> -			/*
+> -			 * ... and add it to the refcnt debug socks count
+> -			 * in the new family. -acme
+> -			 */
+> -			sk_refcnt_debug_inc(sk);
+>  			module_put(THIS_MODULE);
+>  			retv = 0;
+>  			break;
+> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+> index 8cd6cc67c2c5..e913752df112 100644
+> --- a/net/mptcp/protocol.c
+> +++ b/net/mptcp/protocol.c
+> @@ -2876,7 +2876,6 @@ static void __mptcp_destroy_sock(struct sock *sk)
+>  	sk_stream_kill_queues(sk);
+>  	xfrm_sk_free_policy(sk);
+>  
+> -	sk_refcnt_debug_release(sk);
+>  	sock_put(sk);
+>  }
+>  
+> diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+> index b5ab98ca2511..a4c8f86ac12a 100644
+> --- a/net/packet/af_packet.c
+> +++ b/net/packet/af_packet.c
+> @@ -1335,8 +1335,6 @@ static void packet_sock_destruct(struct sock *sk)
+>  		pr_err("Attempt to release alive packet socket: %p\n", sk);
+>  		return;
+>  	}
+> -
+> -	sk_refcnt_debug_dec(sk);
+>  }
+>  
+>  static bool fanout_flow_is_huge(struct packet_sock *po, struct sk_buff *skb)
+> @@ -3172,7 +3170,6 @@ static int packet_release(struct socket *sock)
+>  
+>  	skb_queue_purge(&sk->sk_receive_queue);
+>  	packet_free_pending(po);
+> -	sk_refcnt_debug_release(sk);
+>  
+>  	sock_put(sk);
+>  	return 0;
+> @@ -3362,7 +3359,6 @@ static int packet_create(struct net *net, struct socket *sock, int protocol,
+>  	packet_cached_dev_reset(po);
+>  
+>  	sk->sk_destruct = packet_sock_destruct;
+> -	sk_refcnt_debug_inc(sk);
+>  
+>  	/*
+>  	 *	Attach a protocol block
+> diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
+> index 097bd60ce964..62b436a2c8fe 100644
+> --- a/net/sctp/ipv6.c
+> +++ b/net/sctp/ipv6.c
+> @@ -807,8 +807,6 @@ static struct sock *sctp_v6_create_accept_sk(struct sock *sk,
+>  
+>  	newsk->sk_v6_rcv_saddr = sk->sk_v6_rcv_saddr;
+>  
+> -	sk_refcnt_debug_inc(newsk);
+> -
+>  	if (newsk->sk_prot->init(newsk)) {
+>  		sk_common_release(newsk);
+>  		newsk = NULL;
+> diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+> index 909a89a1cff4..c365df24ad33 100644
+> --- a/net/sctp/protocol.c
+> +++ b/net/sctp/protocol.c
+> @@ -601,8 +601,6 @@ static struct sock *sctp_v4_create_accept_sk(struct sock *sk,
+>  
+>  	newinet->inet_daddr = asoc->peer.primary_addr.v4.sin_addr.s_addr;
+>  
+> -	sk_refcnt_debug_inc(newsk);
+> -
+>  	if (newsk->sk_prot->init(newsk)) {
+>  		sk_common_release(newsk);
+>  		newsk = NULL;
+> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+> index e12d4fa5aece..c594312e22cd 100644
+> --- a/net/smc/af_smc.c
+> +++ b/net/smc/af_smc.c
+> @@ -359,8 +359,6 @@ static void smc_destruct(struct sock *sk)
+>  		return;
+>  	if (!sock_flag(sk, SOCK_DEAD))
+>  		return;
+> -
+> -	sk_refcnt_debug_dec(sk);
+>  }
+>  
+>  static struct sock *smc_sock_alloc(struct net *net, struct socket *sock,
+> @@ -389,7 +387,6 @@ static struct sock *smc_sock_alloc(struct net *net, struct socket *sock,
+>  	spin_lock_init(&smc->accept_q_lock);
+>  	spin_lock_init(&smc->conn.send_lock);
+>  	sk->sk_prot->hash(sk);
+> -	sk_refcnt_debug_inc(sk);
+>  	mutex_init(&smc->clcsock_release_lock);
+>  	smc_init_saved_callbacks(smc);
+>  
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 9f0561b67c12..a245c1b4a21b 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -845,7 +845,6 @@ static int xsk_release(struct socket *sock)
+>  	sock_orphan(sk);
+>  	sock->sk = NULL;
+>  
+> -	sk_refcnt_debug_release(sk);
+>  	sock_put(sk);
+>  
+>  	return 0;
+> @@ -1396,8 +1395,6 @@ static void xsk_destruct(struct sock *sk)
+>  
+>  	if (!xp_put_pool(xs->pool))
+>  		xdp_put_umem(xs->umem, !xs->pool);
+> -
+> -	sk_refcnt_debug_dec(sk);
+>  }
+>  
+>  static int xsk_create(struct net *net, struct socket *sock, int protocol,
+> @@ -1427,7 +1424,6 @@ static int xsk_create(struct net *net, struct socket *sock, int protocol,
+>  	sk->sk_family = PF_XDP;
+>  
+>  	sk->sk_destruct = xsk_destruct;
+> -	sk_refcnt_debug_inc(sk);
+>  
+>  	sock_set_flag(sk, SOCK_RCU_FREE);
+>  
+> -- 
+> 2.37.3
