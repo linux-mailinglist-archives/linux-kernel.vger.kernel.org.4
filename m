@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123906978D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E4A6978E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbjBOJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
+        id S233697AbjBOJZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbjBOJSS (ORCPT
+        with ESMTP id S229847AbjBOJZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:18:18 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EEB36681;
-        Wed, 15 Feb 2023 01:18:16 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PGstt5G6Qz8R04C;
-        Wed, 15 Feb 2023 17:18:14 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 31F9I1Vd089562;
-        Wed, 15 Feb 2023 17:18:01 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 15 Feb 2023 17:18:03 +0800 (CST)
-Date:   Wed, 15 Feb 2023 17:18:03 +0800 (CST)
-X-Zmail-TransId: 2af963eca34bffffffffa6fb6077
-X-Mailer: Zmail v1.0
-Message-ID: <202302151718036138529@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <thierry.reding@gmail.com>
-Cc:     <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBzb2MvdGVncmE6IGZsb3djdHJsOiBVc2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31F9I1Vd089562
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63ECA356.001 by FangMail milter!
-X-FangMail-Envelope: 1676452694/4PGstt5G6Qz8R04C/63ECA356.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63ECA356.001/4PGstt5G6Qz8R04C
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        Wed, 15 Feb 2023 04:25:26 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4338537703
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:24:49 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id o1so6836814ioo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:24:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U58GCmaC1la8M68RT2H2QUDegMYE9gldonYav+YFNps=;
+        b=hIBciBgLYrCDYkPB9WdMlWrowGQkvEoZCrK6UqtB4maXJqa/aF1tjiGMPGV3/xfM7M
+         nt6DjDVmT6o21gaSF2mggZNW6upMQCMVHkVoy2SeWTFDtF1XkDFl3o7zGfi/fY3n3/Qu
+         TkJrE4Vp+ltwTJw84u4O0ETXkeUyqOtwV8LQ8xHR3eMomd3va8elvMPiimt9tMk1tbsI
+         v4JBDcaDHe2FQ7Vh0JVj1ZFZtF7ZqOCbIIHRHE3kSl2SR1WdhwcS/FIF46833AHyllG3
+         m/kYLxF58TCPaWg25y7wRr/23Ay4C29vnX70rLJtL/jG3bMwmfi3YciiKU1+bqo1qP57
+         e+Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U58GCmaC1la8M68RT2H2QUDegMYE9gldonYav+YFNps=;
+        b=dqxA+J5LMbXZC77UDAprjcHvOb0mNL2UD4XGYAsMG6gt+EGjh8um8OBG12c7fyd+uH
+         iA/XN0gvyV679KMrFvovErtcEypfhXicdsbFlOFqPxsMjwCPyhM6wT2QU95mort9FsOZ
+         h8Xp5IPGKeS44u8d31m8bO67nH0Vplds9TNrekNPPC859RuJXVkMjWvZcJZatMU6LiDK
+         NKp2YKZKkVx++29vOAGSOOCcIgSJCNZEWmmMkPydu0MFIQZS6crGXG3UcMPUEkkUbzMx
+         Is0pqf6f6bNsSU9Llzlkvj7go78G8VByTDN2RRfWIdliEatgG5z0VOdfduP0K/gMH/7k
+         rZzw==
+X-Gm-Message-State: AO0yUKXgUpT5BcCnmo+6glN9BIzwLGbKlOwutzXW8tRXX1mnqhHq0TDR
+        a/0jSvNLtiHfDfPfpGs7RgtSjZNwZN7raw==
+X-Google-Smtp-Source: AK7set8dcZjBk3wOyeykdWw1sVtoX9HMZk25EmgDP9DG7NSN6ZyUdmfI84pRKT7OK/egJe/ludo48A==
+X-Received: by 2002:a5d:9f17:0:b0:735:5bdc:7a73 with SMTP id q23-20020a5d9f17000000b007355bdc7a73mr1167324iot.7.1676453080896;
+        Wed, 15 Feb 2023 01:24:40 -0800 (PST)
+Received: from localhost.localdomain ([154.16.192.42])
+        by smtp.gmail.com with ESMTPSA id v26-20020a02cbba000000b0038a06a14b37sm5702423jap.103.2023.02.15.01.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 01:24:07 -0800 (PST)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     unixbhaskar@gmail.com, linux-kernel@vger.kernel.org
+Cc:     jolsa@kernel.org
+Subject: [PATCH] tools:build: Fix few spells
+Date:   Wed, 15 Feb 2023 14:50:13 +0530
+Message-Id: <20230215092013.21833-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,32 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+s/borow/borrow/
+s/dependecies/dependencies/
+s/commandline/command iine/ ------> this one does't matter but for sanity.
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+cc: jolsa@kernel.org
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 ---
- drivers/soc/tegra/flowctrl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ tools/build/fixdep.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/tegra/flowctrl.c b/drivers/soc/tegra/flowctrl.c
-index 5db919d96aba..221202db3313 100644
---- a/drivers/soc/tegra/flowctrl.c
-+++ b/drivers/soc/tegra/flowctrl.c
-@@ -156,10 +156,8 @@ void flowctrl_cpu_suspend_exit(unsigned int cpuid)
- static int tegra_flowctrl_probe(struct platform_device *pdev)
+diff --git a/tools/build/fixdep.c b/tools/build/fixdep.c
+index 2501fea7aa3e..266cf9a1a871 100644
+--- a/tools/build/fixdep.c
++++ b/tools/build/fixdep.c
+@@ -7,8 +7,8 @@
+  *   Copyright    2002 by Kai Germaschewski  <kai.germaschewski@gmx.de>
+  *
+  * This code has been borrowed from kbuild's fixdep (scripts/basic/fixdep.c),
+- * Please check it for detailed explanation. This fixdep borow only the
+- * base transformation of dependecies without the CONFIG mangle.
++ * Please check it for detailed explanation. This fixdep borrow only the
++ * base transformation of dependencies without the CONFIG mangle.
+  */
+
+ #include <sys/types.h>
+@@ -32,7 +32,7 @@ static void usage(void)
+ }
+
+ /*
+- * Print out the commandline prefixed with cmd_<target filename> :=
++ * Print out the command line prefixed with cmd_<target filename> :=
+  */
+ static void print_cmdline(void)
  {
- 	void __iomem *base = tegra_flowctrl_base;
--	struct resource *res;
+--
+2.39.1
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	tegra_flowctrl_base = devm_ioremap_resource(&pdev->dev, res);
-+	tegra_flowctrl_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(tegra_flowctrl_base))
- 		return PTR_ERR(tegra_flowctrl_base);
-
--- 
-2.25.1
