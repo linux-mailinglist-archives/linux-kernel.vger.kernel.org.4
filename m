@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AEE698371
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B942569836C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjBOSgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 13:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S230315AbjBOSgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 13:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjBOSee (ORCPT
+        with ESMTP id S230299AbjBOSee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Feb 2023 13:34:34 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1663D919
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:34:10 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id y1so20129668wru.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:34:10 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15A23D92F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:34:11 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id g6-20020a05600c310600b003e1f6dff952so2302267wmo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:34:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OGskyb7pJ6ELCDekkQO9Fpll4hie2FaxctextYDdWfk=;
-        b=CvkYkGojRTF1eT48EAhOGxpKFAfJuXXxWbY2N2vR/d8PSdGwxRi0RhW/cnfkVMsAZb
-         UgHEANYfWje/SIme3N1mvQJEZSkYoSwbgquxz1tXaWeUi4PNJrl9un3ZY5OMUqjUY586
-         +msL/Q7rs8Wuc9bFSUsEEH7usaRTGp6bWjN/mRrqceDp5Lhr/kjq6tl1jvImVNoNV5On
-         jJOLzL+XV2hTym2JzS0CDZwnAi2GDxFeZlJheO4GsR02YAiEkdHATqcmYeJUBrTiEXgX
-         CXSkyvtQjYwMTZybAeuCRcwnfVb3cDKh5mVveIt6xB2uxt3QdXYVJMAIAesQ7jF4/Lz3
-         rcCg==
+        bh=x17E+eium4VyrfGc7M1myMUnIQM/HJYLttYEMQIU4XY=;
+        b=drIBnfo8BmIYETYhR0pcax10wLOPxJ+wXDgHFy8Qm0ZQytfDYvylUeXrkqM2KMI29H
+         uSrVZcpyJWe9h41LHuh5zJO3szcXDLqa/rLvcrVKcHFLzdgL8C1UYcAw6xapvCpBbwbX
+         nFlzHxjxm+6+d7jlPTYKVtucoeINgm60UXJmKLxv6dnRpewaK+6d5oMTjtJnYx6jv+V1
+         Wm4CoUzAuzBLV0e0QIQ+R9sKPXpK5N9QahMBZaDdNXFfqXqwmPmM1cMBjCNvA4OSjSUz
+         JEWMMTnPzwgUrBPkNvqpCoecl2XxUBYSbfrzuIJ3+Oy9+2D3yj9wYRT09QlblsuGVvf6
+         QVyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OGskyb7pJ6ELCDekkQO9Fpll4hie2FaxctextYDdWfk=;
-        b=iWB6J2Px0dNVvI5CA6gUg7ZZyIA6A6UFKevOqkWgkIDVW0ne1RoxCGalm9beLnKOpr
-         7SwFjRe86JaZZj/I0uNPBNvzqSg7uUph+tO9pvs5XGepfe8LIkQajLjZh9e3EMtAxXV6
-         qcF2EOZT0A4xm1rCcHwSC0iENoliroebdRZFDlf/vT8DfBM3NTAcLT3uHNOSpPkAIeIz
-         4mnuC3Q8bnRnbweFyLlU4W4reO1XLH5S52gg01aCqf5/nyvw84ejWtBJ4FQHAP+M26QH
-         LhGwjwPV1I2WLzFcRVl+0ancZKqaQ7pe1qxKSShXNT76tH76v5hQw9lX0S65wsANdFZT
-         cYCA==
-X-Gm-Message-State: AO0yUKVQJRqhhGXJulg384r8HcUoEWGdRTD1vvp0NkddovZtdFWRlAFY
-        TPCtRNczViw57/2KBEyA/W8HOruKc6qaeSp2
-X-Google-Smtp-Source: AK7set+zt7TRGbCDSYN9tlczhKXE0qGkcB3FKbyoZ66mwG4AUB7+4Kx8jy9YzFAjTaJOQC8rFW7NOg==
-X-Received: by 2002:adf:ef91:0:b0:2c5:4d16:8d73 with SMTP id d17-20020adfef91000000b002c54d168d73mr2693168wro.40.1676486049201;
-        Wed, 15 Feb 2023 10:34:09 -0800 (PST)
+        bh=x17E+eium4VyrfGc7M1myMUnIQM/HJYLttYEMQIU4XY=;
+        b=6lB3GoDEuc3v9F6aRlLz4+LsRQhI5EZrLx11sYAEArDykGU1MVcA6ZVLprhrTuYBBo
+         VTgm+6yvHKHGng52v1G/xvl0eZvWGqkQ97bZvFCzz3f9zo/oMyWOdbdNQLPtuPXDsS/S
+         h0W0LI7igr2gzdqBtsyxiIGq+fPELfTzfD2wsa+4VVS8u+ODTS5zd7nZwRQT4DvA4OUS
+         /MuHF8xZBTB8Evthz3C5fH0ufBZzX+mfJyhp8vJxPJj6IkMyoTtf/18uR/usq8NXsSEd
+         LqHUiGLPQNrRXCZMzSjJiIE5PtK6aN3PmoOB7dH6BqMJZeClQ5YkIaPllARzZTk4aFxJ
+         ZVyg==
+X-Gm-Message-State: AO0yUKWA0lWszcskoqz+lKMmTwSfIBBSLSckcw1IZjwszfEti+O3OvX/
+        53pHF3cLPhEPX6ExqAWktT1jP9yu4AM4bPtx
+X-Google-Smtp-Source: AK7set9o3pNND0YfqQtKqdaBS6DMHAI5qmU2BXmTeF8UsrS4Cz6utn7sdLFB2UpNmOlesyNqccJv7w==
+X-Received: by 2002:a05:600c:310b:b0:3df:f7ba:14e1 with SMTP id g11-20020a05600c310b00b003dff7ba14e1mr2944594wmo.8.1676486051002;
+        Wed, 15 Feb 2023 10:34:11 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05600c45c900b003e00c9888besm3196306wmo.30.2023.02.15.10.34.06
+        by smtp.gmail.com with ESMTPSA id s9-20020a05600c45c900b003e00c9888besm3196306wmo.30.2023.02.15.10.34.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 10:34:08 -0800 (PST)
+        Wed, 15 Feb 2023 10:34:10 -0800 (PST)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -72,9 +72,9 @@ Cc:     Dmitry Safonov <dima@arista.com>,
         Leonard Crestez <cdleonard@gmail.com>,
         Salam Noureddine <noureddine@arista.com>,
         netdev@vger.kernel.org, Francesco Ruggeri <fruggeri@arista.com>
-Subject: [PATCH v4 14/21] net/tcp: Add TCP-AO SNE support
-Date:   Wed, 15 Feb 2023 18:33:28 +0000
-Message-Id: <20230215183335.800122-15-dima@arista.com>
+Subject: [PATCH v4 15/21] net/tcp: Add tcp_hash_fail() ratelimited logs
+Date:   Wed, 15 Feb 2023 18:33:29 +0000
+Message-Id: <20230215183335.800122-16-dima@arista.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230215183335.800122-1-dima@arista.com>
 References: <20230215183335.800122-1-dima@arista.com>
@@ -90,9 +90,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Sequence Number Extension (SNE) extension for TCP-AO.
-This is needed to protect long-living TCP-AO connections from replaying
-attacks after sequence number roll-over, see RFC5925 (6.2).
+Add a helper for logging connection-detailed messages for failed TCP
+hash verification (both MD5 and AO).
 
 Co-developed-by: Francesco Ruggeri <fruggeri@arista.com>
 Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
@@ -100,75 +99,179 @@ Co-developed-by: Salam Noureddine <noureddine@arista.com>
 Signed-off-by: Salam Noureddine <noureddine@arista.com>
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- net/ipv4/tcp_input.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ include/net/tcp.h    | 14 ++++++++++++--
+ include/net/tcp_ao.h | 27 +++++++++++++++++++++++++++
+ net/ipv4/tcp.c       | 23 +++++++++++++----------
+ net/ipv4/tcp_ao.c    |  7 +++++++
+ 4 files changed, 59 insertions(+), 12 deletions(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 264db761153b..9f23cab1e835 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -3528,9 +3528,21 @@ static inline bool tcp_may_update_window(const struct tcp_sock *tp,
- static void tcp_snd_una_update(struct tcp_sock *tp, u32 ack)
- {
- 	u32 delta = ack - tp->snd_una;
-+#ifdef CONFIG_TCP_AO
-+	struct tcp_ao_info *ao;
-+#endif
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index ff1680611530..7b1d8b05e3bc 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -2579,12 +2579,19 @@ tcp_inbound_hash(struct sock *sk, const struct request_sock *req,
+ 	int l3index;
  
- 	sock_owned_by_me((struct sock *)tp);
- 	tp->bytes_acked += delta;
-+#ifdef CONFIG_TCP_AO
-+	ao = rcu_dereference_protected(tp->ao_info,
-+				       lockdep_sock_is_held((struct sock *)tp));
-+	if (ao) {
-+		if (ack < ao->snd_sne_seq)
-+			ao->snd_sne++;
-+		ao->snd_sne_seq = ack;
+ 	/* Invalid option or two times meet any of auth options */
+-	if (tcp_parse_auth_options(th, &md5_location, &aoh))
++	if (tcp_parse_auth_options(th, &md5_location, &aoh)) {
++		tcp_hash_fail("TCP segment has incorrect auth options set",
++				family, skb, "");
+ 		return SKB_DROP_REASON_TCP_AUTH_HDR;
 +	}
-+#endif
- 	tp->snd_una = ack;
- }
  
-@@ -3538,9 +3550,21 @@ static void tcp_snd_una_update(struct tcp_sock *tp, u32 ack)
- static void tcp_rcv_nxt_update(struct tcp_sock *tp, u32 seq)
- {
- 	u32 delta = seq - tp->rcv_nxt;
-+#ifdef CONFIG_TCP_AO
-+	struct tcp_ao_info *ao;
-+#endif
- 
- 	sock_owned_by_me((struct sock *)tp);
- 	tp->bytes_received += delta;
-+#ifdef CONFIG_TCP_AO
-+	ao = rcu_dereference_protected(tp->ao_info,
-+				       lockdep_sock_is_held((struct sock *)tp));
-+	if (ao) {
-+		if (seq < ao->rcv_sne_seq)
-+			ao->rcv_sne++;
-+		ao->rcv_sne_seq = seq;
-+	}
-+#endif
- 	WRITE_ONCE(tp->rcv_nxt, seq);
- }
- 
-@@ -6369,6 +6393,17 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
- 		 * simultaneous connect with crossed SYNs.
- 		 * Particularly, it can be connect to self.
- 		 */
-+#ifdef CONFIG_TCP_AO
-+		struct tcp_ao_info *ao;
-+
-+		ao = rcu_dereference_protected(tp->ao_info,
-+					       lockdep_sock_is_held(sk));
-+		if (ao) {
-+			ao->risn = th->seq;
-+			ao->rcv_sne = 0;
-+			ao->rcv_sne_seq = ntohl(th->seq);
+ 	if (req) {
+-		if (tcp_rsk_used_ao(req) != !!aoh)
++		if (tcp_rsk_used_ao(req) != !!aoh) {
++			tcp_hash_fail("TCP connection can't start/end using TCP-AO",
++					family, skb, " %s",
++					!aoh ? "missing AO" : "AO signed");
+ 			return SKB_DROP_REASON_TCP_AOFAILURE;
 +		}
-+#endif
- 		tcp_set_state(sk, TCP_SYN_RECV);
+ 	}
  
- 		if (tp->rx_opt.saw_tstamp) {
+ 	/* sdif set, means packet ingressed via a device
+@@ -2607,11 +2614,14 @@ tcp_inbound_hash(struct sock *sk, const struct request_sock *req,
+ 					lockdep_sock_is_held(sk));
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOREQUIRED);
+ 			atomic64_inc(&ao_info->counters.ao_required);
++			tcp_hash_fail("AO hash is required, but not found",
++					family, skb, "");
+ 			return SKB_DROP_REASON_TCP_AONOTFOUND;
+ 		}
+ #endif
+ 		if (unlikely(tcp_md5_do_lookup(sk, l3index, saddr, family))) {
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
++			tcp_hash_fail("MD5 Hash not found", family, skb, "");
+ 			return SKB_DROP_REASON_TCP_MD5NOTFOUND;
+ 		}
+ 		return SKB_NOT_DROPPED_YET;
+diff --git a/include/net/tcp_ao.h b/include/net/tcp_ao.h
+index 07d05bb49e46..d953105f5f73 100644
+--- a/include/net/tcp_ao.h
++++ b/include/net/tcp_ao.h
+@@ -98,6 +98,33 @@ struct tcp_ao_info {
+ 	atomic_t		refcnt;		/* Protects twsk destruction */
+ };
+ 
++#define tcp_hash_fail(msg, family, skb, fmt, ...)			\
++do {									\
++	const struct tcphdr *th = tcp_hdr(skb);				\
++	char hdr_flags[5] = {};						\
++	char *f = hdr_flags;						\
++									\
++	if (th->fin)							\
++		*f++ = 'F';						\
++	if (th->syn)							\
++		*f++ = 'S';						\
++	if (th->rst)							\
++		*f++ = 'R';						\
++	if (th->ack)							\
++		*f = 'A';						\
++	if (family == AF_INET) {					\
++		net_info_ratelimited("%s for (%pI4, %d)->(%pI4, %d) %s" fmt "\n", \
++				msg, &ip_hdr(skb)->saddr, ntohs(th->source), \
++				&ip_hdr(skb)->daddr, ntohs(th->dest),	\
++				hdr_flags, ##__VA_ARGS__);		\
++	} else {							\
++		net_info_ratelimited("%s for [%pI6c]:%u->[%pI6c]:%u %s" fmt "\n", \
++				msg, &ipv6_hdr(skb)->saddr, ntohs(th->source), \
++				&ipv6_hdr(skb)->daddr, ntohs(th->dest),	\
++				hdr_flags, ##__VA_ARGS__);		\
++	}								\
++} while (0)
++
+ #ifdef CONFIG_TCP_AO
+ /* TCP-AO structures and functions */
+ 
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 3a2caa5eeee2..d59e7422a481 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -4525,7 +4525,6 @@ tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
+ 	 * o MD5 hash and we're not expecting one.
+ 	 * o MD5 hash and its wrong.
+ 	 */
+-	const struct tcphdr *th = tcp_hdr(skb);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_md5sig_key *key;
+ 	int genhash;
+@@ -4535,6 +4534,7 @@ tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
+ 
+ 	if (!key && hash_location) {
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5UNEXPECTED);
++		tcp_hash_fail("Unexpected MD5 Hash found", family, skb, "");
+ 		return SKB_DROP_REASON_TCP_MD5UNEXPECTED;
+ 	}
+ 
+@@ -4550,16 +4550,19 @@ tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
+ 	if (genhash || memcmp(hash_location, newhash, 16) != 0) {
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
+ 		if (family == AF_INET) {
+-			net_info_ratelimited("MD5 Hash failed for (%pI4, %d)->(%pI4, %d)%s L3 index %d\n",
+-					saddr, ntohs(th->source),
+-					daddr, ntohs(th->dest),
+-					genhash ? " tcp_v4_calc_md5_hash failed"
+-					: "", l3index);
++			tcp_hash_fail("MD5 Hash failed", AF_INET, skb, "%s L3 index %d",
++				      genhash ? " tcp_v4_calc_md5_hash failed"
++				      : "", l3index);
+ 		} else {
+-			net_info_ratelimited("MD5 Hash %s for [%pI6c]:%u->[%pI6c]:%u L3 index %d\n",
+-					genhash ? "failed" : "mismatch",
+-					saddr, ntohs(th->source),
+-					daddr, ntohs(th->dest), l3index);
++			if (genhash) {
++				tcp_hash_fail("MD5 Hash failed",
++					      AF_INET6, skb, " L3 index %d",
++					      l3index);
++			} else {
++				tcp_hash_fail("MD5 Hash mismatch",
++					      AF_INET6, skb, " L3 index %d",
++					      l3index);
++			}
+ 		}
+ 		return SKB_DROP_REASON_TCP_MD5FAILURE;
+ 	}
+diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
+index d34ff3682cf8..6f650ebe01c4 100644
+--- a/net/ipv4/tcp_ao.c
++++ b/net/ipv4/tcp_ao.c
+@@ -693,6 +693,8 @@ tcp_ao_verify_hash(const struct sock *sk, const struct sk_buff *skb,
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOBAD);
+ 		atomic64_inc(&info->counters.pkt_bad);
+ 		atomic64_inc(&key->pkt_bad);
++		tcp_hash_fail("AO hash wrong length", family, skb,
++			      " %u != %d", maclen, tcp_ao_maclen(key));
+ 		return SKB_DROP_REASON_TCP_AOFAILURE;
+ 	}
+ 
+@@ -703,6 +705,7 @@ tcp_ao_verify_hash(const struct sock *sk, const struct sk_buff *skb,
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOBAD);
+ 		atomic64_inc(&info->counters.pkt_bad);
+ 		atomic64_inc(&key->pkt_bad);
++		tcp_hash_fail("AO hash mismatch", family, skb, "");
+ 		return SKB_DROP_REASON_TCP_AOFAILURE;
+ 	}
+ 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOGOOD);
+@@ -728,6 +731,8 @@ tcp_inbound_ao_hash(struct sock *sk, const struct sk_buff *skb,
+ 	info = rcu_dereference(tcp_sk(sk)->ao_info);
+ 	if (!info) {
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOKEYNOTFOUND);
++		tcp_hash_fail("AO key not found", family, skb,
++			      " keyid: %u", aoh->keyid);
+ 		return SKB_DROP_REASON_TCP_AOUNEXPECTED;
+ 	}
+ 
+@@ -824,6 +829,8 @@ tcp_inbound_ao_hash(struct sock *sk, const struct sk_buff *skb,
+ key_not_found:
+ 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAOKEYNOTFOUND);
+ 	atomic64_inc(&info->counters.key_not_found);
++	tcp_hash_fail("Requested by the peer AO key id not found",
++		      family, skb, "");
+ 	return SKB_DROP_REASON_TCP_AOKEYNOTFOUND;
+ }
+ 
 -- 
 2.39.1
 
