@@ -2,178 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3026987CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11826987D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBOW2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S229700AbjBOW3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjBOW2q (ORCPT
+        with ESMTP id S229536AbjBOW3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:28:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9519E15545
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:27:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676500076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vft1Qv3jLlAD1lBQ+InfzxWLMn34pjK5f9gIV8ktH5k=;
-        b=FOVg79UDSwWl7TJcfONvlnEhL8re4G1Nbj9XmC0gFjnEJ7COSQzY5HkejkBwWD4G4Qg9Kb
-        3YG+3li4qa2hSPdIzrZBE37lpukfm3/bqw1Dh/b3wztQrc7lDCRtbifI/9cnAH15ggG+hY
-        cE5OZbJYvRSGQ3Wc604A+lvCat3PaTs=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-287-w-C7pwiuO861969-9bjqmQ-1; Wed, 15 Feb 2023 17:27:55 -0500
-X-MC-Unique: w-C7pwiuO861969-9bjqmQ-1
-Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso222622ilj.17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:27:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vft1Qv3jLlAD1lBQ+InfzxWLMn34pjK5f9gIV8ktH5k=;
-        b=ahRKLBzzBaYnx332DV2UXf6rvIb5ScH7H3E+67qp7xti+e5xmnsVB1Se4DXU9t8Qeb
-         ISIIXAxR3CCej8jZfeulobY7hmw1L8vwbEjNtVqiGwbRsKDN5hqPatLQ+zGVSQCLbPHm
-         O4S1+7AcBW9PuSwWgLfmS6oKEEaLliN4HkY9w3HpZbp+FysoEk9Myyzk8oeokxBrvZEh
-         Rb8Gs2v1WShbIpzPR48/QFkqQZYwRegS6OEZibwW9VOUGORE5XPlTRgELU2uxAOTetgd
-         3q5ZokAtVa7img5Su5KPT/4o88LU+zRoFoPKn43SZyAEksX0HEyOCglZpD/SHEyL7tL2
-         dZbg==
-X-Gm-Message-State: AO0yUKVIHRxJKLBNEU4T96IA9IYYEUu13KmqsyYh3SB1v+OEHMA73yTG
-        otfjoovfjXjxSfjyX8z8XEw19MSg0Vho2OCuQEljz1CVkTQ98E+RjEXktDbGFtyT1sVj6j6oGyH
-        RXSVhYngCSnUPk0rfbMn6+N/u
-X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr2423120iox.0.1676500074420;
-        Wed, 15 Feb 2023 14:27:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set8YQb9C6xFgZu/24UXnVJo7RqQebXMxXct5eaVPh3FRSWk6iqMS8w5jj8njEBwcZYSo5ASRlg==
-X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr2423104iox.0.1676500074087;
-        Wed, 15 Feb 2023 14:27:54 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056602242200b007437276ae6dsm233214iob.3.2023.02.15.14.27.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 14:27:53 -0800 (PST)
-Date:   Wed, 15 Feb 2023 17:27:52 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-Message-ID: <Y+1caMCj3AjEU7BK@x1n>
-References: <20230214075710.2401855-1-stevensd@google.com>
- <20230214075710.2401855-2-stevensd@google.com>
- <Y+wMvVjDpW0nlaPu@x1n>
- <CAD=HUj6c0=-6GRR60up5Jq5CaYbRn8XfSuUvL70Lip6EDB_E-w@mail.gmail.com>
+        Wed, 15 Feb 2023 17:29:34 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A09C15545;
+        Wed, 15 Feb 2023 14:29:30 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHCRp5m76z4x1R;
+        Thu, 16 Feb 2023 09:29:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676500168;
+        bh=7LU4CAj8Zb/mcRh61K+lbqXtN5hxcSXnaJ+GvRxVlWA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YPcMgBkV+8aFh8zF/WOLFGJLNU2UoNxTMnwsqVypT94dS8b5AB4mIhwikK/0RYs5r
+         OX353fmYAWhpNV+wIJ61yACn5T8WG3PacagCipHaDFm1K2G69URcsPgxqAmaP+Dsdj
+         vZ9F/ifcuKwJsvbicrGc3rtMmnHd+UM42xY4qELJY8yhmHIIjVpGzkbxQOtf1nYGeS
+         GKUUhILQ6+Gf56BG26PHKM/N6U52dyn736+NgW1Yt71m5SWApWYSx48AAzg4W4q72L
+         RBtW/dEV+VttzAjG+wFz9T/SodtvfYTPMZjhKPNs4l01ka2FTQa5sU8SPu7RWCJFLQ
+         Mhp59/7pYkEMw==
+Date:   Thu, 16 Feb 2023 09:29:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the v4l-dvb-next tree with the
+ arm-soc tree
+Message-ID: <20230216092925.6b5cfc0c@canb.auug.org.au>
+In-Reply-To: <20230123100923.7899a60f@canb.auug.org.au>
+References: <20230123100923.7899a60f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAD=HUj6c0=-6GRR60up5Jq5CaYbRn8XfSuUvL70Lip6EDB_E-w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/OJCY3qYlEj=b8n2EZY0sNwO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:57:11AM +0900, David Stevens wrote:
-> On Wed, Feb 15, 2023 at 7:35 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > Hi, David,
-> >
-> > On Tue, Feb 14, 2023 at 04:57:10PM +0900, David Stevens wrote:
-> > > From: David Stevens <stevensd@chromium.org>
-> > >
-> > > Make sure that collapse_file respects any userfaultfds registered with
-> > > MODE_MISSING. If userspace has any such userfaultfds registered, then
-> > > for any page which it knows to be missing, it may expect a
-> > > UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
-> > > collapsing a shmem range would result in replacing an empty page with a
-> > > THP, so that it doesn't break userfaultfd.
-> > >
-> > > Synchronization when checking for userfaultfds in collapse_file is
-> > > tricky because the mmap locks can't be used to prevent races with the
-> > > registration of new userfaultfds. Instead, we provide synchronization by
-> > > ensuring that userspace cannot observe the fact that pages are missing
-> > > before we check for userfaultfds. Although this allows registration of a
-> > > userfaultfd to race with collapse_file, it ensures that userspace cannot
-> > > observe any pages transition from missing to present after such a race.
-> > > This makes such a race indistinguishable to the collapse occurring
-> > > immediately before the userfaultfd registration.
-> > >
-> > > The first step to provide this synchronization is to stop filling gaps
-> > > during the loop iterating over the target range, since the page cache
-> > > lock can be dropped during that loop. The second step is to fill the
-> > > gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
-> > > time, to avoid races with accesses to the page cache that only take the
-> > > RCU read lock.
-> > >
-> > > This fix is targeted at khugepaged, but the change also applies to
-> > > MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
-> > > return EBUSY if there are any missing pages (instead of succeeding on
-> > > shmem and returning EINVAL on anonymous memory). There is also now a
-> > > window during MADV_COLLAPSE where a fault on a missing page will cause
-> > > the syscall to fail with EAGAIN.
-> > >
-> > > The fact that intermediate page cache state can no longer be observed
-> > > before the rollback of a failed collapse is also technically a
-> > > userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
-> > > is exceedingly unlikely that anything relies on being able to observe
-> > > that transient state.
-> > >
-> > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > ---
-> > >  mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
-> > >  1 file changed, 58 insertions(+), 8 deletions(-)
-> >
-> > Could you attach a changelog in your next post (probably with a cover
-> > letter when patches more than one)?
-> >
-> > Your patch 1 reminded me that, I think both lseek and mincore will not
-> > report DATA but HOLE on the thp holes during collapse, no matter we fill
-> > hpage in (as long as hpage being !uptodate) or not (as what you do with
-> > this one).
-> >
-> > However I don't understand how this new patch can avoid the same race issue
-> > I mentioned in the last version at all.
-> 
-> If find_get_entry sees an XA_RETRY_ENTRY, then it will re-read from
-> the xarray. This means find_get_entry will loop while we're finalizing
-> the collapse - either until we finalize the collapse with the
-> multi-index hpage entry or abort the collapse and clear the retry
-> entry. This means that even if userspace registers a userfaultfd and
-> calls lseek after khugepage check for userfaultfd, the call to lseek
-> will block until the collapse is finished.
-> 
-> There are a number of other places in filemap.c/shmem.c that do their
-> own iteration over the xarray, and they all retry on xas_retry() as
-> well.
+--Sig_/OJCY3qYlEj=b8n2EZY0sNwO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I've no problem on using RETRY entries (as long as others are fine with it
-:).  It seems your logic depends on patch 1 being there already, so right
-after the RETRY got replaced with the thp it'll show Uptodate==DATA.
+Hi all,
 
-However I doubt whether patch 1 is correct at all..  Maybe that can be
-instead fixed by having:
+On Mon, 23 Jan 2023 10:09:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the v4l-dvb-next tree got conflicts in:
+>=20
+>   drivers/staging/media/Kconfig
+>   drivers/staging/media/Makefile
+>=20
+> between commit:
+>=20
+>   582603a95734 ("staging: media: remove davinci vpfe_capture driver")
+>=20
+> from the arm-soc tree and commit:
+>=20
+>   d2a8e92f0b41 ("media: vpfe_capture: remove deprecated davinci drivers")
+>=20
+> from the v4l-dvb-next tree.
+>=20
+> These 2 commits removed the same driver but caused a conflict due to
+> other changes to these files.
+>=20
+> I fixed it up (I just used the latter version of these files) and can
+> carry the fix as necessary. This is now fixed as far as linux-next is
+> concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-		folio_mark_uptodate(folio);
+This is now a conflict between the arm-soc tree and the v4l-dvb tree.
+--=20
+Cheers,
+Stephen Rothwell
 
-To be before:
+--Sig_/OJCY3qYlEj=b8n2EZY0sNwO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-		xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-		xas_store(&xas, hpage);
+-----BEGIN PGP SIGNATURE-----
 
-To replace patch 1, but I think there's still some issue in patch 2 even if
-it works.  Ouch, I cut the codes..  I'll comment inline in another reply.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtXMYACgkQAVBC80lX
+0GxHLAf+Jvl1lhzdIOt7axPaxoeS+jKIL80VCd+B/4tjETpWqTSak/sSr+qUx4bi
+2KmYehrIegoQjFDsUEKDF42/NnpuHLdJE4xx9OAiFXpwBOmmq8aMikIsV4MwfNuX
+gov7iaNJIhl808ZtvhoCxGsrg43uwmOvR3+DwxTmYF9Iva4k/T+8+3TlS6Zs6d5L
+sw+6Y6CfJfFkkq5ohG+BvxGLBOwamhxyLCs9tnVyq7Tf8CbsTlU+DXV4mHVApyD+
+MwX1mPaxV7h7OTcvBpdiTlx/p0H9IdxKMe1+5xL6DC6bxnCmsdKJ+sfx00+MJOfX
+/PWkU118ZxpOFRek0PMKNyyxnxorSA==
+=vSsZ
+-----END PGP SIGNATURE-----
 
--- 
-Peter Xu
-
+--Sig_/OJCY3qYlEj=b8n2EZY0sNwO--
