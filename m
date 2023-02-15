@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D75697AE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EC5697ADF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjBOLeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S233470AbjBOLdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBOLem (ORCPT
+        with ESMTP id S229536AbjBOLdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:34:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569A13800F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:33:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676460799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zEJ/Uhqxg0AeMUMp7l1Vn2f0i8I+rW1bVURZjF7zQ2s=;
-        b=V0bf/q5xmRB9+7YxFba1kLWURv2n1KPQW1eKkZcHsvlVvOTOOkdW6ycNAfxWuyPQ4Xq7lr
-        33NnwwYsyzwGJ+L8MY+KtjqoYfj9wi+/KBnwZ/pWDqe7rE9wjgabwzpqMi73z1pFvGsvjF
-        gqp9G3QH3n8VMZKY1NRIkeDlbE9J3tk=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-353-QEh29qPKPRmYrkh6a2Q6Uw-1; Wed, 15 Feb 2023 06:33:18 -0500
-X-MC-Unique: QEh29qPKPRmYrkh6a2Q6Uw-1
-Received: by mail-ua1-f69.google.com with SMTP id f40-20020ab049eb000000b006780ae44d28so6590394uad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:33:18 -0800 (PST)
+        Wed, 15 Feb 2023 06:33:51 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EAD37F3C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:33:31 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-530b85f118cso35659387b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oj2P9NKMVMnSiHo+/0bBvpkftuasnb/1Zqo6PRSg2Ho=;
+        b=Pnlw//355ECERe7jIkjr3lHZBlm0m9Lhv8tU6WeRcN0T5pd+UG/2iWx2EfOa5A5zIJ
+         PMnrvXFWglBupXfsTQubNlyxZp9L+LJjWxeWivhlbszw6svjJ8RWJHk/oJhgYvpFHr3r
+         wtA+WLYf7dmQFcZewM95I/3r31NZJVHbWxJ0YlA2kRGmlSSD7Bvd18cX9JjnKKxJOrbR
+         bNkNWb0YQvExTa1Hd1P+Kd7KxXyDsi3KoOJJTn6CZI5DUbPqv1bRmyl2ufR9CCacKglI
+         06dF+PiynCvuHSIyAaS5YDy+L1/TmSwucSfZBy8+Wut4WN6927QeiB7flskHjIWk1Qd6
+         HYdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zEJ/Uhqxg0AeMUMp7l1Vn2f0i8I+rW1bVURZjF7zQ2s=;
-        b=FylW13KqQdO6Uqn5uY3FW4NNLCWG8u853oWJIILnEf56sUHf4oHiefO/vyTbyp1uku
-         y7Ae9cFQ1Bg02r8LMAniSyp2b4DBc7VCyrFZDfwhhKg8hRyMd7dPUycZIvoDwcU7CUV7
-         l5u2EbS/DS+QOIJKly5ADt0BxJFdtIn30m12rT5k/DsgmMmHyKSbs9AlnH8ZY5iaDQA2
-         TPER1jXSH7MqDPeAHeScoDlKTTX1fWRGlhYgKX18WI0ahRgTFrX+RT+aFSmCoGXTui+m
-         +cZ87ILAyM6QWSHxgmySmp/zI1v+JlBaSN0GCXUSi2tkE9peWZs2cDKMAI8M+3N5Sl3Z
-         aivw==
-X-Gm-Message-State: AO0yUKUSoeqNQx/Knz1HnodTlWQrzQTR5n5CrUFfO5zCFFPah6NEssK0
-        aToAuZqFufg7L72TXZFWwCceq1Iaqu1n5JnBqCyI+8R97RoHmxH3rLrNBCxriYSQQZijx9EMutt
-        XinoA7T85mBnD/NI8TEDqNO4a8al45LlrO5DGwETWm+WVww==
-X-Received: by 2002:ab0:308d:0:b0:632:a75f:8b40 with SMTP id h13-20020ab0308d000000b00632a75f8b40mr202255ual.72.1676460797550;
-        Wed, 15 Feb 2023 03:33:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set/m26UI7qpW+qO1L8/fNuQgleYE5hCk9FG/Mv4Pi+II8VixShk2C8TTCRm5eESfJYmwM3zebD7it+5mmLerN8s=
-X-Received: by 2002:ab0:308d:0:b0:632:a75f:8b40 with SMTP id
- h13-20020ab0308d000000b00632a75f8b40mr202253ual.72.1676460797347; Wed, 15 Feb
- 2023 03:33:17 -0800 (PST)
+        bh=Oj2P9NKMVMnSiHo+/0bBvpkftuasnb/1Zqo6PRSg2Ho=;
+        b=BH5JLN8k+Ym2Bu5dQ35sdfkUs2dSWGEjEreAgpwnSPDtzILRUvi/LCa8/yY4pJhhAF
+         33mRDVvkIFSkDp7CmI/V/AVCSR/vr2QMHt+y4e4KqLmCGe47g2ZLnuc05AFBw5veEp5Z
+         +gDgc1ZvFX8Q0k1KEVqqXlnkB/iT0Rk457ihmH/I/63HfYWhHQ7yS9eL89/lCzQMb0O1
+         Ej//YNDfM7N5L+c8ZZ9pIdp5X/AqtbDqgiiCWmX1SetP5XxSAB9Fbgo9c4IoB37CC/bF
+         CmuDxcxTqHfzQ0IRQJBpgrwzcCE/msdeXr1Q6cElWYpu7mLx8kaSOdlSAQg/TbJvFZBf
+         uRYQ==
+X-Gm-Message-State: AO0yUKVkC0o9gKYtiuoUuB6VF0MtN3d4C/ncftypkE92Cg7R/gRy2fEY
+        W16CnDc/mPir016d9jZZ7YxkEolJXurWt0S6DzVKseG88ChkSQ==
+X-Google-Smtp-Source: AK7set8OrXoKmaG52cIMHBiL3yt57kB2vJE3raatZO5Eei7L5TPvJKqKP/95rUSCn/1I1rOgvvYVEhX/2JAqjGZWR4k=
+X-Received: by 2002:a0d:e4c2:0:b0:527:af4a:6a12 with SMTP id
+ n185-20020a0de4c2000000b00527af4a6a12mr248826ywe.297.1676460806859; Wed, 15
+ Feb 2023 03:33:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230215144117.369ffb5f@canb.auug.org.au>
-In-Reply-To: <20230215144117.369ffb5f@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Date:   Wed, 15 Feb 2023 12:33:05 +0100
-Message-ID: <CABgObfY70A=qno-=pMgpr8h0Z2Su90QqbyK8VFhxTEWMaPQFsg@mail.gmail.com>
-Subject: Re: linux-next: build warning in Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230214073638.571417-1-alexander.stein@ew.tq-group.com>
+ <CACRpkdaV3Jv8=ynw5HUH8x7VGuCjFAiULbt-tRMZAU3T+Wo1Ug@mail.gmail.com> <86wn4jxjph.wl-maz@kernel.org>
+In-Reply-To: <86wn4jxjph.wl-maz@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 15 Feb 2023 12:33:15 +0100
+Message-ID: <CACRpkdbSN-FzKB4FT7YX6h5U+rojO4OcmYJMJw3khdOqTeDmoQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] gpio: vf610: make irq_chip immutable
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 4:41 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Building Linus' tree, today's linux-next build (htmldocs) produced
-> this warning:
->
-> Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst:92: ERROR: Unexpected indentation.
->
-> Introduced by commit
->
->   493a2c2d23ca ("Documentation/hw-vuln: Add documentation for Cross-Thread Return Predictions")
+On Wed, Feb 15, 2023 at 12:16 PM Marc Zyngier <maz@kernel.org> wrote:
 
-I will fix it in the next pull request before 6.2.
+> > We fixed quite a few of these now, Marc do you have an idea about
+> > how much we have left until we can make immutable the default?
+>
+> I haven't tracked that, and making it the default would probably mean
+> getting rid of the code that patches the irqchip structures. I'd say
+> that once -rc1 is out, we replace the polite nag with something
+> nastier (WARN_ON() of some sort), and push that into -next.
+>
+> Leave the warning in place for a couple of releases (until the next
+> LTS), and then drop the patching code. The not-so-nice part is that
+> that drivers that haven't been fixed will break silently. The good
+> side is that these drivers will not have been touched over 2 LTS
+> releases, and are thus most likely abandonware.
 
-Paolo
+Hmmm I will take a round and fix some more that are simple and
+obvious, I know some that are definitely used but just sees low attention
+from users.
 
+Yours,
+Linus Walleij
