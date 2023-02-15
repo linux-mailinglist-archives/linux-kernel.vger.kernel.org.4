@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A108697F7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF02697F7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjBOPY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S229791AbjBOPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjBOPY4 (ORCPT
+        with ESMTP id S230111AbjBOPYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:24:56 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B613A86E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:24:34 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id be8so20561622plb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:24:34 -0800 (PST)
+        Wed, 15 Feb 2023 10:24:33 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F5186A1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:24:32 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-16e2c22c3baso6774082fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:24:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fbuK2YMcZd4/efbG59qp7NEzWA/KfSxPQatjxKotauc=;
-        b=adSfwx2l32cZymQNminNVdHL2V/I/UNjOjzh5lKsvkexWwnjiH5rIingtZCu1DO0Zp
-         jt9zT43qtqTSVqkSMXDZAaZ9lC/mjdJP02G2rHS2NzoTXQuGzhzJoyeGxK5e0owMEY/s
-         +zfyEAak3Fqy4QHhXlChAVjxVq9bW96/nKkBEq9JmaduTvwuj1ER733aq04/+UFXgYKF
-         6oAOkCrTlHGKswvHLjyM8BNr/9VTEY2vQS70SU3O9ASt3aHZfLnMC4bMVOW/syQ5y4yQ
-         WDj6iLQ03mE0hiwiBAxVUzGUf5F4WJQBXeZL+/s7HW/Z2DfASpWfpWXGXbxciKWOEYop
-         UM+A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TadElbv/yECNyRvG0Pa2vpl29upi4rkpMkJRcewsa7k=;
+        b=suGbtRbva9mfsiS7LLNx13Qf0OsA9bc4rRjOkogLlK5PHAndCm/2000O593bVAfNf/
+         xhOdda5c+ELAQMSxZTkfuSXJNR2+nRui+95nMQBWRQsz1Pi8XjPRsay1cW7L3ddi0x6N
+         nfVr7EjSjgyyL/DdR2HlYEqRWaUGwit3MSkgYIDgXgBf+rb9zYfU5mBxMIVANBS/HjGT
+         i9WzCuXmnCEJCv07wvufZUhXrFMu7OUSH9tWTM8KU+ykyrVa8OpBfXEjbEThDtys6Y87
+         cli2MqN2J6bAscc++INea8g3hkk2xNtczFkn54zsnIZLswfmJiDuOSOc5QQn9f9Zigqw
+         eVKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fbuK2YMcZd4/efbG59qp7NEzWA/KfSxPQatjxKotauc=;
-        b=SliKN3BpY9F2ELiJYa2UwID9nTr3LlrdLuAPyGghral6lU5dRXrP0bBcoUFc5iI3Uh
-         vgsA2X8Sjq4rqgWmtWLwy8hKd3Y1GEHN+HUXJLyYkYEj/pSUZBb/kPA6ooSql7OkIDSe
-         jttMI3ZUqsp0J9/wKdwzdonoUwjj8Zfy7Tya15+BXgUIgVoB9g71z9AQUrJDBo6UQCYj
-         5DFgwbEIkkM+oVlsBYcHvjpWzIGW08cSf/O0tWV4bXIqN2gzmhvVx9K35aUlu/R0uSOp
-         nXO9v4FMNPXzllyWqTGCXSHHfUBpugzS5vp/n31kSbyeteCoFr37s7OGttpopvSnasgO
-         24RQ==
-X-Gm-Message-State: AO0yUKVGxoly3ITANxtO/6+1+V9wnGZVfF0Uo8dPQqfwFYflgVpI/PDP
-        AcJU8Dw5h0B+FGldmgWq+Ih2sQ==
-X-Google-Smtp-Source: AK7set8V9Fqs6trOvhUW2rNiDUj3z7a1R5k34O15orz/UDYcujudEPAHsE6rEO85Glc49uzLAaJxNw==
-X-Received: by 2002:a17:902:e84e:b0:19a:a815:2877 with SMTP id t14-20020a170902e84e00b0019aa8152877mr3242820plg.6.1676474673787;
-        Wed, 15 Feb 2023 07:24:33 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id jh12-20020a170903328c00b0019682e27995sm6176997plb.223.2023.02.15.07.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 07:24:33 -0800 (PST)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     akpm@linux-foundation.org, vbabka@suse.cz, david@redhat.com,
-        rppt@kernel.org, mhocko@suse.com
-Cc:     willy@infradead.org, mgorman@techsingularity.net,
-        osalvador@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 2/2] mm: memory_hotplug: drop memoryless node from fallback lists
-Date:   Wed, 15 Feb 2023 23:24:12 +0800
-Message-Id: <20230215152412.13368-3-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20230215152412.13368-1-zhengqi.arch@bytedance.com>
-References: <20230215152412.13368-1-zhengqi.arch@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TadElbv/yECNyRvG0Pa2vpl29upi4rkpMkJRcewsa7k=;
+        b=pjkqJMWmtNMeqWX6NG05LK/N8YgwI2BS5cyDIfhPE5aSUKQ5ZmrGaU0uY00o5/HSXE
+         UTHWd0Weoz6zPoZZJkE5XqZpWNpILjP5YRe5RKOKkOmo1NWuDYKPSdTqDcPeIcQvFmCW
+         V63UMm8+NUB/AZ5XBqiUdFc+HZxB0arZKE4kSyLTFhgykzXLtzUwft3u/PEc0gCid5bt
+         bwynFELDN0prEQpXvRx57u3Wt0n9PBnBcvxg3G7eCVQDDjmRAbEi1Z1qISjeacRd++pB
+         JiTOiH9JomtTzHvnBc3+J4NpmEY/p47gP1wVE2wNrCeQ05MHs5Lmp3nF8NIz+f0TViHu
+         EHiw==
+X-Gm-Message-State: AO0yUKX4iknQZFX04C4/9nRr6EKorz2IdG6+SUN2V5HGME7KfnCwBWj9
+        6GsJtrbxKA6vl+xYICjXfHySsteLDV2vFWxqY5Bxag==
+X-Google-Smtp-Source: AK7set89dOBFzBa3roM7yTkRgWk8K9U1srlYYE4cn1E4jBK5Jx6T2MYTeWX22QqOnM8AabgZmdbBdRcqAPmxGXlBDHI=
+X-Received: by 2002:a05:6871:9a:b0:16e:44ad:c9fb with SMTP id
+ u26-20020a056871009a00b0016e44adc9fbmr362093oaa.82.1676474670678; Wed, 15 Feb
+ 2023 07:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Wed, 15 Feb 2023 09:24:19 -0600
+Message-ID: <CAJe_Zhf9E49MkySeqoSFsuy7=j8vmjngda60GEUzTTSNMjj0LA@mail.gmail.com>
+Subject: Re: [PATCH] spi: synquacer: Fix timeout handling in synquacer_spi_transfer_one()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In offline_pages(), if a node becomes memoryless, we
-will clear its N_MEMORY state by calling node_states_clear_node().
-But we do this after rebuilding the zonelists by calling
-build_all_zonelists(), which will cause this memoryless node to
-still be in the fallback list of other nodes. This will incur
-some runtime overhead.
+On Wed, 15 Feb 2023 at 07:01, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> wait_for_completion_timeout() never returns a <0 value. It returns either
+> on timeout or a positive value (at least 1, or number of jiffies left
+> till timeout)
+>
+> So, fix the error handling path and return -ETIMEDOUT should a timeout
+> occur.
+>
+> Fixes: b0823ee35cf9 ("spi: Add spi driver for Socionext SynQuacer platform")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested only.
+> ---
+>  drivers/spi/spi-synquacer.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+> index 47cbe73137c2..dc188f9202c9 100644
+> --- a/drivers/spi/spi-synquacer.c
+> +++ b/drivers/spi/spi-synquacer.c
+> @@ -472,10 +472,9 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+>                 read_fifo(sspi);
+>         }
+>
+> -       if (status < 0) {
+> -               dev_err(sspi->dev, "failed to transfer. status: 0x%x\n",
+> -                       status);
+> -               return status;
+> +       if (status == 0) {
+> +               dev_err(sspi->dev, "failed to transfer. Timeout.\n");
+> +               return -ETIMEDOUT;
+>         }
+>
+>         return 0;
+>
+Acked-by: Jassi Brar <jaswinder.singh@linaro.org>
 
-To drop memoryless node from fallback lists in this case, just
-call node_states_clear_node() before calling build_all_zonelists().
-
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- mm/memory_hotplug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index fd40f7e9f176..1a5e5e8f7e13 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1931,12 +1931,12 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 	/* reinitialise watermarks and update pcp limits */
- 	init_per_zone_wmark_min();
- 
-+	node_states_clear_node(node, &arg);
- 	if (!populated_zone(zone)) {
- 		zone_pcp_reset(zone);
- 		build_all_zonelists(NULL);
- 	}
- 
--	node_states_clear_node(node, &arg);
- 	if (arg.status_change_nid >= 0) {
- 		kcompactd_stop(node);
- 		kswapd_stop(node);
--- 
-2.20.1
-
+thanks
