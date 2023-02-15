@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3409C697872
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7F9697875
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjBOIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S230396AbjBOIqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:46:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjBOIo4 (ORCPT
+        with ESMTP id S229840AbjBOIqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:44:56 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59D118B35;
-        Wed, 15 Feb 2023 00:44:53 -0800 (PST)
+        Wed, 15 Feb 2023 03:46:44 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D959414EAC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:46:42 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id b16so21302719ljr.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676450694; x=1707986694;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z4DhdwaoH58e4ik39f3MRtwMkMTNMbsori+83AG0uWU=;
-  b=MGYN0CSwe1ixWbZMfRqBwAJy9nbYpljjEe0df/v8PYeN4+CMyzVGpzCD
-   WmSx1STMglL1k5EhnwqaC65l2FZE/Cm87IWebqpVhrJiKN05vhiqsbnES
-   eO9eqUQdww7uiTW8qwO8Z0vYzTNu+QfQ5i65NW0uveNNLwFh3RGLhykV6
-   CIymSSnbU6m5Itvf0lp60xGFzW9/UAEzzDUZtZR1SHgMbHJfXGUE2hepT
-   HY367SMcBuMTZYlLX41B10Q/oSg+0BRo5WRnsJFPvYoKXPiAQNMWL8Myi
-   DKV8g9XuTk21GVEegCY9AvwMZcbdQU0LcbQHlC84oI158crGidNwKduJI
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,299,1669071600"; 
-   d="scan'208";a="29092997"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 15 Feb 2023 09:44:52 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 15 Feb 2023 09:44:52 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 15 Feb 2023 09:44:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676450692; x=1707986692;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z4DhdwaoH58e4ik39f3MRtwMkMTNMbsori+83AG0uWU=;
-  b=nCYYzopyh/LuhaoL4m1l8AZSw5kjCYaTxnUBNu5kLOvJDIF0QxmtLQPE
-   k5y48QlTcT078beU0d5OJljgs8oz9F1m//8EFG/CB576+Q2/n7qEJLvRh
-   5Ji404a9RiaE7RT6e/g9qXncDP3PViI8ibd9ZwPipQkUk6M3eBhsQasz/
-   MHsQntqbCyTLl5+ItYiq0M8oDogseNSPaAWOCkhNjnMuG2dSOANtkO5UN
-   2RrNHH1YO8qmjNXvwCxcW0b4I6yk9uD0p6KuaorAJkndUJwEj9p3FkVV/
-   Q49uoKXzzYinGewsgAJmRVzmhz3j+r+BQaQKWOmkUyd7tEc3qSnZEU0lQ
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,299,1669071600"; 
-   d="scan'208";a="29092996"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 Feb 2023 09:44:51 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9FDDB280056;
-        Wed, 15 Feb 2023 09:44:51 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Liu Ying <victor.liu@nxp.com>
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
-Subject: Re: [PATCH v3 1/6] dt-bindings: lcdif: Add i.MX93 LCDIF support
-Date:   Wed, 15 Feb 2023 09:44:51 +0100
-Message-ID: <2703596.mvXUDI8C0e@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <41bc30ac7af4b0ce3ff608b604fb6ea762428680.camel@nxp.com>
-References: <20230213085612.1026538-1-victor.liu@nxp.com> <2551514.Lt9SDvczpP@steina-w> <41bc30ac7af4b0ce3ff608b604fb6ea762428680.camel@nxp.com>
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d0NQp4OeQIj5XifqZfgHq0jDdROVEComQ2rxYyKysmk=;
+        b=ISSZKB3WvKx76JDE//0Ys7Nv0uTUECeLpNx1dgu3yU0aaO3BMkmkSWIVYUdxvCunPg
+         Awu5Z/LWXYspJyqyx8QYUD20lrnUVXOqEd4SR9cimGPruGPUlndvSuJmENPpsAw6kId0
+         h1g6ru7FPJNN7w7u3czDcgEEJas5k4AKcz4sjEME6ogpTmIa8PcWF0zWrn6hPtyTbo6R
+         S6pJ7Cq+VYmHQmbU9KqogAfM2Djxq8bmtY3DSAoIbhhqueYSPuHr3nlqoOzi2ymQ/VEx
+         zto1CZm6XPXc4hGlpG5oWksSneusR/QLe6XXG/vhjAr/lUUzu5kaC0D7KyuJeTIZ86JO
+         J5fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d0NQp4OeQIj5XifqZfgHq0jDdROVEComQ2rxYyKysmk=;
+        b=T9Sns4Fb75Dru4O6xHHzOKRlftDrxCuR2hJz+aKN7cmKUVQW6ADQ9EoLc4guUK/+0e
+         FUos00ZIQx+eL1tPsYvRW8YtZqL4jWnicscv9Mu/jzzbwt3+VZnrFeq5OTo8TOrTMKWG
+         Wx1qQaLJEuY7RjrzNKbvj42tdX60seU2VaCYyqYbZHhABkHcEaFGceS4MTxppc3IeDnv
+         HX2gSzv4/Apu0XjIu8fxi5YU0NGqffWd8uSxFE6Y7lihUO6NTkPBpOAVI6UqYcinmvMi
+         T390M5yjJhbteerk0Sp6ZmJPDf90/yweZtKwVKtGGjhoZ8V9fEQUYG6sDL3phex7W7FR
+         g2yA==
+X-Gm-Message-State: AO0yUKWFtBWsiP6Fpx9NZSrDjS6rsPXDsCOD+FBMHwosvM2e44UVSUet
+        7xOATsSEiyPSk+z2usu5gZ119P6jmAPKg/1SMOwY+w==
+X-Google-Smtp-Source: AK7set+zAaq0R+h4suQYhgRgqk6hp+Y00FM/JX+gQBlUJH+0qaoAfYJNRMpvJDJLcqk3/XeUT5uF+bDh7lFBg+eQtoA=
+X-Received: by 2002:a2e:a365:0:b0:293:261e:74ce with SMTP id
+ i5-20020a2ea365000000b00293261e74cemr312503ljn.4.1676450801070; Wed, 15 Feb
+ 2023 00:46:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <0000000000006bc5be05f4b21b7b@google.com>
+In-Reply-To: <0000000000006bc5be05f4b21b7b@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 15 Feb 2023 09:46:28 +0100
+Message-ID: <CACT4Y+Yv7nuPkoQtAqu05K30hiq45ZYjPy-q5PAUHjJutydKig@mail.gmail.com>
+Subject: Re: [syzbot] riscv/fixes boot error: INFO: rcu detected stall in corrupted
+To:     syzbot <syzbot+42670398d6ddb118138f@syzkaller.appspotmail.com>
+Cc:     aou@eecs.berkeley.edu, brauner@kernel.org, bristot@redhat.com,
+        bsegall@google.com, dietmar.eggemann@arm.com,
+        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, mgorman@suse.de, mingo@redhat.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, peterz@infradead.org,
+        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com,
+        Alex Ghiti <alex@ghiti.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,144 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+On Wed, 15 Feb 2023 at 01:24, syzbot
+<syzbot+42670398d6ddb118138f@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_clea..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=137aaec0c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b3cd714c8e9a6e01
+> dashboard link: https://syzkaller.appspot.com/bug?extid=42670398d6ddb118138f
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+42670398d6ddb118138f@syzkaller.appspotmail.com
+>
+> rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> rcu:    0-...0: (1 GPs behind) idle=36ec/1/0x4000000000000000 softirq=6589/6590 fqs=9960
+>         (detected by 1, t=30504 jiffies, g=14713, q=4 ncpus=2)
+> Task dump for CPU 0:
+> task:cmp             state:R  running task     stack:0     pid:2746  ppid:2744   flags:0x00000008
+> Call Trace:
+> [<ffffffff834348b8>] context_switch kernel/sched/core.c:5244 [inline]
+> [<ffffffff834348b8>] __schedule+0x624/0x1254 kernel/sched/core.c:6555
+> rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> rcu:    0-...0: (1 GPs behind) idle=36ec/1/0x4000000000000000 softirq=6589/6590 fqs=28261
+>         (detected by 1, t=122009 jiffies, g=14713, q=4 ncpus=2)
+> Task dump for CPU 0:
+> task:cmp             state:R  running task     stack:0     pid:2746  ppid:2744   flags:0x00000008
+> Call Trace:
+> [<ffffffff834348b8>] context_switch kernel/sched/core.c:5244 [inline]
+> [<ffffffff834348b8>] __schedule+0x624/0x1254 kernel/sched/core.c:6555
 
-Am Mittwoch, 15. Februar 2023, 08:49:56 CET schrieb Liu Ying:
-> On Wed, 2023-02-15 at 08:26 +0100, Alexander Stein wrote:
-> > Hi Liu,
->=20
-> Hi Alexander,
->=20
-> > thanks for the update.
->=20
-> Thanks for the review.
->=20
-> > Am Montag, 13. Februar 2023, 09:56:07 CET schrieb Liu Ying:
-> > > There is one LCDIF embedded in i.MX93 SoC to connect with
-> > > MIPI DSI controller through LCDIF cross line pattern(controlled
-> > > by mediamix blk-ctrl) or connect with LVDS display bridge(LDB)
-> > > directly or connect with a parallel display through parallel
-> > > display format(also controlled by mediamix blk-ctrl).  i.MX93
-> > > LCDIF IP is essentially the same to i.MX8MP LCDIF IP.  Add device
-> > > tree binding for i.MX93 LCDIF.
-> > >=20
-> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > Reviewed-by: Marek Vasut <marex@denx.de>
-> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > > ---
-> > > v2->v3:
-> > > * No change.
-> > >=20
-> > > v1->v2:
-> > > * Add Krzysztof's A-b and Marek's R-b tags on patch 1/6.
-> > >=20
-> > >  Documentation/devicetree/bindings/display/fsl,lcdif.yaml | 7
-> > >=20
-> > > ++++++-
-> > >=20
-> > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > >=20
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > > b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml index
-> > > 75b4efd70ba8..fc11ab5fc465 100644
-> > > --- a/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > > +++ b/Documentation/devicetree/bindings/display/fsl,lcdif.yaml
-> > >=20
-> > > @@ -21,6 +21,7 @@ properties:
-> > >            - fsl,imx28-lcdif
-> > >            - fsl,imx6sx-lcdif
-> > >            - fsl,imx8mp-lcdif
-> > >=20
-> > > +          - fsl,imx93-lcdif
-> > >=20
-> > >        - items:
-> > >            - enum:
-> > >                - fsl,imx6sl-lcdif
-> > >=20
-> > > @@ -88,7 +89,9 @@ allOf:
-> > >        properties:
-> > >          compatible:
-> > >            contains:
-> > > -            const: fsl,imx8mp-lcdif
-> > > +            enum:
-> > > +              - fsl,imx8mp-lcdif
-> > > +              - fsl,imx93-lcdif
-> > >=20
-> > >      then:
-> > >        properties:
-> > >          clocks:
-> > > @@ -107,6 +110,7 @@ allOf:
-> > >                enum:
-> > >                  - fsl,imx6sx-lcdif
-> > >                  - fsl,imx8mp-lcdif
-> > >=20
-> > > +                - fsl,imx93-lcdif
-> > >=20
-> > >      then:
-> > >        properties:
-> > >          clocks:
-> > > @@ -123,6 +127,7 @@ allOf:
-> > >                - fsl,imx8mm-lcdif
-> > >                - fsl,imx8mn-lcdif
-> > >                - fsl,imx8mp-lcdif
-> > >=20
-> > > +              - fsl,imx93-lcdif
-> > >=20
-> > >      then:
-> > >        required:
-> > >          - power-domains
-> >=20
-> > I would have expected that fsl,imx93-lcdif supports up to 3 endpoints
-> > (MIPI
-> > DSI, LVDS, and parallel) in a 'ports' subnode. But this binding only
-> > supports
-> > a single 'port' sub-node. Also an example for this case might be very
-> > helpful.
->=20
-> The port node allows multiple endpoints(See graph.yaml[1]).  It's
-> enough to use the existing port node instead of using ports node.
+Humm... initially I thought this may be related to the riscv issue
+with too short command line (commit "riscv: Bump COMMAND_LINE_SIZE
+value to 1024").
 
-Ah, I wasn't aware of that possibility for OF graph. Yep, agreed then it's=
-=20
-enough.
+But it seems this actually fired after 300 seconds, right? (300
+seconds is the intended timeout on syzbot):
 
-> For i.MX93 LCDIF, the port node will be something like this:
-> --------------------8<--------------------------
-> port {
->         #address-cells =3D <1>;
->         #size-cells =3D <0>;
->=20
->         lcdif_to_pdfc: endpoint@0 {
->                 reg =3D <0>;
->         };
->=20
->         lcdif_to_ldb: endpoint@1 {
->                 reg =3D <1>;
->         };
->=20
->         lcdif_to_cross_line_pattern: endpoint@2 {
->                 reg =3D <2>;
->         };
-> };
-> --------------------8<--------------------------
->=20
-> Looks like it's not necessary to add a specifc example for i.MX93
-> LCDIF.
-
-=46ine by me.
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-> [1]
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/gr=
-aph
-> .yaml#L48
->=20
-> Regards,
-> Liu Ying
-
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-
-
+>         (detected by 1, t=30504 jiffies, g=14713, q=4 ncpus=2)
