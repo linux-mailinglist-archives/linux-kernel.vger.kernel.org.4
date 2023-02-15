@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC33A6982E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C00D6982F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjBOSEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 13:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S230136AbjBOSLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 13:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjBOSEf (ORCPT
+        with ESMTP id S229538AbjBOSLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:04:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED073CE16
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:04:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSM8f-0002SN-Cg; Wed, 15 Feb 2023 19:04:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSM8a-005AGu-Sc; Wed, 15 Feb 2023 19:04:14 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSM8b-003oDD-CX; Wed, 15 Feb 2023 19:04:13 +0100
-Date:   Wed, 15 Feb 2023 19:04:10 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
-Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
-        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/5] arm64: dts: apple: t8103: Add PWM controller
-Message-ID: <20230215180410.jhontngsrb5vvv55@pengutronix.de>
-References: <20230114132508.96600-1-fnkl.kernel@gmail.com>
- <20230114132508.96600-4-fnkl.kernel@gmail.com>
- <20230215111652.lyhebfntqlibtmex@pengutronix.de>
- <CAMT+MTRydNiYnhBJYVCoS5iXnhr7MywCV0t7FanHWwbwv2TrbQ@mail.gmail.com>
+        Wed, 15 Feb 2023 13:11:34 -0500
+X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Feb 2023 10:11:33 PST
+Received: from out-248.mta1.migadu.com (out-248.mta1.migadu.com [95.215.58.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDEF3B3CE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:11:33 -0800 (PST)
+Message-ID: <7629c295-fc74-41fe-fd2e-28fe3a6e0846@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676484297;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKm9gOUeXhfnihC/vGx+snLWS0EG0ToDKyRoLyPsITI=;
+        b=sRSP1l63/qGTmM/Qa0+s6DVn0CrNu29yWMtLz07RdNpmu3zPnzNiOWXFTgfCOAS/Nio5Zv
+        1p+T+q5emZwHlzr5SaFnVyG4h92w0tJEr+mFReoj4iCzRrVunL9cT/ATIyaRk5LtL/cr+N
+        eDm8O1cOwF5GyIUiD3obSFW5eGEmWR8=
+Date:   Wed, 15 Feb 2023 10:04:51 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yilcpz6dzlbuyk6k"
-Content-Disposition: inline
-In-Reply-To: <CAMT+MTRydNiYnhBJYVCoS5iXnhr7MywCV0t7FanHWwbwv2TrbQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v3 bpf] bpf, test_run: fix &xdp_frame misplacement for
+ LIVE_FRAMES
+Content-Language: en-US
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230215152141.3753548-1-aleksander.lobakin@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230215152141.3753548-1-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/15/23 7:21 AM, Alexander Lobakin wrote:
+>   /* The maximum permissible size is: PAGE_SIZE - sizeof(struct xdp_page_head) -
+> - * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3368 bytes
+> + * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3408 bytes
+>    */
+> -#define MAX_PKT_SIZE 3368
+> +#define MAX_PKT_SIZE 3408
 
---yilcpz6dzlbuyk6k
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+s390 has a different cache line size:
 
-Hello Sasha,
+https://lore.kernel.org/all/20230128000650.1516334-11-iii@linux.ibm.com/
 
-On Wed, Feb 15, 2023 at 05:47:07PM +0100, Sasha Finkelstein wrote:
-> On Wed, 15 Feb 2023 at 12:16, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > This missing newline looks wrong.
-> >
-> > Otherwise the patch looks fine to me.
->
-> Do you want a respin, or can this be fixed when applying the patch?
+The above s390 fix is in bpf-next. It is better to target this patch for 
+bpf-next also such that the CI can test it in s390.
 
-I'm not the one who will apply this patch, so I cannot say. Having said
-that, I wonder who will apply. Will this go via the arm tree, or via
-pwm?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---yilcpz6dzlbuyk6k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPtHpcACgkQwfwUeK3K
-7AnIUwf6A8IV/CXEap01qlTZISJ8wYlKprzqbrcfuItftWrFrVoOTL8ocSEW4fu8
-sYqEZHd/xW1SkHLXn6aCg/1ujkFmMZDT9facvPhBTDzAE61zGbOL7NsDGY1hrhja
-ngit5Zl77keHvabKpqNYKR9LmZtLTiqKpVKDcwhayfxGd1BRcMcA2sfm6HGjsNwi
-+rIXUdzIJDC0t2rzDZAcFJWFbnScMeudnnV2A0OX/ljvDBKZLkQGDp5hHOxc6qmo
-oToABe+8nrF6EtQit0ChbjudhiCrFKKezElks34G4E1Ch3cmj952/rTNHkDA5DVS
-7nGERtYC2i9H2l/3kpgKsUSxI85jAw==
-=ODpw
------END PGP SIGNATURE-----
-
---yilcpz6dzlbuyk6k--
