@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C162697B27
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AA7697B25
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbjBOLvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
+        id S233814AbjBOLvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbjBOLvn (ORCPT
+        with ESMTP id S233794AbjBOLve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:51:43 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C2C37F12;
-        Wed, 15 Feb 2023 03:51:42 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id n9so582635qkh.12;
-        Wed, 15 Feb 2023 03:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AXaEvrNDBi2xYStoe9dSpvKrnOnpCh86GTJcWGZ1v64=;
-        b=D/r+Y9pfSR1bw1mfU58zZPwQ+4n7YSmBx4snTYohpJsVyFZaUHuvsrLriwtbwQUn/q
-         yO5L8zRbmIJb5aPV5Mf+M3hm3J1ydmuHqyZpx0cSyUXlTcb8+DI9Q9YtBqjR9y9V3tLo
-         FxbZ7fch0VtSC71njI0a0kQH7gXYKQnwn3qj7kN1XCLSJFB1DkwnHRiAVIOegq+q4h+1
-         mldpMk0RMSLMRypebwRFuyrxSn3VY/RVuHbmeBXvpTL++A3NziU/pnieTXIDMjuNdeTc
-         Ub6NrgJos5e7gWrADk4SLualQOhlhf59pXBqI5TLUjtKhsi4J1+5aXD5AkRBfpjRlwE+
-         MDWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AXaEvrNDBi2xYStoe9dSpvKrnOnpCh86GTJcWGZ1v64=;
-        b=ojNUHWAYaou3QP+9kcZEmutbWPtSki3xQio+eRLEQ//T68A9yTEUKAn7CjKAz//ss5
-         vx7S5PXpS2NSNqy+ciOGe8Q3AqefQSdTA3ZDYAeoiabkneXm7cF4vuL0EFdVqu52emRT
-         MdMp6WjVzGWy9waLVR/KmbQc5D4MI7Y9JmZ18hgh6nM0UChfz2QRC6bhiwr8EMIc7m7U
-         cbGL2TZt9tkkba3inUH+WYs9+R2tJJbqHv235Dl0IkSsJMNx2h187RyWN6EeE4fl/p0g
-         VEmhBbYaboxAMh7pGlp/SHuAd0DUX3qIRZhR2k3dg4Zo9LWYsTRraHVhu/Q2fxUcCozm
-         RyQw==
-X-Gm-Message-State: AO0yUKVrYkkdMUpBZFwx8FxjeGTgk6/1WTWd/1J5qq9RXVyQzAEsXX8i
-        6X8bvqHlLxTSg2A2EbQp3HAP+i54QBV7KKNWNJdVOcDvM4o=
-X-Google-Smtp-Source: AK7set9a2blACOQbvid4QzlPeRThxlMEsngAnHQ1z0PMYJV2UR8daSPiv4hjeew0rfhXaDp15/YxqsyblokFvBFT8FY=
-X-Received: by 2002:a37:a89:0:b0:725:ff53:b58e with SMTP id
- 131-20020a370a89000000b00725ff53b58emr119421qkk.331.1676461901049; Wed, 15
- Feb 2023 03:51:41 -0800 (PST)
+        Wed, 15 Feb 2023 06:51:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F014513C;
+        Wed, 15 Feb 2023 03:51:32 -0800 (PST)
+Received: from [192.168.1.90] (unknown [86.120.32.152])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 319A86602181;
+        Wed, 15 Feb 2023 11:51:29 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676461890;
+        bh=QSCp6bo6FjxCSjfy/l3o4z89Z1La9kTv6gN3Uu+EpL4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A4rqdwtauXFIbQbOGHfLvjjQ6dlZiEqLF0CG/sWghsauCpAP2mXYKVMwkBAi8uEqZ
+         WyAnVKG1j4VGABIVUzHJKddu8kq1OX83D1bLDMHtGsHI0oTkwtBXfMA4Hpi9kWPQHQ
+         SEL0utAZxVaMKf2Rn3/aUwiy2nTVGox5FI2O/ZIxZdnaanRmdNZIk8hG7PXJMdadHn
+         7p01MjXuIbSf0cggW1k1sHvKuqRRXNk2UdSqWWaS2ECm5wmKJXU5+bWLLesiDLkBTy
+         0Qf3noLv63LboE1TWJ1VuVVP0d2wQjP+LjbDiK6j9PO8YUdgtvqbiop5Cg/d3aw3Ar
+         FDekpJ+BswxCw==
+Message-ID: <68708ef5-9a7f-b7e5-a7a0-e08f6d5ae3a3@collabora.com>
+Date:   Wed, 15 Feb 2023 13:51:26 +0200
 MIME-Version: 1.0
-References: <20230214073638.571417-1-alexander.stein@ew.tq-group.com>
- <Y+tn3Y+SraIetn5X@surfacebook> <CACRpkdYHJOgO9K_H9QA1_VWgParbh+Xqh-oCmo3JAFtaMXYByg@mail.gmail.com>
-In-Reply-To: <CACRpkdYHJOgO9K_H9QA1_VWgParbh+Xqh-oCmo3JAFtaMXYByg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Feb 2023 13:51:04 +0200
-Message-ID: <CAHp75VeCsbSe1knoDwjMjjg-YAK2K_RwV_giRt=H9VG-KwmQGQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] gpio: vf610: make irq_chip immutable
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 08/12] net: stmmac: Add glue layer for StarFive JH7100 SoC
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
+ <Y+e+N/aiqCctIp6e@lunn.ch>
+ <d1769dac-9e80-2f0d-6a5c-386ef70e1547@collabora.com>
+ <CAJM55Z8Uq2ZU3KvJZKDLZUJDLEyvHjCRJKcYn5CAOR0c2rhT7Q@mail.gmail.com>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <CAJM55Z8Uq2ZU3KvJZKDLZUJDLEyvHjCRJKcYn5CAOR0c2rhT7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 12:18 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Tue, Feb 14, 2023 at 11:52 AM <andy.shevchenko@gmail.com> wrote:
-> > Tue, Feb 14, 2023 at 08:36:38AM +0100, Alexander Stein kirjoitti:
-> > > Since recently, the kernel is nagging about mutable irq_chips:
-> > >
-> > >     "not an immutable chip, please consider fixing it!"
-> > >
-> > > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-> > > helper functions and call the appropriate gpiolib functions.
-> >
-> > ...
-> >
-> > > The overall changes are based on commit f1138dacb7ff
-> > > ("gpio: sch: make irq_chip immutable")
-> >
-> > Nice, but you forgot one crucial detail. You need to mark GPIO resuested
-> > whenever it's locked as IRQ and otherwise when unlocked.
->
-> +static const struct irq_chip vf610_irqchip = {
-> (...)
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
->
-> That's what this macro does ;)
+On 2/15/23 13:20, Emil Renner Berthing wrote:
+> On Wed, 15 Feb 2023 at 01:09, Cristian Ciocaltea
+> <cristian.ciocaltea@collabora.com> wrote:
+>>
+>> On 2/11/23 18:11, Andrew Lunn wrote:
+>>>> +
+>>>> +#define JH7100_SYSMAIN_REGISTER28 0x70
+>>>> +/* The value below is not a typo, just really bad naming by StarFive ¯\_(ツ)_/¯ */
+>>>> +#define JH7100_SYSMAIN_REGISTER49 0xc8
+>>>
+>>> Seems like the comment should be one line earlier?
+> 
+> Well yes, the very generic register names are also bad, but this
+> comment refers to the fact that it kind of makes sense that register
+> 28 has the offset
+>    28 * 4 bytes pr. register = 0x70
+> ..but then register 49 is oddly out of place at offset 0xc8 instead of
+>    49 * 4 bytes pr. register = 0xc4
+> 
+>>> There is value in basing the names on the datasheet, but you could
+>>> append something meaningful on the end:
+>>>
+>>> #define JH7100_SYSMAIN_REGISTER49_DLYCHAIN 0xc8
+>>
+>> Unfortunately the JH7100 datasheet I have access to doesn't provide any
+>> information regarding the SYSCTRL-MAINSYS related registers. Maybe Emil
+>> could provide some details here?
+> 
+> This is reverse engineered from the auto generated headers in their u-boot:
+> https://github.com/starfive-tech/u-boot/blob/JH7100_VisionFive_devel/arch/riscv/include/asm/arch-jh7100/syscon_sysmain_ctrl_macro.h
+> 
+> Christian, I'm happy that you're working on this, but mess like this
+> and waiting for the non-coherent dma to be sorted is why I didn't send
+> it upstream yet.
 
-Maybe I was unclear, but I meant that the above mentioned macro
-requires to have the helpers to be called to enable the GPIO line.
+Thank you for clarifying this and for all the work you have done so far, 
+Emil! If you don't mind, I would be glad to continue helping with this 
+mainlining effort.
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+>>>> +    if (!of_property_read_u32(np, "starfive,gtxclk-dlychain", &gtxclk_dlychain)) {
+>>>> +            ret = regmap_write(sysmain, JH7100_SYSMAIN_REGISTER49, gtxclk_dlychain);
+>>>> +            if (ret)
+>>>> +                    return dev_err_probe(dev, ret, "error selecting gtxclk delay chain\n");
+>>>> +    }
+>>>
+>>> You should probably document that if starfive,gtxclk-dlychain is not
+>>> found in the DT blob, the value for the delay chain is undefined.  It
+>>> would actually be better to define it, set it to 0 for example. That
+>>> way, you know you don't have any dependency on the bootloader for
+>>> example.
+>>
+>> Sure, I will set it to 0.
+>>
+>>>
+>>>        Andrew
+>>
+>> Thanks for reviewing,
+>> Cristian
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
