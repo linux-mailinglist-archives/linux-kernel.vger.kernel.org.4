@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C71698760
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009D5698763
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjBOVau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S230058AbjBOVbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjBOVas (ORCPT
+        with ESMTP id S229879AbjBOVbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:30:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119FF2313C;
-        Wed, 15 Feb 2023 13:30:46 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id he5so111819wmb.3;
-        Wed, 15 Feb 2023 13:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wwhRGKzzxRmhQ49hS4QWcVBIwbWV+s9hRRdXyP5iSY0=;
-        b=Z6PKgfElsvUztbaP1UgQEj8lPrM9wfGWphQUsc3B7ceB6XwV29NZos2LBs2XD/Lbea
-         OnFSLIPD0g7doJnmy2CzMuXfd+lZPEb9LxbrJHTvRK84geSiS420fnwq0kc5DTvFiHpI
-         p/JnQHxxwJTe7cLr1dto5kt5OgOO7Ua888nhaMysM49JWuCeLQu1sAtaLrN+Xkx8tdhc
-         atExoZ0RLXF7kRnVZmrqAIWuS/ErosDOatILyvTxC3Q5rlLn6Q1WE+OhL5+F1GK9daIc
-         XGKrnsJqQjUfcSl2riQyVsNgv3jc8OawoXWmxHkQvczv/ZhlrhuMgsXxyIvK6jXix4NO
-         1FDw==
+        Wed, 15 Feb 2023 16:31:43 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE1C233E1;
+        Wed, 15 Feb 2023 13:31:42 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id x26-20020a056830115a00b0068bbc0ee3eeso69372otq.0;
+        Wed, 15 Feb 2023 13:31:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwhRGKzzxRmhQ49hS4QWcVBIwbWV+s9hRRdXyP5iSY0=;
-        b=6MSUthqonT5QQ0G8xk76FR/PDp06coIWWYTsqhiKL/fMSokl6o8MeiBO+CXPu4bUb0
-         BzI/u/oXusngwnvr7v5Lhq919clZmaACTtlQMGYffv+q13sgkoZSueP0NkXvcm3YMFma
-         UQc/DvFZAnVNuYT+x+Wjzn8dN0NWkLYKxS0kAqFQFd0qKTV+o8vkFsmE5ifl1i8bOOpU
-         Vy6bnJLmcCc5Npx6PbhO9JIu7akEwMhzvmGgBZHxsCD7bdpnAZGkmmJc1LlUqu0HBYye
-         zJ8LpDm0OK4Sm/EM8SFskuGLImjSyvh/CZRDwGAEhBOX4zX/UsQXONM++Xo7BpfCRfJu
-         GrMg==
-X-Gm-Message-State: AO0yUKXKhuLzbyjh0OYiRzztAKMJE4yXq4ySHy61Zl17YJ7hhghqRysc
-        uy13ys6ONDW7NfBMx7ytJ5o=
-X-Google-Smtp-Source: AK7set8iMEK3VVHdeN+zzhoqFRVgIYezADgMMKC3NNKrFZt2Pq9ug0Jwtc11+Mj5+wUNupHmjzygQg==
-X-Received: by 2002:a05:600c:816:b0:3dc:5390:6499 with SMTP id k22-20020a05600c081600b003dc53906499mr3444167wmp.1.1676496645352;
-        Wed, 15 Feb 2023 13:30:45 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m7-20020adfe947000000b002c559626a50sm7912740wrn.13.2023.02.15.13.30.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 13:30:44 -0800 (PST)
-Message-ID: <066340d4-adec-a4da-3b88-d52f10f8bceb@gmail.com>
-Date:   Wed, 15 Feb 2023 22:30:42 +0100
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O6xfNqM54ZLmIz2YbilJDBW+8SeWORFysxlKCUVbjQc=;
+        b=XP7HDw83S0aQIfnpJngPADQJnMPxR8YtPx9VsoWs/WkEGK8JMN3MHvXAaB86NJQl/s
+         PXho2NM8lY/bajyc6XuW2A3N6EzPDTaYs4eN4yIp/PWtgv816xpHjQoJJW8LdoCmHPEf
+         q0j7CqiyqEvdrTwnQYELE2IFGr2+voL+iDTxyZI7dT9xKuYHNoB9lqcSrhW6FAFrU+6Q
+         mzgTUtfZxqmeKnuoGshk7+FJe0sF6O4qLifi9KjGAy1Ufy7jiqWwq6ZVVuLkMc+t5dlV
+         NxGsVjo+AYKzqmuMVFQoDMMmgw8Hykeo7nXTZx9jUQp3cqZnpoUtQZsP6zHyu5gP+3+a
+         7MBg==
+X-Gm-Message-State: AO0yUKXhHU9hOjuvkXBLImuu74IrNxesIVw5vsOtHpRoNJ9OgZggFcnH
+        hKLCH57RkW53e1fMJ5OU9g==
+X-Google-Smtp-Source: AK7set/2aDFkLTc1Pcmo3QEZ3+YP/E2bn04VhpJQ7gg4ECFUH3P8CEKxATClYtwv3H8G3aZT4y+8ag==
+X-Received: by 2002:a05:6830:144a:b0:68d:3ea5:1734 with SMTP id w10-20020a056830144a00b0068d3ea51734mr1748127otp.16.1676496701422;
+        Wed, 15 Feb 2023 13:31:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y10-20020a9d634a000000b0068bd20cf07dsm8096385otk.48.2023.02.15.13.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 13:31:40 -0800 (PST)
+Received: (nullmailer pid 664383 invoked by uid 1000);
+        Wed, 15 Feb 2023 21:31:39 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH -next v2] wifi: mt76: mt7996: Remove unneeded semicolon
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, kuba@kernel.org
-Cc:     pabeni@redhat.com, angelogioacchino.delregno@collabora.com,
-        ryder.lee@mediatek.com, lorenzo@kernel.org, nbd@nbd.name,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230215055650.88538-1-yang.lee@linux.alibaba.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230215055650.88538-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Bastian Germann <bage@debian.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-sunxi@lists.linux.dev,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20230215203711.6293-5-bage@debian.org>
+References: <20230215203711.6293-1-bage@debian.org>
+ <20230215203711.6293-5-bage@debian.org>
+Message-Id: <167649580161.649957.15557847976208120638.robh@kernel.org>
+Subject: Re: [PATCH v2 4/5] dt-bindings: hwlock: sun6i: Add a64 compatible
+ string
+Date:   Wed, 15 Feb 2023 15:31:39 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,37 +74,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 15/02/2023 06:56, Yang Li wrote:
-> ./drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3136:3-4: Unneeded semicolon
+On Wed, 15 Feb 2023 21:37:09 +0100, Bastian Germann wrote:
+> Add an allwinner,sun50i-a64-hwspinlock compatible string to the device
+> tree binding. The A31 and A64 have compatible hwspinlocks.
 > 
-
-Please be more verbose in the commit message.
-
-Regards,
-Matthias
-
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4059
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Signed-off-by: Bastian Germann <bage@debian.org>
 > ---
+>  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> change in v2:
-> Add the linux-wireless to cc list.
-> 
->   drivers/net/wireless/mediatek/mt76/mt7996/mcu.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
-> index dbe30832fd88..8ad51cbfdbe8 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
-> @@ -3133,7 +3133,7 @@ int mt7996_mcu_get_chip_config(struct mt7996_dev *dev, u32 *cap)
->   			break;
->   		default:
->   			break;
-> -		};
-> +		}
->   
->   		buf += le16_to_cpu(tlv->len);
->   	}
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.example.dtb: hwlock@1c18000: compatible: ['allwinner,sun6i-a31-hwspinlock'] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230215203711.6293-5-bage@debian.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
