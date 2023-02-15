@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8E4698766
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927EE698769
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjBOVc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S229564AbjBOVfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjBOVcX (ORCPT
+        with ESMTP id S229485AbjBOVfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:32:23 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206D027982
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:32:22 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so3761745pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfYEghNnaEjUfoOcnZ4G0+8zAvGSYgSt957kdbuuys4=;
-        b=d1rnikvOvf/SGy/v2+qrDhe4dbC1eCnXDz2MDCEFQFrQmdniFgCZOM0UH4WI+8mPwQ
-         rlJUw1nQQEmDoXRV0zbXQF6kb7rEpfJHHVQHdB3XjGdjohKrW7Iwhl5w5fjc/7y68clN
-         O0NbwwIz7iyeQ9gHUSU7DHnh/S+DprlGjeGqc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kfYEghNnaEjUfoOcnZ4G0+8zAvGSYgSt957kdbuuys4=;
-        b=3CVLpsHTpHYWiwn8ru9vLAYCi72dUom1DQJvKjVGFGvVBdu+cLOqmrANWrlpLWXS9K
-         dcnb5e3YXIOVU7G6j5nzjjeQU8a2B/cwf+ptZZvRQ1fJuOc1ueKwjRfD6kw0kMOKpWhF
-         VXGo2MBtQKnex+sIzlmuPWUfNd4YYJJt1X2qsLVnIMg20ieGYDFBTDoOQpANzaazGmj5
-         HrTjHGmOe07OY7t3q6WS5zeZoXYZHGdo7aVTlAHCSBZoJxvZ0jHMUmQOGhGx8cb1T7m6
-         3/dJvufqj6WpqohDV9Ug9ZDH5xuAsxHZiCC461PGiAOuUfsRWoq+l2A33173UKTOJwTJ
-         M7rw==
-X-Gm-Message-State: AO0yUKU+hkq3r2bK5K857idIrmf8Cybj+oN8k7CQ6nOiGpnJkeXLBok+
-        ifz7rJbzqIPsPdmKehmzx96HeGGhId48QN97
-X-Google-Smtp-Source: AK7set+wTlRh8SP7In9F+w0tsSMTRd836XZmLAJXyqYif3yvQ2ETEmZh7wyNqIPWtp3PhiL6eWURgA==
-X-Received: by 2002:a17:903:120e:b0:197:35fc:6a5d with SMTP id l14-20020a170903120e00b0019735fc6a5dmr4153057plh.30.1676496741565;
-        Wed, 15 Feb 2023 13:32:21 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b001991e4e0bdcsm12548670pls.233.2023.02.15.13.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 13:32:21 -0800 (PST)
-Message-ID: <63ed4f65.170a0220.b2f75.8a8f@mx.google.com>
-X-Google-Original-Message-ID: <202302151330.@keescook>
-Date:   Wed, 15 Feb 2023 13:32:20 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Brian King <brking@us.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        James Bottomley <James.Bottomley@steeleye.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        John Garry <john.g.garry@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
-References: <20230214132831.2118392-1-arnd@kernel.org>
+        Wed, 15 Feb 2023 16:35:01 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2058.outbound.protection.outlook.com [40.107.102.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E8B769C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:35:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AQOd+2S2faj4hca5yPAsDSDeymVJMHrKkNzCATrHaH5Kxwj5fm7AmXtXKtvvSHmQvWFd3aI5PQOeXQdpWeLMni6hVB6FZ7AzpRgluj7kn/3e5XJTc/le/lzSi1uQvAexUGeH2LGzn4t4ZuFBl5rGUSXRhQX70AuKZO8uI1WkPgoLIaRKKfVPPW5He/J3+08WAksxDViqSLGLhYyAqM2PIztXB2HDIc+lJlhN2UveRejUoP8asE+X1Y6yOPPS6tKKNegJGYI20aVQNeRtOQjsTTe62itRijVwwpYfI2VuGRsDtlfywkxya6wGucq8KkrrWmVVb/Si9AKMxXTFEUmykg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y0DJx+oKrYFmZYTMQiY43ffEUZIFaSoj/e/nfesL16Y=;
+ b=ICUrZifCd+oo+2+rIX0+vGMOr2ASwRn5KbtYYJQ0oh0yAmyOwxWLFOBqvmlTqZuqyw68dTU7B8f4vUHC3z2mqEwQPNcE7HrcJxeENClMcbB98W5mFQ4rf7d0ys5xRrTXDB8oruNaxW5qBk/2HljD+vlZvSf+I/b75jadUcg+tb5Ymc6sa4SwcUFiKBiI29u4cs+uLxMmKqSaneBCOi91klEWWu5znol/0GpPT+j+Wfy9XV/3b8IR4ATS+dr0B3WhfgzWpL+GpOe2zKaYm2I1x0CdhHCo8l75RvvMSCkmwFphkht54WBOfRFDbVJyHQw2WXAMgU1PTb+8kZZfu8rvrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y0DJx+oKrYFmZYTMQiY43ffEUZIFaSoj/e/nfesL16Y=;
+ b=v0YVzgcVEFo1B9RsCDqPeU8cn+VvoL5ygt9XdPGrz6nu/v0aGcLwy39VRRntucC5z5OJ31GuZn58WW51o7RvPxL/GrxTbWSJb85kAPgeteQhn85RE6t4zaqeeVthqV4icX/1a02rX/3iFEkhRNPpHojFT4SSgzxi01VKxJC7zYw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by CH2PR12MB4119.namprd12.prod.outlook.com (2603:10b6:610:aa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 21:34:57 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 21:34:57 +0000
+Message-ID: <a0934601-3a7c-dcb5-8d23-81a3cdfc2c4d@amd.com>
+Date:   Wed, 15 Feb 2023 16:34:48 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] drm/amd/display: only warn once in
+ dce110_edp_wait_for_hpd_ready()
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>,
+        "Nagulendran, Iswara" <Iswara.Nagulendran@amd.com>,
+        Tony Tascioglu <tony.tascioglu@amd.com>,
+        zhikzhai <zhikai.zhai@amd.com>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        "Leung, Martin" <Martin.Leung@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230214211254.233468-1-hamza.mahfooz@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230214211254.233468-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0115.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::15) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CH2PR12MB4119:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3f602e9-758f-44fd-073e-08db0f9c7bac
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fWcb3VU2r9yCIPjbMUHzO/CzvNrwbGSC4I1XqghTJs8M3CzSiCvJJF5jP7cNeDUmLDOFBkyQFyyBnHRQSbfHE5LuN5WLguo6AGqrywZf0HPMATsKntYAChWn5BwKunh7VZ7mZJPdVwS/2ublMdVHO9z5oZtY16jTMoVpp1Cemo3fVBEiDiSiAcpq3p2JIn7SAUXS6tt62yleEKX9AzznTYkIfAYq164k+0GDNk3Cirl3fDO4YV+9a5S2uH/yr/73c2JjFmeHsg44Vy801ZWTNm94p1oIa+YA4eq8XXO2hleSilf4No8CynVtNCD/2zgyEXbdZNVnv8pAAKoXmgDNR84fQhByXmeO7td02L16QMWB08Kqy5L88Fv9F26qy6zkKde0OhpiQbwGMWFy7alS9PA7sr/q55oZKw/eUc1avtqroiU2CESaladcJA5pHwWLuNL9Ep83LYRICwQDtwGRzi0DgJseMQhHSSik2zio5qOuY5E+N/AFCYcLabizjwWpexaYihP4sx3O6tWFV6pg7CRTRm1jL2EXJ9xk1wBZPZ0lP7ssCd1BGoioHyBII0bGBExw2W6iE27xdXh5de1K7JVpU50VG0SzKadQ8/43UJ2Y2yGgkBY9eC5ShJdSeTfrBDrMvZuBSxI2vQOx0sWbrMAXzCyqmBpXu7t/WXNtitIWSt0J2p4I+nAGxeNQPXmR2jPxY1eHjm2VKwJ99vjQFGfTltdidWMefnP5R/mEFak=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(451199018)(8676002)(316002)(66476007)(66556008)(8936002)(66946007)(4326008)(54906003)(5660300002)(44832011)(2906002)(31686004)(41300700001)(6486002)(478600001)(186003)(6506007)(6512007)(53546011)(2616005)(26005)(36756003)(6666004)(83380400001)(38100700002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUFMdGlRdTBqeUdMMVVseUF5WVYzdWsyVGpPN1pQOHRNd0s3ZHlYZzVNZjg4?=
+ =?utf-8?B?TlVOZElZdll4bHlZdzR0cUl3aVZZdlJsWC9ENzJFZVNoSmF2WnhjTi9BTExp?=
+ =?utf-8?B?VGcybzBzWmJodjdtT1Mwd2JRZEluZXAzMm9XeXNlbXRmYjJDalJHaWhvOERG?=
+ =?utf-8?B?Nm9LWlNHODZOcWJOaG9OVkVJb2Vub3YwNW9LaHY1QTYwbzJqT2xYRXczS0VP?=
+ =?utf-8?B?L0RnMzhJVENRK1VOYVhXSTAzNDNoNVZ6bHpCN0w2Ty91SWdYeitOOTlKcmxD?=
+ =?utf-8?B?ajJ6QkZFa2wrbkVla2FYbTBRbzBPdXYxQUJ2OWt3M0FvV2pXOGVUQUlxdFQr?=
+ =?utf-8?B?Wm41YktldFF6MVI4bG42aWdMUWpDYXcwUjBTY1RKTytiNGd5QStXclBsVHNU?=
+ =?utf-8?B?eWtkZ210amIrbi9KdmM1WmFaejNLK2RtM2FzNVRNNS9TeXM4TDVpUlRGVTJt?=
+ =?utf-8?B?ZFVHWW5QenJnUEYydUVLeWxXcFhqTEMyQTIyMHFsMVF0N25La1BEdCswck5L?=
+ =?utf-8?B?RVRtQ0h4M0tXY0ROOXh6Q05OVjBzbGRlVkZHUno2RlB0bzhvajFZWnFtOXpm?=
+ =?utf-8?B?ZjA2OFNKS2ZhTFQzMUlsWXo1VFFibDhYVkhxdDBzOGR6SFU0YmJWL2l3WlZv?=
+ =?utf-8?B?b3NDZXVrSUh6S1VEK1h3SVVzdzhoOE42NFg0NUk2M2lrQXpqZGdSS3VWamVa?=
+ =?utf-8?B?YnltRFJYZDhCNnhLODBGeGVDOGwrU0RuNEh3cDh1T3A0MndxYzE5cHc5eXZS?=
+ =?utf-8?B?bVRzcTBKUmxLQXJGelJ4ckVZUHRyL0tXeHRBMVh1c2xzRU9xeWp1MUNzTldk?=
+ =?utf-8?B?UDRicm1XWlBPWm05ZHliaHgrU2JDM2c1MzlIUE83QlQvQ3hUYVhrbzhNQzFz?=
+ =?utf-8?B?RDltczRwS3REbkJzZzJURHVvcnQ1M3F3QW5IMlQ1YWV3YkVCRlluRW9YWFJE?=
+ =?utf-8?B?QmdnZWhKaW96b2U5bzJDWjNpZnlLQTlueUN4WGhnUEd5dU4vMk9PS0tCVU96?=
+ =?utf-8?B?RjhLNyswa1RHV2FETWl1elRRWnZVUjN2SGxSVG5RZ3BRSGg2VG05WTJYcWJ2?=
+ =?utf-8?B?NSsvSU9HSnFDZWtFTTJwZHoxRGc2L3k0QVViRlBCNmkrajBqTldzZVI3WVRJ?=
+ =?utf-8?B?VHRhQVF0ckpQbHMwZGZHdzA3NzNMT0RyVkV0NVMvKytNdGQzUVNwTEhBZFdK?=
+ =?utf-8?B?Rk5Ed2hZZStCbVdTSU9vNGltOWNUSGwrVlVsMDQ1RVlCanAyR1JEZ3dnYmY0?=
+ =?utf-8?B?akJpejVSZk1zMC94bnI1VTdIdnB3dFhSMjR3RXNxc2RkakVCbldPSUZjR1d4?=
+ =?utf-8?B?ZFZnQ1dwRk5oUnRrM2lTQnE1dElleXV4N29sTjRkRS9BaFdFT0VBbnIwaTFr?=
+ =?utf-8?B?S2djWWVhNXRkeExQTUFXUUM0SkZKaVlMOFlvcGlWcE96RHFlUDYzL2hlZHRs?=
+ =?utf-8?B?OXExcThMd25IenQyRkJYL0dIeW1oQThDdXhXSlMvN1cyN01QbXI0ZVdTaXh6?=
+ =?utf-8?B?QUlodk9pbmVTTVRXdjY3b1JWaHlrRWFod25ETGxtL0xsTUswQjhoZStiZk9z?=
+ =?utf-8?B?U0E1dkNGVDhDU0pWT3czbllUMTgxc2V0YzZhYWVYT3FqUzdvQ255c2FTWHIy?=
+ =?utf-8?B?YnhHdnZ0TGhxZlRrK2hiZ1pJRUljaGtGbG4zUUIybm1oR09jVGlENlpYSTFH?=
+ =?utf-8?B?ZkpEa2VUZVlrRmxaMGhMMzVQOHhvNjB3NnRQSFhSaXhQYmlVWXRKV25XVmsx?=
+ =?utf-8?B?T3VLaXlCVWEyTXc1OHFJUkFjVlF5MlR5VU1tUDQwL3U4RVo2VUFqWGJ1VkxH?=
+ =?utf-8?B?Tnhlb3dmSjhFblZ5S0FqY2JYNkZ1SW9GcTM2NzQxMHBGRlZQSW5XMEoxOEE5?=
+ =?utf-8?B?R2FhL3JhTG5IcEJ0NTdTbTZjZDdqbTdKWmwrOXNKeEhkay95N2VaajZ4djEx?=
+ =?utf-8?B?MWl4KzQ0RVJEYVc1NWZ0RTh4Z2dBSjVlU1JFc0lubGwzL2JlalZlUVVsSGEw?=
+ =?utf-8?B?QUptcnNuNVRoT3NqUUNlRm04T2VJMEdMN1BFTC9ybEdHY2F6T2ZkQ1FWNnRV?=
+ =?utf-8?B?OFY1bmtpZU1aTmFsNHlPWVNDd3JXSEZlRWJ3djJBOFVRNENkakRVWVd5TFVY?=
+ =?utf-8?Q?L16Jbd0CMjY55rEPsgjebvgEp?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3f602e9-758f-44fd-073e-08db0f9c7bac
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 21:34:57.0999
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ty7RB9oJfqBEQ193o/0EUyDcXgH+UrC0NCqTQdSWCi0feasySkU5klGXKrgEtbeJ0a78oRkx5WUTmAb4dODETw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4119
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:28:08PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
-> about a potential string overflow with all versions of clang:
-> 
-> In file included from drivers/scsi/ipr.c:43:
-> In file included from include/linux/string.h:254:
-> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
->                         __write_overflow_field(p_size_field, size);
->                         ^
-> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> 2 errors generated.
-> 
-> I don't see anything actually wrong with the function, but this is the
-> only instance I can reproduce of the fortification going wrong in the
-> kernel at the moment, so the easiest solution may be to rewrite the
-> function into something that does not trigger the warning.
-> 
-> Instead of having a combined buffer for vendor/device/serial strings,
-> use three separate local variables and just truncate the whitespace
-> individually.
-> 
-> Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Reproduced this locally -- I agree your fix looks like the best
-approach. I think Clang was seeing the old "i + 2" return as potentially
-overflowing in the case where there was no space-padding on any strings.
+On 2/14/23 16:12, Hamza Mahfooz wrote:
+> Since, hot plugging eDP displays isn't supported, it is sufficient for
+> us to warn about the lack of a connected display once. So, use ASSERT()
+> in dce110_edp_wait_for_hpd_ready() instead of DC_LOG_WARNING().
+> 
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
--- 
-Kees Cook
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+
+Harry
+
+> ---
+>   drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
+> index fb3fd5b7c78b..0d4d3d586166 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
+> @@ -779,10 +779,8 @@ void dce110_edp_wait_for_hpd_ready(
+>   
+>   	dal_gpio_destroy_irq(&hpd);
+>   
+> -	if (false == edp_hpd_high) {
+> -		DC_LOG_WARNING(
+> -				"%s: wait timed out!\n", __func__);
+> -	}
+> +	/* ensure that the panel is detected */
+> +	ASSERT(edp_hpd_high >   }
+>   
+>   void dce110_edp_power_control(
