@@ -2,289 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11DC69767C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 07:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BB269767F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 07:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbjBOGhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 01:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S229584AbjBOGiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 01:38:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbjBOGhj (ORCPT
+        with ESMTP id S233395AbjBOGiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 01:37:39 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4842423C65
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 22:37:36 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id bt8so14715162edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 22:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SkGPeLz9G3QwJ7k+VnCtMU3iYf1WQRR6SOIzc6kL610=;
-        b=S+/FEIEt4gy30WD7pMHIwm4gBOKP21dIzeE16rtGdoMse6JZhBIma9C1lcV1OYwgIu
-         r1jOJVEWnKOfuiJ6deWTFg9E2OZxOjOEBClujnGijJKrsnjEvr7HdH7IpoepWZDZoh3G
-         gFZGO3THVBdThMTwxwVj54vwrK3rOqz63DdorxFDVNHgLAXhKvoFgzHWGFG9JalNErfv
-         3g3UJmFfIC8mn8OBnHqgwBRJxYAPVvFqszDtc08+DPqBxGbaSfW7i2Ar+Uom8gpz1Zgm
-         jMZ0v0B4riYMskl5qnxraB7Qu7hQbEUcletQE/G+NrK7fEAvJa3fRXfG5jg7y5v0XKfr
-         2yqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SkGPeLz9G3QwJ7k+VnCtMU3iYf1WQRR6SOIzc6kL610=;
-        b=8Nf0EtngDik6vUXlyWaK7mvudH65cBKbbrz0zflD49qsN/GHE4enEpGQxSnNEj7oCA
-         dbNUFcoKgwYceiTJIAa9qUxZ4ke2fwdA28IEc/8W4rnrLzr3GPISPLeHCwdgPYEaqEi2
-         Mi2HxRAT/B0l0vLueRveBCHGp/s6HxDH/IbELl2+Ns2Wlj4N/ul4WrRKMguzL4Kq/LiE
-         j4/0yjXeeM+LGesFaxbqwiUzp8iXmD0iJb0/ZjscAgCT7rdoISA3WmROxyW1rXUqiP25
-         MlecKQ0YwQWpNnmtxSE2/fI+9ekmEzWAhij8sWfBHhD5q45JYOInRCfnPQIBMklFtYYi
-         e1qg==
-X-Gm-Message-State: AO0yUKUZXN8JFMboxV7rt5sug9S5LrY7WwqWnEHJJHPSBfeqX5XKuj0t
-        t+gqRL2tTk034yRX0zXNIxPYSfZTehQhCKuegnODTw==
-X-Google-Smtp-Source: AK7set+qXiQiB9x9uCSwZk1QYwnxZY1Eg0UWlqo7Q/oouHLaAgH6SKW5Si30EzW4dwAZHuh6nm4kP34VtzMPlMZwUBk=
-X-Received: by 2002:a50:d717:0:b0:4ab:49b9:686d with SMTP id
- t23-20020a50d717000000b004ab49b9686dmr434737edi.1.1676443054782; Tue, 14 Feb
- 2023 22:37:34 -0800 (PST)
+        Wed, 15 Feb 2023 01:38:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5116244A9;
+        Tue, 14 Feb 2023 22:38:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F23DB81F8C;
+        Wed, 15 Feb 2023 06:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98798C433D2;
+        Wed, 15 Feb 2023 06:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676443080;
+        bh=nbfks5SxqpR0gszR04yvv2KhvKHnEe8MOnFIrLhiFeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=banI3owiXJMy4ikQsPCws6BAl+NVP/yRML79hRHm+Cnwifzt7jE2PIYEV62dfrP45
+         C1Wu4BDDNJQjjLFHzsCJh+5tVobqqS0SE3axS851ssrcuRWzv1TUjO7KcI7R+UmVky
+         Fv5GTCz3DtvW2/ILGMCQzooaPjvDQFr99L6sKhDmm3TSkIiLvrC7emttWZCiE4oIQm
+         kCfrOMyyoCHgvK/PjzKTwqQvUNA5Zmne6PUB+hwZAG7jaD1/VMkt15ZO6Nlajuqkbd
+         /niuTN2iphHLaPwTwbCfDLY9hU2bldFDVUX0+WAdwP1LKi67U0IFoExjnTSXSJsVFS
+         sPJNIO/4dBqrQ==
+Date:   Wed, 15 Feb 2023 08:37:43 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Nadav Amit <namit@vmware.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Subject: Re: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install
+ WP PTEs
+Message-ID: <Y+x9tx8faNzvZAug@kernel.org>
+References: <20230214215046.1187635-1-axelrasmussen@google.com>
+ <Y+wIdeu3Lw/3kmXg@casper.infradead.org>
+ <CAJHvVciR=inDaKnmCfCQsxgBsJB6eQVDXQw67o0Foc9ofgbuow@mail.gmail.com>
+ <Y+woHZ3AHe3quadT@x1n>
 MIME-Version: 1.0
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-20-rick.p.edgecombe@intel.com> <20230214000947.GB4016181@debug.ba.rivosinc.com>
- <1dd1c61c69739fde6db445df79ebbbbec0efe8cd.camel@intel.com>
- <20230214061007.GC4016181@debug.ba.rivosinc.com> <9ea047ed05d75822991325b709f583ee10b0fa34.camel@intel.com>
-In-Reply-To: <9ea047ed05d75822991325b709f583ee10b0fa34.camel@intel.com>
-From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Tue, 14 Feb 2023 22:37:16 -0800
-Message-ID: <CAKC1njST4i=88zqk6kQfjnVjr+eU=hdDYmTJSb_TGrKX9UftjQ@mail.gmail.com>
-Subject: Re: [PATCH v5 19/39] mm: Fixup places that call pte_mkwrite() directly
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+woHZ3AHe3quadT@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:24 AM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Mon, 2023-02-13 at 22:10 -0800, Deepak Gupta wrote:
-> > On Tue, Feb 14, 2023 at 01:07:24AM +0000, Edgecombe, Rick P wrote:
-> > > On Mon, 2023-02-13 at 16:09 -0800, Deepak Gupta wrote:
-> > > > Since I've a general question on outcome of discussion of how to
-> > > > handle
-> > > > `pte_mkwrite`, so I am top posting.
-> > > >
-> > > > I have posted patches yesterday targeting riscv zisslpcfi
-> > > > extension.
-> > > >
-> > >
-> > >
-> https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
-> > > >
-> > > > Since there're similarities in extension(s), patches have
-> > > > similarity
-> > > > too.
-> > > > One of the similarity was updating `maybe_mkwrite`. I was asked
-> > > > (by
-> > > > dhildenb
-> > > > on my patch #11) to look at x86 approach on how to approach this
-> > > > so
-> > > > that
-> > > > core-mm approach fits multiple architectures along with the need
-> > > > to
-> > > > update `pte_mkwrite` to consume vma flags.
-> > > > In x86 CET patch series, I see that locations where `pte_mkwrite`
-> > > > is
-> > > > invoked are updated to check for shadow stack vma and not
-> > > > necessarily
-> > > > `pte_mkwrite` itself is updated to consume vma flags. Let me know
-> > > > if
-> > > > my
-> > > > understanding is correct and that's the current direction (to
-> > > > update
-> > > > call sites for vma check where `pte_mkwrite` is invoked)
-> > > >
-> > > > Being said that as I've mentioned in my patch series that
-> > > > there're
-> > > > similarities between x86, arm and now riscv for implementing
-> > > > shadow
-> > > > stack
-> > > > and indirect branch tracking, overall it'll be a good thing if we
-> > > > can
-> > > > collaborate and come up with common bits.
-> > >
-> > > Oh interesting. I've made the changes to have pte_mkwrite() take a
-> > > VMA.
-> > > It seems to work pretty well with the core MM code, but I'm letting
-> > > 0-
-> > > day chew on it for a bit because it touched so many arch's. I'll
-> > > include you when I send it out, hopefully later this week.
-> >
-> > Thanks.
-> > >
-> > > From just a quick look, I see some design aspects that have been
-> > > problematic on the x86 implementation.
-> > >
-> > > There was something like PROT_SHADOW_STACK before, but there were
-> > > two
-> > > problems:
-> > > 1. Writable windows while provisioning restore tokens (maybe this
-> > > is
-> > > just an x86 thing)
-> > > 2. Adding guard pages when a shadow stack was mprotect()ed to
-> > > change it
-> > > from writable to shadow stack. Again this might be an x86 need,
-> > > since
-> > > it needed to have it writable to add a restore token, and the guard
-> > > pages help with security.
-> >
-> > I've not seen your earlier patch but I am assuming when you say
-> > window you
-> > mean that shadow stack was open to regular stores (or I may be
-> > missing
-> > something here)
-> >
-> > I am wondering if mapping it as shadow stack (instead of having
-> > temporary
-> > writeable mapping) and using `wruss` was an option to put the token
-> > or
-> > you wanted to avoid it?
-> >
-> > And yes on riscv, architecture itself doesn't define token or its
-> > format.
-> > Since it's RISC, software can define the token format and thus can
-> > use
-> > either `sspush` or `ssamoswap` to put a token on `shadow stack`
-> > virtual
-> > memory.
->
-> With WRSS a token could be created via software, but x86 shadow stack
-> includes instructions to create and switch to tokens in limited ways
-> (RSTORSSP, SAVEPREVSSP), where WRSS lets you write anything. These
-> other instructions are enough for glibc, except for writing a restore
-> token on a brand new shadow stack.
->
-> So WRSS is made optional since it weakens the protection of the shadow
-> stack. Some apps may prefer to use it to do exotic things, but the
-> glibc implementation didn't require it.
->
+On Tue, Feb 14, 2023 at 07:32:29PM -0500, Peter Xu wrote:
+> On Tue, Feb 14, 2023 at 02:37:51PM -0800, Axel Rasmussen wrote:
+> > Agreed, it would likely be a nice cleanup. Peter, any objections? I
+> > wouldn't mind writing a commit to do this sort of refactor, and rebase
+> > my change on top of that.
+> 
+> No objection here.  Personally I actually prefer keeping the parameters
+> around if possible because it's straightforward and no thinking of any
+> possible indirect accesses all over the place. But maybe growing as long as
+> 8 is still a moot point..  It's just that I don't really know whether it'll
+> look that good if we put everything into a struct*.
+> 
+> Things like src_start/dst_start/.. do not look good to be there: each layer
+> could loop over its own range of start/end/... so even if not in the
+> function parameter we'll need a variable to hold them anyway.
+> 
+> But I do see a few low hanging fruits:
+> 
+>   - I don't see why we need to pass over mmap_changing over all of the
+>     __mcopy_atomic() callers.  One chance is we simply pass in the ctx* to
+>     replace "dst_mm + mmap_changing".
 
-Yes, I understand WRSS in user mode is not safe and defeat the purpose as well.
+Now ctx* is completely private to fs/userfaultfd.c and I think it'd be
+better to keep it this way.
+ 
+>   - Merge mcopy_atomic_mode and mode, having last 2 bits for the existing
+>     three modes, then bit 3 for WP, good enough to set it for the new case.
 
-I actually had meant why WRUSS couldn't be used in the kernel to
-manufacture the token when the kernel
-creates the shadow stack while parsing elf bits. But then I went
-through you earlier patch series now and I've a
-a little bit of context now. There is a lot of history and context
-(and mess) here.
+Agree, having flags instead of an enum and bools sounds better to me.
+ 
+>   - Optionally, we can avoid passing over dst_mm/src_mm all around, when
+>     dst_vma/src_vma is there?
 
-> >
-> > >
-> > > So instead this series creates a map_shadow_stack syscall that maps
-> > > a
-> > > shadow stack and writes the token from the kernel side. Then
-> > > mprotect()
-> > > is prevented from making shadow stack's conventionally writable.
-> > >
-> > > another difference is enabling shadow stack based on elf header
-> > > bits
-> > > instead of the arch_prctl()s. See the history and reasoning here
-> > > (section "Switch Enabling Interface"):
-> > >
-> > >
-> https://lore.kernel.org/lkml/20220130211838.8382-1-rick.p.edgecombe@intel.com/
-> > >
-> > > Not sure if those two issues would be problems on riscv or not.
-> >
-> > Apart from mapping and window issue that you mentioned, I couldn't
-> > understand on why elf header bit is an issue only in this case for
-> > x86
-> > shadow stack and not an issue for let's say aarch64. I can see that
-> > aarch64 pretty much uses elf header bit for BTI. Eventually indirect
-> > branch tracking also needs to be enabled which is analogous to BTI.
->
-> Well for one, we had to deal with those old glibc's. But doesn't BTI
-> text need to be mapped with a special PROT as well? So it doesn't just
-> turn on enforcement automatically if it detects the elf bit.
->
-> >
-> > BTW eventually riscv binaries plan to use `.riscv.attributes` section
-> > in riscv elf binary instead of `.gnu.note.property`. So I am hoping
-> > that
-> > part will go into arch specific code of elf parsing for riscv and
-> > will be
-> > contained.
-> >
-> > >
-> > > For sharing the prctl() interface. The other thing is that x86 also
-> > > has
-> > > this "wrss" instruction that can be enabled with shadow stack. The
-> > > current arch_prctl() interface supports both. I'm thinking it's
-> > > probably a pretty arch-specific thing.
-> >
-> > yes ability to perform writes on shadow stack absolutely are
-> > prevented on
-> > x86. So enabling that should be a arch specific prctl.
-> >
-> > >
-> > > ABI-wise, are you planning to automatically allocate shadow stacks
-> > > for
-> > > new tasks? If the ABI is completely different it might be best to
-> > > not
-> > > share user interfaces. But also, I wonder why is it different.
-> >
-> > Yes as of now planning both:
-> > - allocate shadow stack for new task based on elf header
-> > - task can create them using `prctls` (from glibc)
-> >
-> > And yes `fork` will get the all cfi properties (shdow stack and
-> > branch tracking)
-> > from parent.
->
-> Have you looked at a riscv libc implementation yet? For unifying ABI I
-> think that might be best interface to target, for app developers. Then
-> each arch can implement enough kernel functionality to support libc
-> (for example map_shadow_stack).
->
->
++1
+ 
+> How about we start from simple?
+> 
+> -- 
+> Peter Xu
+> 
+
+-- 
+Sincerely yours,
+Mike.
