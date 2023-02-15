@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAF26988BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC3B6988CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBOXW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S229695AbjBOXgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 18:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBOXW5 (ORCPT
+        with ESMTP id S229532AbjBOXgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:22:57 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3665142BE9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:56 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id ky6so1016102ejc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:56 -0800 (PST)
+        Wed, 15 Feb 2023 18:36:50 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA9543469;
+        Wed, 15 Feb 2023 15:36:48 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so282434wmb.5;
+        Wed, 15 Feb 2023 15:36:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tabx9NVVhDi2NL80cED89hxZVqfHcpcD6w5gvEiG26Q=;
-        b=Q8cRbK9bsfMvz1Nn6UBM35NtrHJymdIg7nZkemYtGgv/3Q3yDTJhJG+X81qDdYabIf
-         xxrtKoM9CiUsnARz3yOk+5K7ZQQZ+AQV90O8Y3pMrOhGvrKc3sTzpKJ1yje35uhNEj4B
-         uqqN3W2f/CoTRayN0vR+ZkTzIuArxuwqNE2BU=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KLWxglH8TvO+YjEnp0OsBiwCevBxF+hBx7Ea32u4U1s=;
+        b=XqP2qTHN3FxCW03V1fZuaqLV9dSsKSa5UCeHysLTZ6Z2ilvx3KPGTDbe0f1HqCMTrh
+         0QzhOvWMipm4pTrDTiEIKI6ATFUUAFDJkApr6U/0/xIgVwIpaCMYXlqx8/323YIG9sab
+         YoDWAJTWSVW+YexHbB9kS92EdUQxsO3p8HoQwlbG1xpHS8qWfizGZ76FpnYzjI58we6u
+         XI67WcJHrLfkxdJWpmDo7iC8gMO6oWc/lzkiDh1+VsiCWKg0FJpdgGjbB3KpLhmvo3Di
+         hDnJlFreRzTOXeRyc8LPVw2J7Eem2LfC9l3xss+UfCBIni4PmOyzBeLbTauIfKpGI9YU
+         yrog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Tabx9NVVhDi2NL80cED89hxZVqfHcpcD6w5gvEiG26Q=;
-        b=LyY3Pgt9hJ9m+27xTeGdO7kibUvKV0uL0k4aSS59g8obw5C3v4dngrjCUigj8NzBph
-         Sx0GojiWQB2CvPXObJJnTYMGB/dloLNCwzXlG4slvQnZ91l48YalDJ/l/AYRWLFQd+M6
-         zW6frjREKYKrtavZwQshxaOEQgHSfuJpHH7dXKGc0IyfitPzrJanNsrpqZ2Lr1aFexru
-         vKb25kK+HgMsJW8g1AcIVNfSBrvuAmFAYDeujPDTR9Y/WTtUou1g2skojWWdC57vbmYs
-         aVPSWRdRP98Nr0b8FOByeK4PbjX5GIGSdR8nQt/lumkRl3jbXm4757drvFeNQj3zZ7eN
-         pTcw==
-X-Gm-Message-State: AO0yUKX/Hia5q5TB5uV6YMc/bg9IUYrw2hlF9PcQSkLV7rCNzNd6lXc6
-        3n73SzbBLprNlBbbMsowYaZCpcmqzjDmCXB6tJM=
-X-Google-Smtp-Source: AK7set8mhtvoZE5CQfZjnGl4uQNkDOtnnHwL2D1NnaTpZeU5s/pb8ZHM8R/QfQl1/qe6sG1H86ZFvA==
-X-Received: by 2002:a17:907:76b5:b0:8a4:e0a2:e77f with SMTP id jw21-20020a17090776b500b008a4e0a2e77fmr4229095ejc.34.1676503374220;
-        Wed, 15 Feb 2023 15:22:54 -0800 (PST)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id g16-20020a1709063b1000b008b1390ad11esm2072024ejf.216.2023.02.15.15.22.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 15:22:53 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id u21so519305edv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:22:52 -0800 (PST)
-X-Received: by 2002:a50:99cf:0:b0:4ab:4994:e648 with SMTP id
- n15-20020a5099cf000000b004ab4994e648mr2049346edb.5.1676503372641; Wed, 15 Feb
- 2023 15:22:52 -0800 (PST)
+        bh=KLWxglH8TvO+YjEnp0OsBiwCevBxF+hBx7Ea32u4U1s=;
+        b=FNBg2GofetG2wrbkKYjdr3CEvl/u/v2pN3aRBuUoBo6hMsECD+9Jk2/mmo+3nQuYg2
+         makUCCca/BnbrVSLw5RYHmYmbQ1wcBmY1sFv0gvuYGCOQ2CczUJBCF1TPNWbFSt8kB5b
+         n2dFfqpqnVUtqv0UPYA9NE+oaOXbxFZu9HQDf7uw2NK6Qp1NYSUyOjkDWtpMj93gWzN1
+         m0eMSZA6LPYX3+k1C29YPL6800R5gN1Tcvw1zco6wKAtCrwor6QP1phKwgVC+pxwKyhd
+         AI7husgMjZoV0LChgW45WsYKvvZA2QVVIoMtX8PWj/7URsf84k4uj4dRyWpQdRlq6Fb/
+         iPuQ==
+X-Gm-Message-State: AO0yUKWcj14FyU5zaE0cCmjOF2LitulhVkZAkFf1MKfFojT8+LiGP/Xn
+        QFnfBTmrgKFJh1javsiVyn4=
+X-Google-Smtp-Source: AK7set/0N26bH2pJeOZrfQ3amLrk+OGysrgVUNLdiap4mWIP9pBIBXj5sL9Q/8s3teDjjYS9FR3cVQ==
+X-Received: by 2002:a05:600c:44c4:b0:3da:fc30:bfc5 with SMTP id f4-20020a05600c44c400b003dafc30bfc5mr3259702wmo.13.1676504207100;
+        Wed, 15 Feb 2023 15:36:47 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.googlemail.com with ESMTPSA id m17-20020a05600c3b1100b003dd1bd0b915sm3702281wms.22.2023.02.15.15.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 15:36:46 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: [PATCH] clk: Fix wrong clock returned in parent_data with .name and no .index
+Date:   Thu, 16 Feb 2023 00:27:12 +0100
+Message-Id: <20230215232712.17072-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230209072220.6836-1-jgross@suse.com> <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
- <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com> <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
- <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
-In-Reply-To: <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 15 Feb 2023 15:22:35 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
-Message-ID: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
-To:     Juergen Gross <jgross@suse.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "lists@nerdbynature.de" <lists@nerdbynature.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Cui, Dexuan" <decui@microsoft.com>,
-        "mikelley@microsoft.com" <mikelley@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,22 +75,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 12:25 AM Juergen Gross <jgross@suse.com> wrote:
->
-> The problem arises in case a large mapping is spanning multiple MTRRs,
-> even if they define the same caching type (uniform is set to 0 in this
-> case).
+Commit 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+introduced a regression due to a "fragile" implementation present in some very
+corner case.
 
-Oh, I think then you should fix uniform to be 1.
+Such commit introduced the support for parents to be specified using
+clkspec index. The index is an int and should be -1 if the feature
+should not be used. This is the case with parent_hws or legacy
+parent_names used and the index value is set to -1 by default.
+With parent_data the situation is different, since it's a struct that
+can have multiple value (.index, .name, .fw_name), it's init to all 0 by
+default. This cause the index value to be set to 0 everytime even if not
+intended to be defined and used.
 
-IOW, we should not think "multiple MTRRs" means "non-uniform". Only
-"different actual memory types" should mean non-uniformity.
+This simple "fragile" implementation cause side-effect and unintended
+behaviour.
 
-If I remember correctly, there were good reasons to have overlapping
-MTRR's. In fact, you can generate a single MTRR that described a
-memory ttype that wasn't even contiguous if you had odd memory setups.
+Assuming the following scenario (to repro the corner case and doesn't
+reflect real code):
 
-Intel definitely defines how overlapping MTRR's work, and "same types
-overlaps" is documented as a real thing.
+In dt we have a node like this:
+		acc1: clock-controller@2098000 {
+			compatible = "qcom,kpss-acc-v1";
+			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+			clock-output-names = "acpu1_aux";
+			clocks = <&pxo_board>;
+			clock-names = "pxo";
+			#clock-cells = <0>;
+		};
 
-            Linus
+And on the relevant driver we have the parent data defined as such:
+		static const struct clk_parent_data aux_parents[] = {
+			{ .name = "pll8_vote" },
+			{ .fw_name = "pxo", .name = "pxo_board" },
+		};
+
+Someone would expect the first parent to be globally searched and set to
+point to the clock named "pll8_vote".
+But this is not the case and instead under the hood, the parent point to
+the pxo clock. This happen without any warning and was discovered on
+another platform while the gcc driver was converted to parent_data and
+only .name was defined.
+
+The reason is hard to discover but very simple.
+
+Due to the introduction of index support, clk_core_get() won't return
+-ENOENT but insted will correctly return a clock.
+This is because of_parse_clkspec() will use the index (that is set to 0
+due to how things are allocated) and correctly find in the DT node a
+clock at index 0. That in the provided example is exactly the phandle to
+pxo_board.
+
+Clock is found so the parent is now wrongly linked to the pxo_board
+clock.
+
+This only happens in this specific scenario but it's still worth to be
+handled and currently there are some driver that hardcode the
+parent_data and may suffer from this.
+
+To fix this and handle it correctly we can use the following logic:
+1. With a .fw_name not defined (index searching is skipped if a named
+   clock is provided)
+2. Check if .name is provided
+3. Compare the provided .name with what clockspec found
+4. Return -ENOENT if the name doesn't match, return the clock if it does.
+
+Returning -ENOENT permit clk core code flow to fallback to global
+searching and correctly search the right clock.
+
+Fixes: 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Jeffrey Hugo <jhugo@codeaurora.org>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/clk/clk.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 998676d78029..42e297fcfe45 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -395,6 +395,7 @@ of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec)
+  */
+ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+ {
++	const char *global_name = core->parents[p_index].name;
+ 	const char *name = core->parents[p_index].fw_name;
+ 	int index = core->parents[p_index].index;
+ 	struct clk_hw *hw = ERR_PTR(-ENOENT);
+@@ -407,6 +408,23 @@ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+ 	    !of_parse_clkspec(np, index, name, &clkspec)) {
+ 		hw = of_clk_get_hw_from_clkspec(&clkspec);
+ 		of_node_put(clkspec.np);
++
++		/*
++		 * The returned hw may be incorrect and extra check are required in
++		 * some corner case.
++		 *
++		 * In case a .fw_name is not set of_parse_clkspec will use the index
++		 * to search the related clock.
++		 * But index may be never set and actually never intended to be used
++		 * in the defined parent_data since a 0 value is also accepted and that
++		 * is what by default each struct is initialized.
++		 *
++		 * In the following case check if we have .name and check if the returned
++		 * clock name match the globally name defined for the parent in the
++		 * parent_data .name value.
++		 */
++		if (!name && global_name && strcmp(global_name, hw->core->name))
++			return ERR_PTR(-ENOENT);
+ 	} else if (name) {
+ 		/*
+ 		 * If the DT search above couldn't find the provider fallback to
+-- 
+2.38.1
+
