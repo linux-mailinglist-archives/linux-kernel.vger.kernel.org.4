@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900526972AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F56B6972AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjBOA2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 19:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S232227AbjBOAd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 19:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBOA2X (ORCPT
+        with ESMTP id S230394AbjBOAdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:28:23 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBF923D84
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:28:22 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id dt8so14533929oib.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sp80czwOhma7dov00LFmjFY+/xV7ov2dV4s/yjc86+M=;
-        b=UQrOimRQ30iWMdLTqmrdd83TI0YqAiGR+5ghO80v/HfGuyq+LLp1EC9K8C6a8MqV8u
-         LK+E7ZcIyw/wJjn8mxxD4t/qtX96LpAs18md0goD/adKLlUIwahMn9JC73J/bq1qbv26
-         kbiIEZI3A2xx/aGoTZAN3l6S2X7vj/e3x4AIFGHAcVBOvRsTt+HV4Muaqsuq3Aq0NxoJ
-         Irx5hOX0ION3aSBTve65s04H9bcKW9aLFLexs4/oyV0wUjy/sXf7Y9I5cJk0o3UgO0oT
-         CQ3TVOnqdXtdslGz/3QIxGjdGSjc3lElHyjgKm7Hu83JCDD7yy8GQnEMxfiQhmxJKz/e
-         7TpA==
+        Tue, 14 Feb 2023 19:33:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840FE234E9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:32:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676421157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0etdia8N+ECGaC0gAhXaKuBpC7aTnF6lYawwxL7alZU=;
+        b=cfGW390hFBPKIv50Qskfx916BPSKhAV0OmSqzpIee+F7bxyzPZPeipEPisj5uSL5PJNE3V
+        B9dQZKKTSbdSf/zYIbZx66U7K55CBHzpqoNxM7HRQHm3kcxLzN5q7SEFCXwycygwLp6n6a
+        v1qyR8WP8OtqTyRLm/Dgw8fHPXtST0Q=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-527-ajm8ZUgWPvufTyMfWOmWFw-1; Tue, 14 Feb 2023 19:32:36 -0500
+X-MC-Unique: ajm8ZUgWPvufTyMfWOmWFw-1
+Received: by mail-qt1-f198.google.com with SMTP id n1-20020ac85a01000000b003ba2a2c50f9so10406561qta.23
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:32:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sp80czwOhma7dov00LFmjFY+/xV7ov2dV4s/yjc86+M=;
-        b=k0LXVHq/w3IjEXjzlJkw6du2a8464sdeGfM9dyog4c4whD3YSvufl3hpOrtz6kVgaM
-         juaKF/jZEdjYlvLbLm8ayZId8s90y+Vy0rMK7m8nsY6Ht5x9KX1XKa+97XRwEI49iFw4
-         ExOyylxYmpwGebIMKDLiLZqwH5hjDX4R4k3+RpmolAXj7hN3VwZPs1R0gl/5ztdJyP0U
-         Vgco5eZ3I5FDaTttsJs38opyLuNQqyisgvRR0eu32gSPNWcVsCguv/0yUwqAfnETbWzU
-         2+lOSbXDXfKB+bXiPhlH+FyFAew/K0yCPbzvXUCx4jEa0dBGB592KtFM7V3K0RyfYMhG
-         ynzA==
-X-Gm-Message-State: AO0yUKUDP1UMU9iDRsq5RoIU7ZvaLqHPwOxaQs3Vnk64V1TyMgU4UKOR
-        uqD4mtZO/c1sP0nEtkwdRmh3wu6sFF3ldvNikYNzlA==
-X-Google-Smtp-Source: AK7set8X/RBY86D7efIziwS+i2S491zUsQBQ1hSzpuZBLKL2OhWjJkpHLCG0igAEouDOJ7ypWcguu0TCCtKDOvbn6Us=
-X-Received: by 2002:aca:3d56:0:b0:378:5f47:6cbf with SMTP id
- k83-20020aca3d56000000b003785f476cbfmr120530oia.44.1676420901527; Tue, 14 Feb
- 2023 16:28:21 -0800 (PST)
+        d=1e100.net; s=20210112; t=1676421156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0etdia8N+ECGaC0gAhXaKuBpC7aTnF6lYawwxL7alZU=;
+        b=Wlr1gxSgFCifCx0kWPoIR9kyjMpHZ+l7Gu85MKwuy0AHMd83KfRIW4EDBuEPRJDiDp
+         03EtC8VflunmQ8uVUdtiFiP1SC9x4J2t1n7SbqdzLIbs53DE4OPdlVxAQGFnN+Zj3jwz
+         vP4oBFeLQsWazvh7qhH1PavB5eaudVFPR7vh2/C6KKAvW7RPP9+YT2ZCMo6786+PwmYP
+         MawgU7AeRGLSacTPm7ptin4XYyLmTnZiM9QEr2nbZKhMgehvkqkI3enW4M2/KNee9iIK
+         ynVjsIn7mVp/CXzIi91aBl62Gov4C+F3iayXWtP16c0ZjgDawEwxxS4LsFq/c7mKO77N
+         lSfA==
+X-Gm-Message-State: AO0yUKWMq1BIfSyYFMm3io6snKudDSOPmuez5PtK34an7W8HGg1PjR9S
+        GOV1s7H9gg6HNs0ta+OOouwNsrvSloqP2vOeQsZYxhRNS1WaR+yRa0eFEJVqzXFZNDQ5Uem4lA+
+        BcXNwz0OeBjnraNtjBRx9tJgp
+X-Received: by 2002:a05:622a:5c7:b0:3b8:36f8:830e with SMTP id d7-20020a05622a05c700b003b836f8830emr338507qtb.6.1676421156144;
+        Tue, 14 Feb 2023 16:32:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set9yOl2ngRxqcgHLXOhO5w1e7vPn8HhnvU3R6YCTj2Nylo/ep0JaoSfrJ2cQznmURLh3CZz7pw==
+X-Received: by 2002:a05:622a:5c7:b0:3b8:36f8:830e with SMTP id d7-20020a05622a05c700b003b836f8830emr338467qtb.6.1676421155789;
+        Tue, 14 Feb 2023 16:32:35 -0800 (PST)
+Received: from x1n ([70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id s6-20020a372c06000000b00727538eb831sm12902269qkh.86.2023.02.14.16.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 16:32:35 -0800 (PST)
+Date:   Tue, 14 Feb 2023 19:32:29 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Subject: Re: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install
+ WP PTEs
+Message-ID: <Y+woHZ3AHe3quadT@x1n>
+References: <20230214215046.1187635-1-axelrasmussen@google.com>
+ <Y+wIdeu3Lw/3kmXg@casper.infradead.org>
+ <CAJHvVciR=inDaKnmCfCQsxgBsJB6eQVDXQw67o0Foc9ofgbuow@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230214145609.kernel.v1.1.Ibe4d3a42683381c1e78b8c3aa67b53fc74437ae9@changeid>
- <CABBYNZKVVo4T_pbEdozhNvgiykC7NiLQKEnJi3q5gZpHunGrbA@mail.gmail.com>
-In-Reply-To: <CABBYNZKVVo4T_pbEdozhNvgiykC7NiLQKEnJi3q5gZpHunGrbA@mail.gmail.com>
-From:   Zhengping Jiang <jiangzp@google.com>
-Date:   Tue, 14 Feb 2023 16:28:09 -0800
-Message-ID: <CAB4PzUo+EuapOr+O7eWZH2xiVVAUd98m_DmEK-337=CvfUDeoA@mail.gmail.com>
-Subject: Re: [kernel PATCH v1] Bluetooth: hci_sync: Resume adv with no RPA
- when active scan
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVciR=inDaKnmCfCQsxgBsJB6eQVDXQw67o0Foc9ofgbuow@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,121 +89,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
+On Tue, Feb 14, 2023 at 02:37:51PM -0800, Axel Rasmussen wrote:
+> Agreed, it would likely be a nice cleanup. Peter, any objections? I
+> wouldn't mind writing a commit to do this sort of refactor, and rebase
+> my change on top of that.
 
-Thanks for the comment. I will submit a new patch to address that.
+No objection here.  Personally I actually prefer keeping the parameters
+around if possible because it's straightforward and no thinking of any
+possible indirect accesses all over the place. But maybe growing as long as
+8 is still a moot point..  It's just that I don't really know whether it'll
+look that good if we put everything into a struct*.
 
-I notice in the spec, it is mentioned
-> Note: This command does not affect the generation of Resolvable Private A=
-ddresses.
-How should I understand this note? Does it mean even if the address
-resolution is disabled, the controller can still generate RPA for
-advertising?  Does it mean the advertising can always be resumed
-during active scan?
+Things like src_start/dst_start/.. do not look good to be there: each layer
+could loop over its own range of start/end/... so even if not in the
+function parameter we'll need a variable to hold them anyway.
 
-Thanks,
-Zhengping
+But I do see a few low hanging fruits:
 
-On Tue, Feb 14, 2023 at 4:09 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Zhengping,
->
-> On Tue, Feb 14, 2023 at 2:56 PM Zhengping Jiang <jiangzp@google.com> wrot=
-e:
-> >
-> > The address resolution should be disabled during the active scan,
-> > so all the advertisements can reach the host. The advertising
-> > has to be paused before disabling the address resolution,
-> > because the advertising will prevent any changes to the resolving
-> > list and the address resolution status. Skipping this will cause
-> > the hci error and the discovery failure.
->
-> It is probably a good idea to quote the spec saying:
->
-> 7.8.44 LE Set Address Resolution Enable command
->
-> This command shall not be used when:
-> =E2=80=A2 Advertising (other than periodic advertising) is enabled,
->
-> > If the host is using RPA, the controller needs to generate RPA for
-> > the advertising, so the advertising must remain paused during the
-> > active scan.
-> >
-> > If the host is not using RPA, the advertising can be resumed after
-> > disabling the address resolution.
-> >
-> > Fixes: 9afc675edeeb ("Bluetooth: hci_sync: allow advertise when scan wi=
-thout RPA")
-> > Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-> > ---
-> >
-> > Changes in v1:
-> > - Always pause advertising when active scan, but resume the advertising=
- if the host is not using RPA
-> >
-> >  net/bluetooth/hci_sync.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> > index 117eedb6f709..edbf9faf7fa1 100644
-> > --- a/net/bluetooth/hci_sync.c
-> > +++ b/net/bluetooth/hci_sync.c
-> > @@ -2402,7 +2402,7 @@ static u8 hci_update_accept_list_sync(struct hci_=
-dev *hdev)
-> >         u8 filter_policy;
-> >         int err;
-> >
-> > -       /* Pause advertising if resolving list can be used as controlle=
-rs are
-> > +       /* Pause advertising if resolving list can be used as controlle=
-rs
-> >          * cannot accept resolving list modifications while advertising=
-.
-> >          */
-> >         if (use_ll_privacy(hdev)) {
-> > @@ -5397,7 +5397,7 @@ static int hci_active_scan_sync(struct hci_dev *h=
-dev, uint16_t interval)
-> >         /* Pause advertising since active scanning disables address res=
-olution
-> >          * which advertising depend on in order to generate its RPAs.
-> >          */
-> > -       if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY=
-)) {
-> > +       if (use_ll_privacy(hdev)) {
-> >                 err =3D hci_pause_advertising_sync(hdev);
-> >                 if (err) {
-> >                         bt_dev_err(hdev, "pause advertising failed: %d"=
-, err);
-> > @@ -5416,6 +5416,10 @@ static int hci_active_scan_sync(struct hci_dev *=
-hdev, uint16_t interval)
-> >                 goto failed;
-> >         }
-> >
-> > +       // Resume paused advertising if the host is not using RPA
-> > +       if (use_ll_privacy(hdev) && !hci_dev_test_flag(hdev, HCI_PRIVAC=
-Y))
-> > +               hci_resume_advertising_sync(hdev);
-> > +
-> >         /* All active scans will be done with either a resolvable priva=
-te
-> >          * address (when privacy feature has been enabled) or non-resol=
-vable
-> >          * private address.
-> > --
-> > 2.39.1.581.gbfd45094c4-goog
->
-> I think it is better that we add something like
-> hci_pause_addr_resolution so we can make it check all the conditions,
-> such as pausing advertising and resuming if needed. Btw, we do seem to
-> have proper checks for these conditions on the emulator:
->
-> https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/emulator/btdev.c#=
-n4090
->
-> But perhaps there is no test which attempts to enable LL Privacy
-> without enabling Local Privacy, so it would be great if you could
-> update mgmt-tester adding a test that emulates such behavior.
->
-> --
-> Luiz Augusto von Dentz
+  - I don't see why we need to pass over mmap_changing over all of the
+    __mcopy_atomic() callers.  One chance is we simply pass in the ctx* to
+    replace "dst_mm + mmap_changing".
+
+  - Merge mcopy_atomic_mode and mode, having last 2 bits for the existing
+    three modes, then bit 3 for WP, good enough to set it for the new case.
+
+  - Optionally, we can avoid passing over dst_mm/src_mm all around, when
+    dst_vma/src_vma is there?
+
+How about we start from simple?
+
+-- 
+Peter Xu
+
