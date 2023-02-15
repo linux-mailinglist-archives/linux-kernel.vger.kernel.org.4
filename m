@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E51697EA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D50697EB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjBOOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S229919AbjBOOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjBOOpy (ORCPT
+        with ESMTP id S229811AbjBOOqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:45:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87CD305C2;
-        Wed, 15 Feb 2023 06:45:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC26B81D06;
-        Wed, 15 Feb 2023 14:45:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1839DC433EF;
-        Wed, 15 Feb 2023 14:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676472350;
-        bh=i7XJdYYy5Ec8OzUEFnRgUnGX3zdu+ChHpKa9KrxeWT8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bKr6YjHORC8EsH9VafAjrlUiaCMJvXEsZ7Zl0Iz0hCCUyCqcC0BSR4LuXEOywhBls
-         lUMSTDN3h8okUruhrmpzamMTKPjfG8SkNB0Zm7yqZRXE9JDnALbMfreC38+hNlgh41
-         5LS03rOr52DNRqUBeclMssI/Iqc9XKpFP9qJQAvCGNNIJu9Yt9uqDEqvnJz1Lhnr56
-         9wyCUomS4yeu07y+dQEzBvz5fh2x1Ep8TFkUoz6f+P9ErUsiH6Sm6gNwR/1xroXpvt
-         AQEXQAyqA5AprLWMX2Jn5EDYSPkinz0k4hVBAll1fjauDrddiK/faakSpyFSj7j5dm
-         JDwmGhLfPGZzQ==
-Message-ID: <4eb60628-1546-1bcb-b71a-92368d7116eb@kernel.org>
-Date:   Wed, 15 Feb 2023 22:45:45 +0800
+        Wed, 15 Feb 2023 09:46:44 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD68D392A9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:46:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30A1A1042;
+        Wed, 15 Feb 2023 06:47:17 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 282553F703;
+        Wed, 15 Feb 2023 06:46:30 -0800 (PST)
+Date:   Wed, 15 Feb 2023 14:46:27 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] clocksource/drivers/timer-mediatek: Make
+ timer-mediatek become loadable module
+Message-ID: <20230215144627.ddjc7x365qdnhymi@bogus>
+References: <20230214105412.5856-1-walter.chang@mediatek.com>
+ <20230214105412.5856-5-walter.chang@mediatek.com>
+ <20230214222021.k3tsfwezhnh7tdlx@bogus>
+ <996b4e61-8486-d939-7367-1240b3c5c5fa@collabora.com>
+ <20230215131849.mcgz53jf24atialp@bogus>
+ <53f0e612-b5cc-262e-df98-add1e8a06573@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: Revert "f2fs: truncate blocks in batch
- in __complete_revoke_list()"
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     stable@vger.kernel.org
-References: <20230214235719.799831-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230214235719.799831-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53f0e612-b5cc-262e-df98-add1e8a06573@collabora.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/15 7:57, Jaegeuk Kim wrote:
-> We should not truncate replaced blocks, and were supposed to truncate the first
-> part as well.
+On Wed, Feb 15, 2023 at 02:30:51PM +0100, AngeloGioacchino Del Regno wrote:
 > 
-> This reverts commit 78a99fe6254cad4be310cd84af39f6c46b668c72.
+> Both. I mean that these platforms do have architected timers, but they are stopped
+> before the bootloader jumps to the kernel, or they are never started at all.
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Please refer to:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/clocksource/timer-mediatek.c?h=next-20230215&id=327e93cf9a59b0d04eb3a31a7fdbf0f11cf13ecb
+> 
+> For a nice explanation.
+> 
 
-Oh, my bad, thanks for fixing this.
+Thanks for that. Well then I see no point in making these modules if you
+can't have generic Image that boots on all the platform. I now tend to think
+that these are made modules just because GKI demands and it *might* work
+on one or 2 platforms. One we move this as modules, how will be know the
+Image without these timers or with them built as modules will boot or not
+on a given mediatek platform. Sorry, I initially saw some point in making
+these timers as modules but if they are required for boot on some systems
+then I see no point. So if that is the case, NACK for these as it just
+creates more confusion after these are merged as why some Images or
+even why defconfig image(if we push the config change as well) is not
+booting on these platforms.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+It is no longer just for system timer useful in low power CPU idle states
+as I initial thought.
 
-Thanks,
+-- 
+Regards,
+Sudeep
