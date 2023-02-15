@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9AA6977CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F4B6977CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbjBOIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S233844AbjBOIN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjBOIMd (ORCPT
+        with ESMTP id S233794AbjBOINz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:12:33 -0500
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23EE3A94;
-        Wed, 15 Feb 2023 00:12:31 -0800 (PST)
-Date:   Wed, 15 Feb 2023 08:12:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemb.ch;
-        s=protonmail; t=1676448748; x=1676707948;
-        bh=s9JzE6b6DEfckH/ZqQDZxssRt/o9LAwbB3i41yJi7+4=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=fva+HL8dsv3tACxLbMbg9jlu6/1+Zx2YrA6/vdm7SZEtuYYigjN0yxwB5HMeLH0EE
-         a+dNE8DU6teGbczfDlI1u5t+nHRU4611angKVhKSn1ZsbOxnn+wCGR6bE2DVAHJoxR
-         GFwJHVnCovTqmb5tQrQbLJ09M11k56qN3x+Y2AvMa3JL3b6QpvhwTp155aUucarhmv
-         NbuLt++S+UEQLO7sWVTNT7I2ecxB0igDRYfTgNcbc2IOYCzgAoYjFx280cKLnujCg/
-         FDR7fdlcwadje1Joqh1cMVDckXnlB4d59KzgSfT6YJ2qD/JJ7FxAtEogFExHIVaIDj
-         J+hiZbVgKV5Hw==
-To:     Kalle Valo <kvalo@kernel.org>
-From:   Marc Bornand <dev.mbornand@systemb.ch>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yohan Prod'homme <kernel@zoddo.fr>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] Set ssid when authenticating
-Message-ID: <Y+yT2YUORRHY4bei@opmb2>
-In-Reply-To: <87ttzn4hki.fsf@kernel.org>
-References: <20230214132009.1011452-1-dev.mbornand@systemb.ch> <87ttzn4hki.fsf@kernel.org>
-Feedback-ID: 65519157:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 15 Feb 2023 03:13:55 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4791F7294
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:13:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=mo1cLpGdKDY4uulgiNcnFm0Ec2uXKdttKXI4poEPOf8=;
+        t=1676448834; x=1677658434; b=IafBY+/KkaMIfDBPepNmwrPWU5WPLwH0velJlvNKEXYj3ws
+        cGeWLlC3tGVBthj4YeU51zEKSz+sRR0hdozsuQHIwM306YGBDiLFI/DgbXR9vD7tRJ6xrm7y1+yrM
+        qpdrxRQJ7lKG+idhIJgXp+b5uddgAU2ze4isH8xh3C9PfykJ6bf9GtFevs1kGA3wtQEfgNtBHhbS2
+        y61ERXr1ZcgVKMcOze3yBJsVKJG6oFYDis45MYoCMGWycxc51Bl82NX4tHLhBg3Wkw406ybuuoWI7
+        GwRmpewaCWN25oBboLPXhGrS/aGnUcS/aFPspfLl2GXvIY1+pAC8IMHTSFC9e4lA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pSCv9-00CypS-0k;
+        Wed, 15 Feb 2023 09:13:43 +0100
+Message-ID: <b4bacb46e3a18c1f8d66d25f946dae09ccfcdc4f.camel@sipsolutions.net>
+Subject: Re: [PATCH V1] um: Fix compilation warnings
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Wed, 15 Feb 2023 09:13:36 +0100
+In-Reply-To: <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
+References: <1676410243-10566-1-git-send-email-quic_c_spathi@quicinc.com>
+         <1950127775.130646.1676411821807.JavaMail.zimbra@nod.at>
+         <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
+         <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -55,60 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 07:35:09AM +0200, Kalle Valo wrote:
-> Marc Bornand <dev.mbornand@systemb.ch> writes:
->
-> > changes since v3:
-> > - add missing NULL check
-> > - add missing break
-> >
-> > changes since v2:
-> > - The code was tottaly rewritten based on the disscution of the
-> >   v2 patch.
-> > - the ssid is set in __cfg80211_connect_result() and only if the ssid i=
-s
-> >   not already set.
-> > - Do not add an other ssid reset path since it is already done in
-> >   __cfg80211_disconnected()
-> >
-> > When a connexion was established without going through
-> > NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
-> > Now we set it in __cfg80211_connect_result() when it is not already set=
-.
-> >
-> > Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
-> > Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
-> > Cc: linux-wireless@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216711
-> > Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
-> > ---
-> >  net/wireless/sme.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
->
-> The change log ("changes since v3" etc) should be after "---" line and
+On Wed, 2023-02-15 at 09:07 +0100, Geert Uytterhoeven wrote:
+> Hi Srinivasarao,
+>=20
+> On Wed, Feb 15, 2023 at 6:36 AM Srinivasarao Pathipati
+> <quic_c_spathi@quicinc.com> wrote:
+> > On 2/15/2023 3:27 AM, Richard Weinberger wrote:
+> > > ----- Urspr=C3=BCngliche Mail -----
+> > > > Von: "Srinivasarao Pathipati" <quic_c_spathi@quicinc.com>
+> > > > static void sig_handler_common(int sig, struct siginfo *si, mcontex=
+t_t *mc)
+> > > > {
+> > > > -    struct uml_pt_regs r;
+> > > > +    struct uml_pt_regs *r;
+> > > >      int save_errno =3D errno;
+> > > >=20
+> > > > -    r.is_user =3D 0;
+> > > > +    r =3D malloc(sizeof(struct uml_pt_regs));
+> > > I fear this is not correct since malloc() is not async-signal safe.
+> >=20
+> > Thanks Richard for quick response. Could you please suggest alternative
+> > function of malloc() with async-signal safe.
+> >=20
+> > if that is not possible Is there any other way to fix this warning? OR
+> > do we need to live with that warning?
+>=20
+> Does this limit actually apply to this file, which calls into the host OS=
+?
 
-Does it need another "---" after the change log?
-something like:
+Not really. Also, we know we have a signal stack that's large enough,
+since we set it up ourselves:
 
-"---"
-"changes since v3:"
-"(CHANGES)"
-"---"
+                set_sigstack((void *) STUB_DATA, UM_KERN_PAGE_SIZE);
 
-> the title should start with "wifi: cfg80211:". Please read the wiki link
-> below.
+and it's a full page, so even the OS eating up some of that won't cause
+us any trouble. We do have somewhat deep calls into do_IRQ() but those
+really shouldn't use much stack space since they can (in non-UM kernels)
+be called on top of arbitrary kernel stacks already.
 
-Should i start with the version 1 with the new title?
-and since i am already changing the title, the following might better
-discribe the patch, or should i keep the old title after the ":" ?
+> How come you even see this warning, as we have
+>=20
+>     CFLAGS_signal.o +=3D -Wframe-larger-than=3D4096
+>=20
+> since commit 517f60206ee5d5f7 ("um: Increase stack frame size threshold
+> for signal.c") in v5.11?
+>=20
 
-[PATCH wireless] wifi: cfg80211: Set SSID if it is not already set
+Good question, I don't see it. However we probably should make that a
+_bit_ smaller since we only have a page and still need to call do_IRQ()
+and all.
 
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
-tches
-
+johannes
