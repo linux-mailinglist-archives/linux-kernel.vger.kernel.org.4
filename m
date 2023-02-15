@@ -2,182 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FA5697B75
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED9F697B78
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjBOMIV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Feb 2023 07:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S232749AbjBOMIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBOMIU (ORCPT
+        with ESMTP id S229503AbjBOMI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:08:20 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8E82387A;
-        Wed, 15 Feb 2023 04:08:17 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4B3F524E313;
-        Wed, 15 Feb 2023 20:08:16 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 20:08:16 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
- 2023 20:08:15 +0800
-Message-ID: <9ef960ae-7b61-9ed3-5bab-822e6d7d5a76@starfivetech.com>
-Date:   Wed, 15 Feb 2023 20:08:14 +0800
+        Wed, 15 Feb 2023 07:08:29 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A02C2A987;
+        Wed, 15 Feb 2023 04:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676462908; x=1707998908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DYpXXhUbajYvp9CAwgR03lGdhtEFU9c+JaHUOcAL/20=;
+  b=dbvvEfyKY+Qr0mXnjXDpqBIbBzS6YiRzagk7WRoCk2tSKrB2w5ozbF6D
+   nGwqbyulBCOJEMT3LApXdSK1i5M2HkUu4IHVVtqgJ4W+qeEQCKfwflCCV
+   to/7yQCgFWWSj1kquQylWlAWsof0GrWn5M1ohU5BSSuUjFBSidh/JyYH1
+   IFpaOM5aaTHfEWXodDy9DsIUZ1qKGxSwm/nEzITuNzu2OcF3HHmJwsVaL
+   bFfF1KJ3iEJlxU34B4JuMsxGs+iyeLaBbvZIiLre85C46SbYNspP59e1c
+   pswUri2lddSdnL4U9CFu/zMHTerhY0q2pKtPmCe6RCki+yTR3I0pnLuQu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="319446418"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="319446418"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 04:08:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="702009547"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="702009547"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 15 Feb 2023 04:08:21 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id CDC341A6; Wed, 15 Feb 2023 14:09:01 +0200 (EET)
+Date:   Wed, 15 Feb 2023 14:09:01 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH] gpiolib: acpi: remove redundant declaration
+Message-ID: <Y+zLXZsiZljl0z5t@black.fi.intel.com>
+References: <20230215120004.9693-1-raag.jadav@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 1/4] dt-bindings: mmc: Add StarFive MMC module
-To:     Shengyu Qu <wiagn233@outlook.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230215113249.47727-1-william.qiu@starfivetech.com>
- <20230215113249.47727-2-william.qiu@starfivetech.com>
- <TY3P286MB26111053410F3F96C9C71D2798A39@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <TY3P286MB26111053410F3F96C9C71D2798A39@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230215120004.9693-1-raag.jadav@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/15 19:59, Shengyu Qu wrote:
-> Hello William,
+On Wed, Feb 15, 2023 at 05:30:04PM +0530, Raag Jadav wrote:
+> Remove acpi_device declaration, as it is no longer needed.
 > 
-> Are you sure changing driver is better than changing yaml bindings? All
-> 
-> previous version sent was syscon and sysreg seems not consistent with
-> 
-> other codes.
-> 
-> Best regards,
-> 
-> Shengyu
->
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
 
-Hi Shengyu,
-
-After discussing with colleagues, we decided to restore the lable name to 
-sys_syscon, and sysreg was just a unique name for the functionality of MMC,
-which will be used in all future versions.
-
-Thanks for taking time reviewing this patch series.
-
-Best Regards
-William
-
->> Add documentation to describe StarFive designware mobile storage
->> host controller driver.
->>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   .../bindings/mmc/starfive,jh7110-mmc.yaml     | 77 +++++++++++++++++++
->>   1 file changed, 77 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->> new file mode 100644
->> index 000000000000..51e1b04e799f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->> @@ -0,0 +1,77 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mmc/starfive,jh7110-mmc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive Designware Mobile Storage Host Controller
->> +
->> +description:
->> +  StarFive uses the Synopsys designware mobile storage host controller
->> +  to interface a SoC with storage medium such as eMMC or SD/MMC cards.
->> +
->> +allOf:
->> +  - $ref: synopsys-dw-mshc-common.yaml#
->> +
->> +maintainers:
->> +  - William Qiu <william.qiu@starfivetech.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: starfive,jh7110-mmc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: biu clock
->> +      - description: ciu clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: biu
->> +      - const: ciu
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  starfive,sysreg:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      - items:
->> +          - description: phandle to System Register Controller syscon node
->> +          - description: offset of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->> +          - description: shift of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->> +          - description: mask of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->> +    description:
->> +      Should be four parameters, the phandle to System Register Controller
->> +      syscon node and the offset/shift/mask of SYS_SYSCONSAIF__SYSCFG register
->> +      for MMC controller.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - interrupts
->> +  - starfive,sysreg
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    mmc@16010000 {
->> +        compatible = "starfive,jh7110-mmc";
->> +        reg = <0x16010000 0x10000>;
->> +        clocks = <&syscrg 91>,
->> +                 <&syscrg 93>;
->> +        clock-names = "biu","ciu";
->> +        resets = <&syscrg 64>;
->> +        reset-names = "reset";
->> +        interrupts = <74>;
->> +        fifo-depth = <32>;
->> +        fifo-watermark-aligned;
->> +        data-addr = <0>;
->> +        starfive,sysreg = <&sys_syscon 0x14 0x1a 0x7c000000>;
->> +    };
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
