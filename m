@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2070B697A22
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9775D697A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbjBOKpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S234174AbjBOKqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbjBOKpY (ORCPT
+        with ESMTP id S234162AbjBOKqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:45:24 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993065AC;
-        Wed, 15 Feb 2023 02:45:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+VcSXjQcwN7qvQ16idt+kCzDltRjU1KCRBCzhS3aUVs=; b=Gec6wQWXs1cShlEObFN3algpx3
-        AjRiW+nWaD40LEx8ys6wHCqem48xafMPvzf/TcUSxrdrikX7BgYwA+Sdflt+flEw49Z/3ev67CGVk
-        TccS8f8TZ50N8DFjapDYCufTCQeiz8AAZiAPTecAgWRZQ92iSH0SJBr5PyNDmjNrBqf+C6kj4bAjZ
-        SHI2CvRne3OL/4BilJuQV/ONGAuvsi+VCrxpIrOWulYxVrn0hP4FeHthEQEaMLkPFye8c7WNpQfn9
-        +DoCscxOlxVQLgwNS1gNiRrdaGrn3tRNkWfOrNDFa12G9JiyU4rrN0quOMCcx0zqHcRR5z7KxyLKF
-        R80s2Omg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pSFGv-009uuQ-34;
-        Wed, 15 Feb 2023 10:45:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5776B3001E5;
-        Wed, 15 Feb 2023 11:45:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3E0F323884781; Wed, 15 Feb 2023 11:45:03 +0100 (CET)
-Date:   Wed, 15 Feb 2023 11:45:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
+        Wed, 15 Feb 2023 05:46:22 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93F5243
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:46:21 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-34-i_adRa_mOdaDGX2RAwwiCA-1; Wed, 15 Feb 2023 10:46:18 +0000
+X-MC-Unique: i_adRa_mOdaDGX2RAwwiCA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 15 Feb
+ 2023 10:46:16 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Wed, 15 Feb 2023 10:46:16 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Damien Le Moal' <damien.lemoal@opensource.wdc.com>,
+        Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        "alberto.dassatti@heig-vd.ch" <alberto.dassatti@heig-vd.ch>
+CC:     "xxm@rock-chips.com" <xxm@rock-chips.com>,
+        "rick.wertenbroek@heig-vd.ch" <rick.wertenbroek@heig-vd.ch>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?utf-8?B?S3J6eXN6dG9mIFdpbGN6ecWEc2tp?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+y3r8Q5GT+oJsvd@hirez.programming.kicks-ass.net>
-References: <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
- <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
- <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
- <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
- <Y+tm59SmBEY1Ywq7@hirez.programming.kicks-ass.net>
- <Y+u1RBMMcCkvKISZ@boqun-archlinux>
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: RE: [PATCH v2 8/9] PCI: rockchip: Use u32 variable to access 32-bit
+ registers
+Thread-Topic: [PATCH v2 8/9] PCI: rockchip: Use u32 variable to access 32-bit
+ registers
+Thread-Index: AQHZQN2t4tTaT5pAPkCiUYx37/Wq/67P0uRw
+Date:   Wed, 15 Feb 2023 10:46:16 +0000
+Message-ID: <2a80c4e1f1ad42c6849521d1e644b003@AcuMS.aculab.com>
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-9-rick.wertenbroek@gmail.com>
+ <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
+In-Reply-To: <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+u1RBMMcCkvKISZ@boqun-archlinux>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:22:28AM -0800, Boqun Feng wrote:
+RnJvbTogRGFtaWVuIExlIE1vYWwNCj4gU2VudDogMTUgRmVicnVhcnkgMjAyMyAwMTozNA0KPiAN
+Cj4gT24gMi8xNC8yMyAyMzowOCwgUmljayBXZXJ0ZW5icm9layB3cm90ZToNCj4gPiBQcmV2aW91
+c2x5IHUxNiB2YXJpYWJsZXMgd2VyZSB1c2VkIHRvIGFjY2VzcyAzMi1iaXQgcmVnaXN0ZXJzLCB0
+aGlzDQo+ID4gcmVzdWx0ZWQgaW4gbm90IGFsbCBvZiB0aGUgZGF0YSBiZWluZyByZWFkIGZyb20g
+dGhlIHJlZ2lzdGVycy4gQWxzbw0KPiA+IHRoZSBsZWZ0IHNoaWZ0IG9mIG1vcmUgdGhhbiAxNi1i
+aXRzIHdvdWxkIHJlc3VsdCBpbiBtb3ZpbmcgZGF0YSBvdXQNCj4gPiBvZiB0aGUgdmFyaWFibGUu
+IFVzZSB1MzIgdmFyaWFibGVzIHRvIGFjY2VzcyAzMi1iaXQgcmVnaXN0ZXJzDQo+ID4NCj4gPiBG
+aXhlczogY2Y1OTBiMDc4MzkxICgiUENJOiByb2NrY2hpcDogQWRkIEVQIGRyaXZlciBmb3IgUm9j
+a2NoaXAgUENJZSBjb250cm9sbGVyIikNCj4gPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0K
+PiA+IFNpZ25lZC1vZmYtYnk6IFJpY2sgV2VydGVuYnJvZWsgPHJpY2sud2VydGVuYnJvZWtAZ21h
+aWwuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3BjaS9jb250cm9sbGVyL3BjaWUtcm9ja2No
+aXAtZXAuYyB8IDEwICsrKysrLS0tLS0NCj4gPiAgZHJpdmVycy9wY2kvY29udHJvbGxlci9wY2ll
+LXJvY2tjaGlwLmggICAgfCAgMSArDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25z
+KCspLCA1IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGNpL2Nv
+bnRyb2xsZXIvcGNpZS1yb2NrY2hpcC1lcC5jIGIvZHJpdmVycy9wY2kvY29udHJvbGxlci9wY2ll
+LXJvY2tjaGlwLWVwLmMNCj4gPiBpbmRleCBjYTViMzYzYmEuLmI3ODY1YTk0ZSAxMDA2NDQNCj4g
+PiAtLS0gYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL3BjaWUtcm9ja2NoaXAtZXAuYw0KPiA+ICsr
+KyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvcGNpZS1yb2NrY2hpcC1lcC5jDQo+ID4gQEAgLTI5
+MiwxNSArMjkyLDE1IEBAIHN0YXRpYyBpbnQgcm9ja2NoaXBfcGNpZV9lcF9zZXRfbXNpKHN0cnVj
+dCBwY2lfZXBjICplcGMsIHU4IGZuLCB1OCB2Zm4sDQo+ID4gIHsNCj4gPiAgCXN0cnVjdCByb2Nr
+Y2hpcF9wY2llX2VwICplcCA9IGVwY19nZXRfZHJ2ZGF0YShlcGMpOw0KPiA+ICAJc3RydWN0IHJv
+Y2tjaGlwX3BjaWUgKnJvY2tjaGlwID0gJmVwLT5yb2NrY2hpcDsNCj4gPiAtCXUxNiBmbGFnczsN
+Cj4gPiArCXUzMiBmbGFnczsNCj4gPg0KPiA+ICAJZmxhZ3MgPSByb2NrY2hpcF9wY2llX3JlYWQo
+cm9ja2NoaXAsDQo+ID4gIAkJCQkgICBST0NLQ0hJUF9QQ0lFX0VQX0ZVTkNfQkFTRShmbikgKw0K
+PiA+ICAJCQkJICAgUk9DS0NISVBfUENJRV9FUF9NU0lfQ1RSTF9SRUcpOw0KPiA+ICAJZmxhZ3Mg
+Jj0gflJPQ0tDSElQX1BDSUVfRVBfTVNJX0NUUkxfTU1DX01BU0s7DQo+ID4gIAlmbGFncyB8PQ0K
+PiA+IC0JICAgKChtdWx0aV9tc2dfY2FwIDw8IDEpIDw8ICBST0NLQ0hJUF9QQ0lFX0VQX01TSV9D
+VFJMX01NQ19PRkZTRVQpIHwNCj4gPiAtCSAgIFBDSV9NU0lfRkxBR1NfNjRCSVQ7DQo+ID4gKwkg
+ICAobXVsdGlfbXNnX2NhcCA8PCBST0NLQ0hJUF9QQ0lFX0VQX01TSV9DVFJMX01NQ19PRkZTRVQp
+IHwNCj4gDQo+IFJPQ0tDSElQX1BDSUVfRVBfTVNJX0NUUkxfTU1DX09GRlNFVCBpcyAxNyBhbmQg
+bXVsdGlfbXNnX2NhcCBpcyBhIHU4Li4uDQo+IE5vdCBuaWNlLg0KDQpJdCByZWFsbHkgZG9lc24n
+dCBtYXR0ZXIuDQpBcyBzb29uIGFzIHlvdSBkbyBhbnkgYXJpdGhtZXRpYyBjaGFyIGFuZCBzaG9y
+dCBhcmUgcHJvbW90ZWQgdG8gaW50Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
+IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
+UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-> Ah, right, I was missing the fact that it works with 2 classes...
-> 
-> But I think with only one class, the nest_lock() still works, right?
-> In other words, if P and Cn are the same lock class in your example.
-
-I don't think so, but I don't think I've carefully considered that case.
-
-> Also seems I gave a wrong answer to Alan, just to clarify, the following
-> is not a deadlock to lockdep:
-> 
-> T1:
-> 	mutex_lock(P)
-> 	mutex_lock_next_lock(C1, P)
-> 	mutex_lock_next_lock(C2, P)
-> 	mutex_lock(B)
-> 
-> T2:
-> 	mutex_lock(P)
-> 	mutex_lock(B)
-> 	mutex_lock_next_lock(C1, P)
-> 	mutex_lock_next_lock(C2, P)
-> 
-
-This should in fact complain about a CB-BC deadlock, (but I've not
-tested it, just going on memories of how I implemented it).
-
-> Because of any pair of
-> 
-> 	mutex_lock(L);
-> 	... // other locks maybe
-> 	mutex_lock_nest_lock(M, L);
-> 
-> lockdep will not add M into the dependency graph, since it's nested and
-> should be serialized by L.
-
-We do enter M into the dependency graph, but instead ignore M-M
-recursion. Specifically so that we might catch the above deadlock vs B.
