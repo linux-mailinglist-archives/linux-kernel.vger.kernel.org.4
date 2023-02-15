@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B7B6978F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FC56978F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbjBOJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S233977AbjBOJ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbjBOJ0Z (ORCPT
+        with ESMTP id S234022AbjBOJ0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:26:25 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A483757B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:25:43 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso990161wmo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:25:43 -0800 (PST)
+        Wed, 15 Feb 2023 04:26:54 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDFB222D1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:26:22 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id bx25so2029157uab.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:26:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRaz9F2ndu1/Zzg0HAXs4+stqA3VUbDuTuUhJDAoGm0=;
-        b=oZDj+NVqsSmEJ5xdIf2TEYmmgUNCK6zQP03WEdPsHXYTmzbEg77rO75MQ1ymaqHtkK
-         u8t7eOltDCyuMAndy09UOb2WYFu/beEnNT8JcnvuZUiUFH50NYqbyeP4SOqqPxqLFPtr
-         IzWTR0DZderEsuIHzDLvEZcJl2Plcb6Y8URrctPSeIWS4qZ+AuvbiDspjn9Npj8am/dQ
-         XhOHi3ZKE/MqOnYhlSMkvRh7MGGJLHmiet+xq6zgt4/rWbSMSRCfpnIiC/48goxqgG7W
-         mTYQKQ59JXmjtSzXXr43XG6lAc65VQ7YBm16Qd7peAQDfaI+vhC9OiAiE025LZn5L8fS
-         t2pA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8JZ7cPQMzKcdcwW48N+uKI3jJsqc1Zm4J233qZzbj50=;
+        b=R+gC83k8XKNvKxK2e7FZ6xn9BdKpj6o3v/OEHn402y09PtX3uWtWWyLdVYxl8mKeNH
+         QfOFvgkE45GxvXRpiobhSx5Tp3A5oPgsIcfTyzTrmErpKGfdKByexf17uXMikb/Bzp4V
+         7yMBUGqy1/HxdMRlMQJk8VSqjXDboVdCVux4v0iTFWKn3knTY2YtH8ugxK8scWWSjL/W
+         7zyw7Aa7jrUIlhYT90xOkiwBWGqddlVbdD4OdIZaVdMB14TbSWt1W/3uoqIAxwokGDVn
+         WB0wvrPHwbRxMHltxHMuaX+lg5BIznJFNt6Q0zACvdSQI8/r+kCVeqltoSNpP5XoQ2hb
+         4Oew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lRaz9F2ndu1/Zzg0HAXs4+stqA3VUbDuTuUhJDAoGm0=;
-        b=g7QDeswB8p778qTNO3oqcgBJbI/x6p/df91TBtp7F/rrrTwIv64J0eF2oNsjoFpqc7
-         JDu7zH8Hw0y3zeLauJdvt4yj7dfE4IIFQVmMF4i0g7VMRP/bYrLnb+hEolNSYDgTtM0J
-         cZb7GoSyJ4atQFxqRTaORBcsbH2LCC23pJmKInVh6+BOxRVUF6PVuYJ58JXuA+o/KFrh
-         xUSA03sIBBIBiypDjdYYAFE2k8igThfqMTYEYZNNmHUIuHi2F1yib+0NgnKUuJaZKoLl
-         Usb2/GhUdogBU7UgM84w+r284YcUR4S6cvirSxGMwos6gfaly6PNKbpha2bajjzgKg+S
-         uriw==
-X-Gm-Message-State: AO0yUKVokPbhNMPMGkKH4zUczz2xrHapBx4B+I5AA4HWeOQI6Osz2xyX
-        A3F+hCDwzFfMMBhKNryLhFuEPoOJGrbaCGAw5Rc=
-X-Google-Smtp-Source: AK7set+MPgZiuLq/e8s82IBTD7f+ZJIhVUc3Y4h6gzu5gjWm0PGQysGvJd756SDP8P0/8jSvtDzwcg==
-X-Received: by 2002:a05:600c:4d15:b0:3cf:7197:e68a with SMTP id u21-20020a05600c4d1500b003cf7197e68amr1675557wmp.18.1676453139517;
-        Wed, 15 Feb 2023 01:25:39 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:7fda:5fd:df14:bb65? ([2a01:e0a:982:cbb0:7fda:5fd:df14:bb65])
-        by smtp.gmail.com with ESMTPSA id b15-20020a5d550f000000b002c55ebe37ddsm5674783wrv.115.2023.02.15.01.25.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 01:25:38 -0800 (PST)
-Message-ID: <f6f81af2-00ec-a75b-0e9e-a1eaf649edf5@linaro.org>
-Date:   Wed, 15 Feb 2023 10:25:37 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8JZ7cPQMzKcdcwW48N+uKI3jJsqc1Zm4J233qZzbj50=;
+        b=HHumKNab0aBMoHmvt3AvAYEuavPF62dRFZBua9SwSVXqCEqE1U/RukhBFgzJ6HPulU
+         ebmGEGcgLWMYpSOqO6ZgxYfXD6gcyqX55PWkU66Fbdux8CGo7XKCvcvMJlyGaCyJMkPi
+         SPNnycciGoaaPf8w7CG/QkmvYtPsb9ucqskdb1BL0zow3RmKxdiu7kTyEoHsO1/qIFnf
+         xTreK0MNkWf4ZYKmCCwix7a+c4uy2nrT04WwVPGtrJw6+pjscuJZJXQS/UK+3neM8W8n
+         98uAYZRc48gLPPUGCiPFzXJMEuMjHYnFQi9qOuqkNrdZV+bDoZ3JRxBvaExb3YNPj4t5
+         RWYA==
+X-Gm-Message-State: AO0yUKWZz7OYJXX3+O8Gp9IE1T5gLBs/vLVrlsIyxx94r/mA2l9lv195
+        YkYjP9AkFG3zstgsqMRkSF9ecYhJoR4AtfPdkffBPC7EtETIeUJs
+X-Google-Smtp-Source: AK7set/RtoRfh2WTkzZlIUEXnVPW9gFOvFMFdmDxa2yP1SYxsLbCmAjCASPTcaSqtVyPJldtkwi2HZjvzOdF11ull9U=
+X-Received: by 2002:ab0:7442:0:b0:661:1837:aad7 with SMTP id
+ p2-20020ab07442000000b006611837aad7mr174248uaq.45.1676453181317; Wed, 15 Feb
+ 2023 01:26:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: Add compatible for SM8550
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-References: <20230127132558.1176730-1-abel.vesa@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230127132558.1176730-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215091503.1490152-1-arnd@kernel.org>
+In-Reply-To: <20230215091503.1490152-1-arnd@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 15 Feb 2023 10:25:44 +0100
+Message-ID: <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
+Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Building a kcsan enabled kernel for x86_64 with gcc-11 results in a lot
+> of build warnings or errors without CONFIG_CONSTRUCTORS:
+>
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/copy_mc.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/cpu.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/csum-partial_64.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/csum-wrappers_64.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/insn-eval.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/insn.o'
+> x86_64-linux-ld: error: unplaced orphan section `.ctors.65436' from `arch/x86/lib/misc.o'
+>
+> The same thing has been reported for mips64. I can't reproduce it for
+> any other compiler version, so I don't know if constructors are always
+> required here or if this is a gcc-11 specific implementation detail.
+>
+> I see no harm in always enabling constructors here, and this reliably
+> fixes the build warnings for me.
+>
+> Link: https://lore.kernel.org/lkml/202204181801.r3MMkwJv-lkp@intel.com/T/
+> Cc: Kees Cook <keescook@chromium.org>
+> See-also: 3e6631485fae ("vmlinux.lds.h: Keep .ctors.* with .ctors")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On 27/01/2023 14:25, Abel Vesa wrote:
-> Document the compatible for SM8550 PDC.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> 
-> The v1 is here:
-> https://lore.kernel.org/all/20221116114210.2673902-1-abel.vesa@linaro.org/
-> 
-> Changes since v1:
->   * rebased on next-20230125
->   * added Krzysztof's R-b tag
-> 
->   .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
->   1 file changed, 1 insertion(+)
+Reviewed-by: Marco Elver <elver@google.com>
 
-Do you think you can pick it for v6.3 ?
+Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
+
+Do you have a tree to take this through, or should it go through -rcu
+as usual for KCSAN patches?
 
 Thanks,
-Neil
+-- Marco
 
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-> index 94791e261c42..5a733bd76b57 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-> @@ -37,6 +37,7 @@ properties:
->             - qcom,sm8250-pdc
->             - qcom,sm8350-pdc
->             - qcom,sm8450-pdc
-> +          - qcom,sm8550-pdc
->         - const: qcom,pdc
->   
->     reg:
-
+> ---
+>  lib/Kconfig.kcsan | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index 4dedd61e5192..609ddfc73de5 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -14,6 +14,7 @@ menuconfig KCSAN
+>         bool "KCSAN: dynamic data race detector"
+>         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>         depends on DEBUG_KERNEL && !KASAN
+> +       select CONSTRUCTORS
+>         select STACKTRACE
+>         help
+>           The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+> --
+> 2.39.1
+>
