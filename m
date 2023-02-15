@@ -2,74 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F187697396
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCA169739B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjBOB0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S233598AbjBOB1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjBOB0d (ORCPT
+        with ESMTP id S233472AbjBOB1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:26:33 -0500
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9813525A;
-        Tue, 14 Feb 2023 17:26:08 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VbhaWsD_1676424348;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbhaWsD_1676424348)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Feb 2023 09:25:49 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     kuba@kernel.org
-Cc:     davem@davemloft.net, kvalo@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, ath12k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] wifi: ath12k: dp_mon: clean up some inconsistent indentings
-Date:   Wed, 15 Feb 2023 09:25:48 +0800
-Message-Id: <20230215012548.90989-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 14 Feb 2023 20:27:18 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1653C34334
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676424428; x=1707960428;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rvloK5ngdtPCbJug6sOHC6AFBm+SqF5jOZbIHY27apo=;
+  b=Fg1BHrLQNWTBMvIkv1gP0WyXhlGXBZohqKL1i408IC1WuUxI3UDGtfeL
+   jY6eIeDZOo3Tau0mY/cqxlNcxuC8POhXpqXmTgJnZo0DzYD5o0XQ/K722
+   0bAIqJ5ysrL24BYP1dOOILK8Z/bq8bf+LjgsgAE3l9keggnVJPn3eZJd3
+   YJJAaPnsaK5E2zKxvrttbcDx72heMvfnFRcHzgrRMCHy/HyWDvkRPLnmr
+   MyfXQmA3V8wXLskFDtaR1yvYUwXHxAyXnyqMLD32633NdXDVpb66QoGdU
+   IKn80jNd2VBq5unvG0uH+L581iq6QZoFSePc77f4Z/6t2Q+GiYIbiwOSs
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
+   d="scan'208";a="221622427"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:26:59 +0800
+IronPort-SDR: L28AYcyUoWBwk8Eei0uJhXpK1KjZLFoJ5Ep00NIDpMAMy3DbVxngpkJH0WdGZhEgfxZm1grBtM
+ t3Z4GSJiqRr8wEsyhA0XTq8YBc39QHGja5aGn+a5zbcE/puEgQm253x8J1JY02fm2vTM4Rm0LU
+ Mk1iuF1ACKQWaftMTBCZUFGMOqvV2IVs2LqTRIVaJityWZhoP8HyFnQrPe6o7TZNzF9u9taDrK
+ 1SJyVN0VDwhh7TLJsvrDveLw5YZYW0AiKQgzeO7DRustExvSK4oJ7hlnYtaCep2njUUTWU+oNp
+ Je4=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 16:44:06 -0800
+IronPort-SDR: w4FoTf2sadxcBbIPYPjhMFNDV0oGSs45KF+PKKrC5bLSd0rWLhvXs3CrrIzsL1HGTY9XRyPC5R
+ C4ohbtrcDHU8JMBmB1dL/s+BA844T7A1m2jw7iBAr/ya3KMwq+/Dg/IOEudJKxk/el23lw+5k7
+ yF6su9sobN/XIceasOaGcAOIQY/vy61Se64wZ/lfuYAvQFUg8TPH9c697vvTfOpELcNLSQdXLn
+ KwMewT7BhhaQykDa52g+oHjGne80JY7aWa1GQ97ZD5/GNr1fKNxZteGqyUk1RXLkL0wu5oIgiw
+ /ww=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:26:58 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgR64s7gz1RvTr
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:26:58 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676424417; x=1679016418; bh=rvloK5ngdtPCbJug6sOHC6AFBm+SqF5jOZb
+        IHY27apo=; b=XROi/FN9X2gcoDt8oVw1OMORiTAwQFNEE2nYYXOd0EwCWAdf1Z3
+        4p1O4qn0lqAlbnmL1rz3FlOi4yfBD8I0ck7c4yn3Wlt+/oTj7EHGSkWW/vOfntyU
+        eNZavmZ9BWy66mJQ7x4sjzozwiqsR9rfMbbrtpAqb+K7uLlM8RI5zk4ESTC0Wj0/
+        4kq39GdDjT9YRXEwh/FeajOcOkYuAL9dewJD66hqlXUao7ucyi3RmAdsL8KMtOc9
+        j8DQUrhWMTPWiFFAmwpMaFxFgrSo1JpDp2yTREjxPKBmFuChSr03MtIlLajaa7fk
+        Kwpt3AAMS+0JKDQONC9gB7HGYpWLLnVcNpQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NPn_Jua34dMI for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Feb 2023 17:26:57 -0800 (PST)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgR14p3Jz1RvLy;
+        Tue, 14 Feb 2023 17:26:53 -0800 (PST)
+Message-ID: <67d08dce-4610-5e34-853a-1d09c5389607@opensource.wdc.com>
+Date:   Wed, 15 Feb 2023 10:26:52 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 7/9] PCI: rockchip: Fix legacy IRQ generation for
+ RK3399 PCIe endpoint core
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        stable@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-8-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214140858.1133292-8-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/net/wireless/ath/ath12k/dp_mon.c:532 ath12k_dp_mon_parse_he_sig_su() warn: inconsistent indenting
+On 2/14/23 23:08, Rick Wertenbroek wrote:
+> Fix legacy IRQ generation for RK3399 PCIe endpoint core according to
+> the technical reference manual (TRM). Assert and deassert legacy
+> interrupt (INTx) through the legacy interrupt control register
+> ("PCIE_CLIENT_LEGACY_INT_CTRL") instead of manually generating a PCIe
+> message. The generation of the legacy interrupt was tested and validated
+> with the PCIe endpoint test driver.
+> 
+> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4062
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/net/wireless/ath/ath12k/dp_mon.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Some nits below. But otherwise works fine for me.
 
-diff --git a/drivers/net/wireless/ath/ath12k/dp_mon.c b/drivers/net/wireless/ath/ath12k/dp_mon.c
-index 8b3f0769dd58..b30f50ee88dd 100644
---- a/drivers/net/wireless/ath/ath12k/dp_mon.c
-+++ b/drivers/net/wireless/ath/ath12k/dp_mon.c
-@@ -529,12 +529,12 @@ static void ath12k_dp_mon_parse_he_sig_su(u8 *tlv_data,
- 	case 3:
- 		if (he_dcm && he_stbc) {
- 			he_gi = HE_GI_0_8;
--					he_ltf = HE_LTF_4_X;
-+			he_ltf = HE_LTF_4_X;
- 		} else {
- 			he_gi = HE_GI_3_2;
- 			he_ltf = HE_LTF_4_X;
--			}
--			break;
-+		}
-+		break;
- 	}
- 	ppdu_info->gi = he_gi;
- 	value = he_gi << HE_GI_SHIFT;
+> ---
+>  drivers/pci/controller/pcie-rockchip-ep.c | 38 +++++------------------
+>  drivers/pci/controller/pcie-rockchip.h    |  6 ++++
+>  2 files changed, 14 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+> index cbc281a6a..ca5b363ba 100644
+> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+> @@ -328,45 +328,23 @@ static void rockchip_pcie_ep_assert_intx(struct rockchip_pcie_ep *ep, u8 fn,
+>  					 u8 intx, bool is_asserted)
+>  {
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+> -	u32 r = ep->max_regions - 1;
+> -	u32 offset;
+> -	u32 status;
+> -	u8 msg_code;
+> -
+> -	if (unlikely(ep->irq_pci_addr != ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR ||
+> -		     ep->irq_pci_fn != fn)) {
+> -		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
+> -					     AXI_WRAPPER_NOR_MSG,
+> -					     ep->irq_phys_addr, 0, 0);
+> -		ep->irq_pci_addr = ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR;
+> -		ep->irq_pci_fn = fn;
+> -	}
+>  
+>  	intx &= 3;
+>  	if (is_asserted) {
+>  		ep->irq_pending |= BIT(intx);
+> -		msg_code = ROCKCHIP_PCIE_MSG_CODE_ASSERT_INTA + intx;
+>  	} else {
+>  		ep->irq_pending &= ~BIT(intx);
+> -		msg_code = ROCKCHIP_PCIE_MSG_CODE_DEASSERT_INTA + intx;
+>  	}
+>  
+> -	status = rockchip_pcie_read(rockchip,
+> -				    ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+> -				    ROCKCHIP_PCIE_EP_CMD_STATUS);
+> -	status &= ROCKCHIP_PCIE_EP_CMD_STATUS_IS;
+> -
+> -	if ((status != 0) ^ (ep->irq_pending != 0)) {
+> -		status ^= ROCKCHIP_PCIE_EP_CMD_STATUS_IS;
+> -		rockchip_pcie_write(rockchip, status,
+> -				    ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+> -				    ROCKCHIP_PCIE_EP_CMD_STATUS);
+> +	if (is_asserted) {
+> +		rockchip_pcie_write(rockchip,
+> +			PCIE_CLIENT_INT_IN_ASSERT | PCIE_CLIENT_INT_PEND_ST_PEND,
+> +			PCIE_CLIENT_LEGACY_INT_CTRL);
+> +	} else {
+> +		rockchip_pcie_write(rockchip,
+> +			PCIE_CLIENT_INT_IN_DEASSERT | PCIE_CLIENT_INT_PEND_ST_NORMAL,
+> +			PCIE_CLIENT_LEGACY_INT_CTRL);
+>  	}
+
+With this change, you have now twice "if (is_asserted) {", which is not
+necessary. You can simplify the code a bit:
+
+static void rockchip_pcie_ep_assert_intx(struct rockchip_pcie_ep *ep,
+					 u8 fn, u8 intx, bool do_assert)
+{
+
+        u8 msg_code;
+
+
+
+        intx &= 3;
+
+        if (do_assert) {
+
+                ep->irq_pending |= BIT(intx);
+
+                msg_code = ROCKCHIP_PCIE_MSG_CODE_ASSERT_INTA + intx;
+
+                rockchip_pcie_write(&ep->rockchip,
+
+                        PCIE_CLIENT_INT_IN_ASSERT |
+
+                        PCIE_CLIENT_INT_PEND_ST_PEND,
+
+                        PCIE_CLIENT_LEGACY_INT_CTRL);
+
+                return;
+
+        }
+
+
+
+        ep->irq_pending &= ~BIT(intx);
+
+        msg_code = ROCKCHIP_PCIE_MSG_CODE_DEASSERT_INTA + intx;
+
+        rockchip_pcie_write(&ep->rockchip,
+
+                            PCIE_CLIENT_INT_IN_DEASSERT |
+
+                            PCIE_CLIENT_INT_PEND_ST_NORMAL,
+
+                            PCIE_CLIENT_LEGACY_INT_CTRL);
+
+}
+
+Note also the renaming of the argument "is_asserted" to "do_assert". The
+name is_asserted is badly misleading considering the english meaning given
+that it is true when we *must* do the assert and false when we must
+deassert. So do_assert as a name better match the use of that argument I
+think.
+
+> -
+> -	offset =
+> -	   ROCKCHIP_PCIE_MSG_ROUTING(ROCKCHIP_PCIE_MSG_ROUTING_LOCAL_INTX) |
+> -	   ROCKCHIP_PCIE_MSG_CODE(msg_code) | ROCKCHIP_PCIE_MSG_NO_DATA;
+> -	writel(0, ep->irq_cpu_addr + offset);
+>  }
+>  
+>  static int rockchip_pcie_ep_send_legacy_irq(struct rockchip_pcie_ep *ep, u8 fn,
+> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
+> index 72e427a0f..e90c2a2b8 100644
+> --- a/drivers/pci/controller/pcie-rockchip.h
+> +++ b/drivers/pci/controller/pcie-rockchip.h
+> @@ -39,6 +39,12 @@
+>  #define   PCIE_CLIENT_GEN_SEL_1		  HIWORD_UPDATE(0x0080, 0)
+>  #define   PCIE_CLIENT_GEN_SEL_2		  HIWORD_UPDATE_BIT(0x0080)
+>  #define PCIE_CLIENT_SIDE_BAND_STATUS	(PCIE_CLIENT_BASE + 0x20)
+> +#define PCIE_CLIENT_LEGACY_INT_CTRL		(PCIE_CLIENT_BASE + 0x0c)
+> +#define   PCIE_CLIENT_INT_IN_ASSERT		HIWORD_UPDATE_BIT(0x0002)
+> +#define   PCIE_CLIENT_INT_IN_DEASSERT	HIWORD_UPDATE(0x0002, 0)
+> +#define   PCIE_CLIENT_INT_PEND_ST_PEND	HIWORD_UPDATE_BIT(0x0001)
+> +#define   PCIE_CLIENT_INT_PEND_ST_NORMAL	HIWORD_UPDATE(0x0001, 0)
+> +#define PCIE_CLIENT_SIDE_BAND_STATUS	(PCIE_CLIENT_BASE + 0x20)
+>  #define   PCIE_CLIENT_PHY_ST			BIT(12)
+>  #define PCIE_CLIENT_DEBUG_OUT_0		(PCIE_CLIENT_BASE + 0x3c)
+>  #define   PCIE_CLIENT_DEBUG_LTSSM_MASK		GENMASK(5, 0)
+
 -- 
-2.20.1.7.g153144c
+Damien Le Moal
+Western Digital Research
 
