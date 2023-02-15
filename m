@@ -2,106 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A9E697315
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D66E697318
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjBOBGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
+        id S229650AbjBOBHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjBOBGw (ORCPT
+        with ESMTP id S232035AbjBOBHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:06:52 -0500
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F182D25BA3;
-        Tue, 14 Feb 2023 17:06:49 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vbhgqjj_1676423204;
-Received: from 30.97.48.50(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vbhgqjj_1676423204)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Feb 2023 09:06:45 +0800
-Message-ID: <76f1e8d2-1ef0-4317-061b-c7de33f20626@linux.alibaba.com>
-Date:   Wed, 15 Feb 2023 09:06:44 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 3/4] mm: hugetlb: change to return bool for
- isolate_hugetlb()
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, muchun.song@linux.dev,
-        naoya.horiguchi@nec.com, linmiaohe@huawei.com, david@redhat.com,
-        osalvador@suse.de, willy@infradead.org, damon@lists.linux.dev,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230214180324.71585-1-sj@kernel.org>
- <20230214180708.71645-1-sj@kernel.org> <Y+vRK7kYP0xVZ9Ya@monkey>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <Y+vRK7kYP0xVZ9Ya@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Feb 2023 20:07:21 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BCE3ABF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:07:20 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id z25-20020a6be019000000b00716eaf80c1dso11118132iog.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:07:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IyNPeLOdyUSRCloXmM+8l8tMrO7/92CcJQeGkdKd/vw=;
+        b=a3RFuz2JUP+kYHqqv6Gl99pOIwgDCa05eLIbj2NAByamb9c87BYsdvwxSsltqlpuTj
+         G5bChEn3dvtuU/Zn/BWCKyZk07px3NCmu8Z7Eyewl9O+etu7BOXo/pGAhhwDWb+RofUf
+         UY6O8BrPc0LpoYEbfvBh3vYBSpVnCO+zJ/76Ecmegs8MzRSqk+w1yE103NepU7HN1/6e
+         VwSD+ZVgh1SJWgb7GFmq2TZjZaYbfX9ne88fw/xhK+Lh0frKX3CYWN6CjCp7QgJ66mhA
+         8ld3bdlRiq0Mh27BOLutcQQ4BHuJ1jQWhO3HqmaP7p3TrxwMal8Rk0LRiM2xuK3+aI3A
+         fsrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IyNPeLOdyUSRCloXmM+8l8tMrO7/92CcJQeGkdKd/vw=;
+        b=pjlAV5oOnwPG9TCcXjtddwPvgwehsth1NT2MbpBuZTi0Dh3vbE/fafZf7q6TMBFMR4
+         6NZAvqCEjcbgYfzNQleGmty6Ng0ffDba97VvVzpTjbTiQm8RXZ2oEpXjM8yOcEdr5tBs
+         jelcRjcjXyOGzehwPecI/rkYJIgqDNniOtg5YYMSSyB7dIYhFtK+5nwX84AvN/W7yTs9
+         MU+B/ps7jT6kZ21a4FJziYN5VsUDrUGon9yORJqMpv1wSYJbRtQw5TMi7fbkmWiMJaUs
+         2PGikcynQbAv5h5x/b6GaXT6a/Ry+7H1OCbfvnHNCDkdsPFn1bN44T6zNlUeQawVdiGx
+         YUgw==
+X-Gm-Message-State: AO0yUKVZLcXjjSMIFwPHeLQdZp6uVleeftoCb47nzLVC6GQ3sbRp876u
+        eR2Dnhmz7vZweG9WNCqI1SLMWMg1ksnM
+X-Google-Smtp-Source: AK7set/hhwzs3tBETMRfIHWDYFlERciNM8DL4xWOpJy9YppTznI6bpJLKBiVPnqbNBCyVEoxYd0Fj8xSX5cn
+X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
+ (user=rananta job=sendgmr) by 2002:a6b:4015:0:b0:6df:2c9f:f8fc with SMTP id
+ k21-20020a6b4015000000b006df2c9ff8fcmr306048ioa.4.1676423240257; Tue, 14 Feb
+ 2023 17:07:20 -0800 (PST)
+Date:   Wed, 15 Feb 2023 01:07:01 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230215010717.3612794-1-rananta@google.com>
+Subject: [REPOST PATCH 00/16] Add support for vPMU selftests
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+The series aims to add vPMU selftests to improve the test coverage
+for KVM's PMU emulation. It includes the tests that validates actions
+from userspace, such as verifying the guest read/write accesses to the
+PMu registers while limiting the number for PMCs, and allowing or denying
+certain events via KVM_ARM_VCPU_PMU_V3_FILTER attribute. It also includes
+tests for KVM's guarding of the PMU attributes to count EL2/EL3 events,
+and formal KVM behavior that enables PMU emulation. The last part validates
+the guest expectations of the vPMU by setting up a stress test that
+force-migrates multiple vCPUs frequently across random pCPUs in the system,
+thus ensuring KVM's management of vCPU PMU contexts correctly.
 
-On 2/15/2023 2:21 AM, Mike Kravetz wrote:
-> On 02/14/23 18:07, SeongJae Park wrote:
->> On Tue, 14 Feb 2023 18:03:24 +0000 SeongJae Park <sj@kernel.org> wrote:
->>
->>> On Tue, 14 Feb 2023 21:59:31 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
->>>
->>>> Now the isolate_hugetlb() only returns 0 or -EBUSY, and most users did not
->>>> care about the negative value, thus we can convert the isolate_hugetlb()
->>>> to return a boolean value to make code more clear when checking the
->>>> hugetlb isolation state. Moreover converts 2 users which will consider
->>>> the negative value returned by isolate_hugetlb().
->>>>
->>>> No functional changes intended.
->>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>>   include/linux/hugetlb.h |  6 +++---
->>>>   mm/hugetlb.c            | 12 ++++++++----
->>>>   mm/memory-failure.c     |  2 +-
->>>>   mm/mempolicy.c          |  2 +-
->>>>   mm/migrate.c            |  2 +-
->>>>   5 files changed, 14 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
->>>> index df6dd624ccfe..5f5e4177b2e0 100644
->> [...]
->>>> diff --git a/mm/migrate.c b/mm/migrate.c
->>>> index 53010a142e7f..c5136fa48638 100644
->>>> --- a/mm/migrate.c
->>>> +++ b/mm/migrate.c
->>>> @@ -2128,7 +2128,7 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
->>>>   		if (PageHead(page)) {
->>>>   			err = isolate_hugetlb(page_folio(page), pagelist);
->>>>   			if (!err)
->>>> -				err = 1;
->>>> +				err = -EBUSY;
->>>
->>> Again, I think this is confusing.  'err' is 'bool', not 'int'.
->>
->> I mean, 'err' is not 'bool' but 'int', sorry.  See? This confuses me ;)
->>
-> 
-> Yes,
-> in the case here (and elsewhere) I like David's suggestion of using a separate
-> bool such as 'isolated' to capture the return value of the isolate function.
-> Then, the statement:
-> 
-> 	err = isolated ? 0 : -EBUSY;
-> 
-> would be pretty clear.
+As suggested by Oliver in my original post of the series [1] (and with
+Reiji's permission), I'm re-posting the series to include the
+selftest patches from Reiji's series that aims to limit the number
+of PMCs for the guest [2].
 
-Yes, much better, will do. Thanks.
+Patches 1-4 are unmodified patches 11-14 from Reiji's series [2],
+which introduces the vPMU selftests that adds a test to validate
+the read/write functionalities for the guest accesses to the
+implemented and unimplemented counters.
+
+Patch-5 refactors the existing tests for plugging-in the upcoming tests
+easily and rename the test file to a more generic name.
+
+Patch-6 and 7 add helper macros and functions respectively to interact
+with the cycle counter.
+
+Patch-8 extends create_vpmu_vm() to accept an array of event filters
+as an argument that are to be applied to the VM.
+
+Patch-9 tests the KVM_ARM_VCPU_PMU_V3_FILTER attribute by scripting
+various combinations of events that are to be allowed or denied to
+the guest and verifying guest's behavior.
+
+Patch-10 adds test to validate KVM's handling of guest requests to count
+events in EL2/EL3.
+
+Patch-11 introduces the vCPU migration stress testing by validating cycle
+counter and general purpose counter's behavior across vCPU migrations.
+
+Patch-12, 13, and 14 expands the tests in patch-8 to validate
+overflow/IRQ functionality, chained events, and occupancy of all the PMU
+counters, respectively.
+
+Patch-15 extends create_vpmu_vm() to create multiple vCPUs for the VM.
+
+Patch-16 expands the stress tests for multiple vCPUs.
+
+The series has been tested on hardwares with PMUv3p1 and PMUv3p5 on
+top of v6.2-rc7 plus Reiji's series [2].
+
+Thank you.
+Raghavendra
+
+[1]: https://lore.kernel.org/all/20230213180234.2885032-1-rananta@google.com/
+[2]: https://lore.kernel.org/all/20230211031506.4159098-1-reijiw@google.com/
+
+Raghavendra Rao Ananta (12):
+  selftests: KVM: aarch64: Refactor the vPMU counter access tests
+  tools: arm64: perf_event: Define Cycle counter enable/overflow bits
+  selftests: KVM: aarch64: Add PMU cycle counter helpers
+  selftests: KVM: aarch64: Consider PMU event filters for VM creation
+  selftests: KVM: aarch64: Add KVM PMU event filter test
+  selftests: KVM: aarch64: Add KVM EVTYPE filter PMU test
+  selftests: KVM: aarch64: Add vCPU migration test for PMU
+  selftests: KVM: aarch64: Test PMU overflow/IRQ functionality
+  selftests: KVM: aarch64: Test chained events for PMU
+  selftests: KVM: aarch64: Add PMU test to chain all the counters
+  selftests: KVM: aarch64: Add multi-vCPU support for vPMU VM creation
+  selftests: KVM: aarch64: Extend the vCPU migration test to multi-vCPUs
+
+Reiji Watanabe (4):
+  tools: arm64: Import perf_event.h
+  KVM: selftests: aarch64: Introduce vpmu_counter_access test
+  KVM: selftests: aarch64: vPMU register test for implemented counters
+  KVM: selftests: aarch64: vPMU register test for unimplemented counters
+
+ tools/arch/arm64/include/asm/perf_event.h     |  265 +++
+ tools/testing/selftests/kvm/Makefile          |    1 +
+ .../testing/selftests/kvm/aarch64/vpmu_test.c | 1710 +++++++++++++++++
+ .../selftests/kvm/include/aarch64/processor.h |    1 +
+ 4 files changed, 1977 insertions(+)
+ create mode 100644 tools/arch/arm64/include/asm/perf_event.h
+ create mode 100644 tools/testing/selftests/kvm/aarch64/vpmu_test.c
+
+-- 
+2.39.1.581.gbfd45094c4-goog
+
