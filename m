@@ -2,369 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF946974DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB196974E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 04:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjBODYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 22:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S232686AbjBODYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 22:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBODYP (ORCPT
+        with ESMTP id S229496AbjBODYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:24:15 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BD96192
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:24:11 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230215032407epoutp041928c330ad159fc638a8f7f1e737c684~D4YTgJqcW1897518975epoutp04X
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:24:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230215032407epoutp041928c330ad159fc638a8f7f1e737c684~D4YTgJqcW1897518975epoutp04X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676431447;
-        bh=CeJJHr1g6TM0kd+qg2F6GEyKVlKxUpGWmpbMLofy6qE=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=mW6XZWIX8t+UuyYjsUuJxVes9to4uNhUoB5KCk4naY/tJJ/vFodkhXa0Ht2FchrgU
-         7Z2H1kg6nTxtEQPu7TmFL+/W625LzHqEXJAuEMg24mJpbcAYuFTExF+pZpM9e+BSa0
-         hw+wQ31iB4JSkL8H+HdcIDxnGQdqr41vfcGpmOvk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230215032406epcas2p322c2fe6d3498b6031458606aca1900f9~D4YS8b1FA1167411674epcas2p3l;
-        Wed, 15 Feb 2023 03:24:06 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PGk2F6hdSz4x9Q2; Wed, 15 Feb
-        2023 03:24:05 +0000 (GMT)
-X-AuditID: b6c32a48-45bfc70000021624-79-63ec50555a07
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        53.5A.05668.5505CE36; Wed, 15 Feb 2023 12:24:05 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH 4/6] clk: samsung: exynos850: Implement CMU_G3D domain
-Reply-To: chanho61.park@samsung.com
-Sender: CHANHO PARK <chanho61.park@samsung.com>
-From:   CHANHO PARK <chanho61.park@samsung.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     David Virag <virag.david003@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230211064006.14981-5-semen.protsenko@linaro.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230215032405epcms2p433e63daf766faff2635641cc856ab515@epcms2p4>
-Date:   Wed, 15 Feb 2023 12:24:05 +0900
-X-CMS-MailID: 20230215032405epcms2p433e63daf766faff2635641cc856ab515
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmmW5owJtkgxfLTCwezNvGZnH9y3NW
-        i/lHzrFa7H29ld1i0+NrrBYfe+6xWlzeNYfNYsb5fUwWF0+5WrTuPcJucfhNO6vFv2sbWSye
-        9wHFT939zG6xatcfRovj7x8zOgh4vL/Ryu6xc9Zddo9NqzrZPO5c28PmsXlJvUffllWMHp83
-        yQWwR2XbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDd
-        rqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIF
-        KkzIzvh3bBdTwcKQiqaGfWwNjM/cuhg5OSQETCT2rN7BBGILCexglOifqNnFyMHBKyAo8XeH
-        MEhYWMBL4urjeywgYSEBZYmN22IhwvoS3/ubWEBsNgFdifkfPrF2MXJxiAjcZ5TY/fQrI4jD
-        LHCcRWLWzeOMELt4JWa0P2WBsKUlti/fChbnFHCQmNb0gRkiriHxY1kvlC0qcXP1W3YY+/2x
-        +VBzRCRa752FqhGUePBzNyPIcRICkhKT3kRAhAMkmu6DHARi50hsODiJDcI2l/j+dD5YK6+A
-        r8Td7u9gcRYBVYnp92dBrXKRmDltJdiZzALyEtvfzmEGGc8soCmxfpc+xCZliSO3oCr4JDoO
-        /2WHeXDHvCdMELa6xIHt06GelZXonvMZ6hoPiX/7dzBNYFSchQjnWUh2zULYtYCReRWjWGpB
-        cW56arFRgQk8ZpPzczcxgtOwlscOxtlvP+gdYmTiYDzEKMHBrCTCK/z0RbIQb0piZVVqUX58
-        UWlOavEhRlOgLycyS4km5wMzQV5JvKGJpYGJmZmhuZGpgbmSOK+07clkIYH0xJLU7NTUgtQi
-        mD4mDk6pBiathiuyd4N7DfJ92HKyA9Q2zVkXM8PLbumE5xP4L80MPP50z6QOwX2b6h92WXo7
-        NUfOnfjykJLcUelZGjPqDrj+Or5dpYdDzyEqq8QhZ/sH/dsC1m8FtY7u4/XpbrzfGPfTTSp/
-        VUPB87B1c5MNNQq3NW47Ol/53aniw1wrPhRdy+yP/yNt9+mVxdN1Cd3bGYOvnp/VycA/e+9R
-        RTWLB5qy+y/2Fl/28/jAp7a9fdu8uOXf2Toz1J8u3n/701v/WZbcySK5O25s6ZnKkWG2WHv5
-        Yq5pjifk+Hn+nWE7KKHxysP6MMtanoY7oYIfVluvX8pS9yx0VmZJ8+XgPLE1Uxf+nm5bvbhs
-        Y26F26TC3yeUWIozEg21mIuKEwEXvQVhTAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230211063957epcas2p2302d93ee2aeb2c5e680b771aa8bbc785
-References: <20230211064006.14981-5-semen.protsenko@linaro.org>
-        <20230211064006.14981-1-semen.protsenko@linaro.org>
-        <CGME20230211063957epcas2p2302d93ee2aeb2c5e680b771aa8bbc785@epcms2p4>
+        Tue, 14 Feb 2023 22:24:23 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75A12BF02
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 19:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676431462; x=1707967462;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2STTRWE5W1Se6DM2A+xp0KGGcf/mUnBNdnp5FgTk8SU=;
+  b=AIm7siGxYYz1gy3sDDWsUniHHne1g+8cnFdROAuYRysUMf0ABRQdULNx
+   ZVTermRwOZ6JJ9X1NqZptA+tEGtO57aMq7D1bsdYGvSL8gTl6XRRwhrCV
+   ViGSXMynXoq9LUbeIc7Jhur1RQ6ZZeYNE/PB4Eva2iQwls9K1c9F+MxyP
+   ccZrk/dP4VWmSXvUiEYjSb3+KVKQO9J6QCY2yVjzqvMtLEs6g4Cz0mFzq
+   v9ZBsWba92XtifYubFAUVdVqAvoW+73Uy7LhUxKPcmuBZvvUsXeYw3RwW
+   fz0XosB2e4WbZDFOFDomWFGJzZSPykBpPUCuJDaCWqP6TrbZ+So+uA8vF
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311700420"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="311700420"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:24:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="793333247"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="793333247"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2023 19:24:21 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 19:24:21 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 19:24:20 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 19:24:20 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 14 Feb 2023 19:24:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nnkq016oT+i+rI3ITZdUsRDmq4OURSizmabx5HQ2FKxnAdSaIy3c1S5YjVmICAg5A4A9f7AsEaja7oG5ASimTI8ltSXkWYVKf8AkCpGmxzpXLcxemJMm3Zr+Tzy+HaZ/j/rZu92VwGMHluzBO8EegaV4EU7+vxTYOcJqhHuDVsef7ZIaM6zXMkSuY6XaAJB4fLZApRgsZQ2r6rf7Eao/qskUo8T5VAYCM3eN3f8ts8IEaQ49OF86cdCHQbVSacOIWbuleMwQKkL+4LU0A6Bg0bjseGy5reBYXzGpvqa0jUFA8zZ8AC5yjzR7lYsA1JdQ1KuWe6bTxxOOi6ZyVimRZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4/cBxD6UG9e1EKNURthL4ldGbPk1tTwwBaPvxWh2OMw=;
+ b=a59g5q/P+kK1ZLkHm63CrBjp2DVFCUjsR6UCPfA6rPymdUiFwzqEXihJ1Si3QwceQsfKCsUnwFu7ylzNEPn2EVKW+clQC/BpVwcM+u/1a78Zkh6t1yd9+3R79YGl/8NABZmNbmOE2UV5R7j7Nlp4DWzkqjXG8ejsoBK7eQMhPeRM1lx+fnL5+1Yor5Eo/T2hNF5ytbf25AGRKVYTMY6+nSeUwf+ChH+e0AX8Bm93gyrKVnqpLOTh9rZlIZkHIJc8eSg9/pH77yycYSk/7vrTv0UR2cOkqm3DYslCpNGik6vW68wdUp0cWB01JnHbOrQrrJX6s64l79mHOBzZQ7qsRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DS0PR11MB6375.namprd11.prod.outlook.com (2603:10b6:8:c9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Wed, 15 Feb
+ 2023 03:24:19 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 03:24:19 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.com>
+CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: RE: [PATCH v2 2/3] iommu/sva: Stop using ioasid_set for SVA
+Thread-Topic: [PATCH v2 2/3] iommu/sva: Stop using ioasid_set for SVA
+Thread-Index: AQHZQD9F7KUt2c8R1ECOqV7mphNOEq7PV2IA
+Date:   Wed, 15 Feb 2023 03:24:18 +0000
+Message-ID: <BN9PR11MB527670F77FADCB351E41F8B78CA39@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230214064414.1038058-1-jacob.jun.pan@linux.intel.com>
+ <20230214064414.1038058-3-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230214064414.1038058-3-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB6375:EE_
+x-ms-office365-filtering-correlation-id: 19a1f534-a44f-4f2c-5914-08db0f041fb5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 06+QOsxhhetA5hJx5h8tQy+SeiC2JjRDEbHCnNwEJsqEFoNePGAAoTwKnHm/zkV5zzCecTvp2z7Qq3g1DdxHI5w/B4K+yiSYktPb4lKOsO3DDXMsYpyzr/ZLQ2TD4xGsWCcE3f0YX6RN2NBQk6bOZuQJdI+CdEVSnUs6wkMZVL2d5agqf4eqWhEqsqGpk5YwL48kAikdJASK7ChSBpkWTmpxstunQ6t1/6M7m65UgSjsYEcRSefiE/VCsqukFOqzIh6vVaSz0S/aQQdP+jcCDMRL+stBWjB8Bs4hg4ugJQgrLVYuBVdYSrF443Oj9nLly7zPnUZzN4fS8R7xGkKhxZNtbQr1Gouqi1nEmORkqS0eDgbVm5GXAY66ZGxOm5IguFe6vZRhjCFkvLjBIgOyqIgOJ3+OqGOt9j049RgdtFCckyL0CBELPqyYV3sqLAQiv0WJLwYvDkuRui6BYdsq2Fwsqo5udv5ahoIJHPjJblqn8nNvs3sp5BzWewYbUN2rdNhbxHwp9HUN1NtDI3AYWb/UZvwkAeDWuDtyDxy8ym9mMhTDlugMKPvERs+XhMbjKuzZN0luTH4xpGM1z3TFf/OwBmNA/eFV6azbdRSr1w+mBsZkVBJRDniuM6SjkHrnJ72iih5htvJXaGS0ECeFqn4tnxddoIsyRF0P6YBr5WXzSiv0abMK7RPT+CCnVcqFn4bhO2PWdGPVijwTTWZ7VA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199018)(7696005)(478600001)(71200400001)(83380400001)(86362001)(6506007)(110136005)(316002)(54906003)(9686003)(33656002)(66476007)(66556008)(66946007)(76116006)(64756008)(8676002)(4326008)(66446008)(38070700005)(26005)(186003)(2906002)(55016003)(8936002)(41300700001)(52536014)(5660300002)(7416002)(82960400001)(38100700002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?o3dXjlDMzV3x6Ul96Pg44hOXchdAYCTJA8d+BtuLC4lzkHxKEuUh4bni1sVx?=
+ =?us-ascii?Q?nTJaoJK3RbgUSZPHQu2k74oqYPeqdsHyUdVCBR3xdnfVYRTwdL+jonyf+jEH?=
+ =?us-ascii?Q?2doHd8I4QfGHbbwoDh4zXHgyNi19NFUJpZQmHtM14dsrEe/ikZXLY2TH7utS?=
+ =?us-ascii?Q?9O3e8ijOPGHv/2x/t2rTlTPIwQi1wq70YvnHGu94dm3VJRMtJe3OsFtdQ3kb?=
+ =?us-ascii?Q?FwhE0jOSo/0Kn8vQll8pSEEFRH+J/2yMourO5DsY/KAkqwohS6eZsFDtYKbn?=
+ =?us-ascii?Q?BPg1D+QTkMdciINMZZw0gv1EYAmqulvk+99oiebVLhOCHtHAcO+EhOtA851U?=
+ =?us-ascii?Q?0f3ParjD/PaQNbLSggZTCpkwmNwqq1pJAlCi3MzZEeZivbOrRmt8vk1HZ2V1?=
+ =?us-ascii?Q?v+lVYHWw0oVmR3pTw+Y3c7peAaccBEH+kdutBxA3HkKwpjup8k5fXjhMD7sj?=
+ =?us-ascii?Q?Qa8RQDGra91o4rWLW6b/jveuaggJaBLiTOpZdhN6W+zJViMblLiR1bjodKbv?=
+ =?us-ascii?Q?eXXJdNwfsEzjTc6Wl0+a84tEoNREZMgFxZoFoJ/vEM8bA2sdMB7JJarppM7r?=
+ =?us-ascii?Q?I8Q88IzA8QHXHuPIVC7JDlhqT8iIuieOQSkQ8RPZCdRk1wCAmbGRauQN0Z2B?=
+ =?us-ascii?Q?R6U+Kl4KVe55I0HkUVM3ctu4TJnJ6SpZEKnvVvAOlVFKiJYXbc+Hl3Edi0Of?=
+ =?us-ascii?Q?8ewBB5Xkgr6uvPAFs6ll0kBZjOZGr9dl3oI/wPZkq5TVRuTbGbYJXYxCJUmz?=
+ =?us-ascii?Q?uZ4atiiaRw80CW5o5vINJYEbpn1cnZPXQHz8Qs+DE6Lkxb+wQJaUXRFC/9n8?=
+ =?us-ascii?Q?4zKjxOVntmqJ0iU2ooyl0cf5u2EnFHDcwuoKWp3Qjx5nBrT6xBaiQuTl98Pd?=
+ =?us-ascii?Q?6bot5c++rrn7FZnVVOVlfVGg+ES/rYcvrFoTujZ+K2u6cLyHlXoRX3KcKF4w?=
+ =?us-ascii?Q?AjMBeDUrLwqbdSgxVYsiIORxsT/QjXrKCuDNRVZmWzKy6NXhd/N7Gwn7fura?=
+ =?us-ascii?Q?JBJV023frLEnu8yXg3uql1Dj9K8DYpPjuPiOiMCEvEQJN7f4kPaDAX2lF+Qt?=
+ =?us-ascii?Q?OP9u+lZFVUSDwgyHEx+DR3KDlOlUTa9KgXFibW6yqo2vY3GPAf7kZB0+WCYu?=
+ =?us-ascii?Q?NAXnNG0FCEpWUYei+qbNvHYnA+Ssh/etPE8W4qTcJXi9Nu8TniP86is+5l2W?=
+ =?us-ascii?Q?reNvPzVuTTi0uIuXZ5042jG5GS+fxPipCEm9GDE8nqmUriwxkd4wcAli0QRB?=
+ =?us-ascii?Q?3nvOtvD9WWmEnQ7zBaer5LusS0v9i6vbrWQIqBMDk1M5FPdT+VyXq9V5fQvN?=
+ =?us-ascii?Q?gl7JNd6WuYPP37i0bMpXwhrUq/Y0ibuOS/8myoMwMDW9nNzEIa5a11S18xug?=
+ =?us-ascii?Q?xhv5yEB0vMZjW+lIOyIGrxSB7Gl8vrGElSxkT6Cjg9MfVG6UtoAXOM2YQtDK?=
+ =?us-ascii?Q?0YnKFKorfFl9O4OVWhPI+5CYGFBgaG+SbztxTUYAtCJH1cupM30d96jVS0S2?=
+ =?us-ascii?Q?mlqe29nyNH8LwDSP8wY90KspLUudFQ1t5w1g+fubfsF/rW5ug/4atEdALeey?=
+ =?us-ascii?Q?UPi/hIvXljee0JNlrOPwznsg9K4keo9NYRVxeuJO?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19a1f534-a44f-4f2c-5914-08db0f041fb5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2023 03:24:18.9009
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PjZbG0RzPIBU6+Uef0w9OZqoMm6XUjXO0EK3s64AtJ/tvP/A738blUQxLbyB681nB+IH628eKwz2xLmeFUbczQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6375
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sam Protsenko <semen.protsenko@linaro.org>
-> Sent: Saturday, February 11, 2023 3:40 PM
-> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Chanwoo Choi
-> <cw00.choi@samsung.com>; Sylwester Nawrocki <s.nawrocki@samsung.com>; Rob
-> Herring <robh+dt@kernel.org>
-> Cc: David Virag <virag.david003@gmail.com>; Chanho Park
-> <chanho61.park@samsung.com>; Alim Akhtar <alim.akhtar@samsung.com>; Sumit
-> Semwal <sumit.semwal@linaro.org>; Tomasz Figa <tomasz.figa@gmail.com>;
-> Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
-> <sboyd@kernel.org>; linux-samsung-soc@vger.kernel.org; linux-
-> clk@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH 4/6] clk: samsung: exynos850: Implement CMU_G3D domain
-> 
-> CMU_G3D clock domain provides clocks for Mali-G52 GPU and bus clocks for
-> BLK_G3D.
-> 
-> This patch adds next clocks:
->   - bus clocks in CMU_TOP for CMU_G3D
->   - all internal CMU_G3D clocks
->   - leaf clocks for GPU, TZPC (TrustZone Protection Controller) and
->     SysReg
-> 
-> G3D_CMU_G3D clock was marked as CLK_IGNORE_UNUSED, as system hangs on boot
-> otherwise.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  drivers/clk/samsung/clk-exynos850.c | 121 ++++++++++++++++++++++++++++
->  1 file changed, 121 insertions(+)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos850.c
-> b/drivers/clk/samsung/clk-exynos850.c
-> index 541761e96aeb..a24eff42baae 100644
-> --- a/drivers/clk/samsung/clk-exynos850.c
-> +++ b/drivers/clk/samsung/clk-exynos850.c
-> @@ -36,6 +36,7 @@
->  #define CLK_CON_MUX_MUX_CLKCMU_CORE_MMC_EMBD	0x101c
->  #define CLK_CON_MUX_MUX_CLKCMU_CORE_SSS		0x1020
->  #define CLK_CON_MUX_MUX_CLKCMU_DPU		0x1034
-> +#define CLK_CON_MUX_MUX_CLKCMU_G3D_SWITCH	0x1038
->  #define CLK_CON_MUX_MUX_CLKCMU_HSI_BUS		0x103c
->  #define CLK_CON_MUX_MUX_CLKCMU_HSI_MMC_CARD	0x1040
->  #define CLK_CON_MUX_MUX_CLKCMU_HSI_USB20DRD	0x1044
-> @@ -57,6 +58,7 @@
->  #define CLK_CON_DIV_CLKCMU_CORE_MMC_EMBD	0x1828
->  #define CLK_CON_DIV_CLKCMU_CORE_SSS		0x182c
->  #define CLK_CON_DIV_CLKCMU_DPU			0x1840
-> +#define CLK_CON_DIV_CLKCMU_G3D_SWITCH		0x1844
->  #define CLK_CON_DIV_CLKCMU_HSI_BUS		0x1848
->  #define CLK_CON_DIV_CLKCMU_HSI_MMC_CARD		0x184c
->  #define CLK_CON_DIV_CLKCMU_HSI_USB20DRD		0x1850
-> @@ -84,6 +86,7 @@
->  #define CLK_CON_GAT_GATE_CLKCMU_CORE_MMC_EMBD	0x2024
->  #define CLK_CON_GAT_GATE_CLKCMU_CORE_SSS	0x2028
->  #define CLK_CON_GAT_GATE_CLKCMU_DPU		0x203c
-> +#define CLK_CON_GAT_GATE_CLKCMU_G3D_SWITCH	0x2040
->  #define CLK_CON_GAT_GATE_CLKCMU_HSI_BUS		0x2044
->  #define CLK_CON_GAT_GATE_CLKCMU_HSI_MMC_CARD	0x2048
->  #define CLK_CON_GAT_GATE_CLKCMU_HSI_USB20DRD	0x204c
-> @@ -116,6 +119,7 @@ static const unsigned long top_clk_regs[] __initconst
-> = {
->  	CLK_CON_MUX_MUX_CLKCMU_CORE_MMC_EMBD,
->  	CLK_CON_MUX_MUX_CLKCMU_CORE_SSS,
->  	CLK_CON_MUX_MUX_CLKCMU_DPU,
-> +	CLK_CON_MUX_MUX_CLKCMU_G3D_SWITCH,
->  	CLK_CON_MUX_MUX_CLKCMU_HSI_BUS,
->  	CLK_CON_MUX_MUX_CLKCMU_HSI_MMC_CARD,
->  	CLK_CON_MUX_MUX_CLKCMU_HSI_USB20DRD,
-> @@ -137,6 +141,7 @@ static const unsigned long top_clk_regs[] __initconst
-> = {
->  	CLK_CON_DIV_CLKCMU_CORE_MMC_EMBD,
->  	CLK_CON_DIV_CLKCMU_CORE_SSS,
->  	CLK_CON_DIV_CLKCMU_DPU,
-> +	CLK_CON_DIV_CLKCMU_G3D_SWITCH,
->  	CLK_CON_DIV_CLKCMU_HSI_BUS,
->  	CLK_CON_DIV_CLKCMU_HSI_MMC_CARD,
->  	CLK_CON_DIV_CLKCMU_HSI_USB20DRD,
-> @@ -164,6 +169,7 @@ static const unsigned long top_clk_regs[] __initconst
-> = {
->  	CLK_CON_GAT_GATE_CLKCMU_CORE_MMC_EMBD,
->  	CLK_CON_GAT_GATE_CLKCMU_CORE_SSS,
->  	CLK_CON_GAT_GATE_CLKCMU_DPU,
-> +	CLK_CON_GAT_GATE_CLKCMU_G3D_SWITCH,
->  	CLK_CON_GAT_GATE_CLKCMU_HSI_BUS,
->  	CLK_CON_GAT_GATE_CLKCMU_HSI_MMC_CARD,
->  	CLK_CON_GAT_GATE_CLKCMU_HSI_USB20DRD,
-> @@ -216,6 +222,9 @@ PNAME(mout_core_mmc_embd_p)	= { "oscclk",
-> "dout_shared0_div2",
->  				    "oscclk", "oscclk" };
->  PNAME(mout_core_sss_p)		= { "dout_shared0_div3",
-> "dout_shared1_div3",
->  				    "dout_shared0_div4", "dout_shared1_div4" };
-> +/* List of parent clocks for Muxes in CMU_TOP: for CMU_G3D */
-> +PNAME(mout_g3d_switch_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-> +				    "dout_shared0_div3", "dout_shared1_div3" };
->  /* List of parent clocks for Muxes in CMU_TOP: for CMU_HSI */
->  PNAME(mout_hsi_bus_p)		= { "dout_shared0_div2",
-> "dout_shared1_div2" };
->  PNAME(mout_hsi_mmc_card_p)	= { "oscclk", "dout_shared0_div2",
-> @@ -283,6 +292,10 @@ static const struct samsung_mux_clock top_mux_clks[]
-> __initconst = {
->  	MUX(CLK_MOUT_DPU, "mout_dpu", mout_dpu_p,
->  	    CLK_CON_MUX_MUX_CLKCMU_DPU, 0, 2),
-> 
-> +	/* G3D */
-> +	MUX(CLK_MOUT_G3D_SWITCH, "mout_g3d_switch", mout_g3d_switch_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_G3D_SWITCH, 0, 2),
-> +
->  	/* HSI */
->  	MUX(CLK_MOUT_HSI_BUS, "mout_hsi_bus", mout_hsi_bus_p,
->  	    CLK_CON_MUX_MUX_CLKCMU_HSI_BUS, 0, 1), @@ -357,6 +370,10 @@
-> static const struct samsung_div_clock top_div_clks[] __initconst = {
->  	DIV(CLK_DOUT_DPU, "dout_dpu", "gout_dpu",
->  	    CLK_CON_DIV_CLKCMU_DPU, 0, 4),
-> 
-> +	/* G3D */
-> +	DIV(CLK_DOUT_G3D_SWITCH, "dout_g3d_switch", "gout_g3d_switch",
-> +	    CLK_CON_DIV_CLKCMU_G3D_SWITCH, 0, 3),
-> +
->  	/* HSI */
->  	DIV(CLK_DOUT_HSI_BUS, "dout_hsi_bus", "gout_hsi_bus",
->  	    CLK_CON_DIV_CLKCMU_HSI_BUS, 0, 4), @@ -417,6 +434,10 @@ static
-> const struct samsung_gate_clock top_gate_clks[] __initconst = {
->  	GATE(CLK_GOUT_DPU, "gout_dpu", "mout_dpu",
->  	     CLK_CON_GAT_GATE_CLKCMU_DPU, 21, 0, 0),
-> 
-> +	/* G3D */
-> +	GATE(CLK_GOUT_G3D_SWITCH, "gout_g3d_switch", "mout_g3d_switch",
-> +	     CLK_CON_GAT_GATE_CLKCMU_G3D_SWITCH, 21, 0, 0),
-> +
->  	/* HSI */
->  	GATE(CLK_GOUT_HSI_BUS, "gout_hsi_bus", "mout_hsi_bus",
->  	     CLK_CON_GAT_GATE_CLKCMU_HSI_BUS, 21, 0, 0), @@ -992,6 +1013,103
-> @@ static const struct samsung_cmu_info cmgp_cmu_info __initconst = {
->  	.clk_name		= "gout_clkcmu_cmgp_bus",
->  };
-> 
-> +/* ---- CMU_G3D
-> +------------------------------------------------------------- */
-> +
-> +/* Register Offset definitions for CMU_G3D (0x11400000) */
-> +#define PLL_LOCKTIME_PLL_G3D			0x0000
-> +#define PLL_CON0_PLL_G3D			0x0100
-> +#define PLL_CON3_PLL_G3D			0x010c
-> +#define PLL_CON0_MUX_CLKCMU_G3D_SWITCH_USER	0x0600
-> +#define CLK_CON_MUX_MUX_CLK_G3D_BUSD		0x1000
-> +#define CLK_CON_DIV_DIV_CLK_G3D_BUSP		0x1804
-> +#define CLK_CON_GAT_CLK_G3D_CMU_G3D_PCLK	0x2000
-> +#define CLK_CON_GAT_CLK_G3D_GPU_CLK		0x2004
-> +#define CLK_CON_GAT_GOUT_G3D_TZPC_PCLK		0x200c
-> +#define CLK_CON_GAT_GOUT_G3D_GRAY2BIN_CLK	0x2010
-> +#define CLK_CON_GAT_GOUT_G3D_BUSD_CLK		0x2024
-> +#define CLK_CON_GAT_GOUT_G3D_BUSP_CLK		0x2028
-> +#define CLK_CON_GAT_GOUT_G3D_SYSREG_PCLK	0x202c
-> +
-> +
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Tuesday, February 14, 2023 2:44 PM
+>=20
+> From: Jason Gunthorpe <jgg@nvidia.com>
+>=20
+> Instead SVA drivers can use a simple global IDA to allocate PASIDs for
+> each mm_struct.
+>=20
+> Future work would be to allow drivers using the SVA APIs to reserve globa=
+l
+> PASIDs from this IDA for their internal use, eg with the DMA API PASID
+> support.
 
-Nit: double empty lines.
-Otherwise, looks good to me :)
+I think DMA API PASID will need new API around this IDA. SVA APIs should
+be just for SVA.
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+> +void mm_pasid_drop(struct mm_struct *mm)
+>  {
+> -	return mmget_not_zero(mm);
+> -}
+> +	pr_alert("%s %d", __func__, mm->pasid);
+> +	if (likely(!pasid_valid(mm->pasid)))
+> +		return;
+>=20
+> -/**
+> - * iommu_sva_find() - Find mm associated to the given PASID
+> - * @pasid: Process Address Space ID assigned to the mm
+> - *
+> - * On success a reference to the mm is taken, and must be released with
+> mmput().
+> - *
+> - * Returns the mm corresponding to this PASID, or an error if not found.
+> - */
+> -struct mm_struct *iommu_sva_find(ioasid_t pasid)
+> -{
+> -	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
+> +	ida_free(&iommu_global_pasid_ida, mm->pasid);
+>  }
 
-> +static const unsigned long g3d_clk_regs[] __initconst = {
-> +	PLL_LOCKTIME_PLL_G3D,
-> +	PLL_CON0_PLL_G3D,
-> +	PLL_CON3_PLL_G3D,
-> +	PLL_CON0_MUX_CLKCMU_G3D_SWITCH_USER,
-> +	CLK_CON_MUX_MUX_CLK_G3D_BUSD,
-> +	CLK_CON_DIV_DIV_CLK_G3D_BUSP,
-> +	CLK_CON_GAT_CLK_G3D_CMU_G3D_PCLK,
-> +	CLK_CON_GAT_CLK_G3D_GPU_CLK,
-> +	CLK_CON_GAT_GOUT_G3D_TZPC_PCLK,
-> +	CLK_CON_GAT_GOUT_G3D_GRAY2BIN_CLK,
-> +	CLK_CON_GAT_GOUT_G3D_BUSD_CLK,
-> +	CLK_CON_GAT_GOUT_G3D_BUSP_CLK,
-> +	CLK_CON_GAT_GOUT_G3D_SYSREG_PCLK,
-> +};
-> +
-> +/* List of parent clocks for Muxes in CMU_G3D */
-> +PNAME(mout_g3d_pll_p)		= { "oscclk", "fout_g3d_pll" };
-> +PNAME(mout_g3d_switch_user_p)	= { "oscclk", "dout_g3d_switch" };
-> +PNAME(mout_g3d_busd_p)		= { "mout_g3d_pll",
-> "mout_g3d_switch_user" };
-> +
-> +/*
-> + * Do not provide PLL table to PLL_G3D, as MANUAL_PLL_CTRL bit is not
-> +set
-> + * for that PLL by default, so set_rate operation would fail.
-> + */
-> +static const struct samsung_pll_clock g3d_pll_clks[] __initconst = {
-> +	PLL(pll_0818x, CLK_FOUT_G3D_PLL, "fout_g3d_pll", "oscclk",
-> +	    PLL_LOCKTIME_PLL_G3D, PLL_CON3_PLL_G3D, NULL), };
-> +
-> +static const struct samsung_mux_clock g3d_mux_clks[] __initconst = {
-> +	MUX(CLK_MOUT_G3D_PLL, "mout_g3d_pll", mout_g3d_pll_p,
-> +	    PLL_CON0_PLL_G3D, 4, 1),
-> +	MUX(CLK_MOUT_G3D_SWITCH_USER, "mout_g3d_switch_user",
-> +	    mout_g3d_switch_user_p,
-> +	    PLL_CON0_MUX_CLKCMU_G3D_SWITCH_USER, 4, 1),
-> +	MUX(CLK_MOUT_G3D_BUSD, "mout_g3d_busd", mout_g3d_busd_p,
-> +	    CLK_CON_MUX_MUX_CLK_G3D_BUSD, 0, 1), };
-> +
-> +static const struct samsung_div_clock g3d_div_clks[] __initconst = {
-> +	DIV(CLK_DOUT_G3D_BUSP, "dout_g3d_busp", "mout_g3d_busd",
-> +	    CLK_CON_DIV_DIV_CLK_G3D_BUSP, 0, 3), };
-> +
-> +static const struct samsung_gate_clock g3d_gate_clks[] __initconst = {
-> +	GATE(CLK_GOUT_G3D_CMU_G3D_PCLK, "gout_g3d_cmu_g3d_pclk",
-> +	     "dout_g3d_busp",
-> +	     CLK_CON_GAT_CLK_G3D_CMU_G3D_PCLK, 21, CLK_IGNORE_UNUSED, 0),
-> +	GATE(CLK_GOUT_G3D_GPU_CLK, "gout_g3d_gpu_clk", "mout_g3d_busd",
-> +	     CLK_CON_GAT_CLK_G3D_GPU_CLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_TZPC_PCLK, "gout_g3d_tzpc_pclk", "dout_g3d_busp",
-> +	     CLK_CON_GAT_GOUT_G3D_TZPC_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_GRAY2BIN_CLK, "gout_g3d_gray2bin_clk",
-> +	     "mout_g3d_busd",
-> +	     CLK_CON_GAT_GOUT_G3D_GRAY2BIN_CLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_BUSD_CLK, "gout_g3d_busd_clk", "mout_g3d_busd",
-> +	     CLK_CON_GAT_GOUT_G3D_BUSD_CLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_BUSP_CLK, "gout_g3d_busp_clk", "dout_g3d_busp",
-> +	     CLK_CON_GAT_GOUT_G3D_BUSP_CLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_SYSREG_PCLK, "gout_g3d_sysreg_pclk",
-> "dout_g3d_busp",
-> +	     CLK_CON_GAT_GOUT_G3D_SYSREG_PCLK, 21, 0, 0), };
-> +
-> +static const struct samsung_cmu_info g3d_cmu_info __initconst = {
-> +	.pll_clks		= g3d_pll_clks,
-> +	.nr_pll_clks		= ARRAY_SIZE(g3d_pll_clks),
-> +	.mux_clks		= g3d_mux_clks,
-> +	.nr_mux_clks		= ARRAY_SIZE(g3d_mux_clks),
-> +	.div_clks		= g3d_div_clks,
-> +	.nr_div_clks		= ARRAY_SIZE(g3d_div_clks),
-> +	.gate_clks		= g3d_gate_clks,
-> +	.nr_gate_clks		= ARRAY_SIZE(g3d_gate_clks),
-> +	.nr_clk_ids		= G3D_NR_CLK,
-> +	.clk_regs		= g3d_clk_regs,
-> +	.nr_clk_regs		= ARRAY_SIZE(g3d_clk_regs),
-> +	.clk_name		= "dout_g3d_switch",
-> +};
-> +
->  /* ---- CMU_HSI ---------------------------------------------------------
-> ---- */
-> 
->  /* Register Offset definitions for CMU_HSI (0x13400000) */ @@ -1700,6
-> +1818,9 @@ static const struct of_device_id exynos850_cmu_of_match[] = {
->  	}, {
->  		.compatible = "samsung,exynos850-cmu-cmgp",
->  		.data = &cmgp_cmu_info,
-> +	}, {
-> +		.compatible = "samsung,exynos850-cmu-g3d",
-> +		.data = &g3d_cmu_info,
->  	}, {
->  		.compatible = "samsung,exynos850-cmu-hsi",
->  		.data = &hsi_cmu_info,
-> --
-> 2.39.1
+when moving this function following line is missed:
+
+	mm->pasid =3D INVALID_IOASID;
+
+btw the current placement looks asymmetric. We now have
+mm_pasid_init() and mm_pasid_set() in mm.h while mm_pasid_drop()
+in iommu-sva.c.
+
+Is it cleaner to introduce a iommu_sva_free_pasid() helper and then
+call it from mm_pasid_drop() in mm.h?
