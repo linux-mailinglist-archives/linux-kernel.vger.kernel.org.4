@@ -2,196 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF83B698166
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E731769816E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBOQzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S229734AbjBOQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBOQzG (ORCPT
+        with ESMTP id S229487AbjBOQ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:55:06 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA7B1E5C1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:55:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 76E7233A04;
-        Wed, 15 Feb 2023 16:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676480103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rJxg8jEcjxtYicFkZgjwZzVCWCIDZeFxQL4uhOskhM0=;
-        b=u0l9r6ewpMcfPok5kKBnBNzepRzcbk57d2MySf9wycS55E5klR+ayrnBRlRYICdT5NzE72
-        R9fJ5F2Bs+sb0Y9pXuSkimEuar30u/kf9oyrjfxbFy/FYh//JzXon/xx7OtKVIt2cMrLWG
-        EIa3bUkt2jcpM098S3DMlO3TkN0d3V0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5666F13483;
-        Wed, 15 Feb 2023 16:55:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qZaCEmcO7WO6SwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 15 Feb 2023 16:55:03 +0000
-Date:   Wed, 15 Feb 2023 17:55:02 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Qi Zheng <arch0.zheng@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Teng Hu <huteng.ht@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <muchun.song@linux.dev>, x86@kernel.org
-Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
-Message-ID: <Y+0OZjTLhZG/Fs7G@dhcp22.suse.cz>
-References: <Y+tXrK/g1Nrd/q1h@kernel.org>
- <67240e55-af49-f20a-2b4b-b7d574cd910d@gmail.com>
- <22f0e262-982e-ea80-e52a-a3c924b31d58@redhat.com>
- <dbfbd982-27f3-0d72-49e0-d3dd5fe636a8@bytedance.com>
- <4386151c-0328-d207-9a71-933ef61817f9@redhat.com>
- <Y+t0Bhu7BCzH2Dp4@kernel.org>
- <a7f8be91-32c1-bfbe-7e81-5b1e818ba01d@redhat.com>
- <a09bfe3a-87e4-f8ce-89bb-c5fde8cc33c9@redhat.com>
- <Y+uO5IE7boORqsne@dhcp22.suse.cz>
- <Y+ymKw1eJaRcmDNN@kernel.org>
+        Wed, 15 Feb 2023 11:57:52 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40F6182;
+        Wed, 15 Feb 2023 08:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676480270; x=1708016270;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=yr1asUZzrUFS7lz+GBwLoWZqnhFhBPHltPeo2/iTTKg=;
+  b=DIGtJeJidB7roBjF1M4VzOT3cDK30IHmC899VATaDTh9rKEdj5BTMJJw
+   Q8XlZadE6YO10Mnbiv7vucKIebsUfULlMCsAySfsWui3Y7cnAm42/JVpW
+   HvUhkNNoX1LPtS3BjcxNpNoYC9Jy/UVKVF38vg7IqlRaBL/4xjZRrwuMY
+   nkXFzW1lDEtvWV22u2W3a482abalSOaJi17VPUMLKKp8LWXj0oVwyZK5G
+   2JM/sXX5U+lrEKSppAajaNMERRZGFIGgRogUPmIgzQ44zd43RLBe5i1dw
+   VrMYQ5CPv9PyAgvzx2SS37gN0P31C6A2tdjBI0/B/I72MmkCi9dn34BR1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="331477391"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="331477391"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 08:57:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="671719261"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="671719261"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Feb 2023 08:57:30 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 15 Feb 2023 08:57:30 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 15 Feb 2023 08:57:30 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 15 Feb 2023 08:57:30 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nFHHrYE9Id558Pken3je5jMtSS1Gq2TMl2ClwKey4+1IHJtxV0/mVAuA081m6dsuV7SEEGM60tafvDopoux33rguDS5Gn1ZZ2MmIjQof1kx+Tq7ezqMxN1f1QFbHmru8aoQ5lMXWmol9bDDEpWXgmhf/1FfpiBD9OTJyc5gST77ZQxXJNAOZ7YUxAc+bgNWBX6YHGqwkqLYMHyXipohwkMsfqLIwrxJmrYxn6Aerfr1hFoFzw1rnvJb6S6T36tI37mhzMUsrmh1V1AfmAjWOPgeI7ry6KJJ1ulUXzGE3gHIWfZn9uXxTtPy9O8SSgZDFzwtoJVr6npU+h5eKYE5siw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=thmi5sJcpYovdQN9lBhbD7FAJWJosnojE+4sxy11qOQ=;
+ b=PA2Ul2MszyJEMzM17wmTwUgLI0kGVhlQ5YT5TqA/l3+nhSoix8sris8M9YcqVYoa0CmY1GWXGEnXPzoC3AtZW1s0RZsoprz9GsLQXIuygkgxoTPrwojjPQqvFeCII2TijI2+Rz7YQFJIjsgbyAxpgvWDE8+69LxXAZSAD94FHMarqa2Y8l3NnXAKdOieDTbUqaOuD2Cc8USastZAaNVCcjzo+HueGPHviIrsYIFfmC8FQHWWtMo9YLPbZ7gLFGfySemO8tfu+PCdc5ynK27p4HYezFn2pGQ2ZW7BRc/4fNR7vHruQgZqf/Zre84L2KpjZeul0q6NUPYa7wZmeT3Vhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by DS0PR11MB7213.namprd11.prod.outlook.com (2603:10b6:8:132::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Wed, 15 Feb
+ 2023 16:57:29 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 16:57:29 +0000
+Message-ID: <85172e19-5344-bc30-e6a4-aa39dba3b50b@intel.com>
+Date:   Wed, 15 Feb 2023 17:56:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net-next v1 2/3] net/mlx5e: Add helper for
+ encap_info_equal for tunnels with options
+Content-Language: en-US
+To:     Gavin Li <gavinl@nvidia.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <roopa@nvidia.com>,
+        <eng.alaamohamedsoliman.am@gmail.com>, <bigeasy@linutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roi Dayan <roid@nvidia.com>, Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+References: <20230214134137.225999-1-gavinl@nvidia.com>
+ <20230214134137.225999-3-gavinl@nvidia.com>
+ <611a9a70-0f6e-cba5-dcb3-3412e6e9956f@intel.com>
+ <40a616a5-f350-2ac1-eda1-7e4c777ed487@nvidia.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <40a616a5-f350-2ac1-eda1-7e4c777ed487@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DB6PR1001CA0005.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:4:b7::15) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+ymKw1eJaRcmDNN@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DS0PR11MB7213:EE_
+X-MS-Office365-Filtering-Correlation-Id: bdfed791-db1b-4bd7-d3ca-08db0f75b8ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vhx3gX3AUIaS62yzoTmQ578yqli8Fi+AIgeIAZJthmFOV8J2Im13i+1aHCGKUP6uw8Bh+kXi1J2cnnii1ojf7xeVatrcwk8yySitAYoyNSMbEdCjY7PiJMlzhGPBGwqqzbW4ZVB2wxUgB7NlhzssS4MeS1ciuIFFtsQYOvU4M+S04NNusmZYhvGQxUyjs2xhAB+yx/pEYB5mlH3/c+4HpK6zs87PoYqpxq9fYHH7Sohgip9R3o8pk/ud+gO5lsGk3exW8f7+7gcVCO931bRkXNZUfJJ6TVw+lj7P7lgogeRwr5w1XwMs157hrzqQ98VwRHVPDacxqydzYaKkd+PRgvaFOck8blE3SX+bv13GKrAWedISsUmjGRlIgNhnJuxrLNoq62rBf9XOL0nQV6EK/kVW1VVqPRA2Mm+9yevRRN5ako86jDpUJws+AwzCLMEHcvgxn/retasWUOykqMRfBdtIWbRhg/AM9LBoalJDmYOrocPfaP4+j5Fc7CvRYxf7371RzYlQT4FiEia0kXxKWtQHpP+FX2RRTmw/Qhr0/lIWVMyjnteFfYy+IS3aUKO4ur33diboC63dKUT5oB+gRxXNGjX8yeyPFca4lTOqQRioCQy3AyM3fegsYCoDPFlNgXjmegCn2/UoHxucgXsJqr3Y4FoMKBljRv/ka57xr5vccS35qA3Il/hQIurnXyS0c4u0WFm7sJi9MSN2i0G2rgvYJ5kgQsy8jyTM3VDtR+c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199018)(82960400001)(38100700002)(86362001)(31696002)(36756003)(6916009)(4326008)(66476007)(66946007)(66556008)(8676002)(41300700001)(54906003)(316002)(5660300002)(7416002)(8936002)(2906002)(2616005)(478600001)(6486002)(53546011)(26005)(186003)(6512007)(6506007)(6666004)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHR0SStsZ3RQQ29mWnIzbW5qS1V4V0ZaQUdLdVdwNkR1ZHNKZGFkOCtHZWdo?=
+ =?utf-8?B?RWJBUHRFcjMxd1BBaUxnblVMZGNEcGZPU3ljbm9pNHlDS3dXM2ozVnh6cHNN?=
+ =?utf-8?B?WnFDajlCU3JHQUgwdUVpQUlzRGlmcnc5V1RTNmt5SEJiUVkwUHh3MmVLd2ht?=
+ =?utf-8?B?RUM3M0t5YXFpZndQb2lEL3BnTlNsNVgzOVplR2wvam94QnZpdXJob0hveUFH?=
+ =?utf-8?B?Sy9vbTNwTHZaRVNmS1V0VTI3Tk5kMkVQQlpkZWY0ZDBYK3JyQWVFMkIyMDNH?=
+ =?utf-8?B?ZUVQTXRIM0N5azcrSStOcE50VjNnMFY4OW5IZ0E4bjNqbHpKRDZ5Ty9iVFRQ?=
+ =?utf-8?B?R0pocmNHcTRMSUFkOEZCbGhqc0J4THlXeVRCZkZLa01XMTZUWmpmZTdaZEhD?=
+ =?utf-8?B?TWlHRjUyRmhwUk5aYyt0MW53SDl0UjEvR2ZVcm52N1IwdWs3YkxGd3M3MWo2?=
+ =?utf-8?B?VEhjQUF3a0toOVVIbW1FWCtXNHNjUXFweXdHeGJkaStKYlMveUpYVmJIUXBn?=
+ =?utf-8?B?TnBjTjNBa3FyTy9vWm1RdEd0SnFVV0lmWHp6a2pFVHAzbWppNEtLTWFldmZV?=
+ =?utf-8?B?QTIwL2xqeldTdFFITHBXK2V1Yzg3YkFxRzM5WU5oWkxDTDVnQ2pDV3QwWXUz?=
+ =?utf-8?B?OEs2WjlMelJkQnpSMFlOVllRMldVbjNMckhGc0hHaDNnUzJDVitoSTh4ZHk4?=
+ =?utf-8?B?MTBTV20xM0tZd2hLV1p1TjVuaVY0UTA5ay8zdUppdi92L012UHcydUF3eFBB?=
+ =?utf-8?B?Qmlqem8vWnlXY2FuMVZKNndvY1NLV0s2WmV2RlQ5WmFTaExzNW1PQlRpVnRv?=
+ =?utf-8?B?QzBvQms1dFdseGtuSzlKRHBZUm5KRllpSXBKdWVxUVBWb08zbVN4NkdEVnZT?=
+ =?utf-8?B?M1hVOEVhMW0xYkwrU1FnSTdVVkJQb3ZFdFRZeWJYZThrQlpSZ0lHb1RkNE13?=
+ =?utf-8?B?YXJwSWlrYXJmdDRVYzNTUWFlNUFyTC9ERHJMTFZJS00wRW5PL3dwZFRsbExQ?=
+ =?utf-8?B?ZmcwRmx5WjVhamVCZWhoK1pncjlwZUdPNWxkUjNEQlA0U2hQTkJNK2NBenhP?=
+ =?utf-8?B?Z0RhWlo1U2NKd2hZSFZicThMeVA4QkQrNXFYUk9Bd0dTMXJ3NXNnV1NZbjNi?=
+ =?utf-8?B?dnlMMUVGV0NoekVhdE1uZ1l0OTYraStrSnhiTWdYUHR5VTIzais3OVlLb09s?=
+ =?utf-8?B?QnVmcnBTdFU3OVVhUnp0SE0vYm5xTElFcC9kcEswT2ErSWhLbFZuQURjUmdx?=
+ =?utf-8?B?NWc3OGQ1dU8zQyt2dWxCd2xwWkZuZE53bitsT0Q0RzFGYTgwREt0M1BZU1Mr?=
+ =?utf-8?B?RjFoVmpkZGxGK2t5ZXk2RFZ1QW91dHM0bk1RaUhKWVd5NzJCaTBpWHJXanFO?=
+ =?utf-8?B?Rk5JcDVlcDNZZTdhTFd5WVFtNXVWd2lNV2RRRzRRbDJvVkpCd2dneXd5YTFO?=
+ =?utf-8?B?OEo3ZHZvV2g3R0VDU3ZJVXpSY05oQkZJQzhsYzVEUktaRklFR2tZcHMxQ2h4?=
+ =?utf-8?B?c01IclJaYzVlbW9TUU1tSjczYytLNUlKMW5rNUhWNVhpbE10eXo2WU5ZYUht?=
+ =?utf-8?B?dHVnN2Y4NFJwQkQyTXBqQ0kremRVSEJ2c2Rjb21YRXI1Z0xRYVFBTUJKNk12?=
+ =?utf-8?B?bjlBQ0dDK0tzbVphOWJBeVJiWDlYVjNXQlBPYitJNnl2Y2JEVGdmU1UxQU9j?=
+ =?utf-8?B?Y1p1QWMwcTVTRFNQZkxadGVOY0NudUowRWs2ZEt3Um5jYVBvQ0JxZnovM0dX?=
+ =?utf-8?B?b2lJLytVdmluR0lPd041TllqcFd4MlUwNnpDcWVpcEwxVGhqQ0p6R3c4N0FV?=
+ =?utf-8?B?TjlDQUErTFZFMlhUNElyWEZDdnk4aGNtZ29ZMHFoTUdUWlhYbzhlSnM2NVha?=
+ =?utf-8?B?WlZvN0syQmdaN0hCOFZwVzd4TjgyalJnZEF5OE1qRkxhUjIvN04wbE5aalpB?=
+ =?utf-8?B?M2phV2hUcWNxYkk2WUVLVjlHZkRnM21Gc3NxYXdDNFBvZVZjS0hsSjNOVlY5?=
+ =?utf-8?B?cW5nM1JtMFFRbGtsbmZyMGdma1lKMVZ3TVZEMFhDVFB1b1g5QlNTMHZUZ1pi?=
+ =?utf-8?B?OStjUGNBWXQwYnQ3RDBXN0thZVAyaXk5dUw2U3d1UUdkMDdPcDlPTEpycVR4?=
+ =?utf-8?B?VXNJMXM3bVNlSFhZTG9TTEhVbFdyOS85UlJzQXNhUVNoaFVON05yeHkrSkFQ?=
+ =?utf-8?Q?MEUEDlJh/37i/LI72P7AVJA=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdfed791-db1b-4bd7-d3ca-08db0f75b8ad
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 16:57:28.9546
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DLRVQRvkC/ou/v56p9nWZ9Hd3If1h7graLmPMLhnePkLqi6r/RkDPny7PtZIBJ+7OtKWQbO/5tRR9oSXax9uIwSFi61f0zlXK7RbrnezHD4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7213
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-02-23 11:30:19, Mike Rapoport wrote:
+From: Gavin Li <gavinl@nvidia.com>
+Date: Wed, 15 Feb 2023 10:54:12 +0800
+
+> 
+> On 2/14/2023 11:01 PM, Alexander Lobakin wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> From: Gavin Li <gavinl@nvidia.com>
+>> Date: Tue, 14 Feb 2023 15:41:36 +0200
+
 [...]
-> >From b670120bcacd3fe34a40d7179c70ca2ab69279e0 Mon Sep 17 00:00:00 2001
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> Date: Wed, 15 Feb 2023 11:12:18 +0200
-> Subject: [PATCH] x86/mm: drop 4MB restriction on minimal NUMA node size
-> 
-> Qi Zheng reports crashes in a production environment and provides a
-> simplified example as a reproducer:
-> 
->   For example, if we use qemu to start a two NUMA node kernel,
->   one of the nodes has 2M memory (less than NODE_MIN_SIZE),
->   and the other node has 2G, then we will encounter the
->   following panic:
-> 
->   [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
->   [    0.150783] #PF: supervisor write access in kernel mode
->   [    0.151488] #PF: error_code(0x0002) - not-present page
->   <...>
->   [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
->   <...>
->   [    0.169781] Call Trace:
->   [    0.170159]  <TASK>
->   [    0.170448]  deactivate_slab+0x187/0x3c0
->   [    0.171031]  ? bootstrap+0x1b/0x10e
->   [    0.171559]  ? preempt_count_sub+0x9/0xa0
->   [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
->   [    0.172735]  ? bootstrap+0x1b/0x10e
->   [    0.173236]  bootstrap+0x6b/0x10e
->   [    0.173720]  kmem_cache_init+0x10a/0x188
->   [    0.174240]  start_kernel+0x415/0x6ac
->   [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
->   [    0.175417]  </TASK>
->   [    0.175713] Modules linked in:
->   [    0.176117] CR2: 0000000000000000
-> 
-> The crashes happen because of inconsistency between nodemask that has
-> nodes with less than 4MB as memoryless and the actual memory fed into
-> core mm.
-> 
-> The commit 9391a3f9c7f1 ("[PATCH] x86_64: Clear more state when ignoring
-> empty node in SRAT parsing") that introduced minimal size of a NUMA node
-> does not explain why a node size cannot be less than 4MB and what boot
-> failures this restriction might fix.
-> 
-> Since then a lot has changed and core mm won't confuse badly about small
-> node sizes.
-> 
-> Drop the limitation for the minimal node size.
-> 
-> Link: https://lore.kernel.org/all/20230212110305.93670-1-zhengqi.arch@bytedance.com/
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Yes, I would start with this. If the original reasoning to have a limit
-still exists then we would need to have a closer look but right now I
-would much rather drop this unexplained subtlety. If we hit the issue we
-would get a more specific description at least.
+>>> +     if (a_has_opts != b_has_opts)
+>>> +             return false;
+>>> +
+>>> +     /* options stored in memory next to ip_tunnel_info struct */
+>>> +     a_info = container_of(a->ip_tun_key, struct ip_tunnel_info, key);
+>>> +     b_info = container_of(b->ip_tun_key, struct ip_tunnel_info, key);
+>>> +
+>>> +     return a_info->options_len == b_info->options_len &&
+>>> +             memcmp(a_info + 1, b_info + 1, a_info->options_len) == 0;
+>> 1. memcmp() is not aligned to the first expr (off-by-one to the right).
+> Options start from "info + 1", see ip_tunnel_info_opts and will use it
+> here to replace the "info+1".
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+Nah, I mean the following. Your code:
 
-Thanks!
+	return a_info->options_len == b_info->options_len &&
+		memcmp(a_info + 1, b_info + 1, ...
 
-> ---
->  arch/x86/include/asm/numa.h | 7 -------
->  arch/x86/mm/numa.c          | 7 -------
->  2 files changed, 14 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
-> index e3bae2b60a0d..ef2844d69173 100644
-> --- a/arch/x86/include/asm/numa.h
-> +++ b/arch/x86/include/asm/numa.h
-> @@ -12,13 +12,6 @@
->  
->  #define NR_NODE_MEMBLKS		(MAX_NUMNODES*2)
->  
-> -/*
-> - * Too small node sizes may confuse the VM badly. Usually they
-> - * result from BIOS bugs. So dont recognize nodes as standalone
-> - * NUMA entities that have less than this amount of RAM listed:
-> - */
-> -#define NODE_MIN_SIZE (4*1024*1024)
-> -
->  extern int numa_off;
->  
->  /*
-> diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> index 2aadb2019b4f..55e3d895f15c 100644
-> --- a/arch/x86/mm/numa.c
-> +++ b/arch/x86/mm/numa.c
-> @@ -601,13 +601,6 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
->  		if (start >= end)
->  			continue;
->  
-> -		/*
-> -		 * Don't confuse VM with a node that doesn't have the
-> -		 * minimum amount of memory:
-> -		 */
-> -		if (end && (end - start) < NODE_MIN_SIZE)
-> -			continue;
-> -
->  		alloc_node_data(nid);
->  	}
->  
-> -- 
-> 2.35.1
-> 
-> 
-> > -- 
-> > Michal Hocko
-> > SUSE Labs
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+should be:
 
--- 
-Michal Hocko
-SUSE Labs
+	return a_info->options_len == b_info->options_len &&
+	       memcmp(a_info + 1, b_info + 1, ...
+
+7 spaces instead of a tab to have it aligned to the prev line.
+
+>> 2. `!expr` is preferred over `expr == 0`.
+> ACK
+>>
+>>> +}
+>>> +
+>>>   static int cmp_decap_info(struct mlx5e_decap_key *a,
+>>>                          struct mlx5e_decap_key *b)
+>>>   {
+>> [...]
+>>
+>> Thanks,
+>> Olek
+Thanks,
+Olek
