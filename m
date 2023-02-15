@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E262697793
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746D6697796
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbjBOHup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S233670AbjBOHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjBOHun (ORCPT
+        with ESMTP id S233329AbjBOHvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:50:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9998532CD0;
-        Tue, 14 Feb 2023 23:50:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40A2861A71;
-        Wed, 15 Feb 2023 07:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6AEC433EF;
-        Wed, 15 Feb 2023 07:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676447438;
-        bh=XpvbBaK4xbaNhxlwvyVb04WeG3csNvfLcdKEuWJ14Gc=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=qGLKtYOC1JidZV0q21JkS8oN2oDMbFsSJLLSQ00irZHaYfD+x/CJLL2zI11TWPQao
-         n02MH7PytUN8YAgEmgGSclIZrUvWvyXW402uLQz65NATy640wjiqO1OaW5UbBPTk//
-         RkEdwANKDVVbNj6pcyxKxWGvuVytPRU2YlF91SyNadoup9t5bUL/2M9Su7W5Fwy6X8
-         lTO5Eg/kFUxdxImILs4tnuyo651QpTbRX5ucgc9KbYl004/ZE46v10lvbxA6CPR7gB
-         jbbMJCl3EhlWE+7yXoJfP5J7qEC++NKefFuovuO4XcDvkJ6mnb1pGsmD4PuQl2ik9h
-         4COw6XBFSjXNQ==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Feb 2023 02:51:16 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB793769C;
+        Tue, 14 Feb 2023 23:51:14 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.231])
+        by gnuweeb.org (Postfix) with ESMTPSA id 91863830B9;
+        Wed, 15 Feb 2023 07:51:08 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1676447474;
+        bh=4xu8nGWzIVAPVRMQcoYys7aWOHBc3DMFrZEQxIY6qhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XT3Vca4/rTY3BkZ5u9/RSK+ReBut+uMgsiLoRlLiu8IWdKvU4veubHXqKDXq9ZSz9
+         AkxqsN6qg/bkfitCw+Tju4eIplrpJ+VE7N0/MaKay6kRPKmhhjFJ3+7mSndn7yfXb8
+         FjKqCzPYnPQBzJYkw11RoZMJg5/ElK5kIzWq6GaW5ekcBmYtoOlp38SfJ6meoecIx1
+         K6VZuJOnCo7LR9Ybt/bqyjKY3TbTw+m8G50M8DjcAXP1DDJIDyirKNlrmBNwsRu34+
+         Q5zL5dnW3u6yNQCyyU0ltMUJ4WIQyV8nB1Bof8WurmjhfdkrTnUbuz1r3KzVQLQzPy
+         P1w5uIwbZCFNw==
+Date:   Wed, 15 Feb 2023 14:51:04 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
+ architecture
+Message-ID: <Y+yO6Da4t0+pQQ03@biznet-home.integral.gnuweeb.org>
+References: <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
+ <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org>
+ <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
+ <Y9FpxEz2+LJc7vJP@biznet-home.integral.gnuweeb.org>
+ <SA1PR11MB673454F82DEBD8A1C7009C79A8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 1/3] wifi: rtw88: usb: Set qsel correctly
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230210111632.1985205-2-s.hauer@pengutronix.de>
-References: <20230210111632.1985205-2-s.hauer@pengutronix.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
-        Andreas Henriksson <andreas@fatal.se>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167644743063.2758.2777342637457592464.kvalo@kernel.org>
-Date:   Wed, 15 Feb 2023 07:50:35 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
+X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sascha Hauer <s.hauer@pengutronix.de> wrote:
-
-> We have to extract qsel from the skb before doing skb_push() on it,
-> otherwise qsel will always be 0.
+On Wed, Feb 15, 2023 at 07:42:47AM +0000, Li, Xin3 wrote:
+> Hi Faizi,
 > 
-> Fixes: a82dfd33d1237 ("wifi: rtw88: Add common USB chip support")
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+> Any update on this patch set?
 
-3 patches applied to wireless-next.git, thanks.
+Xin,
 
-7869b834fb07 wifi: rtw88: usb: Set qsel correctly
-07ce9fa6ab0e wifi: rtw88: usb: send Zero length packets if necessary
-462c8db6a011 wifi: rtw88: usb: drop now unnecessary URB size check
+Before I send the next version, I need an answer for this one:
+https://lore.kernel.org/lkml/Y9LfmQ%2Fr1%2FpEP+uv@biznet-home.integral.gnuweeb.org/
+
+I don't think the redzone problem is handled correctly here. Using
+"+r" (rsp) constraint doesn't solve the redzone problem.
+
+HPA, Andrew, anybody?
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230210111632.1985205-2-s.hauer@pengutronix.de/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Ammar Faizi
 
