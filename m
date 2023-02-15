@@ -2,121 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC7A697C20
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46D5697C1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjBOMp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S229677AbjBOMpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjBOMpx (ORCPT
+        with ESMTP id S229532AbjBOMpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:45:53 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735B632CD0;
-        Wed, 15 Feb 2023 04:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676465152; x=1708001152;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ArTeTBl6HoOFZclYi5EBGCWmiDoltI/AT5lZ8Q0N0Tc=;
-  b=LUl8RwjvJvHWsbMm3lYFWgmu6ovPceV9XW2/YVQQd0Pa7TiexFx6GQG5
-   AMcTkq/5R7AfDDahp0nuNsBZSJkaB1iucFxqycaliKmh9wpH3SJ5pCpBs
-   7ZYSkOeyIeeXzvrnb2XOi2j1be13BeHC4jd5NjgHgDFloWdp1zRFYOMBR
-   1gBw0SrfCIbPdm2DIsZXHxBiTE1pDlmQJIy5pYQgpnS7RqohEyRMTluOG
-   KWfC+Nz/a2TWnsof+LjajXdhoCZpjaT7WgB/b+wX0GmKq19XptSKxRW+9
-   Etql2lcZGh0xfkVhw45clO6fxbjDdMRsvpYCp1oz0cAOCmny97ED/4+3q
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="417638100"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="417638100"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 04:45:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="669600690"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="669600690"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2023 04:45:46 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSHAP-0009MX-35;
-        Wed, 15 Feb 2023 12:45:45 +0000
-Date:   Wed, 15 Feb 2023 20:45:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 06/10] soc: fsl: cmp1: Add support for QMC
-Message-ID: <202302152037.NXHi2aFY-lkp@intel.com>
-References: <20230126083222.374243-7-herve.codina@bootlin.com>
+        Wed, 15 Feb 2023 07:45:52 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E9C311CD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:45:51 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id q3-20020a056e02096300b003157134a9fbso736674ilt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:45:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V5gRBWvCrC4ivORDLYanYAKruxMNDrxF3nhXlCgZ6d4=;
+        b=US0DePTcWCe2Ug9Jf6jkcYQIj9Rm2YSce3NDhEgQ/OuU5THFHr/t/ne8XLOTziodfV
+         XqtzCWUZvmzHcS+a5C3yTYqGlmrspIuaQ4weXPEvdP/sdlNtUqGwd4O51KDfqSLTjDsq
+         FVgn5RL9qQM2bT81Xd0k6DNUWct/8+VV2tvzEJF7cxA81VzX2Ldunc4H7nc3dujKzSmo
+         8A0Y0TNpc5BCqqP3kXpvupIwQq8+J8gfHmGYm1Bhip1Oha920oHu1/vO6OKzev2XIVQB
+         JzVyPDv22jBBJ0NEmbyl5Rf0JoN4XISK+0HwbLNkoEphMoMF9Zo4LVE0nfh7Phsz5oWE
+         vvPw==
+X-Gm-Message-State: AO0yUKVmHqvMGM4LjLCYjE27BrgyWDRGn3xVoUURLxaJsIYhlTYE7CJP
+        q28LJRGSb6omA73GITQwqGEtd8H7OqM0zOtEItWqAU8h7POF
+X-Google-Smtp-Source: AK7set9TjvisiTIRVmOM6kk7oWlt9QxFsyDansPcekDaE9vTb1o4Jz8iKYvVdAHKEnBGb6wJBTvmELx9OL90n9hUVjrG8BHZYbwh
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126083222.374243-7-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3e0f:b0:3c4:a4d1:cc49 with SMTP id
+ co15-20020a0566383e0f00b003c4a4d1cc49mr886208jab.3.1676465151294; Wed, 15 Feb
+ 2023 04:45:51 -0800 (PST)
+Date:   Wed, 15 Feb 2023 04:45:51 -0800
+In-Reply-To: <0000000000006c411605e2f127e5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d245a705f4bc75b4@google.com>
+Subject: Re: [Android 5.10] kernel BUG in ext4_free_blocks (2)
+From:   syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        joneslee@google.com, lczerner@redhat.com, lee@kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nogikh@google.com, sashal@kernel.org, stable@vger.kernel.org,
+        syzkaller-android-bugs@googlegroups.com, tadeusz.struk@linaro.org,
+        tudor.ambarus@linaro.org, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herve,
+This bug is marked as fixed by commit:
+ext4: block range must be validated before use in ext4_mb_clear_bb()
 
-I love your patch! Yet something to improve:
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on robh/for-next powerpc/next powerpc/fixes linus/master v6.2-rc8 next-20230215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+#syz fix: exact-commit-title
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina/dt-bindings-soc-fsl-cpm_qe-Add-TSA-controller/20230128-152424
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230126083222.374243-7-herve.codina%40bootlin.com
-patch subject: [PATCH v4 06/10] soc: fsl: cmp1: Add support for QMC
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230215/202302152037.NXHi2aFY-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/20ec2eacb76ca7252aa2934f53357663652edd0f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Herve-Codina/dt-bindings-soc-fsl-cpm_qe-Add-TSA-controller/20230128-152424
-        git checkout 20ec2eacb76ca7252aa2934f53357663652edd0f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302152037.NXHi2aFY-lkp@intel.com/
+Kernel: Android 5.10
+Dashboard link: https://syzkaller.appspot.com/bug?extid=15cd994e273307bf5cfa
 
-All errors (new ones prefixed by >>):
+---
+[1] I expect the commit to be present in:
 
-   powerpc-linux-ld: drivers/soc/fsl/qe/qmc.o: in function `qmc_probe':
->> qmc.c:(.text.qmc_probe+0xd8): undefined reference to `get_immrbase'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+1. android12-5.10-lts branch of
+https://android.googlesource.com/kernel/common
