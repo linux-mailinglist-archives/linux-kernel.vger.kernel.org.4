@@ -2,176 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33656973C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7676973C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbjBOBjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S233670AbjBOBlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjBOBjt (ORCPT
+        with ESMTP id S232720AbjBOBlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:39:49 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022E02ED62
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676425188; x=1707961188;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oy+5bs8bztFCfWMEixVu7mADVC2yPYRnwRT4aa/6byw=;
-  b=CD2V0OaMg4+QxV0hD8pqvu1QhRBWaRmxUR46+/JKy6iiiIR063XrRVdn
-   I9NSakAu3yLPQewAj0gHe7eJJJ8vpBEBM2v2f/FLMa7ElJ5uGs0oo3VEQ
-   GamYMWaSfCAWFM74IoG3aQyh//c4Q+38XaS0dcujlJEGYu5c51THsf8yc
-   aV5+umKXyoTuP2bEhJpDVDye9HsBinylVl4gyDX3atam0BA9w+hMOuT28
-   yMnKb6XtRbsurOmcdiMvU+bUXNqyVZ0/V/GJ2zbeoScnyTt0jN2wxY8FN
-   IeuaGZKjl6EWiwjRT/dzuj6NhW1gTHv0kBTerfFebQm2+1OujtCWT8H+n
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
-   d="scan'208";a="223117986"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:39:46 +0800
-IronPort-SDR: gpTF9oqkEjbGWyaJXSaoUe9xTL7zTOMFzh7IMoxDr+3bwD4IImhtHRMSaLvDKfd2p/3y3FxFCA
- T+057ree44pTDhyuD7m9gddpBLjdSdpnKJcpWiaT/aRaqasIsVFzcgGlEdEyxfJ/rVgNg8578w
- yfI5GxDMhxPKE7fbAxhF1iJHJ1A6gvut3U3ISwC5O5oHUSivRwmkFipf+qv5kA1CN1F6iMSYf8
- ynZi2vCxrn7U+mKmYUXZzg7mVAC6ncJ0jToqIgvMPXFsK6n/y33rGqnu1sB59WZwIz/yZJy9HU
- s1Y=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 16:56:53 -0800
-IronPort-SDR: hPBV4KPCj6M43Gr8h6tRfxCwPVFJtX2A93iyMZHCtCCas/o4jHcsoXFnQjJQ4aHpn4JOWAyTI8
- 9ks5wyswbV10N8aFpGEZdZsFpQsF4rrGov4N1DOSgwMnHnYqNqH1wpWDYtrOV8oXLnGP+hqUxY
- t2XN1qJP4IveHYm6rpERgwR2LVZKjP0UVJMnSDbmFnjIyWnG6QnhlAtrmRnVbIcZvMK5H6Eac+
- 3JDHRFixVwg0JRQZsm/5c0+sZ5C/aywJLHnUWNRDw4TARAQqEcI8/EfjfjJctfwDzbIsOzuA7A
- chs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:39:46 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgjs4PcMz1Rx15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:39:45 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676425184; x=1679017185; bh=oy+5bs8bztFCfWMEixVu7mADVC2yPYRnwRT
-        4aa/6byw=; b=fOcVMEdSFlGAd1ybZTpNogWSvYjl6ZCDZG1CJdrrh3tdQynF8wa
-        MiE+19cVjiqq46ifzKZt3mxvuVEwCLksA7+QuHAQFOrZXLb3FSsKJ9slXisXT5RL
-        XtBXMPaA9sCvCGH4/YoQC/LBjVRj/wkb8gVLj5pjWMOFbRu7bhcOw2qStLyVJbNf
-        An1Mz9pv71TC3lt6OYaeHptV0N2JoQwSvZc2ceRcyXlNadb74ugk8Bi6Da47/Iq1
-        SX01+63gwt+kDdCYfffcA0zaZJo/RUHyNng7i880SK1HA1qWSrszc+APpciLlVrt
-        aaI4vSIi1tGdYbKPTNcod6fNrykE32mZZPQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BsufYKbpJu1L for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Feb 2023 17:39:44 -0800 (PST)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgjn1BCDz1RvLy;
-        Tue, 14 Feb 2023 17:39:40 -0800 (PST)
-Message-ID: <ebbddcfa-99e5-efda-0eab-fbd61a33e2c3@opensource.wdc.com>
-Date:   Wed, 15 Feb 2023 10:39:39 +0900
+        Tue, 14 Feb 2023 20:41:06 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48D02ED57;
+        Tue, 14 Feb 2023 17:41:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VbhioS7_1676425261;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbhioS7_1676425261)
+          by smtp.aliyun-inc.com;
+          Wed, 15 Feb 2023 09:41:02 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, kvalo@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, ath12k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] wifi: ath10k: Remove the unused function shadow_dst_wr_ind_addr() and ath10k_ce_error_intr_enable()
+Date:   Wed, 15 Feb 2023 09:40:58 +0800
+Message-Id: <20230215014058.116775-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 9/9] PCI: rockchip: Add parameter check for RK3399 PCIe
- endpoint core set_msi()
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-10-rick.wertenbroek@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230214140858.1133292-10-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 23:08, Rick Wertenbroek wrote:
-> The RK3399 PCIe endpoint core supports only a single PCIe physcial
-> function (function number 0), therefore return -EINVAL if set_msi() is
-> called with a function number greater than 0.
-> The PCIe standard only allows the multi message capability (MMC) value
-> to be up to 0x5 (32 messages), therefore return -EINVAL if set_msi() is
-> called with a MMC value of over 0x5.
-> 
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> ---
->  drivers/pci/controller/pcie-rockchip-ep.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-> index b7865a94e..80634b690 100644
-> --- a/drivers/pci/controller/pcie-rockchip-ep.c
-> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
-> @@ -294,6 +294,16 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
->  	u32 flags;
->  
-> +	if (fn) {
-> +		dev_err(&epc->dev, "This endpoint controller only supports a single physical function\n");
-> +		return -EINVAL;
-> +	}
+The function shadow_dst_wr_ind_addr() and ath10k_ce_error_intr_enable()
+are defined in the ce.c file, the code calling them has been removed,
+so remove these unused functions.
 
-Checking this here is late... Given that at most only one physical
-function is supported, the check should be in rockchip_pcie_parse_ep_dt().
-Something like:
+Eliminate the following warnings:
+drivers/net/wireless/ath/ath10k/ce.c:80:19: warning: unused function 'shadow_dst_wr_ind_addr'
+drivers/net/wireless/ath/ath10k/ce.c:441:20: warning: unused function 'ath10k_ce_error_intr_enable'
 
-	err = of_property_read_u8(dev->of_node, "max-functions",
-                                  &ep->epc->max_functions);
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4063
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/net/wireless/ath/ath10k/ce.c | 52 ----------------------------
+ 1 file changed, 52 deletions(-)
 
-        if (err < 0 || ep->epc->max_functions > 1)
-
-                ep->epc->max_functions = 1;
-
-And all the macros with the (fn) argument could also be simplified
-(argument fn removed) since fn will always be 0.
-
-> +
-> +	if (mmc > 0x5) {
-> +		dev_err(&epc->dev, "Number of MSI IRQs cannot be more than 32\n");
-
-Long line. Please split it after the comma.
-
-> +		return -EINVAL;
-> +	}
-> +
->  	flags = rockchip_pcie_read(rockchip,
->  				   ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
->  				   ROCKCHIP_PCIE_EP_MSI_CTRL_REG);
-
-Another nice cleanup: define ROCKCHIP_PCIE_EP_MSI_CTRL_REG to include the
-ROCKCHIP_PCIE_EP_FUNC_BASE(fn) addition so that we do not have to do it
-here all the time.
-
+diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
+index c2f3bd35c392..b656cfc03648 100644
+--- a/drivers/net/wireless/ath/ath10k/ce.c
++++ b/drivers/net/wireless/ath/ath10k/ce.c
+@@ -77,45 +77,6 @@ static inline u32 shadow_sr_wr_ind_addr(struct ath10k *ar,
+ 	return addr;
+ }
+ 
+-static inline u32 shadow_dst_wr_ind_addr(struct ath10k *ar,
+-					 struct ath10k_ce_pipe *ce_state)
+-{
+-	u32 ce_id = ce_state->id;
+-	u32 addr = 0;
+-
+-	switch (ce_id) {
+-	case 1:
+-		addr = 0x00032034;
+-		break;
+-	case 2:
+-		addr = 0x00032038;
+-		break;
+-	case 5:
+-		addr = 0x00032044;
+-		break;
+-	case 7:
+-		addr = 0x0003204C;
+-		break;
+-	case 8:
+-		addr = 0x00032050;
+-		break;
+-	case 9:
+-		addr = 0x00032054;
+-		break;
+-	case 10:
+-		addr = 0x00032058;
+-		break;
+-	case 11:
+-		addr = 0x0003205C;
+-		break;
+-	default:
+-		ath10k_warn(ar, "invalid CE id: %d", ce_id);
+-		break;
+-	}
+-
+-	return addr;
+-}
+-
+ static inline unsigned int
+ ath10k_set_ring_byte(unsigned int offset,
+ 		     struct ath10k_hw_ce_regs_addr_map *addr_map)
+@@ -438,19 +399,6 @@ static inline void ath10k_ce_watermark_intr_disable(struct ath10k *ar,
+ 			  host_ie_addr & ~(wm_regs->wm_mask));
+ }
+ 
+-static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+-					       u32 ce_ctrl_addr)
+-{
+-	struct ath10k_hw_ce_misc_regs *misc_regs = ar->hw_ce_regs->misc_regs;
+-
+-	u32 misc_ie_addr = ath10k_ce_read32(ar, ce_ctrl_addr +
+-					    ar->hw_ce_regs->misc_ie_addr);
+-
+-	ath10k_ce_write32(ar,
+-			  ce_ctrl_addr + ar->hw_ce_regs->misc_ie_addr,
+-			  misc_ie_addr | misc_regs->err_mask);
+-}
+-
+ static inline void ath10k_ce_error_intr_disable(struct ath10k *ar,
+ 						u32 ce_ctrl_addr)
+ {
 -- 
-Damien Le Moal
-Western Digital Research
+2.20.1.7.g153144c
 
