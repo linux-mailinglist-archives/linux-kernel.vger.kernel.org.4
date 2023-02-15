@@ -2,220 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D8E697BA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F400B697BA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbjBOMWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        id S233404AbjBOMW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbjBOMWA (ORCPT
+        with ESMTP id S234042AbjBOMWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:22:00 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE19A34F6C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:21:56 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m20-20020a05600c3b1400b003e1e754657aso1432458wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RELpCW/oZXrkZpYRibECyc3kJCsC+qy7Qi3hEX89e/E=;
-        b=w9OOW1XfvuTdpRcmAU7mVA29OsEzVzK+7kQZyb3OfU9XrdxZtGDKMmmy1LCfbjh/vo
-         82PuAPYaemBlpXFWh2h56hdL+XgmAYbZyVHny7dT03oik0W6REGN+AEsrD8g1tPtSgWU
-         wLU4ad+jykFcQogkFHtCDM9JDZvgJ+If5TQ8CP/I6RUAwO9LZw55arZ6YLA1cP1NBygY
-         O+i3bL8hL6XXtJzRQ0pKVqUJqY9evvPbsmsP+asaROcgb68BzT0Uz0siflfzIT/CMuXV
-         8FjGZo0v7hqwmrv+iC6pHcxBx4GPpvYmNGQ3f7eLI9Ng53kjTJHtZNa80u+16B6ilvqq
-         pEtA==
+        Wed, 15 Feb 2023 07:22:25 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226B2360BE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:22:22 -0800 (PST)
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CD5413F215
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:22:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676463738;
+        bh=Ys8CZojIwyiyHL3vfQqMFK60gwHNRkm+YvncjitOGyM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=WC1Q82JyPS6us5x06iqoagIY0hMh6LqaFg3iojR/nnRNnD3JuDW867Zw5dGilHjQc
+         mUemOEc8cOEOxZMlP6f/p9d47QNKDLt6HXzfg4rSM+NCtNZWEHUvfwji1GYRrLY+U7
+         BCU9WvZ2JW9MDjSbW1WD/Dg54dCDjLsJ+s2m9njhNqgT0YEUtlYGbbmnT4snEEII8A
+         caXqbu2Pk+IwF0TCPD+3/kxp+wLtftFMpSSKEp7akENWVfYJLqljoL0fKrVQ/MeHsC
+         BhabM6cuYJXTbb9Czjp2rIKuOGXyR+u7r9BlUHggcLDRCtYbePgCJywYcC+1im6AO4
+         c9Fz8+8mj/SMA==
+Received: by mail-qk1-f197.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so11296984qkn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:22:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RELpCW/oZXrkZpYRibECyc3kJCsC+qy7Qi3hEX89e/E=;
-        b=BObWO4V4HFNChpgBjWwDFqqhC/gVMbhIXirYj6zwnkbPXGAMfWr/t4KPItCOEwmeUH
-         x3mMsgiR+Njye+RIyYBLTvjJwljn7oYknjnj88++gA+ZWwrKYhRhHDLUIpZ9K7Y27UMX
-         B97drVRsThi+G1yjXPliex3enXmge5nhb+g78U4sTs+L06fcAEKQiNh5T9exP1Joe5pk
-         qv5Lu+FpeTewUtm7DQWp6DFsTIFJxdf3SdAo0XLahuHJ7o+j/2JlvqmzfdVQm7XDO+e9
-         bs+G+1xvILzfIDjeqA7UYKTOt2C6KDMAERjhxcHhn3Pus73tRUm7XYChmNamcu4VMuTL
-         fnnA==
-X-Gm-Message-State: AO0yUKWS4PlWux4dqszWPiFMYiudzlBSontcbnQmOHTOf4qQSjhhH8Oq
-        dVqNtmJUXJ7qJ4rbM0ZThw9nhQ==
-X-Google-Smtp-Source: AK7set/+tejIXJKfChexrtS8e4HURhrM7vZydB2uOd6HpyijLy3lPggZbrucOFHYgjS/skYe3YDPsg==
-X-Received: by 2002:a05:600c:329a:b0:3db:15b1:fb28 with SMTP id t26-20020a05600c329a00b003db15b1fb28mr1771329wmp.19.1676463715219;
-        Wed, 15 Feb 2023 04:21:55 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003dc53217e07sm2105310wmq.16.2023.02.15.04.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 04:21:54 -0800 (PST)
-Date:   Wed, 15 Feb 2023 14:21:53 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <Y+zOYfSI7Zq5sll1@linaro.org>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ys8CZojIwyiyHL3vfQqMFK60gwHNRkm+YvncjitOGyM=;
+        b=31Z1AyV2Bxz3+wQKzX/XsIUKP5SjP5kOZ3LfBCYNQrl6ND8CE1BpuCW+/rq7z4uVj5
+         hPBeGKfU9rVF0+5gqRM4NXYbWwvChw+e/CI145b4gXYLSfoiH2hEDI1IK26dDxGzKr9f
+         O0iypOT+BqziQo7odQm1WTGvL30nweB57W3iN7iNJGiMcLbro9586wHpglfwMYwnSC8E
+         P2ImZQlgxwh1GjGmyIOR3tw9BFhJGBpSvWlDZf4I0Nb0KZU5Z2AZ4xORDUXW+XPds52g
+         lD7+slqlmnYY0T8IJXbOLK731fBJxnhyycmIshJdQfZsQdz6At2rCgqPzDfjOFYaBWYr
+         BW9w==
+X-Gm-Message-State: AO0yUKWZ+symcAyEndbxzQGUlCCH5geHZHEh5zZSC0wo4pmwXGoSyWrU
+        R7QUULlA3cQxX+n8LgwdZFUHXY5JJpEkCK6HBv5T8iBrEmZjea8NHcUcN7a3BckVOMahzNJrSwi
+        hpJSLP1geQXqEKPelrcrQPsEN2TqZyCcRPA+uCzkT6oy3nyq0cDfDmOGCww==
+X-Received: by 2002:a37:4249:0:b0:73b:3411:48b1 with SMTP id p70-20020a374249000000b0073b341148b1mr99315qka.219.1676463737793;
+        Wed, 15 Feb 2023 04:22:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set8VCvji9WHmh+GciDNEQcXCQUKLSVfuPNnOPdx+AWLSQHOdX7DU6aUZf6xJQbp70/suV8jyyvielU6wnwPhUbQ=
+X-Received: by 2002:a37:4249:0:b0:73b:3411:48b1 with SMTP id
+ p70-20020a374249000000b0073b341148b1mr99312qka.219.1676463737464; Wed, 15 Feb
+ 2023 04:22:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <20230215113249.47727-4-william.qiu@starfivetech.com> <CAJM55Z8gVEZS4Ws2Gi7_JbdkS-4y3_8mQvR4ZxLCWZ4A1y9X1g@mail.gmail.com>
+In-Reply-To: <CAJM55Z8gVEZS4Ws2Gi7_JbdkS-4y3_8mQvR4ZxLCWZ4A1y9X1g@mail.gmail.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 15 Feb 2023 13:22:00 +0100
+Message-ID: <CAJM55Z-h+CUmWtkn31Ek+qvxrOr5_Jz3QRRLqWYLz2A0E+h+rA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] riscv: dts: starfive: Add mmc node
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-15 12:57:54, Ulf Hansson wrote:
-> On Fri, 27 Jan 2023 at 11:40, Abel Vesa <abel.vesa@linaro.org> wrote:
+On Wed, 15 Feb 2023 at 13:12, Emil Renner Berthing
+<emil.renner.berthing@canonical.com> wrote:
+>
+> On Wed, 15 Feb 2023 at 12:35, William Qiu <william.qiu@starfivetech.com> wrote:
 > >
-> > Currently, there are cases when a domain needs to remain enabled until
-> > the consumer driver probes. Sometimes such consumer drivers may be built
-> > as modules. Since the genpd_power_off_unused is called too early for
-> > such consumer driver modules to get a chance to probe, the domain, since
-> > it is unused, will get disabled. On the other hand, the best time for
-> > an unused domain to be disabled is on the provider's sync_state
-> > callback. So, if the provider has registered a sync_state callback,
-> > assume the unused domains for that provider will be disabled on its
-> > sync_state callback. Also provide a generic sync_state callback which
-> > disables all the domains unused for the provider that registers it.
+> > Add the mmc node for the StarFive JH7110 SoC.
+> > Set mmco node to emmc and set mmc1 node to sd.
 > >
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
 > > ---
+> >  .../jh7110-starfive-visionfive-2.dtsi         | 23 +++++++++
+> >  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 47 +++++++++++++++++++
+> >  2 files changed, 70 insertions(+)
 > >
-> > This approach has been applied for unused clocks as well.
-> > With this patch merged in, all the providers that have sync_state
-> > callback registered will leave the domains enabled unless the provider's
-> > sync_state callback explicitly disables them. So those providers will
-> > need to add the disabling part to their sync_state callback. On the
-> > other hand, the platforms that have cases where domains need to remain
-> > enabled (even if unused) until the consumer driver probes, will be able,
-> > with this patch in, to run without the pd_ignore_unused kernel argument,
-> > which seems to be the case for most Qualcomm platforms, at this moment.
-> 
-> My apologies for the somewhat late reply. Please see my comments below.
-> 
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> > index c60280b89c73..e1a0248e907f 100644
+> > --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> > @@ -42,6 +42,29 @@ &rtc_osc {
+> >         clock-frequency = <32768>;
+> >  };
 > >
-> > The v1 is here:
-> > https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
-> >
-> > Changes since v1:
-> >  * added a generic sync state callback to be registered by providers in
-> >    order to disable the unused domains on their sync state. Also
-> >    mentioned this in the commit message.
-> >
-> >  drivers/base/power/domain.c | 17 ++++++++++++++++-
-> >  include/linux/pm_domain.h   |  3 +++
-> >  2 files changed, 19 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 84662d338188..c2a5f77c01f3 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
-> >         mutex_lock(&gpd_list_lock);
-> >
-> >         list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> > -               genpd_queue_power_off_work(genpd);
-> > +               if (!dev_has_sync_state(genpd->provider->dev))
-> 
-> Unfortunately, this doesn't really help, due to the fact that a
-> genpd's ->power_off() callback may get called anyway. At power off,
-> the genpd core only cares about those consumers that are currently
-> attached, not those that might get attached at some point later in
-> time.
-> 
-> In other words, it's the responsibility for each specific genpd
-> provider to cope with the condition that its ->sync_state() callback
-> may *not* have been called, while its ->power_off() callback is being
-> called.
-> 
-> In these cases, the genpd provider should probably make the
-> ->power_off() callback to return -EBUSY. This is what we do in
-> psci_pd_power_off(), for example.
-> 
+> > +&mmc0 {
+> > +       max-frequency = <100000000>;
+> > +       bus-width = <8>;
+> > +       cap-mmc-highspeed;
+> > +       mmc-ddr-1_8v;
+> > +       mmc-hs200-1_8v;
+> > +       non-removable;
+> > +       cap-mmc-hw-reset;
+> > +       post-power-on-delay-ms = <200>;
+> > +       status = "okay";
+> > +};
+> > +
+> > +&mmc1 {
+> > +       max-frequency = <100000000>;
+> > +       bus-width = <4>;
+> > +       no-sdio;
+> > +       no-mmc;
+> > +       broken-cd;
+> > +       cap-sd-highspeed;
+> > +       post-power-on-delay-ms = <200>;
+> > +       status = "okay";
+> > +};
 
-Hmm, this might actually be a better idea. Bjorn, do you agree?
+These nodes are also still oddly placed in the middle of the external
+clocks. Again please keep the external clocks at the top and then
+order the nodes alphabetically to have some sort of system.
 
-> > +                       genpd_queue_power_off_work(genpd);
+> >  &gmac0_rmii_refin {
+> >         clock-frequency = <50000000>;
+> >  };
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > index 64d260ea1f29..17f7b3ee6ca3 100644
+> > --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > @@ -314,6 +314,11 @@ uart2: serial@10020000 {
+> >                         status = "disabled";
+> >                 };
 > >
-> >         mutex_unlock(&gpd_list_lock);
+> > +               stg_syscon: syscon@10240000 {
+> > +                       compatible = "starfive,jh7110-stg-syscon", "syscon";
+> > +                       reg = <0x0 0x10240000 0x0 0x1000>;
+> > +               };
+> > +
+> >                 uart3: serial@12000000 {
+> >                         compatible = "snps,dw-apb-uart";
+> >                         reg = <0x0 0x12000000 0x0 0x10000>;
+> > @@ -370,6 +375,11 @@ syscrg: clock-controller@13020000 {
+> >                         #reset-cells = <1>;
+> >                 };
 > >
-> > @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
-> >  }
-> >  late_initcall(genpd_power_off_unused);
+> > +               sys_syscon: syscon@13030000 {
+> > +                       compatible = "starfive,jh7110-sys-syscon", "syscon";
+> > +                       reg = <0x0 0x13030000 0x0 0x1000>;
+> > +               };
+> > +
+> >                 gpio: gpio@13040000 {
+> >                         compatible = "starfive,jh7110-sys-pinctrl";
+> >                         reg = <0x0 0x13040000 0x0 0x10000>;
+> > @@ -397,6 +407,11 @@ aoncrg: clock-controller@17000000 {
+> >                         #reset-cells = <1>;
+> >                 };
 > >
-> > +void genpd_power_off_unused_sync_state(struct device *dev)
-> > +{
-> > +       struct generic_pm_domain *genpd;
+> > +               aon_syscon: syscon@17010000 {
+> > +                       compatible = "starfive,jh7110-aon-syscon", "syscon";
+> > +                       reg = <0x0 0x17010000 0x0 0x1000>;
+> > +               };
 > > +
-> > +       mutex_lock(&gpd_list_lock);
+> >                 gpioa: gpio@17020000 {
+> >                         compatible = "starfive,jh7110-aon-pinctrl";
+> >                         reg = <0x0 0x17020000 0x0 0x10000>;
+> > @@ -407,5 +422,37 @@ gpioa: gpio@17020000 {
+> >                         gpio-controller;
+> >                         #gpio-cells = <2>;
+> >                 };
 > > +
-> > +       list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> > +               if (genpd->provider->dev == dev)
-> > +                       genpd_queue_power_off_work(genpd);
+> > +               mmc0: mmc@16010000 {
+> > +                       compatible = "starfive,jh7110-mmc";
+> > +                       reg = <0x0 0x16010000 0x0 0x10000>;
+> > +                       clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
+> > +                                <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
+> > +                       clock-names = "biu","ciu";
+> > +                       resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
+> > +                       reset-names = "reset";
+> > +                       interrupts = <74>;
+> > +                       fifo-depth = <32>;
+> > +                       fifo-watermark-aligned;
+> > +                       data-addr = <0>;
+> > +                       starfive,sysreg = <&sys_syscon 0x14 0x1a 0x7c000000>;
+> > +                       status = "disabled";
+> > +               };
 > > +
-> > +       mutex_unlock(&gpd_list_lock);
-> > +}
-> > +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
-> 
-> I don't think this function is needed at all.
-> 
-> In fact, this part of the problem that you are trying to solve should
-> already be managed by the driver core, as it calls
-> dev->pm_domain->sync() (which is assigned to genpd_dev_pm_sync()) , in
-> really_probe(). Or isn't that taking care of the problem for you?
-
-Hmm, I missed the genpd_dev_pm_sync scenario entirely. Yes, that is
-actually what is needed, and yes, this function I added here is useless
-in this case.
-
-> 
-> > +
-> >  #ifdef CONFIG_PM_SLEEP
-> >
-> >  /**
-> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> > index f776fb93eaa0..1fd5aa500c81 100644
-> > --- a/include/linux/pm_domain.h
-> > +++ b/include/linux/pm_domain.h
-> > @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
-> >                                          unsigned int index);
-> >  struct device *genpd_dev_pm_attach_by_name(struct device *dev,
-> >                                            const char *name);
-> > +void genpd_power_off_unused_sync_state(struct device *dev);
-> >  #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
-> >  static inline int of_genpd_add_provider_simple(struct device_node *np,
-> >                                         struct generic_pm_domain *genpd)
-> > @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
-> >  {
-> >         return ERR_PTR(-EOPNOTSUPP);
-> >  }
-> > +
-> > +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
-> >  #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
-> >
-> >  #ifdef CONFIG_PM
+> > +               mmc1: mmc@16020000 {
+> > +                       compatible = "starfive,jh7110-mmc";
+> > +                       reg = <0x0 0x16020000 0x0 0x10000>;
+> > +                       clocks = <&syscrg JH7110_SYSCLK_SDIO1_AHB>,
+> > +                                <&syscrg JH7110_SYSCLK_SDIO1_SDCARD>;
+> > +                       clock-names = "biu","ciu";
+> > +                       resets = <&syscrg JH7110_SYSRST_SDIO1_AHB>;
+> > +                       reset-names = "reset";
+> > +                       interrupts = <75>;
+> > +                       fifo-depth = <32>;
+> > +                       fifo-watermark-aligned;
+> > +                       data-addr = <0>;
+> > +                       starfive,sysreg = <&sys_syscon 0x9c 0x1 0x3e>;
+> > +                       status = "disabled";
+> > +               };
+>
+> Hi William,
+>
+> These nodes still don't seem to be sorted by address, eg. by the
+> number after the @
+> Also please move the dt-binding patch before this one, so dtb_check
+> won't fail no matter where git bisect happens to land.
+>
+> /Emil
+>
+> >         };
+> >  };
 > > --
 > > 2.34.1
 > >
-> 
-> Kind regards
-> Uffe
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
