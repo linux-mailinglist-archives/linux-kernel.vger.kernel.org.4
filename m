@@ -2,226 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100DD6982C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D300A6982CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjBOR6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S230014AbjBOSAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 13:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjBOR6P (ORCPT
+        with ESMTP id S229723AbjBOSAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:58:15 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A580D27995
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 09:58:13 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id m2so21015514plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 09:58:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvUpuCK8Tw5hHOSWhrZqksRfIU8qxKAVlgjJMcbm0j0=;
-        b=ya9g4lr3OV6BuPLEn75AHWCHCRucPy5++bt8uYHJLCpr2Ko/wjr1Qd3uzOGIcx7fFo
-         6S7DOZbUllcratjAjMEQz8Q6Z7nbwzkhCy9UkRKzSTzvHczQ5NTH7TwOf4hXRT/7gY7m
-         fXxxi3bVZ+orqdjuXmSG3B+Nv2OJEPkhaknSh4dYH/90fSBldG/bQ7McV2UFjLLbXc1r
-         FCwUyHiz+TPIkWVfJgE/1zWM2MbKUQ3Nj7kVMrk2ueV2LPYEpXvQTb87Bq+HZhGXLlgJ
-         tqOQA+HLr1H8wFRWmjbDHGuVINcTCOWNb2kY8YOm2TgpdT7lTt4y2YQbRKlSe2YgmRFa
-         tGMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mvUpuCK8Tw5hHOSWhrZqksRfIU8qxKAVlgjJMcbm0j0=;
-        b=466+2w5G8PFEoYVpImkSh6O0r1baWVQZI6bx+qhieRpsYAKWR4rbUaztwiNT4qvZTx
-         8HCydIzOCZCgOW/f0VLLWeOkI9/f5Fp7TCQoxZ0Xi0HBLoWpULb4/BOSlf8J8Q05FtPV
-         RkMW/CgAoiP0HS306duxRmFIk2ooPt8c4llsxcnx1rLECaJ5viMxHgqsmDDMieVAXtnv
-         +ayqGi5Osi1M4hkUFzCC1YjNJmsJT7MgZMg146o8e9lVGV665Y46XJqv0YAlnDjVDQ7q
-         Fdiz1DO5IHg4dtAuOICnfm4jj06QZAzdpbFM5hhR38vdLfJDpWCOOMwb14WLHJSfIR4C
-         U2ag==
-X-Gm-Message-State: AO0yUKXkguCbIIg4ivghlE4mPVgOHElKrXzOJj1qBgObz5GTPDupFJZV
-        FVU6T3M1faIURa/MF9CQFOOsEg==
-X-Google-Smtp-Source: AK7set8D+TytfU0ZJ503p0kYOBYVjOwgean4hwMM4Ov3LCJJq1ZmLCifc0uWW8eKFUV2yirvj1GhDA==
-X-Received: by 2002:a17:903:41ca:b0:19a:6f28:ec2c with SMTP id u10-20020a17090341ca00b0019a6f28ec2cmr3772871ple.62.1676483893101;
-        Wed, 15 Feb 2023 09:58:13 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:c457:7ba1:9c53:7a14])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170903248600b0019949fd956bsm12435867plw.178.2023.02.15.09.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 09:58:12 -0800 (PST)
-Date:   Wed, 15 Feb 2023 10:58:10 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.J. Wang" <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [RESEND PATCH v4] remoteproc: imx_dsp_rproc: add module
- parameter to ignore ready flag from remote processor
-Message-ID: <20230215175810.GA441246@p14s>
-References: <20230214163744.16377-1-iuliana.prodan@oss.nxp.com>
+        Wed, 15 Feb 2023 13:00:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231923C7BA;
+        Wed, 15 Feb 2023 10:00:30 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31FHXO71032265;
+        Wed, 15 Feb 2023 18:00:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=huAOFH+wzio3JWWNZAJliW4HDetlKh7gD65mTH90JEQ=;
+ b=nPlfi5S53WxIYoN5+jrdA4QKNTFdIfOOj93boCV1PZFydolejYSLM0Tot8BSbPuoJp3G
+ zgmXvludDiEUFHOcA2zhAT317D6cp3vb2H3VXCerM9X1AjyQ0FEopaTFlxadi2EsbEIl
+ 2RTk7DOQPy+WPlH30omOLkZoMJMDGWtXalb40KHoFNu+zh+O8h/U+KjpQHCcsuNiSzEX
+ 464S9fA6LLbmsxVMf+SlECofKS/eCU/QTNOGfQGoxPWjAdKQBxEggf/KCNUi0+JGEwCs
+ Z2Z5bjH2PPzquEhW72rQQWtYVJXI9V1VI8zENK7woAnyngkL/34IS1PDeAmfH/oAd0s+ sQ== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ns3a3hw1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 18:00:13 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31FG51HH009847;
+        Wed, 15 Feb 2023 18:00:12 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3np2n7uyk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 18:00:12 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31FI0AxT28770970
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Feb 2023 18:00:10 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 181F058076;
+        Wed, 15 Feb 2023 18:00:10 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB21058070;
+        Wed, 15 Feb 2023 18:00:08 +0000 (GMT)
+Received: from [9.60.89.243] (unknown [9.60.89.243])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Feb 2023 18:00:08 +0000 (GMT)
+Message-ID: <4ad0d2b9-2465-b42d-c0f9-b48caadfd72c@linux.ibm.com>
+Date:   Wed, 15 Feb 2023 13:00:08 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214163744.16377-1-iuliana.prodan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 4/6] s390/pci: Use dma-iommu layer
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20230215120327.947336-1-schnelle@linux.ibm.com>
+ <20230215120327.947336-5-schnelle@linux.ibm.com>
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230215120327.947336-5-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ir9BlGa-9OeRYihge9S9OWDaTu0bi6j4
+X-Proofpoint-GUID: ir9BlGa-9OeRYihge9S9OWDaTu0bi6j4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-15_07,2023-02-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=675 bulkscore=0
+ clxscore=1015 spamscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302150157
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iuliana,
-
-First and foremost, you were correct to remind me of this patch - it had slipped
-through.  I got mixed up with your other patch[1], which has the same title
-preprend and the same revision.  That one is on my list of patches to review and
-I should get to it later this week or early next week.
-
-Please see below for comments on this patch.
-
-[1]. [PATCH v4] remoteproc: imx_dsp_rproc: add custom memory copy implementation for i.MX DSP Cores
-
-On Tue, Feb 14, 2023 at 06:37:44PM +0200, Iuliana Prodan (OSS) wrote:
-> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+On 2/15/23 7:03 AM, Niklas Schnelle wrote:
+> While s390 already has a standard IOMMU driver and previous changes have
+> added I/O TLB flushing operations this driver is currently only used for
+> user-space PCI access such as vfio-pci. For the DMA API s390 instead
+> utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
+> the same hardware and shares some code but requires a complex and
+> fragile hand over between DMA API and IOMMU API use of a device and
+> despite code sharing still leads to significant duplication and
+> maintenance effort. Let's utilize the common code DMAP API
+> implementation from drivers/iommu/dma-iommu.c instead allowing us to
+> get rid of arch/s390/pci/pci_dma.c.
 > 
-> There are cases when we want to test a simple "hello world"
-> application on the DSP and we don't have IPC between the cores.
-> Therefore, do not wait for a confirmation from the remote processor
-> at start.
-> 
-> Added "ignore_dsp_ready" flag while inserting the module to ignore
-> remote processor reply after start.
-> By default, this is off - do not ignore reply from rproc.
-> 
-> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-> Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
-> Changes since v3
-> - do not instantiate static var to 0, this is done by default
-> - do not initialize mailbox if not IPC between the core
-> 
-> Changes since v2
-> - s/ignoreready/ignore_dsp_ready
-> 
-> Changes since v1
-> - change BIT(31) to BIT(1) for REMOTE_SKIP_WAIT
-> 
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 95da1cbefacf..fb69f4e8ee96 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -26,9 +26,18 @@
->  #include "remoteproc_elf_helpers.h"
->  #include "remoteproc_internal.h"
->  
-> +/*
-> + * Module parameters
-> + */
-> +static unsigned int imx_dsp_rproc_ignore_ready;
-> +module_param_named(ignore_dsp_ready, imx_dsp_rproc_ignore_ready, int, 0644);
 
-This patch is about introducing a mode where the mailboxes aren't used... Why
-not simply name the parameter "no_mailboxes"?
+FYI, this patch doesn't fit on top of iommu-next, I'd guess at least due to baolu's 'Retire detach_dev callback' series, which removed .detach_dev and added .set_platform_dma_ops for s390-iommu.  That's relevant here, because now that this patch enables dma-iommu for s390 and removes the platform DMA ops it must now remove .set_platform_dma_ops/s390_iommu_set_platform_dma for s390-iommu.
 
-> +MODULE_PARM_DESC(ignore_dsp_ready,
-> +		 "Ignore remote proc reply after start, default is 0 (off).");
-> +
->  #define DSP_RPROC_CLK_MAX			5
->  
->  #define REMOTE_IS_READY				BIT(0)
-> +#define REMOTE_SKIP_WAIT			BIT(1)
->  #define REMOTE_READY_WAIT_MAX_RETRIES		500
->  
->  /* att flags */
-> @@ -282,6 +291,10 @@ static int imx_dsp_rproc_ready(struct rproc *rproc)
->  	struct imx_dsp_rproc *priv = rproc->priv;
->  	int i;
->  
-> +	/* No IPC between the cores */
-> +	if (priv->flags & REMOTE_SKIP_WAIT)
-> +		return 0;
-> +
-
-This isn't needed since priv->rxdb_ch is NULL when mailboxes have not been
-initialized.
-
->  	if (!priv->rxdb_ch)
->  		return 0;
->  
-> @@ -503,6 +516,13 @@ static int imx_dsp_rproc_mbox_init(struct imx_dsp_rproc *priv)
->  	struct mbox_client *cl;
->  	int ret;
-
-I suggest to rename imx_dsp_rproc_mbox_init() to imx_dsp_rproc_mbox_alloc(),
-introduce a new function called imx_dsp_rproc_mbox_no_alloc() that simply
-returns 0 and make imx_dsp_rproc_mbox_init() a function pointer.
-
-See imx_dsp_rproc_probe() for the rest of the solution...
-
->  
-> +	/*
-> +	 * If there is no IPC between the cores,
-> +	 * then no need to initialize mailbox.
-> +	 */
-> +	if (priv->flags & REMOTE_SKIP_WAIT)
-> +		return 0;
-
-Remove this.
-
-> +
->  	if (!of_get_property(dev->of_node, "mbox-names", NULL))
->  		return 0;
->  
-> @@ -562,6 +582,10 @@ static int imx_dsp_rproc_mbox_init(struct imx_dsp_rproc *priv)
->  
->  static void imx_dsp_rproc_free_mbox(struct imx_dsp_rproc *priv)
->  {
-> +	/* No IPC between the cores */
-> +	if (priv->flags & REMOTE_SKIP_WAIT)
-> +		return;
-> +
-
-This isn't needed since mbox_free_channel() is able to handle a NULL parameter,
-which is the case when imx_dsp_rproc_mbox_init() hasn't been called.
-
->  	mbox_free_channel(priv->tx_ch);
->  	mbox_free_channel(priv->rx_ch);
->  	mbox_free_channel(priv->rxdb_ch);
-> @@ -903,6 +927,9 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
->  	priv->rproc = rproc;
->  	priv->dsp_dcfg = dsp_dcfg;
->  
-> +	if (imx_dsp_rproc_ignore_ready)
-> +		priv->flags |= REMOTE_SKIP_WAIT;
-> +
-
-        if (no_mailboxes)
-                imx_dsp_rproc_mbox_init = imx_dsp_rproc_mbox_no_alloc;
-        else
-                imx_dsp_rproc_mbox_init = imx_dsp_rproc_mbox_alloc;
-
-That way we don't introduce a new flag, there is no new conditionals peppered
-throughout the code and calls to imx_dsp_rproc_mbox_init() remain unchainged.
-
-Thanks,
-Mathieu
-
->  	dev_set_drvdata(dev, rproc);
->  
->  	INIT_WORK(&priv->rproc_work, imx_dsp_rproc_vq_work);
-> -- 
-> 2.17.1
-> 
+Matt
