@@ -2,55 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90EF697A88
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A66697A8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbjBOLRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S233010AbjBOLUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbjBOLRJ (ORCPT
+        with ESMTP id S232890AbjBOLT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:17:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E78C367E5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:17:08 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSFmQ-0008OF-9D; Wed, 15 Feb 2023 12:16:54 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSFmO-0055zx-Bq; Wed, 15 Feb 2023 12:16:53 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pSFmO-003jc6-LK; Wed, 15 Feb 2023 12:16:52 +0100
-Date:   Wed, 15 Feb 2023 12:16:52 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
-Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
-        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/5] arm64: dts: apple: t8103: Add PWM controller
-Message-ID: <20230215111652.lyhebfntqlibtmex@pengutronix.de>
-References: <20230114132508.96600-1-fnkl.kernel@gmail.com>
- <20230114132508.96600-4-fnkl.kernel@gmail.com>
+        Wed, 15 Feb 2023 06:19:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266D35268
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:19:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676459948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PpXRm7XIkaSeK+VtCKb2B+xrc7DWzyzfV1s6qUfwQhA=;
+        b=GcZhr8BYMqoiaL81p+eWDMY/iNEM4Uahrs6yguZboZzJibDP8O+C25lCGbEIjs9Dl6frdy
+        kWMxiDd+xxRq5NJRieuFk2gl7pjqBG5tJiAKMXEJ4SAy7UbofO5sGLfh937zgw/ZFbiFDW
+        Cp2dHZ7KQklcis0/OU5/aiXTuWPu31g=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-503-BpkuLQLHMiu6TsCHwbtsQQ-1; Wed, 15 Feb 2023 06:19:07 -0500
+X-MC-Unique: BpkuLQLHMiu6TsCHwbtsQQ-1
+Received: by mail-qt1-f197.google.com with SMTP id t5-20020a05622a180500b003b9c03cd525so11061405qtc.20
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:19:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PpXRm7XIkaSeK+VtCKb2B+xrc7DWzyzfV1s6qUfwQhA=;
+        b=yWjVe6ipawzzUrchMUnOOXbtV7+eHJLgBgYLwN7n7aqp8mQ/kSF5LgG7amuhqdbKBS
+         XS/77aSy3ATlmgDbq2mtmlX9T2AQmhDvyF6OqhtF9Edm1QFkcJ12YZccxgo9VH7ZJr+1
+         CI/8DPQ2WgVl9JS3HyZ4mQ/4djRe7WNnxzP8xyWVqItpiWNlHuff6bZHlc19/QyzbR3e
+         ++uqnevxSJdB4HC+rzk3zfZIs+ngGsC5bjTBS/MJKaIKDbaGmMCTFk1zInhpBVP4J/vj
+         IfDCx7o7yM7pEEVA8ARxcvq164Q+nMK/7/gR5nlgO1qtO+/OawtM8UCGVFBnhhrZhUSu
+         T8pQ==
+X-Gm-Message-State: AO0yUKUOx9e5MszVJOw+gaUc4DiJLhySFb4SRUmaWgMJHLs5ELYnIgry
+        z8ZdyBeFSLlE90YkudFDlxoO/FD+/DqWVg1hBC0yTIYkDAVsfBBCFmaHNAtuG5aYOjbR3UKWkSc
+        mZp6TuXI3Wtk5FngBRyIaPG0=
+X-Received: by 2002:a05:622a:178e:b0:3b8:118d:ad86 with SMTP id s14-20020a05622a178e00b003b8118dad86mr2605460qtk.21.1676459947248;
+        Wed, 15 Feb 2023 03:19:07 -0800 (PST)
+X-Google-Smtp-Source: AK7set8ODu25/O65aN32Wt/bDc0IqdTcumQhtlrKFUM/TMBauFfneJFeRapdQxu8kPlHYEvCbGZFyg==
+X-Received: by 2002:a05:622a:178e:b0:3b8:118d:ad86 with SMTP id s14-20020a05622a178e00b003b8118dad86mr2605436qtk.21.1676459946971;
+        Wed, 15 Feb 2023 03:19:06 -0800 (PST)
+Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id y16-20020ac85f50000000b003ba1ccba523sm13085361qta.93.2023.02.15.03.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 03:19:06 -0800 (PST)
+Message-ID: <01fd3850-af54-c0f0-ec2f-ae672420ce17@redhat.com>
+Date:   Wed, 15 Feb 2023 12:19:03 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6p3sxojse4xv3o5l"
-Content-Disposition: inline
-In-Reply-To: <20230114132508.96600-4-fnkl.kernel@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/4] fpga: add initial KUnit test suite for the
+ subsystem
+Content-Language: en-US
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20230203170653.414990-1-marpagan@redhat.com>
+ <05f6238e-4ad8-f30c-38da-74c343e6abb5@intel.com>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <05f6238e-4ad8-f30c-38da-74c343e6abb5@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,85 +85,88 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6p3sxojse4xv3o5l
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 14, 2023 at 04:25:06PM +0300, Sasha Finkelstein wrote:
-> Adds PWM controller and keyboard backlight bindings for M1 MacBooks
->=20
-> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-> Acked-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  arch/arm64/boot/dts/apple/t8103-j293.dts | 17 +++++++++++++++++
->  arch/arm64/boot/dts/apple/t8103-j313.dts | 17 +++++++++++++++++
->  arch/arm64/boot/dts/apple/t8103.dtsi     |  9 +++++++++
->  3 files changed, 43 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/d=
-ts/apple/t8103-j293.dts
-> index 151074109a11..7381dccc1613 100644
-> --- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-> +++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-> @@ -11,10 +11,23 @@
-> =20
->  #include "t8103.dtsi"
->  #include "t8103-jxxx.dtsi"
-> +#include <dt-bindings/leds/common.h>
-> =20
->  / {
->  	compatible =3D "apple,j293", "apple,t8103", "apple,arm-platform";
->  	model =3D "Apple MacBook Pro (13-inch, M1, 2020)";
-> +
-> +	led-controller {
-> +		compatible =3D "pwm-leds";
-> +		led-0 {
-> +			pwms =3D <&fpwm1 0 40000>;
-> +			label =3D "kbd_backlight";
-> +			function =3D LED_FUNCTION_KBD_BACKLIGHT;
-> +			color =3D <LED_COLOR_ID_WHITE>;
-> +			max-brightness =3D <255>;
-> +			default-state =3D "keep";
-> +		};
-> +	};
->  };
-> =20
->  &bluetooth0 {
-> @@ -47,3 +60,7 @@ &i2c2 {
->  &i2c4 {
->  	status =3D "okay";
->  };
-> +
-> +&fpwm1 {
-> +	status =3D "okay";
-> +};
-> \ No newline at end of file
+On 2023-02-14 02:20, Russ Weight wrote:
+> 
+> 
+> On 2/3/23 09:06, Marco Pagani wrote:
+>> This patch set introduces a KUnit suite to test the core components
+>> of the FPGA subsystem. More specifically, the suite tests the core
+>> functions of the FPGA manager, FPGA bridge, and FPGA region.
+>>
+>> These components are tested using "fake" modules that allow
+>> observing their internals without altering the source code.
+>>
+>> The test suite can be run using
+>> [user@localhost linux]$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/fpga/tests
+> When I tried running these tests, I got an error until I created this file:
+> 
+> drivers/fpga/tests/.kunitconfig:
+> CONFIG_KUNIT=y
+> CONFIG_FPGA=y
+> CONFIG_FPGA_REGION=y
+> CONFIG_FPGA_BRIDGE=y
+> CONFIG_FPGA_KUNIT_TESTS=y
+> 
+> I think this file needs to be included in your patchset?
+> 
+> - Russ
+>
 
-This missing newline looks wrong.
 
-Otherwise the patch looks fine to me.
+Patch 1/4 includes a .kunitconfig file with these configs set =y
 
-Best regards
-Uwe
+> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+> new file mode 100644
+> index 000000000000..a1c2a2974c39
+> --- /dev/null
+> +++ b/drivers/fpga/tests/.kunitconfig
+> @@ -0,0 +1,5 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_FPGA=y
+> +CONFIG_FPGA_REGION=y
+> +CONFIG_FPGA_BRIDGE=y
+> +CONFIG_FPGA_KUNIT_TESTS=y
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+To double-check for any patch format errors, I downloaded the patch set
+from lore.kernel.org and applied it on a fresh tree with Git (version
+2.39.1) using git am. In my case, Git created the .kunitconfig file and
+I was able to run the tests.
 
---6p3sxojse4xv3o5l
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+>>
+>> Marco Pagani (4):
+>>   fpga: add initial KUnit test suite
+>>   fpga: add fake FPGA region
+>>   fpga: add fake FPGA manager
+>>   fpga: add fake FPGA bridge
+>>
+>>  drivers/fpga/Kconfig                  |   2 +
+>>  drivers/fpga/Makefile                 |   3 +
+>>  drivers/fpga/tests/.kunitconfig       |   5 +
+>>  drivers/fpga/tests/Kconfig            |  15 ++
+>>  drivers/fpga/tests/Makefile           |   6 +
+>>  drivers/fpga/tests/fake-fpga-bridge.c | 214 +++++++++++++++
+>>  drivers/fpga/tests/fake-fpga-bridge.h |  36 +++
+>>  drivers/fpga/tests/fake-fpga-mgr.c    | 365 ++++++++++++++++++++++++++
+>>  drivers/fpga/tests/fake-fpga-mgr.h    |  42 +++
+>>  drivers/fpga/tests/fake-fpga-region.c | 186 +++++++++++++
+>>  drivers/fpga/tests/fake-fpga-region.h |  37 +++
+>>  drivers/fpga/tests/fpga-tests.c       | 264 +++++++++++++++++++
+>>  12 files changed, 1175 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/.kunitconfig
+>>  create mode 100644 drivers/fpga/tests/Kconfig
+>>  create mode 100644 drivers/fpga/tests/Makefile
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.h
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.h
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
+>>  create mode 100644 drivers/fpga/tests/fpga-tests.c
+>>
+> 
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPsvyEACgkQwfwUeK3K
-7AkOlwf/U3bq2lMyN/O90iDAvjsqHfCLHm3TVOgn4ERdvjgeJ2DxZT1OoblzvJSL
-u+asOEpsEjWrC0+vObmNUdRrZhMzlsLNd64rQyaKVVa6coBE9Ku2LUymxZdEj54N
-HJjfEvXWtKwWEWVOxyVFx3IlcI5tlMVQ+mR+cdP0rg7G7wnBNbv968QY9q3Y6o4w
-PWI+KqYQkgcROrKlkn3Bh9q0WfeKVALU+gOauRW4A9l25zPNed86MqeUUQVNcbDW
-PAmMOnmrpMpzbPJZUXgaGUGsbf/copkFDvg8F53gIBx/r3D5gfYKT4b6CMHRQiPR
-VDTyV6oFsFGcIPBMZeejjj+juTXEjg==
-=Wc+G
------END PGP SIGNATURE-----
+Thanks,
+Marco
 
---6p3sxojse4xv3o5l--
