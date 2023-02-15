@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530556976A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 07:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F6E6976AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 07:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbjBOGwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 01:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S233512AbjBOGzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 01:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBOGwN (ORCPT
+        with ESMTP id S233361AbjBOGzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 01:52:13 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D2034C10;
-        Tue, 14 Feb 2023 22:52:12 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Wed, 15 Feb 2023 01:55:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC985D53C;
+        Tue, 14 Feb 2023 22:55:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PGpfM1bTrz6FK2b;
-        Wed, 15 Feb 2023 14:52:11 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 31F6q2Ad092025;
-        Wed, 15 Feb 2023 14:52:02 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 15 Feb 2023 14:52:04 +0800 (CST)
-Date:   Wed, 15 Feb 2023 14:52:04 +0800 (CST)
-X-Zmail-TransId: 2af963ec8114ffffffffd39024f4
-X-Mailer: Zmail v1.0
-Message-ID: <202302151452046003226@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <sre@kernel.org>
-Cc:     <f.fainelli@gmail.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBwb3dlcjogcmVzZXQ6IGJyY20ta29uYS1yZXNldDogVXNlwqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31F6q2Ad092025
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63EC811B.000 by FangMail milter!
-X-FangMail-Envelope: 1676443931/4PGpfM1bTrz6FK2b/63EC811B.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63EC811B.000/4PGpfM1bTrz6FK2b
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 726F261A34;
+        Wed, 15 Feb 2023 06:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD2BC433D2;
+        Wed, 15 Feb 2023 06:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676444104;
+        bh=iubP8yXcNToMx9a2qJfqUPAOhKiuH64xBy+JLMWqOcA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=acHTA80ZfrGm82Mb7Joyzy9mqHb+B+t04DTzqpUqN9zfoprtEdYLAibv9Tq86ZxIt
+         isD0F9YrYhffllcPC3xEjTG2tdIyDX6JrpJ1tmZp24hFTs4DI5dQ70WzMKVlMomRvs
+         5iaTbTyNFmNszgxbNjBeud/aBFURWjjIibAjyAak=
+Date:   Wed, 15 Feb 2023 07:55:01 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+Cc:     stable@vger.kernel.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH stable v5.15.y 1/1] crypto: add __init/__exit annotations
+ to init/exit funcs
+Message-ID: <Y+yBxXNjBLuonPKP@kroah.com>
+References: <20230214195300.2432989-1-saeed.mirzamohammadi@oracle.com>
+ <20230214195300.2432989-2-saeed.mirzamohammadi@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214195300.2432989-2-saeed.mirzamohammadi@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Tue, Feb 14, 2023 at 11:53:00AM -0800, Saeed Mirzamohammadi wrote:
+> From: Xiu Jianfeng <xiujianfeng@huawei.com>
+> 
+> Add missing __init/__exit annotations to init/exit funcs.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> (cherry picked from commit 33837be33367172d66d1f2bd6964cc41448e6e7c)
+> Cc: stable@vger.kernel.org # 5.15+
+> Signed-off-by: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+> ---
+>  crypto/async_tx/raid6test.c | 4 ++--
+>  crypto/curve25519-generic.c | 4 ++--
+>  crypto/dh.c                 | 4 ++--
+>  crypto/ecdh.c               | 4 ++--
+>  crypto/ecdsa.c              | 4 ++--
+>  crypto/rsa.c                | 4 ++--
+>  crypto/sm2.c                | 4 ++--
+>  7 files changed, 14 insertions(+), 14 deletions(-)
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
-
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/power/reset/brcm-kona-reset.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/power/reset/brcm-kona-reset.c b/drivers/power/reset/brcm-kona-reset.c
-index 3de024e3ceb7..02a056983291 100644
---- a/drivers/power/reset/brcm-kona-reset.c
-+++ b/drivers/power/reset/brcm-kona-reset.c
-@@ -38,9 +38,7 @@ static struct notifier_block kona_reset_nb = {
-
- static int kona_reset_probe(struct platform_device *pdev)
- {
--	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	kona_reset_base = devm_ioremap_resource(&pdev->dev, res);
-+	kona_reset_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(kona_reset_base))
- 		return PTR_ERR(kona_reset_base);
-
--- 
-2.25.1
+What bug/problem does this resolve?  Why is this needed in stable
+kernels?
