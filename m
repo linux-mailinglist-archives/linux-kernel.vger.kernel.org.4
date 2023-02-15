@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A798969756D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0551369756F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjBOE25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 23:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S232833AbjBOE3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 23:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBOE2z (ORCPT
+        with ESMTP id S232996AbjBOE3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 23:28:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D14D24482;
-        Tue, 14 Feb 2023 20:28:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Feb 2023 23:29:17 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CB91DBBE;
+        Tue, 14 Feb 2023 20:29:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEE9DB81FF1;
-        Wed, 15 Feb 2023 04:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE76C433D2;
-        Wed, 15 Feb 2023 04:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676435322;
-        bh=gQItWQGViuqC4+TT/qMNvKQW0f7Z2GI5pq6Tmc/cnSw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hrJJanqiNyATEazIGNFnAGjhN6dMFxhO8QjMkU9sRACmx/H/ogmc3HzodBufMzB1e
-         HYalY7868g2wTBMXzie8tEIVO2Ck7LzCngSosI0l4v/T2fmkhZyXHODP6pP1umXuDi
-         R4w8zNzcswUDIYWcdK7ThjrvZ/3VsldZRlQrYcWULZuMQPXLm8XYd05txDF95Ih8tV
-         emlWXj3EADYXb7dNQ4g7xS1ZpTly0m/7K7xF8KPNRPyRS405oYWbFk2OJNkd/AAEAR
-         VBUeS/LE49QR+XGrq5GqFGXva9chUkQD9GwPL52tO5TNskyhgU8qqq7vtfR8F4r+Dj
-         FZ2OjNM1KKMJA==
-Date:   Tue, 14 Feb 2023 20:28:41 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH v2] octeontx2-pf: Use correct struct reference in test
- condition
-Message-ID: <20230214202841.595656be@kernel.org>
-In-Reply-To: <Y+ohwh7K5CYHhziq@ubun2204.myguest.virtualbox.org>
-References: <Y+ohwh7K5CYHhziq@ubun2204.myguest.virtualbox.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGlTJ1qPCz4x4r;
+        Wed, 15 Feb 2023 15:29:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676435349;
+        bh=k+UyJ0bzyj6iwA5lq4VzIodTsZc9POWZGOJzSpcD3vM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oG8kVFNPEB8/2E8SMdywJ6CnsIp+8k2PZmw8TbysJy+f4eAQoH9bd+Kx9zt3FUFKX
+         h5IETgUVQDqRLKCBgn7sg224u7vSe36w6I6EQfCuyZ/hAsGgFf2gRLLWkKlYxLtcr8
+         h3bxqxT7k/yCZrZvxTbRpDDbzQASCiVs4/eajmTN1wDfQT3I/XwKLJ5DHQV76YO8N1
+         nqWh8MvENZ8MEmyiQijk6eii1DTpp38mU/2xqiPeHsI4NPgMzgtsmIdA3Thdm27Qvh
+         j4xFNnThd+z5rs+7wBomHk0EsOC2q6/ECxqqKZ65zGMUo5l7by+YDKMcbL6Ug8tEEp
+         8dtGB/N8B5F8Q==
+Date:   Wed, 15 Feb 2023 15:29:07 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the clockevents tree
+Message-ID: <20230215152907.238e0ba1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/P6Y7jCjcak2+er5zS7l16yA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 17:10:50 +0530 Deepak R Varma wrote:
-> Fix the typo/copy-paste error by replacing struct variable ah_esp_mask name
-> by ah_esp_hdr.
-> Issue identified using doublebitand.cocci Coccinelle semantic patch.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+--Sig_/P6Y7jCjcak2+er5zS7l16yA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Your patch did not make it to the list, please make sure or recipients
-are correct (common error is to lack a space between name and the
-address, e.g. "David S. Miller"<davem@davemloft.net>).
+Hi all,
 
-When reposting please add a Fixes tag.
+The following commits are also in the tip tree as different commits
+(but the same patches):
 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-> index 684cb8ec9f21..10e11262d48a 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-> @@ -793,7 +793,7 @@ static int otx2_prepare_ipv6_flow(struct ethtool_rx_flow_spec *fsp,
->  
->  		/* NPC profile doesn't extract AH/ESP header fields */
->  		if ((ah_esp_mask->spi & ah_esp_hdr->spi) ||
-> -		    (ah_esp_mask->tclass & ah_esp_mask->tclass))
-> +		    (ah_esp_mask->tclass & ah_esp_hdr->tclass))
->  			return -EOPNOTSUPP;
->  
->  		if (flow_type == AH_V6_FLOW)
+  e09903cea09e ("clocksource/drivers/riscv: Get rid of clocksource_arch_ini=
+t() callback")
+  f243533b29c5 ("clocksource/drivers/sh_cmt: Mark driver as non-removable")
+  596846da9f03 ("clocksource/drivers/timer-microchip-pit64b: Drop obsolete =
+dependency on COMPILE_TEST")
+  8e148217ffb9 ("clocksource/drivers/riscv: Increase the clock source ratin=
+g")
+  969ec81d5a96 ("clocksource/drivers/timer-riscv: Set CLOCK_EVT_FEAT_C3STOP=
+ based on DT")
+  98ce3981716c ("dt-bindings: timer: Add bindings for the RISC-V timer devi=
+ce")
+  245fe5328dc7 ("RISC-V: time: initialize hrtimer based broadcast clock eve=
+nt device")
+  8cf50035875e ("dt-bindings: timer: rk-timer: Add rktimer for rv1126")
 
+These are commits
+
+  3aff0403f814 ("clocksource/drivers/riscv: Get rid of clocksource_arch_ini=
+t() callback")
+  c3daa4754f3c ("clocksource/drivers/sh_cmt: Mark driver as non-removable")
+  8d17aca90bcf ("clocksource/drivers/timer-microchip-pit64b: Drop obsolete =
+dependency on COMPILE_TEST")
+  674402b0098b ("clocksource/drivers/riscv: Increase the clock source ratin=
+g")
+  8932a9533a9c ("clocksource/drivers/timer-riscv: Set CLOCK_EVT_FEAT_C3STOP=
+ based on DT")
+  e2bcf2d876fd ("dt-bindings: timer: Add bindings for the RISC-V timer devi=
+ce")
+  8b3b8fbb4896 ("RISC-V: time: initialize hrtimer based broadcast clock eve=
+nt device")
+  b3cbfb792792 ("dt-bindings: timer: rk-timer: Add rktimer for rv1126")
+
+in the tip tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/P6Y7jCjcak2+er5zS7l16yA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsX5MACgkQAVBC80lX
+0GymMQf+MGhtyWOF/mY26ClVhST/JkHUpSbiGou3WXfLHS3Teu2hlEml2uW7gfoY
+yQKCep8fVkwvmJQ433o79gndI0xnbCLugUNxGUWtsj285XxS4UDxk4zDCoqMstFz
+YcYkw3x0ejNN80v3HdZiQu64UTczy3bjr7JLAndTr+kOgtlNbp209tWelTvDO2mV
+ag5frLhnL53ATm5UrLRo2SLsfVrTC/xsuauLkpRKXjSEeP3GIaoJGjLkzLjpF61B
+dM7cEgc3vGsHCqRFdjPFEcJLZdpGbmD5udtoK3nKkMwAyAAtqutUTaRM0f2WpPiZ
+KFcBOS/NVQMf8TE4+neftR+f/8btiQ==
+=JuDu
+-----END PGP SIGNATURE-----
+
+--Sig_/P6Y7jCjcak2+er5zS7l16yA--
