@@ -2,285 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF956973E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D126973EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjBOBv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S232454AbjBOBwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjBOBvV (ORCPT
+        with ESMTP id S229551AbjBOBwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:51:21 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5FA2B0A8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:51:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676425877; x=1707961877;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pY73svOgwdqd6BSUYdpIutEqwh8IMouiKs97EFOaRtU=;
-  b=WpW8ZKKp1Bqk9a99QZaS4JzACBYYYh3UvmxmKjQuWGtmnh4HbKcOOrr2
-   gG0JNenw0IiP4ZtKOlOzjqMK07cN7KXdq0Xmwz46sLHrez7qqtpVuVuB9
-   Z/5hDgm/d34pTvfffan8hvFuuNVwaUV60nI+s0RYn0sBs83gHNX+cc1yI
-   c5OoJLaFIZD2OXun4VTVypWX4RnRxTFO7yCnx+8Pl7mDJcZF5bdN5tQl2
-   zIRRxS8a3spFSYhwHxucBC6Mlb7vjlBmnEX3xIdxRXF5bOEZBYXs5AqmH
-   S8eIXzrKH7NjBV94FFSreXzC9xZ3MaCTy+E5/ikr2+pQm7EROW79i2Gaz
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
-   d="scan'208";a="223345053"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:51:16 +0800
-IronPort-SDR: LIakpHL8bkVArE23+rZKsn5sm5uU1oUW3xvuEgt+cetrB5EAGJlS5tzhLBObQmPV/wcLYr3uQN
- 1y5/zo1hQV1bVW3vCDEdnTQyvIdX015D1MEpPAPA9Uq3lp2V8euuixbe1Vw8/+isn7al7MDmDg
- ysFpBisFkgn2EYdukLND6XOthLy4s5JM/iqUVJuYkH9AwvJpdxyrXGz813ncSITfatuqsNCoN6
- AeNyE2/W6Nc7ZFyB897SG/8A0kxD25Ybd/EwNz77Bna081ZrGXl3FvUPllK32TABaZbtRljyz2
- ZhE=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:02:39 -0800
-IronPort-SDR: 0AwQphSVBMiYuwYmnJo19P4FnrRMeoK2klyr2ZexbonjK1rx9ipFLYc29mz4Y6T+JBJPc54/Os
- snOA5t9AOa9pPz1PmgQpmzakKKEvXw1O4wL77h/3twNowao5/1ATpLGvCuT4sl3tZ4IObV946p
- quzrr7WaX+5qLQselsiQjfsy2nqJ7rkXC8+OjkbKQu2wkYkVtUzIU0efJZ4stW5eF13RczDkaI
- 1ifV9C3EDkYwgqEWytrFa9rW561Zni21mXY7y1OpDo/GsJ98kGO5jf9AxV20dJbdC0vQ3x8hUs
- a0w=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:51:17 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgz80wx4z1RWy3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:51:16 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676425872; x=1679017873; bh=pY73svOgwdqd6BSUYdpIutEqwh8IMouiKs9
-        7EFOaRtU=; b=fyOCQWDcyHlBOIbK5ysMm6noA8GFEVee8rIBYtpP645ZvUq2WUK
-        MIWuJ4Jp/o9n6yxWJulWoVmxAQTey45NL56acctMouqvmTabq+w8a9FF1Tu9h3uF
-        53UJlw9ti+KUvbutkgkr6kqQy+YpanfesZxIo/4C6lawhupHZ0wQqokRbvbQTwrG
-        85eT4K43J2Z3XozyGPg/1lufNDH4+cKpM2sJgMXuVmODYSAqvEzCa3vuCgbxV09J
-        hSHgiDXKPdvfruIUQkLVsBNvfIO59R0bH/5rgA2S7dngwp4SsnYB/bLG4CxMZavr
-        jKmwpzpL5zCdonGiardsQvMnjuuAmpH3rLw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VSEkXUXXcGyD for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Feb 2023 17:51:12 -0800 (PST)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgz11G1Vz1RvLy;
-        Tue, 14 Feb 2023 17:51:09 -0800 (PST)
-Message-ID: <7b8a8d38-feef-d2af-f23f-6b2b46f78110@opensource.wdc.com>
-Date:   Wed, 15 Feb 2023 10:51:08 +0900
+        Tue, 14 Feb 2023 20:52:16 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404002A157;
+        Tue, 14 Feb 2023 17:52:14 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id n33so6282979wms.0;
+        Tue, 14 Feb 2023 17:52:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Dh7W8B7GdfNW9yPvCjvXCuyXKP9Wu7p2Nt1nW6SFtM=;
+        b=phrqXdzRmKmaU13ShVFndAAUftLPIuXjw5K3mLIl02WLP6mgyjilKVr0GbwTS4DR0e
+         Z5r5XS1j0dAQ8Ad2m8bCjsXIWP3p7lFiX3ha8aEqdjdr5xJlhZGoY2JTzsIPwyNTuBiS
+         FkSZFGt5yVsK4hgZNQJMF5VNPoI0JlSpkF0rj33eS5YO9WC1BuFPBSnXc9fFqD+LUrif
+         /f+R6RaHepdFAn+WvhQln2+c89vgFhVQ7fhiYEe1mhVeIjZmVMK0Ow5s1oD8BoT+na3O
+         NEKNjJjocatuZB+VpF7jWDofvS6EQBpmkwpuUqQ76ec3HlVbX2mcW2ZbSaSkPm+1vOu8
+         YWuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2Dh7W8B7GdfNW9yPvCjvXCuyXKP9Wu7p2Nt1nW6SFtM=;
+        b=MGmfjkTPfuT9IE9HAZx0ZDyA7lWatPytX0mFY8eUixzsstmJWmCG5GgwS027UlPSLw
+         XzPt8Dr5O7bjo/wD5yMOSlU9tXFZWLtySmo8JfhfqWASMDLWr8RnmJUoCJs2TRYclcBr
+         lVdJLoTbBcmOhSt+WjtHEMkuLwHNLB4PIik+YhTvJ9J6Ij2tuxYEFQ/umhRwLknpnb5M
+         ON4hIE0CK0wh/fkdk1pm8qUpWng0aFSGN55WGYxmLpyX1gaTuKXAPh1rARDCpm+H3xU0
+         lk+DD4YTg2MzDhknlqNBYCNmvso07duqFj5MBg4MAp9c33CrzOyKgLtBE+7yJFhYpUpj
+         c4AA==
+X-Gm-Message-State: AO0yUKWsEDsUy8A6n0T8zCYZYL7ZnkLACLiRItveOso8dobpSuXLhtlE
+        7yTKnzEqP9jXoNsIW+Sw9lA=
+X-Google-Smtp-Source: AK7set9RpbtmJnOFc0EN+4fgOgfEdwNGUfnLsA4RWOCn+1MjXx1AJ+DNRglvZ6JyJTJmemNm6AOD0Q==
+X-Received: by 2002:a05:600c:a293:b0:3d2:3be4:2d9a with SMTP id hu19-20020a05600ca29300b003d23be42d9amr633180wmb.20.1676425932520;
+        Tue, 14 Feb 2023 17:52:12 -0800 (PST)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c4d0600b003de664d4c14sm437341wmp.36.2023.02.14.17.52.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 17:52:11 -0800 (PST)
+Message-ID: <82ced680-8c2c-75b7-4368-16e602353f32@gmail.com>
+Date:   Wed, 15 Feb 2023 02:52:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 0/9] PCI: rockchip: Fix RK3399 PCIe endpoint controller
- driver
+Subject: Re: [PATCH 1/1] rseq.2: New man page for the rseq(2) API
 Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     "G. Branden Robinson" <g.branden.robinson@gmail.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-man <linux-man@vger.kernel.org>
+References: <20230214195442.937586-1-mathieu.desnoyers@efficios.com>
+ <669eb324-aef6-0583-c8a4-f54a93ee4d6d@gmail.com>
+ <20230215012054.twzw4k5et6hxvi2j@illithid>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <20230215012054.twzw4k5et6hxvi2j@illithid>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Xj05Fg30Ypwl9s1c12Cq5qbF"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 23:08, Rick Wertenbroek wrote:
-> This is a series of patches that fixes the PCIe endpoint controller driver
-> for the Rockchip RK3399 SoC. The driver was introduced in
-> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> The original driver had issues and would not allow for the RK3399 to
-> operate in PCIe endpoint mode correctly. This patch series fixes that so
-> that the PCIe core controller of the RK3399 SoC can now act as a PCIe
-> endpoint. This is v2 of the patch series and addresses the concerns that
-> were raised during the review of the first version.
-> 
-> Thank you in advance for reviewing these changes and hopefully
-> getting this merged. Having a functional PCIe endpoint controller
-> driver for the RK3399 would allow to develop further PCIe endpoint
-> functions through the Linux PCIe endpoint framework using this SoC.
-> 
-> Problem: The Rockchip RK3399 PCIe endpoint controller driver introduced in
-> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> did not work.
-> 
-> Summary of problems with the driver :
-> 
-> * Missing dtsi entry
-> * Could not update Device ID (DID)
-> * The endpoint could not be configured by a host computer because the
->   endpoint kept sending Configuration Request Retry Status (CRS) messages
-> * The kernel would sometimes hang on probe due to access to registers in
->   a clock domain of which the PLLs were not locked
-> * The memory window mapping and address translation mechanism had
->   conflicting mappings and did not follow the technical reference manual
->   as to how the address translation should be done
-> * Legacy IRQs were not generated by the endpoint
-> * Message Signaled interrupts (MSI) were not generated by the endpoint
-> 
-> The problems have been addressed and validated through tests (see below).
-> 
-> Summary of changes :
-> 
-> This patch series is composed of 9 patches that do the following :
-> * Remove writes to unused registers in the PCIe core register space.
->   The registers that were written to is marked "unused" and read
->   only in the technical reference manual of the RK3399 SoC.
-> * Write PCI Device ID (DID) to correct register, the DID was written to
->   a read only register and therefore would not update the DID.
-> * Assert PCI Configuration Enable bit after probe so that it would stop
->   sending Configuration Request Retry Status (CRS) messages to the
->   host once configured, without this the host would retry until
->   timeout and cancel the PCI configuration.
-> * Add poll and timeout to wait for PHY PLLs to be locked, this
->   is the only patch that also applies to the root complex function
->   of the PCIe core controller, without this the kernel would
->   sometimes access registers in the PHY PLL clock domain when the PLLs
->   were not yet locked and the system would hang. This was hackily solved
->   in other non mainline patches (e.g., in armbian) with a "msleep()"
->   that was added after PHY PLL configuration but without realizing
->   why it was needed. A poll with timeout seems like a sane approach.
-> * Add dtsi entry for RK3399 PCIe endpoint core. The new entry is
->   in "disabled" status by default, so unless it is explicitly enabled
->   it will not conflict with the PCIe root complex controller entry.
->   Developers that will enable it would know that the root complex function
->   then must be disabled, this can be done in the board level DTS.
-> * Fix window mapping and address translation for endpoint. The window
->   mapping and address translation did not follow the technical reference
->   manual and a single memory region was used which resulted in conflicting
->   address translations for memory allocated in that region. The current
->   patch allows to allocate up to 32 memory windows with 1MB pages.
-> * Fix legacy IRQ generation for RK3399 PCIe endpoint core, the legacy IRQs
->   were not sent by the device because their generation did not follow the
->   instructions in the technical reference manual. They now work.
-> * Use u32 variable to access 32-bit registers, u16 variables were used to
->   access and manipulate data of 32-bit registers, this would lead to
->   overflows e.g., when left shifting more than 16 bits.
-> * Add parameter check for RK3399 PCIe endpoint core set_msi(), return
->   -EINVAL when incompatible parameters are passed.
-> 
-> Validation on real hardware:
-> 
-> This patch series has been tested with kernel 6.0.19 (and 5.19)
-> on real hardware, a FriendlyElec NanoPC-T4 RK3399 based single computer
-> board connected to a host computer through PCIe x1 and x4. The PCIe
-> endpoint test function driver was loaded on the SoC and the PCIe endpoint
-> test driver was loaded on the host computer. The following tests were
-> executed through this setup :
-> 
-> * enumeration of the PCIe endpoint device (lspci)
->   lspci -vvv
-> * validation of PCI header and capabilities
->   setpci and lspci -xxxx
-> * device was recognized by host computer dans PCIe endpoint test driver
->   was loaded
->   lspci -v states "Kernel modules: pci_endpoint_test"
-> * tested the BARs 0-5
->   sudo /usr/bin/pcitest -b 0
->   ...
->   sudo /usr/bin/pcitest -b 5
-> * tested legacy interrupt through the test driver
->   sudo /usr/bin/pcitest -i 0
->   sudo /usr/bin/pcitest -l
-> * tested MSI interrupt through the test driver
->   sudo /usr/bin/pcitest -i 1
->   sudo /usr/bin/pcitest -m 1
-> * tested read/write to and from host through the test driver with checksum
->   sudo /usr/bin/pcitest -r -s 1024
->   sudo /usr/bin/pcitest -w -s 1024
-> * tested read/write with DMA enabled (all read/write tests also did IRQ)
->   sudo /usr/bin/pcitest -r -d -s 8192
->   sudo /usr/bin/pcitest -w -d -s 8192
-> 
-> Commands used on the SoC to launch the endpoint function (configfs) :
-> 
-> modprobe -i pci-epf-test
-> mkdir -p /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0
-> echo 0xb500 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/deviceid
-> echo 0x104c > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/vendorid
-> echo 16 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/msi_interrupts 
-> ln -s /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0 \
-> /sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/
-> echo 1 > /sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/start
-> 
-> Note: to enable the endpoint controller on the board the file :
-> arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
-> Was edited to set the status of &pcie0 to "disabled" and &pcie0_ep
-> to "okay". This is not submitted as a patch because most users
-> will use the PCIe core controller in host (root complex) mode
-> rather than endpoint mode.
-> 
-> I have tested and confirmed all basic functionality required for the
-> endpoint with the test driver and tools. With the previous state of
-> the driver the device would not even be enumerated by the host
-> computer (mainly because of CRS messages being sent back to the root
-> complex) and tests would not pass (driver would not even be loaded
-> because DID was not set correctly) and then only the BAR test would
-> pass. Now all tests pass as stated above.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Xj05Fg30Ypwl9s1c12Cq5qbF
+Content-Type: multipart/mixed; boundary="------------wK9md0z3a2LwFwAtiC8g3CEm";
+ protected-headers="v1"
+From: Alejandro Colomar <alx.manpages@gmail.com>
+To: "G. Branden Robinson" <g.branden.robinson@gmail.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-man <linux-man@vger.kernel.org>
+Message-ID: <82ced680-8c2c-75b7-4368-16e602353f32@gmail.com>
+Subject: Re: [PATCH 1/1] rseq.2: New man page for the rseq(2) API
+References: <20230214195442.937586-1-mathieu.desnoyers@efficios.com>
+ <669eb324-aef6-0583-c8a4-f54a93ee4d6d@gmail.com>
+ <20230215012054.twzw4k5et6hxvi2j@illithid>
+In-Reply-To: <20230215012054.twzw4k5et6hxvi2j@illithid>
 
-Note about that: with your series applied, nothing was working for me on
-my pine Rockpro64 board (AMD Ryzen host). I got weird/unstable behavior
-and the host IOMMU screaming about IO page faults due to the endpoint
-doing weird pci accesses. Running the host with IOMMU on really helps in
-debugging this stuff :)
+--------------wK9md0z3a2LwFwAtiC8g3CEm
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-With the few fixes to your series I commented about, things started to
-work better, but still very unstable. More debugging and I found out that
-the pci-epf-test drivers, both host and endpoint sides, have nasty
-problems that lead to reporting failures when things are actually working,
-or outright dummy things being done that trigger errors (e.g. bad DMA
-synchronization triggers IOMMU page faults reports). I have a dozen fix
-patches for these drivers. Will clean them up and post ASAP.
+Hi Branden,
 
-With the test drivers fixed + the fixes to your series, I have the
-pci_test.sh tests passing 100% of the time, repeatedly (in a loop). All solid.
+On 2/15/23 02:20, G. Branden Robinson wrote:
+> [CC list violently trimmed; for those who remain, this is mostly man
+> page style issues]
 
-However, I am still seeing issues with my ongoing work with a NVMe
-endpoint driver function: I see everything working when the host BIOS
-pokes at the NVMe "drive" it sees (all good, that is normal), but once
-Linux nvme driver probe kicks in, IRQs are essentially dead: the nvme
-driver does not see anything strange and allocates IRQs (1 first, which
-ends up being INTX, then multiple MSI one for each completion queue), but
-on the endpoint side, attempting to raise MSI or INTX IRQs result in error
-as the rockchip-ep driver sees both INTX and MSI as disabled. No clue what
-is going on. I suspect that a pci reset may have happened and corrupted
-the core configuration. However, the EPC/EPF infrastructure does not
-catch/process PCI resets as far as I can tell. That may be the issue.
-I do not see this issue with the epf test driver, because I suspect the
-host BIOS not knowing anything about that device, it does not touch it.
-This all may depend on the host & BIOS. Not sure. Need to try with
-different hosts. Just FYI :)
+Ironically, you trimmed linux-man@  :D
+
+>=20
+> At 2023-02-14T23:29:37+0100, Alejandro Colomar wrote:
+>> On 2/14/23 20:54, Mathieu Desnoyers wrote:
+>>> +per-thread data structure shared between kernel and user-space.
+>>
+>> This last 'user-space' is not adjectivated, so it should go without
+>> a hyphen, according to common English rules.
+>=20
+> +1
+>=20
+> Also I like your coinage.  "Adjectivated yeast" is reflexive and
+> tautological!
+
+:D
+
+I didn't even think about it.  "adjetivado" is an actual word in Spanish,=
+
+so I just guessed that it would exist in English.  But yes, it's a nice
+word for this case :)
+
+>=20
+>>> +.RB ( "struct rseq" )
+>>
+>> We format types in italics, so this should be '.RI'.
+>=20
+> +1
+>=20
+>>> +Only one
+>>> +.BR rseq ()
+>>> +ABI can be registered per thread, so user-space libraries and
+>>> +applications must follow a user-space ABI defining how to share this=
+
+>>> +resource.
+>>
+>> Please use semantic newlines.  See man-pages(7):
+>>
+>>    Use semantic newlines
+>>        In  the source of a manual page, new sentences should be starte=
+d on new
+>>        lines, long sentences should be split into lines at clause brea=
+ks (com=E2=80=90
+>>        mas, semicolons, colons, and so on), and long clauses should  b=
+e  split
+>>        at  phrase  boundaries.   This convention, sometimes known as "=
+semantic
+>>        newlines", makes it easier to see the effect of  patches,  whic=
+h  often
+>>        operate at the level of individual sentences, clauses, or phras=
+es.
+>=20
+> I think I've said this before, but, strictly, commas in particular can
+> separate things that are not clauses.  Clauses have subjects and
+> predicates.
+>=20
+> Might it be better to say simply:
+>=20
+>   Start each sentence on a new line.  Split long sentences where
+>   punctuated by commas, semicolons, and colons.
+>=20
+> With this there is not even any need to discuss "phrase boundaries".
+
+I still disagree with that;
+punctuation is not enough
+(see below).
+
+>=20
+>> In the above lines, that would mean breaking after the comma,
+>> and not leaving resource in a line of its own.
+>=20
+> The latter is inevitably going to happen from time to time simply due t=
+o
+> sentence length and structure and the line length used by one's text
+> editor.
+
+That's if you only break at sentence and clause boundaries,
+and then adjust at 80 columns...
+
+>  I don't think an "orphan word" (what typographers call this) is
+> symptomatic of anything in *roff source when filling is enabled.
+
+but if you also break at phrase boundaries
+(when/where convenient)
+you'll find that you get rid of those "orphan words",
+because you'll never have to adjust at 80 columns
+(or rather,
+you'll try to find a way to break it
+that also happens to be a phrase boundary
+because breaking at phrase boundaries is _better_
+than breaking at random points which may happen to be
+in the middle of a compound noun).
+
+>=20
+>>> +The ABI defining how to share this resource between applications and=
+
+>>> +libraries is defined by the C library.
+>>> +Allocation of the per-thread
+>>> +.BR rseq ()
+>>> +ABI and its registration to the kernel is handled by glibc since ver=
+sion
+>>> +2.35.
+>>> +.PP
+>>> +The
+>>> +.BR rseq ()
+>>> +ABI per-thread data structure contains a
+>>> +.I rseq_cs
+>>> +field which points to the currently executing critical section.
+>>
+>> currently-executing should probably use a hyphen
+>> (if I understood the line correctly).
+>=20
+> This is not the case, according to some style authorities.  Dave Kemper=
+
+> convinced me of this on the groff list.
+>=20
+> Here is one resource.
+>=20
+> https://www.editorgroup.com/blog/to-hyphenate-or-not-to-hyphenate/
+
+Hmm, interesting.  I didn't think about it, but it makes sense
+to not hyphenate here.
+
+>=20
+>> See an interesting discussion in the groff@ mailing list:
+>> <https://lists.gnu.org/archive/html/groff/2022-10/msg00015.html>
+>=20
+> That's not _squarely_ on point, as none of "block", "device", or "based=
+"
+> is an adverb.  "Currently" is.
+
+You're right.
+
+>=20
+>>> +For each thread, a single rseq critical section can run at any given=
+
+>>> +point.
+>>> +Each critical section need to be implemented in assembly.
+>>
+>> needs?
+>=20
+> +1
+>=20
+>>> +.TP
+>>> +.B Structure alignment
+>>
+>> Let's remove the bold here.  It's not necessary for marking a constant=
+
+>> or something that needs bold.  And the indentation is already making
+>> it stand out, so bold is a bit too much aggressive to the reader.
+>=20
+> I agree; if it wouldn't be styled in running text, it doesn't need
+> styling as a paragraph tag; it already stands out by dint of its
+> placement as a tag.
+>=20
+>>> +Its value should always be confirmed by reading the cpu_id field bef=
+ore
+>>
+>> cpu_id should be formatted (.I).
+>=20
+> +1
+>=20
+>>> +user-space performs any side-effect
+>>> +(e.g. storing to memory).
+>>> +.IP
+>>> +This field is always guaranteed to hold a valid CPU number in the ra=
+nge
+>>> +[ 0 ..  nr_possible_cpus - 1 ].
+>>
+>> Please use interval notation:
+>> 	[0, nr_possible_cpus)
+>> or
+>> 	[0, nr_possible_cpus - 1]
+>> whichever looks better to you.
+>>
+>> We did some consistency fix recently:
+>> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?i=
+d=3D147a60d792a5db8f3cb93ea16eefb73e16c1fb91>
+>>
+>> Also, do we have a more standard way of saying nr_possible_cpus?
+>> Should we say nproc?
+>=20
+> Apropos of a separate discussion we had weeks ago, Alex, I remembered
+> where I saw "nitems" as a variable name.
+>=20
+> _UNIX Programming_, second edition, by Kernighan and Ritchie!
+>=20
+> https://wolfram.schneider.org/bsd/7thEdManVol2/uprog/uprog.pdf
+>=20
+> Plop _that_ down on the desk of the person who claimed it was a stupid
+> variable name that no good programmer would ever use.
+
+ROFL.  I'm bookmarking this!
+
+>=20
+> (I think appeals to authority are just fine as long as one is being
+> mean.  ;-P
+
+Indeed ;-P
+
+>  And as regards variable naming, Kernighan is a _legitimate_
+> authority: a subject matter expert with multiple well-regarded books on=
+
+> coding style to his credit.  Ritchie's strengths were more esoteric,
+> enough that he put up specimens of his own youthful hubris as, I think,=
+
+> an effort to discourage his many admirers from copying his mistakes as
+> slavishly as his successes[1]--apart from their humor value.)
+>=20
+>> Branden, IIRC, this seems to be the reason why I didn't want .RS for
+>> indenting code examples.  It doesn't fit nicely right after TP.
+>>
+>> Why is there a blank line?  I'm not even sure that's reasonable.  Is
+>> it a (minor) bug in man(7)?  (FWIW, mandoc(1) is consistent with
+>> groff(1).)
+>=20
+> Right, I'll take this up in the separate thread you started for it on
+> the groff list.
+
+Sure.
+
+>=20
+> Regards,
+> Branden
+>=20
+> [1] https://www.bell-labs.com/usr/dmr/www/odd.html
+>=20
+>     See particularly "Comments I do feel guilty about".
+
+Yep, that page is always funny :)
+
+Cheers,
+
+Alex
 
 
--- 
-Damien Le Moal
-Western Digital Research
+--=20
+<http://www.alejandro-colomar.es/>
+GPG key fingerprint: A9348594CE31283A826FBDD8D57633D441E25BB5
 
+--------------wK9md0z3a2LwFwAtiC8g3CEm--
+
+--------------Xj05Fg30Ypwl9s1c12Cq5qbF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmPsOsMACgkQnowa+77/
+2zI7rQ//TVyLf4xAVvaho4V11PH7DtEniFhXUN2dC+VZfKTci4mdGiSHF0n34OfC
+VDWK/6TMPe5tsWRbVggu6X7WSkwFSyxcTJKpYBUuArqJPEQ6uMwWVaX9xfiFSnrf
+NcwGt3bwnep6Nz2bt2Bm9Eck/WunXx2WbefjUs+c1DnMvZAw9/gx8FKGxRG9BJDh
+DvjHp74BnbLZiduCA22dUrYZUtHfFgJKVL3Jjnf4Y0zrMJ94khQhe9YCpOyG2y7Z
+QFK+F6hIeULuvZYAxlGKcgMw44n9Iky6D/l7n6xyi57hGwTEzuTCmwb7fdbPC3HY
+LFEZOz6jlJWZINyHNHQLJggEsQ3bF6hOQJeKiXTWVgbPlW74y5423tQsz14d6Eiq
+LrO+cjy352fB/7Si/JWetFpnhl/PHazdvlYwXKqyaXUApJyvEYEVMLv4COFMaxwl
+aa8YYdMfrloi2QslqmWte+4hVUd9xdYS3nz0rGdqUqDbwayNvmxOKZJlvmpaK09v
+XtbjXoJ5TGe0Yc45vV7ipN447TVvwUAToclKWJSJ5WybwTVBijBp6oSyQSBp6zCM
+rcUKlewdef4HD0iLgTsglrGeS8AoIQIzwJOiXarGMaai5YlY7Xt59qtQqSKykreP
+Y7f8BcgL0mzBySlPNXM1CR8VqJQFSLOJhlIgQAzY8jADYUU9JBs=
+=q32l
+-----END PGP SIGNATURE-----
+
+--------------Xj05Fg30Ypwl9s1c12Cq5qbF--
