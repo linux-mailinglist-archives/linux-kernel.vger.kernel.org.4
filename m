@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46D5697C1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EC9697C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjBOMpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S231249AbjBOMrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBOMpw (ORCPT
+        with ESMTP id S232996AbjBOMrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:45:52 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E9C311CD
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:45:51 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id q3-20020a056e02096300b003157134a9fbso736674ilt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:45:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V5gRBWvCrC4ivORDLYanYAKruxMNDrxF3nhXlCgZ6d4=;
-        b=US0DePTcWCe2Ug9Jf6jkcYQIj9Rm2YSce3NDhEgQ/OuU5THFHr/t/ne8XLOTziodfV
-         XqtzCWUZvmzHcS+a5C3yTYqGlmrspIuaQ4weXPEvdP/sdlNtUqGwd4O51KDfqSLTjDsq
-         FVgn5RL9qQM2bT81Xd0k6DNUWct/8+VV2tvzEJF7cxA81VzX2Ldunc4H7nc3dujKzSmo
-         8A0Y0TNpc5BCqqP3kXpvupIwQq8+J8gfHmGYm1Bhip1Oha920oHu1/vO6OKzev2XIVQB
-         JzVyPDv22jBBJ0NEmbyl5Rf0JoN4XISK+0HwbLNkoEphMoMF9Zo4LVE0nfh7Phsz5oWE
-         vvPw==
-X-Gm-Message-State: AO0yUKVmHqvMGM4LjLCYjE27BrgyWDRGn3xVoUURLxaJsIYhlTYE7CJP
-        q28LJRGSb6omA73GITQwqGEtd8H7OqM0zOtEItWqAU8h7POF
-X-Google-Smtp-Source: AK7set9TjvisiTIRVmOM6kk7oWlt9QxFsyDansPcekDaE9vTb1o4Jz8iKYvVdAHKEnBGb6wJBTvmELx9OL90n9hUVjrG8BHZYbwh
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3e0f:b0:3c4:a4d1:cc49 with SMTP id
- co15-20020a0566383e0f00b003c4a4d1cc49mr886208jab.3.1676465151294; Wed, 15 Feb
- 2023 04:45:51 -0800 (PST)
-Date:   Wed, 15 Feb 2023 04:45:51 -0800
-In-Reply-To: <0000000000006c411605e2f127e5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d245a705f4bc75b4@google.com>
-Subject: Re: [Android 5.10] kernel BUG in ext4_free_blocks (2)
-From:   syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        joneslee@google.com, lczerner@redhat.com, lee@kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nogikh@google.com, sashal@kernel.org, stable@vger.kernel.org,
-        syzkaller-android-bugs@googlegroups.com, tadeusz.struk@linaro.org,
-        tudor.ambarus@linaro.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 15 Feb 2023 07:47:03 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682536446;
+        Wed, 15 Feb 2023 04:46:59 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 60F315C00C9;
+        Wed, 15 Feb 2023 07:46:57 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 15 Feb 2023 07:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676465217; x=1676551617; bh=oF+nuJUlGq
+        sGD2Bd/Tzxg3RSEzUS++9nuxOl/FiQWe4=; b=qfidbLrLN3TDh1LZOQ2Gwl3B2r
+        9OZtKILiUwziX3/ACgoOCrK3lSoFWwj5HXsKLeduWfKgE73UDQiL2Vi2xoTG7DdY
+        KCB19b4YCn7WfSvWXEgjqtB6Jgk78rcCxlcuQs88OuFPGJSPT0kQ0jgzeQTzfMCY
+        mV5PXAeWuxjbGU8qAg5efh1wLWn1hJNefIYZ0/W78cnYMMkjO3e08qqhgPVnAxHI
+        daxply72SYoS6FHJdlFwTIvJ/SUyjqJwYKLWC6vqWIF+nJxa/eZoOI4Zi0d7xdv8
+        KFokIk8S/yAU/LxTTCiqsL0nZHmvlOgRIrutUtOPy3dZN9jpZDF9Fb5/F+8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676465217; x=1676551617; bh=oF+nuJUlGqsGD2Bd/Tzxg3RSEzUS
+        ++9nuxOl/FiQWe4=; b=MdfZou+mEa3P2OMT6/tgNT7PBDPe0bv04M9ZtPHnaD5L
+        e9B9HvP0vueq2CEM04J2wmFFvhF1eJCYM5GROSpQ3l7LiGYjPXr4uUcwx4Piy1up
+        hwrOZxMUh6WAJ/DayqX3y+M0/1nsV3+pqEL/ZzNsvAqP2O0FRQnEd8myy+grKhHF
+        spzgKiTJncafS7zGyEt6oqtW8AaC6PTyCFX8DVfWYJ2rw8TqRiqEAyNfCiyBn6O3
+        CJneo5zBtnhjcQTzl/eapHVv9G7i21R0c0MBMEU+xnQNri0iA1a4PDwQgF1Xs6Bx
+        m3Spw88Q9c+YAAZcibmgBiKRgkFe9QgqWjWAm7Yweg==
+X-ME-Sender: <xms:QNTsY2O75uas4Ue2tq9U_VZ1HzSwwDMCPe7nZeY93LwpvSBQYGcvUQ>
+    <xme:QNTsY0_X0n1eL0eZKQC8eJ7OdZ8cYMAYMuzIFoNqjKE-Rc2v5E3V3MpkNetq789nh
+    LWp0gu3RK2eIFvtFhg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:QNTsY9T-avZzH2T9X5EmngfUKI4dz0E55TTTJpEXNJKFBICTmI-ZiQ>
+    <xmx:QNTsY2tk1BTFV3-aytHejDvkgtJN6xwAWgQnebEq6jaNJdjylI0Esg>
+    <xmx:QNTsY-enjknIQCYq_zlk-LDfVZwlohw--q_c6o8gXdi2vV-NEk9PqQ>
+    <xmx:QdTsY1xE55an06N4LlDL6g_84JxFs-m0Sv8nGbxoEttsQKmJJEuDpw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BC9E0B60086; Wed, 15 Feb 2023 07:46:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <51900fc5-1a5c-4414-a85b-061a0cd58c63@app.fastmail.com>
+In-Reply-To: <CAMj1kXGYcLLaJQfYjcjvAnFbb+MAWQF-2BzeUGJTqBu4V=ejNw@mail.gmail.com>
+References: <20230215100008.2565237-1-ardb@kernel.org>
+ <20230215100008.2565237-3-ardb@kernel.org>
+ <ea12dd12-db17-44a8-8c29-6b0a129f355d@app.fastmail.com>
+ <62e7ab37-1148-4cf1-8d6a-3da440fa623f@app.fastmail.com>
+ <CAMj1kXGYcLLaJQfYjcjvAnFbb+MAWQF-2BzeUGJTqBu4V=ejNw@mail.gmail.com>
+Date:   Wed, 15 Feb 2023 13:46:38 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Ard Biesheuvel" <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, "Jonathan Corbet" <corbet@lwn.net>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: [RFC PATCH 2/5] kernel: Drop IA64 support from sig_fault handlers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ext4: block range must be validated before use in ext4_mb_clear_bb()
+On Wed, Feb 15, 2023, at 12:22, Ard Biesheuvel wrote:
+> On Wed, 15 Feb 2023 at 12:15, Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> CONFIG_IA64
+>> CONFIG_IA64_PAGE_SIZE_64KB
+>> CONFIG_IA64_SGI_UV
+>> CONFIG_IA64_DEBUG_CMPXCHG
+>> CONFIG_MSPEC
+>
+> These are all gone from the code after applying this series.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Ok, got it. I missed that the first patch also removes
+bits outside of arch/ia64.
 
-#syz fix: exact-commit-title
-
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
-
-Kernel: Android 5.10
-Dashboard link: https://syzkaller.appspot.com/bug?extid=15cd994e273307bf5cfa
-
----
-[1] I expect the commit to be present in:
-
-1. android12-5.10-lts branch of
-https://android.googlesource.com/kernel/common
+     Arnd
