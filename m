@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B6A6973A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33456973A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbjBOB2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S232803AbjBOBbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbjBOB2g (ORCPT
+        with ESMTP id S232342AbjBOBbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:28:36 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19625469A;
-        Tue, 14 Feb 2023 17:28:36 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id bd6so14566986oib.6;
-        Tue, 14 Feb 2023 17:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wP7ZSWKSYiSNh4//0LGY48SytGVZ1Q61Ky7oicSasw4=;
-        b=dChf08Fgnzc/7i6cHdWw4ZCN8pOkax0iU+IhPt21tPCgPwuXypoS40QqLbiAv/33P8
-         /3K6c9U99sy0+Gx2dYpPoxWKvQKpZkuOlJ0SeeZQYbJC0lXEaAAXc92slmCULAKqBRSI
-         PKQWWXZ90P4WZY9iZJx6zI2Lk6OelHvcgkQXxGBMuVKTasv+qKRcNSgV7Og3tsPQMPCN
-         im5nOOY8X8jOROq8eTUDRr0lmjhVgmnHtfhLdzks8zgWdJc/7/bLgwOOAhy3X8lKliCs
-         P8R6uQntT9k6532jw0Qr1bDlMapQ3R9JwbNo61VTJILAf3rla3wOUk1F+dUccL+8kzsm
-         bvtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wP7ZSWKSYiSNh4//0LGY48SytGVZ1Q61Ky7oicSasw4=;
-        b=kG1TgTvuU1KPImnqewL8k9o09hSljKHNVW2gzcwLeJQjNdeJRj29m5DGNuAD5TcV16
-         lGeHEmTnCwcr2dtQaidD/hY7DgHejFk3b7mwrUvr6pc9/W1uHOtaAGl0JOtYm3ZZaF5D
-         lRNjDCU4wcLx0Mpic6vuOXTtFc3/Ky6MU0Rjuvf8qn/u+MLFmviLDIeQ5z2hb2wTT8L3
-         5SzCUvgd+eAXxL+fq3hGSfGrwTjxyYCErRmnuZnQp9DZRKgqbMvsSsK2QQ1BZGtGfr+7
-         dJWZH1HbhbQ1ztLQDcelD8UBYMl93P+uvKlHKZCedA+EkgW7qQOGiP+ONSiANdaynbp9
-         QVNA==
-X-Gm-Message-State: AO0yUKWYhtC/LjO28ueg2/sJAPN/gTlTOi0BGlmfPGOSa+MfF+lKO2AU
-        3FoisB7ePZEnxNkMJrLV3Y5E17ugV0ZNj9oKpDlm2RrX
-X-Google-Smtp-Source: AK7set/EfopdPMu3y6nt7yUm2rlRHgHLya+Z6RM5IvHr0a1MZI40AQ50Jr0ypH+faKcjsdOkWLzLFYp9mgf3o4zXExM=
-X-Received: by 2002:aca:d743:0:b0:37d:81a9:5103 with SMTP id
- o64-20020acad743000000b0037d81a95103mr52567oig.38.1676424515344; Tue, 14 Feb
- 2023 17:28:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
- <20230214173145.2482651-11-konrad.dybcio@linaro.org> <CAF6AEGva3ecxTOx3Yb+Wh-1K=jYA3tDo_aXg09jS9pzJupYExQ@mail.gmail.com>
- <a4627ca5-46e6-2f32-c0e2-a85990e02f54@linaro.org> <1c57fcfd-8e94-649b-df6f-655626f94454@linaro.org>
-In-Reply-To: <1c57fcfd-8e94-649b-df6f-655626f94454@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 14 Feb 2023 17:28:50 -0800
-Message-ID: <CAF6AEGs=7TxfUPOu1aP09WsehCwYHnZE_oDoZ3KOzrqY=NDrbA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/14] drm/msm/a6xx: Fix up A6XX protected registers
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 14 Feb 2023 20:31:11 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042DA3431A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:31:10 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EL3sSL016207;
+        Wed, 15 Feb 2023 01:31:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=2YN4NPMiVZ/gada3XBxhbQ0i3hT/Rjk5A5hzVtCsjdg=;
+ b=sPlF2buO8XvUausytVmYxSYbaBi81Zle5UZCvB00wHrbKLptZG/U6DMCynb5GRXdwuBj
+ vBfBEyHqIRaiGmpy+ILUh1Kj9h62Tva5Odjlpboo0MRzlT8QPHbJfE1AsCRwoRRFkpxP
+ 7FMRCARGDPB1AmmwGt8zuwQZ3yTu47HyUDmVkMNpfRORYuqgkH4hEgkT8pB9b94flKIY
+ AXtp4rqkQBjXPnczZVPbjH22+Nts/3PvXSP3C9AkOAvzx7ORgeQUJ1mRqFyZUKCWdzC3
+ cBI4tcm5iHQJ/liSECrcubDkn+SheKU602oXJnvIAkiyX34CmGQDA2YRY5QdyIcjT1KA JQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1t3f0dk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Feb 2023 01:31:05 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31F06NYd013576;
+        Wed, 15 Feb 2023 01:31:05 GMT
+Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3np1f64m55-1;
+        Wed, 15 Feb 2023 01:31:04 +0000
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com
+Cc:     parav@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
+Subject: [PATCH v3] vdpa/mlx5: should not activate virtq object when suspended
+Date:   Tue, 14 Feb 2023 17:30:40 -0800
+Message-Id: <1676424640-11673-1-git-send-email-si-wei.liu@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_17,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302150012
+X-Proofpoint-GUID: X8IRcncblieIcEQ_6it949XjhE64ri01
+X-Proofpoint-ORIG-GUID: X8IRcncblieIcEQ_6it949XjhE64ri01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,63 +63,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:38 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 15.02.2023 01:10, Dmitry Baryshkov wrote:
-> > On 14/02/2023 23:56, Rob Clark wrote:
-> >> On Tue, Feb 14, 2023 at 9:32 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>>
-> >>> One of the protected ranges was too small (compared to the data we
-> >>> have downstream). Fix it.
-> >>>
-> >>> Fixes: 408434036958 ("drm/msm/a6xx: update/fix CP_PROTECT initialization")
-> >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>> ---
-> >>>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >>> index 503c750216e6..d6b38bfdb3b4 100644
-> >>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >>> @@ -690,7 +690,7 @@ static const u32 a6xx_protect[] = {
-> >>>          A6XX_PROTECT_NORDWR(0x00800, 0x0082),
-> >>>          A6XX_PROTECT_NORDWR(0x008a0, 0x0008),
-> >>>          A6XX_PROTECT_NORDWR(0x008ab, 0x0024),
-> >>> -       A6XX_PROTECT_RDONLY(0x008de, 0x00ae),
-> >>> +       A6XX_PROTECT_RDONLY(0x008d0, 0x00bc),
-> >>
-> >> Nak, this is intentional, we need userspace to be able to configure
-> >> the CP counters.  Otherwise this would break fdperf, perfetto, etc
-> >>
-> >> (although maybe we should comment where we diverge from downstream)
-> >
-> > Yes, please. Otherwise it is extremely hard to understand the reason for diversion between the vendor driver and our one.
-> +1
->
-> I am content with dropping this patch from this series, so long
-> as you leave a clue for others to not scratch their heads on this!
+Otherwise the virtqueue object to instate could point to invalid address
+that was unmapped from the MTT:
 
-Yeah, I admit it is kinda a trap as-is.  And makes things less obvious
-what to do when porting from downstream.  When I get a few minutes
-I'll double check that there weren't any other exceptions (I don't
-think they were but it has been a while) and add some comments.
+  mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
+  CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
+  bad parameter(0x3), syndrome (0x5fa1c), err(-22)
 
-BR,
--R
+Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
+Cc: Eli Cohen <elic@nvidia.com>
+Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+Reviewed-by: Eli Cohen <elic@nvidia.com>
 
-> Konrad
-> >
-> >>
-> >> BR,
-> >> -R
-> >>
-> >>>          A6XX_PROTECT_NORDWR(0x00900, 0x004d),
-> >>>          A6XX_PROTECT_NORDWR(0x0098d, 0x0272),
-> >>>          A6XX_PROTECT_NORDWR(0x00e00, 0x0001),
-> >>> --
-> >>> 2.39.1
-> >>>
-> >
+---
+v3: move suspended to struct mlx5_vdpa_dev
+v2: removed the change for improving warning message
+---
+ drivers/vdpa/mlx5/core/mlx5_vdpa.h | 1 +
+ drivers/vdpa/mlx5/net/mlx5_vnet.c  | 6 +++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+index 058fbe2..25fc412 100644
+--- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
++++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+@@ -96,6 +96,7 @@ struct mlx5_vdpa_dev {
+ 	struct mlx5_control_vq cvq;
+ 	struct workqueue_struct *wq;
+ 	unsigned int group2asid[MLX5_VDPA_NUMVQ_GROUPS];
++	bool suspended;
+ };
+ 
+ int mlx5_vdpa_alloc_pd(struct mlx5_vdpa_dev *dev, u32 *pdn, u16 uid);
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 3a6dbbc6..daac3ab 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -2411,7 +2411,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+ 	if (err)
+ 		goto err_mr;
+ 
+-	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
++	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || mvdev->suspended)
+ 		goto err_mr;
+ 
+ 	restore_channels_info(ndev);
+@@ -2579,6 +2579,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+ 	clear_vqs_ready(ndev);
+ 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+ 	ndev->mvdev.status = 0;
++	ndev->mvdev.suspended = false;
+ 	ndev->cur_num_vqs = 0;
+ 	ndev->mvdev.cvq.received_desc = 0;
+ 	ndev->mvdev.cvq.completed_desc = 0;
+@@ -2815,6 +2816,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 	struct mlx5_vdpa_virtqueue *mvq;
+ 	int i;
+ 
++	mlx5_vdpa_info(mvdev, "suspending device\n");
++
+ 	down_write(&ndev->reslock);
+ 	ndev->nb_registered = false;
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+@@ -2824,6 +2827,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 		suspend_vq(ndev, mvq);
+ 	}
+ 	mlx5_vdpa_cvq_suspend(mvdev);
++	mvdev->suspended = true;
+ 	up_write(&ndev->reslock);
+ 	return 0;
+ }
+-- 
+1.8.3.1
+
