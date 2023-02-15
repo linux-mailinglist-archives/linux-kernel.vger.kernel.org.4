@@ -2,301 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED466984E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E396984EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjBOTrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:47:02 -0500
+        id S229805AbjBOTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:47:54 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjBOTqe (ORCPT
+        with ESMTP id S229948AbjBOTri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:46:34 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F10C3E62F;
-        Wed, 15 Feb 2023 11:46:16 -0800 (PST)
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 3F8307A0741;
-        Wed, 15 Feb 2023 20:46:06 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
-        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 18/18] pata_parport: move pata_parport.h to drivers/ata/pata_parport
-Date:   Wed, 15 Feb 2023 20:45:54 +0100
-Message-Id: <20230215194554.25632-19-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230215194554.25632-1-linux@zary.sk>
-References: <20230215194554.25632-1-linux@zary.sk>
+        Wed, 15 Feb 2023 14:47:38 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95C841B54;
+        Wed, 15 Feb 2023 11:46:31 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id eq11so25127007edb.6;
+        Wed, 15 Feb 2023 11:46:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gY6fPU2wIKz3O7JKb5l+ZOzMIrxO+gU/Fm6ycOW600=;
+        b=CHXE1eU9oJnw19JirsAUnDO3tkBMRfy1btendDMBP5AvRrQ0274GX5pCHVg7IW85Xl
+         Y0kqwtXxmIT3Vla8GB5aF5QlCVLGN9Y+j8vIsdXZ6xhhetLg/qhA7nrwF666eFQy/ZYJ
+         4N46YnXGiVfvZRwo1LP6ndb9jq0kCL1xXNTlK8feWZhgJxM46rkHNOCD1ZGUh4IgvE9g
+         A7SE6tXe4M5bDAWr3LtRZRPlUv3/YDSTzjM4J8Au9ixcKNg9V7SNiGl/eTlPZkslqUg9
+         K6lwqBminK/H7J3SMiR7JkR7ybvL8GdZyVcqfAQz2diVErk4UGA5xOouUohCzwC+pwDr
+         767Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0gY6fPU2wIKz3O7JKb5l+ZOzMIrxO+gU/Fm6ycOW600=;
+        b=5EgudC5k3yDK17cxIV7a4ikUSPZ8oeRzR0iGcsSCj+EQz4lnVF0gNbg7gSs3Zz2qX3
+         7wugu7pnXguRhGpnMB2d1+y3uFWayrHOYDxdfxC0Ys6dKTV4y+IbG/gv2N49ffm+uSW3
+         OV5DGtNhIXVtV7iaJLfTliEh39uWN88CYhaVVzKeLRdEE91nkC+qhC23I2+rm5SCH989
+         BuGAcyRrY1v1OFe3p7lSULaIfRMy2+nEOM3SNYKbW2wBe7SFI0DiYWGt49bLbbG2skyn
+         wojKEeSflT6ABJ+Su6jwReWbcFB/Hu2cazGwhrkDqvGpTfaYdZCUSpdWQ012GN/vrPWb
+         4rUA==
+X-Gm-Message-State: AO0yUKUyS9gLQt3Qy2KKM2DhdLF+Nr5nkIbGd70XUEdoQU/usFYdsqWe
+        zQk8pSSMplde506lavYBLgOqCmhtjrK6XIhvJlrTQ8PI
+X-Google-Smtp-Source: AK7set+5UINGYpxfOT+JqbbXrDGaMZhcao3eRocx2Q849cXbeJg5nU66qqezg0N3hP3F2iUPkmOt4fymeqb7uO0SUdE=
+X-Received: by 2002:a17:907:68b:b0:877:747d:1112 with SMTP id
+ wn11-20020a170907068b00b00877747d1112mr1645959ejb.15.1676490388540; Wed, 15
+ Feb 2023 11:46:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+ <20230208101545.45711-4-krzysztof.kozlowski@linaro.org> <20230215192123.4ore7ac6tnedrsyq@ripper>
+In-Reply-To: <20230215192123.4ore7ac6tnedrsyq@ripper>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 15 Feb 2023 13:46:17 -0600
+Message-ID: <CABb+yY1xHOac4C7fWHW6Cj67-O7nBWFP8LXbW-9V_F24b1SMTA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] dt-bindings: mailbox: qcom,apcs-kpss-global: drop
+ mbox-names from example
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that paride is gone, pata_parport.h does not need to be in
-include/linux. Move it to drivers/ata/pata_parport.
+On Wed, Feb 15, 2023 at 1:19 PM Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Wed, Feb 08, 2023 at 11:15:42AM +0100, Krzysztof Kozlowski wrote:
+> > Qualcomm G-Link RPM edge bindings do not allow and do not use mbox-names
+> > property.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >
+> > ---
+> >
+> > Changes since v1:
+> > 1. None.
+> > 2. Previously was sent as separate patch.
+> >
+> > There are no strict dependencies. This can go anytime. The next patch
+> > (glink-rpm-edge) should be applied in the same or later cycle (could be
+> > via different trees).
+>
+> Jassi, I missed this note and merged the following patches, introducing
+> the forecasted issue in linux-next. To remedy this, I took the liberty
+> of merging this patch as well into the remoteproc tree.
+>
+No problem.
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Ondrej Zary <linux@zary.sk>
----
- drivers/ata/pata_parport/aten.c                            | 3 +--
- drivers/ata/pata_parport/bpck.c                            | 3 +--
- drivers/ata/pata_parport/bpck6.c                           | 3 +--
- drivers/ata/pata_parport/comm.c                            | 3 +--
- drivers/ata/pata_parport/dstr.c                            | 3 +--
- drivers/ata/pata_parport/epat.c                            | 3 +--
- drivers/ata/pata_parport/epia.c                            | 3 +--
- drivers/ata/pata_parport/fit2.c                            | 3 +--
- drivers/ata/pata_parport/fit3.c                            | 3 +--
- drivers/ata/pata_parport/friq.c                            | 3 +--
- drivers/ata/pata_parport/frpw.c                            | 3 +--
- drivers/ata/pata_parport/kbic.c                            | 3 +--
- drivers/ata/pata_parport/ktti.c                            | 3 +--
- drivers/ata/pata_parport/on20.c                            | 3 +--
- drivers/ata/pata_parport/on26.c                            | 3 +--
- drivers/ata/pata_parport/pata_parport.c                    | 2 +-
- {include/linux => drivers/ata/pata_parport}/pata_parport.h | 0
- 17 files changed, 16 insertions(+), 31 deletions(-)
- rename {include/linux => drivers/ata/pata_parport}/pata_parport.h (100%)
-
-diff --git a/drivers/ata/pata_parport/aten.c b/drivers/ata/pata_parport/aten.c
-index f0d63b8513e0..1bd248c42f8b 100644
---- a/drivers/ata/pata_parport/aten.c
-+++ b/drivers/ata/pata_parport/aten.c
-@@ -16,8 +16,7 @@
- #include <linux/wait.h>
- #include <linux/types.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define j44(a,b)                ((((a>>4)&0x0f)|(b&0xf0))^0x88)
- 
-diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
-index 472029a21d59..1c5035a09554 100644
---- a/drivers/ata/pata_parport/bpck.c
-+++ b/drivers/ata/pata_parport/bpck.c
-@@ -14,8 +14,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #undef r2
- #undef w2
-diff --git a/drivers/ata/pata_parport/bpck6.c b/drivers/ata/pata_parport/bpck6.c
-index 683a11131acd..964bc688e280 100644
---- a/drivers/ata/pata_parport/bpck6.c
-+++ b/drivers/ata/pata_parport/bpck6.c
-@@ -18,9 +18,8 @@
- #include <linux/types.h>
- #include <asm/io.h>
- #include <linux/parport.h>
--
- #include "ppc6lnx.c"
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define PPCSTRUCT(pi) ((Interface *)(pi->private))
- 
-diff --git a/drivers/ata/pata_parport/comm.c b/drivers/ata/pata_parport/comm.c
-index 0483caa80544..4c2f9ad60ad8 100644
---- a/drivers/ata/pata_parport/comm.c
-+++ b/drivers/ata/pata_parport/comm.c
-@@ -15,8 +15,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- /* mode codes:  0  nybble reads, 8-bit writes
-                 1  8-bit reads and writes
-diff --git a/drivers/ata/pata_parport/dstr.c b/drivers/ata/pata_parport/dstr.c
-index c5af7a5fa636..2524684be206 100644
---- a/drivers/ata/pata_parport/dstr.c
-+++ b/drivers/ata/pata_parport/dstr.c
-@@ -14,8 +14,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- /* mode codes:  0  nybble reads, 8-bit writes
-                 1  8-bit reads and writes
-diff --git a/drivers/ata/pata_parport/epat.c b/drivers/ata/pata_parport/epat.c
-index b7085a448301..0e4369dbe48e 100644
---- a/drivers/ata/pata_parport/epat.c
-+++ b/drivers/ata/pata_parport/epat.c
-@@ -16,8 +16,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define j44(a,b)		(((a>>4)&0x0f)+(b&0xf0))
- #define j53(a,b)		(((a>>3)&0x1f)+((b<<4)&0xe0))
-diff --git a/drivers/ata/pata_parport/epia.c b/drivers/ata/pata_parport/epia.c
-index 63e74c1facba..7821e363b143 100644
---- a/drivers/ata/pata_parport/epia.c
-+++ b/drivers/ata/pata_parport/epia.c
-@@ -17,8 +17,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- /* mode codes:  0  nybble reads on port 1, 8-bit writes
-                 1  5/3 reads on ports 1 & 2, 8-bit writes
-diff --git a/drivers/ata/pata_parport/fit2.c b/drivers/ata/pata_parport/fit2.c
-index 3536d8c07955..fd3b2ce426a5 100644
---- a/drivers/ata/pata_parport/fit2.c
-+++ b/drivers/ata/pata_parport/fit2.c
-@@ -20,8 +20,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define j44(a,b)                (((a>>4)&0x0f)|(b&0xf0))
- 
-diff --git a/drivers/ata/pata_parport/fit3.c b/drivers/ata/pata_parport/fit3.c
-index 9f5320c750e2..75df656ac472 100644
---- a/drivers/ata/pata_parport/fit3.c
-+++ b/drivers/ata/pata_parport/fit3.c
-@@ -24,8 +24,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define j44(a,b)                (((a>>3)&0x0f)|((b<<1)&0xf0))
- 
-diff --git a/drivers/ata/pata_parport/friq.c b/drivers/ata/pata_parport/friq.c
-index ce605f665ab1..b48bfabd1759 100644
---- a/drivers/ata/pata_parport/friq.c
-+++ b/drivers/ata/pata_parport/friq.c
-@@ -27,8 +27,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define CMD(x)		w2(4);w0(0xff);w0(0xff);w0(0x73);w0(0x73);\
- 			w0(0xc9);w0(0xc9);w0(0x26);w0(0x26);w0(x);w0(x);
-diff --git a/drivers/ata/pata_parport/frpw.c b/drivers/ata/pata_parport/frpw.c
-index 257ad13dec09..5d4bba371b8e 100644
---- a/drivers/ata/pata_parport/frpw.c
-+++ b/drivers/ata/pata_parport/frpw.c
-@@ -20,8 +20,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define cec4		w2(0xc);w2(0xe);w2(0xe);w2(0xc);w2(4);w2(4);w2(4);
- #define j44(l,h)	(((l>>4)&0x0f)|(h&0xf0))
-diff --git a/drivers/ata/pata_parport/kbic.c b/drivers/ata/pata_parport/kbic.c
-index 29f4f1e14d21..8213e62f8f00 100644
---- a/drivers/ata/pata_parport/kbic.c
-+++ b/drivers/ata/pata_parport/kbic.c
-@@ -19,8 +19,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define r12w()			(delay_p,inw(pi->port+1)&0xffff) 
- 
-diff --git a/drivers/ata/pata_parport/ktti.c b/drivers/ata/pata_parport/ktti.c
-index 742051f6ea10..4890b1f12348 100644
---- a/drivers/ata/pata_parport/ktti.c
-+++ b/drivers/ata/pata_parport/ktti.c
-@@ -16,8 +16,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define j44(a,b)                (((a>>4)&0x0f)|(b&0xf0))
- 
-diff --git a/drivers/ata/pata_parport/on20.c b/drivers/ata/pata_parport/on20.c
-index 6956b91efb47..276ace12d490 100644
---- a/drivers/ata/pata_parport/on20.c
-+++ b/drivers/ata/pata_parport/on20.c
-@@ -13,8 +13,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define op(f)	w2(4);w0(f);w2(5);w2(0xd);w2(5);w2(0xd);w2(5);w2(4);
- #define vl(v)	w2(4);w0(v);w2(5);w2(7);w2(5);w2(4);
-diff --git a/drivers/ata/pata_parport/on26.c b/drivers/ata/pata_parport/on26.c
-index 1d90eb9b541e..dc47a54b121f 100644
---- a/drivers/ata/pata_parport/on26.c
-+++ b/drivers/ata/pata_parport/on26.c
-@@ -14,8 +14,7 @@
- #include <linux/types.h>
- #include <linux/wait.h>
- #include <asm/io.h>
--
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- /* mode codes:  0  nybble reads, 8-bit writes
-                 1  8-bit reads and writes
-diff --git a/drivers/ata/pata_parport/pata_parport.c b/drivers/ata/pata_parport/pata_parport.c
-index 77a3e5a3f062..a1dc639665dc 100644
---- a/drivers/ata/pata_parport/pata_parport.c
-+++ b/drivers/ata/pata_parport/pata_parport.c
-@@ -6,7 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/parport.h>
--#include <linux/pata_parport.h>
-+#include "pata_parport.h"
- 
- #define DRV_NAME "pata_parport"
- 
-diff --git a/include/linux/pata_parport.h b/drivers/ata/pata_parport/pata_parport.h
-similarity index 100%
-rename from include/linux/pata_parport.h
-rename to drivers/ata/pata_parport/pata_parport.h
--- 
-Ondrej Zary
-
+Cheers.
