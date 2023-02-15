@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD3E697C82
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C22697C8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjBOM7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S233758AbjBONAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbjBOM7L (ORCPT
+        with ESMTP id S231229AbjBONAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:59:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37C81EFCC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:58:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84D1D61B9F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:58:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 594FEC433D2;
-        Wed, 15 Feb 2023 12:58:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676465924;
-        bh=eyP/8H2w6Aq7Vb2ltmRwluPS7KXnfTSnFc3mifM9j/o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NijATvzR8b6e7No1G41E+8G6J2f/+t01fspm1dRlVUs84T/vitbZV/XCYlM5FzSyc
-         CtioQM7mqHmZpCB3mcmxZuO9SbsNkYvGLoi0SAhNW9DEIU7xdBgAr1+H/2w0o7vuBO
-         PMR+jJe6wvYnYdUSb4s9k5dHDearL3aUvIf8/O4BfzBne5J6D+Xw2KeQpG/ewgAby0
-         6/6UjdvHKfbK1tHtgTsq8Z6qx6W+FmQbck+2hKvZAuYaJ60466adJzzBMDjadATaeW
-         gC6MbrHE0/Ry0EV7PlbLyao87AkvUSEFLiB1UywwzcfPS6ubO/laCiCuW4hnOZ4b77
-         cm3LV3/InRo0w==
-Date:   Wed, 15 Feb 2023 12:58:41 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lucas Tanure <lucas.tanure@collabora.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH] ASoC: soc-dapm.h: fixup warning struct snd_pcm_substream
- not declared
-Message-ID: <Y+zXAQHHhkPtjXZB@sirena.org.uk>
-References: <20230215094643.823156-1-lucas.tanure@collabora.com>
+        Wed, 15 Feb 2023 08:00:43 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459D26180;
+        Wed, 15 Feb 2023 05:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=T80Dv/pbeHv4yQbIV1WRGowSCcOuo+FwhGVSDYirNyo=; b=typStl4V61M+0LWV6CYl45n1NF
+        m4W0eM90AoKd85qmixDcPpthnLk+b95bwsgFFcBvnssjyLxRNyWUkf38MBdHnC5hJMHQXzrAXfE4u
+        sjXI9CnPsT2tyWCtaFGJReOhVBJ7C1Ky0fJf6uDeq4qgqxhR8LjP5C0F4+mFpu0QYM/1ri8+MwHzB
+        Qf+rKkAOQgWN+tf3cp48UNgtPLftSBYrStzhBTXcXjZymQMX0JdBeGP5uBPfD69mswliqG6fC1C8X
+        g8JyK0lQvJ+nNDGbGSfSRKRlMGVdmWQAdYU5t1SmOnXYVevrwp2QWkhQ7cr4d8xZJhXA4l/PEejz+
+        YbEfXprg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60068)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pSHNj-0006l6-Uv; Wed, 15 Feb 2023 12:59:31 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pSHNS-0004uV-TZ; Wed, 15 Feb 2023 12:59:14 +0000
+Date:   Wed, 15 Feb 2023 12:59:14 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v3 03/24] arm: Remove COMMAND_LINE_SIZE from uapi
+Message-ID: <Y+zXIgwO5wteLQZ5@shell.armlinux.org.uk>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+ <20230214074925.228106-4-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H4pdYQ3rNz1gxtj+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230215094643.823156-1-lucas.tanure@collabora.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230214074925.228106-4-alexghiti@rivosinc.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 14, 2023 at 08:49:04AM +0100, Alexandre Ghiti wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> As far as I can tell this is not used by userspace and thus should not
+> be part of the user-visible API.
+> 
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 
---H4pdYQ3rNz1gxtj+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks good to me. What's the merge plan for this?
 
-On Wed, Feb 15, 2023 at 09:46:43AM +0000, Lucas Tanure wrote:
-> Add sound/pcm.h header to include struct snd_pcm_substream used in
-> snd_soc_dapm_update_dai function.
+Thanks.
 
-> +#include <sound/pcm.h>
-> =20
->  struct device;
->  struct snd_soc_pcm_runtime;
-
-This should be a forward declaration of the struct like the
-adjacent forward declarations that are already there, we only
-pass a pointer to it we don't need the contents.
-
---H4pdYQ3rNz1gxtj+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPs1v4ACgkQJNaLcl1U
-h9BmuQf/XGMHuzkuHa6g7NfdPJiXEc/2CMdz9QaXMWzdXCKriEHeZwvEBNDb5vbT
-OTfHFHZT6SA2/b1xjFJNizc/EhG5bAf9VpYPKHeY5QzoaoXnK/LmnGaSz9bd3avi
-stM3whRCQDFAv2MswJna4r/+oRWOssZbhv/2TjTCLi5pWca1LTm24sooqKG+g11w
-NG+ooCEE2IquycBT56spysa0ds+Ekxkx9lwu5rJXmj5rg9QiWMQG+JlBhxA2BUrD
-V3atTKZEL5IdLpGazmQFe7V/9wM4jDtnhSHMonapfX2fQ/TprcqjvJUwjy/9eXU3
-cjKvJsorSjFww1TPSV1piq+s5x0syg==
-=g84M
------END PGP SIGNATURE-----
-
---H4pdYQ3rNz1gxtj+--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
