@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F02D697BF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5E3697BF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 13:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbjBOMiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 07:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S234051AbjBOMiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 07:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbjBOMiR (ORCPT
+        with ESMTP id S231442AbjBOMiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:38:17 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247BF3802D;
-        Wed, 15 Feb 2023 04:38:15 -0800 (PST)
-X-UUID: 9a517f7aad2d11eda06fc9ecc4dadd91-20230215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=f9EBWwssS/YFeyn8xKypBqeYW3Z1Yj/I0JqpK089PLs=;
-        b=aMFe+e6jgv0jFr3pUAgzxN6I9U0SCTrcvPzyHILbn9Rx8IsQNDb9RHiisTW/XmcgSBNTBZYqnxyzFKNEfBJrH7EQuHy15dxb4lTUnQvzyiEJSGwdQn7zijunfQuAxsRsViFSu5keGW7c47YDHz0ScZ58Ku4wdTpu48nTi9MBYZo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:c1540f21-d421-4bcb-bce2-f9f9010e351f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:885ddb2,CLOUDID:fd5817f3-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: 9a517f7aad2d11eda06fc9ecc4dadd91-20230215
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <powen.kao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 752279861; Wed, 15 Feb 2023 20:38:09 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 15 Feb 2023 20:38:07 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 15 Feb 2023 20:38:07 +0800
-From:   Po-Wen Kao <powen.kao@mediatek.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
-        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
-        <alice.chao@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <jiajie.hao@mediatek.com>, <mason.zhang@mediatek.com>,
-        <quic_asutoshd@quicinc.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 2/2] scsi: ufs: core: Export symbol ufshcd_mcq_read_cqis()
-Date:   Wed, 15 Feb 2023 20:37:46 +0800
-Message-ID: <20230215123750.15785-2-powen.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230215123750.15785-1-powen.kao@mediatek.com>
-References: <20230215123750.15785-1-powen.kao@mediatek.com>
+        Wed, 15 Feb 2023 07:38:13 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B8ACC2D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 04:38:12 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C193666020BD;
+        Wed, 15 Feb 2023 12:38:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676464691;
+        bh=maGtHjzFaF1HAyDrKAFsw2fGzDZFcLB2DcMRG1RYFPw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fgAsH4Dmr4t5TkVVZhkYYaTmyWw0+dCCh2JEsZQzy+pU9LTIM9jqQp5O8LhaxS9uG
+         k1fKruqe9BrPK4ZiPpSjPUuGNhMSy5vw1NF8Kb/ChG8ESRuMKeclQlBEc8KglYPUnO
+         JloDcCTT9SHC0QyzNS0VpemIanGuyf8YPxdkEt7VnhsC6IV6dF4z11bXCCEDlDUaXM
+         poBOHanlSR7QTZ4RPUKP1QiCAqfCx04vNNUgYsdubQ6TGkg2CtsISftg2Q7f3jqqGu
+         QE7fPILS00rO8fmsONJZ6mHlQRmnUdJj107nFqZikcqKd7i2iy6H0XVjQj6k/3yW8u
+         XPfwverVPELMQ==
+Message-ID: <dd3a6b7f-7d42-40f9-dc35-1f6266c8b87c@collabora.com>
+Date:   Wed, 15 Feb 2023 13:38:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] ASoC: soc-dapm.h: fixup warning struct snd_pcm_substream
+ not declared
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230215094643.823156-1-lucas.tanure@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230215094643.823156-1-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export symbol for driver module
+Il 15/02/23 10:46, Lucas Tanure ha scritto:
+> Add sound/pcm.h header to include struct snd_pcm_substream used in
+> snd_soc_dapm_update_dai function.
+> 
+> Fixes: 078a85f2806f ("ASoC: dapm: Only power up active channels from a DAI")
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
 
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
----
- drivers/ufs/core/ufs-mcq.c | 1 +
- include/ufs/ufshcd.h       | 2 ++
- 2 files changed, 3 insertions(+)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 3a27fa4b0024..c97b45cd94ee 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -241,6 +241,7 @@ u32 ufshcd_mcq_read_cqis(struct ufs_hba *hba, int i)
- {
- 	return readl(mcq_opr_base(hba, OPR_CQIS, i) + REG_CQIS);
- }
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_read_cqis);
- 
- void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i)
- {
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index ed9e3d5addb3..57e3b9524b1b 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1243,6 +1243,8 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val);
- void ufshcd_hba_stop(struct ufs_hba *hba);
- void ufshcd_schedule_eh_work(struct ufs_hba *hba);
- void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
-+u32 ufshcd_mcq_read_cqis(struct ufs_hba *hba, int i);
-+
- unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
- 					 struct ufs_hw_queue *hwq);
- void ufshcd_mcq_enable_esi(struct ufs_hba *hba);
--- 
-2.18.0
 
