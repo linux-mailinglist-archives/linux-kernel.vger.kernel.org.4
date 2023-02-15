@@ -2,157 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0262698751
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3E669875C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 22:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjBOVZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 16:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S230023AbjBOVaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 16:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjBOVZ2 (ORCPT
+        with ESMTP id S229545AbjBOVai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 16:25:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA2323301;
-        Wed, 15 Feb 2023 13:25:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CACA6B8208F;
-        Wed, 15 Feb 2023 21:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CF6C433D2;
-        Wed, 15 Feb 2023 21:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676496324;
-        bh=yT0K+3YL357KR0NiqP89fd2PeAmTGztkd0aqwwFztEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=teKK61SayCRu7xGjVpn79ODnqJg4fIs1XILh/g9mqjDiDpUA403dfzQGZNwrfcbyK
-         Qj65jUlPxg74Lk0eKDmrEt2COv6PKhsXmHj6f1OqRwD6hDOWOIC+7szypivY0n+ait
-         Raxp4kI+GPCtsKBMt0NIqBmc0wn0xslX31ra6kpwAp00oln5fcI7eBr2b5qLJmWh2r
-         k++XsTknuT1S8ONc2wOIrvuJjYFkDeUyul/vkeS8Yi0EWgl0vRdofYCtQmYH1RPmGM
-         J+Rd0RxRZPTilWZHNziYSKwzDm8dEerPSy6BS8cDcuO/bISyEgS0PMXUG9PaFtxnTZ
-         ilODtzNQ+0nRQ==
-Date:   Wed, 15 Feb 2023 21:25:18 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        dram <dramforever@live.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 3/6] RISC-V: hwprobe: Add support for
- RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-Message-ID: <Y+1NvsLlbo8HvV5w@spud>
-References: <20230206201455.1790329-1-evan@rivosinc.com>
- <20230206201455.1790329-4-evan@rivosinc.com>
+        Wed, 15 Feb 2023 16:30:38 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEEF2313C;
+        Wed, 15 Feb 2023 13:30:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676496636; x=1708032636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ruaFmQvw0ZYZOgXQykasAiwomUvuehEVW/GogxRD7bA=;
+  b=MX1TOmxpcLjBikCUWUybXzUGx1SnU8AmG/Oxld0XVt7vKaDG9oyD1X3P
+   U6hNimqx/38hMFJl41KJyo0iclSdECewQE+QuyQxnXuFvJQNdu+MWOiRK
+   gAb/HeJBThUmTUualQfYbVReL0G/QaIGtkPTkMEF7LI5zkx8rk2eMyiwT
+   dmtXQuWxXTbkGshw+3c0q3dt32mJUUi0cqsEBtxqOtEQpfPzhykK/9gwf
+   eEdSTpTYU8IDs94PBs7iZ6Mfcuv+jH5tRNngzE+TBKNGtNp5FxrqHCC3d
+   h3r1jTic5nuJ03U6rR5G1B1IYmhRyabpGCRUXYnPdd/JeFwfvarBXk+Md
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="329270543"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="329270543"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 13:30:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="915392945"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="915392945"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Feb 2023 13:30:06 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSPLp-0009oF-2t;
+        Wed, 15 Feb 2023 21:30:05 +0000
+Date:   Thu, 16 Feb 2023 05:29:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     oe-kbuild-all@lists.linux.dev, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        Andreas Gruenbacher <agruen@linbit.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Subject: Re: [PATCH 3/7] drbd: INFO_bm_xfer_stats(): Pass a peer device
+ argument
+Message-ID: <202302160521.CQ9teCgI-lkp@intel.com>
+References: <20230215163204.2856631-4-christoph.boehmwalder@linbit.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="updhdCcu1eESaG0k"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206201455.1790329-4-evan@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230215163204.2856631-4-christoph.boehmwalder@linbit.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christoph,
 
---updhdCcu1eESaG0k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Perhaps something to improve:
 
-On Mon, Feb 06, 2023 at 12:14:52PM -0800, Evan Green wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->=20
-> We have an implicit set of base behaviors that userspace depends on,
-> which are mostly defined in various ISA specifications.
->=20
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> ---
->=20
-> (no changes since v1)
->=20
->  Documentation/riscv/hwprobe.rst       | 16 ++++++++++++++++
->  arch/riscv/include/asm/hwprobe.h      |  2 +-
->  arch/riscv/include/uapi/asm/hwprobe.h |  6 +++++-
->  arch/riscv/kernel/sys_riscv.c         | 23 +++++++++++++++++++++++
->  4 files changed, 45 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprob=
-e.rst
-> index 97771090e972..ce186967861f 100644
-> --- a/Documentation/riscv/hwprobe.rst
-> +++ b/Documentation/riscv/hwprobe.rst
-> @@ -35,3 +35,19 @@ The following keys are defined:
->    specifications.
->  * :RISCV_HWPROBE_KEY_MIMPLID:: Contains the value of :mimplid:, as per t=
-he ISA
->    specifications.
-> +* :RISCV_HWPROBE_KEY_BASE_BEHAVIOR:: A bitmask containing the base user-=
-visible
-> +  behavior that this kernel supports.  The following base user ABIs are =
-defined:
-> +    * :RISCV_HWPROBE_BASE_BEHAVIOR_IMA:: Support for rv32ima or rv64ima,=
- as
-> +      defined by version 2.2 of the user ISA and version 1.10 of the pri=
-vileged
-> +      ISA, with the following known exceptions (more exceptions may be a=
-dded,
-> +      but only if it can be demonstrated that the user ABI is not broken=
-):
-> +        * The :fence.i: instruction cannot be directly executed by users=
-pace
-> +          programs (it may still be executed in userspace via a
-> +          kernel-controlled mechanism such as the vDSO).
+[auto build test WARNING on a06377c5d01eeeaa52ad979b62c3c72efcc3eff0]
 
-I don't really do the whole rst thing at all, are we able to have
-newlines between list items? If we can, I think one would go nicely here.
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-B-hmwalder/drbd-Rip-out-the-ERR_IF_CNT_IS_NEGATIVE-macro/20230216-003454
+base:   a06377c5d01eeeaa52ad979b62c3c72efcc3eff0
+patch link:    https://lore.kernel.org/r/20230215163204.2856631-4-christoph.boehmwalder%40linbit.com
+patch subject: [PATCH 3/7] drbd: INFO_bm_xfer_stats(): Pass a peer device argument
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230216/202302160521.CQ9teCgI-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5c0303cbd7f9f393f07ff9b8738a25cb1883e947
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christoph-B-hmwalder/drbd-Rip-out-the-ERR_IF_CNT_IS_NEGATIVE-macro/20230216-003454
+        git checkout 5c0303cbd7f9f393f07ff9b8738a25cb1883e947
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/block/
 
-> +* :RISCV_HWPROBE_KEY_IMA_EXT_0:: A bitmask containing the extensions tha=
-t are
-> +  compatible with the :RISCV_HWPROBE_BASE_BEHAVIOR_IMA: base system beha=
-vior.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302160521.CQ9teCgI-lkp@intel.com/
 
-Why do we specifically care if they're compatible with IMA?
-What's the "fear" here?
+All warnings (new ones prefixed by >>):
 
-> +    * :RISCV_HWPROBE_IMA_FD:: The F and D extensions are supported, as d=
-efined
+   In file included from drivers/block/drbd/drbd_bitmap.c:22:
+>> drivers/block/drbd/drbd_int.h:129:39: warning: 'struct drbd_peer_device' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |                                       ^~~~~~~~~~~~~~~~
+--
+   In file included from drivers/block/drbd/drbd_receiver.c:37:
+>> drivers/block/drbd/drbd_int.h:129:39: warning: 'struct drbd_peer_device' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |                                       ^~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c: In function 'drbd_sync_handshake':
+   drivers/block/drbd/drbd_receiver.c:3593:21: error: too many arguments to function 'drbd_bitmap_io'
+    3593 |                 if (drbd_bitmap_io(device, &drbd_bmio_set_n_write, "set_n_write from sync_handshake",
+         |                     ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c: In function 'receive_uuids':
+   drivers/block/drbd/drbd_receiver.c:4271:25: error: too many arguments to function 'drbd_bitmap_io'
+    4271 |                         drbd_bitmap_io(device, &drbd_bmio_clear_n_write,
+         |                         ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c: At top level:
+   drivers/block/drbd/drbd_receiver.c:4769:6: error: conflicting types for 'INFO_bm_xfer_stats'; have 'void(struct drbd_peer_device *, const char *, struct bm_xfer_ctx *)'
+    4769 | void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |      ^~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:129:13: note: previous declaration of 'INFO_bm_xfer_stats' with type 'void(struct drbd_peer_device *, const char *, struct bm_xfer_ctx *)'
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |             ^~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c: In function 'receive_bitmap':
+   drivers/block/drbd/drbd_receiver.c:4880:23: error: too few arguments to function 'drbd_send_bitmap'
+    4880 |                 err = drbd_send_bitmap(device);
+         |                       ^~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1045:12: note: declared here
+    1045 | extern int drbd_send_bitmap(struct drbd_device *device, struct drbd_peer_device *peer_device);
+         |            ^~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c: In function 'drbd_disconnected':
+   drivers/block/drbd/drbd_receiver.c:5216:40: error: passing argument 2 of 'drbd_bitmap_io' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    5216 |                 drbd_bitmap_io(device, &drbd_bm_write_copy_pages,
+         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                        |
+         |                                        int (*)(struct drbd_device *)
+   drivers/block/drbd/drbd_int.h:1073:23: note: expected 'int (*)(struct drbd_device *, struct drbd_peer_device *)' but argument is of type 'int (*)(struct drbd_device *)'
+    1073 |                 int (*io_fn)(struct drbd_device *, struct drbd_peer_device *),
+         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_receiver.c:5216:17: error: too many arguments to function 'drbd_bitmap_io'
+    5216 |                 drbd_bitmap_io(device, &drbd_bm_write_copy_pages,
+         |                 ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/block/drbd/drbd_main.c:46:
+>> drivers/block/drbd/drbd_int.h:129:39: warning: 'struct drbd_peer_device' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |                                       ^~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_main.c: In function 'send_bitmap_rle_or_plain':
+   drivers/block/drbd/drbd_main.c:1203:29: error: 'device' redeclared as different kind of symbol
+    1203 |         struct drbd_device *device = peer_device->device;
+         |                             ^~~~~~
+   drivers/block/drbd/drbd_main.c:1201:51: note: previous definition of 'device' with type 'struct drbd_peer_device *'
+    1201 | send_bitmap_rle_or_plain(struct drbd_peer_device *device, struct bm_xfer_ctx *c)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/block/drbd/drbd_main.c:1203:38: error: 'peer_device' undeclared (first use in this function); did you mean 'phy_device'?
+    1203 |         struct drbd_device *device = peer_device->device;
+         |                                      ^~~~~~~~~~~
+         |                                      phy_device
+   drivers/block/drbd/drbd_main.c:1203:38: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/block/drbd/drbd_main.c: In function '_drbd_send_bitmap':
+   drivers/block/drbd/drbd_main.c:1272:29: error: too few arguments to function 'drbd_bm_write'
+    1272 |                         if (drbd_bm_write(device)) {
+         |                             ^~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1293:13: note: declared here
+    1293 | extern int  drbd_bm_write(struct drbd_device *device,
+         |             ^~~~~~~~~~~~~
+   drivers/block/drbd/drbd_main.c: At top level:
+   drivers/block/drbd/drbd_main.c:3497:6: error: conflicting types for 'drbd_queue_bitmap_io'; have 'void(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), void (*)(struct drbd_device *, int), char *, enum bm_flag,  struct drbd_peer_device *)'
+    3497 | void drbd_queue_bitmap_io(struct drbd_device *device,
+         |      ^~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1068:13: note: previous declaration of 'drbd_queue_bitmap_io' with type 'void(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), void (*)(struct drbd_device *, int), char *, enum bm_flag)'
+    1068 | extern void drbd_queue_bitmap_io(struct drbd_device *device,
+         |             ^~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_main.c:3540:5: error: conflicting types for 'drbd_bitmap_io'; have 'int(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), char *, enum bm_flag,  struct drbd_peer_device *)'
+    3540 | int drbd_bitmap_io(struct drbd_device *device,
+         |     ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: previous declaration of 'drbd_bitmap_io' with type 'int(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), char *, enum bm_flag)'
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+--
+   In file included from drivers/block/drbd/drbd_nl.c:24:
+>> drivers/block/drbd/drbd_int.h:129:39: warning: 'struct drbd_peer_device' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |                                       ^~~~~~~~~~~~~~~~
+   In file included from include/linux/drbd_genl_api.h:54,
+                    from drivers/block/drbd/drbd_int.h:35:
+   include/linux/drbd_genl_api.h:51:33: warning: no previous prototype for 'drbd_genl_cmd_to_str' [-Wmissing-prototypes]
+      51 | #define GENL_MAGIC_FAMILY       drbd
+         |                                 ^~~~
+   include/linux/genl_magic_struct.h:20:25: note: in definition of macro 'CONCAT__'
+      20 | #define CONCAT__(a,b)   a ## b
+         |                         ^
+   include/linux/genl_magic_func.h:212:13: note: in expansion of macro 'CONCAT_'
+     212 | const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
+         |             ^~~~~~~
+   include/linux/genl_magic_func.h:212:21: note: in expansion of macro 'GENL_MAGIC_FAMILY'
+     212 | const char *CONCAT_(GENL_MAGIC_FAMILY, _genl_cmd_to_str)(__u8 cmd)
+         |                     ^~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_determine_dev_size':
+   drivers/block/drbd/drbd_nl.c:1055:70: warning: pointer type mismatch in conditional expression
+    1055 |                 drbd_bitmap_io(device, md_moved ? &drbd_bm_write_all : &drbd_bm_write,
+         |                                                                      ^
+   drivers/block/drbd/drbd_nl.c:1055:17: error: too many arguments to function 'drbd_bitmap_io'
+    1055 |                 drbd_bitmap_io(device, md_moved ? &drbd_bm_write_all : &drbd_bm_write,
+         |                 ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_adm_attach':
+   drivers/block/drbd/drbd_nl.c:2029:21: error: too many arguments to function 'drbd_bitmap_io'
+    2029 |                 if (drbd_bitmap_io(device, &drbd_bmio_set_n_write,
+         |                     ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c:2036:21: error: too many arguments to function 'drbd_bitmap_io'
+    2036 |                 if (drbd_bitmap_io(device, &drbd_bm_read,
+         |                     ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_adm_invalidate':
+   drivers/block/drbd/drbd_nl.c:2976:29: error: too many arguments to function 'drbd_bitmap_io'
+    2976 |                         if (drbd_bitmap_io(device, &drbd_bmio_set_n_write,
+         |                             ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_bmio_set_susp_al':
+   drivers/block/drbd/drbd_nl.c:3014:14: error: too few arguments to function 'drbd_bmio_set_n_write'
+    3014 |         rv = drbd_bmio_set_n_write(device);
+         |              ^~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1078:12: note: declared here
+    1078 | extern int drbd_bmio_set_n_write(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_adm_invalidate_peer':
+   drivers/block/drbd/drbd_nl.c:3055:52: error: passing argument 2 of 'drbd_bitmap_io' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    3055 |                         if (drbd_bitmap_io(device, &drbd_bmio_set_susp_al,
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~
+         |                                                    |
+         |                                                    int (*)(struct drbd_device *)
+   drivers/block/drbd/drbd_int.h:1073:23: note: expected 'int (*)(struct drbd_device *, struct drbd_peer_device *)' but argument is of type 'int (*)(struct drbd_device *)'
+    1073 |                 int (*io_fn)(struct drbd_device *, struct drbd_peer_device *),
+         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c:3055:29: error: too many arguments to function 'drbd_bitmap_io'
+    3055 |                         if (drbd_bitmap_io(device, &drbd_bmio_set_susp_al,
+         |                             ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_nl.c: In function 'drbd_adm_new_c_uuid':
+   drivers/block/drbd/drbd_nl.c:4152:23: error: too many arguments to function 'drbd_bitmap_io'
+    4152 |                 err = drbd_bitmap_io(device, &drbd_bmio_clear_n_write,
+         |                       ^~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1072:12: note: declared here
+    1072 | extern int drbd_bitmap_io(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/block/drbd/drbd_state.c:17:
+>> drivers/block/drbd/drbd_int.h:129:39: warning: 'struct drbd_peer_device' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+         |                                       ^~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c:1520:5: error: conflicting types for 'drbd_bitmap_io_from_worker'; have 'int(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), char *, enum bm_flag,  struct drbd_peer_device *)'
+    1520 | int drbd_bitmap_io_from_worker(struct drbd_device *device,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_int.h:1075:12: note: previous declaration of 'drbd_bitmap_io_from_worker' with type 'int(struct drbd_device *, int (*)(struct drbd_device *, struct drbd_peer_device *), char *, enum bm_flag)'
+    1075 | extern int drbd_bitmap_io_from_worker(struct drbd_device *device,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c: In function 'after_state_ch':
+   drivers/block/drbd/drbd_state.c:1842:25: error: too few arguments to function 'drbd_bitmap_io_from_worker'
+    1842 |                         drbd_bitmap_io_from_worker(device, &drbd_bm_write,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c:1520:5: note: declared here
+    1520 | int drbd_bitmap_io_from_worker(struct drbd_device *device,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c:1854:17: error: too few arguments to function 'drbd_bitmap_io_from_worker'
+    1854 |                 drbd_bitmap_io_from_worker(device, &drbd_bm_write,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c:1520:5: note: declared here
+    1520 | int drbd_bitmap_io_from_worker(struct drbd_device *device,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/drbd/drbd_state.c:2014:46: error: passing argument 2 of 'drbd_queue_bitmap_io' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    2014 |                 drbd_queue_bitmap_io(device, &drbd_bm_write_copy_pages, NULL,
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                              |
+         |                                              int (*)(struct drbd_device *)
+   drivers/block/drbd/drbd_int.h:1069:40: note: expected 'int (*)(struct drbd_device *, struct drbd_peer_device *)' but argument is of type 'int (*)(struct drbd_device *)'
+    1069 |                                  int (*io_fn)(struct drbd_device *, struct drbd_peer_device *),
+         |                                  ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Also, is this IMA and FD thing a kinda commitment to only supporting
-hardware that has IMA* or IMAFD*
-I know that's what we do now, but only under the hood?
-As per usual, I'm probably missing something. What is it?
 
-> +      by commit cd20cee ("FMIN/FMAX now implement minimumNumber/maximumN=
-umber,
-> +      not minNum/maxNum") of the RISC-V ISA manual.
-> +    * :RISCV_HWPROBE_IMA_C:: The C extension is supported, as defined by
-> +      version 2.2 of the RISC-V ISA manual.
+vim +129 drivers/block/drbd/drbd_int.h
 
-See, this seems to be how we have to treat specs, list the exact
-versions! I don't even have to look to know that this was in the v1 ;)
+   128	
+ > 129	extern void INFO_bm_xfer_stats(struct drbd_peer_device *peer_device,
+   130				       const char *direction, struct bm_xfer_ctx *c);
+   131	
 
-
---updhdCcu1eESaG0k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+1NvgAKCRB4tDGHoIJi
-0ha7AQC/S5jZedtKbMNumbyPyOqC4TjG5v6wEG28r1rPooijYAD/cJ+TtEVxdSCk
-N3UbO2hRZZfO+Ot5Y2ew9jJdYzzn8gc=
-=Sxkx
------END PGP SIGNATURE-----
-
---updhdCcu1eESaG0k--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
