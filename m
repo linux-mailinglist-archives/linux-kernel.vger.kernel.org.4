@@ -2,94 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7336973AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB606973AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 02:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjBOBdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 20:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S233651AbjBOBej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 20:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBOBdb (ORCPT
+        with ESMTP id S229520AbjBOBei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 20:33:31 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8879C2B601
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:33:28 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id j17so25855220lfr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+w3LbzPvMWbBgPnILe+wwnZS5ZiKny6OZv0ppYywUgw=;
-        b=Xd/LxmxL18xkn4GKKw+kk7nmN9AhtdRkFtuyCLu5gaPLEeY4wMTyXXr6/OJTD5jDUW
-         j4yLBrPdNX1ZSPZxQfJ3d9d5ue5mXWNb5pzwRS+1tzEu+Ue9qu7VqJW4s8Yheq4vMVnG
-         K8Qu6JmM1GXlNcprcCCPy0t2SGKaLfdDfp/Sk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+w3LbzPvMWbBgPnILe+wwnZS5ZiKny6OZv0ppYywUgw=;
-        b=GmypOiNIJHZa5wUNCuUHM7RfsSbZfmD53aor05eyPRGapQCaysELiix3T+reZ5zUCJ
-         Bk7fBqnRpWk4taNg8a+bofOkig8ZtvVNhRBUvuLnFhD5/1TTke5vkE94ht36Hgd2aDsa
-         ibvrSza3/IVDW72F9E/FC2dJNIGEEy8+KDg776V9iy9WJMqMpEi4UtgW6UKbssdCQDDV
-         KUAEQuvnz8B/E419EEYYcHo4lcUrC5LTe+Fr3Azs6t8IbNTuzC1sFcPVmO2zG8F++A4a
-         4MrjbQR7shRSFlLvwYqIRbcF4BmrMnKKRqy0kEDuyvYg0tT7v5wtIzPncIrILxKF3fE6
-         PraQ==
-X-Gm-Message-State: AO0yUKXMbyi/1LDhtFE+T+cPN955l7PutvlbxExNJchk3/2f6VFmnLyI
-        RwQK4YwbRJ9AF2vTRZgx2YbgQUNivNylcMaB1Q1HeA==
-X-Google-Smtp-Source: AK7set8TzUas9M+ScnKwXa648gIhE0hdrmRXlNPvZPSxcsb71Aal/1Q2wrlPhyHfQxfYupVzc3m1smfnLm4FF/3jdyk=
-X-Received: by 2002:ac2:5296:0:b0:4db:266c:433b with SMTP id
- q22-20020ac25296000000b004db266c433bmr32291lfm.1.1676424806799; Tue, 14 Feb
- 2023 17:33:26 -0800 (PST)
+        Tue, 14 Feb 2023 20:34:38 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE23251C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676424876; x=1707960876;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=924sFE1g2peLp9NKsKxgM5DmB2kwoPIL6ZPhHqjTmPs=;
+  b=iCexVlT3he91HXo0I/3TFyj9DVArvdlPinP1hmDNcRK5xQTwhtN0aX7q
+   JHEBaT/sdNUDqIN12B0QYPSuq2+Ga04shfwTFgCAbZ6x3ShtBApu6cOpd
+   7NaN2Bwj+Vir/vJ7LugRhSa+3pWbqjd66nZxqFW7pNHY3R0Qm9+ZMR2cG
+   /XgxBtBAZ/mXn0+vWLm2b/WudVh6IJ4OtHzwq0DoySHAeUw4B9cMotHnF
+   hKWxHQgiL3wTE5hoscNQ9iJu30JdL0u4zLlc4lwXuuYM9ymPGB+ksHsP9
+   vfdZLPic0BS6rVtDRJ85jf/bqPsTbSO++miYlh185OIMIaE23e6CDy5Xv
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
+   d="scan'208";a="223343954"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 09:34:35 +0800
+IronPort-SDR: 381Ls8PPGAD32pLPr3WTIhVCclREd7N4RMbYLZOjcCG2lBLwZ6LnwFSnWyf1UasangvUW97KB5
+ UkBDCUhrGRfI4KQrnUEWMfMgZ4QJt8z2QEvJGn+0O7eDVux8xfsRC2HDM1Ck4s4Vf8xQhd4883
+ w27DflbU4jqOnRZmAtAbymCRvYQWkwv/uabkOM4esKBeM8RGb7VM9mzml3lqs8w3aFsBCIKef2
+ 1+/YPyzLH+EBmFRY74VGzhHuaXthHHc9pCJKIupiTh41bYRcEd5q9swOar9/L+eRnj+LJPiVe5
+ laQ=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 16:51:42 -0800
+IronPort-SDR: NHEsMfgOqlLUcG3DrzK+IeYOVgXnFDyv9n5L5wzH2voZlk27dDMcdZDMUvTgcCkAKjOo2yINbC
+ sp/Ks+iOMtRZQluVwI7Fd9iQ8bqT1928/9mymZO3ANxD+xa+7BNhaI87jCSsYBlgoE49bdc5xQ
+ GefUfk4tWUm7y9jgOLKBoRUcqQaHC3UNWWPNvGY1oRTQ/yADmbcyR0qHuM5UWxroShbqfc6MoM
+ K9LwTmmEeuEvmW5Tx891R9TMWkTbXPtzjYquQuq/+2atgzR36x3LMD5EoTNpMG2c59JU7538+L
+ Zoc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 17:34:35 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGgbt3wh7z1RwtC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 17:34:34 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676424873; x=1679016874; bh=924sFE1g2peLp9NKsKxgM5DmB2kwoPIL6ZP
+        hHqjTmPs=; b=ijswNdQtEpnSj3rZ7vW8jwqI2i0ajTwkqJ8RRkCo5E3CBgPoEwu
+        44cpXVamtM19QJuNsgxKE4HyUh5WdOTFTVQHjGU29E5xifdfLdPciyzMQ6ijGDt7
+        /VgzVJc+fKdETixifpMU2X7R7MhrJw74aTHjwtyMvPs9LYWtW/Ay84ROojq34DDl
+        rCbkDXPwbvGfx9G40KYK4/IE5TCuvACfppMJns8SbnZv6qQZ/xjJTiVaTyUqplET
+        9zpCYpaEShHr5D+zvqXhvujcAGurgcZz5fV/Slcyjgu5H+nalFrHki9Udmq4nXUY
+        82Ct92oTgvFj7jP9EXnfuL9/+a9LudX+cOw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id W2SWes3ugvS3 for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Feb 2023 17:34:33 -0800 (PST)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGgbn6kStz1RvLy;
+        Tue, 14 Feb 2023 17:34:29 -0800 (PST)
+Message-ID: <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
+Date:   Wed, 15 Feb 2023 10:34:28 +0900
 MIME-Version: 1.0
-References: <20230214075710.2401855-1-stevensd@google.com> <Y+usdhfguWr/aD5x@casper.infradead.org>
-In-Reply-To: <Y+usdhfguWr/aD5x@casper.infradead.org>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Wed, 15 Feb 2023 10:33:15 +0900
-Message-ID: <CAD=HUj76eeScAKkX=uf03KnGcVvyzz_kJ4sYVx8XeFqwTVhDow@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm/khugepaged: set THP as uptodate earlier for shmem
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 8/9] PCI: rockchip: Use u32 variable to access 32-bit
+ registers
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        stable@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-9-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214140858.1133292-9-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 12:44 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Tue, Feb 14, 2023 at 04:57:09PM +0900, David Stevens wrote:
-> >       /*
-> > -      * At this point the hpage is locked and not up-to-date.
-> > -      * It's safe to insert it into the page cache, because nobody would
-> > -      * be able to map it or use it in another way until we unlock it.
-> > +      * Mark hpage as up-to-date before inserting it into the page cache to
-> > +      * prevent it from being mistaken for an fallocated but unwritten page.
-> > +      * Inserting the unfinished hpage into the page cache is safe because
-> > +      * it is locked, so nobody can map it or use it in another way until we
-> > +      * unlock it.
->
-> No, that's not true.  The data has to be there before we mark it
-> uptodate.  See filemap_get_pages() for example, used as part of
-> read().  We don't lock the page unless we need to bring it uptodate
-> ourselves.
+On 2/14/23 23:08, Rick Wertenbroek wrote:
+> Previously u16 variables were used to access 32-bit registers, this
+> resulted in not all of the data being read from the registers. Also
+> the left shift of more than 16-bits would result in moving data out
+> of the variable. Use u32 variables to access 32-bit registers
+> 
+> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-rockchip-ep.c | 10 +++++-----
+>  drivers/pci/controller/pcie-rockchip.h    |  1 +
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+> index ca5b363ba..b7865a94e 100644
+> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+> @@ -292,15 +292,15 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
+>  {
+>  	struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+> -	u16 flags;
+> +	u32 flags;
+>  
+>  	flags = rockchip_pcie_read(rockchip,
+>  				   ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+>  				   ROCKCHIP_PCIE_EP_MSI_CTRL_REG);
+>  	flags &= ~ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK;
+>  	flags |=
+> -	   ((multi_msg_cap << 1) <<  ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET) |
+> -	   PCI_MSI_FLAGS_64BIT;
+> +	   (multi_msg_cap << ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET) |
 
-I've been focusing on the shmem case for collapse_file and forgot to
-think about the !is_shmem case. As far as I could tell, shmem doesn't
-use filemap_get_pages() and everything else in filemap.c/shmem.c that
-checks folio_test_uptodate also locks the folio. But yeah, this would
-break the !is_shmem case and is kind of sketchy anyway. I'll put
-together a better patch.
+ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET is 17 and multi_msg_cap is a u8...
+Not nice.
 
--David
+Locally, I added the local variable:
+
+u32 mmc = multi_msg_cap;
+
+And use mmc instead of multi_msg_cap to avoid issues. Also,
+
+> +	   (PCI_MSI_FLAGS_64BIT << ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET);
+>  	flags &= ~ROCKCHIP_PCIE_EP_MSI_CTRL_MASK_MSI_CAP;
+>  	rockchip_pcie_write(rockchip, flags,
+>  			    ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+> @@ -312,7 +312,7 @@ static int rockchip_pcie_ep_get_msi(struct pci_epc *epc, u8 fn, u8 vfn)
+>  {
+>  	struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+> -	u16 flags;
+> +	u32 flags;
+>  
+>  	flags = rockchip_pcie_read(rockchip,
+>  				   ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+> @@ -374,7 +374,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
+>  					 u8 interrupt_num)
+>  {
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+> -	u16 flags, mme, data, data_mask;
+> +	u32 flags, mme, data, data_mask;
+>  	u8 msi_count;
+>  	u64 pci_addr, pci_addr_mask = 0xff;
+>  	u32 r;
+> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
+> index e90c2a2b8..11dbf53cd 100644
+> --- a/drivers/pci/controller/pcie-rockchip.h
+> +++ b/drivers/pci/controller/pcie-rockchip.h
+> @@ -227,6 +227,7 @@
+>  #define ROCKCHIP_PCIE_EP_CMD_STATUS			0x4
+>  #define   ROCKCHIP_PCIE_EP_CMD_STATUS_IS		BIT(19)
+>  #define ROCKCHIP_PCIE_EP_MSI_CTRL_REG			0x90
+> +#define   ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET			16
+
+You are not using this macro anywhere. The name is also not very
+descriptive. Better have it as:
+
+#define   ROCKCHIP_PCIE_EP_MSI_CTRL_ME		BIT(16)
+
+to match the TRM name and be clear that the bit indicates if MSI is
+enabled or not.
+
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET		17
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK		GENMASK(19, 17)
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MME_OFFSET		20
+
+-- 
+Damien Le Moal
+Western Digital Research
+
