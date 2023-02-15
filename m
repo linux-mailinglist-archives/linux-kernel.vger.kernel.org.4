@@ -2,77 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CD1698108
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563BB698109
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBOQin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S229637AbjBOQiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBOQil (ORCPT
+        with ESMTP id S229596AbjBOQiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:38:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14F3646A;
-        Wed, 15 Feb 2023 08:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QZeyTraFcbeI8aImDYPVhypwmRLT7NN7Q/wvF36P66g=; b=BHsVl7A524f3kv4ggnOjMEgTCt
-        nTWCHvpzbdA7vN5WRjbrUIP8FKU6vrfpCJOMyxWbLsZdVI37pR6sLVkuPkp7L+vzrc2DTQe+ewmoW
-        8/tGaxmbdcq0ZcCr0I9zU4lwsAHnWlvZUEEyRneL8dU/T31xB7LGcsqAUbiyQyuV5s7DxKLpCB70M
-        aeAWNtUxxh9pjh5jWbSp7lksq3T/ijwisTgu/jqhocFzpJy16H2S2PlwjGkF6oksn2ygpTPXMF47z
-        vw726UOpzqbPcNE5o0tKli9d/JFmVhUbU6hV1c0b3zJEqg40h6jWlg6oA7JTCuxDYODGVfF/jWoGM
-        LgjZpHUw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSKnB-006Y5G-Rx; Wed, 15 Feb 2023 16:38:01 +0000
-Date:   Wed, 15 Feb 2023 08:38:01 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v15 05/17] overlayfs: Implement splice-read
-Message-ID: <Y+0KaXocK57OrGTS@infradead.org>
-References: <20230214171330.2722188-1-dhowells@redhat.com>
- <20230214171330.2722188-6-dhowells@redhat.com>
- <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com>
- <3370085.1676475658@warthog.procyon.org.uk>
- <CAJfpegt5OurEve+TvzaXRVZSCv0in8_7whMYGsMDdDd2EjiBNQ@mail.gmail.com>
- <Y+z/85HqpEceq66f@casper.infradead.org>
+        Wed, 15 Feb 2023 11:38:52 -0500
+Received: from gw.hale.at (gw.hale.at [89.26.116.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2196A79
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:38:27 -0800 (PST)
+Received: from unknown (HELO mail3.hale) ([192.168.100.5])
+  by gw.hale.at with ESMTP; 15 Feb 2023 17:38:24 +0100
+Received: from localhost (localhost [127.0.0.1])
+        by mail3.hale (Postfix) with ESMTP id 67298BD58B;
+        Wed, 15 Feb 2023 17:38:24 +0100 (CET)
+Received: from mail3.hale ([127.0.0.1])
+        by localhost (mail3.hale [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id gbNbBL4CRE0T; Wed, 15 Feb 2023 17:38:24 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail3.hale (Postfix) with ESMTP id EFCDCBD594;
+        Wed, 15 Feb 2023 17:38:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mail3.hale
+Received: from mail3.hale ([127.0.0.1])
+        by localhost (mail3.hale [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yRnVNnW7y150; Wed, 15 Feb 2023 17:38:23 +0100 (CET)
+Received: from mail3.hale (mail3.hale [192.168.100.5])
+        by mail3.hale (Postfix) with ESMTP id D2EAEBD58B;
+        Wed, 15 Feb 2023 17:38:23 +0100 (CET)
+Date:   Wed, 15 Feb 2023 17:38:23 +0100 (CET)
+From:   Michael Thalmeier <michael.thalmeier@hale.at>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        john ogness <john.ogness@linutronix.de>
+Message-ID: <1831554214.546921.1676479103702.JavaMail.zimbra@hale.at>
+In-Reply-To: <Y+ztReOGJwAbpv52@alley>
+References: <20230214115921.399608-1-michael.thalmeier@hale.at> <Y+zEAA1hp+3guGxT@axis.com> <Y+ztReOGJwAbpv52@alley>
+Subject: Re: [PATCH v2] tty: ttynull: implement console write
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+z/85HqpEceq66f@casper.infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.100.5]
+X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF109 (Linux)/8.8.15_GA_4007)
+Thread-Topic: ttynull: implement console write
+Thread-Index: JhxFv7VaxVUD/wX9fLFIujWwTi5T4g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 03:53:23PM +0000, Matthew Wilcox wrote:
-> On Wed, Feb 15, 2023 at 04:50:04PM +0100, Miklos Szeredi wrote:
-> > Looks good.  One more suggestion: add a vfs_splice() helper and use
-> > that from do_splice_to() as well.
+Hi Petr,
+
+----- On 15 Feb, 2023, at 15:33, Petr Mladek pmladek@suse.com wrote:
+> On Wed 2023-02-15 12:37:36, Vincent Whitchurch wrote:
+>> + Cc: John, Petr
+>> 
+>> On Tue, Feb 14, 2023 at 12:59:21PM +0100, Michael Thalmeier wrote:
+>> > Since commit a699449bb13b ("printk: refactor and rework printing logic"),
+>> > con->write is called without checking if it is implemented in the console
+>> > driver. This does make some sense, because for all "normal" consoles it
+>> > is vital to have a write function.
+>> > As the ttynull console driver does not need any console output the write
+>> > function was not implemented. This caused a "unable to handle kernel NULL
+>> > pointer dereference" when the write function is called now.
+>> > 
+>> > To fix this issue, implement an empty write function.
+>> > 
+>> > Fixes: a699449bb13b ("printk: refactor and rework printing logic")
+>> > Cc: stable@vger.kernel.org
+>> > Signed-off-by: Michael Thalmeier <michael.thalmeier@hale.at>
+>> 
+>> Looking at the referenced commit, the only place I see it calling
+>> con->write() is from call_console_driver(), which is in turn only called
+>> from console_emit_next_record().  And console_flush_all(), the only
+>> caller of console_emit_next_record(), checks that con->write is not NULL
+>> using console_is_usable() before calling console_emit_next_record().
 > 
-> I really hate call_read_iter() etc.  Please don't perpetuate that
-> pattern.
+> I see the same. The refactoring moved the check of con->write from
+> call_console_driver() to console_is_usable(). It detects the NULL
+> pointer earlier in console_flush_all()...
+> 
+>> What am I missing?  Which code path in the referenced commit calls
+>> con->write without checking for NULL?
+> 
+> Vincent, could you please provide log with the backtrace?
+> 
+> I wonder if the problem is in the RT-patchset where
+> console_emit_next_record() is called also from the printk kthread.
 
-I think it's time to kill it.  I'll prepare a patch for it.
+You are right. I have encountered this problem with the RT-patchset.
+We currently are using the latest v5.15-rt kernel which had this problem.
+ 
+> That said, the current code is error-prone. The check for non-NULL
+> con->write is too far from the caller.
+> 
+> I would prefer to make it more safe. For example, I would prevent
+> registration of consoles without con->write callback in the first
+> place. It would require, to implement the empty write() callback
+> for ttynull console as done by this patch.
+> 
+> Anyway, I would like to understand if the "unable to handle kernel NULL
+> pointer dereference" is a real problem in the current implementation.
 
+Unfortunately I have not yet tested with the current RT or non-RT versions.
+
+> 
+> Best Regards,
+> Petr
+
+Regards, Michael
