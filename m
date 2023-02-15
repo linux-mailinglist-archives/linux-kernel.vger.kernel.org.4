@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9C9697A1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2070B697A22
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbjBOKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S234171AbjBOKpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbjBOKox (ORCPT
+        with ESMTP id S234162AbjBOKpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:44:53 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED644A5;
-        Wed, 15 Feb 2023 02:44:52 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.231])
-        by gnuweeb.org (Postfix) with ESMTPSA id 66513830B9;
-        Wed, 15 Feb 2023 10:44:46 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676457892;
-        bh=DRwv3piHmMXuW33yjmbYf/9oXn6DL3uQXB+v4j1d+Gs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hnLLM3zr31CtA0QaReAYKDFpStlY6IHmiGPtDSpwq+D9FFjY0Iyc5HXVSZ0mliGzx
-         Inof7OjEZxwkfJU3elgOZiTnH+bbRsRYNMSGu/mGJaqo761BZk9Srd/HUmwbYJL5+8
-         XtGzYpkgpyQDis1y5Wb+h5d9jhwQbvVvORzKIhGzNXgK0dYHeVz3BURDKiVM2k8qf7
-         wW7aCAhnV6ttjPQQyv0uPi+WYzr6SqaLENlmWbMOJkoxTfCTjKdXqLLlwVedORSaiW
-         QCLAXzPUYkYdDOcnUix0MQzv1Hcf4JVbqTevHvnC6BoZ4JR4anNYmb7ZPNtMtENnqa
-         Lg3F/tGprln3g==
-Date:   Wed, 15 Feb 2023 17:44:41 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Xin Li <xin3.li@intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
- a FRED system
-Message-ID: <Y+y3mSKoVwem3xbT@biznet-home.integral.gnuweeb.org>
-References: <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
- <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
- <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
- <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
- <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
- <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
- <Y9LdwVX9BaZA7zmA@biznet-home.integral.gnuweeb.org>
- <0b57d2ab-14e0-14a0-adf3-3186fd2f5282@citrix.com>
- <e4222762-fc60-a848-09af-f6de614d5f74@citrix.com>
+        Wed, 15 Feb 2023 05:45:24 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993065AC;
+        Wed, 15 Feb 2023 02:45:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+VcSXjQcwN7qvQ16idt+kCzDltRjU1KCRBCzhS3aUVs=; b=Gec6wQWXs1cShlEObFN3algpx3
+        AjRiW+nWaD40LEx8ys6wHCqem48xafMPvzf/TcUSxrdrikX7BgYwA+Sdflt+flEw49Z/3ev67CGVk
+        TccS8f8TZ50N8DFjapDYCufTCQeiz8AAZiAPTecAgWRZQ92iSH0SJBr5PyNDmjNrBqf+C6kj4bAjZ
+        SHI2CvRne3OL/4BilJuQV/ONGAuvsi+VCrxpIrOWulYxVrn0hP4FeHthEQEaMLkPFye8c7WNpQfn9
+        +DoCscxOlxVQLgwNS1gNiRrdaGrn3tRNkWfOrNDFa12G9JiyU4rrN0quOMCcx0zqHcRR5z7KxyLKF
+        R80s2Omg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pSFGv-009uuQ-34;
+        Wed, 15 Feb 2023 10:45:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5776B3001E5;
+        Wed, 15 Feb 2023 11:45:03 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3E0F323884781; Wed, 15 Feb 2023 11:45:03 +0100 (CET)
+Date:   Wed, 15 Feb 2023 11:45:03 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+y3r8Q5GT+oJsvd@hirez.programming.kicks-ass.net>
+References: <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+pWhyFJeE93nlWd@rowland.harvard.edu>
+ <Y+plfZnEqw6mG+XH@hirez.programming.kicks-ass.net>
+ <Y+rpD7QPheQQ8Lxj@boqun-archlinux>
+ <Y+tm59SmBEY1Ywq7@hirez.programming.kicks-ass.net>
+ <Y+u1RBMMcCkvKISZ@boqun-archlinux>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e4222762-fc60-a848-09af-f6de614d5f74@citrix.com>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y+u1RBMMcCkvKISZ@boqun-archlinux>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:29:37AM +0000, Andrew Cooper wrote:
-> I've opened https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108799
+On Tue, Feb 14, 2023 at 08:22:28AM -0800, Boqun Feng wrote:
 
-Added myself to the CC list. Thanks for opening.
+> Ah, right, I was missing the fact that it works with 2 classes...
+> 
+> But I think with only one class, the nest_lock() still works, right?
+> In other words, if P and Cn are the same lock class in your example.
 
--- 
-Ammar Faizi
+I don't think so, but I don't think I've carefully considered that case.
 
+> Also seems I gave a wrong answer to Alan, just to clarify, the following
+> is not a deadlock to lockdep:
+> 
+> T1:
+> 	mutex_lock(P)
+> 	mutex_lock_next_lock(C1, P)
+> 	mutex_lock_next_lock(C2, P)
+> 	mutex_lock(B)
+> 
+> T2:
+> 	mutex_lock(P)
+> 	mutex_lock(B)
+> 	mutex_lock_next_lock(C1, P)
+> 	mutex_lock_next_lock(C2, P)
+> 
+
+This should in fact complain about a CB-BC deadlock, (but I've not
+tested it, just going on memories of how I implemented it).
+
+> Because of any pair of
+> 
+> 	mutex_lock(L);
+> 	... // other locks maybe
+> 	mutex_lock_nest_lock(M, L);
+> 
+> lockdep will not add M into the dependency graph, since it's nested and
+> should be serialized by L.
+
+We do enter M into the dependency graph, but instead ignore M-M
+recursion. Specifically so that we might catch the above deadlock vs B.
