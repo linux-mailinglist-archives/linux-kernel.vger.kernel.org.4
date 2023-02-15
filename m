@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32FB698520
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB15D698524
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBOUBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S229748AbjBOUCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjBOUBp (ORCPT
+        with ESMTP id S229554AbjBOUCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:01:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B933D93D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676491255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pM6ZuLLAVBgaXnAlM0ysAj5P46WWetvT+AboXXV0/P0=;
-        b=jCCwlo1hscl0u9sE0K2gxZcse439KplXToIbLI0AnEg7eNW4EFqjzhp+tfWsjs1JxI6Fob
-        f+Y8rUsjIXq3Jj7jhGw1FDDpiR/jZBciysZ8whplf7LVNEht+koPaaeX7YTRtp1LJg7dRQ
-        5Obcr9DfjgbJ06kqkzhPtIr+cF70bn4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-588-IqE_8EzrPp-YBi4lJQgzOA-1; Wed, 15 Feb 2023 15:00:53 -0500
-X-MC-Unique: IqE_8EzrPp-YBi4lJQgzOA-1
-Received: by mail-wr1-f72.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so3935122wro.20
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 12:00:53 -0800 (PST)
+        Wed, 15 Feb 2023 15:02:16 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341686B5;
+        Wed, 15 Feb 2023 12:02:15 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id bh15so16832317oib.4;
+        Wed, 15 Feb 2023 12:02:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pM6ZuLLAVBgaXnAlM0ysAj5P46WWetvT+AboXXV0/P0=;
-        b=LWmBHex9mNT8Oh+/PqymRma/PoVsvI9FItO95/4AwlyRRUyEb9P5n72F/S1BwTUuST
-         ML3P+U6lb+LoNAweZXB/7lnyzTV0leb6+eiNSB+dd2x4Rab0SpGJ/uTQqM788Dz31s+r
-         MPEfPuTFmlouK4dUeZd+i6KGJjzjRk4M5+9B15NJbzN+MZftdG7uPHSkMY+LVCGx3vQp
-         57RwFd9dildWyallTzZMTEjsZOmAs70OOqY7eb6mI0QzxmTu19pTXH22fRCcmYCnhdCi
-         ClCrQR8zRThctKekJPx7IpyAAE/9RfM0vGfGBaiDcmXWAreMxRBDer4xUTTzz4mvAET+
-         zh1g==
-X-Gm-Message-State: AO0yUKXn/nwQv9NPOyV8CAfiZH6Shw+nOOLwQyNQoRuGe0fll7DKSUEM
-        Vf0p05MFq8H7qNn+sTC0lz7urmyMMC4Pc/6U7Ffjfqz2ldRGml1HqVRjUdAYP86XlWMEyq2CW6Q
-        wKpaeBpXLttW5GRMqHRNbTvvlOdJ1gQ==
-X-Received: by 2002:a5d:544b:0:b0:2c5:534d:eebb with SMTP id w11-20020a5d544b000000b002c5534deebbmr2901864wrv.13.1676491252230;
-        Wed, 15 Feb 2023 12:00:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set8yuqeosoikVPd5aJzudaeycPQRLEyT0zOy6UwFihA/3b+WnGmJgbNqpboh+yuCfhJLq2KqCg==
-X-Received: by 2002:a5d:544b:0:b0:2c5:534d:eebb with SMTP id w11-20020a5d544b000000b002c5534deebbmr2901840wrv.13.1676491251804;
-        Wed, 15 Feb 2023 12:00:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:1400:b7d:4122:28d:f4c3? (p200300cbc70714000b7d4122028df4c3.dip0.t-ipconnect.de. [2003:cb:c707:1400:b7d:4122:28d:f4c3])
-        by smtp.gmail.com with ESMTPSA id d1-20020adffd81000000b002bfe08c566fsm15989893wrr.106.2023.02.15.12.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 12:00:51 -0800 (PST)
-Message-ID: <1ddc2eff-f1bd-be62-3c62-abe6d539feef@redhat.com>
-Date:   Wed, 15 Feb 2023 21:00:50 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnYwpFSiJkxoqAenwxBT3P5OhTg1ARQ8fjLNlY4RHZo=;
+        b=WaWqFpDWZmZYfsB0Zc/FLcA6YKYqPTlaPhkuU6yHjMSG7ZRYOQMGC1k4WIQEcpYGnC
+         cokZ8pNOVfmTuarAQuB0F+glZU3Y5hcd2OOTiXexkISmY90gDcUzQYC7KpWwa/aDrpPh
+         RZ3UEWyzvWK4HGuDNohuvvA0tYXRNgIYm7PLYbeTt9q8b6D8q/1bFRTXoyyvM0BIANDM
+         /uzSvromxtuqwvh65KiRyHaaH7qhf9Fy1+7QRyHOYyJ0YOMWXDV7RoR7cOCXi6FETF5Y
+         Cks40ah7L8/dSaqDNV8vlmnfXdELi06DEspDM28qJwpc1WeGGNa1aSLjO7fPe3vSVBmU
+         6ehQ==
+X-Gm-Message-State: AO0yUKW6UX6Yy6501H568Vr0PoOo0WiCM2G+Nh2ezYeIfRn8myc6W2D6
+        rlxn86wVpe+cm0W2+bh7cg==
+X-Google-Smtp-Source: AK7set8fP7f98bfSC9h4Mu+gzjVfDfd39Q/pkCbq9lmO3NEodl2mRI8121AZZ5n0n5Hy0GqB22i4LQ==
+X-Received: by 2002:a05:6808:1d0:b0:364:ca56:dd47 with SMTP id x16-20020a05680801d000b00364ca56dd47mr1586600oic.0.1676491334902;
+        Wed, 15 Feb 2023 12:02:14 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05683004b200b0068d59d15a93sm8060848otd.40.2023.02.15.12.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 12:02:14 -0800 (PST)
+Received: (nullmailer pid 477812 invoked by uid 1000);
+        Wed, 15 Feb 2023 20:02:13 -0000
+Date:   Wed, 15 Feb 2023 14:02:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frieder Schrempf <frieder@fris.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Robin Gong <yibin.gong@nxp.com>, Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Per-Daniel Olsson <perdo@axis.com>,
+        Rickard x Andersson <rickaran@axis.com>
+Subject: Re: [PATCH 1/6] dt-bindings: regulator: pca9450: Document new usage
+ of sd-vsel-gpios
+Message-ID: <20230215200213.GA467386-robh@kernel.org>
+References: <20230213155833.1644366-1-frieder@fris.de>
+ <20230213155833.1644366-2-frieder@fris.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm/memory_hotplug: return zero from do_migrate_range()
- for only success
-Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, osalvador@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230215180316.75431-1-sj@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230215180316.75431-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213155833.1644366-2-frieder@fris.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.02.23 19:03, SeongJae Park wrote:
-> On Wed, 15 Feb 2023 14:16:05 +0100 David Hildenbrand <david@redhat.com> wrote:
+On Mon, Feb 13, 2023 at 04:58:19PM +0100, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
 > 
->> On 14.02.23 23:32, SeongJae Park wrote:
->>> do_migrate_range() returns migrate_pages() return value, which zero
->>> means perfect success, in usual cases.  If all pages are failed to be
->>> isolated, however, it returns isolate_{lru,movalbe}_page() return
->>> values, or zero if all pfn were invalid, were hugetlb or hwpoisoned.  So
->>> do_migrate_range() returning zero means either perfect success, or
->>> special cases of isolation total failure.
->>>
->>> Actually, the return value is not checked by any caller, so it might be
->>> better to simply make it a void function.  However, there is a TODO for
->>> checking the return value.
->>
->> I'd prefer to not add more dead code ;) Let's not return an error instead.
+> The sd-vsel-gpios property is abandoned in its current meaning as an
+> output. We now use it to specify an optional signal that can be
+> evaluated by the driver in order to retrieve the current status
+> of the SD_VSEL signal that is used to select the control register
+> of LDO5.
 > 
-> Makes sense, I will send next spin soon.
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> ---
+>  .../regulator/nxp,pca9450-regulator.yaml      | 23 ++++++++++++++-----
+>  1 file changed, 17 insertions(+), 6 deletions(-)
 > 
->>
->> It's still unclear which kind of fatal migration issues we actually care
->> about and how to really detect them.
-> 
-> What do you think about treating the isolation/migration rate limit
-> (migrate_rs) hit in do_migrate_range() as fatal?  It warns for the event
-> already, so definitely a bad sign.
-> 
-> If that's not that bad enough to be treated as fatal, I think we could have yet
-> another rate limit to be considered fatal.
+> diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+> index 835b53302db8..c86534538a4e 100644
+> --- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+> @@ -40,8 +40,24 @@ properties:
+>      description: |
+>        list of regulators provided by this controller
+>  
+> +    properties:
+> +      LDO5:
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        description:
+> +          Properties for single LDO5 regulator.
+> +
+> +        properties:
+> +          sd-vsel-gpios:
 
-IIRC, there are some setups where offlining might take several minutes 
-(e.g., heavy O_DIRECT load) and that's to be expected.
+It is a pin on the device, right? Then it belongs in the device node as 
+it was.
 
-So the existing code warns for better debugging, but keeps trying. So 
-the ratelimit is rather to not produce too much debug output, not to 
-really indicate that something is fatal.
+Can't the direction of the signal tell you how it is used? Assuming the 
+pin is bidirectional?
 
--- 
-Thanks,
+The binding should support any possible way the device is wired, not 
+just what's been seen so far on some boards.
 
-David / dhildenb
-
+Rob
