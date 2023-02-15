@@ -2,145 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AA7697B25
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2453697B28
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbjBOLvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S233769AbjBOLwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjBOLve (ORCPT
+        with ESMTP id S233838AbjBOLwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:51:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F014513C;
-        Wed, 15 Feb 2023 03:51:32 -0800 (PST)
-Received: from [192.168.1.90] (unknown [86.120.32.152])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 319A86602181;
-        Wed, 15 Feb 2023 11:51:29 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676461890;
-        bh=QSCp6bo6FjxCSjfy/l3o4z89Z1La9kTv6gN3Uu+EpL4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A4rqdwtauXFIbQbOGHfLvjjQ6dlZiEqLF0CG/sWghsauCpAP2mXYKVMwkBAi8uEqZ
-         WyAnVKG1j4VGABIVUzHJKddu8kq1OX83D1bLDMHtGsHI0oTkwtBXfMA4Hpi9kWPQHQ
-         SEL0utAZxVaMKf2Rn3/aUwiy2nTVGox5FI2O/ZIxZdnaanRmdNZIk8hG7PXJMdadHn
-         7p01MjXuIbSf0cggW1k1sHvKuqRRXNk2UdSqWWaS2ECm5wmKJXU5+bWLLesiDLkBTy
-         0Qf3noLv63LboE1TWJ1VuVVP0d2wQjP+LjbDiK6j9PO8YUdgtvqbiop5Cg/d3aw3Ar
-         FDekpJ+BswxCw==
-Message-ID: <68708ef5-9a7f-b7e5-a7a0-e08f6d5ae3a3@collabora.com>
-Date:   Wed, 15 Feb 2023 13:51:26 +0200
+        Wed, 15 Feb 2023 06:52:21 -0500
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF52C23659
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1676461935;
+        bh=Sk/Bg/0AfjKLFwi3dSCYsVcH9mEMa2atHropqO8Z7ps=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=JQYVPOTSZGv/vrzXksNZLuN69G27GDcBZyyP56ZCfBUN4ki0xhprUoWUPk9dJwUPZ
+         +LowQDcEgrtOOri7IEWndC57kAjkyPBkc5ixrD2EzisgwkFNPaVERUyA5Iih7WpLAs
+         4Or2SEc4n5j6ChE5RQ9dgnoLIWEWmQZSKFcf8jIw=
+Received: from [IPv6:240e:358:111b:f00:dc73:854d:832e:3] (unknown [IPv6:240e:358:111b:f00:dc73:854d:832e:3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 20BFA6681E;
+        Wed, 15 Feb 2023 06:52:10 -0500 (EST)
+Message-ID: <bf0e57db317d7061ecaaf928ce6cf40941b1740c.camel@xry111.site>
+Subject: Re: "kernel ade access" oops on LoongArch
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Jinyang He <hejinyang@loongson.cn>, loongarch@lists.linux.dev,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org
+Date:   Wed, 15 Feb 2023 19:52:04 +0800
+In-Reply-To: <21b0e60dac8bedf9e389645ec103aa4241b35f8d.camel@xry111.site>
+References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
+         <2e902dfa-cb84-7ef0-6b50-02b16354a139@loongson.cn>
+         <511d385675ea7a846ff791974c6ae7feeeec2589.camel@xry111.site>
+         <9a70e89c-0f3b-0660-501e-3292e410cfd8@loongson.cn>
+         <5403e5eb-5792-7d6f-df74-ca3fab82ecd5@loongson.cn>
+         <818419c03037bda833a5b281588a4b331c34ae8c.camel@xry111.site>
+         <74fb1e24-36c0-c642-5bab-3646ba7790df@loongson.cn>
+         <21b0e60dac8bedf9e389645ec103aa4241b35f8d.camel@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 08/12] net: stmmac: Add glue layer for StarFive JH7100 SoC
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
- <Y+e+N/aiqCctIp6e@lunn.ch>
- <d1769dac-9e80-2f0d-6a5c-386ef70e1547@collabora.com>
- <CAJM55Z8Uq2ZU3KvJZKDLZUJDLEyvHjCRJKcYn5CAOR0c2rhT7Q@mail.gmail.com>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <CAJM55Z8Uq2ZU3KvJZKDLZUJDLEyvHjCRJKcYn5CAOR0c2rhT7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 13:20, Emil Renner Berthing wrote:
-> On Wed, 15 Feb 2023 at 01:09, Cristian Ciocaltea
-> <cristian.ciocaltea@collabora.com> wrote:
->>
->> On 2/11/23 18:11, Andrew Lunn wrote:
->>>> +
->>>> +#define JH7100_SYSMAIN_REGISTER28 0x70
->>>> +/* The value below is not a typo, just really bad naming by StarFive ¯\_(ツ)_/¯ */
->>>> +#define JH7100_SYSMAIN_REGISTER49 0xc8
->>>
->>> Seems like the comment should be one line earlier?
-> 
-> Well yes, the very generic register names are also bad, but this
-> comment refers to the fact that it kind of makes sense that register
-> 28 has the offset
->    28 * 4 bytes pr. register = 0x70
-> ..but then register 49 is oddly out of place at offset 0xc8 instead of
->    49 * 4 bytes pr. register = 0xc4
-> 
->>> There is value in basing the names on the datasheet, but you could
->>> append something meaningful on the end:
->>>
->>> #define JH7100_SYSMAIN_REGISTER49_DLYCHAIN 0xc8
->>
->> Unfortunately the JH7100 datasheet I have access to doesn't provide any
->> information regarding the SYSCTRL-MAINSYS related registers. Maybe Emil
->> could provide some details here?
-> 
-> This is reverse engineered from the auto generated headers in their u-boot:
-> https://github.com/starfive-tech/u-boot/blob/JH7100_VisionFive_devel/arch/riscv/include/asm/arch-jh7100/syscon_sysmain_ctrl_macro.h
-> 
-> Christian, I'm happy that you're working on this, but mess like this
-> and waiting for the non-coherent dma to be sorted is why I didn't send
-> it upstream yet.
+On Wed, 2023-02-15 at 16:35 +0800, Xi Ruoyao wrote:
+> On Wed, 2023-02-15 at 16:25 +0800, Youling Tang wrote:
+> > Can you modify the kernel as follows and test it, so as to avoid
+> > possible relationship with the exception table data link position and
+> > alignment rules (or use EXCEPTION_TABLE(12))?
+> >=20
+> > --- a/arch/loongarch/kernel/vmlinux.lds.S
+> > +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> > @@ -4,7 +4,6 @@
+> > =C2=A0 #include <asm/thread_info.h>
+> >=20
+> > =C2=A0 #define PAGE_SIZE _PAGE_SIZE
+> > -#define RO_EXCEPTION_TABLE_ALIGN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4
+> >=20
+> > =C2=A0 /*
+> > =C2=A0=C2=A0 * Put .bss..swapper_pg_dir as the first thing in .bss. Thi=
+s will
+> > @@ -54,6 +53,8 @@ SECTIONS
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 . =3D ALIGN(PECOFF_SEG=
+MENT_ALIGN);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 _etext =3D .;
+> >=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 EXCEPTION_TABLE(16)
+> > +
+>=20
+> It seems the kernel refuses to boot after the change, but I'm not
+> completely sure: I'm 5 km away from the board and operating it via ssh
+> so maybe it's a reboot failure or network failure.=C2=A0 I'll report agai=
+n in
+> the evening.
 
-Thank you for clarifying this and for all the work you have done so far, 
-Emil! If you don't mind, I would be glad to continue helping with this 
-mainlining effort.
+It was a reboot failure.
 
->>>> +    if (!of_property_read_u32(np, "starfive,gtxclk-dlychain", &gtxclk_dlychain)) {
->>>> +            ret = regmap_write(sysmain, JH7100_SYSMAIN_REGISTER49, gtxclk_dlychain);
->>>> +            if (ret)
->>>> +                    return dev_err_probe(dev, ret, "error selecting gtxclk delay chain\n");
->>>> +    }
->>>
->>> You should probably document that if starfive,gtxclk-dlychain is not
->>> found in the DT blob, the value for the delay chain is undefined.  It
->>> would actually be better to define it, set it to 0 for example. That
->>> way, you know you don't have any dependency on the bootloader for
->>> example.
->>
->> Sure, I will set it to 0.
->>
->>>
->>>        Andrew
->>
->> Thanks for reviewing,
->> Cristian
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Now it has booted successfully, but the stack trace still shows (during
+the 25th run of the make test t=3D... command).
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
