@@ -2,234 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3FE697B17
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4100697B11
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjBOLsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S233761AbjBOLro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbjBOLsL (ORCPT
+        with ESMTP id S233554AbjBOLrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:48:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D136474
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676461631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
-        b=AovHE+nJ4dA01xPC1U6nlUxnvU0RCuhdZJlurF8yM4mrGJzaQcjvje4lQGpx06+EuBg2uF
-        vBUVv5AEIxbFxyS037XSpyjStjbWxHcsxlOKNSHo+8SNteyOOneEBMySk5OrYNZSaBdw6z
-        fFXTzjMxmcltPPE0oOhaX8wjc9iCI1Y=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-57-4b-Vee5zNL22AH25V0ZL2A-1; Wed, 15 Feb 2023 06:47:10 -0500
-X-MC-Unique: 4b-Vee5zNL22AH25V0ZL2A-1
-Received: by mail-qk1-f200.google.com with SMTP id x14-20020a05620a14ae00b0072f7f0f356bso11239871qkj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:10 -0800 (PST)
+        Wed, 15 Feb 2023 06:47:43 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9193669D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:37 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id k16so15981129ejv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:47:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676461656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GHrA9e3gwy1oaxI6a54qm8/8P6kdz6l+7yWvSQcQDZU=;
+        b=BspNH+cyetpUGliVhXLo+JZiUdBN8mvj1cMhgeIcGc2uM3fXCxjQqF4zN7UYvpcJ5X
+         +zITlYD+RfOC2GxUU+YOEe29iivKNFsZWx3gpmFNfqWj3ny85Odptmc3DY8b24ZdFqNf
+         w1Pu7fl1lFwgKS90qZq4W9C00qPN9JWqcFLhr6Ax8QTYJd96+GTBb6OQAT7lO0WkqPpX
+         Mq59+mn1WbN55CANJXNVgwb8rh3WSuk4Bves26P+bbmwPL3eJctuTuPRjo3j3cI03jyh
+         cUbNXzvG4nsVx61iMqHaZzXVY6k0YLlV5iRYQDQPJzqUr8bAcDtTcZxZEbUVz0IXTuSh
+         GJ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gWla4IxpPAIr1RMijB2VmvTQNQGZkqTx/F5Sx1IMUPQ=;
-        b=BszGwPP8KhI1A94/v4JtvWfmB/vV3/GiCig+oJk2NyblIx4cIqcXKPiVC4yNBRLBKz
-         uzwnuSQkoYFXU4qk64XfCf6Kqvr7Blb8gdeqne2y0sgzBS2lJ3x6IvIlZKbEh8gudbfp
-         on7+06yMRMnmqf7H8iKhzoWWvB0Cr4GpWNCHoi99g8rBsYW6FwyBJUEfy7ZeJsCYFRst
-         XP9PGSiS3Vwugs8J9FNB0REMtv6ER79rnxS018gPpmki2NpYSsuUq8pEX3nYeU1q5SZ4
-         yhL7NTk0Gd4QlfrUSWM4UtTg0sYtej5itLHVSFhOd488OCakyFEZcw432ml68OnnXPke
-         NMAQ==
-X-Gm-Message-State: AO0yUKXPbTCxsig2vP3QK9qS2xsuTDWeRDnA/NF5O+SrszySDhPvRUb2
-        zhNkxs96aPpCame2788ESy9SqXOuEEwk7g7xiD+N3u3jdVafoxAjCZgTFGpLb372OCMEF9TOjg4
-        AaIqiUmVFazatcDUOTGytE6o=
-X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848991qtf.49.1676461630136;
-        Wed, 15 Feb 2023 03:47:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set+ONFsJKriqgRyboXfngZUgoqZTtSrpSfRrC8VyIHG33OdFC+XpiAkZDvoCkfM/mItot1Aa7Q==
-X-Received: by 2002:ac8:59d3:0:b0:3b6:9817:18e4 with SMTP id f19-20020ac859d3000000b003b6981718e4mr2848979qtf.49.1676461629870;
-        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id cc5-20020a05622a410500b003995f6513b9sm5931170qtb.95.2023.02.15.03.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 03:47:09 -0800 (PST)
-Message-ID: <93039f92-3462-e2a2-6052-830668419a4d@redhat.com>
-Date:   Wed, 15 Feb 2023 12:47:02 +0100
+        d=1e100.net; s=20210112; t=1676461656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GHrA9e3gwy1oaxI6a54qm8/8P6kdz6l+7yWvSQcQDZU=;
+        b=34vcbU6F6m92VHJnM0uQqMTfP3riuiKHTQ+d1PNvHW3FVqQcVsRei6swQbHSxt+zOV
+         ZVhiufUt6B8BEtoanOJZ8bdkC/kp3OhO4uQphNBZXk18XKOwCpGFjyJMI61J+iQtsdqr
+         kIxM957CcKtwqnSPr5ibUpJdwxHQlEQ/d0S/7uBez9XESCBLZvy9uo6cMGG6Chvbhx31
+         cPQ5Btp+Ua5SvVziJ7AnpO36yHZkGP1dJL5BqeetEZI4l4/H9Quz4QhOrBvfzz3EU2uY
+         6WZUU+gxvTpcFMBpb4CXlGnZhcCxzUG4+M+oKAopT47xj416Hi3ERkcWO3CUqk1XmGP0
+         Tvdw==
+X-Gm-Message-State: AO0yUKXHbv8rW1O8psS+Llapcx0IXL9wJd2uGQ7IviYi3nHnW9DHYUoQ
+        bQZjRObmhK5rA/gCfivH23g=
+X-Google-Smtp-Source: AK7set8hvJKVD1NmnqmURX+8ZT25FIOOW1YZBQO2LpRgsntYlFIQQ6B7tyCaxlHaNsMUpgTTGl/mkA==
+X-Received: by 2002:a17:906:1de:b0:89a:8238:3323 with SMTP id 30-20020a17090601de00b0089a82383323mr2091025ejj.6.1676461656250;
+        Wed, 15 Feb 2023 03:47:36 -0800 (PST)
+Received: from mineorpe-virtual-machine.localdomain ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170906088400b008b126051fbdsm2748787eje.47.2023.02.15.03.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 03:47:35 -0800 (PST)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     dan.j.williams@intel.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, maddy@in.ibm.com,
+        peterz@infradead.org, kjain@linux.ibm.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+Subject: [PATCH] Fix 'unexpected indentation' during documentation compilation
+Date:   Wed, 15 Feb 2023 14:47:17 +0300
+Message-Id: <20230215114717.10194-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/4] fpga: add initial KUnit test suite
-Content-Language: en-US
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20230203170653.414990-1-marpagan@redhat.com>
- <20230203170653.414990-2-marpagan@redhat.com>
- <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <3588ad2f-f33f-8979-ba05-29c367716610@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reformat the 'sys-fs-nvdimm' ABI documentation file to make it
+correspond the right format. This patch will fix annoying
+'WARNING: Unexpected indentation' message during documentation
+compilation process.
 
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ Documentation/ABI/testing/sysfs-bus-nvdimm | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On 2023-02-14 00:37, Russ Weight wrote:
-> 
-> 
-> On 2/3/23 09:06, Marco Pagani wrote:
->> Introduce an initial KUnit suite to test the core components of the
->> FPGA subsystem.
->>
->> The test suite consists of two test cases. The first test case checks
->> the programming of a static image on a fake FPGA with a single hardware
->> bridge. The FPGA is first programmed using a test image stored in a
->> buffer, and then with the same image linked to a single-entry
->> scatter-gather list.
->>
->> The second test case models dynamic partial reconfiguration. The FPGA
->> is first configured with a static image that implements a
->> reconfigurable design containing a sub-region controlled by two soft
->> bridges. Then, the reconfigurable sub-region is reconfigured using
->> a fake partial bitstream image. After the reconfiguration, the test
->> checks that the soft bridges have been correctly activated.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/Kconfig            |   2 +
->>  drivers/fpga/Makefile           |   3 +
->>  drivers/fpga/tests/.kunitconfig |   5 +
->>  drivers/fpga/tests/Kconfig      |  15 ++
->>  drivers/fpga/tests/Makefile     |   6 +
->>  drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
->>  6 files changed, 295 insertions(+)
->>  create mode 100644 drivers/fpga/tests/.kunitconfig
->>  create mode 100644 drivers/fpga/tests/Kconfig
->>  create mode 100644 drivers/fpga/tests/Makefile
->>  create mode 100644 drivers/fpga/tests/fpga-tests.c
->>
->> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
->> index 0a00763b9f28..2f689ac4ba3a 100644
->> --- a/drivers/fpga/Kconfig
->> +++ b/drivers/fpga/Kconfig
->> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
->>  	  FPGA manager driver support for Lattice FPGAs programming over slave
->>  	  SPI sysCONFIG interface.
->>  
->> +source "drivers/fpga/tests/Kconfig"
->> +
->>  endif # FPGA
->> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
->> index 72e554b4d2f7..352a2612623e 100644
->> --- a/drivers/fpga/Makefile
->> +++ b/drivers/fpga/Makefile
->> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
->>  
->>  # Drivers for FPGAs which implement DFL
->>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
->> +
->> +# KUnit tests
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
->> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
->> new file mode 100644
->> index 000000000000..a1c2a2974c39
->> --- /dev/null
->> +++ b/drivers/fpga/tests/.kunitconfig
->> @@ -0,0 +1,5 @@
->> +CONFIG_KUNIT=y
->> +CONFIG_FPGA=y
->> +CONFIG_FPGA_REGION=y
->> +CONFIG_FPGA_BRIDGE=y
->> +CONFIG_FPGA_KUNIT_TESTS=y
->> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
->> new file mode 100644
->> index 000000000000..5198e605b38d
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Kconfig
->> @@ -0,0 +1,15 @@
->> +config FPGA_KUNIT_TESTS
->> +	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
->> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
->> +	default KUNIT_ALL_TESTS
->> +	help
->> +	  Builds unit tests for the FPGA subsystem. This option
->> +	  is not useful for distributions or general kernels,
->> +	  but only for kernel developers working on the FPGA
->> +	  subsystem and its associated drivers.
->> +
->> +	  For more information on KUnit and unit tests in general,
->> +	  please refer to the KUnit documentation in
->> +	  Documentation/dev-tools/kunit/.
->> +
->> +	  If in doubt, say "N".
->> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
->> new file mode 100644
->> index 000000000000..74346ae62457
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Makefile
->> @@ -0,0 +1,6 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
->> diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
->> new file mode 100644
->> index 000000000000..33f04079b32f
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fpga-tests.c
->> @@ -0,0 +1,264 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Test suite for the FPGA subsystem
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#include <kunit/test.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/scatterlist.h>
->> +
->> +#include <linux/fpga/fpga-mgr.h>
->> +#include <linux/fpga/fpga-region.h>
->> +#include <linux/fpga/fpga-bridge.h>
->> +
->> +#include "fake-fpga-region.h"
->> +#include "fake-fpga-bridge.h"
->> +#include "fake-fpga-mgr.h"
->> +
->> +#define FAKE_BIT_BLOCKS		16
->> +#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
->> +
->> +static u8 fake_bit[FAKE_BIT_SIZE];
-> 
-> I take it "bit" in fake_bit and sgt_bit is short for "bitstream". Initially,
-> I found this confusing as I tend to think of a bit as a single bit. It might
-> be better to expand that something like "fake_bitstream" or "fake_image".
-> 
-> - Russ
-
-
-You're right. Using "bit" in the name can be confusing. I'll change it
-to "fake_image" or maybe "fake_image_buf" to be consistent with the naming
-convention used in the subsystem. I'll also change "test_img_info"
-to "fake_img_info" to improve naming consistency.
-
-Thanks,
-Marco
+diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
+index de8c5a59c77f..c50a075ae1d8 100644
+--- a/Documentation/ABI/testing/sysfs-bus-nvdimm
++++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
+@@ -18,9 +18,11 @@ Description:	(RO) Attribute group to describe the magic bits
+ 		Each attribute under this group defines a bit range of the
+ 		perf_event_attr.config. Supported attribute is listed
+ 		below::
+-		  event  = "config:0-4"  - event ID
++
++			event  = "config:0-4"  - event ID
+ 
+ 		For example::
++
+ 			ctl_res_cnt = "event=0x1"
+ 
+ What:           /sys/bus/event_source/devices/nmemX/events
+-- 
+2.34.1
 
