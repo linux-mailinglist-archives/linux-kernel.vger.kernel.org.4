@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE31697D95
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E7E697D97
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjBONiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S230203AbjBONjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjBONiM (ORCPT
+        with ESMTP id S229642AbjBONi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:38:12 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909422F7AD;
-        Wed, 15 Feb 2023 05:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676468291; x=1708004291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+4r0+D+q5ysn8M+YYqPSqFr45GaxeGtQyxkSeRJTi1U=;
-  b=NRrmvenv4cwJpf95BqDV4tCGNgFaYW884q3Kh2rwFkEmnGjm3XfUHNDJ
-   0I6kLfxt2ZojI7pLftuXIVlzsQTbBaQ4BdIpPbqFWta7ke3dIpJHsk0Zw
-   zXlGtSbdcV4bI45AmJ4r22WG0Nf7V6VnR0ASG3of3r91VBR8atX7WmKpZ
-   kfiH8ZQM0bvhhEvgFQgEaQWqE2lPskNoNmohnVTU1wBhC8LPLRwO7Qds7
-   TkOHS3XDmEX9bg+iGFuSrnPIxogtkmsxQ0yw8IqSj/PG75Sq5D3sHvyqL
-   akS2wYbifkgJzgF6jOs+Ko9NRHFLBGDQDfnTDRwJwNdRXbInhF+KXy6h5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="332733937"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="332733937"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:38:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="793501673"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="793501673"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2023 05:38:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pSHz4-007H3i-2x;
-        Wed, 15 Feb 2023 15:38:06 +0200
-Date:   Wed, 15 Feb 2023 15:38:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Claudiu.Beznea@microchip.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ludovic.Desroches@microchip.com,
-        linus.walleij@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v2 5/5] pinctrl: at91: Utilise temporary variable for
- struct device
-Message-ID: <Y+zgPjDruv4cIqDd@smile.fi.intel.com>
-References: <20230213154532.32992-1-andriy.shevchenko@linux.intel.com>
- <20230213154532.32992-6-andriy.shevchenko@linux.intel.com>
- <b78661b9-d9a4-5c2c-7df6-8fc79da73538@microchip.com>
+        Wed, 15 Feb 2023 08:38:58 -0500
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701C77D88;
+        Wed, 15 Feb 2023 05:38:57 -0800 (PST)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 1EFC02147;
+        Wed, 15 Feb 2023 13:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1676468085;
+        bh=v58AXW2jaHRye0+maSOsTkJ3+nH0kdM/rFc7zhel7Rc=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=W4yAraG/LFxRU1llz2bytqvNtGnqOkDAsNUSflnIdSqi2WB4dmyV07Vp9gmL7aBzA
+         RLOcoQ3v00omyOCC4OtsDJzX//VF+mkYcGp8YdRXKA+jBpvUt5L+mV6diBi5Di8M9R
+         azxBZlm0LhyBv5C1t8ozsOdC6sfk0D8cjgvL7yic=
+Received: from [192.168.211.36] (192.168.211.36) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 15 Feb 2023 16:38:55 +0300
+Message-ID: <2f017ba3-78a9-211d-2a61-f8a1c90c3cab@paragon-software.com>
+Date:   Wed, 15 Feb 2023 17:38:54 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b78661b9-d9a4-5c2c-7df6-8fc79da73538@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: [PATCH 08/11] fs/ntfs3: Changed ntfs_get_acl() to use dentry
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <d7c91201-5e09-5c06-3283-7887f5a5b7f1@paragon-software.com>
+In-Reply-To: <d7c91201-5e09-5c06-3283-7887f5a5b7f1@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.36]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,23 +56,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:11:58AM +0000, Claudiu.Beznea@microchip.com wrote:
-> On 13.02.2023 17:45, Andy Shevchenko wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > We have a temporary variable to keep pointer to struct device.
-> > Utilise it inside the ->probe() implementation.
-> 
-> Apart from this the patch also removes some { } and does some alignments.
-> For clarity some of these might go better in a different patch.
+ntfs_get_acl changed to match new interface in struct inode_operations.
 
-I was under impression that checkpatch will complain about it, but it appears
-that it does not. I will issue a new version with this updated.
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/file.c    |  2 +-
+  fs/ntfs3/namei.c   |  4 ++--
+  fs/ntfs3/ntfs_fs.h |  3 ++-
+  fs/ntfs3/xattr.c   | 26 +++++++++-----------------
+  4 files changed, 14 insertions(+), 21 deletions(-)
 
-Thanks for your reviews and testing!
+diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
+index df7b76d1c127..09b7931e6be3 100644
+--- a/fs/ntfs3/file.c
++++ b/fs/ntfs3/file.c
+@@ -1143,7 +1143,7 @@ const struct inode_operations 
+ntfs_file_inode_operations = {
+      .getattr    = ntfs_getattr,
+      .setattr    = ntfs3_setattr,
+      .listxattr    = ntfs_listxattr,
+-    .get_inode_acl    = ntfs_get_acl,
++    .get_acl    = ntfs_get_acl,
+      .set_acl    = ntfs_set_acl,
+      .fiemap        = ntfs_fiemap,
+  };
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 5d5fe2f1f77c..8b68ead5cc1f 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -607,7 +607,7 @@ const struct inode_operations 
+ntfs_dir_inode_operations = {
+      .rmdir        = ntfs_rmdir,
+      .mknod        = ntfs_mknod,
+      .rename        = ntfs_rename,
+-    .get_inode_acl    = ntfs_get_acl,
++    .get_acl    = ntfs_get_acl,
+      .set_acl    = ntfs_set_acl,
+      .setattr    = ntfs3_setattr,
+      .getattr    = ntfs_getattr,
+@@ -620,7 +620,7 @@ const struct inode_operations 
+ntfs_special_inode_operations = {
+      .setattr    = ntfs3_setattr,
+      .getattr    = ntfs_getattr,
+      .listxattr    = ntfs_listxattr,
+-    .get_inode_acl    = ntfs_get_acl,
++    .get_acl    = ntfs_get_acl,
+      .set_acl    = ntfs_set_acl,
+  };
 
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 26957dbfe471..b7782107ce8a 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -855,7 +855,8 @@ unsigned long ntfs_names_hash(const u16 *name, 
+size_t len, const u16 *upcase,
+
+  /* globals from xattr.c */
+  #ifdef CONFIG_NTFS3_FS_POSIX_ACL
+-struct posix_acl *ntfs_get_acl(struct inode *inode, int type, bool rcu);
++struct posix_acl *ntfs_get_acl(struct user_namespace *mnt_userns,
++         struct dentry *dentry, int type);
+  int ntfs_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
+           struct posix_acl *acl, int type);
+  int ntfs_init_acl(struct user_namespace *mnt_userns, struct inode *inode,
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index e7a66225361d..95c479d7ebba 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -520,9 +520,14 @@ static noinline int ntfs_set_ea(struct inode 
+*inode, const char *name,
+  }
+
+  #ifdef CONFIG_NTFS3_FS_POSIX_ACL
+-static struct posix_acl *ntfs_get_acl_ex(struct inode *inode, int type,
+-                     int locked)
++
++/*
++ * ntfs_get_acl - inode_operations::get_acl
++ */
++struct posix_acl *ntfs_get_acl(struct user_namespace *mnt_userns,
++                   struct dentry *dentry, int type)
+  {
++    struct inode *inode = d_inode(dentry);
+      struct ntfs_inode *ni = ntfs_i(inode);
+      const char *name;
+      size_t name_len;
+@@ -545,13 +550,11 @@ static struct posix_acl *ntfs_get_acl_ex(struct 
+inode *inode, int type,
+          name_len = sizeof(XATTR_NAME_POSIX_ACL_DEFAULT) - 1;
+      }
+
+-    if (!locked)
+-        ni_lock(ni);
++    ni_lock(ni);
+
+      err = ntfs_get_ea(inode, name, name_len, buf, PATH_MAX, &req);
+
+-    if (!locked)
+-        ni_unlock(ni);
++    ni_unlock(ni);
+
+      /* Translate extended attribute to acl. */
+      if (err >= 0) {
+@@ -570,17 +573,6 @@ static struct posix_acl *ntfs_get_acl_ex(struct 
+inode *inode, int type,
+      return acl;
+  }
+
+-/*
+- * ntfs_get_acl - inode_operations::get_acl
+- */
+-struct posix_acl *ntfs_get_acl(struct inode *inode, int type, bool rcu)
+-{
+-    if (rcu)
+-        return ERR_PTR(-ECHILD);
+-
+-    return ntfs_get_acl_ex(inode, type, 0);
+-}
+-
+  static noinline int ntfs_set_acl_ex(struct user_namespace *mnt_userns,
+                      struct inode *inode, struct posix_acl *acl,
+                      int type, bool init_acl)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
