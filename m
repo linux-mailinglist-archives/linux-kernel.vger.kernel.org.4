@@ -2,159 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B178697766
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ACA697767
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 08:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbjBOHdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 02:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S233614AbjBOHdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 02:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjBOHdX (ORCPT
+        with ESMTP id S233588AbjBOHd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:33:23 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBC028D31
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:33:18 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230215073316epoutp023ef27ac4d1e3ea4af7d65de2c4929127~D7x16P5h51830218302epoutp02N
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:33:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230215073316epoutp023ef27ac4d1e3ea4af7d65de2c4929127~D7x16P5h51830218302epoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676446396;
-        bh=RF/xzastbc895o4SA8/7HdvL35TK9YhPjdbYmMRhRTA=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=TGFovSsHkBawJ/N/Y3SH2VBfaXVy47p3kN9CaaEAzlEBG7zvJqoYxhYSZo7q+VArh
-         C64ISMCCr1j9RT/mmS+7q27XsIKlu8h6GRkJtrlVBy5bmeUHfsG9ifiUxotI+1QMvL
-         GOIq6F1OJUq7LYYflqxYEYzbPJW4M4Cb2vAu0ly0=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230215073315epcas1p4335c5fb91495fc9bfd60a52fd5806a14~D7x1p3HLt2115921159epcas1p4Y;
-        Wed, 15 Feb 2023 07:33:15 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.248]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PGqYl1zxKz4x9QK; Wed, 15 Feb
-        2023 07:33:15 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F5.BD.54823.ABA8CE36; Wed, 15 Feb 2023 16:33:15 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230215073314epcas1p18f4c784aa53ec77537c2dbd596014af7~D7x0lt9ag1246812468epcas1p19;
-        Wed, 15 Feb 2023 07:33:14 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230215073314epsmtrp1adb93e54e45a08890d8579311f48f207~D7x0lHpJ52895528955epsmtrp1M;
-        Wed, 15 Feb 2023 07:33:14 +0000 (GMT)
-X-AuditID: b6c32a39-a97ff7000000d627-85-63ec8ababa31
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DC.89.17995.ABA8CE36; Wed, 15 Feb 2023 16:33:14 +0900 (KST)
-Received: from VDBS1418.vd.sec.samsung.net (unknown [168.219.244.30]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230215073314epsmtip19d854a30cac03c74690c39ff33a72540~D7x0bfPdY1295712957epsmtip1I;
-        Wed, 15 Feb 2023 07:33:14 +0000 (GMT)
-From:   Bumwoo Lee <bw365.lee@samsung.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     Bumwoo Lee <bw365.lee@samsung.com>
-Subject: [PATCH] kernel/irq/manage.c: print irq name when unbalanced irq
- enable.
-Date:   Wed, 15 Feb 2023 16:32:17 +0900
-Message-Id: <20230215073217.18269-1-bw365.lee@samsung.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 15 Feb 2023 02:33:29 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DE53526D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:33:27 -0800 (PST)
+Received: from [192.168.0.2] (unknown [95.90.237.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3CFF461CC457B;
+        Wed, 15 Feb 2023 08:33:24 +0100 (CET)
+Message-ID: <866fe1b3-8044-6581-9711-452550f91198@molgen.mpg.de>
+Date:   Wed, 15 Feb 2023 08:33:23 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 2/2] misc: smpro-errmon: Add dimm training failure
+ syndrome
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Thang Nguyen <thang@os.amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>
+References: <20230214064509.3622044-1-quan@os.amperecomputing.com>
+ <20230214064509.3622044-3-quan@os.amperecomputing.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230214064509.3622044-3-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIKsWRmVeSWpSXmKPExsWy7bCmru7urjfJBg0H+SxOrFnEZHF51xw2
-        i82bpjI7MHu8O3eO3aNvyypGj8+b5AKYo7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1
-        DS0tzJUU8hJzU22VXHwCdN0yc4AWKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIK
-        zAr0ihNzi0vz0vXyUkusDA0MjEyBChOyM1oPHmUsmMJTseXEBPYGxkucXYycHBICJhL3v/5g
-        62Lk4hAS2MEocerkPkYI5xOjROvrHawQzmdGiV0L37HDtOz9eYIFIrGLUWLm5p3sEM4vRoln
-        K9rBqtgENCT2XGxgA7FFBNwkunq/g9nMAmoSD1ZtBKsRFgiS+NozAyzOIqAqcXV1OxOIzStg
-        JTF9zSc2iG3yEt3//rBAxAUlTs58wgIxR16ieetsZpDFEgKL2CX+Ht4C1MwB5LhIrNpsBNEr
-        LPHq+Baoq6UkXva3QdnpEiuv3IGycyRe329nhLCNJd69XcsMMoZZQFNi/S59iLCixM7fcxkh
-        1vJJvPvawwqxiVeio00IokRZovvBCyYIW1Ji8dM7UBM9JG48msIKYgsJxErs2nKMeQKj/Cwk
-        z8xC8swshMULGJlXMYqlFhTnpqcWGxaYwiM1OT93EyM4rWlZ7mCc/vaD3iFGJg7GQ4wSHMxK
-        IrzCT18kC/GmJFZWpRblxxeV5qQWH2I0BQbvRGYp0eR8YGLNK4k3NLE0MDEzMrEwtjQ2UxLn
-        Fbc9mSwkkJ5YkpqdmlqQWgTTx8TBKdXA5Lx0RnX0DrUy37p6gYaFe6UvVs+uMjxuZnNy2sk3
-        R3avEvzwRWlidLxfdcGrzwmfOrzuWxhU3n50MnDptlN5ckx2E3lVOZ7m7Vj5YuqTa7zXDa6s
-        uikXl/q79RbXK2HmW+wLJh/nebSUbe+qY3zHedI7IlR27Dg7dU6POKNb67V3QYvW9Sq+aqlK
-        5JTo1N7Pxh8k5ScU15B/p77WZ7blzLY192yYT/25dMLBxlRzqVlX3I891jNjO1bN0Td89HTJ
-        Im1eof8i731n7NrMvH0vn4hpT9rUqkPrrFxmXXkmN1Pmj/mGkN3FsRsrnv4K5TC7EbD957RJ
-        f5jVW4pZWfgmLv4y/cFjhWh28Y35Lt8kdJRYijMSDbWYi4oTAWf+rJL0AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnluLIzCtJLcpLzFFi42LZdlhJTndX15tkg19XNS1OrFnEZHF51xw2
-        i82bpjI7MHu8O3eO3aNvyypGj8+b5AKYo7hsUlJzMstSi/TtErgyWg8eZSyYwlOx5cQE9gbG
-        S5xdjJwcEgImEnt/nmDpYuTiEBLYwSjx98spFoiEpMTZ5Y/Yuxg5gGxhicOHiyFqfjBK3L55
-        kBmkhk1AQ2LPxQY2EFtEwEPi1+EVYL3MAmoSD1ZtBOsVFgiQ+HvHGiTMIqAqcXV1OxOIzStg
-        JTF9zSc2iFXyEt3//rBAxAUlTs58AjVGXqJ562zmCYx8s5CkZiFJLWBkWsUomVpQnJueW2xY
-        YJSXWq5XnJhbXJqXrpecn7uJERxmWlo7GPes+qB3iJGJg/EQowQHs5IIr/DTF8lCvCmJlVWp
-        RfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MM3h3PBig+xZD56Wrz/s
-        xQPuqSrMFebr9luuItnzWubnbaVzjyPaklU+vVmT3sy0dIm5Y9T3Tdbv+1+uvPm59sYdiVt/
-        j7t4PGVf+bFnUrHURLHN/j6l59U2qSU+u37n2xet/1uvLPXetsS3tiv3myt7cvkJj9b0NNPL
-        C82PuEgszuoQ7wts7ZIt9hXy/Lur7eXBvsn+kudY+mJNhGfLc8z0YDs5wzyrSiPwtcy3dkn2
-        QMfY4v0vbyZl99dMmfPlpJDA8XuC7R3f9c4Evf8kxvBoT9OXB1unv2iM/K7Wc1roWLC/vKum
-        Ku/Xb+9+Nd5v6dW1+RtieVYq96BV94S3l+YtfPTKI1FdY4aZxPsHLEosxRmJhlrMRcWJABmj
-        ZK+iAgAA
-X-CMS-MailID: 20230215073314epcas1p18f4c784aa53ec77537c2dbd596014af7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230215073314epcas1p18f4c784aa53ec77537c2dbd596014af7
-References: <CGME20230215073314epcas1p18f4c784aa53ec77537c2dbd596014af7@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make easy for debugging,
-let's print desc->name at the time of the problem.
+Dear Quan,
 
-[3-32714.6377] Unbalanced enable for IRQ 69 (2800000.sdp_dvde)
 
-Signed-off-by: Bumwoo Lee <bw365.lee@samsung.com>
----
- kernel/irq/manage.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Thank you for your patch.
 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 8ce75495e04f..161138998d8d 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -781,8 +781,8 @@ void __enable_irq(struct irq_desc *desc)
- 	switch (desc->depth) {
- 	case 0:
-  err_out:
--		WARN(1, KERN_WARNING "Unbalanced enable for IRQ %d\n",
--		     irq_desc_get_irq(desc));
-+		WARN(1, "Unbalanced enable for IRQ %d (%s)\n",
-+		     irq_desc_get_irq(desc), desc->name ? desc->name : "Null");
- 		break;
- 	case 1: {
- 		if (desc->istate & IRQS_SUSPENDED)
-@@ -823,7 +823,8 @@ void enable_irq(unsigned int irq)
- 	if (!desc)
- 		return;
- 	if (WARN(!desc->irq_data.chip,
--		 KERN_ERR "enable_irq before setup/request_irq: irq %u\n", irq))
-+		 "%s before setup/request_irq: irq %u (%s)\n",
-+		 __func__, irq, desc->name ? desc->name : "Null"))
- 		goto out;
- 
- 	__enable_irq(desc);
-@@ -907,7 +908,8 @@ int irq_set_irq_wake(unsigned int irq, unsigned int on)
- 		}
- 	} else {
- 		if (desc->wake_depth == 0) {
--			WARN(1, "Unbalanced IRQ %d wake disable\n", irq);
-+			WARN(1, "Unbalanced IRQ %d (%s) wake disable\n", irq,
-+				 desc->name ? desc->name : "Null");
- 		} else if (--desc->wake_depth == 0) {
- 			ret = set_irq_wake_real(irq, on);
- 			if (ret)
--- 
-2.35.1
+Am 14.02.23 um 07:45 schrieb Quan Nguyen:
+> Adds event_dimm[0-15]_syndrome sysfs to report the failure syndrome
+> to BMC when DIMM training failed.
 
+Where you able to verify that it works? Out of curiosity, how?
+
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+>   .../sysfs-bus-platform-devices-ampere-smpro   | 10 +++
+>   drivers/misc/smpro-errmon.c                   | 77 +++++++++++++++++++
+>   2 files changed, 87 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+> index d4e3f308c451..c35f1d45e656 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+> +++ b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+> @@ -265,6 +265,16 @@ Description:
+>   		For more details, see section `5.7 GPI Status Registers and 5.9 Memory Error Register Definitions,
+>   		Altra Family Soc BMC Interface Specification`.
+>   
+> +What:		/sys/bus/platform/devices/smpro-errmon.*/event_dimm[0-15]_syndrome
+> +KernelVersion:	6.1
+
+Should it be 6.2, as it probably won’t make it into 6.1?
+
+> +Contact:	Quan Nguyen <quan@os.amperecomputing.com>
+> +Description:
+> +		(RO) The sysfs returns the 2-byte DIMM failure syndrome data for slot
+> +		0-15 if it failed to initialized.
+
+to initialize
+
+> +
+> +		For more details, see section `5.11 Boot Stage Register Definitions,
+> +		Altra Family Soc BMC Interface Specification`.
+> +
+>   What:		/sys/bus/platform/devices/smpro-misc.*/boot_progress
+>   KernelVersion:	6.1
+>   Contact:	Quan Nguyen <quan@os.amperecomputing.com>
+> diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
+> index 1635e881aefb..3e8570cbb740 100644
+> --- a/drivers/misc/smpro-errmon.c
+> +++ b/drivers/misc/smpro-errmon.c
+> @@ -47,6 +47,12 @@
+>   #define WARN_PMPRO_INFO_LO	0xAC
+>   #define WARN_PMPRO_INFO_HI	0xAD
+>   
+> +/* Boot Stage Register */
+> +#define BOOTSTAGE		0xB0
+> +#define DIMM_SYNDROME_SEL	0xB4
+> +#define DIMM_SYNDROME_ERR	0xB5
+> +#define DIMM_SYNDROME_STAGE	4
+> +
+>   /* PCIE Error Registers */
+>   #define PCIE_CE_ERR_CNT		0xC0
+>   #define PCIE_CE_ERR_LEN		0xC1
+> @@ -468,6 +474,61 @@ EVENT_RO(vrd_hot, VRD_HOT_EVENT);
+>   EVENT_RO(dimm_hot, DIMM_HOT_EVENT);
+>   EVENT_RO(dimm_2x_refresh, DIMM_2X_REFRESH_EVENT);
+>   
+> +static ssize_t smpro_dimm_syndrome_read(struct device *dev, struct device_attribute *da,
+> +					char *buf, int slot)
+
+Could `slot` be passed as `unsigned int`?
+
+> +{
+> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
+> +	s32 data;
+> +	int ret;
+> +
+> +	ret = regmap_read(errmon->regmap, BOOTSTAGE, &data);
+
+The function signature is:
+
+     int regmap_read(struct regmap *map, unsigned int reg, unsigned int 
+*val)
+
+So why not use unsigned int as data type for `data`?
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* check for valid stage */
+> +	data = (data >> 8) & 0xff;
+> +	if (data != DIMM_SYNDROME_STAGE)
+> +		return ret;
+
+Isn’t now success returned? Should a debug message be printed?
+
+> +
+> +	/* Write the slot ID to retrieve Error Syndrome */
+> +	ret = regmap_write(errmon->regmap, DIMM_SYNDROME_SEL, slot);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Read the Syndrome error */
+> +	ret = regmap_read(errmon->regmap, DIMM_SYNDROME_ERR, &data);
+> +	if (ret || !data)
+> +		return ret;
+> +
+> +	return sysfs_emit(buf, "%04x\n", data);
+> +}
+> +
+> +#define EVENT_DIMM_SYNDROME(_slot) \
+> +	static ssize_t event_dimm##_slot##_syndrome_show(struct device *dev,          \
+> +							 struct device_attribute *da, \
+> +							 char *buf)                   \
+> +	{                                                                             \
+> +		return smpro_dimm_syndrome_read(dev, da, buf, _slot);                 \
+> +	}                                                                             \
+> +	static DEVICE_ATTR_RO(event_dimm##_slot##_syndrome)
+> +
+> +EVENT_DIMM_SYNDROME(0);
+> +EVENT_DIMM_SYNDROME(1);
+> +EVENT_DIMM_SYNDROME(2);
+> +EVENT_DIMM_SYNDROME(3);
+> +EVENT_DIMM_SYNDROME(4);
+> +EVENT_DIMM_SYNDROME(5);
+> +EVENT_DIMM_SYNDROME(6);
+> +EVENT_DIMM_SYNDROME(7);
+> +EVENT_DIMM_SYNDROME(8);
+> +EVENT_DIMM_SYNDROME(9);
+> +EVENT_DIMM_SYNDROME(10);
+> +EVENT_DIMM_SYNDROME(11);
+> +EVENT_DIMM_SYNDROME(12);
+> +EVENT_DIMM_SYNDROME(13);
+> +EVENT_DIMM_SYNDROME(14);
+> +EVENT_DIMM_SYNDROME(15);
+> +
+>   static struct attribute *smpro_errmon_attrs[] = {
+>   	&dev_attr_overflow_core_ce.attr,
+>   	&dev_attr_overflow_core_ue.attr,
+> @@ -493,6 +554,22 @@ static struct attribute *smpro_errmon_attrs[] = {
+>   	&dev_attr_event_vrd_hot.attr,
+>   	&dev_attr_event_dimm_hot.attr,
+>   	&dev_attr_event_dimm_2x_refresh.attr,
+> +	&dev_attr_event_dimm0_syndrome.attr,
+> +	&dev_attr_event_dimm1_syndrome.attr,
+> +	&dev_attr_event_dimm2_syndrome.attr,
+> +	&dev_attr_event_dimm3_syndrome.attr,
+> +	&dev_attr_event_dimm4_syndrome.attr,
+> +	&dev_attr_event_dimm5_syndrome.attr,
+> +	&dev_attr_event_dimm6_syndrome.attr,
+> +	&dev_attr_event_dimm7_syndrome.attr,
+> +	&dev_attr_event_dimm8_syndrome.attr,
+> +	&dev_attr_event_dimm9_syndrome.attr,
+> +	&dev_attr_event_dimm10_syndrome.attr,
+> +	&dev_attr_event_dimm11_syndrome.attr,
+> +	&dev_attr_event_dimm12_syndrome.attr,
+> +	&dev_attr_event_dimm13_syndrome.attr,
+> +	&dev_attr_event_dimm14_syndrome.attr,
+> +	&dev_attr_event_dimm15_syndrome.attr,
+>   	NULL
+>   };
+
+
+Kind regards,
+
+Paul
