@@ -2,215 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9FC6981F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451336981E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 18:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjBOR1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 12:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S230042AbjBORZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 12:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBOR1k (ORCPT
+        with ESMTP id S229597AbjBORZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:27:40 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1484AD31
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 09:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676482058; x=1708018058;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PBPnPi0qro1VlO3swfBP/0cTMsG0vJodGSvXgwx++3Q=;
-  b=WfDYNIHRmeIstiPku26lZhUkbFiZviImpTI9r1tj6o4Zu/6IPtHi3Eeg
-   g++Ls5c7EGzhYdN84EOuyKU/GnlVkwqA+0Gl+PuzMVsObewiK+J7+BIwo
-   /9lD54ZJXQI/r/H+BJ6d7fG9FjXReycyb6vVScEjBK0Z26Ggzsr2l5iCH
-   BklY8gTbyFThrR8eSoHgzY0RSWNt1j24W6jHAmeINk43LMTX2y63FZe6l
-   HniHS/Qt4/q5bXfrrOL+22m2nlXCZHYQ9I5aNLuRClsdIxtWrt3qnFdAo
-   ugorPOYnGJj6o3xx4d7f73fEHC0B5tE6BXeiNYiT6e8kpF8MCOk/mNIbT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="315145453"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="315145453"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 09:24:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="738433319"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="738433319"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Feb 2023 09:24:56 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSLWZ-0009ar-1n;
-        Wed, 15 Feb 2023 17:24:55 +0000
-Date:   Thu, 16 Feb 2023 01:24:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Subject: Re: [PATCH 2/3] irqchip/gic-v3: Propagate gic_cpu_pm_init() return
- code
-Message-ID: <202302160113.Sfcg9tC9-lkp@intel.com>
-References: <20230214233426.2994501-3-f.fainelli@gmail.com>
+        Wed, 15 Feb 2023 12:25:42 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B796BAD31;
+        Wed, 15 Feb 2023 09:25:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nsi2G34RsT0eR/wVvungwa2txk6yHhr4sYUmdru4qQ+sKh17w11nE8xJOzlmdbT3bTJw8n0unO4zhThe0Fn2T0Jqepc62ir+W6DctwyXqN0mFsExugvAl6bVX12uBp2P5UUuF7HaPF17YMw/9JBy46jfBFgByjbLoQrhakv6lgIE0roj/Qz7V2cXJTugDbODSFAoBNBlk2rpzcjCnbKdb9wu7j5/tDmxJPR9jiw5i3W+1jrcz1CR5CNSovQpft2rRwUK5jledFPYBvXSX6RM9AJSoII2W6p3oUYSFRnYjJU3J9VQdn3vWiC2BacnKkX79FEejtph94s0HjY+Dc8e2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cAi6DsO32l7bI21HmO77vVnT3Jx6/Dv1Rs2HBFHD8Lg=;
+ b=dLaqr0Bv0vUinY1U3v618ZmVAmKvnB1y6TKWUw+5RhNCq+Z/IuF+7kSeRj53WV+YCrfTsZzwgt7wXtKrDrHez93cdsUpQjcp7Av3KVrBenniSSTs9UcVaBuyRGEHRv0wmV7cLtjyjeT4hNKMfrmU2WJMFDzJaul8AaxfXz8bPFdEgzAFKaI7u0i4q4iQNfNMHMIYB2TOZy3v5AJhd0fOUE4uXfC5r9y4gF+9OX5RoriZ8fm0slB4YGlltR0AGWIErJ7t7KLUR8aaEs2FT5DKIwMoj6vOtCNGMHFp5MnN8C/zLbkyB/vQigzd+t0bMoVXpIfWt/nN0O4UKYY8FUgd5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cAi6DsO32l7bI21HmO77vVnT3Jx6/Dv1Rs2HBFHD8Lg=;
+ b=gqv+TRf56wghGt+Vnr+JE3wb4+Qe+FEAQ9VHBAFTjmBtD6DSe7XVXtGw4wDa4mM+RFQMoH2GYAbyT5Jgw/jskNrWZo96Np2ovvr8qo0C7vPrRYIxN5NWQZrqRfbJ5a0hu6QmmxxkKydb9rlrlDW9j8WF7RBxIKLC32c7RioRrRE=
+Received: from BN9PR03CA0079.namprd03.prod.outlook.com (2603:10b6:408:fc::24)
+ by DS0PR12MB6438.namprd12.prod.outlook.com (2603:10b6:8:ca::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 17:25:35 +0000
+Received: from BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fc:cafe::52) by BN9PR03CA0079.outlook.office365.com
+ (2603:10b6:408:fc::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12 via Frontend
+ Transport; Wed, 15 Feb 2023 17:25:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT056.mail.protection.outlook.com (10.13.177.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6111.12 via Frontend Transport; Wed, 15 Feb 2023 17:25:34 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 15 Feb
+ 2023 11:25:34 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-usb@vger.kernel.org>
+CC:     <Sanju.Mehta@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] Fix problems fetching TBT3 DROM from AMD USB4 routers
+Date:   Wed, 15 Feb 2023 11:25:18 -0600
+Message-ID: <20230215172520.8925-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214233426.2994501-3-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT056:EE_|DS0PR12MB6438:EE_
+X-MS-Office365-Filtering-Correlation-Id: c788cdb3-fb67-4435-bf29-08db0f79a5bd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SJvi/RuebE9NhiQ+f9SVAX/e1Zvl62jfTTTyX9acS+i2EJaD4xl2ahQKD7YcpFVSXobhF7skxdI4sNFIcuNZxkJDGIXtxEiAKKhZ2y7Pb0iY19K57K+ns5/7/oeulUeLjDTbwHD7FX/Klc5jUWiIKvv4P5/artXvNjnqtuOFo3gKdPEKdIxnkv+vCBPXxmNVhdt7aMMo8IYZ/Y/OpQ/q5M+RINv7cAN5jNdIKxfoGV8466t6vsILl04aHRGLkNfjPY05mp09M0uIJeHMCSd9ipKqYXfMuhNdmY5wwlsYwo5+bjR1lOwIHYa57nzVSbpwW/H4fYf4/LNs3uHaFRQv9u1okVCSrInRQFqrHy+v7sd7lMQXQme5zgVd03zjaeimtd4SDipgxJefvsOl2U3GJGKeGdYQvc2fKyq4FEMFfPuFiy7GQW55L/bs5oYLWNTqGTTqZPR0PP7bKlUP3QToit6GubBEY/DBoj1TgvisWQBYABeB6+JKUnyMsVrwdempmk8REoYxchGc3J4t7DQ4ZBDpDIHcXEt/mEKUzHCkft2VECmSu3dglmy5W/8PwHyoWtq3zg+0EQbMj9djYLnBwXvcnYjXlEWWCF+GHoRnh9rNqibqqfEjJdheTphNdDbyRoC0Hdvm5fZNNacfbDpptIu9eJT/WA39jNXjRTv9Ub3EBbPbXzxoeN7DGzgMhJNuownEK9b0FUKjRxQJFv7SPWJ5d2cJbE/H+ZwhL1edSl0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(41300700001)(5660300002)(40480700001)(8936002)(426003)(36756003)(83380400001)(36860700001)(66574015)(478600001)(86362001)(356005)(40460700003)(81166007)(316002)(70206006)(54906003)(7696005)(110136005)(82740400003)(4326008)(70586007)(8676002)(16526019)(26005)(2616005)(336012)(1076003)(6666004)(186003)(47076005)(82310400005)(44832011)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 17:25:34.8723
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c788cdb3-fb67-4435-bf29-08db0f79a5bd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6438
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+TBT3 devices when connected to an AMD USB4 router occasionally fail to
+properly respond to requests for the DROM via bit banging.
 
-I love your patch! Yet something to improve:
+Depending upon which part of the request failed will impact the severity.
+A number of workarounds have been put in place to let the driver handle
+the failed requests:
 
-[auto build test ERROR on tip/irq/core]
-[also build test ERROR on soc/for-next linus/master v6.2-rc8 next-20230215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+commit e87491a9fd4e3 ("thunderbolt: Retry DROM reads for more failure scenarios")
+commit a283de3ec646f ("thunderbolt: Do not resume routers if UID is not set")
+commit 6915812bbd109 ("thunderbolt: Do not make DROM read success compulsory")
+commit f022ff7bf377 ("thunderbolt: Retry DROM read once if parsing fails")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/irqchip-gic-v3-Use-switch-case-statements-in-gic_cpu_pm_notifier/20230215-073628
-patch link:    https://lore.kernel.org/r/20230214233426.2994501-3-f.fainelli%40gmail.com
-patch subject: [PATCH 2/3] irqchip/gic-v3: Propagate gic_cpu_pm_init() return code
-config: arm64-randconfig-r011-20230213 (https://download.01.org/0day-ci/archive/20230216/202302160113.Sfcg9tC9-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8657e4fd7d9714934c7660bc3693d9ad507679a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Fainelli/irqchip-gic-v3-Use-switch-case-statements-in-gic_cpu_pm_notifier/20230215-073628
-        git checkout 8657e4fd7d9714934c7660bc3693d9ad507679a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
+Still even with these changes the failures do make it through. In comparing
+other CM implementations utilized on AMD systems, they all access the
+DROM directly from the NVM.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302160113.Sfcg9tC9-lkp@intel.com/
+To avoid triggering this issue, try to get the DROM directly from the NVM
+in Linux as well before resorting to bitbanging.
 
-All errors (new ones prefixed by >>):
+Mario Limonciello (2):
+  thunderbolt: Adjust how NVM reading works
+  thunderbolt: use `tb_eeprom_get_drom_offset` to discover DROM offset
 
-   drivers/irqchip/irq-gic-v3.c: In function 'gic_init_bases':
->> drivers/irqchip/irq-gic-v3.c:1896:13: error: void value not ignored as it ought to be
-    1896 |         err = gic_cpu_pm_init();
-         |             ^
-
-
-vim +1896 drivers/irqchip/irq-gic-v3.c
-
-  1825	
-  1826	static int __init gic_init_bases(void __iomem *dist_base,
-  1827					 struct redist_region *rdist_regs,
-  1828					 u32 nr_redist_regions,
-  1829					 u64 redist_stride,
-  1830					 struct fwnode_handle *handle)
-  1831	{
-  1832		u32 typer;
-  1833		int err;
-  1834	
-  1835		if (!is_hyp_mode_available())
-  1836			static_branch_disable(&supports_deactivate_key);
-  1837	
-  1838		if (static_branch_likely(&supports_deactivate_key))
-  1839			pr_info("GIC: Using split EOI/Deactivate mode\n");
-  1840	
-  1841		gic_data.fwnode = handle;
-  1842		gic_data.dist_base = dist_base;
-  1843		gic_data.redist_regions = rdist_regs;
-  1844		gic_data.nr_redist_regions = nr_redist_regions;
-  1845		gic_data.redist_stride = redist_stride;
-  1846	
-  1847		/*
-  1848		 * Find out how many interrupts are supported.
-  1849		 */
-  1850		typer = readl_relaxed(gic_data.dist_base + GICD_TYPER);
-  1851		gic_data.rdists.gicd_typer = typer;
-  1852	
-  1853		gic_enable_quirks(readl_relaxed(gic_data.dist_base + GICD_IIDR),
-  1854				  gic_quirks, &gic_data);
-  1855	
-  1856		pr_info("%d SPIs implemented\n", GIC_LINE_NR - 32);
-  1857		pr_info("%d Extended SPIs implemented\n", GIC_ESPI_NR);
-  1858	
-  1859		/*
-  1860		 * ThunderX1 explodes on reading GICD_TYPER2, in violation of the
-  1861		 * architecture spec (which says that reserved registers are RES0).
-  1862		 */
-  1863		if (!(gic_data.flags & FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539))
-  1864			gic_data.rdists.gicd_typer2 = readl_relaxed(gic_data.dist_base + GICD_TYPER2);
-  1865	
-  1866		gic_data.domain = irq_domain_create_tree(handle, &gic_irq_domain_ops,
-  1867							 &gic_data);
-  1868		gic_data.rdists.rdist = alloc_percpu(typeof(*gic_data.rdists.rdist));
-  1869		gic_data.rdists.has_rvpeid = true;
-  1870		gic_data.rdists.has_vlpis = true;
-  1871		gic_data.rdists.has_direct_lpi = true;
-  1872		gic_data.rdists.has_vpend_valid_dirty = true;
-  1873	
-  1874		if (WARN_ON(!gic_data.domain) || WARN_ON(!gic_data.rdists.rdist)) {
-  1875			err = -ENOMEM;
-  1876			goto out_free;
-  1877		}
-  1878	
-  1879		irq_domain_update_bus_token(gic_data.domain, DOMAIN_BUS_WIRED);
-  1880	
-  1881		gic_data.has_rss = !!(typer & GICD_TYPER_RSS);
-  1882	
-  1883		if (typer & GICD_TYPER_MBIS) {
-  1884			err = mbi_init(handle, gic_data.domain);
-  1885			if (err)
-  1886				pr_err("Failed to initialize MBIs\n");
-  1887		}
-  1888	
-  1889		set_handle_irq(gic_handle_irq);
-  1890	
-  1891		gic_update_rdist_properties();
-  1892	
-  1893		gic_dist_init();
-  1894		gic_cpu_init();
-  1895		gic_smp_init();
-> 1896		err = gic_cpu_pm_init();
-  1897		if (err)
-  1898			goto out_set_handle;
-  1899	
-  1900		if (gic_dist_supports_lpis()) {
-  1901			its_init(handle, &gic_data.rdists, gic_data.domain);
-  1902			its_cpu_init();
-  1903			its_lpi_memreserve_init();
-  1904		} else {
-  1905			if (IS_ENABLED(CONFIG_ARM_GIC_V2M))
-  1906				gicv2m_init(handle, gic_data.domain);
-  1907		}
-  1908	
-  1909		gic_enable_nmi_support();
-  1910	
-  1911		return 0;
-  1912	
-  1913	out_set_handle:
-  1914		set_handle_irq(NULL);
-  1915	out_free:
-  1916		if (gic_data.domain)
-  1917			irq_domain_remove(gic_data.domain);
-  1918		free_percpu(gic_data.rdists.rdist);
-  1919		return err;
-  1920	}
-  1921	
+ drivers/thunderbolt/eeprom.c | 150 +++++++++++++++++++----------------
+ 1 file changed, 82 insertions(+), 68 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
