@@ -2,83 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812F2698805
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C55698807
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjBOWm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S229874AbjBOWnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjBOWm1 (ORCPT
+        with ESMTP id S229866AbjBOWnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:42:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B991284E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:42:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1D0E1CE25C8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:42:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374DAC433D2;
-        Wed, 15 Feb 2023 22:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676500940;
-        bh=FZ+vJUnpiBy150adY2/Snz6rzRsvYvVw+/XhB7D6DsM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HNwd9NX0rRF50euktiNXQ0u72rb9iQwYZxJJpBpkd6BrNSVmF0rqjCrcy3/9Ba21D
-         fOWeD1Tt1E9qeukg2CYP27VUHTKRtEsD82OtPzZeI/9R5WegOLVKWHYj9OJdo91M2g
-         llzoFqhY6aL61YD+A6CITtZ4iyVSm71nlI6DVyxz8dvMyNF0bUDwTZpDqYac26NOt/
-         C+5FHM1FSJNidFm0sOrlJsTCY5ka3LMaHOcMUvOFDOhkvo5hE5lzAHXRPTlPvK49mN
-         i+ZlFkgE/JGFUdORFiPtwVvAlaugmY/IKppplcOuRgS3lVdlIBt6w4xUbORRPa9UPZ
-         zKz2/ft5roaug==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0EFE65C0F9D; Wed, 15 Feb 2023 14:42:18 -0800 (PST)
-Date:   Wed, 15 Feb 2023 14:42:18 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Marco Elver <elver@google.com>, Arnd Bergmann <arnd@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wed, 15 Feb 2023 17:43:12 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8624134
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:10 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-52ec7c792b1so389747b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cVqwUoC4GP/fOMjS8mr++nAU4yxunp7mbNFnyq/qIn8=;
+        b=iIQH/g0b9xgWNpEM6kDdNbbbMfOVqoYx/50hTtksPVkvnVRWPK7N0Y54z76+I3ZgJN
+         kCEvQctXT2mnhEECw8xbCZHPuyFDILI8siKAD74DW7FkmmhXgCU9ADG3TTWw6xkYE77A
+         goF2OUeCaEETnV9f8G/epYW/sBvbXrfkwq7b13CrKfaoWmfbcZx/rVxZ2V8JqAf/2H0Y
+         9fuZgtNgbEckfnHGaNJuKsaYxxjiY5ZFG+xelAc07oClxPO6YMZ3Ks7ni6geqCByrjST
+         Av1+wyqR+tCscDA8kq7Cn8kBMjAp70iHz8UwRi/FwQmpvnko1remy0ZXg5KhpDd3Q5TM
+         zsXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cVqwUoC4GP/fOMjS8mr++nAU4yxunp7mbNFnyq/qIn8=;
+        b=QNj8ap+o4VOFTWsRnHqD5tw9oEmM1JLsp68vmcErlDu114+JmGc5mbqXyeQOR33yPp
+         SYv3BDuaIXTmwj20r3cUb64ZzQHKtm4MEU0yV1e8/qLRaFd+bJFWX1XWvsDhMFMbahIS
+         Yf/av8Y6NS40XERVa0yI8/bJqdLB2X5p+b4SgslfaeIsY3kLQxDyv52WPZeIpCd/HE1F
+         gful3PTZk2LN7BZJtUpx3BX6LEIGDuDoTi0YB/CPIu3Nd/eNwuH0WkHzzRaRsg/kFfO6
+         SAVlbk7NudK8HnLPMIiMbOhfN9FkHOM/6cMihl5JufgnqUCRuhrbl0NkHdakSYb4wvvi
+         2xnQ==
+X-Gm-Message-State: AO0yUKWr6MRp+NofKUn60Bsu99r5zRM0a8QmUn20ZEp87xoXsGidqUsw
+        2S9zexV5suW77WIPJTyqhpy1jkWhxfI=
+X-Google-Smtp-Source: AK7set83BDwMNOrgS6ktEvYsmjAck1AxlN4mXYwbgpbE0KOH/4yoO6GQe2EpHX2G0ere3dR6hGktDR/8Jpk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ae5f:0:b0:52f:daf9:66af with SMTP id
+ g31-20020a81ae5f000000b0052fdaf966afmr5ywk.6.1676500989866; Wed, 15 Feb 2023
+ 14:43:09 -0800 (PST)
+Date:   Wed, 15 Feb 2023 14:43:08 -0800
+In-Reply-To: <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com>
+Mime-Version: 1.0
+References: <20221129193717.513824-1-mlevitsk@redhat.com> <20221129193717.513824-8-mlevitsk@redhat.com>
+ <Y9mWFlGdzoa8ZDW7@google.com> <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
+ <Y+PIdJZtCsGH2Sw3@google.com> <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com>
+Message-ID: <Y+1f/En6rvqoe6st@google.com>
+Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection interface
+From:   Sean Christopherson <seanjc@google.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
-Message-ID: <20230215224218.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230215091503.1490152-1-arnd@kernel.org>
- <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
- <78b2ed7d-2585-479f-98b1-ed2574a64cb8@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78b2ed7d-2585-479f-98b1-ed2574a64cb8@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:48:11AM +0100, Arnd Bergmann wrote:
-> On Wed, Feb 15, 2023, at 10:25, Marco Elver wrote:
-> > On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, Feb 14, 2023, Santosh Shukla wrote:
+> On 2/8/2023 9:36 PM, Sean Christopherson wrote:
+> > On Wed, Feb 08, 2023, Santosh Shukla wrote:
+> >> On 2/1/2023 3:58 AM, Sean Christopherson wrote:
+> >>> On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+> >>>> @@ -5191,9 +5191,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+> >>>>  
+> >>>>  	vcpu->arch.nmi_injected = events->nmi.injected;
+> >>>>  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
+> >>>> -		vcpu->arch.nmi_pending = events->nmi.pending;
+> >>>> +		atomic_add(events->nmi.pending, &vcpu->arch.nmi_queued);
+> >>>> +
+> >>>>  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+> >>>>  
+> >>>> +	process_nmi(vcpu);
+> >>>
+> >>> Argh, having two process_nmi() calls is ugly (not blaming your code, it's KVM's
+> >>> ABI that's ugly).  E.g. if we collapse this down, it becomes:
+> >>>
+> >>> 	process_nmi(vcpu);
+> >>>
+> >>> 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+> >>> 		<blah blah blah>
+> >>> 	}
+> >>> 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+> >>>
+> >>> 	process_nmi(vcpu);
+> >>>
+> >>> And the second mess is that V_NMI needs to be cleared.
+> >>>
+> >>
+> >> Can you please elaborate on "V_NMI cleared" scenario? Are you mentioning
+> >> about V_NMI_MASK or svm->nmi_masked?
+> > 
+> > V_NMI_MASK.  KVM needs to purge any pending virtual NMIs when userspace sets
+> > vCPU event state and KVM_VCPUEVENT_VALID_NMI_PENDING is set.
+> > 
 > 
-> > Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
-> >
-> > Do you have a tree to take this through, or should it go through -rcu
-> > as usual for KCSAN patches?
+> As per the APM: V_NMI_MASK is managed by the processor
+
+Heh, we're running afoul over KVM's bad terminology conflicting with the APM's
+terminology.  By V_NMI_MASK, I meant "KVM's V_NMI_MASK", a.k.a. the flag that says
+whether or there's a pending NMI.
+
+
+However...
+
+> "
+> V_NMI_MASK: Indicates whether virtual NMIs are masked. The processor will set V_NMI_MASK
+> once it takes the virtual NMI. V_NMI_MASK is cleared when the guest successfully completes an
+> IRET instruction or #VMEXIT occurs while delivering the virtual NMI
+> "
+>
+> In my initial implementation I had changed V_NMI_MASK for the SMM scenario [1],
+> This is also not required as HW will save the V_NMI/V_NMI_MASK on 
+> SMM entry and restore them on RSM.
 > 
-> I don't have a tree for taking these build fixes, so it would be good if you could forward it as appropriate.
+> That said the svm_{get,set}_nmi_mask will look something like:
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index a9e9bfbffd72..08911a33cf1e 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3635,13 +3635,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> 
+>  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+>  {
+> -       return to_svm(vcpu)->nmi_masked;
+> +       struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +       if (is_vnmi_enabled(svm))
+> +               return svm->vmcb->control.int_ctl & V_NMI_MASK;
+> +       else
+> +               return svm->nmi_masked;
+>  }
+> 
+>  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+>  {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> 
+> +       if (is_vnmi_enabled(svm))
+> +               return;
+> +
+>         if (masked) {
+>                 svm->nmi_masked = true;
+>                 svm_set_iret_intercept(svm);
+> 
+> is there any inputs on above approach?
 
-Queued and pushed, thank you both!
+What happens if software clears the "NMIs are blocked" flag?  If KVM can't clear
+the flag, then we've got problems.  E.g. if KVM emulates IRET or SMI+RSM.  And I
+I believe there are use cases that use KVM to snapshot and reload vCPU state,
+e.g. record+replay?, in which case KVM_SET_VCPU_EVENTS needs to be able to adjust
+NMI blocking too.
 
-Is this ready for the upcoming merge window, or would you rather that
-I hold off until the v6.4 merge window?  (I am tempted to treat this
-as a bug fix, thus sending it earlier rather than later, but figured I
-should ask.)
+> On top of the above, I am including your suggested change as below...
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index e0855599df65..437a6cea3bc7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5201,9 +5201,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+> 
+>         vcpu->arch.nmi_injected = events->nmi.injected;
+>         if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+> -               vcpu->arch.nmi_pending = events->nmi.pending;
+> -               if (vcpu->arch.nmi_pending)
+> -                       kvm_make_request(KVM_REQ_NMI, vcpu);
+> +               vcpu->arch.nmi_pending = 0;
+> +               atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
+> +               kvm_make_request(KVM_REQ_NMI, vcpu);
+>         }
+>         static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+> 
+> does that make sense?
 
-							Thanx, Paul
+Yep!
