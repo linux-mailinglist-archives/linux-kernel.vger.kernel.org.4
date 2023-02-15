@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE41697EF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D8697EF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 15:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjBOO5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 09:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S229922AbjBOO7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 09:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjBOO5q (ORCPT
+        with ESMTP id S229720AbjBOO66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 09:57:46 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20593B0C8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:57:19 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so3735234pjd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:57:19 -0800 (PST)
+        Wed, 15 Feb 2023 09:58:58 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B683A0B5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:58:35 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id m1so20106005vst.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 06:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXiyNpETkYC9z6V5qLWPf0k+7IPR5cZpgLQTFb6RXec=;
-        b=NxZSpyUi5aOKG9wEEN6Nqjpnc+7z0Wt/NwdEqoJ1ebur20lHv/oM7Ija1av6J+Kncl
-         nOm6T/oa2vCuvOGkM8tfJi3YDwcNnr1gUq/F+Uc+kNbhRuxvLcbvaApeum8euQN5+QuD
-         kIp33+3YRSVtlkZc7HllsgFABTiFlh9E6gVNhKUPQVsDNNtCHHu/+ngs1Iy2Q5lyd5pH
-         DRNrtW9+envN/knBC5rHyRxzQtWvE6lYEmg5umG07qFxHLh2dxPYNsqO7qXQPxdkAXkk
-         kO735u+cYddx2jgMHJxJIGXkLoXLncSk+fH6EGqhIxvAI9NoJohjP93Wy0WeSuWCjztf
-         D8Sw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vPkUSaLMzwpeCHMGA+UM75UbDw347VZfWrMPvnxSJi0=;
+        b=ZJ39X5oTsZs/ynW8YRkYknySK+P7IIWYfkYcekUd4iKazKtn4cWD6BxY0OZUuv5RHS
+         Me2RaZXQvE7GCB+I70HCtifJ3XaeOh2yEbMcihp1AdezuwAYpQUKKXnsqnc0G/J36jdT
+         dK5TlDDHEpjBanUkThStkKzNR5bL9cX6/yOq1D2b7/OpUaxTL4soSepbODExn0ZgbhJb
+         lKwiTjuFALIeMbKxnOcSF9mpl8eWG0Q3P/4A+TTLYx6u28q/JcFqv/Ga/FX4flWnwvxI
+         CiTHib4YuDL2t2wCNp7VRPuxhhYaGxt9xVxm1Iy5Kp3FAWOx7jSM6yfHZU1h96fdw/Vl
+         Pk1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WXiyNpETkYC9z6V5qLWPf0k+7IPR5cZpgLQTFb6RXec=;
-        b=hFDZ0p5nXTFmDbqIh7gFpSmjJq8XPfXzaC/PJUYRMGrOzq6jN/3xfGb800zFoIKBfU
-         uQ5irynlx05qojF2Zcml0bMvkRiIbIG0KVdULIeZMIgi+PwBPa95MK7Mi6g1eGzJNhXW
-         1ucU6Iik0Ybne5KLsDwDI7FzXF4n6WfM6+MGkobpQggqONpe/KrtpvVAZUOMf6klU6wP
-         R/KgqZMlsSvmnT3Q0RIw1939LBN6RdjRCeepiiwGvWNFbJuib9ImEIDOGPcvA57N8xsK
-         Vibd3X2chfnjONhVFpsAcj1ikD5swV9E2lfqvzDLjLSsfHs2Nv5JRuwBWCdqjn7RcDHY
-         K/9g==
-X-Gm-Message-State: AO0yUKXn0gB8s0MZOT7nV7LmOVk25E5lueFoGjLDNtzlEBOOrfz2Dq0F
-        pugTbT42PWuduoIJhTpfAxSH6A==
-X-Google-Smtp-Source: AK7set/7P/HtTKptrN8fEWEQBq3y3lZIWLRAPkYVv5DtZxdSAAog0SbdOHfHXa5okdJFu7VPTr4zOA==
-X-Received: by 2002:a17:902:f54f:b0:199:26b1:17b3 with SMTP id h15-20020a170902f54f00b0019926b117b3mr2804547plf.28.1676473038684;
-        Wed, 15 Feb 2023 06:57:18 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id iw6-20020a170903044600b0019ab6beea1esm3585233plb.87.2023.02.15.06.57.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 06:57:17 -0800 (PST)
-In-Reply-To: <20230104180513.1379453-1-conor@kernel.org>
-References: <20230104180513.1379453-1-conor@kernel.org>
-Subject: Re: [PATCH v1 0/2] dt-bindings: Add a cpu-capacity property for RISC-V
-Message-Id: <167647301916.19800.9191672449999836503.b4-ty@rivosinc.com>
-Date:   Wed, 15 Feb 2023 06:56:59 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vPkUSaLMzwpeCHMGA+UM75UbDw347VZfWrMPvnxSJi0=;
+        b=Oed105uspW51qoMqG/OJyK8MSMYmsjG60TcH40kUBs7sKX2hFImsjSdA9tw6UeEUqp
+         2vji/DdyQeNsfCYceYMatu4gCV1q3xeFLZhSF8B5E+3OLvK+inXG8sC/rIUQT+Y2C0T0
+         4EhYqdRumszGQpdq+7J02JwyKnmLbd/VxvTmXc8tm3YbzZHTSs09GRUW+9EsdYazULxi
+         uddmEqH61llYPtCSOAm6tBlIOGA9DOBkpe/QdwfZ174GmxkBa7QIpWI0wrGvE3juGgsB
+         gEIa8eIfzW6K/ygzmjW+gl9GqIQk7TuulpcVrhyEG07w+pkOYH/T/VHy/x1RHRlBpm7C
+         wpYQ==
+X-Gm-Message-State: AO0yUKXa2ROLDAkc+EkaxDZLtKqtV+GbpQXrlmgrHdbwa6rSIfCBlh6r
+        lnWAIQOqFM+3pBuWZXfEFnl+vWJjXCgo+vRnaKNrJQ==
+X-Google-Smtp-Source: AK7set+0YxuGri/V2foEwc0NiZxIp6uu5J4mgHu5oKT2oVA9rc8lPd74Rg8O7qhHyudpBwVuMuSQnCHtmC16lKeGmbc=
+X-Received: by 2002:a05:6102:7db:b0:410:e23:4ba with SMTP id
+ y27-20020a05610207db00b004100e2304bamr401863vsg.80.1676473110911; Wed, 15 Feb
+ 2023 06:58:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-Cc:     Yanteng Si <siyanteng@loongson.cn>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
-        Alex Shi <alexs@kernel.org>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
+References: <20230215095249.246911-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20230215095249.246911-1-alexander.stein@ew.tq-group.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Feb 2023 15:58:20 +0100
+Message-ID: <CAMRc=MciMZ5n9RZ7nzac46WKwmbxdjO_4VSL=GgApmOdj=wf4w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] gpio: vf610: make irq_chip immutable
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andy.shevchenko@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,25 +67,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 18:05:12 +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Hey,
-> 
-> Ever since RISC-V starting using generic arch topology code, the code
-> paths for cpu-capacity have been there but there's no binding defined to
-> actually convey the information. Defining the same property as used on
-> arm seems to be the only logical thing to do, so do it.
-> 
-> [...]
+On Wed, Feb 15, 2023 at 10:52 AM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Since recently, the kernel is nagging about mutable irq_chips:
+>
+>     "not an immutable chip, please consider fixing it!"
+>
+> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> helper functions and call the appropriate gpiolib functions.
+>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> ---
+> Changes in v3:
+> * Use calculated gpio_num instead of accessing struct member
+>
+>  drivers/gpio/gpio-vf610.c | 41 ++++++++++++++++++++++-----------------
+>  1 file changed, 23 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
+> index a429176673e7..d3f3a69d4907 100644
+> --- a/drivers/gpio/gpio-vf610.c
+> +++ b/drivers/gpio/gpio-vf610.c
+> @@ -30,7 +30,6 @@ struct fsl_gpio_soc_data {
+>
+>  struct vf610_gpio_port {
+>         struct gpio_chip gc;
+> -       struct irq_chip ic;
+>         void __iomem *base;
+>         void __iomem *gpio_base;
+>         const struct fsl_gpio_soc_data *sdata;
+> @@ -207,20 +206,24 @@ static int vf610_gpio_irq_set_type(struct irq_data *d, u32 type)
+>
+>  static void vf610_gpio_irq_mask(struct irq_data *d)
+>  {
+> -       struct vf610_gpio_port *port =
+> -               gpiochip_get_data(irq_data_get_irq_chip_data(d));
+> -       void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
+> +       struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +       struct vf610_gpio_port *port = gpiochip_get_data(gc);
+> +       irq_hw_number_t gpio_num = irqd_to_hwirq(d);
+> +       void __iomem *pcr_base = port->base + PORT_PCR(gpio_num);
+>
+>         vf610_gpio_writel(0, pcr_base);
+> +       gpiochip_disable_irq(gc, gpio_num);
+>  }
+>
+>  static void vf610_gpio_irq_unmask(struct irq_data *d)
+>  {
+> -       struct vf610_gpio_port *port =
+> -               gpiochip_get_data(irq_data_get_irq_chip_data(d));
+> -       void __iomem *pcr_base = port->base + PORT_PCR(d->hwirq);
+> +       struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +       struct vf610_gpio_port *port = gpiochip_get_data(gc);
+> +       irq_hw_number_t gpio_num = irqd_to_hwirq(d);
+> +       void __iomem *pcr_base = port->base + PORT_PCR(gpio_num);
+>
+> -       vf610_gpio_writel(port->irqc[d->hwirq] << PORT_PCR_IRQC_OFFSET,
+> +       gpiochip_enable_irq(gc, gpio_num);
+> +       vf610_gpio_writel(port->irqc[gpio_num] << PORT_PCR_IRQC_OFFSET,
+>                           pcr_base);
+>  }
+>
+> @@ -237,6 +240,17 @@ static int vf610_gpio_irq_set_wake(struct irq_data *d, u32 enable)
+>         return 0;
+>  }
+>
+> +static const struct irq_chip vf610_irqchip = {
+> +       .name = "gpio-vf610",
+> +       .irq_ack = vf610_gpio_irq_ack,
+> +       .irq_mask = vf610_gpio_irq_mask,
+> +       .irq_unmask = vf610_gpio_irq_unmask,
+> +       .irq_set_type = vf610_gpio_irq_set_type,
+> +       .irq_set_wake = vf610_gpio_irq_set_wake,
+> +       .flags = IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+> +
+>  static void vf610_gpio_disable_clk(void *data)
+>  {
+>         clk_disable_unprepare(data);
+> @@ -249,7 +263,6 @@ static int vf610_gpio_probe(struct platform_device *pdev)
+>         struct vf610_gpio_port *port;
+>         struct gpio_chip *gc;
+>         struct gpio_irq_chip *girq;
+> -       struct irq_chip *ic;
+>         int i;
+>         int ret;
+>
+> @@ -315,14 +328,6 @@ static int vf610_gpio_probe(struct platform_device *pdev)
+>         gc->direction_output = vf610_gpio_direction_output;
+>         gc->set = vf610_gpio_set;
+>
+> -       ic = &port->ic;
+> -       ic->name = "gpio-vf610";
+> -       ic->irq_ack = vf610_gpio_irq_ack;
+> -       ic->irq_mask = vf610_gpio_irq_mask;
+> -       ic->irq_unmask = vf610_gpio_irq_unmask;
+> -       ic->irq_set_type = vf610_gpio_irq_set_type;
+> -       ic->irq_set_wake = vf610_gpio_irq_set_wake;
+> -
+>         /* Mask all GPIO interrupts */
+>         for (i = 0; i < gc->ngpio; i++)
+>                 vf610_gpio_writel(0, port->base + PORT_PCR(i));
+> @@ -331,7 +336,7 @@ static int vf610_gpio_probe(struct platform_device *pdev)
+>         vf610_gpio_writel(~0, port->base + PORT_ISFR);
+>
+>         girq = &gc->irq;
+> -       girq->chip = ic;
+> +       gpio_irq_chip_set_chip(girq, &vf610_irqchip);
+>         girq->parent_handler = vf610_gpio_irq_handler;
+>         girq->num_parents = 1;
+>         girq->parents = devm_kcalloc(&pdev->dev, 1,
+> --
+> 2.34.1
+>
 
 Applied, thanks!
 
-[1/2] dt-bindings: arm: move cpu-capacity to a shared loation
-      https://git.kernel.org/palmer/c/7d2078310cbf
-[2/2] dt-bindings: riscv: add a capacity-dmips-mhz cpu property
-      https://git.kernel.org/palmer/c/991994509ee9
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Bart
