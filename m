@@ -2,158 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3BF697AFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50528697AFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbjBOLoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S233696AbjBOLon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjBOLoT (ORCPT
+        with ESMTP id S233586AbjBOLom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:44:19 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A0E9ED3;
-        Wed, 15 Feb 2023 03:44:14 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id bx25so2106720uab.9;
-        Wed, 15 Feb 2023 03:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=awt3h/BgoD85tVDVGLaiObMzjnTgyZo2ngbTA8DaEYU=;
-        b=Wc8F944WuLNh5OLXFCwzLpu82agUA1DdtxO4DM/xZVfDI7qNhlIe8Z9xt2k0et87zz
-         UIG7brxiHD9tdPTKt3APTRWX854e4hf6gdBUK16OuL22D48banvtPf3uk4X2XCSlZtTj
-         Ow7jkBGX/8vEg/J9I27ZeocunKn/lOx6tPxj0Ml3DZvHPhQCYA0j31PagdnTG2ZqduAE
-         wFDalZK+x1iW3TAPxyuCcLVponVRaO/MY9+ZoCL7iacGSABzZFKjevI3rXaRpMfJkF/3
-         2gjQbzhql0uDX5Bomg1R1Mz02bCcwGC8riSpzNwcjvBADTq4nk9uL3JD7kRgmESsnow/
-         Xb9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=awt3h/BgoD85tVDVGLaiObMzjnTgyZo2ngbTA8DaEYU=;
-        b=TVhupVIocTpi93SGsP9r2ZobKgWo6fbp+UtgUxzrHd09Ou/4wRc1KMt7eNoglggnWn
-         GJmadr0eUjAHFieJCfkvNY3gc4cM2vu9H9XsH6HqiZTeKpG9aG93GeUvPZ8+8jbWGZEs
-         4rw0BdXaxh0IKoausR0A4mub77ekH/Bao9wmiG/2Xupx3j1NlaD16kog8h2ZW8kVfv6b
-         97RTA1QpDGmYbU22GBW1qVAe4Fluds9QEr3hAvBu5K8XqFcqJrrFHP8Tv7JJptsMud5x
-         puHAv8XLDAoguZMDsOVoxYtPyqDkIQPAKL+4SG94vDdq3qS6T3NWCfXV0uywfnHlj37m
-         CUbQ==
-X-Gm-Message-State: AO0yUKWmNpW8WpuNBzvpT6NDmNW/7suzWNtvyq7/gj6vGYiJEVizAeAL
-        RFtJRPy/UoaODQgaLratxbq0EC9bQkHuR+U05vU=
-X-Google-Smtp-Source: AK7set/cc8b3+yjQliSQxdGVVOWi0u4hi6UpB28JhdhTs5H7m2uu+c6gg9rdkck8h74qXS86Mag3LLrKkqbBVvuMbac=
-X-Received: by 2002:a05:6130:2104:b0:68a:570a:8ddb with SMTP id
- cl4-20020a056130210400b0068a570a8ddbmr217187uab.4.1676461453461; Wed, 15 Feb
- 2023 03:44:13 -0800 (PST)
+        Wed, 15 Feb 2023 06:44:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81683A9B;
+        Wed, 15 Feb 2023 03:44:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B5E7B81E9A;
+        Wed, 15 Feb 2023 11:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63ACC433EF;
+        Wed, 15 Feb 2023 11:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676461478;
+        bh=zffZcsdJ2UU+p64/x6vS7zCO6brF87H+zMZ2pG6TqXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=En4ozv2+lINTGIKHxd+jP0pEbe61/DSa62Nei6sT+ce5GcniyCKnzNZxxGQfocwud
+         kfTuUfBowRS+cA7GHdjVgGV6Kou1daWHiWPwDzdzPXBlsZZtod/wbJPgYRjUwXSirq
+         hSbO3sJ+TfWMtunm8dmLRPyWGp0mNk9kz8doPYzQ=
+Date:   Wed, 15 Feb 2023 12:44:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kumaravel.Thiagarajan@microchip.com
+Cc:     michael@walle.cc, Tharunkumar.Pasumarthi@microchip.com,
+        UNGLinuxDriver@microchip.com, arnd@arndb.de,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Subject: Re: [PATCH v5 char-misc-next] misc: microchip: pci1xxxx: Add
+ OTP/EEPROM driver for the pci1xxxx switch
+Message-ID: <Y+zFo4SP5L/KkT/v@kroah.com>
+References: <20230212035743.231353-1-tharunkumar.pasumarthi@microchip.com>
+ <20230214082804.2761756-1-michael@walle.cc>
+ <BN8PR11MB36680842890C294566A156C3E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <7276bef47792e489abd093e4bd0044de@walle.cc>
+ <Y+yeyNCA48IbKOKC@kroah.com>
+ <BN8PR11MB36680D97C97B4894E321CAD9E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <BN8PR11MB3668A1E8541035E257F2C500E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <CACsaVZJvXpCt37nQOoe8qd1EPUpfdMM1HwHk9tVO8HdU_Azhhw@mail.gmail.com>
- <25578.37401.314298.238192@quad.stoffel.home> <CACsaVZJ-5y7U5xqwL9bof69EKbTk+wrHWFcBFYyP_BwVSt+CNA@mail.gmail.com>
- <CAM23Vxr8LkkcVDFfW1=qEYGgo7JG1qx62eWSV4WOw4_MnD+TZA@mail.gmail.com>
- <CAAMCDeeHxMBoVkNYAyssjgjo4=FYd2NonS-mqC7OUEL89B9Cig@mail.gmail.com> <CAM23VxpzY6qYsdTYxe01FT7AJvEbODf8X_vq8ALL35TfyrB8xQ@mail.gmail.com>
-In-Reply-To: <CAM23VxpzY6qYsdTYxe01FT7AJvEbODf8X_vq8ALL35TfyrB8xQ@mail.gmail.com>
-From:   Roger Heflin <rogerheflin@gmail.com>
-Date:   Wed, 15 Feb 2023 05:44:01 -0600
-Message-ID: <CAAMCDee2hV1YP=119Rorz1uGTnyBD5q9hb20PvMq89FHow2wPw@mail.gmail.com>
-Subject: Re: [dm-devel] RAID4 with no striping mode request
-To:     Heinz Mauelshagen <heinzm@redhat.com>
-Cc:     Kyle Sanderson <kyle.leet@gmail.com>, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        John Stoffel <john@stoffel.org>,
-        Linux-Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN8PR11MB3668A1E8541035E257F2C500E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think he is wanting the parity across the data blocks on the
-separate filesystems (some sort of parity across fs[1-8]/block0 to
-parity/block0).
+On Wed, Feb 15, 2023 at 09:56:46AM +0000, Kumaravel.Thiagarajan@microchip.com wrote:
+> > From: Kumaravel Thiagarajan - I21417
+> > <Kumaravel.Thiagarajan@microchip.com>
+> > Sent: Wednesday, February 15, 2023 3:18 PM
+> > To: Greg KH <gregkh@linuxfoundation.org>; Michael Walle 
+> > <michael@walle.cc>
+> > Cc: Tharunkumar Pasumarthi - I67821
+> > <Tharunkumar.Pasumarthi@microchip.com>; UNGLinuxDriver 
+> > <UNGLinuxDriver@microchip.com>; arnd@arndb.de; linux- 
+> > gpio@vger.kernel.org; linux-kernel@vger.kernel.org; 
+> > srinivas.kandagatla@linaro.org
+> > Subject: RE: [PATCH v5 char-misc-next] misc: microchip: pci1xxxx: Add 
+> > OTP/EEPROM driver for the pci1xxxx switch
+> > 
+> > >
+> > > On Wed, Feb 15, 2023 at 09:20:10AM +0100, Michael Walle wrote:
+> > > > Hi,
+> > > >
+> > > > > > > Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for 
+> > > > > > > consumer, industrial, and automotive applications. This 
+> > > > > > > switch integrates OTP and EEPROM to enable customization of 
+> > > > > > > the part in the field. This patch provides the OTP/EEPROM 
+> > > > > > > driver to support the
+> > > same.
+> > > > > >
+> > > > > > Why isn't this driver using the nvmem subsystem which is 
+> > > > > > usually used for OTP and EEPROM?
+> > > > > Michael, these OTP and EEPROM memories do not have any fixed 
+> > > > > location registers which store values (Eg. mac address, config 
+> > > > > parameters, etc) at fixed offsets.
+> > > > > It stores a bunch of records, each of which has some data to be 
+> > > > > written into the device's hardware registers at different locations.
+> > > > > These records are directly consumed by the hardware and 
+> > > > > interpreted without the involvement of the software.
+> > > > > Therefore, we don't require any OTP / EEPROM register map to be 
+> > > > > input to the OS / driver through device tree or board files.
+> > > > > I only had to enumerate two separate block devices using the 
+> > > > > driver so that the config binary files can be overlayed using 
+> > > > > the dd command.
+> > > > > Since this is not fitting like a conventional nvme device, I 
+> > > > > didn't choose the nvme subsystem.
+> > > > > Please let me know your thoughts / comments if any.
+> > > >
+> > > > So this is only for provisioning. i.e. during manufacturing a 
+> > > > board which uses this PCI bridge? There are no kernel users, nor 
+> > > > is there a common interface towards user-space. But just some 
+> > > > block device (why not a char device?) exposed to userspace. I 
+> > > > presume there is a companion userspace application for it? Why do 
+> > > > you take the extra step and have a (random) kernel interface, you 
+> > > > could also just access the PCI device directly from userspace 
+> > > > within your companion application, e.g. through libpci.
+> > >
+> > > Yeah, why not just use userspace, I missed that, thanks!
+> > Greg & Michael, I do not want to expose the entire or even partial set 
+> > of device registers to the user space access directly for safety reasons.
 
-it is not clear to me what this setup would be enough better than what
-the current setups.    Given that one could have 8 spin + 1ssd or 12
-spin for the same price.    And 2 6 disk raid6's would have the same
-usable space, and be pretty safe (can lose any 2 of the 6 and lose no
-data).  And given the separate filesystems requirement that would
-require some software above the filesystems to manage spreading the
-disks across multiple filesystems.   The risk of another disk going
-bad (while one was failed) and losing a disk's worth of data would
-push me to use the 6-disk raid6.
+But that's all exposed here through this block device, right?
 
-WOL: current SSD's are rated for around 1000-2000 writes.  So a 1Tb
-disk can sustain 1000-2000TB of total writes.  And writes to
-filesystem blocks would get re-written more often than data blocks.
- How well it would work would depend on how often the data is deleted
-and re-written.   If the disks are some sort of long term storage then
-the SSD is not going to get used up.   And I am not sure if the rated
-used up really means anything unless you are using a STUPID enterprise
-controller that proactively disables/kills the SSD when it says the
-rated writes have happened.   I have a 500GB ssd in a mirror that
-"FAILED" according to smart 2 years ago and so far is still fully
-functional, and it is "GOOD" again because the counters used to
-determine total writes seems to have rolled over.
+And this is already exposed to userspace today, no need to add anything
+the kernel already provides this.
 
-On Tue, Feb 14, 2023 at 8:23 PM Heinz Mauelshagen <heinzm@redhat.com> wrote:
->
-> Roger,
->
-> as any of the currently implemented 'parity' algorithms (block xor/P-/Q-Syndrome) provided by DM/MD RAID
-> have to have at least two data blocks to calculate:  are you, apart from the filesystem thoughts you bring up, thinking
-> about running those on e.g. pairs of disks of mentioned even numbered set of 8?
->
-> Heinz
->
-> On Tue, Feb 14, 2023 at 11:28 PM Roger Heflin <rogerheflin@gmail.com> wrote:
->>
->> On Tue, Feb 14, 2023 at 3:27 PM Heinz Mauelshagen <heinzm@redhat.com> wrote:
->> >
->>
->> >
->> >
->> > ...which is RAID1 plus a parity disk which seems superfluous as you achieve (N-1)
->> > resilience against single device failures already without the later.
->> >
->> > What would you need such parity disk for?
->> >
->> > Heinz
->> >
->>
->> I thought that at first too, but threw that idea out as it did not
->> make much sense.
->>
->> What he appears to want is 8 linear non-striped data disks + a parity disk.
->>
->> Such that you can lose any one data disk and parity can rebuild that
->> disk.  And if you lose several data diskis, then you have intact
->> non-striped data for the remaining disks.
->>
->> It would almost seem that you would need to put a separate filesystem
->> on each data disk/section (or have a filesystem that is redundant
->> enough to survive) otherwise losing an entire data disk would leave
->> the filesystem in a mess..
->>
->> So N filesystems + a parity disk for the data on the N separate
->> filesystems.   And each write needs you to read the data from the disk
->> you are writing to, and the parity and recalculate the new parity and
->> write out the data and new parity.
->>
->> If the parity disk was an SSD it would be fast enough, but if parity
->> was an SSD I would expect it to get used up/burned out from all of
->> parity being re-written for each write on each disk unless you bought
->> an expensive high-write ssd.
->>
->> The only advantage of the setup is that if you lose too many disks you
->> still have some data.
->>
->> It is not clear to me that it would be any cheaper if parity needs to
->> be a normal ssd's (since ssds are about 4x the price/gb and high-write
->> ones are even more) than a classic bunch of mirrors, or even say a 4
->> disks raid6 where you can lose any 2 and still have data.
->>
+> > I think hardware registers shall be accessible only through safe and 
+> > robust kernel mode components and that the user space shall only be 
+> > able to access the device through the kernel mode services.
+
+Again, PCI devices are already exposed to userspace today, what am I
+missing?
+
+> > I want the user to use the hardware only in those ways designated by 
+> > the driver.
+> > We were using the "busybox devmem" to access the hardware registers 
+> > directly and to program the EEPROM / OTP.
+> > But we understood that it cannot be an end user solution in all cases 
+> > and based on some of the operating environments, there can be some 
+> > restrictions in opening the direct hardware access to the user space.
+
+What restrictions are you referring to?
+
+
+> > Please let me know your thoughts / comments if any.
+> 
+> I missed one more important point. This driver is targeted not just for the manufacturing environment.
+> we want to be able to update the OTP / EEPROM when the device is in the field also.
+
+Great, then this really should just be using the firmware download
+interface if you wish to write to this hardware.  Don't expose this as a
+block device, as that's not what this is.
+
+thanks,
+
+greg k-h
