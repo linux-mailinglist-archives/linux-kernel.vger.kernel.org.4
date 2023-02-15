@@ -2,202 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C55698807
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1204A698809
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 23:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjBOWnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 17:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229776AbjBOWns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 17:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjBOWnM (ORCPT
+        with ESMTP id S229875AbjBOWnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:43:12 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8624134
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:10 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-52ec7c792b1so389747b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:10 -0800 (PST)
+        Wed, 15 Feb 2023 17:43:45 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2434124CB1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:43 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d4so107868wrj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 14:43:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVqwUoC4GP/fOMjS8mr++nAU4yxunp7mbNFnyq/qIn8=;
-        b=iIQH/g0b9xgWNpEM6kDdNbbbMfOVqoYx/50hTtksPVkvnVRWPK7N0Y54z76+I3ZgJN
-         kCEvQctXT2mnhEECw8xbCZHPuyFDILI8siKAD74DW7FkmmhXgCU9ADG3TTWw6xkYE77A
-         goF2OUeCaEETnV9f8G/epYW/sBvbXrfkwq7b13CrKfaoWmfbcZx/rVxZ2V8JqAf/2H0Y
-         9fuZgtNgbEckfnHGaNJuKsaYxxjiY5ZFG+xelAc07oClxPO6YMZ3Ks7ni6geqCByrjST
-         Av1+wyqR+tCscDA8kq7Cn8kBMjAp70iHz8UwRi/FwQmpvnko1remy0ZXg5KhpDd3Q5TM
-         zsXQ==
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8nXdn4YzDoM0iF73Zmjo9+E9vHioH6H+aNis+Nm9tKQ=;
+        b=PQnDiG2mGCPp4v/7j0ZmtNBwITcIvFmkjw5yT5SMk5SXcMwDq890BR6Kziw95pom06
+         YSykh6oEIJ0xmLwL2LHzbZe5lO9Kxrqk5hoR1p4A7FuSErCF2tsxCsPXX/SExNetMDJi
+         Q6tZ/1FEnacXaWUontH2YRie6Ae1jT+D2/961qfdOACLHNTzWlaDHzs3RVEThl6GJDxG
+         gpZp7DjYRE/JjFy81ePgsBWSRdwz1k0ESwtNXiChzw+ozgUpLlKgrp2jtPeY2zJqGstA
+         vPjF3V5yLb8Udr1GEnH+Bwi3Z2jH/3nUsHFWjJ0QhoQ57LcncKTnTSZPZstEdGIfVqgk
+         6iAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVqwUoC4GP/fOMjS8mr++nAU4yxunp7mbNFnyq/qIn8=;
-        b=QNj8ap+o4VOFTWsRnHqD5tw9oEmM1JLsp68vmcErlDu114+JmGc5mbqXyeQOR33yPp
-         SYv3BDuaIXTmwj20r3cUb64ZzQHKtm4MEU0yV1e8/qLRaFd+bJFWX1XWvsDhMFMbahIS
-         Yf/av8Y6NS40XERVa0yI8/bJqdLB2X5p+b4SgslfaeIsY3kLQxDyv52WPZeIpCd/HE1F
-         gful3PTZk2LN7BZJtUpx3BX6LEIGDuDoTi0YB/CPIu3Nd/eNwuH0WkHzzRaRsg/kFfO6
-         SAVlbk7NudK8HnLPMIiMbOhfN9FkHOM/6cMihl5JufgnqUCRuhrbl0NkHdakSYb4wvvi
-         2xnQ==
-X-Gm-Message-State: AO0yUKWr6MRp+NofKUn60Bsu99r5zRM0a8QmUn20ZEp87xoXsGidqUsw
-        2S9zexV5suW77WIPJTyqhpy1jkWhxfI=
-X-Google-Smtp-Source: AK7set83BDwMNOrgS6ktEvYsmjAck1AxlN4mXYwbgpbE0KOH/4yoO6GQe2EpHX2G0ere3dR6hGktDR/8Jpk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae5f:0:b0:52f:daf9:66af with SMTP id
- g31-20020a81ae5f000000b0052fdaf966afmr5ywk.6.1676500989866; Wed, 15 Feb 2023
- 14:43:09 -0800 (PST)
-Date:   Wed, 15 Feb 2023 14:43:08 -0800
-In-Reply-To: <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com>
-Mime-Version: 1.0
-References: <20221129193717.513824-1-mlevitsk@redhat.com> <20221129193717.513824-8-mlevitsk@redhat.com>
- <Y9mWFlGdzoa8ZDW7@google.com> <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
- <Y+PIdJZtCsGH2Sw3@google.com> <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com>
-Message-ID: <Y+1f/En6rvqoe6st@google.com>
-Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection interface
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8nXdn4YzDoM0iF73Zmjo9+E9vHioH6H+aNis+Nm9tKQ=;
+        b=OeURIUfxTL0d8DrwmY3/NSEhExfdSF7BrfyGSenSEci3b/B2Whj3lQZwh/Drr62Lty
+         Q83PTkVl6hCqpI+5tRI492BpWDQJ9YKyAc851Wrqwztu3UkTws5uNU82Yjt+O+PdTtiy
+         mWvUN8P6SDLLeCQt1+QmWsNBVXwxpQFXfWvRJ1UfZ+wWcQRSVOn/zbfm/VGdl99Pvcj2
+         /m8c3zU4cOuZdxsvUoKyXZD2kDEo5Y1hIb1Zm/qDRh97iqkAhNn6WcTNut+QKGYzbU6/
+         WkpYx5gtrlStLOLrKmYbr7nFgI3wUazUI05tkImViPYpGasj1mbtKEUoFge8+c0PtgZt
+         T/AA==
+X-Gm-Message-State: AO0yUKWjNHxBDTv0g4JEu+TWkqJa2QsWFvmiS6juot0zcqqSGEuPcgzK
+        HjxvqYg6VpdxSWXgfmrqLDpzdw==
+X-Google-Smtp-Source: AK7set98K5jOTFHXvTnJFhewS8kQNi6s1VNOzQfcaEUH0oYmf+Z3IJxRq5HqzV+LOohnSOiuZeHFjA==
+X-Received: by 2002:adf:e4c9:0:b0:2c5:7c7a:78f7 with SMTP id v9-20020adfe4c9000000b002c57c7a78f7mr239350wrm.45.1676501021541;
+        Wed, 15 Feb 2023 14:43:41 -0800 (PST)
+Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
+        by smtp.gmail.com with ESMTPSA id d15-20020a5d6dcf000000b002c3f9404c45sm16991637wrz.7.2023.02.15.14.43.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Feb 2023 14:43:41 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 2/6] RISC-V: Add a syscall for HW probing
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <CALs-HsuwOqR+y-GriKOiRx068bgOv3qTOpsJTaA02htiiynWmw@mail.gmail.com>
+Date:   Wed, 15 Feb 2023 22:43:40 +0000
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-doc@vger.kernel.org,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Celeste Liu <coelacanthus@outlook.com>, slewis@rivosinc.com,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vineet Gupta <vineetg@rivosinc.com>,
+        Dao Lu <daolu@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Ruizhe Pan <c141028@gmail.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, guoren <guoren@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6FA7F803-1B4A-418E-9368-E205F3A6CF27@jrtc27.com>
+References: <20230206201455.1790329-1-evan@rivosinc.com>
+ <20230206201455.1790329-3-evan@rivosinc.com>
+ <ded4018d-c90f-41c7-9e54-da954bdef49e@app.fastmail.com>
+ <CALs-HsuwOqR+y-GriKOiRx068bgOv3qTOpsJTaA02htiiynWmw@mail.gmail.com>
+To:     Evan Green <evan@rivosinc.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023, Santosh Shukla wrote:
-> On 2/8/2023 9:36 PM, Sean Christopherson wrote:
-> > On Wed, Feb 08, 2023, Santosh Shukla wrote:
-> >> On 2/1/2023 3:58 AM, Sean Christopherson wrote:
-> >>> On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> >>>> @@ -5191,9 +5191,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
-> >>>>  
-> >>>>  	vcpu->arch.nmi_injected = events->nmi.injected;
-> >>>>  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
-> >>>> -		vcpu->arch.nmi_pending = events->nmi.pending;
-> >>>> +		atomic_add(events->nmi.pending, &vcpu->arch.nmi_queued);
-> >>>> +
-> >>>>  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-> >>>>  
-> >>>> +	process_nmi(vcpu);
-> >>>
-> >>> Argh, having two process_nmi() calls is ugly (not blaming your code, it's KVM's
-> >>> ABI that's ugly).  E.g. if we collapse this down, it becomes:
-> >>>
-> >>> 	process_nmi(vcpu);
-> >>>
-> >>> 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-> >>> 		<blah blah blah>
-> >>> 	}
-> >>> 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-> >>>
-> >>> 	process_nmi(vcpu);
-> >>>
-> >>> And the second mess is that V_NMI needs to be cleared.
-> >>>
-> >>
-> >> Can you please elaborate on "V_NMI cleared" scenario? Are you mentioning
-> >> about V_NMI_MASK or svm->nmi_masked?
-> > 
-> > V_NMI_MASK.  KVM needs to purge any pending virtual NMIs when userspace sets
-> > vCPU event state and KVM_VCPUEVENT_VALID_NMI_PENDING is set.
-> > 
-> 
-> As per the APM: V_NMI_MASK is managed by the processor
+On 15 Feb 2023, at 21:14, Evan Green <evan@rivosinc.com> wrote:
+>=20
+> On Wed, Feb 15, 2023 at 1:57 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>=20
+>> On Mon, Feb 6, 2023, at 21:14, Evan Green wrote:
+>>> We don't have enough space for these all in ELF_HWCAP{,2} and =
+there's no
+>>> system call that quite does this, so let's just provide an =
+arch-specific
+>>> one to probe for hardware capabilities.  This currently just =
+provides
+>>> m{arch,imp,vendor}id, but with the key-value pairs we can pass more =
+in
+>>> the future.
+>>>=20
+>>> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>> Signed-off-by: Evan Green <evan@rivosinc.com>
+>>=20
+>> I'm not sure I understand the problem with
+>> AT_HWCAP. While the bits in AT_HWCAP and AT_HWCAP2
+>> are limited, I don't see us running out of new
+>> AT_* words to use for additional bits. Presumably
+>> the kernel would already have to know about the
+>> name of each supported HW feature and could assign
+>> a unique bit number to them.
+>=20
+> Palmer can probably speak to this with more authority, but my
+> understanding about the motivation for an approach like this goes
+> something like:
+> * With the nature of RISC-V, we expect a lot of these types of bits
+> and bobs, many more than we've seen with the likes of x86 and ARM.
 
-Heh, we're running afoul over KVM's bad terminology conflicting with the APM's
-terminology.  By V_NMI_MASK, I meant "KVM's V_NMI_MASK", a.k.a. the flag that says
-whether or there's a pending NMI.
+We=E2=80=99re already at (I think) 51 standard user-level extensions =
+that LLVM
+knows about.
 
+> * We also expect in some cases these values to be inconsistent across =
+CPUs.
 
-However...
+That=E2=80=99s also true of some Arm SoCs.
 
-> "
-> V_NMI_MASK: Indicates whether virtual NMIs are masked. The processor will set V_NMI_MASK
-> once it takes the virtual NMI. V_NMI_MASK is cleared when the guest successfully completes an
-> IRET instruction or #VMEXIT occurs while delivering the virtual NMI
-> "
->
-> In my initial implementation I had changed V_NMI_MASK for the SMM scenario [1],
-> This is also not required as HW will save the V_NMI/V_NMI_MASK on 
-> SMM entry and restore them on RSM.
-> 
-> That said the svm_{get,set}_nmi_mask will look something like:
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index a9e9bfbffd72..08911a33cf1e 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3635,13 +3635,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
-> 
->  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
->  {
-> -       return to_svm(vcpu)->nmi_masked;
-> +       struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +       if (is_vnmi_enabled(svm))
-> +               return svm->vmcb->control.int_ctl & V_NMI_MASK;
-> +       else
-> +               return svm->nmi_masked;
->  }
-> 
->  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
->  {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> 
-> +       if (is_vnmi_enabled(svm))
-> +               return;
-> +
->         if (masked) {
->                 svm->nmi_masked = true;
->                 svm_set_iret_intercept(svm);
-> 
-> is there any inputs on above approach?
+> * While we could copy all that data into the aux vector every time,
+> it starts to look like a lot of data, not all programs care about all
+> of it, and a lot of it is static, making all the copying wasteful.
 
-What happens if software clears the "NMIs are blocked" flag?  If KVM can't clear
-the flag, then we've got problems.  E.g. if KVM emulates IRET or SMI+RSM.  And I
-I believe there are use cases that use KVM to snapshot and reload vCPU state,
-e.g. record+replay?, in which case KVM_SET_VCPU_EVENTS needs to be able to adjust
-NMI blocking too.
+Bitvectors are pretty cheap, this is negligible.
 
-> On top of the above, I am including your suggested change as below...
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e0855599df65..437a6cea3bc7 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5201,9 +5201,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
-> 
->         vcpu->arch.nmi_injected = events->nmi.injected;
->         if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-> -               vcpu->arch.nmi_pending = events->nmi.pending;
-> -               if (vcpu->arch.nmi_pending)
-> -                       kvm_make_request(KVM_REQ_NMI, vcpu);
-> +               vcpu->arch.nmi_pending = 0;
-> +               atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
-> +               kvm_make_request(KVM_REQ_NMI, vcpu);
->         }
->         static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-> 
-> does that make sense?
+> * Another option that would solve most of this would be to point to a
+> vDSO data area from the aux vector. This solves the copy complaints,
+> but makes that vDSO data ABI, and requires it all to be known up
+> front.
 
-Yep!
+That doesn't seem like a huge deal, other than my usual point of
+needing a standardised portable cross-platform API for this, so that
+shouldn=E2=80=99t be =E2=80=9Cthe=E2=80=9D generic interface programmed =
+against by applications.
+
+> * So, a syscall with a vDSO function in front of it seemed like a
+> good combination of speed and flexibility.
+>=20
+> You're certainly right that HWCAPn would work for what we're exposing
+> today, so the question probably comes down to our relative predictions
+> of how this data will grow.
+
+The other big problem is vendor extensions.
+
+Jess
+
+> -Evan
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
