@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40966982FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC9E69830D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 19:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjBOSN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 13:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S230030AbjBOSRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 13:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjBOSN2 (ORCPT
+        with ESMTP id S230012AbjBOSRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:13:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4CD33B66B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:13:26 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F26C1042;
-        Wed, 15 Feb 2023 10:14:09 -0800 (PST)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89FFF3F663;
-        Wed, 15 Feb 2023 10:13:24 -0800 (PST)
-Message-ID: <2b06fd6c-83d5-3dbe-0227-02091f5d3dac@arm.com>
-Date:   Wed, 15 Feb 2023 18:13:19 +0000
+        Wed, 15 Feb 2023 13:17:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31873B66E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676485021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uessFhdI9WdEulNO2xW+TQ3mB+8qWJXKcAD4iyGADLA=;
+        b=CR41fEVZ6ciTHr3MNw8metMh3yGabfjx1V2MiRx9TDzavVTw8x9AUBcCASSx47pIDXwkmK
+        49vTWYpiWdtGFFMcfChoZ5czosINDdmvt8RAaAh322yG9DxKOYJ2meRpaVfT+hmvoP2Vxs
+        6PXmpsYZkh1r01Gk7c6GEMSlb3KNEjw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-594-AS_ex99IPnKhqnTlgOy1Dw-1; Wed, 15 Feb 2023 13:17:00 -0500
+X-MC-Unique: AS_ex99IPnKhqnTlgOy1Dw-1
+Received: by mail-qv1-f69.google.com with SMTP id e5-20020a056214110500b0053547681552so11008778qvs.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 10:17:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uessFhdI9WdEulNO2xW+TQ3mB+8qWJXKcAD4iyGADLA=;
+        b=gDlLw19pVslKJvx45uTQtgYwUosQW7DhI8439dStTJ01bC6fxZQYMU28sO1ZRGOOC2
+         qczCYk516/JsdI7Yh+5KjlAzG5quzaW27bCWs1mStSdH6RhxRisl5di+dJdmem0qjedg
+         zK4MxynhhYvOr/ZBdB/fMycNW5F5ZIeNBicjuUWQG0+1h1KnJcJsvwelRmCEjJojPpyg
+         M7cpDzU9tN70SdRIBiln1WM7hLELQx/gPcqNrUHDXKxrhvTieUxXGrH+ykFdxMtzIa1T
+         Ty/KqIcXBdbmy39Mtpx+23MZGVwzS7auvv5uzPXLIERXw8AnZI3ZjOyTs8zbmNNv7VHx
+         3Kgg==
+X-Gm-Message-State: AO0yUKX9gBs2Yo8Uy46emY+0yvhvdkMGqdjAmlSvq++xUvgjAZ3b+1JL
+        Jb59GhS3ZzNbxo41uwspQmG6KVLUTf/SkseyApBhHouxBX7GDIU3e90a0vi1NdgM+4nMoaQRvnJ
+        LcBn75bIccageQs1wCnQ0wDdPi8+VvfJRa1p0+a4YdssM03yIv32CrzGBJX7Tcy/z+jZ0VLwdvI
+        lIh2IsJQ==
+X-Received: by 2002:ac8:5a43:0:b0:3b9:d5db:9cc0 with SMTP id o3-20020ac85a43000000b003b9d5db9cc0mr4554382qta.43.1676485019211;
+        Wed, 15 Feb 2023 10:16:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set8FU3eoyL28ybs08sAywzxth4kBSlJ2NA6RcMM6MilEjKlhqWQYIXy6AB+vAmjRxgxJgmty4g==
+X-Received: by 2002:ac8:5a43:0:b0:3b9:d5db:9cc0 with SMTP id o3-20020ac85a43000000b003b9d5db9cc0mr4554338qta.43.1676485018834;
+        Wed, 15 Feb 2023 10:16:58 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id 17-20020ac82091000000b003b960aad697sm13414533qtd.9.2023.02.15.10.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 10:16:58 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     ye.xingchen@zte.com.cn, mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/topology: remove duplicate include header in
+ topology.c
+In-Reply-To: <202302091512245950001@zte.com.cn>
+References: <202302091512245950001@zte.com.cn>
+Date:   Wed, 15 Feb 2023 18:16:55 +0000
+Message-ID: <xhsmh4jrmrdyg.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3] firmware: arm_sdei: Fix sleep from invalid context BUG
-Content-Language: en-GB
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        WANG Xuerui <git@xen0n.name>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Child <nnac123@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230215160949.94602-1-pierre.gondois@arm.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <20230215160949.94602-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,81 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre, Will,
+On 09/02/23 15:12, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>
+> linux/bsearch.h is included more than once.
+>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  kernel/sched/topology.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index ebc8cbeb55dc..eb339751fe90 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -1766,7 +1766,6 @@ bool find_numa_distance(int distance)
+>   *   there is an intermediary node C, which is < N hops away from both
+>   *   nodes A and B, the system is a glueless mesh.
+>   */
+> -#include <linux/bsearch.h>
+>
 
-On 15/02/2023 16:09, Pierre Gondois wrote:
-> Running a preemp_rt kernel based on vv6.2-rc3-rt1 based kernel on an
-> Ampere Altra triggers:
->   BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
->   in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
->   preempt_count: 0, expected: 0
->   RCU nest depth: 0, expected: 0
->   3 locks held by cpuhp/0/24:
->    #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
->    #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
->    #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
->   irq event stamp: 36
->   hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
->   hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
->   softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
->   softirqs last disabled at (0): [<0000000000000000>] 0x0
->   CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
->   Hardware name: WIWYNN Mt.Jade Server [...]
->   Call trace:
->    dump_backtrace+0x114/0x120
->    show_stack+0x20/0x70
->    dump_stack_lvl+0x9c/0xd8
->    dump_stack+0x18/0x34
->    __might_resched+0x188/0x228
->    rt_spin_lock+0x70/0x120
->    sdei_cpuhp_up+0x3c/0x130
->    cpuhp_invoke_callback+0x250/0xf08
->    cpuhp_thread_fun+0x120/0x248
->    smpboot_thread_fn+0x280/0x320
->    kthread+0x130/0x140
->    ret_from_fork+0x10/0x20
-> 
-> sdei_cpuhp_up() is called in the STARTING hotplug section,
-> which runs whith interrupts disabled. Use a CPUHP_AP_ONLINE_DYN entry
+This doesn't exist upstream, and I can't find any proof of it ever existing
+in the git history, so I don't think you're working on an upstream tree.
 
-Typo: with
+>  static void init_numa_topology_type(int offline_node)
+>  {
+> --
+> 2.25.1
 
-> instead to execute the cpuhp cb later, with preemption enabled.
-> 
-> SDEI originaly got its own cpuhp slot because to allow interracting
-
-Typo: originally
-Typo: interacting
-
-> with perf. It got superseded by pNMI and this early slot is not
-> relevant anymore. [1]
-
-(Please add a spell checker to your workflow. 'codespell' knows which bits of
- a diff it should check)
-
-"because to allow interacting" isn't easy to parse, "to allow an interaction with"?
-
-
-> Some SDEI calls (e.g. SDEI_1_0_FN_SDEI_PE_MASK) take actions on the
-> calling CPU. It is checked that preemption is disabled for them.
-> _ONLINE cpuhp cb are executed in the 'per CPU hotplug thread'.
-> Preemption is enabled in those threads, but their cpumask is limited
-> to 1 CPU.
-> Move 'WARN_ON_ONCE(preemptible())' statements so that SDEI cpuhp cb
-> don't trigger them.
-> 
-> Also add a check for the SDEI_1_0_FN_SDEI_PRIVATE_RESET SDEI call
-> which acts on the calling CPU.
-
-Thanks for sticking with this,
-
-Reviewed-by: James Morse <james.morse@arm.com>
-
-
-Will, are you happy to pick this up and fix the typos, or would you prefer a clean version
-to be posted?
-
-
-Thanks,
-
-James
