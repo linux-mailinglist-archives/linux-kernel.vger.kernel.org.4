@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2D6977C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9AA6977CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbjBOII4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 03:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S233838AbjBOIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjBOIIy (ORCPT
+        with ESMTP id S233794AbjBOIMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:08:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C5366BF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676448486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9u9d4+mSA10ut2q7fk3wCmoZCnOirUoOM8gzSFKLCaI=;
-        b=BwPqbDV8YGLf0X6/kGnr1n8srm6yWVSbFMfsyD9blBOhGQ15b9+gr6zwjp5RlJ1XklJb+F
-        9AQTOFrWhHM26748JeggPZUSxbEEHbdLrZsXncK6Pv/dZv0NsaRGrZ7LlBYVpagEAg+DU6
-        1BWjnELTpEQxLwEmLwkVqrixwB/K9G4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-QV-m0oUcNiaSK3dKwtDYaw-1; Wed, 15 Feb 2023 03:08:02 -0500
-X-MC-Unique: QV-m0oUcNiaSK3dKwtDYaw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F46729AA2D5;
-        Wed, 15 Feb 2023 08:08:01 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1FF6140EBF6;
-        Wed, 15 Feb 2023 08:07:58 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <867e1e3e-681b-843b-1704-effed736e13d@kernel.dk>
-References: <867e1e3e-681b-843b-1704-effed736e13d@kernel.dk> <20230214171330.2722188-1-dhowells@redhat.com> <2877092.1676415412@warthog.procyon.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, smfrench@gmail.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just list)
+        Wed, 15 Feb 2023 03:12:33 -0500
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23EE3A94;
+        Wed, 15 Feb 2023 00:12:31 -0800 (PST)
+Date:   Wed, 15 Feb 2023 08:12:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemb.ch;
+        s=protonmail; t=1676448748; x=1676707948;
+        bh=s9JzE6b6DEfckH/ZqQDZxssRt/o9LAwbB3i41yJi7+4=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=fva+HL8dsv3tACxLbMbg9jlu6/1+Zx2YrA6/vdm7SZEtuYYigjN0yxwB5HMeLH0EE
+         a+dNE8DU6teGbczfDlI1u5t+nHRU4611angKVhKSn1ZsbOxnn+wCGR6bE2DVAHJoxR
+         GFwJHVnCovTqmb5tQrQbLJ09M11k56qN3x+Y2AvMa3JL3b6QpvhwTp155aUucarhmv
+         NbuLt++S+UEQLO7sWVTNT7I2ecxB0igDRYfTgNcbc2IOYCzgAoYjFx280cKLnujCg/
+         FDR7fdlcwadje1Joqh1cMVDckXnlB4d59KzgSfT6YJ2qD/JJ7FxAtEogFExHIVaIDj
+         J+hiZbVgKV5Hw==
+To:     Kalle Valo <kvalo@kernel.org>
+From:   Marc Bornand <dev.mbornand@systemb.ch>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-wireless@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yohan Prod'homme <kernel@zoddo.fr>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4] Set ssid when authenticating
+Message-ID: <Y+yT2YUORRHY4bei@opmb2>
+In-Reply-To: <87ttzn4hki.fsf@kernel.org>
+References: <20230214132009.1011452-1-dev.mbornand@systemb.ch> <87ttzn4hki.fsf@kernel.org>
+Feedback-ID: 65519157:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2895994.1676448478.1@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 15 Feb 2023 08:07:58 +0000
-Message-ID: <2895995.1676448478@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
+On Wed, Feb 15, 2023 at 07:35:09AM +0200, Kalle Valo wrote:
+> Marc Bornand <dev.mbornand@systemb.ch> writes:
+>
+> > changes since v3:
+> > - add missing NULL check
+> > - add missing break
+> >
+> > changes since v2:
+> > - The code was tottaly rewritten based on the disscution of the
+> >   v2 patch.
+> > - the ssid is set in __cfg80211_connect_result() and only if the ssid i=
+s
+> >   not already set.
+> > - Do not add an other ssid reset path since it is already done in
+> >   __cfg80211_disconnected()
+> >
+> > When a connexion was established without going through
+> > NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
+> > Now we set it in __cfg80211_connect_result() when it is not already set=
+.
+> >
+> > Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
+> > Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: stable@vger.kernel.org
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216711
+> > Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
+> > ---
+> >  net/wireless/sme.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+>
+> The change log ("changes since v3" etc) should be after "---" line and
 
-> Let's update the branch and see how it goes... If there's more fallout, =
-then
-> let's make a fallback plan for the first few.
+Does it need another "---" after the change log?
+something like:
 
-I forgot to export the new functions, as Steve found out.  Fix attached.
+"---"
+"changes since v3:"
+"(CHANGES)"
+"---"
 
-David
----
-splice: Export filemap/direct_splice_read()
+> the title should start with "wifi: cfg80211:". Please read the wiki link
+> below.
 
-filemap_splice_read() and direct_splice_read() should be exported.
+Should i start with the version 1 with the new title?
+and since i am already changing the title, the following might better
+discribe the patch, or should i keep the old title after the ":" ?
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: David Hildenbrand <david@redhat.com>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: linux-cifs@vger.kernel.org
-cc: linux-mm@kvack.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/splice.c  |    1 +
- mm/filemap.c |    1 +
- 2 files changed, 2 insertions(+)
+[PATCH wireless] wifi: cfg80211: Set SSID if it is not already set
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 4c6332854b63..928c7be2f318 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -373,6 +373,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *pp=
-os,
- 	kfree(bv);
- 	return ret;
- }
-+EXPORT_SYMBOL(direct_splice_read);
- =
-
- /**
-  * generic_file_splice_read - splice data from file to a pipe
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 8c7b135c8e23..570f86578f7c 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2969,6 +2969,7 @@ ssize_t filemap_splice_read(struct file *in, loff_t =
-*ppos,
- =
-
- 	return total_spliced ? total_spliced : error;
- }
-+EXPORT_SYMBOL(filemap_splice_read);
- =
-
- static inline loff_t folio_seek_hole_data(struct xa_state *xas,
- 		struct address_space *mapping, struct folio *folio,
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
+tches
 
