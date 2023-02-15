@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9D06975DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E93F6975E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjBOFfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S233314AbjBOFgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 00:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBOFfV (ORCPT
+        with ESMTP id S233142AbjBOFgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:35:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5CD2A9A5;
-        Tue, 14 Feb 2023 21:35:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA4ACB82046;
-        Wed, 15 Feb 2023 05:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93631C433D2;
-        Wed, 15 Feb 2023 05:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676439317;
-        bh=LANnG+PtQLcN/12XLL7GZBXeaLs0zbH80bLxomIclLs=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=lR7QtoVO/ZyJ+Fj8sNHOAqdSggan9Qw8vQ8dKctyFX80q7Qxs/hT6Or1B25oELbeN
-         AcMufULJhQ2z6CS1pZeb1dvzqquwBfr/Hrhq8ZiSxY0jSFYRHxhe6QXQMuoAonftHT
-         eCfxLFlA4HO2KNu89u1gVj2zdScsJPO0qZ74KE5FPeVDdgJc+gnrN9FdlGQSBhyfyr
-         1HRgl5eAhNKVa45mM9HtoGmaeIoD9Rf/g0tVDLKws780QmMmWvGyppv4te5nMKtlxb
-         HMMUl0xR7O2HhKCDQl/RmkjK7n/lRNQjHrN4fFijzfG3thKbSsYipy8JEf0Db9syn0
-         tSrrhQ43HM0Fw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Marc Bornand <dev.mbornand@systemb.ch>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yohan Prod'homme <kernel@zoddo.fr>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] Set ssid when authenticating
-References: <20230214132009.1011452-1-dev.mbornand@systemb.ch>
-Date:   Wed, 15 Feb 2023 07:35:09 +0200
-In-Reply-To: <20230214132009.1011452-1-dev.mbornand@systemb.ch> (Marc
-        Bornand's message of "Tue, 14 Feb 2023 13:20:25 +0000")
-Message-ID: <87ttzn4hki.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 15 Feb 2023 00:36:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9839C2A9B0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:36:41 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31F0FutM025508;
+        Wed, 15 Feb 2023 05:36:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eMsxikA2FKWM0cAyyuNKptymaSt/npyL9FJnQ+uOQSc=;
+ b=FxV3qwIoK5wvwqTwdtx7P/Xe30YZTQUDQ3mDE7kvtyKG9/DvuUhxiQvsmPFBrQVhA80l
+ pBrlyPw0yLyyNGvZQiKVPJcZldKd/WKNvlsT7Exo6+iqLrZsekfrishLhD72Dccb5MD/
+ /Suy/Ny1G8GO1FykHApHU9azG2cNoH8DurHJ/v6wMLoO6wB0y10B2B1rXWMUCIuH/8Mz
+ eov1w0tlxE/dralzhJYIGSokDo5dkkE5DjUHFQT63LV2lw5K3nYaLldH9ZNfCAPpVDGk
+ tVrnQkPEHSjhFBuhgPIVBJn7AnogKtCnco+JJGCvN/oQmL5Hhvvk+J8ZbmKWMKIKNXoU cw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nrhx3s0vf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 05:36:26 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31F5aQCx028070
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 05:36:26 GMT
+Received: from [10.213.73.166] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 21:36:24 -0800
+Message-ID: <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
+Date:   Wed, 15 Feb 2023 11:05:53 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V1] um: Fix compilation warnings
+Content-Language: en-US
+To:     Richard Weinberger <richard@nod.at>
+CC:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <1676410243-10566-1-git-send-email-quic_c_spathi@quicinc.com>
+ <1950127775.130646.1676411821807.JavaMail.zimbra@nod.at>
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+In-Reply-To: <1950127775.130646.1676411821807.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _xvosdkay_gpVVwM-dww_kVZiKxqBlj1
+X-Proofpoint-GUID: _xvosdkay_gpVVwM-dww_kVZiKxqBlj1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-15_02,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 suspectscore=0 mlxlogscore=677 bulkscore=0
+ malwarescore=0 spamscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302150049
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,39 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marc Bornand <dev.mbornand@systemb.ch> writes:
 
-> changes since v3:
-> - add missing NULL check
-> - add missing break
+On 2/15/2023 3:27 AM, Richard Weinberger wrote:
+> ----- Ursprüngliche Mail -----
+>> Von: "Srinivasarao Pathipati" <quic_c_spathi@quicinc.com>
+>> static void sig_handler_common(int sig, struct siginfo *si, mcontext_t *mc)
+>> {
+>> -	struct uml_pt_regs r;
+>> +	struct uml_pt_regs *r;
+>> 	int save_errno = errno;
+>>
+>> -	r.is_user = 0;
+>> +	r = malloc(sizeof(struct uml_pt_regs));
+> I fear this is not correct since malloc() is not async-signal safe.
+
+Thanks Richard for quick response. Could you please suggest alternative 
+function of malloc() with async-signal safe.
+
+if that is not possible Is there any other way to fix this warning? OR 
+do we need to live with that warning?
+
 >
-> changes since v2:
-> - The code was tottaly rewritten based on the disscution of the
->   v2 patch.
-> - the ssid is set in __cfg80211_connect_result() and only if the ssid is
->   not already set.
-> - Do not add an other ssid reset path since it is already done in
->   __cfg80211_disconnected()
->
-> When a connexion was established without going through
-> NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
-> Now we set it in __cfg80211_connect_result() when it is not already set.
->
-> Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
-> Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
-> Cc: linux-wireless@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216711
-> Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
-> ---
->  net/wireless/sme.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-
-The change log ("changes since v3" etc) should be after "---" line and
-the title should start with "wifi: cfg80211:". Please read the wiki link
-below.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Thanks,
+> //richard
