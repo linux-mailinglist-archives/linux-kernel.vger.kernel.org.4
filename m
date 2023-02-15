@@ -2,176 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85EF697A73
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A473697A78
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 12:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjBOLKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 06:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S230418AbjBOLNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 06:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBOLKv (ORCPT
+        with ESMTP id S230492AbjBOLNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 06:10:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2B3645E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676459400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tIFgXh/l40GhiL7GOoC/0iUQI17ikABcGGlDWzu5xTA=;
-        b=PEOXnUUyjX6T9Zua1JhdxzriUUPXqmN+IB8B4TTregKmxOuyLX/kH7nRpAcJTM76V8lw1L
-        sYE1TODRUsMpFZh3001EGL+aYSq0dPM7ywC/2pqHMHTuGf4LW67S6dbLnIDm4RskSSCaxZ
-        LT3yD+Ij6dA2uyVp9DSfRjFHCUVdUsI=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-590-j8o_EtEGNl-xN-mcgWvcow-1; Wed, 15 Feb 2023 06:09:58 -0500
-X-MC-Unique: j8o_EtEGNl-xN-mcgWvcow-1
-Received: by mail-lj1-f199.google.com with SMTP id r17-20020a2eb891000000b00290658792ceso4603680ljp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:09:58 -0800 (PST)
+        Wed, 15 Feb 2023 06:13:15 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAAF1B54C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:13:13 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id u20so3556224vsp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 03:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1676459592;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D9lP4MvG5k1EpDumXLwfDIbMIO5VvOfCG8n4ZwEIYRA=;
+        b=LrC6OAsRg8g1C233qVSu2aTQsjJukMSr9kJugX5eEv5xTztxZNBGMYdnJtZL4A3I20
+         FoLBUysjf9I+puYCWrbSuqo18hn0vqoPJL/cUrror+NRaNEDJyZ3FV73Mb3RKJ5gxrUm
+         doCRxywsnNkhtbu6FZMJIpFRgYhTSkEwnzvw8bRm76R+noLjOzx1LDCmPmiRSHG2fvso
+         ELFjfxQfq8GOCff+Anilfx36Xa62SovbSw6qbo8+Grwykib0TwZ2Cc5QFZJb/qgNfGhE
+         GfmbPEfktti6g6oROelZgHi/02PwL6GGew43sdomc4f8fWfJDqXSSIFCj1u96PRDbLcp
+         idQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1676459592;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tIFgXh/l40GhiL7GOoC/0iUQI17ikABcGGlDWzu5xTA=;
-        b=ll2MMRCZU/8Wv6CjKajz0QlcZ2dosa7Z/BkB79FIZZbh7wGNEHZtTzISZJb+wHvcbx
-         uuu0X3C+3ux89g4zEYPk0CkXNE/y17pH/puZxuQt9RfQ+zYyCA2g7DEin9B1f2oIv9Aa
-         2XcUhKB7lZml9gXDRoPwTAb3tkJOJnw50Q88x2VlAkYTvlWkC4gOcNm3ih3aphrxykrB
-         GkZ/1NvuMNOIhl1MdELv2JNL3ls5OKP1VxsgxQMbSW0IeJkOUCWMYBx5rj91p+ZgyLYE
-         1yQpLZRtdTKS9IlxXRyD7Mvewf1Pho00sBvzu7ptVHhSrXAoJIOrdwpLlod/1SzZaScs
-         B6xg==
-X-Gm-Message-State: AO0yUKU+AFT6w8XFHxghfNpBBDGbOSHQT3TRHPtqb7/15y5P8me/CS4G
-        l07yItKvxUActxGMu9kShRq9PCN6Ib1iI31ixWzmZxryqMuwoDFMoBGW5Z2YtKGJ/Oxx5dr30mr
-        /fkoWy5LtVx8m2p/Zwg6MbPwu7/Tkgp8NncDGUxmI
-X-Received: by 2002:a2e:b803:0:b0:293:5317:47ab with SMTP id u3-20020a2eb803000000b00293531747abmr433602ljo.8.1676459397210;
-        Wed, 15 Feb 2023 03:09:57 -0800 (PST)
-X-Google-Smtp-Source: AK7set/9H0SZhUW24BTzDKxz2i3Ak4kG4AuPlENkYIzHIEXR57C28xi1MjzNIGuWTJb6egEAxgh5LbogHsjJtJv3t7E=
-X-Received: by 2002:a2e:b803:0:b0:293:5317:47ab with SMTP id
- u3-20020a2eb803000000b00293531747abmr433597ljo.8.1676459396916; Wed, 15 Feb
- 2023 03:09:56 -0800 (PST)
+        bh=D9lP4MvG5k1EpDumXLwfDIbMIO5VvOfCG8n4ZwEIYRA=;
+        b=cijwaaOIYui4Iwmj8/grCulGiScTfRP2RDDn16N+neLDH9Ia5JClNb0Ljd1ymNg2KY
+         ycVu7m9fCQPNkbuPAxbr006rCHFqo9xMq6RY3MwcHeRti2M53yCjU3Yfn9Ue4mDUM8v9
+         0pYMvB9MjVJ+1CKIipJnWzF202eHpNmBpjEWWSpHTCfpPofc+ecdzIoASkO3N4uBKpCS
+         Mvx8ma/w9LfKvLUtHqfzzmVK/ydzhcObm9C9oopi1X7ogoekYdW7o36fELvnUYYbN2mH
+         8CsJemiWHWid3+zpBBll6QqaiWwYB0aMEzbEgA6249BgAxEkLblDgLN3sq8Xlu2Pk04e
+         a0kA==
+X-Gm-Message-State: AO0yUKVofCgo23uTiquEPyA8cB0JanKM0FdkxoiG9J463447IWMuDGfs
+        x68Z1+oyruhQ+ZMo03I0sR99O5HobFgOku423l8jsA==
+X-Google-Smtp-Source: AK7set+3UZH4rvUHU7q81fVFwnGAXPrl5eO9z6mdY/NTSmUYUwUrPc1QZupIIazj9JL9bT4f4FTNcpxlotuAc3guJtA=
+X-Received: by 2002:a67:6081:0:b0:3ee:65e3:af84 with SMTP id
+ u123-20020a676081000000b003ee65e3af84mr325407vsb.77.1676459592133; Wed, 15
+ Feb 2023 03:13:12 -0800 (PST)
 MIME-Version: 1.0
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com> <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
- <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com> <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
- <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
- <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com> <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com> <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info> <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com> <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
-In-Reply-To: <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Wed, 15 Feb 2023 12:09:45 +0100
-Message-ID: <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Chris Clayton <chris2553@googlemail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <20230209223811.4993-1-mario.limonciello@amd.com> <20230209223811.4993-3-mario.limonciello@amd.com>
+In-Reply-To: <20230209223811.4993-3-mario.limonciello@amd.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 15 Feb 2023 16:43:01 +0530
+Message-ID: <CAFA6WYMJosUrE0BzQe6xFOaofZZWGiRBPBqoGk4Cvhm5s30VEQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
+        Lendacky Thomas <Thomas.Lendacky@amd.com>,
+        herbert@gondor.apana.org.au,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        kvm@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
-(Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+On Fri, 10 Feb 2023 at 04:08, Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> On 13.02.23 10:14, Chris Clayton wrote:
-> > On 13/02/2023 02:57, Dave Airlie wrote:
-> >> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
-> >>>> On 10.02.23 20:01, Karol Herbst wrote:
-> >>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
-> >>>>> Leemhuis) <regressions@leemhuis.info> wrote:
-> >>>>>>
-> >>>>>> On 08.02.23 09:48, Chris Clayton wrote:
-> >>>>>>>
-> >>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
-> >>>>>>
-> >>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
-> >>>>>> time to fix it and there is one thing I wonder:
-> >>>>>>
-> >>>>>> Did any of the nouveau developers look at the netconsole captures Chris
-> >>>>>> posted more than a week ago to check if they somehow help to track down
-> >>>>>> the root of this problem?
-> >>>>>
-> >>>>> I did now and I can't spot anything. I think at this point it would
-> >>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
-> >>>>> any is in a weird state preventing the machine from shutting down.
-> >>>>
-> >>>> Many thx for looking into it!
-> >>>
-> >>> Yes, thanks Karol.
-> >>>
-> >>> Attached is the output from dmesg when this block of code:
-> >>>
-> >>>         /bin/mount /dev/sda7 /mnt/sda7
-> >>>         /bin/mountpoint /proc || /bin/mount /proc
-> >>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
-> >>>         /bin/echo t > /proc/sysrq-trigger
-> >>>         /bin/sleep 1
-> >>>         /bin/sync
-> >>>         /bin/sleep 1
-> >>>         kill $(pidof dmesg)
-> >>>         /bin/umount /mnt/sda7
-> >>>
-> >>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
-> >>>
-> >>> I hope this is what you were looking for, but if not, please let me know what you need
-> >
-> > Thanks Dave. [...]
-> FWIW, in case anyone strands here in the archives: the msg was
-> truncated. The full post can be found in a new thread:
+> The TEE subdriver for CCP, the amdtee driver and the i2c-designware-amdpsp
+> drivers all include `psp-sev.h` even though they don't use SEV
+> functionality.
 >
-> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+> Move the definition of `__psp_pa` into a common header to be included
+> by all of these drivers.
 >
-> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
-> my laptop." didn't bring us much further to a solution. :-/ I don't
-> really like it, but for regression tracking I'm now putting this on the
-> back-burner, as a fix is not in sight.
->
-> #regzbot monitor:
-> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
-> #regzbot backburner: hard to debug and apparently rare
-> #regzbot ignore-activity
->
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c                     |  1 +
+>  drivers/crypto/ccp/sev-dev.c               |  1 +
+>  drivers/crypto/ccp/tee-dev.c               |  2 +-
+>  drivers/i2c/busses/i2c-designware-amdpsp.c |  2 +-
 
-yeah.. this bug looks a little annoying. Sadly the only Turing based
-laptop I got doesn't work on Nouveau because of firmware related
-issues and we probably need to get updated ones from Nvidia here :(
+>  drivers/tee/amdtee/call.c                  |  2 +-
+>  drivers/tee/amdtee/shm_pool.c              |  2 +-
 
-But it's a bit weird that the kernel doesn't shutdown, because I don't
-see anything in the logs which would prevent that from happening.
-Unless it's waiting on one of the tasks to complete, but none of them
-looked in any way nouveau related.
+For TEE subsystem bits:
 
-If somebody else has any fancy kernel debugging tips here to figure
-out why it hangs, that would be very helpful...
+Acked-by: Sumit Garg <sumit.garg@linaro.org>
 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+-Sumit
+
+>  include/linux/psp-sev.h                    |  8 --------
+>  include/linux/psp.h                        | 14 ++++++++++++++
+>  8 files changed, 20 insertions(+), 12 deletions(-)
+>  create mode 100644 include/linux/psp.h
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 86d6897f48068..ee8e9053f4468 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/kvm_host.h>
+>  #include <linux/kernel.h>
+>  #include <linux/highmem.h>
+> +#include <linux/psp.h>
+>  #include <linux/psp-sev.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/swap.h>
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index e2f25926eb514..28945ca7c8563 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/cpufeature.h>
+>  #include <linux/fs.h>
+>  #include <linux/fs_struct.h>
+> +#include <linux/psp.h>
+>
+>  #include <asm/smp.h>
+>  #include <asm/cacheflush.h>
+> diff --git a/drivers/crypto/ccp/tee-dev.c b/drivers/crypto/ccp/tee-dev.c
+> index 5c9d47f3be375..f24fc953718a0 100644
+> --- a/drivers/crypto/ccp/tee-dev.c
+> +++ b/drivers/crypto/ccp/tee-dev.c
+> @@ -13,7 +13,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/slab.h>
+>  #include <linux/gfp.h>
+> -#include <linux/psp-sev.h>
+> +#include <linux/psp.h>
+>  #include <linux/psp-tee.h>
+>
+>  #include "psp-dev.h"
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 8f36167bce624..80f28a1bbbef6 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -4,7 +4,7 @@
+>  #include <linux/bits.h>
+>  #include <linux/i2c.h>
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+> -#include <linux/psp-sev.h>
+> +#include <linux/psp.h>
+>  #include <linux/types.h>
+>  #include <linux/workqueue.h>
+>
+> diff --git a/drivers/tee/amdtee/call.c b/drivers/tee/amdtee/call.c
+> index cec6e70f0ac92..e8cd9aaa34675 100644
+> --- a/drivers/tee/amdtee/call.c
+> +++ b/drivers/tee/amdtee/call.c
+> @@ -8,7 +8,7 @@
+>  #include <linux/tee_drv.h>
+>  #include <linux/psp-tee.h>
+>  #include <linux/slab.h>
+> -#include <linux/psp-sev.h>
+> +#include <linux/psp.h>
+>  #include "amdtee_if.h"
+>  #include "amdtee_private.h"
+>
+> diff --git a/drivers/tee/amdtee/shm_pool.c b/drivers/tee/amdtee/shm_pool.c
+> index f87f96a291c99..f0303126f199d 100644
+> --- a/drivers/tee/amdtee/shm_pool.c
+> +++ b/drivers/tee/amdtee/shm_pool.c
+> @@ -5,7 +5,7 @@
+>
+>  #include <linux/slab.h>
+>  #include <linux/tee_drv.h>
+> -#include <linux/psp-sev.h>
+> +#include <linux/psp.h>
+>  #include "amdtee_private.h"
+>
+>  static int pool_op_alloc(struct tee_shm_pool *pool, struct tee_shm *shm,
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index 1595088c428b4..7fd17e82bab43 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -14,14 +14,6 @@
+>
+>  #include <uapi/linux/psp-sev.h>
+>
+> -#ifdef CONFIG_X86
+> -#include <linux/mem_encrypt.h>
+> -
+> -#define __psp_pa(x)    __sme_pa(x)
+> -#else
+> -#define __psp_pa(x)    __pa(x)
+> -#endif
+> -
+>  #define SEV_FW_BLOB_MAX_SIZE   0x4000  /* 16KB */
+>
+>  /**
+> diff --git a/include/linux/psp.h b/include/linux/psp.h
+> new file mode 100644
+> index 0000000000000..202162487ec3b
+> --- /dev/null
+> +++ b/include/linux/psp.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef __PSP_H
+> +#define __PSP_H
+> +
+> +#ifdef CONFIG_X86
+> +#include <linux/mem_encrypt.h>
+> +
+> +#define __psp_pa(x)    __sme_pa(x)
+> +#else
+> +#define __psp_pa(x)    __pa(x)
+> +#endif
+> +
+> +#endif /* __PSP_H */
 > --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> That page also explains what to do if mails like this annoy you.
+> 2.34.1
 >
-> #regzbot ignore-activity
->
-
