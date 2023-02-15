@@ -2,229 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCA369749B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B340697499
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 03:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbjBOC5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 21:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S232531AbjBOC5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 21:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBOC5s (ORCPT
+        with ESMTP id S229515AbjBOC5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 21:57:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E17301A9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676429820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mXtgX5Vk2h3WIcUJAdVP4BZOumGxRu9HOZsfurPg6EA=;
-        b=XDEWIhYzkC7VF7mywTTuuDRUEhmDv/7Z+TW5ASR0vLOMgAeHswwp0IxxzuEY3sYgCyjh/0
-        qSV8W/CKo5Y3tkjn3XNuML2rjzHy5l3Je9bidR/iPmc3tsUwGoEvpfYDh2dCW4MrqQmcG6
-        monQe2Ur17Va02RvfLnAV9Y9CQELD40=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-626-bHy9SHxQP9K9ZjkOiMQcjg-1; Tue, 14 Feb 2023 21:56:58 -0500
-X-MC-Unique: bHy9SHxQP9K9ZjkOiMQcjg-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-16df7d9c780so4209794fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:56:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mXtgX5Vk2h3WIcUJAdVP4BZOumGxRu9HOZsfurPg6EA=;
-        b=GrCteRojlsui+GA3RngR3f28QnIFDcbgplh/LTH180/VsblCB2yzjEbotHm8v+jvDk
-         kpxW67c7qShryG63ydwckxwDBMzNlP5Tck3jgRswmEMcr0GCNIBDt/2KOe1Xkh4myDfn
-         QaYKntfiL0rJKsiSb7RVt+X7A9EpctQY+qW7urcTI89b6a02IEjvCtY+yeXi1Gu2BEd5
-         eMo8LEFLlI/UItFQO9uRGVH67B4cmbJhQIAJJJEuygQQrJNJq8WU/37z34f4hPgbbGFX
-         qOqe5vTnR4qYh7YfFzugYoxHc6rdE/3LRS/br04Y+tA1nwyFEDq98dWF+3eNUZ8+vhp/
-         lO3Q==
-X-Gm-Message-State: AO0yUKViOU3TWc0EMmP5iplTIljISm9KU1H/fS9q6HTe35oHSue8ibxs
-        11ct4U7DMDQ08CBpjw/DF6olGXA5RXGPyMRJ3Z9pn49PfoTsfa6PL+E+MEsF0HsOVIS3mwvcBSN
-        gz2Y4Nvz1Q1PoWhgd2wc5Nvbopnh3EKzIQfd1GAgy
-X-Received: by 2002:a9d:62e:0:b0:68b:cbcf:c24b with SMTP id 43-20020a9d062e000000b0068bcbcfc24bmr38212otn.4.1676429818127;
-        Tue, 14 Feb 2023 18:56:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set+DrpHnZ9E7DqN5CM1RUFJnBP54MzJQLr0RZB9+OZFABcaKeLjC/2nGjj6vR1Zfy1ETJ3ecoA4Ek43x1WjGjeA=
-X-Received: by 2002:a9d:62e:0:b0:68b:cbcf:c24b with SMTP id
- 43-20020a9d062e000000b0068bcbcfc24bmr38208otn.4.1676429817882; Tue, 14 Feb
- 2023 18:56:57 -0800 (PST)
+        Tue, 14 Feb 2023 21:57:42 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FEF2B639;
+        Tue, 14 Feb 2023 18:57:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGjRg1rGVz4x4q;
+        Wed, 15 Feb 2023 13:57:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676429856;
+        bh=SuXpWZnEeQFvY/oeKHZrR5GwTlkroYww7DMqncK//mk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M3Wfg1uf/0W5iQnJJ6oXNGFVjHfRu7odY7ooaP4Wj2qmjYPPAUs9KMv+5kbU3Sez4
+         edB0V5kuibXnkusRLsVph+6gciQc7vMFhQ5EYq89pi5dQzYhkYv7IhHlkACj7/Yrz7
+         p1iR/ISutxdWc89+PpTrJmOPhxsO5YQatsStwxWtrqlkpwZj7PLsmvPGMnzI+e7Apl
+         xSdZOlrCEbWwz5aFp69NM8KCqGEabVJMEaZ3ql0k5UnyJvvWv0XsPgS2nddv4+Ee7M
+         kw9F6J7H0mJGE3daP9aVmWsknhze4yVvFSBdg43pZbh2y2qx+d6/NXLotzcL6Edafd
+         Avc9aG0h+OQyA==
+Date:   Wed, 15 Feb 2023 13:57:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the mm tree with the bpf-next tree
+Message-ID: <20230215135734.4dffcd39@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230131145310.2069-1-longpeng2@huawei.com> <db99245c-606a-2f24-52fe-836a6972437f@redhat.com>
- <35b94992-0c6b-a190-1fce-5dda9c8dcf4b@huawei.com> <CACGkMEt0Rgkcmt9k4dWsp-qqtPvrM40mtgmSERc0A7Ve1wzKHw@mail.gmail.com>
- <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
-In-Reply-To: <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 15 Feb 2023 10:56:46 +0800
-Message-ID: <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
-Subject: Re: [PATCH] vhost-vdpa: cleanup memory maps when closing vdpa fds
-To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-Cc:     mst@redhat.com, arei.gonglei@huawei.com, yechuan@huawei.com,
-        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fUyJ4JZH/K==rq=60W7H0TR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 10:49 AM Longpeng (Mike, Cloud Infrastructure
-Service Product Dept.) <longpeng2@huawei.com> wrote:
->
->
->
-> =E5=9C=A8 2023/2/15 10:00, Jason Wang =E5=86=99=E9=81=93:
-> > On Tue, Feb 14, 2023 at 2:28 PM Longpeng (Mike, Cloud Infrastructure
-> > Service Product Dept.) <longpeng2@huawei.com> wrote:
-> >>
-> >>
-> >>
-> >> =E5=9C=A8 2023/2/14 14:16, Jason Wang =E5=86=99=E9=81=93:
-> >>>
-> >>> =E5=9C=A8 2023/1/31 22:53, Longpeng(Mike) =E5=86=99=E9=81=93:
-> >>>> From: Longpeng <longpeng2@huawei.com>
-> >>>>
-> >>>> We must cleanup all memory maps when closing the vdpa fds, otherwise
-> >>>> some critical resources (e.g. memory, iommu map) will leaked if the
-> >>>> userspace exits unexpectedly (e.g. kill -9).
-> >>>
-> >>>
-> >>> Sounds like a bug of the kernel, should we fix there?
-> >>>
-> >>
-> >> For example, the iommu map is setup when QEMU calls VHOST_IOTLB_UPDATE
-> >> ioctl and it'll be freed if QEMU calls VHOST_IOTLB_INVALIDATE ioctl.
-> >>
-> >> So maybe we release these resources in vdpa framework in kernel is a
-> >> suitable choice?
-> >
-> > I think I need understand what does "resources" mean here:
-> >
-> > For iommu mapping, it should be freed by vhost_vdpa_free_domain() in
-> > vhost_vdpa_release()?
-> >
->
-> Please consider the following lifecycle of the vdpa device:
->
-> 1. vhost_vdpa_open
->      vhost_vdpa_alloc_domain
->
-> 2. vhost_vdpa_pa_map
->      pin_user_pages
->      vhost_vdpa_map
->        iommu_map
->
-> 3. kill QEMU
->
-> 4. vhost_vdpa_release
->      vhost_vdpa_free_domain
->
-> In this case, we have no opportunity to invoke unpin_user_pages or
-> iommu_unmap to free the memory.
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-We do:
+Hi all,
 
-vhost_vdpa_cleanup()
-    vhost_vdpa_remove_as()
-        vhost_vdpa_iotlb_unmap()
-            vhost_vdpa_pa_unmap()
-                unpin_user_pages()
-                vhost_vdpa_general_unmap()
-                    iommu_unmap()
-?
+Today's linux-next merge of the mm tree got conflicts in:
 
-Btw, it looks like we should call vhost_vdpa_free_domain() *after*
-vhost_vdpa_cleanup() otherwise it's a UAF?
+  include/linux/memcontrol.h
+  mm/memcontrol.c
 
-Thanks
+between commit:
 
->
-> > static int vhost_vdpa_release(struct inode *inode, struct file *filep)
-> > {
-> >          struct vhost_vdpa *v =3D filep->private_data;
-> >          struct vhost_dev *d =3D &v->vdev;
-> >
-> >          mutex_lock(&d->mutex);
-> >          filep->private_data =3D NULL;
-> >          vhost_vdpa_clean_irq(v);
-> >          vhost_vdpa_reset(v);
-> >          vhost_dev_stop(&v->vdev);
-> >          vhost_vdpa_free_domain(v);
-> >          vhost_vdpa_config_put(v);
-> >          vhost_vdpa_cleanup(v);
-> >          mutex_unlock(&d->mutex);
-> >
-> >          atomic_dec(&v->opened);
-> >          complete(&v->completion);
-> >
-> >          return 0;
-> > }
-> >
-> >>
-> >> By the way, Jason, can you reproduce the problem in your machine?
-> >>
-> >
-> > Haven't got time in doing this but it should be the responsibility of
-> > the author to validate this anyhow.
-> >
-> > Thanks
-> >
-> >>> Thanks
-> >>>
-> >>>
-> >>>>
-> >>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
-> >>>> ---
-> >>>>    drivers/vhost/vdpa.c | 13 +++++++++++++
-> >>>>    1 file changed, 13 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> >>>> index a527eeeac637..37477cffa5aa 100644
-> >>>> --- a/drivers/vhost/vdpa.c
-> >>>> +++ b/drivers/vhost/vdpa.c
-> >>>> @@ -823,6 +823,18 @@ static void vhost_vdpa_unmap(struct vhost_vdpa =
-*v,
-> >>>>            vhost_vdpa_remove_as(v, asid);
-> >>>>    }
-> >>>> +static void vhost_vdpa_clean_map(struct vhost_vdpa *v)
-> >>>> +{
-> >>>> +    struct vhost_vdpa_as *as;
-> >>>> +    u32 asid;
-> >>>> +
-> >>>> +    for (asid =3D 0; asid < v->vdpa->nas; asid++) {
-> >>>> +        as =3D asid_to_as(v, asid);
-> >>>> +        if (as)
-> >>>> +            vhost_vdpa_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
-> >>>> +    }
-> >>>> +}
-> >>>> +
-> >>>>    static int vhost_vdpa_va_map(struct vhost_vdpa *v,
-> >>>>                     struct vhost_iotlb *iotlb,
-> >>>>                     u64 iova, u64 size, u64 uaddr, u32 perm)
-> >>>> @@ -1247,6 +1259,7 @@ static int vhost_vdpa_release(struct inode
-> >>>> *inode, struct file *filep)
-> >>>>        vhost_vdpa_clean_irq(v);
-> >>>>        vhost_vdpa_reset(v);
-> >>>>        vhost_dev_stop(&v->vdev);
-> >>>> +    vhost_vdpa_clean_map(v);
-> >>>>        vhost_vdpa_free_domain(v);
-> >>>>        vhost_vdpa_config_put(v);
-> >>>>        vhost_vdpa_cleanup(v);
-> >>>
-> >>> .
-> >>
-> >
-> > .
->
+  b6c1a8af5b1e ("mm: memcontrol: add new kernel parameter cgroup.memory=3Dn=
+obpf")
 
+from the bpf-next tree and commit:
+
+  2006d382484e ("mm: memcontrol: rename memcg_kmem_enabled()")
+
+from the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/memcontrol.h
+index e7310363f0cb,5567319027d1..000000000000
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@@ -1776,17 -1776,11 +1776,17 @@@ struct obj_cgroup *get_obj_cgroup_from_
+  int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size);
+  void obj_cgroup_uncharge(struct obj_cgroup *objcg, size_t size);
+ =20
+ +extern struct static_key_false memcg_bpf_enabled_key;
+ +static inline bool memcg_bpf_enabled(void)
+ +{
+ +	return static_branch_likely(&memcg_bpf_enabled_key);
+ +}
+ +
+- extern struct static_key_false memcg_kmem_enabled_key;
++ extern struct static_key_false memcg_kmem_online_key;
+ =20
+- static inline bool memcg_kmem_enabled(void)
++ static inline bool memcg_kmem_online(void)
+  {
+- 	return static_branch_likely(&memcg_kmem_enabled_key);
++ 	return static_branch_likely(&memcg_kmem_online_key);
+  }
+ =20
+  static inline int memcg_kmem_charge_page(struct page *page, gfp_t gfp,
+@@@ -1860,12 -1854,7 +1860,12 @@@ static inline struct obj_cgroup *get_ob
+  	return NULL;
+  }
+ =20
+ +static inline bool memcg_bpf_enabled(void)
+ +{
+ +	return false;
+ +}
+ +
+- static inline bool memcg_kmem_enabled(void)
++ static inline bool memcg_kmem_online(void)
+  {
+  	return false;
+  }
+diff --cc mm/memcontrol.c
+index 186a3a56dd7c,3e3cdb9bed95..000000000000
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@@ -348,11 -345,8 +348,11 @@@ static void memcg_reparent_objcgs(struc
+   * conditional to this static branch, we'll have to allow modules that do=
+es
+   * kmem_cache_alloc and the such to see this symbol as well
+   */
+- DEFINE_STATIC_KEY_FALSE(memcg_kmem_enabled_key);
+- EXPORT_SYMBOL(memcg_kmem_enabled_key);
++ DEFINE_STATIC_KEY_FALSE(memcg_kmem_online_key);
++ EXPORT_SYMBOL(memcg_kmem_online_key);
+ +
+ +DEFINE_STATIC_KEY_FALSE(memcg_bpf_enabled_key);
+ +EXPORT_SYMBOL(memcg_bpf_enabled_key);
+  #endif
+ =20
+  /**
+
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsSh4ACgkQAVBC80lX
+0Gxa+Qf/abbZhDuKtWmpJs/t/LThpHp4uYKNTFBA66rnXueNTp2NXIZHQt4IT4Ix
+btNitQjfYVfWWDfNVgBVh8jNO8qRiUqqEkXEjIjZThn0z41SzMQ0DlUS6XDOIwsY
+lj1Bc4TU3JFWI7uufu5htz2qXpQKte+Zd2TC7Qy4/a6b62WHPE9KbA3ALPP77FqD
+nYKkrXgygFCRggy9l80lCgNduw1Z3DT5yFkyOLaaxfHfJpxds2VCxCKgFcr+gQIN
+gMqqoWUcoakXNhjnXrtxchz2YIiU7lYkOs7yyWGC6CDLtK4nNrwI/dfiKr3Hj80E
+azCVuBAWa1jGN0ySrpMqIFCiVTVwfg==
+=OmX7
+-----END PGP SIGNATURE-----
+
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR--
