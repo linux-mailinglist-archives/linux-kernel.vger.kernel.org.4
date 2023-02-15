@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39936985B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07DA6985AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBOUho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:37:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S229745AbjBOUhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBOUhg (ORCPT
+        with ESMTP id S229516AbjBOUhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Feb 2023 15:37:36 -0500
 Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F493B3C4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35CF3B3E2;
         Wed, 15 Feb 2023 12:37:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
         s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
-        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=e/h7Jd3Bftz4I/V3GwkrnB37sFuV2tm61VzgB83k3L4=; b=OffNwXDw2cmv09Gyr4ScW2cmR8
-        ddg010JHL6upKIJS4YL0BLf8upSmjs0nkBYuycSPCIadhCthTA2OEyUAD7WrEWSrOTD/jBIFtip0O
-        y9mYrS1MDbym6lMeKM7aN9N3OkLrRe838X02Oh7HRxUXTSoev4o2Ex0dL4NV9i2V4gk6ROQ88Yr4L
-        L6CecifHmbvpBDCN0DDtSaAx3mxcJt15rWoEokXcRu1WwJ70FULOBRfb8qvGyTJ9glwwfOrNbayEK
-        8893zclLjf36lU5GfinPl02IIz6VkH4byI7ZmYMdMhokXq2snKBBiBR41fIrI4NAomTbv1EwVaReW
-        HijuX0KA==;
+        :References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=H4m3RP9AkGa0lGoncGnuU5TSiDprpEx7CfW0CHNe6C4=; b=Xv/LX8xdfRA3IJXZUbMbjDLKxe
+        xm7Pccqt4fjdnkBet05mvUTdubkfrMNdU7Pc/yemm12fkAV6oaKDC0Oe5Bbv1GaieZEEq5mQNh5kq
+        piDNJuUhOr3DkHj2fiHoL3Sf8fbeGU9R8dnXnuCVI00JMPJFjZ3gV/CXgS91M3Eydsw7yK/C2Mzl4
+        k+AY4TDj0rfniyHhswQhBhleKbrUBoZe8lo9/uWmT12QV+26pRQFNrmP6BPNp/aoa8WymGsB39hDD
+        THFm5TpCo6c23+3vgVoP851fe1UA/UxtNZG/FkP7jDNjhBmQrRuxnus6bSg2pMF9nPIDZ2ivSueGq
+        2sgA5x0g==;
 Received: from authenticated user
         by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
         (Exim 4.94.2)
         (envelope-from <bage@debian.org>)
-        id 1pSOWi-002j5f-B0; Wed, 15 Feb 2023 20:37:16 +0000
+        id 1pSOWi-002j5f-MJ; Wed, 15 Feb 2023 20:37:16 +0000
 From:   Bastian Germann <bage@debian.org>
 To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
 Cc:     Bastian Germann <bage@debian.org>,
@@ -42,11 +42,15 @@ Cc:     Bastian Germann <bage@debian.org>,
         Samuel Holland <samuel@sholland.org>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 0/5] Enable hwlock on Allwinner A64
-Date:   Wed, 15 Feb 2023 21:37:05 +0100
-Message-Id: <20230215203711.6293-1-bage@debian.org>
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Subject: [PATCH v2 1/5] dt-bindings: hwlock: sun6i: Add missing #hwlock-cells
+Date:   Wed, 15 Feb 2023 21:37:06 +0100
+Message-Id: <20230215203711.6293-2-bage@debian.org>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230215203711.6293-1-bage@debian.org>
+References: <20230215203711.6293-1-bage@debian.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Debian-User: bage
@@ -60,34 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allwinner,sun6i-a31-hwspinlock compatible driver can be used with
-the Allwinner A64 chip. Add the wiring required to enable it.
+The allwinner,sun6i-a31-hwspinlock.yaml binding needs #hwlock-cells
+which is required by the hwlock type.
 
-The device tree binding needs some work to verify everything that is
-needed by the sun6i hwlock driver.
+Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
+Signed-off-by: Bastian Germann <bage@debian.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+Link: https://lore.kernel.org/r/20230213231931.6546-2-bage@debian.org
+---
+ .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The hwlock device was verified to be available with this series applied
-on a Pinebook.
-
-1/5 was already applied in linux-next.
-
-Changelog:
-v2:
-   Fix the dt-binding example for the added properties.
-   Add a compatible string for a64.
-   Wording 3/5: driver -> Linux driver.
-
-Bastian Germann (5):
-  dt-bindings: hwlock: sun6i: Add missing #hwlock-cells
-  dt-bindings: hwlock: sun6i: Add #hwlock-cells to example
-  dt-bindings: hwlock: sun6i: Add missing names
-  dt-bindings: hwlock: sun6i: Add a64 compatible string
-  arm64: dts: allwinner: a64: Add hwspinlock node
-
- .../allwinner,sun6i-a31-hwspinlock.yaml       | 21 ++++++++++++++++++-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 11 ++++++++++
- 2 files changed, 31 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+index 10e5a53e447b..01b1bbb3061f 100644
+--- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
++++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+@@ -26,11 +26,15 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  '#hwlock-cells':
++    const: 1
++
+ required:
+   - compatible
+   - reg
+   - clocks
+   - resets
++  - "#hwlock-cells"
+ 
+ additionalProperties: false
+ 
 -- 
 2.39.1
 
