@@ -2,173 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53C9697285
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08BE697288
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 01:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjBOAKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 19:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S232270AbjBOAKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 19:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjBOAKA (ORCPT
+        with ESMTP id S232163AbjBOAKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:10:00 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CED301A6;
-        Tue, 14 Feb 2023 16:09:59 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id a9so20259028ljr.13;
-        Tue, 14 Feb 2023 16:09:59 -0800 (PST)
+        Tue, 14 Feb 2023 19:10:15 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B779B311C8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:10:05 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a3so10174985ejb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 16:10:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QEKkwruQ7jJehw3g+rIQrjpIlByT/m3bwWLpiiOouVk=;
-        b=p28FIZZBq5sK9WuODXt+DSVdnUi4kp2nyF4/5sBrfjiGRSfrK3VLvwJlqb6kpi6goZ
-         qW7G6N0SZEPju3mzicM9fGnpmwVofK8DM/N6lHc97wo47VIhc+3dFUtuzTny7VXklaiR
-         sacuyMrQpWVGBK83x9Q237ImM/M5Z96CzVxla8UlDf3mnfccGgdM+lK/VUYOq3xqH24/
-         VZMlVLDugj9q87loyT8/vHzqLvla76NyR99e5dL5f2178nEPHkuTwzlTWMSqaMAm75lI
-         Wm3gCgdP07Q9Hv5gpwpUNREeDw1iJX8/pZet8+4YRvOYwDaOU+JIMErvHQ9WzLCyinUH
-         Z0uw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8azonh6JuDM6yxIBz+UeUT9A+K1dkd2wXajwtSP1wNo=;
+        b=M81D30xtRjOeLl0/ENzu5hw5o44r66wXeRX9tMqeqWbvV5eTiAz6wRgQsVd4/yn6fe
+         SAKjUk0EPFpyoa8Dvqn3ZvIakxe7sLp0X+nspxQ5cTfv2bidV27zMg6BUMRgSsZlcuuw
+         TBTKWTzkzOJqsKkIc5C5wZDSGyhoyXGFeMz0RnLqa4VU8wgXO8Bd/iaewBWTWFYhhszM
+         qWRWxprx/WJG87+hRrYuXOKHioz/3aXutio53bdNErHWICAYbdDPhYY5+QcqodOBSNjs
+         b1iSINmG4DeIxZnvwm4Z0RhQVVE6oPERfmVh5tunqmLPIQP6j+OyF9f+jxHo04ct4LYM
+         j3PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QEKkwruQ7jJehw3g+rIQrjpIlByT/m3bwWLpiiOouVk=;
-        b=0trloeN7Y5b1wbGEUwDXmEUtrj+qKZI4IONsQiS1OfO5k+2dhcWySqDSNTkXv5Bgfj
-         EBOREtD2YrR36qZ+FAoJwYDytGI294GBYdNUWXHK658ni3NVGzxCl82PHbPwyw7eZhP5
-         byOhIVzUjoYOhlbqp0gLAnYVc+EubS8hL5qlGRjsN7PonB2UJyHTtv2lgIcFIzUot1+e
-         npCr0v4j/nOHsBeQLyjvOOPlyiHM7yAY4f5SCt6e7O5Mba3iroZJannYdZMLrr59WOi6
-         nJduTSnjl8zRXLL9dV1sNY53ECa2WeWap2D+IFad5IxK3qmun01Iq/pSPOP0XeWHeAs6
-         32YQ==
-X-Gm-Message-State: AO0yUKVxXeJAcBov53yjRMTT95O4yKJjf4o+WmJX+EVd5FsiJ7/C1KeN
-        EcEILTitRAxe2MP2A37WszZM911oL6LvKaVKrUM=
-X-Google-Smtp-Source: AK7set9zLYyavZdxDHLOuwVAryxvhgX3pw8MoesyCSUWxffTXcGoaNJtWpq1tPR2Bxb8kogvzpl0flY6SH32a2Z9IBE=
-X-Received: by 2002:a2e:b5d9:0:b0:293:4fd1:6105 with SMTP id
- g25-20020a2eb5d9000000b002934fd16105mr5738ljn.9.1676419797461; Tue, 14 Feb
- 2023 16:09:57 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8azonh6JuDM6yxIBz+UeUT9A+K1dkd2wXajwtSP1wNo=;
+        b=IbsdO81s+fXV2AzOBdDs7DEYLxzLOvLCv6qLM5plS+BrbjZSFEG7arsa70H8TebcEv
+         oyvtAVCggKsJ9dmdxh8K5SIve7gAbywp0VNc+zCa7cheOODpo7VVMxR9yvv3zXbZUTh2
+         IgHvGsF7YSF2U/WP2RiktY+hr6hwkmTr/XdtGQfuzlkzJmh4Fxt4M4j3bJ7uD570k5d4
+         w4ibhl29CzQHHBiTigZOhufI5jrpMlv6tmtwRNXDok27Y3YThOgEDJF/fLPDTb3xU6LR
+         Q3iKvC5F9pF6SRgkk9fRiuomccWTKe946p7a6F2x91P6MhYMXwTfdXw/qS7Z1o8qYQVb
+         FFqQ==
+X-Gm-Message-State: AO0yUKUNOww517BzP/DhKvjcfBvZ8skWoSI51GCIFoCtMCSmN9EvG3qJ
+        VNLrKuJlJXWl8PI6EIEN/YNqyw==
+X-Google-Smtp-Source: AK7set/gKNIqLXNJwW+JD/xwd56nsFrvF97bkqwOd4DklH3lI/hfm72F9UxypL4PvkVMgtm0dKAn9w==
+X-Received: by 2002:a17:906:9159:b0:866:6b08:946b with SMTP id y25-20020a170906915900b008666b08946bmr254841ejw.39.1676419804292;
+        Tue, 14 Feb 2023 16:10:04 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id kg3-20020a17090776e300b0088a2aebb146sm8848566ejc.52.2023.02.14.16.10.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 16:10:03 -0800 (PST)
+Message-ID: <a4627ca5-46e6-2f32-c0e2-a85990e02f54@linaro.org>
+Date:   Wed, 15 Feb 2023 02:10:02 +0200
 MIME-Version: 1.0
-References: <20230214145609.kernel.v1.1.Ibe4d3a42683381c1e78b8c3aa67b53fc74437ae9@changeid>
-In-Reply-To: <20230214145609.kernel.v1.1.Ibe4d3a42683381c1e78b8c3aa67b53fc74437ae9@changeid>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 14 Feb 2023 16:09:45 -0800
-Message-ID: <CABBYNZKVVo4T_pbEdozhNvgiykC7NiLQKEnJi3q5gZpHunGrbA@mail.gmail.com>
-Subject: Re: [kernel PATCH v1] Bluetooth: hci_sync: Resume adv with no RPA
- when active scan
-To:     Zhengping Jiang <jiangzp@google.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 10/14] drm/msm/a6xx: Fix up A6XX protected registers
+Content-Language: en-GB
+To:     Rob Clark <robdclark@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, marijn.suijten@somainline.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
+ <20230214173145.2482651-11-konrad.dybcio@linaro.org>
+ <CAF6AEGva3ecxTOx3Yb+Wh-1K=jYA3tDo_aXg09jS9pzJupYExQ@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAF6AEGva3ecxTOx3Yb+Wh-1K=jYA3tDo_aXg09jS9pzJupYExQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhengping,
+On 14/02/2023 23:56, Rob Clark wrote:
+> On Tue, Feb 14, 2023 at 9:32 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> One of the protected ranges was too small (compared to the data we
+>> have downstream). Fix it.
+>>
+>> Fixes: 408434036958 ("drm/msm/a6xx: update/fix CP_PROTECT initialization")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index 503c750216e6..d6b38bfdb3b4 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -690,7 +690,7 @@ static const u32 a6xx_protect[] = {
+>>          A6XX_PROTECT_NORDWR(0x00800, 0x0082),
+>>          A6XX_PROTECT_NORDWR(0x008a0, 0x0008),
+>>          A6XX_PROTECT_NORDWR(0x008ab, 0x0024),
+>> -       A6XX_PROTECT_RDONLY(0x008de, 0x00ae),
+>> +       A6XX_PROTECT_RDONLY(0x008d0, 0x00bc),
+> 
+> Nak, this is intentional, we need userspace to be able to configure
+> the CP counters.  Otherwise this would break fdperf, perfetto, etc
+> 
+> (although maybe we should comment where we diverge from downstream)
 
-On Tue, Feb 14, 2023 at 2:56 PM Zhengping Jiang <jiangzp@google.com> wrote:
->
-> The address resolution should be disabled during the active scan,
-> so all the advertisements can reach the host. The advertising
-> has to be paused before disabling the address resolution,
-> because the advertising will prevent any changes to the resolving
-> list and the address resolution status. Skipping this will cause
-> the hci error and the discovery failure.
+Yes, please. Otherwise it is extremely hard to understand the reason for 
+diversion between the vendor driver and our one.
 
-It is probably a good idea to quote the spec saying:
+> 
+> BR,
+> -R
+> 
+>>          A6XX_PROTECT_NORDWR(0x00900, 0x004d),
+>>          A6XX_PROTECT_NORDWR(0x0098d, 0x0272),
+>>          A6XX_PROTECT_NORDWR(0x00e00, 0x0001),
+>> --
+>> 2.39.1
+>>
 
-7.8.44 LE Set Address Resolution Enable command
+-- 
+With best wishes
+Dmitry
 
-This command shall not be used when:
-=E2=80=A2 Advertising (other than periodic advertising) is enabled,
-
-> If the host is using RPA, the controller needs to generate RPA for
-> the advertising, so the advertising must remain paused during the
-> active scan.
->
-> If the host is not using RPA, the advertising can be resumed after
-> disabling the address resolution.
->
-> Fixes: 9afc675edeeb ("Bluetooth: hci_sync: allow advertise when scan with=
-out RPA")
-> Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-> ---
->
-> Changes in v1:
-> - Always pause advertising when active scan, but resume the advertising i=
-f the host is not using RPA
->
->  net/bluetooth/hci_sync.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 117eedb6f709..edbf9faf7fa1 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -2402,7 +2402,7 @@ static u8 hci_update_accept_list_sync(struct hci_de=
-v *hdev)
->         u8 filter_policy;
->         int err;
->
-> -       /* Pause advertising if resolving list can be used as controllers=
- are
-> +       /* Pause advertising if resolving list can be used as controllers
->          * cannot accept resolving list modifications while advertising.
->          */
->         if (use_ll_privacy(hdev)) {
-> @@ -5397,7 +5397,7 @@ static int hci_active_scan_sync(struct hci_dev *hde=
-v, uint16_t interval)
->         /* Pause advertising since active scanning disables address resol=
-ution
->          * which advertising depend on in order to generate its RPAs.
->          */
-> -       if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY))=
- {
-> +       if (use_ll_privacy(hdev)) {
->                 err =3D hci_pause_advertising_sync(hdev);
->                 if (err) {
->                         bt_dev_err(hdev, "pause advertising failed: %d", =
-err);
-> @@ -5416,6 +5416,10 @@ static int hci_active_scan_sync(struct hci_dev *hd=
-ev, uint16_t interval)
->                 goto failed;
->         }
->
-> +       // Resume paused advertising if the host is not using RPA
-> +       if (use_ll_privacy(hdev) && !hci_dev_test_flag(hdev, HCI_PRIVACY)=
-)
-> +               hci_resume_advertising_sync(hdev);
-> +
->         /* All active scans will be done with either a resolvable private
->          * address (when privacy feature has been enabled) or non-resolva=
-ble
->          * private address.
-> --
-> 2.39.1.581.gbfd45094c4-goog
-
-I think it is better that we add something like
-hci_pause_addr_resolution so we can make it check all the conditions,
-such as pausing advertising and resuming if needed. Btw, we do seem to
-have proper checks for these conditions on the emulator:
-
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/emulator/btdev.c#n4=
-090
-
-But perhaps there is no test which attempts to enable LL Privacy
-without enabling Local Privacy, so it would be great if you could
-update mgmt-tester adding a test that emulates such behavior.
-
---=20
-Luiz Augusto von Dentz
