@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF926986B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0BE6986B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjBOU5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S230286AbjBOU6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjBOU5j (ORCPT
+        with ESMTP id S229795AbjBOU6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:57:39 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CF460AC;
-        Wed, 15 Feb 2023 12:54:39 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id g15-20020a9d6b0f000000b0068db1940216so38068otp.5;
-        Wed, 15 Feb 2023 12:54:39 -0800 (PST)
+        Wed, 15 Feb 2023 15:58:34 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E543253543;
+        Wed, 15 Feb 2023 12:55:53 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id c15so16992544oic.8;
+        Wed, 15 Feb 2023 12:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zmbh1f8KIAJa4cfe7gLSSbxP1FhhqTnT01uu/QY3KeI=;
+        b=bPW9aaLh1JaW0780UTgBkKiZwSdh4bZKO9tcXjlNHjGyhyih6rrW2OiaGWHn9GGrzo
+         g4u2uJkYpOenZCoRHvtM+r1WPAg4N9NoB7sQIp2XXtNPsbBo6L2tyP/gIKtnULWcj0kf
+         bxhhlMkvfKJg3kel4LDav48JbtUKK/hR2DAdP9dDCXcjHFgUz9WyPcWUCt0F8RQgZD7a
+         FpP0MRSXQ262bYC2J63HxT5FAaeErd6fo3WKRaqw+8bWeLeBoNqfRbHdqL008vBqRbhy
+         PnJpD2z6IEZ3fKibiG7042N+GjXjdDa9K3ax4VSAACfC702VSwGtsMma35HmfEIg17u5
+         6NWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YjzOyjobJagfirhvlCXNjjk5lMxOm3c7K/SKq6NqqPI=;
-        b=EnsZ1ndN/HXOGXpCe1ntumJb08LRGNPQpLqnePul0IAXkxKeWgMme9znCPqCSuCp/U
-         TVoUnyjPpjX+1Pemp6m0pZxRrBg/0e6WHMi8tzXpY/cqDCTzCrr/GVMk1jX1gQPafo+d
-         8C2LOVCwa+WOb8vVlGo103YMGvlmZsfPVt4ZmPZAsrnoEolgLj4UycdpY+UB57F88wcI
-         WFRR2oqC/8DIdw8wSKaUy8+1FZgBRQ4CsuGEqRn+knlK+QvubC6b35wmYzVteNLFs5eN
-         eHZTvRkLVuO/WSzEeLTRHn7MfwppjnTeCjfxRB1hujUPLvODgMheEjv2UErA4UrtJZNw
-         UhDg==
-X-Gm-Message-State: AO0yUKUPn1G/OATaJptGvaMJ67ByeIoy5GHkBzA0rnuMMBo6EvtSMeKS
-        95BeP2YKH/qcyX/io8rzSA==
-X-Google-Smtp-Source: AK7set85Fr/64N9KeajUXci8m4jgyhP+/i2Yinfwq8mFdO068byhumKoIjoQQ4OEwMVGLZpL31ak1w==
-X-Received: by 2002:a05:6830:3a10:b0:68b:d2c2:4430 with SMTP id di16-20020a0568303a1000b0068bd2c24430mr1533886otb.38.1676494398146;
-        Wed, 15 Feb 2023 12:53:18 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u4-20020a9d4d84000000b0068d752f1870sm7896769otk.5.2023.02.15.12.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 12:53:17 -0800 (PST)
-Received: (nullmailer pid 533048 invoked by uid 1000);
-        Wed, 15 Feb 2023 20:53:17 -0000
-Date:   Wed, 15 Feb 2023 14:53:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] media: dt-bindings: samsung,exynos4212-is:
- convert to dtschema
-Message-ID: <20230215205317.GA529822-robh@kernel.org>
-References: <20230214104508.51955-1-krzysztof.kozlowski@linaro.org>
- <20230214104508.51955-6-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zmbh1f8KIAJa4cfe7gLSSbxP1FhhqTnT01uu/QY3KeI=;
+        b=Wn5EmuWZ47keMyA3AoyWFMwlUFNWycPlbfyXNfhsMlI1AjD+3fG2ocx7cVUrWK1iEh
+         FF9Dl9jTCVR8r7oFhbQ4rxIVV+jOSL0txIVv/JqzXUwolmSreeqU5KgSVmvI2ll05cBa
+         9qXKv2kKsGn8vLs5jz2BzjZdvPraQwDIavrpQ7noNw/sap/QRalGUTVvwnix/Wt8R3EK
+         5XAoJUQg9Z3rbojnZe6ITHQO7/JGmvokv83SCBM3c+RdRmWcKjCkugb/1xzcVbv/pWdz
+         GgeNYRioC0QRKvgHGzRBpkZdrydS1MRpnJzJGO/Jdp1WLSnlRFEM0OwsAQGln9S2xmvZ
+         HAhw==
+X-Gm-Message-State: AO0yUKXYIDeGQsBuxwjmlzLp/KiEw6kze5yww1IyiKEOpULqrjMLSaLm
+        T1JXGhIdcTjTEjol4gcwD6FAc2yfC+vqOD8sISE=
+X-Google-Smtp-Source: AK7set8ABtTTUiS8oZK3RlDNhc5D2N8SMW1l2Ck93cqJrlRu9e68Rq3rGmBhaheeQUX2zCR4+IThgziKrKlEI8GPdmo=
+X-Received: by 2002:a05:6808:1b09:b0:35b:d93f:cbc4 with SMTP id
+ bx9-20020a0568081b0900b0035bd93fcbc4mr56498oib.96.1676494518455; Wed, 15 Feb
+ 2023 12:55:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214104508.51955-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230215204547.2760761-1-sashal@kernel.org> <20230215204547.2760761-24-sashal@kernel.org>
+In-Reply-To: <20230215204547.2760761-24-sashal@kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 15 Feb 2023 15:55:07 -0500
+Message-ID: <CADnq5_PEGUSTFAzPOQtJFpsBqWQMaox=E1AxE+-h3_FxSbHNzg@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.1 24/24] drm/amd/display: disable S/G display on
+ DCN 3.1.2/3
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        yifan1.zhang@amd.com, stylon.wang@amd.com, sunpeng.li@amd.com,
+        airlied@gmail.com, Xinhui.Pan@amd.com, Rodrigo.Siqueira@amd.com,
+        roman.li@amd.com, amd-gfx@lists.freedesktop.org, Jerry.Zuo@amd.com,
+        aurabindo.pillai@amd.com, dri-devel@lists.freedesktop.org,
+        daniel@ffwll.ch, Alex Deucher <alexander.deucher@amd.com>,
+        harry.wentland@amd.com, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,186 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:45:06AM +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung Exynos4212/4412 SoC Imaging Subsystem (FIMC-IS)
-> bindings to DT schema.  Changes during conversion - adjust to existing
-> DTS and Linux driver: add iommus and power-domains.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Feb 15, 2023 at 3:46 PM Sasha Levin <sashal@kernel.org> wrote:
+>
+> From: Alex Deucher <alexander.deucher@amd.com>
+>
+> [ Upstream commit 077e9659581acab70f2dcc04b5bc799aca3a056b ]
+>
+> Causes flickering or white screens in some configurations.
+> Disable it for now until we can fix the issue.
+>
+> Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2352
+> Cc: roman.li@amd.com
+> Cc: yifan1.zhang@amd.com
+> Reviewed-by: Yifan Zhang <yifan1.zhang@amd.com>
+> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+This was reverted upstream and should be dropped.
+
+Alex
+
 > ---
->  .../bindings/media/exynos4-fimc-is.txt        |  50 ----
->  .../media/samsung,exynos4212-fimc-is.yaml     | 221 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 222 insertions(+), 50 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt b/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
-> deleted file mode 100644
-> index 32ced99d4244..000000000000
-> --- a/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -Exynos4x12 SoC series Imaging Subsystem (FIMC-IS)
-> -
-> -The FIMC-IS is a subsystem for processing image signal from an image sensor.
-> -The Exynos4x12 SoC series FIMC-IS V1.5 comprises of a dedicated ARM Cortex-A5
-> -processor, ISP, DRC and FD IP blocks and peripheral devices such as UART, I2C
-> -and SPI bus controllers, PWM and ADC.
-> -
-> -fimc-is node
-> -------------
-> -
-> -Required properties:
-> -- compatible	: should be "samsung,exynos4212-fimc-is" for Exynos4212 and
-> -		  Exynos4412 SoCs;
-> -- reg		: physical base address and length of the registers set;
-> -- interrupts	: must contain two FIMC-IS interrupts, in order: ISP0, ISP1;
-> -- clocks	: list of clock specifiers, corresponding to entries in
-> -		  clock-names property;
-> -- clock-names	: must contain "ppmuispx", "ppmuispx", "lite0", "lite1"
-> -		  "mpll", "sysreg", "isp", "drc", "fd", "mcuisp", "gicisp",
-> -		  "pwm_isp", "mcuctl_isp", "uart", "ispdiv0", "ispdiv1",
-> -		  "mcuispdiv0", "mcuispdiv1", "aclk200", "div_aclk200",
-> -		  "aclk400mcuisp", "div_aclk400mcuisp" entries,
-> -		  matching entries in the clocks property.
-> -pmu subnode
-> ------------
-> -
-> -Required properties:
-> - - reg : must contain PMU physical base address and size of the register set.
-> -
-> -The following are the FIMC-IS peripheral device nodes and can be specified
-> -either standalone or as the fimc-is node child nodes.
-> -
-> -i2c-isp (ISP I2C bus controller) nodes
-> -------------------------------------------
-> -
-> -Required properties:
-> -
-> -- compatible	: should be "samsung,exynos4212-i2c-isp" for Exynos4212 and
-> -		  Exynos4412 SoCs;
-> -- reg		: physical base address and length of the registers set;
-> -- clocks	: must contain gate clock specifier for this controller;
-> -- clock-names	: must contain "i2c_isp" entry.
-> -
-> -For the above nodes it is required to specify a pinctrl state named "default",
-> -according to the pinctrl bindings defined in ../pinctrl/pinctrl-bindings.txt.
-> -
-> -Device tree nodes of the image sensors' controlled directly by the FIMC-IS
-> -firmware must be child nodes of their corresponding ISP I2C bus controller node.
-> -The data link of these image sensors must be specified using the common video
-> -interfaces bindings, defined in video-interfaces.txt.
-> diff --git a/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-> new file mode 100644
-> index 000000000000..288f4bf3d44d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-> @@ -0,0 +1,221 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/samsung,exynos4212-fimc-is.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung Exynos4212/4412 SoC Imaging Subsystem (FIMC-IS)
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
-> +
-> +description:
-> +  The FIMC-IS is a subsystem for processing image signal from an image sensor.
-> +  The Exynos4x12 SoC series FIMC-IS V1.5 comprises of a dedicated ARM Cortex-A5
-> +  processor, ISP, DRC and FD IP blocks and peripheral devices such as UART, I2C
-> +  and SPI bus controllers, PWM and ADC.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,exynos4212-fimc-is
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  clocks:
-> +    maxItems: 21
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lite0
-> +      - const: lite1
-> +      - const: ppmuispx
-> +      - const: ppmuispmx
-> +      - const: isp
-> +      - const: drc
-> +      - const: fd
-> +      - const: mcuisp
-> +      - const: gicisp
-> +      - const: mcuctl_isp
-> +      - const: pwm_isp
-> +      - const: ispdiv0
-> +      - const: ispdiv1
-> +      - const: mcuispdiv0
-> +      - const: mcuispdiv1
-> +      - const: mpll
-> +      - const: aclk200
-> +      - const: aclk400mcuisp
-> +      - const: div_aclk200
-> +      - const: div_aclk400mcuisp
-> +      - const: uart
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  iommus:
-> +    maxItems: 4
-> +
-> +  iommu-names:
-> +    items:
-> +      - const: isp
-> +      - const: drc
-> +      - const: fd
-> +      - const: mcuctl
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  ranges: true
-> +
-> +  '#size-cells':
-> +    const: 1
-
-Normally this is next to #address-cells.
-
-> +
-> +patternProperties:
-> +  "^pmu@[0-9a-f]+$":
-> +    type: object
-> +    additionalProperties: false
-> +    description:
-> +      Node representing the SoC's Power Management Unit (duplicated with the
-> +      correct PMU node in the SoC).
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - reg
-> +
-> +  "^i2c-isp@[0-9a-f]+$":
-> +    type: object
-> +    $ref: /schemas/i2c/i2c-controller.yaml#
-> +    unevaluatedProperties: false
-> +      #additionalProperties: false
-
-??
-
-> +    description:
-> +      ISP I2C bus controller
-
-
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 988b1c947aefc..c026ba532b733 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -1524,8 +1524,6 @@ static int amdgpu_dm_init(struct amdgpu_device *adev)
+>                         break;
+>                 case IP_VERSION(2, 1, 0):
+>                 case IP_VERSION(3, 0, 1):
+> -               case IP_VERSION(3, 1, 2):
+> -               case IP_VERSION(3, 1, 3):
+>                 case IP_VERSION(3, 1, 6):
+>                         init_data.flags.gpu_vm_support = true;
+>                         break;
+> --
+> 2.39.0
+>
