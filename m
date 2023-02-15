@@ -2,210 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D9697A03
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602286979FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbjBOKhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S233554AbjBOKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbjBOKgz (ORCPT
+        with ESMTP id S230250AbjBOKga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:36:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911321717E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676457369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DULdTVfIZoN5gfe54AIlB0FglUr8CaQBCm49yRWhdM=;
-        b=CgZ+cYfjvhwVCBJ8SgIa1eNrfT6zqK72UN/T4nPtWYtu+4zIjF+/lHu1fK/4iMUjUC3fyC
-        c+FJI30UogSeYIKiacMetXAtVFzK59LuDiHkoKaBqwln1W0RqnAcaaU7EGCknm+A1hQ3lL
-        NSS9yEAQJcsZEqQMPlTZQuT19GGwtac=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-352-F7oLIIarNgK249DGkv2PWA-1; Wed, 15 Feb 2023 05:36:08 -0500
-X-MC-Unique: F7oLIIarNgK249DGkv2PWA-1
-Received: by mail-pf1-f198.google.com with SMTP id u18-20020a62ed12000000b00593cc641da4so9373558pfh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:36:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0DULdTVfIZoN5gfe54AIlB0FglUr8CaQBCm49yRWhdM=;
-        b=s9RtPk66N4mIKI0tjZLJNMtiInP4ojRQtwUrMSCnVHmNHwDT6L3VKKs8eV1NR0NIE2
-         fsRY10PEmrNelBDBJmKMrsZ+ilPHovtxGX0Wmhdd6dyZPrixylqOOW0igZYLB4uv+S7h
-         3B03mTtcrcnLMJpBRJRNoL4JIIUCcg7TLfKyEgJnwo/rARexhlb4TVhIZ5useRCTuhyS
-         yZrTADEYOmnL1JY26cRb/GQWP4xmdoNMZgECtcyr4z+aALHQyg4dyKNT5vvc29P/mBGs
-         5+TwQcufTjJni8dkUETe3QE52Mo6Kvtfv1HoYGj5pek1oeDIrAEiWqEA8y91Tc9tpP7s
-         pc6g==
-X-Gm-Message-State: AO0yUKX3vTK9zpuhMXr8qjmde/enES+it0ISgdbheTf3gv9YKIKKPDOJ
-        Kf/KbIe1Y+7jUzqjlH6tTbNYfQV/cv1lSI8cgZudLvIBzVNWRsuQ0vvIo5wQO6SRD1DS+Z8c6fK
-        KN4kt/f7rvJKdHJEdB73D11Ed
-X-Received: by 2002:a62:6386:0:b0:5a8:d774:b1bb with SMTP id x128-20020a626386000000b005a8d774b1bbmr1242719pfb.17.1676457367428;
-        Wed, 15 Feb 2023 02:36:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9LIdiV+BZC34EN4XzgfYunSTZ8ydX5eez16+K7fnvylsGll/d6Y1RhpFXInG2c+mL+K9q5gA==
-X-Received: by 2002:a62:6386:0:b0:5a8:d774:b1bb with SMTP id x128-20020a626386000000b005a8d774b1bbmr1242709pfb.17.1676457367110;
-        Wed, 15 Feb 2023 02:36:07 -0800 (PST)
-Received: from [10.72.12.170] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id j21-20020aa78d15000000b00581c741f95csm11322638pfe.46.2023.02.15.02.36.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 02:36:06 -0800 (PST)
-Message-ID: <90147a2b-982e-ae57-9b7c-062bee0fab07@redhat.com>
-Date:   Wed, 15 Feb 2023 18:36:02 +0800
+        Wed, 15 Feb 2023 05:36:30 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C6B186;
+        Wed, 15 Feb 2023 02:36:28 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7E85524E29A;
+        Wed, 15 Feb 2023 18:36:27 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 18:36:27 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Feb
+ 2023 18:36:26 +0800
+Message-ID: <69b677fd-4e97-9d05-0703-0924719374b8@starfivetech.com>
+Date:   Wed, 15 Feb 2023 18:36:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: cgroup: deadlock between cpu_hotplug_lock and freezer_mutex
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/3] StarFive's SDIO/eMMC driver support
 Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     tj@kernel.org, hannes@cmpxchg.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230215072501.3764-1-hdanton@sina.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230215072501.3764-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Conor Dooley <conor@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230203081913.81968-1-william.qiu@starfivetech.com>
+ <CAPDyKFqei-GjKpBUQnDZUbYnSyn-JS5f_EnTLOuA1U4PdYTyVA@mail.gmail.com>
+ <CAJM55Z8gpBDu9818GPLRYJ9DBa+NfXW0uo76_bkwWm6RS1S9wg@mail.gmail.com>
+ <3ee9b726-10db-5d05-b24a-010c8bf5b59d@starfivetech.com>
+ <Y+yyZaBITDmEFUyB@spud>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <Y+yyZaBITDmEFUyB@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
 
-On 15/02/2023 15:25, Hillf Danton wrote:
-> On Wed, 15 Feb 2023 10:07:23 +0800 Xiubo Li <xiubli@redhat.com>
->> Hi
->>
->> Recently when running some test cases for ceph we hit the following
->> deadlock issue in cgroup code. Has this been fixed ? I have checked the
->> latest code and it seems no any commit is fixing this.
->>
->> This call trace could also be found in
->> https://tracker.ceph.com/issues/58564#note-4, which is more friendly to
->> read.
->>
->>    ======================================================
->>    WARNING: possible circular locking dependency detected
->>    6.1.0-rc5-ceph-gc90f64b588ff #1 Tainted: G S
->>    ------------------------------------------------------
->>    runc/90769 is trying to acquire lock:
->>    ffffffff82664cb0 (cpu_hotplug_lock){++++}-{0:0}, at:
->> static_key_slow_inc+0xe/0x20
->>    #012but task is already holding lock:
->>    ffffffff8276e468 (freezer_mutex){+.+.}-{3:3}, at: freezer_write+0x89/0x530
->>    #012which lock already depends on the new lock.
->>    #012the existing dependency chain (in reverse order) is:
->>    #012-> #2 (freezer_mutex){+.+.}-{3:3}:
->>          __mutex_lock+0x9c/0xf20
->>          freezer_attach+0x2c/0xf0
->>          cgroup_migrate_execute+0x3f3/0x4c0
->>          cgroup_attach_task+0x22e/0x3e0
->>          __cgroup1_procs_write.constprop.12+0xfb/0x140
->>          cgroup_file_write+0x91/0x230
->>          kernfs_fop_write_iter+0x137/0x1d0
->>          vfs_write+0x344/0x4d0
->>          ksys_write+0x5c/0xd0
->>          do_syscall_64+0x34/0x80
->>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>    #012-> #1 (cgroup_threadgroup_rwsem){++++}-{0:0}:
->>          percpu_down_write+0x45/0x2c0
->>          cgroup_procs_write_start+0x84/0x270
->>          __cgroup1_procs_write.constprop.12+0x57/0x140
->>          cgroup_file_write+0x91/0x230
->>          kernfs_fop_write_iter+0x137/0x1d0
->>          vfs_write+0x344/0x4d0
->>          ksys_write+0x5c/0xd0
->>          do_syscall_64+0x34/0x80
->>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>    #012-> #0 (cpu_hotplug_lock){++++}-{0:0}:
->>          __lock_acquire+0x103f/0x1de0
->>          lock_acquire+0xd4/0x2f0
->>          cpus_read_lock+0x3c/0xd0
->>          static_key_slow_inc+0xe/0x20
->>          freezer_apply_state+0x98/0xb0
->>          freezer_write+0x307/0x530
->>          cgroup_file_write+0x91/0x230
->>          kernfs_fop_write_iter+0x137/0x1d0
->>          vfs_write+0x344/0x4d0
->>          ksys_write+0x5c/0xd0
->>          do_syscall_64+0x34/0x80
->>          entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>    #012other info that might help us debug this:
->>    Chain exists of:#012  cpu_hotplug_lock --> cgroup_threadgroup_rwsem
->> --> freezer_mutex
->>    Possible unsafe locking scenario:
->>          CPU0                    CPU1
->>          ----                    ----
->>     lock(freezer_mutex);
->>                                  lock(cgroup_threadgroup_rwsem);
->>                                  lock(freezer_mutex);
->>     lock(cpu_hotplug_lock);
->>    #012 *** DEADLOCK ***
-> Thanks for your report.
+
+On 2023/2/15 18:22, Conor Dooley wrote:
+> On Wed, Feb 15, 2023 at 06:16:35PM +0800, William Qiu wrote:
+>> 
+>> 
+>> On 2023/2/15 18:00, Emil Renner Berthing wrote:
+>> > On Tue, 14 Feb 2023 at 13:21, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>> >>
+>> >> On Fri, 3 Feb 2023 at 09:19, William Qiu <william.qiu@starfivetech.com> wrote:
+>> >> >
+>> >> > Hi,
+>> >> >
+>> >> > This patchset adds initial rudimentary support for the StarFive
+>> >> > designware mobile storage host controller driver. And this driver will
+>> >> > be used in StarFive's VisionFive 2 board. The main purpose of adding
+>> >> > this driver is to accommodate the ultra-high speed mode of eMMC.
+>> >> >
+>> >> > The last patch should be applied after the patchset [1]:
+>> >> > [1] https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
+>> >> >
+>> >> > Changes since v2:
+>> >> > - Wraped commit message according to Linux coding style.
+>> >> > - Rephrased the description of the patches.
+>> >> > - Changed the description of syscon regsiter.
+>> >> > - Dropped redundant properties.
+>> >> >
+>> >> > The patch series is based on v6.1.
+>> >> >
+>> >> > William Qiu (3):
+>> >> >   dt-bindings: mmc: Add StarFive MMC module
+>> >> >   mmc: starfive: Add sdio/emmc driver support
+>> >> >   riscv: dts: starfive: Add mmc node
+>> >> >
+>> >> >  .../bindings/mmc/starfive,jh7110-mmc.yaml     |  77 ++++++++
+>> >> >  MAINTAINERS                                   |   6 +
+>> >> >  .../jh7110-starfive-visionfive-2.dtsi         |  23 +++
+>> >> >  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  37 ++++
+>> >> >  drivers/mmc/host/Kconfig                      |  10 +
+>> >> >  drivers/mmc/host/Makefile                     |   1 +
+>> >> >  drivers/mmc/host/dw_mmc-starfive.c            | 185 ++++++++++++++++++
+>> >> >  7 files changed, 339 insertions(+)
+>> >> >  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+>> >> >  create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
+>> >> >
+>> >>
+>> >> Patch 1 and patch 2 applied for next, thanks!
+>> >>
+>> >> Note that I fixed some checkpatch errors/warnings. Next time, please
+>> >> run ./scripts/checkpatch.pl before you submit your patches.
+>> > 
+>> > Hi,
+>> > 
+>> > Something here is not right. The bindings document "starfive,sysreg",
+>> > but the code is looking for "starfive,syscon".
+>> > William, did you test this and run dtbs_check before sending this series?
+>> > 
+>> > /Emil
+>> 
+>> Hi Emil,
+>> 
+>> Sorry about that, it's my negligence that I did dtbs_check without
+> 
+> dtbs_check would be okay though, no? The binding and dts (from checking
+> with eyeballs!) are consistent & it is just the driver that is looking
+> for the wrong property name, no?
 >
-> Change locking order if it is impossible to update freezer_active in atomic manner.
->
-> Only for thoughts.
 
-Sure, I will test this.
+ 
+It was my negligence that I didn't test the function
 
-Thanks
+>> checking the configuration of CONFIG_SOC_STARFIVE. I made a modification 
+>> in the next version and add binding for all the syscon at the same time. Next
+>> time I'll make sure the check is correct.I'm sorry again for this oversight.
+>> I'll send v4 patch series today.
+> 
+> Ulf's subsystem & his rules, but I would just send a follow-on patch
+> fixing the driver to use the property that is in the dt-binding.
+> 
+> Sorta unrelated, but please remind me about the dts patch once the base
+> dts is merged. It's still in the RISC-V patchwork so *should* be fine,
+> but in case the base dts takes a while it may get automatically
+> archived.
+> 
+> Thanks,
+> Conor.
+> 
 
-
->
-> Hillf
-> +++ linux-6.1.3/kernel/cgroup/legacy_freezer.c
-> @@ -350,7 +350,7 @@ static void freezer_apply_state(struct f
->   
->   	if (freeze) {
->   		if (!(freezer->state & CGROUP_FREEZING))
-> -			static_branch_inc(&freezer_active);
-> +			static_branch_inc_cpuslocked(&freezer_active);
->   		freezer->state |= state;
->   		freeze_cgroup(freezer);
->   	} else {
-> @@ -361,7 +361,7 @@ static void freezer_apply_state(struct f
->   		if (!(freezer->state & CGROUP_FREEZING)) {
->   			freezer->state &= ~CGROUP_FROZEN;
->   			if (was_freezing)
-> -				static_branch_dec(&freezer_active);
-> +				static_branch_dec_cpuslocked(&freezer_active);
->   			unfreeze_cgroup(freezer);
->   		}
->   	}
-> @@ -379,6 +379,7 @@ static void freezer_change_state(struct
->   {
->   	struct cgroup_subsys_state *pos;
->   
-> +	cpus_read_lock();
->   	/*
->   	 * Update all its descendants in pre-order traversal.  Each
->   	 * descendant will try to inherit its parent's FREEZING state as
-> @@ -407,6 +408,7 @@ static void freezer_change_state(struct
->   	}
->   	rcu_read_unlock();
->   	mutex_unlock(&freezer_mutex);
-> +	cpus_read_unlock();
->   }
->   
->   static ssize_t freezer_write(struct kernfs_open_file *of,
->
--- 
-Best Regards,
-
-Xiubo Li (李秀波)
-
-Email: xiubli@redhat.com/xiubli@ibm.com
-Slack: @Xiubo Li
-
+I'll do it then.
+Thanks,
+William
