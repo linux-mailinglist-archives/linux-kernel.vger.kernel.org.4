@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DC86975BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006C76975CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 06:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjBOFRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 00:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S233306AbjBOFWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 00:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjBOFRK (ORCPT
+        with ESMTP id S233137AbjBOFW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 00:17:10 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D106E80;
-        Tue, 14 Feb 2023 21:17:09 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31F1hgf7018371;
-        Wed, 15 Feb 2023 05:17:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=oGCT/5IFWwFCKLzPtnIq0Q+X/5HAUDivyeTJBKdWj6k=;
- b=f3c/TU25ZSEFeTr9eUhy2sma03vAshydzKIYpVyUACaOXPNE0NwX9hjARWew7Ugk7rps
- rMSxBl3F0SuSEKofZIPeyxZhJW3hzhXhDzklQmiRoZNucT9UEygzPs68K225IQmI3xBh
- cdf9Sjzu3jFFTs6JKXWY+sHUznps4pEXTSevy91eH3I0EVzNPK67iVqBvPF/sf4FzkeY
- dJ3qsKTzOxvppjc449e3Y6T0eeq7hgj+mchDfLw9r3g6oy3mr4o7zaFjyAUbjC6vWXxI
- nzDWiXUMSqQIUookx86BqVexrFzJ1+n6xgz7LtUFZy1lYHlFOqyWVYhU1GL8DHffaTtU 9g== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6qkjwe5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Feb 2023 05:17:05 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31F5H42T027026
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Feb 2023 05:17:04 GMT
-Received: from [10.216.8.213] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 21:17:01 -0800
-Message-ID: <8aeea3f5-7b90-f384-33ab-ba7b4afb5317@quicinc.com>
-Date:   Wed, 15 Feb 2023 10:46:58 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] remoteproc: qcom: replace kstrdup with kstrndup
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     <dmitry.baryshkov@linaro.org>, <agross@kernel.org>,
-        <mathieu.poirier@linaro.org>, <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
- <1676383691-29738-1-git-send-email-quic_mojha@quicinc.com>
- <20230214163944.y5tkgdfmsycmpg7p@ripper>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230214163944.y5tkgdfmsycmpg7p@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9PlTnfRyFABlGgXrF7iH0q31QJ30WOon
-X-Proofpoint-ORIG-GUID: 9PlTnfRyFABlGgXrF7iH0q31QJ30WOon
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-15_02,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1015 bulkscore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302150047
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 00:22:29 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72A53402A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:22:25 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id n2so11841735pfo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tV+nl5/6nbPk/6HA5pQX/rHuTHF5S4E9f4KJMF/h5x0=;
+        b=fhWxOvSg47bnqh1vlUb0tg8U7zRfENd11uhGOf5Jsz/ZocWHFEI68pLXo5d9vBVXvT
+         wSDFNO3/CV6QVriW/uJf7uSjBsTIo2nfhwr90ljf0Mtrv3l+ZNz03APZ/NoeYJxIi8AS
+         eT1BnG6scYkTL0mRsKAhicVLLfSox5xFSJlK+m4CcZ2f/19AZeBmn0TeLDNpHHUJ+j//
+         pNGe52xRL7NHFqYuRqi8NBAMhHiUAqm3krXcV9gB6lQ+ZUL8htkaq+hcUOto2vJWmQ/P
+         1t61ly6hek8z31+cUX+0shb1PAvYlU/KvbO9KdB05jwbmNe1/Zq0XZpFJiImeu8sqMJC
+         uFRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tV+nl5/6nbPk/6HA5pQX/rHuTHF5S4E9f4KJMF/h5x0=;
+        b=2kZAUMjWImdPo0XZe4dIXpI8S0ivoh7UygwiO8XKFEmYANgJlEZHiy98FHI0iBruKw
+         KjmJOyFTnoVmhs3wSseACGSb1IJFvqwucChxegl8GiJf7TbZtrrCjGLcP2D7Nsp7BX5b
+         09M2UEZBS+Dp0WL5ZuFm0KxH5MilOw0ggGFkTRlmzJlV6PrTF/h+teuVL8CVAYA2900X
+         rEo5bM1SzoWKYS8GegyjdTuuRJOZPMmw3mccwWoixU2SAOkUxNm1Y0c4cUmNJfa/VDEm
+         fDOijjdL8EIK2F2v+f8r2h8kbWkPg6kyGOd45mf3yw2cyduSrVNinbVTTn4ikZ0I/RNZ
+         H3og==
+X-Gm-Message-State: AO0yUKU14lXFStA94vOIf+GaybpYFoHD3SX7XMobvbCMrLrpxNh94Ugk
+        RtzEk6pRYWL7rEbM3GULZKJhzQ==
+X-Google-Smtp-Source: AK7set/rdrNLm8tItidqjsvagDbtl5rYMULe1MueAmQXNPzlIf4+Jxy35EVuWqAlcqe6sRrK/ndqkQ==
+X-Received: by 2002:aa7:9f85:0:b0:577:272f:fdb with SMTP id z5-20020aa79f85000000b00577272f0fdbmr600755pfr.29.1676438545117;
+        Tue, 14 Feb 2023 21:22:25 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id n14-20020aa78a4e000000b005a8d396ae27sm2788868pfa.8.2023.02.14.21.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 21:22:24 -0800 (PST)
+Date:   Tue, 14 Feb 2023 21:22:24 -0800 (PST)
+X-Google-Original-Date: Tue, 14 Feb 2023 21:22:11 PST (-0800)
+Subject:     Re: [PATCH 13/19] arch/riscv: rename internal name __xchg to __arch_xchg
+In-Reply-To: <20221222114635.1251934-14-andrzej.hajda@intel.com>
+CC:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, andrzej.hajda@intel.com,
+        Arnd Bergmann <arnd@arndb.de>, rodrigo.vivi@intel.com,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        peterz@infradead.org, boqun.feng@gmail.com, mark.rutland@arm.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     andrzej.hajda@intel.com
+Message-ID: <mhng-e75808d7-21de-4ef8-a606-b7c652a1f38e@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 22 Dec 2022 03:46:29 PST (-0800), andrzej.hajda@intel.com wrote:
+> __xchg will be used for non-atomic xchg macro.
+>
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> ---
+>  arch/riscv/include/asm/atomic.h  | 2 +-
+>  arch/riscv/include/asm/cmpxchg.h | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+> index 0dfe9d857a762b..bba472928b5393 100644
+> --- a/arch/riscv/include/asm/atomic.h
+> +++ b/arch/riscv/include/asm/atomic.h
+> @@ -261,7 +261,7 @@ c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
+>  static __always_inline							\
+>  c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
+>  {									\
+> -	return __xchg(&(v->counter), n, size);				\
+> +	return __arch_xchg(&(v->counter), n, size);			\
+>  }									\
+>  static __always_inline							\
+>  c_t arch_atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,	\
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 12debce235e52d..2f4726d3cfcc25 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -114,7 +114,7 @@
+>  					    _x_, sizeof(*(ptr)));	\
+>  })
+>
+> -#define __xchg(ptr, new, size)						\
+> +#define __arch_xchg(ptr, new, size)					\
+>  ({									\
+>  	__typeof__(ptr) __ptr = (ptr);					\
+>  	__typeof__(new) __new = (new);					\
+> @@ -143,7 +143,7 @@
+>  #define arch_xchg(ptr, x)						\
+>  ({									\
+>  	__typeof__(*(ptr)) _x_ = (x);					\
+> -	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
+> +	(__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));	\
+>  })
+>
+>  #define xchg32(ptr, x)							\
 
-
-On 2/14/2023 10:09 PM, Bjorn Andersson wrote:
-> On Tue, Feb 14, 2023 at 07:38:11PM +0530, Mukesh Ojha wrote:
->> Since, there is no guarantee that region.name will be 0-terminated
->> from the firmware side, replace kstrdup with kstrndup.
->>
->> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> 
-> Please don't send additional patches in-reply-to another patch, it makes
-> it impossible to use b4 to pick up the first patch.
-> 
-> And please don't send two patches which clearly will conflict with
-> each other. Now I had to manually apply the first patch...
-> 
-
-Really sorry, for the inconvenience.
-will keep in mind.
-
-Thanks,
--Mukesh
-
-> Regards,
-> Bjorn
-> 
->> ---
->>   drivers/remoteproc/qcom_common.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
->> index 020349f..7810f91 100644
->> --- a/drivers/remoteproc/qcom_common.c
->> +++ b/drivers/remoteproc/qcom_common.c
->> @@ -124,7 +124,7 @@ static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsy
->>   	for (i = 0; i < seg_cnt; i++) {
->>   		memcpy_fromio(&region, ptr + i, sizeof(region));
->>   		if (region.valid == MD_REGION_VALID) {
->> -			name = kstrdup(region.name, GFP_KERNEL);
->> +			name = kstrndup(region.name, MAX_REGION_NAME_LENGTH - 1, GFP_KERNEL);
->>   			if (!name) {
->>   				iounmap(ptr);
->>   				return -ENOMEM;
->> -- 
->> 2.7.4
->>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
