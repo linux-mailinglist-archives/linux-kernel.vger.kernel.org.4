@@ -2,178 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FB2697A14
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDBE697A16
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjBOKkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S234130AbjBOKks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbjBOKjz (ORCPT
+        with ESMTP id S231193AbjBOKkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:39:55 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD5B360B4;
-        Wed, 15 Feb 2023 02:39:52 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VbkDfWy_1676457588;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VbkDfWy_1676457588)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Feb 2023 18:39:49 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        baolin.wang@linux.alibaba.com, damon@lists.linux.dev,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] mm: change to return bool for isolate_movable_page()
-Date:   Wed, 15 Feb 2023 18:39:37 +0800
-Message-Id: <cb877f73f4fff8d309611082ec740a7065b1ade0.1676424378.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
-References: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
+        Wed, 15 Feb 2023 05:40:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBBC37F17;
+        Wed, 15 Feb 2023 02:40:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13E50B8211A;
+        Wed, 15 Feb 2023 10:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AFABEC4339B;
+        Wed, 15 Feb 2023 10:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676457617;
+        bh=6XfvpkS4ktnzBRkhY+HY/ay+Qmpby5+oDivd/EpfJvA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R5HmBC/DtHPMgpOZgyx4pO6599jxLceSMUmzDdDdCgCpNcJzu3nFMOc/jOMBRxMeJ
+         s5yJOKqz2qP0CcuiEbfh4KLB3khJ1fU9X5Xon0ksc8dcy9C+exP1Oqsu+cr0dvvLPX
+         BsWY7TmzJpypJ7iuSoYSfpojA0D3jCrwRmpSkP+Xy4GEohKAM9hGpWMUdAirFmaSBB
+         74Gdd5YuOjtp0EmSTyYMwr/EtUwIrZt9npuLPAcHkFBQCQf7qIay8dUc6Zn4MjKptf
+         qe59s2YonKMX4nzIYc0FhN6aPydbJd7w4oud10Qmf9z949zrYtpF0DGP3hnYcswEFF
+         zAmkiXoFaU1LA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98809C41676;
+        Wed, 15 Feb 2023 10:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next] net: phylink: support validated pause and autoneg in
+ fixed-link
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167645761762.3800.17601944894703381087.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Feb 2023 10:40:17 +0000
+References: <20230210154627.19086-1-i.bornyakov@metrotek.ru>
+In-Reply-To: <20230210154627.19086-1-i.bornyakov@metrotek.ru>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     netdev@vger.kernel.org, linux@armlinux.org.uk, andrew@lunn.ch,
+        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now the isolate_movable_page() can only return 0 or -EBUSY, and no users
-will care about the negative return value, thus we can convert the
-isolate_movable_page() to return a boolean value to make the code more
-clear when checking the movable page isolation state.
+Hello:
 
-No functional changes intended.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Acked-by: David Hildenbrand <david@redhat.com>
----
- include/linux/migrate.h |  6 +++---
- mm/compaction.c         |  2 +-
- mm/memory-failure.c     |  4 ++--
- mm/memory_hotplug.c     | 10 +++++-----
- mm/migrate.c            |  6 +++---
- 5 files changed, 14 insertions(+), 14 deletions(-)
+On Fri, 10 Feb 2023 18:46:27 +0300 you wrote:
+> In fixed-link setup phylink_parse_fixedlink() unconditionally sets
+> Pause, Asym_Pause and Autoneg bits to "supported" bitmap, while MAC may
+> not support these.
+> 
+> This leads to ethtool reporting:
+> 
+>  > Supported pause frame use: Symmetric Receive-only
+>  > Supports auto-negotiation: Yes
+> 
+> [...]
 
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index c88b96b48be7..6b252f519c86 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -71,7 +71,7 @@ extern int migrate_pages(struct list_head *l, new_page_t new, free_page_t free,
- 		unsigned long private, enum migrate_mode mode, int reason,
- 		unsigned int *ret_succeeded);
- extern struct page *alloc_migration_target(struct page *page, unsigned long private);
--extern int isolate_movable_page(struct page *page, isolate_mode_t mode);
-+extern bool isolate_movable_page(struct page *page, isolate_mode_t mode);
- 
- int migrate_huge_page_move_mapping(struct address_space *mapping,
- 		struct folio *dst, struct folio *src);
-@@ -92,8 +92,8 @@ static inline int migrate_pages(struct list_head *l, new_page_t new,
- static inline struct page *alloc_migration_target(struct page *page,
- 		unsigned long private)
- 	{ return NULL; }
--static inline int isolate_movable_page(struct page *page, isolate_mode_t mode)
--	{ return -EBUSY; }
-+static inline bool isolate_movable_page(struct page *page, isolate_mode_t mode)
-+	{ return false; }
- 
- static inline int migrate_huge_page_move_mapping(struct address_space *mapping,
- 				  struct folio *dst, struct folio *src)
-diff --git a/mm/compaction.c b/mm/compaction.c
-index d73578af44cc..ad7409f70519 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -976,7 +976,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 					locked = NULL;
- 				}
- 
--				if (!isolate_movable_page(page, mode))
-+				if (isolate_movable_page(page, mode))
- 					goto isolate_success;
- 			}
- 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 8604753bc644..a1ede7bdce95 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2515,8 +2515,8 @@ static bool isolate_page(struct page *page, struct list_head *pagelist)
- 		if (lru)
- 			isolated = isolate_lru_page(page);
- 		else
--			isolated = !isolate_movable_page(page,
--							 ISOLATE_UNEVICTABLE);
-+			isolated = isolate_movable_page(page,
-+							ISOLATE_UNEVICTABLE);
- 
- 		if (isolated) {
- 			list_add(&page->lru, pagelist);
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 5fc2dcf4e3ab..bcb0dc41c2f2 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1668,18 +1668,18 @@ do_migrate_range(unsigned long start_pfn, unsigned long end_pfn)
- 		 * We can skip free pages. And we can deal with pages on
- 		 * LRU and non-lru movable pages.
- 		 */
--		if (PageLRU(page)) {
-+		if (PageLRU(page))
- 			isolated = isolate_lru_page(page);
--			ret = isolated ? 0 : -EBUSY;
--		} else
--			ret = isolate_movable_page(page, ISOLATE_UNEVICTABLE);
--		if (!ret) { /* Success */
-+		else
-+			isolated = isolate_movable_page(page, ISOLATE_UNEVICTABLE);
-+		if (isolated) { /* Success */
- 			list_add_tail(&page->lru, &source);
- 			if (!__PageMovable(page))
- 				inc_node_page_state(page, NR_ISOLATED_ANON +
- 						    page_is_file_lru(page));
- 
- 		} else {
-+			ret = -EBUSY;
- 			if (__ratelimit(&migrate_rs)) {
- 				pr_warn("failed to isolate pfn %lx\n", pfn);
- 				dump_page(page, "isolation failed");
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 2db546a0618c..9a101c7bb8ff 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -58,7 +58,7 @@
- 
- #include "internal.h"
- 
--int isolate_movable_page(struct page *page, isolate_mode_t mode)
-+bool isolate_movable_page(struct page *page, isolate_mode_t mode)
- {
- 	struct folio *folio = folio_get_nontail_page(page);
- 	const struct movable_operations *mops;
-@@ -119,14 +119,14 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
- 	folio_set_isolated(folio);
- 	folio_unlock(folio);
- 
--	return 0;
-+	return true;
- 
- out_no_isolated:
- 	folio_unlock(folio);
- out_putfolio:
- 	folio_put(folio);
- out:
--	return -EBUSY;
-+	return false;
- }
- 
- static void putback_movable_folio(struct folio *folio)
+Here is the summary with links:
+  - [net-next] net: phylink: support validated pause and autoneg in fixed-link
+    https://git.kernel.org/netdev/net-next/c/894341ad3ad7
+
+You are awesome, thank you!
 -- 
-2.27.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
