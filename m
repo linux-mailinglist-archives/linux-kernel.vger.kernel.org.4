@@ -2,204 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53852697A1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3016B697A1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 11:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbjBOKmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 05:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S234142AbjBOKmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 05:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbjBOKmJ (ORCPT
+        with ESMTP id S234147AbjBOKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 05:42:09 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DF037B59
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676457727; x=1707993727;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bYOeNaHyaVrirbdon1Wxef62nvktUzAM/kkBHGbdOTg=;
-  b=Xp+eskE+q9CDAmaWm3cwGQSQuL1LGFfuNVh/qb44/pwRdhf4lWa9S7m5
-   YKzylWnQrhPObrLO6WedQ7H0sxLeGHvb/Gb9FkitPEn0bk/fXgfxHP5Iv
-   HqrJ/DiAfzfe0udZZd+onQ8laeUjB5A0JU5o2m/zoY1QztKS8eWuvX9DO
-   str2NLJFozpl27O7i+Yml7jtbKwd1grnZJ0TFkZdxuAA9P0TRuEzePB3U
-   7UMc/uGfZzybEarE65BwYzaxA/SwW1j3wIvlUGwgCrgxUE4kLzlbMCgfh
-   r4IPlD7hCO6vQWDSRp9in+l6qJfZRYVhZmOOQQZhi8et+JfR6f+Fg4yVf
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,299,1669046400"; 
-   d="scan'208";a="228332147"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 18:42:05 +0800
-IronPort-SDR: GJu1PJyyL1XZVKjN/PMkF2gG9dFgW79tvNlYBYJmCOAdX3bpm2O7fZ3Ck+9Ch2Su4S/3R0C8hD
- un+Vc4yfXQjiFY5WBGNLf8yV1KXRreh7bdMIzr7d3IQWnOypbv37fAT3S4vYew9UA3KCFmHNBy
- n4YiNxgibaanMJVBnF+xLsHMdleBl/Q90MiVijNTLXrNkHpNgRzNvlDWoAMfCoktl9xkCXu+bt
- WpVwii0a8/y6yG00VaJSNw38j2NCjDaDj66q+FoF8TIYr6iMhk199MAD2HdyEe84dVAnRNwz3u
- YsQ=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Feb 2023 01:53:27 -0800
-IronPort-SDR: 3gQByREm4lDgC7poV3fZS7KNi5deV1oUY1y53sA6kW6c6ZBXwXFjuSK9pN0MJnJ84JnOHEfqrP
- Rb/gt0y8X4B3ovw99mU1tU6j+U4g4CE5jCqLonYEX1Om/mjecdagC2pZagzFZSD01fk5c/B8W1
- MIbyp4COHETFibNj6wAly+IKKWuNJzZnozmuLf9aSqt7S040HYKx/5JKEqjSlimHRg77RBZDcY
- FyqBGzSOe/qljxOkSBtHUAh/31tADCo9CFx9BO8LSLroGLPtujhDsdhWB+v7Fbq1T96Z681S5W
- xRc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Feb 2023 02:42:06 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGvld1Dczz1RwqL
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 02:42:05 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676457723; x=1679049724; bh=bYOeNaHyaVrirbdon1Wxef62nvktUzAM/kk
-        BHGbdOTg=; b=ON0F5Q+U0+QUO1m86MIM9DQ+JEo1a4jPVOzjn2HAs3UFHdAcLAf
-        o4KQbxqw0O85vE3RBMc65JsQa/sedcCwupRT57p3GhDI/IC4MGt2FMyjiQlNWa/u
-        sZXhXUga6EWCiuWpPzu6tBCM+4Pv61gIvrGMj9BywTXz9v+ozRvuzt8/H6trmUB6
-        hOkHQiQYeyWLU5jrKd0RblnJWtINh6I2uiU/Lw36/ctdbumiHMUUDJXALMZF8AR3
-        KGAokSFa0Mpc8W4hB0gDma+uGUexGFZbCZhw0Eqe0g2BcyodtSvs0yxYt4o+FUn2
-        TMpa8PWVJ5TgBYgPFZoUd8CFrMWuEN2tKGg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id x308fI2gm13O for <linux-kernel@vger.kernel.org>;
-        Wed, 15 Feb 2023 02:42:03 -0800 (PST)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGvlW6T6dz1RvLy;
-        Wed, 15 Feb 2023 02:41:59 -0800 (PST)
-Message-ID: <b0219543-dec3-dfa2-8bba-93e4bc32eee2@opensource.wdc.com>
-Date:   Wed, 15 Feb 2023 19:41:58 +0900
+        Wed, 15 Feb 2023 05:42:37 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A8937558;
+        Wed, 15 Feb 2023 02:42:36 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.231])
+        by gnuweeb.org (Postfix) with ESMTPSA id E76A3830B9;
+        Wed, 15 Feb 2023 10:42:29 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1676457755;
+        bh=ca8bG178e59OpF+OaCvDlTsF5YL0MZS6S+rlzEPMn2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PEjg7p1UjNTruASToVkm4BEwv4AYXpbV0jzlkk7YFvFzp0+X5eUoaaIGHl+37vPPX
+         LULM0ZhrFeUw0XUkij76j9H6gX5feTTsOBxphpEFnaSnCF7gc4cwCp82xzVmTWY/1L
+         Azif9KP6MJE2+FL6yIkja+naVQhrIHzI1h3WPp9dgsMuvoVUCBRuwxTaoV/A1uxKbZ
+         g/edxRFtsP0QDG4Fzx1U6OPnQs+eBdHHqZx21mtf2NTstE77tMPKs/BIT3ylo7raaU
+         zMviz9AuJ73pw7+f3qm+zBCwg3zsNldZLY5m5wSq1Q7cUOVwej/dFeujevlxQ4jRQY
+         I7PhLnLdBNDew==
+Date:   Wed, 15 Feb 2023 17:42:25 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Xin Li <xin3.li@intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
+ a FRED system
+Message-ID: <Y+y3EabhG5p3b8iZ@biznet-home.integral.gnuweeb.org>
+References: <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
+ <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
+ <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
+ <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+ <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+ <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+ <Y9LdwVX9BaZA7zmA@biznet-home.integral.gnuweeb.org>
+ <0b57d2ab-14e0-14a0-adf3-3186fd2f5282@citrix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 0/9] PCI: rockchip: Fix RK3399 PCIe endpoint controller
- driver
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <7b8a8d38-feef-d2af-f23f-6b2b46f78110@opensource.wdc.com>
- <CAAEEuhrzysR-xfx7X-gVqUdi17R1YiWxyBM+0asQxtyZ9PQozg@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAAEEuhrzysR-xfx7X-gVqUdi17R1YiWxyBM+0asQxtyZ9PQozg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0b57d2ab-14e0-14a0-adf3-3186fd2f5282@citrix.com>
+X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 19:28, Rick Wertenbroek wrote:
-> On Wed, Feb 15, 2023 at 2:51 AM Damien Le Moal
-> <damien.lemoal@opensource.wdc.com> wrote:
->>
->> Note about that: with your series applied, nothing was working for me on
->> my pine Rockpro64 board (AMD Ryzen host). I got weird/unstable behavior
->> and the host IOMMU screaming about IO page faults due to the endpoint
->> doing weird pci accesses. Running the host with IOMMU on really helps in
->> debugging this stuff :)
+On Wed, Feb 15, 2023 at 09:17:23AM +0000, Andrew Cooper wrote:
+> On 26/01/2023 8:08 pm, Ammar Faizi wrote:
+> > What did I do wrong?
 > 
-> Thank you for testing, I have also tested with a Ryzen host, I have IOMMU
-> enabled as well.
+> Well this is a fine mess...
 > 
->>
->> With the few fixes to your series I commented about, things started to
->> work better, but still very unstable. More debugging and I found out that
->> the pci-epf-test drivers, both host and endpoint sides, have nasty
->> problems that lead to reporting failures when things are actually working,
->> or outright dummy things being done that trigger errors (e.g. bad DMA
->> synchronization triggers IOMMU page faults reports). I have a dozen fix
->> patches for these drivers. Will clean them up and post ASAP.
->>
->> With the test drivers fixed + the fixes to your series, I have the
->> pci_test.sh tests passing 100% of the time, repeatedly (in a loop). All solid.
->>
-> 
-> Good to hear that it now works, I'll try them as well.
-> 
->> However, I am still seeing issues with my ongoing work with a NVMe
->> endpoint driver function: I see everything working when the host BIOS
->> pokes at the NVMe "drive" it sees (all good, that is normal), but once
->> Linux nvme driver probe kicks in, IRQs are essentially dead: the nvme
->> driver does not see anything strange and allocates IRQs (1 first, which
->> ends up being INTX, then multiple MSI one for each completion queue), but
->> on the endpoint side, attempting to raise MSI or INTX IRQs result in error
->> as the rockchip-ep driver sees both INTX and MSI as disabled. No clue what
->> is going on. I suspect that a pci reset may have happened and corrupted
->> the core configuration. However, the EPC/EPF infrastructure does not
->> catch/process PCI resets as far as I can tell. That may be the issue.
->> I do not see this issue with the epf test driver, because I suspect the
->> host BIOS not knowing anything about that device, it does not touch it.
->> This all may depend on the host & BIOS. Not sure. Need to try with
->> different hosts. Just FYI :)
->>
-> 
-> Interesting that you are working on this, I started to patch the RK3399 PCIe
-> endpoint controller driver for a similar project, I want to run our NVMe
-> firmware in a Linux PCIe endpoint function.
-> 
-> For the IRQs there are two things that come to mind:
-> 1) The host driver could actually disable them and work in polling mode,
-> I have seen that with different versions of the Linux kernel NVMe driver
-> sometimes it would choose to use polling instead of IRQs for the queues.
-> So maybe it's just the
-> 2) The RK3399 PCIe endpoint controller is said to be able only to generate
-> one type of interrupt at a given time. "It is capable of generating MSI or
-> Legacy interrupt if the PCIe is configured as EP. Notes that one PCIe
-> component can't generate both types of interrupts. It is either one or the
-> other." (see TRM 17.5.9 Interrupt Support).
-> I don't know exactly what the TRM means the the controller cannot
-> use both interrupts at the same time, but this might be a path to explore
+> https://godbolt.org/z/MaPM7s8qr does the right thing, but is now
+> contrary to the prior discussion regarding calls in asm, which concluded
+> that the "+r"(rsp) was the way to go.
 
-The host says that both INTX is enabled and MSI disabled when the nvme driver
-starts probing. That driver starts probe with a single vector to enable the
-device first and use the admin SQ/CQ for indentify etc. Then, that IRQ is freed
-and multiple MSI vectors allocated, one for each admin + IO queue pair.
-The problem is that on the endpoint, the driver says that both INTX and MSI are
-disabled but the host at least sees INTX enabled, and the first IRQ allocated
-for the probe enables MSI and gets one vector. But that MSI enable is not seen
-by the EP, and the EP also says that INTX is disabled, contrary to what the host
-says.
+Does that also mean the ASM_CALL_CONSTRAINT macro in
+arch/x86/include/asm/asm.h macro is wrong?
 
-When the BIOS probe the drive, both INTX and MSI are OK. Only one IRQ is used by
-the BIOS and I tried both by setting & disabling MSI. What I think happens is
-that there may be a PCI reset/FLR or something similar, and that screws up the
-core config... I do not have a PCI bus analyzer, so hard to debug :)
+That macro adds a "+r"(rsp) constraint, and we assume it's safe to
+execute the "call" instruction with that constraint in an inline
+Assembly.
 
-I did hack both the host nvme driver and EP driver to print PCI link status etc,
-but I do not see anything strange there. Furthermore, the BAR accesses and admin
-SQ/CQ commands and cqe exchange is working as I get the identify commands from
-the host and the host sees the cqe, but after a timeout as it never receives any
-IRQ... I would like to try testing without the BIOS touching the EP nvme
-controller. But not sure how to do that. Probably should ignore the first CC.EN
-enable event I see, which is from the BIOS.
+I am not sure what "+r" (rsp) actually does. And if we are now
+complaining, "+r" (rsp) doesn't work. Since when it works? Or at least,
+where is that rule written?  I couldn't find any GCC or Clang version
+that does it right with the "+r" (rsp) constraint (from a quick playing
+with that godbolt link).
+
+> Furthermore GCC regressed in 9.0 and emits:
+> 
+>   warning: listing the stack pointer register 'rsp' in a clobber list is
+> deprecated [-Wdeprecated]
+> 
+> which might be the intention of the developers, but is wrong seeing as
+> this is the only way to say "I modify the redzone" to the compiler...
+
+Yeah, adding "rsp" to the clobber list works. But sadly, it's deprecated
+in GCC. Not sure what the reason is.
+
+I think the most straightforward and safest way, for now, is: "Don't
+clobber the red zone from the inline asm.".
+
+I will use the previous approach to avoid red-zone clobbering in the
+next revision. That's by adding "r12" to the clobber list and preserving
+the red zone content in "%r12". 
 
 -- 
-Damien Le Moal
-Western Digital Research
+Ammar Faizi
 
