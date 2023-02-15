@@ -2,48 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D16D697547
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1266669754A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 05:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjBOEPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 23:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S231959AbjBOETk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 23:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbjBOEOo (ORCPT
+        with ESMTP id S233265AbjBOETV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 23:14:44 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F24934C34;
-        Tue, 14 Feb 2023 20:13:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGl7C12Csz4x87;
-        Wed, 15 Feb 2023 15:13:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676434407;
-        bh=6NpP2stHfFOpAqwIjJFPHzN5E64XNjxtbY4r5Tv5aSM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=czpPUyx2hHxHNiIxS2uKJwccTRZ0h2JRqNMqfD6CMaWeqwgKGv07aQB+mxvEpdejU
-         X/lQ11ijNwhfIUCOZjvgndc5vnaZ35C0ZIng8DzZiT+RQ8xDTDMOUoAyTPC5aBO7RI
-         hDXrLP3LA3Io9+m+r3GeSPeQeWEpw1XtoAJ4lGrcM0CSIF54P4TQ5JF6TzM19Y7Rd0
-         NoNG+Lx3mVOcWZqp/wG0BAxINANjBiInZefO0l+CE9DeNNYKk1qk7fB3/UCScD0Gho
-         A3FCboL7ylMocjoznUFK4P6fO2guAa3ve8/jm9NR/bGhDgpETLpFrScNgQAFXAFdce
-         M/01aEZqKcYbQ==
-Date:   Wed, 15 Feb 2023 15:13:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Wenjing Liu <wenjing.liu@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20230215151326.576dad62@canb.auug.org.au>
+        Tue, 14 Feb 2023 23:19:21 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717D134330;
+        Tue, 14 Feb 2023 20:17:30 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-16a7f5b6882so21586654fac.10;
+        Tue, 14 Feb 2023 20:17:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xmVeJ55I3Amn4MeSLLrEqjAfEnFaFqqmJFVHznJhXDg=;
+        b=f0JQ8yzg+FPR5y3CaNNne8QhAd3lAC+Iilmkc/1qKFQTVBnRvohkiTN/g+NPgq0Xz1
+         9D/AruKAIVYyH6eQMAt3KOsjYJDlzJKisFMpwfFA3ZkKBrySd1D6r50TnpU+1DYDQMhU
+         HTY/kh7NQ2N99B2VXolM/BaAF5uCePH0rJi5DR4vF3ANxwwnMU0MsrkyeLbZJ9shFQkD
+         p+a3x4w9MUXBQdKGtJ+fBOhybW5arybnxQL5cC6MZL4StEjiLu2s4bkg8jB9OteGxdPg
+         ANdpvz12ub8F7pCYPMzncSWFQUQe/2u6J+lT534u39ulfGTjd3B5CPSi2rXD1mEzF7IG
+         ICFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xmVeJ55I3Amn4MeSLLrEqjAfEnFaFqqmJFVHznJhXDg=;
+        b=Z8PSIe1yjBx/OgRApJPiJVJUnh7Gpb2i9ETa5C5UGHxMmVkJMAgOEM2CI7trASUPZV
+         px4/HzYdFtzzoLcUp0OtQGXfA0npq/60d35HQukQMt3CfMMZuoh9/rcwWWDgDodC+B31
+         lh0bSfVcVSpQ9Fib/IsqAAFIUy2iSK6BRHmfa5iSOzu8+KlCcQi5npcAeyGmf3Utz2cd
+         07SMw4Mx8+9elGXBa2oXbn8Xw225umOSu5yU28Eauqfnev+Qz6ZXguzRhQM2L81uK5Zr
+         wj7tiVPG/NSSFo5Zj/dalU63paw2+lv+WhqAINOl9H+d5ajpcGAW1PBRUQqIv5XL4Zi6
+         dEWA==
+X-Gm-Message-State: AO0yUKV0/0s8RRRHan8QAoRB/614BWL5EOAWdH/2lWqd2NCAS/ekaC9w
+        2YvapW1mkKKltU+tMbyAGS0cfk0GNK0=
+X-Google-Smtp-Source: AK7set9YxmE76VEtlEwSGDhLhrdacS37IAlGfOJedC4/nE6qBvViit+FXiWz6r49rMj3U8quEpIkWw==
+X-Received: by 2002:a05:6870:20c:b0:16d:d985:3363 with SMTP id j12-20020a056870020c00b0016dd9853363mr401941oad.36.1676434639838;
+        Tue, 14 Feb 2023 20:17:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ds41-20020a0568705b2900b0016db8833b2dsm5181674oab.52.2023.02.14.20.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 20:17:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 14 Feb 2023 20:17:17 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
+Message-ID: <20230215041717.GA1237270@roeck-us.net>
+References: <20230214172549.450713187@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BzMFIsSJh.zpnfNaHmh8_Io";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,41 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BzMFIsSJh.zpnfNaHmh8_Io
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Feb 14, 2023 at 06:41:06PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.168 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
+> Anything received after that time might be too late.
+> 
 
-Hi all,
+For v5.10.167-133-gf90240a:
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+Build results:
+	total: 162 pass: 162 fail: 0
+Qemu test results:
+	total: 478 pass: 478 fail: 0
 
-drivers/gpu/drm/amd/display/dc/dc.h:877: warning: Function parameter or mem=
-ber 'temp_mst_deallocation_sequence' not described in 'dc_debug_options'
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Introduced by commit
-
-  3d8fcc6740c9 ("drm/amd/display: Extract temp drm mst deallocation wa into=
- its own function")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BzMFIsSJh.zpnfNaHmh8_Io
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsW+YACgkQAVBC80lX
-0GzBfQf/eZCTsAFKOVMlfvTfPIdiYzTfAlSyfyeu9+Jde9d7GCBEHiRdLkXoY5Gp
-G9iWAZR5Pmuna7IXa0Be0XUk/CiOl/mMxbFzk1PDaRYZE55qzTBYM8BIy27vyEdT
-csTg8YJyAJ7gQiCZnKxr24Uda/Rig1TKsTb2irlqyGbJLhs7ay8CCJ+gHC8MteXY
-8/WAqI+2vsmqigBsrHXo47NqCMvS7Ij4hyYZJg1yMV8To17B1q/CzRofUPVC4qrW
-o0ba/8uWd6S8u7sdHr3xfXYTyn15UJAySRDn1hBxYJiIKz1KmIwDsJrfhSos9LaC
-a5blmlNHGl/014wsR9tdSsXa5bwbuA==
-=bVds
------END PGP SIGNATURE-----
-
---Sig_/BzMFIsSJh.zpnfNaHmh8_Io--
+Guenter
