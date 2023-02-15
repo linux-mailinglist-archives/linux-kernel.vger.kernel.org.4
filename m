@@ -2,210 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD3E697CD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6AA697CCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 14:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjBONJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 08:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S233083AbjBONIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 08:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjBONJB (ORCPT
+        with ESMTP id S232277AbjBONIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:09:01 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422FA1B323;
-        Wed, 15 Feb 2023 05:08:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RLIYB+DbsHFwfkeGFJ+5s6imhi+TkkwiHX8HtowSF1yWWYYiQnwSTwvJyA3y+HCL/wSiE2qLyq8y/N7pP4GU/ltmrnzpnTXozCgCgWbJNebV17k7iLoqyZcW38qGiuAZZqLimWKHKZejOl7OR4C10xh+4Hnm0KBy4GjEw/SIocCbdI6g2MIBC+q/KIYVuXoDrXF0s3Ymyp1W9pGz0nB1pGCtFg1lrZ5NascSeNWziIheQkufc0S1L8GEqafdFaQdEo2OXYlt5JrOUXEtnCXu2lQoYcWBNZM7wfAJfiB8ZGW1rry1pgVuuNu8LbO/9DrMLKMkSu4PAFlUTscJVLq+6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4iiNWca0U2JAn90vB41ExVkooylJ029HpveQ8lMUnos=;
- b=VvvKaiGMQXOQoid28iXQr5SaqlGB/vPlGpLcNZ9GOfiKEKtFwHp/zQ3yp1FE+/YbLl2rPqBe3HinDTXo6piBn+8bkaPbyOB28YFL/YOrh1yDumWoJ3a39Er+HHbDy3L/yahquho5IDaKkqpuoGT7IbhT4AoxSpUnrVqZ5H2uEQG/rPJqKIp5nJDSLPseXG4KlrfKOi6l641vgK80lGf5qqTOYyz6ScnKvDVJo6eUM0HtVcupfZPGkh4pGfqJeWMtUls9crH9v3jQQ0WdK300RqGAq0e+/xDMJPkQESOpf30piHgxHGgbJwf7ykNhPbYwCR+UNwn2wLc9938B6QZ5ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4iiNWca0U2JAn90vB41ExVkooylJ029HpveQ8lMUnos=;
- b=oYfkM2v436Wx9EYerfsWho5msj/EX/AoXvtC01IrqPWU1ODSjcwAuTW5nNSP6hLBQeQO0ur//e4sxcwCOayeLjWQ4mKTxQT6FljGuO9VBSzF1wOfVB1OkEwYJKzdRojQD1ZqEeolxO/C09Rl8+hjpUgf51lJTQfxaaEtP6vaGRE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- CH2PR12MB5001.namprd12.prod.outlook.com (2603:10b6:610:61::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.19; Wed, 15 Feb 2023 13:08:44 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b%7]) with mapi id 15.20.6086.024; Wed, 15 Feb 2023
- 13:08:44 +0000
-Date:   Wed, 15 Feb 2023 21:08:17 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Karny, Wyes" <Wyes.Karny@amd.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Shukla, Santosh" <Santosh.Shukla@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        Tor Vic <torvic9@mailbox.org>
-Subject: Re: [PATCH v6 1/6] acpi: cppc: Add min and max perf reg writing
- support
-Message-ID: <Y+zZQV+63uGnQbUA@amd.com>
-References: <20230206172157.49887-1-wyes.karny@amd.com>
- <20230206172157.49887-2-wyes.karny@amd.com>
+        Wed, 15 Feb 2023 08:08:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8039239287
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 05:07:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CF67B821F9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 13:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25876C433EF;
+        Wed, 15 Feb 2023 13:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676466443;
+        bh=+hwO7JErfYD4tISTCHkKL1+A6053koS9PX7XC0ujeYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a3EhsgsZn0VTwpxr63gGNBnxf8CoaEmcUge3otJJ6MWz5zRz+LI3pc69Zbrxcg+te
+         eo6dq34XdS7Ni/ySYttdumSi0fK2VlgBMm0pBqEBaVpbemjguqBpQ2UlWDhZFERr0z
+         Syi5Kp2osRKtcJSwWEhS8UJTpzD1HJsrvzCrWL01Qd1cG7nW3y0iIXbgk5lVJcTrAN
+         dqKgmn05rtTpvkjr6CZFFi77NSiSO3grK/dI0vP30bIJoyIejtmlfafTBwkAYBA8VA
+         5RlcF//1vvYgHZeHMGq7vWy7G0G7WvXd9HDblUY/U8MA7tH076/wQ68GKvpSWTwkTq
+         5unmPNdr8X9AQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pSHWF-0002Ri-Q4; Wed, 15 Feb 2023 14:08:19 +0100
+Date:   Wed, 15 Feb 2023 14:08:19 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
+        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu-qcom: Rework the logic finding the bypass
+ quirk
+Message-ID: <Y+zZQ0PKW1d2XGbW@hovoldconsulting.com>
+References: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
+ <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
+ <20230214075312.GB4981@thinkpad>
+ <Y+tPWAUBwBxcOPFm@hovoldconsulting.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206172157.49887-2-wyes.karny@amd.com>
-X-ClientProxiedBy: SG3P274CA0016.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::28)
- To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|CH2PR12MB5001:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f7121bc-43db-4ccd-3a98-08db0f55c3e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MGYDs3sql2U93aBswfXiuFYCZTIKQmXLgq2QN6XmRlJwx1EW34LLYqO2n+ttLWRnAmoEBujaNagz5tusCPHSfyp4h0fbEUdGP/sAuv9UgJis4DqImNb0jkoUfToeTdCL4E/zYuuXAOzbCf9a7PCdCjnS2+R67iPYftLOy4KSoGiE+2gjBM/+3tAVkzU3U5hyb4U/PHM2sxDiPZ7UOP0NWvotawDMUkDMCfhtVYcxRk1ahwKSuTsNLVMEzKliI2p9C9zu5QMjUGp/VnsoK8Hy0MNNIQ7Q4GHrP3V2KF1mLauJVdmdB/RoUugdenfo/URF9fYUUBySIgULyffgTIxF2s0VpfaB8kfdKY2hDmALxsotBUEMquP6aSum3FVn67qeE+VaD5h5SQzP0Q/rcYICj5RTTMJPkxeSM7hHXcjycW2duc5lF+lMjHmn+UJvWJcCDwiZnbr46wTsaN8md/70ACBxPRWotA8VsV7W56kQ4/+LqFYV9+AwSw7wJ8xYCov+TGaxSotTJcCacZw1xfLzT4L4tD+T6FVkdUJg61X7ruMTJl4P6gfH8gdofXmlqNPoUtSYUcAlF4f/TFVPmurOpyMuyhVv9WjiZIiyvWAmPyCDFLnLzhCPkScf1Wf3q47J1exnp+n1f1+JDNgo0hMZBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(451199018)(37006003)(6666004)(2906002)(36756003)(6486002)(6862004)(6636002)(7416002)(316002)(38100700002)(41300700001)(8936002)(5660300002)(26005)(6512007)(2616005)(478600001)(54906003)(83380400001)(86362001)(66556008)(6506007)(186003)(66476007)(8676002)(4326008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rLP6vonKFkkEAZsZ1E8iMRN5P+wGNIMHWKTshFtW9J8LVi1UEvVRl88RHUq/?=
- =?us-ascii?Q?u0otb0PExTofi8yAtTctICh27FjL2GkYA1Z5CnnYuNnCVGEbabl8uXFWdxz5?=
- =?us-ascii?Q?Vxba+WYA4E/styZyU28NjphVU/Tteqkc5+WwdIK8WqvRqANtuIA2AgShm0re?=
- =?us-ascii?Q?GGEBNCzgndYuJ/+fWyqoCs2Dw7owD2DMdGkGw/WLZs33Ia6vuo3rLSgcZlTp?=
- =?us-ascii?Q?WR+HSKwuHIDY5oyJ3eufN1prig/dBVO6wV5NWdILznsIAXJ/sResqVC/Tx/8?=
- =?us-ascii?Q?7yxx+CwpeuK5HXHu4SEHEWPo4UeaJ/6RHGuM+8+w4jkPD2CBK7UmrDpnWkDV?=
- =?us-ascii?Q?nO9bS2N5s1eShXaIOTNmp6BDzwJIZxZgabTs9AGXpR7MYPBjik8o7hgsnQjF?=
- =?us-ascii?Q?WiJb/XAuvM7Xq0QhWuoLj/RszaF8x1CG5kybAeRCOt+lO3+mvM5tAYn9EjJm?=
- =?us-ascii?Q?qWUehcQiLGQEKk510L15AtrXnVEI0y5dH8bLRyq+x7ykWEmVyj6t5vnmDwFz?=
- =?us-ascii?Q?7x5cO+nA1X/AbfqzYJQLjGGmpWhcp6G0EWae+Ti3MkLYpMfP0IsSbJow44JS?=
- =?us-ascii?Q?Lgn4kvu0t+AMr5x7Si3uP/GDeClVesKU5mlB+iFHO2IXUfUIEo4RCb/WBSq0?=
- =?us-ascii?Q?HpC4/B618XTzkC7Z9E2GdVPUHd4+BhcErBHHthjlSa8XY1/XbXXQCunfIBMg?=
- =?us-ascii?Q?xnRTZnbjoXz0iEZnSJZ/omO90ZmTqcwv+FMWcPfSoh6mGDS1FUNEsXRAoh8J?=
- =?us-ascii?Q?pREUVGpUTic0I5KZbc9ztXo/gLXIY9m0r4NMKGZbXFNroEVKf+y7H17fAVK2?=
- =?us-ascii?Q?nBcjr+RhOQEZ2EXXMwwzJNcY+r74SxFKy79m3Tf6BSEd35DM/X1qDBxGCGfz?=
- =?us-ascii?Q?dJdS535u8gfaPtHJ7xF5gkbktb3gGxWfZHIf1hdn9cbmgL8EbsV8EiOytp37?=
- =?us-ascii?Q?XTX67OA/IlXK05rQJEsVz9uRgxNXhO6LjjhFxQeOYL58TrTTbx8bSb6wz+KB?=
- =?us-ascii?Q?tozYd1o/eo85kzmbFGziRa9mxvA1WzRPVfziOjqPA+EYoGb/Hl6Td4JeYsJj?=
- =?us-ascii?Q?FtTwOXDrC+jB2We9cx+vJyv5mM8Xavg+gmUyfAGNv55FrXGLlyWbKIcjp2Al?=
- =?us-ascii?Q?RoIn4LnV8Yx4lTmgRtjypZLnpxUsoxrGvW/6zdSGk0+y61kqHaYF58xMimWz?=
- =?us-ascii?Q?0SX0fgbKGcz6vumZUljRDkrr4Jv9t5dRcTVNYH9JLiNvQYoAAgfFvmnfG2Hy?=
- =?us-ascii?Q?pNTA7vrkg3M4EoAObRhpZ8dc8ZzBe1MIhW3uMP7AmEuxCqwYXdjnkAR6Q3oi?=
- =?us-ascii?Q?VHAvWrN5kpQAJbXBKsgIuoIkiraZPdotWpCIDmsOKdm6HzM7C4LE5PFyphDO?=
- =?us-ascii?Q?/d57ZOph3/cS4xYy6Thm/xCkKBZr7vonAHnLUK+C/c8qMgsNQgYDlpX41563?=
- =?us-ascii?Q?kVMBwc3CSFpgVA3VPc2b6ZDvz6L9Fy150hACO1PKgSRuhmEyBBVxdQA/1jt7?=
- =?us-ascii?Q?SFtnX9pDHsdw03MaXUaO2Wjev8XWCH6mnUa9SePrIoY1fBWC3dDlMuJk8PcQ?=
- =?us-ascii?Q?wuWznrADcSvwLMvxmKo8Hde9ttB1twfJISRzHYl7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f7121bc-43db-4ccd-3a98-08db0f55c3e8
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 13:08:43.8970
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AmHWiX7pDdoD5bsIXX6kr1uDmJM5mF8Pn1uCcc3fzRcVAQD2gvatkRF2syT+bazMITIQHdLHK5AJmv1oBQvTcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5001
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y+tPWAUBwBxcOPFm@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:21:52AM +0800, Karny, Wyes wrote:
-> Currently writing of min and max perf register is deferred in
-> cppc_set_perf function. In CPPC guided mode, these registers needed to
-> be written to guide the platform about min and max perf levels. Add this support
-> to make guided mode work properly on AMD shared memory systems.
+On Tue, Feb 14, 2023 at 10:07:36AM +0100, Johan Hovold wrote:
+> On Tue, Feb 14, 2023 at 01:23:12PM +0530, Manivannan Sadhasivam wrote:
+> > On Mon, Feb 13, 2023 at 05:43:56PM +0100, Johan Hovold wrote:
+> > > On Wed, Feb 01, 2023 at 01:55:00PM +0530, Manivannan Sadhasivam wrote:
+> > > > The logic used to find the quirky firmware that intercepts the writes to
+> > > > S2CR register to replace bypass type streams with a fault, and ignore the
+> > > > fault type, is not working with the firmware on newer SoCs like SC8280XP.
+> > > > 
+> > > > The current logic uses the last stream mapping group (num_mapping_groups
+> > > > - 1) as an index for finding quirky firmware. But on SC8280XP, this
+> > > > logic is not working as the number of stream mapping groups reported by
+> > > > the SMMU (163 as on the SC8280XP-CRD device) is not valid for some reason.
+> > > 
+> > > NUMSMRG read back as 162 here, both on my CRD and X13s. Was '163' a typo
+> > > or a real difference?
+> > > 
+> > 
+> > Ah yes, it is 162 indeed. Sorry, typo!
+> > 
+> > > > So the current logic that checks the (163-1) S2CR entry fails to detect
+> > > > the quirky firmware on these devices and triggers invalid context fault
+> > > > for bypass streams.
+> > > > 
+> > > > To fix this issue, rework the logic to find the first non-valid (free)
+> > > > stream mapping register group (SMR) and use that index to access S2CR
+> > > > for detecting the bypass quirk.
+> > > 
+> > > So while this works for the quirk detection, shouldn't we also do
+> > > something about that bogus NUMSMRG value? At least cap it at 128, which
+> > > appears to be the maximum according to the specification, for example,
+> > > by clearing bit 7 when any of the lower bits are set?
+> > > 
+> > > That would give us 35 (or 36) groups and working quirk detection with
+> > > just the following smaller patch:
+> > > 
+> > 
+> > I'm not certain if the value is bogus or not. It is clear that the spec
+> > specifies 128 as the max but internal qcom document shows that they indeed
+> > set 162 on purpose in the hypervisor.
+> >
+> > So until we get a clear view on that, I'd not cap it.
 > 
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> But if we fault as soon as we try to do something with those register
+> groups above 128 that also violate the spec, it doesn't seem right to
+> trust the fw value here.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+I realised that the fault is due to the quirk not being detected
+properly as writes to groups above index 127 apparently succeeds
+(including out-of-bounds index 162):
 
-> ---
->  drivers/acpi/cppc_acpi.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
+	qcom_smmu_cfg_probe - index = 127, reg = 200ff, type = 02
+	qcom_smmu_cfg_probe - index = 128, reg = 100ff, type = 01
+	qcom_smmu_cfg_probe - index = 161, reg = 100ff, type = 01
+	qcom_smmu_cfg_probe - index = 162, reg = 100ff, type = 01
+
+So leaving smmu->num_mapping_groups unchanged for now and using the
+first available group for the detection indeed seems like the right
+thing to do here (alternatively, never use an index above 127).
+
+But perhaps you can update to commit message to reflect this finding
+(i.e. that the num groups value is probably bogus, and that you at least
+need to use an index < 128 for quirk detection).
+
+By the way, I noticed that the number of groups is reported as 162 on
+the sa8295p-adp as well.
+
+> > > > This also warrants a change in variable name from last_s2cr to free_s2cr.
+> > > > 
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > ---
+> > > >  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 24 +++++++++++++++++-----
+> > > >  1 file changed, 19 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> > > > index 78fc0e1bf215..4104f81b8d8f 100644
+> > > > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> > > > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> > > > @@ -267,23 +267,37 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
+> > > >  
+> > > >  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
+> > > >  {
+> > > > -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
+> > > >  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
+> > > > +	u32 free_s2cr;
+> > > >  	u32 reg;
+> > > >  	u32 smr;
+> > > >  	int i;
+> > > >  
+> > > > +	/*
+> > > > +	 * Find the first non-valid (free) stream mapping register group and
+> > > > +	 * use that index to access S2CR for detecting the bypass quirk.
+> > > > +	 */
+> > > > +	for (i = 0; i < smmu->num_mapping_groups; i++) {
+> > > > +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
+> > > > +
+> > > > +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
+> > > > +			break;
+> > > > +	}
+> > > > +
+> > > > +	free_s2cr = ARM_SMMU_GR0_S2CR(i);
+> > > 
+> > > In the unlikely event that there is no free group this would access an
+> > > invalid index.
+> > > 
+> > 
+> > Hmm, theoretically yes. But what would be the plan of action if that happens?
+> > Should we just bail out with error or skip the quirk detection?
 > 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 02d83c807271..91f9ef75f7de 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1487,7 +1487,7 @@ EXPORT_SYMBOL_GPL(cppc_set_enable);
->  int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  {
->  	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> -	struct cpc_register_resource *desired_reg;
-> +	struct cpc_register_resource *desired_reg, *min_perf_reg, *max_perf_reg;
->  	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
->  	struct cppc_pcc_data *pcc_ss_data = NULL;
->  	int ret = 0;
-> @@ -1498,6 +1498,8 @@ int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  	}
->  
->  	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
-> +	min_perf_reg = &cpc_desc->cpc_regs[MIN_PERF];
-> +	max_perf_reg = &cpc_desc->cpc_regs[MAX_PERF];
->  
->  	/*
->  	 * This is Phase-I where we want to write to CPC registers
-> @@ -1506,7 +1508,7 @@ int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  	 * Since read_lock can be acquired by multiple CPUs simultaneously we
->  	 * achieve that goal here
->  	 */
-> -	if (CPC_IN_PCC(desired_reg)) {
-> +	if (CPC_IN_PCC(desired_reg) || CPC_IN_PCC(min_perf_reg) || CPC_IN_PCC(max_perf_reg)) {
->  		if (pcc_ss_id < 0) {
->  			pr_debug("Invalid pcc_ss_id\n");
->  			return -ENODEV;
-> @@ -1529,13 +1531,19 @@ int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  		cpc_desc->write_cmd_status = 0;
->  	}
->  
-> -	/*
-> -	 * Skip writing MIN/MAX until Linux knows how to come up with
-> -	 * useful values.
-> -	 */
->  	cpc_write(cpu, desired_reg, perf_ctrls->desired_perf);
->  
-> -	if (CPC_IN_PCC(desired_reg))
-> +	/**
-> +	 * Only write if min_perf and max_perf not zero. Some drivers pass zero
-> +	 * value to min and max perf, but they don't mean to set the zero value,
-> +	 * they just don't want to write to those registers.
-> +	 */
-> +	if (perf_ctrls->min_perf)
-> +		cpc_write(cpu, min_perf_reg, perf_ctrls->min_perf);
-> +	if (perf_ctrls->max_perf)
-> +		cpc_write(cpu, max_perf_reg, perf_ctrls->max_perf);
-> +
-> +	if (CPC_IN_PCC(desired_reg) || CPC_IN_PCC(min_perf_reg) || CPC_IN_PCC(max_perf_reg))
->  		up_read(&pcc_ss_data->pcc_lock);	/* END Phase-I */
->  	/*
->  	 * This is Phase-II where we transfer the ownership of PCC to Platform
-> @@ -1583,7 +1591,7 @@ int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  	 * case during a CMD_READ and if there are pending writes it delivers
->  	 * the write command before servicing the read command
->  	 */
-> -	if (CPC_IN_PCC(desired_reg)) {
-> +	if (CPC_IN_PCC(desired_reg) || CPC_IN_PCC(min_perf_reg) || CPC_IN_PCC(max_perf_reg)) {
->  		if (down_write_trylock(&pcc_ss_data->pcc_lock)) {/* BEGIN Phase-II */
->  			/* Update only if there are pending write commands */
->  			if (pcc_ss_data->pending_pcc_write_cmd)
-> -- 
-> 2.34.1
-> 
+> Yes, skipping quirk detection seems preferable to crashing systems that
+> don't need the quirk.
+
+Perhaps you can move the quirk handling to its own function and simply
+return early in case there is no free group.
+
+Johan
