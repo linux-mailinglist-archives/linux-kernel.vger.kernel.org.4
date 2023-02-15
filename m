@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FD06977C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5C96977C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 09:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbjBOIHi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Feb 2023 03:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S233829AbjBOIIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 03:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbjBOIHg (ORCPT
+        with ESMTP id S230320AbjBOIIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:07:36 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041053669D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:35 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id ch10so19843325qtb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:34 -0800 (PST)
+        Wed, 15 Feb 2023 03:08:06 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE72366BC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:47 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id a2so18156443wrd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPMJsA1KpeE5VoKwKV4tJd2pa41EOw8Ss33XN/h6Hpc=;
+        b=dxxjsaIKM7IF5XURFRVgZLsB9Hlouv5GlxlsQUQKT5Go7ayu32gHi2ryj/tzAqXTHw
+         5Km7YTJo4oFXb6/8ca1xrBIxQt+VDv24Q4B5vsvFTlcuZxQhAhfYpsacK+RdE4v4OSig
+         6RxERd3TZ7PK/O53nY9Tk7J1Hgy7xGdkVeaSyp42gH8k8neuzSTzei3NjVgQzbIeAHx7
+         DXj6pUxNnQlRRTVS4YSrCjvZyQ4oeyuhqdnaCDoyH91XpJtvPwCdcEuJIgpgMgWdWM4Y
+         PiRCtPlqyIFeFuZGrg84Xs/GiHRt+TisQhVDMPCYi/lgj5mondLDBcUilmvSbdqqk/ZH
+         itRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rx6raGPVkjLOh5DBbFhiid2XbozsdzVzlVKzi7He69I=;
-        b=KsO0ehOj+ABHmIeTUMg/spvI3id4G/jkVp+U1VHxlb+2vFepKSo/2o5tCAN32d6JD2
-         ptlAS/+WZ2q0XgsIIudepF+HIDN/5zIb99XaT1xHSfP/l5XQnC40UVj4CZEPRZjYgZPx
-         7KdQkifB7AjnBiyRTWrGnLzkfxyY2RNNJl0ZSzsIdQjz7D++PHud1kztP+FqNs2EekU2
-         Pcngb4kbHao9EQeWt6JeBJc9feBrIDUHX7fSvXa9CKHTO3cJ7//ZWCEZbXPBPIMucPbA
-         hTHAt+5nProyo7xjN1XjIKbP3r7Yuu/4iRXx14yGu17n7VHfNtQeFfT64KdAExPwghhy
-         XYmA==
-X-Gm-Message-State: AO0yUKUzJIYJG3/rwbVlVFQRARauNTKetPnbvYkFSrcsaCE9JNmSy18i
-        rNOV32hdVXVtXZRf1+A9ew3t98cz6cldPbLV
-X-Google-Smtp-Source: AK7set80KUhYvnn7mPBFIMeZxLc5+K6SmYfWB1qQAr2ozhpDbDOP11mAVkwEyK5x21QLkmKkcigViw==
-X-Received: by 2002:ac8:5e53:0:b0:3a6:8f7c:5936 with SMTP id i19-20020ac85e53000000b003a68f7c5936mr2143324qtx.25.1676448453923;
-        Wed, 15 Feb 2023 00:07:33 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b0070383f1b6f1sm13544679qkd.31.2023.02.15.00.07.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 00:07:33 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-51ba4b1b9feso249110307b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 00:07:33 -0800 (PST)
-X-Received: by 2002:a81:6a03:0:b0:52f:972:e6a1 with SMTP id
- f3-20020a816a03000000b0052f0972e6a1mr173556ywc.235.1676448452756; Wed, 15 Feb
- 2023 00:07:32 -0800 (PST)
-MIME-Version: 1.0
-References: <1676410243-10566-1-git-send-email-quic_c_spathi@quicinc.com>
- <1950127775.130646.1676411821807.JavaMail.zimbra@nod.at> <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
-In-Reply-To: <913fea79-09f9-b976-ff1a-cd833784abb6@quicinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Feb 2023 09:07:21 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
-Message-ID: <CAMuHMdUb9cduEae2vzX8LeVG7z0nRrKHrQN6UGJ_YLuWOBbKOg@mail.gmail.com>
-Subject: Re: [PATCH V1] um: Fix compilation warnings
-To:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        bh=RPMJsA1KpeE5VoKwKV4tJd2pa41EOw8Ss33XN/h6Hpc=;
+        b=ImdTHnQjEPWBRrhPz8PggFDJsx2kbJfPrdADVwkyWE/GVxgjSsH258Me6O0kxlBB45
+         mRUJfuSOZ+8F2+X6Km5ubYbzNHLOlxUfD6S3bg6t9KphDTaKN6j3n2jcpbB8kreTHtYs
+         zt5iv1mBh6jjiUI+A8luWl7um2suUV3ybDpVsvjYHbOwXoSfLtwt3cP5qwkY2E35gtcK
+         250EXQoiEulO6PH/DX6Z8vizdpLpONCtEmpqXDqhUpDArbx2KkIB1LkevdymxigxyqWu
+         NQUlTt3jAyGaEoPPJqJ/8/sVfZJC0/djan6HcEUXnztH3oaibEa9p0WhwxjwWAy4GqHT
+         NVQg==
+X-Gm-Message-State: AO0yUKU1SEOYhviPvImot0JOCqavq03ZHZ7CkMvcdY2cSRmyRNHHFEgh
+        OIm+3Mb6g50EMwyRAJLLNyzqOnBjJa5HN7vK
+X-Google-Smtp-Source: AK7set/i88qdd3+GM+tZM98/pv3VHLnrlJpTWpFeuVjLM7BbjrcmP3iwkYHWh5OP4ps9FFX9mAcPug==
+X-Received: by 2002:adf:e6ce:0:b0:2c4:848:bbd4 with SMTP id y14-20020adfe6ce000000b002c40848bbd4mr871805wrm.36.1676448465631;
+        Wed, 15 Feb 2023 00:07:45 -0800 (PST)
+Received: from smtpclient.apple ([77.137.71.15])
+        by smtp.gmail.com with ESMTPSA id b16-20020adfe650000000b002c5534db60bsm8619336wrn.71.2023.02.15.00.07.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Feb 2023 00:07:45 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH -tip v2] x86/kprobes: Remove unneeded casting from
+ immediate value
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <167641982421.1677831.18379341946856978545.stgit@mhiramat.roam.corp.google.com>
+Date:   Wed, 15 Feb 2023 10:07:33 +0200
+Cc:     X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AEF3FED8-BF58-4B9E-B36E-662A09636A70@gmail.com>
+References: <167641982421.1677831.18379341946856978545.stgit@mhiramat.roam.corp.google.com>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivasarao,
 
-On Wed, Feb 15, 2023 at 6:36 AM Srinivasarao Pathipati
-<quic_c_spathi@quicinc.com> wrote:
-> On 2/15/2023 3:27 AM, Richard Weinberger wrote:
-> > ----- Ursprüngliche Mail -----
-> >> Von: "Srinivasarao Pathipati" <quic_c_spathi@quicinc.com>
-> >> static void sig_handler_common(int sig, struct siginfo *si, mcontext_t *mc)
-> >> {
-> >> -    struct uml_pt_regs r;
-> >> +    struct uml_pt_regs *r;
-> >>      int save_errno = errno;
-> >>
-> >> -    r.is_user = 0;
-> >> +    r = malloc(sizeof(struct uml_pt_regs));
-> > I fear this is not correct since malloc() is not async-signal safe.
->
-> Thanks Richard for quick response. Could you please suggest alternative
-> function of malloc() with async-signal safe.
->
-> if that is not possible Is there any other way to fix this warning? OR
-> do we need to live with that warning?
 
-Does this limit actually apply to this file, which calls into the host OS?
+> On Feb 15, 2023, at 2:10 AM, Masami Hiramatsu (Google) =
+<mhiramat@kernel.org> wrote:
+>=20
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>=20
+> Remove unneeded casting from immediate value assignments for relative
+> jump offset. Since the immediate values in the 'insn' data structure =
+are
+> assigned from immediate bytes as a signed value to =
+insn.immediate.value
+> by insn_field_set(). Thus, if we need to access that value as a signed
+> value (in this kprobe's case), we don't need to cast it.
+> This is a kind of clean up (should not change behavior) follows =
+Nadav's
+> bugfix.
+>=20
+> Link: =
+https://lore.kernel.org/all/20230208071708.4048-1-namit@vmware.com/
+>=20
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-How come you even see this warning, as we have
+Thanks for incorporating my feedback.
 
-    CFLAGS_signal.o += -Wframe-larger-than=4096
+Acked-by: Nadav Amit <namit@vmware.com>
 
-since commit 517f60206ee5d5f7 ("um: Increase stack frame size threshold
-for signal.c") in v5.11?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
