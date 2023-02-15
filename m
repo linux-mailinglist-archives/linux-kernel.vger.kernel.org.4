@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6B1698036
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7A0698045
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 17:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjBOQLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 11:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S229958AbjBOQN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 11:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjBOQLL (ORCPT
+        with ESMTP id S229592AbjBOQNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:11:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECC13B0DB;
-        Wed, 15 Feb 2023 08:10:59 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C98571042;
-        Wed, 15 Feb 2023 08:11:41 -0800 (PST)
-Received: from cam-smtp0.cambridge.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EEC963F881;
-        Wed, 15 Feb 2023 08:10:57 -0800 (PST)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-efi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1] arm64: efi: Make efi_rt_lock a raw_spinlock
-Date:   Wed, 15 Feb 2023 17:10:47 +0100
-Message-Id: <20230215161047.94803-1-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Feb 2023 11:13:24 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2035639CC3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 08:13:23 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF04F1F8D6;
+        Wed, 15 Feb 2023 16:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676477601; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bO6TMATtoIzjhUOxe6hhhYeI9Ys3fzNE2u1n+L9XlU0=;
+        b=aU5eYNsiUKzXdSgol90wtlxGNSEtXqupTpn5XWRKcTf/ol1lAJxAMbWp+e6XmofE41dzdD
+        zD+t0L2zHV8ysF1D+SlZparKAASlfkELS2lcpJyk+jBbhvThyGZUiAfIU2CKjhysDUJb/2
+        tFbygIDacKDBXGtxcwFqhCbaNnO3WGg=
+Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 964782C141;
+        Wed, 15 Feb 2023 16:13:21 +0000 (UTC)
+Date:   Wed, 15 Feb 2023 17:13:17 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Michael Thalmeier <michael.thalmeier@hale.at>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tty: ttynull: implement console write
+Message-ID: <Y+0EnQ/Ujtq+nEFf@alley>
+References: <20230214115921.399608-1-michael.thalmeier@hale.at>
+ <Y+zEAA1hp+3guGxT@axis.com>
+ <Y+ztReOGJwAbpv52@alley>
+ <87y1oz7y9s.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y1oz7y9s.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running a rt-kernel base on 6.2.0-rc3-rt1 on an Ampere Altra outputs
-the following:
-  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 9, name: kworker/u320:0
-  preempt_count: 2, expected: 0
-  RCU nest depth: 0, expected: 0
-  3 locks held by kworker/u320:0/9:
-  #0: ffff3fff8c27d128 ((wq_completion)efi_rts_wq){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
-  #1: ffff80000861bdd0 ((work_completion)(&efi_rts_work.work)){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
-  #2: ffffdf7e1ed3e460 (efi_rt_lock){+.+.}-{3:3}, at: efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
-  Preemption disabled at:
-  efi_virtmap_load (./arch/arm64/include/asm/mmu_context.h:248)
-  CPU: 0 PID: 9 Comm: kworker/u320:0 Tainted: G        W          6.2.0-rc3-rt1
-  Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-  Workqueue: efi_rts_wq efi_call_rts
-  Call trace:
-  dump_backtrace (arch/arm64/kernel/stacktrace.c:158)
-  show_stack (arch/arm64/kernel/stacktrace.c:165)
-  dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-  dump_stack (lib/dump_stack.c:114)
-  __might_resched (kernel/sched/core.c:10134)
-  rt_spin_lock (kernel/locking/rtmutex.c:1769 (discriminator 4))
-  efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
-  [...]
+On Wed 2023-02-15 16:24:23, John Ogness wrote:
+> On 2023-02-15, Petr Mladek <pmladek@suse.com> wrote:
+> > That said, the current code is error-prone. The check for non-NULL
+> > con->write is too far from the caller.
+> 
+> con->write is supposed to be immutable after registration, so having the
+> check "far from the caller" is not a real danger.
+> 
+> console_emit_next_record() is the toplevel function responsible for
+> printing on a particular console so I think it is appropriate that the
+> check is made when determining if this function should be called. I also
+> think console_is_usable() is the proper place for the NULL check to
+> reside since that is the function that determines if printing is
+> allowed.
 
-This seems to come from commit ff7a167961d1 ("arm64: efi: Execute
-runtime services from a dedicated stack") which adds a spinlock. This
-spinlock is taken through:
-efi_call_rts()
-\-efi_call_virt()
-  \-efi_call_virt_pointer()
-    \-arch_efi_call_virt_setup()
+I agree that the current code is not that bad. But still, the call
+chain is:
 
-Make 'efi_rt_lock' a raw_spinlock to avoid being preempted.
+  + console_flush_all()
+    + console_emit_next_record()
+      + call_console_driver()
+	+ con->write()
 
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- arch/arm64/include/asm/efi.h | 6 +++---
- arch/arm64/kernel/efi.c      | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I could imagine another code that would call call_console_driver()
+or console_emit_next_record() directly. We might just hope that
+it would check console_is_usable() or con->write pointer before.
+I consider this error-prone.
 
-diff --git a/arch/arm64/include/asm/efi.h b/arch/arm64/include/asm/efi.h
-index 31d13a6001df..37dc2e8c3500 100644
---- a/arch/arm64/include/asm/efi.h
-+++ b/arch/arm64/include/asm/efi.h
-@@ -33,7 +33,7 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
- ({									\
- 	efi_virtmap_load();						\
- 	__efi_fpsimd_begin();						\
--	spin_lock(&efi_rt_lock);					\
-+	raw_spin_lock(&efi_rt_lock);					\
- })
- 
- #undef arch_efi_call_virt
-@@ -42,12 +42,12 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
- 
- #define arch_efi_call_virt_teardown()					\
- ({									\
--	spin_unlock(&efi_rt_lock);					\
-+	raw_spin_unlock(&efi_rt_lock);					\
- 	__efi_fpsimd_end();						\
- 	efi_virtmap_unload();						\
- })
- 
--extern spinlock_t efi_rt_lock;
-+extern raw_spinlock_t efi_rt_lock;
- efi_status_t __efi_rt_asm_wrapper(void *, const char *, ...);
- 
- #define ARCH_EFI_IRQ_FLAGS_MASK (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT)
-diff --git a/arch/arm64/kernel/efi.c b/arch/arm64/kernel/efi.c
-index fab05de2e12d..216933cf47ee 100644
---- a/arch/arm64/kernel/efi.c
-+++ b/arch/arm64/kernel/efi.c
-@@ -145,7 +145,7 @@ asmlinkage efi_status_t efi_handle_corrupted_x18(efi_status_t s, const char *f)
- 	return s;
- }
- 
--DEFINE_SPINLOCK(efi_rt_lock);
-+DEFINE_RAW_SPINLOCK(efi_rt_lock);
- 
- asmlinkage u64 *efi_rt_stack_top __ro_after_init;
- 
--- 
-2.25.1
+Also, as you say, con->write is immutable. All real consoles have it
+defined. It does not make sense to check it again and again.
+I would leave console_is_usable() for checks that might really
+change at runtime.
 
+
+> > I would prefer to make it more safe. For example, I would prevent
+> > registration of consoles without con->write callback in the first
+> > place. It would require, to implement the empty write() callback
+> > for ttynull console as done by this patch.
+> 
+> I would prefer that we do not start encouraging dummy implementations.
+> If you insist on con->write having _some_ value other than NULL, then we
+> could define some macro with a special value (CONSOLE_NO_WRITE). But
+> then we have to check that value. IMHO, allowing NULL is not an issue.
+
+ttynull is really special. It is a dummy driver and dummy callbacks
+are perfectly fine. IMHO, one dummy driver is enough. Ideally,
+the generic printk code should not need any special hacks to
+handle it.
+
+IMHO, normal console drivers would be useless without write()
+callback. It sounds perfectly fine to reject useless console
+drivers at all. And it sounds like a reasonable check
+in register_console() that would reject bad console drivers.
+
+Best Regards,
+Petr
