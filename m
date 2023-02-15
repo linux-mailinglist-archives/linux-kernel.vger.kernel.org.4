@@ -2,38 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2EE69794B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEAD69794C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbjBOJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 04:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S234090AbjBOJs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 04:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbjBOJsa (ORCPT
+        with ESMTP id S234071AbjBOJsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 04:48:30 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1356367D0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:48:24 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 31F9lqPP003803;
-        Wed, 15 Feb 2023 10:47:52 +0100
-Date:   Wed, 15 Feb 2023 10:47:51 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        nicolas.pitre@linaro.org, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, Adam Borowski <kilobyte@angband.pl>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: Re: Kernel-only deployments?
-Message-ID: <Y+yqRwNERjb0/dSd@1wt.eu>
-References: <20180823190657.GA12057@1wt.eu>
- <20230215023557.7241-1-falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215023557.7241-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Wed, 15 Feb 2023 04:48:42 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B44E36FEF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 01:48:33 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 687A53200893;
+        Wed, 15 Feb 2023 04:48:30 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 15 Feb 2023 04:48:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676454509; x=1676540909; bh=jLXjSQkTOn
+        +4ktIkp6EZtl+YKLL9/WnSJEkDg2a+TfI=; b=RxSH/xlkF3FiEBW3/RkM0mPVmg
+        8M/DGumRbq9Uo0JuFEUi6FKil3p0qW2KG52n+EK/UJfEicbmA1M4oreBInWT4HFE
+        EgqcXQhsx6YLRxuo7PUM/UTedOszgHnDtaArilRhPi+vawTDjFXnsnu6RQ67PXA5
+        XM5DFz1kzdFieQAngjhfVf0OpiEQX5Wd3crH0r270EBuaPiAF7nnTNaNjUPqoBEL
+        tD9BD0ySgrKVz0TjIU6vamtBI6J9Kxjh0NEb+LDkpoK6yywjL1RjCq9v1j9hX0yY
+        NtJz4MvSaxd8nTkE03Opmoge4zCMQITMGv8D0lHLjTB/XkgEuQaQjSS7OXzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676454509; x=1676540909; bh=jLXjSQkTOn+4ktIkp6EZtl+YKLL9
+        /WnSJEkDg2a+TfI=; b=PrEn79tzqBiwMpg80px2VL4XBQtSfVKofb+KosTC2Pcn
+        P9QsUSI81yCaf5HYqBh/Cwr36yoX3t6Yt+BAOvazmG2XA4B2gLGhmBQqo8gJkxa0
+        C6dzeYiab7MI9QecwQeDI9bGoId+FFpQS54+DfLqxEWxjAGYstyqkQ4gmeXnscuN
+        qiFO3flHi2TxaLVWSibBW18g7v3w5gQmgzdz/+U2+ncsXOXkBqucncK06ajVqLfx
+        qeX9KcKboSLAlypuAe0BUM1IgO57WW+i+TqGq5TbH2QB8umqMMiY2ONhPNXLcgYw
+        bJ7SiHy9ct5Lwk4TkO/V5g/oT6HBIFh61t2EtW76iw==
+X-ME-Sender: <xms:barsY7VDO506yJbtptQM4-5rQIhAOma5b98KwL-Lmoqj6ZJi9-83lQ>
+    <xme:barsYzmO4tmgXsjf-9GTr5Zxo7vBAgdMl2Rx5haUdLAUIWMga9lWdGpRIBInuYTEC
+    yPV6Y0oyWsjUd8jp7Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:barsY3YcKtMWUVFhBuvX1BJA57eggeewaElBjWs_HQy1x5pHNnVExw>
+    <xmx:barsY2WOK5T0ZciUgY7m7VKnN8gxoK1jaYmNflXUkqiFeAAIg45O0Q>
+    <xmx:barsY1kj2k_uBe1ftJVqgrOTSgNHHhiCh3AHljEvkv2cbg3UqTgUZg>
+    <xmx:barsY7UY4NuB2i8bxrs9t0wX6WhSKKQjmryrDn9SFBc1SaAMA8IS8w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 80C21B60086; Wed, 15 Feb 2023 04:48:29 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <78b2ed7d-2585-479f-98b1-ed2574a64cb8@app.fastmail.com>
+In-Reply-To: <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
+References: <20230215091503.1490152-1-arnd@kernel.org>
+ <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
+Date:   Wed, 15 Feb 2023 10:48:11 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Marco Elver" <elver@google.com>, "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Kees Cook" <keescook@chromium.org>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Miroslav Benes" <mbenes@suse.cz>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,106 +88,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wu,
+On Wed, Feb 15, 2023, at 10:25, Marco Elver wrote:
+> On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
 
-On Wed, Feb 15, 2023 at 10:35:57AM +0800, Zhangjin Wu wrote:
-> Hi, Willy & Paul
-> 
-> Thanks very much for your work on nolibc, based on the nolibc feature
-> and the gc-sections feature from Paul Burton, I have tried to 'gc' the
-> dead system calls not used in the nolibc applications.
-> 
-> Tests shows, the gc-sections shrinks a minimal config of RISC-V 64 by
-> ~10% and the gc-sections for syscalls shrinks another ~4.6% (~200k).
-> 
-> Since nolibc has been added into tools/include/nolibc, it may be
-> possible to auto 'gc' the dead syscalls automatically while building the
-> nolibc based initrd, but it requires to auto update the architecture
-> specific system call table after building the nolibc application:
-> 
-> 1. Eliminate the unused functions and syscalls of the nolibc application
-> 
->    add -ffunction-sections -fdata-sections and -Wl,--gc-sections to
->    compile the nolibc application
-> 
-> 2. Dump the used syscalls with the help of objdump
-> 
->    This is architecture dependent, a RISC-V 64 example:
-> 
->    riscv64-linux-gnu-objdump -d $nolibc_bin | \
->        egrep "li[[:space:]]*a7|ecall" | \
->        egrep -B1 ecall | \
->        egrep "li[[:space:]]*a7" | \
->        rev | cut -d ' ' -f1 | rev | cut -d ',' -f2 | \
->        sort -u -g
-> 
->    Use a simple hello.c with reboot() at the end as an example, the
->    dumped syscall numbers are:
-> 
->        64
->        93
->        142
-> 
-> 3. Update architecture specific system call table
-> 
->    Use RISC-V 64 as an example, arch/riscv/kernel/syscall_table.c:
-> 
->     diff --git a/arch/riscv/kernel/syscall_table.c b/arch/riscv/kernel/syscall_table.c
->     index 44b1420a2270..3b48a94c0ae8 100644
->     --- a/arch/riscv/kernel/syscall_table.c
->     +++ b/arch/riscv/kernel/syscall_table.c
->     @@ -14,5 +14,10 @@
-> 
->      void * const sys_call_table[__NR_syscalls] = {
->             [0 ... __NR_syscalls - 1] = sys_ni_syscall,
->     -#include <asm/unistd.h>
->     +// AUTO INSERT START
->     +       [64] = sys_write,
->     +       [93] = sys_exit,
->     +       [142] = sys_reboot,
->     +// AUTO INSERT END
->     +// #include <asm/unistd.h>
->      };
-> 
-> 4. Build kernel with gc-sections, the unused syscalls will be eliminated
-> 
-> It is not that complicated, but to mainline such a feature and let it
-> support more architectures, it is not that easy. I have written more
-> about this here:
-> https://lore.kernel.org/linux-riscv/20230214084229.42623-1-falcon@tinylab.org/
+> Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
+>
+> Do you have a tree to take this through, or should it go through -rcu
+> as usual for KCSAN patches?
 
-Yeah I noticed your message (though didn't yet have time to respond). If
-find it interesting from an academic perspective at least.
+I don't have a tree for taking these build fixes, so it would be good if you could forward it as appropriate.
 
-> So, is such a feature really useful? does anyone in the deep embedded
-> space already do this? welcome your suggestion.
+Thanks,
 
-The thing is that you will clearly not be able to compile realistic
-applications with nolibc. Its goal is just to support test programs
-or ultra-basic shells or init programs for which a libc is either
-annoying (e.g. for kernel development you prefer to use the -nolibc
-toolchains) or overkill (you don't always want to inflate your embedded
-initramfs by hundreds of kB for a 300 bytes program, especially when
-your kernel size approaches the maximum size of your flash device like
-I recently had).
-
-But for real applications you will definitely need to have a real libc
-such as klibc or musl.
-
-However the value I'm seeing in your work is to be able to show the
-cost of families of syscalls and features. Instead of automatically
-trimming them depending on what the application uses, I think it could
-be useful to spot groups that dominate the size of these 200kB savings,
-and possibly add build options to allow to remove them. In this case it
-becomes easy to add tests for them (including using nolibc) that are
-representative to what a some application would need and quickly verify
-if a given kernel config has chances to work with this or that application.
-
-This approach is even better because it won't force you to limit your
-analysis to syscalls, but it can also cover other optional areas and
-help application developers estimate the rough amount of savings they
-can make by removing some parts if it's estimated that the application
-will not use them.
-
-Just my two cents,
-Willy
+     Arnd
