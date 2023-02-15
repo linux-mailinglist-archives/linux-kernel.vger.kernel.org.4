@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDFD697F16
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C666697F1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 16:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjBOPEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 10:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S229823AbjBOPHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 10:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjBOPEu (ORCPT
+        with ESMTP id S229509AbjBOPHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 10:04:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C25268E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676473440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AA0HfJf0ghZRpE+IyHbKXXgsU5oTF5v1rWycRLY8ctI=;
-        b=S+MTpMOxEheghjNxO1Z6uAuoLhkBU9vLuY/0XQjL6ZecH46ea60JCw/qiMyQjbVE8OiwU0
-        StSFPYZ0qwEQKePH3i5ba2PgeiiV5ErrcGeb2KulX+KykXIYCwOwxOR78qAS9jp/WPkav0
-        +0S/9XgHR5H/byUTkc5m89wzkMrCE2Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-353-waR7bzIWP4Swo5jl6ha6hw-1; Wed, 15 Feb 2023 10:03:55 -0500
-X-MC-Unique: waR7bzIWP4Swo5jl6ha6hw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 15 Feb 2023 10:07:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9151BD7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 07:07:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F21C719705B7;
-        Wed, 15 Feb 2023 15:03:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 32E6F40CF8EA;
-        Wed, 15 Feb 2023 15:03:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com>
-References: <CAJfpegshWgUYZLc5v-Vwf6g3ZGmfnHsT_t9JLwxFoV8wPrvBnA@mail.gmail.com> <20230214171330.2722188-1-dhowells@redhat.com> <20230214171330.2722188-6-dhowells@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v14 05/17] overlayfs: Implement splice-read
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45D2EB81D06
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 15:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F33C433EF;
+        Wed, 15 Feb 2023 15:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676473626;
+        bh=g4lVOohaJiHCnZenvdv47LjjxECvnXyXGuo9zGit+Hc=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=U626YwjyunoFDLPBetDBtXBER9WrtslNZG1WXf7eiEWLOK3IMbKE3DGHc33maLCQN
+         SlBbj4TFH6H5wlS/S7C0KoVhxzTC+cg7AH+H/qacpmlqdGfW0QTTCzb2x4As7gLuDU
+         qq7mM/LFtECDemKhpyB+pPObFOIxt506s27cYear5N4CeQvtcy3zN7CA8dpYb1cK31
+         ghpDAfPrGd0Jg1PTHzo7P88/LbfFO5w75xYOoNIR/nInYWKu8pH/LYZvZ/PWqJIg5a
+         8wkIO6mvVYt968oFGD6ZAq6B/gr0pi8frSPFJ2PoOuR0Ciioy0CtQ0dNnQbae7Nw9P
+         ORmvh2woerw1w==
+Message-ID: <cf7eae6b-61ea-accb-f981-023fb022919c@kernel.org>
+Date:   Wed, 15 Feb 2023 23:07:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3367218.1676473410.1@warthog.procyon.org.uk>
-Date:   Wed, 15 Feb 2023 15:03:30 +0000
-Message-ID: <3367219.1676473410@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     yonggil.song@samsung.com,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>
+References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p2>
+ <20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p2>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH v1] f2fs: fix uninitialized skipped_gc_rwsem
+In-Reply-To: <20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,18 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miklos Szeredi <miklos@szeredi.hu> wrote:
+On 2023/2/15 10:48, Yonggil Song wrote:
+> When f2fs skipped a gc round during victim migration, there was a bug which
+> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
+> was not initialized. It fixes the bug by correctly initializing the
+> skipped_gc_rwsem inside the gc loop.
 
-> > +       ret = -EINVAL;
-> > +       if (in->f_flags & O_DIRECT &&
-> > +           !(real.file->f_mode & FMODE_CAN_ODIRECT))
-> > +               goto out_fdput;
+It makes sense to me.
+
 > 
-> This is unnecessary, as it was already done in ovl_real_fdget() ->
-> ovl_real_fdget_meta() -> ovl_change_flags().
+> Fixes: d147ea4adb96 ("f2fs: introduce f2fs_gc_control to consolidate f2fs_gc parameters")
 
-Does that mean ovl_read_iter() and ovl_write_iter() shouldn't be doing it,
-then?
+How does this commits introduce the bug?
 
-David
+Thanks,
 
+> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index b22f49a6f128..81d326abaac1 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>   				prefree_segments(sbi));
+>   
+>   	cpc.reason = __get_cp_reason(sbi);
+> -	sbi->skipped_gc_rwsem = 0;
+>   gc_more:
+> +	sbi->skipped_gc_rwsem = 0;
+>   	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
+>   		ret = -EINVAL;
+>   		goto stop;
