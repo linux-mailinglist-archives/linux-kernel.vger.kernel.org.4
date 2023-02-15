@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1546985C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF906985CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 21:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjBOUnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 15:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229674AbjBOUoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 15:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBOUnW (ORCPT
+        with ESMTP id S229462AbjBOUoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:43:22 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF2E2A6CB;
-        Wed, 15 Feb 2023 12:43:21 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-16cc1e43244so164137fac.12;
-        Wed, 15 Feb 2023 12:43:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bt0frRzR+llEQZaK/DO0XkpInRvQORs9L/8JhGVHFqc=;
-        b=H0P5SrNgWQDhOhHB5wK9a26PoCTHS4iAa6UiJwk3qhuRC6uSWB8aR1D2WTGF1rHii4
-         8nEhq98+HZwX/WkQmni1GMQAkLk/vV5ekk+KUqjp6k8hm8QFa+S6nHoOV9Tb+B7f+C4U
-         S5mv0tm5HRdg4uX6ZJY/U+6RRDo42BSa7f9df2f0br4K11ULEj33imGP1s07o2oL4Har
-         4UlU38a6qjxdOBvbYVoFYXWyG5ASgWfjJv+bMQp+jCfD/b01qfhlZ/0s1hodqnY+2NLj
-         WdXMRnQif6YUn0eQ0kwzK7FX6fl8DDvwL6zJ32e+d91I4U7J26kJsAvNTwLwsKyVIA0J
-         h/qg==
-X-Gm-Message-State: AO0yUKWM5ng5MuEl5ZBqAdyAlNPUddH/b29ALdveKLDDPJI7jkeYV6c0
-        9bwUw7Fdo0lhTtp4MQfiOQ==
-X-Google-Smtp-Source: AK7set/50GBdop8VIc7s3EAxwGBGWbyNcA539gq34/FMTl1ZDlaTwOVNjvWSnEXsfwQb/NQwOO/gYw==
-X-Received: by 2002:a05:6870:c0c6:b0:16d:f177:1a1a with SMTP id e6-20020a056870c0c600b0016df1771a1amr1659946oad.46.1676493800394;
-        Wed, 15 Feb 2023 12:43:20 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p1-20020a056870a54100b0015f83e16a10sm7374482oal.44.2023.02.15.12.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 12:43:20 -0800 (PST)
-Received: (nullmailer pid 521661 invoked by uid 1000);
-        Wed, 15 Feb 2023 20:43:18 -0000
-Date:   Wed, 15 Feb 2023 14:43:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v6 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert
- to DT schema
-Message-ID: <20230215204318.GA517744-robh@kernel.org>
-References: <cover.1676323692.git.daniel@makrotopia.org>
- <f4b378f4b19064df85d529973ed6c73ae7aa9f2d.1676323692.git.daniel@makrotopia.org>
+        Wed, 15 Feb 2023 15:44:01 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AB32A6CB;
+        Wed, 15 Feb 2023 12:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Reply-To:Content-ID:Content-Description;
+        bh=FkpPjBi+rHVjTdLlMQGMpiIrvag580LeZ4r5zllWXIw=; b=S7CwLmDWMdsBaeDdmmbE94Fd6r
+        YfnYg+wWyh2JTR8ajXhvmZQpSFwyJXM2tieQ/vmRLetW2L6fFfs5bgn9oHJtXvLHWx1Bje+Q9xKk0
+        WksNFzH3FZkNuIXlzQELhdlArMi+ZI3cCllEPs6N7oRw3d65tq/lfUUWvoPA1z0p5Pzx0L9SPsYcF
+        DoA8xxwwH4AYCjqbVeMbfrwRI4NG+ZczyDV5RCL/S/ws/7eNG67oaKlE3epRsTydOV66QDCBlp6cT
+        0q4+607bU2xELjgHUKGGiNyS6Wtu54nJ2Usz9uqDVUs2FmFAYcfoC44w2YbFOJWnCgXqHS4r7Kk66
+        WWo0Znvw==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+        (Exim 4.94.2)
+        (envelope-from <bage@debian.org>)
+        id 1pSOd6-002jOy-4V; Wed, 15 Feb 2023 20:43:52 +0000
+Message-ID: <aefc027c-e330-c117-87d2-3ea3023f610e@debian.org>
+Date:   Wed, 15 Feb 2023 21:43:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4b378f4b19064df85d529973ed6c73ae7aa9f2d.1676323692.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 2/5] dt-bindings: hwlock: sun6i: Add #hwlock-cells to
+ example
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+References: <20230215203711.6293-1-bage@debian.org>
+ <20230215203711.6293-3-bage@debian.org>
+ <20230215204026.318d4b2d@slackpad.lan>
+From:   Bastian Germann <bage@debian.org>
+In-Reply-To: <20230215204026.318d4b2d@slackpad.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Debian-User: bage
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 09:34:43PM +0000, Daniel Golle wrote:
-> Convert mediatek,sgmiiisys bindings to DT schema format.
-> Add maintainer Matthias Brugger, no maintainers were listed in the
-> original documentation.
-> As this node is also referenced by the Ethernet controller and used
-> as SGMII PCS add this fact to the description.
+Am 15.02.23 um 21:40 schrieb Andre Przywara:
+> On Wed, 15 Feb 2023 21:37:07 +0100
+> Bastian Germann <bage@debian.org> wrote:
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  .../arm/mediatek/mediatek,sgmiisys.txt        | 27 ----------
->  .../arm/mediatek/mediatek,sgmiisys.yaml       | 49 +++++++++++++++++++
->  2 files changed, 49 insertions(+), 27 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
+> Hi,
+> 
+>> The dt-bindings tools will compile the yaml dt examples
+>> and this prevents an error about this node not existing.
+> 
+> This needs to be part of patch 1/5, otherwise it will break
+> bisecting. Just squash the two patches together.
 
-If you respin or as a follow-up, can you move this to bindings/clock/?
+Is this also okay with 1/5 already being applied in linux-next?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> Cheers,
+> Andre
+> 
+>> Signed-off-by: Bastian Germann <bage@debian.org>
+>> ---
+>>   .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml          | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> index 01b1bbb3061f..38478dad8b25 100644
+>> --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
+>> @@ -48,5 +48,6 @@ examples:
+>>           reg = <0x01c18000 0x1000>;
+>>           clocks = <&ccu CLK_BUS_SPINLOCK>;
+>>           resets = <&ccu RST_BUS_SPINLOCK>;
+>> +        #hwlock-cells = <1>;
+>>       };
+>>   ...
+> 
+
