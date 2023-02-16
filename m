@@ -2,92 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12154699BD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE30699BDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjBPSF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S230247AbjBPSGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjBPSFz (ORCPT
+        with ESMTP id S230243AbjBPSGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:05:55 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0560A4D626
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:05:55 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id j12so711394ila.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:05:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676570754;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zIsYWDtVn/3TTL69Bzc66uketslFLcUy54JhmTT+JsU=;
-        b=YDfyJNlJhFuVsi5yF2knqnejDfZKEcdNXMoVthiu5YT4Pt1MAw0C1kGdMiEujqgeCz
-         2ckOnKfiI5V0HtfMoBQ/rosBX4a29a/aq/qEKyZhKHfuTo5sdJMVkcBZbLXVofE0YoV1
-         jLl7f6Ddiuf9t4n3ujCJ9OiWbg1F4q3WWnwiAvJh6rVL1Ih6FkjyL/Y/XEd26fx7ibLP
-         3G1IUmu2eBDn5BWKq5zvdFWJeh/CGYLyGAPBThKF94qanJz75EYrIkcD4IsdCWgTbCV6
-         8KKySpD+LI0jztCN8kW410aNWpvYIDH6KPx/zRG5F5L7/657CB0w1IIwbDT4JKfkX5DE
-         zEDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676570754;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zIsYWDtVn/3TTL69Bzc66uketslFLcUy54JhmTT+JsU=;
-        b=6LsdfZ2pbpaiKCH+ye2sm8XoDBm68Afh1GoJMnA7fx5q3GpnRmA4L5Ri8yV9WFqT2Q
-         BpUrGCR0zeB8boK9W/5p5NSWXIeRYtCnHO6YvCBvKDnjb4Oy++OYKeL6hVgF3KnnOeUB
-         8OJ/S2OgWIKnxSw5UiskFfjtvPrT5Kqvmvv2/I6QitSfZPnmeexbH28LaVaP9Rr2BRlD
-         3k5aPC6YQPAoWp8tjR0etbG2XrJ5TrzWqkPgSeALCUcC71aR7oeCD5Duuovmj+9shPTF
-         bvzyWcz+T4Bod+eWAdFFfwfYeL+EiKLMFswJSDS0KTTAOA87OaDfWW6m9YXH3K6aItla
-         BrDQ==
-X-Gm-Message-State: AO0yUKVdphdxmX65U2F8fiI1rlM1YDArfck/ERobs5ecdA/gXruJ7JbP
-        ID0XvHvxQDKQnGS1x/n0OEHBKaXQ7p+YjrPt
-X-Google-Smtp-Source: AK7set/qdcxpQq9vu6N4oQCRsg1sP5mrb5w8zI/Qkzuj6zrOvq0fuQLc14NaSHZt3EBSFonMmbLvsQ==
-X-Received: by 2002:a05:6e02:e0e:b0:314:16ea:103b with SMTP id a14-20020a056e020e0e00b0031416ea103bmr5455498ilk.3.1676570754273;
-        Thu, 16 Feb 2023 10:05:54 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id x12-20020a92d30c000000b0031406a0e1c0sm613738ila.57.2023.02.16.10.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 10:05:53 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     ming.lei@redhat.com, Jinke Han <hanjinke.666@bytedance.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev
-In-Reply-To: <20230216032250.74230-1-hanjinke.666@bytedance.com>
-References: <20230216032250.74230-1-hanjinke.666@bytedance.com>
-Subject: Re: [PATCH] block: Fix io statistics for cgroup in throttle path
-Message-Id: <167657075356.383926.13498048587945400623.b4-ty@kernel.dk>
-Date:   Thu, 16 Feb 2023 11:05:53 -0700
+        Thu, 16 Feb 2023 13:06:07 -0500
+X-Greylist: delayed 5630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Feb 2023 10:06:01 PST
+Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7972B4D632;
+        Thu, 16 Feb 2023 10:06:01 -0800 (PST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1676570759; bh=h/RD0fpEx2CpDUljHxUoo7rG/kbdPtYbs9Wh4An/URk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fXKa8EEdneUshdOIHIUvGSnB0wJhszNzXkS6L/A1S3Eg04chpoTpnp34UdfTZR/Vq
+         QoYSTH32cTGCNpT583i3nQ96GlvufAx+oRmJjW1wo25OgVXbnyXSZC74tIKHoxV/Yh
+         /g0lmj2w0LuuKYjyg3FF/Z01BNIarEjxmHIWDGKOiZhAcNiW5RgGZt48tJqiGWxzvo
+         jWZ9usp576tzE8zbQjyMQny9jHpzNx1vEoL+LRjpeaxSV1X4aOTxYQlzPVny2YAjHT
+         w07884k7CDBfiE8xr9cQjvNZNkSxkppN7k0bnVkIYt5GAjlErNDq0wQseOic2rNi1C
+         COTC/0EWabzqA==
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 1/1] wifi: ath9k: hif_usb: fix memory leak of remain_skbs
+In-Reply-To: <5d67552f-88dd-7bbe-ebeb-888d1efad985@ispras.ru>
+References: <20230212145238.123055-1-pchelkin@ispras.ru>
+ <20230212145238.123055-2-pchelkin@ispras.ru> <87a61dsi1n.fsf@toke.dk>
+ <5d67552f-88dd-7bbe-ebeb-888d1efad985@ispras.ru>
+Date:   Thu, 16 Feb 2023 19:05:59 +0100
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87ttzlqyd4.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fedor Pchelkin <pchelkin@ispras.ru> writes:
 
-On Thu, 16 Feb 2023 11:22:50 +0800, Jinke Han wrote:
-> In the current code, io statistics are missing for cgroup when bio
-> was throttled by blk-throttle. Fix it by moving the unreaching code
-> to submit_bio_noacct_nocheck.
-> 
-> 
+> On 16.02.2023 19:15, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>  > Erm, does this actually fix the leak? AFAICT, ath9k_hif_usb_dev_deinit=
+()
+>  > is only called on the error path of ath9k_hif_usb_firmware_cb(), not
+>  > when the device is subsequently torn down in
+>  > ath9k_htc_disconnect_device()?
+>
+> ath9k_hif_usb_dev_deinit() is also called inside
+> ath9k_hif_usb_disconnect().
 
-Applied, thanks!
+No it's not, as of:
 
-[1/1] block: Fix io statistics for cgroup in throttle path
-      commit: 0f7c8f0f7934c389b0f9fa1f151e753d8de6348f
+f099c5c9e2ba ("wifi: ath9k: Fix use-after-free in ath9k_hif_usb_disconnect(=
+)")
 
-Best regards,
--- 
-Jens Axboe
+I guess you're looking at an older tree? Please base your patches on an
+up-to-date ath-next tree.
 
+> I see it to be the only place wherehif_dev is freed (apart from an
+> early error path), so the current patchimplementation actually fixes
+> the leak. However, as you have noticed, itis not probably the best
+> place to put the deallocation: we need to clearthe cached skb not only
+> when freeing the device but in urbs deallocationcase, too - in order
+> to avoid its irrelevant processing later.
+>
+>  > I think the right place to put this is probably inside
+>  > ath9k_hif_usb_dealloc_urbs()? That gets called on USB suspend as well,
+>  > but it seems to me that if we're suspending the device to an extent th=
+at
+>  > we're deallocating the urbs, we should be clearing out the cached skb =
+in
+>  > remain_skb anyway?
+>  >
+>  > -Toke
+>
+> Thank you for the advice! As I can see, remain_skb makes sense when
+> receiving two consecutive urbs which are logically linked together, i.e.
+> a specific data field from the first skb indicates a cached skb to be
+> allocated, memcpy'd with some data and subsequently processed in the
+> next call to rx callback (see 6ce708f54cc8 ("ath9k: Fix out-of-bound
+> memcpy in ath9k_hif_usb_rx_stream")). Urbs deallocation, I suppose,
+> makes that link irrelevant.
+>
+> So I agree with you that remain_skb freeing should be done when
+> deallocating the urbs. I would just place that specifically into
+> ath9k_hif_usb_dealloc_rx_urbs() as remain_skb is associated with rx
+> urbs.
 
+SGTM.
 
+> RX_STAT_INC(hif_dev, skb_dropped), I think, should be also called when
+> freeing afilled remain_skb?
+
+Well, if this is mostly something that happens if the device is going
+away I'm not sure that anyone will actually see that; but I suppose if
+it happens on suspend, the stat increase may be useful, and it shouldn't
+hurt otherwise, so sure, let's add that :)
+
+-Toke
