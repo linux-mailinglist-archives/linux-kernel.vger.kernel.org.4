@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CFF698F6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF17698F6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjBPJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S229944AbjBPJNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjBPJMZ (ORCPT
+        with ESMTP id S230017AbjBPJNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:12:25 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6357D42BFC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:12:19 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id fj20so1872558edb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O8xTaSVWV8eCcA3aGYZTtzHQygaT6P6tleF9HZfYaVg=;
-        b=dE/QylYHy5/d+CtAyaD0GfhSEd/r4N9dWV2ka4PTSahYakJz1OOeGqyBUu1Sk4yXEP
-         nlaR4zg2QYHUrZcreq3MQ5zC3zPDhLpWxoqMeRQpLIxi2Sui6ue2gv2G/MChJveAMBVb
-         Nbf7v83FDvUoN0LUp41sk2r8jlVJeHkl9ZIYh8IxUMnt4ovKEWvfiCqFwWTnJbT3O9PW
-         u8jsPZOF+UEIbpgfSy8muk/JSShBHPXTXxqytVY7uWMywFcGdqBfr7JLkpZSWuDT0bji
-         3Y2QJL5bGeZVI3eJhYt202NRDZGrwuPaE6di9N/zXMONonRl88Cjw6hJ2IAElR5wb1qm
-         wyQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8xTaSVWV8eCcA3aGYZTtzHQygaT6P6tleF9HZfYaVg=;
-        b=7y/BZ/rIJsqm7gVrf/29qLRaMkqbE66GldYXP86MR8Jw78pVeJ+pel3Bs0hz4RGji/
-         zp9NAPtT7ZpvXVlfqr+XNTh4fFir75AP7yA57ASGtHUfCXFKaC9/RasEG6EIE2u0ciP6
-         W0MsWXN8E6z5NNVo58nDtqjMlEIdVkH3arCSQ20v5kRDOhIRisMHE+zzD25+aG0KrO75
-         4f/Vswdw96X1C+Wm4Nm1jotIjOktEyuBquKU79Go1NcEVmIGR8Xfx2PgLqrlky/nLt0q
-         TzXRjQL6UohDLBE+PfxnQVimaasP1h0wIn8ftv+L2Z2rtGno2vly/PuUTRWivGgHzvjS
-         R7uw==
-X-Gm-Message-State: AO0yUKX4lPncTwCVkzqD4v4CRYCUBuEo69EADtEWC3lyg5YcKCP78g54
-        wCLB04ySeWu/vuN47FB7YDzyhw==
-X-Google-Smtp-Source: AK7set8kMK8vzlUIrZY76WpBhXiwWpWpNnBam4ADmn49dwO8Wg9z5RT7JiA1OUaJ8X6cNOiBTcHsJw==
-X-Received: by 2002:aa7:c497:0:b0:4aa:a8e7:c04c with SMTP id m23-20020aa7c497000000b004aaa8e7c04cmr5680600edq.21.1676538737890;
-        Thu, 16 Feb 2023 01:12:17 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a25-20020a509b59000000b004acbda55f6bsm536899edj.27.2023.02.16.01.12.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 01:12:17 -0800 (PST)
-Message-ID: <9c1f4d0e-83c9-014e-bdb1-38b4b0fb2bbf@linaro.org>
-Date:   Thu, 16 Feb 2023 10:12:15 +0100
+        Thu, 16 Feb 2023 04:13:07 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2065.outbound.protection.outlook.com [40.107.102.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2035D13D61;
+        Thu, 16 Feb 2023 01:13:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZDU/nsHagMRmZIIWSF0pR11X4rVeIv7YBD+JwVad6sncv6qzJvZ6JqUoSjY+NDV68WO3V9Dmy6VWrvZy4nVZsXdzjmdw2QGm1/dWMGlH3gTNsJjWv3kqMIcNZBh5xXjdoQgxvlmXzLUnGjJrlsQ8iuOHabrB6z1rU6a2hRRBAoeFTDgwfPsBYRQOjyah1+yFa0al6l/mwGS0n3CqS9Sq6cLPOpQ1546u8/qlGD+gOopWjG4orUow3E++Hszbde2qfYgyI5gxXHzdHIIMCFweeD3p8gdvfOnQ2Gu7ZVaiOWK99DnUeFfXw/HYNLa+w02rXGpxYy4caR/6+5cSMEkjxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=klV0qTySTJ3ALfy+/Vq5u2Y+rjoQM8Pvf4C5WzfoIa4=;
+ b=B6Nmb7o/BU463p6CVdNrhqH/Z0FYVkKpnmp2A7v37aGhmD+85yezkPnNUHuhOER9xcJlkQb3c+ZE1UDKjOq6yXQ431VmK2PE2jPZOGsgf+JRjECfPm0wXKij/ylVv79fQ3V37buMiBXoALS11KVSjoUZCpBQJPT4tkJloFfxxDjVuqMJ3L0VzNVr0ms/7LZY29CSVNSAN7DWmZPC9lZwj/AnZSqIvvJWZU3nok8FmT/V0h4i6aOlzuhsT0JDZ9Gt/39pt5EmZtkKnJYIhRaXSvJBVx7uzaJFZOhT/ATfQ9P2qESwTBBb/J9Qyf+qCJHq4aG/H/oPZuRAvSfFDYEQuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=klV0qTySTJ3ALfy+/Vq5u2Y+rjoQM8Pvf4C5WzfoIa4=;
+ b=fJWJ9seQ4ByT7zhlciU23PlqEiA3aLQRbDZQQHqX4OUOPnN3QCKkN6vJXBsOelZKi1m1n8GYcxU07y11+S9hOmgOF+2LutTPQFfun4qpIaOC66iH5NCO8tDfkxgwHWAyr/8dHOH+bnn2upZUQXWZRju/iRDjXFZbFcWnfGp820w=
+Received: from BN7PR06CA0048.namprd06.prod.outlook.com (2603:10b6:408:34::25)
+ by CH0PR12MB5073.namprd12.prod.outlook.com (2603:10b6:610:e0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Thu, 16 Feb
+ 2023 09:13:03 +0000
+Received: from BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::ac) by BN7PR06CA0048.outlook.office365.com
+ (2603:10b6:408:34::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
+ Transport; Thu, 16 Feb 2023 09:13:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT100.mail.protection.outlook.com (10.13.177.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6111.13 via Frontend Transport; Thu, 16 Feb 2023 09:13:03 +0000
+Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Feb
+ 2023 03:13:00 -0600
+Message-ID: <0bc626c8-492b-78ab-b054-0ae9f40cb967@amd.com>
+Date:   Thu, 16 Feb 2023 10:12:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek
- RT5739
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] i2c: xiic: Remove some dead code
 Content-Language: en-US
-To:     cy_huang@richtek.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lgirdwood@gmail.com, u0084500@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <1676426457-1389-1-git-send-email-cy_huang@richtek.com>
- <1676426457-1389-2-git-send-email-cy_huang@richtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1676426457-1389-2-git-send-email-cy_huang@richtek.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Michal Simek <michal.simek@xilinx.com>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
+References: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT100:EE_|CH0PR12MB5073:EE_
+X-MS-Office365-Filtering-Correlation-Id: 280f2d5f-b161-4e25-bb46-08db0ffe01f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5xvy8Kl9YaxR6Ym2Ja26Xx7zbaqcBIGcQZPmDeQk8s5oGF/fkWcqKi0UCVw4934WfD5GcHiMv5uRIrTH4GZgzNP+nkyir0LQHN0ALAqTJF6DyiuQTHPSe0JOG3bNWibTWld0g21ezG14eh8vwRr9hqdf8v5D5ZuzERBecyb+L4aK0iLyvLcdkmnw2uTwZrZTC/C87f1E0XNXOD2u968RKIL0PYF8kdfRBBDrBY/3lNVj1IlRmlyM+Y17VNm1SjZuT9XvvDac5PFG4SsO2Apl42aCym4+0+bD7Uj9/2bBBo5kUhKFI1sosWsOWXdNqqfi/s4f6SNx7enITsXjIfByoZC0h+HG7mtcf5lITPmORjh8pHZf9VmJZ4VhBSOTelRRJ/fb7iWMEzR6T74fiI/oNTtn43pctmkV3qEcaS1z8RocZrdy5CtGmtVXmVYYM5GRIaJldeC9VMOSnPw477183o2eLTado4LFN5VWv4XGW0V6HGDKlX5fr9IPO6AQCtbgLz/twZZvGVBUmvSH1HMG1J04S2gdyH3jUGXfFX3Ps7xIv9gw6LSev6Cz4E91JhaeGh4gK3e1K9+Jr/a6HPqgMbs4jW6dQvmpNvSG7lOOaixXcJSC7hqJdmcXBdUZaNGto4CpAOMTtEYjrZOVoaJHbrLH2ldnpkrTIHkJFBN/LWRdES5lA4nK8Lto+izANfl9zh2w75X5NLfRq6vjT3+AezOPxMjvbinGjqJqZ2izpJ1rHhRyz4u0S1EjebbsTdkPBYQCGn3bdYYTwdCqTWs+TQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199018)(40470700004)(36840700001)(46966006)(110136005)(5660300002)(44832011)(4744005)(36860700001)(31696002)(2906002)(86362001)(40460700003)(6666004)(40480700001)(36756003)(53546011)(186003)(26005)(16526019)(478600001)(2616005)(336012)(82310400005)(70586007)(4326008)(356005)(8676002)(41300700001)(82740400003)(31686004)(81166007)(83380400001)(54906003)(70206006)(8936002)(316002)(47076005)(16576012)(426003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 09:13:03.1514
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 280f2d5f-b161-4e25-bb46-08db0ffe01f4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5073
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2023 03:00, cy_huang@richtek.com wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add the binding document for Richtek RT5739.
 
-Subject: drop second/last, redundant "bindings for". The "dt-bindings"
-prefix is already stating that these are bindings.
 
+On 2/15/23 11:38, Christophe JAILLET wrote:
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> wait_for_completion_timeout() never returns negative value.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  .../bindings/regulator/richtek,rt5739.yaml         | 80 ++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
+>   drivers/i2c/busses/i2c-xiic.c | 4 ----
+>   1 file changed, 4 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
-> new file mode 100644
-> index 00000000..7dc4f78
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/richtek,rt5739.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Richtek RT5739 2.4MHz 3.5A Step-Down Converter
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  The RT5739 is a step-down switching voltage regulator that delivers a
-> +  digitally programmable output from an input voltage supply of 2.5V to 5.5V.
-> +  The output voltage is programmed through an I2C interface capable of
-> +  operating up to 3.4MHz.
-> +
-> +  Using a proprietary architecture with synchronous rectification, the RT5739
-> +  is capable of delivering 3.5A continuously at over 80% efficiency,
-> +  maintaining that efficiency at load current as low as 10mA. The regulator
-> +  operates at a normal fixed frequency of 2.4MHz, which reduces the value of
-> +  the external components. 
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index 8503b5016aaf..5543f372ae60 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -1038,10 +1038,6 @@ static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+>                  i2c->rx_msg = NULL;
+>                  i2c->nmsgs = 0;
+>                  err = -ETIMEDOUT;
+> -       } else if (err < 0) {   /* Completion error */
+> -               i2c->tx_msg = NULL;
+> -               i2c->rx_msg = NULL;
+> -               i2c->nmsgs = 0;
+>          } else {
+>                  err = (i2c->state == STATE_DONE) ? num : -EIO;
+>          }
+> --
+> 2.34.1
+> 
 
-Can we drop the marketing from kernel? Last part of sentence is not
-related to this submission at all. The internal frequency also looks
-unrelated to the topic...
+Reviewed-by: Michal Simek <michal.simek@amd.com>
 
-> Additional output capacitance can be added to
-> +  improve regulation during load transients without affecting stability.
-> +
-> +allOf:
-> +  - $ref: regulator.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - richtek,rt5739
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  enable-gpios:
-> +    maxItems: 1
-> +
-> +  richtek,vsel-active-high:
-> +    description: |
-> +      If property is present, use the 'VSEL1' register group for buck control.
-> +      Else, use the 'VSEL0' register group. This depends on external hardware
-> +      'VSEL' pin connecton.
-> +    type: boolean
-> +
-> +  regulator-allowed-modes:
-> +    description: |
-> +      buck allowed operating mode
-> +        0: Auto PFM/PWM mode
-> +        1: Forced PWM mode
-> +    maxItems: 2
-> +    items:
-> +      enum: [0, 1]
-
-So you always require two items? Thus I wonder what's the point of
-having it in DT? To skip the property entirely if none of the modes are
-allowed?
-
-
-Best regards,
-Krzysztof
-
+Thanks,
+Michal
