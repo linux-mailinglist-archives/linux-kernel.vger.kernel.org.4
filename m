@@ -2,333 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C61A698BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8CD698B8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjBPFVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S229513AbjBPFLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjBPFUt (ORCPT
+        with ESMTP id S229460AbjBPFLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:20:49 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFB643469
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:21 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id k9-20020a25bec9000000b00944353b6a81so864551ybm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/bIj4YrLTVPG3QwseSVPiqG0bxdZfORy7sIu/6u8O1k=;
-        b=kcrkMPk51QPn4U+Qy9PCMBVvz0+hngRjWyUVg3mDY5eCPo5kdNdGQXXAF5nSKjvtxI
-         ovQfwzu/2jGBzDo4t58Z0TFwD6xaqMMee+NhMptwfny7jSZBnt/+oKNA3aeQgGljd8sS
-         akXety944Mg3EUnDXa5SJO4Zw7aGeTPZtwigMyHbadec4ytdul9kOPOFJ5Xa+9QmQgoM
-         XeWGGTE6ollJyfe3sBlUvV2EFNH4AWaioDHTISUd5H/KMkPUAsjYGzb18bayjRFOkrs2
-         88EaIEp+Df0ZGeekcwiDAUNprBAPetgMpUou+tgl+Oy9Z03QrXgN/piqimqVkufqqcTw
-         xlTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/bIj4YrLTVPG3QwseSVPiqG0bxdZfORy7sIu/6u8O1k=;
-        b=DQhhhcQxTqFfKwjtkbtZ+npx3UhLA0Tn0hgwW5AgAjcXAzMwobubUJr919IreKbDwE
-         9AIQddKGd7MLyWfWru1d+xkQblxK2nvp+gdOelQoxm0oD3CaR1rqSti9JJB0Fy1S+AB/
-         T8pel0u3zVv1HkUWtNLcW+pzpPyt2lRTpEIUDKAhvIRVuKda5FnSoC09mxRXLa/1oDJV
-         w+p7+E1XAxwVz+Oic5JHmoRIwDuH7eNR1DtMmiLyP0PMxa6qSDUs9cKhwLI/bT4Yr/b2
-         lci9JcY8154OeRbDe+fPwN537do8c2dKCGcAg3wcUMu2uPTn4L/P6Xw4/dOuVw1/DZ8m
-         Es/A==
-X-Gm-Message-State: AO0yUKU3i4TBtYYC0OvXrl4HbxsBDSYjCsTkBBhNR0isRxQcYrz0OHMP
-        P4KNVfwRfIbuU8f9e596BLNciVDl94Y=
-X-Google-Smtp-Source: AK7set8myT7mAaWBlS7bx8SxyKn+Tp8Tz7m7loe5CFurrliPBtK4ZSRcKwf3y/QxM2DkFEVl7Wxm2+r0UC8=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f781:d5ed:1806:6ebb])
- (user=surenb job=sendgmr) by 2002:a0d:ea05:0:b0:52e:fbcd:e1b4 with SMTP id
- t5-20020a0dea05000000b0052efbcde1b4mr590898ywe.0.1676524759267; Wed, 15 Feb
- 2023 21:19:19 -0800 (PST)
-Date:   Wed, 15 Feb 2023 21:17:50 -0800
-In-Reply-To: <20230216051750.3125598-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20230216051750.3125598-1-surenb@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230216051750.3125598-36-surenb@google.com>
-Subject: [PATCH v3 35/35] mm: separate vma->lock from vm_area_struct
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        chriscli@google.com, axelrasmussen@google.com, joelaf@google.com,
-        minchan@google.com, rppt@kernel.org, jannh@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Suren Baghdasaryan <surenb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 00:11:16 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D94C3CE2F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676524275; x=1708060275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lNpZwY5k1fsJ7ohV4PumgaRLkPrWvdHzqXcI/gOW7Fk=;
+  b=Wv+jm4ij8xPW+E8v7hTGAyqJW65/+pK7u7o8vr43lX95WxV9xM3jj0RT
+   92Iuffc/UR6Hn0Gu3uoqU4xNBfaaS8NvwSgqpI4L7/Z+V7ONOlY9RXosN
+   F9ua8RVxDLgUcFl4pi+B/LEeF1xbeASkIMmqLghMiVw7PsXbFEtQM7rgR
+   AiSXo9Xt61FOPNUUTc5nmD+Z6uZA78e2kUW/rRSk2O+0EAtvpulv5Bf1V
+   jfdTK7EOc4cVYYO+6NThqhF1IoBdTRVDiP6awyPkwYGI9wOWyltW/xlbZ
+   WDGlHiY37C+CLhRBeoopmnQoC6jE+5wAtagSD5G7XGKy+es7FznP3RjEV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="315301315"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="315301315"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 21:11:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="619870333"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="619870333"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2023 21:11:09 -0800
+Date:   Wed, 15 Feb 2023 21:21:05 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+Message-ID: <20230216052105.GA20785@ranerica-svr.sc.intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+ <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
+ <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
+ <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
+ <xhsmhk00pqwap.mognet@vschneid.remote.csb>
+ <20230210183155.GA11997@ranerica-svr.sc.intel.com>
+ <8300f288-7157-5e2d-3bb3-badcffd15d34@arm.com>
+ <20230214064328.GA11859@ranerica-svr.sc.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214064328.GA11859@ranerica-svr.sc.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vma->lock being part of the vm_area_struct causes performance regression
-during page faults because during contention its count and owner fields
-are constantly updated and having other parts of vm_area_struct used
-during page fault handling next to them causes constant cache line
-bouncing. Fix that by moving the lock outside of the vm_area_struct.
-All attempts to keep vma->lock inside vm_area_struct in a separate
-cache line still produce performance regression especially on NUMA
-machines. Smallest regression was achieved when lock is placed in the
-fourth cache line but that bloats vm_area_struct to 256 bytes.
-Considering performance and memory impact, separate lock looks like
-the best option. It increases memory footprint of each VMA but that
-can be optimized later if the new size causes issues.
-Note that after this change vma_init() does not allocate or
-initialize vma->lock anymore. A number of drivers allocate a pseudo
-VMA on the stack but they never use the VMA's lock, therefore it does
-not need to be allocated. The future drivers which might need the VMA
-lock should use vm_area_alloc()/vm_area_free() to allocate the VMA.
+On Mon, Feb 13, 2023 at 10:43:28PM -0800, Ricardo Neri wrote:
+> On Mon, Feb 13, 2023 at 01:17:09PM +0100, Dietmar Eggemann wrote:
+> > On 10/02/2023 19:31, Ricardo Neri wrote:
+> > > On Fri, Feb 10, 2023 at 05:12:30PM +0000, Valentin Schneider wrote:
+> > >> On 10/02/23 17:53, Peter Zijlstra wrote:
+> > >>> On Fri, Feb 10, 2023 at 02:54:56PM +0000, Valentin Schneider wrote:
+> > >>>
+> > >>>> So something like have SD_PREFER_SIBLING affect the SD it's on (and not
+> > >>>> its parent), but remove it from the lowest non-degenerated topology level?
+> > >>>
+> > >>> So I was rather confused about the whole moving it between levels things
+> > >>> this morning -- conceptually, prefer siblings says you want to try
+> > >>> sibling domains before filling up your current domain. Now, balancing
+> > >>> between siblings happens one level up, hence looking at child->flags
+> > >>> makes perfect sense.
+> > >>>
+> > >>> But looking at the current domain and still calling it prefer sibling
+> > >>> makes absolutely no sense what so ever.
+> > >>>
+> > >>
+> > >> True :-)
+> > >>
+> > >>> In that confusion I think I also got the polarity wrong, I thought you
+> > >>> wanted to kill prefer_sibling for the assymetric SMT cases, instead you
+> > >>> want to force enable it as long as there is one SMT child around.
+> > > 
+> > > Exactly.
+> > > 
+> > >>>
+> > >>> Whichever way around it we do it, I'm thinking perhaps some renaming
+> > >>> might be in order to clarify things.
+> > >>>
+> > >>> How about adding a flag SD_SPREAD_TASKS, which is the effective toggle
+> > >>> of the behaviour, but have it be set by children with SD_PREFER_SIBLING
+> > >>> or something.
+> > >>>
+> > >>
+> > >> Or entirely bin SD_PREFER_SIBLING and stick with SD_SPREAD_TASKS, but yeah
+> > >> something along those lines.
+> > > 
+> > > I sense a consesus towards SD_SPREAD_TASKS.
+> > 
+> > Can you not detect the E-core dst_cpu case on MC with:
+> > 
+> > +       if (child)
+> > +               sds->prefer_sibling = child->flags & SD_PREFER_SIBLING;
+> > +       else if (sds->busiest)
+> > +               sds->prefer_sibling = sds->busiest->group_weight > 1;
+> 
+> Whose child wants the prefer_sibling setting? In update_sd_lb_stats(), it
+> is set based on the flags of the destination CPU's sched domain. But when
+> used in find_busiest_group() tasks are spread from the busiest group's
+> child domain.
+> 
+> Your proposed code, also needs a check for SD_PREFER_SIBLING, no?
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- include/linux/mm.h       | 23 ++++++-------
- include/linux/mm_types.h |  6 +++-
- kernel/fork.c            | 73 ++++++++++++++++++++++++++++++++--------
- 3 files changed, 74 insertions(+), 28 deletions(-)
+I tweaked the solution that Dietmar proposed:
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index cedef02dfd2b..96b18ef3bfa3 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -627,12 +627,6 @@ struct vm_operations_struct {
- };
- 
- #ifdef CONFIG_PER_VMA_LOCK
--static inline void vma_init_lock(struct vm_area_struct *vma)
--{
--	init_rwsem(&vma->lock);
--	vma->vm_lock_seq = -1;
--}
--
- /*
-  * Try to read-lock a vma. The function is allowed to occasionally yield false
-  * locked result to avoid performance overhead, in which case we fall back to
-@@ -644,17 +638,17 @@ static inline bool vma_start_read(struct vm_area_struct *vma)
- 	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
- 		return false;
- 
--	if (unlikely(down_read_trylock(&vma->lock) == 0))
-+	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
- 		return false;
- 
- 	/*
- 	 * Overflow might produce false locked result.
- 	 * False unlocked result is impossible because we modify and check
--	 * vma->vm_lock_seq under vma->lock protection and mm->mm_lock_seq
-+	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
- 	 * modification invalidates all existing locks.
- 	 */
- 	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
--		up_read(&vma->lock);
-+		up_read(&vma->vm_lock->lock);
- 		return false;
- 	}
- 	return true;
-@@ -663,7 +657,7 @@ static inline bool vma_start_read(struct vm_area_struct *vma)
- static inline void vma_end_read(struct vm_area_struct *vma)
- {
- 	rcu_read_lock(); /* keeps vma alive till the end of up_read */
--	up_read(&vma->lock);
-+	up_read(&vma->vm_lock->lock);
- 	rcu_read_unlock();
- }
- 
-@@ -681,9 +675,9 @@ static inline void vma_start_write(struct vm_area_struct *vma)
- 	if (vma->vm_lock_seq == mm_lock_seq)
- 		return;
- 
--	down_write(&vma->lock);
-+	down_write(&vma->vm_lock->lock);
- 	vma->vm_lock_seq = mm_lock_seq;
--	up_write(&vma->lock);
-+	up_write(&vma->vm_lock->lock);
- }
- 
- static inline void vma_assert_write_locked(struct vm_area_struct *vma)
-@@ -720,6 +714,10 @@ static inline void vma_mark_detached(struct vm_area_struct *vma,
- 
- #endif /* CONFIG_PER_VMA_LOCK */
- 
-+/*
-+ * WARNING: vma_init does not initialize vma->vm_lock.
-+ * Use vm_area_alloc()/vm_area_free() if vma needs locking.
-+ */
- static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- {
- 	static const struct vm_operations_struct dummy_vm_ops = {};
-@@ -729,7 +727,6 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- 	vma->vm_ops = &dummy_vm_ops;
- 	INIT_LIST_HEAD(&vma->anon_vma_chain);
- 	vma_mark_detached(vma, false);
--	vma_init_lock(vma);
- }
- 
- /* Use when VMA is not part of the VMA tree and needs no locking */
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 212e7f923a69..30d4f867ae56 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -471,6 +471,10 @@ struct anon_vma_name {
- 	char name[];
- };
- 
-+struct vma_lock {
-+	struct rw_semaphore lock;
-+};
-+
- /*
-  * This struct describes a virtual memory area. There is one of these
-  * per VM-area/task. A VM area is any part of the process virtual memory
-@@ -510,7 +514,7 @@ struct vm_area_struct {
- 
- #ifdef CONFIG_PER_VMA_LOCK
- 	int vm_lock_seq;
--	struct rw_semaphore lock;
-+	struct vma_lock *vm_lock;
- 
- 	/* Flag to indicate areas detached from the mm->mm_mt tree */
- 	bool detached;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index d0999de82f94..a152804faa14 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -451,13 +451,49 @@ static struct kmem_cache *vm_area_cachep;
- /* SLAB cache for mm_struct structures (tsk->mm) */
- static struct kmem_cache *mm_cachep;
- 
-+#ifdef CONFIG_PER_VMA_LOCK
-+
-+/* SLAB cache for vm_area_struct.lock */
-+static struct kmem_cache *vma_lock_cachep;
-+
-+static bool vma_lock_alloc(struct vm_area_struct *vma)
-+{
-+	vma->vm_lock = kmem_cache_alloc(vma_lock_cachep, GFP_KERNEL);
-+	if (!vma->vm_lock)
-+		return false;
-+
-+	init_rwsem(&vma->vm_lock->lock);
-+	vma->vm_lock_seq = -1;
-+
-+	return true;
-+}
-+
-+static inline void vma_lock_free(struct vm_area_struct *vma)
-+{
-+	kmem_cache_free(vma_lock_cachep, vma->vm_lock);
-+}
-+
-+#else /* CONFIG_PER_VMA_LOCK */
-+
-+static inline bool vma_lock_alloc(struct vm_area_struct *vma) { return true; }
-+static inline void vma_lock_free(struct vm_area_struct *vma) {}
-+
-+#endif /* CONFIG_PER_VMA_LOCK */
-+
- struct vm_area_struct *vm_area_alloc(struct mm_struct *mm)
- {
- 	struct vm_area_struct *vma;
- 
- 	vma = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
--	if (vma)
--		vma_init(vma, mm);
-+	if (!vma)
-+		return NULL;
-+
-+	vma_init(vma, mm);
-+	if (!vma_lock_alloc(vma)) {
-+		kmem_cache_free(vm_area_cachep, vma);
-+		return NULL;
-+	}
-+
- 	return vma;
- }
- 
-@@ -465,24 +501,30 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
- {
- 	struct vm_area_struct *new = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
- 
--	if (new) {
--		ASSERT_EXCLUSIVE_WRITER(orig->vm_flags);
--		ASSERT_EXCLUSIVE_WRITER(orig->vm_file);
--		/*
--		 * orig->shared.rb may be modified concurrently, but the clone
--		 * will be reinitialized.
--		 */
--		data_race(memcpy(new, orig, sizeof(*new)));
--		INIT_LIST_HEAD(&new->anon_vma_chain);
--		vma_init_lock(new);
--		dup_anon_vma_name(orig, new);
-+	if (!new)
-+		return NULL;
-+
-+	ASSERT_EXCLUSIVE_WRITER(orig->vm_flags);
-+	ASSERT_EXCLUSIVE_WRITER(orig->vm_file);
-+	/*
-+	 * orig->shared.rb may be modified concurrently, but the clone
-+	 * will be reinitialized.
-+	 */
-+	data_race(memcpy(new, orig, sizeof(*new)));
-+	if (!vma_lock_alloc(new)) {
-+		kmem_cache_free(vm_area_cachep, new);
-+		return NULL;
- 	}
-+	INIT_LIST_HEAD(&new->anon_vma_chain);
-+	dup_anon_vma_name(orig, new);
-+
- 	return new;
- }
- 
- void __vm_area_free(struct vm_area_struct *vma)
- {
- 	free_anon_vma_name(vma);
-+	vma_lock_free(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
- }
- 
-@@ -493,7 +535,7 @@ static void vm_area_free_rcu_cb(struct rcu_head *head)
- 						  vm_rcu);
- 
- 	/* The vma should not be locked while being destroyed. */
--	VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock), vma);
-+	VM_BUG_ON_VMA(rwsem_is_locked(&vma->vm_lock->lock), vma);
- 	__vm_area_free(vma);
- }
- #endif
-@@ -3089,6 +3131,9 @@ void __init proc_caches_init(void)
- 			NULL);
- 
- 	vm_area_cachep = KMEM_CACHE(vm_area_struct, SLAB_PANIC|SLAB_ACCOUNT);
-+#ifdef CONFIG_PER_VMA_LOCK
-+	vma_lock_cachep = KMEM_CACHE(vma_lock, SLAB_PANIC|SLAB_ACCOUNT);
-+#endif
- 	mmap_init();
- 	nsproxy_cache_init();
- }
--- 
-2.39.1
+-	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
++	if (sds->busiest)
++		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
 
+This comes from the observation that the prefer_sibling setting acts on
+busiest group. It then depends on whether the busiest group, not the local
+group, has child sched sched domains. Today it works because in most cases
+both the local and the busiest groups have child domains with the SD_
+PREFER_SIBLING flag.
+
+This would also satisfy sched domains with the SD_ASYM_CPUCAPACITY flag as
+prefer_sibling would not be set in that case.
+
+It would also conserve the current behavior at the NUMA level. We would
+not need to implement SD_SPREAD_TASKS.
+
+This would both fix the SMT vs non-SMT bug and be less invasive.
+
+Thoughts?
+
+Thanks and BR,
+Ricardo
