@@ -2,219 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E124769948D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD34699491
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBPMkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S229878AbjBPMle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBPMkm (ORCPT
+        with ESMTP id S229592AbjBPMld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:40:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602CE1712;
-        Thu, 16 Feb 2023 04:40:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 16 Feb 2023 07:41:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E19510F3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:41:32 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E810D61FB9;
-        Thu, 16 Feb 2023 12:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D71FAC433D2;
-        Thu, 16 Feb 2023 12:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676551240;
-        bh=YukQlthcym8GuIt8JwP/G1usKq0bLhLvB1Scby/jETU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XxwQ5oLvB7oHwBALPfQG9fu0nlcan7zw5nBJa9jvxHB/WHNOx9jYIFcUSzwXOq6qq
-         fyWdpI7afR1ZTgzxN13EpmWl/HpYKKK5gJSoLjoIllCDuj2O0PkcpgWon97cWXclDo
-         lxWLSWNoOrnu5OzbhDkYgGmEdsJy6PHzvpIM1bVM=
-Date:   Thu, 16 Feb 2023 13:40:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jithu Joseph <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, rostedt@goodmis.org,
-        ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-Subject: Re: [PATCH v2 2/7] platform/x86/intel/ifs: Introduce Array Scan test
- to IFS
-Message-ID: <Y+4kQOtrHt5pdsSO@kroah.com>
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
- <20230214234426.344960-1-jithu.joseph@intel.com>
- <20230214234426.344960-3-jithu.joseph@intel.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A66711EC0930;
+        Thu, 16 Feb 2023 13:41:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676551290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=yknwMfWqTf5eyJox4GKcMbuJh77tfAxUiWzzn4pkdpM=;
+        b=q+S0UTe9xZhM0Ft5LzYbHjMi2xYADfQoXTP0z3zNnxpJX7z81Swk3GwKZFotKy7ypP29RH
+        LvK2hL5Q5IgNuh5wI6ZcrmuX2fNzdd83poWAZ5XLO76zDa8VzPtOyYswj0tcqKc9hcgLOd
+        pXlbM7P+UADEHtahDxPmk+N/4VvbpDQ=
+From:   Borislav Petkov <bp@alien8.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Peter Gonda <pgonda@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        linux-coco@lists.linux.dev, x86@kernel.org
+Subject: [PATCH 00/11] SEV: Cleanup sev-guest a bit and add throttling
+Date:   Thu, 16 Feb 2023 13:41:09 +0100
+Message-Id: <20230216124120.26578-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214234426.344960-3-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 03:44:21PM -0800, Jithu Joseph wrote:
-> Array BIST is a new type of core test introduced under the Intel Infield
-> Scan (IFS) suite of tests.
-> 
-> Emerald Rapids (EMR) is the first CPU to support Array BIST.
-> Array BIST performs tests on some portions of the core logic such as
-> caches and register files. These are different portions of the silicon
-> compared to the parts tested by the first test type
-> i.e Scan at Field (SAF).
-> 
-> Make changes in the device driver init flow to register this new test
-> type with the device driver framework. Each test will have its own
-> sysfs directory (intel_ifs_0 , intel_ifs_1) under misc hierarchy to
-> accommodate for the differences in test type and how they are initiated.
-> 
-> Upcoming patches will add actual support.
-> 
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> ---
->  drivers/platform/x86/intel/ifs/ifs.h  |  5 ++
->  drivers/platform/x86/intel/ifs/core.c | 70 ++++++++++++++++++---------
->  2 files changed, 52 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index 046e39304fd5..2cef88a88aa9 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -137,6 +137,11 @@
->  #define SCAN_TEST_PASS				1
->  #define SCAN_TEST_FAIL				2
->  
-> +enum test_types {
-> +	IFS_SAF,
-> +	IFS_ARRAY,
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-As you are using this enum to index an array, don't you need to set the
-starting value to be sure it's 0?
+Hi,
 
-But note, that's a horrid name of an enumerated type that is in a .h
-file, either put it only in the .c file, or give it a name that makes
-more sense that it belongs only to this driver.
+so I've been looking at Dionna's patches adding the SEV guest throttling
+and that request issuing spaghetti was getting on my nerves. And it
+would've become even worse with more stuff piling ontop so here's
+a first round of cleanups before adding more stuff and making it an
+unmaintainable mess.
 
-Yes, naming is hard.
+The final result is a lot easier to read with proper separation of
+functionality between functions. I want to get rid of more input/output
+params being passed back'n'forth and use a struct instead and Nikunj's
+patches have stuff which goes in that direction but first things first.
 
-Wait, you don't even use the enumerated type anywhere in this patch
-series only the value, did you mean for this to happen?  Why name it
-anything?
+After the cleanup, the new stuff being added is a lot less code and
+almost trivial. But I've been staring at this for a while now so it
+could be only me who thinks it is trivial now. But we'll see.
 
+Initial smoke testing seems to work ok but I might've introduced some
+funky bugs, ofc.
 
+Comments and suggestions are appreciated, as always.
 
+Thanks and thanks, Tom, for the help!
 
-> +};
-> +
->  /* MSR_SCAN_HASHES_STATUS bit fields */
->  union ifs_scan_hashes_status {
->  	u64	data;
-> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-> index 206a617c2e02..ab234620ef4c 100644
-> --- a/drivers/platform/x86/intel/ifs/core.c
-> +++ b/drivers/platform/x86/intel/ifs/core.c
-> @@ -16,27 +16,44 @@
->  
->  static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
->  	X86_MATCH(SAPPHIRERAPIDS_X),
-> +	X86_MATCH(EMERALDRAPIDS_X),
->  	{}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
->  
-> -static struct ifs_device ifs_device = {
-> -	.data = {
-> -		.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
-> -		.test_num = 0,
-> +static struct ifs_device ifs_devices[] = {
-> +	[IFS_SAF] = {
-> +		.data = {
-> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
-> +			.test_num = IFS_SAF,
-> +		},
-> +		.misc = {
-> +			.name = "intel_ifs_0",
-> +			.nodename = "intel_ifs/0",
+Borislav Petkov (AMD) (7):
+  virt/coco/sev-guest: Check SEV_SNP attribute at probe time
+  virt/coco/sev-guest: Simplify extended guest request handling
+  virt/coco/sev-guest: Remove the disable_vmpck label in
+    handle_guest_request()
+  virt/coco/sev-guest: Carve out the request issuing logic into a helper
+  virt/coco/sev-guest: Do some code style cleanups
+  virt/coco/sev-guest: Convert the sw_exit_info_2 checking to a
+    switch-case
+  crypto: ccp: Get rid of __sev_platform_init_locked()'s local function
+    pointer
 
-I just noticed this, a device node called "0" is not good, why do you
-need this in a subdir at all?
+Dionna Glaze (3):
+  virt/coco/sev-guest: Add throttling awareness
+  virt/coco/sev-guest: Double-buffer messages
+  x86/sev: Change snp_guest_issue_request()'s fw_err argument
 
-> +			.minor = MISC_DYNAMIC_MINOR,
-> +		},
->  	},
-> -	.misc = {
-> -		.name = "intel_ifs_0",
-> -		.nodename = "intel_ifs/0",
-> -		.minor = MISC_DYNAMIC_MINOR,
-> +	[IFS_ARRAY] = {
-> +		.data = {
-> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_ARRAY_BIST_BIT,
-> +			.test_num = IFS_ARRAY,
-> +		},
-> +		.misc = {
-> +			.name = "intel_ifs_1",
-> +			.nodename = "intel_ifs/1",
+Peter Gonda (1):
+  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
 
-Again, a device node called "1"?
+ Documentation/virt/coco/sev-guest.rst   |  20 ++-
+ arch/x86/include/asm/sev-common.h       |   3 -
+ arch/x86/include/asm/sev.h              |   4 +-
+ arch/x86/kernel/sev.c                   |  33 +++--
+ drivers/crypto/ccp/sev-dev.c            |  22 +--
+ drivers/virt/coco/sev-guest/sev-guest.c | 169 +++++++++++++++---------
+ include/uapi/linux/psp-sev.h            |   7 +
+ include/uapi/linux/sev-guest.h          |  18 ++-
+ 8 files changed, 181 insertions(+), 95 deletions(-)
 
-> +			.minor = MISC_DYNAMIC_MINOR,
-> +		},
->  	},
->  };
->  
-> +#define IFS_NUMTESTS ARRAY_SIZE(ifs_devices)
+-- 
+2.35.1
 
-Don't do this, just have a list with a NULL entry at the end, makes
-things much simpler and easier over time.
-
-
-> +
->  static int __init ifs_init(void)
->  {
->  	const struct x86_cpu_id *m;
-> +	int ndevices = 0;
->  	u64 msrval;
-> -	int ret;
-> +	int i;
->  
->  	m = x86_match_cpu(ifs_cpu_ids);
->  	if (!m)
-> @@ -51,28 +68,35 @@ static int __init ifs_init(void)
->  	if (rdmsrl_safe(MSR_INTEGRITY_CAPS, &msrval))
->  		return -ENODEV;
->  
-> -	ifs_device.misc.groups = ifs_get_groups();
-> -
-> -	if (!(msrval & BIT(ifs_device.data.integrity_cap_bit)))
-> -		return -ENODEV;
-> +	for (i = 0; i < IFS_NUMTESTS; i++) {
-> +		if (!(msrval & BIT(ifs_devices[i].data.integrity_cap_bit)))
-> +			continue;
->  
-> -	ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
-> -	if (!ifs_device.data.pkg_auth)
-> -		return -ENOMEM;
-> +		ifs_devices[i].data.pkg_auth = kmalloc_array(topology_max_packages(),
-> +							     sizeof(bool), GFP_KERNEL);
-> +		if (!ifs_devices[i].data.pkg_auth)
-> +			continue;
-
-You have a static array of a structure that contains both things that
-describe the devices being used, as well as dynamic data with no real
-lifespan rules.  Please don't perputate this common design pattern
-mistake.
-
-Always try to make static data constant and make dynamic data dynamic
-with proper reference counted lifetime rules.  People converting this
-code into rust in the future will thank you :)
-
-thanks,
-
-greg k-h
