@@ -2,139 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABA8699A72
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFFE699A77
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjBPQrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S229811AbjBPQsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBPQrE (ORCPT
+        with ESMTP id S229482AbjBPQsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:47:04 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A794CC99;
-        Thu, 16 Feb 2023 08:47:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676566004; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=GrPLRpJVoAtGe1QSM3oCQ0Z1MFBjeDNtoCW1YI3XlifzYQPOMYr/9GjmDMdsTrwcbK
-    tkY4cEYKTRrV7XQUt8lMRdT+C/MBTGVdKtNvtaGVfvDcvKc8vOW6wL9ZvFMotGBZAljB
-    qRrOBCZCRvh6TWEOXgI/s+VLKj+G33aYhG8FNtYlCpuVgBayGM43eVC/oLvfFZaUIHy4
-    3MXRR9motdBqy1/7oaTvNJUbphFJ1aflOoVpnlrxn7fGA/8Cn0KBALY7wIVT5/cOVixX
-    /RFViT0DoBLlOMWScs09wdturZiJ+JAPNnOoIBZEjOtzVZKSMpNRhMEjRicZVaiD34fk
-    79CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676566004;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=Zi6Do96Wyv8JYhglKdzeHQTuT3KJmQXKv8y3uhJcpwY=;
-    b=iu2I4EX/mVPxDGay7t5wMaZ1MKu5LOLFVlxDP6Nq1Vt3ADuG/h4wfaS4VzRAdZokno
-    bvVtZaNFmV5ICWFFZ/aGGLxSnb63AIEJ04Xeiad+yHGW8HLa20aKakqe/bEa8SF9ULWO
-    67oRiViILIgGk9XtgemJPqoLMpyJnajvRFhXjwk6WCz9uFJNqcyOJ1XFRtTLbHEkTLJ2
-    JijZi19MbrkOz18hF4gEKjrBUB/hE19BpprTnQq7EAiu2etUR9597KMGgWmGbbU8YaKg
-    3/IioAJ2Aq7L9b1chqEr3lRF7o1yMTKDijP1AgGTNUDPhc0fFg9QEh0SDztUnOy5LA/s
-    fSBQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676566004;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=Zi6Do96Wyv8JYhglKdzeHQTuT3KJmQXKv8y3uhJcpwY=;
-    b=abIRn0yOpZ11kuW3rSNDWUmU9Uad2JztvC5XQkBtn0VUakeoRm/zZblfnljQ5tBih2
-    WPjfVvVZcjXaj1FGtD6DXoXuG93Yb2R3zdq7k/5TWbwzglMRNBfEu7BCp/mpOanaMjl6
-    2ahc0UfmxHrYAFcjqYCJYkAFgqEADCDqgB426Bvq8lTrRIrmgXkCV+iFJ7LINZNiYJWk
-    ZwLUsZ7ZDbJg78vW0wvoAYvLihVoseYZUDN0LjGmsFotKZSrLaptxVlJBRDbJQNEh6Ap
-    opKgJzC9zoP40bcss0yIdO572BQUTefhRD4rfDtLj9tomlLqWzlMhPhX1TLnuBtmu6D7
-    MmNg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZq23J"
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
-    with ESMTPSA id 326d57z1GGkhhTj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 16 Feb 2023 17:46:43 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
+        Thu, 16 Feb 2023 11:48:33 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050B8422F;
+        Thu, 16 Feb 2023 08:48:32 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pShQp-0004xf-1J;
+        Thu, 16 Feb 2023 17:48:27 +0100
+Date:   Thu, 16 Feb 2023 16:48:25 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH] ARM: dts: omap3-gta04: fix compatible record for GTA04 board
-Date:   Thu, 16 Feb 2023 17:46:43 +0100
-Message-Id: <38b49aad0cf33bb5d6a511edb458139b58e367fd.1676566002.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.38.1
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: Re: [PATCH v2 2/2] pinctrl: add mt7981 pinctrl driver
+Message-ID: <Y+5eWWoZzMej6N4I@makrotopia.org>
+References: <cover.1674693008.git.daniel@makrotopia.org>
+ <ef5112946d16cacc67e65e439ba7b52a9950c1bb.1674693008.git.daniel@makrotopia.org>
+ <88ef812b-b8e8-f640-f9f7-a1579ea69d31@arinc9.com>
+ <Y+5ZSUURaK/hq1iq@makrotopia.org>
+ <765313c2-c2d7-9450-aabd-29c471f82ce5@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <765313c2-c2d7-9450-aabd-29c471f82ce5@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vendor of the GTA04 boards is and always was
-Golden Delicious Computers GmbH&Co. KG, Germany
-and not Texas Instruments.
+On Thu, Feb 16, 2023 at 07:32:13PM +0300, Arınç ÜNAL wrote:
+> On 16.02.2023 19:26, Daniel Golle wrote:
+> > On Thu, Feb 16, 2023 at 04:50:57PM +0300, Arınç ÜNAL wrote:
+> > > Hi Daniel,
+> > > 
+> > > On 26.01.2023 03:34, Daniel Golle wrote:
+> > > > Add pinctrl driver for the MediaTek MT7981 SoC, based on the driver
+> > > > which can also be found the SDK.
+> > > > 
+> > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > > > ---
+> > > >    drivers/pinctrl/mediatek/Kconfig          |    5 +
+> > > >    drivers/pinctrl/mediatek/Makefile         |    1 +
+> > > >    drivers/pinctrl/mediatek/pinctrl-mt7981.c | 1048 +++++++++++++++++++++
+> > > >    3 files changed, 1054 insertions(+)
+> > > >    create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt7981.c
+> > > > 
+> > > > diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
+> > > > index fed02c6fea062..f20c28334bcbf 100644
+> > > > --- a/drivers/pinctrl/mediatek/Kconfig
+> > > > +++ b/drivers/pinctrl/mediatek/Kconfig
+> > > > @@ -127,6 +127,11 @@ config PINCTRL_MT7622
+> > > >    	default ARM64 && ARCH_MEDIATEK
+> > > >    	select PINCTRL_MTK_MOORE
+> > > > +config PINCTRL_MT7981
+> > > > +	bool "Mediatek MT7981 pin control"
+> > > > +	depends on OF
+> > > > +	select PINCTRL_MTK_MOORE
+> > > > +
+> > > 
+> > > Is there a reason why you removed these lines from v1?
+> > 
+> > Oh, that seemed to have happened by accident. Imho it'd be better
+> > to have these two lines there as well.
+> 
+> Agreed. I'm preparing some patches to move the pinctrl driver for the
+> MediaTek MIPS SoCs here, this driver appears on the menuconfig even though
+> it shouldn't. Will you fix this yourself, or I can do it and add it to my
+> upcoming patch series.
 
-Maybe, TI was references here because the GTA04 was based on
-the BeagleBoard design which is designated as "ti,omap3-beagle".
-
-While we are looking at vendors of omap3 based devices, we also
-add the record for OpenPandora. The DTS files for the pandora
-device already make use of it.
-
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 4 ++++
- arch/arm/boot/dts/omap3-gta04.dtsi                     | 3 +--
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 70ffb3780621b..1476aaaebf883 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -508,6 +508,8 @@ patternProperties:
-     description: GlobalTop Technology, Inc.
-   "^gmt,.*":
-     description: Global Mixed-mode Technology, Inc.
-+  "^goldelico,.*":
-+    description: Golden Delicious Computers GmbH & Co. KG
-   "^goodix,.*":
-     description: Shenzhen Huiding Technology Co., Ltd.
-   "^google,.*":
-@@ -959,6 +961,8 @@ patternProperties:
-     description: OpenCores.org
-   "^openembed,.*":
-     description: OpenEmbed
-+  "^openpandora,.*":
-+    description: OpenPandora GmbH
-   "^openrisc,.*":
-     description: OpenRISC.io
-   "^option,.*":
-diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
-index 87e0ab1bbe957..5932012d04966 100644
---- a/arch/arm/boot/dts/omap3-gta04.dtsi
-+++ b/arch/arm/boot/dts/omap3-gta04.dtsi
-@@ -11,8 +11,7 @@
- 
- / {
- 	model = "OMAP3 GTA04";
--	compatible = "ti,omap3-gta04", "ti,omap3630", "ti,omap36xx", "ti,omap3";
--
-+	compatible = "goldelico,gta04", "ti,omap3630", "ti,omap36xx", "ti,omap3";
- 	cpus {
- 		cpu@0 {
- 			cpu0-supply = <&vcc>;
--- 
-2.38.1
-
+If you are anyway planning to send out a series of patches for pinctrl
+please include a patch adding these two lines as well, I will Ack that
+patch.
