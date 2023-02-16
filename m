@@ -2,201 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5689369980B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37532699810
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjBPO4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S230319AbjBPO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjBPO4r (ORCPT
+        with ESMTP id S230302AbjBPO4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:56:47 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2128.outbound.protection.outlook.com [40.107.255.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C1A5456B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:56:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KfCoRKDjNwZkf/AGFMA+ujEIbsb7Ry2/g0h/aRPpUdAnTCh8iDypIZGMuRTfZrjxbKwzs2h1uRON+wBy8/x8k3GNXlhqmomDULL7fVyb77u232+VVfE604C/4i9kuf2bYG7iBgvEJNSvZ4LClRbC3FRL6RJ7VhdhFflpjvgROVrxehCB0XV1NPNl1MEwlMEyVT3a6Q9gphatrl+LrW26BUcNQ+Pli96UM2Lyx98At8AxAqSBTQBWfSasW0NMv/viDzCmu/sSHukaKj7HwfiAySvc0ZUdPDVCT4uDfMe/hSfcPUpSoFSDzvO+B1K3pFew9z7kU9SH5Du/IcqcVfNO9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RQHbNpcMJh3MOvgeTQA8bvKfy6mnW3VY6ldmmLIrzys=;
- b=I/faMSVCveVUFG7fvyPR5JfpnK0F2ANGXeHdyD8/lNr4qHLe01cZjuVZi0f5M0be5uSuNk0T9ZPPKw6LA2DlkO6JVhNpddmO22Rrnrr48Hkxq+3+2CtXaP9s3k2Rn7qeDMCh2I8Kh1Nl28qUsN+cwaEJmjFs10u3f7LgKfhZhCB8cFggMt4R97mje25XJLykT2EAzYygAt4qgjlwM+16SsNFWYvWATaagUEPnlQneSur9APw8iFJA277sG5S57OC5xBr2Knq/E+dJJae02yqCq7fxjA/XP17E5f5eRBOvcIwgicWixh7C/w5P1LwydewTAoBav5tWObUUAZtftovbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RQHbNpcMJh3MOvgeTQA8bvKfy6mnW3VY6ldmmLIrzys=;
- b=oIqLi+zceOLgnULKHul8WdVYGhKaOEduPCs8dUEZCucJNU4/BfmDbIL8OCn4G6SYvMr4vFUk9qsiEEQn9/ws8lHFPhGRPvZhV/lDsfqKaYgYf8i/vZkGCoNi3cG1MQZWSwBx/COIJ1nswVmH0jHB/v8UFnUrlut5CWkom+ekAmrKMykuDyBfzdqqGXSWzEKZSS0nPjC5M/fxJbR7tOuPQpgHGN/hD6qqXO/dR7EZ1y+/5DKOl7pDt3+M1MR6iqwkcgpn4AShj43Y8j+wDuE4SjTw4/h7v16tKcuLYbDMl/jlLXp1izWGtgBHpPzqDrAM7xZIvWNVBqLYuk83sh00mQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
- by TY0PR06MB5104.apcprd06.prod.outlook.com (2603:1096:400:1b8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.10; Thu, 16 Feb
- 2023 14:56:27 +0000
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190%3]) with mapi id 15.20.6111.009; Thu, 16 Feb 2023
- 14:56:27 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: convert to MAX_SBI_FLAG instead of 32 in stat_show()
-Date:   Thu, 16 Feb 2023 22:56:17 +0800
-Message-Id: <20230216145617.27150-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0004.apcprd02.prod.outlook.com
- (2603:1096:3:17::16) To TYZPR06MB5275.apcprd06.prod.outlook.com
- (2603:1096:400:1f5::6)
+        Thu, 16 Feb 2023 09:56:53 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39275521E9;
+        Thu, 16 Feb 2023 06:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676559400; x=1708095400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Jnag3RTmvPqBfzuViYzSn81cgXd3OsGGPoaxMk4z/kA=;
+  b=OkLArTbgpuaCB1kL3Xh3m/ABtQgMsi92eNWXt26gH1CWF5PLrUl7w2dx
+   moZ14klivmV3ElyhWeLWljPUS5WTVJ7v6psLYpRUC2qgZXPVxdNSaGGvL
+   kVUwOGGBxbfSNQUrFNKemQNHzZD3p2mrp0hW2cY8YlSuhfK+w3p3+aMl/
+   a+cCRkxk4+2ovnK5ClrCclaQK1GnDj4fY/sHFCdzabgWiXR/5OYWxyEkC
+   vwZ37S4cjrWhA/IzIRtrtGVhFzVsof/ogBo5Bhl6TcRdMNBfFKJytdPzx
+   lTT7JVSYQJOESDQqB+jdUxJbA7dQj3BuKop300cUpjFFZgVz7sBR2V1ts
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359164718"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="359164718"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 06:56:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="844169379"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="844169379"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2023 06:56:37 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pSfgZ-007pOc-1d;
+        Thu, 16 Feb 2023 16:56:35 +0200
+Date:   Thu, 16 Feb 2023 16:56:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
+        Lendacky Thomas <Thomas.Lendacky@amd.com>,
+        herbert@gondor.apana.org.au,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] i2c: designware: Use PCI PSP driver for communication
+Message-ID: <Y+5EI3XGBzuwwVBV@smile.fi.intel.com>
+References: <20230209223811.4993-1-mario.limonciello@amd.com>
+ <20230209223811.4993-7-mario.limonciello@amd.com>
+ <703033aa-1293-307d-42a2-9734a51c7190@linux.intel.com>
+ <ca9c0f77-c191-d88a-22a1-315ca97f17e8@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|TY0PR06MB5104:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3f12e81-288c-4cc1-e5bc-08db102dfab1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 04ZdL2WpDA2+Ug8QhJTud4EhKc/iBp0JxHFapXne4at4ZQau6T7nSAyTGklpO+rh8QQ4lOl2GzCWQtEA+yQtA3fPd15B1Mi+3HurxKs+vNVsI319J+fs1Mt/vQ27f7XrBFgMvCOS3c+b17FxMotUdQLjt9YvOnnx80QxNuIyod+wrMMA64EcfOgZg1Lu14k9NH6gLoVsCWDQ4xl+D6tNWwUIfE1O6FsHy2qYTZHkUYMa40MEEEtGkVrfrGUbdjPxNhXRsdpflRjj5HbWYSGWn2xkdfy7hPjoKOQF9GEEocVK6dxd0QAl/XTcaxzH+p3b9qTIRrGODRkVy1AdHGHnLMdrGuuyf7iKT9/8r2dcsT48je7BiKkJSpH2rlqNBvEh0LyjG8pEMwrt5iAtlsDaEVuEMnAGWrJLZR/LP69GJNHgGGzn1zYREkSWdqnAHlGP4ihneNjThtJAidvYQWDuFUs3XH5hhv/aErEhas5etIDRLu4+8+cMDVaJ/uu334QupXp+N80VZ8RwAm+PIF6y/DhXT6lnrKhopmh+isJPOUIhmvtpZtVpXoz5cwUcnEfgHLtE10JaDwcBu9quXFcPppqn8i9NBrULAMEMpHiREBy/BqyzDJHdHe7rPMw6ZBzDbgyoY5bSeFTohL3vXqHEEAw2dhAS7PAMqI/E3P4ShKFTvvvR+m21DgoVLH8u5vK/s/r79HJ1e1Q0+8Gt3TWIrQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199018)(107886003)(1076003)(186003)(26005)(6506007)(478600001)(6512007)(86362001)(6666004)(2616005)(6486002)(52116002)(83380400001)(316002)(66946007)(8936002)(5660300002)(8676002)(4326008)(66476007)(2906002)(66556008)(41300700001)(38100700002)(36756003)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nbGc5asf3DzXSnl4magDcosaKnPFvhXWqPWZgRoAH1Bcon9iE2JCr8V+lWkv?=
- =?us-ascii?Q?Lxc/1xJHDJbv5vR98Bii8BbiCpIMKDsn1z0s3OxuKcL8kDICs90h0d/Q05vv?=
- =?us-ascii?Q?5qE6yKDgDyLHOeropu0kaPbayGykpN/5KUtviCjBX+czO31rr3pK7e4WFdeF?=
- =?us-ascii?Q?x0fxo6DdxX7QFnBY/YSQ9tj35UG2BOlRx2A8CQf7kHpzbCJhxBZu40aIi4YA?=
- =?us-ascii?Q?9fnBQeU+m+tnO+q10xHddQ/B0p8V1xlPn42Rgryoq6z61NXGO8jc+ENKwVtq?=
- =?us-ascii?Q?7IGpAcsmgo/aoQE3tK3wjwloYoRacFODMlGRWWMCwTBevOmdtTCaklAtvVTn?=
- =?us-ascii?Q?dRFTALJPqcxj8vUvvtKIp/OOJrMIYZ+3fMUSJCq/NIK1m/mtvIEz3lqAyi8W?=
- =?us-ascii?Q?IyQbTVjL+CMSmGXsN1jRnDofO3CawBsgXFAq0unn4d5JLp6E4vBhWlZ7FE+T?=
- =?us-ascii?Q?p4SlHb+nj6tSmklgl/bhBLwGjA+FUk0wuLwSbw/VxyO0EpN0TG7SO0nslx8b?=
- =?us-ascii?Q?x+51KCnjSCiHn6xRD6X1gOeLsWTcf+4lE6ykNcFT9e3afEIIYIH+upqE/eex?=
- =?us-ascii?Q?BScePoP+Uf9dS9Y+r1YSX9dAF7wZc9dMnmYrmPMF3ukPNS9D/zW27qnQFyR4?=
- =?us-ascii?Q?nKbxMMVKI2TUp+iSVCAlbH1410YtWA/xkH7PAA9A/giwgCe3t1wgF7yBcVDk?=
- =?us-ascii?Q?qs5CLO46dbY70IXujjZ5/vMU2HV+eh6tV/2KcjAHvlckHiV7hKCZH9fiDOB3?=
- =?us-ascii?Q?z9ht8lQIVG+USchbGLNdu5qLsosS31LVx4geFzFFR1+H33YldzjBwyLSSD7w?=
- =?us-ascii?Q?xVtj1j1z8RyjReLI4LX5HBZdx7XUB4EmhQWYo4kDM6egaqjLBLjkvEf+KYTJ?=
- =?us-ascii?Q?qu9k5D8cz4WR3SEfxmLEhAPQF66sZs1YZXdnLDrQGSAGsr76rEi4655KlX47?=
- =?us-ascii?Q?3EssA9kr21Aas/VN7tZywOafEuKCgCYxuodPNT9k+3uJzM7Tyk3uAK2gV7+A?=
- =?us-ascii?Q?ck4+vwDSYiEdnznLPmjHqJqogGeC4PsDwrBJcEcZBmj1N6VmCBfAqYgLF+2d?=
- =?us-ascii?Q?5/2xrI5BqJ9L4cmbW6h/Il9OEudfaBvIhD3ML6OTqmjR9n+/MYZaY3j51j5l?=
- =?us-ascii?Q?iPn/OxXCqRAm0Yf35TCJy6EC+Rgapkzy/C5aB0xHXbMTPEhW/4JZSSmOScs1?=
- =?us-ascii?Q?D87YOCWXhbPn/mvFz5fUVTHSYaYT8u/hSmeVCDx3j0KlDGp5MqGkuwagAoOH?=
- =?us-ascii?Q?8H+E50GnAHOjDUutbzQLUBYDRD6frmM0Ob6dOrxHVVFDDhwp42ULjQVhbb0J?=
- =?us-ascii?Q?OzZgOcBrBPIKB74KAXaAZztECyYcDQQm1rnUUdTOZAG7gNDQ798hSGViyAVk?=
- =?us-ascii?Q?4KdIu0KctnUONVVqJMyG79oen41Gh97sQ34SjDHJZoTY5F/mu3IF4s0OwvmI?=
- =?us-ascii?Q?tUhK1/DvP1iOOgm5mZh9+4Jk4u7Q1dq/H3jdljyQGhmDZR4sFcPOub7YUQfr?=
- =?us-ascii?Q?R/iD9mFDSO4qQQ7nNKQhG3vwDKO8MerOd8Ji2L9WQgmPdZGZTQmYS8LGIAd5?=
- =?us-ascii?Q?BD8fJXYw5LDYVl3US3M8yfrTff2KH+Tjd4qhrZ8G?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3f12e81-288c-4cc1-e5bc-08db102dfab1
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 14:56:27.0167
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Mko74GjDBXDXIcxdMPaTgL/DRZh/iZSgn+bEk88ILAPIlrpaP3BIk5djzBT+CwaPPJlDdRFaN98NbxGHILyww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5104
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca9c0f77-c191-d88a-22a1-315ca97f17e8@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BIT reduce the s_flag array size.
+On Thu, Feb 16, 2023 at 07:29:53AM -0600, Mario Limonciello wrote:
+> On 2/16/23 07:27, Jarkko Nikula wrote:
+> > On 2/10/23 00:38, Mario Limonciello wrote:
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/debug.c | 36 ++++++++++++++++++------------------
- fs/f2fs/f2fs.h  |  6 +++++-
- 2 files changed, 23 insertions(+), 19 deletions(-)
+...
 
-diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-index 30a77936e3c5..ab3e9cbd53ee 100644
---- a/fs/f2fs/debug.c
-+++ b/fs/f2fs/debug.c
-@@ -336,22 +336,22 @@ static void update_mem_info(struct f2fs_sb_info *sbi)
- #endif
- }
- 
--static char *s_flag[] = {
--	[SBI_IS_DIRTY]		= " fs_dirty",
--	[SBI_IS_CLOSE]		= " closing",
--	[SBI_NEED_FSCK]		= " need_fsck",
--	[SBI_POR_DOING]		= " recovering",
--	[SBI_NEED_SB_WRITE]	= " sb_dirty",
--	[SBI_NEED_CP]		= " need_cp",
--	[SBI_IS_SHUTDOWN]	= " shutdown",
--	[SBI_IS_RECOVERED]	= " recovered",
--	[SBI_CP_DISABLED]	= " cp_disabled",
--	[SBI_CP_DISABLED_QUICK]	= " cp_disabled_quick",
--	[SBI_QUOTA_NEED_FLUSH]	= " quota_need_flush",
--	[SBI_QUOTA_SKIP_FLUSH]	= " quota_skip_flush",
--	[SBI_QUOTA_NEED_REPAIR]	= " quota_need_repair",
--	[SBI_IS_RESIZEFS]	= " resizefs",
--	[SBI_IS_FREEZING]	= " freezefs",
-+static char *s_flag[MAX_SBI_FLAG] = {
-+	[SBI_IS_DIRTY]		= "fs_dirty",
-+	[SBI_IS_CLOSE]		= "closing",
-+	[SBI_NEED_FSCK]		= "need_fsck",
-+	[SBI_POR_DOING]		= "recovering",
-+	[SBI_NEED_SB_WRITE]	= "sb_dirty",
-+	[SBI_NEED_CP]		= "need_cp",
-+	[SBI_IS_SHUTDOWN]	= "shutdown",
-+	[SBI_IS_RECOVERED]	= "recovered",
-+	[SBI_CP_DISABLED]	= "cp_disabled",
-+	[SBI_CP_DISABLED_QUICK]	= "cp_disabled_quick",
-+	[SBI_QUOTA_NEED_FLUSH]	= "quota_need_flush",
-+	[SBI_QUOTA_SKIP_FLUSH]	= "quota_skip_flush",
-+	[SBI_QUOTA_NEED_REPAIR]	= "quota_need_repair",
-+	[SBI_IS_RESIZEFS]	= "resizefs",
-+	[SBI_IS_FREEZING]	= "freezefs",
- };
- 
- static const char *ipu_mode_names[F2FS_IPU_MAX] = {
-@@ -384,8 +384,8 @@ static int stat_show(struct seq_file *s, void *v)
- 			"Disabled" : (f2fs_cp_error(sbi) ? "Error" : "Good"));
- 		if (sbi->s_flag) {
- 			seq_puts(s, "[SBI:");
--			for_each_set_bit(j, &sbi->s_flag, 32)
--				seq_puts(s, s_flag[j]);
-+			for_each_set_bit(j, &sbi->s_flag, MAX_SBI_FLAG)
-+				seq_printf(s, " %s", s_flag[j]);
- 			seq_puts(s, "]\n");
- 		}
- 		seq_printf(s, "[SB: 1] [CP: 2] [SIT: %d] [NAT: %d] ",
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 21596e0266ba..e24180c0e4af 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1293,7 +1293,10 @@ struct f2fs_gc_control {
- 	unsigned int nr_free_secs;	/* # of free sections to do GC */
- };
- 
--/* For s_flag in struct f2fs_sb_info */
-+/*
-+ * For s_flag in struct f2fs_sb_info
-+ * Modification on enum should be synchronized with s_flag array
-+ */
- enum {
- 	SBI_IS_DIRTY,				/* dirty flag for checkpoint */
- 	SBI_IS_CLOSE,				/* specify unmounting */
-@@ -1310,6 +1313,7 @@ enum {
- 	SBI_QUOTA_NEED_REPAIR,			/* quota file may be corrupted */
- 	SBI_IS_RESIZEFS,			/* resizefs is in process */
- 	SBI_IS_FREEZING,			/* freezefs is in process */
-+	MAX_SBI_FLAG,
- };
- 
- enum {
+> > >     config I2C_DESIGNWARE_AMDPSP
+> > >       bool "AMD PSP I2C semaphore support"
+> > > -    depends on X86_MSR
+> > >       depends on ACPI
+> > >       depends on I2C_DESIGNWARE_PLATFORM
+> > > +    depends on CRYPTO_DEV_SP_PSP && !(I2C_DESIGNWARE_PLATFORM=y &&
+> > > CRYPTO_DEV_CCP_DD=m)
+> > >       help
+> > 
+> > Would this look better if split? I.e.
+> > 
+> >     depends on CRYPTO_DEV_SP_PSP
+> >     depends on !(I2C_DESIGNWARE_PLATFORM=y && CRYPTO_DEV_CCP_DD=m)
+> Yes, thanks I'll change that for next version.
+
+I'm wondering if this is homegrown implementation of 'imply' keyword?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
