@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89178698EFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86D3698F01
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBPIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S229988AbjBPItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjBPIsl (ORCPT
+        with ESMTP id S229646AbjBPItS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:48:41 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BEC3A0A2;
-        Thu, 16 Feb 2023 00:48:37 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id z6so845963pgk.0;
-        Thu, 16 Feb 2023 00:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xxPI//pS1yfJEnvmaYxMoqiiVdQbpuUKbfNVph9SA+k=;
-        b=du+9qzsFVQ+Yu8KHkXaQ2U7M5X8yE5rDiThJR97GGjW6mZBSSdrGf0JQtIrQthK69L
-         ydfWbe/dxUWVlED3eBoAoAlOtld3dVovi1qCrN5P8f7mfQQ/tVZVNqOi1Na5b1cC+RJj
-         O/FHWM123A0KjPn3HCVu3bBZNEJXXXyyOcJux+XToZnXK1iXOVmFU0ww2oj1wnWSqD/v
-         /zFcJukTXRSEUJmc7rxlhbiB7oZcoz9Fe0sKAOOqrYa60Oa7e+ZF9Y9qsECpOUn+sH8O
-         SE5nlpYBpMg4evqc167BG0+VulKghRULprKLsQpSLiWKAWxgY9wPT2IMvKa7FZ5R+pqT
-         VaWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xxPI//pS1yfJEnvmaYxMoqiiVdQbpuUKbfNVph9SA+k=;
-        b=1m+Fb5vFsdkZjKfZIfytBwFEEpWBNuhb+Qp/jhanJxP9fP1nwFXCAwL4qKWB9qshn2
-         uvooW7YgQ+T+beL/LHWh2Eh6f5KQ9cgWvJQGJfo8XiOOJi1DwDTEAH3Ih60CnWWDRZXF
-         qDp6iJndwqKaXqw/kN0xizKxFGhBwzsv8r1cVgTPwMFUZQvzZYosNIcdReQgqZ2tQETx
-         M2tfAIShkLXWLwIm4yJYk9BBGFcX6fcRzhnaLESLhnjnq+pBe68FcZbUHtQsVnWwg7Wr
-         a8qHtIpgFqdJdSNVmVRx3wGyBo477fNPljpEQ0LQs2bAVMAVejKmBoUvRSZ6jw/kvX2C
-         N7+g==
-X-Gm-Message-State: AO0yUKW4ZRAAiZihdpuZC1KAAxrb9tM2jf9Tt/sKzdopaANpOYc7aX5P
-        80mMcmVIkqVaMP14swVcLzEzTLH+/7M=
-X-Google-Smtp-Source: AK7set8QNkWalRHdz7MM0GMLaLGOW4GOq5sMxuRqjmjulsPm+dV8D9oaFGyiXkRe4MvU0c05C+iZnA==
-X-Received: by 2002:aa7:9489:0:b0:590:7659:9c33 with SMTP id z9-20020aa79489000000b0059076599c33mr3912994pfk.22.1676537316643;
-        Thu, 16 Feb 2023 00:48:36 -0800 (PST)
-Received: from mi-OptiPlex-7080.mioffice.cn ([2408:8607:1b00:8:b27b:25ff:fe2c:5c4])
-        by smtp.gmail.com with ESMTPSA id j3-20020aa78dc3000000b0058ba2ebee1bsm722131pfr.213.2023.02.16.00.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 00:48:36 -0800 (PST)
-From:   Qi Feng <fengqi706@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fengqi <fengqi@xiaomi.com>
-Subject: [PATCH v4] HID: add KEY_CAMERA_FOCUS event in HID
-Date:   Thu, 16 Feb 2023 16:48:30 +0800
-Message-Id: <3f8627d20de711d08b8cafe0a11481a2b9ca941e.1676537236.git.fengqi@xiaomi.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 16 Feb 2023 03:49:18 -0500
+Received: from smtp-out-04.comm2000.it (smtp-out-04.comm2000.it [212.97.32.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D953A09D;
+        Thu, 16 Feb 2023 00:49:15 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-04.comm2000.it (Postfix) with ESMTPSA id 8A003BC4540;
+        Thu, 16 Feb 2023 09:49:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1676537352;
+        bh=PQPNu0ICzycgofYS3iFsEuSYoBFLhXMOuIcmqqj/OMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=uhwoyh+YGaX6DC67jyFpp58iJ1cRHzwBZVupnXs1lsRbqdKYyyvl+/kN8Al8CiTc3
+         j8XXLHLiDo1X7RsxHoI3lFqA7F8vtgFzxBqiL5egbWmSiwGUeHKFB/AUhdzzp/Awf1
+         1D1VPn4Z8ANGSTuJvL6lNlX2WkU9Iwo05B7mMbVKBi4PVKfPTkJFR5x5oJIy3wYM2F
+         uaXEymqSdR9IgKp5Uo14AEy9kAuosB125Lhaz/D7UsyX0crcjKT68Re7ykmQv8cmKV
+         Zep6Z2z6qEutim3uGCnWkM/cKOKmNsirorzncsvn2IuqOFZDLnOvAvYNK0cOSYLUtW
+         0mdlhK4MK7P3w==
+Date:   Thu, 16 Feb 2023 09:49:07 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v3 5/5] arm64: dts: imx8mp-verdin: add 88W8997 serdev to
+ uart4
+Message-ID: <Y+3uA7ygMRMd8hbK@francesco-nb.int.toradex.com>
+References: <20230213120926.8166-1-francesco@dolcini.it>
+ <20230213120926.8166-6-francesco@dolcini.it>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213120926.8166-6-francesco@dolcini.it>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: fengqi <fengqi@xiaomi.com>
+Hello Shawn,
 
-Our HID device need KEY_CAMERA_FOCUS event to control camera,
-but this event is non-existent in current HID driver.
-So we add this event in hid-input.c.
+On Mon, Feb 13, 2023 at 01:09:26PM +0100, Francesco Dolcini wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> 
+> Use the serdev feature to load the driver for the 88W8997 bluetooth
+> driver.
+> 
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Signed-off-by: fengqi <fengqi@xiaomi.com>
+Patches 1-4 are now in linux-next, just pick this when it is
+appropriate for you (I know you already sent a pull request to Arnd a
+couple of weeks ago).
 
----
-changes in v4:
-
--add HID_UP_CAMERA in HID usage tables , Then add the mapping under HID_UP_CAMERA
--modify the commit log of patch
--Link to v3:https://lore.kernel.org/linux-input/9a85b268c7636ef2e4e3bbbe318561ba2842a591.1676536357.git.fengqi@xiaomi.com/T/#u
--Link to v2:https://lore.kernel.org/linux-input/CACOZ=ZU0zgRmoRu8X5bMUzUrXA9x-qoDJqrQroUs=+qKR58MQA@mail.gmail.com/T/#t
--Link to v1:https://lore.kernel.org/linux-input/CACOZ=ZWB3grJKn7wAZEZ0BDyN7KJF4VWUTNs-mPxeoW_oiR7=g@mail.gmail.com/T/#t
----
- drivers/hid/hid-input.c | 10 ++++++++++
- include/linux/hid.h     |  1 +
- 2 files changed, 11 insertions(+)
-
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 77c8c49852b5..c6098ae2fac7 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -1225,6 +1225,16 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 			return;
- 		}
- 		goto unknown;
-+	case HID_UP_CAMERA:
-+		switch (usage->hid & HID_USAGE) {
-+		case 0x020:
-+			map_key_clear(KEY_CAMERA_FOCUS);	break;
-+		case 0x021:
-+			map_key_clear(KEY_CAMERA);		break;
-+		default:
-+			goto ignore;
-+		}
-+		break;
- 
- 	case HID_UP_HPVENDOR:	/* Reported on a Dutch layout HP5308 */
- 		set_bit(EV_REP, input->evbit);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 8677ae38599e..88793b77bd63 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -155,6 +155,7 @@ struct hid_item {
- #define HID_UP_DIGITIZER	0x000d0000
- #define HID_UP_PID		0x000f0000
- #define HID_UP_BATTERY		0x00850000
-+#define HID_UP_CAMERA		0x00900000
- #define HID_UP_HPVENDOR         0xff7f0000
- #define HID_UP_HPVENDOR2        0xff010000
- #define HID_UP_MSVENDOR		0xff000000
--- 
-2.39.0
+Thanks,
+Francesco
 
