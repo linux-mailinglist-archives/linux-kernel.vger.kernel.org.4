@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E70699BA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8458699BAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjBPRyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S230187AbjBPRzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjBPRyG (ORCPT
+        with ESMTP id S229663AbjBPRzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:54:06 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49F4FAAA;
-        Thu, 16 Feb 2023 09:54:05 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id o19-20020a05600c379300b003e21af96703so1121672wmr.2;
-        Thu, 16 Feb 2023 09:54:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fa6e/J6Az3QweT1AcfTAdQTvvQGaFdfGTCPOYfh9lAs=;
-        b=nP5Cj6OoPxzboBqC043G0EDoX/vicms/McihqYLr/ykhh1ezlX/LIi1OCe99bCp72f
-         jMgp+2xrg+i3imAgDgEOpKEEfaHcP8zCAC/4gnQod7Iz0IuPMpwrU53FYtOzVcwksmpa
-         Fp02UE3yz50femzY/eFXRDsSYaGScZXSqhPLejpgzgQahFx85YyhnBQDZ/bAL6U2Vevg
-         YXFvgafGOGjCfiU8fMRHQzWgm9FyfdKr/rLPjlJm9GSYf5jK01XJ2gRoXcNjJLlFWfTa
-         BsTPfP9H18ho+DEz2ZaOXBhBEpnACFkKnvNBRQLrw/i5R63gTzPIIFwS9zvZbenNASTi
-         qTCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fa6e/J6Az3QweT1AcfTAdQTvvQGaFdfGTCPOYfh9lAs=;
-        b=6ELW4z2hfRzvP00Bqs1e/P3/fQYCPsT1pT8klybj/oXco/5nY15FFA7ErTwIs1tqjZ
-         5/LwI24mX/awFd5AphgyH0FcHAK0CO4HsR4XQ9d0y6nSLgDif87lNgYfM+4oQH/C3f5y
-         EqfNGfjqIHh12W765kdC55Za9UKZxTJysYbReQkC2fDEDucISvxjGe6A7MPoiNcphr09
-         Ek6S3waTBI2fCMdTo7XVKNPBxxs4Ujyw7cswLfJZFe2QGWI7inZjbSk9vBIgd22zn6uu
-         Y89RkOCcKtjDexFnAf4J5Yabguv1tB6asH6KIc8PXYBiHLTkr2fTYEcSqT6pd70A6in+
-         T3og==
-X-Gm-Message-State: AO0yUKWGozyQvVQ1IFqzA0Ub0h4LO8Noq3eNfymaY2aRk95z9+16BVp5
-        HZ8PSH3qjw4vDdPlc3dj92U=
-X-Google-Smtp-Source: AK7set9OgspDNDFeQp7YEfFIWhJ6rfthg/5MfYK31MG2O9dqKxGyuzCJtk9GmLU0woeuB4KRlknNQg==
-X-Received: by 2002:a05:600c:188a:b0:3e1:fc61:e0e5 with SMTP id x10-20020a05600c188a00b003e1fc61e0e5mr6103294wmp.33.1676570044447;
-        Thu, 16 Feb 2023 09:54:04 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:31b2:19e1:4409:5c3b])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dc4aae4739sm5826836wmc.27.2023.02.16.09.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 09:54:04 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 16 Feb 2023 12:55:17 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E525B9D;
+        Thu, 16 Feb 2023 09:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=U8HRVsC8weUc6GSIfzXEInXuXcTfhl4YDU5SDrGogxA=; b=KH3WV85edpy0UAdBCnY5WK/i6D
+        rnKSqHF/tzTZJ9sizmE/UMspW69CyQ8syUFWmx4DLvtFLDD6wrxxxz6T/l3kyyZ0OwI13x8sFTRbE
+        msKUvskpf5UB5sVlgzjxwi5faotzUz611+/z2KWbaKyOo9cQQ2lkvbNzA0Dw73gBOA/0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pSiSu-005D4t-OV; Thu, 16 Feb 2023 18:54:40 +0100
+Date:   Thu, 16 Feb 2023 18:54:40 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 3/3] arm64: dts: renesas: rzg2l-smarc: Enable CRU and CSI nodes
-Date:   Thu, 16 Feb 2023 17:53:47 +0000
-Message-Id: <20230216175347.99778-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 07/12] dt-bindings: net: Add StarFive JH7100 SoC
+Message-ID: <Y+5t4Jlb0ytw40pu@lunn.ch>
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-8-cristian.ciocaltea@collabora.com>
+ <Y+e74UIV/Td91lKB@lunn.ch>
+ <586971af-2d78-456d-a605-6c7b2aefda91@collabora.com>
+ <Y+zXv90rGfQupjPP@lunn.ch>
+ <cfa0f980-4bb6-4419-909c-3fce697cf8f9@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cfa0f980-4bb6-4419-909c-3fce697cf8f9@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> I gave "rgmii-id" a try and it's not usable, I get too many errors. So
+> "rgmii" should be the right choice here.
 
-Enable CRU and CSI nodes and tie the CSI remote endpoint with
-OV5645 endpoint.
+I would actually say it shows we don't understand what is going on
+with delays. "rgmii" is not every often the correct value. The fact it
+works suggests the MAC is adding delays.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- .../boot/dts/renesas/r9a07g044l2-smarc.dts    |  1 +
- .../boot/dts/renesas/rz-smarc-common.dtsi     | 23 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+What value are you using for starfive,gtxclk-dlychain ? Try 0 and then
+"rgmii-id"
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-index 275e760324f3..25da4c93e0a4 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-@@ -9,6 +9,7 @@
- 
- /* comment the #define statement if OV5645 is not connected to CN1  */
- #define CAM_INTERFACE_OV5645	1
-+#define CRU_INTERFACE_AVAILABLE	1
- 
- #include "r9a07g044l2.dtsi"
- #include "rzg2l-smarc-som.dtsi"
-diff --git a/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi b/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
-index 915ad7e3935d..0f9a96ef5f6a 100644
---- a/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
-@@ -132,6 +132,28 @@ channel1 {
- 	};
- };
- 
-+#ifdef CRU_INTERFACE_AVAILABLE
-+&cru {
-+	status = "okay";
-+};
-+
-+&csi2 {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			csi2_in: endpoint {
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+#ifdef CAM_INTERFACE_OV5645
-+				remote-endpoint = <&ov5645_ep>;
-+#endif
-+			};
-+		};
-+	};
-+};
-+#endif
-+
- &ehci0 {
- 	dr_mode = "otg";
- 	status = "okay";
-@@ -168,6 +190,7 @@ port {
- 			ov5645_ep: endpoint {
- 				clock-lanes = <0>;
- 				data-lanes = <1 2>;
-+				remote-endpoint = <&csi2_in>;
- 			};
- 		};
- 	};
--- 
-2.25.1
+	Andrew			 
 
