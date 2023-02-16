@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E4A6997D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25976997DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjBPOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S230147AbjBPOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjBPOty (ORCPT
+        with ESMTP id S229462AbjBPOvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:49:54 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E994B517
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:49:51 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id v5so482878uat.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ai3CedyoQlPri6k1JjfVKIfsle4h0KNZCUuZJqKd8BA=;
-        b=ABED20X7r8NTLeNjt5Z51+7Gc/N0xVn31/dsccxUvfTyUb0ug/tYwQSlqRjO/hRMxW
-         DpfZnZa/sB1ij8d3RixcE/bthSpCuld/wGPJvcTdBGswQwDS1aECelXEGYu+lNgcApCZ
-         KVajiZYVqU898fh7Q7t/Y4EDuvgMFBzWMTSLSsF23ctOXr9MFn3m/8/y2LEo1FHsyELw
-         pqibr9Ng3T709Q37j0c7Z+M5rbkD4vbzVz7HkmX9JbkhELebu7EBl1xUoufA/21yycGl
-         c37zljDuDDc6VZj8t1tkizn7x2QhmEWwT5I5Eio1ZUnko1v9pL/DuwPpnkFHQkfEjnXI
-         7Lyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ai3CedyoQlPri6k1JjfVKIfsle4h0KNZCUuZJqKd8BA=;
-        b=3N5xi+aflw4Mc3YTKMniQaA4unU2Lhs4s4DN0T+rIHxq/YUWZjwadIqKq6XVvUqbpJ
-         SiNuw/hIPtGlR4jL/D8Tqt8n6ErlAiUs2zJmToRUvJN3Ng3gnjSvub46TeZQrCoGMJK6
-         Ghv5I+/UaMtHpuSrFKc+uG9eu5lRDdt2/AwA/eJBN/CNRvjK0QRkhq59DdZKD8mWDHwM
-         WA9xaUkVZtNmpNZP9EskkEZBsabWY6CoV7XBHPORT2fsGxeRjih5KClFEPKijD+v6Vbn
-         JSlcdxHXQUBaPL+QkyOJokkhStABCdP+HOnSZA3JZZzL5zBtTRA4OkkS5hH9k3p4ZFOM
-         1f3Q==
-X-Gm-Message-State: AO0yUKWQe2N7y3TeSfZu8U6tUKBSk0SjoopMPSytJiH+DCSeSDRjgl2r
-        Js2zg61q3l32nNeNM/yIOSTpT8byAGwruGnrEdCHaA==
-X-Google-Smtp-Source: AK7set+BNhdSYJr2WYaQ9cpbqWW82KD8HjVkehRodf+B4b/q4fs5NJNHLKdzsG8KjCFtNbWh7brMfL+W+zCINaWgYgI=
-X-Received: by 2002:a05:6130:6cb:b0:688:cc78:8662 with SMTP id
- bl11-20020a05613006cb00b00688cc788662mr655873uab.1.1676558990146; Thu, 16 Feb
- 2023 06:49:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20230216141555.116219-1-brgl@bgdev.pl> <Y+5AzMxlTC7X2UsM@smile.fi.intel.com>
-In-Reply-To: <Y+5AzMxlTC7X2UsM@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 16 Feb 2023 15:49:39 +0100
-Message-ID: <CAMRc=MfmMRUpv8ThWU1hW0pZBFNCoS3ODd23Z6ZZ_yuCo=2GTA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: sim: fix a memory leak
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thu, 16 Feb 2023 09:51:46 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D7E3A0AC;
+        Thu, 16 Feb 2023 06:51:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676559102; x=1708095102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x371ivh4xXBL5WHPoCYny9H2qed+c4NoN03Dsh6RNUM=;
+  b=V3niWVjStF2MXEujrINr6URB/lJ0pxJ++okCsiyZ7VZHXp6r9NANJx72
+   27/92BReNFhY23NqzvWZqGwZyA+BgVueQMKL4GbNj2AP9364T2YgRotAM
+   s4U/oPyUw0qAkAO8XAgnwS1WkeUQK9W27Ppta+mZQuAhPxhM7Gy7dfbKC
+   62bHBttTLn0ZsRrQiMQsVEs+SdTDXsmmPQjdIeD8eyqH1GzSbnUM3SCRo
+   3D/A7kItoP7jG+6SlB88F6tl+wJdVJSNaoans2FCtnqEYAR4paoBecrwa
+   HJA05K5ZgeVPq3j//X2xe01y0aLrAuG8YuEVvCLgwq7/l0xsreYar4ZOe
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="394160682"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="394160682"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 06:51:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="915682205"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="915682205"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2023 06:51:39 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pSfbl-007pIR-2r;
+        Thu, 16 Feb 2023 16:51:37 +0200
+Date:   Thu, 16 Feb 2023 16:51:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH v1 2/3] gpio: merrifield: Adapt to tangier driver
+Message-ID: <Y+5C+YeeQJsIHayU@smile.fi.intel.com>
+References: <20230216132356.29922-1-raag.jadav@intel.com>
+ <20230216132356.29922-3-raag.jadav@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216132356.29922-3-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 3:42 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Feb 16, 2023 at 03:15:55PM +0100, Bartosz Golaszewski wrote:
-> > Fix an inverted logic bug in gpio_sim_remove_hogs() that leads to GPIO
-> > hog structures never being freed.
->
-> Ha-ha, I stared to this code, and in the head I was "okay, this loop is until
-> chip_label is *not* NULL, so should be fine".
->
-> At the same time, "! is hard to process", see for example
-> 2754435d4c82 ("ACPI / battery: get rid of negations in conditions")
-> which I had suggested.
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> P.S. But my patch I mentioned looks also good to have, no?
->
+On Thu, Feb 16, 2023 at 06:53:55PM +0530, Raag Jadav wrote:
+> From: Pandith N <pandith.n@intel.com>
+> 
+> Make use of Intel Tangier as a library driver for Merrifield.
 
-I don't think it matters. In fact - I'm not sure if the order was
-accidental or not anymore. :( If you want to discuss it further -
-please resend it as a regular patch on the list.
+...
 
-Bart
+> -MODULE_LICENSE("GPL v2");
+> +MODULE_LICENSE("GPL");
+
+Stray change.
+No need to resend, it can be fixed when applying.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
