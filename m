@@ -2,76 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519BC698E70
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B98698E7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjBPIQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:16:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S229863AbjBPITG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjBPIQQ (ORCPT
+        with ESMTP id S229843AbjBPIS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:16:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD1E30C2;
-        Thu, 16 Feb 2023 00:16:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50C0EB824F1;
-        Thu, 16 Feb 2023 08:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76152C433D2;
-        Thu, 16 Feb 2023 08:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676535373;
-        bh=VyzmEsPoa/Y565Ji4nqFDLHYCje9rYD0PrA6meuz6yQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ad1O+QQV/rW9JaixcdpRKFUQz9al6FjHd3z3HPbEEI6hYl56YB4XkPPWZHoi/aY9b
-         nubWjRWKnrIQZXSSstWRBjLWJhqneHNtqVm51BArm1SYV/B17VpWofCQVVI47Nkmi9
-         CIVWLzw6k94dwsw1oaeqdby73f2okGp5FdthFbJQ=
-Date:   Thu, 16 Feb 2023 09:16:10 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Taichi Nishimura <awkrail01@gmail.com>
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, iii@linux.ibm.com, ytcoode@gmail.com,
-        deso@posteo.net, memxor@gmail.com, joannelkoong@gmail.com,
-        rdunlap@infradead.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next] Fix typos in selftest/bpf files
-Message-ID: <Y+3mSp2j2Xqe1sT0@kroah.com>
-References: <20230216080423.513746-1-awkrail01@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216080423.513746-1-awkrail01@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 03:18:59 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5D530197
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:18:55 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VbnmOMt_1676535472;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VbnmOMt_1676535472)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Feb 2023 16:18:53 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH] perf/arm-cmn: Fix and refactor device mapping resource
+Date:   Thu, 16 Feb 2023 16:17:50 +0800
+Message-Id: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 05:04:23PM +0900, Taichi Nishimura wrote:
-> This patch is a re-submitting patch.
-> I cloned bpf-next repo, run spell checker, and fixed typos.
-> Included v1 and v2 patches to this one.
-> 
-> Could you review it again? 
-> Let me know if I have any mistakes.
+The devm_platform_ioremap_resource() won't let the platform device
+claim resource when the ACPI companion device has already claimed it.
+If CMN-ANY except CMN600 is ACPI companion device, it will return
+-EBUSY in devm_platform_ioremap_resource(), and the driver cannot be
+successfully installed.
 
-This text is not needed in the changelog for a patch, please read the
-section entitled "The canonical patch format" in the kernel file,
-Documentation/process/submitting-patches.rst for what is needed in order
-to properly describe the change.
+So let ACPI companion device call arm_cmn_acpi_probe and not claim
+resource again. In addition, the arm_cmn_acpi_probe() and
+arm_cmn_of_probe() functions are refactored to make them compatible
+with both CMN600 and CMN-ANY.
 
-thanks,
+Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
+Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+---
+ drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 20 deletions(-)
 
-greg k-h
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 1deb61b..beb3b37 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+ 	return 0;
+ }
+ 
+-static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
++static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+ {
+ 	struct resource *cfg, *root;
+ 
+@@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	if (!root)
+-		return -EINVAL;
++	/* If ACPI defines more than one resource, such as cmn-600, then there may be
++	 * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
++	 * be obtained from the second resource. Otherwise, it can be considered that
++	 * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
++	 */
++	if (pdev->num_resources > 1) {
++		root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++		if (!root)
++			return -EINVAL;
+ 
+-	if (!resource_contains(cfg, root))
+-		swap(cfg, root);
++		if (!resource_contains(cfg, root))
++			swap(cfg, root);
++	} else {
++		root = cfg;
++	}
+ 	/*
+ 	 * Note that devm_ioremap_resource() is dumb and won't let the platform
+ 	 * device claim cfg when the ACPI companion device has already claimed
+@@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+ 	 * appropriate name, we don't really need to do it again here anyway.
+ 	 */
+ 	cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
+-	if (!cmn->base)
+-		return -ENOMEM;
++	if (IS_ERR(cmn->base))
++		return PTR_ERR(cmn->base);
+ 
+ 	return root->start - cfg->start;
+ }
+ 
+-static int arm_cmn600_of_probe(struct device_node *np)
++static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+ {
+ 	u32 rootnode;
++	int ret;
++
++	cmn->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(cmn->base))
++		return PTR_ERR(cmn->base);
+ 
+-	return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
++	/* If of_property_read_u32() return EINVAL, it means that device tree has
++	 * not define root-node, and root-node will return 0, which is compatible
++	 * with cmn-600 and cmn-any.
++	 */
++	ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
++	if (ret == -EINVAL)
++		return 0;
++
++	return rootnode;
+ }
+ 
+ static int arm_cmn_probe(struct platform_device *pdev)
+@@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
+ 	cmn->model = (unsigned long)device_get_match_data(cmn->dev);
+ 	platform_set_drvdata(pdev, cmn);
+ 
+-	if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
+-		rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+-	} else {
+-		rootnode = 0;
+-		cmn->base = devm_platform_ioremap_resource(pdev, 0);
+-		if (IS_ERR(cmn->base))
+-			return PTR_ERR(cmn->base);
+-		if (cmn->model == CMN600)
+-			rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+-	}
++	if (has_acpi_companion(cmn->dev))
++		rootnode = arm_cmn_acpi_probe(pdev, cmn);
++	else
++		rootnode = arm_cmn_of_probe(pdev, cmn);
++
+ 	if (rootnode < 0)
+ 		return rootnode;
+ 
+-- 
+1.8.3.1
+
