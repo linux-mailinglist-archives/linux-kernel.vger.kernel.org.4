@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC94698FD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD87698FD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjBPJbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S229998AbjBPJcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBPJa6 (ORCPT
+        with ESMTP id S229803AbjBPJcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:30:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8969D;
-        Thu, 16 Feb 2023 01:30:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Feb 2023 04:32:31 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D47EF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:32:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C6BD61EF4;
-        Thu, 16 Feb 2023 09:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED1EC4339E;
-        Thu, 16 Feb 2023 09:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676539856;
-        bh=OdLf0lflbfPh6eJsxKZzkNPd+cBrLw4Nsh++3rLbo3U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lrYYx/UanFz71hs7kc/V2NG6UVveJtdnW2kR8C9HvO3hi0eQQO8VMeO6bPeuoj6tf
-         Q6+HcJaB0Lpkli/UkxYeA9H4uIb/9ptldb3+7xRigtmf81ly82b9rADOAEozGBpUGG
-         I/kfsYE6CT77A3/+RbEImNPtsj9Z2rVEQhvKBnmmNJmhWdhDsu/V68gxIwu7zOVGvD
-         ztY3R3ubKykpJBfzNsfN47px7RWyJ6e4Ef1AfqtqGPJL0LSbrM3JI+FywkfRCvLxkx
-         VgScCCPikOgVT8YSgPkdEetlGFkMbnBXG5oZfobwS3g0XpJ/vdstEAgal80WqQRfzY
-         YqVXxwLWzSd3w==
-Received: by mail-ej1-f51.google.com with SMTP id he33so3586122ejc.11;
-        Thu, 16 Feb 2023 01:30:56 -0800 (PST)
-X-Gm-Message-State: AO0yUKWeFUALvuhEnQci/npGa37BF/8TvPz89lILmsH9Epzw9F6mD6X+
-        f8ETk8EzTFOuOZF5Z8xoPIcCoJ6uE214t1scyNI=
-X-Google-Smtp-Source: AK7set98w9l2vIAxaf28W6wZ9k6ybYWesA0iLcj/ZtNswakBr1+s5dpgWQLdGVrV0xaSQr0Etr3j6M7lrYYXqzIrFmk=
-X-Received: by 2002:a17:906:245b:b0:8b0:e909:9136 with SMTP id
- a27-20020a170906245b00b008b0e9099136mr2621638ejb.1.1676539854884; Thu, 16 Feb
- 2023 01:30:54 -0800 (PST)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E775321DD6;
+        Thu, 16 Feb 2023 09:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676539948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mQGGh0+aQKoMs9jkQE18Hu5wUNl3MbfUQWveNSNG/3o=;
+        b=Ewp6/OUfjmV7uiXEeQxFWVLdp8kivGcJzYFJS99KcrgAQSrg2e8gj9BlDbpF4Tdc/yu2cx
+        KhmfqMGBNHAbnG9yJtZt931P9AzdT+m5rps2FMeKoI6ioJzPUIJDVtPz+y9QlP+vsyivrg
+        XfQm9meyv4LjZaDwn0RTxNv5mV++4JY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C50C13484;
+        Thu, 16 Feb 2023 09:32:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gh9vJCz47WP9KgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 16 Feb 2023 09:32:28 +0000
+Message-ID: <cc6c58a8-b162-a6eb-37d4-40786f532837@suse.com>
+Date:   Thu, 16 Feb 2023 10:32:28 +0100
 MIME-Version: 1.0
-References: <cover.1676289084.git.zhoubinbin@loongson.cn> <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org> <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
- <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org> <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
- <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
-In-Reply-To: <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 16 Feb 2023 17:30:45 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6+aDYZ4JAPpdkefPR0P3QFqKCmt=RsZiw+FZRRax5TgA@mail.gmail.com>
-Message-ID: <CAAhV-H6+aDYZ4JAPpdkefPR0P3QFqKCmt=RsZiw+FZRRax5TgA@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+In-Reply-To: <Y+ohfE/wICFKO/93@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------GZlBcdN97K0Ko47SmRuLt09p"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,114 +71,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Krzysztof,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------GZlBcdN97K0Ko47SmRuLt09p
+Content-Type: multipart/mixed; boundary="------------nvD3HbiZsMbWmwnQx4LKBhNy";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <cc6c58a8-b162-a6eb-37d4-40786f532837@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+In-Reply-To: <Y+ohfE/wICFKO/93@zn.tnic>
 
-On Thu, Feb 16, 2023 at 4:10 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 16/02/2023 02:46, Binbin Zhou wrote:
-> > On Tue, Feb 14, 2023 at 8:43 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 14/02/2023 13:40, Binbin Zhou wrote:
-> >>> On Tue, Feb 14, 2023 at 5:53 PM Krzysztof Kozlowski
-> >>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>
-> >>>> On 13/02/2023 13:15, Binbin Zhou wrote:
-> >>>>> Add Loongson Extended I/O Interrupt controller binding with DT schema
-> >>>>> format using json-schema.
-> >>>>>
-> >>>>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> >>>>> ---
-> >>>>>  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
-> >>>>>  1 file changed, 80 insertions(+)
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..88580297f955
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> >>>>> @@ -0,0 +1,80 @@
-> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>>> +%YAML 1.2
-> >>>>> +---
-> >>>>> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
-> >>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> >>>>
-> >>>> Drop quotes from bopth.
-> >>>>
-> >>>>> +
-> >>>>> +title: Loongson Extended I/O Interrupt Controller
-> >>>>> +
-> >>>>> +maintainers:
-> >>>>> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> >>>>> +
-> >>>>> +description: |
-> >>>>> +  This interrupt controller is found on the Loongson-3 family chips and
-> >>>>> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
-> >>>>> +  individual cores without forwarding them through the HT's interrupt line.
-> >>>>> +
-> >>>>> +allOf:
-> >>>>> +  - $ref: /schemas/interrupt-controller.yaml#
-> >>>>> +
-> >>>>> +properties:
-> >>>>> +  compatible:
-> >>>>> +    enum:
-> >>>>> +      - loongson,eiointc-1.0
-> >>>>
-> >>>> Why not using SoC based compatible? It is preferred.
-> >>>
-> >>> Hi Krzysztof:
-> >>>
-> >>> So far, from the datasheet, I know that only the EXIOINTC of the
-> >>> Loongson-2K0500 is different from the other chips, and that is the
-> >>> "loongson,eio-num-vecs" below, which is 128, while all the others are
-> >>> 256.
-> >>> My original idea was to add this property to make compatible
-> >>> consistent, and also to make it easier to add new chips if they have
-> >>> different eio-num-vecs.
-> >>
-> >> We talk about different things. SoC based compatibles are preferred over
-> >> version ones. This was on the lists expressed many times. Please provide
-> >> a reason why you deviate from general recommendation. Flexibility and
-> >> genericness of bindings is not a reason - it's the opposite of the
-> >> argument, thus this will be a: NAK. :(
-> >>
-> >>
-> > Hi Krzysztof:
-> >
-> > Allow me to give a brief overview of the current status of eiointc (DT-based):
-> >      Loongson-3A series supports eiointc;
-> >      Loongson-2K1000 does not support eiointc now;
-> >      Loongson-2K0500 supports eiointc, with differences from
-> > Loongson-3, e.g. only up to 128 devices are supported;
-> >      Loongson-2K2000 supports eiointc, similar to Loongson-3.
-> >      ....
-> >
-> > As can be seen, there is now a bit of confusion in the chip's design of eiointc.
-> >
-> > The design of eiointc is probably refined step by step with the chip.
-> > The same version of eiointc can be used for multiple chips, and the
-> > same chip series may also use different versions of eiointc. Low-end
-> > chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
-> > depending on the time it's produced.
-> >
-> > So in the Loongson-2K series I have defined the current state as
-> > eiointc-1.0, using the dts property to indicate the maximum number of
-> > devices supported by eiointc that can be used directly in the driver.
-> >
-> > If there are new changes to the design later on, such as the
-> > definition of registers, we can call it eiointc-2.0, which can also
-> > cover more than one chip.
->
-> Just go with SoC-based compatibles. If your version is not specific
-> enough, then it is not a good way to represent the hardware.
-EIOINTC is a bit like the existing LIOINTC which is already use
-version to represent hardware.
+--------------nvD3HbiZsMbWmwnQx4LKBhNy
+Content-Type: multipart/mixed; boundary="------------CBWiUEXdu0AJH9bM7gkN0hRw"
 
-Huacai
->
-> Best regards,
-> Krzysztof
->
+--------------CBWiUEXdu0AJH9bM7gkN0hRw
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMTMuMDIuMjMgMTI6MzksIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBG
+ZWIgMDksIDIwMjMgYXQgMDg6MjI6MTRBTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IFdoZW4gcnVubmluZyB2aXJ0dWFsaXplZCwgTVRSUiBhY2Nlc3MgY2FuIGJlIHJlZHVj
+ZWQgKGUuZy4gaW4gWGVuIFBWDQo+PiBndWVzdHMgb3Igd2hlbiBydW5uaW5nIGFzIGEgU0VW
+LVNOUCBndWVzdCB1bmRlciBIeXBlci1WKS4gVHlwaWNhbGx5DQo+PiB0aGUgaHlwZXJ2aXNv
+ciB3aWxsIHJlc2V0IHRoZSBNVFJSIGZlYXR1cmUgaW4gY3B1aWQgZGF0YSwgcmVzdWx0aW5n
+DQo+PiBpbiBubyBNVFJSIG1lbW9yeSB0eXBlIGluZm9ybWF0aW9uIGJlaW5nIGF2YWlsYWJs
+ZSBmb3IgdGhlIGtlcm5lbC4NCj4+DQo+PiBUaGlzIGhhcyB0dXJuZWQgb3V0IHRvIHJlc3Vs
+dCBpbiBwcm9ibGVtczoNCj4+DQo+PiAtIEh5cGVyLVYgU0VWLVNOUCBndWVzdHMgdXNpbmcg
+dW5jYWNoZWQgbWFwcGluZ3Mgd2hlcmUgdGhleSBzaG91bGRuJ3QNCj4+IC0gWGVuIFBWIGRv
+bTAgbWFwcGluZyBtZW1vcnkgYXMgV0Igd2hpY2ggc2hvdWxkIGJlIFVDLSBpbnN0ZWFkDQo+
+Pg0KPj4gU29sdmUgdGhvc2UgcHJvYmxlbXMgYnkgc3VwcG9ydGluZyB0byBzZXQgYSBmaXhl
+ZCBNVFJSIHN0YXRlLA0KPj4gb3ZlcndyaXRpbmcgdGhlIGVtcHR5IHN0YXRlIHVzZWQgdG9k
+YXkuIEluIGNhc2Ugc3VjaCBhIHN0YXRlIGhhcyBiZWVuDQo+PiBzZXQsIGRvbid0IGNhbGwg
+Z2V0X210cnJfc3RhdGUoKSBpbiBtdHJyX2JwX2luaXQoKS4gVGhlIHNldCBzdGF0ZQ0KPj4g
+d2lsbCBvbmx5IGJlIHVzZWQgYnkgbXRycl90eXBlX2xvb2t1cCgpLCBhcyBpbiBhbGwgb3Ro
+ZXIgY2FzZXMNCj4+IG10cnJfZW5hYmxlZCgpIGlzIGJlaW5nIGNoZWNrZWQsIHdoaWNoIHdp
+bGwgcmV0dXJuIGZhbHNlLiBBY2NlcHQgdGhlDQo+PiBvdmVyd3JpdGUgY2FsbCBvbmx5IGlu
+IGNhc2Ugb2YgTVRSUnMgYmVpbmcgZGlzYWJsZWQgaW4gY3B1aWQuDQo+IA0KPiBzL2NwdWlk
+L0NQVUlEL2cNCj4gDQo+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NA
+c3VzZS5jb20+DQo+PiAtLS0NCj4+IFYyOg0KPj4gLSBuZXcgcGF0Y2gNCj4+IC0tLQ0KPj4g
+ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9tdHJyLmggICAgICAgIHwgIDIgKysNCj4+ICAgYXJj
+aC94ODYva2VybmVsL2NwdS9tdHJyL2dlbmVyaWMuYyB8IDM4ICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKw0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5jICAg
+IHwgIDkgKysrKysrKw0KPj4gICAzIGZpbGVzIGNoYW5nZWQsIDQ5IGluc2VydGlvbnMoKykN
+Cj4+DQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oIGIvYXJj
+aC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBpbmRleCBmMGVlYWY2ZTVmNWYuLjBiOGY1
+MWQ2ODNkYyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL210cnIuaA0K
+Pj4gKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBAQCAtMzEsNiArMzEs
+OCBAQA0KPj4gICAgKi8NCj4+ICAgIyBpZmRlZiBDT05GSUdfTVRSUg0KPj4gICB2b2lkIG10
+cnJfYnBfaW5pdCh2b2lkKTsNCj4+ICt2b2lkIG10cnJfb3ZlcndyaXRlX3N0YXRlKHN0cnVj
+dCBtdHJyX3Zhcl9yYW5nZSAqdmFyLCB1bnNpZ25lZCBpbnQgbnVtX3ZhciwNCj4+ICsJCQkg
+IG10cnJfdHlwZSAqZml4ZWQsIG10cnJfdHlwZSBkZWZfdHlwZSk7DQo+PiAgIGV4dGVybiB1
+OCBtdHJyX3R5cGVfbG9va3VwKHU2NCBhZGRyLCB1NjQgZW5kLCB1OCAqdW5pZm9ybSk7DQo+
+PiAgIGV4dGVybiB2b2lkIG10cnJfc2F2ZV9maXhlZF9yYW5nZXModm9pZCAqKTsNCj4+ICAg
+ZXh0ZXJuIHZvaWQgbXRycl9zYXZlX3N0YXRlKHZvaWQpOw0KPj4gZGlmZiAtLWdpdCBhL2Fy
+Y2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1
+L210cnIvZ2VuZXJpYy5jDQo+PiBpbmRleCBlZTA5ZDM1OWUwOGYuLjc4OGJjMTY4ODhhNSAx
+MDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMNCj4+
+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMNCj4+IEBAIC0yNDAs
+NiArMjQwLDQ0IEBAIHN0YXRpYyB1OCBtdHJyX3R5cGVfbG9va3VwX3ZhcmlhYmxlKHU2NCBz
+dGFydCwgdTY0IGVuZCwgdTY0ICpwYXJ0aWFsX2VuZCwNCj4+ICAgCXJldHVybiBtdHJyX3N0
+YXRlLmRlZl90eXBlOw0KPj4gICB9DQo+PiAgIA0KPj4gKy8qKg0KPj4gKyAqIG10cnJfb3Zl
+cndyaXRlX3N0YXRlIC0gc2V0IGZpeGVkIE1UUlIgc3RhdGUNCj4gDQo+IGZpeGVkIG9ubHk/
+IFlvdSBwYXNzIGluIHZhcmlhYmxlIHRvby4uLg0KPiANCj4+ICsgKg0KPj4gKyAqIFVzZWQg
+dG8gc2V0IE1UUlIgc3RhdGUgdmlhIGRpZmZlcmVudCBtZWFucyAoZS5nLiB3aXRoIGRhdGEg
+b2J0YWluZWQgZnJvbQ0KPj4gKyAqIGEgaHlwZXJ2aXNvcikuDQo+PiArICovDQo+PiArdm9p
+ZCBtdHJyX292ZXJ3cml0ZV9zdGF0ZShzdHJ1Y3QgbXRycl92YXJfcmFuZ2UgKnZhciwgdW5z
+aWduZWQgaW50IG51bV92YXIsDQo+PiArCQkJICBtdHJyX3R5cGUgKmZpeGVkLCBtdHJyX3R5
+cGUgZGVmX3R5cGUpDQo+PiArew0KPj4gKwl1bnNpZ25lZCBpbnQgaTsNCj4+ICsNCj4+ICsJ
+aWYgKGJvb3RfY3B1X2hhcyhYODZfRkVBVFVSRV9NVFJSKSkNCj4gDQo+IGNoZWNrX2Zvcl9k
+ZXByZWNhdGVkX2FwaXM6IFdBUk5JTkc6IGFyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5l
+cmljLmM6MjU0OiBEbyBub3QgdXNlIGJvb3RfY3B1X2hhcygpIC0gdXNlIGNwdV9mZWF0dXJl
+X2VuYWJsZWQoKSBpbnN0ZWFkLg0KPiANCj4+ICsJCXJldHVybjsNCj4gDQo+IFNvIHRoaXMg
+aGVyZSBuZWVkcyB0byBjaGVjazoNCj4gDQo+IAlpZiAoIWNwdV9mZWF0dXJlX2VuYWJsZWQo
+WDg2X0ZFQVRVUkVfSFlQRVJWSVNPUikgJiYNCj4gCSAgICAhKGNwdV9mZWF0dXJlX2VuYWJs
+ZWQoWDg2X0ZFQVRVUkVfU0VWX1NOUCkgfHwNCj4gCSAgICAgIGNwdV9mZWF0dXJlX2VuYWJs
+ZWQoWDg2X0ZFQVRVUkVfWEVOUFYpKSkgew0KPiAJCVdBUk5fT05fT05DRSgxKTsNCj4gCQly
+ZXR1cm47DQo+IAl9DQo+IA0KPiBhcyB3ZSBkb24ndCB3YW50IHRoaXMgdG8gYmUgY2FsbGVk
+IHNvbWV3aGVyZSBvciBieSBzb21ldGhpbmcgZWxzZS4NCj4gDQo+IFRoZSBTRVZfU05QIGZs
+YWcgY2FuIGJlIHVzZWQgZnJvbToNCj4gDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3Iv
+MjAyMjEyMTQxOTQwNTYuMTYxNDkyLTE0LW1pY2hhZWwucm90aEBhbWQuY29tDQo+IA0KPiBJ
+J20gYXNzdW1pbmcgaGVyZSBIeXBlclYgU0VWLVNOUCBndWVzdHMgcmVhbGx5IGRvIHNldCB0
+aGF0IGZlYXR1cmUgZmxhZw0KPiAodGhleSBiZXR0ZXIpLiBXZSBjYW4gZXhwZWRpdGUgdGhh
+dCBwYXRjaCBvZmMuDQoNCklzIHRoYXQgZmxhZyBfcmVhbGx5XyBtZWFudCB0byBpbmRpY2F0
+ZSB3ZSBhcmUgcnVubmluZyBhcyBhIFNFVi1TTlAgZ3Vlc3Q/DQoNCkdpdmVuIHRoYXQgdGhl
+IHJlZmVyZW5jZWQgcGF0Y2ggaXMgcGFydCBvZiB0aGUgU0VWLVNOUCBob3N0IHN1cHBvcnQg
+c2VyaWVzLA0KSSdtIGluY2xpbmVkIHRvIHN1c3BlY3QgaXQgd29uJ3QgYmUgc2V0IGZvciBz
+dXJlIGluIEh5cGVyViBTRVYtU05QIGd1ZXN0cy4NCkFuZCB3aG8gaXMgc2V0dGluZyBpdCBm
+b3IgS1ZNIFNFVi1TTlAgZ3Vlc3RzPw0KDQoNCkp1ZXJnZW4NCg==
+--------------CBWiUEXdu0AJH9bM7gkN0hRw
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------CBWiUEXdu0AJH9bM7gkN0hRw--
+
+--------------nvD3HbiZsMbWmwnQx4LKBhNy--
+
+--------------GZlBcdN97K0Ko47SmRuLt09p
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPt+CwFAwAAAAAACgkQsN6d1ii/Ey9Q
+Jwf/fv2NuEW5I6MAjokIy+uvtyDuUYLCvdiJK5b8axxKOnrzxlWtsfG1CjJNYrOKhKaaZ+Rp8byz
+U/vuM72rUf2OBYN3KlwVeKjHvDCDcXRzNoY9sEnhTqx0dftkibjVJ6QGe8xMvYABCVSWx1tP8yWr
+0s6ZFJ1dKg/zWZHSH3PworVfB6p9t4GHLV9kqC6U4bJUin95ClZaqCJIOCdOXrKuAqapm3CkLpN9
+DNPORzZbqYX/012ihYGSSO4bgW0QMcEL/Dlok+obVX4oQiTEK2BbwTi+gU25u/LxD/mlSkWaZvKN
+hjsImhXevxU8qvHNQCxTc+iuGc24I1m6lqHo+31uTg==
+=Dyqx
+-----END PGP SIGNATURE-----
+
+--------------GZlBcdN97K0Ko47SmRuLt09p--
