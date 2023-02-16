@@ -2,132 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057CE698FCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC116698FD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjBPJ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S229959AbjBPJaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjBPJ3E (ORCPT
+        with ESMTP id S229611AbjBPJaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:29:04 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5616BBDE3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:29:01 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSaZU-0000eh-1H; Thu, 16 Feb 2023 10:28:56 +0100
-Message-ID: <52f9afe2-f621-77d8-9d10-449d539e901d@leemhuis.info>
-Date:   Thu, 16 Feb 2023 10:28:55 +0100
+        Thu, 16 Feb 2023 04:30:11 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9067C3C1D;
+        Thu, 16 Feb 2023 01:30:09 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PHV0f5kyTzFqTF;
+        Thu, 16 Feb 2023 17:25:22 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Thu, 16 Feb 2023 17:29:58 +0800
+Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
+ journal record without error
+To:     Baokun Li <libaokun1@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <20230214022905.765088-2-yebin@huaweicloud.com>
+ <501b98e2-9345-d57f-bc70-432ae342b1e8@huawei.com> <63EDDED7.90406@huawei.com>
+ <add8f2da-e220-61ad-76ae-1590e9d2c715@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <63EDF795.7030204@huawei.com>
+Date:   Thu, 16 Feb 2023 17:29:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        michallinuxstuff@gmail.com
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217037 - cmb attributes missing from the nvme class
- under sysfs
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <add8f2da-e220-61ad-76ae-1590e9d2c715@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676539741;0120c9ad;
-X-HE-SMSGID: 1pSaZU-0000eh-1H
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217037 :
-
->  michallinuxstuff@gmail.com 2023-02-14 14:16:26 UTC
-> 
-> For the CMB-capable nvme ctrls, kernel was exposing couple of related attributes under the sysfs. E.g.
-> 
-> 
-> # grep . /sys/class/nvme/nvme0/cmb*
-> /sys/class/nvme/nvme0/cmb:cmbloc : x00000062
-> /sys/class/nvme/nvme0/cmb:cmbsz  : x0008021d
-> /sys/class/nvme/nvme0/cmbloc:98
-> /sys/class/nvme/nvme0/cmbsz:524829
-> #
-> 
-
-> The above was taken from fedora37 running under 6.1.8 kernel build.
-> In 6.1.{9,10} all these attributes are gone.
-> 
-> I am running fedora37 under QEMU 7.{0,2}.0, all nvmes are emulated.
-> 
-> I've tried to understand what change in 6.1.9 might have caused it
-> (suspected that maybe fedora's src is applying some weird patches on
-> top but that's not it), but I could not pinpoint anything specific.
-> 
-> The latest commit that indirectly touches these attributes is
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=86adbf0cdb9ec
-> but my C-fu is to weak to understand if this really could somehow
-> hide|remove these attrs.
-> 
-> Also from the look of nvme_pci_attrs_are_visible() nothing has
-> recently changed. I use same QEMU params for setting up the nvmes
-> across all the VMs - is it possible that the way QEMU exposes CMB is
-> not valid anymore?
-> 
-> If I check proper BARs with setpci + /proc/iomem it seems like CMB is
-> there. SPDK also tells me that given nvme comes with CMB.
-> 
-> Any hints would be appreciated. I have couple of scripts which depend
-> on these so I am a bit biased if it comes to prio on this. :)>
-> [...]
->
-> So I did install the latest available build,
-> 6.2.0-0.rc8.20230215gte1c04510.258.vanilla.fc37.x86_64 to be exact,
-> but there's no change - /cmb* stuff is still missing (remaining
-> parts, lspci output, etc. look exactly the same as in the case of
-> previously mentioned versions).
-
-See the ticket for more details.
 
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+On 2023/2/16 17:17, Baokun Li wrote:
+> On 2023/2/16 15:44, yebin (H) wrote:
+>>
+>>
+>> On 2023/2/16 15:17, Baokun Li wrote:
+>>> On 2023/2/14 10:29, Ye Bin wrote:
+>>>> From: Ye Bin <yebin10@huawei.com>
+>>>>
+>>>> Now, 'es->s_state' maybe covered by recover journal. And journal errno
+>>>> maybe not recorded in journal sb as IO error. ext4_update_super() only
+>>>> update error information when 'sbi->s_add_error_count' large than 
+>>>> zero.
+>>>> Then 'EXT4_ERROR_FS' flag maybe lost.
+>>>> To solve above issue commit error information after recover journal.
+>>>>
+>>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>>>> ---
+>>>>   fs/ext4/super.c | 12 ++++++++++++
+>>>>   1 file changed, 12 insertions(+)
+>>>>
+>>>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>>>> index dc3907dff13a..b94754ba8556 100644
+>>>> --- a/fs/ext4/super.c
+>>>> +++ b/fs/ext4/super.c
+>>>> @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct 
+>>>> super_block *sb,
+>>>>           goto err_out;
+>>>>       }
+>>>>   +    if (unlikely(es->s_error_count && 
+>>>> !jbd2_journal_errno(journal) &&
+>>>> +             !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
+>>>> +        EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+>>>> +        es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+>>>> +        err = ext4_commit_super(sb);
+>>>> +        if (err) {
+>>>> +            ext4_msg(sb, KERN_ERR,
+>>>> +                 "Failed to commit error information, please 
+>>>> repair fs force!");
+>>>> +            goto err_out;
+>>>> +        }
+>>>> +    }
+>>>> +
+>>>>       EXT4_SB(sb)->s_journal = journal;
+>>>>       err = ext4_clear_journal_err(sb, es);
+>>>>       if (err) {
+>>> I think we don't need such a complicated judgment, after the journal 
+>>> replay and saving the error info,
+>>> if there is EXT4_ERROR_FS flag in ext4_sb_info->s_mount_state, just 
+>>> add this flag directly to es->s_state.
+>>> This way the EXT4_ERROR_FS flag and the error message will be 
+>>> written to disk the next time
+>>
+>> Thanks for your suggestion. There are two reasons for this:
+>> 1. We want to write the error mark to the disk as soon as possible.
+>> 2. Here we deal with the case where there is no error mark bit but 
+>> there is an error record.
+>> In this case, the file system should be marked with an error and the 
+>> user should be prompted.
+> The EXT4_ERROR_FS flag is always written to disk at the same time as 
+> the error info,
+> except when the journal is replayed. During journal replay the error 
+> info is additionally
+> copied to disk first, and the EXT4_ERROR_FS flag in the sbi is not 
+> written to disk until
+> the ext4_put_super() is called. It is only when a failure occurs 
+> during this time that
+> there is an error info but no EXT4_ERROR_FS flag. So we just need to 
+> make sure that
+> the EXT4_ERROR_FS flag is also written to disk at the same time as the 
+> error info
+> after the journal replay.
+The situation you said is based on the situation after the repair. What 
+about the existing
+image with such inconsistency?
+>>> ext4_commit_super() is executed. The code change is as follows:
+>>>
+>>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>>> index 260c1b3e3ef2..341b11c589b3 100644
+>>> --- a/fs/ext4/super.c
+>>> +++ b/fs/ext4/super.c
+>>> @@ -5935,6 +5935,7 @@ static int ext4_load_journal(struct 
+>>> super_block *sb,
+>>>                         memcpy(((char *) es) + EXT4_S_ERR_START,
+>>>                                save, EXT4_S_ERR_LEN);
+>>>                 kfree(save);
+>>> +               es->s_state |= 
+>>> cpu_to_le16(EXT4_SB(sb)->s_mount_state & EXT4_ERROR_FS);
+>>>         }
+>>>
+>>>         if (err) {
+>>>
+>>
+>>
+>>
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.1..v6.2-rc8
-https://bugzilla.kernel.org/show_bug.cgi?id=217037
-#regzbot title: nvme: cmb attributes vanished after v6.1.8
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
