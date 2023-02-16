@@ -2,169 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F306989A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483056989AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBPBJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 20:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S229664AbjBPBKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 20:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPBJH (ORCPT
+        with ESMTP id S229477AbjBPBJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 20:09:07 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1D12941F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 17:09:05 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676509744;
-        bh=V531A1mtpKWQcvrMaihobrwS5e41GRmm87PsL+uN8es=;
-        h=From:Date:Subject:To:Cc:From;
-        b=IAUU1a5rRB5i7mH/AWXrxGiTK0pdweZJ/ZyUH86IhKK1qKnsOywScYyyCSa6oUL93
-         SOKRgbGJQaG1ft1dgCMnV8NdEH2Ee1WP4IWpwRNmIT/AGpAcp4U3QRfNdapzT1xrjc
-         +ciEKYDwJgb5boH7DygBQXr8Mtd3c8dLuBvoaWH0=
-Date:   Thu, 16 Feb 2023 01:09:00 +0000
-Subject: [PATCH] drm/amdkfd: Make kobj_type structures constant
+        Wed, 15 Feb 2023 20:09:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1712A6D7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 17:09:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7791DB824E6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC05FC433D2;
+        Thu, 16 Feb 2023 01:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676509794;
+        bh=CLxgvvve9og1cYZR7tzc8NisOq0EVCJzqM3j00w+GMk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=KhFwyZr8ZeBQpyFjSqclLU+LukmBr5iengkv65ncdRPVCYQfRa1bGIYmbf4G+fV4P
+         ijd/DINCvS83OsaSMNsF3VJjas27bibniojy0lqNFrFNXui3MWcwHrOzIHV9qydDXL
+         odn5iMDyWlv5F39siQgYZHjTLsm6S6xsEK8jUPVq02uA5QieZdZjZebUfbq7Zkl6kN
+         /Eo22EcrRjLagPIPAyp+jiSJ9wke4zHDZihMQDNuWmm+37sUcwetrLvAYRgQWgetTl
+         iPe2h6hlq9/SLg+oZHouznK67jPg89Aqmw7u4Jw+uRdjZR6KEpND2POcKjGaD19/gP
+         Y991AFtvkcqCQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+In-Reply-To: <20230215105818.3315925-1-ckeepax@opensource.cirrus.com>
+References: <20230215105818.3315925-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/2] ASoC: cs35l45: Remove separate tables module
+Message-Id: <167650979263.3620645.17342543857239200742.b4-ty@kernel.org>
+Date:   Thu, 16 Feb 2023 01:09:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230216-kobj_type-amdkfd-v1-1-337abb104da2@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIACuC7WMC/x2N0QqDMAwAf0XybKB2IOivjCGJTTXTVWm3sSH++
- 8Ie7+C4A4pklQJ9dUCWtxbdkkFTVzDOlCZBDcbgnb8437S4bHwfnt9dkB5hiQGJQxelI3atA8u
- YiiBnSuNsYXqtq8k9S9TP/3O9necPDkizOHcAAAA=
-To:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676509741; l=3587;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=V531A1mtpKWQcvrMaihobrwS5e41GRmm87PsL+uN8es=;
- b=kYY1zEibQVGvsyoUpN4UBRby0/UOQm81zpCrkVNsQxe2T1/B/coRpFWSAjINXjXTiPCUJdiLx
- tFZ608D+FmZAxhbPAXGkZ0SrONhyFHxBvYbVm9Lo+ibD7xcZKwhFB7D
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On Wed, 15 Feb 2023 10:58:17 +0000, Charles Keepax wrote:
+> There is no reason to have a separate module for the tables file it just
+> holds regmap callbacks and register patches used by the main part of the
+> driver. Remove the separate module and merge it into the main driver
+> module.
+> 
+> 
 
-Take advantage of this to constify the structure definitions to prevent
-modification at runtime.
+Applied to
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/gpu/drm/amd/amdkfd/kfd_process.c  |  8 ++++----
- drivers/gpu/drm/amd/amdkfd/kfd_topology.c | 10 +++++-----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+   broonie/sound.git for-next
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_process.c b/drivers/gpu/drm/amd/amdkfd/kfd_process.c
-index 51b1683ac5c1..8d719f90db40 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_process.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_process.c
-@@ -344,7 +344,7 @@ static const struct sysfs_ops kfd_procfs_ops = {
- 	.show = kfd_procfs_show,
- };
- 
--static struct kobj_type procfs_type = {
-+static const struct kobj_type procfs_type = {
- 	.release = kfd_procfs_kobj_release,
- 	.sysfs_ops = &kfd_procfs_ops,
- };
-@@ -469,7 +469,7 @@ static const struct sysfs_ops procfs_queue_ops = {
- 	.show = kfd_procfs_queue_show,
- };
- 
--static struct kobj_type procfs_queue_type = {
-+static const struct kobj_type procfs_queue_type = {
- 	.sysfs_ops = &procfs_queue_ops,
- 	.default_groups = procfs_queue_groups,
- };
-@@ -478,7 +478,7 @@ static const struct sysfs_ops procfs_stats_ops = {
- 	.show = kfd_procfs_stats_show,
- };
- 
--static struct kobj_type procfs_stats_type = {
-+static const struct kobj_type procfs_stats_type = {
- 	.sysfs_ops = &procfs_stats_ops,
- 	.release = kfd_procfs_kobj_release,
- };
-@@ -487,7 +487,7 @@ static const struct sysfs_ops sysfs_counters_ops = {
- 	.show = kfd_sysfs_counters_show,
- };
- 
--static struct kobj_type sysfs_counters_type = {
-+static const struct kobj_type sysfs_counters_type = {
- 	.sysfs_ops = &sysfs_counters_ops,
- 	.release = kfd_procfs_kobj_release,
- };
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_topology.c b/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
-index 3fdaba56be6f..8e4124dcb6e4 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_topology.c
-@@ -278,7 +278,7 @@ static const struct sysfs_ops sysprops_ops = {
- 	.show = sysprops_show,
- };
- 
--static struct kobj_type sysprops_type = {
-+static const struct kobj_type sysprops_type = {
- 	.release = kfd_topology_kobj_release,
- 	.sysfs_ops = &sysprops_ops,
- };
-@@ -318,7 +318,7 @@ static const struct sysfs_ops iolink_ops = {
- 	.show = iolink_show,
- };
- 
--static struct kobj_type iolink_type = {
-+static const struct kobj_type iolink_type = {
- 	.release = kfd_topology_kobj_release,
- 	.sysfs_ops = &iolink_ops,
- };
-@@ -350,7 +350,7 @@ static const struct sysfs_ops mem_ops = {
- 	.show = mem_show,
- };
- 
--static struct kobj_type mem_type = {
-+static const struct kobj_type mem_type = {
- 	.release = kfd_topology_kobj_release,
- 	.sysfs_ops = &mem_ops,
- };
-@@ -395,7 +395,7 @@ static const struct sysfs_ops cache_ops = {
- 	.show = kfd_cache_show,
- };
- 
--static struct kobj_type cache_type = {
-+static const struct kobj_type cache_type = {
- 	.release = kfd_topology_kobj_release,
- 	.sysfs_ops = &cache_ops,
- };
-@@ -566,7 +566,7 @@ static const struct sysfs_ops node_ops = {
- 	.show = node_show,
- };
- 
--static struct kobj_type node_type = {
-+static const struct kobj_type node_type = {
- 	.release = kfd_topology_kobj_release,
- 	.sysfs_ops = &node_ops,
- };
+Thanks!
 
----
-base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
-change-id: 20230216-kobj_type-amdkfd-abd9fe9ab060
+[1/2] ASoC: cs35l45: Remove separate tables module
+      commit: 4dac6f5abc02ffeeb10459c575aba2343363d4ee
+[2/2] ASoC: cs35l45: Remove separate namespace for tables
+      commit: 926505cf14258376c3cd244e891c7d739a2a049a
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
