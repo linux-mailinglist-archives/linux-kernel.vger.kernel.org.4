@@ -2,55 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D37E69966C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD5169966F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjBPNz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S229489AbjBPN4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjBPNzX (ORCPT
+        with ESMTP id S230138AbjBPN4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:55:23 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8543B21B;
-        Thu, 16 Feb 2023 05:55:22 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSejD-0006gg-DY; Thu, 16 Feb 2023 14:55:15 +0100
-Message-ID: <8c33484b-9a35-11af-b856-22e49b3c31f0@leemhuis.info>
-Date:   Thu, 16 Feb 2023 14:55:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu
- trace_pipe_raw blocks indefinitely
-Content-Language: en-US, de-DE
-To:     Shiju Jose <shiju.jose@huawei.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        Thu, 16 Feb 2023 08:56:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE673B220
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676555736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hii/hEJ9PZyd5sM9pg8DiE74V3lS3n6PlgGZ2jOvQQA=;
+        b=hqHZ2K7N1FEyU91dO0tSTZrKz+YpIas6Zmlfz7ppDkaHrDrygBo6UDLy87TDkuCFYSrVzu
+        YBeihVyE622TS1K1w70j8le1hS/hai53YeLlacQnbIJpqq2ZD6PMe/J1AB8aNzb3fUbwQf
+        zZxDi7bYAD2jH6wvgn97u9tzi1+L1Qg=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-578-5R24a1KVNNSk2gPiDZI-_w-1; Thu, 16 Feb 2023 08:55:35 -0500
+X-MC-Unique: 5R24a1KVNNSk2gPiDZI-_w-1
+Received: by mail-qk1-f197.google.com with SMTP id a13-20020a05620a438d00b0073b88cae2f5so1213432qkp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:55:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hii/hEJ9PZyd5sM9pg8DiE74V3lS3n6PlgGZ2jOvQQA=;
+        b=v4u3fFfsGIJAY7W4FkqQZkfXP5Yl5VKeYVWHhhOCwc1kSalv592j0Vk4Qnj7BBh5ba
+         mWiinz8WIJ+5Ki5jGJf5571IP8vFiCUU7KoUjxTgrr2Svp0i1qeeis1nYMftFjIW67kP
+         EMsNpGUvUKUc0KeKvhD9Y5hZjvzdwZsfMlifUTCTfZ6C3S3Pb7NJD4Kpon59n9Fb/N2d
+         /Y/Kaikj0cC4tkpqiUcBzavPvR32AEm+7iNPjLNEFiX/hrxfNs8E2J4C5Qxtfe5WEKrO
+         VBmMuz0vaeDb5f3nwRwVFxA+8El+xEQpMSYX3TxQlI/JpfQEfwFKJH+Us+kE7+5LIsE+
+         UKXA==
+X-Gm-Message-State: AO0yUKXFup5u7Ec2UngZ460VdoGPnzNLeL7QWmvkBeCBpWr90ljBZfYo
+        7MMMaKOGI5GE+9ZPw44xRTrgfkHbFzXOHUeWRTO7tPSszCuQ1SlJtxg01Z/M5cbopcBaDBBW5z9
+        8NSga4QtaCqkpjdz+D+skCO+D
+X-Received: by 2002:ac8:5bd5:0:b0:3bb:8f10:6029 with SMTP id b21-20020ac85bd5000000b003bb8f106029mr10792544qtb.50.1676555734667;
+        Thu, 16 Feb 2023 05:55:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set+JnPrAuwzQGhfHNhTBc/+z66FBbT4aDZCX6sfMD4/mj4mAXZ+i5dm9S21S3kppDEVaj0vlBQ==
+X-Received: by 2002:ac8:5bd5:0:b0:3bb:8f10:6029 with SMTP id b21-20020ac85bd5000000b003bb8f106029mr10792507qtb.50.1676555734312;
+        Thu, 16 Feb 2023 05:55:34 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-167.retail.telecomitalia.it. [82.57.51.167])
+        by smtp.gmail.com with ESMTPSA id r188-20020a37a8c5000000b00729a26e836esm1206352qke.84.2023.02.16.05.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 05:55:33 -0800 (PST)
+Date:   Thu, 16 Feb 2023 14:55:28 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        tanxiaofei <tanxiaofei@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-References: <20230204193345.842-1-shiju.jose@huawei.com>
- <286293b4-5ae6-1348-9d69-7049ef5adf35@leemhuis.info>
- <1e759e44f5e64b4e99096afd9e89b6dc@huawei.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <1e759e44f5e64b4e99096afd9e89b6dc@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676555722;159f4814;
-X-HE-SMSGID: 1pSejD-0006gg-DY
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 02/12] vsock: read from socket's error queue
+Message-ID: <20230216135528.ge4otfhfv22p3htc@sgarzare-redhat>
+References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
+ <7b2f00ce-296c-3f59-9861-468c6340300e@sberdevices.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <7b2f00ce-296c-3f59-9861-468c6340300e@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,51 +90,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.23 14:40, Shiju Jose wrote:
-> Hello,
-> 
->> -----Original Message-----
->> From: Linux regression tracking (Thorsten Leemhuis)
->> <regressions@leemhuis.info>
->> Sent: 16 February 2023 11:48
->> To: rostedt@goodmis.org
->> Cc: mhiramat@kernel.org; linux-kernel@vger.kernel.org; linux-trace-
->> kernel@vger.kernel.org; tanxiaofei <tanxiaofei@huawei.com>; Jonathan
->> Cameron <jonathan.cameron@huawei.com>; Linuxarm
->> <linuxarm@huawei.com>; Linux kernel regressions list
->> <regressions@lists.linux.dev>; Shiju Jose <shiju.jose@huawei.com>;
->> mchehab@kernel.org; linux-edac@vger.kernel.org
->> Subject: Re: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu
->> trace_pipe_raw blocks indefinitely
->>
->> Hi, this is your Linux kernel regression tracker.
-> 
-> Kernel fix patch for this issue is already in the mainline. Please see the commit
-> 3e46d910d8acf94e5360126593b68bf4fee4c4a1
-> ("tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw")
+On Mon, Feb 06, 2023 at 06:54:51AM +0000, Arseniy Krasnov wrote:
+>This adds handling of MSG_ERRQUEUE input flag for receive call, thus
+>skb from socket's error queue is read.
 
-Great, thx for letting me know.
+A general tip, add a little more description in the commit messages,
+especially to explain why these changes are necessary.
+Otherwise, even review becomes difficult because one has to look at all
+the patches to understand what the previous ones are for.
+I know it's boring, but it's very useful for those who review and even
+then if we have to bisect ;-)
 
->> On 04.02.23 20:33, shiju.jose@huawei.com wrote:
->>> From: Shiju Jose <shiju.jose@huawei.com>
->>>
->>> The error events are not received in the rasdaemon since kernel 6.1-rc6.
->>> This issue is firstly detected and reported, when testing the CXL
->>> error events in the rasdaemon.
->>
->> Thanks for working on this. This submission looks stalled, unless I missed
->> something. This is unfortunate, as this afaics is fixing a regression (caused by a
->> commit from Steven). Hence it would be good to get this fixed rather sooner
->> than later. Or is the RFC in the subject the reason why there was no progress? Is
->> it maybe time to remove it?
-> 
-> I made the pull request for this rasdaemon  patch here,
->  https://github.com/mchehab/rasdaemon/pull/86
+Thanks,
+Stefano
 
-Ha, stupid me, I didn't even notice this thread was about a rasdaemon
-change (I landed here as the patch description liked to the tracked
-regression report). Apologies for mixing this up; I deal with a lot of
-regression reports and try to avoid mistakes like this, but they
-nevertheless happen. :-/
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> include/linux/socket.h   |  1 +
+> net/vmw_vsock/af_vsock.c | 26 ++++++++++++++++++++++++++
+> 2 files changed, 27 insertions(+)
+>
+>diff --git a/include/linux/socket.h b/include/linux/socket.h
+>index 13c3a237b9c9..19a6f39fa014 100644
+>--- a/include/linux/socket.h
+>+++ b/include/linux/socket.h
+>@@ -379,6 +379,7 @@ struct ucred {
+> #define SOL_MPTCP	284
+> #define SOL_MCTP	285
+> #define SOL_SMC		286
+>+#define SOL_VSOCK	287
+>
+> /* IPX options */
+> #define IPX_TYPE	1
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index b5e51ef4a74c..f752b30b71d6 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -110,6 +110,7 @@
+> #include <linux/workqueue.h>
+> #include <net/sock.h>
+> #include <net/af_vsock.h>
+>+#include <linux/errqueue.h>
+>
+> static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+> static void vsock_sk_destruct(struct sock *sk);
+>@@ -2086,6 +2087,27 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+> 	return err;
+> }
+>
+>+static int vsock_err_recvmsg(struct sock *sk, struct msghdr *msg)
+>+{
+>+	struct sock_extended_err *ee;
+>+	struct sk_buff *skb;
+>+	int err;
+>+
+>+	lock_sock(sk);
+>+	skb = sock_dequeue_err_skb(sk);
+>+	release_sock(sk);
+>+
+>+	if (!skb)
+>+		return -EAGAIN;
+>+
+>+	ee = &SKB_EXT_ERR(skb)->ee;
+>+	err = put_cmsg(msg, SOL_VSOCK, 0, sizeof(*ee), ee);
+>+	msg->msg_flags |= MSG_ERRQUEUE;
+>+	consume_skb(skb);
+>+
+>+	return err;
+>+}
+>+
+> static int
+> vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+> 			  int flags)
+>@@ -2096,6 +2118,10 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+> 	int err;
+>
+> 	sk = sock->sk;
+>+
+>+	if (unlikely(flags & MSG_ERRQUEUE))
+>+		return vsock_err_recvmsg(sk, msg);
+>+
+> 	vsk = vsock_sk(sk);
+> 	err = 0;
+>
+>-- 
+>2.25.1
 
-Ciao, Thorsten
