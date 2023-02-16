@@ -2,81 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0922F699387
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CFA699389
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjBPLrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S229512AbjBPLrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjBPLrV (ORCPT
+        with ESMTP id S229546AbjBPLrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:47:21 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BAC1F922;
-        Thu, 16 Feb 2023 03:47:20 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id bu23so1558896wrb.8;
-        Thu, 16 Feb 2023 03:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K/GymRTC8E30kXdASfjuHKtUeZnJnGl8Jnbq0ua5e4w=;
-        b=pElrnzmI7gL4teX90A06t9foesLfwzg2W3jO4Ac+TptnGnaYWUeJT7aqzUVL9elwlz
-         TBY2fVERHnMX2SDLV9WYl/W8cYbIRVq/WQyeBEuU7tbOcS1ZeTPVa11r1CNi2U3d63ih
-         gGILu/yvs9q0kMx9c52+ZMs8kOs3eXknbum5pMWhJKDKTwt65Dj9d6yoK/COuFgJ0b7K
-         qVyUM2dcTBOUJNBsQOCALgYXd2BLkaK+vgyQMOcZnh9IHTsRBKOe5q0wGVcU2vFU7rOi
-         TodwibpS3sLPqy1n/ARtQ8Dbmk9T2vDUWE6tIeIGEwPXrpNM1Ed/oD/gvMTwzus2cxEO
-         Fh0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/GymRTC8E30kXdASfjuHKtUeZnJnGl8Jnbq0ua5e4w=;
-        b=elm4ewgrxXn3iW9GiR85iuDZ70uhjeGTG0ORfIAsxDx9tKgvGuATBAL0E9xzNphmsr
-         MV84NAyWUOFBBaJi3RLUkmN3xalf/T+7g8oMbTRDm4caK12kB0SY0lI40fnFh8zTyhkc
-         9zmDgFiEeJd6QcFEjix4S+b86Z5GDhaMv8w9OuYUzBpu85sfFeCtc09D1nPg/Ixrhwzr
-         U86mQ03jK5POxn9qUU+SHb72St/RHgBrFGwFAKBrFrar5nbIcu+/r5eqjGIS9NAHNRaw
-         P6yJUG78G+lGXONdWnTY5Om6zdABhzE5yJ819p0vGau6pRnSNPdonNFg5jCBHUcaKRWy
-         +40w==
-X-Gm-Message-State: AO0yUKX+gWAIOCAo/Jf14wjSPS+I1HZWEYQ9Hj7W4lLv+92Iep1EYtKF
-        lG2Jvb96nneCWmR2l7yakWM=
-X-Google-Smtp-Source: AK7set+4r8zWos74GXrVBfODT1MIee24TRa67kh+h9GiMPo+o4DQjgxdbo2YrQ/bsYkfXlTIWQFLkw==
-X-Received: by 2002:a5d:6882:0:b0:2c3:fb3e:ae85 with SMTP id h2-20020a5d6882000000b002c3fb3eae85mr5416717wru.44.1676548038630;
-        Thu, 16 Feb 2023 03:47:18 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o15-20020a5d62cf000000b002c406b357cfsm1320858wrv.86.2023.02.16.03.47.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 03:47:18 -0800 (PST)
-Message-ID: <533e5cd4-713a-f683-1545-913b84d280c2@gmail.com>
-Date:   Thu, 16 Feb 2023 12:47:16 +0100
+        Thu, 16 Feb 2023 06:47:41 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01675593;
+        Thu, 16 Feb 2023 03:47:39 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pScjg-0000CY-Ra; Thu, 16 Feb 2023 12:47:36 +0100
+Message-ID: <286293b4-5ae6-1348-9d69-7049ef5adf35@leemhuis.info>
+Date:   Thu, 16 Feb 2023 12:47:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 02/12] arm64: dts: mediatek: mt8183-kukui: Update the
- node name of SCP rpmsg subnode
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230215041257.14548-1-tinghan.shen@mediatek.com>
- <20230215041257.14548-3-tinghan.shen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230215041257.14548-3-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.7.2
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu
+ trace_pipe_raw blocks indefinitely
+Content-Language: en-US, de-DE
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, tanxiaofei@huawei.com,
+        jonathan.cameron@huawei.com, linuxarm@huawei.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        shiju.jose@huawei.com, mchehab@kernel.org,
+        linux-edac@vger.kernel.org
+References: <20230204193345.842-1-shiju.jose@huawei.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <20230204193345.842-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676548059;509d3c9d;
+X-HE-SMSGID: 1pScjg-0000CY-Ra
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,33 +51,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker.
 
-
-On 15/02/2023 05:12, Tinghan Shen wrote:
-> Align the node name with the definition in SCP bindings.
+On 04.02.23 20:33, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> The error events are not received in the rasdaemon since kernel 6.1-rc6.
+> This issue is firstly detected and reported, when testing the CXL error
+> events in the rasdaemon.
+
+Thanks for working on this. This submission looks stalled, unless I
+missed something. This is unfortunate, as this afaics is fixing a
+regression (caused by a commit from Steven). Hence it would be good to
+get this fixed rather sooner than later. Or is the RFC in the subject
+the reason why there was no progress? Is it maybe time to remove it?
+
+> Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
+> return and this issue is seen after the commit
+> 42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
+> polling block on watermark").
+> 
+> This also verified using a test application for poll()
+> and select() on trace_pipe_raw.
+> 
+> There is also a bug reported on this issue,
+> https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+
+
+
+> This issue occurs for the per_cpu case, which calls the
+> ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
+> buffer_percent > 0 and then wait until the percentage of pages are
+> available.The default value set for the buffer_percent is 50 in the
+> kernel/trace/trace.c. However poll() does not return even met the percentage
+> of pages condition.
+> 
+> As a fix, rasdaemon set buffer_percent as 0 through the
+> /sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
+> task will wake up as soon as data is added to any of the specific cpu
+> buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
+> indefinitely.
+> 
+> Dependency on the kernel RFC patch
+> tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+
+BTW, this patch afaics should have these tags:
+
+Fixes: 42fb0a1e84ff ("tracing/ring-buffer: Have polling block on watermark")
+Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Link:
+https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+An likely a
+
+Cc: <stable@vger.kernel.org> # 6.1.x
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+#regzbot ^backmonitor:
+https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Changes:
+> RFC V1 -> RFC V2
+> 1. Rename the patch header subject.
+> 2. Changes for the backward compatability to the old kernels.
 > ---
->   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  ras-events.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index fbe14b13051a..a259eb043de5 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -810,7 +810,7 @@
->   	pinctrl-names = "default";
->   	pinctrl-0 = <&scp_pins>;
->   
-> -	cros_ec {
-> +	cros-ec-rpmsg {
->   		compatible = "google,cros-ec-rpmsg";
-
-There are more users of "google,cros-ec-rpmsg" which would nedd to be updated.
-
-Regards,
-Matthias
-
->   		mediatek,rpmsg-name = "cros-ec-rpmsg";
->   	};
+> diff --git a/ras-events.c b/ras-events.c
+> index 3691311..e505a0e 100644
+> --- a/ras-events.c
+> +++ b/ras-events.c
+> @@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+>  	int warnonce[n_cpus];
+>  	char pipe_raw[PATH_MAX];
+>  	int legacy_kernel = 0;
+> +	int fd;
+> +	char buf[10];
+>  #if 0
+>  	int need_sleep = 0;
+>  #endif
+> @@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+>  		return -ENOMEM;
+>  	}
+>  
+> +	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
+> +	 * indefinitely with the default buffer_percent in the kernel trace system,
+> +	 * which is introduced by the following change in the kernel.
+> +	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
+> +	 * Set buffer_percent to 0 so that poll() will return immediately
+> +	 * when the trace data is available in the ras per_cpu trace pipe_raw
+> +	 */
+> +	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
+> +	if (fd >= 0) {
+> +		/* For the backward compatabilty to the old kernel, do not return
+> +		 * if fail to set the buffer_percent.
+> +		 */
+> +		snprintf(buf, sizeof(buf), "0");
+> +		size = write(fd, buf, strlen(buf));
+> +		if (size <= 0)
+> +			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
+> +		close(fd);
+> +	} else
+> +		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
+> +
+>  	for (i = 0; i < (n_cpus + 1); i++)
+>  		fds[i].fd = -1;
+>  
