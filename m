@@ -2,169 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D8F699AAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261EF699AB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjBPQ5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S230023AbjBPQ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjBPQ5l (ORCPT
+        with ESMTP id S230018AbjBPQ6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:57:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A60F2684F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:57:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B9762029
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:57:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89BDC4339C;
-        Thu, 16 Feb 2023 16:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676566659;
-        bh=Ntk7Qpaq0ZHepWOOpWHDTPtb9+WKOGLT5gVjZDtQgqQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kni1naGi8f3UcSl9m4eLHh/vj4IlRbSSomex8TJxRtQw8pPVjdd0nAnhKdLv0HF5s
-         c+BXzobu3H5fZONIS/WUli3SIkqOeg/LDBtFY7KcBeeTuMU0230/6IuiOdJMPhRnqs
-         lf4NARWTlseK0f52sCRDF7Zl4I0oDRw6fdrm7esA=
-Date:   Thu, 16 Feb 2023 17:57:36 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     "Suweifeng (Weifeng, EulerOS)" <suweifeng1@huawei.com>,
-        linux-kernel@vger.kernel.org, shikemeng@huawei.com,
-        liuzhiqiang26@huawei.com, linfeilong@huawei.com,
-        zhanghongtao22@huawei.com
-Subject: Re: [PATCH] uio:uio_pci_generic:Don't clear master bit when the
- process does not exit
-Message-ID: <Y+5ggLAorbjjhCVP@kroah.com>
-References: <20230214132157.472753-1-suweifeng1@huawei.com>
- <Y+uJ6ejVNl6RoQPk@kroah.com>
- <1601ce95-5ec7-3656-cdcd-bf052cf6d222@huawei.com>
- <Y+5GrE6F++Lv4BO+@kroah.com>
- <20230216105435-mutt-send-email-mst@kernel.org>
+        Thu, 16 Feb 2023 11:58:48 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA0727988;
+        Thu, 16 Feb 2023 08:58:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=6wGbs1zzxMmzwpDLodKGDpXuC2kipHsbgo+ADLhwwGo=; b=Z6h9iUM2J47GO6FmgkAmCiGsGq
+        2u9RKvp3C3TIaZrNDy/tHURkA8sX1+AGykuLZA4yWEfNSce77Yd0GkZDAeIVxxss0iPwwUBumW9kM
+        +fmuhC9fP834MkPeHkYz4Gvq+/O5E3k8IVB9uMUbQqyLfMkxOSPACkJjEWarj6OsbUM1QO/goACIA
+        LqObuWQzeebm5N0q/vQ+KAgfbvNj4Nkw7Oy5vybjLZZKcsPbcrSTSd8UhOLhl2I/CjsAMYwtFgDAa
+        DdCTAR3m3OKKvB9FOaYNp7VBvarBpE2tT2A9cTEkDRjQojVSOoQd4n8n24EP/ZjE1I5hyxEZBfXoH
+        VBeya9Mw==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pShaa-00BHG7-ER; Thu, 16 Feb 2023 16:58:32 +0000
+Message-ID: <328ad5a9-552b-ebd9-0ea2-6313a7347cad@infradead.org>
+Date:   Thu, 16 Feb 2023 08:58:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216105435-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH bpf-next] Fix typos in selftest/bpf files
+Content-Language: en-US
+To:     Taichi Nishimura <awkrail01@gmail.com>, andrii@kernel.org,
+        mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        iii@linux.ibm.com, ytcoode@gmail.com, deso@posteo.net,
+        memxor@gmail.com, joannelkoong@gmail.com
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230216085537.519062-1-awkrail01@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230216085537.519062-1-awkrail01@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:55:05AM -0500, Michael S. Tsirkin wrote:
-> On Thu, Feb 16, 2023 at 04:07:24PM +0100, Greg KH wrote:
-> > On Thu, Feb 16, 2023 at 10:45:02PM +0800, Suweifeng (Weifeng, EulerOS) wrote:
-> > > On 2023/2/14 21:17, Greg KH wrote:
-> > > > On Tue, Feb 14, 2023 at 09:21:57PM +0800, Su Weifeng wrote:
-> > > > > From: Weifeng Su <suweifeng1@huawei.com>
-> > > > > 
-> > > > > The /dev/uioX device is used by multiple processes. The current behavior
-> > > > > is to clear the master bit when a process exits. This affects other
-> > > > > processes that use the device, resulting in command suspension and
-> > > > > timeout. This behavior cannot be sensed by the process itself.
-> > > > > The solution is to add the reference counting. The reference count is
-> > > > > self-incremented and self-decremented each time when the device open and
-> > > > > close. The master bit is cleared only when the last process exited.
-> > > > > 
-> > > > > Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
-> > > > > ---
-> > > > >   drivers/uio/uio_pci_generic.c | 18 +++++++++++++++++-
-> > > > >   1 file changed, 17 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
-> > > > > index e03f9b532..d36d3e08e 100644
-> > > > > --- a/drivers/uio/uio_pci_generic.c
-> > > > > +++ b/drivers/uio/uio_pci_generic.c
-> > > > > @@ -31,6 +31,7 @@
-> > > > >   struct uio_pci_generic_dev {
-> > > > >   	struct uio_info info;
-> > > > >   	struct pci_dev *pdev;
-> > > > > +	refcount_t  dev_refc;
-> > > > >   };
-> > > > >   static inline struct uio_pci_generic_dev *
-> > > > > @@ -39,10 +40,22 @@ to_uio_pci_generic_dev(struct uio_info *info)
-> > > > >   	return container_of(info, struct uio_pci_generic_dev, info);
-> > > > >   }
-> > > > > +static int open(struct uio_info *info, struct inode *inode)
-> > > > > +{
-> > > > > +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > > > > +
-> > > > > +	if (gdev)
-> > > > > +		refcount_inc(&gdev->dev_refc);
-> > > > 
-> > > > This flat out does not work, sorry.
-> > > > 
-> > > > You should never rely on trying to count open/release calls, just let
-> > > > the vfs layer handle that for us as it currently does so.
-> > > > 
-> > > > Think about what happens if you call dup() in userspace on a
-> > > > filehandle...
-> > > > 
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > >   static int release(struct uio_info *info, struct inode *inode)
-> > > > >   {
-> > > > >   	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > > > > +	if (gdev && refcount_dec_not_one(&gdev->dev_refc))
-> > > > 
-> > > > I don't think you actually tested this as it is impossible for gdev to
-> > > > ever be NULL.
-> > > > 
-> > > > sorry, but this patch is not correct.
-> > > > 
-> > > > greg k-h
-> > > 
-> > > First of all, thank you for taking the time to read this patch, your
-> > > comments are very enlightening, but I do have a strange problem here, I test
-> > > such programs on kernels 5.10 and 6.2.
-> > > fd = open("/dev/uio0". O_RDWR);
-> > > while (true)
-> > > 	sleep(1);
-> > > This program only opens the uio device. After starting multiple such
-> > > processes, I close one of them. From the added print, it can be seen that
-> > > the "uio_pci_generic.c:release" function is called and the master bit is
-> > > cleared, instead of being called when the last process exits as expected. I
-> > > think the vfs is not protected as it should be.
-> > 
-> > Did your patch change this functionality?
-> > 
-> > > Such a problem cannot be
-> > > handled in the user-mode program. We have to clear the master bit when the
-> > > last process exits. Otherwise, user-mode programs (for example, the DPDK
-> > > process that uses uio_pci_generic) cannot work properly.
-> > 
-> > Look at the big comment in the release() function in this file.  Does
-> > that explain the issues here?
-> > 
-> > Just do not open the device multiple times, you have full control over
-> > this, right?
-> > 
-> > If not, then perhaps your hardware should not be using the
-> > uio_pci_generic() driver but rather have a real kernel driver for it
-> > instead if it needs to handle this type of functionality?
-> > 
-> > thanks,
-> > 
-> > greg k-h
+
+
+On 2/16/23 00:55, Taichi Nishimura wrote:
+> Run spell checker on files in selftest/bpf and fixed typos.
 > 
-> 
-> Hmm. this code did however work correctly before
-> 865a11f987ab5f03089 ("uio/uio_pci_generic: Disable bus-mastering on release")
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
+>  .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+>  tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
+>  tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
+>  tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
+>  tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
+>  tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
+>  tools/testing/selftests/bpf/veristat.c                      | 4 ++--
+>  10 files changed, 13 insertions(+), 13 deletions(-)
 > 
 
-It's not really "correct" to leave dma bus mastering enabled, right?
 
-Again, you can't "count" open and close calls, that just does not work
-(i.e. the proposed patch will not work), so I don't see a viable
-solution at the moment here.
-
-thanks,
-
-greg k-h
+-- 
+~Randy
