@@ -2,173 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CC2699156
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9036991D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBPKdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S230253AbjBPKkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBPKdm (ORCPT
+        with ESMTP id S230266AbjBPKkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:33:42 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9101042E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:12 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id o20so2207172lfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G28TAuy/6oFk/suK4dD0fVgYuOSi6iwQbnKbW0IjYhs=;
-        b=fQq4rkcz+L115UYJbdYTul6ajjgtT8qDegn+dhmI5X/Vt7lsw2szYwaC+e+FoWzVzS
-         UqnjA+aDLU4Hu0G1ujtKt3OiD9t9bbRmthTvyxQxFytX3bij9mu8+X6Y1T5ek6z9MDTe
-         dWl0WNVTyeCnQa4+2gFyZu2F7m4GPY54nXa8BUeWWiyI+brJDfqzsNZ8k2lH2MtcDiGq
-         nrjmRc5Vp3P0r50THhPSDvH69ViYPzsqDnCwszmXC3Q+SPNgsncu7kZuKKOJNMOv+yQM
-         11W4u57Otb3je3SCTBfjqFGkZVFasqzpNUnwGyA5lDUZ3J9jm+0SNJllNF2SR0L90nZF
-         kz9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G28TAuy/6oFk/suK4dD0fVgYuOSi6iwQbnKbW0IjYhs=;
-        b=XHwgUDOvJPabD0qGVLMCRb7EJpE4NwiqqobaNJNML5KIV/H156NYlgALhaL6mI4otz
-         BWqTeo/CuF9I8vQ+yAtuSWOb7/feayhMFvnBhJ+6oh0ShDXklAZlpw842EE4HJvTXyyI
-         z8v3PytwMYAPR4EGxq7NGdM2dYtzmyzwnNzv/sOik8oDQnCh4dKujKmgAisO2zmxOIVt
-         3zhgJbUSdOc+MNO2vyrPiOmtlVO3LmXl8x6qw3qiojDFEwz1wsIdk8vUUr0UtuKgdy8U
-         gyC3sdfNulqQ+dpgNNtOEh2yHJEZRbfuqJrHwo75BxhgFqSAfD17eXGWeJ5onoJg8wnj
-         f0cg==
-X-Gm-Message-State: AO0yUKUATaMfo2vYvZzvkZ/K7rkDXDBlacVzLviCOTcSktJBVLizm4cQ
-        RAeswbQK+zpNY/tlcnx8ABe2cg==
-X-Google-Smtp-Source: AK7set+ny/k21yqV1u4cmjdixiAmB7aht5jerIGcbd4dSjACtG8rjnomZdynpsWysY5VscuIlYDr3g==
-X-Received: by 2002:ac2:44b9:0:b0:4b5:1545:222b with SMTP id c25-20020ac244b9000000b004b51545222bmr1416421lfm.47.1676543591151;
-        Thu, 16 Feb 2023 02:33:11 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id y14-20020ac24e6e000000b004db00415a1asm242534lfs.248.2023.02.16.02.33.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:33:10 -0800 (PST)
-Message-ID: <e8f1110e-7f60-3031-25d4-d4993fa04cb9@linaro.org>
-Date:   Thu, 16 Feb 2023 11:33:09 +0100
+        Thu, 16 Feb 2023 05:40:06 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30307518F2;
+        Thu, 16 Feb 2023 02:39:45 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676543675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UuBL6kmwmBuSZ2ZP6ebJ2zMsiIjued5u/Up36kiGCNY=;
+        b=EBQ6jr9Ley19igYWmsUoe6JX88InrFFuZgk7Utu+R5SPdP1h9nEHan1tbM34aD8PsTqfOS
+        dAy1mHrnhGGsMKV0uE96N+YHG+fItY2In4s1iTIdy91bR2iV6zAR1sxjpF5oqEishzd5w6
+        MMDB8+1m48G6c00R9AyJrzwOARcHdKFom4TYBUFgkP7oAZw51SsChUUg/ea9W3AL96o2ms
+        AoN4A5irUhDyB3lbL7jcH1v/T5bwrCpTD+Jh3UTUp+nJ5UrG09dE25H+KlXEH55dZGT1mj
+        gLrBiVxrThv+/1AHLiOgdvd071DHOhw3hWhTqVe9Fialuj45umEsCeu9ToMwDw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676543675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UuBL6kmwmBuSZ2ZP6ebJ2zMsiIjued5u/Up36kiGCNY=;
+        b=/lTwDTPnhoaK+uuoNhbUw/q2HsM8a3K012wUOGOa+mfIli2jCFYiAAWHBuz8+qsG5+2WMf
+        9nrY6SXudb7xXkCg==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 3/3] net/sched: taprio: dynamic max_sdu larger
+ than the max_mtu is unlimited
+In-Reply-To: <20230216102914.wat37qsih5xx3wk4@skbuf>
+References: <20230215224632.2532685-1-vladimir.oltean@nxp.com>
+ <20230215224632.2532685-4-vladimir.oltean@nxp.com> <87cz6aot67.fsf@kurt>
+ <20230216102914.wat37qsih5xx3wk4@skbuf>
+Date:   Thu, 16 Feb 2023 11:34:33 +0100
+Message-ID: <875yc1q4p2.fsf@kurt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RESEND PATCH 01/12] arm64: dts: qcom: sdm845: Supply clock from
- cpufreq node to CPUs
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org
-References: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
- <20230215070400.5901-2-manivannan.sadhasivam@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230215070400.5901-2-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
+On Thu Feb 16 2023, Vladimir Oltean wrote:
+> On Thu, Feb 16, 2023 at 10:28:48AM +0100, Kurt Kanzenbach wrote:
+>> On Thu Feb 16 2023, Vladimir Oltean wrote:
+>> > It makes no sense to keep randomly large max_sdu values, especially if
+>> > larger than the device's max_mtu. These are visible in "tc qdisc show".
+>> > Such a max_sdu is practically unlimited and will cause no packets for
+>> > that traffic class to be dropped on enqueue.
+>> >
+>> > Just set max_sdu_dynamic to U32_MAX, which in the logic below causes
+>> > taprio to save a max_frm_len of U32_MAX and a max_sdu presented to user
+>> > space of 0 (unlimited).
+>> >
+>> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+>>=20
+>> Doesn't this deserve a Fixes tag as well?
+>
+> No, I don't think so. It's just so that the user (and later, the offloadi=
+ng
+> driver) doesn't see arbitrarily large values, just a simplifying 0.
 
-On 15.02.2023 08:03, Manivannan Sadhasivam wrote:
-> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
-> to the CPU cores. But this relationship is not represented in DTS so far.
-> 
-> So let's make cpufreq node as the clock provider and CPU nodes as the
-> consumers. The clock index for each CPU node is based on the frequency
-> domain index.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Yes, exactly. It's visible by the user.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 479859bd8ab3..1d5e6ade8ae7 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -92,6 +92,7 @@ CPU0: cpu@0 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x0>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <611>;
->  			dynamic-power-coefficient = <290>;
-> @@ -118,6 +119,7 @@ CPU1: cpu@100 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x100>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <611>;
->  			dynamic-power-coefficient = <290>;
-> @@ -140,6 +142,7 @@ CPU2: cpu@200 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x200>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <611>;
->  			dynamic-power-coefficient = <290>;
-> @@ -162,6 +165,7 @@ CPU3: cpu@300 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x300>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <611>;
->  			dynamic-power-coefficient = <290>;
-> @@ -184,6 +188,7 @@ CPU4: cpu@400 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x400>;
-> +			clocks = <&cpufreq_hw 1>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <1024>;
->  			dynamic-power-coefficient = <442>;
-> @@ -206,6 +211,7 @@ CPU5: cpu@500 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x500>;
-> +			clocks = <&cpufreq_hw 1>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <1024>;
->  			dynamic-power-coefficient = <442>;
-> @@ -228,6 +234,7 @@ CPU6: cpu@600 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x600>;
-> +			clocks = <&cpufreq_hw 1>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <1024>;
->  			dynamic-power-coefficient = <442>;
-> @@ -250,6 +257,7 @@ CPU7: cpu@700 {
->  			device_type = "cpu";
->  			compatible = "qcom,kryo385";
->  			reg = <0x0 0x700>;
-> +			clocks = <&cpufreq_hw 1>;
->  			enable-method = "psci";
->  			capacity-dmips-mhz = <1024>;
->  			dynamic-power-coefficient = <442>;
-> @@ -5232,6 +5240,7 @@ cpufreq_hw: cpufreq@17d43000 {
->  			clock-names = "xo", "alternate";
->  
->  			#freq-domain-cells = <1>;
-> +			#clock-cells = <1>;
->  		};
->  
->  		wifi: wifi@18800000 {
+> I guess it could potentially make a difference to the software taprio
+> data path with TSO, if the max MTU is comparable with the segment
+> sizes.
+>
+> Anyway, with or without the Fixes tag, the patch lands in the same place.
+
+Yup. It doesn't really matter that much.
+
+Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmPuBrkTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgskYD/0Zog5rr3p4qNBwduQ6KPvpiZ08v/US
+HBd3+saD7yak+a27mkITUfgagYrQgWNJmMYTTiklKl35upA5/+5LjFDNCCM3neWr
+3X9R0FpdAxM42KqaD6chvt5vh8GBwJ5iidDTk/+iaMNDiyta5wrOK8x1x818a+Dp
+uJG+SyEexCw8OS2XalovNHQW/xLFtI3U1N9nC9GzX88LDw2qWQ0rkSXFyg7Pdx6t
+ZybpezZGDmVD0Hrs86KNBZXoyv/ae4hdCtwmQYOkKQBN9LhFPgZbJZBLbD5l4QH6
+Q8XYxP8XYLw9UrJ8/97jYuNtcPalz3w3ir7Xv28iGLcrECMI7Z2fdi2JmPS4FOAk
+IgoFet/4ZwK8ugsjnjWb5djP7JgAf0hjM9nNUx4Au0cbQ3ooiYj1ZDVMNHKhtt3P
+k1nNO6wViq4bBaIxxg10VL4Q9fHDLnNfM7jS8X16V3zv5oPD4HvooMgb3y3Ece3b
+acTbRUFIyxPYsFYD5MzxUmR1+6v5fP6K+WpzaAXi50Gkc13RWbA/aZOhibj/zBSA
+BC+DTEUrDEpOMnvAko/+jIPofgH08ekWW6kv359iD9MCMkyDzliosYpQs842Fz3U
+ASjYyycqbxA2QbNcVu9D4D5zTyLlG3B49v9M3YRtu5+h65d1Uy0fD8Zo6+r4WcUd
+nDlKVPUgtup/DQ==
+=XlUA
+-----END PGP SIGNATURE-----
+--=-=-=--
