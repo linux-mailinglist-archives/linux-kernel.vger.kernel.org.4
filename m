@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A00B69997F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BB86999D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjBPQKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S229849AbjBPQWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBPQKt (ORCPT
+        with ESMTP id S229839AbjBPQWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:10:49 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA934D601
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:10:48 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id bx22so2339479pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GEswlEoANnCYJZ4CQNeZ3b7/tLKIkxyJxKO8y46Blss=;
-        b=t77I3zq/lsWwoijj5yg3nMALMbETP32lnruynx3xKn2jaAc0/sE0sOtaJVdYlBCrYJ
-         b8bWpF5nwzQfr7t+XI4tCDItPZm0rd9LduV1mzvHNnB1grdCCgSodJW0AJn+xrfMg1U2
-         ZrkpeZ2QK56qhNKA5WtC+7vb7EKkPUXUnpnJ7MkdvB8jS+lkivH4VU/2yudTOdaItpQQ
-         GVh7gy5dKbQ6UcybdbjMuxCnIPfmzyfJjO6FNLiiMk5qKDWfnJG8JhHtoSrnzeoFOAYO
-         U+58Vjz6eAADFgqEvTz1gMqHFPjsDjL5QuuXhnno2ndpkfD5oEa6qkGjcVJwShgX/C3W
-         gWtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GEswlEoANnCYJZ4CQNeZ3b7/tLKIkxyJxKO8y46Blss=;
-        b=VA5zGav/crzcYP5GE6pgn2lFUSYiBf4pRMmAfl+Y9DrcWPN1IBv5ECZ08ZBM0gztXR
-         OcT8j7q8nGDo/2OZ5k3UFgR7tWb3oeEVrclYhMckL+zcnF3K6Hx52Neasru8Wt9558Id
-         ebuLF8zTHspGyQ9TnmMn7V54rQPAMxKwXtDfcZROde8dTeteInv94T1hW0NVm5VpcHWq
-         G+oWyU3N5D0XsR5ksWnz6uXXXb9PRYcscN2V03WNvkTJWXCCsQjMp/6chbE8JH0REpFV
-         3++SKH8w6kqocry0FLVTP514WPI3Yxti1+Jsi3LJxbQBR3O1iloyd8yqMarDHvnYGpzF
-         upnw==
-X-Gm-Message-State: AO0yUKU9ExNaJsktsuRRviLnfvSbeHzmcpoBiuE/U+0lKSzOdxHrEUWM
-        wWdgr+lBbQH/VRxpH+8vgvRLtg==
-X-Google-Smtp-Source: AK7set/U5E34SKCpowgonDjLfLHp7GBOTSycnR5f8A4foP5WZo/kPZQngijv8VMRHs8I56nZRsFnGA==
-X-Received: by 2002:a17:903:d1:b0:19a:996c:5c2b with SMTP id x17-20020a17090300d100b0019a996c5c2bmr4671596plc.39.1676563847574;
-        Thu, 16 Feb 2023 08:10:47 -0800 (PST)
-Received: from [10.255.2.172] ([139.177.225.247])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170902c38100b001993411d66bsm1490186plg.272.2023.02.16.08.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 08:10:47 -0800 (PST)
-Message-ID: <bc8f48ce-7280-c70a-db7d-825923f08b48@bytedance.com>
-Date:   Fri, 17 Feb 2023 00:10:42 +0800
+        Thu, 16 Feb 2023 11:22:19 -0500
+Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C72EB4E5F9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:22:14 -0800 (PST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1676564133; bh=LtOqw6Liu2Qd487IpRFryDo1qNR5M58ZhCvzkyOx7kY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=qPEdJaoOfTKEpYVFEf0ioaeyxbQbv6jO+H5nKcaBkqLJi6OoNzgTEhhaKfQILGnDi
+         SZQ/0We5NmKist916zor1GoYemRbA1Kc4QuAx34cXA7agu9yo6cNr4Wm9UnaXhbx1b
+         +Lvhe4StNEfcj4WQNiGPv2xuvnOcgXkagkfCXZGKIOLJp53kzg/ujuQJNp+TZWGHSf
+         /eEAKE5B7BRjOlA4X5e3jB0Gz9X99GfYrF+O5tFYxDgt23FikVWh5FhF1qWPSTbdVo
+         IijtvvLcquXI+X0Ho/l847EuVoeAyo6X0kUJqDkYn/yg1baqlawR0YwPk4Agvq8VCq
+         X/PNk3WdydnTw==
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 1/1] wifi: ath9k: hif_usb: fix memory leak of remain_skbs
+In-Reply-To: <20230212145238.123055-2-pchelkin@ispras.ru>
+References: <20230212145238.123055-1-pchelkin@ispras.ru>
+ <20230212145238.123055-2-pchelkin@ispras.ru>
+Date:   Thu, 16 Feb 2023 17:15:32 +0100
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87a61dsi1n.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [External] Re: [PATCH v2] ext4: make dioread_nolock consistent in
- each mapping round
-To:     "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <87fsb5lpn1.fsf@doe.com>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <87fsb5lpn1.fsf@doe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fedor Pchelkin <pchelkin@ispras.ru> writes:
 
+> hif_dev->remain_skb is allocated and used exclusively in
+> ath9k_hif_usb_rx_stream(). It is implied that an allocated remain_skb is
+> processed and subsequently freed (in error paths) only during the next
+> call of ath9k_hif_usb_rx_stream().
+>
+> So, if the device is deinitialized between those two calls or if the skb
+> contents are incorrect, it is possible that ath9k_hif_usb_rx_stream() is
+> not called next time and the allocated remain_skb is leaked. Our local
+> Syzkaller instance was able to trigger that.
+>
+> Fix the leak by introducing a function to explicitly free remain_skb (if
+> it is not NULL) when the device is being deinitialized. remain_skb is NULL
+> when it has not been allocated at all (hif_dev struct is kzalloced) or
+> when it has been proccesed in next call to ath9k_hif_usb_rx_stream().
+>
+> Proper spinlocks are held to prevent possible concurrent access to
+> remain_skb from the interrupt context ath9k_hif_usb_rx_stream(). These
+> accesses should not happen as rx_urbs have been deallocated before but
+> it prevents a dangerous race condition in these cases.
+>
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+>
+> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> ---
+>  drivers/net/wireless/ath/ath9k/hif_usb.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+> index f521dfa2f194..e03ab972edf7 100644
+> --- a/drivers/net/wireless/ath/ath9k/hif_usb.c
+> +++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
+> @@ -534,6 +534,23 @@ static struct ath9k_htc_hif hif_usb = {
+>  	.send = hif_usb_send,
+>  };
+>  
+> +/* Need to free remain_skb allocated in ath9k_hif_usb_rx_stream
+> + * in case ath9k_hif_usb_rx_stream wasn't called next time to
+> + * process the buffer and subsequently free it.
+> + */
+> +static void ath9k_hif_usb_free_rx_remain_skb(struct hif_device_usb *hif_dev)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&hif_dev->rx_lock, flags);
+> +	if (hif_dev->remain_skb) {
+> +		dev_kfree_skb_any(hif_dev->remain_skb);
+> +		hif_dev->remain_skb = NULL;
+> +		hif_dev->rx_remain_len = 0;
+> +	}
+> +	spin_unlock_irqrestore(&hif_dev->rx_lock, flags);
+> +}
+> +
+>  static void ath9k_hif_usb_rx_stream(struct hif_device_usb *hif_dev,
+>  				    struct sk_buff *skb)
+>  {
+> @@ -1129,6 +1146,7 @@ static int ath9k_hif_usb_dev_init(struct hif_device_usb *hif_dev)
+>  static void ath9k_hif_usb_dev_deinit(struct hif_device_usb *hif_dev)
+>  {
+>  	ath9k_hif_usb_dealloc_urbs(hif_dev);
+> +	ath9k_hif_usb_free_rx_remain_skb(hif_dev);
+>  }
 
-在 2023/2/16 下午9:13, Ritesh Harjani (IBM) 写道:
-> Jinke Han <hanjinke.666@bytedance.com> writes:
-> 
->> From: Jinke Han <hanjinke.666@bytedance.com>
->>
->> When disable and enable dioread_nolock by remount, we may see
->> dioread_lock in ext4_do_writepages while see dioread_nolock in
->> mpage_map_one_extent. This inconsistency may triger the warning
->> in ext4_add_complete_io when the io_end->handle is NULL. Although
->> this warning is harmless in most cases, there is still a risk of
->> insufficient log reservation in conversion of unwritten extents.
->>
-> 
-> Sorry, I haven't completely gone through the patch yet. But this idea of
-> caching the initial value of mount parameter and passing it do different
-> functions while an I/O request completes, is not looking right to me.
-> 
-> If that's the case shouldn't we disallow this mount option to change
-> until all the outstanding I/O's are done or complete?
-> Then we need not cache the value of dioread_nolock at the start of
-> writepages and continue to pass it down in case it it changes.
-> 
-> Just my initial thoughts.
-> 
-> -ritesh
-> 
+Erm, does this actually fix the leak? AFAICT, ath9k_hif_usb_dev_deinit()
+is only called on the error path of ath9k_hif_usb_firmware_cb(), not
+when the device is subsequently torn down in
+ath9k_htc_disconnect_device()?
 
-Fair enough, thanks.
+I think the right place to put this is probably inside
+ath9k_hif_usb_dealloc_urbs()? That gets called on USB suspend as well,
+but it seems to me that if we're suspending the device to an extent that
+we're deallocating the urbs, we should be clearing out the cached skb in
+remain_skb anyway?
 
+-Toke
