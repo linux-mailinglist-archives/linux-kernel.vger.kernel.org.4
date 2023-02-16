@@ -2,228 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F16F699083
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B0A699084
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjBPJwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S229583AbjBPJxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjBPJv5 (ORCPT
+        with ESMTP id S229614AbjBPJxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:51:57 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2079.outbound.protection.outlook.com [40.107.95.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D86BDC9;
-        Thu, 16 Feb 2023 01:51:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CmeC8vvOOsHGnOLrmd23Ll3ewB8DbIyH1lSpuz/+xk3fP86SvgcV6BXvK03Qbbgx/T9yLkVj1OhMp0CB5iV29Pk/hFg5f5409RwvP86KgcA+wC91fg4t9nV2Z3teakeQXtjtRv87V4A6f9ZZAUOqM0Ql6/NjNZBIR1V/aouAhoV0PzhtIbBAE2E+hYzCr2tusdq7I5siCWsXVIZKXbi0XStUUjRcekHh/cAzNzySyG/lrG1XPqsbXqwvcVjlY2FMRA2iNLn+DQgEcHuZFOzxObkyOoJXO+q6uhrOPhZYTjcPsUlPxMhXUAAdLjy9WKeaWfW7KORRjVwabkQ5l3UMxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WYhi8XEvPcZF/NFcsIA0cyLpWprtOSD5JJvxwE+I2h4=;
- b=b23R7zb0Wf1Gr6zBH/OYYljiRGyK4HIlK51F2ErHkg975tPbUGk73sGwaek5Kz+xpKsOXRKkAjKi8Ilm6TPpk/mH253sY68pYArd1a9jXy2M+LZ77edDvv9c/g2yw0i1OnNam+hxx5M3iLg5Cqfs/crfOU25HATfaRkGSI52liC+2EEvA6O1R58qo/NUm1AVAdv+ZlvTRD+Em7SPt1zEAj+xWznjL3hVKzfjZUITx3wq2zKUqBMeoYBsJITO0Yhj0pnG0GrK+TesW02WF+aOQQD9Kr51+FrHNsUZ9c15lxMYFhia5lCTFYPFHkEvFYYtssmkjSBI8H+JPfRxHvBLKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYhi8XEvPcZF/NFcsIA0cyLpWprtOSD5JJvxwE+I2h4=;
- b=xzTvgJKiIo8mrqoGfICnkaidnekMORdnGhan+niZZ0gazFWzJLiF4gYDbiT951tn0NmyIl87CCztrahy3swvtzbAT3JknYhJZWS2a3ox9jqCqo1HfkJIoRXlSsQpASpYYNRWlqc0U8tfTCbC+MTKRFSqz+l6xxMuY7jZfXMZMTo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) by
- DM6PR12MB4057.namprd12.prod.outlook.com (2603:10b6:5:213::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.13; Thu, 16 Feb 2023 09:51:54 +0000
-Received: from DS7PR12MB6309.namprd12.prod.outlook.com
- ([fe80::6c34:2aaf:bf7:c349]) by DS7PR12MB6309.namprd12.prod.outlook.com
- ([fe80::6c34:2aaf:bf7:c349%8]) with mapi id 15.20.6111.013; Thu, 16 Feb 2023
- 09:51:54 +0000
-Message-ID: <86d7cc82-8ff9-769b-f80f-ff18fe28f44d@amd.com>
-Date:   Thu, 16 Feb 2023 15:21:21 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
-From:   "Nikunj A. Dadhania" <nikunj@amd.com>
-In-Reply-To: <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0180.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::17) To DS7PR12MB6309.namprd12.prod.outlook.com
- (2603:10b6:8:96::19)
+        Thu, 16 Feb 2023 04:53:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9F137577;
+        Thu, 16 Feb 2023 01:53:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 50AED2035C;
+        Thu, 16 Feb 2023 09:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676541213; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=RxHW2WWUGp1yNDTBMPzHvEZBuQ5roo80DeS3wMBao2c=;
+        b=fIpukfaMMsgb90WuH1FwV6H6oY0JeOot/iAlPx9+JgaOV/cPl2K/+CkFsxc1Lad9dNc1Y+
+        ZYSy1bwuHLcez/+RmUUauPVWHTZYIvez9zFybGfKcBoFq8H+PPIsV2NbHmyNxftKtWEwNJ
+        7/XIXudkAm7dXv0AOEnAroIKC3pSV9M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676541213;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=RxHW2WWUGp1yNDTBMPzHvEZBuQ5roo80DeS3wMBao2c=;
+        b=bZ17fkkOlWGP4Nym//DRwm/BKHLdSdZ5BWqTWJBxCMd03T25gG5fxogL7jn/h9YgQrJKtg
+        nQYLyu5wv8xpqTAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31396139B5;
+        Thu, 16 Feb 2023 09:53:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SjZ9Cx397WMlNAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 16 Feb 2023 09:53:33 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Mel Gorman <mgorman@techsingularity.net>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Alexander Halbuer <halbuer@sra.uni-hannover.de>
+Subject: [PATCH] mm, page_alloc: reduce page alloc/free sanity checks
+Date:   Thu, 16 Feb 2023 10:51:31 +0100
+Message-Id: <20230216095131.17336-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6309:EE_|DM6PR12MB4057:EE_
-X-MS-Office365-Filtering-Correlation-Id: e96d707f-90aa-4882-dacd-08db10036ed9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gfGRgkh27w0t8Vh/5TP63H4fV9VGnxCmtMIkQaDTgM+QVimFWRQUKRb2l9+MyokIRgW+N2zNNJB15ZifmDod0YHtAbGK7HeMSnhJmx2gdbqSFemJtMctQKusQZJoFu06ueFBTNgJoTwR7IbmTlTiCCZoxSxToDqal8bxTOuT5JxyjJimPNJeSpCBTrT0sWyBAmb/EEd5eI5JRnFTzp9g0aOxEZLgffTdF0J4BFhvi+h2tn7L2U7aBm3lJTwuAZU7h56H8RcqMtb4Zd3mEKCWffiZ79fO/TXB2OGKva+UDJ/kRGnNNH3kAahVyykxKKO44g/84tD9LPPy/J/kHFHP5pFC3xgfrBwUELvGb+yQHNwqqWefl/lbVoV8XvhJQMDnf0l0pC0dWOJdht9vb2F3WE6mJaaosVBSg/ATk5h2ZOi6TakvhopUFQMAghFfMrP9DBISBzInBdFGbCaJO0+YESw8NgOoATY9ZwTWuO6yCRTw4uz3K01iRRMvfy8jX5w0v9fSkVUsuLyClBxqGVwXpsS0ISeQ9Z2YEZnjNK8toI9Cd8+zCSgH/WlN0oiahsqeCjHMA4MJRpS+YsAetSV+kxf+8bjRVkqLItYoNOczezOKy82nFaxXGCKqMoGZJ2PDOsIA46frQ+Zy1j01Ilb5xi0rvM6LcX63+enpOijYz4WJeDM04Y/FSC+Iy8VRVdasFB/aZaSzGK0PDhTcP+kBa+1ezSN+3BfQTJ7ewWCbU7U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6309.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(451199018)(31686004)(36756003)(54906003)(2906002)(7406005)(7416002)(5660300002)(8936002)(66556008)(66476007)(66946007)(316002)(41300700001)(8676002)(4326008)(478600001)(6486002)(186003)(6512007)(26005)(6506007)(31696002)(6666004)(2616005)(83380400001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXVnWG5DT3pBUnlkeEhSWjhxYnFaYTB6ejZhSkhIOFlJdER6T2kwY2NheWZu?=
- =?utf-8?B?ZHZsR1JCbnl5K3E1cWU3TjlyL3UzVmJ1UmJraW91WXlWUUtxNzBFanI3bGQx?=
- =?utf-8?B?WXpRdnROcEpLU2E2bFFIdUJNVHI4dEcxRGI1U1pUYkNmUmtYeXQ3NDRjMHJq?=
- =?utf-8?B?NDdtcm1KVHZrS3FoSEthS3dXeWl1Wm9teTM2RWptRFlVN2N0MGd3eEdYL05p?=
- =?utf-8?B?NHczRHNkZEMzWjVFQW14WkNRM2dJR2U4TU55WFo0UTlEUkxRK2Njdm5YeitJ?=
- =?utf-8?B?c3BuV1Ziblg5K2g3a0RnODdSdkFhRW9McS95b09qUG43bUhMeVduSGZXY1lm?=
- =?utf-8?B?RzR0Zlc2dHF0SG1oWjFkblB3K1BCaWh5STI4YUsyUzVhSFBxTU4zckxkN2dL?=
- =?utf-8?B?cUtKQ0htYXpIZW9UQ054Q2dGMHg0NjI3dUlqYXpZTVlaOXdYdFRqMWhkbVdB?=
- =?utf-8?B?T1RqalFxTVpZK3pidzJwRUVtZkk0QmhpdGZxa1VXYjBhYlZvRkpkLzRLd0wz?=
- =?utf-8?B?RkUrN01xS3hRMXNJOXVZR1k3ZVBTaWQzODZqMjhNeE5GaUh5dlBvRkxPVDEz?=
- =?utf-8?B?Um5qU3FTeDU4b1V3c0pvaldIdHAzYUZ0U2ppTkpKKzlidXhXQUt4RFd4bGwx?=
- =?utf-8?B?Y2ludzQ2NjlLQ2lvMHZJWlVrb0lMNEIrbEVhdmZLWE5zRkFhdUxscEJIQUMy?=
- =?utf-8?B?TVpURVpQTWpJWmE0Y2pmTHJHVERZZU0wRUpRSWtQZTRhc0QvVDRkOWsycGYx?=
- =?utf-8?B?MnFjby9OZjhQMGI3bXpETTl4N09ldVNEb3hTZkNkb3k1S1B4aFdGTkVDUzJP?=
- =?utf-8?B?QnlqQkNrMjRyN0tGeHZaUXYzZkRQVmh4d253SzMwY05vNExVU0YrVmtUb0hj?=
- =?utf-8?B?eldCL1MxSXZLd0hwN3UzSzZwbjhTVUZjZVFhS201Z3VsRVRINVM5RG44aStq?=
- =?utf-8?B?YzRTanFPcERUeEpGVFh4OFJzRERpTjIyRHFESzRaUllxUU9FcGhqZFlyWSs3?=
- =?utf-8?B?czlpQkVBUGVibk84MXJKN2tibHZCV0pRQzBwQktneWZoWGVydjVJQmxJZkZj?=
- =?utf-8?B?Tm5TTjJ3b1dtZC80YWpwZ3ZCMCtWWjNMZVIzTTBoWU9qWGtrRHo5TGVNNStk?=
- =?utf-8?B?T1k1TlRubkNmWmVQMWxCU2hZOUg2SWsrTFZTRlNURTdoNWlLakRUbVdpZVIx?=
- =?utf-8?B?d2JKbzRMTGdHbUh3K0x2Um94dDZKZVVnTjcyZ21JMFBxdHYvVE1HbHNYVzdh?=
- =?utf-8?B?blFISzkyY2VPUGc3RXFDUmxWTmhjdHhxVXlyVHlNY25OWTdFdGQ0cXVSY2ta?=
- =?utf-8?B?eE9QN1dnSkhlcllMcjNRaDBoMkhNSnQyNWNEMWF0Z1Bqc3NjRGpLR296aWI2?=
- =?utf-8?B?bWxpY1RKR2xMbTlNeUNzb1lFcmVVZ2lqWFQyajBDRU94RlYyYkcrRHdqL0wx?=
- =?utf-8?B?N2x1MmtLVUFXcEtGZDl3cDN4Q2xtY25uZGxwRXBTSlR2eFNpQTNMeVBjNUw5?=
- =?utf-8?B?V1NpWGROaktLdDRiTFhLSTl3SXhtMjNWYjdYNThueFJhY2R4U0l6Zit5ekJF?=
- =?utf-8?B?NzFDZkhWSThNaGpKUWRGK1JvbkR2K2RmMGV6VFhpc1RIOWdEQnYyZUxxcFcv?=
- =?utf-8?B?am1QQndtRm5OYXFReDN5YVhMUjJnL1RST3BwUyt4UDRSdUNROXF2emlmd3FQ?=
- =?utf-8?B?aUJnN1hQd3FQb2tDaEpCcEE4U28yTE1NcGZVYnQ1Q2tnc3BKb0M4WnF3K0ps?=
- =?utf-8?B?ZTFIY3BYZ05NZUJUbWNlcC93WWVzK3RNdkpOM1VDNm1Hb3J6SHZjMnFjRUZ0?=
- =?utf-8?B?ckVkaEp2MWU0MWhtMThycmNhaFg1Q0V4ZkhBMWkrdXpkdG04bTQ2ZmY3Qm5B?=
- =?utf-8?B?SG1UTGMvNzZ3ZHkrQldOeS9DOUl1SXdrdlFjeWc5a2R1eE11YlNxYmFZa0lU?=
- =?utf-8?B?QkR4MUE0enRSMEhVbk9rV2dUMFltSlpNejhkTWtONlplWS9IQVU4di9SaVV6?=
- =?utf-8?B?MlJSb3NDN1J3cWE3Y2V1V1dwdm9OQUdaL3ZmUGVGQ1l0K0lFZThlMDJBZU84?=
- =?utf-8?B?cTlOREVrUTZqMmF2T0ZkeEpvMWdlZ21HV0ZWdTNIUjY2SkQ0VGpTazZRUFYx?=
- =?utf-8?Q?rgFgqaG8ZnkJVK4qqBoKR+Hr6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e96d707f-90aa-4882-dacd-08db10036ed9
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6309.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 09:51:53.8317
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lL4mnVPD9cv0od0rUs88y4Ud1AUMOK2PHaHIvvnI2WhZDRcZQH9xfDWnrUACOSTjR0V+CwDAUnTN4ccPcQTPhg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4057
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Historically, we have performed sanity checks on all struct pages being
+allocated or freed, making sure they have no unexpected page flags or
+certain field values. This can detect insufficient cleanup and some
+cases of use-after-free, although on its own it can't always identify
+the culprit. The result is a warning and the "bad page" being leaked.
 
-> +static struct file *restrictedmem_file_create(struct file *memfd)
-> +{
-> +	struct restrictedmem_data *data;
-> +	struct address_space *mapping;
-> +	struct inode *inode;
-> +	struct file *file;
-> +
-> +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	data->memfd = memfd;
-> +	mutex_init(&data->lock);
-> +	INIT_LIST_HEAD(&data->notifiers);
-> +
-> +	inode = alloc_anon_inode(restrictedmem_mnt->mnt_sb);
-> +	if (IS_ERR(inode)) {
-> +		kfree(data);
-> +		return ERR_CAST(inode);
-> +	}
+The checks do need some cpu cycles, so in 4.7 with commits 479f854a207c
+("mm, page_alloc: defer debugging checks of pages allocated from the
+PCP") and 4db7548ccbd9 ("mm, page_alloc: defer debugging checks of freed
+pages until a PCP drain") they were no longer performed in the hot paths
+when allocating and freeing from pcplists, but only when pcplists are
+bypassed, refilled or drained. For debugging purposes, with
+CONFIG_DEBUG_VM enabled the checks were instead still done in the
+hot paths and not when refilling or draining pcplists.
 
-alloc_anon_inode() uses new_pseudo_inode() to get the inode. As per the comment, new inode 
-is not added to the superblock s_inodes list.
+With 4462b32c9285 ("mm, page_alloc: more extensive free page checking
+with debug_pagealloc"), enabling debug_pagealloc also moved the sanity
+checks back to hot pahs. When both debug_pagealloc and CONFIG_DEBUG_VM
+are enabled, the checks are done both in hotpaths and pcplist
+refill/drain.
 
-/**
- *	new_inode_pseudo 	- obtain an inode
- *	@sb: superblock
- *
- *	Allocates a new inode for given superblock.
- *	Inode wont be chained in superblock s_inodes list
- *	This means :
- *	- fs can't be unmount
- *	- quotas, fsnotify, writeback can't work
- */
+Even though the non-debug default today might seem to be a sensible
+tradeoff between overhead and ability to detect bad pages, on closer
+look it's arguably not. As most allocations go through the pcplists,
+catching any bad pages when refilling or draining pcplists has only a
+small chance, insufficient for debugging or serious hardening purposes.
+On the other hand the cost of the checks is concentrated in the already
+expensive drain/refill batching operations, and those are done under the
+often contended zone lock. That was recently identified as an issue for
+page allocation and the zone lock contention reduced by moving the
+checks outside of the locked section with a patch "mm: reduce lock
+contention of pcp buffer refill", but the cost of the checks is still
+visible compared to their removal [1]. In the pcplist draining path
+free_pcppages_bulk() the checks are still done under zone->lock.
 
-So the restrictedmem_error_page will not find the inode as it was never added to the s_inodes list.
+Thus, remove the checks from pcplist refill and drain paths completely.
+Introduce a static key check_pages_enabled to control checks during page
+allocation a freeing (whether pcplist is used or bypassed). The static
+key is enabled if either is true:
+- kernel is built with CONFIG_DEBUG_VM=y (debugging)
+- debug_pagealloc or page poisoning is boot-time enabled (debugging)
+- init_on_alloc or init_on_free is boot-time enabled (hardening)
 
-We might need to add the inode after allocating.
+The resulting user visible changes:
+- no checks when draining/refilling pcplists - less overhead, with
+  likely no practical reduction of ability to catch bad pages
+- no checks when bypassing pcplists in default config (no
+  debugging/hardening) - less overhead etc. as above
+- on typical hardened kernels [2], checks are now performed on each page
+  allocation/free (previously only when bypassing/draining/refilling
+  pcplists) - the init_on_alloc/init_on_free enabled should be sufficient
+  indication for preferring more costly alloc/free operations for
+  hardening purposes and we shouldn't need to introduce another toggle
+- code (various wrappers) removal and simplification
 
-	inode_sb_list_add(inode);
+[1] https://lore.kernel.org/all/68ba44d8-6899-c018-dcb3-36f3a96e6bea@sra.uni-hannover.de/
+[2] https://lore.kernel.org/all/63ebc499.a70a0220.9ac51.29ea@mx.google.com/
 
-> +void restrictedmem_error_page(struct page *page, struct address_space *mapping)
-> +{
-> +	struct super_block *sb = restrictedmem_mnt->mnt_sb;
-> +	struct inode *inode, *next;
-> +
-> +	if (!shmem_mapping(mapping))
-> +		return;
-> +
-> +	spin_lock(&sb->s_inode_list_lock);
-> +	list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) {
-> +		struct restrictedmem_data *data = inode->i_mapping->private_data;
-> +		struct file *memfd = data->memfd;
-> +
-> +		if (memfd->f_mapping == mapping) {
-> +			pgoff_t start, end;
-> +
-> +			spin_unlock(&sb->s_inode_list_lock);
-> +
-> +			start = page->index;
-> +			end = start + thp_nr_pages(page);
-> +			restrictedmem_notifier_error(data, start, end);
-> +			return;
-> +		}
-> +	}
-> +	spin_unlock(&sb->s_inode_list_lock);
-> +}
+Reported-by: Alexander Halbuer <halbuer@sra.uni-hannover.de>
+Reported-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ mm/page_alloc.c | 188 ++++++++++++++----------------------------------
+ 1 file changed, 53 insertions(+), 135 deletions(-)
 
-Regards
-Nikunj
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 713643fd132b..0113df51cd9c 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -253,6 +253,9 @@ EXPORT_SYMBOL(init_on_alloc);
+ DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
+ EXPORT_SYMBOL(init_on_free);
+ 
++/* perform sanity checks on struct pages being allocated or freed */
++DEFINE_STATIC_KEY_MAYBE(CONFIG_DEBUG_VM, check_pages_enabled);
++
+ static bool _init_on_alloc_enabled_early __read_mostly
+ 				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
+ static int __init early_init_on_alloc(char *buf)
+@@ -893,6 +896,7 @@ static inline void clear_page_guard(struct zone *zone, struct page *page,
+ void __init init_mem_debugging_and_hardening(void)
+ {
+ 	bool page_poisoning_requested = false;
++	bool want_check_pages = false;
+ 
+ #ifdef CONFIG_PAGE_POISONING
+ 	/*
+@@ -904,6 +908,7 @@ void __init init_mem_debugging_and_hardening(void)
+ 	      debug_pagealloc_enabled())) {
+ 		static_branch_enable(&_page_poisoning_enabled);
+ 		page_poisoning_requested = true;
++		want_check_pages = true;
+ 	}
+ #endif
+ 
+@@ -915,31 +920,42 @@ void __init init_mem_debugging_and_hardening(void)
+ 		_init_on_free_enabled_early = false;
+ 	}
+ 
+-	if (_init_on_alloc_enabled_early)
++	if (_init_on_alloc_enabled_early) {
++		want_check_pages = true;
+ 		static_branch_enable(&init_on_alloc);
+-	else
++	} else {
+ 		static_branch_disable(&init_on_alloc);
++	}
+ 
+-	if (_init_on_free_enabled_early)
++	if (_init_on_free_enabled_early) {
++		want_check_pages = true;
+ 		static_branch_enable(&init_on_free);
+-	else
++	} else {
+ 		static_branch_disable(&init_on_free);
++	}
+ 
+ 	if (IS_ENABLED(CONFIG_KMSAN) &&
+ 	    (_init_on_alloc_enabled_early || _init_on_free_enabled_early))
+ 		pr_info("mem auto-init: please make sure init_on_alloc and init_on_free are disabled when running KMSAN\n");
+ 
+ #ifdef CONFIG_DEBUG_PAGEALLOC
+-	if (!debug_pagealloc_enabled())
+-		return;
+-
+-	static_branch_enable(&_debug_pagealloc_enabled);
+-
+-	if (!debug_guardpage_minorder())
+-		return;
++	if (debug_pagealloc_enabled()) {
++		want_check_pages = true;
++		static_branch_enable(&_debug_pagealloc_enabled);
+ 
+-	static_branch_enable(&_debug_guardpage_enabled);
++		if (debug_guardpage_minorder())
++			static_branch_enable(&_debug_guardpage_enabled);
++	}
+ #endif
++
++	/*
++	 * Any page debugging or hardening option also enables sanity checking
++	 * of struct pages being allocated or freed. With CONFIG_DEBUG_VM it's
++	 * enabled already.
++	 */
++	if (!IS_ENABLED(CONFIG_DEBUG_VM) && want_check_pages) {
++		static_branch_enable(&check_pages_enabled);
++	}
+ }
+ 
+ static inline void set_buddy_order(struct page *page, unsigned int order)
+@@ -1395,7 +1411,7 @@ static void kernel_init_pages(struct page *page, int numpages)
+ }
+ 
+ static __always_inline bool free_pages_prepare(struct page *page,
+-			unsigned int order, bool check_free, fpi_t fpi_flags)
++			unsigned int order, fpi_t fpi_flags)
+ {
+ 	int bad = 0;
+ 	bool init = want_init_on_free();
+@@ -1432,9 +1448,11 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 		for (i = 1; i < (1 << order); i++) {
+ 			if (compound)
+ 				bad += free_tail_pages_check(page, page + i);
+-			if (unlikely(free_page_is_bad(page + i))) {
+-				bad++;
+-				continue;
++			if (static_branch_unlikely(&check_pages_enabled)) {
++				if (unlikely(free_page_is_bad(page + i))) {
++					bad++;
++					continue;
++				}
+ 			}
+ 			(page + i)->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+ 		}
+@@ -1443,10 +1461,12 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 		page->mapping = NULL;
+ 	if (memcg_kmem_online() && PageMemcgKmem(page))
+ 		__memcg_kmem_uncharge_page(page, order);
+-	if (check_free && free_page_is_bad(page))
+-		bad++;
+-	if (bad)
+-		return false;
++	if (static_branch_unlikely(&check_pages_enabled)) {
++		if (free_page_is_bad(page))
++			bad++;
++		if (bad)
++			return false;
++	}
+ 
+ 	page_cpupid_reset_last(page);
+ 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+@@ -1492,46 +1512,6 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 	return true;
+ }
+ 
+-#ifdef CONFIG_DEBUG_VM
+-/*
+- * With DEBUG_VM enabled, order-0 pages are checked immediately when being freed
+- * to pcp lists. With debug_pagealloc also enabled, they are also rechecked when
+- * moved from pcp lists to free lists.
+- */
+-static bool free_pcp_prepare(struct page *page, unsigned int order)
+-{
+-	return free_pages_prepare(page, order, true, FPI_NONE);
+-}
+-
+-/* return true if this page has an inappropriate state */
+-static bool bulkfree_pcp_prepare(struct page *page)
+-{
+-	if (debug_pagealloc_enabled_static())
+-		return free_page_is_bad(page);
+-	else
+-		return false;
+-}
+-#else
+-/*
+- * With DEBUG_VM disabled, order-0 pages being freed are checked only when
+- * moving from pcp lists to free list in order to reduce overhead. With
+- * debug_pagealloc enabled, they are checked also immediately when being freed
+- * to the pcp lists.
+- */
+-static bool free_pcp_prepare(struct page *page, unsigned int order)
+-{
+-	if (debug_pagealloc_enabled_static())
+-		return free_pages_prepare(page, order, true, FPI_NONE);
+-	else
+-		return free_pages_prepare(page, order, false, FPI_NONE);
+-}
+-
+-static bool bulkfree_pcp_prepare(struct page *page)
+-{
+-	return free_page_is_bad(page);
+-}
+-#endif /* CONFIG_DEBUG_VM */
+-
+ /*
+  * Frees a number of pages from the PCP lists
+  * Assumes all pages on list are in same zone.
+@@ -1591,9 +1571,6 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 			count -= nr_pages;
+ 			pcp->count -= nr_pages;
+ 
+-			if (bulkfree_pcp_prepare(page))
+-				continue;
+-
+ 			/* MIGRATE_ISOLATE page should not go to pcplists */
+ 			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
+ 			/* Pageblock could have been isolated meanwhile */
+@@ -1706,7 +1683,7 @@ static void __free_pages_ok(struct page *page, unsigned int order,
+ 	unsigned long pfn = page_to_pfn(page);
+ 	struct zone *zone = page_zone(page);
+ 
+-	if (!free_pages_prepare(page, order, true, fpi_flags))
++	if (!free_pages_prepare(page, order, fpi_flags))
+ 		return;
+ 
+ 	/*
+@@ -2382,7 +2359,7 @@ static void check_new_page_bad(struct page *page)
+ /*
+  * This page is about to be returned from the page allocator
+  */
+-static inline int check_new_page(struct page *page)
++static int check_new_page(struct page *page)
+ {
+ 	if (likely(page_expected_state(page,
+ 				PAGE_FLAGS_CHECK_AT_PREP|__PG_HWPOISON)))
+@@ -2392,56 +2369,20 @@ static inline int check_new_page(struct page *page)
+ 	return 1;
+ }
+ 
+-static bool check_new_pages(struct page *page, unsigned int order)
++static inline bool check_new_pages(struct page *page, unsigned int order)
+ {
+-	int i;
+-	for (i = 0; i < (1 << order); i++) {
+-		struct page *p = page + i;
++	if (static_branch_unlikely(&check_pages_enabled)) {
++		for (int i = 0; i < (1 << order); i++) {
++			struct page *p = page + i;
+ 
+-		if (unlikely(check_new_page(p)))
+-			return true;
++			if (unlikely(check_new_page(p)))
++				return true;
++		}
+ 	}
+ 
+ 	return false;
+ }
+ 
+-#ifdef CONFIG_DEBUG_VM
+-/*
+- * With DEBUG_VM enabled, order-0 pages are checked for expected state when
+- * being allocated from pcp lists. With debug_pagealloc also enabled, they are
+- * also checked when pcp lists are refilled from the free lists.
+- */
+-static inline bool check_pcp_refill(struct page *page, unsigned int order)
+-{
+-	if (debug_pagealloc_enabled_static())
+-		return check_new_pages(page, order);
+-	else
+-		return false;
+-}
+-
+-static inline bool check_new_pcp(struct page *page, unsigned int order)
+-{
+-	return check_new_pages(page, order);
+-}
+-#else
+-/*
+- * With DEBUG_VM disabled, free order-0 pages are checked for expected state
+- * when pcp lists are being refilled from the free lists. With debug_pagealloc
+- * enabled, they are also checked when being allocated from the pcp lists.
+- */
+-static inline bool check_pcp_refill(struct page *page, unsigned int order)
+-{
+-	return check_new_pages(page, order);
+-}
+-static inline bool check_new_pcp(struct page *page, unsigned int order)
+-{
+-	if (debug_pagealloc_enabled_static())
+-		return check_new_pages(page, order);
+-	else
+-		return false;
+-}
+-#endif /* CONFIG_DEBUG_VM */
+-
+ static inline bool should_skip_kasan_unpoison(gfp_t flags)
+ {
+ 	/* Don't skip if a software KASAN mode is enabled. */
+@@ -3136,9 +3077,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 			int migratetype, unsigned int alloc_flags)
+ {
+ 	unsigned long flags;
+-	int i, allocated = 0;
+-	struct list_head *prev_tail = list->prev;
+-	struct page *pos, *n;
++	int i;
+ 
+ 	spin_lock_irqsave(&zone->lock, flags);
+ 	for (i = 0; i < count; ++i) {
+@@ -3163,31 +3102,10 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 					      -(1 << order));
+ 	}
+ 
+-	/*
+-	 * i pages were removed from the buddy list even if some leak due
+-	 * to check_pcp_refill failing so adjust NR_FREE_PAGES based
+-	 * on i. Do not confuse with 'allocated' which is the number of
+-	 * pages added to the pcp list.
+-	 */
+ 	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
+ 	spin_unlock_irqrestore(&zone->lock, flags);
+ 
+-	/*
+-	 * Pages are appended to the pcp list without checking to reduce the
+-	 * time holding the zone lock. Checking the appended pages happens right
+-	 * after the critical section while still holding the pcp lock.
+-	 */
+-	pos = list_first_entry(prev_tail, struct page, pcp_list);
+-	list_for_each_entry_safe_from(pos, n, list, pcp_list) {
+-		if (unlikely(check_pcp_refill(pos, order))) {
+-			list_del(&pos->pcp_list);
+-			continue;
+-		}
+-
+-		allocated++;
+-	}
+-
+-	return allocated;
++	return i;
+ }
+ 
+ #ifdef CONFIG_NUMA
+@@ -3398,7 +3316,7 @@ static bool free_unref_page_prepare(struct page *page, unsigned long pfn,
+ {
+ 	int migratetype;
+ 
+-	if (!free_pcp_prepare(page, order))
++	if (!free_pages_prepare(page, order, FPI_NONE))
+ 		return false;
+ 
+ 	migratetype = get_pfnblock_migratetype(page, pfn);
+@@ -3804,7 +3722,7 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 		page = list_first_entry(list, struct page, pcp_list);
+ 		list_del(&page->pcp_list);
+ 		pcp->count -= 1 << order;
+-	} while (check_new_pcp(page, order));
++	} while (check_new_pages(page, order));
+ 
+ 	return page;
+ }
+-- 
+2.39.1
+
