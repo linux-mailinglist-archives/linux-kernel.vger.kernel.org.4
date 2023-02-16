@@ -2,339 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627E6698D75
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629D8698D78
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBPG54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S229776AbjBPG6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBPG5w (ORCPT
+        with ESMTP id S229584AbjBPG6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:57:52 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CF3172A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1676530666; bh=zCwedMKNgSjvY2H0j2H2RqiSjd2/0Bn6ptsVy3J6/Oo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MWfZQ2OWTMnOnm7D4H1ho8JZZwx64M8fmrNKkBtzkBKruijtMoNKRRZQTx81kq0q2
-         lPgy+woUOJDFQDbrqnev1j3ay5xLcqZ3H+aphcyqe46P3kxpkZShc2VCiFOSM3U64T
-         ki5sfDN3/vnKAMyxCCs613x4j72XUfLUF7wdGQeU=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BAAD960096;
-        Thu, 16 Feb 2023 14:57:45 +0800 (CST)
-Message-ID: <469f1228-dd70-a183-3135-4e3b2e9165f7@xen0n.name>
-Date:   Thu, 16 Feb 2023 14:57:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v3 2/3] LoongArch: Add ptrace single step support
-Content-Language: en-US
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230215092358.30368-1-zhangqing@loongson.cn>
- <20230215092358.30368-3-zhangqing@loongson.cn>
- <2b759af4-4047-4ac6-acbb-42e91c14fb48@loongson.cn>
- <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 01:58:38 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77C2DBCD;
+        Wed, 15 Feb 2023 22:58:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676530698; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=hthfDL44YXKR+IRSBeMk6k/NcDvOmLlxKj3Uf+30lv3ytJ3Jc5W07Cu+SmgQt3aLD/
+    jT3V6yoJdiOJB/ZMCBlYZML0CtAv8ApT66gIneDnvWFh9da8VQyvt/hCWCkZeNlNE1Xo
+    f7ARHzvOzwawtwQxlETFo2VfPdcNm3fPUk3aLObaMyLvlqXPzYoSrd1OGCzyMVoc/VVS
+    QmqaiRnB3XhQnUwgxKjz3VRiP0JbApuUzbSMQiHNYIPDBE07Xktvd7o1dLvK6FdN9a+2
+    9VaIfYQF53ADYPHUh/AJ1ZHOC8siPluu3RqPWqQipdvrJmoYg3DR0hykpl0+m00ULUJy
+    cmIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676530698;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=ZBHlQFwAUfRBpUV+H1jo5cLO4/0meUShd8PmBjJei4E=;
+    b=Z5jBQ13qIE253TEtSQzHAdpNVgpAwWRxoXP/EksLcZ0RfmwaaEYlMoOg7h9e/EHl+l
+    TnNZoFH0v/e6xc8HiXL6iBSCbk63NAqoczpVhUVkfI9vsJ0xX6HPqnkavC8tuV5ocpSs
+    RBdpPT9ACaV+aYhG9hNN2ydoZYt7byonxNNk68h426GhsYHglVuNSq4gTS1C7YrxR5wL
+    Shf9w9Q7kTC9Wvkj/xlAjoPnwJMzyV61zMO6jt2QFuJPHGyxvifc5CRH14v9BpFfNggv
+    AQXJDOkSaIVbBEp+WtjfwrUcyLcVlDsv77foZg648nx9OQGodRrbCYIb63hoaSxgCuO1
+    sPhw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676530698;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=ZBHlQFwAUfRBpUV+H1jo5cLO4/0meUShd8PmBjJei4E=;
+    b=Gl9bgpaD8R6g2Srzg36t4SgyOz0mZtHSS35KaCmd8aHxpIiNeh+tub0jy+SdaBdCgO
+    KUYs6pNZ0x4dj1YqrXDDAUOZ4nter4cRTG/mYN/T0WDer+FbFrX6UBjUozBaQccYyX8C
+    RO2wCc82n2u1TjLCceZYxk9XHfESc73mgInb4PF3oRHKmusxZhtFtk8eZ9oOiCL6HoH3
+    sR4bwUyC3bWAY36mVKaxQ/AympeFk+x5XMQIw7rVZ6cKMmPwD/ulrqacNZ29GR37y7Yz
+    voW3NE9Rcy/ApKfON4BmikWb++Bqz6uR8b/AzNW741dzcq9ZBsIFl21MKZhXMPMCQNHl
+    NGzg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGfq2U="
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
+    with ESMTPSA id 326d57z1G6wHdzG
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 16 Feb 2023 07:58:17 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [RFC 0/3] Make WLAN and Bluetooth basically work for CI20
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <4485f880f7b41bdb833d1153682530cd4bc3ed94.camel@crapouillou.net>
+Date:   Thu, 16 Feb 2023 07:58:16 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Riccardo Mottola <riccardo.mottola@libero.it>,
+        Paul Boddie <paul@boddie.org.uk>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <809FC192-DBC6-45A7-AF91-A30179E6830C@goldelico.com>
+References: <cover.1676482318.git.hns@goldelico.com>
+ <e1f92dc94a3e3df7c4bb32b441802cb333ccb6db.camel@crapouillou.net>
+ <B1706E39-202F-417C-A7A4-B07482B787B0@goldelico.com>
+ <4485f880f7b41bdb833d1153682530cd4bc3ed94.camel@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/16 11:13, Youling Tang wrote:
-> 
-> 
-> On 02/16/2023 10:07 AM, Jinyang He wrote:
->>
->> On 2023-02-15 17:23, Qing Zhang wrote:
->>> Use the generic ptrace_resume code for PTRACE_SYSCALL, PTRACE_CONT,
->>> PTRACE_KILL and PTRACE_SINGLESTEP. This implies defining
->>> arch_has_single_step in  and implementing the
->>> user_enable_single_step and user_disable_single_step functions.
->>>
->>> LongArch has no hardware single-step register. the hardware single-step
->>> function multiplex fetch instruction watchpoint(FWPS) and specifies that
->>> the next instruction must trigger the watch exception by setting the
->>> mask bit.
->>>
->>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>> ---
->>>   arch/loongarch/include/asm/processor.h |  3 ++
->>>   arch/loongarch/include/asm/ptrace.h    |  2 +
->>>   arch/loongarch/kernel/hw_breakpoint.c  | 35 +++++++++++--
->>>   arch/loongarch/kernel/ptrace.c         | 68 ++++++++++++++++++++++++++
->>>   arch/loongarch/kernel/traps.c          | 20 ++++++--
->>>   5 files changed, 120 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/arch/loongarch/include/asm/processor.h
->>> b/arch/loongarch/include/asm/processor.h
->>> index db060c5a976f..3ea0f1910c23 100644
->>> --- a/arch/loongarch/include/asm/processor.h
->>> +++ b/arch/loongarch/include/asm/processor.h
->>> @@ -131,6 +131,9 @@ struct thread_struct {
->>>       struct perf_event    *hbp_break[LOONGARCH_MAX_BRP];
->>>       struct perf_event    *hbp_watch[LOONGARCH_MAX_WRP];
->>>   +    /* Used by ptrace single_step */
->>> +    unsigned long single_step;
->>> +
->>>       /*
->>>        * FPU & vector registers, must be at last because
->>>        * they are conditionally copied at fork().
->>> diff --git a/arch/loongarch/include/asm/ptrace.h
->>> b/arch/loongarch/include/asm/ptrace.h
->>> index 58596c4f8a0f..66a0e6c480a3 100644
->>> --- a/arch/loongarch/include/asm/ptrace.h
->>> +++ b/arch/loongarch/include/asm/ptrace.h
->>> @@ -150,4 +150,6 @@ static inline void user_stack_pointer_set(struct
->>> pt_regs *regs,
->>>       regs->regs[3] = val;
->>>   }
->>>   +#define arch_has_single_step()        (1)
->>> +
->>>   #endif /* _ASM_PTRACE_H */
->>> diff --git a/arch/loongarch/kernel/hw_breakpoint.c
->>> b/arch/loongarch/kernel/hw_breakpoint.c
->>> index 6431cd319c32..94967b887d92 100644
->>> --- a/arch/loongarch/kernel/hw_breakpoint.c
->>> +++ b/arch/loongarch/kernel/hw_breakpoint.c
->>> @@ -153,6 +153,22 @@ static int hw_breakpoint_slot_setup(struct
->>> perf_event **slots, int max_slots,
->>>    */
->>>   void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
->>>   {
->>> +    int i;
->>> +    struct thread_struct *t = &tsk->thread;
->>> +
->>> +    for (i = 0; i < LOONGARCH_MAX_BRP; i++) {
->>> +        if (t->hbp_break[i]) {
->>> +            unregister_hw_breakpoint(t->hbp_break[i]);
->>> +            t->hbp_break[i] = NULL;
->>> +        }
->>> +    }
->>> +
->>> +    for (i = 0; i < LOONGARCH_MAX_WRP; i++) {
->>> +        if (t->hbp_watch[i]) {
->>> +            unregister_hw_breakpoint(t->hbp_watch[i]);
->>> +            t->hbp_watch[i] = NULL;
->>> +        }
->>> +    }
->>>   }
->>>     void ptrace_hw_copy_thread(struct task_struct *tsk)
->>> @@ -498,11 +514,20 @@ arch_initcall(arch_hw_breakpoint_init);
->>>   void hw_breakpoint_thread_switch(struct task_struct *next)
->>>   {
->>>       struct pt_regs *regs = task_pt_regs(next);
->>> -
->>> -    /* Update breakpoints */
->>> -    update_bp_registers(regs, 1, 0);
->>> -    /* Update watchpoints */
->>> -    update_bp_registers(regs, 1, 1);
->>> +    u64 addr, mask;
->>> +
->>> +    if (test_bit(TIF_SINGLESTEP, &task_thread_info(next)->flags)) {
->>> +        addr = read_wb_reg(CSR_CFG_ADDR, 0, 0);
->>> +        mask = read_wb_reg(CSR_CFG_MASK, 0, 0);
->>> +        if ((task_pt_regs(next)->csr_era & ~mask) == (addr & ~mask))
->>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
->>> +        regs->csr_prmd |= CSR_PRMD_PWE;
->>> +    } else {
->>> +        /* Update breakpoints */
->>> +        update_bp_registers(regs, 1, 0);
->>> +        /* Update watchpoints */
->>> +        update_bp_registers(regs, 1, 1);
->>> +    }
->>>   }
->>>     void hw_breakpoint_pmu_read(struct perf_event *bp)
->>> diff --git a/arch/loongarch/kernel/ptrace.c
->>> b/arch/loongarch/kernel/ptrace.c
->>> index bee4194177fd..52a3ee4366f4 100644
->>> --- a/arch/loongarch/kernel/ptrace.c
->>> +++ b/arch/loongarch/kernel/ptrace.c
->>> @@ -20,6 +20,7 @@
->>>   #include <linux/context_tracking.h>
->>>   #include <linux/elf.h>
->>>   #include <linux/errno.h>
->>> +#include <linux/hw_breakpoint.h>
->>>   #include <linux/mm.h>
->>>   #include <linux/ptrace.h>
->>>   #include <linux/regset.h>
->>> @@ -30,6 +31,7 @@
->>>   #include <linux/stddef.h>
->>>   #include <linux/seccomp.h>
->>>   #include <linux/uaccess.h>
->>> +#include <linux/thread_info.h>
->>>     #include <asm/byteorder.h>
->>>   #include <asm/cpu.h>
->>> @@ -39,6 +41,7 @@
->>>   #include <asm/page.h>
->>>   #include <asm/pgtable.h>
->>>   #include <asm/processor.h>
->>> +#include <asm/ptrace.h>
->>>   #include <asm/reg.h>
->>>   #include <asm/syscall.h>
->>>   @@ -541,3 +544,68 @@ long arch_ptrace(struct task_struct *child,
->>> long request,
->>>         return ret;
->>>   }
->>> +
->>> +void ptrace_triggered(struct perf_event *bp,
->>> +              struct perf_sample_data *data, struct pt_regs *regs)
->>> +{
->>> +    struct perf_event_attr attr;
->>> +
->>> +    attr = bp->attr;
->>> +    attr.disabled = true;
->>> +    modify_user_hw_breakpoint(bp, &attr);
->>> +}
->>> +
->>> +static int set_single_step(struct task_struct *tsk, unsigned long addr)
->>> +{
->>> +    struct thread_struct *thread = &tsk->thread;
->>> +    struct perf_event *bp;
->>> +    struct perf_event_attr attr;
->>> +    struct arch_hw_breakpoint *info;
->>> +
->>> +    bp = thread->hbp_break[0];
->>> +    if (!bp) {
->>> +        ptrace_breakpoint_init(&attr);
->>> +
->>> +        attr.bp_addr = addr;
->>> +        attr.bp_len = HW_BREAKPOINT_LEN_8;
->>> +        attr.bp_type = HW_BREAKPOINT_X;
->>> +
->>> +        bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
->>> +                         NULL, tsk);
->>> +        if (IS_ERR(bp))
->>> +            return PTR_ERR(bp);
->>> +
->>> +        thread->hbp_break[0] = bp;
->>> +    } else {
->>> +        int err;
->>> +
->>> +        attr = bp->attr;
->>> +        attr.bp_addr = addr;
->>> +        /* reenable breakpoint */
->>> +        attr.disabled = false;
->>> +        err = modify_user_hw_breakpoint(bp, &attr);
->>> +        if (unlikely(err))
->>> +            return err;
->>> +
->>> +        csr_write64(attr.bp_addr, LOONGARCH_CSR_IB0ADDR);
->>> +    }
->>> +    info = counter_arch_bp(bp);
->>> +    info->mask = 0xffffffffffff;
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/* ptrace API */
->>> +void user_enable_single_step(struct task_struct *task)
->>> +{
->>> +    struct thread_info *ti = task_thread_info(task);
->>> +
->>> +    set_single_step(task, task_pt_regs(task)->csr_era);
->>> +    task->thread.single_step = task_pt_regs(task)->csr_era;
->>> +    set_ti_thread_flag(ti, TIF_SINGLESTEP);
->>> +}
->>> +
->>> +void user_disable_single_step(struct task_struct *task)
->>> +{
->>> +    clear_tsk_thread_flag(task, TIF_SINGLESTEP);
->>> +}
->>> diff --git a/arch/loongarch/kernel/traps.c
->>> b/arch/loongarch/kernel/traps.c
->>> index 2b133079e0f3..56d7d076153c 100644
->>> --- a/arch/loongarch/kernel/traps.c
->>> +++ b/arch/loongarch/kernel/traps.c
->>> @@ -511,9 +511,23 @@ asmlinkage void noinstr do_watch(struct pt_regs
->>> *regs)
->>>   #ifdef CONFIG_HAVE_HW_BREAKPOINT
->>>       irqentry_state_t state = irqentry_enter(regs);
->>>   -    breakpoint_handler(regs);
->>> -    watchpoint_handler(regs);
->>> -    force_sig(SIGTRAP);
->>> +    if (test_tsk_thread_flag(current, TIF_SINGLESTEP)) {
->>> +        int llbit = (csr_read32(LOONGARCH_CSR_LLBCTL) & 0x1);
->>> +        unsigned long pc = regs->csr_era;
->>> +
->>> +        if (llbit) {
->>
->> Hi, Qing,
->>
->>
->> It should be noted here. When the ll-sc combo is encountered, it is
->> regarded as an single instruction. So donnot clear llbit and reset
->> CSR.FWPS.Skip until the llsc execution is completed.
->>
->>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
->>> +            csr_write32(0x4, LOONGARCH_CSR_LLBCTL);
->>> +        } else if (pc == current->thread.single_step) {
->> Note here as well. Because 3A5000 has a strange hardware issue that
->> certain insns are occasionally not skipped when CSR.FWPS.Skip is set,
->> such as fld.d/fst.d. Singlestep needs compare whether the csr_era is
->> equal to the value of singlestep which last time set, as in most case
->>
->> they should be not equal.
-> 
-> BTW, I prefer to separate this special processing from this patch (for
-> example, add two patchs in this series, add special processing of
-> instructions such as LL-SC, and FLD.D/FST.D, etc.), and add
-> corresponding test cases to describe the phenomenon and reason, this
-> is conducive to everyone's understanding of the code.
-> 
->>
->>
->> And for this condition expression, some potentially strange insns may
->> cause bugs. For example, "b 0" or "jr rd" where rd is equal to its PC
->> will cause cannot stop the singlestep. These insns is so strange that
->> we did not consider in OW. However, I think we should consider this
->> case for robustness in upstream.
->>
-> 
-> I don't know if there will be instructions like "b 0" or "jr rd (rd =
-> pc)" in the executable file after linking?
-FWIW `jirl A, A, 0` is apparently ubiquitous in the old world:
+Hi Paul,
 
-$ objdump -d 
-~/loongnix-sysroot/usr/lib/loongarch64-linux-gnu/libc_nonshared.a | grep 
--E 'jirl\s+\$(..), \$\1'
-   20:   4c000021        jirl            $ra, $ra, 0
-   24:   4c000021        jirl            $ra, $ra, 0
-    c:   4c000021        jirl            $ra, $ra, 0
+> Am 15.02.2023 um 22:19 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 21:32 +0100, H. Nikolaus =
+Schaller a
+> =C3=A9crit :
+>> Hi Paul,
+>> I wasn't aware of your work and it could have saved me a lot of time
+>> to
+>> experiment and try to make my patch set work.
+>>=20
+>> But we are still lucky, as we can merge ideas and find the really
+>> best solution.
+>>=20
+>> Anyways you can take my patch 1/3 and 3/3 and we have only to discuss
+>> details of 2/3.
+>>=20
+>> Interesting is your setup of several fixed regulators using
+>> regulator-settling-time-us
+>> to take care of power up sequencing. What I don't understand is the
+>> fixedregulator-5
+>> which has no controlling gpio but is always on. What is it needed
+>> for? Maybe just to
+>> be used to silence v(q)mmc-supply warnings etc.?
+>=20
+> It's wired to the various inputs of the ACT8600 chip. The driver will
+> complain if they are not connected to anything. And while we're at it,
+> it will also silence the v(q)mmc-supply warnings, yes.
+>=20
+>> But you do not really switch or enable/disable power of the SDIO or
+>> bluetooth UART
+>> interface?
+>=20
+> The badly named "bt_power" regulator powers on the chip, while the
+> "wifi_io" regulator controls the voltage on the VDDIO pins. So these
+> are enabled/disabled when needed.
+>=20
+>> Is it necessary to add a compatible of "ingenic,iw8103-fmac"? If it
+>> works with the
+>> standard "brcm,bcm4329-fmac" driver (note that I have "brcm,bcm4330-
+>> fmac" because that
+>> is how the module identifies itself) there seems to be no need for
+>> another compatible
+>> and a special bindings documentation.
+>=20
+> The chip has a different name so we can't guarantee that it works
+> exactly like the BCM4330. So that was my reason behind using a new
+> compatible string with a fallback.
 
-One of the occurrences is in __stack_chk_fail_local, guess how popular 
-it is among the whole old world...
+Ok, that would be a good reason.
 
-But fortunately a quick check against my Gentoo sysroot yielded nothing, 
-so perhaps the new world as a whole isn't going to be affected. I've 
-checked some of the *older* (i.e. before 2022) new world sysroots I have 
-at hand and they seemed not affected either.
+>=20
+> However I sent a patch to add the new compatible string to the
+> documentation and it got refused and I was told to just use the
+> brcm,bcm4330-fmac, so I'll just do that.
+>=20
+>> For bluetooth you could add brcm,bt-pcm-int-params =3D [01 02 00 01
+>> 01]; so that we
+>> can eventually add some PCM stream to the sound setup.
+>=20
+> Sure, does that work though?
 
-As for `b 0`, they are kinda already signifying some panic/abort/halt 
-condition, at least in a few projects that I've studied/ported.
+Well, I don't know. We have no sound setup.
 
-But IMO the kernel shouldn't get DoS'd even if userland gets stuck in 
-things like this, so some kind of workaround should still be necessary.
+> One (unrelated) note about Bluetooth, I didn't get it to work =
+properly;
+> it works enough to detect my keyboard and allow me to pair with it
+> (typing the password on the BT keyboard) but it will never connect
+> properly after that.
 
--- 
-WANG "xen0n" Xuerui
+I haven't tested it that way in my setup.
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>=20
+>> Finally you have made node labels more consistent by calling them
+>> wifi* while I made
+>> them wlan0*... Well, just a matter of taste.
+>=20
+> Actually the node names should use as much as possible the generic
+> names specified in the devicetree specification
+> (https://www.devicetree.org/specifications/) and "wifi" is one of
+> those.
+
+I meant the node labels, not the node names.
+
+BTW: Wi-Fi is a trademark of the Wi-Fi Alliance and means certification
+while WLAN means the function. Of course the first must be compatible
+to 802.11 and other standards while a WLAN could use some different
+technology.
+
+>=20
+>> Then I tried to take your tree, add my defconfig (because it seems as
+>> if you have not
+>> updated configs), but I could only see=20
+>>=20
+>> [    0.929072] Bluetooth: hci0: BCM: firmware Patch file not found,
+>> tried:
+>> [    0.935704] Bluetooth: hci0: BCM: 'brcm/BCM4330B1.img,ci20.hcd'
+>> [    0.941683] Bluetooth: hci0: BCM: 'brcm/BCM4330B1.hcd'
+>> [    0.946827] Bluetooth: hci0: BCM: 'brcm/BCM.img,ci20.hcd'
+>> [    0.952278] Bluetooth: hci0: BCM: 'brcm/BCM.hcd'
+>>=20
+>> and then the kernel is stuck.
+>>=20
+>> So what is your defconfig that I can test your build?
+>=20
+> I test with the OpenDingux userspace so my defconfig is probably very
+> different from yours. What are you using?
+
+upstream ci20_defconfig + my patch 3/3.
+Otherwise I test with Debian user-space.
+
+Can you share your defconfig just for testing purposes?
+
+>=20
+> About the crash: make sure you have the *very* latest WiFi firmware
+> from
+> =
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.gi=
+t/
+
+The BCM4330B1.hcd firmware is missing there. I get mine from
+
+https://github.com/armbian/firmware/raw/master/brcm
+
+And it works with my setup but not yours. So I think something
+else is missing or wrong. Note that it is loaded from the SD card
+but the kernel is stuck earlier.
+
+> I do remember that one particular version of the firmware will crash
+> the kernel. You also don't need the .hcd firmware for Bluetooth to
+> (somewhat) work.
+
+Yes, I know. There may also be some race if the drivers are compiled
+into the kernel that the bluetooth subsystem searches for the .hcd
+files before the mmc subsystem has found and SD card. Then we have no
+firmware even if it is stored.
+
+BR,
+Nikolaus
+
+>>>=20
+>>>>=20
+>>>> Tested on CI20 with v6.2-rc6.
+>>>>=20
+>>>> H. Nikolaus Schaller (3):
+>>>>   MIPS: DTS: jz4780: add #clock-cells to rtc_dev
+>>>>   MIPS: DTS: CI20: fixes for WiFi/Bluetooth
+>>>>   MIPS: configs: ci20: enable drivers we need for WiFi/Bluetooth
+>>>>=20
+>>>>  arch/mips/boot/dts/ingenic/ci20.dts    | 77
+>>>> ++++++++++++++++++++++--
+>>>> --
+>>>>  arch/mips/boot/dts/ingenic/jz4780.dtsi |  2 +
+>>>>  arch/mips/configs/ci20_defconfig       | 18 +++++-
+>>>>  3 files changed, 84 insertions(+), 13 deletions(-)
 
