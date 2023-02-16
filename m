@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC16698FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F93698FC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjBPJ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S229983AbjBPJ1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjBPJ1v (ORCPT
+        with ESMTP id S229928AbjBPJ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Feb 2023 04:27:51 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D98B4A1D4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:27:47 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id E00755C00EC;
-        Thu, 16 Feb 2023 04:27:44 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 16 Feb 2023 04:27:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676539664; x=
-        1676626064; bh=jP9eT3Xwt+PHa6nYxYos+hxlaTDyJ+o8yJePB7G5N8k=; b=J
-        EJbgvHpky9gM3V3RTD5L11bs6OC9JReSpFeLoUlyUfa7KfkQCdc+TunJEZaxGiEU
-        LrT3mtukllbtH7FxCCDA4+ZGCHLOtk7ZuDZ+twSVNSADm1/LYomNAgdiOPGMAHuq
-        j7itAmoXkSgYkYmpmEaomp5bYTCakcIJ8nXHeeBGLi5zVK4Pv3gN7rkPSOawnYbY
-        5ZCUuljtH/SDFdOcnUjoHEF3NfmLr3r3wScNlGRYOH3o1STngmwnEm37Y/f75PeI
-        143rf2I9PA82E1jZoJ3vi1eP9+vijP4tiN7mhmtrMfiGdHWqun0Uu5EYmEJ78ozn
-        bSNSj0X8O83hQTT+iqP4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676539664; x=
-        1676626064; bh=jP9eT3Xwt+PHa6nYxYos+hxlaTDyJ+o8yJePB7G5N8k=; b=A
-        YmQya/unN7niV/Y+WB8YsoOJztg+KHoHJIawKR3W7gxXa3KxGWlqo7A6/74mH/3V
-        dnYi2HxtdvQLRaObzkCB57O946GLmOEIFKxfpNDSlxsnEMtR2DG255QDPK3Y/hQm
-        63b+IvyUSxdsA6NGbvbda14ixhGzj375W21Gz6uqt2NtVyi0eetruKvjau1zRMFS
-        Ism26Pdc1BcMQgB46HvKqo99XXUMUxoFuMSZvUxQyIya/IgSwo2TVOQ0vFF+CclL
-        rr0ne13+9q20L0WB9rZh/+Fce2MDRPlp5Mh0iVv+C3bFxcdczRqQW9kEMHTCfebL
-        MPWhG/2UEEcA1sQoI8PAg==
-X-ME-Sender: <xms:EPftY7YzcAAPMx-DuGx5cMcPHsq4U1yEWu9_dFe32zwhiert54lLfQ>
-    <xme:EPftY6ak-cUyUfcNYkvVljoVP8c1dU-7jjGRhhkSYdKn-Bt5FUnagIwBOXqhoJ6vJ
-    i0F4Txwp_qgoIgcbdM>
-X-ME-Received: <xmr:EPftY9-WoElP0qrIaWm6tNQauJveSnV9qFl4rvujmFymuINpCn3wRtjD5BRiRtRMs8iT_mNShHf4IFQ-IUHPwBLYDnGDohw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepleeifffgvdetjeejueejieehuedvteeigeehtefhhfeifeegleekudek
-    teegueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:EPftYxoDZF3jErRmO3Oza01ZAMGNgu-yaPPTOqYxoVnMiT3coVzesQ>
-    <xmx:EPftY2pymkIW15p6NUgkLyea39HqdDrBa6ZKHu7-kVILBCFeGE7bHg>
-    <xmx:EPftY3SPLAWfe6dPEot72sGAFEH3cS10mX8tQO6Jua0tEkMGsBiZ6g>
-    <xmx:EPftY0Y9GtGMubQWpAwClGr_QxdSwy7hpVaP6OCEPQtA6FHRYsINeQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Feb 2023 04:27:43 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
-References: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
-Subject: Re: [PATCH 0/4] drm/vc4: hdmi: Firmware clocks cleanup
-Message-Id: <167653964791.480383.6636538561912185343.b4-ty@cerno.tech>
-Date:   Thu, 16 Feb 2023 10:27:27 +0100
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C2723119;
+        Thu, 16 Feb 2023 01:27:46 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676539664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jw3PZ7MODFX9HxX9q5lGVWQ7M8L+9vkiuEiADAQGJS8=;
+        b=hT3rr/afUadWcQ3Y5HoN90bLPMD9UQV+3jSGwtwqlvnNbZeIyh47kgoXBS88ORqQ/IFhR/
+        2tQe3hr1+Q1n3paRhsSRAnMjinwC5rkXhh3VfGDCMfqIE+Y1uq0HW79MzqX8QReGh5SqIK
+        NluzDAtVIhg/pHDv4as71w+xjliE0+yBS376uJDg6dKdvnoN8Ts6+CwPS28eSdI4qnSQ7L
+        yn9uWBXy9aDIUInKqOG0HIKZZKWtXi3Ec2AEMwOXxze/JKWaLE0Lp+oXxehhzJ5w03CM+7
+        V3G4KC+yN8/GcQe/oECmAvtw2e2KVjvae2GGlw2xBBpcGZHMPAeYM6FXHUGBfw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676539664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jw3PZ7MODFX9HxX9q5lGVWQ7M8L+9vkiuEiADAQGJS8=;
+        b=Q2R40o0xtkF3OjUbI4RAPRCNftTce6zbJGSYaffgUM0JnhlCiPfjrSrLnr/rWqngPTw2VP
+        ikZp/SXYNSlGJQBQ==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/3] net/sched: taprio: fix calculation of
+ maximum gate durations
+In-Reply-To: <20230215224632.2532685-2-vladimir.oltean@nxp.com>
+References: <20230215224632.2532685-1-vladimir.oltean@nxp.com>
+ <20230215224632.2532685-2-vladimir.oltean@nxp.com>
+Date:   Thu, 16 Feb 2023 10:27:41 +0100
+Message-ID: <87ilg2ot82.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 18:05:46 +0100, Maxime Ripard wrote:
-> In order to accomodate the Pi0-3 using the clk-bcm2835 and the Pi4 using the
-> clk-raspberrypi clock drivers for the HDMI clocks, we piled a number of
-> workarounds over the years.
-> 
-> Since 6.2, we've switched the Pi0-3 to the clk-raspberrypi driver, so we can
-> now remove those workarounds.
-> 
-> [...]
+--=-=-=
+Content-Type: text/plain
 
-Applied to drm/drm-misc (drm-misc-next).
+On Thu Feb 16 2023, Vladimir Oltean wrote:
+> taprio_calculate_gate_durations() depends on netdev_get_num_tc() and
+> this returns 0. So it calculates the maximum gate durations for no
+> traffic class.
+>
+> I had tested the blamed commit only with another patch in my tree, one
+> which in the end I decided isn't valuable enough to submit ("net/sched:
+> taprio: mask off bits in gate mask that exceed number of TCs").
+>
+> The problem is that having this patch threw off my testing. By moving
+> the netdev_set_num_tc() call earlier, we implicitly gave to
+> taprio_calculate_gate_durations() the information it needed.
+>
+> Extract only the portion from the unsubmitted change which applies the
+> mqprio configuration to the netdev earlier.
+>
+> Link: https://patchwork.kernel.org/project/netdevbpf/patch/20230130173145.475943-15-vladimir.oltean@nxp.com/
+> Fixes: a306a90c8ffe ("net/sched: taprio: calculate tc gate durations")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Thanks!
-Maxime
+Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
 
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmPt9w0THGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgiLWD/sEsgU4uIw/hKRfG8XNgX+JjTAvMbuy
+xBGaj8M+l6+U975oDQ7Blw5r9vXNwKPenNJrWUAKbFQdGS6/iuA3h/6cYsYzlMZZ
+RPI7sxu0cvwnI48CjaXRAQdZwopMDx+Tyz6Lo6Gdzqbzy007EgKYv3KL5asPkHR+
+SNjhcUgdcBDy6B0hyNO3oYDw2jlNuU9T+xelfRd034RploGRTh2EQ3jbAAYhOD1Y
+Q3f4S3eqoz50PlkwnTxM4RWIQjkmxtdyke4lU/E8/XUPx392anzuwW9srdNzR/3t
+fg5bcd/bF+m7cJ5GIYh6gKdqFs8dH4tJ0EpKF0sMw/wzy2iafSNB6AGTXSQSTMe1
+ty2+xpyG4NVAhthS4ieMMWRTvZKjfnEzfwQ8xrRK2n+P3hN3UOdcq+IkVJsi+wQ3
+RmxLNQr9ExNcUvYMUm+ZHHrGhwHQwCWRnlN8I74VuWN5Vbe4J0xLHeh+KtVAU2Q0
+tcH7bhyKUIqp8B9CZ1wzMuHLnMB4xRFIK64kEZU3TvBghWnWNKsUGGXGTBWj4Kh5
+1WAMb/FfDjZfai36fliwlo/fieMWpJmCIhrClIaEUi1o17LaPJ0lV1P++Ohfw0a9
+wV0j8VhG67BRQKmzx6go4S69R49+vwfDf87BkuuEPY0SMLgG6YFhz28jD97Ufo5p
+FpGqkr1f3T34IQ==
+=br6z
+-----END PGP SIGNATURE-----
+--=-=-=--
