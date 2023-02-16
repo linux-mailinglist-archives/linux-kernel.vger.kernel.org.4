@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C877699446
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6E0699450
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBPMZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S230004AbjBPM16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBPMZi (ORCPT
+        with ESMTP id S229538AbjBPM14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:25:38 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB545776D;
-        Thu, 16 Feb 2023 04:25:30 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id n2so1345727pfo.3;
-        Thu, 16 Feb 2023 04:25:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Am8BGSEip5nNE8Zh0hm60KhhWsRjuiVkZed/6iLfSSg=;
-        b=kuj5ZFPccKNgGnLvhSCdjjLGRHp/Cg168G+FmzCHapcrrSBsK3Zq2++X4KBN/kfm2N
-         /YvqnFNfz8wJq8hQUrRRx0qDaQ9e4Ix/LnT2/oD+P6L9iDzb4nS/q0JD7HxyjYvKeksL
-         brv5h9SOUs/hfcUBWzikgIBVekWlqRnR3jK1XCC59m/1Seon8DSfXHvzPn5RhLZU2Wcs
-         ag9Fg+2U4RX4jkrm3jNql2ihlc3eN6CTD1wvVWv3I+JllMKVAg5YaXHtEs2NT7Jp/9tm
-         AUoF8g9dNGGJUfraAGSG0M4WJnqrt13qgU2lgPX5RHrjeS7Ok5frtdfoqVoyEsSyq8mL
-         QRNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Am8BGSEip5nNE8Zh0hm60KhhWsRjuiVkZed/6iLfSSg=;
-        b=ee30K0aBXI6gdfGrDc+nBUKNKKC9tnDY1Q0xNX1VhiLIwltRy5cI6jJXrxzTUDlUf2
-         mJc/w265f6Db6iDltxCvAS/g25XslJ9tRHhPaqpdOz45T4cOOMQckO5AZtZFnPF0wz+c
-         S/Imhz8BCradViYHEGBryHfZyhCxnXDzE1zDPSiXNPonbu3FjZfQDN7se9S8kILkCww6
-         VqW+kK12b6Vfdp6c1HeWZoWoX57lobcKVoksd8R4p5n2xumfQ/mK3+xKqChE2IbGuDsX
-         vUebPL51xsUZZhDCQD+xHujehHl9VEDIKImMgOazr2zsg+wArpT2bPhKg25ExybU+DZY
-         LoSw==
-X-Gm-Message-State: AO0yUKUUQ867heqLs/ixiyBSkZ68P9Oq3MtjhZiRDPr+n6UomfhkGjF+
-        YPwZ8piwnzpJCLRnfE2us5s=
-X-Google-Smtp-Source: AK7set8ACMHQ+CoNxkDCXmloap5SGqUHHlZGmEKH5vb6gpD3darU63R9nZVjDqKoybEsBzYbjR4Xiw==
-X-Received: by 2002:aa7:978e:0:b0:592:5276:95df with SMTP id o14-20020aa7978e000000b00592527695dfmr4534640pfp.2.1676550329599;
-        Thu, 16 Feb 2023 04:25:29 -0800 (PST)
-Received: from localhost.localdomain ([202.53.32.211])
-        by smtp.gmail.com with ESMTPSA id c10-20020aa781ca000000b005a909290425sm1224055pfn.172.2023.02.16.04.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 04:25:29 -0800 (PST)
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Seth Forshee <sforshee@kernel.org>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: [PATCH v2 5/5] apple-gmux: add debugfs interface
-Date:   Thu, 16 Feb 2023 23:23:43 +1100
-Message-Id: <20230216122342.5918-6-orlandoch.dev@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230216122342.5918-1-orlandoch.dev@gmail.com>
-References: <20230216122342.5918-1-orlandoch.dev@gmail.com>
+        Thu, 16 Feb 2023 07:27:56 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD7D12049;
+        Thu, 16 Feb 2023 04:27:52 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2A68224E391;
+        Thu, 16 Feb 2023 20:27:44 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
+ 2023 20:27:44 +0800
+Received: from [192.168.125.82] (183.27.97.168) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
+ 2023 20:27:42 +0800
+Message-ID: <fbf82563-0b2c-d813-2c7c-08ea712ea91d@starfivetech.com>
+Date:   Thu, 16 Feb 2023 20:27:42 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
+ VisionFive 2 board device tree
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Conor Dooley" <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-8-hal.feng@starfivetech.com>
+ <CAJM55Z9Y_fF+4Dtu++C_jVS0+ohXp5U0GyuJCBpUh-SpTMGrVA@mail.gmail.com>
+ <af42ed91-95aa-014a-1efb-6f70ee5a0433@starfivetech.com>
+ <CAJM55Z-+Cz8d=YySRaFJSAffDfoZ4Madx322qCX100-nAcx+5Q@mail.gmail.com>
+ <Y+38bT8cnahu19bw@wendy> <Y+4AxDSDLyL1WAqh@wendy>
+ <CAJM55Z9M2xgNBRxG8cNefGt5hn4fbZmgHWzC2e8AfmKUq9Gw7A@mail.gmail.com>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <CAJM55Z9M2xgNBRxG8cNefGt5hn4fbZmgHWzC2e8AfmKUq9Gw7A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.168]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,148 +75,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow reading and writing gmux ports from userspace.
+On Thu, 16 Feb 2023 11:32:31 +0100, Emil Renner Berthing wrote:
+> On Thu, 16 Feb 2023 at 11:09, Conor Dooley <conor.dooley@microchip.com> wrote:
+>>
+>> On Thu, Feb 16, 2023 at 09:50:37AM +0000, Conor Dooley wrote:
+>> > On Thu, Feb 16, 2023 at 10:27:17AM +0100, Emil Renner Berthing wrote:
+>> > > On Wed, 15 Feb 2023 at 15:04, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> > > > On 2/14/2023 5:53 PM, Emil Renner Berthing wrote:
+>> > > > > On Tue, 20 Dec 2022 at 02:12, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> >
+>> > > > >> +       model = "StarFive VisionFive 2 VB";
+>> > > > >> +       compatible = "starfive,visionfive-2-vb", "starfive,jh7110";
+>> > > > >
+>> > > > > Hi Hal,
+>> > > > >
+>> > > > > I just want to double check, is "VisionFive 2 VA" / "visoinfive-2-va"
+>> > > > > and "VisionFive 2 VB" / "visionfive-2-vb" really what you want? I
+>> > > > > still think having these names match what is printed on the silkscreen
+>> > > > > makes it a lot easier for everybody. Even your own releases calls the
+>> > > > > boards "v1.2A" and "v1.3B":
+>> > > > > https://github.com/starfive-tech/VisionFive2/releases/
+>> > > > >
+>> > > > > So I'd suggest
+>> > > > > model = "StarFive VisionFive 2 v1.3B";
+>> > > > > compatible = "starfive,visionfive-2-v1.3b", "starfive,jh7110";
+>> > > > >
+>> > > > > I haven't seen these "VA" and "VB" anywhere else, so if you don't want
+>> > > > > the version numbers and can promise that there will be no incompatible
+>> > > > > future revisions of the boards then maybe just drop the "V". Eg.
+>> > > > > model = "StarFive VisionFive 2 B";
+>> > > > > compatible = "starfive,visionfive-2-b", "starfive,jh7110";
+>> > > >
+>> > > > The version A board has reached the end of life. As far as I know, the
+>> > > > version B board will not update also unless there are some important
+>> > > > requirements and StarFive decides to update. Furthermore, it's too late
+>> > > > to change the compatible as patch 1 was already accepted. Will it be
+>> > > > easier to read if I modify it as below?
+>> > > >
+>> > > >         model = "StarFive VisionFive 2 vB";
+>> > > >         compatible = "starfive,visionfive-2-vb", "starfive,jh7110";
+>> > >
+>> > > Oh, that's sad that the kernel will now end up calling the boards
+>> > > something that's used nowhere else, even by StarFive :/
+>> > > But yeah, I guess vA and vB are a little easier to read.
+>> >
+>> > Nothing has been released with that name so AFAIU we can change it
+>> > still. If you sort it out today/tomorrow I'll try get it to Arnd before
+>> > the merge window opens...
+>> >
+>> > I might've jumped the gun a bit here, I thought that it'd been changed
+>> > to what you (Emil) had suggested.
+> 
+> No, I'm sorry for being late here. The below definitely looks better to me.
+> 
+> Hal, would you be fine with this change?
 
-For example:
+I'm fine with this. It will be more exact. Thanks.
 
-echo 4 > /sys/kernel/debug/apple_gmux/selected_port
-cat /sys/kernel/debug/apple_gmux/selected_port_data | xxd -p
+Best regards,
+Hal
 
-Will show the gmux version information (00000005 in this case)
-
-Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
----
-v1->v2: Use debugfs instead of sysfs.
- drivers/platform/x86/apple-gmux.c | 88 +++++++++++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
-index 5bac6dcfada0..e8a35d98b113 100644
---- a/drivers/platform/x86/apple-gmux.c
-+++ b/drivers/platform/x86/apple-gmux.c
-@@ -22,6 +22,7 @@
- #include <linux/delay.h>
- #include <linux/pci.h>
- #include <linux/vga_switcheroo.h>
-+#include <linux/debugfs.h>
- #include <asm/io.h>
- 
- /**
-@@ -66,6 +67,10 @@ struct apple_gmux_data {
- 	enum vga_switcheroo_client_id switch_state_external;
- 	enum vga_switcheroo_state power_state;
- 	struct completion powerchange_done;
-+
-+	/* debugfs data */
-+	u8 selected_port;
-+	struct dentry *debug_dentry;
- };
- 
- static struct apple_gmux_data *apple_gmux_data;
-@@ -674,6 +679,87 @@ static void gmux_notify_handler(acpi_handle device, u32 value, void *context)
- 		complete(&gmux_data->powerchange_done);
- }
- 
-+/**
-+ * DOC: Debugfs Interface
-+ *
-+ * gmux ports can be accessed from userspace as a debugfs interface. For example:
-+ *
-+ * # echo 4 > /sys/kernel/debug/apple_gmux/selected_port
-+ * # cat /sys/kernel/debug/apple_gmux/selected_port_data | xxd -p
-+ * 00000005
-+ *
-+ * Reads 4 bytes from port 4 (GMUX_PORT_VERSION_MAJOR).
-+ *
-+ * 1 and 4 byte writes are also allowed.
-+ */
-+
-+static ssize_t gmux_selected_port_data_write(struct file *file,
-+		const char __user *userbuf, size_t count, loff_t *ppos)
-+{
-+	struct apple_gmux_data *gmux_data = file->private_data;
-+	int ret;
-+
-+	if (*ppos)
-+		return -EINVAL;
-+
-+	if (count == 1) {
-+		u8 data;
-+
-+		ret = copy_from_user(&data, userbuf, 1);
-+		if (ret)
-+			return ret;
-+		gmux_write8(gmux_data, gmux_data->selected_port, data);
-+	} else if (count == 4) {
-+		u32 data;
-+
-+		ret = copy_from_user(&data, userbuf, 4);
-+		if (ret)
-+			return ret;
-+		gmux_write32(gmux_data, gmux_data->selected_port, data);
-+	} else
-+		return -EINVAL;
-+
-+	return count;
-+}
-+
-+static ssize_t gmux_selected_port_data_read(struct file *file,
-+		char __user *userbuf, size_t count, loff_t *ppos)
-+{
-+	struct apple_gmux_data *gmux_data = file->private_data;
-+	u32 data;
-+
-+	data = gmux_read32(gmux_data, gmux_data->selected_port);
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, &data, sizeof(data));
-+}
-+
-+static const struct file_operations gmux_port_data_ops = {
-+	.open = simple_open,
-+	.write = gmux_selected_port_data_write,
-+	.read = gmux_selected_port_data_read
-+};
-+
-+static void gmux_init_debugfs(struct apple_gmux_data *gmux_data)
-+{
-+	struct dentry *debug_dentry;
-+
-+	debug_dentry = debugfs_create_dir(KBUILD_MODNAME, NULL);
-+
-+	if (IS_ERR(debug_dentry))
-+		return;
-+
-+	gmux_data->debug_dentry = debug_dentry;
-+
-+	debugfs_create_u8("selected_port", 0644, debug_dentry, &gmux_data->selected_port);
-+	debugfs_create_file("selected_port_data", 0644, debug_dentry,
-+			gmux_data, &gmux_port_data_ops);
-+}
-+
-+static void gmux_fini_debugfs(struct apple_gmux_data *gmux_data)
-+{
-+	debugfs_remove_recursive(gmux_data->debug_dentry);
-+}
-+
- static int gmux_suspend(struct device *dev)
- {
- 	struct pnp_dev *pnp = to_pnp_dev(dev);
-@@ -874,6 +960,7 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
- 		goto err_register_handler;
- 	}
- 
-+	gmux_init_debugfs(gmux_data);
- 	return 0;
- 
- err_register_handler:
-@@ -905,6 +992,7 @@ static void gmux_remove(struct pnp_dev *pnp)
- {
- 	struct apple_gmux_data *gmux_data = pnp_get_drvdata(pnp);
- 
-+	gmux_fini_debugfs(gmux_data);
- 	vga_switcheroo_unregister_handler();
- 	gmux_disable_interrupts(gmux_data);
- 	if (gmux_data->gpe >= 0) {
--- 
-2.39.1
+> 
+>>
+>> -- >8 --
+>> From 4d44e8a83716d1caa314f25a95bd21ac8904909e Mon Sep 17 00:00:00 2001
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>> Date: Thu, 16 Feb 2023 09:58:22 +0000
+>> Subject: [PATCH] dt-bindings: riscv: correct starfive visionfive 2 compatibles
+>>
+>> Using "va" and "vb" doesn't match what's written on the board, or the
+>> communications from StarFive.
+>> Switching to using the silkscreened version number will ease confusion &
+>> the risk of another spin of the board containing a "conflicting" version
+>> identifier.
+>>
+>> Suggested-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+>> Fixes: 97b7ed072784 ("dt-bindings: riscv: Add StarFive JH7110 SoC and VisionFive 2 board")
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>>  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
+>> index 60c7c03fcdce..cc4d92f0a1bf 100644
+>> --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+>> +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+>> @@ -26,8 +26,8 @@ properties:
+>>
+>>        - items:
+>>            - enum:
+>> -              - starfive,visionfive-2-va
+>> -              - starfive,visionfive-2-vb
+>> +              - starfive,visionfive-2-v1.2a
+>> +              - starfive,visionfive-2-v1.3b
+>>            - const: starfive,jh7110
+>>
+>>  additionalProperties: true
+>> --
+>> 2.39.0
+>>
+>>
 
