@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29B969996B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5449269995D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjBPQCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S229568AbjBPQAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjBPQCa (ORCPT
+        with ESMTP id S229673AbjBPQAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:02:30 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 851D95355B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:02:08 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D93F113E;
-        Thu, 16 Feb 2023 08:02:50 -0800 (PST)
-Received: from e126864.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AF763F881;
-        Thu, 16 Feb 2023 08:02:04 -0800 (PST)
-From:   Kristina Martsenko <kristina.martsenko@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] arm64: mops: allow disabling MOPS from the kernel command line
-Date:   Thu, 16 Feb 2023 16:00:12 +0000
-Message-Id: <20230216160012.272345-11-kristina.martsenko@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230216160012.272345-1-kristina.martsenko@arm.com>
-References: <20230216160012.272345-1-kristina.martsenko@arm.com>
+        Thu, 16 Feb 2023 11:00:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ECB5355B;
+        Thu, 16 Feb 2023 08:00:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BA661F2F;
+        Thu, 16 Feb 2023 16:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED648C4339B;
+        Thu, 16 Feb 2023 16:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676563233;
+        bh=zn5cqo7ihCyFYu66pNpA0T87YS1Zk1ekASHfJaV9lFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=skNWlZoOUUXh0hy+tBZaGGHPkzQBlRXFvd3ajeTtsBr9VvieB4Pdmv+sF3W75I1WW
+         efwoUZF216MVg2URY8IBDMypyQGyJHsC4CsdzlHkwB261fJA+dm7/KC0w/Lr66hyL3
+         6odrVBCFWi4Jd0PAG6hRo24i4eNiEV/mOSmBLjKIY5ZvV2Y2TTW10xWpme9Mnu579a
+         rnzyhb06wZjAAkEwNxuAKriz113isyUezmUt1jff8srxo7148y1+QHAcpRM09x6Br3
+         kWDAVePj5QETCISxrl5mU8MNmpGo1HiXRho65U1rh2Lw54ZevvuWTu+G/f5zZ1nbpF
+         n7walrUmsTm1g==
+Date:   Thu, 16 Feb 2023 16:00:24 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 14/17] dt-bindings: sound: apple,mca: Add t8112-mca
+ compatible
+Message-ID: <Y+5TGKoMuRr4XQ+b@sirena.org.uk>
+References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+ <20230202-asahi-t8112-dt-v1-14-cb5442d1c229@jannau.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zLAA02ljnSaFRQBD"
+Content-Disposition: inline
+In-Reply-To: <20230202-asahi-t8112-dt-v1-14-cb5442d1c229@jannau.net>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it possible to disable the MOPS extension at runtime using the
-kernel command line. This can be useful for testing or working around
-hardware issues.
 
-Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 3 +++
- arch/arm64/kernel/idreg-override.c              | 2 ++
- 2 files changed, 5 insertions(+)
+--zLAA02ljnSaFRQBD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf..ee86fe17352d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -408,6 +408,9 @@
- 	arm64.nosme	[ARM64] Unconditionally disable Scalable Matrix
- 			Extension support
- 
-+	arm64.nomops	[ARM64] Unconditionally disable Memory Copy and Memory
-+			Set instructions support
-+
- 	ataflop=	[HW,M68k]
- 
- 	atarimouse=	[HW,MOUSE] Atari Mouse
-diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index d833d78a7f31..d13ae90042cb 100644
---- a/arch/arm64/kernel/idreg-override.c
-+++ b/arch/arm64/kernel/idreg-override.c
-@@ -123,6 +123,7 @@ static const struct ftr_set_desc isar2 __initconst = {
- 	.fields		= {
- 		FIELD("gpa3", ID_AA64ISAR2_EL1_GPA3_SHIFT, NULL),
- 		FIELD("apa3", ID_AA64ISAR2_EL1_APA3_SHIFT, NULL),
-+		FIELD("mops", ID_AA64ISAR2_EL1_MOPS_SHIFT, NULL),
- 		{}
- 	},
- };
-@@ -174,6 +175,7 @@ static const struct {
- 	  "id_aa64isar1.gpi=0 id_aa64isar1.gpa=0 "
- 	  "id_aa64isar1.api=0 id_aa64isar1.apa=0 "
- 	  "id_aa64isar2.gpa3=0 id_aa64isar2.apa3=0"	   },
-+	{ "arm64.nomops",		"id_aa64isar2.mops=0" },
- 	{ "arm64.nomte",		"id_aa64pfr1.mte=0" },
- 	{ "nokaslr",			"kaslr.disabled=1" },
- };
--- 
-2.25.1
+On Sun, Feb 12, 2023 at 04:41:24PM +0100, Janne Grunau wrote:
 
+> This trivial dt-bindings update should be merged through the asahi-soc
+> tree to ensure validation of the Apple M2 (t8112) devicetrees in this
+> series.
+
+I didn't get a response to my query about the nearness to the
+merge window and the prospects of the series hitting v6.3, though
+I do see that there's a new version needed for some of the other
+patches.  I'm just going to go ahead and apply so it's there and
+I don't need to worry about or see resends, in case the rest of
+the series is going to go in it's not the end of the world if it
+gets applied twice anyway so
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--zLAA02ljnSaFRQBD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuUxcACgkQJNaLcl1U
+h9Af/Af/YMaqhnQb4Eh5+46lP4Mxb8PbrkBIC4qlIjcB+Hh/k8zv4T6lxMliCgrb
+V26ONFvyzAl+q0EBaeRgwcB2htrFjzmrTmXa4QnbmfGIOriavTXNqKhfwAqqIFOs
+NJhxIAqVavNLiKHkW2opVIiWRDWq8Sf/tyKwsVZB6OQym2Fj+X1Zv35s1jp2SUeb
+MhzQYMIvIrLLXtIcZzBb6H7G0kOFCFbnaqTginkiQPgYawuoHaZ/kxsGlbPZA1Dr
+tuWHPGnkdFtg8tnlYDn9AUSI+k5VJovf9m9bGzstnzBpH8uovKEciu6sDAkJtkww
+A/goHQ6NXCEgVO+yyApSnF7Ai4X5gg==
+=KvWA
+-----END PGP SIGNATURE-----
+
+--zLAA02ljnSaFRQBD--
