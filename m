@@ -2,162 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0139E699922
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A169990C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjBPPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
+        id S229475AbjBPPkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjBPPmd (ORCPT
+        with ESMTP id S229436AbjBPPkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:42:33 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753AF518C1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:42:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676562130; x=1708098130;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZiXDUFGLKyZJWKtsy/KxUXEoRcnEoHEMZePrHLGJ+VE=;
-  b=IywDMY45ACbodPNhiMP9bih+4vr67ugfUWeAHcCP3LdLR66PVzEsDO3Y
-   mqKaNez+Un2vxfKW6+y7cjg69wzo8Ycqnb4NS9GiAnYugNydCLmeXRn3o
-   HUmh1MtOOOH7n4oietlDEuVln/+jdPTNrupgz+niDpxewLSHsVmkEYC3+
-   QqTHfWGF50aa9ddOvOsGDqLCWlAOpc8YcbMARs/RCB/13uCFnYFwrh0VJ
-   HV0IX1vc8mCxyY9X5v1/o4Tf3lWhIxMnyStZKTd4YtDUJwd6arJOYoud7
-   KanhVullKI1pILMRsnoDWSBPX0aWT2+r+3oDssM23VjLZ7BUWekNlGYdq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359177966"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="359177966"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 07:41:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="700531728"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="700531728"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Feb 2023 07:41:29 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSgO1-000AK7-0N;
-        Thu, 16 Feb 2023 15:41:29 +0000
-Date:   Thu, 16 Feb 2023 23:40:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- e067248949e3de7fbeae812b0ccbbee7a401e7aa
-Message-ID: <63ee4e77.RMLAHufK6SNSKXbQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 16 Feb 2023 10:40:13 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC38252A2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:40:12 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id jk14so2403436plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dckOt9ZcX3PBA7dkA4NwToXQbFSTM3HdmIxpC2CHEx4=;
+        b=SUuT3baKGqj/B16sQzWVhF0tjHQKfms9VZGD+WjuO36OsuaSh7+WjyDOo+bAWJzfrJ
+         uZ3//iMlKj9mB6z4VYu8pW7ClECgdkx1roDBTvkjmsN/3/cIV1OMt1kOgkPVtkUfJE3N
+         RASXvWPlRvWntkgi5HO0Ye1XoedAjkY3JBO4eHkmcvuXMbtyuZPjCNNdFSzWXRDzF5q0
+         b66EbxOKorT9apZ7d2jlViVQklpGd+GfANyvuNHhnhghbY7SaRzfDiy8IR6BF/WroZI2
+         8SZ7EghKlHHrMVn7SXjiclXB+m3LUmQhAjoLwSK2uJwQoKukbBGcVu0k//FMi/JYzDyQ
+         HHTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dckOt9ZcX3PBA7dkA4NwToXQbFSTM3HdmIxpC2CHEx4=;
+        b=vHbP80IAJG4lIRA0nGMCLzHzZ/gXhIMdjUGuK/NS+4tDHBiAH5hfVd1hPipcb+n7Vn
+         kIjN6BC5daoBV3SD/39LTf6uc3HR6lhTrwNDQTro9YyVvDCYO+ka+NnIn8IoaHyL/C7f
+         kT/9cNPz7j9RUX0I7KYkHfxDBWIA59OGg6kD+xB4PYjMm6Kb6MgLSuRHBvkaYm6kGoSR
+         Kp8/dDO5rLFLGyXriV6ifQCKrdqXkzMi+4x8JTj3EIuqhw7ooC2f/Lv0KBkFLJSgKSdY
+         KoE5Zsvht6S8C7adf67V2dHwxVossTMBXBHKzdyQTQVEsHVETYcfSbms870YlwVXT2Jh
+         5DyQ==
+X-Gm-Message-State: AO0yUKXmjZ2oXnUQUWeh2Xa9swnYox2nal6lTLxdR7kZaExjzWRJ05Xv
+        spBmH6wpZXEP6/rzAIOReFFB28BaFW8=
+X-Google-Smtp-Source: AK7set/XqpIhCR7j8BMd2RQ9Ula/mGwPCwieixfJI/WKtIm/kACaG+6hUlNZUS3qS7saWkTGLrnLiQ==
+X-Received: by 2002:a17:902:e5c3:b0:19a:a80e:a6d5 with SMTP id u3-20020a170902e5c300b0019aa80ea6d5mr7406336plf.23.1676562011281;
+        Thu, 16 Feb 2023 07:40:11 -0800 (PST)
+Received: from localhost ([198.11.176.14])
+        by smtp.gmail.com with ESMTPSA id bi12-20020a170902bf0c00b00194c1281ca9sm1468078plb.166.2023.02.16.07.40.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Feb 2023 07:40:10 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH V3 00/14] kvm: x86/mmu: Share the same code to invalidate each vTLB entry 
+Date:   Thu, 16 Feb 2023 23:41:06 +0800
+Message-Id: <20230216154115.710033-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: e067248949e3de7fbeae812b0ccbbee7a401e7aa  Merge branch 'linus' into x86/cpu, to resolve conflict
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-elapsed time: 1714m
+FNAME(invlpg) and FNAME(sync_page) invalidate vTLB entries but in
+slightly different methods.
 
-configs tested: 79
-configs skipped: 3
+Make them use the same method and share the same code.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Patch 1: Address a subtle bug reported by Sean Christopherson.
+Patch 2-6: Add FNAME(sync_page)
+Patch 7-14: Refactor code which uses FNAME(invlpg) and finally use FNAME(sync_page).
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230212
-arc                  randconfig-r043-20230213
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230212
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a011-20230213
-i386                 randconfig-a012-20230213
-i386                 randconfig-a013-20230213
-i386                 randconfig-a014-20230213
-i386                 randconfig-a015-20230213
-i386                 randconfig-a016-20230213
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230213
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230213
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64               randconfig-a011-20230213
-x86_64               randconfig-a012-20230213
-x86_64               randconfig-a013-20230213
-x86_64               randconfig-a014-20230213
-x86_64               randconfig-a015-20230213
-x86_64               randconfig-a016-20230213
-x86_64                               rhel-8.3
+Changed from V2:
+	Convert the address type and fix subtle bug
+	Check mmu->sync_page pointer before calling it
+	Fix the defination of KVM_MMU_ROOT_XXX
 
-clang tested configs:
-arm                  randconfig-r046-20230213
-hexagon              randconfig-r041-20230212
-hexagon              randconfig-r041-20230213
-hexagon              randconfig-r045-20230212
-hexagon              randconfig-r045-20230213
-i386                 randconfig-a001-20230213
-i386                 randconfig-a002-20230213
-i386                 randconfig-a003-20230213
-i386                 randconfig-a004-20230213
-i386                 randconfig-a005-20230213
-i386                 randconfig-a006-20230213
-riscv                randconfig-r042-20230212
-s390                 randconfig-r044-20230212
-x86_64               randconfig-a001-20230213
-x86_64               randconfig-a002-20230213
-x86_64               randconfig-a003-20230213
-x86_64               randconfig-a004-20230213
-x86_64               randconfig-a005-20230213
-x86_64               randconfig-a006-20230213
+[V2]: https://lore.kernel.org/lkml/20230207155735.2845-1-jiangshanlai@gmail.com/
+[V1]: https://lore.kernel.org/lkml/20230105095848.6061-1-jiangshanlai@gmail.com/
+
+Lai Jiangshan (13):
+  KVM: x86/mmu: Use 64-bit address to invalidate to fix a subtle bug
+  kvm: x86/mmu: Move the check in FNAME(sync_page) as
+    kvm_sync_page_check()
+  kvm: x86/mmu: Check mmu->sync_page pointer in kvm_sync_page_check()
+  kvm: x86/mmu: Set mmu->sync_page as NULL for direct paging
+  kvm: x86/mmu: Move the code out of FNAME(sync_page)'s loop body into
+    mmu.c
+  kvm: x86/mmu: Reduce the update to the spte in FNAME(sync_spte)
+  kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for kvm_mmu_invalidate_addr()
+  kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in kvm_mmu_invpcid_gva()
+  kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in
+    nested_ept_invalidate_addr()
+  kvm: x86/mmu: Allow the roots to be invalid in FNAME(invlpg)
+  kvm: x86/mmu: Remove FNAME(invlpg) and use FNAME(sync_spte) to update
+    vTLB instead.
+  kvm: x86/mmu: Remove @no_dirty_log from FNAME(prefetch_gpte)
+  kvm: x86/mmu: Skip calling mmu->sync_spte() when the spte is 0
+
+Sean Christopherson (1):
+  KVM: x86/mmu: Sanity check input to kvm_mmu_free_roots()
+
+ arch/x86/include/asm/kvm_host.h |  17 ++-
+ arch/x86/kvm/mmu/mmu.c          | 201 ++++++++++++++++++++----------
+ arch/x86/kvm/mmu/paging_tmpl.h  | 209 +++++++++-----------------------
+ arch/x86/kvm/vmx/nested.c       |   5 +-
+ arch/x86/kvm/x86.c              |   4 +-
+ 5 files changed, 205 insertions(+), 231 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.19.1.6.gb485710b
+
