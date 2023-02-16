@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18363699220
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBDC699226
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjBPKsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S230208AbjBPKsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjBPKsE (ORCPT
+        with ESMTP id S229970AbjBPKsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:48:04 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67C28212
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:47:35 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id n36so511746wmr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:47:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L6cGhYejmXP7gqB3bw2vF3QoztsjWluwjTHj/jf8Uws=;
-        b=PBc6KKJKbZ3iyuRUtK8YCSuz2fE2U0nOOKv4gwc5JAzo9KnzG6+tEIuW22y+Z2h7wp
-         O2E9TmpoatjIsTIlnJq61rp4zXDmvAcTsgK40YWkbtzumnoCEzzAzc6/85UxzuTb9x/9
-         /BfBOKANovWTBtZXk9OilYAVJ5aGUpoiBn4GM7jtLATZkeOSKi8q37Afn+W2Gyr+rhDf
-         y++AW6LIt+arLfjfljiaK00eotTkGNULJn8dHQ7I6HLU/oIntHYrJdn0FRiaIWrofx2E
-         7PQ627vGNKgpxZMxvVqNSn6IqfSqo/aKk65aLUZQvNmXTyeKELrBoN/tGX913VtXIGwC
-         mD2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L6cGhYejmXP7gqB3bw2vF3QoztsjWluwjTHj/jf8Uws=;
-        b=2xWr7qEkqQvEDafu60oLPO3cwCgWdpE/IUoFwx9x/99VHN5VRqCfSQV5Y53yOm939r
-         SioUZ/8vmKCgFJFhLnWJGXTdp0cNtFcqz8iq+iJgOLO9HjeqK1yKFYsae8PUdF446vPe
-         0v/Wk6EYPWJQnD4qdCqEBWXuTOM5/M8fd7ufX6a4HROlFe63EWxScD1nUVnhR9vZupQo
-         Ih7itCDfc8JwuYPUtCAL6Zy9zGN5pb8OkOAHAsXF3VbtIEE7UWZHf6fvWmLsFiwd9254
-         n6gy9E+WSHYWnvXkLW1UaXHC6omcudmZlzfZRQcvupHbOG0wPXLgGUwh2HdhizGTRsnb
-         r2OQ==
-X-Gm-Message-State: AO0yUKWCbO3B9K4ejXgsER28nJ7Gkeyj7MWI9zKWjDVZzQHbm7y7wKb1
-        1bj8CpnG8rIslE/Pcz+tyHeHSw==
-X-Google-Smtp-Source: AK7set9j+Y/T2zdL7L9ZbqX0E7DPcvdQDA5CDDfLv72oFuHrrUchsK7J4Kv1ONGwlSnoCQ0pPMI9nQ==
-X-Received: by 2002:a05:600c:1819:b0:3e0:10d:f1c with SMTP id n25-20020a05600c181900b003e0010d0f1cmr4459563wmp.37.1676544450857;
-        Thu, 16 Feb 2023 02:47:30 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05600c290b00b003e215973a96sm977173wmd.16.2023.02.16.02.47.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 02:47:30 -0800 (PST)
-Date:   Thu, 16 Feb 2023 10:47:29 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bhelgaas@google.com, darren@os.amperecomputing.com,
-        scott@os.amperecomputing.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-Subject: Re: [PATCH] PCI/ATS:  Allow to enable ATS on VFs even if it is not
- enabled on PF
-Message-ID: <Y+4JwV843tZWGxih@myrica>
-References: <Y+ksmNWJdWNkGAU9@unreal>
- <20230215205726.GA3213227@bhelgaas>
- <Y+3al/a3HPrvfNgh@unreal>
- <Y+3fa/3HC1vsLRXa@unreal>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+3fa/3HC1vsLRXa@unreal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 16 Feb 2023 05:48:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B587E552A9;
+        Thu, 16 Feb 2023 02:48:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6554361F77;
+        Thu, 16 Feb 2023 10:47:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37A4C433EF;
+        Thu, 16 Feb 2023 10:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676544466;
+        bh=qPKJcQ81NdgJ9mjdld2jyisKDD9+D95sDN9DG7hmjx0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DszsnKa9tf0u7K5ayygNV3MPjUNrLLUSycmWGZhwOkCQQ4NU+FuzhI8jekTi3ANNB
+         fus/TC1hPty7mv4ToYwocMe8jIOX7YxQalBcxi4AfwsNXPfR+SqGoXx3hJJVnXRWCU
+         WHKnLHdX4otGbV9Qh/z/mcru/K2rWe/ze+AHxZ9djovLcly/rUbYSeWXY9yzhqBdKY
+         YQDl9s/8fF37sJHLLaAON2vBZXyL0H8IGm3kt3pLCmMrJi4vX08ZUWd23/Hh85Cpnl
+         ZCuNXLxJPKHGieKddQrO1fsC8XLaMPK0oQ/FmqPPL52mWpsy3F+333wJtE0V2uwcGP
+         xs6dAcaBcCDIw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pSbnk-00ArRW-Bg;
+        Thu, 16 Feb 2023 10:47:44 +0000
+Date:   Thu, 16 Feb 2023 10:47:43 +0000
+Message-ID: <86pma9yjhs.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mun Yew Tham <mun.yew.tham@intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH 00/17] Mass convert GPIO IRQ chips to be immutable
+In-Reply-To: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
+References: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, mun.yew.tham@intel.com, brgl@bgdev.pl, joel@jms.id.au, andrew@aj.id.au, albeu@free.fr, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, f.fangjian@huawei.com, daniel@thingy.jp, romain.perier@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, william.gray@linaro.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org, jmkrzyszt@gmail.com, arnd@arndb.de, tony@atomide.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 09:46:51AM +0200, Leon Romanovsky wrote:
-> On Thu, Feb 16, 2023 at 09:26:15AM +0200, Leon Romanovsky wrote:
-> > On Wed, Feb 15, 2023 at 02:57:26PM -0600, Bjorn Helgaas wrote:
-> > > [+cc Will, Robin, Joerg for arm-smmu-v3 page size question]
-> > > 
-> > > On Sun, Feb 12, 2023 at 08:14:48PM +0200, Leon Romanovsky wrote:
-> > > > On Wed, Feb 08, 2023 at 10:43:21AM -0800, Ganapatrao Kulkarni wrote:
-> > > > > As per PCIe specification(section 10.5), If a VF implements an
-> > > > > ATS capability, its associated PF must implement an ATS capability.
-> > > > > The ATS Capabilities in VFs and their associated PFs are permitted to
-> > > > > be enabled independently.
-> > > > > Also, it states that the Smallest Translation Unit (STU) for VFs must be
-> > > > > hardwired to Zero and the associated PF's value applies to VFs STU.
-> > > > > 
-> > > > > The current code allows to enable ATS on VFs only if it is already
-> > > > > enabled on associated PF, which is not necessary as per the specification.
-> > > > > 
-> > > > > It is only required to have valid STU programmed on PF to enable
-> > > > > ATS on VFs. Adding code to write the first VFs STU to a PF's STU
-> > > > > when PFs ATS is not enabled.
-> > > >
-> > > > Can you please add here quotes from the spec and its version? I don't see
-> > > > anything like this in my version of PCIe specification.
+On Thu, 16 Feb 2023 09:37:01 +0000,
+Linus Walleij <linus.walleij@linaro.org> wrote:
+> 
+> We are getting tired of these irq_chips not getting converted
+> to be immutable, so I just take out the big hammer and fix
+> some that I deem not too complex as best I can.
 
-In PCIe r6.0, 10.5.1 ATS Extended Capability:
+Thanks for taking the hit on this one.
 
-"The ATS Capabilities in VFs and their associated PFs are permitted to be
-enabled independently."
+I had a cursory look, and they seem fine overall. only the omap one
+looks a bit scary, but I take it that Tony can give that one a go
+before it gets merged.
 
-> For VFs, this field must be hardwired to Zero. The associated PF's value applies.
-> Default value is 0 0000b"
+FWIW:
 
-And this sentence indicates that the PF's STU should be configured
-appropriately in order to use ATS in the VF.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-So a driver is permitted to enable the VF ATS capability without enabling
-the PF ATS cap, though the STU value of the PF cap still applies. But the
-first sentence is weak ("permitted" instead of "required"), so as Joerg
-said, some device implementations may still require to enable the PF cap
-in order to enable the VF cap.
+	M.
 
-Maybe we could have a list of vendor:device IDs which allow enabling the
-VF cap independently?
-
-Thanks,
-Jean
+-- 
+Without deviation from the norm, progress is not possible.
