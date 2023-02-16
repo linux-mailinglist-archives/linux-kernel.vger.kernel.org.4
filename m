@@ -2,98 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDC46996FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2605C6996FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBPOSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S229462AbjBPOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBPOSH (ORCPT
+        with ESMTP id S229862AbjBPOSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:18:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AAE4EC7;
-        Thu, 16 Feb 2023 06:18:06 -0800 (PST)
-Date:   Thu, 16 Feb 2023 15:17:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676557083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yC70dxR3j3o6dABPqhp3X+zunb/UJz6Yh+UqMQ9x8v0=;
-        b=GYxNiX9V2EWsDAli1sgzN6Erxn3zxIom6rvzvUwcYW5yHbug400DMTmaHz3kDpF9Iz0JR8
-        A/YZa3blN5fpTiaZWlaJ6LVEmaKYHI89WETGz3EDERF8gI9+nGCd56M6bQAXIo0Jtl6bQ4
-        JhkcdPk8B8URAn4T2F8oDOqDwM3oFH2Vy9HUabTIMgGxX9nkstUyOZ4J901CRJt0bbZYq2
-        bZ946cz/Oq8Vl8psdpY/Nsy4NqG+Jqe8rWKhH9YL6cfNMdOlr9S/KXEhyRF6ejexPycabo
-        084lNSeTJZIPwk8xZDKd6Pl/4sO1Z43Tq/sV2KqFd6Vsm1c9yRVd9vBvU8T/Qg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676557083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yC70dxR3j3o6dABPqhp3X+zunb/UJz6Yh+UqMQ9x8v0=;
-        b=5+9pvFUkhxXBGMs6TLBuyPGAh9RI+q3+DwLnyBsJ6RQCjsyJk7QKgtqbJh/2qKJFkCczk6
-        sWZMfEKtXXz+u6Aw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Crystal Wood <swood@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        John Keeping <john@metanate.com>,
-        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: rtmutex, pi_blocked_on, and blk_flush_plug()
-Message-ID: <Y+47FVJ+hI+NA2In@linutronix.de>
-References: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
+        Thu, 16 Feb 2023 09:18:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE374BE93;
+        Thu, 16 Feb 2023 06:18:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8846560ABC;
+        Thu, 16 Feb 2023 14:18:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D37C433EF;
+        Thu, 16 Feb 2023 14:18:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676557095;
+        bh=FJ/3UUWVjEdyo6sc6ZR1O3Q4KgQjH18wZv40K7Gof6M=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Ix5GRxoJn+k+9ve36EFVTZOAAPQNXVIXjT+0mFF9O7L62zuzPEJ9cDrEWxAxi8bTr
+         czE37Jf6LNa/aCYs9LaJpSbJLuPyn63SKCWY76kuwysC50mh8ZkMNXAd7ci/EOfQ+Q
+         M6PD88cnympwxc/0DTqkkuk2drSH1ELQJqzA0o+GCRv+xnIvMM+e9pwZwJwDtBNEYo
+         SABcScV1X3lYLo4OBer/IlNAiTmVjfxYGtqh9jRl5L3m0sOjSqnqlaWgbe60JOeBm0
+         qxA4aI8lhOtuiYuUrk37SMCQgCo9nK5Y7lyEx8FfvAi3GPR4KbiP7s0DX0HBmN1VBm
+         KnQOa2GT7gsgQ==
+Message-ID: <16e3ddb4-219e-70a8-8644-c62973f84d31@kernel.org>
+Date:   Thu, 16 Feb 2023 15:18:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2 6/6] arm64: tegra: Add GTE nodes
+Content-Language: en-US
+To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev
+References: <20230214115553.10416-1-dipenp@nvidia.com>
+ <20230214115553.10416-7-dipenp@nvidia.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230214115553.10416-7-dipenp@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-09 22:31:57 [-0600], Crystal Wood wrote:
-> Hello!
-Hi,
+On 14/02/2023 12:55, Dipen Patel wrote:
+> Add GTE nodes for the tegra234. Also modify AON GTE nodes for the
+> tegra194 to remove nvidia,slice property and add nvidia,gpio-controller
+> propertyto specify AON GPIO controller node so that GTE driver can
+> do namespace conversion between GPIO lines provided by the gpiolib
+> framework and hardware timestamping engine subsystem.
+> 
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> ---
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi |  3 +--
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 19 +++++++++++++++++++
+>  2 files changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> index 4afcbd60e144..4c92850b1ec4 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> @@ -1363,7 +1363,6 @@
+>  			reg = <0x3aa0000 0x10000>;
+>  			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>  			nvidia,int-threshold = <1>;
+> -			nvidia,slices = <11>;
+>  			#timestamp-cells = <1>;
+>  			status = "okay";
+>  		};
+> @@ -1586,7 +1585,7 @@
+>  			reg = <0xc1e0000 0x10000>;
+>  			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>  			nvidia,int-threshold = <1>;
+> -			nvidia,slices = <3>;
+> +			nvidia,gpio-controller = <&gpio_aon>;
+>  			#timestamp-cells = <1>;
+>  			status = "okay";
+>  		};
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> index eaf05ee9acd1..4a87490c5fd4 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> @@ -1086,6 +1086,15 @@
+>  			clock-names = "fuse";
+>  		};
+>  
+> +		hte_lic: hardware-timestamp@3aa0000 {
+> +			compatible = "nvidia,tegra234-gte-lic";
+> +			reg = <0x3aa0000 0x10000>;
+> +			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> +			nvidia,int-threshold = <1>;
+> +			#timestamp-cells = <1>;
+> +			status = "okay";
 
-> It is possible for blk_flush_plug() to be called while
-> current->pi_blocked_on is set, in the process of trying to acquire an rwsem.
-> If the block flush blocks trying to acquire some lock, then it appears that
-> current->pi_blocked_on will be overwritten, and then set to NULL once that
-> lock is acquired, even though the task is still blocked on the original
-> rwsem.  Am I missing something that deals with this situation?  It seems
-> like the lock types that are supposed to call blk_flush_plug() should do so
-> before calling task_blocks_on_rt_mutex().
+Why do you need status? It's okay by default.
 
-Do you experience a problem in v6.1-RT?
+> +		};
+> +
+>  		hsp_top0: hsp@3c00000 {
+>  			compatible = "nvidia,tegra234-hsp", "nvidia,tegra194-hsp";
+>  			reg = <0x03c00000 0xa0000>;
+> @@ -1603,6 +1612,16 @@
+>  			#mbox-cells = <2>;
+>  		};
+>  
+> +		hte_aon: hardware-timestamp@c1e0000 {
+> +			compatible = "nvidia,tegra234-gte-aon";
+> +			reg = <0xc1e0000 0x10000>;
+> +			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+> +			nvidia,int-threshold = <1>;
+> +			nvidia,gpio-controller = <&gpio_aon>;
+> +			#timestamp-cells = <1>;
+> +			status = "okay";
 
-> I originally noticed this while investigating a related issue on an older
-> RHEL kernel where task_blocked_on_mutex() has a BUG_ON if entered with
-> current->pi_blocked_on non-NULL.  Current kernels lack this check.
 
-The logic is different but the deadlock should be avoided:
-- mutex_t and rw_semaphore invoke schedule() while blocking on a lock.
-  As part of schedule() sched_submit_work() is invoked.
-  This is the same in RT and !RT so I don't expect any dead lock since
-  the involved locks are the same.
+Also here
 
-- spinlock_t invokes schedule_rtlock() which avoids sched_submit_work().
-  This is the behaviour as with !RT because it spins and does not submit
-  work either.
-  rwlock_t should be have the same way but invokes schedule() instead.
-  This looks wrong. And it could deadlock in sched_submit_work().
+Best regards,
+Krzysztof
 
-> To demonstrate that the recursive blocking scenario can happen (without
-> actually waiting to hit the scenario where the second lock is contended),
-> I put a WARN_ON_ONCE(current->pi_blocked_on) in rtlock_lock() (plus a few
-> other places, but this is the one I hit):
-
-XFS does not use rwlock_t directly.
-
-> -Crystal
-
-Sebastian
