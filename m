@@ -2,130 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A9B698D53
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0895B698D55
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjBPGpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S229739AbjBPGpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBPGpj (ORCPT
+        with ESMTP id S229477AbjBPGpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:45:39 -0500
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E14DD2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:45:38 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id SY1Nph9XNm8TdSY1NpF4Iy; Thu, 16 Feb 2023 07:45:36 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 16 Feb 2023 07:45:36 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <95af8972-478f-12b8-efea-30c7e249f449@wanadoo.fr>
-Date:   Thu, 16 Feb 2023 07:45:33 +0100
+        Thu, 16 Feb 2023 01:45:41 -0500
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5131AB;
+        Wed, 15 Feb 2023 22:45:40 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id g6-20020a05600c310600b003e1f6dff952so3389009wmo.1;
+        Wed, 15 Feb 2023 22:45:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1erk48KVVeI/+eFAGnZc8sEEqbTN/WLvkPC+ieubqRc=;
+        b=7hE83IkNSTZKyYebGMZ5YO2tZXg6mecJuQqieUWlIP+eJR5fv4AMLdlcZJ8/SFUurn
+         a8BqqRn+WJwI9jGgP0iGLv90QRn+tGrjDp05BKNqfPJDJUAawWFIE/d98+RrA9+Ixc0u
+         FjbmSCI6nOPENXHxTFJRSQMy7nxSNxb7DFg43hg5hrbmVqAn1nyBfPhplTggYRF7teeK
+         LrclCfWOvETIMSYJ5lpZW7cM0ZsnovtFivOWfcsZktqfSIxRk+gjJGSH/cw7fjS1dT6i
+         kPm6psZ5Mc7WeWQuhQ5ij9+0NXK1NPXlDUQJeEEF1kCjUIbg9fAZUxQ/QQNElZ10MIKZ
+         Bx8Q==
+X-Gm-Message-State: AO0yUKWe+Msl+Fhc+5iq8XtwhBf64ykSP4ycq2uQNuKAvo/40VjsgC0h
+        n6s3aHJZusiixQfuzVQQFzo=
+X-Google-Smtp-Source: AK7set+N4NsjMOEpcpJ23+61k/88zxYcHZXcULDwl4iDfQBjhHjL6CXkfGP67EpOPs7GO81bqSx+4w==
+X-Received: by 2002:a05:600c:708:b0:3dc:1687:9ba2 with SMTP id i8-20020a05600c070800b003dc16879ba2mr4042689wmn.35.1676529938838;
+        Wed, 15 Feb 2023 22:45:38 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id hn30-20020a05600ca39e00b003db03725e86sm685919wmb.8.2023.02.15.22.45.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 22:45:37 -0800 (PST)
+Message-ID: <5ece1fc9-f2e7-3567-9a16-3f950ee65709@kernel.org>
+Date:   Thu, 16 Feb 2023 07:45:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] net: mdio: thunder: Do not unregister buses that have not
- been registered
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        David Daney <david.daney@cavium.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <918382e19fdeb172f3836234d07e706460b7d06b.1620906605.git.christophe.jaillet@wanadoo.fr>
- <20210513121634.GX1336@shell.armlinux.org.uk>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20210513121634.GX1336@shell.armlinux.org.uk>
+Subject: Re: [PATCH 2/2] leds: trigger: ledtrig-tty: add additional modes
+Content-Language: en-US
+To:     Florian Eckert <fe@dev.tdt.de>
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+References: <20230213140638.620206-1-fe@dev.tdt.de>
+ <20230213140638.620206-3-fe@dev.tdt.de>
+ <b5dd2505-b087-b521-739b-ad4e97f3cbc5@kernel.org>
+ <f4f9b09939819709822cea2b328422b8@dev.tdt.de>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <f4f9b09939819709822cea2b328422b8@dev.tdt.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 13/05/2021 à 14:16, Russell King - ARM Linux admin a écrit :
-> On Thu, May 13, 2021 at 01:51:40PM +0200, Christophe JAILLET wrote:
->> In the probe, if 'of_mdiobus_register()' fails, 'nexus->buses[i]' will
->> still have a non-NULL value.
->> So in the remove function, we will try to unregister a bus that has not
->> been registered.
->>
->> In order to avoid that NULLify 'nexus->buses[i]'.
->> 'oct_mdio_writeq(0,...)' must also be called here.
->>
->> Suggested-by: Russell King - ARM Linux admin <linux@armlinux.org.uk>
->> Fixes: 379d7ac7ca31 ("phy: mdio-thunder: Add driver for Cavium Thunder SoC MDIO buses.")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> Calling 'devm_mdiobus_free()' would also be cleaner, IMHO.
->> I've not added it because:
->>     - it should be fine, even without it
->>     - I'm not sure how to use it
-> 
-> devm_mdiobus_free() is a static function not intended to be used by
-> drivers. There is no devm.*free() function available for this, so
-> this memory will only ever be freed when either probe fails or the
-> driver is unbound from its device.
-> 
-> That should be fine, but it would be nice to give that memory back
-> to the system. Without having a function for drivers to use though,
-> that's not possible. Such a function should take a struct device
-> pointer and the struct mii_bus pointer returned by the devm
-> allocation function.
-> 
-> So, unless Andrew things we really need to free that, what you're
-> doing below should be fine as far as setting the pointer to NULL.
-> 
-> I think I'd want comments from Cavium on setting the register to
-> zero - as we don't know how this hardware behaves, and whether that
-> would have implications we aren't aware of. So, I'm copying in
-> David Daney (the original driver author) for comment, if his email
-> address still works!
-
 Hi,
 
-drivers/net/mdio/mdio-thunder.c has been touched recently, so i take the 
-opportunity to ping on this old patch.
-
-It does not cleanly apply anymore, but still look valid to me.
-
-CJ
-
-> 
->> ---
->>   drivers/net/mdio/mdio-thunder.c | 8 +++++++-
->>   1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/mdio/mdio-thunder.c b/drivers/net/mdio/mdio-thunder.c
->> index 822d2cdd2f35..140c405d4a41 100644
->> --- a/drivers/net/mdio/mdio-thunder.c
->> +++ b/drivers/net/mdio/mdio-thunder.c
->> @@ -97,8 +97,14 @@ static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
->>   		bus->mii_bus->write = cavium_mdiobus_write;
->>   
->>   		err = of_mdiobus_register(bus->mii_bus, node);
->> -		if (err)
->> +		if (err) {
->>   			dev_err(&pdev->dev, "of_mdiobus_register failed\n");
->> +			/* non-registered buses must not be unregistered in
->> +			 * the .remove function
->> +			 */
->> +			oct_mdio_writeq(0, bus->register_base + SMI_EN);
->> +			nexus->buses[i] = NULL;
->> +		}
->>   
->>   		dev_info(&pdev->dev, "Added bus at %llx\n", r.start);
->>   		if (i >= ARRAY_SIZE(nexus->buses))
->> -- 
->> 2.30.2
->>
+On 14. 02. 23, 12:13, Florian Eckert wrote:
+>>> +static const char * const mode[] = {
 >>
 > 
+>> This is not a wise name.
+> 
+> What do you suggest? For me, the 'mode' here was the most accurate.
+> It describes how the trigger should behave.
+
+mode is fine but with a context. Like tty_led_mode.
+
+thanks,
+-- 
+js
 
