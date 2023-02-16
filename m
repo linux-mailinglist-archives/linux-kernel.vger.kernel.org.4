@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F9B698B5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 05:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FDD698B62
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 05:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBPEQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 23:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S229493AbjBPERJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 23:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBPEQW (ORCPT
+        with ESMTP id S229642AbjBPERC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 23:16:22 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3152C3CE2D;
-        Wed, 15 Feb 2023 20:16:21 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id s20so679127pfe.2;
-        Wed, 15 Feb 2023 20:16:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pv5vtFhC1/6mVNPYEr5ZDqdeCHty+f23VE56nzPwJAw=;
-        b=cdNjE5wcxQbuw9IKIkHokysV/M+8uWE53aX5nXcRarfmyXvXTDwgJwyLKYn1BKaFSt
-         79VHVPzsmWZx0UlDJpwkWJLNWtjvo4CxWLGgqhgfVsCExI/Ix0emDDKjvijWRvN2Wi2W
-         W+7IEqoC6VT5ELnbpLEorDDVkK5kWupUHavC92viH6F/g4YB80cLtw0qYxH0hqTcH3Ks
-         l+OuEk6LOCfJdf1pC6hZfT1kp/+5/4aIuzmrNKrn9U018fRqL1cA9zGs+bAfc0wppcBE
-         Y7ELT0I2UQL1aTaiLV02t+T27m21JO/xn37jXSWsJPqRaZ2tXgi0vHZ4MTUPttPyRpYW
-         XAzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pv5vtFhC1/6mVNPYEr5ZDqdeCHty+f23VE56nzPwJAw=;
-        b=IMODo/L4zLFAfkP832OYg1SF+y3sqfGZv2A9tzA/aTq5tqMah61X9nyr6AZ1sUG1Tz
-         1nivpeD81CQ4JyQBtmI65ZcPa2znAUedIKaXo+mdpHuxVtmco5gTErEgyPapR5e5IRZ3
-         XLi2XEe7fhDN7u3PYxGjpL+eOI4DirNJHVGXgJWREbknOf22q6Pfzn/j1ZFR8mM4hrOr
-         UpjTddP4Rauir6tBDPU0b0+FRZRKtOYYUNmznMbQsxOdZ7XdYXXSLBqFfpZ/TMigUPol
-         OhiZgVCAi9RDKgoqyt1beyGyVmHDH2CtYNtS/abIxktBYn6P13Yopgmq58oXJf7KP9VZ
-         8uVg==
-X-Gm-Message-State: AO0yUKVbo6Ha3SNjtqQ3Rsdl1woC8zFyhTuC+qcy35QlRMVGZSfZ+92f
-        Tcb5svCh11CFSwpyhdzjXIqx6aS3D3pbfoGR8z4=
-X-Google-Smtp-Source: AK7set/GPwAClfXPGVN6ACUHYHmwE7KN249J7fT7QgaU+/B4NEyP/F+6Fbdu195NPVwC2ph1PgrUK8uAcW0oJxG27XQ=
-X-Received: by 2002:a63:3507:0:b0:4ce:cb07:1d86 with SMTP id
- c7-20020a633507000000b004cecb071d86mr669795pga.2.1676520979707; Wed, 15 Feb
- 2023 20:16:19 -0800 (PST)
+        Wed, 15 Feb 2023 23:17:02 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082E734035
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 20:17:02 -0800 (PST)
+Received: from [192.168.87.25] (unknown [50.35.78.176])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 240CA20B9C3D;
+        Wed, 15 Feb 2023 20:17:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 240CA20B9C3D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676521021;
+        bh=VmsDF5gDLO0hK+EBXyDyJfasU051a0MIEUc0wQei5PA=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=qblMqRUk/t0G8EmLsEeHJRQ3EbsYm/2M9u9QOGyyhpNRJFj0S+UgH5sth+0NIEiWH
+         s/GHuGPYnCe2/EiI2SnvXgkQjadEPJcywRIcTqHchiR2v7YSG7DgVw4a/xlSrjqd36
+         3bsg1CWzAZAQxHGsUps1VyDKTONOB+9NpLC9NEhA=
+Message-ID: <a62fb259-3ad3-b75e-c59e-2ce937bf799a@linux.microsoft.com>
+Date:   Wed, 15 Feb 2023 20:17:00 -0800
 MIME-Version: 1.0
-References: <20230207155735.2845-1-jiangshanlai@gmail.com> <20230207155735.2845-7-jiangshanlai@gmail.com>
- <Y+WZoXYvacqx/+Yu@google.com>
-In-Reply-To: <Y+WZoXYvacqx/+Yu@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 16 Feb 2023 12:16:07 +0800
-Message-ID: <CAJhGHyDMdbJQVZnHC6nwPcous1kR2kfRH2c--LhuzHgjR4_mDQ@mail.gmail.com>
-Subject: Re: [PATCH V2 6/8] kvm: x86/mmu: Remove FNAME(invlpg)
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
+ i2C driver
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+ <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
+ <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
+ <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Content-Language: en-US
+From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
+In-Reply-To: <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-20.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 9:11 AM Sean Christopherson <seanjc@google.com> wrote:
+Hi Ryan,
 
->
-> > +                     gfn_t gfn = kvm_mmu_page_get_gfn(sp, iterator.index);
-> > +                     int ret = mmu->sync_spte(vcpu, sp, iterator.index);
-> > +
-> > +                     if (ret < 0)
-> > +                             mmu_page_zap_pte(vcpu->kvm, sp, iterator.sptep, NULL);
-> > +                     if (ret)
-> > +                             kvm_flush_remote_tlbs_with_address(vcpu->kvm, gfn, 1);
->
-> Why open code kvm_flush_remote_tlbs_sptep()?  Does it actually shave enough
-> cycles to be visible?
+On 2/14/2023 9:43 PM, Ryan Chen wrote:
+> It is not duplicated, as my description in cover " This series add AST2600 i2c new register set driver"
+> So, this will be different driver compatible.
+> The original compatible is
+>        - aspeed,ast2400-i2c-bus
+>        - aspeed,ast2500-i2c-bus
+>        - aspeed,ast2600-i2c-bus
+> So the new register set compatible is "- aspeed,ast2600-i2c", remove "bus".
 
+Is it possible to keep existing driver drivers/i2c/busses/i2c-aspeed.c
+for ast2400/ast2500, while move ast2600 support to new driver
+altogether, say i2c-ast2600.c along with new register mode? By default
+new driver can support legacy mode with same compatible "aspeed,ast2600-
+i2c-bus", additionally driven by dt props, switch to new mode.
 
-Although I have read the code of sync_page() many times,
-I don't know why I had been having the assumption that it can possibly
-change the sp->gfns[] (now sp->shadowed_translation[]).
-
-I will add the following comments before calling kvm_mmu_page_get_gfn():
-
-  Get the gfn beforehand for later flushing.  Although mmu->sync_spte()
-  doesn't change it, but just avoid dependence.
-
-Or I will use kvm_flush_remote_tlbs_sptep() with comments stating
-that the gfn will not be changed.
-
->
-> If open coding is really justified, can you rebase on one of the two branches?
-> And then change this to kvm_flush_remote_tlbs_gfn().
->
->   https://github.com/kvm-x86/linux/tree/next
->   https://github.com/kvm-x86/linux/tree/mmu
-
-The code was based on https://github.com/kvm-x86/linux/tree/mmu.
-
-Thanks
-Lai
+Regards,
+Dhananjay
