@@ -2,65 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BD9699A10
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5CA699A14
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBPQcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S229551AbjBPQdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBPQcV (ORCPT
+        with ESMTP id S229666AbjBPQdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:32:21 -0500
+        Thu, 16 Feb 2023 11:33:21 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E53497C5;
-        Thu, 16 Feb 2023 08:32:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0DC497CF;
+        Thu, 16 Feb 2023 08:33:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02CCFB828F1;
-        Thu, 16 Feb 2023 16:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF25C4339B;
-        Thu, 16 Feb 2023 16:32:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B212B828EE;
+        Thu, 16 Feb 2023 16:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26DEC4339C;
+        Thu, 16 Feb 2023 16:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676565137;
-        bh=SdwRkhrTgubITR7LoCM6csaPxtac6AqTfrJPOaGWVhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b/AkaUzY0WWVwUsfam89eFtAVf1NtUzY+2bUUaZrtsvy4XoU4uiXer3PvSR6fCb2N
-         jIMEbInkfRRa3cd2H1b+mkJYY98iDcVsOXbLxR21MJIrL4RTt/X6ko1ox0NH3fHKDh
-         xhqisNdrfdxjLXwEaKguQ9FeyZGciXgiQ/JAmX1/RrQST2OqnkHNOMXTXV86m5b2t5
-         hbO3W4nHK1MsQxP0Cnc7Aw/h2hYkxpKXjQavQIse4AOCBUusmmVhSwGrHeXcXxe68h
-         IjE/O1S8XxsrR9rQqBGoBBrY+EQH3pX/0tQOXxdrwrMZDRsBMno2ds4pL/crve35W1
-         c+bzBr8LtOhBw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C91AD40025; Thu, 16 Feb 2023 13:32:14 -0300 (-03)
-Date:   Thu, 16 Feb 2023 13:32:14 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
-Message-ID: <Y+5ajnitOAxjdn2C@kernel.org>
-References: <20230214050452.26390-1-namhyung@kernel.org>
- <20230214050452.26390-5-namhyung@kernel.org>
- <Y+5YaQt7Fme65a78@krava>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+5YaQt7Fme65a78@krava>
-X-Url:  http://acmel.wordpress.com
+        s=k20201202; t=1676565193;
+        bh=nMVHmIqfaHt08Slvr0nYctMoK6XHgT9o9PCB3tkVwMM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tRHuxIl2U6ktQg70qCgMQu7QRzybFUQFlAz6fRrdN4HLZlfgQwRNiKw5QJR1OZ9Yu
+         CiY4DEAy+A5xcCYaNDgiDOJ8J7EGTQp6ZDhqWLv1lqUlLMm5ZnFlZYFmu+HIYvjmBG
+         CLS/0J6okaldrafpDdKA9oSBJhJ7Wkm+LX3tFcY3pzA7FAfjPGe5rQZQ05Igj6bs7a
+         qaQSTrJi7hVoh8FoEpQiu56xOxPamXtBe4zhb2DjnN6ABZIbkzBNOCVX5IIhQm6ps/
+         rJfvbSR4HID+1RtVRLsqr10IcSfO2QTI4/MIb4M37H6Cibu6iXjdo0Z2+A8YOeXxIZ
+         AdG75UPF3zCyg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v6.2-rc8-abi
+Date:   Thu, 16 Feb 2023 16:33:04 +0000
+Message-Id: <20230216163312.A26DEC4339C@smtp.kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,39 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 16, 2023 at 05:23:05PM +0100, Jiri Olsa escreveu:
-> On Mon, Feb 13, 2023 at 09:04:49PM -0800, Namhyung Kim wrote:
-> 
-> SNIP
-> 
-> > @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
-> >  
-> >  		for (int x = 0; x < xyarray__max_x(xy); x++) {
-> >  			for (int y = 0; y < xyarray__max_y(xy); y++) {
-> > -				__record__read_lost_samples(rec, evsel, lost, x, y);
-> > +				struct perf_counts_values count;
-> > +
-> > +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
-> > +					pr_err("read LOST count failed\n");
-> > +					goto out;
-> > +				}
-> > +
-> > +				if (count.lost) {
-> > +					__record__save_lost_samples(rec, evsel, lost,
-> > +								    x, y, count.lost, 0);
-> > +				}
-> >  			}
-> >  		}
-> > +
-> > +		lost_count = perf_bpf_filter__lost_count(evsel);
-> > +		if (lost_count)
-> > +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
-> > +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
-> 
-> hi,
-> I can't see PERF_RECORD_MISC_LOST_SAMPLES_BPF in the tip/perf/core so can't compile,
-> what do I miss?
+The following changes since commit e0fe6a31cac84735939c29d1e05055d58325c6c0:
 
-Humm, but you shouldn't need kernel headers to build tools/perf/, right?
+  spi: Rename spi-cs-setup-ns property to spi-cs-setup-delay-ns (2023-01-05 16:07:09 +0000)
 
-- Arnaldo
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.2-rc8-abi
+
+for you to fetch changes up to f276aacf5d2f7fb57e400db44c807ea3b9525fd6:
+
+  spi: Use a 32-bit DT property for spi-cs-setup-delay-ns (2023-01-13 12:31:49 +0000)
+
+----------------------------------------------------------------
+spi: Update for v6.2
+
+One more last minute patch for v6.2 updating the parsing of the
+newly added spi-cs-setup-delay-ns - it's been pointed out that
+due to the way DT parsing works the change in property size is
+ABI visible so let's not let a release go out without it being
+fixed.  The change got split from some earlier ABI related fixes
+to the property since the first version sent had a build error.
+
+----------------------------------------------------------------
+Janne Grunau (1):
+      spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
+
+ drivers/spi/spi.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
