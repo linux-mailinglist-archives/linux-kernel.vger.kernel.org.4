@@ -2,130 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA33F69A21C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED5069A227
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBPXKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S229583AbjBPXPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBPXKA (ORCPT
+        with ESMTP id S229460AbjBPXPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:10:00 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DA637F20
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:09:58 -0800 (PST)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB13A66021BB;
-        Thu, 16 Feb 2023 23:09:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676588997;
-        bh=eJ31KjQvfQ1OAUYYt2ngpiSKt3yk0pd1vQYJrvXlQMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=drPUZkvM1cTe3zfqASEwhAq9wlIuEQsSzLLIfL5qT2oxH/SQ0Bfrei/mCstanGeLK
-         cJYU0TNIFgJXWmHPvm/YbM2Xx8LuaVWuFguMhmQ4jPpbXPdEF2dTdyxXX8vt5glsgX
-         lP6ejH5vqDDT9UnIqfdc+1FM+4mUaJxwurG6EOLNUFp4omIvej9iH0O8EFdxXaacvP
-         cMw4nvB7aZxGViBHxO7H0hYMt7qD8puLPMM06aPp4AFI81rqZBXNi9wkZDasbLHh4u
-         SlbU0kG/t+5g49Y6kgzqsudtvkg85pDbcHy6O/NcpNhXqd25D9uYm9F1LFZjCd+iPc
-         OGL8CFg4/kTkQ==
-Date:   Thu, 16 Feb 2023 18:09:46 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Thu, 16 Feb 2023 18:15:16 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D5536FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:15:14 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id i15so963703plr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UOrfIPBVHyXsCRwwROx/BsBty9DiIQBe0zYeec/wKME=;
+        b=JjDfoqzyJdK1Z+JLju5+wXufzKS9j1J2UGrsG8zH1vJThpOvyv2wG4doMtKDQqmv4E
+         iqYvzssDipr+537Uwii89iTv4iOHU3nEI21OGm/bmj484ud1ovKW1O3QU/HIx66Vc+U1
+         hSloSIfMVpFHHAFJhesC5/+XyUUmZNfH40lBCdIbWxpQ240tDspmR7vs4QLR6IgzjGhZ
+         7XdcHZ6j0U1p6qBhwylQ2qGlX2DvtYmhG8lZSBIWiOO0Zm7dmHGeNNxZUhTYxYiXGD3l
+         pyxpnPYWgyzD9HUwKth+kQfgkDqjrIAgwRHUIBAwiBuc9Vi5lPon1C3YqM6YxOx3fXJB
+         gDhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UOrfIPBVHyXsCRwwROx/BsBty9DiIQBe0zYeec/wKME=;
+        b=jb/xBR2aprZuqeW8szjPBOQ/40kqr6uGaUyX3uFfcqA90/uplJaDN1FBBkU7QwCvJi
+         KhvaqcCvMYK+c3MApA/DAQu/l6sSmdMBAFwZLqM8temPmpKZFGDigl84t69YRJlgDs/0
+         hgL5cg1DT58u8FaxHezCPsQEgqQGNC/VLul6S+v+dJ/UQm/Z5UD49QWqY0Ae2cBx1TtE
+         c9ab7bcfZIxWo07mkV0qDXG5PibNBB2YJmw1DNQOA8qJ6hPcSbQ/sEEBmlk9dICWPsyQ
+         F+83mW3MnrmEJ9wEsMeX0xU5MYqGmYBKmR+3G/Z0hsTUG3Axl7zejXA4uTnr+qnkQ79B
+         cdMg==
+X-Gm-Message-State: AO0yUKXQ9FGS6E0kuPTdl2r1C94WH+bngMsaNUfPp59Uqvo/I8pxrS45
+        kO4VfKdgXo+Pv2wlg2c+ZoA=
+X-Google-Smtp-Source: AK7set/H9inEjyTBJ5xH8PuOEx/wInnSuKCdjl4oy5mBMQXn9NKjK6WdSMSBZ60Mlqq1NFbtQPuKkg==
+X-Received: by 2002:a05:6a20:3d0b:b0:bf:45d7:6d0b with SMTP id y11-20020a056a203d0b00b000bf45d76d0bmr9195937pzi.33.1676589314420;
+        Thu, 16 Feb 2023 15:15:14 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id 11-20020aa7914b000000b005a77b030b5csm1788401pfi.88.2023.02.16.15.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 15:15:14 -0800 (PST)
+Date:   Fri, 17 Feb 2023 10:15:03 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     amd-gfx@lists.freedesktop.org, Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Aditya Garg <gargaditya08@live.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Xin Ji <xji@analogixsemi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge: anx7625: Drop device lock before
- drm_helper_hpd_irq_event()
-Message-ID: <20230216230946.g3ojtx7na3smogbx@notapiano>
-References: <20230116072234.3970768-1-wenst@chromium.org>
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Subject: Re: [PATCHv2] drm/amdgpu: register a vga_switcheroo client for
+ MacBooks with apple-gmux
+Message-ID: <20230217101503.6196ab7f@redecorated-mbp>
+In-Reply-To: <CADnq5_OMA3+FXwUB5eK=Y3qcGW1xNY6RjQAtywT3_bh6HmJztA@mail.gmail.com>
+References: <20230216102856.11987-1-orlandoch.dev@gmail.com>
+        <CADnq5_OMA3+FXwUB5eK=Y3qcGW1xNY6RjQAtywT3_bh6HmJztA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116072234.3970768-1-wenst@chromium.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 16 Feb 2023 09:52:57 -0500
+Alex Deucher <alexdeucher@gmail.com> wrote:
 
-On Mon, Jan 16, 2023 at 03:22:34PM +0800, Chen-Yu Tsai wrote:
-> The device lock is used to serialize the low level power sequencing
-> operations. Since drm_helper_hpd_irq_event() could end up calling
-> .atomic_enable, which also calls power sequencing functions through
-> runtime PM, this results in a real deadlock. This was observed on an
-> MT8192-based Chromebook's external display (with appropriate patches [1]
-> and DT changes applied).
+> On Thu, Feb 16, 2023 at 8:45 AM Orlando Chamberlain
+> <orlandoch.dev@gmail.com> wrote:
+> >
+> > Commit 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
+> > vga_switcheroo") made amdgpu only register a vga_switcheroo client
+> > for GPU's with PX, however AMD GPUs in dual gpu Apple Macbooks do
+> > need to register, but don't have PX. Instead of AMD's PX, they use
+> > apple-gmux.
+> >
+> > Use apple_gmux_detect() to identify these gpus, and
+> > pci_is_thunderbolt_attached() to ensure eGPUs connected to Dual GPU
+> > Macbooks don't register with vga_switcheroo.
+> >
+> > Fixes: 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
+> > vga_switcheroo") Link:
+> > https://lore.kernel.org/amd-gfx/20230210044826.9834-10-orlandoch.dev@gmail.com/
+> > Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>  
 > 
-> Move the drm_helper_hpd_irq_event() call outside of the lock range. The
-> lock only needs to be held so that the device status can be read back.
-> This is the bare minimum change to avoid the deadlock. The lock could
-> be dropped completely and have pm_runtime_get_if_in_use() increase the
-> reference count, but this is not the same as pm_runtime_suspended().
-> This also causes the internal display of the same device to not
-> function correctly. Both the internal and external display of said
-> device each use one anx7625 bridge.
-> 
-> [1] https://lore.kernel.org/dri-devel/20230112042104.4107253-1-treapking@chromium.org/
-> 
-> Fixes: 60487584a79a ("drm/bridge: anx7625: refactor power control to use runtime PM framework")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
-> FWIW I'm aware that this driver could be refactored a lot better.
-> The work function might be simplified and merged into the threaded
-> interrupt handler. The .detect op should be reading the HPD state
-> from the hardware, not some cached state.
-> 
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 7e1fb93a6ce4..bf1770b79bba 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -1597,18 +1597,17 @@ static void anx7625_work_func(struct work_struct *work)
->  
->  	mutex_lock(&ctx->lock);
->  
-> -	if (pm_runtime_suspended(&ctx->client->dev))
-> -		goto unlock;
-> +	if (pm_runtime_suspended(&ctx->client->dev)) {
-> +		mutex_unlock(&ctx->lock);
-> +		return;
-> +	}
->  
->  	event = anx7625_hpd_change_detect(ctx);
-> -	if (event < 0)
+> This needs ifdefs around the apple_gmux stuff so that it will build
+> without the gmux support.
 
-Are you intentionally dropping this early-return on error?
+There are ifdefs in include/linux/apple-gmux.h already, will
+those be sufficient?
 
-> -		goto unlock;
-> +
-> +	mutex_unlock(&ctx->lock);
->  
->  	if (ctx->bridge_attached)
->  		drm_helper_hpd_irq_event(ctx->bridge.dev);
-> -
-> -unlock:
-> -	mutex_unlock(&ctx->lock);
->  }
->  
->  static irqreturn_t anx7625_intr_hpd_isr(int irq, void *data)
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
 > 
+> Alex
+> 
+> > ---
+> > v1->v2: Use apple_gmux_detect()
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 21
+> > ++++++++++++++++----- 1 file changed, 16 insertions(+), 5
+> > deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> > b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c index
+> > 2f28a8c02f64..ef8b996f0622 100644 ---
+> > a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c +++
+> > b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c @@ -35,6 +35,7 @@
+> >  #include <linux/devcoredump.h>
+> >  #include <generated/utsrelease.h>
+> >  #include <linux/pci-p2pdma.h>
+> > +#include <linux/apple-gmux.h>
+> >
+> >  #include <drm/drm_aperture.h>
+> >  #include <drm/drm_atomic_helper.h>
+> > @@ -3919,12 +3920,15 @@ int amdgpu_device_init(struct amdgpu_device
+> > *adev, if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
+> >                 vga_client_register(adev->pdev,
+> > amdgpu_device_vga_set_decode);
+> >
+> > -       if (amdgpu_device_supports_px(ddev)) {
+> > -               px = true;
+> > +       px = amdgpu_device_supports_px(ddev);
+> > +
+> > +       if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
+> > +                               apple_gmux_detect(NULL, NULL)))
+> >                 vga_switcheroo_register_client(adev->pdev,
+> >                                                &amdgpu_switcheroo_ops,
+> > px); +
+> > +       if (px)
+> >                 vga_switcheroo_init_domain_pm_ops(adev->dev,
+> > &adev->vga_pm_domain);
+> > -       }
+> >
+> >         if (adev->gmc.xgmi.pending_reset)
+> >                 queue_delayed_work(system_wq,
+> > &mgpu_info.delayed_reset_work, @@ -4029,6 +4033,7 @@ void
+> > amdgpu_device_fini_hw(struct amdgpu_device *adev) void
+> > amdgpu_device_fini_sw(struct amdgpu_device *adev) {
+> >         int idx;
+> > +       bool px;
+> >
+> >         amdgpu_fence_driver_sw_fini(adev);
+> >         amdgpu_device_ip_fini(adev);
+> > @@ -4048,10 +4053,16 @@ void amdgpu_device_fini_sw(struct
+> > amdgpu_device *adev)
+> >
+> >         kfree(adev->bios);
+> >         adev->bios = NULL;
+> > -       if (amdgpu_device_supports_px(adev_to_drm(adev))) {
+> > +
+> > +       px = amdgpu_device_supports_px(adev_to_drm(adev));
+> > +
+> > +       if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
+> > +                               apple_gmux_detect(NULL, NULL)))
+> >                 vga_switcheroo_unregister_client(adev->pdev);
+> > +
+> > +       if (px)
+> >                 vga_switcheroo_fini_domain_pm_ops(adev->dev);
+> > -       }
+> > +
+> >         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
+> >                 vga_client_unregister(adev->pdev);
+> >
+> > --
+> > 2.39.1
+> >  
+
