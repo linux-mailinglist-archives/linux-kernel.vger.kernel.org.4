@@ -2,180 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF55869904A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911D769904B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBPJnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S229928AbjBPJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBPJnO (ORCPT
+        with ESMTP id S229596AbjBPJnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:43:14 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CD57D9A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:43:12 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id az27so299678uab.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+IcP9JZ9x1kcivgUFdu74is1jTxITNl/hwmvZ5y5f8=;
-        b=m7QKamtB4nlsz/kEd9OvsoPEHumtXSdhtUbRm4tQ0On6c+9PjP2yH0/5/9K2zfxYZ4
-         WpWELkjr+vDA/keD2bO/gcC1hvebLE5sG+WBfdZX/b++2xFRtUbCZ4niFU32eqoaVeko
-         CXy/jsYQtF9+NNrkbUn3Bl1jIA4gpjJWLCbaDW305DS8+ii4Mz7BkcFZ1a35T6jfOzDI
-         Thelr5sBigU6ftwkb9DbJN+hYZbYfpfGqKFhpdkNe7LhtMhgdsApygg9Qj5lsjSxPL0q
-         cZBPMc+ghaAFCJcB5Z8NbwglLP2RXcAPoKPSZXL3gn1ABvc0Jq3X+YXFmIQoAgqOoGPu
-         1bhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k+IcP9JZ9x1kcivgUFdu74is1jTxITNl/hwmvZ5y5f8=;
-        b=wj2mSjG9G/zi+D60MM4ErZMg63d7WC7AYu0FuxzV8eQ6J/0yp3+T+mfJQCF4pRddoN
-         0LL5JWmpvQdsCzsK+8idqV2P6JjLkUWckdtvYIAXV5A6WA27KImSdV12urIID7xpDAjf
-         iar9EgGGvPA4rmYF0kfeyq3JecZdkjDG9H5PjxMpH2g+2axBuEa+PEX4Fb5msb7gvQzd
-         Ad+/rr779w1Zm+fy1El344UUKJuPL28zTLMLSllq3H4AGRyT1cK4Jus3rs90kdp8v605
-         JMT4gmy6WnReZQmoWycaZTCFCKdi39KWw62NznKUfByL8Y34BscVO3ezvqsuyIxosjyl
-         B1tQ==
-X-Gm-Message-State: AO0yUKXYfm7Od4WwfPhmu0uQzDaRjsHgI4Fa6ZbMEzdUUXaLgu2G5wMH
-        S6a+FCHfuc/SY7I4emgdR8yHLKeK9ezjFjoXBolGRA==
-X-Google-Smtp-Source: AK7set/HBL5bYW7gxs8bV8MFxYe2tMQUs1boWXh8ugz4WqDDq0aDUuMmiKXQPGsPd1LWO/To14TY6DEuDhNA5e1Rcdo=
-X-Received: by 2002:ab0:549e:0:b0:68a:8f33:9567 with SMTP id
- p30-20020ab0549e000000b0068a8f339567mr817107uaa.2.1676540592009; Thu, 16 Feb
- 2023 01:43:12 -0800 (PST)
+        Thu, 16 Feb 2023 04:43:25 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EDDBDC9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:43:20 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2CED52098F;
+        Thu, 16 Feb 2023 09:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676540599; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N5U6IrVwCsueztAcTutfhEgyuA7eyIVe2k7iIPG0pCI=;
+        b=se+bNvjTSByWvU29J6oW0TuWh2xsyMYlq4FEFx0+MTB/G71QwrQS3SGKaRJv24HMeBBcK1
+        FV+oiQZqFX5Udy6o30Zdh/PReTmngMVNg6A4zVi+3Bkkr1K8Vc9vbBdtXsDnDTZ2HlQSFa
+        H31wCb3wAyvdF1o0eRNvMhzj5oBMBgc=
+Received: from suse.cz (unknown [10.163.25.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0BD9B2C141;
+        Thu, 16 Feb 2023 09:43:18 +0000 (UTC)
+Date:   Thu, 16 Feb 2023 10:43:13 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 2/5] workqueue: Warn when a new worker could not be created
+Message-ID: <Y+36sT088JAEwUCe@alley>
+References: <20230201134543.13687-1-pmladek@suse.com>
+ <20230201134543.13687-3-pmladek@suse.com>
+ <20230215180204.GP1757@blackbody.suse.cz>
 MIME-Version: 1.0
-References: <20230215154002.446808-1-brgl@bgdev.pl> <20230215154002.446808-4-brgl@bgdev.pl>
-In-Reply-To: <20230215154002.446808-4-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 16 Feb 2023 10:43:01 +0100
-Message-ID: <CAMRc=MdH7yxof63V2icesypGTFSssziaA5sCOZP_Gby-3ciLKA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sa8775p: add the GNSS high-speed
- UART for sa8775p-ride
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230215180204.GP1757@blackbody.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 4:40 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> Add the serial port connected to the GNSS on sa8775p-ride.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 34 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 15 ++++++++++
->  2 files changed, 49 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> index d01ca3a9ee37..47cf26ea49e8 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> @@ -13,6 +13,7 @@ / {
->
->         aliases {
->                 serial0 = &uart10;
-> +               serial1 = &uart12;
->                 i2c18 = &i2c18;
->                 spi16 = &spi16;
->         };
-> @@ -66,6 +67,30 @@ qup_i2c18_default: qup-i2c18-state {
->                 drive-strength = <2>;
->                 bias-pull-up;
->         };
-> +
-> +       qup_uart12_cts: qup-uart12-cts-state {
-> +               pins = "gpio52";
-> +               function = "qup1_se5";
-> +               bias-disable;
-> +       };
-> +
-> +       qup_uart12_rts: qup_uart12_rts-state {
-> +               pins = "gpio53";
-> +               function = "qup1_se5";
-> +               bias-pull-down;
-> +       };
-> +
-> +       qup_uart12_tx: qup_uart12_tx-state {
-> +               pins = "gpio54";
-> +               function = "qup1_se5";
-> +               bias-pull-up;
-> +       };
-> +
-> +       qup_uart12_rx: qup_uart12_rx-state {
-> +               pins = "gpio55";
-> +               function = "qup1_se5";
-> +               bias-pull-down;
-> +       };
->  };
->
->  &uart10 {
-> @@ -75,6 +100,15 @@ &uart10 {
->         status = "okay";
->  };
->
-> +&uart12 {
-> +       pinctrl-0 = <&qup_uart12_cts>,
-> +                   <&qup_uart12_rts>,
-> +                   <&qup_uart12_tx>,
-> +                   <&qup_uart12_rx>;
-> +       pinctrl-names = "default";
-> +       status = "okay";
-> +};
-> +
->  &xo_board_clk {
->         clock-frequency = <38400000>;
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index 1abb545ff4f4..8b8931ea739d 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -489,6 +489,21 @@ &clk_virt SLAVE_QUP_CORE_1 0>,
->                                 operating-points-v2 = <&qup_opp_table_100mhz>;
->                                 status = "disabled";
->                         };
-> +
-> +                       uart12: serial@a94000 {
-> +                               compatible = "qcom,geni-uart";
-> +                               reg = <0x0 0xa94000 0x0 0x4000>;
-> +                               interrupts = <GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>;
+On Wed 2023-02-15 19:02:04, Michal Koutný wrote:
+> Hello.
+> 
+> On Wed, Feb 01, 2023 at 02:45:40PM +0100, Petr Mladek <pmladek@suse.com> wrote:
+> >    + the system reached PID limit
+> or threads-max limit.
+> 
+> FTR, I was once considering something like
+> 
+> --->8---
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 867b46d6fd0a..bba05ecc3765 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -1684,8 +1684,10 @@ static __latent_entropy struct task_struct *copy_process(
+>          * to stop root fork bombs.
+>          */
+>         retval = -EAGAIN;
+> -       if (nr_threads >= max_threads)
+> +       if (nr_threads >= max_threads) {
+> +               printk_once(KERN_INFO "clone failed due to threads-max limit\n");
+>                 goto bad_fork_cleanup_count;
+> +       }
+> 
+>         delayacct_tsk_init(p);  /* Must remain after dup_task_struct() */
+>         p->flags &= ~(PF_SUPERPRIV | PF_WQ_WORKER | PF_IDLE);
+> @@ -1816,6 +1818,7 @@ static __latent_entropy struct task_struct *copy_process(
+>         if (pid != &init_struct_pid) {
+>                 pid = alloc_pid(p->nsproxy->pid_ns_for_children);
+>                 if (IS_ERR(pid)) {
+> +                       printk_once(KERN_INFO "fork failed to find pid\n");
+>                         retval = PTR_ERR(pid);
+>                         goto bad_fork_cleanup_thread;
+>                 }
+> --->8---
+> 
+> Effects of the global limits on anything but kthreads should be much less
+> important and easier to troubleshoot anyway.
+> Covering kworkers with your changes should be useful and substitute my idea
+> above.
 
-Please disregard this series, I've just noticed I didn't stage the
-change to the interrupt number here which is wrong. And I need to fix
-the underscores in node names too.
+I was not brave enough to touch kernel/fork.c.
 
-Bart
+> Take that as my support for this patch (from my perspective reporting
+> *_once would be enough to guide a troubleshooter).
 
-> +                               clocks = <&gcc GCC_QUPV3_WRAP1_S5_CLK>;
-> +                               clock-names = "se";
-> +                               interconnects = <&clk_virt MASTER_QUP_CORE_1 0
-> +                                                &clk_virt SLAVE_QUP_CORE_1 0>,
-> +                                               <&gem_noc MASTER_APPSS_PROC 0
-> +                                                &config_noc SLAVE_QUP_1 0>;
-> +                               interconnect-names = "qup-core", "qup-config";
-> +                               power-domains = <&rpmhpd SA8775P_CX>;
-> +                               status = "disabled";
-> +                       };
->                 };
->
->                 qupv3_id_2: geniqup@8c0000 {
-> --
-> 2.37.2
->
+My experience is that users often send logs with many stall reports and
+the earlier messages are missing/lost. This is why I wanted to repeat
+them.
+
+Anyway, thanks for the support. I am going to send v2 when time permits.
+
+Best Regards,
+Petr
