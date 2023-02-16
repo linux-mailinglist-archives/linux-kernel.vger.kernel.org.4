@@ -2,130 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19748699C5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F61699C53
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjBPSeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S229883AbjBPSaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBPSeL (ORCPT
+        with ESMTP id S230415AbjBPS36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:34:11 -0500
-X-Greylist: delayed 452 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Feb 2023 10:34:09 PST
-Received: from forward502c.mail.yandex.net (forward502c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920D2EC44
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:34:09 -0800 (PST)
-Received: from iva8-eaa10739bb9b.qloud-c.yandex.net (iva8-eaa10739bb9b.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:c20e:0:640:eaa1:739])
-        by forward502c.mail.yandex.net (Yandex) with ESMTP id A08895EEB9;
-        Thu, 16 Feb 2023 21:26:31 +0300 (MSK)
-Received: by iva8-eaa10739bb9b.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id TQqiIlBYp0U1-EKlK2b5X;
-        Thu, 16 Feb 2023 21:26:31 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lach.pw; s=mail; t=1676571991;
-        bh=+N+w4FHvR3Wjef2EHy6zll+1B2G14vAMncJdLdK0Ogo=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=a2Qiv7hwTp5yNYPhWoVpNHATB+bHBOISVtxk28g7FUvcyaQt+oigBh59vSHUgaH+p
-         cH7Ws62eINz0arMvYBeWv8y/fLNIw+7Jvv2DSBI+vx/P6Uc+qBRBKTqVPUOOtY8xsR
-         DC1lha5BJjFVpTPvuUHakryDk+Ga8pLu1ddhQTlQ=
-Authentication-Results: iva8-eaa10739bb9b.qloud-c.yandex.net; dkim=pass header.i=@lach.pw
-Message-ID: <d6f66bf7-356a-4bd9-fa21-a3197c0dff50@lach.pw>
-Date:   Thu, 16 Feb 2023 19:26:29 +0100
+        Thu, 16 Feb 2023 13:29:58 -0500
+Received: from out203-205-221-209.mail.qq.com (out203-205-221-209.mail.qq.com [203.205.221.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868448A65
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:29:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1676572193;
+        bh=tpo05uIrSacwP/ayWfelC/1KDGLF6+foH8Gxsp184zo=;
+        h=From:To:Cc:Subject:Date;
+        b=dyA3ibHwSEzn5NBCTMWK00Imn6uOnKJ4yVOW6NXKaVhzrzZGRmH5P8WOxcV3X7RVK
+         HfGewZs/p9tt788bDNf+w3vw/lpDSHGeVL/z9V+KvI4gV1WqshpsrOUnrpHEphkLlP
+         FJTC/9yoHB2aylBxiXKec9mvee/vwEJvqIoIiyp4=
+Received: from localhost.localdomain ([222.182.118.161])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id 77320C47; Fri, 17 Feb 2023 02:29:51 +0800
+X-QQ-mid: xmsmtpt1676572191tl5gbs3vj
+Message-ID: <tencent_98334C552AB55C90FCE4523A327393DFF606@qq.com>
+X-QQ-XMAILINFO: N7h1OCCDntujfPX9AmgkfAeXzMg3Yo7i2LquEBhKD6goXaR/+obi86JtI8z1I4
+         Pk2Vxz8aeh5DMv8wGeVanr2/nGOoeG5aHIYKEctEVk5mqhCmtf3DRSukpitOjOhQHgshvIY5DLSJ
+         2KMld2hK1YTj6XrhHzO7cqvla0oqEMe05Q0K0EgK/qLDpWjobIFFb7NNlOeNh+3cMbK5KKE58szR
+         ugW7y9epm89HsiZsgsKBkKDd1swO9ba4j3Qzo/54oku1nLzuwT1i4bL63iq7gL6rTi2KNFwqZWtx
+         44sXgReUxj82AOip2og4vhEFWIvJp+jQe2z5mkGKDcF3J6bpDiMsQs/Xdq41Gd2tnhPXIeMeENLt
+         vpWLaM8TYS6unIN+FVi9dDFuM/uhyxQNrpWr6Ti16o181hJFrj26tbK1vwIqUv7viCxIyXIM92y8
+         agrHXx3SoHdYsW2H2SmrNjhq8S5R7DC1I70tVzpC6GNaZ7BoRR5wJHEMMP76ombUwb8yquhAWCuD
+         em5fpbP8UWEFElJTa1XRGDKPYTBlweX6euqguaCcW0P4pGC7jVtiF5VQ1ELYl4Ft3A9s16Mnvxzq
+         RvatuOIWsBpdt82PfiDMALMmEtS/xCmSjHSDV7mWhTlqbziqARAJosnnJl/AwIxuICq9KPTGwRsj
+         YiXQgf+efiLGMIEhMXB1BzMuenT4rN3aSEY2xFMCLsZ4Sjj6eEb2ubXWHDgbtxvJjN+dejtR2qh0
+         wg4BFtQKcBnGrheVyjNL8rt32orvJStymbhHjQrZq8rIWiAC84GYIQ4A0mJ45u3C+eRAYKg3seSE
+         FADsy4on+/J/lY0WLp0nAME3n8RgVwL+0vxces+WpbLcnrdFjqGkd+PMuJPbgCrpbDPbXA87/6av
+         AGId27hwHGKBlsk9w8jAeCvedu/uNwp1a8VeVdDbzt0aKYoOHegLMnTO0MP/J02sFKmYaKyQ4d0l
+         bfZ6SLfqqQWH2VrIftu9lIEez1baVtIWs/pxCMOH0lsU21HL7fX26ujEX7Yi3X
+From:   wenyang.linux@foxmail.com
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michal Nazarewicz <m.nazarewicz@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] eventfd: use wait_event_interruptible_locked_irq() helper
+Date:   Fri, 17 Feb 2023 02:29:48 +0800
+X-OQ-MSGID: <20230216182948.1401036-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>
-References: <20220118170037.14584-1-iam@lach.pw>
- <5d5a8183-aebc-6660-9cbc-03950f9b14b8@collabora.com>
- <87v8k5vqg6.fsf@intel.com>
- <831e7daf-48ae-cea8-a5d2-3786317b3b65@collabora.com>
- <87sff9vl6j.fsf@intel.com>
- <b5f6c63e-adf3-38a6-18fb-c92c764c23f3@collabora.com>
-From:   Iaroslav Boliukin <iam@lach.pw>
-In-Reply-To: <b5f6c63e-adf3-38a6-18fb-c92c764c23f3@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 12:50, Dmitry Osipenko wrote:
-> On 2/13/23 14:50, Jani Nikula wrote:
->> On Mon, 13 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
->>> On 2/13/23 12:56, Jani Nikula wrote:
->>>> On Sun, 12 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
->>>>> Hi,
->>>>>
->>>>> On 1/18/22 20:00, Yaroslav Bolyukin wrote:
->>>>>
->>>>> Add a brief commit message, describing a user-visible effect of this
->>>>> patch. Tell that this change prevents exposing headset as a regular
->>>>> display to the system, while it will work with SteamVR.
->>>>>
->>>>>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
->>>>>> ---
->>>>>>   drivers/gpu/drm/drm_edid.c | 3 ++-
->>>>>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
->>>>>> index 12893e7be..fdb8f0a6f 100644
->>>>>> --- a/drivers/gpu/drm/drm_edid.c
->>>>>> +++ b/drivers/gpu/drm/drm_edid.c
->>>>>> @@ -200,9 +200,10 @@ static const struct edid_quirk {
->>>>>>   	EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
->>>>>>   	EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
->>>>>>   
->>>>>> -	/* HTC Vive and Vive Pro VR Headsets */
->>>>>> +	/* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
->>>>>
->>>>> Nit: I'd keep the original comment, or change it to a generic "HTC VR
->>>>> Headsets" to prevent further comment changes
->>>>>
->>>>>>   	EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
->>>>>>   	EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
->>>>>> +	EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
->>>>>>   
->>>>>>   	/* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
->>>>>>   	EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
->>>>>>
->>>>>> base-commit: 99613159ad749543621da8238acf1a122880144e
->>>>>
->>>>> Please send the v2 patch with the added EDID for Cosmos VR and the
->>>>> addressed comments. Thanks!
->>>>
->>>> Yeah, we'll need to EDID to check that it doesn't have the Microsoft
->>>> VSDB to indicate non-desktop. See 2869f599c0d8 ("drm/edid: support
->>>> Microsoft extension for HMDs and specialized monitors").
->>>
->>> Do you mean to skip using the EDID_QUIRK_NON_DESKTOP if MS VSDB entry
->>> presents in the EDID?
->>>
->>> These HTC EDIDs don't have MS VSDB, otherwise the quirk wouldn't be needed.
->>
->> Okay, I didn't know that. I just observed that the original patch was
->> sent before the the MS VSDB parsing was added.
-> 
-> This will be good to mention in the v2 commit message.
-> 
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-This headset does support some kind of HMD signalling, however, this is 
-not a microsoft-specific extension (0xca125c) but part of the DisplayId 
-spec, "Display Product Primary Use Case" field is set to "7".
+wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
+("wait_event_interruptible_locked() interface"), but older code such as
+eventfd_{write,read} still uses the open code implementation.
+Inspired by commit 8120a8aadb20
+("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
+patch replaces the open code implementation with a single macro call.
 
-The problem is, I have no idea what spec I should refer to, as I can't 
-find this errata in the original spec, and the only reference to this 
-value I see is in https://git.linuxtv.org/edid-decode.git utility:
+No functional change intended.
 
-https://git.linuxtv.org/edid-decode.git/tree/parse-displayid-block.cpp?ref=aa956e0dd5fb85271dde900ea1ebdda795af7f8b#n1676
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Fu Wei <wefu@redhat.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Michal Nazarewicz <m.nazarewicz@samsung.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ fs/eventfd.c | 41 +++++++----------------------------------
+ 1 file changed, 7 insertions(+), 34 deletions(-)
 
-I would like to implement this feature, but I need some spec reference.
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 249ca6c0b784..95850a13ce8d 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -228,7 +228,6 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 	struct file *file = iocb->ki_filp;
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	__u64 ucnt = 0;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (iov_iter_count(to) < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -239,23 +238,11 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 			spin_unlock_irq(&ctx->wqh.lock);
+ 			return -EAGAIN;
+ 		}
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ctx->count)
+-				break;
+-			if (signal_pending(current)) {
+-				__remove_wait_queue(&ctx->wqh, &wait);
+-				__set_current_state(TASK_RUNNING);
+-				spin_unlock_irq(&ctx->wqh.lock);
+-				return -ERESTARTSYS;
+-			}
++
++		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count)) {
+ 			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
++			return -ERESTARTSYS;
+ 		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
+ 	}
+ 	eventfd_ctx_do_read(ctx, &ucnt);
+ 	current->in_eventfd = 1;
+@@ -275,7 +262,6 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	ssize_t res;
+ 	__u64 ucnt;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (count < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -288,23 +274,10 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	if (ULLONG_MAX - ctx->count > ucnt)
+ 		res = sizeof(ucnt);
+ 	else if (!(file->f_flags & O_NONBLOCK)) {
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (res = 0;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ULLONG_MAX - ctx->count > ucnt) {
+-				res = sizeof(ucnt);
+-				break;
+-			}
+-			if (signal_pending(current)) {
+-				res = -ERESTARTSYS;
+-				break;
+-			}
+-			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
+-		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
++		res = wait_event_interruptible_locked_irq(ctx->wqh,
++				ULLONG_MAX - ctx->count > ucnt);
++		if (!res)
++			res = sizeof(ucnt);
+ 	}
+ 	if (likely(res > 0)) {
+ 		ctx->count += ucnt;
+-- 
+2.37.2
+
