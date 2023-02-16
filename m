@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578D9698CA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6F6698CAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjBPGKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S229868AbjBPGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBPGK2 (ORCPT
+        with ESMTP id S229678AbjBPGLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:10:28 -0500
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73DB460BB;
-        Wed, 15 Feb 2023 22:10:20 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VbnEka5_1676527817;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbnEka5_1676527817)
-          by smtp.aliyun-inc.com;
-          Thu, 16 Feb 2023 14:10:18 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     matthias.bgg@gmail.com
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, angelogioacchino.delregno@collabora.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next v2] thermal/drivers/mediatek: Remove unneeded semicolon
-Date:   Thu, 16 Feb 2023 14:10:16 +0800
-Message-Id: <20230216061016.94355-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 16 Feb 2023 01:11:09 -0500
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A75B1420E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:11:07 -0800 (PST)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-4c24993965eso10942057b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:11:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3GzLoKe2RbYpjca6vWcbTj2qTGQrrVF6Wq34+VFvzcw=;
+        b=gLR8ILZ5T4GIGWzbNtPsy9Hds0pa8A5KKsoJzaXZurUtZK3TUl7eT+g4ivW6BKA4TJ
+         sQqJqdIw4cqCdZf26POccndG32txj6jWbuOSXSYj5hJjdOlPOoRQ/LbdvjlnHGm4o45p
+         2gYMofgNm7ZiyjRTPURkMRNyc8aYjh/fvK89cRag8ICvKhmHEZl/Y4/74edcijKcI8Rw
+         1eCAkP6FzDS2d0C9xHZV4wjBqRShr1U22aAmkRAF0x/p4lkgGHWcl87EvO4eOl2YBS9n
+         9/gvwAslcQAib9rieGaMpswMpYsSiISWcDI8wX0U8Sl12d/GPist60J3lx5utBs/9kLJ
+         sMcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3GzLoKe2RbYpjca6vWcbTj2qTGQrrVF6Wq34+VFvzcw=;
+        b=oOvnayMtWEdgsf8UhrUBGNN2sQssoXjh8Hh7sTVg4TpTM/D6HgHHBIZv6ja/lv+wVI
+         cSNvSU8pqVa7MW7KgEvkQ/wP/5mkpM8SyaoviAKAHgO9cuipA82sf1+KfUiyySI/kyq7
+         YqVWrxJ7vHA4FrDgOAPo0pP8S43sjDUB6bdMxmTqVHe9GL/L+PaEew5MRkLOQcapKJ3b
+         MaPMMQ7SMb5Ff64erdCYYWgBJUx4eTfTCfhUF+36FvQCufxhnB7+xJsavYwtQqe1bury
+         45v0VlaXTMPySEaeOvOHsHbysVhSZ4bPIMAWsW9FzAKXzMf3+PdeGqjxUW1TN+qfdUX3
+         xGpQ==
+X-Gm-Message-State: AO0yUKVRYgrjJZ14ualTCxksccTI/jWeqKnHxjm6KXiGE+66Iur3Lw7m
+        KPKjtDUu0K4NSjOOoTjZm+IeVuovLPmVyObNlgw=
+X-Google-Smtp-Source: AK7set+jmSTlVTeyYgfsQCwf/N2nng8m5quvj37xPRqblcTn9nkxAHY07Q+vb/+0s9Jcbdv62yH5AIdpHkjUoODWzNk=
+X-Received: by 2002:a81:9e03:0:b0:52e:e396:3ad with SMTP id
+ m3-20020a819e03000000b0052ee39603admr702614ywj.171.1676527866568; Wed, 15 Feb
+ 2023 22:11:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: sessouaicha9@gmail.com
+Received: by 2002:a05:7000:2701:b0:46b:c128:722f with HTTP; Wed, 15 Feb 2023
+ 22:11:06 -0800 (PST)
+From:   Miss Reacheal <Reacheal4u@gmail.com>
+Date:   Thu, 16 Feb 2023 06:11:06 +0000
+X-Google-Sender-Auth: QY2S5L7ro60q-hNuUpnxZO2LMzE
+Message-ID: <CAOcv6REZuG6+EmWitiS4AnX6Yj7tqGwcaMzcC25=K=S6u4bdwg@mail.gmail.com>
+Subject: RE: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove an unneeded semicolon to solve the following warning:
-./drivers/thermal/mediatek/lvts_thermal.c:520:2-3: Unneeded semicolon
+Cze=C5=9B=C4=87,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4058
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
+Otrzyma=C5=82e=C5=9B moj=C4=85 poprzedni=C4=85 wiadomo=C5=9B=C4=87? Skontak=
+towa=C5=82em si=C4=99 z tob=C4=85
+wcze=C5=9Bniej, ale wiadomo=C5=9B=C4=87 nie wr=C3=B3ci=C5=82a, wi=C4=99c po=
+stanowi=C5=82em napisa=C4=87
+ponownie. Potwierd=C5=BA, czy to otrzymasz, abym m=C3=B3g=C5=82 kontynuowa=
+=C4=87,
 
-change in v2:
-According to Regno's suggestion, fix the commit description.
+czekam na Twoj=C4=85 odpowied=C5=BA.
 
- drivers/thermal/mediatek/lvts_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 84ba65a27acf..31d65fb50383 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -517,7 +517,7 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 		 */
- 		lvts_sensor[i].msr = lvts_ctrl_data->mode == LVTS_MSR_IMMEDIATE_MODE ?
- 			imm_regs[i] : msr_regs[i];
--	};
-+	}
- 
- 	lvts_ctrl->num_lvts_sensor = lvts_ctrl_data->num_lvts_sensor;
- 
--- 
-2.20.1.7.g153144c
-
+Pozdrowienia,
+Pani Reacheal
