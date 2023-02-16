@@ -2,208 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEA56993F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D81C6993FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjBPMLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S229964AbjBPMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBPMLL (ORCPT
+        with ESMTP id S229904AbjBPMMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:11:11 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27D55E77;
-        Thu, 16 Feb 2023 04:11:09 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PHYgQ1hddzrS1D;
-        Thu, 16 Feb 2023 20:10:42 +0800 (CST)
-Received: from [10.174.179.79] (10.174.179.79) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Feb 2023 20:11:07 +0800
-Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <jasowang@redhat.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <wangrong68@huawei.com>
-References: <20230207120843.1580403-1-sunnanyong@huawei.com>
- <20230215064759-mutt-send-email-mst@kernel.org>
-From:   Nanyong Sun <sunnanyong@huawei.com>
-Message-ID: <18aa2ad4-df34-de2d-4bda-8a49c191df18@huawei.com>
-Date:   Thu, 16 Feb 2023 20:11:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 16 Feb 2023 07:12:31 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF07F5649B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:12:26 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f34so2478605lfv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xa1EgxIuknODW/uxmcnzw4VoWb0VoixqD9F/6r/2kI=;
+        b=mXTOhX8NwTDA23CAvJrkwEBGQd0MTwe9gvMrXRGiDSG/+UmqpW9kQ2WNH2pHckZ6bZ
+         iRfRvrbTih4mtqGcHEOrAcvpBJaECdgRC94rvROmmsMFZ0Xs1/X48yh6U7Wn1CgN6g/u
+         vqvjDE0AtOteACicAJnOEUmVwuaUNfff69Z0QH2NcMv5V/U+BJem3VB8mkb8VzFKSVFq
+         luGLNCl4UODo7yHQWGUDwLWCET5elF7YzuqtbCKREVWAbwhm9KyxnAdXsWd5bSCZkA3X
+         sYT6kyfYozkTg8MJs32xmJh6GRPNhpsAHayh/AJeDFsPMAUGNGOZtw2KlHND3VI0MrMW
+         hKZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5xa1EgxIuknODW/uxmcnzw4VoWb0VoixqD9F/6r/2kI=;
+        b=R2TZQ0iphc5BsNAAIOoTcx9EilqGHzVZrz+d0KemOMf+AqXTvdFSC//NMh9tolVEIm
+         XlQ9MfZ6DiKpfqbp2GCJGz7+5yulJhkN1AUUVJYr1tdKiUZqE//FdhSzUigsz0kxEPPu
+         uy4hCInPhRJZXcLI6AIVqxV6wPOf9J4PtAXBC+v/n8RZIDx8pQO59183EafEPy9Soh0d
+         zM/XCY8b+Kxio/N4+u3U0uyp3RAz142b9qIXRn7atSdcSw0L3i+ejMRURwKu5BJmYOI5
+         RpH1frUUTvPGa3mSbqaw5lGTc4ypsUH3WJ1jyTKrZXlSzHz7Wi95jQzzAx/KPwlW1Lg4
+         Uvwg==
+X-Gm-Message-State: AO0yUKVvwEUv6SIEyFVDZlz6fSxWY4BoXt3m6cO9p807/mJtuU8fff5v
+        70uOYv8yoPfPd3og2XVQVoUXAw==
+X-Google-Smtp-Source: AK7set8gHz2zlSC0sGqYDh4zrURadOgNH0ueAYynB3wPhj/9oVZ9hQQtl4FxuuyOcRQ7u6nY9dkDMA==
+X-Received: by 2002:ac2:4908:0:b0:4cc:7a44:f05f with SMTP id n8-20020ac24908000000b004cc7a44f05fmr1523734lfi.31.1676549545029;
+        Thu, 16 Feb 2023 04:12:25 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id l2-20020ac24302000000b004dc4b00a1f3sm278509lfh.253.2023.02.16.04.12.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 04:12:24 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Gene Chen <gene_chen@richtek.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings usb: typec: rt1711h: Use a generic node name
+Date:   Thu, 16 Feb 2023 13:12:10 +0100
+Message-Id: <20230216121211.3964433-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-In-Reply-To: <20230215064759-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.79]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Node names should be generic. Use typec-portc@ instead of rt1711h@.
 
-On 2023/2/15 19:48, Michael S. Tsirkin wrote:
-> On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
->> From: Rong Wang <wangrong68@huawei.com>
->>
->> Once enable iommu domain for one device, the MSI
->> translation tables have to be there for software-managed MSI.
->> Otherwise, platform with software-managed MSI without an
->> irq bypass function, can not get a correct memory write event
->> from pcie, will not get irqs.
->> The solution is to obtain the MSI phy base address from
->> iommu reserved region, and set it to iommu MSI cookie,
->> then translation tables will be created while request irq.
->>
->> Change log
->> ----------
->>
->> v1->v2:
->> - add resv iotlb to avoid overlap mapping.
-> put changelog after --- pls
+Fixes: a72095ed8e65 ("dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Ok, will do that in version3
+diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+index 1999f614c89b..7431c25d82ce 100644
+--- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
++++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+@@ -17,6 +17,9 @@ description: |
+   support for alternative interfaces of the Type-C specification.
+ 
+ properties:
++  $nodename:
++    pattern: "^typec-portc@[0-9a-f]+$"
++
+   compatible:
+     enum:
+       - richtek,rt1711h
+@@ -55,7 +58,7 @@ examples:
+       #address-cells = <1>;
+       #size-cells = <0>;
+ 
+-      rt1711h@4e {
++      typec-portc@4e {
+         compatible = "richtek,rt1711h";
+         reg = <0x4e>;
+         interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
+-- 
+2.39.1
 
->
->> Signed-off-by: Rong Wang <wangrong68@huawei.com>
->> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
->> ---
->>   drivers/iommu/iommu.c |  1 +
->>   drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
->>   2 files changed, 57 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 5f6a85aea501..af9c064ad8b2 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
->>   	if (ops->get_resv_regions)
->>   		ops->get_resv_regions(dev, list);
->>   }
->> +EXPORT_SYMBOL(iommu_get_resv_regions);
->>   
->>   /**
->>    * iommu_put_resv_regions - release resered regions
->> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->> index ec32f785dfde..a58979da8acd 100644
->> --- a/drivers/vhost/vdpa.c
->> +++ b/drivers/vhost/vdpa.c
->> @@ -49,6 +49,7 @@ struct vhost_vdpa {
->>   	struct completion completion;
->>   	struct vdpa_device *vdpa;
->>   	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
->> +	struct vhost_iotlb resv_iotlb;
->>   	struct device dev;
->>   	struct cdev cdev;
->>   	atomic_t opened;
->> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
->>   
->>   	v->in_batch = 0;
->>   
->> +	vhost_iotlb_reset(&v->resv_iotlb);
->> +
->>   	return vdpa_reset(vdpa);
->>   }
->>   
->> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
->>   	    msg->iova + msg->size - 1 > v->range.last)
->>   		return -EINVAL;
->>   
->> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
->> +					msg->iova + msg->size - 1))
->> +		return -EINVAL;
->> +
->>   	if (vhost_iotlb_itree_first(iotlb, msg->iova,
->>   				    msg->iova + msg->size - 1))
->>   		return -EEXIST;
->> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
->>   	return vhost_chr_write_iter(dev, from);
->>   }
->>   
->> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
->> +	struct vhost_iotlb *resv_iotlb)
->> +{
->> +	struct list_head dev_resv_regions;
->> +	phys_addr_t resv_msi_base = 0;
->> +	struct iommu_resv_region *region;
->> +	int ret = 0;
->> +	bool with_sw_msi = false;
->> +	bool with_hw_msi = false;
->> +
->> +	INIT_LIST_HEAD(&dev_resv_regions);
->> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
->> +
->> +	list_for_each_entry(region, &dev_resv_regions, list) {
->> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
->> +				region->start + region->length - 1,
->> +				0, 0, NULL);
->> +		if (ret) {
->> +			vhost_iotlb_reset(resv_iotlb);
->> +			break;
->> +		}
->> +
->> +		if (region->type == IOMMU_RESV_MSI)
->> +			with_hw_msi = true;
->> +
->> +		if (region->type == IOMMU_RESV_SW_MSI) {
->> +			resv_msi_base = region->start;
->> +			with_sw_msi = true;
->> +		}
->> +	}
->> +
->> +	if (!ret && !with_hw_msi && with_sw_msi)
->> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
->> +
->> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
->> +
->> +	return ret;
->> +}
->> +
->>   static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->>   {
->>   	struct vdpa_device *vdpa = v->vdpa;
->> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->>   
->>   	ret = iommu_attach_device(v->domain, dma_dev);
->>   	if (ret)
->> -		goto err_attach;
->> +		goto err_alloc_domain;
->>   
->> -	return 0;
->> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
->> +	if (ret)
->> +		goto err_attach_device;
->>   
->> -err_attach:
->> +	return 0;
->> +err_attach_device:
->> +	iommu_detach_device(v->domain, dma_dev);
->> +err_alloc_domain:
->>   	iommu_domain_free(v->domain);
->>   	return ret;
->>   }
->> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->>   		goto err;
->>   	}
->>   
->> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
->> +
->>   	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
->>   	if (r)
->>   		goto err;
->> -- 
->> 2.25.1
-> .
