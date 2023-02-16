@@ -2,211 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA1B699604
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5786699607
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjBPNmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S229653AbjBPNmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjBPNmX (ORCPT
+        with ESMTP id S229574AbjBPNmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:42:23 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65A55291;
-        Thu, 16 Feb 2023 05:42:01 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id s8so1989749ljp.2;
-        Thu, 16 Feb 2023 05:42:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ZYjJggXOXL46dSil1ea0yixaiqpsLjMvxrmPaE0WG0=;
-        b=oKTFXsstpnYaCaBevgN8Lj1oymM/nUslVw1Nw1lQuomTN4jqn4lowPuakc7+zPjmMp
-         gE1cYP5ZdDzNKmKmIq4yZ93xQg/3mbY1sIVgzbSOhhI5+EDTOPyycnChCyeTRIFfal+J
-         +I+a6/l1YkjPCxlR/TGIbLO3+qRJmnRi/SolFzeM8CDDklqRx1ymPGrQOyh3arXQg2lD
-         cs75LTnR2e+vBlt4lrAOgtcvjJikDiq/utimAKGXbuqzgZc+SCZWQZbNDtJ1Qg6/Blqd
-         GirM4+l25D4GHg+jYIjh6eFp2YKntDrC9IVFbEeV7feSbFAqMm/EDht7yOKLlXpP/l+D
-         tmLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8ZYjJggXOXL46dSil1ea0yixaiqpsLjMvxrmPaE0WG0=;
-        b=XiNZ8cppHM1aQfAOMB+sA0SthYapGgc3DRNqHYZYbbH1wS8wKMWxFfYoQ0ABzbnq41
-         /uXLNPqSxH3bS/PZZnabfKthTkQ+2oPPEYjRbDeRco4TJ6yUEruh/Tyc01G2AS/q6Dy7
-         md6LAP0ivlKvm/GQhmqi66EtsOehFn5JhYwcZIG+5u7SiINwA3DF8HX1XGB4sEdgaYlK
-         50LeU3lTSaXOQvJq2q27snl7sfqVIsG73xCy730v1wD1AJweVKF7V/scVG4N1zWZxUFx
-         gXMTA4WlQ3o5NrMLuOkn88OzE8AoJ/FNAOf/QOhZXmTgw2QucpzanNfKguysix84O3d/
-         0wAQ==
-X-Gm-Message-State: AO0yUKXckvJQ5n59ZGlYYPApGlI/Q2VHAT915GRfnTzbRe/J043/Wn/T
-        HX5lCw4N0poI8bEDjC6tjP4=
-X-Google-Smtp-Source: AK7set8Za8XwYW7+bDk0HqpPPwan/LM87m2COo8k54tL9H4vaOF2w1WtsouEynf8foe7MZ+9SE31Fw==
-X-Received: by 2002:a2e:550:0:b0:294:6d2d:c18c with SMTP id 77-20020a2e0550000000b002946d2dc18cmr231543ljf.36.1676554919729;
-        Thu, 16 Feb 2023 05:41:59 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id l14-20020a2e868e000000b0029328acc669sm205131lji.75.2023.02.16.05.41.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 05:41:59 -0800 (PST)
-Date:   Thu, 16 Feb 2023 16:41:56 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Sergey.Semin@baikalelectronics.ru,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] dmaengine: dw-edma: Rename dw_edma_core_ops
- structure to dw_edma_plat_ops
-Message-ID: <20230216134156.enjanyzwfhamve6q@mobilestation>
-References: <20230213132411.65524-1-cai.huoqing@linux.dev>
- <20230213132411.65524-2-cai.huoqing@linux.dev>
+        Thu, 16 Feb 2023 08:42:53 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852DE564B0;
+        Thu, 16 Feb 2023 05:42:39 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id D8E9B20008;
+        Thu, 16 Feb 2023 13:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676554958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Re6dExHLTuII9oT9hr8NYXFH5m9BbCVYzgBc6Vl4QRA=;
+        b=W5Ea2Homj/n68S95eCTkqLI8o9MB23A9hRPSJnOTfis4TCTt7l0AoPk85sCxtY3P05hTnc
+        9Gm647vimy6O1M+TWJEmBYCy7Cd8nwy+Wcd6tfKdC2kIkZd4X7nXrXH6Eg8OXTho7q0n5+
+        VLDzxJROsz7GU+VKcrH7wlyGJKGdD6PPufThxKxiXlcTCMYtYoIe45cV1Lc1/Va2PuQL59
+        i2TSIwhZcj5m3kGocyOFqzhx1Ck6XXdfkgfJiq7MGtdFAuxNWRA41X6rBb1foKMj0Kx3LD
+        XpL8/WSRVa8kK8Hi1dryMEPWS6+YNvO/072q5WyrVMZr72Unsen4CmOWwUp3gA==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v5 00/10] Add the PowerQUICC audio support using the QMC
+Date:   Thu, 16 Feb 2023 14:42:16 +0100
+Message-Id: <20230216134226.1692107-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213132411.65524-2-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 09:24:06PM +0800, Cai Huoqing wrote:
-> From: Cai huoqing <cai.huoqing@linux.dev>
-> 
-> Rename dw_edma_core_ops structure to dw_edma_plat_ops, the ops is platform
-> specific operations: the DMA device environment configs like IRQs,
-> address translation, etc.
-> 
+Hi,
 
-> The dw_edma_pcie_plat_ops name was supposed to refer to the platform which
+This series adds support for audio using the QMC controller available in
+some Freescale PowerQUICC SoCs.
 
-s/dw_edma_pcie_plat_ops/dw_edma_plat_ops
-* The main goal is to update the structure name.
+This series contains three parts in order to show the different blocks
+hierarchy and their usage in this support.
 
-> the DW eDMA engine is embedded to, like PCIe end-point (accessible via
-> the PCIe bus) or a PCIe root port (directly accessible by CPU).
-> Needless to say that for them the IRQ-vector and PCI-addresses are
-> differently determined. The suggested name has a connection with the
-> kernel platform device only as a private case of the eDMA/hDMA embedded
-> into the DW PCI Root ports, though basically it was supposed to refer to
-> any platform in which the DMA hardware lives.
-> 
-> Anyway the renaming was necessary to distinguish two types of
-> the implementation callbacks:
-> 1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
-> setups in one or another aspect of the DMA-engine initialization.
-> 2. DW eDMA/hDMA platform specific operations: the DMA device
-> environment configs like IRQs, address translation, etc.
-> 
+The first one is related to TSA (Time Slot Assigner).
+The TSA handles the data present at the pin level (TDM with up to 64
+time slots) and dispatchs them to one or more serial controller (SCC).
 
-> dw_edma_pcie_core_ops is supposed to be used for the case 1, and
-> dw_edma_pcie_plat_ops - for the case 2.
+The second is related to QMC (QUICC Multichannel Controller).
+The QMC handles the data at the serial controller (SCC) level and splits
+again the data to creates some virtual channels.
 
-ditto
+The last one is related to the audio component (QMC audio).
+It is the glue between the QMC controller and the ASoC component. It
+handles one or more QMC virtual channels and creates one DAI per QMC
+virtual channels handled.
 
-> 
-> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-> ---
->  drivers/dma/dw-edma/dw-edma-pcie.c           | 4 ++--
->  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
->  include/linux/dma/edma.h                     | 7 ++++---
->  3 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> index 2b40f2b44f5e..1c6043751dc9 100644
-> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> @@ -109,7 +109,7 @@ static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
->  	return region.start;
->  }
->  
-> -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
-> +static const struct dw_edma_plat_ops dw_edma_pcie_plat_ops = {
->  	.irq_vector = dw_edma_pcie_irq_vector,
->  	.pci_address = dw_edma_pcie_address,
->  };
-> @@ -225,7 +225,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  
->  	chip->mf = vsec_data.mf;
->  	chip->nr_irqs = nr_irqs;
-> -	chip->ops = &dw_edma_pcie_core_ops;
-> +	chip->ops = &dw_edma_pcie_plat_ops;
->  
->  	chip->ll_wr_cnt = vsec_data.wr_ch_cnt;
->  	chip->ll_rd_cnt = vsec_data.rd_ch_cnt;
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 53a16b8b6ac2..44e90b71d429 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -828,7 +828,7 @@ static int dw_pcie_edma_irq_vector(struct device *dev, unsigned int nr)
->  	return platform_get_irq_byname_optional(pdev, name);
->  }
->  
-> -static struct dw_edma_core_ops dw_pcie_edma_ops = {
-> +static struct dw_edma_plat_ops dw_pcie_edma_ops = {
->  	.irq_vector = dw_pcie_edma_irq_vector,
->  };
->  
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index d2638d9259dc..b2f3dd5e7e1a 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -40,7 +40,7 @@ struct dw_edma_region {
->   *			iATU windows. That will be done by the controller
->   *			automatically.
->   */
-> -struct dw_edma_core_ops {
-> +struct dw_edma_plat_ops {
->  	int (*irq_vector)(struct device *dev, unsigned int nr);
->  	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
->  };
-> @@ -48,7 +48,8 @@ struct dw_edma_core_ops {
->  enum dw_edma_map_format {
->  	EDMA_MF_EDMA_LEGACY = 0x0,
->  	EDMA_MF_EDMA_UNROLL = 0x1,
-> -	EDMA_MF_HDMA_COMPAT = 0x5
-> +	EDMA_MF_HDMA_COMPAT = 0x5,
+Compared to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230126083222.374243-1-herve.codina@bootlin.com/
+this v5 series mainly:
+  - fixes bindings,
+  - removes one left out_8() specific ppc call (missed in v3),
+  - changes 'depends-on' in case of COMPILE_TEST.
 
-> +	EDMA_MF_HDMA_NATIVE = 0x7
-                                 ^
-Please add a comma here ---------+
+Best regards,
+Herve Codina
 
-Thus if there is a new entry is added to the enum list in future the
-update will consist of a single-line change. It's a common practice in
-kernel to terminate the last entry in enums or struct initializers if
-there is a possibility to add new entries to the list afterwards.
+Changes v4 -> v5
+  - patch 1
+    Rename fsl,tsa.yaml to fsl,cpm1-tsa.yaml
+    Rename #serial-cells to #fsl,serial-cells and add a description
+    Fix typos
+    Remove examples present in description
+    Use a pattern property for fsl,[rt]x-ts-routes
 
->  };
->  
->  /**
-> @@ -80,7 +81,7 @@ enum dw_edma_chip_flags {
->  struct dw_edma_chip {
->  	struct device		*dev;
->  	int			nr_irqs;
+  - patch 2
+    Remove one left out_8() ppc specific function call
+    Remove the no more needed PPC dependency in case of COMPILE_TEST
 
-> -	const struct dw_edma_core_ops   *ops;
-> +	const struct dw_edma_plat_ops   *ops;
-                                     \ /
-                                      ^
-These are just three white-spaces ----+
-Please replace them with either a tab or with a single space.
+  - patch 4
+    Add 'Acked-by: Michael Ellerman <mpe@ellerman.id.au>'
 
--Serge(y)
+  - patch 5
+    Rename fsl,qmc.yaml to fsl,cpm1-scc-qmc.yaml
+    Rename #chan-cells to #fsl,chan-cells and add a description
 
->  	u32			flags;
->  
->  	void __iomem		*reg_base;
-> -- 
-> 2.34.1
-> 
+  - patch 6
+    Add the SOC_FSL dependency in case of COMPILE_TEST (issue raised by
+    the kernel test robot).
+    Fix a typo in commit log
+    Add 'Acked-by: Li Yang <leoyang.li@nxp.com>'
+
+Changes v3 -> v4
+  - patches 2, 6 and 9
+    Update code comment format.
+
+  - patch 1
+    Fix some description formats.
+    Add 'additionalProperties: false' in subnode.
+    Move fsl,mode to fsl,diagnostic-mode.
+    Change clocks and clock-names properties.
+    Add '#serial-cells' property related to the newly introduced
+    fsl,tsa-serial phandle.
+
+  - patch 2
+    Move fsl,mode to fsl,diagnostic-mode.
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and update the related API.
+    Add missing locks.
+
+  - patch 5
+    Fix some description format.
+    Replace the fsl,tsa phandle and the fsl,tsa-cell-id property by a
+    fsl,tsa-serial phandle.
+    Rename fsl,mode to fsl,operational-mode and update its description.
+
+  - patch 6
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and use the TSA updated API.
+    Rename fsl,mode to fsl,operational-mode.
+
+  - patch 8
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v2 -> v3
+  - All bindings
+    Rename fsl-tsa.h to fsl,tsa.h
+    Add missing vendor prefix
+    Various fixes (quotes, node names, upper/lower case)
+
+  - patches 1 and 2 (TSA binding specific)
+    Remove 'reserved' values in the routing tables
+    Remove fsl,grant-mode
+    Add a better description for 'fsl,common-rxtx-pins'
+    Fix clocks/clocks-name handling against fsl,common-rxtx-pins
+    Add information related to the delays unit
+    Removed FSL_CPM_TSA_NBCELL
+    Fix license in binding header file fsl,tsa.h
+
+  - patches 5 and 6 (QMC binding specific)
+    Remove fsl,cpm-command property
+    Add interrupt property constraint
+
+  - patches 8 and 9 (QMC audio binding specific)
+    Remove 'items' in compatible property definition
+    Add missing 'dai-common.yaml' reference
+    Fix the qmc_chan phandle definition
+
+  - patch 2 and 6
+    Use io{read,write}be{32,16}
+    Change commit subjects and logs
+
+  - patch 4
+    Add 'Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+Changes v1 -> v2:
+  - patch 2 and 6
+    Fix kernel test robot errors
+
+  - other patches
+    No changes
+
+Herve Codina (10):
+  dt-bindings: soc: fsl: cpm_qe: Add TSA controller
+  soc: fsl: cpm1: Add support for TSA
+  MAINTAINERS: add the Freescale TSA controller entry
+  powerpc/8xx: Use a larger CPM1 command check mask
+  dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+  soc: fsl: cpm1: Add support for QMC
+  MAINTAINERS: add the Freescale QMC controller entry
+  dt-bindings: sound: Add support for QMC audio
+  ASoC: fsl: Add support for QMC audio
+  MAINTAINERS: add the Freescale QMC audio entry
+
+ .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      |  172 ++
+ .../bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml |  234 +++
+ .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
+ MAINTAINERS                                   |   25 +
+ arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+ drivers/soc/fsl/qe/Kconfig                    |   23 +
+ drivers/soc/fsl/qe/Makefile                   |    2 +
+ drivers/soc/fsl/qe/qmc.c                      | 1533 +++++++++++++++++
+ drivers/soc/fsl/qe/tsa.c                      |  869 ++++++++++
+ drivers/soc/fsl/qe/tsa.h                      |   42 +
+ include/dt-bindings/soc/fsl,tsa.h             |   13 +
+ include/soc/fsl/qe/qmc.h                      |   71 +
+ sound/soc/fsl/Kconfig                         |    9 +
+ sound/soc/fsl/Makefile                        |    2 +
+ sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
+ 15 files changed, 3848 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ create mode 100644 drivers/soc/fsl/qe/qmc.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.h
+ create mode 100644 include/dt-bindings/soc/fsl,tsa.h
+ create mode 100644 include/soc/fsl/qe/qmc.h
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
+
+-- 
+2.39.1
+
