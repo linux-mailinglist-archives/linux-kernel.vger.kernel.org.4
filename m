@@ -2,53 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679AC699496
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3FD699498
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBPMlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S229561AbjBPMms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjBPMlg (ORCPT
+        with ESMTP id S229725AbjBPMmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:41:36 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D43986AF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:41:35 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C1F4A1EC0947;
-        Thu, 16 Feb 2023 13:41:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676551293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cwRPhPVa7VbVWxOqB+Oos/acf4MTp3gp6dUcgjiwjrA=;
-        b=SFrilYmyeGG0wWrmWf25Jgw2SDvEd8gzeP1UPSHZyFlv3FF99ToHgozNFDcU9l3SrDz00k
-        vdwPjOAszIOg9tM8kOMicIjxXT9IkBgbf0S6UG6LG3vwytXUqpleG9v44J0vfIJP+leiX4
-        7yhq3Ju+RMzzuIGSYSMji02XLzEnazE=
-From:   Borislav Petkov <bp@alien8.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Peter Gonda <pgonda@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        linux-coco@lists.linux.dev, x86@kernel.org
-Subject: [PATCH 05/11] virt/coco/sev-guest: Carve out the request issuing logic into a helper
-Date:   Thu, 16 Feb 2023 13:41:14 +0100
-Message-Id: <20230216124120.26578-6-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230216124120.26578-1-bp@alien8.de>
-References: <20230216124120.26578-1-bp@alien8.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        Thu, 16 Feb 2023 07:42:44 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B883311C1;
+        Thu, 16 Feb 2023 04:42:11 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8C9095C00BE;
+        Thu, 16 Feb 2023 07:42:08 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 07:42:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676551328; x=1676637728; bh=4av0BcgO57
+        q6PB48qfskBTT3lQalafxs0+Jkv9f+ETk=; b=fwdeBLH8dTHrGbPNhRjaH73LJ4
+        g4YLate0C/+/NPvvKigVGKh3hgOLc7x0K8dOTpvE4yhsoD9MnXdvPq3PwbNjY1dN
+        0Fx76WBWTnnH8D/hnn3ienM9XCsQfQ0vWKorriw0dvI8UCZ9X/nsQvht+pvdaO0m
+        9Uz+/yHQCUVIKYg8xCUR87WSl3bOlgi/FBwWwpEmb1HXEV9oU+Nux1chsF6/m7bG
+        QaLKoAFXxPxFHMiG73SV0xUi4b2edzxivQoB+J79vY6fSLZ77YGXRw0bR/29pOyI
+        GnuBLVdTFm+U1ExWgLUOX7s4+jZCdzNyYiVUUAR33fEcUnh61qmIbxjhgmrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676551328; x=1676637728; bh=4av0BcgO57q6PB48qfskBTT3lQal
+        afxs0+Jkv9f+ETk=; b=dEoQmo4s0anb3S3N8HPNR0ZZy/aYvoMKXJiWyaxfG4rX
+        GcF3gnjZrskxj9C1nFPjFXzF5ozgikRom25Co8ySi30qJMDV7ZS85l6IbscIcemL
+        1rR2PHTRRkJ/G5MgjlpPv5zEcvofztTP27zMPfzjCfsMOnJDPSn1oZVEz8obbhfS
+        RaQGXt1ds3uFrJP3HansNLJYIEpapHmSmyxt0ewbaRkeQqIY49j4ogeX/gZ5CFGF
+        mH7DaiocUH0ch7JWFch8/AXvOrN/6RwfNLtbHlI522U8taigMBdhgpIVnacDWeL1
+        IviOVslVI6VdnsDXky35glkRGZFULHo/T2lMlfwzyQ==
+X-ME-Sender: <xms:nyTuY_zFlIxyhMAhKUQoT2wFloAl6rRRnytiAYpYO14eZ-3TfPMYow>
+    <xme:nyTuY3TQftmcV8XyxkbV9st_qJnVfohlFUyF-gNmqepd4TxKVCjeOfXAQgPQwx65R
+    MtdmlMq1LBBbev2xh0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:oCTuY5VRl0RYfyjZhprRZvs1jPfVlprFM2S4EeC4A2HDIA9HyileIw>
+    <xmx:oCTuY5gG-dcLiyJLDfsl7Ex8tJV4tIP6oFuDVLB94mX_SyzjEdqVQA>
+    <xmx:oCTuYxAjWNG7VDdsTI5wRgqV4IajPABfCd8vVY0H922XnBIYTpK1-w>
+    <xmx:oCTuY1v9POI7Q7M-iwZBb-OyZNqVVEbqn90QpipewMEiJOgBIZ3-Qw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DD2F1B60086; Thu, 16 Feb 2023 07:42:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <f4f4c47a-7bd1-484a-8190-203357efa0ab@app.fastmail.com>
+In-Reply-To: <20230216123419.461016-5-bhe@redhat.com>
+References: <20230216123419.461016-1-bhe@redhat.com>
+ <20230216123419.461016-5-bhe@redhat.com>
+Date:   Thu, 16 Feb 2023 13:41:49 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "David Laight" <David.Laight@ACULAB.COM>,
+        "Stafford Horne" <shorne@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v4 04/16] mm: ioremap: allow ARCH to have its own ioremap method
+ definition
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,88 +92,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Thu, Feb 16, 2023, at 13:34, Baoquan He wrote:
+> Architectures can be converted to GENERIC_IOREMAP, to take standard
+> ioremap_xxx() and iounmap() way. But some ARCH-es could have specific
+> handling for ioremap_prot(), ioremap() and iounmap(), than standard
+> methods.
+>
+> In oder to convert these ARCH-es to take GENERIC_IOREMAP, allow these
+> architecutres to have their own ioremap_prot(), ioremap() and iounmap()
+> definitions.
+>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Cc: linux-arch@vger.kernel.org
 
-This makes the code flow a lot easier to follow.
-
-No functional changes.
-
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- drivers/virt/coco/sev-guest/sev-guest.c | 41 +++++++++++++++----------
- 1 file changed, 24 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index c0ecc5885573..e72289de2b28 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -318,27 +318,12 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
- 	return __enc_payload(snp_dev, req, payload, sz);
- }
- 
--static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
--				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
--				u32 resp_sz, __u64 *fw_err)
-+static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
- {
- 	unsigned long err, override_err = 0;
- 	unsigned int override_npages = 0;
--	u64 seqno;
- 	int rc;
- 
--	/* Get message sequence and verify that its a non-zero */
--	seqno = snp_get_msg_seqno(snp_dev);
--	if (!seqno)
--		return -EIO;
--
--	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
--
--	/* Encrypt the userspace provided payload */
--	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
--	if (rc)
--		return rc;
--
- retry_request:
- 	/*
- 	 * Call firmware to process the request. In this function the encrypted
-@@ -347,7 +332,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	 * prevent reuse of the IV.
- 	 */
- 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
--
- 	switch (rc) {
- 	case -ENOSPC:
- 		/*
-@@ -384,6 +368,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	if (override_npages)
- 		snp_dev->input.data_npages = override_npages;
- 
-+	return rc;
-+}
-+
-+static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
-+				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
-+				u32 resp_sz, __u64 *fw_err)
-+{
-+	u64 seqno;
-+	int rc;
-+
-+	/* Get message sequence and verify that its a non-zero */
-+	seqno = snp_get_msg_seqno(snp_dev);
-+	if (!seqno)
-+		return -EIO;
-+
-+	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
-+
-+	/* Encrypt the userspace provided payload */
-+	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
-+	if (rc)
-+		return rc;
-+
-+	rc = __handle_guest_request(snp_dev, exit_code, fw_err);
- 	if (rc) {
- 		dev_alert(snp_dev->dev,
- 			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
--- 
-2.35.1
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
