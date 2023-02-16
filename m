@@ -2,166 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04233699CB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F5F699CBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjBPSzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S230064AbjBPTAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBPSzx (ORCPT
+        with ESMTP id S230063AbjBPTAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:55:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEA24AFCF;
-        Thu, 16 Feb 2023 10:55:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B456B82501;
-        Thu, 16 Feb 2023 18:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FEDC433D2;
-        Thu, 16 Feb 2023 18:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676573749;
-        bh=cNJMx4XuP7npWr1rxGXhE1NzLjT7BexfPm4jGcNcpLs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rD5NU9ruj/FyRMxi7e0J56a0NqSAIGBvtVnPlXp1GDJJbVJVEQLrfJWOMQ7LiOb0/
-         C09/veySTi/naR/YI1FfJwZCEiYbCQiT0tt4X18/yGmX3xO1IQ2DpT6HCq5J9a6LOP
-         Y8/Xqn1p1kHgVf5T4253rXPP0eyrtDKyFN8iEWnRscdzluFfQ8cw+X7x/xm3ZTLJ8x
-         VSBU0vllFMmj6rqhYXLysYx4qsKvgTl9QT0K7ccbrzpPRpAop15Enc3JhI42ohVmf9
-         /mVqQK30Jvjt8D8xqnu9V3QtzYkpsVU76w2RA1S43/aFvE1GmvSs0W6uwTLjEq2Ahv
-         BAQyb8/9Ir2QA==
-Date:   Thu, 16 Feb 2023 10:55:48 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <joneslee@google.com>
-Subject: [PATCH] ext4: fix another off-by-one fsmap error on 1k block
- filesystems
-Message-ID: <Y+58NPTH7VNGgzdd@magnolia>
+        Thu, 16 Feb 2023 14:00:10 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9984C6FD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:59:56 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id l2so2859204wry.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:59:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=16NwX6E/MJZLYXtvH88vb9mQe/rSJJo8cnIM1GgMvfg=;
+        b=pAvCpLSIgO1x1G4Bn7wqyClAVkP3a/hIFiOwWBqd5mHzoyergvav7nACd8mIvPdtUa
+         iUwgEhqm+7T/U2cj9qDu5MZ/36YK+zqpWhv9n7Psh7yPUUEHaVaGYYpYVEAI+eEIa/R2
+         qTcLa1m51tD21o8nCEOBnlcP7mvNGkC33+oT2Vy1YGJVRoP9vGfvTli2/1VLtvhTYg5R
+         U5Jnge0+9TNyKMBtiwn29bc/uhlck+sl0kfwFt9pZQhYFpPo5l1Bd9N1IikIoFzMPeps
+         hNh3AeaHjEgHVIVoizu2yEhXDfnOm9OhElcgIJhT+P5UFW2H75nGW40HPPe54EFdGW1o
+         mfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=16NwX6E/MJZLYXtvH88vb9mQe/rSJJo8cnIM1GgMvfg=;
+        b=rxHaBSkFlPMzeGGn5nVebMY6vb0vOhgoA6gb1XeVFaLiuN78KBU2zshWW4Ld0DY/Qi
+         AtU2sZxzi3FMtOkmgfhSDtFnRicWYOS1W3pMCFk7j0LauMU5cOYwcGTk93wR5TtNwi60
+         8JMtr+lrbIAARZVUpi3ORYokYB90auDZlIdY2APCWRgHbp1tvSVC+iVq4D53kMHqzgJy
+         x1SqCiibqezHdWvNs5yVDjgE3SM6hHXGJtv7y3x9prQ/QYlWUfc5sT9uXI9h4zOGSL8J
+         /wRBLmAZ1gkBTeGT/WDkpZTtVB8QxX9A1HTq6W3NslYGKfHGnA+BpuyvWbhnGQyUU4No
+         kmRA==
+X-Gm-Message-State: AO0yUKUEwf3a88IAaHpFN7N55e7h3G+bdkbZHwOZ9dtJxwDyWg3h1xSG
+        P7dA5ncjPdL3Y/0gU4l7BLRoNIIZ2ribGi9qmjvZyA==
+X-Google-Smtp-Source: AK7set8Oneh95L7B1A7lxQ1bkQVa+zW1TlDHlb9LkoKPPo7JGd2outto4zwJErETE9iymz7a4hfE69hDXy9xCgyeaoI=
+X-Received: by 2002:adf:f6c6:0:b0:2c3:ea81:64bb with SMTP id
+ y6-20020adff6c6000000b002c3ea8164bbmr152263wrp.479.1676573994742; Thu, 16 Feb
+ 2023 10:59:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYvZqytp3gMnC4-no9EB=Jnzqmu44i8JQo6apiZat-xxPg@mail.gmail.com>
+ <CAG_fn=V3a-kLkjE252V4ncHWDR0YhMby7nd1P6RNQA4aPf+fRw@mail.gmail.com>
+In-Reply-To: <CAG_fn=V3a-kLkjE252V4ncHWDR0YhMby7nd1P6RNQA4aPf+fRw@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Feb 2023 19:58:55 +0100
+Message-ID: <CAG_fn=VuD+8GL_3-aSa9Y=zLqmroK11bqk48GBuPgTCpZMe-jw@mail.gmail.com>
+Subject: Re: next: x86_64: kunit test crashed and kernel panic
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Peter Collingbourne <pcc@google.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
+        regressions@lists.linux.dev,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+>
+> > <4>[   38.796558]  ? kmalloc_memmove_negative_size+0xeb/0x1f0
+> > <4>[   38.797376]  ? __pfx_kmalloc_memmove_negative_size+0x10/0x10
+>
+> Most certainly kmalloc_memmove_negative_size() is related.
+> Looks like we fail to intercept the call to memmove() in this test,
+> passing -2 to the actual __memmove().
 
-Apparently syzbot figured out that issuing this FSMAP call:
+This was introduced by 69d4c0d321869 ("entry, kasan, x86: Disallow
+overriding mem*() functions")
 
-struct fsmap_head cmd = {
-	.fmh_count	= ...;
-	.fmh_keys	= {
-		{ .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
-		{ .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
-	},
-...
-};
-ret = ioctl(fd, FS_IOC_GETFSMAP, &cmd);
+There's Marco's "kasan: Emit different calls for instrumentable
+memintrinsics", but it doesn't fix the problem for me (looking
+closer...), and GCC support is still not there, right?
 
-Produces this crash if the underlying filesystem is a 1k-block ext4
-filesystem:
-
-kernel BUG at fs/ext4/ext4.h:3331!
-invalid opcode: 0000 [#1] PREEMPT SMP
-CPU: 3 PID: 3227965 Comm: xfs_io Tainted: G        W  O       6.2.0-rc8-achx
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
-RIP: 0010:ext4_mb_load_buddy_gfp+0x47c/0x570 [ext4]
-RSP: 0018:ffffc90007c03998 EFLAGS: 00010246
-RAX: ffff888004978000 RBX: ffffc90007c03a20 RCX: ffff888041618000
-RDX: 0000000000000000 RSI: 00000000000005a4 RDI: ffffffffa0c99b11
-RBP: ffff888012330000 R08: ffffffffa0c2b7d0 R09: 0000000000000400
-R10: ffffc90007c03950 R11: 0000000000000000 R12: 0000000000000001
-R13: 00000000ffffffff R14: 0000000000000c40 R15: ffff88802678c398
-FS:  00007fdf2020c880(0000) GS:ffff88807e100000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd318a5fe8 CR3: 000000007f80f001 CR4: 00000000001706e0
-Call Trace:
- <TASK>
- ext4_mballoc_query_range+0x4b/0x210 [ext4 dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
- ext4_getfsmap_datadev+0x713/0x890 [ext4 dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
- ext4_getfsmap+0x2b7/0x330 [ext4 dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
- ext4_ioc_getfsmap+0x153/0x2b0 [ext4 dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
- __ext4_ioctl+0x2a7/0x17e0 [ext4 dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
- __x64_sys_ioctl+0x82/0xa0
- do_syscall_64+0x2b/0x80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fdf20558aff
-RSP: 002b:00007ffd318a9e30 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000000200c0 RCX: 00007fdf20558aff
-RDX: 00007fdf1feb2010 RSI: 00000000c0c0583b RDI: 0000000000000003
-RBP: 00005625c0634be0 R08: 00005625c0634c40 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf1feb2010
-R13: 00005625be70d994 R14: 0000000000000800 R15: 0000000000000000
-
-For GETFSMAP calls, the caller selects a physical block device by
-writing its block number into fsmap_head.fmh_keys[01].fmr_device.
-To query mappings for a subrange of the device, the starting byte of the
-range is written to fsmap_head.fmh_keys[0].fmr_physical and the last
-byte of the range goes in fsmap_head.fmh_keys[1].fmr_physical.
-
-IOWs, to query what mappings overlap with bytes 3-14 of /dev/sda, you'd
-set the inputs as follows:
-
-	fmh_keys[0] = { .fmr_device = major(8, 0), .fmr_physical = 3},
-	fmh_keys[1] = { .fmr_device = major(8, 0), .fmr_physical = 14},
-
-Which would return you whatever is mapped in the 12 bytes starting at
-physical offset 3.
-
-The crash is due to insufficient range validation of keys[1] in
-ext4_getfsmap_datadev.  On 1k-block filesystems, block 0 is not part of
-the filesystem, which means that s_first_data_block is nonzero.
-ext4_get_group_no_and_offset subtracts this quantity from the blocknr
-argument before cracking it into a group number and a block number
-within a group.  IOWs, block group 0 spans blocks 1-8192 (1-based)
-instead of 0-8191 (0-based) like what happens with larger blocksizes.
-
-The net result of this encoding is that blocknr < s_first_data_block is
-not a valid input to this function.  The end_fsb variable is set from
-the keys that are copied from userspace, which means that in the above
-example, its value is zero.  That leads to an underflow here:
-
-	blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
-
-The division then operates on -1:
-
-	offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
-		EXT4_SB(sb)->s_cluster_bits;
-
-Leaving an impossibly large group number (2^32-1) in blocknr.
-ext4_getfsmap_check_keys checked that keys[0].fmr_physical and
-keys[1].fmr_physical are in increasing order, but
-ext4_getfsmap_datadev adjusts keys[0].fmr_physical to be at least
-s_first_data_block.  This implies that we have to check it again after
-the adjustment, which is the piece that I forgot.
-
-Fixes: 4a4956249dac ("ext4: fix off-by-one fsmap error on 1k block filesystems")
-Link: https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
----
- fs/ext4/fsmap.c |    2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
-index 4493ef0c715e..cdf9bfe10137 100644
---- a/fs/ext4/fsmap.c
-+++ b/fs/ext4/fsmap.c
-@@ -486,6 +486,8 @@ static int ext4_getfsmap_datadev(struct super_block *sb,
- 		keys[0].fmr_physical = bofs;
- 	if (keys[1].fmr_physical >= eofs)
- 		keys[1].fmr_physical = eofs - 1;
-+	if (keys[1].fmr_physical < keys[0].fmr_physical)
-+		return 0;
- 	start_fsb = keys[0].fmr_physical;
- 	end_fsb = keys[1].fmr_physical;
- 
+Failing to intercept memcpy/memset/memmove should normally result in
+false negatives, but kmalloc_memmove_negative_size() makes a strong
+assumption that KASAN will catch and prevent memmove(dst, src, -2).
