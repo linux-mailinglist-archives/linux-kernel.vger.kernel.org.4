@@ -2,180 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2D9698E94
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28E1698E8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjBPIV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S229881AbjBPIU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBPIV1 (ORCPT
+        with ESMTP id S229605AbjBPIUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:21:27 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E13474D7;
-        Thu, 16 Feb 2023 00:21:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QyH4kqyJyP4LH+YmvU0rhzD0vlNFfnj9EesAe1dVGEO4cty5zWaLexSqTILJOTEh2ejHfMRvXQ47uD3imM1PIGRN2qwyUksdPHRBl9NQSz7XawbcIULtZjHhOxgFlhdU8k8FMfWvcq6u4QD7hdECil48gEtR7Kw3XQFwDoLOm+N0prGCBBZakcRlny8qfm7Lyb+hUJermmN6I2ge+l6E2RzmBZ+g3jj06Qt0U6Fixutxt23mTqkCbDu7XF2eoeD3a6SRhlAk+EXY3jPSwXVc2JPSzAlQh3u9O/oRKjnMjVeH9A7r9Cr6EdeodG7Cd8JqaImBwgYeAEw1fAKq0E/h1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BYHnwtjE4Ts7dhIt9xsEXMlV6Wkuhg50KYm9bT1XLzc=;
- b=bzA2muXW6Rm1s5x2NbW7g5OZbpSeYTQ1I6RmavEP7aBnoqD0P/VSQDYfnuHgEayUFJzXMQOHf0m0qPHWEG3owv8L2tIDrKezJCZCkIDEVgpJd8uEI4VMRuWmYSToPHPQMSoQwPEwh6BPgbqcb8J9oFTOHhlDx+kLjJ58c+KV39+2gFWE5EaV9SPle4YmJ11Bc7T3LkhjXhFyOH3SWhrsMOfwkVxm8109gocc0E+2J7l7OHKX/pUVtO8leJkPOtwoB+RApsVJ+prDBKTid6BDgg0oX0Gq9kgsIp19ZqxrolPGPUKj1QwV4MFENVZB5uoJLYIZSgdGZi1NRy7f4UCGQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BYHnwtjE4Ts7dhIt9xsEXMlV6Wkuhg50KYm9bT1XLzc=;
- b=hUq3ksOV1HCYv7SaCijG9tDwHBPSjNXo5ZmAWmawsCwgwGrkx1GegE5O+GQPs1m0XdDIAqzQmseuZ5sYP8cCXYuaZcUtAeEF6xsm0uw7gZOz5V9LFwF1VhLRra2t3apmiCVyHRUKEkdBGkZ5Pq2JAmnqPjavVn71kmO2ITE4oE0=
-Received: from CY5PR22CA0013.namprd22.prod.outlook.com (2603:10b6:930:16::23)
- by DS7PR12MB5933.namprd12.prod.outlook.com (2603:10b6:8:7c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
- 2023 08:21:02 +0000
-Received: from CY4PEPF0000C97F.namprd02.prod.outlook.com
- (2603:10b6:930:16:cafe::c1) by CY5PR22CA0013.outlook.office365.com
- (2603:10b6:930:16::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
- Transport; Thu, 16 Feb 2023 08:21:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C97F.mail.protection.outlook.com (10.167.241.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.9 via Frontend Transport; Thu, 16 Feb 2023 08:21:02 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Feb
- 2023 02:20:55 -0600
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        <Mario.Limonciello@amd.com>, <Perry.Yuan@amd.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
-        <santosh.shukla@amd.com>, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        <gautham.shenoy@amd.com>, Tor Vic <torvic9@mailbox.org>,
-        Russell Haley <yumpusamongus@gmail.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v7 6/6] Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for guided
-Date:   Thu, 16 Feb 2023 08:18:02 +0000
-Message-ID: <20230216081802.38007-7-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230216081802.38007-1-wyes.karny@amd.com>
-References: <20230216081802.38007-1-wyes.karny@amd.com>
+        Thu, 16 Feb 2023 03:20:25 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADCE27D55
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:20:19 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id a3so3303047ejb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g9hfU2Fl5/j4A3QnaJpUGjRq1/KXRcgp861nKkf/nNw=;
+        b=FZJzzH1JQE4zZJfEpbXHoNj8o9hV8HehrRzPhVUsyc3lBjhsoqWpAR2BAYj0Qccw3t
+         wpxXp14Qr5EE9xu9CWMbcAKLn1ckqsqYWNFvISMIXlwAnkbdxKSD0V4EaJMxPHdPYOP3
+         Q/RHiTlf+SrFj4Soo+wqFuVT9KJt3QYpwkIG8ZWYuBCOwY2UtoVEl7Fylwfl/KLi4Oq6
+         88g2MuMD7QDRoPkMP3tlSKuOUy/EnyEReWCDPfx42GyAnsnxyAJM8nErZA2sL/QQ4/U7
+         0uoWCY/K//o8ozFnCllcXwUd4UjSE0PTGZuahmsa9kjNiMl3Vb/fSfuYdWn1K80UKJ+X
+         Zr3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g9hfU2Fl5/j4A3QnaJpUGjRq1/KXRcgp861nKkf/nNw=;
+        b=Wl9FvCz3uXY9zAvUr+stg56r4tQlLdrOwv3vEAQCQJGYmdLmTW3QoKvG0UPT7NWHgr
+         1Ww6LWapRx0NRfjxZKi8HRBAuM4ZTswQBDbmW+6CglFryb8rCBVsCNLNzmkzbVXvo1SR
+         IadR7v7YBwSSTe3TSxY+/FZNLTrSg3nyx3nYsLBrT8pd4QaHrJXgBb5w7IET/Nd5ZR9y
+         QnIXvDOcnPaxuCDg60lrQQfMo9xLenO6qQolWVfBHmp8g33OcYz7+l11zGhApdZ9oWkz
+         zdAFxBC2QTITZbWEr7eYusoyTPl7K1PaR/I0Zd50NDdoV1fn6PTXVW0X+/LZh8OpQ0H3
+         SGEA==
+X-Gm-Message-State: AO0yUKWtrvN9ULo8kFkYARLfJIFFvr39aub2Q55Jd/5d+5GKjL3BMWwc
+        Z1wz7C+NodiXcutuo2lW25V9gQ==
+X-Google-Smtp-Source: AK7set9HeLdz9xi9BB7rkdqCHJi4WyceVUvbWuT5oEQ0FuJ2pmvnuibIKYF7wC8OyZ5RPuSE0jy6eA==
+X-Received: by 2002:a17:906:ca47:b0:8b1:2d40:a399 with SMTP id jx7-20020a170906ca4700b008b12d40a399mr5111853ejb.42.1676535617582;
+        Thu, 16 Feb 2023 00:20:17 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090685cf00b008b1435bd1cbsm488199ejy.105.2023.02.16.00.20.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 00:20:17 -0800 (PST)
+Message-ID: <5ab1d573-aaf2-6747-291d-0c64a01b9ffc@linaro.org>
+Date:   Thu, 16 Feb 2023 09:20:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97F:EE_|DS7PR12MB5933:EE_
-X-MS-Office365-Filtering-Correlation-Id: 059181cd-603c-459a-b7c0-08db0ff6bdb8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mBnl7vJRToMaV0U6FiFk4V9WUq8sv4R4Gpiml0hRKhEY5Ga8WxHIymUPkTKFurLENE3GGpfxVrYfDjKH1hJQCYeyvRyM97bi+R+llrc2UFw+/Xx9Hf7MzObNO7GtKWCTL3gAcpv/0DrfeRBw4IO8Nesl1gLWI2u6on80JkdtZ1snJ82vjfxm3zbaTJRr/G+Z9708zQSqoKM7pSrQ5NrVHMqEymDAa7NRyvx+fuAGGJy7DPHqegcY/TZChxfcpbzRXTHIXFYFn+Bc5iaAC/EzBshZRpt3c9NwZsSVuJ10/xdW3EBVlR4gM/7Cc6F8M8nLkcxuHl9uV5VHkAqavRA9K6gSYKeKbkAEPZi8ST1ncgHt9j1rdUu5FwxBugePEhF/XYPeeI1fzeXPD9wMjnTpFHm+VTp0Ysn2l1EpaVEaqK35UbHczzNUNnTSYYW5nL6BUSj/F1+3CpaPBxOyVyc5WWGCKIJEtdxeJwI1iZsYBReDGqKs6qJVSP8/3FLhT6lyrDKTOu05GOXJenzNP+PEC7Fna7lOlL5X86eKm0eyg+ujamCbu3W2MVffaYxVOs00FZHbW6mNLKqKJPLn0jtWWrqd4Pp8VvnQ/RNBRv69p+cEcmvPZkV/osS0f67PRdoRVRM0+VKwj6wpzOlkV25P7SGXlJSp9y5VgvdNiEKX4UnnW5fgcRr3ZJY6xq7wifPus1Ql820tp8Rn/BijYprDK0LqJ84ATbepGAkUmjvadhs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(81166007)(82740400003)(70586007)(8936002)(70206006)(5660300002)(8676002)(41300700001)(4326008)(40480700001)(2616005)(36756003)(16526019)(15650500001)(186003)(44832011)(26005)(336012)(110136005)(36860700001)(356005)(54906003)(6636002)(82310400005)(478600001)(7696005)(6666004)(40460700003)(86362001)(7416002)(1076003)(426003)(83380400001)(316002)(2906002)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 08:21:02.1334
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 059181cd-603c-459a-b7c0-08db0ff6bdb8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5933
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
+ dependent code
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
+ <20230213200519.889503-4-sergio.paracuellos@gmail.com>
+ <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+ <aa68fc8c-cfa1-902d-b95e-4fcbd3154f93@roeck-us.net>
+ <c23f78fe-8ea4-1a5c-c36e-fd981a2c381d@linaro.org>
+ <7c815038-e3d2-dd78-26af-8a6f498a6a1e@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7c815038-e3d2-dd78-26af-8a6f498a6a1e@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update amd_pstate status sysfs for guided mode.
+On 14/02/2023 16:07, Guenter Roeck wrote:
+> On 2/14/23 04:15, Krzysztof Kozlowski wrote:
+>> On 14/02/2023 13:10, Guenter Roeck wrote:
+>>> On 2/14/23 00:31, Krzysztof Kozlowski wrote:
+>>>> On 13/02/2023 21:05, Sergio Paracuellos wrote:
+>>>>> MT7621 SoC has a system controller node. Watchdog need to access to reset
+>>>>> status register. Ralink architecture and related driver are old and from
+>>>>> the beggining they are using some architecture dependent operations for
+>>>>> accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
+>>>>> header file. However this is not ideal from a driver perspective which can
+>>>>> just access to the system controller registers in an arch independent way
+>>>>> using regmap syscon APIs. Update Kconfig accordingly to select new added
+>>>>> dependencies and allow driver to be compile tested.
+>>>>>
+>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>>>> ---
+>>>>>    drivers/watchdog/Kconfig      |  4 +++-
+>>>>>    drivers/watchdog/mt7621_wdt.c | 18 +++++++++++++-----
+>>>>>    2 files changed, 16 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>>>>> index b64bc49c7..cf752ad64 100644
+>>>>> --- a/drivers/watchdog/Kconfig
+>>>>> +++ b/drivers/watchdog/Kconfig
+>>>>> @@ -1865,7 +1865,9 @@ config GXP_WATCHDOG
+>>>>>    config MT7621_WDT
+>>>>>    	tristate "Mediatek SoC watchdog"
+>>>>>    	select WATCHDOG_CORE
+>>>>> -	depends on SOC_MT7620 || SOC_MT7621
+>>>>> +	select REGMAP_MMIO
+>>>>> +	select MFD_SYSCON
+>>>>> +	depends on SOC_MT7620 || SOC_MT7621 || COMPILE_TEST
+>>>>>    	help
+>>>>>    	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
+>>>>>    
+>>>>> diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
+>>>>> index 40fb2c9ba..22e979bdd 100644
+>>>>> --- a/drivers/watchdog/mt7621_wdt.c
+>>>>> +++ b/drivers/watchdog/mt7621_wdt.c
+>>>>> @@ -15,8 +15,8 @@
+>>>>>    #include <linux/moduleparam.h>
+>>>>>    #include <linux/platform_device.h>
+>>>>>    #include <linux/mod_devicetable.h>
+>>>>> -
+>>>>> -#include <asm/mach-ralink/ralink_regs.h>
+>>>>> +#include <linux/mfd/syscon.h>
+>>>>> +#include <linux/regmap.h>
+>>>>>    
+>>>>>    #define SYSC_RSTSTAT			0x38
+>>>>>    #define WDT_RST_CAUSE			BIT(1)
+>>>>> @@ -34,6 +34,7 @@
+>>>>>    struct mt7621_wdt_data {
+>>>>>    	void __iomem *base;
+>>>>>    	struct reset_control *rst;
+>>>>> +	struct regmap *sysc;
+>>>>>    	struct watchdog_device wdt;
+>>>>>    };
+>>>>>    
+>>>>> @@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
+>>>>>    	return 0;
+>>>>>    }
+>>>>>    
+>>>>> -static int mt7621_wdt_bootcause(void)
+>>>>> +static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
+>>>>>    {
+>>>>> -	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
+>>>>> +	u32 val;
+>>>>> +
+>>>>> +	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
+>>>>> +	if (val & WDT_RST_CAUSE)
+>>>>>    		return WDIOF_CARDRESET;
+>>>>>    
+>>>>>    	return 0;
+>>>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+>>>>>    	if (!drvdata)
+>>>>>    		return -ENOMEM;
+>>>>>    
+>>>>> +	drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+>>>>> +	if (IS_ERR(drvdata->sysc))
+>>>>> +		return PTR_ERR(drvdata->sysc);
+>>>>
+>>>> This should be the backup/error path for original code using syscon
+>>>> property. Looking up by compatible is really not portable/re-usable.
+>>>>
+>>>
+>>> I really disagree here.
+>>>
+>>> $ git grep syscon_regmap_lookup_by_compatible | wc
+>>>        90     326    8940
+>>>
+>>> I have not yet reviewed this code, but I do not accept this argument against it.
+>>
+>> First, argument that bad pattern is being used is not an argument to
+>> keep it and repeat it.
+>>
+>> Second, we already had examples that:
+>> 1. Author used syscon_regmap_lookup_by_compatible() and assumed "we will
+>> never add new variant/soc".
+>> 2. Then turns out that new variants are obviously added and
+>> syscon_regmap_lookup_by_compatible() stops scaling.
+>>
+> 
+> Your arguments only applies if 1) there is ever going to be a new Mediatek/Ralink
+> chip with the same watchdog core, and 2) that chip also has the same watchdog
+> related registers in its syscon node.
+> 
+> Both is highly unlikely to happen. There already is a more generic watchdog
+> driver for later Mediatek chips (mtk_wdt.c). Even if Mediatek/Ralink ever
+> decides to revive this specific watchdog core for whatever reason,
+> the time to make the code more generic would have been at that time, at the same
+> time ensuring that the more generic code actually works and does have the
+> same syscon registers to obtain the boot status.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 31 ++++++++++++++++-----
- 1 file changed, 24 insertions(+), 7 deletions(-)
+Sure. In other cases we experienced, people also claimed that this will
+not happen. But it happened... I cannot judge whether this will happen
+here or not, thus I give generic guideline. If you (singular and plural)
+are sure this will not happen, then the code is fine.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 5304adf2fc2f..95d2d0a803fe 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -303,13 +303,18 @@ efficiency frequency management method on AMD processors.
- AMD Pstate Driver Operation Modes
- =================================
- 
--``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
--CPPC non-autonomous(passive) mode.
--active mode and passive mode can be chosen by different kernel parameters.
--When in Autonomous mode, CPPC ignores requests done in the Desired Performance
--Target register and takes into account only the values set to the Minimum requested
--performance, Maximum requested performance, and Energy Performance Preference
--registers. When Autonomous is disabled, it only considers the Desired Performance Target.
-+``amd_pstate`` CPPC has 3 operation modes: autonomous (active) mode,
-+non-autonomous (passive) mode and guided autonomous (guided) mode.
-+Active/passive/guided mode can be chosen by different kernel parameters.
-+
-+- In autonomous mode, platform ignores the desired performance level request
-+  and takes into account only the values set to the minimum, maximum and energy
-+  performance preference registers.
-+- In non-autonomous mode, platform gets desired performance level
-+  from OS directly through Desired Performance Register.
-+- In guided-autonomous mode, platform sets operating performance level
-+  autonomously according to the current workload and within the limits set by
-+  OS through min and max performance registers.
- 
- Active Mode
- ------------
-@@ -338,6 +343,15 @@ to the Performance Reduction Tolerance register. Above the nominal performance l
- processor must provide at least nominal performance requested and go higher if current
- operating conditions allow.
- 
-+Guided Mode
-+-----------
-+
-+``amd_pstate=guided``
-+
-+If ``amd_pstate=guided`` is passed to kernel command line option then this mode
-+is activated.  In this mode, driver requests minimum and maximum performance
-+level and the platform autonomously selects a performance level in this range
-+and appropriate to the current workload.
- 
- User Space Interface in ``sysfs``
- =================================
-@@ -358,6 +372,9 @@ control its functionality at the system level.  They are located in the
- 	"passive"
- 		The driver is functional and in the ``passive mode``
- 
-+	"guided"
-+		The driver is functional and in the ``guided mode``
-+
- 	"disable"
- 		The driver is unregistered and not functional now.
- 
--- 
-2.34.1
+> 
+>> Whether any new variant/compatible/platform can appear for this watchdog
+>> - I don't know.
+>>
+>> Third, with syscon_regmap_lookup_by_compatible() you have undocumented
+>> (not in the binding) dependency between blocks which:
+>> a. stops any reusability,
+>> b. affects device links and probe ordering (simply - there is no, device
+>> must defer probe),
+>> c. is simply undocumented.
+>>
+>> The usage of syscon_regmap_lookup_by_compatible() has clear drawbacks
+>> thus new code should rather use syscon phandles which solve all of above.
+>>
+> 
+> "new code". Exactly. This isn't new code.
+
+New code not as "new driver" but new code adding syscon usage. Syscon is
+new here so we have flexibility to make it differently, and IMHO, one
+way is better than other (for the reasons I stated).
+
+> 
+> In order to make progress, I'll accept v7, assuming its updated devicetree
+> description is going to be accepted, but my argument still stands.
+
+
+Best regards,
+Krzysztof
 
