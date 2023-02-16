@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C5F699494
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679AC699496
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjBPMll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S229956AbjBPMlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjBPMlf (ORCPT
+        with ESMTP id S229918AbjBPMlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:41:35 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E423421E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:41:34 -0800 (PST)
+        Thu, 16 Feb 2023 07:41:36 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D43986AF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:41:35 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0C54A1EC0943;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C1F4A1EC0947;
         Thu, 16 Feb 2023 13:41:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
         t=1676551293;
@@ -26,10 +26,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eIxV1gF+0xxMeTGWWux4B6qDSXGFkU3ZGwakcGga7O0=;
-        b=ThSmfUbfDmjSnEl6qh+7Pe4x1ZXuVa+Ys/Rys6hfl//8F9/zXkXVZMblxyw/yk3uAJiQTR
-        ggzfpva5+wZRxNQDDSc+4SvLKbLCkNlbR9v1wtBWNNPbx+68NedQGYls7q8Duh0INz0D7Y
-        NqHW3/ILrLdJs8BcAv4dqaIGnj9MAc4=
+        bh=cwRPhPVa7VbVWxOqB+Oos/acf4MTp3gp6dUcgjiwjrA=;
+        b=SFrilYmyeGG0wWrmWf25Jgw2SDvEd8gzeP1UPSHZyFlv3FF99ToHgozNFDcU9l3SrDz00k
+        vdwPjOAszIOg9tM8kOMicIjxXT9IkBgbf0S6UG6LG3vwytXUqpleG9v44J0vfIJP+leiX4
+        7yhq3Ju+RMzzuIGSYSMji02XLzEnazE=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
@@ -39,9 +39,9 @@ Cc:     Dionna Glaze <dionnaglaze@google.com>,
         Peter Gonda <pgonda@google.com>,
         Tom Lendacky <Thomas.Lendacky@amd.com>,
         linux-coco@lists.linux.dev, x86@kernel.org
-Subject: [PATCH 04/11] virt/coco/sev-guest: Remove the disable_vmpck label in handle_guest_request()
-Date:   Thu, 16 Feb 2023 13:41:13 +0100
-Message-Id: <20230216124120.26578-5-bp@alien8.de>
+Subject: [PATCH 05/11] virt/coco/sev-guest: Carve out the request issuing logic into a helper
+Date:   Thu, 16 Feb 2023 13:41:14 +0100
+Message-Id: <20230216124120.26578-6-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230216124120.26578-1-bp@alien8.de>
 References: <20230216124120.26578-1-bp@alien8.de>
@@ -58,49 +58,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-Call the function directly instead.
+This makes the code flow a lot easier to follow.
 
 No functional changes.
 
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 ---
- drivers/virt/coco/sev-guest/sev-guest.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/virt/coco/sev-guest/sev-guest.c | 41 +++++++++++++++----------
+ 1 file changed, 24 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 5b4cddf44a3a..c0ecc5885573 100644
+index c0ecc5885573..e72289de2b28 100644
 --- a/drivers/virt/coco/sev-guest/sev-guest.c
 +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -388,7 +388,8 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		dev_alert(snp_dev->dev,
- 			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
- 			  rc, *fw_err);
--		goto disable_vmpck;
-+		snp_disable_vmpck(snp_dev);
-+		return rc;
- 	}
- 
- 	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
-@@ -396,17 +397,14 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		dev_alert(snp_dev->dev,
- 			  "Detected unexpected decode failure from ASP. rc: %d\n",
- 			  rc);
--		goto disable_vmpck;
-+		snp_disable_vmpck(snp_dev);
-+		return rc;
- 	}
- 
- 	/* Increment to new message sequence after payload decryption was successful. */
- 	snp_inc_msg_seqno(snp_dev);
- 
- 	return 0;
--
--disable_vmpck:
--	snp_disable_vmpck(snp_dev);
--	return rc;
+@@ -318,27 +318,12 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
+ 	return __enc_payload(snp_dev, req, payload, sz);
  }
  
- static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+-static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
+-				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+-				u32 resp_sz, __u64 *fw_err)
++static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
+ {
+ 	unsigned long err, override_err = 0;
+ 	unsigned int override_npages = 0;
+-	u64 seqno;
+ 	int rc;
+ 
+-	/* Get message sequence and verify that its a non-zero */
+-	seqno = snp_get_msg_seqno(snp_dev);
+-	if (!seqno)
+-		return -EIO;
+-
+-	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
+-
+-	/* Encrypt the userspace provided payload */
+-	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
+-	if (rc)
+-		return rc;
+-
+ retry_request:
+ 	/*
+ 	 * Call firmware to process the request. In this function the encrypted
+@@ -347,7 +332,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	 * prevent reuse of the IV.
+ 	 */
+ 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+-
+ 	switch (rc) {
+ 	case -ENOSPC:
+ 		/*
+@@ -384,6 +368,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	if (override_npages)
+ 		snp_dev->input.data_npages = override_npages;
+ 
++	return rc;
++}
++
++static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
++				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
++				u32 resp_sz, __u64 *fw_err)
++{
++	u64 seqno;
++	int rc;
++
++	/* Get message sequence and verify that its a non-zero */
++	seqno = snp_get_msg_seqno(snp_dev);
++	if (!seqno)
++		return -EIO;
++
++	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
++
++	/* Encrypt the userspace provided payload */
++	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
++	if (rc)
++		return rc;
++
++	rc = __handle_guest_request(snp_dev, exit_code, fw_err);
+ 	if (rc) {
+ 		dev_alert(snp_dev->dev,
+ 			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
 -- 
 2.35.1
 
