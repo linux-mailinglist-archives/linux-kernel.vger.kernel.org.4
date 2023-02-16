@@ -2,146 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B54269912B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9CA699133
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBPK3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S230014AbjBPK3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBPK3X (ORCPT
+        with ESMTP id S229988AbjBPK3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:29:23 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2044.outbound.protection.outlook.com [40.107.7.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F65D366B0;
-        Thu, 16 Feb 2023 02:29:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dHRSlArW0G1jBy7FvTrF3rGRLRi7GeiOyLihD5u/0z9xykGepIUhlaAT3cBhqFsAhg3Yf4dcLX7/782Yjq59ukSkTMly0G5vpGgTnC6vD8FcpxZinPYjav8Fma6kltRJqXMCQysbwjx4je+bnXJGmIce/TDcNMHUK/S6R0o7zBNFy8Dl2r5r1t4IYKvXShaHhpd0lD8t+q3xnPzdJulWLGZm+iSRSfk5bf07pcUqnswd+I7KlQoKLsU+hQyldZkQ4Y1sIsCiBzzUF76pbSUhyHXPRRdxsiBKnoki6SJWgVNVONvmRqO16j+AX/MXVJ7U6m4GypwEpS0fUUOUHJOBYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b/WJ07a6e8A8aGMa/TAAYsnUiMQGLmkthSaTi5EN0/0=;
- b=mTbNQbrgWBhaqpsN+bgx5uI6D6oNOVtoRla1R6f3eyqhdjrW09AokOOBRbn1Nyktny5tAKqTisGo/vSY7hfH8lzNlPaLsRxOENv/dmv1YXYECWyyaFd54jIDL7eE7QEh188zDcYUiD3i+vF6lJ4LDmMUc//OWJxYNesfNNAZu0qnn458KLx4p5c3+OSr+rHybvfDO3O5HINVyjNuVfKEEK5yLW0dpR9Ohxp3yqBAZgROYUuu2d64ckoEWIvJxW+egKPbji0yeVOqbLOmid8seI12t9GVx/fT6eEhpRY/CDllaOvfhxtthNr7+YWd+W1RtZxpbmnQuoVjGUKBHXnf5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b/WJ07a6e8A8aGMa/TAAYsnUiMQGLmkthSaTi5EN0/0=;
- b=VTje4NYspStD4zcX5Be7LTQAEc3xIpBacrcJQIM2pVdj75zWZNjsLqpthaIOojt4igGt2suWLX5Op2xy3AXpO2xGqTDLuoIQYB7qSPVFc7LvoLTg1E3YQk6vz9CYkkW826m6FLeqqKO+oCO9ESSaXIRHcU7mwfT/cmhpjIxXw3g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM7PR04MB7095.eurprd04.prod.outlook.com (2603:10a6:20b:11c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Thu, 16 Feb
- 2023 10:29:18 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.6086.026; Thu, 16 Feb 2023
- 10:29:18 +0000
-Date:   Thu, 16 Feb 2023 12:29:14 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] net/sched: taprio: dynamic max_sdu larger
- than the max_mtu is unlimited
-Message-ID: <20230216102914.wat37qsih5xx3wk4@skbuf>
-References: <20230215224632.2532685-1-vladimir.oltean@nxp.com>
- <20230215224632.2532685-4-vladimir.oltean@nxp.com>
- <87cz6aot67.fsf@kurt>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87cz6aot67.fsf@kurt>
-X-ClientProxiedBy: BE1P281CA0145.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7c::15) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Thu, 16 Feb 2023 05:29:32 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509A3518ED
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:29:30 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id he33so3941615ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:29:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a9siJVZPOFvTKH6qbA3a38sGnlXPDe1LlTNA0o2LihA=;
+        b=AOvDsJeMQqZAscWrOwd++yaSB5pWNZLC1DGXNJLb/EmImWJhlUMZh/QkrYMOlg3y/I
+         oEXtb+SGVQnabDf8ii3/Tn7mSwJ3zPd0kR1SLHubef7tJuVLg0e3tcxfaY0JiQ4Ipy3H
+         uakQnIYX1URDOmbeigKL/+zcyZYnovZNVdeMUVr2oMBRDjuwEqSHOoAdUr1EkIEdTK0C
+         kJ7N3abgfqkV/8QjHokp1cHgPeOE2uRrEB5DcrmKkZ6kFO1zmpLU74ch+PrPiBXh8PlH
+         qqMHG7SNU0S+sHMEfAmRlKVYLVk0wZsqWSDDGxaRgfcAD4Hz/k1coir4sAMlAOX0atXN
+         Ry0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9siJVZPOFvTKH6qbA3a38sGnlXPDe1LlTNA0o2LihA=;
+        b=cW+cbx5gT4yN6xuL1XA3Hb25bZOAaPhddFRDGcB+57DDsPlu0EqXFOD3ukllsscfaJ
+         z8T2oFg0uiycTljimaFZhUu2qpHnHl3+bQVxFhdWVF9cGjy0MDFqeMZ2Xtf/Dz/IFBOC
+         e4gQkcaWxP55tH3U7B8+p9DMiVTfCbEeDQ7bJprWlvWm97w0BhFIFHoJ4/gs4MPixbAa
+         N9MnG1eT3s+5cj4YyvmrmB9UQMXOTGy/3UZ+6u82pG5Y9Iv6ZIGvv3kMbda+E9p5C9p8
+         LhSM/vO46jWKjrVKkk36xRCtFFDUL+qzYBr+QEuoFXfZp9rko03DeQWx2xF9VUPfFxgR
+         //Kw==
+X-Gm-Message-State: AO0yUKVcS9PGviHuJb7yrUAtGzp9wbNymuK2ly/qyvRSTHuX+h6E7xEr
+        6xBLKxf7HsD1QoE96ARAx+297g==
+X-Google-Smtp-Source: AK7set8Py/urVAnDtSVqOAA45n+CZn4wecDP3p27sIw8OB/YpmZIlVwbIdd7aUzHO+JP4miZ6M97dQ==
+X-Received: by 2002:a17:906:9f25:b0:8b1:2eef:154c with SMTP id fy37-20020a1709069f2500b008b12eef154cmr1592559ejc.0.1676543368620;
+        Thu, 16 Feb 2023 02:29:28 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id lf18-20020a170906ae5200b008af2b5cc1a2sm630463ejb.69.2023.02.16.02.29.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 02:29:28 -0800 (PST)
+Message-ID: <f883e857-1281-ceae-74ac-72a1f07d6413@linaro.org>
+Date:   Thu, 16 Feb 2023 11:29:24 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AM7PR04MB7095:EE_
-X-MS-Office365-Filtering-Correlation-Id: fea21f7f-c2fd-44f7-a3b4-08db1008a8ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EJ3szp8cB7GQaAFaFiQD+bD7kzidDG4b8xg5QhdFtVxVN1i9joIJhJuQasqgDopnd45p6fG8seWL8v2KrAUIai8N0mg3gM7PSwdJUEPoJVFwsXbLlKlgQec0C63Fd/FTiJcYb0p+w1WTk2UmRqGeSmaac4Iyaa5k50VaVGmHqYSvtUfkHXzLbl6KTMbRQCo1uh6exFOyah2luHSCmrrR/zoXkUYwgINuSpvgE73hghQXaja+mTwURzKvaSPj3+gMHQEdry44XxRdy1LOVU6SGPeRWFqGBzcbDU7sCQIbdnfyUiTiMVY/dvGOvodf3RO5RCJCByGDF0kyDScChoyByruUbT3tSBAH0k3dz/2h0wc5WXr2PM4JbhsiwLy734jiA76JnInTiDmr2dvzn9TOgbPl+F4UJt53Fr58VOycBTdIIafbA9KtYbsEJq607UYvsckCEo3EtALrkfx5GEI9kZTVgHuVFV1FdA9rPB+fiMKNjq8sFdw/8bwyNgPoNyps58Mdqgez6VPr90AqO5XF/Ddrhqz9VlUvGf+s6UwT5mOM2cIrtqiTDst6AysQEUsc8F42hTkv6N2SVHvocUaNghw9CsUYadcNxMPiOtSp/HoTnj8cZBFEGfTCqF9BokkOsZ6SvjPmTKIOYso4i4GfRA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(451199018)(44832011)(66556008)(2906002)(54906003)(7416002)(5660300002)(8936002)(66476007)(66946007)(316002)(8676002)(6916009)(41300700001)(4326008)(478600001)(6486002)(86362001)(6506007)(26005)(6512007)(186003)(9686003)(33716001)(1076003)(6666004)(38100700002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZnjQmDFtW6uVzUYzV4jo+oKKUiskpNXYiszkQnLWbtvTzKGJjnMPOhLLIdoT?=
- =?us-ascii?Q?hBWh29/X0bLtHHwD7XpguczW7nBWsZJ6gdLy29mbOrV7e5YNKri11/CWCoAN?=
- =?us-ascii?Q?7avYLYs0UByfrnjrYjr4y7ZjlA3x12Z9OD3cDUKXxghyM0UPfodKHlOyEqia?=
- =?us-ascii?Q?g6ZGZwnHix6J4Ecm+kI+NyWIQqMXx/EYJrXJ0MVd4PUlQebKBN9a8meRU6JK?=
- =?us-ascii?Q?3vF0kX/Ze9SheoWdgW549p0N7M5K1MBcbFebur+gGa222fQLE87xLbvCr6sx?=
- =?us-ascii?Q?VLpoeu1U+pLYwyPRRAAGn0UP+y/RvPOAuTPdw/6M+2XfIEKYPF13QojyVbpI?=
- =?us-ascii?Q?2U/PNkoEhy3Qp+A2iiBGCmM/Hgfy9BRADV38zbep6xsma3thnJ3BwApJuoCX?=
- =?us-ascii?Q?0e09Y+L0J+FrlL/0BRfkQeZ/MBGNh98jjHVHw9W8Mc5hq4qm1ku5q6YyPt9o?=
- =?us-ascii?Q?0LfxMhQKRUc9hoyBTYd8AFfJ11kr6sSdvWw50E9ksqbC0MyI26U3BEyLLB/y?=
- =?us-ascii?Q?Ol2/lDgpTrnKy6+njYi0++lIDf0Dt5YYfEFvIFheqlvQ5aiCqza8OCNsd8Gi?=
- =?us-ascii?Q?cP57ZvtlUTF1EHn2ziWM9htYVQQsgX8H8AIYtIQjZ+mMQQN0XtFUWME30PgD?=
- =?us-ascii?Q?o5mFmrt8hJJPq+W/820IIgW/1ddYEQPIK7BMm+6hM23IpZpIw7aBEDDfdKXA?=
- =?us-ascii?Q?tpcXmcIDu9jRCufEHkxukbyuW6UKqlXtqSvFE78VIoT6VOst50ot2/Hx++ox?=
- =?us-ascii?Q?HbZD57hDh/QHDpuN710VoZShLlS1s+TmziWhHzOqaCiVNZbxTB0+UEsH2FpA?=
- =?us-ascii?Q?fpDxkgaRCRmwEcRre2Y5syfF9ShiGBOked8zxr6n396yhf+c4agi3iYpPA45?=
- =?us-ascii?Q?4v5FP/frmvgL6CbI5xKV7Fvd/wNEIuYAOEu3GpIlp16FVzbEqvDtqci7e/wq?=
- =?us-ascii?Q?OaxNdp1L4+/Nx0s9avifdoIqzufyd2pfvXh/xuIrXcvUWp/O9+Jk/ZPtpPCH?=
- =?us-ascii?Q?pEr1d7GfG5mnHStflXPfFF/Dvc5f1F6zU3+knXJLvyM/c/IvcziuSBcJT2pj?=
- =?us-ascii?Q?pbo64B0GWI1U4nf1T+7qE9BWE27YESVzb1NJozHcBgQRst3yxoIDSPcXGuU5?=
- =?us-ascii?Q?tgkXMhG7f3qLuALC/msqSRgq72H4vGthnzxoQCtvGHMjpoenOUT2h4Y9Wih4?=
- =?us-ascii?Q?WeKuupWXkN2NUlabNOlQC2YyEbcDSlyHWpsLJGyCZ1WhwzHn8NoVDvJy9ahj?=
- =?us-ascii?Q?59GEgUFEzOOZk8bGF+sI5RBahmWv5sdS/Ll4bzS5L489mAwY4VgQu0bjrhmm?=
- =?us-ascii?Q?XTAeqeHyCW/AmIKG0Mw0d8a25J3TWjBKixdcoE1ore804ggFZ5LgUJ2Xi107?=
- =?us-ascii?Q?WSCTJmTITslvrd4rcaBCZIduzveyq5jdlmehQ/xyGZn//SoFYAL+bXKDInr9?=
- =?us-ascii?Q?fHfHRX1Jwc3ekYuIvEbdTcwP3DaWO66un2I5V4HvCqWi+WOIVSnVje7gNmLT?=
- =?us-ascii?Q?dMclSVgbAtvwU+7XS5vZMiiXUhRH2djK642u+EJ9n28ZYAaxKFGa8lTlOvec?=
- =?us-ascii?Q?ocBGn7DYCO45o1cw3WfSuvZMqx0mw+e1I5rQWcF2q0DYApkRdzTNAX0hrFNo?=
- =?us-ascii?Q?+A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fea21f7f-c2fd-44f7-a3b4-08db1008a8ce
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 10:29:18.2516
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KRKFJrOea/vmdVmsuUG/0TiEUgGHYI7Oe+sGU+r9q2RXO6qRPyMagMptijDiNQ6oTaYbuIkWNk5ibVMtrFAYsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7095
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
+ compatible
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, mani@kernel.org, p.zabel@pengutronix.de,
+        svarbanov@mm-sol.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-2-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214164135.17039-2-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:28:48AM +0100, Kurt Kanzenbach wrote:
-> On Thu Feb 16 2023, Vladimir Oltean wrote:
-> > It makes no sense to keep randomly large max_sdu values, especially if
-> > larger than the device's max_mtu. These are visible in "tc qdisc show".
-> > Such a max_sdu is practically unlimited and will cause no packets for
-> > that traffic class to be dropped on enqueue.
-> >
-> > Just set max_sdu_dynamic to U32_MAX, which in the logic below causes
-> > taprio to save a max_frm_len of U32_MAX and a max_sdu presented to user
-> > space of 0 (unlimited).
-> >
-> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+On 14/02/2023 17:41, Devi Priya wrote:
+> Document the compatible for IPQ9574
 > 
-> Doesn't this deserve a Fixes tag as well?
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
+>  1 file changed, 70 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index 872817d6d2bd..dabdf2684e2d 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -26,6 +26,7 @@ properties:
+>            - qcom,pcie-ipq8064-v2
+>            - qcom,pcie-ipq8074
+>            - qcom,pcie-ipq8074-gen3
+> +          - qcom,pcie-ipq9574
+>            - qcom,pcie-msm8996
+>            - qcom,pcie-qcs404
+>            - qcom,pcie-sa8540p
+> @@ -44,11 +45,11 @@ properties:
+>  
+>    reg:
+>      minItems: 4
+> -    maxItems: 5
+> +    maxItems: 6
+>  
+>    reg-names:
+>      minItems: 4
+> -    maxItems: 5
+> +    maxItems: 6
+>  
+>    interrupts:
+>      minItems: 1
+> @@ -105,6 +106,8 @@ properties:
+>      items:
+>        - const: pciephy
+>  
+> +  msi-parent: true
+> +
+>    power-domains:
+>      maxItems: 1
+>  
+> @@ -173,6 +176,27 @@ allOf:
+>              - const: parf # Qualcomm specific registers
+>              - const: config # PCIe configuration space
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pcie-ipq9574
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 5
+> +          maxItems: 6
+> +        reg-names:
+> +          minItems: 5
+> +          items:
+> +            - const: dbi # DesignWare PCIe registers
+> +            - const: elbi # External local bus interface registers
+> +            - const: atu # ATU address space
+> +            - const: parf # Qualcomm specific registers
+> +            - const: config # PCIe configuration space
+> +            - const: aggr_noc #PCIe aggr_noc
 
-No, I don't think so. It's just so that the user (and later, the offloading
-driver) doesn't see arbitrarily large values, just a simplifying 0. I guess
-it could potentially make a difference to the software taprio data path with
-TSO, if the max MTU is comparable with the segment sizes.
+Why last one is optional? I would assume device either has it or has not.
 
-Anyway, with or without the Fixes tag, the patch lands in the same place.
+
+Best regards,
+Krzysztof
+
