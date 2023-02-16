@@ -2,153 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538C869917D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90365699188
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjBPKg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S230184AbjBPKhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjBPKgX (ORCPT
+        with ESMTP id S230142AbjBPKgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:36:23 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on20631.outbound.protection.outlook.com [IPv6:2a01:111:f400:7d00::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8581C54548;
-        Thu, 16 Feb 2023 02:35:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PKNx7eVgXFTUcTqc3xbaQf8PWpXkeFDM68QA8JDuvyRS+RHB1GfyZBZ0VCTPfe4od1SthrZvfYdMeym8YMLWT4ETMAns8CdsVctlfmUyexXSR7quxYm2NDCjLBqN6b6Qnj63zZRJ7dFVYSSG+Zf24QRPfvIX6fzu+gy1r5A2xigpUVlTnTNNrRM9lrk1m1m4Zb5mQRobQy/onDAjATkz8QB2rtgafnZu/rXfLkqh7NfFImmUBYccUcnQ/e3keoRSGBXMa1HDz1vBmRVtJy5RoNAeR/Vaf8FTFl7Mg1K1w2qkO1HiH6QZmgFLnFcIQh1nYJdgNuN2MXrjrnQ+/wXFQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RL48ZGgYux8+zO5FlOizRddNkYha10BOrREUm2fTlc8=;
- b=IW855Oypr6r2i1/U7f0SjpOoHwkPYfxLPPg1Tq2hWTR/5eDzlkJEjnQVYf3QvMKH8Czr1ixOHoE0DHKBJuOLSoAeaApFSp6dzbrS8UiESmwo8xkQXqLn0t1DMyNHKcmMpX3qYwV5nqM5PrnV+OKi2XE1scVeprLRuxFUqfDITsMVElRAZoeB+jvjks7vs/yjkksUvqqCa3/KJ5CVOW1xrA6RLSFXnmiyV1jaRKEUIR8qFWBm1ZrS6N7Vb7OTb/s2hD2zWOgNi8Nza8HMUMBQipLIzuonHrtmL+nNDZJaXEHHRM1BpXPNochIyF7CRa8CNHQejL/4yeMD2qKxXtMgBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RL48ZGgYux8+zO5FlOizRddNkYha10BOrREUm2fTlc8=;
- b=qsYSFQrP3Sz0snTFq791b6AmAH/tL0tFwdpDQpx1qvoxPGDqpfhbitS8D+0V0akhvsfULRmmHjBjurI0NvKf9HFtiaT9o0gAV4+qXCKk+oW3SGmDBUpCwYE06uBYUSwkIo47qWy5qgMBQqGsZm6IYyYwdo0gh2kIFG7IulDAk1o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PA4PR04MB9591.eurprd04.prod.outlook.com (2603:10a6:102:270::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
- 2023 10:35:40 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.6086.026; Thu, 16 Feb 2023
- 10:35:40 +0000
-Date:   Thu, 16 Feb 2023 12:35:36 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] net/sched: taprio: dynamic max_sdu larger
- than the max_mtu is unlimited
-Message-ID: <20230216103536.abju64jbpucfyqir@skbuf>
-References: <20230215224632.2532685-1-vladimir.oltean@nxp.com>
- <20230215224632.2532685-4-vladimir.oltean@nxp.com>
- <87cz6aot67.fsf@kurt>
- <20230216102914.wat37qsih5xx3wk4@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216102914.wat37qsih5xx3wk4@skbuf>
-X-ClientProxiedBy: BE0P281CA0023.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:14::10) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Thu, 16 Feb 2023 05:36:48 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5617F55E44
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:36:26 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id o20so2216502lfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9JW0EJLLZnjtc5Rcfkvi40WpRhRyZAMonDW3VQmeurE=;
+        b=yzXttBf1kKa3GcyNUHCHisd7ta+C+4p+1Da1kfUuXpPyL7tA7mKigBSV2fYj/aWmYz
+         bwx4j/ZykC9mmoixS3ryXfMXOOMOZmL1X8XjFdN/CF1nVkcIfP61OsMGTB49JlSEOv78
+         ylQlGq9qwWnORdQOO/Uj9RRMEzWK13MWJgKeA0whYjG2FH8yl2qgZWGVJRcOTgFqCiYX
+         V9v0OnrkJNa6BiYuj1Vd7KF0e6Ly+dfBjeLHNHhNjK83OI8Pv4a9pivlc7zbjpJzAshc
+         yrAtjxWseSXdFpv0oNQwp9Ec2kqFRUwZkKQM9YqhtdBn2QyQfs/eqFfene4vI0uVsFqU
+         3X+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9JW0EJLLZnjtc5Rcfkvi40WpRhRyZAMonDW3VQmeurE=;
+        b=yIK4hEPeyBYMtU2TOtVFvKHMXtWWEh5C4l1ygeoyAucMzxXHwsXYsSnxPV2hyeyDM0
+         uj6wIP/3m+USBmLnbQcGVzBowVjFfUBGK9U/kx7fyI8cOe+3G62s9anbI58RGKj9NAGN
+         XAuH5cecxM4PEVIqj2azyfA2HFBY7ZbfBRiwlQ4MRYBvWv5QzsrIRzor8Jhf4nHnG6xC
+         X6dpJy9dfUampVjHoPvSfIcjgaQFG7CgTny/rlr6/5xzvX7njjs5WI70hb2SrvXrbkmD
+         i8tsK0D8rEADIO9/FpT7St4HjRAybleUOIza+o4upweVBU5jxqOx54mP+5SGot9NyaBD
+         7Lbg==
+X-Gm-Message-State: AO0yUKUa9CxxMdKG2eP/9U0/Cjc1ffSqslsCY3YeR4lhDgNb0+YTfHM+
+        8SW7cDsFT9c43Vc4ssksGYLixg==
+X-Google-Smtp-Source: AK7set9bDLo2KXqnfy06cq8SDtYjejF0UqV3SI7k8ZIMZ0EQ2wD7PrX42mQ+7fkiX2EWyaUv9/TRoQ==
+X-Received: by 2002:ac2:4a8b:0:b0:4cb:3b24:8390 with SMTP id l11-20020ac24a8b000000b004cb3b248390mr1504447lfp.59.1676543780089;
+        Thu, 16 Feb 2023 02:36:20 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05651211e300b004db50ad07ffsm246087lfs.247.2023.02.16.02.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 02:36:19 -0800 (PST)
+Message-ID: <0c7e3064-4ad0-949a-76a6-4da548892ce8@linaro.org>
+Date:   Thu, 16 Feb 2023 11:36:18 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB9591:EE_
-X-MS-Office365-Filtering-Correlation-Id: 430c287b-7158-4d17-d987-08db10098c9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PNbYAMUN6W61LTld0TmUqRe2S+VEJKd4jDHCJ6Es6yGyUZ1uwonsY+uSAaNHgMrgHNVB19wREyQDzVzrN771zRCa9ZCm5IRUms9W1QZJx8ddIi5F6tlOkz4CgvjMjDdoqLkkn8EviGUozzzGwp54g5mAft/FQ1/oOU/tzWT03cc7GEyIvDz2tqXOxYpfgVspn9o3GIokthYEKBOlGHolPXMJuTFmaTE+eG3zqdIGiVNGPgEzSbSvO9k7c0ISPXhgPkQgDFwXH3C1mc5Uv1eVqmR+D4C1HSoqkSRa4QEpXZ9IguuBLvaVUVo+FsID6mcEBrnMkSiiplNbqidmoCso/YH12PHa2Ekj2c3QLVD4j7hh9Ka319HNO9f9b4Jz1oj81SSIhUWzOvwaJhE+zbr1PtHelaHC1WSpn4gMm3gpi1zXOBGivL7dIPOU0rMw4ZACyEbiMidfSSZj65dPAQDQmcG4AuMyayxsO9W7Ym+4GdD2im4SqjirPmhkkZxL/bnTa7u+MAYeSWDdNPjISrjRJDd9Gks46bcNdjKM3JHoe21dB/y46gz4Nj8mPmI0xh6hB7J71GaGNhtIqa1Nnw2IcLJdaXnDhFEwSX3mJFBbIXhN37U5+drqj8lWt7oMCk1FDpiw4LU5IAYcAw9ys2ng+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199018)(83380400001)(6506007)(33716001)(86362001)(186003)(1076003)(6512007)(54906003)(66556008)(5660300002)(26005)(8936002)(9686003)(6486002)(4326008)(44832011)(8676002)(66476007)(6916009)(66946007)(41300700001)(7416002)(478600001)(6666004)(2906002)(38100700002)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zyVDrr0n733ZHaDhuNQkeG60ldW14qgs8pjQJWXAf2tpuoLPAulKBcEHv8Oc?=
- =?us-ascii?Q?JEJROOJckxi/JqAf3+Jwh5w61gfaI0F/QYF8mzC8dRrOEo2XF0xLGDIqKQAv?=
- =?us-ascii?Q?VVYPoPa/W0hev/VoQgDAgG6KCNmnazFT4gaQ7HHv7AKnDLLvw20vOiOynBAZ?=
- =?us-ascii?Q?AyRbk32C/V/rwFS9vuY4v1ymF0/mMHYEE94sTUoGBqjcIJUY6fw9xebI70oV?=
- =?us-ascii?Q?3vRB1imK5jnIpQhrUMhJkMqTs9kc0/p4+k9wx0JSBc+B4MFZornMhPMGR1pc?=
- =?us-ascii?Q?FpMxgK2Id9SGbUt+/4Bg3KngOxpN8N0fGXj23gJUXCmaPL/M/jKcMX76dusB?=
- =?us-ascii?Q?Z34j2O0w0hQv+VBlc+rGvpCiWQnlCKIgehxn0RUFcn51YOtkbeIKQAJeivVH?=
- =?us-ascii?Q?2PeWG+viw7IXPr52YTLF5Yft397JtHdRpuyIqjVjxVAKdbYQJ/6HOLHaMtOQ?=
- =?us-ascii?Q?PxUhqu5p+fV16sn4pEb9tv676MNRV/JLID82Vu4atyKxvQlq2W8nUg3YP7qt?=
- =?us-ascii?Q?CuToxWwRknSdrL3U1Cb9WMw4965pXptX9VoOQJD1MeDRmN3n4txpvuAoFJmq?=
- =?us-ascii?Q?rSg9gZP0LX2/ZB6EzhZwt9msIlsrcR3ad6mjGV1y+Y8ZvvQzvnYkKAY6oWVW?=
- =?us-ascii?Q?6STmflev34yuCF7AT0BAOFlm0HyNgfShl3rG7Eraezc4jqyb/8k/CkFsCuWe?=
- =?us-ascii?Q?l6Mg4iWIgHO5jctnSdas9V3zQwrwqOVuqQzkcvfVNxLvAV/QhPzLJxAKFlJw?=
- =?us-ascii?Q?xx3GpebwNri02+uzZaVFCMy+dy8we6gcZZ5JuUNQU3vbXS8fIZ/xwwbzgJ/o?=
- =?us-ascii?Q?vDzJ2CG88mwoV+Q+JB2IWG4PHYxuMlP2WO0zeQNfk/7OKW2zNw7rQoaKHrbV?=
- =?us-ascii?Q?H3rgTozJ9Bg3D68i1njH0lVYHS9zD9EFThz0k/5Cha6SxZUiSI4rXwrYxOy7?=
- =?us-ascii?Q?DVZzLX+b/h4+L9z18bi0QkKIseM9at/wRyJBuHXyJSn/1Q8amID4EzxwQA1i?=
- =?us-ascii?Q?QcFkMzDkvK3xBngHoBBb151cys5zLDpJVg7zuKWg4Pk7skghhXwjlFl1YnQE?=
- =?us-ascii?Q?hqYaGC2YshUGzK2p5bywna89VONQxFj84UKjQ434O2RW63jf06zesiBncYTP?=
- =?us-ascii?Q?O8CIW7gED5760ymRdLPmcFxr/cVtU1L3t0qaYjkLyJ5zGsHnGx68WcdFdjAA?=
- =?us-ascii?Q?QQAjKXpPYbBVGqcJ67nPx9IrD49trs1QguUhgvXKeEbu6R7taWfEN2c7ypIV?=
- =?us-ascii?Q?0bM5AuLPWjk14MKagE3Y8xlaOlS9UdF8jBk4Rk29Dv1nu9P4QRaDoCR7kXlK?=
- =?us-ascii?Q?Rm/EsWwnzA7UjM3+zcp/4aMYNfOA0IrQE256ZQcr91qFp5yQU0e3WN33CMwm?=
- =?us-ascii?Q?Zc8vAM+8++aN0wqwzMlmyahtOCGB/3IpWM2pCJkMJiNtRqe4N9As2mr3/9x0?=
- =?us-ascii?Q?If+s93UnYuJaMIMA91IL2OKONqj0p5sfTsT910yX3RqdCKPguYCpgz3WlUCc?=
- =?us-ascii?Q?jzta/bb2ZixVMfPGM16xmUkzcEtViGJW5nc0aT5atwBIIIOA5OKOeg+VjhPU?=
- =?us-ascii?Q?BITKGKRN1tyjhQA6BQyqPqqwa4VLOEQCQrQoOMJbYFMrkT6aNZqkFhffH+KA?=
- =?us-ascii?Q?QQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 430c287b-7158-4d17-d987-08db10098c9e
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 10:35:40.4433
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /IGPOOg8KCLYuUqzxj43nzYjrw8BhkISmick+G/1lXgHlmGgHmGGqfK6KtrJROPCgqkLFX12gWtS1YKfDVWdaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9591
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RESEND PATCH 04/12] arm64: dts: qcom: sm8550: Supply clock from
+ cpufreq node to CPUs
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org
+References: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
+ <20230215070400.5901-5-manivannan.sadhasivam@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230215070400.5901-5-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 12:29:14PM +0200, Vladimir Oltean wrote:
-> On Thu, Feb 16, 2023 at 10:28:48AM +0100, Kurt Kanzenbach wrote:
-> > On Thu Feb 16 2023, Vladimir Oltean wrote:
-> > > It makes no sense to keep randomly large max_sdu values, especially if
-> > > larger than the device's max_mtu. These are visible in "tc qdisc show".
-> > > Such a max_sdu is practically unlimited and will cause no packets for
-> > > that traffic class to be dropped on enqueue.
-> > >
-> > > Just set max_sdu_dynamic to U32_MAX, which in the logic below causes
-> > > taprio to save a max_frm_len of U32_MAX and a max_sdu presented to user
-> > > space of 0 (unlimited).
-> > >
-> > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > 
-> > Doesn't this deserve a Fixes tag as well?
-> 
-> No, I don't think so. It's just so that the user (and later, the offloading
-> driver) doesn't see arbitrarily large values, just a simplifying 0. I guess
-> it could potentially make a difference to the software taprio data path with
-> TSO, if the max MTU is comparable with the segment sizes.
-> 
-> Anyway, with or without the Fixes tag, the patch lands in the same place.
 
-I should probably clarify the term "later". Right now, taprio_enable_offload()
-still passes q->max_sdu[tc] to the offloading driver and not sched->max_sdu[tc],
-or in other words, it always passes what the user has requested, not the
-value postprocessed by taprio to take the current speed into consideration.
+
+On 15.02.2023 08:03, Manivannan Sadhasivam wrote:
+> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
+> to the CPU cores. But this relationship is not represented in DTS so far.
+> 
+> So let's make cpufreq node as the clock provider and CPU nodes as the
+> consumers. The clock index for each CPU node is based on the frequency
+> domain index.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 9910006c32aa..21b4f668889d 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -68,6 +68,7 @@ CPU0: cpu@0 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			power-domains = <&CPU_PD0>;
+> @@ -91,6 +92,7 @@ CPU1: cpu@100 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x100>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_100>;
+>  			power-domains = <&CPU_PD1>;
+> @@ -110,6 +112,7 @@ CPU2: cpu@200 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x200>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_200>;
+>  			power-domains = <&CPU_PD2>;
+> @@ -129,6 +132,7 @@ CPU3: cpu@300 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x300>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_300>;
+>  			power-domains = <&CPU_PD3>;
+> @@ -148,6 +152,7 @@ CPU4: cpu@400 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x400>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_400>;
+>  			power-domains = <&CPU_PD4>;
+> @@ -167,6 +172,7 @@ CPU5: cpu@500 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x500>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_500>;
+>  			power-domains = <&CPU_PD5>;
+> @@ -186,6 +192,7 @@ CPU6: cpu@600 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x600>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_600>;
+>  			power-domains = <&CPU_PD6>;
+> @@ -205,6 +212,7 @@ CPU7: cpu@700 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo";
+>  			reg = <0 0x700>;
+> +			clocks = <&cpufreq_hw 2>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_700>;
+>  			power-domains = <&CPU_PD7>;
+> @@ -3341,6 +3349,7 @@ cpufreq_hw: cpufreq@17d91000 {
+>  				     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+>  			interrupt-names = "dcvsh-irq-0", "dcvsh-irq-1", "dcvsh-irq-2";
+>  			#freq-domain-cells = <1>;
+> +			#clock-cells = <1>;
+>  		};
+>  
+>  		pmu@24091000 {
