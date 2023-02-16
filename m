@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE526999E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EAF6999E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjBPQXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S229890AbjBPQXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjBPQXG (ORCPT
+        with ESMTP id S229862AbjBPQXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:23:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7111F20D23
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:23:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC724B828E3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28273C433EF;
-        Thu, 16 Feb 2023 16:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676564582;
-        bh=vkIDRo1FtU4bdhqJCU8/sKrR9uWhJNwYm0CALFCj3VE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UiSLNcmLeLUN5WOChgq4bE6fCx33leWZzSPX9W9B4P5HZmsn2BsVOESz+DKNBEGFP
-         qlaYjTB/fPX3+YsS1G+6Hw/9t9AEpUvluE3OqUoWRGzcyjpcv+0Bmm4HoyVly+18Xo
-         M5Wtm6RDpt2pMISesyWuq9DxLkJwNKbdJOmlViCDOXVmY7FXxypiMldYdBPJyVT+4E
-         Z2KQugdYCbosc8rQqTzrbUrbGhqOdWih00WZNk1QAsBVryNi51b+oma45jCQXcakB3
-         c+48UkoFaqhkwPhPbuxH2QTedoIZMZw/ZDMoxcZxB53QCWPGedq5sn+fBj0mf+hdG9
-         0Twh6tYHtnf1g==
-Date:   Thu, 16 Feb 2023 16:22:59 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Kristina Martsenko <kristina.martsenko@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] arm64: mops: detect and enable FEAT_MOPS
-Message-ID: <Y+5YY7RtNYZKTiNn@sirena.org.uk>
-References: <20230216160012.272345-1-kristina.martsenko@arm.com>
- <20230216160012.272345-10-kristina.martsenko@arm.com>
+        Thu, 16 Feb 2023 11:23:18 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ACC2CC44;
+        Thu, 16 Feb 2023 08:23:09 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id r18so1950642wmq.5;
+        Thu, 16 Feb 2023 08:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZaZpaZyKc2DplIs/9QVPf6ipKOfM/9KljO6oqwZ2imI=;
+        b=L/sTlh0uy4R2QyLmqXlLVnobaBrICtszGn9xlRvWUhyaCVInMP43TSh72YceM4+orS
+         JoZ+i5mZrt9csqigXH7aY+cjKuoi70y57271wXRMqyDKNxX/Q5CcXEc3Tc+kEqipJjTQ
+         Dylv3jVXv4ca8ZwhgwMKNttRM6mejUI8UbAsYdPEJghHfOeicPG2fGP5zzP8q/DaH2Lx
+         Od1rQYnMlDJ2mRLIRj3TI3+SwxF7VjbaVXq3OkrxHaprAVfQucQyGrQC9warCa1vxDN9
+         plFMPUd44djjHaQjZVspdXTvP9kBXpTERV1cBbNQm+dWWUMqx07EtUtW5oRnu/EPGX02
+         qGnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZaZpaZyKc2DplIs/9QVPf6ipKOfM/9KljO6oqwZ2imI=;
+        b=oGZm2lJOKdxrVnBymoJEdHUdwvZmuIdf7q0x5MyIiwcJVZ1dF8RypOx+NLn5PCkoWL
+         3hp7u2FBnBqux2Eb10hdBxf7az3pVrFWwa44UVahNXBBsntDyYsifUtUzk5+3QT291LJ
+         bNrh0NMy2a2LSzWSugobvb2Bmde2PDbdrEAYJCVrIsV7EBpYeWUaRQXltS2t068hBxMq
+         Ga84O5afXb4oNnDUcbZK1Vq7rqtsxniwLbTZ1gffLi48AVcgdtyPGU2N9TjEgQSm4f6+
+         Wb2Y4r/d+NZlkPUVZTt3LXg0zWd66dU2pxIfKto6P08dsv6p6Kw5YhRVuex9JNS6oppO
+         eBCg==
+X-Gm-Message-State: AO0yUKXAzjOUdRK2zjqEkgYEUTUhFJLJigJK0nElzcqbipVCch43NMd5
+        Ax/0e7sXmilYf4JkmL6RAwE=
+X-Google-Smtp-Source: AK7set/nQpY/nblha38OjKGEVdXjoIjByakGjT1uvowXoCffJrvnPsjaUPdnAFHE7e7EU6X5q97S8A==
+X-Received: by 2002:a05:600c:13c3:b0:3e2:40e:9475 with SMTP id e3-20020a05600c13c300b003e2040e9475mr4838321wmg.16.1676564588129;
+        Thu, 16 Feb 2023 08:23:08 -0800 (PST)
+Received: from krava ([81.6.34.132])
+        by smtp.gmail.com with ESMTPSA id e1-20020a05600c4e4100b003e0015c8618sm5930010wmq.6.2023.02.16.08.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 08:23:07 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 16 Feb 2023 17:23:05 +0100
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
+Message-ID: <Y+5YaQt7Fme65a78@krava>
+References: <20230214050452.26390-1-namhyung@kernel.org>
+ <20230214050452.26390-5-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iebF125Yz+Y6P7Q8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230216160012.272345-10-kristina.martsenko@arm.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230214050452.26390-5-namhyung@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 09:04:49PM -0800, Namhyung Kim wrote:
 
---iebF125Yz+Y6P7Q8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+SNIP
 
-On Thu, Feb 16, 2023 at 04:00:11PM +0000, Kristina Martsenko wrote:
+> @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
+>  
+>  		for (int x = 0; x < xyarray__max_x(xy); x++) {
+>  			for (int y = 0; y < xyarray__max_y(xy); y++) {
+> -				__record__read_lost_samples(rec, evsel, lost, x, y);
+> +				struct perf_counts_values count;
+> +
+> +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
+> +					pr_err("read LOST count failed\n");
+> +					goto out;
+> +				}
+> +
+> +				if (count.lost) {
+> +					__record__save_lost_samples(rec, evsel, lost,
+> +								    x, y, count.lost, 0);
+> +				}
+>  			}
+>  		}
+> +
+> +		lost_count = perf_bpf_filter__lost_count(evsel);
+> +		if (lost_count)
+> +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
+> +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
 
-> The Arm v8.8/9.3 FEAT_MOPS feature provides new instructions that
-> perform a memory copy or set. Wire up the cpufeature code to detect the
-> presence of FEAT_MOPS and enable it.
->=20
-> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
-> ---
->  Documentation/arm64/cpu-feature-registers.rst |  2 ++
->  Documentation/arm64/elf_hwcaps.rst            |  3 +++
->  arch/arm64/include/asm/hwcap.h                |  1 +
->  arch/arm64/include/uapi/asm/hwcap.h           |  1 +
->  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
->  arch/arm64/kernel/cpuinfo.c                   |  1 +
->  arch/arm64/tools/cpucaps                      |  1 +
->  7 files changed, 28 insertions(+)
+hi,
+I can't see PERF_RECORD_MISC_LOST_SAMPLES_BPF in the tip/perf/core so can't compile,
+what do I miss?
 
-Please also add this to the hwcaps selftest.
-
---iebF125Yz+Y6P7Q8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWGIACgkQJNaLcl1U
-h9ChWAf/dwfCz3sdklcf13AUvRi8cnyD9UEYYPEfOSFVtz5/fo3doRUwwauL4hkN
-gBKhXLqsl+byDLExSGhh0gxtfYwRrJjTh4PlNC/3l5p5wzVixNV5pRJFz00pfksM
-fF3fdUD5J99sQbarL0x9RxHT+roEGNm+nvbRrWzMGq9Jnw6jRZ+OUq7nZAon+yib
-0d+hoHmsd/lD2LrNkbpId1GvaLV1h6OW0bH0xH4QxV/O8Imdcbmj1nkbfazk6GD/
-HnRdMXSj2aM5mlDEq3fjeRdbbnAT9xBOYhOUOEoklhuJJ3oDKjAVOWRWejq/bmcM
-ltgZXxXVW2W4MgHfxq/GxyDe39bnkQ==
-=kNhl
------END PGP SIGNATURE-----
-
---iebF125Yz+Y6P7Q8--
+thanks,
+jirka
