@@ -2,268 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21933699F8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC87699F96
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjBPV7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 16:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S230282AbjBPWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjBPV7J (ORCPT
+        with ESMTP id S230268AbjBPWIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 16:59:09 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57AF3609C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:59:07 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d2so3278533pjd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:59:07 -0800 (PST)
+        Thu, 16 Feb 2023 17:08:12 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEF738012
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:08:08 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o19-20020a05600c379300b003e21af96703so1634365wmr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:08:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2cQYnkXv7L7qhiGEdO0H9rKipVy8lLGlyCZOqqsAcqU=;
-        b=gmPBUl59wTFyJIl/E/EcCS3HT6nMuh+KY8yAitPi9tUu6iS10t+FlMb3mW+ybZOIio
-         sqdUmnyeWF+vRVa/23T9dqWvrDOv8EBLsjOcjtBEDXHx/ImTx5XluaHbQZbPiqM4sQfr
-         YLOgHIUMeHbnNFLEJNn3ZIhiGxYseq+rLjQviMKWdOdjnAJC9PSL3OMTcahyyWrAMETj
-         6FQmxMRPIX+wg+ohlEZTUyHpYYj6cVn0chYCycA7W/DK7ZfWAbZBkonMqPDTkrMP/czI
-         i/ejcHcmF9FGMe2xxmGsc5nsK3CHSDkNXmfc8j8foKzzNJhlEKPljAwkMLTpHTj9pPhY
-         k6NQ==
+        d=ffwll.ch; s=google; t=1676585287;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JPtKJo9uzlMbqFwgogBCaidam3IFBJ25DbmRZejTbw8=;
+        b=jB5QcbTg7E/RoJswPQ07QlMEw+zeu2daTGLLLuDm9I6Od5VmBkY17pMFFuKFoD0jTA
+         xoM0CpBh1hiyBe3YgAdQ7njuyr5aXbf179ad0kV05vSJX5UKxBa8Q6Jxxv6TrxqDWzUI
+         iZWl9MLy9BPnaPG2rmybso0dqRp8TRloXzCwc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2cQYnkXv7L7qhiGEdO0H9rKipVy8lLGlyCZOqqsAcqU=;
-        b=iVNDgOcSjQMjIu9MtGr95ydnBKwpG5ispK6pbL9ed4iAi2bx+lueE8/hRGIyhMMmkH
-         3/j28Ztcwa/vLK2uhoh7puzKV0wm+muAP+agMb9/Lofm5zEWujJu/Ok355irTNk8LBvI
-         pOrQaz6aq4JoMtUln4qjb9tQr7XX5OJ5+dyOdzekHvdg8TRQRJhz/JvJr/05mCJ9HI78
-         BFMkpz8stIwzKPyPbgUISa5WVnAtsWDOkChaaUz6lbu4X6pB4YoD40DOYXjNcaI5hzq3
-         eM9aUn0C/HxoyeG+ip0Vqu/Jw5GL+bWu0ZwpZ9W0EE7wqvY1wTfnlSTfsGZNzh9bcm0r
-         OPbA==
-X-Gm-Message-State: AO0yUKVyVuLTIljs1qSDXj2uSrrCN6iFeQd/5GLe5/bHgP0A5IIA1+mM
-        QTw31PfHG43DDjfheEDONh29pRSk7iII8EYdUn4=
-X-Google-Smtp-Source: AK7set8Gij72ajPVD9Xe2MJng02VISC3uIHSu7lyyH+Mf3nS1U+xR+oo072qbV8rbGgihEewLSGRE1AzpKA6eUfbyWk=
-X-Received: by 2002:a17:90b:1e47:b0:230:b973:a726 with SMTP id
- pi7-20020a17090b1e4700b00230b973a726mr943751pjb.23.1676584747311; Thu, 16 Feb
- 2023 13:59:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1676585287;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPtKJo9uzlMbqFwgogBCaidam3IFBJ25DbmRZejTbw8=;
+        b=mpTU1EKGLLA1fQudG9USBZneYr8D/GeazBnSLnwh6edwvmszIqcF1jgWXP9CkKbJUt
+         EA9SEkShkyqwSl7wKfCSulpEAPSa0CjkeuaINxSkq/ru6zsGnFehaCbdUAeJMUeAGBLC
+         02j1Q6XqHyzcfMb83WUQEJvN0l3+GlXUeZH9wAC/dgSSFiXjjFA1rD/QHie6Wr8uzhlL
+         GDyBZJkwSAEBtX2C1mPQOAnJo774jKrcbaX3ObYlKFHanO0FbXTK0KqaGx0V1m9RIp4g
+         WyVGUUZtdmTRVbgXWtnVO2OFln5BW5r3lyowxS9nlYKS1sn80bjjbxQcqRkK+khs/hO9
+         0+Yg==
+X-Gm-Message-State: AO0yUKWKLfGGqa3K8MCGEwaHdk0PLZW9HQnvBR1eu462rj1lonAhWzWX
+        WDgrJ5wJrwfdTlB8rozYnVy7aQ==
+X-Google-Smtp-Source: AK7set/3YOBop3Elq8fdTq/3aXEvc3XA6+caiK+/8lZSXrLrHk3r4WC6sfK021BpJY5Y1vaapO9s3Q==
+X-Received: by 2002:a05:600c:b87:b0:3e2:415:f09f with SMTP id fl7-20020a05600c0b8700b003e20415f09fmr6148446wmb.3.1676585287109;
+        Thu, 16 Feb 2023 14:08:07 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c63-20020a1c3542000000b003df7b40f99fsm6915429wma.11.2023.02.16.14.08.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 14:08:06 -0800 (PST)
+Date:   Thu, 16 Feb 2023 23:07:47 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        David Airlie <airlied@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: [PATCH v10 00/11] Add generic memory shrinker to VirtIO-GPU and
+ Panfrost DRM drivers
+Message-ID: <Y+6pM/HuBuz+eqtA@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        David Airlie <airlied@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <e5e9e8dd-a5b6-cfd2-44d6-4d5aa768e56c@collabora.com>
+ <20230127081339.yovxofpboc4gfdgo@sirius.home.kraxel.org>
+ <0081b2c3-56c9-3ed8-b419-5ce8a151999e@collabora.com>
+ <Y+4eYqdH1Xw2OYX5@phenom.ffwll.local>
+ <c6ae4f5f-7fe1-5497-a611-bee57672c289@collabora.com>
 MIME-Version: 1.0
-References: <20230214075710.2401855-1-stevensd@google.com> <20230214075710.2401855-2-stevensd@google.com>
- <Y+1hMsm4eQIUtag5@x1n> <CAD=HUj69L2e-Z4TB19qFt8h1cn0r1oGbWovJGMOjjyvfDcQ7NA@mail.gmail.com>
- <Y+5Akpz4CvGywt6R@x1n>
-In-Reply-To: <Y+5Akpz4CvGywt6R@x1n>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 16 Feb 2023 13:58:55 -0800
-Message-ID: <CAHbLzkqUF8Y759ZBVGXWdKwDS4f+ZJakUhoqf8Dqvx0Jam4c1g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6ae4f5f-7fe1-5497-a611-bee57672c289@collabora.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 6:41 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Feb 16, 2023 at 10:37:47AM +0900, David Stevens wrote:
-> > On Thu, Feb 16, 2023 at 7:48 AM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Tue, Feb 14, 2023 at 04:57:10PM +0900, David Stevens wrote:
-> > > > From: David Stevens <stevensd@chromium.org>
-> > > >
-> > > > Make sure that collapse_file respects any userfaultfds registered with
-> > > > MODE_MISSING. If userspace has any such userfaultfds registered, then
-> > > > for any page which it knows to be missing, it may expect a
-> > > > UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
-> > > > collapsing a shmem range would result in replacing an empty page with a
-> > > > THP, so that it doesn't break userfaultfd.
-> > > >
-> > > > Synchronization when checking for userfaultfds in collapse_file is
-> > > > tricky because the mmap locks can't be used to prevent races with the
-> > > > registration of new userfaultfds. Instead, we provide synchronization by
-> > > > ensuring that userspace cannot observe the fact that pages are missing
-> > > > before we check for userfaultfds. Although this allows registration of a
-> > > > userfaultfd to race with collapse_file, it ensures that userspace cannot
-> > > > observe any pages transition from missing to present after such a race.
-> > > > This makes such a race indistinguishable to the collapse occurring
-> > > > immediately before the userfaultfd registration.
-> > > >
-> > > > The first step to provide this synchronization is to stop filling gaps
-> > > > during the loop iterating over the target range, since the page cache
-> > > > lock can be dropped during that loop. The second step is to fill the
-> > > > gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
-> > > > time, to avoid races with accesses to the page cache that only take the
-> > > > RCU read lock.
-> > > >
-> > > > This fix is targeted at khugepaged, but the change also applies to
-> > > > MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
-> > > > return EBUSY if there are any missing pages (instead of succeeding on
-> > > > shmem and returning EINVAL on anonymous memory). There is also now a
-> > > > window during MADV_COLLAPSE where a fault on a missing page will cause
-> > > > the syscall to fail with EAGAIN.
-> > > >
-> > > > The fact that intermediate page cache state can no longer be observed
-> > > > before the rollback of a failed collapse is also technically a
-> > > > userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
-> > > > is exceedingly unlikely that anything relies on being able to observe
-> > > > that transient state.
-> > > >
-> > > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > > ---
-> > > >  mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
-> > > >  1 file changed, 58 insertions(+), 8 deletions(-)
-> > > >
-> > > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > > > index b648f1053d95..8c2e2349e883 100644
-> > > > --- a/mm/khugepaged.c
-> > > > +++ b/mm/khugepaged.c
-> > > > @@ -55,6 +55,7 @@ enum scan_result {
-> > > >       SCAN_CGROUP_CHARGE_FAIL,
-> > > >       SCAN_TRUNCATED,
-> > > >       SCAN_PAGE_HAS_PRIVATE,
-> > > > +     SCAN_PAGE_FILLED,
-> > >
-> > > PS: You may want to also touch SCAN_STATUS in huge_memory.h next time.
-> > >
-> > > >  };
-> > > >
-> > > >  #define CREATE_TRACE_POINTS
-> > > > @@ -1725,8 +1726,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
-> > > >   *  - allocate and lock a new huge page;
-> > > >   *  - scan page cache replacing old pages with the new one
-> > > >   *    + swap/gup in pages if necessary;
-> > > > - *    + fill in gaps;
-> > >
-> > > IIUC it's not a complete removal, but just moved downwards:
-> > >
-> > > >   *    + keep old pages around in case rollback is required;
-> > > > + *  - finalize updates to the page cache;
-> > >
-> > >          + fill in gaps with RETRY entries
-> > >          + detect race conditions with userfaultfds
-> > >
-> > > >   *  - if replacing succeeds:
-> > > >   *    + copy data over;
-> > > >   *    + free old pages;
-> > > > @@ -1805,13 +1806,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
-> > > >                                               result = SCAN_TRUNCATED;
-> > > >                                               goto xa_locked;
-> > > >                                       }
-> > > > -                                     xas_set(&xas, index);
-> > > > +                                     xas_set(&xas, index + 1);
-> > > >                               }
-> > > >                               if (!shmem_charge(mapping->host, 1)) {
-> > > >                                       result = SCAN_FAIL;
-> > > >                                       goto xa_locked;
-> > > >                               }
-> > > > -                             xas_store(&xas, hpage);
-> > > >                               nr_none++;
-> > > >                               continue;
-> > > >                       }
-> > > > @@ -1970,6 +1970,56 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
-> > > >               put_page(page);
-> > > >               goto xa_unlocked;
-> > > >       }
-> > > > +
-> > > > +     if (nr_none) {
-> > > > +             struct vm_area_struct *vma;
-> > > > +             int nr_none_check = 0;
-> > > > +
-> > > > +             xas_unlock_irq(&xas);
-> > > > +             i_mmap_lock_read(mapping);
-> > > > +             xas_lock_irq(&xas);
-> > > > +
-> > > > +             xas_set(&xas, start);
-> > > > +             for (index = start; index < end; index++) {
-> > > > +                     if (!xas_next(&xas)) {
-> > > > +                             xas_store(&xas, XA_RETRY_ENTRY);
-> > > > +                             nr_none_check++;
-> > > > +                     }
-> > > > +             }
-> > > > +
-> > > > +             if (nr_none != nr_none_check) {
-> > > > +                     result = SCAN_PAGE_FILLED;
-> > > > +                     goto immap_locked;
-> > > > +             }
-> > > > +
-> > > > +             /*
-> > > > +              * If userspace observed a missing page in a VMA with an armed
-> > > > +              * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for
-> > > > +              * that page, so we need to roll back to avoid suppressing such
-> > > > +              * an event. Any userfaultfds armed after this point will not be
-> > > > +              * able to observe any missing pages due to the previously
-> > > > +              * inserted retry entries.
-> > > > +              */
-> > > > +             vma_interval_tree_foreach(vma, &mapping->i_mmap, start, start) {
-> > > > +                     if (userfaultfd_missing(vma)) {
-> > > > +                             result = SCAN_EXCEED_NONE_PTE;
-> > > > +                             goto immap_locked;
-> > > > +                     }
-> > > > +             }
-> > > > +
-> > > > +immap_locked:
-> > > > +             i_mmap_unlock_read(mapping);
-> > > > +             if (result != SCAN_SUCCEED) {
-> > > > +                     xas_set(&xas, start);
-> > > > +                     for (index = start; index < end; index++) {
-> > > > +                             if (xas_next(&xas) == XA_RETRY_ENTRY)
-> > > > +                                     xas_store(&xas, NULL);
-> > > > +                     }
-> > > > +
-> > > > +                     goto xa_locked;
-> > > > +             }
-> > > > +     }
-> > > > +
-> > >
-> > > Until here, all look fine to me (ignoring patch 1 for now; assuming the
-> > > hpage is always uptodate).
-> > >
-> > > My question is after here we'll release page cache lock again before
-> > > try_to_unmap_flush(), but is it safe to keep RETRY entries after releasing
-> > > page cache lock?  It means other threads can be spinning.  I assume page
-> > > lock is always safe and sleepable, but not sure about the page cache lock
-> > > here.
-> >
-> > We insert the multi-index entry for hpage before releasing the page
-> > cache lock, which should replace all of the XA_RETRY_ENTRYs. So the
-> > page cache will be fully up to date when we release the lock, at least
-> > in terms of which pages it contains.
->
-> IIUC we released it before copying the pages:
+On Thu, Feb 16, 2023 at 11:43:38PM +0300, Dmitry Osipenko wrote:
+> On 2/16/23 15:15, Daniel Vetter wrote:
+> > On Mon, Jan 30, 2023 at 03:02:10PM +0300, Dmitry Osipenko wrote:
+> >> On 1/27/23 11:13, Gerd Hoffmann wrote:
+> >>> On Thu, Jan 26, 2023 at 01:55:09AM +0300, Dmitry Osipenko wrote:
+> >>>> Hello Thomas and Gerd,
+> >>>>
+> >>>> On 1/9/23 00:04, Dmitry Osipenko wrote:
+> >>>>> This series:
+> >>>>>
+> >>>>>   1. Makes minor fixes for drm_gem_lru and Panfrost
+> >>>>>   2. Brings refactoring for older code
+> >>>>>   3. Adds common drm-shmem memory shrinker
+> >>>>>   4. Enables shrinker for VirtIO-GPU driver
+> >>>>>   5. Switches Panfrost driver to the common shrinker
+> >>>>>
+> >>>>> Changelog:
+> >>>>>
+> >>>>> v10:- Rebased on a recent linux-next.
+> >>>>>
+> >>>>>     - Added Rob's ack to MSM "Prevent blocking within shrinker loop" patch.
+> >>>>>
+> >>>>>     - Added Steven's ack/r-b/t-b for the Panfrost patches.
+> >>>>>
+> >>>>>     - Fixed missing export of the new drm_gem_object_evict() function.
+> >>>>>
+> >>>>>     - Added fixes tags to the first two patches that are making minor fixes,
+> >>>>>       for consistency.
+> >>>>
+> >>>> Do you have comments on this version? Otherwise ack will be appreciated.
+> >>>> Thanks in advance!
+> >>>
+> >>> Don't feel like signing off on the locking changes, I'm not that
+> >>> familiar with the drm locking rules.  So someone else looking at them
+> >>> would be good.  Otherwise the series and specifically the virtio changes
+> >>> look good to me.
+> >>>
+> >>> Acked-by: Gerd Hoffmann <kraxel@redhat.com>
+> >>
+> >> Thomas was looking at the the DRM core changes. I expect he'll ack them.
+> >>
+> >> Thank you for reviewing the virtio patches!
+> > 
+> > I think best-case would be an ack from msm people that this looks good
+> > (even better a conversion for msm to start using this).
+> 
+> The MSM pretty much isn't touched by this patchset, apart from the minor
+> common shrinker fix. Moving whole MSM to use drm_shmem should be a big
+> change to the driver.
+> 
+> The Panfrost and VirtIO-GPU drivers already got the acks. I also tested
+> the Lima driver, which uses drm-shmem helpers. Other DRM drivers should
+> be unaffected by this series.
 
-The huge page is locked until the copy is done. It should be fine
-unless the users inspect the page content without acquiring page lock.
+Ah that sounds good, I somehow thought that etnaviv also uses the helpers,
+but there we only had problems with dma-buf. So that's all sorted.
 
->
-> xa_locked:
->         xas_unlock_irq(&xas);  <-------------------------------- here
-> xa_unlocked:
->
->         /*
->          * If collapse is successful, flush must be done now before copying.
->          * If collapse is unsuccessful, does flush actually need to be done?
->          * Do it anyway, to clear the state.
->          */
->         try_to_unmap_flush();
->
-> Before insertion of the multi-index:
->
->         /* Join all the small entries into a single multi-index entry. */
->         xas_set_order(&xas, start, HPAGE_PMD_ORDER);
->         xas_store(&xas, hpage);
->
-> Thanks,
->
-> --
-> Peter Xu
->
+> > Otherwise I think the locking looks reasonable, I think the tricky bits
+> > have been moving the dma-buf rules, but if you want I can try to take
+> > another in-depth look. But would need to be in 2 weeks since I'm going on
+> > vacations, pls ping me on irc if I'm needed.
+> 
+> The locking conversion is mostly a straightforward replacement of mutex
+> with resv lock for drm-shmem. The dma-buf rules were tricky, another
+> tricky part was fixing the lockdep warning for the bogus report of
+> fs_reclaim vs GEM shrinker at the GEM destroy time where I borrowed the
+> drm_gem_shmem_resv_assert_held() solution from the MSM driver where Rob
+> had a similar issue.
+
+Ah I missed that detail, if msm solved that the same way then I think very
+high chances it all ends up being compatible. Which is really what
+matters, not so much whether every last driver actually has converted
+over.
+
+> > Otherwise would be great if we can land this soon, so that it can soak the
+> > entire linux-next cycle to catch any driver specific issues.
+> 
+> That will be great. Was waiting for Thomas to ack the shmem patches
+> since he reviewed the previous versions, but if you or anyone else could
+> ack them, then will be good too. Thanks!
+
+I'm good for an ack, but maybe ping Thomas for a review on irc since I'm
+out next week. Also maybe Thomas has some series you can help land for
+cross review.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
