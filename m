@@ -2,119 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A423699B24
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 824B0699B28
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjBPRUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S230142AbjBPRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjBPRUw (ORCPT
+        with ESMTP id S230140AbjBPRVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:20:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E244E5DB;
-        Thu, 16 Feb 2023 09:20:51 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 76F5B1FDA8;
-        Thu, 16 Feb 2023 17:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1676568050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2AuHHxKUXvB76fx4Zt4gCT8/vnjZH/GFMD7PdFz+ZUQ=;
-        b=OiDEZX6ISx9uuPnswQ0fCFyH5lMRiaHPp1jQ6p2JoN2pqgPMpDSHQvC1JeYGB/DmhKlyK+
-        uE2dIvLWwM65BKZq1uO3hOrwQjQpCw1peDT7el7c6IhV8D6akSKtHXVRny6J575BW8q68S
-        UbDAKutUyw0Z3b7wNKJ+XcNiXOYeuHA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1676568050;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2AuHHxKUXvB76fx4Zt4gCT8/vnjZH/GFMD7PdFz+ZUQ=;
-        b=SK2rqAVJVUtxDav9ksURIqfun8RQOkgxOU0RL6qRDZlOQw+d+LGQvs35YYxm8xEk6hz4uy
-        kXqUjakox1RKioCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D11F13438;
-        Thu, 16 Feb 2023 17:20:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vGTtCvJl7mMwQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 16 Feb 2023 17:20:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EE137A06E1; Thu, 16 Feb 2023 18:20:47 +0100 (CET)
-Date:   Thu, 16 Feb 2023 18:20:47 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH v3 2/2] ext4: make sure fs error flag setted before clear
- journal error
-Message-ID: <20230216172047.lhc3pwv4rqiegbxs@quack3>
-References: <20230214022905.765088-1-yebin@huaweicloud.com>
- <20230214022905.765088-3-yebin@huaweicloud.com>
+        Thu, 16 Feb 2023 12:21:30 -0500
+X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Feb 2023 09:21:25 PST
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AA94E5D0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:21:25 -0800 (PST)
+Received: from pps.filterd (m0122330.ppops.net [127.0.0.1])
+        by mx0b-00190b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GEZ3Un025145;
+        Thu, 16 Feb 2023 17:21:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=po1mytrc3hGhewQZJTcWp8dBR/9WcyX5DTv6Q2tYDWo=;
+ b=WM3f14GuKAHQGpQjNmQZoBbiM2ql3S2f3qF4CYY+mpzMFgjkJIUO7+h0cbg+6uv94Scj
+ yO6rAcSsh8ktrYcQy/wggtZ20DOVb+Uo0TU41stNZg8PQWNLkSXfVNshYIqn+gxNuLU6
+ Gichax9EThpFI9k7UFXnKolhpkrBh9agd0egPL5p2SmvIhxaYGiiq16c+2blYaNUy6CO
+ OM7EdVoPCZYxOQ7hhgZhKHMMn9FdWjJ4nsCkt7fEDgWuCmPwduDH70iqX2b50Uv357oa
+ FDjTu7E1a+nKHOt+Y76iuYTzFYN1gvFTHfY6oAbrP1KfZCkATrzATfJ2HpYyTXnTMD4Y 1Q== 
+Received: from prod-mail-ppoint4 (a72-247-45-32.deploy.static.akamaitechnologies.com [72.247.45.32] (may be forged))
+        by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 3np3j7w1ry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 17:21:09 +0000
+Received: from pps.filterd (prod-mail-ppoint4.akamai.com [127.0.0.1])
+        by prod-mail-ppoint4.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 31GH2bZI003816;
+        Thu, 16 Feb 2023 12:21:08 -0500
+Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
+        by prod-mail-ppoint4.akamai.com (PPS) with ESMTP id 3np783pxg5-1;
+        Thu, 16 Feb 2023 12:21:08 -0500
+Received: from [172.19.46.2] (bos-lpa4700a.bos01.corp.akamai.com [172.19.46.2])
+        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id 40F1060278;
+        Thu, 16 Feb 2023 17:21:07 +0000 (GMT)
+Message-ID: <8ca08fba-1120-ca86-6129-0b33afb4a1da@akamai.com>
+Date:   Thu, 16 Feb 2023 12:21:06 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214022905.765088-3-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 20/20] jump_label: RFC - tolerate toggled state
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Jim Cromie <jim.cromie@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
+        ville.syrjala@linux.intel.com, daniel.vetter@ffwll.ch,
+        seanpaul@chromium.org, robdclark@gmail.com,
+        gregkh@linuxfoundation.org
+References: <20230113193016.749791-1-jim.cromie@gmail.com>
+ <20230113193016.749791-21-jim.cromie@gmail.com>
+ <Y8aNMxHpvZ8qecSc@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   Jason Baron <jbaron@akamai.com>
+In-Reply-To: <Y8aNMxHpvZ8qecSc@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-16_13,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302160150
+X-Proofpoint-ORIG-GUID: erwF1POyva0bWaz2e82KJguAff2y8qIj
+X-Proofpoint-GUID: erwF1POyva0bWaz2e82KJguAff2y8qIj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-16_13,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 suspectscore=0
+ spamscore=0 clxscore=1011 bulkscore=0 mlxscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302160150
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 14-02-23 10:29:05, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> Now, jounral error number maybe cleared even though ext4_commit_super()
-> failed. This may lead to error flag miss, then fsck will miss to check
-> file system deeply.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Looks good to me. Feel free to add:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/super.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+On 1/17/23 6:57 AM, Peter Zijlstra wrote:
+> On Fri, Jan 13, 2023 at 12:30:16PM -0700, Jim Cromie wrote:
+>> __jump_label_patch currently will "crash the box" if it finds a
+>> jump_entry not as expected.  ISTM this overly harsh; it doesn't
+>> distinguish between "alternate/opposite" state, and truly
+>> "insane/corrupted".
+>>
+>> The "opposite" (but well-formed) state is a milder mis-initialization
+>> problem, and some less severe mitigation seems practical.  ATM this
+>> just warns about it; a range/enum of outcomes: warn, crash, silence,
+>> ok, fixup-continue, etc, are possible on a case-by-case basis.
+>>
+>> Ive managed to create this mis-initialization condition with
+>> test_dynamic_debug.ko & _submod.ko.  These replicate DRM's regression
+>> on DRM_USE_DYNAMIC_DEBUG=y; drm.debug callsites in drivers/helpers
+>> (dependent modules) are not enabled along with those in drm.ko itself.
+>>
 > 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index b94754ba8556..619ef6d021d4 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -6163,11 +6163,13 @@ static int ext4_clear_journal_err(struct super_block *sb,
->  		errstr = ext4_decode_error(sb, j_errno, nbuf);
->  		ext4_warning(sb, "Filesystem error recorded "
->  			     "from previous mount: %s", errstr);
-> -		ext4_warning(sb, "Marking fs in need of filesystem check.");
->  
->  		EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
->  		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
-> -		ext4_commit_super(sb);
-> +		j_errno = ext4_commit_super(sb);
-> +		if (j_errno)
-> +			return j_errno;
-> +		ext4_warning(sb, "Marked fs in need of filesystem check.");
->  
->  		jbd2_journal_clear_err(journal);
->  		jbd2_journal_update_sb_errno(journal);
-> -- 
-> 2.31.1
+>> Ive hit this case a few times, but havent been able to isolate the
+>> when and why.
+>>
+>> warn-only is something of a punt, and I'm still left with remaining
+>> bugs which are likely related; I'm able to toggle the p-flag on
+>> callsites in the submod, but their enablement still doesn't yield
+>> logging activity.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Right; having been in this is state is bad since it will generate
+> inconsistent code-flow. Full on panic *might* not be warranted (as it
+> does for corrupted text) but it is still a fairly bad situation -- so
+> I'm not convinced we want to warn and carry on.
+> 
+> It would be really good to figure out why the site was skipped over and
+> got out of skew.
+> 
+> Given it's all module stuff, the 'obvious' case would be something like
+> a race between adding the new sites and flipping it, but I'm not seeing
+> how -- things are rather crudely serialized by jump_label_mutex.
+
+Indeed, looks like dynamic debug introduces a new path in this series to 
+that tries to toggle the jump label sites before they have been 
+initialized, which ends up with the jump label key enabled but only some 
+of the sites in the correct state. Then when the key is subsequently 
+disabled it finds some in the wrong state. I just posted a patch for 
+dynamic debug to use the module callback notifiers so it's ordered 
+properly against jump label.
+
+Note this isn't an issue in the current tree b/c there is no path to 
+toggle the sites currently before they are initialized, but Jim's series 
+here adds such a path.
+
+Thanks,
+
+-Jason
+
+
+> 
+> The only other option I can come up with is that somehow the update
+> condition in jump_label_add_module() is somehow wrong.
+> 
