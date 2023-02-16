@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25F0698DDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E973698DDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjBPHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S229709AbjBPHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:35:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBPHfF (ORCPT
+        with ESMTP id S229532AbjBPHfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:35:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEDB39CEF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:34:19 -0800 (PST)
+        Thu, 16 Feb 2023 02:35:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8953A08C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:34:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676532858;
+        s=mimecast20190719; t=1676532864;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yd5xmOXPZHKVAKlGrDMUmCIduEo2IuFrCSEEq5e9PpQ=;
-        b=e4eEfWT/UHkwe7pz+AJdBwzoaMmTDcH2k15SSqCryieLSI8k/kFbPFp1PysyH0HfvNvXAa
-        x3jn8gz/HF4aOU+6puCrxUylCWZwLeYxDWChR3thhdRhYRYyG2DM8E7w+ajxOCCMbmwLdL
-        hvZiQgc3wLlPeQTotT/21Ifte2oL/uI=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K8gjNmTSR559OlRy9/RjmiyCYfUP8oDtfxDvTzbUrgI=;
+        b=SkpWc/TiozrqE7zFRcbVQjqQAKRIcSGvfAePr72p+pDYmUbqjbrPuWj9eL1kIDO4kQ3pJz
+        L1EKVY8T2C8qVOKHVsJNlssXZv1G1o3UpCCr4gJG0AO3A0tZYjbLOUR3CI+9nbna8D/+wT
+        REdKO+F2fArUH6RiCqp8vvGcdi+/Dvo=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-158-501f2zoYNpCK8dHrgO7vFQ-1; Thu, 16 Feb 2023 02:34:12 -0500
-X-MC-Unique: 501f2zoYNpCK8dHrgO7vFQ-1
+ us-mta-607-qFMrDV1tMX6QrEoyM6s7bg-1; Thu, 16 Feb 2023 02:34:18 -0500
+X-MC-Unique: qFMrDV1tMX6QrEoyM6s7bg-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45CE01871CD7;
-        Thu, 16 Feb 2023 07:34:12 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B46D811E6E;
+        Thu, 16 Feb 2023 07:34:18 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-99.pek2.redhat.com [10.72.12.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DAFF71415108;
-        Thu, 16 Feb 2023 07:34:06 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F227C140EBF6;
+        Thu, 16 Feb 2023 07:34:12 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, schnelle@linux.ibm.com,
         linux-s390@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 1/2] pcmcia : make PCMCIA depend on HAS_IOMEM
-Date:   Thu, 16 Feb 2023 15:34:02 +0800
-Message-Id: <20230216073403.451455-1-bhe@redhat.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: [PATCH 2/2] dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
+Date:   Thu, 16 Feb 2023 15:34:03 +0800
+Message-Id: <20230216073403.451455-2-bhe@redhat.com>
+In-Reply-To: <20230216073403.451455-1-bhe@redhat.com>
+References: <20230216073403.451455-1-bhe@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -69,41 +72,40 @@ than PCI devices. Hence it could have a fully functional s390 kernel
 with CONFIG_PCI=n, then the relevant iomem mapping functions
 [including ioremap(), devm_ioremap(), etc.] are not available.
 
-Here let depend PCMCIA on HAS_IOMEM so that it won't be built to
+Here let QCOM_HIDMA depend on HAS_IOMEM so that it won't be built to
 cause below compiling error if PCI is unset.
 
--------------------------------------------------------
-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-cistpl.c:(.text+0x1202): undefined reference to `ioremap'
-ld: cistpl.c:(.text+0x13b0): undefined reference to `iounmap'
-ld: cistpl.c:(.text+0x14a6): undefined reference to `iounmap'
-ld: cistpl.c:(.text+0x1544): undefined reference to `ioremap'
-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-cistpl.c:(.text+0x3f14): undefined reference to `iounmap'
+--------------------------------------------------------
+ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+hidma.c:(.text+0x4b46): undefined reference to `devm_ioremap_resource'
+ld: hidma.c:(.text+0x4b9e): undefined reference to `devm_ioremap_resource'
+make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+make: *** [Makefile:1264: vmlinux] Error 2
 
 Link: https://lore.kernel.org/all/Y0TcaZD4nB1w+mAQ@MiWiFi-R3L-srv/T/#u
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
 ---
- drivers/pcmcia/Kconfig | 1 +
+ drivers/dma/qcom/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index 1525023e49b6..7c412bbe8bbe 100644
---- a/drivers/pcmcia/Kconfig
-+++ b/drivers/pcmcia/Kconfig
-@@ -20,6 +20,7 @@ if PCCARD
+diff --git a/drivers/dma/qcom/Kconfig b/drivers/dma/qcom/Kconfig
+index 3f926a653bd8..ace75d7b835a 100644
+--- a/drivers/dma/qcom/Kconfig
++++ b/drivers/dma/qcom/Kconfig
+@@ -45,6 +45,7 @@ config QCOM_HIDMA_MGMT
  
- config PCMCIA
- 	tristate "16-bit PCMCIA support"
+ config QCOM_HIDMA
+ 	tristate "Qualcomm Technologies HIDMA Channel support"
 +	depends on HAS_IOMEM
- 	select CRC32
- 	default y
+ 	select DMA_ENGINE
  	help
+ 	  Enable support for the Qualcomm Technologies HIDMA controller.
 -- 
 2.34.1
 
