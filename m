@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DD0698D2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A7C698D29
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjBPGhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S229650AbjBPGhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBPGhu (ORCPT
+        with ESMTP id S229478AbjBPGho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:37:50 -0500
+        Thu, 16 Feb 2023 01:37:44 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0899B42DCC;
-        Wed, 15 Feb 2023 22:37:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1ED410A0;
+        Wed, 15 Feb 2023 22:37:42 -0800 (PST)
 Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PHQF36YR6zJsWv;
-        Thu, 16 Feb 2023 14:35:51 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PHQD965srzRs0q;
+        Thu, 16 Feb 2023 14:35:05 +0800 (CST)
 Received: from localhost.localdomain (10.28.79.22) by
  kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Feb 2023 14:37:39 +0800
+ 15.1.2507.17; Thu, 16 Feb 2023 14:37:40 +0800
 From:   Huisong Li <lihuisong@huawei.com>
 To:     <robbiek@xsightlabs.com>, <sudeep.holla@arm.com>
 CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -31,9 +31,9 @@ CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
         <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>,
         <lihuisong@huawei.com>
-Subject: [PATCH 1/2] mailbox: pcc: Add processing platform notification for slave subspaces
-Date:   Thu, 16 Feb 2023 14:36:52 +0800
-Message-ID: <20230216063653.1995-2-lihuisong@huawei.com>
+Subject: [PATCH 2/2] mailbox: pcc: Support shared interrupt for multiple subspaces
+Date:   Thu, 16 Feb 2023 14:36:53 +0800
+Message-ID: <20230216063653.1995-3-lihuisong@huawei.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20230216063653.1995-1-lihuisong@huawei.com>
 References: <20221016034043.52227-1-lihuisong@huawei.com>
@@ -53,138 +53,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, PCC driver doesn't support the processing of platform
-notification for slave PCC subspaces because of the incomplete
-communication flow.
+If the platform acknowledge interrupt is level triggered, then it can
+be shared by multiple subspaces provided each one has a unique platform
+interrupt ack preserve and ack set masks.
 
-According to ACPI specification, if platform sends a notification
-to OSPM, it must clear the command complete bit and trigger platform
-interrupt. OSPM needs to check whether the command complete bit is
-cleared, clear platform interrupt, process command, and then set the
-command complete and ring doorbell to Platform. But the current judgment
-on the command complete is not applicable to type4 in pcc_mbox_irq().
+If it can be shared, then we can request the irq with IRQF_SHARED and
+IRQF_ONESHOT flags. The first one indicating it can be shared and the
+latter one to keep the interrupt disabled until the hardirq handler
+finished.
 
-This patch determines whether the PCC driver needs to respond to the
-interrupt of the channel with the master or slave subspace based on
-the command complete register. And PCC driver needs to add the phase
-of setting the command complete and ring doorbell in pcc_mbox_irq()
-to complete type4 communication flow after processing command from
-Platform.
+Further, since there is no way to detect if the interrupt is for a given
+channel as the interrupt ack preserve and ack set masks are for clearing
+the interrupt and not for reading the status(in case Irq Ack register
+may be write-only on some platforms), we need a way to identify if the
+given channel is in use and expecting the interrupt.
+
+PCC type0, type1 and type5 do not support shared level triggered interrupt.
+The methods of determining whether a given channel for remaining types
+should respond to an interrupt are as follows:
+ - type2: Whether the interrupt belongs to a given channel is only
+          determined by the status field in Generic Communications Channel
+          Shared Memory Region, which is done in rx_callback of PCC client.
+ - type3: This channel checks chan_in_use flag first and then checks the
+          command complete bit(value '1' indicates that the command has
+          been completed).
+ - type4: Platform ensure that the default value of the command complete
+          bit corresponding to the type4 channel is '1'. This command
+          complete bit is '0' when receive a platform notification.
 
 Signed-off-by: Huisong Li <lihuisong@huawei.com>
 ---
- drivers/mailbox/pcc.c | 57 ++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 51 insertions(+), 6 deletions(-)
+ drivers/mailbox/pcc.c | 45 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 42 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index 105d46c9801b..ecd54f049de3 100644
+index ecd54f049de3..04c2d73a0473 100644
 --- a/drivers/mailbox/pcc.c
 +++ b/drivers/mailbox/pcc.c
-@@ -91,6 +91,7 @@ struct pcc_chan_reg {
-  * @cmd_update: PCC register bundle for the command complete update register
+@@ -92,6 +92,10 @@ struct pcc_chan_reg {
   * @error: PCC register bundle for the error status register
   * @plat_irq: platform interrupt
-+ * @type: PCC subspace type
+  * @type: PCC subspace type
++ * @plat_irq_flags: platform interrupt flags
++ * @chan_in_use: flag indicating whether the channel is in use or not when use
++ *		platform interrupt, and only use it for communication from OSPM
++ *		to Platform, like type 3.
   */
  struct pcc_chan_info {
  	struct pcc_mbox_chan chan;
-@@ -100,12 +101,15 @@ struct pcc_chan_info {
- 	struct pcc_chan_reg cmd_update;
+@@ -102,6 +106,8 @@ struct pcc_chan_info {
  	struct pcc_chan_reg error;
  	int plat_irq;
-+	u8 type;
+ 	u8 type;
++	unsigned int plat_irq_flags;
++	bool chan_in_use;
  };
  
  #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
- static struct pcc_chan_info *chan_info;
- static int pcc_chan_count;
- 
-+static int pcc_send_data(struct mbox_chan *chan, void *data);
-+
- /*
-  * PCC can be used with perf critical drivers such as CPPC
-  * So it makes sense to locally cache the virtual address and
-@@ -221,6 +225,43 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
+@@ -225,6 +231,12 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
  	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
  }
  
-+static bool pcc_chan_command_complete(struct pcc_chan_info *pchan,
-+				      u64 cmd_complete_reg_val)
++static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
 +{
-+	bool complete;
-+
-+	if (!pchan->cmd_complete.gas)
-+		return true;
-+
-+	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
-+
-+	switch (pchan->type) {
-+	case ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE:
-+		/*
-+		 * If this channel with the PCC master subspace is in use,
-+		 * the command complete bit is 1 indicates that the executing
-+		 * command has been completed by Platform and OSPM needs to
-+		 * process the response.
-+		 */
-+		complete = cmd_complete_reg_val != 0;
-+		break;
-+	case ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE:
-+		/*
-+		 * If this channel with the PCC slave subspace is in use,
-+		 * the command complete bit is 0 indicates that Platform is
-+		 * sending a notification and OSPM needs to response the
-+		 * interrupt to process this command.
-+		 */
-+		complete = cmd_complete_reg_val == 0;
-+		break;
-+	default:
-+		complete = true;
-+		break;
-+	}
-+
-+	return complete;
++	return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
++		ACPI_LEVEL_SENSITIVE;
 +}
 +
- /**
-  * pcc_mbox_irq - PCC mailbox interrupt handler
-  * @irq:	interrupt number
-@@ -240,12 +281,8 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
- 	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
- 	if (ret)
- 		return IRQ_NONE;
--
--	if (val) { /* Ensure GAS exists and value is non-zero */
--		val &= pchan->cmd_complete.status_mask;
--		if (!val)
--			return IRQ_NONE;
--	}
-+	if (!pcc_chan_command_complete(pchan, val))
+ static bool pcc_chan_command_complete(struct pcc_chan_info *pchan,
+ 				      u64 cmd_complete_reg_val)
+ {
+@@ -277,6 +289,9 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+ 	int ret;
+ 
+ 	pchan = chan->con_priv;
++	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
++	    !pchan->chan_in_use)
 +		return IRQ_NONE;
  
- 	ret = pcc_chan_reg_read(&pchan->error, &val);
+ 	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
  	if (ret)
-@@ -262,6 +299,13 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+@@ -302,9 +317,13 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+ 	/*
+ 	 * The PCC slave subspace channel needs to set the command complete bit
+ 	 * and ring doorbell after processing message.
++	 *
++	 * The PCC master subspace channel clears chan_in_use to free channel.
+ 	 */
+ 	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
+ 		pcc_send_data(chan, NULL);
++	else if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE)
++		pchan->chan_in_use = false;
  
- 	mbox_chan_received_data(chan, NULL);
- 
-+	/*
-+	 * The PCC slave subspace channel needs to set the command complete bit
-+	 * and ring doorbell after processing message.
-+	 */
-+	if (pchan->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE)
-+		pcc_send_data(chan, NULL);
-+
  	return IRQ_HANDLED;
  }
+@@ -353,10 +372,13 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
+ 	spin_unlock_irqrestore(&chan->lock, flags);
  
-@@ -692,6 +736,7 @@ static int pcc_mbox_probe(struct platform_device *pdev)
+ 	if (pchan->plat_irq > 0) {
++		unsigned long irqflags;
+ 		int rc;
  
- 		pcc_parse_subspace_shmem(pchan, pcct_entry);
+-		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq, 0,
+-				      MBOX_IRQ_NAME, chan);
++		irqflags = pcc_chan_plat_irq_can_be_shared(pchan) ?
++					IRQF_SHARED | IRQF_ONESHOT : 0;
++		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq,
++				      irqflags, MBOX_IRQ_NAME, chan);
+ 		if (unlikely(rc)) {
+ 			dev_err(dev, "failed to register PCC interrupt %d\n",
+ 				pchan->plat_irq);
+@@ -418,7 +440,17 @@ static int pcc_send_data(struct mbox_chan *chan, void *data)
+ 	if (ret)
+ 		return ret;
  
-+		pchan->type = pcct_entry->type;
- 		pcct_entry = (struct acpi_subtable_header *)
- 			((unsigned long) pcct_entry + pcct_entry->length);
+-	return pcc_chan_reg_read_modify_write(&pchan->db);
++	ret = pcc_chan_reg_read_modify_write(&pchan->db);
++	/*
++	 * For the master subspace channel, set chan_in_use flag to true after
++	 * ring doorbell, and clear this flag when the reply message is
++	 * processed.
++	 */
++	if (!ret && pchan->type == ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE &&
++	    pchan->plat_irq > 0)
++		pchan->chan_in_use = true;
++
++	return ret;
+ }
+ 
+ static const struct mbox_chan_ops pcc_chan_ops = {
+@@ -501,6 +533,7 @@ static int pcc_parse_subspace_irq(struct pcc_chan_info *pchan,
+ 		       pcct_ss->platform_interrupt);
+ 		return -EINVAL;
  	}
++	pchan->plat_irq_flags = pcct_ss->flags;
+ 
+ 	if (pcct_ss->header.type == ACPI_PCCT_TYPE_HW_REDUCED_SUBSPACE_TYPE2) {
+ 		struct acpi_pcct_hw_reduced_type2 *pcct2_ss = (void *)pcct_ss;
+@@ -522,6 +555,12 @@ static int pcc_parse_subspace_irq(struct pcc_chan_info *pchan,
+ 					"PLAT IRQ ACK");
+ 	}
+ 
++	if (pcc_chan_plat_irq_can_be_shared(pchan) &&
++	    !pchan->plat_irq_ack.gas) {
++		pr_err("PCC subspace has level IRQ with no ACK register\n");
++		return -EINVAL;
++	}
++
+ 	return ret;
+ }
+ 
 -- 
 2.33.0
 
