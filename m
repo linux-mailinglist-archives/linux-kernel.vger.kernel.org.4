@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B86A6989CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C292D6989D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjBPBXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 20:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S229622AbjBPB1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 20:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBPBXH (ORCPT
+        with ESMTP id S229462AbjBPB1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 20:23:07 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3839838EA4;
-        Wed, 15 Feb 2023 17:23:06 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PHHJ45MqWz4f3jMP;
-        Thu, 16 Feb 2023 09:23:00 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-        by APP3 (Coremail) with SMTP id _Ch0CgA3LRt2he1jx4OFDQ--.43193S2;
-        Thu, 16 Feb 2023 09:23:02 +0800 (CST)
-Message-ID: <f4f01d2a-666b-58a1-cf76-84541643bdc3@huaweicloud.com>
-Date:   Thu, 16 Feb 2023 09:23:02 +0800
+        Wed, 15 Feb 2023 20:27:37 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD4C3A851;
+        Wed, 15 Feb 2023 17:27:35 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 12A1783623;
+        Thu, 16 Feb 2023 02:27:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1676510853;
+        bh=+5uh659jRk20xdyjABEXrzLlKYQCsRAUPaeAVAAPj2E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RzpFQJn34bJboFL2/q3XNRKx0Sb0W3nUwNl5pdiq5dWGEUT0tCXJr1HK1yir+AhD5
+         eHu789Dy1gCJMZAW6fH4nw61Q/D2cBceWYZL9r2YfDnlKpAxZYXluFDtSczoDAxX9d
+         VQ9bYqCb7uADIHE1b/xL9/E6UKqaBmBow21LU/L7/6pYNuxEibnAlmUHNEgZI6wCt2
+         5yZw9gwr3aZWaRgixDXDzUkq8fBJKyoT731EBhFLWNWRG+xWbYxmGQOBDJ+NbwmiSL
+         Zuxzc8uHif+OdJlg6hmWpaA+Lh9FlJgbXwgHzQ41GFbeR1EYE9g+/lU/hh/t3M+BHB
+         xpBmzj9sPDKNQ==
+Message-ID: <a32979ac-d272-0865-f453-c65d405814c8@denx.de>
+Date:   Thu, 16 Feb 2023 02:27:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH bpf-next v1 0/4] Support bpf trampoline for RV64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/6] dt-bindings: regulator: pca9450: Document new usage
+ of sd-vsel-gpios
 Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>
-References: <20230215135205.1411105-1-pulehui@huaweicloud.com>
- <87mt5ft2bx.fsf@all.your.base.are.belong.to.us>
-From:   Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <87mt5ft2bx.fsf@all.your.base.are.belong.to.us>
+To:     Rob Herring <robh@kernel.org>, Frieder Schrempf <frieder@fris.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Per-Daniel Olsson <perdo@axis.com>,
+        Rickard x Andersson <rickaran@axis.com>
+References: <20230213155833.1644366-1-frieder@fris.de>
+ <20230213155833.1644366-2-frieder@fris.de>
+ <20230215200213.GA467386-robh@kernel.org>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230215200213.GA467386-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgA3LRt2he1jx4OFDQ--.43193S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruryrtFy5AFyDKry8KryUJrb_yoWkCFg_ur
-        93tF1xZwnxJanrta1Y9r4a9rZFgr47Xry0y3yxZrWIv34kZFn8Jr4FvF9avryfXa4SvFn8
-        GrZxuFyxAa42vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUo0eHDUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/15/23 21:02, Rob Herring wrote:
+> On Mon, Feb 13, 2023 at 04:58:19PM +0100, Frieder Schrempf wrote:
+>> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>>
+>> The sd-vsel-gpios property is abandoned in its current meaning as an
+>> output. We now use it to specify an optional signal that can be
+>> evaluated by the driver in order to retrieve the current status
+>> of the SD_VSEL signal that is used to select the control register
+>> of LDO5.
+>>
+>> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+>> ---
+>>   .../regulator/nxp,pca9450-regulator.yaml      | 23 ++++++++++++++-----
+>>   1 file changed, 17 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+>> index 835b53302db8..c86534538a4e 100644
+>> --- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+>> +++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+>> @@ -40,8 +40,24 @@ properties:
+>>       description: |
+>>         list of regulators provided by this controller
+>>   
+>> +    properties:
+>> +      LDO5:
+>> +        type: object
+>> +        $ref: regulator.yaml#
+>> +        description:
+>> +          Properties for single LDO5 regulator.
+>> +
+>> +        properties:
+>> +          sd-vsel-gpios:
+> 
+> It is a pin on the device, right? Then it belongs in the device node as
+> it was.
+> 
+> Can't the direction of the signal tell you how it is used? Assuming the
+> pin is bidirectional?
 
+The pin is input to the PMIC, it is unidirection, i.e.
 
-On 2023/2/15 22:45, Björn Töpel wrote:
-> Hi Lehui,
-> 
-> Pu Lehui <pulehui@huaweicloud.com> writes:
-> 
->> BPF trampoline is the critical infrastructure of the bpf
->> subsystem, acting as a mediator between kernel functions
->> and BPF programs. Numerous important features, such as
->> using ebpf program for zero overhead kernel introspection,
->> rely on this key component. We can't wait to support bpf
->> trampoline on RV64. Since RV64 does not support ftrace
->> direct call yet, the current RV64 bpf trampoline is only
->> used in bpf context.
-> 
-> Thanks a lot for continuing this work. I agree with you that it's
-> valuable to have BPF trampoline support, even without proper direct call
-> support (we'll get there soon). The trampoline enables kfunc calls. On
-> that note; I don't see that you enable "bpf_jit_supports_kfunc_call()"
-> anywhere in the series.  With BPF trampoline support, the RISC-V BPF
-> finally can support kfunc calls!
-> 
-> I'd add the following to bpf_jit_comp64.c:
-> 
+SoC(output)---->(input)PMIC
 
-happy to hear that，let's make it more completeable.
+> The binding should support any possible way the device is wired, not
+> just what's been seen so far on some boards.
 
-> bool bpf_jit_supports_kfunc_call(void)
-> {
->          return true;
-> }
-> 
-> :-)
-> 
-> I'll do a review ASAP.
-> 
-> 
-> Björn
-
+The usage is always the above as far as I can tell.
