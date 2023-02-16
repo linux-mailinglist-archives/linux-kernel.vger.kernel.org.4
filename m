@@ -2,187 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A44169930A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F299869930B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjBPLXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S230269AbjBPLXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjBPLXS (ORCPT
+        with ESMTP id S230154AbjBPLXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:23:18 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16101DBBD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:23:09 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o19-20020a05600c379300b003e21af96703so153807wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0GkkSM6uGyms/phZR7XyFKOmqJzQQT53LYPG7cGU++k=;
-        b=TN9UsM3jbCuGt/lbfTp34HAj+qsa7YdTjGfvyBq0OWvWKJAbwU3tXRaM1ftwnR7KUW
-         xXNG9JqNrKI033tlzisPnGlqr8coXs8mV0mKxOne/9CHiHVL485oMOPJ/azOuvmUeWpt
-         Adv6S3JfWhT3UB2ooazFKPiaa6Xknl1XCwfvKTLgswh45dYV5M4tsYN5G0065X5Kes5w
-         s5H0CHQ6Dh7kODOue/X7R/+lsYlQjJ5NfvT+qg1fdDUVvQaS1uKC3EzHyNI8SUw7gYx2
-         JSOnhkGPcORWc8MwvW/bY9PJHIMEtdjashwQOQmfb+O6l9zthkXnFSJzjQVJ5dDhJEJu
-         gKgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GkkSM6uGyms/phZR7XyFKOmqJzQQT53LYPG7cGU++k=;
-        b=eTAGjrWIbxoEQi0e+R/Ir/JUV9bWGezsHi0iYiBt4iRdoPOH0LteeTpIm/pb2Dl2W2
-         0/vTNHDtYzRXsB/u+sp8NMO5NBsRXJsvwlK7DVmRXZiuN1R/xL1TqRDu9cz7hLRh8UEs
-         Ub+fRuVC6cnXWyg4yIv/9rN30HE5BmYQ4CP2DgMjx3k7R3qU7yuaxJDrFai5v7sFkpsJ
-         UVLfvEY894sFxAb6qENndz2Og/eCmP7IC1GOs3E/OEhqMeDMek+9BIKfXdqw/zj12VW2
-         /1+UbgFGFQzL3eEKBrOQTf3s/cfl0AZ8BcOzXEqun7PDG6TL11caImaozEPN/SBUZ2Ck
-         Lihw==
-X-Gm-Message-State: AO0yUKVdDCtbCJUUjFCXSvTBbvzY61pZ+c3H9Le1nYbwN9VK1oU+HRjF
-        M7LIcjty9os/NfYV1C78gvk=
-X-Google-Smtp-Source: AK7set+CU8UF+oc71jPePBMDXE75DgzGRMd/XKIWTPh/oHMmhxBdOLea5I4IootQeUIkXsa4ohX6iA==
-X-Received: by 2002:a05:600c:3094:b0:3dd:97d6:8f2e with SMTP id g20-20020a05600c309400b003dd97d68f2emr4488600wmn.17.1676546588003;
-        Thu, 16 Feb 2023 03:23:08 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1c770f000000b003dc3f195abesm1364420wmi.39.2023.02.16.03.23.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 03:23:07 -0800 (PST)
-Message-ID: <96d6f405-22bc-f112-2c88-76da280eed46@gmail.com>
-Date:   Thu, 16 Feb 2023 12:23:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thu, 16 Feb 2023 06:23:39 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2051.outbound.protection.outlook.com [40.107.237.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2730B1EBC1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:23:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S/Rk1aCjpHrV4PZGuThm3VlxsRgnnRW94DGRO2OM+K2oKY+RRrhIaBN6BbJrLmO5WkJNBzzKbUvfdcNfl10GxR7ftp+nNBELEXmfz8iEvZ8F5FYGIEHqJA04rmJEuNHJqWpI8ibrhR3j1wG2CID0K5LfqrzQvCJX7b2xAlzZk2S19QkkO/WXlLidefEG/KQ1MhE3Dav8uMQMEhDw0l2hD/tmnZDHVhwsVm0iydWG+n/FM/NUsQCJ94Id+ZmQf29xPVEZ1tFpmc66DzZVOXipxHBYtsxSbxXrO5d7OmQYrU5zc4zpOFsSK3OP7cfrNm5Vg2U7eSQHaWaJ7OjwtybU+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tPd92+NkJuOoEOfr7wYOPKGxwR+f+5y9r9WLNbYYufw=;
+ b=f3M2pFVKcBe3tWddpVPTRaD+6kDNCnoET6+YQCe/VgGzFGYnDs9qtrJPxYHa+RmCogmHaVH0V0n5CRTFCTUZjKLV8obYkra6jSSZ3Oaf2eyxbtGyl6+rbua5pB79Rb1NvN/fRvKKqDJQOd5VauOilgYVKSXgpv/r/flcnu7bdVcIyuxUqArDCBvPEU/4iyPVnuSctZQSsD4/VydK54cQ6P7ANB6LEJxtE3FLkT+lbZwnoghg0Jsvse1R//UIC/SlpEg1UCJq9t+JYCCATraIS0A/Kuq2jyIil+sRcRGcIBqnW4jAx9/8l5lAXtHPqssDIDunSzLUBPFSqMbljzq4dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tPd92+NkJuOoEOfr7wYOPKGxwR+f+5y9r9WLNbYYufw=;
+ b=wlRe+6/Prl/7X1Kx1iCalbadpjcoNUVfDa+ePCNQQmC0dVS2uMb3EcpycCiZ+/uZU9gadQPWKnORIsP+vHw81NrHLtW+jn7Mn+y/DzX1XiXorwazjVNb3AFNhvlveCFRkc9+Gd80Vb4ywjTwB7wUM+xMquYzf9LDeiMqVoXBrwo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3398.namprd12.prod.outlook.com (2603:10b6:a03:aa::24)
+ by CH0PR12MB5091.namprd12.prod.outlook.com (2603:10b6:610:be::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Thu, 16 Feb
+ 2023 11:23:30 +0000
+Received: from BYAPR12MB3398.namprd12.prod.outlook.com
+ ([fe80::dc39:38f2:85ed:4e2d]) by BYAPR12MB3398.namprd12.prod.outlook.com
+ ([fe80::dc39:38f2:85ed:4e2d%7]) with mapi id 15.20.6111.013; Thu, 16 Feb 2023
+ 11:23:30 +0000
+Message-ID: <407cf4bb-1462-e9ae-75a6-034cea7735b4@amd.com>
+Date:   Thu, 16 Feb 2023 11:23:23 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     walter.chang@mediatek.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
-        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230214105412.5856-1-walter.chang@mediatek.com>
- <20230214105412.5856-5-walter.chang@mediatek.com>
- <20230214222021.k3tsfwezhnh7tdlx@bogus>
- <996b4e61-8486-d939-7367-1240b3c5c5fa@collabora.com>
- <20230215131849.mcgz53jf24atialp@bogus>
- <53f0e612-b5cc-262e-df98-add1e8a06573@collabora.com>
- <20230215144627.ddjc7x365qdnhymi@bogus>
- <7ac030be-8b5e-d190-6676-8cea9cdc1915@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v2 4/4] clocksource/drivers/timer-mediatek: Make
- timer-mediatek become loadable module
-In-Reply-To: <7ac030be-8b5e-d190-6676-8cea9cdc1915@collabora.com>
+Subject: Re: Reg the next LTS kernel (6.1?)
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Kris Chaplin <kris.chaplin@amd.com>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Willy Tarreau <w@1wt.eu>, Theodore Ts'o <tytso@mit.edu>,
+        Michal Simek <michal.simek@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
+ <96e41e6d-bec9-f8cf-22ed-1fa5d9022238@amd.com> <Y8FAFAwB9gBzQXQG@kroah.com>
+ <314489f6-cb54-fb3b-6557-d69b1284fa4d@amd.com> <Y8GFYEnIy0Wbh/n6@kroah.com>
+ <Y8HPw2t+TbdXa83C@mit.edu> <20230114071412.GB5088@1wt.eu>
+ <Y8JnHyKNTHMjsHSb@kroah.com>
+ <CAB=otbS2uwfm0+YHMXXY3TM94V82LtxgcBXGZq1Zxbvd36Wkug@mail.gmail.com>
+ <2e2c9362-1f4e-a183-e619-c5dc3e56324a@amd.com> <Y+4RkU0x9VRYcUGv@kroah.com>
+From:   Kris Chaplin <kris.chaplin@amd.com>
+In-Reply-To: <Y+4RkU0x9VRYcUGv@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0516.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13b::23) To BYAPR12MB3398.namprd12.prod.outlook.com
+ (2603:10b6:a03:aa::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3398:EE_|CH0PR12MB5091:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d19dec9-003e-4057-0429-08db10103adb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VM5XBC/cTsnlLJw7M1pXZ116AlcJ6PazltNSv2RqQVeWpp6lQifoUqNT/P9SmBvBB0q2IWKdXzsFeWYHXUkmJdu7JNvwdEhgiq677bcQ65UyunZ7Ec3l1FMDMKrnkpWQqUehnY32KeBGYFGlu5QQKfHZdRkgZiC0GlN2OeReG3ONfdgQ/qdFGqDGgwCJd4x8PcEmPXovK+JoA1LiTjP3m0V2YiFQaZnjoov+oXoKK7iPpWJw+VsF+61lsWknOen0cwEkim3LELGsU40PQ2DyMGgf9qCGvCGpaQXfEB43ydUz1bldv8UPlVzlLiZFoaSthOKa74TcU7E6MoUg1Bf3xd+6n5MW26CUGaPlNL2ADXx1GJF+okipE15CQNRwfg4E34/vv1UWW7EztWzDQqQpqNj/1tYDv2UVTu4wscClLLhZwhoyAUpi6DCwIGr/U0G1mj+MNnUH4w/917kD1X2gyyf7+SM5oQBZCUfw5ZA9bWYxZAVam2pEJmSbA/lkJ6/jWrTJVg23K4WygEhyQogGegwIL5hIt4KDbhlO3BggB6QCy6eZDH+SU5Y5AMB1Lep6uvQanLRs7G/Jj0WjNNORcaJDNCnmW0OD38P9Sdnqe/R/wJ+LY2bOtwAJUIcUwL7V7Gta6d0gpHEt9kaoKTszwHn8TxHF0HuzfB58HhPklVn8jerEruBoD7mK8DryqMEs+poJKw68H6Gid3ym9j6lYAK1hEkyEqoORvzgOjjfAo0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3398.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(376002)(396003)(136003)(39860400002)(451199018)(86362001)(38100700002)(31696002)(558084003)(36756003)(4326008)(44832011)(5660300002)(2906002)(8676002)(66556008)(66946007)(66476007)(8936002)(2616005)(26005)(53546011)(186003)(6512007)(83380400001)(6506007)(110136005)(54906003)(316002)(41300700001)(6666004)(478600001)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WHlnV01jRCsxQy9LVGV5V2x6elIxbUZuMWlPR1pIaW1PSzVMblBJTlJVcUIx?=
+ =?utf-8?B?c1Z5UzU5QkxiVElqemhwb24rcTZyUmxZZ1A0QW5GLzVCRE9PT3daYk1TT0hZ?=
+ =?utf-8?B?MHpCSTVTRXlDd1JVUTRDSFJBZUJUUE9Cb2t5VklLQ2xIOFBIM0lRdVppS29M?=
+ =?utf-8?B?L05ybUdYKzBETHVEMU5nWnlVYWJsQ0RPc1pmM0M0Nm1VVWUxUHFaditWRUhY?=
+ =?utf-8?B?SElvL1drZkJOQU5BeXEybzhmbWI3ZFFTWWVkbjN4bXZSdXVZekJtV3FLK3dn?=
+ =?utf-8?B?aTEySkVrQzlGK0pEek81V3JEQnlCQnR6UE5BK3A3aEc4K2pSNG5QQW8vWitp?=
+ =?utf-8?B?MGRDd2VGVjdhaysxakl6MHNDcmRjYzFsaUlyRXR0S1FpaWRUZDQ5Z0JqdE9B?=
+ =?utf-8?B?MTRiYlhaUkw3d0FLNWJ0Si9UbTUwV29PUTliSTI0UlpwVG9SZkpnWjRPbTc0?=
+ =?utf-8?B?dkVIQ2I0RUhRYW5vNm9JMjdPamxRTFNmTTVWbXpIRzFSS1lTa1hrdjZCd0wr?=
+ =?utf-8?B?NXNJejBMT3paVHB5QmNydWVmZEllc0FBMVUzUy9mYVZzUVc5S0p1Z1U4dnNO?=
+ =?utf-8?B?Tm0vMWs0dThIeGJzODlEQ044alJaUk5iTDgrK1RNdjg5TlZZbk5nZUJJOW9D?=
+ =?utf-8?B?Y0NnVU15TmFXUElRbXBiRFpNR2dmVU9waXRMNG94eU44czVNa3FNS2x6dGw5?=
+ =?utf-8?B?OFl1cUY4QVA2VlZuSVk1Y3ZCTllmS0pwd1dhWlhrZG0xWExMU21IVThzRWZt?=
+ =?utf-8?B?V29HOWFTZS9OWlo0Z3dTSGVOd1o1cGJHQmFhcGkwL1Vpb0FWNm8vbG9KS3Ns?=
+ =?utf-8?B?L0NvcmdPWmxHS2dXN0U1bDQ3dHZBNzBnREZUUzZIYmI1Q0RGbFFBRHRtSUh1?=
+ =?utf-8?B?L05LRmNQUTFVcnc4eW44czQ4SkovZUt1RVhOb3FnVHA4NFVPM3EzdEROSnJz?=
+ =?utf-8?B?RExPSzVtZUNOdFMza1RLVDdzOFVlZnIwemFTWi9jWEp4Z2pWUUpiUVlzaGZZ?=
+ =?utf-8?B?REVZcDJvbG5KKzd1SnZrTEl4cWZ2S2dOZHRqMksycFlFT0JZejJWY08zdVJC?=
+ =?utf-8?B?aUNZeWxtZGswU1Nsb3ZrTzBaZHlEYk5Ia1BVK2JjaE90K0FSU0d3NTRyMUdQ?=
+ =?utf-8?B?L0pML2JWSlJtWjB6SCtPTE9BbkxGUjREN0liZXEzd2JjVUpaS0JpYnNlck5Y?=
+ =?utf-8?B?OGdFS1NCSEZSYSt6STkxelhONG5oZHBHUmZzMlcxZjFaVStYcFdNQitaUkdL?=
+ =?utf-8?B?Z2lmTmxnaFNiTGtYYWVhYTlnUk5vU29uVU91THkrNmRkalU4cWFZRU9QaFdm?=
+ =?utf-8?B?WUlBSkRmdUlqUjcxQXhKNENFY2RxUDkzNDRYWUUxdWV2RGEydWtCTEowdWts?=
+ =?utf-8?B?S3VXODkyKytZdWozeFh4allXdlRCQTdsdWM2cVZQbXFyTlpwWXhIbExDVHRN?=
+ =?utf-8?B?VCtQdTJ0WjFVTkNlTjZ0blg5bTBVWVlLUkc2aVFHNkkrbGZ5MWxKRGVYRllt?=
+ =?utf-8?B?SjZkVjhzTXpnMFh2ek9Ra2RSc1BSZGd1c0RaV0J6OW9nTjdnS2dySWI0RVM4?=
+ =?utf-8?B?MjhjNWZCK3YyYmxMY1NKU3RXOUlObC94SnZKZi90RWZNVFRMWFJXaWpHQ09u?=
+ =?utf-8?B?Rms2OGhaR25GcTRnai9hdTFEZkxIVHVvMzBXc0RJSFJZMDRLYktBNlVIWlN6?=
+ =?utf-8?B?dy9EblpRcVExWk14VE5UeFF4Tmh6cnpESEFhM2RvYjJ0RXg5bFJFUGVVQjd3?=
+ =?utf-8?B?T053bU1LYlpITnFWdTdvbkhMVnVXSmloend1cVdpVnp6U2p5Q1UzQXlEa1BU?=
+ =?utf-8?B?b2tOZXZQQVp0UWlBdkpqKzZycnl2cExkYnRpQWh1VFN0Qy9MVjJhWXdNbko0?=
+ =?utf-8?B?WU5URHBGZmw4UkdKc2RraVdJUmVPeWdFbk5kUEYwTUFjTUlHZWlrNTdLZEht?=
+ =?utf-8?B?dDBrYWg2MFVLYS83YWtiKy9ubHlBOEwwWlJrYUx2dVFhYXJUWmdrUExySXVU?=
+ =?utf-8?B?RWNGVW5zcUtQNWw3ZVBjTUxSaWJ4QUgvd3FvS3RITGZXa2lYMTlKZXZ2d1VN?=
+ =?utf-8?B?VCsvcGxPZ0RodUtINXdZMWhENm9WL2EvUGxwK3RPdUVjekQyU1YzSWNNOTIv?=
+ =?utf-8?Q?/nw8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d19dec9-003e-4057-0429-08db10103adb
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3398.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 11:23:29.9135
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i2PZUdABJc5wj2qLpa47uKwVFy5JkKqf/Qk2DdcVXLHDc6CVw8JfW4HhScClVPoT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5091
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/02/2023 11:20, Greg KH wrote:
+> Have you looked at the above link recently?  :)
 
+Oops!  Superb.. Thanks Greg.
 
-On 16/02/2023 11:22, AngeloGioacchino Del Regno wrote:
-> Il 15/02/23 15:46, Sudeep Holla ha scritto:
->> On Wed, Feb 15, 2023 at 02:30:51PM +0100, AngeloGioacchino Del Regno wrote:
->>>
->>> Both. I mean that these platforms do have architected timers, but they are 
->>> stopped
->>> before the bootloader jumps to the kernel, or they are never started at all.
->>>
->>> Please refer to:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/clocksource/timer-mediatek.c?h=next-20230215&id=327e93cf9a59b0d04eb3a31a7fdbf0f11cf13ecb
->>>
->>> For a nice explanation.
->>>
->>
->> Thanks for that. Well then I see no point in making these modules if you
->> can't have generic Image that boots on all the platform. I now tend to think
->> that these are made modules just because GKI demands and it *might* work
->> on one or 2 platforms. One we move this as modules, how will be know the
->> Image without these timers or with them built as modules will boot or not
->> on a given mediatek platform. Sorry, I initially saw some point in making
->> these timers as modules but if they are required for boot on some systems
->> then I see no point. So if that is the case, NACK for these as it just
->> creates more confusion after these are merged as why some Images or
->> even why defconfig image(if we push the config change as well) is not
->> booting on these platforms.
->>
->> It is no longer just for system timer useful in low power CPU idle states
->> as I initial thought.
->>
-> 
-> I think that there is still a point in modularization for this driver and I
-> can propose a rather simple solution, even though this may add some, rather
-> little, code duplication to the mix.
-> 
-> The platforms that I've described (like mt6795) need the system timer to be
-> initialized as early as possible - that's true - but that timer is always
-> "CPUXGPT".
-> 
-> On those platforms, you *still* have multiple timers:
->   - CPUX (short for cpuxgpt), used only as system timer;
->   - SYST, as another system timer implementation (additional timers) but
->     those are always initialized (AFAIK) from the bootloader before booting;
->   - GPT (General Purpose Timer).
-> 
-> On one SoC, you may have:
->   - CPUX *and* SYST
->   - CPUX *and* GPT
->   - CPUX *and* SYST *and* GPT
-> 
-> ... where the only one that is boot critical and needs to be initialized early
-> is always only CPUX.
-> 
-> Hence this proposal: to still allow modularization of timers on MediaTek platforms,
-> we could eventually split the CPUX as a separated driver that *cannot be*, due to
-> the previously explained constraints, compiled as module, hence always built-in,
-> from a timer-mediatek driver that could be a module and capable of handling only
-> SYST and GPT timers.
-> 
-> In that case, we'd hence have...
->   - timer-mediatek-cpux.o (bool)
->   - timer-mediatek.c (tristate)
-> 
-> Counting that the CPUX timers are actually even using different `tick_resume`
-> and `set_state_shutdown` callbacks (doing only a IRQ clear/restore and nothing
-> else), the amount of duplication would be .. well, again, minimal, but then
-> this means that timer-mediatek-cpux would be `default y if ARCH_MEDIATEK`, or
-> even selected by ARCH_MEDIATEK itself.
-> 
-> If you think that this could be a good solution, I can send a "fast" patch to
-> split it out, preparing the ground for the people doing this module work.
-> 
-> Any considerations?
-> 
-
-I think your proposal sounds acceptable, but we would need to make sure that all 
-SoCs can boot with the CPUX driver. I'm aware of some armv7 SoCs that use a kind 
-of hack to enable the architecture timer [1]. This, for one part, should be 
-moved to CPUX, if possible. For the other part it makes me wonder if really all 
-supported MediaTek platforms will boot with SYST/GPT being a module. I think we 
-will need some effort from the community to test that.
-
-So as a resume, yes I think your approach is feasible but we should collect 
-tested-by tags before merging it.
-
-Regards,
-Matthias
-
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/mach-mediatek/mediatek.c?h=v6.2-rc8#n16
