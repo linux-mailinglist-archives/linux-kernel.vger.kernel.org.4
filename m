@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EED699278
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093F369927E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjBPK7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S230300AbjBPK7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjBPK7X (ORCPT
+        with ESMTP id S229718AbjBPK7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:59:23 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143155E6C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:59:19 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mc25so4085416ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:59:19 -0800 (PST)
+        Thu, 16 Feb 2023 05:59:40 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6475B22DC4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:59:29 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s8so997240pgg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:59:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hUO21HiD9AwPPk2yVyNNeKr/3WbcLbkpbjx6Ehu0Tmw=;
-        b=D1XSSLIWGXwR9w6YIJRb6pI0ieOpzo5hYIm3tOAx37MZP8cTkCTkZq8cn6ppUH9GWg
-         4DWCxcjbZrfko7IXHSmnybSJYvRQ9t11TWX03SzavoDVS6jD5rGwHzsVlncGeRqnR2L3
-         ZDC7tlbaLKIoxfYpDGrr4iKyGU0C+JGf8zLGHWGB0e//hkCkY/MTtACWb1PzscxzpxvF
-         znMZ/1FSdFeVYjSSN/lrgldYNS7L/qn4PYC0tFIO3jzdEv0TAuPOKtAJol3qaUD/jGF2
-         3UhS0SFOZ+2+WLKGXzGe+VMHCej1NRocgiGu+dne4F6JLyZN9T7G3a98xM73+TRAGaSC
-         msIg==
+        d=sartura.hr; s=sartura;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUwtxTNrGxdg9BYsoTpYW1OupabW0YeM169NaiVjmL4=;
+        b=gclcawT1st6EiwSqGAnIkgbaoTQmWUFxODnJlpPrHqBwEas8neXbswcWc4IMPZNlba
+         uEPJguMOBFHlRQtqM3t9xjLbbapn5naV29bODLtWgbFFNtXijhme93FoJflfeXclEIT1
+         WR+8gPiYt9xNNSpb4zF5ziZ0GP9QxnT/WBMTpBEZU5yGMYe5KgMLkJklQ3iN7rvLNgT8
+         xJUZemi4pufnNBBlL8FzuAqlYEktXW7fvA+NtF8x+HvrNSkNVmqcVrKAB7YWFwIPFXjY
+         9VMJrtx4JVT9GC90boj1FJLEoO8LmZnb28avOiuH99/Rop+dLqLnrHItPFeDfIIadrJp
+         D3VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hUO21HiD9AwPPk2yVyNNeKr/3WbcLbkpbjx6Ehu0Tmw=;
-        b=pbPco2BpPsEP+psX7xsy+gmSkJxPNTgTt2thhB+gkMCI2Vl2u5ohtwMwwVPR5Hoaut
-         akdEDxdag//z6v/uSntsxY5FKZeoKo4Jps/OePpcaY252TfoxWrIEoR5GWTR1jwThhjp
-         rz5VrOCH2LtpsYDw93QyvROJda+6nB/gy/FPoyhOKjpvIEik4SuRX7pZq9RX6jv0oCPM
-         FWq9lgiR/MqzQXclPbkjyp60HzUZJeGE6I5d2wEcgzW9w/ZYMAc6zs0TFFvEzynRifst
-         MFXAs7taTWrX7fp2wSbwR9RdroujBK16MlaAHdG3dZ5cMHdmpe8ouCTJ+oWhUMn3OzIA
-         8ltw==
-X-Gm-Message-State: AO0yUKXlkWH8HFNOa8r0uCR9lzoOBVuOOowc4X8LPHlNmJn5S4i8IyRb
-        cum11tdiZjdG4Sq2AfaD9ho1JA==
-X-Google-Smtp-Source: AK7set9kqT0KWfYBEgpPpqbE3mXf//cnTThDSrhMXoaZ2Z562G5Cb5Fwxv17Ew0mW/1P8G+LQlFOxg==
-X-Received: by 2002:a17:906:71d0:b0:8ae:f73e:233f with SMTP id i16-20020a17090671d000b008aef73e233fmr6938108ejk.32.1676545157943;
-        Thu, 16 Feb 2023 02:59:17 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t22-20020a170906949600b008b149bdacedsm670578ejx.12.2023.02.16.02.59.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:59:17 -0800 (PST)
-Message-ID: <4e7f3fe5-3a5e-d4c3-d513-642184bbdb23@linaro.org>
-Date:   Thu, 16 Feb 2023 11:59:15 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wUwtxTNrGxdg9BYsoTpYW1OupabW0YeM169NaiVjmL4=;
+        b=NnS+4kIRQ0ffTE16eq/WahF1o/I6hmjfuIHbn6tEw/oIPbuW2JVXg3GFF1ugZsq10V
+         8liAZ5+cYBEu0gW2Zj8N1a7BY9FaT5m9e2jhgttA2kHn1hwqMOaJVZX8yq1r4E7Mlm7C
+         iXxtck+zr9h9fvMi2KUN/3yoqK7Wcn+M2Lwdzh+FWj9bZxbiDd7WhdQ2U3so7M8raLuX
+         KrVQRjVc9usbmgtV5HuwfU8F6/fffw6K80L8yvoCKWk8/cadQf//tD6oR9VPvBnaoYwH
+         VS6t+flFhhuOrC2edaWkLuI4rH2DXOB80CJ7/2xK7C8pFtPTkDY6+CxDS1O+K2yYtbMr
+         id1w==
+X-Gm-Message-State: AO0yUKVT1AHvUNbzamyMS5J/DrsxUvhcCw0gYo1fqOxu9E1fsgYlTAEK
+        xHZVHvrSmf0U3sE86VEhD+RcZ8dtFYjNUFdUmVctxA==
+X-Google-Smtp-Source: AK7set9TBhxKZy2kQoKauQhNJYoNrdjcISmxAqqPLdN9X3hfahISDWjjgxuL5aVg/UEu7YkqH+r7vQqRiVvBPBZmAY4=
+X-Received: by 2002:a63:3dc4:0:b0:4ce:e113:5e32 with SMTP id
+ k187-20020a633dc4000000b004cee1135e32mr788869pga.10.1676545168884; Thu, 16
+ Feb 2023 02:59:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 02/16] PCI: exynos: Rename Exynos PCIe driver to Samsung
- PCIe
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
-        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
-        m.szyprowski@samsung.com, jh80.chung@samsung.co,
-        pankaj.dubey@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214121333.1837-1-shradha.t@samsung.com>
- <CGME20230214121411epcas5p25efd5d4242c512f21165df0c2e81b8bc@epcas5p2.samsung.com>
- <20230214121333.1837-3-shradha.t@samsung.com>
- <d0d1db7e-e2a7-dddf-5c28-fed330b44cdb@linaro.org>
-In-Reply-To: <d0d1db7e-e2a7-dddf-5c28-fed330b44cdb@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230214161211.306462-1-robert.marko@sartura.hr>
+ <20230214161211.306462-2-robert.marko@sartura.hr> <c55a17fb-3c49-6e7e-f22e-95917daf97c0@linaro.org>
+In-Reply-To: <c55a17fb-3c49-6e7e-f22e-95917daf97c0@linaro.org>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Thu, 16 Feb 2023 11:59:17 +0100
+Message-ID: <CA+HBbNHTGX1BBhQuOSfwo=j-+dY9KgDpYn4Ty9m0fU5aiMV-Zw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: qcom: ipq4018-ap120c-ac: align GPIO hog
+ with DT schema
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,27 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 11:55, Krzysztof Kozlowski wrote:
-> On 14/02/2023 13:13, Shradha Todi wrote:
->> The current PCIe controller driver is being used for Exynos5433
->> SoC only. In order to extend this driver for all SoCs manufactured
->> by Samsung using DWC PCIe controller, rename this driver and make
->> it Samsung specific instead of any Samsung SoC name.
->>
->> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
->> ---
->>  MAINTAINERS                              |   4 +-
->>  drivers/pci/controller/dwc/Kconfig       |   6 +-
->>  drivers/pci/controller/dwc/Makefile      |   2 +-
->>  drivers/pci/controller/dwc/pci-samsung.c | 443 +++++++++++++++++++++++
-> 
-> Rename missing. I am anyway not sure if this is good. What's wrong with
-> old name?
+On Thu, Feb 16, 2023 at 11:48 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 14.02.2023 17:12, Robert Marko wrote:
+> > Align USB power GPIO hog node to DT schema.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> Unless you submitted a separate patch for this, I only see
+> hog being allowed in 845 TLMM.
 
-OK, looking a bit at your further patches - doesn't it make sense to
-split a bit the driver? Maybe keep the core as pci-samsung, but some
-other parts in pci-exynso5433?
+No, cause there is a gpio-hog schema in dtschema and I did not
+even look into the pinctrl bindings and dtbs_check is not throwing
+a warning.
 
-Best regards,
-Krzysztof
+I dont really see a point further allowing it in pinctrl bindings.
 
+Regards,
+Robert
+>
+> Konrad
+> >  arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
+> > index 38efd45433da5..cd2a32d0d5548 100644
+> > --- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
+> > +++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
+> > @@ -76,7 +76,7 @@ mux_cs {
+> >               };
+> >       };
+> >
+> > -     usb-power {
+> > +     usb-power-hog {
+> >               line-name = "USB-power";
+> >               gpios = <1 GPIO_ACTIVE_HIGH>;
+> >               gpio-hog;
+
+
+
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
