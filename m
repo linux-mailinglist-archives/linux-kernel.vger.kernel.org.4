@@ -2,151 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50C76988F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 00:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9B86988FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBOX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 18:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S229721AbjBPACM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBOXz6 (ORCPT
+        with ESMTP id S229518AbjBPACL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:55:58 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865E03864F;
-        Wed, 15 Feb 2023 15:55:57 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 72CE510B;
-        Thu, 16 Feb 2023 00:55:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676505355;
-        bh=xk5vBg/Iz8a0qsDOR7HVUgH7GHTgpabQoQX9UvpnwQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RnCQ7g1HJ7UDnweuIrJb5hOmkxgrbwvyCESUQoL5/RRyCDaVRMnpgLFc1j7U6waP4
-         i2U0QzMD9Kg/ud5VJh+Q5Y+P7QFtuPu5GB5olUm3bmhs8djJC0nzwnVd6HmKyHQ39g
-         PXp39l1vaPYBElxfeVolTI3zOUOIHzaqUeCak8O8=
-Date:   Thu, 16 Feb 2023 01:55:54 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/14] media: rkisp1: Add support for i.MX8MP
-Message-ID: <Y+1xCtdxIoPtnOws@pendragon.ideasonboard.com>
-References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
- <CAHCN7x+9E8qcBVOQZKTKagDkvkKVnqDtjvpNX-iNFYwCLRoYug@mail.gmail.com>
+        Wed, 15 Feb 2023 19:02:11 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B337C23105;
+        Wed, 15 Feb 2023 16:02:09 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id s21so60866uac.13;
+        Wed, 15 Feb 2023 16:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H7+6qQa+p0mgRiuJ1OJVWY0HGLNJgAvVISPrwm3CHGc=;
+        b=m86yl/jTnKDAQhPT8CBgNAVrMu/wDCZ9+rJw6NvBHDt7EmyGxFY+Mnk0L/D+rtskpk
+         9MspfmW4Htg2xemcw6CxRgPHR3PJXkm/YA9OzW9XljVJmRLOtRBtUO4JXdWrdp4mBbPM
+         mTDcRYIuWWedFsaeB9xw03SYrSbblx1+/kv6R/d//rnFs2a0PpL6KrOP0HmKm5jkQIQc
+         s+flfuC6MRco1zkUeHy282IDnGpjT0e2RWe/yaggKYsd0i1dU4MZ3UFoFQvete/mBW47
+         6ov4oUNCQ/cJL6G36C9t+VcNwitF7fsDBaj+95I180IRz2mz2ELGIbHmvEYsmH8JH5vj
+         UFGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H7+6qQa+p0mgRiuJ1OJVWY0HGLNJgAvVISPrwm3CHGc=;
+        b=konoQvyfzdZeqtA9V+uEiIG7kBiX8DAl39d35+OFziCi1Ou4jzFl+xzprGon2nLgPB
+         R96+7OEwbEbDiugLTIO0+n8JvYmSNMbgqvlfp3nAErRemcAS8H+8ciByBB7Cjf1McAfX
+         EpSLnb4CcsyE0bQziSn3eooMpqHtOR6zKavy/8P7rC803gY/Pf3ahWTR9sJFaZJSpzE9
+         Wtjs/gb998btVcDDyx60kPylHYVQCBIFZAUIH4xBX4UGuseVn15/061SaFaAzbPbzqKC
+         8saCgZO6myq/tiiBfXY9kiae7ZAF2nkW+kXXlzx9d4otTSvePCYj2lxDC+Ogy9/RCvkY
+         onKQ==
+X-Gm-Message-State: AO0yUKXr5lgGUR7FWp/xfIWkTL0KdRbsXEpuj3l0GwrJ6oneFGIQSqFA
+        uXqoDal0RggatK1RY8qTTlHv/sO1te8y2HdCSH4=
+X-Google-Smtp-Source: AK7set8i0RSR1WbmCEWS/0IYke3YKLUGyjLlsV0tEdHcrXVBsL3AafZ/9/47K8J2wttvP+cHORFMXNhXBoVdW8o0Njc=
+X-Received: by 2002:ab0:7e8e:0:b0:68a:57ea:ca48 with SMTP id
+ j14-20020ab07e8e000000b0068a57eaca48mr379751uax.77.1676505728700; Wed, 15 Feb
+ 2023 16:02:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHCN7x+9E8qcBVOQZKTKagDkvkKVnqDtjvpNX-iNFYwCLRoYug@mail.gmail.com>
+References: <CACsaVZJvXpCt37nQOoe8qd1EPUpfdMM1HwHk9tVO8HdU_Azhhw@mail.gmail.com>
+ <25578.37401.314298.238192@quad.stoffel.home> <CACsaVZJ-5y7U5xqwL9bof69EKbTk+wrHWFcBFYyP_BwVSt+CNA@mail.gmail.com>
+ <CAM23Vxr8LkkcVDFfW1=qEYGgo7JG1qx62eWSV4WOw4_MnD+TZA@mail.gmail.com>
+ <CAAMCDeeHxMBoVkNYAyssjgjo4=FYd2NonS-mqC7OUEL89B9Cig@mail.gmail.com>
+ <CAM23VxpzY6qYsdTYxe01FT7AJvEbODf8X_vq8ALL35TfyrB8xQ@mail.gmail.com> <CAAMCDee2hV1YP=119Rorz1uGTnyBD5q9hb20PvMq89FHow2wPw@mail.gmail.com>
+In-Reply-To: <CAAMCDee2hV1YP=119Rorz1uGTnyBD5q9hb20PvMq89FHow2wPw@mail.gmail.com>
+From:   Kyle Sanderson <kyle.leet@gmail.com>
+Date:   Wed, 15 Feb 2023 16:01:56 -0800
+Message-ID: <CACsaVZJeC=6f4aGmnfdh1iSj77YQuTduQyXeADKJHnpC1aNWLQ@mail.gmail.com>
+Subject: Re: [dm-devel] RAID4 with no striping mode request
+To:     Roger Heflin <rogerheflin@gmail.com>
+Cc:     Heinz Mauelshagen <heinzm@redhat.com>, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        John Stoffel <john@stoffel.org>,
+        Linux-Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
-
-On Wed, Feb 15, 2023 at 07:57:53AM -0600, Adam Ford wrote:
-> On Fri, Nov 18, 2022 at 3:44 AM Paul Elder wrote:
-> 
-> > This series depends on v3 of "dt-bindings: media: Add macros for video
-> > interface bus types" [1].
-> >
-> > This series extends the rkisp1 driver to support the ISP found in the
-> > NXP i.MX8MP SoC.
-> 
-> I'm going to spend some time testing this over the weekend.  Is there a V4
-> pending, or should I just test whatever is in Laurent's repo?
-
-I've updated all the v6.2-based branches on
-https://gitlab.com/ideasonboard/nxp/linux.git (and renamed them to
-v6.2/*). Beside a rebase, the v6.2/isp branch contains (at the bottom) 6
-additional patches that I've previously posted to the linux-media
-mailing list (feel free to review them ;-)).
-
-My only concern with this series is with patch "media: rkisp1: Add match
-data for i.MX8MP ISP", and in particular with the following hunk:
-
- enum rkisp1_cif_isp_version {
- 	RKISP1_V10 = 10,
- 	RKISP1_V11,
- 	RKISP1_V12,
- 	RKISP1_V13,
-+	IMX8MP_V10,
- };
-
-It's not a very nice versioning scheme :-S I'll see if I can find
-something better, but regardless of that, I'll post v4 with the goal of
-merging it in v6.4.
-
-> I have an IMX219 camera with 4-lane support and an i.MX8M Plus kit from
-> Beacon, and I want to test the RGGB bayer conversion to see how well it
-> works.
-> 
-> > The ISP IP cores in the Rockchip RK3399 (known as the "Rockchip ISP1")
-> > and in the NXP i.MX8MP have the same origin, and have slightly diverged
-> > over time as they are now independently developed (afaik) by Rockchip
-> > and VeriSilicon. The latter is marketed under the name "ISP8000Nano",
-> > and is close enough to the RK3399 ISP that it can easily be supported by
-> > the same driver.
+> On Wed, Feb 15, 2023 at 3:44 AM Roger Heflin <rogerheflin@gmail.com> wrote:
 >
-> Is there a reason the driver cannot be renamed to a more generic name than
-> rkisp1 if the Rockchip and VeriSilicon had similar origins?  Having the
-> name Rockchip referenced from an NXP i.MX8M Plus seems odd to me.
+> I think he is wanting the parity across the data blocks on the
+> separate filesystems (some sort of parity across fs[1-8]/block0 to
+> parity/block0).
 
-The common roots of the IP core predate both Rockchip and VeriSilicon.
-Those two implementations have now diverged (as with all forks), so
-either name would be wrong in some cases :-S
+Correct.
 
-> > The last two patches add support for UYVY output format, which can be
-> > implemented on the ISP version in the i.MX8MP but not in the one in the
-> > RK3399.
-> >
-> > This version of the series specifically has been tested on a Polyhex
-> > Debix model A with an imx219 (Raspberry Pi cam v2).
-> >
-> > [1] https://lore.kernel.org/linux-media/20220615221410.27459-2-laurent.pinchart@ideasonboard.com/
-> >
-> > Laurent Pinchart (3):
-> >   dt-bindings: media: rkisp1: Add i.MX8MP ISP example
-> >   media: rkisp1: Add and use rkisp1_has_feature() macro
-> >   media: rkisp1: Configure gasket on i.MX8MP
-> >
-> > Paul Elder (11):
-> >   dt-bindings: media: rkisp1: Add i.MX8MP ISP to compatible
-> >   media: rkisp1: Add match data for i.MX8MP ISP
-> >   media: rkisp1: Add and set registers for crop for i.MX8MP
-> >   media: rkisp1: Add and set registers for output size config on i.MX8MP
-> >   media: rkisp1: Add i.MX8MP-specific registers for MI and resizer
-> >   media: rkisp1: Shift DMA buffer addresses on i.MX8MP
-> >   media: rkisp1: Add register definitions for the test pattern generator
-> >   media: rkisp1: Fix RSZ_CTRL bits for i.MX8MP
-> >   media: rkisp1: Support devices without self path
-> >   media: rkisp1: Add YC swap capability
-> >   media: rkisp1: Add UYVY as an output format
-> >
-> >  .../bindings/media/rockchip-isp1.yaml         |  79 ++++++++++-
-> >  .../platform/rockchip/rkisp1/rkisp1-capture.c | 102 +++++++++++---
-> >  .../platform/rockchip/rkisp1/rkisp1-common.h  |  32 +++++
-> >  .../platform/rockchip/rkisp1/rkisp1-debug.c   |  14 +-
-> >  .../platform/rockchip/rkisp1/rkisp1-dev.c     |  67 +++++++--
-> >  .../platform/rockchip/rkisp1/rkisp1-isp.c     | 128 +++++++++++++++++-
-> >  .../platform/rockchip/rkisp1/rkisp1-regs.h    |  90 ++++++++++++
-> >  .../platform/rockchip/rkisp1/rkisp1-resizer.c |  35 ++++-
-> >  include/uapi/linux/rkisp1-config.h            |   2 +
-> >  9 files changed, 509 insertions(+), 40 deletions(-)
+> On Wed, Feb 15, 2023 at 3:44 AM Roger Heflin <rogerheflin@gmail.com> wrote:
+> it is not clear to me what this setup would be enough better than what
+> the current setups.    Given that one could have 8 spin + 1ssd or 12
+> spin for the same price.    And 2 6 disk raid6's would have the same
+> usable space, and be pretty safe (can lose any 2 of the 6 and lose no
+> data).
 
--- 
-Regards,
+They're not the same price though. Remember these disks are mixed
+sizes and various ages, exposing their entire data value
+(4d+8d+12d+12p gives you 24T of usable storage) all protected by the
+single parity disk.
 
-Laurent Pinchart
+Yes, higher levels of RAID will always be better. However, that's not
+how these millions of appliances are developed by a number of
+manufacturers and sold at your local retailer. The proposal (and ask
+for help) that I've raised is to have an open-source solution to these
+proprietary MD implementations, as opposed to being trapped with buggy
+MD drivers on firmware that's glitchy and breaks other aspects of the
+kernel.
+
+> On Wed, Feb 15, 2023 at 3:44 AM Roger Heflin <rogerheflin@gmail.com> wrote:
+> And given the separate filesystems requirement that would
+> require some software above the filesystems to manage spreading the
+> disks across multiple filesystems.   The risk of another disk going
+> bad (while one was failed) and losing a disk's worth of data would
+> push me to use the 6-disk raid6.
+
+This is long solved by a number of FUSE filesystems, as well as
+overlayfs (which would be nice if it could gradually spool data down
+into layers, but that's another ball of wax).
+
+Hopefully that makes sense. The only thing that's coming closer to
+this is bcachefs, but that's still looking like a multi-year long road
+(with the above being deployed in homes since the early 2000s).
+
+On Wed, Feb 15, 2023 at 3:44 AM Roger Heflin <rogerheflin@gmail.com> wrote:
+>
+> I think he is wanting the parity across the data blocks on the
+> separate filesystems (some sort of parity across fs[1-8]/block0 to
+> parity/block0).
+>
+> it is not clear to me what this setup would be enough better than what
+> the current setups.    Given that one could have 8 spin + 1ssd or 12
+> spin for the same price.    And 2 6 disk raid6's would have the same
+> usable space, and be pretty safe (can lose any 2 of the 6 and lose no
+> data).  And given the separate filesystems requirement that would
+> require some software above the filesystems to manage spreading the
+> disks across multiple filesystems.   The risk of another disk going
+> bad (while one was failed) and losing a disk's worth of data would
+> push me to use the 6-disk raid6.
+>
+> WOL: current SSD's are rated for around 1000-2000 writes.  So a 1Tb
+> disk can sustain 1000-2000TB of total writes.  And writes to
+> filesystem blocks would get re-written more often than data blocks.
+>  How well it would work would depend on how often the data is deleted
+> and re-written.   If the disks are some sort of long term storage then
+> the SSD is not going to get used up.   And I am not sure if the rated
+> used up really means anything unless you are using a STUPID enterprise
+> controller that proactively disables/kills the SSD when it says the
+> rated writes have happened.   I have a 500GB ssd in a mirror that
+> "FAILED" according to smart 2 years ago and so far is still fully
+> functional, and it is "GOOD" again because the counters used to
+> determine total writes seems to have rolled over.
+>
+> On Tue, Feb 14, 2023 at 8:23 PM Heinz Mauelshagen <heinzm@redhat.com> wrote:
+> >
+> > Roger,
+> >
+> > as any of the currently implemented 'parity' algorithms (block xor/P-/Q-Syndrome) provided by DM/MD RAID
+> > have to have at least two data blocks to calculate:  are you, apart from the filesystem thoughts you bring up, thinking
+> > about running those on e.g. pairs of disks of mentioned even numbered set of 8?
+> >
+> > Heinz
+> >
+> > On Tue, Feb 14, 2023 at 11:28 PM Roger Heflin <rogerheflin@gmail.com> wrote:
+> >>
+> >> On Tue, Feb 14, 2023 at 3:27 PM Heinz Mauelshagen <heinzm@redhat.com> wrote:
+> >> >
+> >>
+> >> >
+> >> >
+> >> > ...which is RAID1 plus a parity disk which seems superfluous as you achieve (N-1)
+> >> > resilience against single device failures already without the later.
+> >> >
+> >> > What would you need such parity disk for?
+> >> >
+> >> > Heinz
+> >> >
+> >>
+> >> I thought that at first too, but threw that idea out as it did not
+> >> make much sense.
+> >>
+> >> What he appears to want is 8 linear non-striped data disks + a parity disk.
+> >>
+> >> Such that you can lose any one data disk and parity can rebuild that
+> >> disk.  And if you lose several data diskis, then you have intact
+> >> non-striped data for the remaining disks.
+> >>
+> >> It would almost seem that you would need to put a separate filesystem
+> >> on each data disk/section (or have a filesystem that is redundant
+> >> enough to survive) otherwise losing an entire data disk would leave
+> >> the filesystem in a mess..
+> >>
+> >> So N filesystems + a parity disk for the data on the N separate
+> >> filesystems.   And each write needs you to read the data from the disk
+> >> you are writing to, and the parity and recalculate the new parity and
+> >> write out the data and new parity.
+> >>
+> >> If the parity disk was an SSD it would be fast enough, but if parity
+> >> was an SSD I would expect it to get used up/burned out from all of
+> >> parity being re-written for each write on each disk unless you bought
+> >> an expensive high-write ssd.
+> >>
+> >> The only advantage of the setup is that if you lose too many disks you
+> >> still have some data.
+> >>
+> >> It is not clear to me that it would be any cheaper if parity needs to
+> >> be a normal ssd's (since ssds are about 4x the price/gb and high-write
+> >> ones are even more) than a classic bunch of mirrors, or even say a 4
+> >> disks raid6 where you can lose any 2 and still have data.
+> >>
