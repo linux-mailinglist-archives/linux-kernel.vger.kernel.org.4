@@ -2,105 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD766699260
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0386269926C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjBPK4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
+        id S230339AbjBPK6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjBPK4t (ORCPT
+        with ESMTP id S230323AbjBPK55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:56:49 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C570EB5D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:55:54 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id dr8so4085666ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:55:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wELXWPPoXk4hvkrL0n24gtCGLJJqnUYYyY4uopwT0do=;
-        b=sO5dU0gLMQb9Kor9OD9tiQaZ+g6Ijl3BCOZJ4uIa9xldCN2i5C2gFA5OTQQDsRmLC4
-         VNuuRm3r/DPpu8zRw3zx6Yc0CXPWV92JPqXgzZbu/Y29G/LLShytWwVOrj4XvOuzGOxF
-         2ZW+JAwylk9JKz9w3ZWQ1mmX0EtSFgdJMgn7PXSmo08zhj9m2voZWBh2dJJ7jNmPq4UQ
-         zFDnD8sFX2uARQdfKOlBEnVvJb+1UAdE2MjNHDkRosMMjVhJt6J9vKxeteNV8P+c8Qw5
-         rYdubt6NHPYnWhnJEuqO/pDWp+8YvOP2xs8zn9Nbf+ZZEebxOCoPO3dFeuryzSD1uI25
-         3i7g==
+        Thu, 16 Feb 2023 05:57:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3585956485
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676544979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uTgMQWhXxbdOB1s+iJ3y+3uVjK3VfEIrdExBYMmTzrk=;
+        b=cgTA8yeBuLVrFQVUmlI+zpc+i1N1YJx/XupkVor1p/PDzbtkrCJaRFBHH5jm5w/+5d51X8
+        Bn2kkqyd8oZGSVLCtonsceAAevnNU5H26m5PiLePfMmuSxCWYBhVrrk1glN+9V+nsIJyVa
+        6qv75jzAEiTEOdI0A+bzz0LgINFEB2s=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-353-r9p6845-ODSq9UybbBZQVg-1; Thu, 16 Feb 2023 05:56:18 -0500
+X-MC-Unique: r9p6845-ODSq9UybbBZQVg-1
+Received: by mail-wr1-f72.google.com with SMTP id k17-20020adfe8d1000000b002c55ef1ec94so194314wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wELXWPPoXk4hvkrL0n24gtCGLJJqnUYYyY4uopwT0do=;
-        b=onuabbVx8Qokl9P6nveHFPfDB4wIspRX3/FmaeBkbterYBjXcLMO70PeFjehBKCf6n
-         gzI9M8A9Fo24Dx+PIxCy0W+O3+e6eFnJrMMHj/0xtTpxRS4Iv7yRbDD3pv9jEcez73UM
-         W/oiecNSlWOsJB7ZGUViwvoxx601ByuKtvd7uMj8fSIcsjxPilYVbrpRlp4qNkZIT7T6
-         GfVsMQCnYaWUbhTJOqXdxfJ0ik5cihxItGRDnlF8qmT3uhQd4L1vbJYWpM2pk0MoUELB
-         uNEXrW1YwB9gPvFC7ADMUmPZexvhJjSyiayE3KdHjr7oxg9YpiKzz0Dj+bc6zg9ju3rv
-         jHnQ==
-X-Gm-Message-State: AO0yUKXhawAVVE4s3jhhGxAIC7EpDdQx+ptitwLy8PnzXEBTahihQy5l
-        kXYMPM4JBjHUut7GrNTnoPIOKA==
-X-Google-Smtp-Source: AK7set/d4qp8Og+m+oKhKa3w+tTNVK0pbSJ3GHq2sgppAOaYduPGmD7LK7OQ+NQ7kXBno6gxbM+2CQ==
-X-Received: by 2002:a17:906:6c95:b0:886:7eae:26c4 with SMTP id s21-20020a1709066c9500b008867eae26c4mr5133303ejr.5.1676544952785;
-        Thu, 16 Feb 2023 02:55:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id gh15-20020a170906e08f00b008720c458bd4sm664172ejb.3.2023.02.16.02.55.51
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uTgMQWhXxbdOB1s+iJ3y+3uVjK3VfEIrdExBYMmTzrk=;
+        b=Y1UxWZc15PQCXsYimcxF2sMZ4vW2vlJF2YJyd/3WRv2pku7ht+Bgtg38kI2lq/BZ96
+         igh4E9k0fMNH04yJnS7UUgbN9JMOG55gHO6g+rLS5615nA5LK+PghdB9Pj6A2XwP6wJp
+         aCBa7Ly0ic+4PPOJQyPw0A3g5uOIe2OKe53NB9iLF1w3DJUr0pnnFGeseZMJt66/ocqU
+         g22BEVKyTAZci4Q3TB/ohPQk2x6pj05BRuyma+Y65W48gE1y0aRHwW7rcMGa2h/q7T4y
+         lFSRDb2T9VTtp8Kykh0WBXymzTv6AGgyXt9z0C7XawmTVAGpmnHEgO1LV0yY9uD+InSE
+         Fbzw==
+X-Gm-Message-State: AO0yUKWVyeIdXFxeQ2Zd1kAa11lS8yaYlANorf2CzY3dw/Tuw/4qnJtj
+        F96qtfHcU8n/RDnmpgTsL/fxLHzXUPmQASB03dD6eSChQFsjdlORnMVw+memC167Bzi24yOCp1g
+        BqR7RWAxIeerqc+8e5fH12ccf
+X-Received: by 2002:adf:e701:0:b0:2c5:5331:5516 with SMTP id c1-20020adfe701000000b002c553315516mr4351118wrm.51.1676544976935;
+        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ObTYOMWdJTcJUhFYm6zKW9Smmq8ZljjToRyJseQklHttx5j+GTfa92sWHSmEG8i4fOJ6xDQ==
+X-Received: by 2002:adf:e701:0:b0:2c5:5331:5516 with SMTP id c1-20020adfe701000000b002c553315516mr4351100wrm.51.1676544976599;
+        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
+        by smtp.gmail.com with ESMTPSA id h16-20020adffa90000000b002c5621263e3sm1221457wrr.19.2023.02.16.02.56.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:55:52 -0800 (PST)
-Message-ID: <d0d1db7e-e2a7-dddf-5c28-fed330b44cdb@linaro.org>
-Date:   Thu, 16 Feb 2023 11:55:50 +0100
+        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
+Message-ID: <909d3cd5-eb64-6901-4e12-00ac5c69f4aa@redhat.com>
+Date:   Thu, 16 Feb 2023 11:56:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 02/16] PCI: exynos: Rename Exynos PCIe driver to Samsung
- PCIe
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] Revert "splice: Do splice read from a buffered file
+ without using ITER_PIPE"
 Content-Language: en-US
-To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
-        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
-        m.szyprowski@samsung.com, jh80.chung@samsung.co,
-        pankaj.dubey@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214121333.1837-1-shradha.t@samsung.com>
- <CGME20230214121411epcas5p25efd5d4242c512f21165df0c2e81b8bc@epcas5p2.samsung.com>
- <20230214121333.1837-3-shradha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214121333.1837-3-shradha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-mm@kvack.org
+References: <20230215-topic-next-20230214-revert-v1-2-c58cd87b9086@linaro.org>
+ <20230215-topic-next-20230214-revert-v1-0-c58cd87b9086@linaro.org>
+ <3055589.1676466118@warthog.procyon.org.uk>
+ <71078188-1443-d84e-658c-967991f3b590@linaro.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <71078188-1443-d84e-658c-967991f3b590@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 13:13, Shradha Todi wrote:
-> The current PCIe controller driver is being used for Exynos5433
-> SoC only. In order to extend this driver for all SoCs manufactured
-> by Samsung using DWC PCIe controller, rename this driver and make
-> it Samsung specific instead of any Samsung SoC name.
+On 16.02.23 10:10, Konrad Dybcio wrote:
 > 
-> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
-> ---
->  MAINTAINERS                              |   4 +-
->  drivers/pci/controller/dwc/Kconfig       |   6 +-
->  drivers/pci/controller/dwc/Makefile      |   2 +-
->  drivers/pci/controller/dwc/pci-samsung.c | 443 +++++++++++++++++++++++
+> 
+> On 15.02.2023 14:01, David Howells wrote:
+>> Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>> next-20230213 introduced commit d9722a475711 ("splice: Do splice read from
+>>> a buffered file without using ITER_PIPE") which broke booting on any
+>>> Qualcomm ARM64 device I grabbed, dereferencing a null pointer in
+>>> generic_filesplice_read+0xf8/x598. Revert it to make the devices
+>>> bootable again.
+>>>
+>>> This reverts commit d9722a47571104f7fa1eeb5ec59044d3607c6070.
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>> Commit d9722a47571104f7fa1eeb5ec59044d3607c6070 was part of v13 of my
+>> patches.  This got replaced yesterday by a newer version which may or may not
+>> have made it into linux-next.
+>>
+>> This is probably a known bug fixed in the v14 by making shmem have its own
+>> splice-read function.
+>>
+>> Can you try this?
+>>
+>> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+> next-20230216 boots fine again, thanks!
+> 
+>>
+>> (Also, can you include me in the cc list as I'm the author of the patch you
+>> reverted?)
+> Ugh.. I thought b4 would have done that for me.. weird..
 
-Rename missing. I am anyway not sure if this is good. What's wrong with
-old name?
+Right, and usually it's nicer to comment on the problematic patches, 
+asking for a fix or a revert, instead of sending reverts.
 
-Best regards,
-Krzysztof
+My 2 cents.
+
+-- 
+Thanks,
+
+David / dhildenb
 
