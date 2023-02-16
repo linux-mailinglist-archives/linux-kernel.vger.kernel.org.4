@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF08698EB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14726698EB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjBPIaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S229515AbjBPIal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBPIaX (ORCPT
+        with ESMTP id S229608AbjBPIaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:30:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB6E2CC45;
-        Thu, 16 Feb 2023 00:30:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B82D3B8265F;
-        Thu, 16 Feb 2023 08:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33E0EC4339B;
-        Thu, 16 Feb 2023 08:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676536219;
-        bh=BoI3Pa5/8NBSfjvMPIAStqEd9DYVS/ieE9UgjkVV5bE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ax2KpHwcRtYKxX2JPuCgBzUGN3n4xSKpKATqqVyCbHckiFydU9U5sg+eYVDc2LMkU
-         ORIbSKYskRNaTRBNgeRmQrci1hPPhH1ZF6YLbVJmG3SrIyn4ALVBnTxZOIR0mDXmRu
-         q+b47jz7neOpom9Rt/7M45XcbadtmaB7j/TNQlpg8GUy7KMQoxXXXJGUSYVWodSR2+
-         SiP85nafE7BIyPcJYSqswPsY64Qc3BefOIC25il3wdqn6e/2X3TEfXP7RcswkWAJXD
-         Oo+98QEfl/yhnTWHTZprbjpX+QjryenUKXNClb4ZVoJAMCLlEVeSTYlI/MNDRCu0Ao
-         B/RyevKn5rWew==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14927E29F3F;
-        Thu, 16 Feb 2023 08:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Feb 2023 03:30:39 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF3F474C4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:30:36 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id a63so131631ybg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:30:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aV6pFwE43CN4dem5vZuHJChCMbOrTxdF1BMzS4I5thA=;
+        b=dR1ZtEmOP3odAC3bEPASdqgIl20IHPzHQkOUvMp1FM1Xp0ykjbimWSPFMMAdZYfYsc
+         Di8B93AsFkX/IePgujBt2O9VlkPgcvH49pPV7Iuev9KbQzBveh9OsTjYce19tW69mi0s
+         JXbM/InAUtEeDhyS7GnUzJV9aBz6QPTLzEvN/HhYNObLTmbCM7H7hk5qtKWummBqgYw3
+         miSDQkMMFAQRHTbcdfk6YCrg/b9AMaslGt9Ku/rcaZ6QtJnnsixBlQfldyYRdH9ObS4S
+         Sf6Qf9sO5zGJXX2Tg/0nX/RP8gJySxhw+Te2H+QW+mo7vbG0l5uG0bjn5B383eQ6fFAA
+         l11Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aV6pFwE43CN4dem5vZuHJChCMbOrTxdF1BMzS4I5thA=;
+        b=dY+SlrfLVvnIbKEk2gryAiT/bgeF7OwOL2zN67lw/1tCDa4uHBmzQJdVJ9//FG0/B8
+         CkUG5tH/culsaEsgKe2kxxGsY89hkQ2Yh3kWX0Q52ijWQ9VYhC7OOac238r4wTJnngtM
+         +nxkhDywtN0DTUX5GsY8qbxP/g6s8UdvDbcrJxmRMzerQoNx0DE61IjjOC6d+VBJVGnJ
+         DrGz6iOiT9jXXGEwE3E2G5mK5bakPo59PbzOJSjc32P8hYQG1lqO9G/9JyPjxPZPNbYU
+         YYAwm7/l0eB83+jZGfvcJvNVMBHE6x+6xvfnM72m8h2n6wwsWykOk+jyNNChZlDn9Xti
+         Y85A==
+X-Gm-Message-State: AO0yUKVL/ZY2MZIBIpcjF1qTSSq0YJp5h/n3x/4YnAw3X/0aofeNzRsb
+        ax8lLm4fmVA8D9ELLr2s+2pfXPn0NiEkq7lzz8bkhw==
+X-Google-Smtp-Source: AK7set9aQOLKtH9O2Hal4NZyH6uriEKubDXvZj7QxBF6mwF4swlyoOv+TuQfEhquM0RKsldDD3QIpRo515xgRrsb59c=
+X-Received: by 2002:a25:9983:0:b0:883:cf5:1553 with SMTP id
+ p3-20020a259983000000b008830cf51553mr517453ybo.28.1676536235470; Thu, 16 Feb
+ 2023 00:30:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 00/10] Adding Sparx5 ES0 VCAP support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167653621907.28100.17908588254142053263.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Feb 2023 08:30:19 +0000
-References: <20230214104049.1553059-1-steen.hegelund@microchip.com>
-In-Reply-To: <20230214104049.1553059-1-steen.hegelund@microchip.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
-        rdunlap@infradead.org, casper.casan@gmail.com,
-        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
-        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
-        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+ <20230120154437.22025-4-andriy.shevchenko@linux.intel.com> <736566bd-b8bc-07d0-bb07-b8abb8bc09eb@wanadoo.fr>
+In-Reply-To: <736566bd-b8bc-07d0-bb07-b8abb8bc09eb@wanadoo.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 Feb 2023 09:30:23 +0100
+Message-ID: <CACRpkdYVbMiwWyQtTGezZcZ5UaRL=hy1y5FNHTTkYWQDCySE=Q@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] usb: fotg210: Switch to use dev_err_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,46 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Feb 16, 2023 at 9:07 AM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+> > -     dev_err(dev, "init %s fail, %d\n", dev_name(dev), retval);
+> > -     return retval;
+> > +     return dev_err_probe(dev, retval, "init %s fail\n", dev_name(dev));
+>
+> Hi,
+> the patch is already applied, but is dev_name(dev) needed here?
 
-On Tue, 14 Feb 2023 11:40:39 +0100 you wrote:
-> This provides the Egress Stage 0 (ES0) VCAP (Versatile Content-Aware
-> Processor) support for the Sparx5 platform.
-> 
-> The ES0 VCAP is an Egress Access Control VCAP that uses frame keyfields and
-> previously classified keyfields to add, rewrite or remove VLAN tags on the
-> egress frames, and is therefore often referred to as the rewriter.
-> 
-> [...]
+Not really but it's not a big deal either, it's just a string.
+Feel free to send an incremental patch dropping it :)
 
-Here is the summary with links:
-  - [net-next,v2,01/10] net: microchip: sparx5: Discard frames with SMAC multicast addresses
-    https://git.kernel.org/netdev/net-next/c/65b6625069a4
-  - [net-next,v2,02/10] net: microchip: sparx5: Clear rule counter even if lookup is disabled
-    https://git.kernel.org/netdev/net-next/c/d7953da4f293
-  - [net-next,v2,03/10] net: microchip: sparx5: Egress VLAN TPID configuration follows IFH
-    https://git.kernel.org/netdev/net-next/c/38f6408c6071
-  - [net-next,v2,04/10] net: microchip: sparx5: Use chain ids without offsets when enabling rules
-    https://git.kernel.org/netdev/net-next/c/0518e914f34a
-  - [net-next,v2,05/10] net: microchip: sparx5: Improve the error handling for linked rules
-    https://git.kernel.org/netdev/net-next/c/b5b0c3645988
-  - [net-next,v2,06/10] net: microchip: sparx5: Add ES0 VCAP model and updated KUNIT VCAP model
-    https://git.kernel.org/netdev/net-next/c/a5cc98adf3cb
-  - [net-next,v2,07/10] net: microchip: sparx5: Updated register interface with VCAP ES0 access
-    https://git.kernel.org/netdev/net-next/c/f2a77dd69f51
-  - [net-next,v2,08/10] net: microchip: sparx5: Add ES0 VCAP keyset configuration for Sparx5
-    https://git.kernel.org/netdev/net-next/c/3cbe7537a7f1
-  - [net-next,v2,09/10] net: microchip: sparx5: Add TC support for the ES0 VCAP
-    https://git.kernel.org/netdev/net-next/c/52b28a93c45d
-  - [net-next,v2,10/10] net: microchip: sparx5: Add TC vlan action support for the ES0 VCAP
-    https://git.kernel.org/netdev/net-next/c/ebf44ded76e9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yours,
+Linus Walleij
