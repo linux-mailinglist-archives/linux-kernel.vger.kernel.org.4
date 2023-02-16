@@ -2,114 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346B36997B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E633E6997B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjBPOma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S230232AbjBPOmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjBPOm0 (ORCPT
+        with ESMTP id S229980AbjBPOmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:42:26 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66165311C3;
-        Thu, 16 Feb 2023 06:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676558545; x=1708094545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5bVsjkDJKcW49tiFh1Ukt7n2ye4PhDRhCc+U/ksoYtI=;
-  b=d9LuPDKhPFqx5PY+u513CitQKeEtceahP41j1jLfmA0REPp2uQVDTwEc
-   NOOsWQ4r58vRHZvTTxe7XpLvqONVux6XuY77AMbsjPY/f3mpdGIY1MJBZ
-   TMAJWyC+6nbDLSfSQOyIsPUhDWbq9nSdPDO2QKudtVBqcLjcJJtCSn0NN
-   G6oMoKp2Ujt5nN9Oelrn08xZHHOn4Oca2Emjyn1EnrCzx7U5NbOncPPoX
-   JeHru6IrUts0MeiTmHxJlRqDAnLSspzGWsTqyG6TozIHisASknVZTtT3G
-   GNI65RxP1Mry+hY34qmkI2wLk1cEdH5L06QMrDI9s2zESfMUXErvOEGw0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359161965"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="359161965"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 06:42:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="844165526"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="844165526"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2023 06:42:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pSfSm-007p7Z-2f;
-        Thu, 16 Feb 2023 16:42:20 +0200
-Date:   Thu, 16 Feb 2023 16:42:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [PATCH] gpio: sim: fix a memory leak
-Message-ID: <Y+5AzMxlTC7X2UsM@smile.fi.intel.com>
-References: <20230216141555.116219-1-brgl@bgdev.pl>
+        Thu, 16 Feb 2023 09:42:47 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466474D627;
+        Thu, 16 Feb 2023 06:42:37 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 243D524DB8C;
+        Thu, 16 Feb 2023 22:42:22 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
+ 2023 22:42:22 +0800
+Received: from [192.168.125.82] (183.27.97.168) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
+ 2023 22:42:21 +0800
+Message-ID: <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
+Date:   Thu, 16 Feb 2023 22:42:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216141555.116219-1-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud>
+ <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
+ <Y6tSWB2+98a8k9Qw@spud>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y6tSWB2+98a8k9Qw@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.168]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 03:15:55PM +0100, Bartosz Golaszewski wrote:
-> Fix an inverted logic bug in gpio_sim_remove_hogs() that leads to GPIO
-> hog structures never being freed.
-
-Ha-ha, I stared to this code, and in the head I was "okay, this loop is until
-chip_label is *not* NULL, so should be fine".
-
-At the same time, "! is hard to process", see for example
-2754435d4c82 ("ACPI / battery: get rid of negations in conditions")
-which I had suggested.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-P.S. But my patch I mentioned looks also good to have, no?
-
-> Fixes: cb8c474e79be ("gpio: sim: new testing module")
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  drivers/gpio/gpio-sim.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
+> On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
+>> On Tue, 20 Dec 2022 23:14:39 +0000, Conor Dooley wrote:
+>> > On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
+>> > > From: Emil Renner Berthing <kernel@esmil.dk>
+>> > > 
+>> > > Add bindings for the system clock and reset generator (SYSCRG) on the
+>> > > JH7110 RISC-V SoC by StarFive Ltd.
+>> > > 
+>> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 > 
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index 60514bc5454f..9e3893b19e4f 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -736,7 +736,7 @@ static void gpio_sim_remove_hogs(struct gpio_sim_device *dev)
->  
->  	gpiod_remove_hogs(dev->hogs);
->  
-> -	for (hog = dev->hogs; !hog->chip_label; hog++) {
-> +	for (hog = dev->hogs; hog->chip_label; hog++) {
->  		kfree(hog->chip_label);
->  		kfree(hog->line_name);
->  	}
-> -- 
-> 2.37.2
+>> > > +  clocks:
+>> > > +    items:
+>> > > +      - description: Main Oscillator (24 MHz)
+>> > > +      - description: GMAC1 RMII reference
+>> > > +      - description: GMAC1 RGMII RX
+>> > > +      - description: External I2S TX bit clock
+>> > > +      - description: External I2S TX left/right channel clock
+>> > > +      - description: External I2S RX bit clock
+>> > > +      - description: External I2S RX left/right channel clock
+>> > > +      - description: External TDM clock
+>> > > +      - description: External audio master clock
+>> > 
+>> > So, from peeking at the clock driver & the dt - it looks like a bunch of
+>> > these are not actually required?
+>> 
+>> These clocks are used as root clocks or optional parent clocks in clock tree.
+>> Some of them are optional, but they are required if we want to describe the
+>> complete clock tree of JH7110 SoC.
 > 
+> Perhaps I have a misunderstand of what required means. To me, required
+> means "you must provide this clock for the SoC to operate in all
+> configurations".
+> Optional therefore would be for things that are needed only for some
+> configurations and may be omitted if not required.
+> 
+> From your comment below, boards with a JH7110 may choose not to populate
+> both external clock inputs to a mux. In that case, "dummy" clocks should
+> not have to be provided in the DT of such boards to satisfy this binding
+> which seems wrong to me..
 
--- 
-With Best Regards,
-Andy Shevchenko
+Please see the picture of these external clocks in clock tree.
 
+# mount -t debugfs none /mnt
+# cat /mnt/clk/clk_summary
+                                 enable  prepare  protect                                duty  hardware
+   clock                          count    count    count        rate   accuracy phase  cycle    enable
+-------------------------------------------------------------------------------------------------------
+ *mclk_ext*                             0        0        0    12288000          0     0  50000         Y
+ *tdm_ext*                              0        0        0    49152000          0     0  50000         Y
+ *i2srx_lrck_ext*                       0        0        0      192000          0     0  50000         Y
+ *i2srx_bclk_ext*                       0        0        0    12288000          0     0  50000         Y
+ *i2stx_lrck_ext*                       0        0        0      192000          0     0  50000         Y
+ *i2stx_bclk_ext*                       0        0        0    12288000          0     0  50000         Y
+ *gmac1_rgmii_rxin*                     0        0        0   125000000          0     0  50000         Y
+    gmac1_rx                          0        0        0   125000000          0     0  50000         Y
+       gmac1_rx_inv                   0        0        0   125000000          0   180  50000         Y
+ *gmac1_rmii_refin*                     0        0        0    50000000          0     0  50000         Y
+    gmac1_rmii_rtx                    0        0        0    50000000          0     0  50000         Y
+       gmac1_tx                       0        0        0    50000000          0     0  50000         N
+          gmac1_tx_inv                0        0        0    50000000          0   180  50000         Y
+ *osc*                                  4        4        0    24000000          0     0  50000         Y
+    apb_func                          0        0        0    24000000          0     0  50000         Y
+ ...
 
+The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" are
+actually used as the parent of other clocks. The "dummy" clocks
+you said are all internal clocks.
+
+For the audio related clocks (mclk_ext/tdm_ext/i2srx_lrck_ext/
+i2srx_bclk_ext/i2stx_lrck_ext/i2stx_bclk_ext), they will be used
+as the parent clocks in audio related drivers. Note that some
+clocks need to select different clocks as parent according to
+requirement.
+So all these external clocks are required.
+
+> 
+> It would seem to me that you need to set minItems < maxItems here to
+> account for that & you do in fact need clock-names.
+> 
+>> 
+>> > I'd have ploughed through this, but having read Krzysztof's comments on
+>> > the DTS I'm not sure that this binding is correct.
+>> > https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.feng@starfivetech.com/T/#mdf67621a2344dce801aa8015d4963593a2c28bcc
+>> > 
+>> > I *think* the DT is correct - the fixed clocks are all inputs from clock
+>> > sources on the board and as such they are empty in soc.dtsi and are
+>> > populated in board.dts?
+>> 
+>> Yes, the fixed clocks are all clock sources on the board and input to the SoC.
+>> 
+>> > 
+>> > However, are they all actually required? In the driver I see:
+>> > 	JH71X0__MUX(JH7110_SYSCLK_GMAC1_RX, "gmac1_rx", 2,
+>> > 		    JH7110_SYSCLK_GMAC1_RGMII_RXIN,
+>> > 		    JH7110_SYSCLK_GMAC1_RMII_RTX),
+>> > That macro is:
+>> > #define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] = {			\
+>> > 	.name = _name,								\
+>> > 	.flags = 0,								\
+>> > 	.max = ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
+>> > 	.parents = { __VA_ARGS__ },						\
+>> > }
+>> > 
+>> > AFAICT, RMII reference feeds RMII_RTX & RGMII RX *is* RGMII_RXIN?
+>> > Does that mean you need to populate only one of GMAC1 RMII reference
+>> > and GMAC1 RMGII RX and the other is optional?
+>> 
+>> Yes, actually only one of them is chosen as the root clock
+>> source of the clock "gmac1_rx".
+>> 
+>> > 
+>> > What have I missed?
+>> > 
+>> > > +
+>> > > +  clock-names:
+>> > > +    items:
+>> > > +      - const: osc
+>> > > +      - const: gmac1_rmii_refin
+>> > > +      - const: gmac1_rgmii_rxin
+>> > > +      - const: i2stx_bclk_ext
+>> > > +      - const: i2stx_lrck_ext
+>> > > +      - const: i2srx_bclk_ext
+>> > > +      - const: i2srx_lrck_ext
+>> > > +      - const: tdm_ext
+>> > > +      - const: mclk_ext
+>> > 
+>> > If all clocks are in fact required though, isn't this kinda pointless to
+>> > have since we already know that the order is fixed from the "clocks"
+>> > property?
+>> > Krzk/Rob?
+>> 
+>> The clock-names are used to easily identify these clocks in the clock driver.
+> 
+> *IF* all clocks were in fact required, which they aren't, you could rely
+> on the order alone in the driver as it is enforced by the binding.
+
+OK, I'll remove "clock-names" property in the bindings and device tree.
+Instead, will use index to get these clocks in drivers.
+
+Best regards,
+Hal
