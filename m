@@ -2,87 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19305699122
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81875699123
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjBPK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S229953AbjBPK2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjBPK2E (ORCPT
+        with ESMTP id S229725AbjBPK2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Feb 2023 05:28:04 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4FF27D4A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:28:03 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id g9so1410258vst.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:28:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aC0UZCTaZwODqWa60Uyhp4WnMR7OWFiD7msBoAVkJA4=;
-        b=htrWahqkdR7BI3F8kB0NkYMgKTrwmwm96JkeJku5UN773iiC76dr1Vuj3h+k3wxLuJ
-         mlVpcoxw28S9V9xkApmJxmAkvQREJCSwGQYT37ZrSVK2YtqP2fiqSDkcD6iOkLcYHRl9
-         oNWuBqSjy5fEClLHgaynPefkng2WmdqVsXmMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aC0UZCTaZwODqWa60Uyhp4WnMR7OWFiD7msBoAVkJA4=;
-        b=ct7eGAt2L+ed3wcds9GTo9GbpoJFeOr3INId3ZXenBH7aMFpiSQAL7CAclfzcRWJ7F
-         P1bYsJkToshRmUBt1PmRnHg8dOuGfYfbtl6iE7rCC01KSjkOIcE9vKRoz3O+MH+6yxd6
-         oVMn/MEbGn9MtiGr88Yv5nK1WxQVT5Fo9ZbOlr9jmy6+3nkkg0SIZqtSH2Z18yULbj4t
-         8OacMeRqzZTq4Q9iBGfwPiyD+ZOyzPQ04sKZ33T7ovwCQflkr9/red7X8RqkZRtGJQAR
-         Iz/P09QFD8kVIai/vUIqovwRwWq1KQ7Mmg5OavKBjU2EDdys8y/DDSr9rg4J8ha43sVu
-         3UhQ==
-X-Gm-Message-State: AO0yUKWohLEIY5s/keFJIylIRvfcd0aQFZKVTTWa3B8ZEK2N1l7UlWzm
-        8Ge8EF0bdZSzFrm9RN4YVON77qOqsTW+ZrjjrRVxMg==
-X-Google-Smtp-Source: AK7set9S1a9PnO5AlC0aIUcyuYB4GoqrIa5JQM3cAhXe6/vzdJZfyC8Ugb35qpq0pzDqN3S8b4loTS4XI5MfTKfgMT8=
-X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr1001620vso.60.1676543282237; Thu, 16 Feb
- 2023 02:28:02 -0800 (PST)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9EBA366B0;
+        Thu, 16 Feb 2023 02:28:03 -0800 (PST)
+Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id DE5FB20B9C3D;
+        Thu, 16 Feb 2023 02:28:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DE5FB20B9C3D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676543283;
+        bh=TiBxPy2bvn90kEvfNZ1gm0HLB1XTqCcNsA01CVVqYb8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JyXq/lCzwM9AJxO1fMQCJmJtleLVhCXG/by6cwTcunoSQAI0tabjzAmYKVuZSwmo9
+         1vfOOjaiahoaeWP40hPJtw3BWp1oIxSHjvLVh6HCQuY3S6Nw3EK8U7FVDsm/0rod8H
+         5nkVviFRLPMchx6Qe9yYktGkwoC36HIfBKgx9YsA=
+Message-ID: <f2632137-3d9f-1ed6-a5b4-f13c67afdaea@linux.microsoft.com>
+Date:   Thu, 16 Feb 2023 11:28:01 +0100
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-22-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-22-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 16 Feb 2023 18:27:51 +0800
-Message-ID: <CAGXv+5GqF=PN_ZTLAHtpbOQG7VhsGJmVu8x8zVMWSn5X7uQ93g@mail.gmail.com>
-Subject: Re: [PATCH v2 21/47] clk: mediatek: Consistently use GATE_MTK() macro
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 1/8] include/acpi: add definition of ASPT table
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+References: <20230213092429.1167812-1-jpiotrowski@linux.microsoft.com>
+ <20230213092429.1167812-2-jpiotrowski@linux.microsoft.com>
+ <CAJZ5v0hcyWs49ttGA2sjyWe5f++jvCORLeTX1eiP5O2qOAOGgQ@mail.gmail.com>
+Content-Language: en-US
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <CAJZ5v0hcyWs49ttGA2sjyWe5f++jvCORLeTX1eiP5O2qOAOGgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-20.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> All the various MediaTek clock drivers are, in a way or another,
-> redefining the GATE_MTK() macro with different names: while some
-> are doing that by actually using GATE_MTK(), others are copying
-> it entirely (hence, entirely redefining it).
->
-> Change all clock drivers to always and consistently use this macro.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+On 13/02/2023 19:43, Rafael J. Wysocki wrote:
+> On Mon, Feb 13, 2023 at 10:25 AM Jeremi Piotrowski
+> <jpiotrowski@linux.microsoft.com> wrote:
+>>
+>> The AMD Secure Processor ACPI Table provides the memory location of the
+>> register window and register offsets necessary to communicate with AMD's
+>> PSP (Platform Security Processor). This table is exposed on Hyper-V VMs
+>> configured with support for AMD's SNP isolation technology.
+>>
+>> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> 
+> Please add a Link tag pointing to the corresponding upstream ACPICA
+> pull request (or upstream ACPICA commit if already pulled) to this
+> patch and analogously for patch [2/8].
+> 
+> Thanks!
+> 
+
+Will do when I post v3. I'll poke the ACPICA maintainer again after the specification
+gets published this friday.
+
+Jeremi
+
+>> ---
+>>  include/acpi/actbl1.h | 46 +++++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 46 insertions(+)
+>>
+>> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
+>> index 15c78678c5d3..00d40373df37 100644
+>> --- a/include/acpi/actbl1.h
+>> +++ b/include/acpi/actbl1.h
+>> @@ -26,6 +26,7 @@
+>>   */
+>>  #define ACPI_SIG_AEST           "AEST" /* Arm Error Source Table */
+>>  #define ACPI_SIG_ASF            "ASF!" /* Alert Standard Format table */
+>> +#define ACPI_SIG_ASPT           "ASPT" /* AMD Secure Processor Table */
+>>  #define ACPI_SIG_BERT           "BERT" /* Boot Error Record Table */
+>>  #define ACPI_SIG_BGRT           "BGRT" /* Boot Graphics Resource Table */
+>>  #define ACPI_SIG_BOOT           "BOOT" /* Simple Boot Flag Table */
+>> @@ -106,6 +107,51 @@ struct acpi_whea_header {
+>>         u64 mask;               /* Bitmask required for this register instruction */
+>>  };
+>>
+>> +/* https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/acpitabl/ns-acpitabl-aspt_table */
+>> +#define ASPT_REVISION_ID 0x01
+>> +struct acpi_table_aspt {
+>> +       struct acpi_table_header header;
+>> +       u32 num_entries;
+>> +};
+>> +
+>> +struct acpi_aspt_header {
+>> +       u16 type;
+>> +       u16 length;
+>> +};
+>> +
+>> +enum acpi_aspt_type {
+>> +       ACPI_ASPT_TYPE_GLOBAL_REGS = 0,
+>> +       ACPI_ASPT_TYPE_SEV_MBOX_REGS = 1,
+>> +       ACPI_ASPT_TYPE_ACPI_MBOX_REGS = 2,
+>> +};
+>> +
+>> +/* 0: ASPT Global Registers */
+>> +struct acpi_aspt_global_regs {
+>> +       struct acpi_aspt_header header;
+>> +       u32 reserved;
+>> +       u64 feature_reg_addr;
+>> +       u64 irq_en_reg_addr;
+>> +       u64 irq_st_reg_addr;
+>> +};
+>> +
+>> +/* 1: ASPT SEV Mailbox Registers */
+>> +struct acpi_aspt_sev_mbox_regs {
+>> +       struct acpi_aspt_header header;
+>> +       u8 mbox_irq_id;
+>> +       u8 reserved[3];
+>> +       u64 cmd_resp_reg_addr;
+>> +       u64 cmd_buf_lo_reg_addr;
+>> +       u64 cmd_buf_hi_reg_addr;
+>> +};
+>> +
+>> +/* 2: ASPT ACPI Mailbox Registers */
+>> +struct acpi_aspt_acpi_mbox_regs {
+>> +       struct acpi_aspt_header header;
+>> +       u32 reserved1;
+>> +       u64 cmd_resp_reg_addr;
+>> +       u64 reserved2[2];
+>> +};
+>> +
+>>  /*******************************************************************************
+>>   *
+>>   * ASF - Alert Standard Format table (Signature "ASF!")
+>> --
+>> 2.25.1
+>>
