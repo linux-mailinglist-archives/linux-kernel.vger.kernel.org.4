@@ -2,136 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B42698A46
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13190698A4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjBPCCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 21:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S229646AbjBPCEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 21:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBPCCW (ORCPT
+        with ESMTP id S229583AbjBPCEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:02:22 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C87829171
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:02:19 -0800 (PST)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230216020215epoutp01cf4f17afb3142b3e891ad96c19a372b4~EK6HrWqhh2617526175epoutp01Z
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:02:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230216020215epoutp01cf4f17afb3142b3e891ad96c19a372b4~EK6HrWqhh2617526175epoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676512935;
-        bh=CSvqJjBL22C0lmgcM8zgoa8hVL77LICcIrvup4e0B1o=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=W55n6i4JpuqgbnUZhBDpWGQFqt+m9ugcBULO6ETKSLboUI6RXW9bk/TZWRpsq4JE2
-         Nr1Z6WPQrNHCwvY9jCcZC3YU4mbf/mo7PvvvJBoKEjnsg4+GEZLQB4JcqmWp5i4yxf
-         kL8XfliaAVouEdRmOCshbS+MjgNptZS8B6sxgfEg=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230216020215epcas2p3be5de9975ecdc1198c5f7395f1a3bb8a~EK6HVWvAW3106531065epcas2p3x;
-        Thu, 16 Feb 2023 02:02:15 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4PHJ9M0FH3z4x9Py; Thu, 16 Feb
-        2023 02:02:15 +0000 (GMT)
-X-AuditID: b6c32a45-671ff7000001f1e7-aa-63ed8ea624d5
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        62.B3.61927.6AE8DE36; Thu, 16 Feb 2023 11:02:14 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v1] f2fs: fix uninitialized skipped_gc_rwsem
-Reply-To: yonggil.song@samsung.com
-Sender: Yonggil Song <yonggil.song@samsung.com>
-From:   Yonggil Song <yonggil.song@samsung.com>
-To:     Chao Yu <chao@kernel.org>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Seokhwan Kim <sukka.kim@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <cf7eae6b-61ea-accb-f981-023fb022919c@kernel.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230216020214epcms2p1dfa8562c1d33231856848bb0ec8ba1a7@epcms2p1>
-Date:   Thu, 16 Feb 2023 11:02:14 +0900
-X-CMS-MailID: 20230216020214epcms2p1dfa8562c1d33231856848bb0ec8ba1a7
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFKsWRmVeSWpSXmKPExsWy7bCmme6yvrfJBisem1mcnnqWyWLVg3CL
-        J+tnMVtcWuRucXnXHDaLVR1zGR3YPDat6mTz2L3gM5NH35ZVjB6fN8kFsERl22SkJqakFimk
-        5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYArVZSKEvMKQUKBSQWFyvp
-        29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGc8uL+evaCHs+LD
-        qZPMDYwr2bsYOTkkBEwkmk6dZ+pi5OIQEtjBKLFozj62LkYODl4BQYm/O4RBaoQFnCW+TXrK
-        DGILCShJXDvQywIR15fYvHgZ2Bw2AV2JvxuWs4PMERF4wCgx5cZeNpAEs0CQxP0pD1ghlvFK
-        zGh/ygJhS0tsX76VEcTmFLCTuLT5NVRcQ+LHsl5mCFtU4ubqt+ww9vtj8xkhbBGJ1ntnoWoE
-        JR783A0Vl5RYdAjkGRA7X+LviutsEHaNxNaGNqi4vsS1jo1gu3gFfCUOdRwAu41FQFXi++PT
-        UDNdJA4cvM0Mcb+8xPa3c5hBYcIsoCmxfpc+iCkhoCxx5BYLRAWfRMfhv+wwH+6Y9wRqk5rE
-        5k2boT6XkbjwuA3qSg+JSVvvMU9gVJyFCOhZSHbNQti1gJF5FaNYakFxbnpqsVGBITxuk/Nz
-        NzGCE6GW6w7GyW8/6B1iZOJgPMQowcGsJMK76eabZCHelMTKqtSi/Pii0pzU4kOMpkBfTmSW
-        Ek3OB6bivJJ4QxNLAxMzM0NzI1MDcyVxXmnbk8lCAumJJanZqakFqUUwfUwcnFINTOueGe2J
-        26Vb9Oz2lB3ZubuOMcatf/9K8baonILLE5fXXTYl9h9CBScsVM5dZ7zzX/C9PakzHmgySn/1
-        vdHmHMdzzvMQhynDzacR6nsba8Kva/9V/tdSMevs/4fursXSpbO8c1oDHrFcCPvhp66zTWfz
-        sW57pfn5ZpZRHdF3vmguOrxBcOmxWJejW/z7C0+p9Mfm/W9oD9nAJx4i4BJ14sTl4rQzOxYV
-        Huj68IBb/VL0Go78ZsfHXsfclyy8duDV7voCt7WmE5sZbPr7pS1aH7TcWmA3+8Vbtp/KNU5q
-        uV6WzKXTZjg+KLguldj5cNH3xZJzXGqnRObNuaNZvqvpp+HX7kjJDNcdTWkhey88U2Ipzkg0
-        1GIuKk4EAK8lt+ENBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6
-References: <cf7eae6b-61ea-accb-f981-023fb022919c@kernel.org>
-        <20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p2>
-        <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p1>
+        Wed, 15 Feb 2023 21:04:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A9F22026;
+        Wed, 15 Feb 2023 18:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676513071; x=1708049071;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hb7vpaFy1+xNq//qwF1yWdxFMR3v3oby6ZiTClQzpLU=;
+  b=YUc/YMTvlPRP2Cozpbw6qxFRv5Qtl6mBsq+TOEOGsefYqoo74pTi4KY9
+   lvwZY1JjB6SJzQVeN7/J7ZGGktOcDUViYh2BHbytNnXzS5Byi4CWb6iwQ
+   Zug9UKnmr4rzefVnHWasa5intg02qguYOMl1TaZHDFL1qIjUHXW16M6oH
+   SWLff1qHtuOQMOqHuOJrqNFk5zlLX285D2CfH+OrDBjt1IoVBd1oc0cQX
+   rwNzCZxrMvl1tdERegFu5bwyd59v53CuoQsmb8e7yxRdUFeiLNcuFsbY7
+   CH30wnSdapITaHXOqA33mH+z8tJWSkMOHgtwjRDV2t39ycu6Fgy1qG2Zx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="329322594"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="329322594"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 18:04:31 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="758750806"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="758750806"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.33.161])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 18:04:30 -0800
+Date:   Wed, 15 Feb 2023 18:04:28 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/6] cxl/region: Provide region info to the cxl_poison
+ trace event
+Message-ID: <Y+2PLGynCGRDLmVl@aschofie-mobl2>
+References: <cover.1675983077.git.alison.schofield@intel.com>
+ <7862ef793a3b4fce49b0c8074b014b53b389ce12.1675983077.git.alison.schofield@intel.com>
+ <20230210125641.00004744@Huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210125641.00004744@Huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/15 10:48, Yonggil Song wrote:
->> When f2fs skipped a gc round during victim migration, there was a bug which
->> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
->> was not initialized. It fixes the bug by correctly initializing the
->> skipped_gc_rwsem inside the gc loop.
->
->It makes sense to me.
->
->> 
->> Fixes: d147ea4adb96 ("f2fs: introduce f2fs_gc_control to consolidate f2fs_gc parameters")
->
->How does this commits introduce the bug?
+On Fri, Feb 10, 2023 at 12:56:41PM +0000, Jonathan Cameron wrote:
+> On Thu,  9 Feb 2023 15:32:57 -0800
+> alison.schofield@intel.com wrote:
+> 
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > User space may need to know which region, if any, maps the poison
+> > address(es) logged in a cxl_poison trace event. Since the mapping
+> > of DPAs (device physical addresses) to a region can change, the
+> > kernel must provide this information at the time the poison list
+> > is read. The event informs user space that at event <timestamp>
+> > this <region> mapped to this <DPA>, which is poisoned.
+> > 
+> > The cxl_poison trace event is already wired up to log the region
+> > name and uuid if it receives param 'struct cxl_region'.
+> > 
+> > In order to provide that cxl_region, add another method for gathering
+> > poison - by committed endpoint decoder mappings. This method is only
+> > available with CONFIG_CXL_REGION and is only used if a region actually
+> > maps the memdev where poison is being read. The default method remains:
+> > read the poison by memdev resource.
+> 
+> Mention here that you also cover memory that isn't mapped.
+Ok, will do. And will also mention that we don't cover
+CXL_DECODER_MIXED, as I'm noting below...
 
-Oh, sorry I've got wrong hash.
-I'll send right hash on PATCH v2.
+> 
+> A few minor comments inline.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> 
+> > 
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > ---
+> >  drivers/cxl/core/core.h   |  5 +++
+> >  drivers/cxl/core/memdev.c | 14 ++++++-
+> >  drivers/cxl/core/region.c | 82 +++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 100 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> > index 8c04672dca56..2f9bd8651eb1 100644
+> > --- a/drivers/cxl/core/core.h
+> > +++ b/drivers/cxl/core/core.h
+> > @@ -22,7 +22,12 @@ void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
+> >  #define CXL_PMEM_REGION_TYPE(x) (&cxl_pmem_region_type)
+> >  int cxl_region_init(void);
+> >  void cxl_region_exit(void);
+> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data);
+> >  #else
+> > +static inline int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> > +{
+> > +	return 0;
+> > +}
+> >  static inline void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled)
+> >  {
+> >  }
+> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> > index 19b833c9cf35..8696d7b508b6 100644
+> > --- a/drivers/cxl/core/memdev.c
+> > +++ b/drivers/cxl/core/memdev.c
+> > @@ -139,14 +139,26 @@ static ssize_t trigger_poison_list_store(struct device *dev,
+> >  					 const char *buf, size_t len)
+> >  {
+> >  	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> > +	struct cxl_port *port;
+> >  	bool trigger;
+> >  	int rc;
+> >  
+> >  	if (kstrtobool(buf, &trigger) || !trigger)
+> >  		return -EINVAL;
+> >  
+> > +	port = dev_get_drvdata(&cxlmd->dev);
+> > +	if (!port || !is_cxl_endpoint(port))
+> > +		return -EINVAL;
+> > +
+> >  	down_read(&cxl_dpa_rwsem);
+> > -	rc = cxl_get_poison_by_memdev(cxlmd);
+> > +	if (port->commit_end == -1)
+> > +		/* No regions mapped to this memdev */
+> > +		rc = cxl_get_poison_by_memdev(cxlmd);
+> > +	else
+> > +		/* Regions mapped, collect poison by endpoint */
+> > +		rc = device_for_each_child(&port->dev, port,
+> > +					   cxl_get_poison_by_endpoint);
+> > +
+> >  	up_read(&cxl_dpa_rwsem);
+> >  
+> >  	return rc ? rc : len;
+> > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> > index 67e83d961670..0ac08e9106af 100644
+> > --- a/drivers/cxl/core/region.c
+> > +++ b/drivers/cxl/core/region.c
+> > @@ -1826,6 +1826,88 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(to_cxl_pmem_region, CXL);
+> >  
+> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> > +{
+> > +	struct cxl_endpoint_decoder *cxled;
+> > +	struct cxl_port *port = data;
+> > +	struct cxl_dev_state *cxlds;
+> > +	struct cxl_memdev *cxlmd;
+> > +	u64 offset, length;
+> > +	int rc = 0;
+> > +
+> > +	down_read(&cxl_dpa_rwsem);
+> > +
+> > +	if (!is_endpoint_decoder(dev))
+> > +		goto out;
+> > +
+> > +	cxled = to_cxl_endpoint_decoder(dev);
+> > +	if (!cxled->dpa_res || !resource_size(cxled->dpa_res))
+> > +		goto out;
+> > +
+> > +	/*
+> > +	 * Get the poison by decoder for mapped resources. This
+> > +	 * separates pmem and ram poison list reads, as the spec
+> > +	 * requires, and provides the region for the trace event.
+> > +	 */
+> 
+> Does the spec actually require separate decoders for PMEM and MEM?
+> Sure, Linux only sets it up like that, but a BIOS might have set
+> them up as a single decoder I think - even if we don't handle
+> that form of crazy yet. If the spec requires it, then a reference
+> would be great.
+> 
 
-Thanks for your comment.
+No, the spec allows mixed mode decoders. I chatted w Dan about this,
+and we're suggesting skipping poison reads when mode == CXL_DECODER_MIXED.
+That skip would be quiet, just a dev_debug(). But, add some more noise
+to the front end by changing adding this dev_warn() :
 
->
->Thanks,
->
->> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
->> 
->> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->> index b22f49a6f128..81d326abaac1 100644
->> --- a/fs/f2fs/gc.c
->> +++ b/fs/f2fs/gc.c
->> @@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>   				prefree_segments(sbi));
->>   
->>   	cpc.reason = __get_cp_reason(sbi);
->> -	sbi->skipped_gc_rwsem = 0;
->>   gc_more:
->> +	sbi->skipped_gc_rwsem = 0;
->>   	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
->>   		ret = -EINVAL;
->>   		goto stop;
+diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+index dcc16d7cb8f3..349a16b7c97a 100644
+--- a/drivers/cxl/core/hdm.c
++++ b/drivers/cxl/core/hdm.c
+@@ -268,8 +268,8 @@ static int __cxl_dpa_reserve(struct cxl_endpoint_decoder *cxled,
+        else if (resource_contains(&cxlds->ram_res, res))
+                cxled->mode = CXL_DECODER_RAM;
+        else {
+-               dev_dbg(dev, "decoder%d.%d: %pr mixed\n", port->id,
+-                       cxled->cxld.id, cxled->dpa_res);
++               dev_warn(dev, "decoder%d.%d: %pr mixed mode not supported\n",
++                        port->id, cxled->cxld.id, cxled->dpa_res);
+                cxled->mode = CXL_DECODER_MIXED;
+        }
+
+> > +	cxlmd = cxled_to_memdev(cxled);
+> > +	length = cxled->dpa_res->end - cxled->dpa_res->start + 1;
+> > +	rc = cxl_mem_get_poison(cxlmd, cxled->dpa_res->start, length,
+> > +				cxled->cxld.region);
+> > +	if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> > +		rc = 0;
+> > +	if (rc)
+> > +		goto out;
+> > +
+> > +	/* Get poison in a skip range */
+> 
+> Seems odd to do it in this order. I'd do the skip first as then
+> the records will appear in address order (subject to whatever
+> random order the device is tracking them and the resulting ordering
+> in each request)
+> 
+Yes - skip should be logically first, since those addresses would be
+before any mapped addresses. Thanks for pointing it out.
+
+> > +	if (cxled->skip) {
+> > +		rc = cxl_mem_get_poison(cxlmd, 0, cxled->skip, NULL);
+> > +		if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> > +			rc = 0;
+> > +		if (rc)
+> > +			goto out;
+> > +	}
+> > +
+> > +	/* Iterate until commit_end is reached */
+> > +	if (cxled->cxld.id < port->commit_end)
+> > +		goto out;
+> > +
+> > +	/*
+> > +	 * Reach here with the last committed decoder only.
+> > +	 * Knowing that PMEM must always follow RAM, get poison
+> > +	 * for unmapped ranges based on the last decoder's mode:
+> > +	 *	ram: scan remains of ram range, then scan for pmem
+> > +	 *	pmem: scan remains of pmem range
+> > +	 */
+> > +	cxlds = cxlmd->cxlds;
+> > +
+> > +	if (cxled->mode == CXL_DECODER_RAM) {
+> > +		offset = cxled->dpa_res->end + 1;
+> > +		length = resource_size(&cxlds->ram_res) - offset;
+> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> > +		if (rc == -EFAULT)
+> > +			rc = 0;
+> > +		if (rc)
+> > +			goto out;
+> > +	}
+> > +	if (cxled->mode == CXL_DECODER_PMEM) {
+> > +		offset = cxled->dpa_res->end + 1;
+> > +		length = resource_size(&cxlds->pmem_res) - offset;
+> > +	} else if (resource_size(&cxlds->pmem_res)) {
+> > +		offset = cxlds->pmem_res.start;
+> > +		length = resource_size(&cxlds->pmem_res);
+> > +	} else {
+> > +		rc = 1;
+> > +		goto out;
+> > +	}
+> > +	/* Final get poison call. Return rc or 1 to stop iteration. */
+> > +	rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> > +	if (!rc)
+> > +		rc = 1;
+> > +out:
+> > +	up_read(&cxl_dpa_rwsem);
+> > +	return rc;
+> > +}
+> > +
+> >  static struct lock_class_key cxl_pmem_region_key;
+> >  
+> >  static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
+> 
