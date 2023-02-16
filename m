@@ -2,253 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9276D69931B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2676699321
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjBPL3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S230167AbjBPLaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjBPL3W (ORCPT
+        with ESMTP id S230017AbjBPLax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:29:22 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F9F42A149
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:29:20 -0800 (PST)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Bx+9mOE+5jmU8BAA--.3140S3;
-        Thu, 16 Feb 2023 19:29:18 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuSOE+5jho40AA--.62543S3;
-        Thu, 16 Feb 2023 19:29:18 +0800 (CST)
-Subject: Re: [PATCH v4 2/5] LoongArch: Use la.pcrel instead of la.abs for
- exception handlers
-To:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
- <1676018856-26520-3-git-send-email-tangyouling@loongson.cn>
- <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
- <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn>
- <848e2985-9ba3-c14d-23ac-a7f1c218215f@loongson.cn>
- <5adf0fc4-b75c-f7f2-311c-0f5d8f14311b@loongson.cn>
- <48c4b1f81c21950e9fd46d4acb5196d979b147cb.camel@xry111.site>
- <295efdc0-388e-cda4-120c-5f9c4740b208@loongson.cn>
- <33b173e4-d61d-5f43-b2f2-d96ec2897361@loongson.cn>
-Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin lv <lvjianmin@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <6e7e595a-d9f9-8b5a-f91a-7ca706b29122@loongson.cn>
-Date:   Thu, 16 Feb 2023 19:29:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 16 Feb 2023 06:30:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6403C79E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0tv9nEA8m2S6K8/UhiZeHlpixxVHzhHoy3L6P2KNEV8=; b=ipIX1llL46ob2Hqhpi/U7TY7ZR
+        r8eQy7TuCDKPi3j76KFDxvAi2q7TbId6BdYR2fFDneUzG/WO/UwhsxqOv0GL/yFOMe6Dxf9opFo7y
+        wYcke4Hqo9rY1/TXoToUX9Ko490Beonl0UjiMuc0T8IjRChaEU64k0PN5tej5n3uSp/C3c1zzXYkL
+        3bzspdxUh5G5S5cgRBNMgRJCPIaVUNYUDMOlDA/dycK/TbdIkoD0ylXxlb30Qp8sxFeUcaWtnOSXB
+        srfQJmjZnp+hccmd4YcfepfaJTdVtW+Gk4jgrS6YdQoDh9DGCwUWaVSq/Kbxm7pzGNN95IWF7mEiG
+        t9SS7bng==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pScT5-008Mw8-05; Thu, 16 Feb 2023 11:30:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6C15130056B;
+        Thu, 16 Feb 2023 12:30:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1979520CB2A44; Thu, 16 Feb 2023 12:30:24 +0100 (CET)
+Date:   Thu, 16 Feb 2023 12:30:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP
+ instruction
+Message-ID: <Y+4T0EV8SBN09KxA@hirez.programming.kicks-ass.net>
+References: <cover.1676068346.git.jpoimboe@kernel.org>
+ <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
+ <20230213234357.1fe194b2767d9bc431202d4c@kernel.org>
+ <Y+tx6DZyoQ362lUM@hirez.programming.kicks-ass.net>
+ <20230214170552.glhdytvunczyxxao@treble>
+ <Y+yzMmL7gUprDru3@hirez.programming.kicks-ass.net>
+ <20230215231637.laryjsua5p4wcd57@treble>
+ <Y+4JhmEGDR16EVpi@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <33b173e4-d61d-5f43-b2f2-d96ec2897361@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxTuSOE+5jho40AA--.62543S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxury8AF1xWw4fAw45Aw4UXFb_yoWrAFW5pr
-        Wj9a4ktF4rGr1kA3WUt3ykZryUtwsrWw17WFyqkFyUZasIvF1xtFykCrnrZa1kGw40ka1S
-        qFy5tasFvan8Aa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bwkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
-        0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE
-        44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26rWlOx8S6xCaFVCjc4
-        AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vI
-        r41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14
-        v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-        IxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7xRE6wZ7UUUUU==
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+4JhmEGDR16EVpi@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 16, 2023 at 11:46:30AM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 15, 2023 at 03:16:37PM -0800, Josh Poimboeuf wrote:
+> > On Wed, Feb 15, 2023 at 11:25:54AM +0100, Peter Zijlstra wrote:
+> 
+> > > Well, I was specifically thinking about #DB, why don't we need to
+> > > decrement when we put a hardware breakpoint on a stack modifying op?
+> > 
+> > I assume you mean the INT1 instruction.  Yeah, maybe we should care
+> > about that.
+> 
+> Nah, I was thinking #DB from DR7, but ...
+> 
+> > I'm struggling to come up with any decent ideas about how to implement
+> > that.  Presumably the #DB handler would have to communicate to the
+> > unwinder somehow whether the given frame is a trap.
+> 
+> ... I had forgotten that #DB is not unconditionally trap :/ The worst
+> part seems to be that code breakpoints are faults while data breakpoints
+> are traps.
+> 
+> And you so don't want to go decode the DR registers in the unwinder,
+> quality mess this :/
+> 
+> Put a breakpoint on the stack and you've got PUSH doing a trap, put a
+> breakpoint on the PUSH instruction and you get a fault, and lo and
+> behold, you get a different unwind :-(
 
+It could be I'm just confusing things... when #DB traps it is actually
+because the instruction is complete, so looking up the ORC based on the
+next instruction is correct, while when #DB faults, it is because the
+instruction has not yet completed and again ORC lookup on IP just works.
 
-On 02/16/2023 07:18 PM, Youling Tang wrote:
->
-> On 02/16/2023 04:03 PM, Youling Tang wrote:
->>
->>
->> On 02/16/2023 03:10 PM, Xi Ruoyao wrote:
->>> On Thu, 2023-02-16 at 14:59 +0800, Jinyang He wrote:
->>>> +.macro la.abs reg, sym
->>>> +766:
->>>> +    nop
->>>> +    nop
->>>> +    nop
->>>> +    nop
->>>
->>> In the "formal" version we can code
->>>
->>> lu12i.w        reg, 0
->>> ori        reg, reg, 0
->>> lu32i.d        reg, 0
->>> lu52i.d        reg, reg, 0
->>>
->>> here.  Then we only need to fixup the immediate slot so we can avoid
->>> using parse_r.
->>>
->>>
->>>> +    .pushsection ".laabs", "aw", %progbits
->>>> +768:
->>>> +    .word 768b-766b
->>>> +    parse_r regno, \reg
->>>> +    .word regno
->>>> +    .dword \sym
->>>> +    .popsection
->>>> +.endm
->>
->> I will try to modify a version for testing, using the following
->> definition, when the RELOCATABLE is turned on, the "la.abs macro" is
->> used, otherwise the "la.abs pseudo instruction" is still used as before.
->>
->> #ifdef CONFIG_RELOCATABLE
->> .macro la.abs reg, sym
->> lu12i.w        reg, 0
->> ori        reg, reg, 0
->> lu32i.d        reg, 0
->> lu52i.d        reg, reg, 0
->> .endm
->> #endif
->
-> On the basis of the v4 patch set, remove patch2, and then add the
-> following patches, and the test is successful on qemu.
->
-> If this method is more acceptable to everyone, I will send v5.
->
-> diff --git a/arch/loongarch/include/asm/asmmacro.h
-> b/arch/loongarch/include/asm/asmmacro.h
-> index 328bb956f241..adb04ae6b208 100644
-> --- a/arch/loongarch/include/asm/asmmacro.h
-> +++ b/arch/loongarch/include/asm/asmmacro.h
-> @@ -667,4 +667,19 @@
->         nor     \dst, \src, zero
->  .endm
->
-> +#ifdef CONFIG_RELOCATABLE
-> +.macro la.abs reg, sym
-> +766:
-> +       lu12i.w \reg, 0
-> +       ori     \reg, \reg, 0
-> +       lu32i.d \reg, 0
-> +       lu52i.d \reg, \reg, 0
-> +       .pushsection ".laabs", "aw", %progbits
-> +768:
-> +       .dword 768b-766b
-> +       .dword \sym
-> +       .popsection
-> +.endm
-> +#endif
-> +
->  #endif /* _ASM_ASMMACRO_H */
-> diff --git a/arch/loongarch/kernel/relocate.c
-> b/arch/loongarch/kernel/relocate.c
-> index 7d19cc0d2185..7ad327a554f9 100644
-> --- a/arch/loongarch/kernel/relocate.c
-> +++ b/arch/loongarch/kernel/relocate.c
-> @@ -12,6 +12,7 @@
->  #include <linux/start_kernel.h>
->  #include <asm/bootinfo.h>
->  #include <asm/early_ioremap.h>
-> +#include <asm/inst.h>
->  #include <asm/sections.h>
->
->  #define RELOCATED(x) ((void *)((long)x + reloc_offset))
-> @@ -45,6 +46,32 @@ static inline __init void relocate_relative(void)
->         }
->  }
->
-> +static inline void __init relocate_laabs(long offset)
-> +{
-> +       extern void *__laabs_begin;
-> +       extern void *__laabs_end;
-> +       struct laabs {
-> +               long offset;
-> +               long symvalue;
-> +       } *p;
-> +
-> +       for (p = (void *)&__laabs_begin; (void *)p < (void
-> *)&__laabs_end; p++) {
-> +               long v = p->symvalue + reloc_offset;
-> +               union loongarch_instruction *insn = (void *)p -
-> p->offset + offset;
-> +               u32 lu12iw, ori, lu32id, lu52id;
-> +
-> +               lu12iw = (v >> 12) & 0xfffff;
-> +               ori = v & 0xfff;
-> +               lu32id = (v >> 32) & 0xfffff;
-> +               lu52id = v >> 52;
-> +
-> +               insn[0].reg1i20_format.immediate = lu12iw;
-> +               insn[1].reg2i12_format.immediate = ori;
-> +               insn[2].reg1i20_format.immediate = lu32id;
-> +               insn[3].reg2i12_format.immediate = lu52id;
-> +    }
-> +}
-> +
->  #ifdef CONFIG_RANDOMIZE_BASE
->  static inline __init unsigned long rotate_xor(unsigned long hash,
->                                               const void *area, size_t
-> size)
-> @@ -168,8 +195,10 @@ void *__init do_kaslr(void)
->                 update_reloc_offset(&reloc_offset, offset);
->         }
->
-> -       if (reloc_offset)
-> +       if (reloc_offset) {
->                 relocate_relative();
-> +               relocate_laabs(offset);
-> +       }
+So while determining if #DB is trap or fault is a giant pain in the
+arse, it does not actually matter for the unwinder in this case.
 
-Self review:
+And with the INT3 thing the problem is that we've replaced an
+instruction that was supposed to do a stack op.
 
-         if (reloc_offset)
-                 relocate_relative();
-
-         relocate_laabs(offset);
-
->
->         return kernel_entry;
->  }
-> @@ -181,6 +210,8 @@ void __init relocate_kernel(void)
->
->         if (reloc_offset)
->                 relocate_relative();
-> +
-> +       relocate_laabs(0);
->  }
->
->  /*
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S
-> b/arch/loongarch/kernel/vmlinux.lds.S
-> index aec0b6567d24..0e58c68bf427 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -66,6 +66,13 @@ SECTIONS
->                 __alt_instructions_end = .;
->         }
->
-> +       . = ALIGN(8);
-> +       .laabs : AT(ADDR(.laabs) - LOAD_OFFSET) {
-> +               __laabs_begin = .;
-> +               *(.laabs)
-> +               __laabs_end = .;
-> +       }
-> +
->         .got : ALIGN(16) { *(.got) }
->
->
-> Youling.
->
 
