@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65618698912
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1354C698916
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjBPAGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S229642AbjBPAHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBPAGg (ORCPT
+        with ESMTP id S229554AbjBPAHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:06:36 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055443AAC;
-        Wed, 15 Feb 2023 16:06:36 -0800 (PST)
+        Wed, 15 Feb 2023 19:07:02 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020A935247;
+        Wed, 15 Feb 2023 16:07:02 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C5130660206C;
-        Thu, 16 Feb 2023 00:06:34 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6EE7660206C;
+        Thu, 16 Feb 2023 00:07:00 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676505994;
-        bh=ilI/10v5PJHrttNszyQv4HKgv/kX2fQrPAogzLEUmLo=;
+        s=mail; t=1676506020;
+        bh=zj/VGR6ZN2C2BqNQmI75um4oc0yzLvQN9PNdoVme50M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CGhhDI3X55N6XQ6XTTyAKis7UV7HjrOviPyti7t5sgqYMgxWv/uUFTVvfmdyPxmaA
-         0siYj9OwOfBSViwYAhc9QuZghkCQVt0KGv20LaTbhxcQuwNYGXtv8MMow7PGdifBgn
-         aPtSTDH/qiHtZd2b40CSV4l9oAntETrWEOSOSm0OTdRluCaBTgEFVYdKFawn7J6nSd
-         6fPQlQ/5SHUeELuNRas8YSIqumiT68MjyDHeNmJz7O4+Ndy9lHzDKQmlC20S+kcfCn
-         EKhnIF6XYblCLJLpm3I8+mOR/tP0GY6CHPjK8v846WI+w06jCs/v3PK1iolb68LSWJ
-         b3nJAQS2R6MmQ==
+        b=YmMWPQijm9Chur5POuKyLwvgWtFDaIa86Oo2tkPrhdmICLLVS98HgIEn4jkjyUYOX
+         6/Qsx9ax9DIs77oj0ELeaHX/T9BGcaXXoxJ3OOhATLFq83/BS7sORH3g3nS+/zi5lG
+         Iz2IyD1vJo1bSJvaEjrrBxDux8HUjMnRblE7l1Z/WWhr8ElR5J/A+T/raZzHZV667K
+         Cz07SedGXDtOsRqlnqvKGf3EsnVTiz5Ea0nfEjn76IPBQ3DnkVbfDJPiwkopiZ8wdl
+         X63CFJSCmqPdgk4W0R1SFWmzZ4spW3x6a2j3bIjonku5wsy3mtZiHA+vxiBmBEkjey
+         vojEcMoc+xjKg==
 Received: by mercury (Postfix, from userid 1000)
-        id B779B10603FE; Thu, 16 Feb 2023 01:06:31 +0100 (CET)
-Date:   Thu, 16 Feb 2023 01:06:31 +0100
+        id 8F1FB10603FE; Thu, 16 Feb 2023 01:06:58 +0100 (CET)
+Date:   Thu, 16 Feb 2023 01:06:58 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, marijn.suijten@somainline.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: pm8941-coincell: Add
- PM8998 compatible
-Message-ID: <20230216000631.2vpwbgajr7u5ysnc@mercury.elektranox.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: power: supply: pm8941-coincell:
+ Don't require charging properties
+Message-ID: <20230216000658.f5rqso65zocwz2ns@mercury.elektranox.org>
 References: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
+ <20230214090849.2186370-2-konrad.dybcio@linaro.org>
+ <27866ba4-ea82-68b9-fa10-5c7687bcaf17@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vsxp4rzne67m5cq4"
+        protocol="application/pgp-signature"; boundary="q5pkc2stfdd7kbum"
 Content-Disposition: inline
-In-Reply-To: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
+In-Reply-To: <27866ba4-ea82-68b9-fa10-5c7687bcaf17@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,76 +65,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---vsxp4rzne67m5cq4
+--q5pkc2stfdd7kbum
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Feb 14, 2023 at 10:08:47AM +0100, Konrad Dybcio wrote:
-> Add a specific compatible for the coincell charger present on PM8998.
+On Wed, Feb 15, 2023 at 08:04:00PM +0100, Krzysztof Kozlowski wrote:
+> On 14/02/2023 10:08, Konrad Dybcio wrote:
+> > It's fine for these properties to be absent, as the driver doesn't fail
+> > without them and functions with settings inherited from the reset/previ=
+ous
+> > stage bootloader state.
+> >=20
+> > Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Conv=
+ert to DT schema format")
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>=20
 >=20
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
 
 Thanks, queued.
 
 -- Sebastian
 
-> v1 -> v2:
->=20
-> - Pick up ab
->=20
->  .../bindings/power/supply/qcom,pm8941-coincell.yaml       | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-c=
-oincell.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-c=
-oincell.yaml
-> index 0450f4dd4e51..b7b58aed3f3c 100644
-> --- a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell=
-=2Eyaml
-> +++ b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell=
-=2Eyaml
-> @@ -16,7 +16,13 @@ maintainers:
-> =20
->  properties:
->    compatible:
-> -    const: qcom,pm8941-coincell
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - qcom,pm8998-coincell
-> +          - const: qcom,pm8941-coincell
-> +
-> +      - const: qcom,pm8941-coincell
-> =20
->    reg:
->      maxItems: 1
-> --=20
-> 2.39.1
->=20
-
---vsxp4rzne67m5cq4
+--q5pkc2stfdd7kbum
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPtc4cACgkQ2O7X88g7
-+ppwjg/+OflPejHjoX4Jx2r0sgHANAq5wme+KIdm/jJxHIIbzG8XS54rTp82vbP7
-UCBL4S8tEn6AJuvembTJmIcw89EWwZydOipaWFLWKOqX38rtvG0VyRHg8W18901c
-JYsuFguR/xpJRCaK118e40ZWJHCOvAibu+3WU4/euJAe4yMbP+ljZPu5/l1DvSDi
-05eSNlinA36XgswvFvLpESSS/PW5loCr/F1S5iZxd10aAMe0eDeM+qZn8aSvQcH4
-kZybBqw4ED+SZ4ZpzR9cpfR2CcRTpZYN+ZQ6FcIqpv7crpxMnqTnP/k1dTxG8TH/
-HreQN6SyAOCQbYEROdz60TENNR116EWpCAJtLQsGUiiFZD83+g5vekPEy7kap1sX
-3sDqtnkH6mLu5ZQKsnwIz9/YSeBOl2YFOiD0+qyVqx12xIpLSSQHSsNqnvKdlzAZ
-nExfMfpJtRM94xvROwFfFDhjmSh12DFEI+MUfz+rPwAe9vKJcbbVNMufQzzKTsrQ
-39SLnsNX1y6WLnJ+GY9ov6NojlWmx7C/hOBim9Pac3VbIW1mGdF2guF4a/I1cFqj
-QYqKtwkY7KX6ZuFHNLRJnMQKSRju0vIEW3CLukKrhc9390//jprIm4iiLuaqnfvB
-UXinkYvJ9IaOM+yJFmDbaDNSybO/a7Ml34DxkyLWAkvt4ogA9bc=
-=9WL4
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPtc6IACgkQ2O7X88g7
++poDaQ//Z7PxP8kwr+kgfnl0p7PMiYJPvLy8oRwxDCYGut3RBMnYMk9jXsZErM80
+Sh3SYbCbVKqCU5UKkiAze9GV8I7aNcro33yA9EGgQr5bCxWVoWt1ihYjqHS+ZuY2
+mQGIhNu7NJA3ADQOmVjFxxOePNZrqz8/5G6MkC5D75IXJ6BOKUuCSUxMNyK0ttHq
+Ad0E3cKcq5v270djrzecpI9pY5J1z5ESKkbuCpBZypAF+ANGE02u6NtqNQ1rlySH
+IHcSiTFu/HMF29FiOezjBmp4/r6gSEaLIfhoXCcn+WikB/Wc6KWCT+zRIN3HDa/1
+VfcDf5l2Bid1FnuDRuGzj9nS338p6sn+mFVHmcR312gLazCvM4n3a1O7Mga7h3iP
+gouIznbqJb+/5y6I3KGsgkIwO6ywptIoPoRmsEBKg1PLTNUzViFck6EfoCH+/yEE
+GRlGKtvp/DxPaM1oF1yHbWoeeH4WJPZmEBXeMZsu9zIfLlOy/ERDiY/yoTkMhu2W
+obuBC3Dmpen0ZEegnWX01a6liPpQw2qXxSsQvdyihff7gsBIZkXKotXK07QLFbbB
+8oyFj2CbsABsuh5HtglLdoC6N050NFdQfsJj9896VE3Ejnoufh0gRoHZg/uJzyXg
+U6xu7z+gn/ZMmaz0JTpGsizB92O5KFOfVLbPTrgLc/N/ClLXiIM=
+=TEzR
 -----END PGP SIGNATURE-----
 
---vsxp4rzne67m5cq4--
+--q5pkc2stfdd7kbum--
