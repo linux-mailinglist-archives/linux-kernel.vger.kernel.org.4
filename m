@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB188698EA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF08698EB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjBPI07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S229898AbjBPIaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBPI05 (ORCPT
+        with ESMTP id S229462AbjBPIaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:26:57 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BEA728F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:26:56 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso964464wmo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yOIWYd8BLDoyQEOPcZt4Svqq+LpSVhiHkQEJPlmTjCU=;
-        b=gQQYrG/1mNO98m/E2eyHzHqpo6XYMXhiLOQXglwZ4h8TDlIFXOZpm4yAFQplmmC41D
-         7XiDwxsE0b/FzKA82rMi+AzPmyHSjEijKHHqAmtPv+/Ovv+IBObjW3kmdbH4+3GuGnJm
-         K7VLjrmQewjjs1wo+Dy8A5pFVsV4oIHkbxjTdraSyS00/H5KensGE7N68jN0qciAzlWN
-         2dslCN6QYjBdqMHZbnqkZ1Cg9t49kvOXErNX5LX5yVNR0LYZEbppgpasq5gO3toLKOlN
-         qnV/wi4O1TY/2Up0xfgyGO6IV9+rZ77xL9WDMRH0iFYz1Hhxwpf/2SG8fVmn/5+V2FUE
-         DJcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yOIWYd8BLDoyQEOPcZt4Svqq+LpSVhiHkQEJPlmTjCU=;
-        b=3ktfsHG5GGrZYoe1DX0zw61JXnpkU9/LQ8xJFtZMs0MuQR9cQc3TVTckfNd15YfYON
-         8kereu7LnSI7Hsx43dIuqPuv7y08ER7vB96nbjMEiBnQ5aGR0M1Oj3KB1YLbcQlends4
-         rp8jB3SkkZGdjM1XybECrJEZA/CxDXvRP4kDtr8NGQVAg7gRJG47Nc5V3tZrEuACm1Cy
-         imte9LEziA4xFSQ2K9XPNGyUH2BjT2CGUIOJh/4VBb8U8J/hrKRlWYMzltAaKTCPcfCT
-         IY4kWPDgHhE501Z8UxiKgu4j1q+naowHb1r3GiE9viJ3S7zSb4GesYtYoLH6jiCPeZ6O
-         slBg==
-X-Gm-Message-State: AO0yUKWW26OGW7+wpv1MWOdAGWAzId1DC7CQdG3RzT7+1cG1okaBNmWd
-        6W5BYgPPzXB3ArhAfChC6nI4jJLYQgFhbw==
-X-Google-Smtp-Source: AK7set9/pDvtB0jb0WFogLcLbNy5p3XJ4qGM2jDVG+gk/LL8mu9qravOWh3Dr7k1FeiVRIAHBXWc3A==
-X-Received: by 2002:a05:600c:3ba1:b0:3dc:1ad6:55fd with SMTP id n33-20020a05600c3ba100b003dc1ad655fdmr4362575wms.32.1676536014935;
-        Thu, 16 Feb 2023 00:26:54 -0800 (PST)
-Received: from suse.localnet (host-79-49-12-231.retail.telecomitalia.it. [79.49.12.231])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b003dff870ce0esm5099595wmq.2.2023.02.16.00.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 00:26:54 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] WARNING in usb_tx_block/usb_submit_urb
-Date:   Thu, 16 Feb 2023 09:26:53 +0100
-Message-ID: <2277739.ElGaqSPkdT@suse>
-In-Reply-To: <00000000000039636e05f4cc5da3@google.com>
-References: <00000000000039636e05f4cc5da3@google.com>
+        Thu, 16 Feb 2023 03:30:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB6E2CC45;
+        Thu, 16 Feb 2023 00:30:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B82D3B8265F;
+        Thu, 16 Feb 2023 08:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33E0EC4339B;
+        Thu, 16 Feb 2023 08:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676536219;
+        bh=BoI3Pa5/8NBSfjvMPIAStqEd9DYVS/ieE9UgjkVV5bE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ax2KpHwcRtYKxX2JPuCgBzUGN3n4xSKpKATqqVyCbHckiFydU9U5sg+eYVDc2LMkU
+         ORIbSKYskRNaTRBNgeRmQrci1hPPhH1ZF6YLbVJmG3SrIyn4ALVBnTxZOIR0mDXmRu
+         q+b47jz7neOpom9Rt/7M45XcbadtmaB7j/TNQlpg8GUy7KMQoxXXXJGUSYVWodSR2+
+         SiP85nafE7BIyPcJYSqswPsY64Qc3BefOIC25il3wdqn6e/2X3TEfXP7RcswkWAJXD
+         Oo+98QEfl/yhnTWHTZprbjpX+QjryenUKXNClb4ZVoJAMCLlEVeSTYlI/MNDRCu0Ao
+         B/RyevKn5rWew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14927E29F3F;
+        Thu, 16 Feb 2023 08:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 00/10] Adding Sparx5 ES0 VCAP support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167653621907.28100.17908588254142053263.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Feb 2023 08:30:19 +0000
+References: <20230214104049.1553059-1-steen.hegelund@microchip.com>
+In-Reply-To: <20230214104049.1553059-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        rdunlap@infradead.org, casper.casan@gmail.com,
+        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
+        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 16 febbraio 2023 08:44:18 CET syzbot wrote:
-> Hello,
->=20
-> syzbot tried to test the proposed patch but the build/boot failed:
->=20
-> drivers/net/wireless/marvell/libertas/if_usb.c:865:43: error: expected ';'
-> before ':' token
->=20
->=20
-> Tested on:
->=20
-> commit:         f87b5646 dt-bindings: usb: amlogic,meson-g12a-usb-ctrl..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/
-usb.git
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D355c68b459d1d96=
-c4d06
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls
-> for Debian) 2.35.2 patch:        =20
-> https://syzkaller.appspot.com/x/patch.diff?x=3D1414acf0c80000
+Hello:
 
-Sorry for this syntax error :-(
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=20
-f87b564686ee
+On Tue, 14 Feb 2023 11:40:39 +0100 you wrote:
+> This provides the Egress Stage 0 (ES0) VCAP (Versatile Content-Aware
+> Processor) support for the Sparx5 platform.
+> 
+> The ES0 VCAP is an Egress Access Control VCAP that uses frame keyfields and
+> previously classified keyfields to add, rewrite or remove VLAN tags on the
+> egress frames, and is therefore often referred to as the rewriter.
+> 
+> [...]
 
-diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/
-wireless/marvell/libertas/if_usb.c
-index 20436a289d5c..e03a5dcf6dab 100644
-=2D-- a/drivers/net/wireless/marvell/libertas/if_usb.c
-+++ b/drivers/net/wireless/marvell/libertas/if_usb.c
-@@ -859,6 +859,7 @@ static void if_usb_prog_firmware(struct lbs_private *pr=
-iv,=20
-int ret,
-                        j++;
-                        msleep_interruptible(100);
-                } while (cardp->bootcmdresp =3D=3D 0 && j < 10);
-+               usb_kill_urb(cardp->tx_urb);
-        } while (cardp->bootcmdresp =3D=3D 0 && i < 5);
+Here is the summary with links:
+  - [net-next,v2,01/10] net: microchip: sparx5: Discard frames with SMAC multicast addresses
+    https://git.kernel.org/netdev/net-next/c/65b6625069a4
+  - [net-next,v2,02/10] net: microchip: sparx5: Clear rule counter even if lookup is disabled
+    https://git.kernel.org/netdev/net-next/c/d7953da4f293
+  - [net-next,v2,03/10] net: microchip: sparx5: Egress VLAN TPID configuration follows IFH
+    https://git.kernel.org/netdev/net-next/c/38f6408c6071
+  - [net-next,v2,04/10] net: microchip: sparx5: Use chain ids without offsets when enabling rules
+    https://git.kernel.org/netdev/net-next/c/0518e914f34a
+  - [net-next,v2,05/10] net: microchip: sparx5: Improve the error handling for linked rules
+    https://git.kernel.org/netdev/net-next/c/b5b0c3645988
+  - [net-next,v2,06/10] net: microchip: sparx5: Add ES0 VCAP model and updated KUNIT VCAP model
+    https://git.kernel.org/netdev/net-next/c/a5cc98adf3cb
+  - [net-next,v2,07/10] net: microchip: sparx5: Updated register interface with VCAP ES0 access
+    https://git.kernel.org/netdev/net-next/c/f2a77dd69f51
+  - [net-next,v2,08/10] net: microchip: sparx5: Add ES0 VCAP keyset configuration for Sparx5
+    https://git.kernel.org/netdev/net-next/c/3cbe7537a7f1
+  - [net-next,v2,09/10] net: microchip: sparx5: Add TC support for the ES0 VCAP
+    https://git.kernel.org/netdev/net-next/c/52b28a93c45d
+  - [net-next,v2,10/10] net: microchip: sparx5: Add TC vlan action support for the ES0 VCAP
+    https://git.kernel.org/netdev/net-next/c/ebf44ded76e9
 
-        if (cardp->bootcmdresp =3D=3D BOOT_CMD_RESP_NOT_SUPPORTED) {
-=2D-
-
-=46abio
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
