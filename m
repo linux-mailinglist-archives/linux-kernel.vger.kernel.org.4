@@ -2,87 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAEE698E5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FE2698E5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjBPIMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S229822AbjBPIMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBPIML (ORCPT
+        with ESMTP id S229492AbjBPIMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:12:11 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456722886B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:12:07 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id z15so1092401vsj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dfTtDbofkY1pATTMEv/SAf76IfaGsSIyYJtG+jJyho8=;
-        b=lySNA01DIQWkgwtRvj/X6Ob8tzm+Mn+oE9MXXNMKCbzvD9/ImDRgbys0KYR05gATMg
-         LzjYmu0MdtH7jHJ/j02SeRJC7YJcrsh+Yc/RdgaLqqNjaRmafziWbucC1pGdMsO/eK1K
-         Py/e5RdiSHfWAh/qPd2tLOt2MiqOxsRoiL19Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dfTtDbofkY1pATTMEv/SAf76IfaGsSIyYJtG+jJyho8=;
-        b=L3A9Dmq1VO1YJ9ddf/AG8cdSbylh7NATQW06GhILKQtTFBGquaamv39fa8TQsLwjrP
-         LJXQf12tVFQRHlVmnDQjy+Ko8zUorC/PnE1F3zVlk7FAKUEYKJW2fp26K1feck2oXbWH
-         PloQ8WNUg3RttHcDoUx0PU5Fl3fImDdhsYQBVfrOAMDP7Q6Xd+eDPXJ74mjbd/ecUujE
-         +Tv1w+5eOjJ4oBTmKSO0QjDSbHV5Ks2TSb/HLsjSWBohxoNpIa2L0zKs9y1DVdEMsj2i
-         waHGyCy0ldXTU+2+CBFMjlbPG2S4T6qA60KQbvjiUzYKvXuAMW3575qMSZcbekl22jxW
-         +RKg==
-X-Gm-Message-State: AO0yUKVoj6Cs/vfJevWzfJVssCt67O/QrRvvYBcRAr0Mz3qJtKXn3owN
-        yRdV2YdDZxldyHqfNDFJ7s2/1xWJABUeRFaDQf8dJg==
-X-Google-Smtp-Source: AK7set9GLZD9CV/33MRERq3c7/9G84mUxES45gMMthrTTkVHz/fhYLvw9tN1hgVZOMakIs5IYmKdncbES1i/ffC40Zg=
-X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr948306vso.60.1676535126416; Thu, 16 Feb
- 2023 00:12:06 -0800 (PST)
+        Thu, 16 Feb 2023 03:12:35 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB72886B;
+        Thu, 16 Feb 2023 00:12:34 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PHSKs5xCqznWCc;
+        Thu, 16 Feb 2023 16:10:09 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Thu, 16 Feb 2023 16:12:04 +0800
+Subject: Re: [PATCH v3 0/2] fix error flag covered by journal recovery
+To:     Baokun Li <libaokun1@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <fa2c6946-ab52-47f4-e5d2-49043eb2bd50@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <63EDE553.2000701@huawei.com>
+Date:   Thu, 16 Feb 2023 16:12:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-19-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-19-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 16 Feb 2023 16:11:55 +0800
-Message-ID: <CAGXv+5EVLKwf8F9SxauWP4O61wxdEFwk7hhir16r82Xp-pDe7A@mail.gmail.com>
-Subject: Re: [PATCH v2 18/47] clk: mediatek: mt8183: Move apmixedsys clock
- driver to its own file
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fa2c6946-ab52-47f4-e5d2-49043eb2bd50@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+
+
+On 2023/2/16 15:18, Baokun Li wrote:
+> On 2023/2/14 10:29, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> Diff v3 Vs v2:
+>> Only fix fs error flag lost when previous journal errno is not record
+>> in disk. As this may lead to drop orphan list, however fs not record
+>> error flag, then fsck will not repair deeply.
+>>
+>> Diff v2 vs v1:
+>> Move call 'j_replay_prepare_callback' and 'j_replay_end_callback' from
+>> ext4_load_journal() to jbd2_journal_recover().
+>>
+>> When do fault injection test, got issue as follows:
+>> EXT4-fs (dm-5): warning: mounting fs with errors, running e2fsck is 
+>> recommended
+>> EXT4-fs (dm-5): Errors on filesystem, clearing orphan list.
+>> EXT4-fs (dm-5): recovery complete
+>> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: 
+>> data_err=abort,errors=remount-ro
+>>
+>> EXT4-fs (dm-5): recovery complete
+>> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: 
+>> data_err=abort,errors=remount-ro
+>>
+>> Without do file system check, file system is clean when do second mount.
+>> Theoretically, the kernel will not clear fs error flag. In 
+>> errors=remount-ro
+>> mode the last super block is commit directly. So super block in 
+>> journal is
+>> not uptodate. When do jounral recovery, the uptodate super block will be
+>> covered by jounral data. If super block submit all failed after recover
+>> journal, then file system error flag is lost. When do "fsck -a" couldn't
+>> repair file system deeply.
+>> To solve above issue we need to do extra handle when do super block 
+>> journal
+>> recovery.
+>>
+>>
+>> Ye Bin (2):
+>>    ext4: commit super block if fs record error when journal record
+>>      without error
+>>    ext4: make sure fs error flag setted before clear journal error
+>>
+>>   fs/ext4/super.c | 18 ++++++++++++++++--
+>>   1 file changed, 16 insertions(+), 2 deletions(-)
+> When we proceed in the flow of ( uninstall after injecting fault 
+> triggered error -> mount
+> kernel replay journal -> umount to view fsck info ), there are three 
+> cases:
 >
-> In preparation for migrating all other mt8183 clocks to the common
-> mtk_clk_simple_probe(), move apmixedsys clocks to a different file.
-> While at it, use the builtin_platform_driver() macro for it and fix
-> some indentation issues in the PLLs table.
+> 1. When an injection fault causes the ERROR_FS flag to not be saved to 
+> disk, but j_errno
+> is successfully saved to disk, PATCH 2/2 effectively ensures that 
+> ERROR_FS is saved to disk
+> so that fsck performs a force check to discover the error correctly.
+>
+> 2. When j_errno is lost and the ERROR_FS flag is saved, after the 
+> journal replay：
+>     a. The ext4_super_block on disk has neither error info nor 
+> ERROR_FS flag;
+>     b. The ext4_super_block in memory contains error info but no 
+> ERROR_FS flag
+>         because the error info is copied additionally during journal 
+> replay;
+>     c. The ext4_sb_info in memory contains both error info and 
+> ERROR_FS flag.
+> This means that the ext4_super_block in memory will be written to disk 
+> the next time
+> ext4_commit_super is executed, while the ERROR_FS flag in ext4_sb_info 
+> will not be written
+> to disk until ext4_put_super is called. So if there is a disk 
+> deletion/power failure/disk offline,
+> we will lose the ERROR_FS flag or even the error info.
+>
+> (In this case, repairing directly with e2fsck will not do a force 
+> check either, because it
+> relies on j_errno to recover the ERROR_FS flag after the journal 
+> replay. And it reloads
+> the information from the disk into memory after the journal replay, so 
+> the
+> ERROR_FS flag and error info are completely lost.)
+>
+> 3. If neither the ERROR_FS flag nor j_errno are saved to disk, we seem 
+> to be unable to
+> determine if a deep sweep is currently needed. But I think when 
+> journal replay is needed
+> it means that the file system exits abnormally,
+> *Is it possible to consider e2fsck to do a force check after the 
+> journal replay?*
+Perhaps e2fsck can provide a command parameter, because it is 
+unacceptable to
+do so in scenarios with requirements for startup time.
 
-You also implemented error handling. That probably deserves a separate
-patch with a Fixes tag.
-
-ChenYu
