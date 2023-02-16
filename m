@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E106998F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894E86998F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjBPPeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S229873AbjBPPeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjBPPeK (ORCPT
+        with ESMTP id S230004AbjBPPeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Feb 2023 10:34:10 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E7613D4F;
-        Thu, 16 Feb 2023 07:34:07 -0800 (PST)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234EA1421B;
+        Thu, 16 Feb 2023 07:34:08 -0800 (PST)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXfov120311;
-        Thu, 16 Feb 2023 09:33:41 -0600
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXgTH122100;
+        Thu, 16 Feb 2023 09:33:42 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676561621;
-        bh=u3jhDRVvhzaDvG3WrKImoKtXR1CDbSnJ2NhA4UTl/nk=;
+        s=ti-com-17Q1; t=1676561622;
+        bh=JdiG6mmYGnA6sHUWLSIHsE9Q/nBRYbImdIQ8CP+p1vc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=q3xpZ/S6NPu09X8JQPxjkD1xxE9a9DkN7eLkYpt7CaIKd4+6Oe9uSweoryuEreqtX
-         4Fxg1PfqYfWQ3DKaZF2Lp+XwpjGrSxzUuJioa421LrY/w9kVRp/LPMB5lS4O+Vj0az
-         AGiqLEqjzfHy41WlDM3/JpfekfAyqytczvqK1CXs=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31GFXfqt040321
+        b=rL9IZ3iolob3P0qRu/FCR60rWN+UhuWLkPBXI1C7VWiNShUJ4FJ7K79l4IWw4/Yru
+         ZF7bWis5dTfkHI/r64M/9+ODDpnucZ38IhNz6AAUqFTjpzSjV/BiXfv3fxqu5v/Rco
+         OdI5qqhDqIfJLqkBOiDuyWa5uXlX2wXnN4ql/0SY=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31GFXg1P040329
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Feb 2023 09:33:41 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 16 Feb 2023 09:33:42 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
- Feb 2023 09:33:41 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2023 09:33:42 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 16 Feb 2023 09:33:41 -0600
+ Frontend Transport; Thu, 16 Feb 2023 09:33:42 -0600
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXdce018680;
-        Thu, 16 Feb 2023 09:33:40 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXdcf018680;
+        Thu, 16 Feb 2023 09:33:41 -0600
 From:   Andrew Davis <afd@ti.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -50,9 +50,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-omap@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: [RFC 1/2] ARM: dts: omap: Drop ti,omap36xx compatible
-Date:   Thu, 16 Feb 2023 09:33:38 -0600
-Message-ID: <20230216153339.19987-2-afd@ti.com>
+Subject: [RFC 2/2] WIP: dt-bindings: omap: Convert omap.txt to yaml
+Date:   Thu, 16 Feb 2023 09:33:39 -0600
+Message-ID: <20230216153339.19987-3-afd@ti.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230216153339.19987-1-afd@ti.com>
 References: <20230216153339.19987-1-afd@ti.com>
@@ -69,301 +69,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was not matched anywhere and provides no additional information.
-
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm/boot/dts/omap3-beagle-xm.dts              | 2 +-
- arch/arm/boot/dts/omap3-cm-t3730.dts               | 2 +-
- arch/arm/boot/dts/omap3-igep0020-rev-f.dts         | 2 +-
- arch/arm/boot/dts/omap3-igep0020.dts               | 2 +-
- arch/arm/boot/dts/omap3-igep0030-rev-g.dts         | 2 +-
- arch/arm/boot/dts/omap3-igep0030.dts               | 2 +-
- arch/arm/boot/dts/omap3-lilly-dbb056.dts           | 2 +-
- arch/arm/boot/dts/omap3-n9.dts                     | 2 +-
- arch/arm/boot/dts/omap3-n950.dts                   | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-alto35.dts     | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-palo35.dts     | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-palo43.dts     | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-summit.dts     | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-tobi.dts       | 2 +-
- arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    | 2 +-
- arch/arm/boot/dts/omap3-pandora-1ghz.dts           | 2 +-
- arch/arm/boot/dts/omap3-sbc-t3730.dts              | 2 +-
- arch/arm/boot/dts/omap3-sniper.dts                 | 2 +-
- arch/arm/boot/dts/omap3-zoom3.dts                  | 2 +-
- 21 files changed, 21 insertions(+), 21 deletions(-)
+ .../devicetree/bindings/arm/omap/omap.yaml    | 174 ++++++++++++++++++
+ 1 file changed, 174 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/omap/omap.yaml
 
-diff --git a/arch/arm/boot/dts/omap3-beagle-xm.dts b/arch/arm/boot/dts/omap3-beagle-xm.dts
-index 35eced6521efb..1a085bc013177 100644
---- a/arch/arm/boot/dts/omap3-beagle-xm.dts
-+++ b/arch/arm/boot/dts/omap3-beagle-xm.dts
-@@ -8,7 +8,7 @@
- 
- / {
- 	model = "TI OMAP3 BeagleBoard xM";
--	compatible = "ti,omap3-beagle-xm", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "ti,omap3-beagle-xm", "ti,omap3630", "ti,omap3";
- 
- 	cpus {
- 		cpu@0 {
-diff --git a/arch/arm/boot/dts/omap3-cm-t3730.dts b/arch/arm/boot/dts/omap3-cm-t3730.dts
-index 48e48b0c81901..e1b1a047f77a0 100644
---- a/arch/arm/boot/dts/omap3-cm-t3730.dts
-+++ b/arch/arm/boot/dts/omap3-cm-t3730.dts
-@@ -9,7 +9,7 @@
- 
- / {
- 	model = "CompuLab CM-T3730";
--	compatible = "compulab,omap3-cm-t3730", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "compulab,omap3-cm-t3730", "ti,omap3630", "ti,omap3";
- 
- 	wl12xx_vmmc2: wl12xx_vmmc2 {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/omap3-igep0020-rev-f.dts b/arch/arm/boot/dts/omap3-igep0020-rev-f.dts
-index 9dca5bfc87ab2..eadb5b857f48b 100644
---- a/arch/arm/boot/dts/omap3-igep0020-rev-f.dts
-+++ b/arch/arm/boot/dts/omap3-igep0020-rev-f.dts
-@@ -10,7 +10,7 @@
- 
- / {
- 	model = "IGEPv2 Rev. F (TI OMAP AM/DM37x)";
--	compatible = "isee,omap3-igep0020-rev-f", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "isee,omap3-igep0020-rev-f", "ti,omap3630", "ti,omap3";
- 
- 	/* Regulator to trigger the WL_EN signal of the Wifi module */
- 	lbep5clwmc_wlen: regulator-lbep5clwmc-wlen {
-diff --git a/arch/arm/boot/dts/omap3-igep0020.dts b/arch/arm/boot/dts/omap3-igep0020.dts
-index c6f863bc03adf..3f0197ceae09e 100644
---- a/arch/arm/boot/dts/omap3-igep0020.dts
-+++ b/arch/arm/boot/dts/omap3-igep0020.dts
-@@ -10,7 +10,7 @@
- 
- / {
- 	model = "IGEPv2 Rev. C (TI OMAP AM/DM37x)";
--	compatible = "isee,omap3-igep0020", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "isee,omap3-igep0020", "ti,omap3630", "ti,omap3";
- 
- 	vmmcsdio_fixed: fixedregulator-mmcsdio {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/omap3-igep0030-rev-g.dts b/arch/arm/boot/dts/omap3-igep0030-rev-g.dts
-index 8e9c12cf51a7b..bc95a8df2e6a1 100644
---- a/arch/arm/boot/dts/omap3-igep0030-rev-g.dts
-+++ b/arch/arm/boot/dts/omap3-igep0030-rev-g.dts
-@@ -10,7 +10,7 @@
- 
- / {
- 	model = "IGEP COM MODULE Rev. G (TI OMAP AM/DM37x)";
--	compatible = "isee,omap3-igep0030-rev-g", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "isee,omap3-igep0030-rev-g", "ti,omap3630", "ti,omap3";
- 
- 	/* Regulator to trigger the WL_EN signal of the Wifi module */
- 	lbep5clwmc_wlen: regulator-lbep5clwmc-wlen {
-diff --git a/arch/arm/boot/dts/omap3-igep0030.dts b/arch/arm/boot/dts/omap3-igep0030.dts
-index 5188f96f431e7..d36ceecb7328c 100644
---- a/arch/arm/boot/dts/omap3-igep0030.dts
-+++ b/arch/arm/boot/dts/omap3-igep0030.dts
-@@ -10,7 +10,7 @@
- 
- / {
- 	model = "IGEP COM MODULE Rev. E (TI OMAP AM/DM37x)";
--	compatible = "isee,omap3-igep0030", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "isee,omap3-igep0030", "ti,omap3630", "ti,omap3";
- 
- 	vmmcsdio_fixed: fixedregulator-mmcsdio {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/omap3-lilly-dbb056.dts b/arch/arm/boot/dts/omap3-lilly-dbb056.dts
-index ecb4ef738e07b..f6bbea2be54c5 100644
---- a/arch/arm/boot/dts/omap3-lilly-dbb056.dts
-+++ b/arch/arm/boot/dts/omap3-lilly-dbb056.dts
-@@ -8,7 +8,7 @@
- 
- / {
- 	model = "INCOstartec LILLY-DBB056 (DM3730)";
--	compatible = "incostartec,omap3-lilly-dbb056", "incostartec,omap3-lilly-a83x", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "incostartec,omap3-lilly-dbb056", "incostartec,omap3-lilly-a83x", "ti,omap3630", "ti,omap3";
- };
- 
- &twl {
-diff --git a/arch/arm/boot/dts/omap3-n9.dts b/arch/arm/boot/dts/omap3-n9.dts
-index d211bcc311745..a3cf3f443785f 100644
---- a/arch/arm/boot/dts/omap3-n9.dts
-+++ b/arch/arm/boot/dts/omap3-n9.dts
-@@ -12,7 +12,7 @@
- 
- / {
- 	model = "Nokia N9";
--	compatible = "nokia,omap3-n9", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "nokia,omap3-n9", "ti,omap3630", "ti,omap3";
- };
- 
- &i2c2 {
-diff --git a/arch/arm/boot/dts/omap3-n950.dts b/arch/arm/boot/dts/omap3-n950.dts
-index b2f480022ff6e..cbaf79c4e8422 100644
---- a/arch/arm/boot/dts/omap3-n950.dts
-+++ b/arch/arm/boot/dts/omap3-n950.dts
-@@ -12,7 +12,7 @@
- 
- / {
- 	model = "Nokia N950";
--	compatible = "nokia,omap3-n950", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "nokia,omap3-n950", "ti,omap3630", "ti,omap3";
- 
- 	keys {
- 		compatible = "gpio-keys";
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-alto35.dts b/arch/arm/boot/dts/omap3-overo-storm-alto35.dts
-index 7f04dfad82034..3eb935df04dcc 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-alto35.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-alto35.dts
-@@ -14,5 +14,5 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Alto35";
--	compatible = "gumstix,omap3-overo-alto35", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-alto35", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts b/arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts
-index bc5a04e033362..3af8d10d72247 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts
-@@ -14,7 +14,7 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Chestnut43";
--	compatible = "gumstix,omap3-overo-chestnut43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-chestnut43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-gallop43.dts b/arch/arm/boot/dts/omap3-overo-storm-gallop43.dts
-index 065c31cbf0e29..813e3c9fe3b64 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-gallop43.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-gallop43.dts
-@@ -14,7 +14,7 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Gallop43";
--	compatible = "gumstix,omap3-overo-gallop43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-gallop43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-palo35.dts b/arch/arm/boot/dts/omap3-overo-storm-palo35.dts
-index e38c1c51392c5..8405bd9262de6 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-palo35.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-palo35.dts
-@@ -14,7 +14,7 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Palo35";
--	compatible = "gumstix,omap3-overo-palo35", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-palo35", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-palo43.dts b/arch/arm/boot/dts/omap3-overo-storm-palo43.dts
-index e6dc23159c4d9..b9558d736e795 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-palo43.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-palo43.dts
-@@ -14,7 +14,7 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Palo43";
--	compatible = "gumstix,omap3-overo-palo43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-palo43", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-summit.dts b/arch/arm/boot/dts/omap3-overo-storm-summit.dts
-index 587c08ce282d3..fcfc449f2abea 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-summit.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-summit.dts
-@@ -14,7 +14,7 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Summit";
--	compatible = "gumstix,omap3-overo-summit", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-summit", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-tobi.dts b/arch/arm/boot/dts/omap3-overo-storm-tobi.dts
-index f57de6010994e..6d14466c180af 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-tobi.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-tobi.dts
-@@ -14,6 +14,6 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Tobi";
--	compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
- 
-diff --git a/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts b/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts
-index 281af6c113beb..bcf20ff3f2813 100644
---- a/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts
-+++ b/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts
-@@ -14,5 +14,5 @@
- 
- / {
- 	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on TobiDuo";
--	compatible = "gumstix,omap3-overo-tobiduo", "gumstix,omap3-overo", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "gumstix,omap3-overo-tobiduo", "gumstix,omap3-overo", "ti,omap3630", "ti,omap3";
- };
-diff --git a/arch/arm/boot/dts/omap3-pandora-1ghz.dts b/arch/arm/boot/dts/omap3-pandora-1ghz.dts
-index ea509956d7aca..c0252f8a798aa 100644
---- a/arch/arm/boot/dts/omap3-pandora-1ghz.dts
-+++ b/arch/arm/boot/dts/omap3-pandora-1ghz.dts
-@@ -16,7 +16,7 @@
- / {
- 	model = "Pandora Handheld Console 1GHz";
- 
--	compatible = "openpandora,omap3-pandora-1ghz", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "openpandora,omap3-pandora-1ghz", "ti,omap3630", "ti,omap3";
- };
- 
- &omap3_pmx_core2 {
-diff --git a/arch/arm/boot/dts/omap3-sbc-t3730.dts b/arch/arm/boot/dts/omap3-sbc-t3730.dts
-index eb3893b9535e6..4c36bde62491d 100644
---- a/arch/arm/boot/dts/omap3-sbc-t3730.dts
-+++ b/arch/arm/boot/dts/omap3-sbc-t3730.dts
-@@ -8,7 +8,7 @@
- 
- / {
- 	model = "CompuLab SBC-T3730 with CM-T3730";
--	compatible = "compulab,omap3-sbc-t3730", "compulab,omap3-cm-t3730", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "compulab,omap3-sbc-t3730", "compulab,omap3-cm-t3730", "ti,omap3630", "ti,omap3";
- 
- 	aliases {
- 		display0 = &dvi0;
-diff --git a/arch/arm/boot/dts/omap3-sniper.dts b/arch/arm/boot/dts/omap3-sniper.dts
-index b6879cdc5c13e..0591af4941847 100644
---- a/arch/arm/boot/dts/omap3-sniper.dts
-+++ b/arch/arm/boot/dts/omap3-sniper.dts
-@@ -9,7 +9,7 @@
- 
- / {
- 	model = "LG Optimus Black";
--	compatible = "lg,omap3-sniper", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "lg,omap3-sniper", "ti,omap3630", "ti,omap3";
- 
- 	cpus {
- 		cpu@0 {
-diff --git a/arch/arm/boot/dts/omap3-zoom3.dts b/arch/arm/boot/dts/omap3-zoom3.dts
-index ce58b1f208e81..ab52e8d68f760 100644
---- a/arch/arm/boot/dts/omap3-zoom3.dts
-+++ b/arch/arm/boot/dts/omap3-zoom3.dts
-@@ -9,7 +9,7 @@
- 
- / {
- 	model = "TI Zoom3";
--	compatible = "ti,omap3-zoom3", "ti,omap3630", "ti,omap36xx", "ti,omap3";
-+	compatible = "ti,omap3-zoom3", "ti,omap3630", "ti,omap3";
- 
- 	cpus {
- 		cpu@0 {
+diff --git a/Documentation/devicetree/bindings/arm/omap/omap.yaml b/Documentation/devicetree/bindings/arm/omap/omap.yaml
+new file mode 100644
+index 0000000000000..cf07a7a7df279
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/omap/omap.yaml
+@@ -0,0 +1,174 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/omap/omap.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments OMAP SoC architecture device tree bindings
++
++maintainers:
++  - Tony Lindgren <tony@atomide.com>
++
++description: |
++  Platforms based on Texas Instruments OMAP SoC architecture.
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++
++      - description: TI OMAP2420 SoC based platforms
++        items:
++          - enum:
++              - ti,omap2420-h4 # TI OMAP2420 H4 board
++              - nokia,n800 # Nokia N800
++              - nokia,n810 # Nokia N810
++              - nokia,n810-wimax # Nokia N810 WiMax
++          - const: ti,omap2420
++          - const: ti,omap2
++
++      - description: TI OMAP2430 SoC based platforms
++        items:
++          - enum:
++              - ti,omap2430-sdp # TI OMAP2430 SDP
++          - const: ti,omap2430
++          - const: ti,omap2
++
++      - description: TI OMAP3430 SoC based platforms
++        items:
++          - enum:
++              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom OMAP35xx SOM-LV Development Kit
++              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom OMAP35xx Torpedo Development Kit
++              - ti,omap3430-sdp # TI OMAP3430 SDP
++              - ti,omap3-beagle # TI OMAP3 BeagleBoard
++              - compulab,omap3-cm-t3530 # CompuLab CM-T3530
++              - timll,omap3-devkit8000 # TimLL OMAP3 Devkit8000
++              - ti,omap3-evm # TI OMAP35XX EVM (TMDSEVM3530)
++              - ti,omap3-ldp # TI OMAP3430 LDP (Zoom1 Labrador)
++              - nokia,omap3-n900 # Nokia N900
++          - const: ti,omap3430
++          - const: ti,omap3
++
++      - description: TI OMAP3630 SoC based platforms
++        items:
++          - enum:
++              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom DM3730 SOM-LV Development Kit
++              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 Torpedo + Wireless Development Kit
++              - ti,omap3-beagle-xm # TI OMAP3 BeagleBoard xM
++              - compulab,omap3-cm-t3730 # CompuLab CM-T3730
++              - amazon,omap3-echo # Amazon Echo (first generation)
++              - ti,omap3-evm-37xx # TI OMAP37XX EVM (TMDSEVM3730)
++              - ti,omap3-gta04 # OMAP3 GTA04
++              - nokia,omap3-n9 # Nokia N9
++              - nokia,omap3-n950 # Nokia N950
++              - lg,omap3-sniper # LG Optimus Black
++              - ti,omap3-zoom3 # TI Zoom3
++          - const: ti,omap3630
++          - const: ti,omap3
++
++      - description: TI AM35 SoC based platforms
++        items:
++          - enum:
++              - teejet,mt_ventoux # TeeJet Mt.Ventoux
++              - ti,am3517-craneboard # TI AM3517 CraneBoard (TMDSEVM3517)
++              - ti,am3517-evm # TI AM3517 EVM (AM3517/05 TMDSEVM3517)
++              - compulab,omap3-sbc-t3517 # CompuLab SBC-T3517 with CM-T3517
++          - const: ti,am3517
++          - const: ti,omap3
++
++      - description: TI OMAP4430 SoC based platforms
++        items:
++          - enum:
++              - motorola,droid4 # Motorola Droid 4 XT894
++              - motorola,droid-bionic # Motorola Droid Bionic XT875
++              - amazon,omap4-kc1 # Amazon Kindle Fire (first generation)
++              - ti,omap4-panda # TI OMAP4 PandaBoard
++              - ti,omap4-sdp # TI OMAP4 SDP board
++          - const: ti,omap4430
++          - const: ti,omap4
++
++      - description: TI OMAP4460 SoC based platforms
++        items:
++          - enum:
++              - ti,omap4-panda-es # TI OMAP4 PandaBoard-ES
++          - const: ti,omap4460
++          - const: ti,omap4
++
++      - description: TI OMAP543 SoC based platforms
++        items:
++          - enum:
++              - compulab,omap5-cm-t54 # CompuLab CM-T54
++              - isee,omap5-igep0050 # IGEPv5
++              - ti,omap5-uevm # TI OMAP5 uEVM board
++          - const: ti,omap5
++
++      - description: TI AM33 SoC based platforms
++        items:
++          - enum:
++              - ti,am335x-bone # TI AM335x BeagleBone
++              - compulab,cm-t335 # CompuLab CM-T335
++              - ti,am335x-evm # TI AM335x EVM
++              - ti,am335x-evmsk # TI AM335x EVM-SK
++              - bosch,am335x-guardian # Bosch AM335x Guardian
++              - ti,am3359-icev2 # TI AM3359 ICE-V2
++              - novatech,am335x-lxm # NovaTech OrionLXm
++              - moxa,uc-2101 # Moxa UC-2101
++              - moxa,uc-8100-me-t # Moxa UC-8100-ME-T
++              - gumstix,am335x-pepper # Gumstix Pepper
++              - tcl,am335x-sl50 # Toby Churchill SL50 Series
++          - pattern: '^ti,am33(5[1246789]|xx)$' # ti,am33xx is legacy please use full SoC name
++
++      - description: TI AM43 SoC based platforms
++        items:
++          - enum:
++              - compulab,am437x-cm-t43 # CompuLab CM-T43
++              - ti,am437x-gp-evm # TI AM437x GP EVM
++              - ti,am437x-idk-evm # TI AM437x Industrial Development Kit
++              - ti,am437x-sk-evm # TI AM437x SK EVM
++          - pattern: '^ti,am4372[26789]$'
++          - const: ti,am43
++
++      - description: TI AM57 SoC based platforms
++        items:
++          - enum:
++              - beagle,am5729-beagleboneai # BeagleBoard.org BeagleBone AI
++              - compulab,cl-som-am57x # CompuLab CL-SOM-AM57x
++              - ti,am5718-idk # TI AM5718 IDK
++              - ti,am5728-idk # TI AM5728 IDK
++              - ti,am5748-idk # TI AM5748 IDK
++          - pattern: '^ti,am57[0124][689]$'
++          - const: ti,am57
++
++      - description: TI DRA7 SoC based platforms
++        items:
++          - enum:
++              - ti,dra718-evm # TI DRA718 EVM
++              - ti,dra722-evm # TI DRA722 EVM
++              - ti,dra742-evm # TI DRA742 EVM
++              - ti,dra762-evm # TI DRA762 EVM
++          - pattern: '^ti,dra7[12456][024568p]$'
++          - const: ti,dra7
++
++additionalProperties: true
++
++examples:
++  - |
++    / {
++        model = "TI OMAP2430 SDP (Software Development Board)";
++        compatible = "ti,omap2430-sdp", "ti,omap2430", "ti,omap2";
++
++        #address-cells = <1>;
++        #size-cells = <1>;
++    };
++
++  - |
++    / {
++        model = "TI DRA762 EVM";
++        compatible = "ti,dra762-evm", "ti,dra762", "ti,dra7";
++
++        #address-cells = <1>;
++        #size-cells = <1>;
++    };
++
++...
 -- 
 2.39.1
 
