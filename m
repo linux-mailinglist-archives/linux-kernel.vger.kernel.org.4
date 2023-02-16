@@ -2,183 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08695699B19
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10192699B1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjBPRSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S230090AbjBPRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBPRSe (ORCPT
+        with ESMTP id S229658AbjBPRT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:18:34 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6342C4C3F1;
-        Thu, 16 Feb 2023 09:18:33 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GArWmU013797;
-        Thu, 16 Feb 2023 17:18:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=065Xd7//5pM+MBjAeMGCDbNIHvUuqvLOuk8VwXjjjDI=;
- b=P6LYdkhaASC7CRP/KQ/fiB9OrGmv6kinIxNTsaYCb8Fc7ZIfnlJ5h3ISMVIlXci+U+2J
- tFoq/W/PSSOAN6NM1DktRV/2UmAM61d7a+0rHoC2jVJNGYveRCFZUX5Oa/LTVOXLpSGF
- GHBKyOfY4qexmbUyrGmjL9fFWw+9NFhR2De5H10SAKgPziqU+EwI6MHfoYDknVlxPygt
- SKgLqiw0odsPxveqk0ivVvhYOborkePH5CVC6ZvBi69BoUSsRuaMOZb1lnMg7s4nSsck
- 7mb+2fYWMdyLiGhz5r4GNtuYDPm1cNa9PxAZb20cg5lpWOiaq7ni4qLrfTbWAKdY8wM3 mQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nsja913vx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 17:18:16 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31GHIF20030402
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 17:18:15 GMT
-Received: from [10.110.95.168] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 16 Feb
- 2023 09:18:14 -0800
-Message-ID: <f273f9c6-7a6f-f451-4afa-eaea303613d9@quicinc.com>
-Date:   Thu, 16 Feb 2023 09:18:13 -0800
+        Thu, 16 Feb 2023 12:19:29 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2597C34F77;
+        Thu, 16 Feb 2023 09:19:27 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B771E24E154;
+        Fri, 17 Feb 2023 01:19:24 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
+ 2023 01:19:24 +0800
+Received: from [172.16.16.234] (113.72.147.207) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
+ 2023 01:19:23 +0800
+Message-ID: <10c2bcb2-e8ca-572f-9e35-84bc8dbf699e@starfivetech.com>
+Date:   Fri, 17 Feb 2023 01:19:20 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 09/26] gunyah: rsc_mgr: Add VM lifecycle RPC
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3 08/11] dt-bindings: clock: Add StarFive JH7110
+ always-on clock and reset generator
+To:     Conor Dooley <conor@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-9-hal.feng@starfivetech.com> <Y6JC6PZaRMYxZG5Z@spud>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212343.3311875-1-quic_eberman@quicinc.com>
- <Y+3PvUqkC2YJaW5o@kroah.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <Y+3PvUqkC2YJaW5o@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y6JC6PZaRMYxZG5Z@spud>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: vGZA4yzQKNvoP32q0R7fM1y6uxNK5uUT
-X-Proofpoint-ORIG-GUID: vGZA4yzQKNvoP32q0R7fM1y6uxNK5uUT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_13,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160150
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [113.72.147.207]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/15/2023 10:39 PM, Greg Kroah-Hartman wrote:
-> On Tue, Feb 14, 2023 at 01:23:42PM -0800, Elliot Berman wrote:
->>
->> Add Gunyah Resource Manager RPC to launch an unauthenticated VM.
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+On Tue, 20 Dec 2022 23:19:04 +0000, Conor Dooley wrote:
+> On Tue, Dec 20, 2022 at 08:50:51AM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> 
+>> Add bindings for the always-on clock and reset generator (AONCRG) on the
+>> JH7110 RISC-V SoC by StarFive Ltd.
+>> 
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 >> ---
->>   drivers/virt/gunyah/Makefile      |   2 +-
->>   drivers/virt/gunyah/rsc_mgr.h     |  45 ++++++
->>   drivers/virt/gunyah/rsc_mgr_rpc.c | 226 ++++++++++++++++++++++++++++++
->>   include/linux/gunyah_rsc_mgr.h    |  73 ++++++++++
->>   4 files changed, 345 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/virt/gunyah/rsc_mgr_rpc.c
->>
->> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
->> index cc864ff5abbb..de29769f2f3f 100644
->> --- a/drivers/virt/gunyah/Makefile
->> +++ b/drivers/virt/gunyah/Makefile
->> @@ -2,5 +2,5 @@
->>   
->>   obj-$(CONFIG_GUNYAH) += gunyah.o
->>   
->> -gunyah_rsc_mgr-y += rsc_mgr.o
->> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
->>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
->> diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
->> index d4e799a7526f..7406237bc66d 100644
->> --- a/drivers/virt/gunyah/rsc_mgr.h
->> +++ b/drivers/virt/gunyah/rsc_mgr.h
->> @@ -74,4 +74,49 @@ struct gh_rm;
->>   int gh_rm_call(struct gh_rm *rsc_mgr, u32 message_id, void *req_buff, size_t req_buff_size,
->>   		void **resp_buf, size_t *resp_buff_size);
->>   
->> +/* Message IDs: VM Management */
->> +#define GH_RM_RPC_VM_ALLOC_VMID			0x56000001
->> +#define GH_RM_RPC_VM_DEALLOC_VMID		0x56000002
->> +#define GH_RM_RPC_VM_START			0x56000004
->> +#define GH_RM_RPC_VM_STOP			0x56000005
->> +#define GH_RM_RPC_VM_RESET			0x56000006
->> +#define GH_RM_RPC_VM_CONFIG_IMAGE		0x56000009
->> +#define GH_RM_RPC_VM_INIT			0x5600000B
->> +#define GH_RM_RPC_VM_GET_HYP_RESOURCES		0x56000020
->> +#define GH_RM_RPC_VM_GET_VMID			0x56000024
+>>  .../clock/starfive,jh7110-aoncrg.yaml         | 76 +++++++++++++++++++
+>>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 18 +++++
+>>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 12 +++
+>>  3 files changed, 106 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>> new file mode 100644
+>> index 000000000000..a3cf0570d950
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>> @@ -0,0 +1,76 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +struct gh_rm_vm_common_vmid_req {
->> +	__le16 vmid;
->> +	__le16 reserved0;
-> 
-> reserved for what?  What is a valid value for this field?  Should it be
-> checked for 0?
-
-This struct is transmitted "over the wire" and RM makes all of its 
-structures 4-byte aligned. The reserved fields are padding for this 
-alignment and will be zero but don't need to be checked. Linux 
-initializes the reserved fields to zero.
-
-> 
-> Same with other "reserved0" fields in this file.
-> 
-> 
->> +} __packed;
+>> +title: StarFive JH7110 Always-On Clock and Reset Generator
 >> +
->> +/* Call: VM_ALLOC */
->> +struct gh_rm_vm_alloc_vmid_resp {
->> +	__le16 vmid;
->> +	__le16 reserved0;
->> +} __packed;
+>> +maintainers:
+>> +  - Emil Renner Berthing <kernel@esmil.dk>
 >> +
->> +/* Call: VM_STOP */
->> +struct gh_rm_vm_stop_req {
->> +	__le16 vmid;
->> +#define GH_RM_VM_STOP_FLAG_FORCE_STOP	BIT(0)
->> +	u8 flags;
->> +	u8 reserved;
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-aoncrg
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Main Oscillator (24 MHz)
+>> +      - description: RTC Oscillator (32.768 kHz)
+>> +      - description: GMAC0 RMII reference
+>> +      - description: GMAC0 RGMII RX
 > 
-> Why just "reserved" and not "reserved0"?  Naming is hard :(
+> Gotta ask the same question here about the muxing - are all of these
+> clocks truly required?
+
+Please see the following clock tree.
+
+                                 enable  prepare  protect                                duty  hardware
+   clock                          count    count    count        rate   accuracy phase  cycle    enable
+-------------------------------------------------------------------------------------------------------
+ *rtc_osc*                              0        0        0       32768          0     0  50000         Y
+    rtc_32k                           0        0        0       32768          0     0  50000         Y
+ *gmac0_rgmii_rxin*                     0        0        0   125000000          0     0  50000         Y
+    gmac0_rx                          0        0        0   125000000          0     0  50000         Y
+       gmac0_rx_inv                   0        0        0   125000000          0   180  50000         Y
+ *gmac0_rmii_refin*                     0        0        0    50000000          0     0  50000         Y
+    gmac0_rmii_rtx                    0        0        0    25000000          0     0  50000         Y
+       gmac0_tx                       0        0        0    25000000          0     0  50000         N
+          gmac0_tx_inv                0        0        0    25000000          0   180  50000         Y
+ *osc*                                  3        3        0    24000000          0     0  50000         Y
+    rtc_cal                           0        0        0    24000000          0     0  50000         N
+    rtc_internal                      0        0        0       32000          0     0  50000         Y
+    apb_func                          0        0        0    24000000          0     0  50000         Y
+    osc_div4                          0        0        0     6000000          0     0  50000         Y
+    pll2_out                          2        2        0  1188000000          0     0  50000         Y
+       bus_root                       1        1        0  1188000000          0     0  50000         Y
+          axi_cfg0                    2        2        0   396000000          0     0  50000         Y
+             *stg_axiahb*               3        3        0   198000000          0     0  50000         Y
+                gmac0_axi             0        0        0   198000000          0     0  50000         N
+                gmac0_ahb             0        0        0   198000000          0     0  50000         N
+                *apb_bus*               2        2        0    49500000          0     0  50000         Y
+                   rtc_apb            0        0        0    49500000          0     0  50000         Y
+                   otpc_apb           0        0        0    49500000          0     0  50000         Y
+    pll0_out                          1        1        0  1250000000          0     0  50000         Y
+       *gmac0_gtxclk*                   0        0        0   156250000          0     0  50000         N
+          gmac0_gtxc                  0        0        0   156250000          0     0  50000         N
+
+Most input clocks are used as parent of the clocks registered
+in aon clock driver (patch 10) except the clock "gmac0_gtxclk".
+But I still think there is no harm in building a complete
+clock tree, so we can adjust the parent clocks easily.
+
+> 
+>> +      - description: STG AXI/AHB
+>> +      - description: APB Bus
+>> +      - description: GMAC0 GTX
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: osc
+>> +      - const: rtc_osc
+>> +      - const: gmac0_rmii_refin
+>> +      - const: gmac0_rgmii_rxin
+>> +      - const: stg_axiahb
+>> +      - const: apb_bus
+>> +      - const: gmac0_gtxclk
+> 
+> And if they are, is this actually needed since the order must be as
+> above?
+
+Will remove "clock-names" in the binding and device tree. Thanks.
+
+Best regards,
+Hal
+
+> 
+> As I said in the previous patch, I've probably missed something...
 > 
 
-Some fields have multiple reserved fields. I'll clean up so "reserved0" 
-only appears when there are multiple padding fields.
-
-Thanks,
-Elliot
