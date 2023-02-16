@@ -2,158 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3780699FBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC08699FBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBPW1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S229477AbjBPW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPW1U (ORCPT
+        with ESMTP id S229800AbjBPW1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:27:20 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E51E191;
-        Thu, 16 Feb 2023 14:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676586439; x=1708122439;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=eyhB6JFAAC2b9CORrA1wH7YfJGWrXX7WAgkV7NeyW4s=;
-  b=OvXRumSrviwXrxIFvBKCHI3HBuzGbumWz4yqdrVjVBqBThEzcbHQZL2c
-   66NGrzBu529lVCwjsCFqr96zyRw7alKGV7TRJ77FWKJZKpuP4QyHAmvB4
-   +54eP0gKw4AmFtS5pB0WLirSilwxm5SRLq22WVwZyOY9O9XW4Nqn6dxUT
-   oBbeLapaujKOsk08yCcfngJQEFcQs/6vjBoBZUOFgMRcFykqBlVZE+stq
-   3PJ5uwL8kPVmCBiGCn1nfz6aucH+Ja61V1HdXhqP3rgs+h4IWwFAk9se9
-   yZs7v1twr2PE94UlaqbOc9GRnZM+oLb2cKExx9+yy9LNpQAnzoJokY+Ff
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="311484950"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="311484950"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 14:27:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="915858027"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="915858027"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2023 14:27:11 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 16 Feb 2023 14:27:10 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 16 Feb 2023 14:27:10 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 16 Feb 2023 14:27:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DarzpjwZr2Mr9dwXaNEJa9G/gbU2z+xZuRYS+b+B4whtiM8Q6D4xUR9m+V8a4zBiltDFuHAASOG1+ocGmBRbV8fsoXKAOmTbpKVhRxv6b/umYuVRtK69LAe70GjSnSfVaWlMK8X5ZMB1d1Y9uoYrmpye02pobcwSj1gkc7GLe8biHlHJEtWsXfxje72/PHv8xo6rfcONqFzwnEUr+syK9965mgvjnCTuk+cuyhZfgbL8vnJwShAR7EN7Oj4FqAkUdm4FEjEeRFgLkO2CnwQ+ZvVcEZbOMHhWhmP+TQGdL7U903X+rdEFhjvt6VDeuQpiv8BTBGRCQIWDn/psS7FaPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/NhIheebMgTInEiW3pvlN2iPu1by5On6KJKDCuJ8OYA=;
- b=N60T+1um/0JOcsOK5ahk3yPJtvnca0LuTNxav4rjmaoKhuK1QUT47fjZVoApFUdx8fY0Se4tCfp1tB3wRKlUXARIrQ7Gn5tvp5XiOSGc40qVazFux07tF3+cEO99xPshwtr+cOc/9U+thq+SDYxJdgkYMBnt4fVf2GKjYjpLlboBRYYJq4ROUr5dHttZGGPSR6nIkBhysjNiT0h5A/9hm9/mFB+gpu85mLq/S4SD2/es19QHLpYo+8kCzp6anuY9RBvY5ui3XyRZ3lgrPVJ1wyUo2hUYuV7iqV7iIgTNzGyV8HMo+1Gx0gtKIV5lmWm/t2MY4cdSdOEtcSkNcUKqNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB6103.namprd11.prod.outlook.com (2603:10b6:8:84::19) by
- DM6PR11MB4563.namprd11.prod.outlook.com (2603:10b6:5:28e::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.26; Thu, 16 Feb 2023 22:27:07 +0000
-Received: from DS7PR11MB6103.namprd11.prod.outlook.com
- ([fe80::7eea:6559:5b5c:82f]) by DS7PR11MB6103.namprd11.prod.outlook.com
- ([fe80::7eea:6559:5b5c:82f%9]) with mapi id 15.20.5986.023; Thu, 16 Feb 2023
- 22:27:07 +0000
-Message-ID: <3898cf3c-42e8-1fa0-395f-318bceda313d@intel.com>
-Date:   Thu, 16 Feb 2023 14:27:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [RFC v2 PATCH 1/7] x86/resctrl: Add multiple tasks to the resctrl
- group at once
-Content-Language: en-US
-To:     Babu Moger <babu.moger@amd.com>, <reinette.chatre@intel.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <eranian@google.com>,
-        <peternewman@google.com>
-References: <167537433143.647488.9641864719195184123.stgit@bmoger-ubuntu>
- <167537441417.647488.18261538242584692230.stgit@bmoger-ubuntu>
-From:   Fenghua Yu <fenghua.yu@intel.com>
-In-Reply-To: <167537441417.647488.18261538242584692230.stgit@bmoger-ubuntu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0007.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::12) To DS7PR11MB6103.namprd11.prod.outlook.com
- (2603:10b6:8:84::19)
+        Thu, 16 Feb 2023 17:27:25 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D4B3B232
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:27:23 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id v189so2049590vkf.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1676586442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIIagYEPOZjsPtFjlj+Npxy7tYezVym+nY7h8CxULgM=;
+        b=XbgTu8Kc8j1zKle2ISwgCQgirsgjy0fBjz/z1i2OOa80knGR86DHz9w78U7Vh0JKFe
+         amvuDtw5vj7dq/dofItCAM8daEFZds6SpGAqj9Oy31CZawFzJmEvjE6uuDWUF5oPZODi
+         cQSnxUQNSalM1sNv04yQZqmTCRlcoD5UoXvLyfL9cyFAReuNzLePAaNorxVM7v8Tf6xX
+         SmYugxB4igpEwRc7N58WCOajCO9ZkIjMNFwy6w3NT0tsNN6AN2YcbcbXpHr89vjBSOYZ
+         ThkVLsl/uPs7Eoaw/Ec6ck0FhTs7DbuqWWDwFAOJ+FkAJ+tkP6rFHwAyoiFt1hys4BGX
+         Vu7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676586442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RIIagYEPOZjsPtFjlj+Npxy7tYezVym+nY7h8CxULgM=;
+        b=T0OQh0tQZr5s3iKIK4REGM7bxiMcNljy1sOuXwCvqHnuEdOAgbUjFyeX56XMRlhyHg
+         r/JzIoMuD7jcNkDce4pni7eovcqhX/rwVlwxQDf1IIobNLyiocsQeJnj3WPbx4uykY3t
+         MEBmY4R6/VyH2jy87pmReni7+QQ3vyjFyH9gxqFwMMRHP5U0sLHRuEk7PJRa0cM5J5PQ
+         o3YUMXZ6A03T6ZAcePTv9bDV2vBeYqdKhdATDEe92/Uy1WNBqs9t8xRT3D+bPLCf9yGU
+         PFxVG706CTHOeUvtIqitJ9bK80Xyu7iD7vObz/CC79NX1i3FGRarqrDN2Nq1bL4bL98n
+         TNwA==
+X-Gm-Message-State: AO0yUKWrnXWNiISCRDg4dBX2fq0E1dUzKedaNNoRvAtsQccqHgk45Sw+
+        +EtEX0N5NPlnZKl47ss5M7ELGaa/jTafComfOiX2cQ==
+X-Google-Smtp-Source: AK7set8+nYkrawdpOMwYuT/GH/1xErNmKd9P/0AexHtu6RVh1nwi3E/PBA3Iv0RdDvIxOXzJuk83s9r/k2LQuAUGNcQ=
+X-Received: by 2002:a05:6122:1385:b0:401:8b0a:8aa6 with SMTP id
+ m5-20020a056122138500b004018b0a8aa6mr1090547vkp.12.1676586442407; Thu, 16 Feb
+ 2023 14:27:22 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB6103:EE_|DM6PR11MB4563:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31b979c8-c55f-47cd-16d7-08db106cefab
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gZHscuEyNGzXMBC5alRuJEdvu7NCNEZ3jlCuviIU82RYpHyrDq567Upbmg3PJ4dMdG6VuEygWkFl38H6omf1cKqSqf35NWcvop4uKA+8XoWDTMq3CDhMaoy6obg6bjA+PpsZ8nLoamdq1qR2/37ta9iEbr+dwn4bo14/H+C+DLkPn357ACAsKldabDtZE77ahLkNMTG4Y+XDHgVyXqz79UlvONu0OdVRWirmwWO5OxxaruaTgyIzdVrscRmeBp6CpShEyduEuXwG2LSzhIHUdc0WfvBBDVSeRmvqUVEv48NZ0s+4RyOt29mOUlvem1KbKktykH9NoDD0n8H7WBhvCOD8XFMAO0wVZ2SumjfkSLKZFGcIQWRzbMHp1ROJOu1MU6l0zt1hVvYJpJ/TY7nbZ8icHT5iVpnqGAvBhkL0SkqtfWHhnF58kJ5SYZGYfvzOsYD+62I8IlwCAvGX47FfPFHfgPoG48B5XsLVcvnUeltrWFINslKcrHzuOqCIFqlYmkzLbiNIE3es+K66d2y5X3X4ulttNApq67MuQwKhoRGh+jsJAdq+fqDZzfhObkHtdqvABaUnxzM+AiCfE5gcBksU5SsRrmeG2tI6Ce1agB49sptQgliDMWYyUb4pUUYJVsq99GuY8G6gyXE6dijQrmC1RigyZZ0u9PnZwgmh8YlIw4rHjEMcuxbhZP53B/M7J4/vAuObAEinWpjTWxk1LgyXvMA5CVWHHTNB9e6xUgQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB6103.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(396003)(136003)(376002)(39860400002)(451199018)(26005)(31686004)(66899018)(83380400001)(2616005)(31696002)(44832011)(2906002)(36756003)(478600001)(186003)(6506007)(41300700001)(6486002)(53546011)(4326008)(6512007)(82960400001)(8676002)(316002)(8936002)(5660300002)(38100700002)(6636002)(7416002)(66556008)(66476007)(86362001)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bldNT1AraHFYTlFpNlhibXZXUkIzcDVWU2Z6V1BFY1llVy9za3R4Qzl3T3Vt?=
- =?utf-8?B?ZVpxR3MrRXZXYWsvL29paVpnWjczQ2ZDRXlidGtjTCsrR0VFNzVBcnJaTHZH?=
- =?utf-8?B?MURoYnlOY2RVcnVvK0RNbmJ0aHA5QUtrZEZrUkhYQlFJQ1VRcHVNZ2dJRDlq?=
- =?utf-8?B?UHFRM3pmODdHZFdWUFEyRGtibVQzRzU4Yko5L3djM2VEUzZNV1F3TFRFckc2?=
- =?utf-8?B?eHFray9DTEVEZm5uem1INit0VVhzb05vdThvakZJWVR5ckNVN2pZbXJrQm14?=
- =?utf-8?B?elA5dnhSdExFRkhwSFlBUVJuNnBRdGF0SVJ3QTNydk4wemN2K1BpeU1zSmNX?=
- =?utf-8?B?eHRubWRkT3cvKzhVWjZWZ3VKSkZOb285TlJScWVXMnpwdzdWaU82RndDcTU5?=
- =?utf-8?B?Z3RQVGlUU28wejREWkgrczFKanRuN2U3SmttaFJSNWJBa2V2VzlzbDhqQTVk?=
- =?utf-8?B?YWYvREZHb29Vck1Va2gzeUk1MTdsM3RSb0JtOW5PMXZFY3FzZU9GUTVKQXRP?=
- =?utf-8?B?TTRocUZxT0o4bnF4WU52ODYrN3JjaUE3bmNSVWdHVFUzLzRpZ3VYS3MvWVVi?=
- =?utf-8?B?K3dDejZmcDZid0UvR3p0WCtFdWlsT1NVSklDdVBOOXBqck9kMFlNdmMzOGFp?=
- =?utf-8?B?QlJ3clhabllzRm5wYTYxYnpqWmVlWnllNHNZMXFUaHprMWw5VCtGTW9iNE1C?=
- =?utf-8?B?QnR5TmlTMHBaU2hCaThWUWtNelBkM1UrbWlIckpEKzJKTnZFMmxiYmtGWFFo?=
- =?utf-8?B?YksyMzdtM3lWQ2lneWRIWDl1UFBOdzRlR2s1aEtuQzBkazBTaGttTUxMelNx?=
- =?utf-8?B?NmJNLzY1c2R0R3UvMTBNaXVFb1BjK0YyMmgwQ1hoRUNoRkc0a0xqd3VHdG1r?=
- =?utf-8?B?WFJROWxsVDVmSm05TDhmMFFyV0JvT3h1K3RFK1Ayb21nSmxJRTZ4dHZ4MDJG?=
- =?utf-8?B?UW5aYmdPN2xBZm03Mzk4Zm0vbitUSWY4RjVNbHZrSDgwdjBMVXFTUVpGR2lj?=
- =?utf-8?B?T3JYRGdDSWxTQnJzQ3E1NFBYcWRJbXYyclcrdFBpSUcya2RLOWVnQ08vb3Iy?=
- =?utf-8?B?NkU4RTNGU0NaUmRZS1EwK3dERXFTd3g3TlRQNlhNb2hCQ1N1Vno5ZDlZc1RI?=
- =?utf-8?B?TXFDN2w3UWc0MDl6VlFOL0lhVzU5Mjg3WmFsVHJnRllld3hxKzljbFl4YTJk?=
- =?utf-8?B?UElWUm8vMFZXS3FJR08vcUZWMFpSNzcyYjA4UlA3M0ZwK3JoTk9WNld3TXQy?=
- =?utf-8?B?Z2h2SVF2eldWU3Fwc24xRjRVYXV4SFRVd21TZXp4RTVjSlFCblpYSi9tYlpa?=
- =?utf-8?B?eWdPVlVyTTNkWHhZWEFncmJrNHpWOXBOOHROMmtyUndoYzZRZWl2QUdHLzFv?=
- =?utf-8?B?SUtHNkgrVXpMQytwQ2l5ZXRyUEJPU0QrbXJ1Z1FINkJ1VngxTWU3ZXRBMWxK?=
- =?utf-8?B?K1RpYTJyMjVXSU1DZlRBeEgwUVNlSytqWHFMWXJYQ3FOTWhRNUwzdEQ1WnhG?=
- =?utf-8?B?TUpteVYvV0duTW1VdXdHWmlLckxMaVFvcUd1STM0a3N2WWxSRG8wbS9uRFdM?=
- =?utf-8?B?RDN2RndJMzJzRXlMdFlLa1p4aFpvWDhSWW9LVktEajlrakZqRGtQdGZtVGhh?=
- =?utf-8?B?cE1IaC8zSXJ1YUJjeE1oSFEzRTNoOUtQU0Vic1RMRldYWDNnUmxjbmp3TXJ5?=
- =?utf-8?B?TmtxWmIzVjE3bUtUODVZc3ZvN2lsL0J5RE1DazBJUUJYT21PQWZ4aVF3N3h2?=
- =?utf-8?B?V0hDMnZKQlVnNW8rdWdFOENiL29yOE1ualNGYTBYRjdKckI5Y3ZueEJVdlpy?=
- =?utf-8?B?ekFNbS9pb0wxaXRJVys3b2lqTlRwVSsrR2tzb0RJcThMbVlJRTVhR3BEZUtO?=
- =?utf-8?B?ZFNaOXJOUWdNWml4UmluM0t2MitpRjNlcGRtNEdZU0o1ME4yZ09JK0wyK3Fa?=
- =?utf-8?B?MXdkelZUNGxCSmtUWEJ3VzJiMkhzL2VGSnZmTXY5SUhVZDJFQlhlWEZsYVJ6?=
- =?utf-8?B?ZlVrMWU4aTlzV1RBSy85Uk9FQXRuYnRuRnlUczFHeUt2M3Avb2t3RG92bzVL?=
- =?utf-8?B?c2h5emN2bWtQek5tamIyTDVNRFMyQml6WjNFM1p5d0NDdzRjNWFqNFBndWxH?=
- =?utf-8?Q?9mXRBsGXNchpJtpZUkJaKBMXi?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31b979c8-c55f-47cd-16d7-08db106cefab
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB6103.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 22:27:06.8723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q1FMKTM8RRj1c6kYsVxIMUSj2pl0Jr1p7Zw1qGJJGMOobBxfMqBuFFHAvDoqWB3y91Fa42Q2J05xv5w4tv9p0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4563
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+From:   Lokesh Gidra <lokeshgidra@google.com>
+Date:   Thu, 16 Feb 2023 14:27:11 -0800
+Message-ID: <CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZKNKXqxRCyjniNVjp0Aw@mail.gmail.com>
+Subject: RFC for new feature to move pages from one vma to another without split
+To:     Peter Xu <peterx@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Brian Geffon <bgeffon@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Nicolas Geoffray <ngeoffray@google.com>,
+        Jared Duke <jdduke@google.com>,
+        android-mm <android-mm@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -161,127 +78,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Babu,
+I) SUMMARY:
+Requesting comments on a new feature which remaps pages from one
+private anonymous mapping to another, without altering the vmas
+involved. Two alternatives exist but both have drawbacks:
+1. userfaultfd ioctls allocate new pages, copy data and free the old
+ones even when updates could be done in-place;
+2. mremap results in vma splitting in most of the cases due to 'pgoff' mism=
+atch.
 
-On 2/2/23 13:46, Babu Moger wrote:
-> The resctrl task assignment for MONITOR or CONTROL group needs to be
-> done one at a time. For example:
-> 
->    $mount -t resctrl resctrl /sys/fs/resctrl/
->    $mkdir /sys/fs/resctrl/clos1
->    $echo 123 > /sys/fs/resctrl/clos1/tasks
->    $echo 456 > /sys/fs/resctrl/clos1/tasks
->    $echo 789 > /sys/fs/resctrl/clos1/tasks
-> 
-> This is not user-friendly when dealing with hundreds of tasks.
+Proposing a new mremap flag or userfaultfd ioctl which enables
+remapping pages without these drawbacks. Such a feature, as described
+below, would be very helpful in efficient implementation of concurrent
+compaction algorithms.
 
-Maybe add something like "poor performance due to syscall overhead...".
 
-> 
-> Improve the user experience by supporting the multiple task assignment
-> in one command with the tasks separated by commas. For example:
-> 
->    $echo 123,456,789 > /sys/fs/resctrl/clos1/tasks
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-> ---
->   Documentation/x86/resctrl.rst          |    9 +++++++--
->   arch/x86/kernel/cpu/resctrl/rdtgroup.c |   24 +++++++++++++++++++++++-
->   2 files changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst
-> index 058257dc56c8..58b76fc75cb7 100644
-> --- a/Documentation/x86/resctrl.rst
-> +++ b/Documentation/x86/resctrl.rst
-> @@ -292,13 +292,18 @@ All groups contain the following files:
->   "tasks":
->   	Reading this file shows the list of all tasks that belong to
->   	this group. Writing a task id to the file will add a task to the
-> -	group. If the group is a CTRL_MON group the task is removed from
-> +	group. Multiple tasks can be assigned together in one command by
-> +	inputting the tasks separated by commas. Tasks will be assigned
-> +	sequentially in the order it is provided. Failure while assigning
-> +	the tasks will be aborted immediately and tasks next in the
-> +	sequence will not be assigned. Users may need to retry them again.
+II) MOTIVATION:
+Garbage collectors (like the ones used in managed languages) perform
+defragmentation of the managed heap by moving objects (of varying
+sizes) within the heap. Usually these algorithms have to be concurrent
+to avoid response time concerns. These are concurrent in the sense
+that while the GC threads are compacting the heap, application threads
+continue to make progress, which means enabling access to the heap
+while objects are being simultaneously moved.
 
-May need to add "tasks before the failure are assigned...".
+Given the high overhead of heap compaction, such algorithms typically
+segregate the heap into two types of regions (set of contiguous
+pages): those that have enough fragmentation to compact, and those
+that are densely populated. While only =E2=80=98fragmented=E2=80=99 regions=
+ are
+compacted by sliding objects, both types of regions are traversed to
+update references in them to the moved objects.
 
-To retry movement, user needs to know which pid fails. So it's better
-to add "last_command_status shows the failure pid and user can parse
-it to retry assignment starting from the failure pid".
+A) PROT_NONE+SIGSEGV approach:
+One of the widely used techniques to ensure data integrity during
+concurrent compaction is to use page-level access interception.
+Traditionally, this is implemented by mprotecting (PROT_NONE) the heap
+before starting compaction and installing a SIGSEGV handler. When GC
+threads are compacting the heap, if some application threads fault on
+the heap, then they compact the faulted page in the SIGSEGV handler
+and then enable access to it before returning. To do this atomically,
+the heap must use shmem (MAP_SHARED) so that an alias mapping (with
+read-write permission) can be used for moving objects into and
+updating references.
 
-> +
-> +	If the group is a CTRL_MON group the task is removed from
->   	whichever previous CTRL_MON group owned the task and also from
->   	any MON group that owned the task. If the group is a MON group,
->   	then the task must already belong to the CTRL_MON parent of this
->   	group. The task is removed from any previous MON group.
->   
-> -
->   "cpus":
->   	Reading this file shows a bitmask of the logical CPUs owned by
->   	this group. Writing a mask to this file will add and remove
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index e2c1599d1b37..13b7c5f3a27c 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -683,16 +683,34 @@ static ssize_t rdtgroup_tasks_write(struct kernfs_open_file *of,
->   				    char *buf, size_t nbytes, loff_t off)
->   {
->   	struct rdtgroup *rdtgrp;
-> +	char *pid_str;
->   	int ret = 0;
->   	pid_t pid;
->   
-> -	if (kstrtoint(strstrip(buf), 0, &pid) || pid < 0)
-> +	/* Valid input requires a trailing newline */
-> +	if (nbytes == 0 || buf[nbytes - 1] != '\n')
->   		return -EINVAL;
-> +
-> +	buf[nbytes - 1] = '\0';
-> +
->   	rdtgrp = rdtgroup_kn_lock_live(of->kn);
->   	if (!rdtgrp) {
->   		rdtgroup_kn_unlock(of->kn);
->   		return -ENOENT;
->   	}
-> +
-> +next:
-> +	if (!buf || buf[0] == '\0')
-> +		goto unlock;
-> +
-> +	pid_str = strim(strsep(&buf, ","));
-> +
-> +	if (kstrtoint(pid_str, 0, &pid) || pid < 0) {
-> +		rdt_last_cmd_puts("Invalid pid value\n");
+Limitation: due to different access rights, the heap can end up with
+one vma per page in the worst case, hitting the =E2=80=98max_map_count=E2=
+=80=99 limit.
 
-Better to add pid_str in failure info. Then user knows where the failure 
-pid happens and can re-do the movement starting from the failed pid.
+B) Userfaultfd approach:
+Userfaultfd avoids the vma split issue by intercepting page-faults
+when the page is missing and gives control to user-space to map the
+desired content. It doesn=E2=80=99t affect the vma properties. The compacti=
+on
+algorithm in this case works by first remapping the heap pages (using
+mremap) to a secondary mapping and then registering the heap with
+userfaultfd for MISSING faults. When an application thread accesses a
+page that has not yet been mapped (by other GC/application threads), a
+userfault occurs, and as a consequence the corresponding page is
+generated and mapped using one of the following two ioctls.
+1) COPY ioctl: Typically the heap would be private anonymous in this
+case. For every page on the heap, compact the objects into a
+page-sized buffer, which COPY ioctl takes as input. The ioctl
+allocates a new page, copies the input buffer to it, and then maps it.
+This means that even for updating references in the densely populated
+regions (where compaction is not done), in-place updation is
+impossible. This results in unnecessary page-clear, memcpy and
+freeing.
+2) CONTINUE ioctl: the two mappings (heap and secondary) are
+MAP_SHARED to the same shmem file. Userfaults in the =E2=80=98fragmented=E2=
+=80=99
+regions are MISSING, in which case objects are compacted into the
+corresponding secondary mapping page (which triggers a regular page
+fault to get a page mapped) and then CONTINUE ioctl is invoked, which
+maps the same page on the heap mapping. On the other hand, userfaults
+in the =E2=80=98densely populated=E2=80=99 regions are MINOR (as the page a=
+lready
+exists in the secondary mapping), in which case we update the
+references in the already existing page on the secondary mapping and
+then invoke CONTINUE ioctl.
 
-> +		ret = -EINVAL;
-> +		goto unlock;
-> +	}
-> +
->   	rdt_last_cmd_clear();
->   
->   	if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED ||
-> @@ -703,6 +721,10 @@ static ssize_t rdtgroup_tasks_write(struct kernfs_open_file *of,
->   	}
->   
->   	ret = rdtgroup_move_task(pid, rdtgrp, of);
-> +	if (ret)
+Limitation: we observed in our implementation that
+page-faults/page-allocation, memcpy, and madvise took (with either of
+the two ioctls) ~50% of the time spent in compaction.
 
-May need to report "Failed at %d\n", pid;
 
-> +		goto unlock;
-> +	else
-> +		goto next;
->   
->   unlock:
->   	rdtgroup_kn_unlock(of->kn);
-> 
-> 
+III) USE CASE (of the proposed feature):
+The proposed feature of moving pages from one vma to another will
+enable us to:
+A) Recycle pages entirely in the userspace as they are freed (pages
+whose objects are already consumed as part of the current compaction
+cycle) in the =E2=80=98fragmented=E2=80=99 regions. This way we avoid page-=
+clearing
+(during page allocation) and memcpy (in the kernel). When the page is
+handed over to the kernel for remapping, there is nothing else needed
+to be done. Furthermore, since the page is being reused, it doesn=E2=80=99t
+have to be freed either.
+B) Implement a coarse-grained page-level compaction algorithm wherein
+pages containing live objects are slid next to each other without
+touching them, while reclaiming in-between pages which contain only
+garbage. Such an algorithm is very useful for compacting objects which
+are seldom accessed by application and hence are likely to be swapped
+out. Without this feature, this would require copying the pages
+containing live objects, for which the src pages have to be
+swapped-in, only to be soon swapped-out afterwards.
 
-Thanks.
+AFAIK, none of the above features can be implemented using mremap
+(with current flags), irrespective of whether the heap is a shmem or
+private anonymous mapping, because:
+1) When moving a page it=E2=80=99s likely that its index will need to chang=
+e
+and mremapping such a page would result in VMA splitting.
+2) Using mremap for moving pages would result in the heap=E2=80=99s range
+being covered by several vmas. The mremap in the next compaction cycle
+(required prior to starting compaction as described above), will fail
+with EFAULT. This is because the src range in mremap is not allowed to
+span multiple vmas. On the other hand, calling it for each src vma is
+not feasible because:
+  a) It=E2=80=99s not trivial to identify various vmas covering the heap ra=
+nge
+in userspace, and
+  b) This operation is supposed to happen with application threads
+paused. Invoking numerous mremap syscalls in a pause risks causing
+janks.
+3) Mremap has scalability concerns due to the need to acquire mmap_sem
+exclusively for splitting/merging VMAs. This would impact parallelism
+of application threads, particularly during the beginning of the
+compaction process when they are expected to cause a spurt of
+userfaults.
 
--Fenghua
+
+IV) PROPOSAL:
+Initially, maybe the feature can be implemented only for private
+anonymous mappings. There are two ways this can be implemented:
+A) A new userfaultfd ioctl, =E2=80=98MOVE=E2=80=99, which takes the same in=
+puts as the
+=E2=80=98COPY=E2=80=99 ioctl. After sanity check, the ioctl would detach th=
+e pte
+entries from the src vma, and move them to dst vma while updating
+their =E2=80=98mapping=E2=80=99 and =E2=80=98index=E2=80=99 fields, if requ=
+ired.
+
+B) Add a new flag to mremap, =E2=80=98MREMAP_ONLYPAGES=E2=80=99, which work=
+s similar
+to the MOVE ioctl above.
+
+Assuming (A) is implemented, here is broadly how the compaction would work:
+* For a MISSING userfault in the =E2=80=98densely populated=E2=80=99 region=
+s, update
+pointers in-place in the secondary mapping page corresponding to the
+fault address (on the heap) and then use the MOVE ioctl to map it on
+the heap. In this case the =E2=80=98index=E2=80=99 field would remain the s=
+ame.
+* For a MISSING userfault in =E2=80=98fragmented=E2=80=99 regions, pick any=
+ freed page
+in the secondary map, compact the objects corresponding to the fault
+address in this page and then use MOVE ioctl to map it on the fault
+address in the heap. This would require updating the =E2=80=98index=E2=80=
+=99 field.
+After compaction is completed, use madvise(MADV_DONTNEED) on the
+secondary mapping to free any remaining pages.
+
+
+Thanks,
+Lokesh
