@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1B4699B9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E0C699BA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjBPRyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S230099AbjBPRyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBPRyD (ORCPT
+        with ESMTP id S230029AbjBPRyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:54:03 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C01233E1;
-        Thu, 16 Feb 2023 09:54:02 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id z13so2175938wmp.2;
-        Thu, 16 Feb 2023 09:54:02 -0800 (PST)
+        Thu, 16 Feb 2023 12:54:05 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101AB1BD1;
+        Thu, 16 Feb 2023 09:54:04 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m20-20020a05600c3b1400b003e1e754657aso4842575wms.2;
+        Thu, 16 Feb 2023 09:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SRSURI/V2oyh1+/lXCmSSf5hGU04tceoQ6lHc66Onvc=;
-        b=ZVSA1PDnW/GVVqITC3q+aFLyrMGhZoPp1SwIbMDEQM5zrLrt+lc4a3oZgSvfgrSVMn
-         WG17GgMHv+7WOgbBRtNCLRxvFktcTNp9KKB47X+9AfXRhhsJLdBOyvBhD3Cf4DB+V5Xk
-         fR44y3yEbcd3paSwU92+xI+Fto/8ja3DBzSug7P9SFZOmJAflPWln7mTrmtbn9bJYSSv
-         mB+UA2WULHXC5UTbsKLgCdB2qfDnlJM0dMEd8dscaP8DPDCfjrY6XOdYSePMP8hwEcu5
-         jBmapzDhMZgD0AyT8KQhybSFSv+YDrylZrXv1IRWBqLh1//3IGEKH3GXjkW6YsPuUjm+
-         sJsw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fsnnXrGjSFWEPm5CWqloaKqDhJT1psg1t9dTnw05I+s=;
+        b=WkBQvpQP9hcUr4Yb7UY8gP3xGFXv7ITKCyRGvvFlyhtIcSD5+GTIK22Pb1LINOPlL3
+         c9In0GzByClzeTHpVAO6UXTv7UUxTvSLy1lQd2salLYsc5IC9fejSyD8bCfv2M6D+umr
+         gSmQCe8/j2pQ+b1KCviC5TosE12Ho836UK1DX9Yk3Xh+v2xXe5g/mklTbtDAl2rDX0bE
+         Qn9QpBj48niXaHGL9Nk8wqJd/z/nKkvc+A2AcjI9NPK5CmuiB5nRKc4Farhj1uQ8n/Ww
+         Rm2L6JyRabiaaOI0Pj6NoeKCym6Me5mQBeIYn1IeHyqG6Kl4Y8vyOrwoZUwTJm2eVe4L
+         fZaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SRSURI/V2oyh1+/lXCmSSf5hGU04tceoQ6lHc66Onvc=;
-        b=iaZnG3ZouXLoFawd1ksT0Lb8L+uqlx49ZUSiZyxz81Uu5ttVv3whXiddN/n7dhmpk2
-         wqPY37cHlLhszvcMQeYaP++UClPuRsjMoDNk9yxNR6k+bSIZLwp7KpIRhoQeRpTLdU+D
-         FBXHNDWzutiQmzkFijPLdMZ9xCKGZ0Fz69T2puZtXUyJfhgzQuYBN2JhNKuwQ9ExSjRU
-         wpVIwSZi6hzZB5OyDDbQIopCY51H5EngEx+/ttOFLpE8y1wgJygAAow6C3E1uAHdP86z
-         pDepNLbzK/jty0PrS1Ce0Hx2z1bT29vlVY3dNJcIfPNbgcutvi+HpTQx0V0pgFH3n/cc
-         Q2mg==
-X-Gm-Message-State: AO0yUKUcSwmr9NtWUw0+daDQS5d8Ycfdgrnc5rU7PEZ/abqxmLdGtkEU
-        8OOhGBwRJn85AX4Q/3XK275aOsZd2yc1cA==
-X-Google-Smtp-Source: AK7set8bYnAD8/rjwzCkHqTHIF7S89uJjuIWGkWNU0JeWxVil+LGh+t5wtVMB5SPTqVAcvuKPFln3Q==
-X-Received: by 2002:a05:600c:1603:b0:3e0:1a9:b1d7 with SMTP id m3-20020a05600c160300b003e001a9b1d7mr5163837wmn.19.1676570041371;
-        Thu, 16 Feb 2023 09:54:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fsnnXrGjSFWEPm5CWqloaKqDhJT1psg1t9dTnw05I+s=;
+        b=MUp9TM4+5PvTlGDnNScSGznZCEwwATonMhl3fTGp5d5t+WZ2hi0h5dNUEbNkVu/b07
+         Us0bZ7cnst+nSXBK2r5cqozjVrn3KRwreCddmb2tMZYaRWq+GBD1WY7oCeZgAX3+v/4e
+         YRdf18rnRxvH12KvfmIObokfLE3AaVeqMUHXc4ekH/PXGJxECiDr7sfQYzME71/8MK54
+         wJGD4mCYW6PybO4twtJ0xFffYkNZgDL/tOjPVKFuiAf9nwEKeyCy6xp6+BspODB2GteF
+         lh37mqwRvzOvXUNcv7LWvbDgN9SBYhlB24qP25XLVrYC/pev2Ucly3BtkHpSnPP/U0H5
+         hxhA==
+X-Gm-Message-State: AO0yUKXe8R6uCunnp7r/u/t3/aiHWZJF+jbdmDTJhvAym1o1LxobeVLp
+        ICR+kdPkTbCALmchxmWGazHWTPgfZ/llKA==
+X-Google-Smtp-Source: AK7set9bgnBmaGTRk9onV8zOknwRYTFctXIShIpOreYy6FgpVZavqHFnlULt+WQI+FxLgaPVY/Z8fA==
+X-Received: by 2002:a05:600c:5486:b0:3dd:37a5:dc90 with SMTP id iv6-20020a05600c548600b003dd37a5dc90mr5550444wmb.32.1676570042573;
+        Thu, 16 Feb 2023 09:54:02 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2501:c701:31b2:19e1:4409:5c3b])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dc4aae4739sm5826836wmc.27.2023.02.16.09.54.00
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dc4aae4739sm5826836wmc.27.2023.02.16.09.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 09:54:00 -0800 (PST)
+        Thu, 16 Feb 2023 09:54:01 -0800 (PST)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -63,10 +64,12 @@ Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 0/3] RZ/G2L: Add CRU, CSI support
-Date:   Thu, 16 Feb 2023 17:53:44 +0000
-Message-Id: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 1/3] arm64: dts: renesas: r9a07g044: Add CSI and CRU nodes
+Date:   Thu, 16 Feb 2023 17:53:45 +0000
+Message-Id: <20230216175347.99778-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,29 +84,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Hi All,
+Add CSI and CRU nodes r9a07g044 (RZ/G2L) SoC DTSI.
 
-This patch series adds support for CRU and CSI support to RZ/G2L SoC
-and enables it on the RZ/G2L SMARC EVK. Also ov5645 node is added which
-connects to the CSI2 node.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 79 ++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
-Note, this patch series applies on top of [0].
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Cheers,
-Prabhakar
-
-Lad Prabhakar (3):
-  arm64: dts: renesas: r9a07g044: Add CSI and CRU nodes
-  arm64: dts: renesas: rzg2l-smarc: Add OV5645 node
-  arm64: dts: renesas: rzg2l-smarc: Enable CRU and CSI nodes
-
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi    | 79 +++++++++++++++++++
- .../boot/dts/renesas/r9a07g044l2-smarc.dts    |  5 ++
- .../boot/dts/renesas/rz-smarc-common.dtsi     | 76 ++++++++++++++++++
- 3 files changed, 160 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index 9a3e18abae39..68bd70210d08 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -627,6 +627,85 @@ sbc: spi@10060000 {
+ 			status = "disabled";
+ 		};
+ 
++		cru: video@10830000 {
++			compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
++			reg = <0 0x10830000 0 0x400>;
++			clocks = <&cpg CPG_MOD SOC_PREFIX(CRU_VCLK)>,
++				 <&cpg CPG_MOD SOC_PREFIX(CRU_PCLK)>,
++				 <&cpg CPG_MOD SOC_PREFIX(CRU_ACLK)>;
++			clock-names = "video", "apb", "axi";
++			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
++			resets = <&cpg SOC_PREFIX(CRU_PRESETN)>,
++				 <&cpg SOC_PREFIX(CRU_ARESETN)>;
++			reset-names = "presetn", "aresetn";
++			power-domains = <&cpg>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					reg = <0>;
++					cruparallel: endpoint@0 {
++						reg = <0>;
++					};
++				};
++
++				port@1 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					reg = <1>;
++					crucsi2: endpoint@0 {
++						reg = <0>;
++						remote-endpoint = <&csi2cru>;
++					};
++				};
++			};
++		};
++
++		csi2: csi2@10830400 {
++			compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
++			reg = <0 0x10830400 0 0xfc00>;
++			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD SOC_PREFIX(CRU_SYSCLK)>,
++				 <&cpg CPG_MOD SOC_PREFIX(CRU_VCLK)>,
++				 <&cpg CPG_MOD SOC_PREFIX(CRU_PCLK)>;
++			clock-names = "system", "video", "apb";
++			resets = <&cpg SOC_PREFIX(CRU_PRESETN)>,
++				 <&cpg SOC_PREFIX(CRU_CMN_RSTB)>;
++			reset-names = "presetn", "cmn-rstb";
++			power-domains = <&cpg>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++				};
++
++				port@1 {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					reg = <1>;
++
++					csi2cru: endpoint@0 {
++						reg = <0>;
++						remote-endpoint = <&crucsi2>;
++					};
++				};
++			};
++		};
++
+ 		cpg: clock-controller@11010000 {
+ 			compatible = "renesas,r9a07g044-cpg";
+ 			reg = <0 0x11010000 0 0x10000>;
 -- 
 2.25.1
 
