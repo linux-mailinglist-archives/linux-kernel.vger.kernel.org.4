@@ -2,133 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A3E6992B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE516992BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjBPLHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S229611AbjBPLHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjBPLHk (ORCPT
+        with ESMTP id S230303AbjBPLHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:07:40 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24BED199
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:07:29 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 9DC522011247; Thu, 16 Feb 2023 03:07:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9DC522011247
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676545648;
-        bh=jcLHWxG2QdRLedl8Yx8Cuagw6dzTIWzWdtfr68oqv6c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i7HStZqbzBW2Y1TFNHeJzzdlIqvUo8+djAESxgF9mW42xxS1E0N1W007uCJ3tFiwo
-         hIQ/WzLr7g97EF3YR9BNTkjtUK4ZfS9ebKcKKKiC91IlpVN2szdkuZLEBV1UpzCwQY
-         9NpFezfXiZ57HxabJAeUBhbv8Uzuk9cEIzJRyFQo=
-Date:   Thu, 16 Feb 2023 03:07:28 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-Message-ID: <20230216110728.GB3949@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com>
- <Y+ohfE/wICFKO/93@zn.tnic>
+        Thu, 16 Feb 2023 06:07:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F0338B76;
+        Thu, 16 Feb 2023 03:07:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4752A61F47;
+        Thu, 16 Feb 2023 11:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38752C433EF;
+        Thu, 16 Feb 2023 11:07:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676545661;
+        bh=uIJ8oF2A7ZYaYb6BfW+DNEbnze9p7SG1BuuIeqZr46M=;
+        h=Subject:From:To:Cc:Date:From;
+        b=MWbetuoLyHC6hSGXXPdC6TE+VsYBW8inbjrOcn2g+JQn5d03r/Jhrgeni46QoLs9g
+         Vd6MOgDJTd4MGF6sS7XsP1+sWDgwHB+ftTMl+EGSKpD6yJUqpjmqdhrXVJ49DtOC/r
+         Wxp7FWQqh9rOK85/UDhqI2trV2teja0egcB6nMwl/ddbTXbZtI+FtuNW/eg6ZwByoQ
+         daoGS0yq2aiFwhoSZNWSRCCqUPbAC6kqosj1hE/SubamNch/Ak6YyqCC1yQzLJLMps
+         06F/DDI88JSlbJEmAXJjfsWPWZfhxvJICUQU+s7ZsMeDfX8k/YXWiGvWbNF0ZuErL/
+         zermXSModyJpQ==
+Message-ID: <c56632e59e4c5b727619de7dd79db11d15bdca6f.camel@kernel.org>
+Subject: [GIT PULL] file locking changes for v6.3
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Date:   Thu, 16 Feb 2023 06:07:34 -0500
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-ho+cotI388jsVDHTTOTf"
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+ohfE/wICFKO/93@zn.tnic>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 12:39:40PM +0100, Borislav Petkov wrote:
-> On Thu, Feb 09, 2023 at 08:22:14AM +0100, Juergen Gross wrote:
-> > When running virtualized, MTRR access can be reduced (e.g. in Xen PV
-> > guests or when running as a SEV-SNP guest under Hyper-V). Typically
-> > the hypervisor will reset the MTRR feature in cpuid data, resulting
-> > in no MTRR memory type information being available for the kernel.
-> > 
-> > This has turned out to result in problems:
-> > 
-> > - Hyper-V SEV-SNP guests using uncached mappings where they shouldn't
-> > - Xen PV dom0 mapping memory as WB which should be UC- instead
-> > 
-> > Solve those problems by supporting to set a fixed MTRR state,
-> > overwriting the empty state used today. In case such a state has been
-> > set, don't call get_mtrr_state() in mtrr_bp_init(). The set state
-> > will only be used by mtrr_type_lookup(), as in all other cases
-> > mtrr_enabled() is being checked, which will return false. Accept the
-> > overwrite call only in case of MTRRs being disabled in cpuid.
-> 
-> s/cpuid/CPUID/g
-> 
-> > Signed-off-by: Juergen Gross <jgross@suse.com>
-> > ---
-> > V2:
-> > - new patch
-> > ---
-> >  arch/x86/include/asm/mtrr.h        |  2 ++
-> >  arch/x86/kernel/cpu/mtrr/generic.c | 38 ++++++++++++++++++++++++++++++
-> >  arch/x86/kernel/cpu/mtrr/mtrr.c    |  9 +++++++
-> >  3 files changed, 49 insertions(+)
-> > 
-> > diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-> > index f0eeaf6e5f5f..0b8f51d683dc 100644
-> > --- a/arch/x86/include/asm/mtrr.h
-> > +++ b/arch/x86/include/asm/mtrr.h
-> > @@ -31,6 +31,8 @@
-> >   */
-> >  # ifdef CONFIG_MTRR
-> >  void mtrr_bp_init(void);
-> > +void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
-> > +			  mtrr_type *fixed, mtrr_type def_type);
-> >  extern u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform);
-> >  extern void mtrr_save_fixed_ranges(void *);
-> >  extern void mtrr_save_state(void);
-> > diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-> > index ee09d359e08f..788bc16888a5 100644
-> > --- a/arch/x86/kernel/cpu/mtrr/generic.c
-> > +++ b/arch/x86/kernel/cpu/mtrr/generic.c
-> > @@ -240,6 +240,44 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
-> >  	return mtrr_state.def_type;
-> >  }
-> >  
-> > +/**
-> > + * mtrr_overwrite_state - set fixed MTRR state
-> 
-> fixed only? You pass in variable too...
-> 
-> > + *
-> > + * Used to set MTRR state via different means (e.g. with data obtained from
-> > + * a hypervisor).
-> > + */
-> > +void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
-> > +			  mtrr_type *fixed, mtrr_type def_type)
-> > +{
-> > +	unsigned int i;
-> > +
-> > +	if (boot_cpu_has(X86_FEATURE_MTRR))
-> 
-> check_for_deprecated_apis: WARNING: arch/x86/kernel/cpu/mtrr/generic.c:254: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
-> 
 
-Hi Boris,
+--=-ho+cotI388jsVDHTTOTf
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
 
-Where does this check come from? I can't find a source for it.
+The following changes since commit 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9=
+:
 
-Jeremi
+  Merge tag 'xfs-6.2-fixes-2' of git://git.kernel.org/pub/scm/fs/xfs/xfs-li=
+nux (2023-01-08 12:11:45 -0600)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/lo=
+cks-v6.3
+
+for you to fetch changes up to c65454a947263dfdf482076388aaed60af84ca2f:
+
+  fs: remove locks_inode (2023-01-11 06:52:43 -0500)
+
+----------------------------------------------------------------
+The main change here is that I've broken out most of the file locking
+definitions into a new header file. I also went ahead and completed the
+removal of locks_inode function.
+
+Note that there was a minor merge conflict with the fuse tree reported
+by Stephen Rothwell:
+
+https://lore.kernel.org/lkml/20230127112640.6f55e705@canb.auug.org.au/T/
+
+Cheers,
+----------------------------------------------------------------
+Jeff Layton (2):
+      filelock: move file locking definitions to separate header file
+      fs: remove locks_inode
+
+ arch/arm/kernel/sys_oabi-compat.c |   1 +
+ fs/9p/vfs_file.c                  |   1 +
+ fs/afs/flock.c                    |  14 +-
+ fs/afs/internal.h                 |   1 +
+ fs/attr.c                         |   1 +
+ fs/ceph/caps.c                    |   1 +
+ fs/ceph/locks.c                   |   1 +
+ fs/cifs/cifsfs.c                  |   1 +
+ fs/cifs/cifsglob.h                |   1 +
+ fs/cifs/cifssmb.c                 |   1 +
+ fs/cifs/file.c                    |   1 +
+ fs/cifs/smb2file.c                |   1 +
+ fs/dlm/plock.c                    |   1 +
+ fs/fcntl.c                        |   1 +
+ fs/file_table.c                   |   1 +
+ fs/fuse/file.c                    |   1 +
+ fs/gfs2/file.c                    |   1 +
+ fs/inode.c                        |   1 +
+ fs/ksmbd/smb2pdu.c                |   1 +
+ fs/ksmbd/vfs.c                    |   1 +
+ fs/ksmbd/vfs_cache.c              |   1 +
+ fs/lockd/clntlock.c               |   2 +-
+ fs/lockd/clntproc.c               |   3 +-
+ fs/lockd/netns.h                  |   1 +
+ fs/locks.c                        |  29 ++--
+ fs/namei.c                        |   1 +
+ fs/nfs/file.c                     |   1 +
+ fs/nfs/nfs4_fs.h                  |   1 +
+ fs/nfs/pagelist.c                 |   1 +
+ fs/nfs/write.c                    |   1 +
+ fs/nfs_common/grace.c             |   1 +
+ fs/nfsd/netns.h                   |   1 +
+ fs/nfsd/nfs4state.c               |   4 +-
+ fs/ocfs2/locks.c                  |   1 +
+ fs/ocfs2/stack_user.c             |   1 +
+ fs/open.c                         |   3 +-
+ fs/orangefs/file.c                |   1 +
+ fs/posix_acl.c                    |   1 +
+ fs/proc/fd.c                      |   1 +
+ fs/utimes.c                       |   1 +
+ fs/xattr.c                        |   1 +
+ fs/xfs/xfs_linux.h                |   1 +
+ include/linux/filelock.h          | 439 ++++++++++++++++++++++++++++++++++=
+++++++++++++++++++++++++
+ include/linux/fs.h                | 429 ----------------------------------=
+----------------------
+ include/linux/lockd/lockd.h       |   4 +-
+ include/linux/lockd/xdr.h         |   1 +
+ 46 files changed, 507 insertions(+), 457 deletions(-)
+ create mode 100644 include/linux/filelock.h
+
+--=20
+Jeff Layton <jlayton@kernel.org>
+
+--=-ho+cotI388jsVDHTTOTf
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAABCAAxFiEES8DXskRxsqGE6vXTAA5oQRlWghUFAmPuDnYTHGpsYXl0b25A
+a2VybmVsLm9yZwAKCRAADmhBGVaCFfwzEACQ1sIhw3ZPLXcJ2myJbZGKSQir1Tbh
+IKXq/GXXqGYN/6txDJCgsjfnzr96PW5l2raG+8J6pTJviGUIU6ZKhsNhXHrZHJis
+cacOqS9X5IsTBjenHRFLShpZFjZH3f0l+uT6IN/6NaO9IX8cSBfE74yteNVymFSG
+ebKk9kSXYlYFZq/HWgE7lvGwSeYXA0jnDTJEUsAF10Q5EMHqR/B8Av+MwwyvzcKd
+rkm18hSBLiNxWyOhYmpFiFrQUHy3Va7kKqFOAFKr/7hx3NuUj4hJhSaEvCe08SpT
+lb/jajAvQZLs7QaWkDn45VuOOMszAQfRHxqDOTbvxPC2LaUj9WRAOhbFqLEGiGia
+UKDjftVFcd6UAbsEyTB/lQLx0G8GahzyXhSzt2SfbbMYQ8kX2zDlAAMhJ1WMCO8k
+dzEedOBigK2t5bv88bQFfh2YWBD8HOkVOQr2YDAka2wKDWsqkd56p+6eHluPZSBU
+XEoDfY2vWGnI4+7R0ConUo9PC93aVhhaVhcminQOEchWHUZZvOWrH4UOB9dMGorN
+5xjlDLAyO49lQiVotbbR7/nzkj9n5EpzF8lJLopaOxSGnVkK8FEAzcFEgfaO2m/W
+VP6+30bTpXWw9WWaEyg6oiDE95bM6iH8K/RH06hoDecuZ3tqISDZd2DcyhZ+Y5Db
+mUR0DL30dCVnOw==
+=AxhF
+-----END PGP SIGNATURE-----
+
+--=-ho+cotI388jsVDHTTOTf--
