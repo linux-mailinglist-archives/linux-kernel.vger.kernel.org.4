@@ -2,64 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A7A699AB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C149699ABB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjBPRA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S230039AbjBPRBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPRAY (ORCPT
+        with ESMTP id S229477AbjBPRBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:00:24 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F0D1731;
-        Thu, 16 Feb 2023 09:00:23 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 69A3A66020E1;
-        Thu, 16 Feb 2023 17:00:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676566821;
-        bh=DO0zRY/SN2YP3EDp5S9LS38bcetUlw2AqR8pE8gxXC4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=l2hdDR/n4QJY55qMAxG+E6DI/t/rVpCKD131CGH7Mnw05erHRAqLArwneMJaRJX8W
-         AGwhYEdhdBn0K5kCkQSz20AGZ7ulsjkXps0jBcc3U08JEGMaAvRhmZBknwfHYuo81l
-         YJ41tpI5efWA4qqqq6aHr3FY48f8Z47lOGWDcetNsotsw8ay//qi9KWzUEnG/47koK
-         yQeFjZVVpTE6SdNOPGJ+O55/q6VeXpkJdeJfuiBIWLEoUoijRCedpHsEMz7Auqh3hY
-         gkOZZcA6t3Yd2PSSiWTWOUOuUIY/AWC5tsVH+iOc6tdTFm3Wh12TnFDhWEK68jAEIV
-         S4fzFYcFaCGnA==
-Message-ID: <c30fad90fcc48802b6f8be632789a5f034711797.camel@collabora.com>
-Subject: Re: [PATCH v2 01/12] media: v4l2: Add NV15 pixel format
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Alex Bee <knaerzche@gmail.com>,
-        Collabora Kernel-domain <kernel@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Thu, 16 Feb 2023 12:00:08 -0500
-In-Reply-To: <aa85c526-da32-d108-f85e-5dcd2cc8c846@synaptics.com>
-References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
-         <20230101-patch-series-v2-6-2-rc1-v2-1-fa1897efac14@collabora.com>
-         <aa85c526-da32-d108-f85e-5dcd2cc8c846@synaptics.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 16 Feb 2023 12:01:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E111731
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:00:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676566856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rPtS2M4ckztPkytz/xiV8zOap2sT6BuznJ9SmPkRUBo=;
+        b=BM3telA40Azgc92AT/YSaa/4jjfojzSYYToCbCY5hWuyv31BRCCw5lkv62uxm1LZlZGTy3
+        ZJpEWrT+RleP74TAzjYeDcdNJRcX9XtxEGy93C/24sSZQA3URtK9hvtdX1SJoos7U8DhzL
+        lGrU5E3hJ5vJ7rzeKihL766IfifCJl0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-631-B-unw87uMByP-_-dTFOS2g-1; Thu, 16 Feb 2023 12:00:55 -0500
+X-MC-Unique: B-unw87uMByP-_-dTFOS2g-1
+Received: by mail-wm1-f70.google.com with SMTP id fl9-20020a05600c0b8900b003dfe4bae099so1440364wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:00:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rPtS2M4ckztPkytz/xiV8zOap2sT6BuznJ9SmPkRUBo=;
+        b=p3L5pkjympyRIHWyVjDtfOSOOX3SeJYhD4C23QXNRpwVKQ9yKZCIuLSLyshAG+C/ct
+         RuSvNu0DVFckboOBS27uQe3Vycb6XwAfKLZYwjrniLcUEBVoyULXLxPIRw01JW13dewd
+         ifOmtaFizu0/ltSywXoPuq82eEXttYDrfUyqcGDA3cj7BatZRnQbUEhNkdqpPs8s4/0U
+         BFttcQ6cgBHd2LMJOWnJJXqIJOhDbFF4pMjZUwprRJrsa5M5kxCm/TSk20OKUqoMoDNy
+         MYHgGqYq+6CMBnl0cOnlLX2V0JGPzx1Y5txtIQ0CIgCTDWLnpMVR/WiPAVlPIm5AOwLd
+         lo0g==
+X-Gm-Message-State: AO0yUKV6H0gJdEK6wu2cIzN/2Cv+JyAssKUjK9zbI19Cb8eHs1rbljAW
+        vGqc2M/5lBGmiN63MjBjADgY5Gii+NjkjwYR2ZwSAT98ysyto18qW7d1rNMLL0rhvuKFnOcXAYe
+        JL5G+jKVwts9BiH4XCmWZJ20xOatw5A==
+X-Received: by 2002:a5d:40d0:0:b0:2c5:5a65:799f with SMTP id b16-20020a5d40d0000000b002c55a65799fmr4808553wrq.34.1676566853678;
+        Thu, 16 Feb 2023 09:00:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set9dw7x2GZ1RBccsi5U8GisuBksZelvx9S8gQKwDhaYWOgVGlFewbg4pWNsxPmhoWu8WHuq2Ng==
+X-Received: by 2002:a5d:40d0:0:b0:2c5:5a65:799f with SMTP id b16-20020a5d40d0000000b002c55a65799fmr4808533wrq.34.1676566853285;
+        Thu, 16 Feb 2023 09:00:53 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d530e000000b002c553e061fdsm1852390wrv.112.2023.02.16.09.00.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 09:00:52 -0800 (PST)
+Message-ID: <4f64d62f-c21d-b7c8-640e-d41742bbbe7b@redhat.com>
+Date:   Thu, 16 Feb 2023 18:00:51 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+References: <20230215210257.224243-1-peterx@redhat.com>
+ <7eb2bce9-d0b1-a0e3-8be3-f28d858a61a0@redhat.com> <Y+5Z+88Z3T2TyxUI@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
+In-Reply-To: <Y+5Z+88Z3T2TyxUI@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,240 +89,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 16 f=C3=A9vrier 2023 =C3=A0 16:57 +0800, Hsia-Jun Li a =C3=A9crit=
-=C2=A0:
->=20
-> On 1/12/23 20:56, Sebastian Fricke wrote:
-> > CAUTION: Email originated externally, do not click links or open attach=
-ments unless you recognize the sender and know the content is safe.
-> >=20
-> >=20
-> > From: Jonas Karlman <jonas@kwiboo.se>
-> >=20
-> > Add the NV15 pixel format used by the Rockchip Video Decoder for 10-bit=
- buffers.
-> >=20
-> I think this pixel format in the Rockchip platform supports multiple=20
-> planes buffers. It is all right not to add more variant until the ext=20
-> pixel format and buffer APIs are merged.
->=20
-> I just want to mention the need of this.
+>>
+>> There are various reasons why I think a UFFD_FEATURE_WP_UNPOPULATED, using
+>> PTE markers, would be more benficial:
+>>
+>> 1) It would be applicable to anon hugetlb
+> 
+> Anon hugetlb should already work with non ptes with the markers?
+> 
 
-Can you extend, I don't see that support in rkvdec driver (nor in mpp).
+... really? I thought we'd do the whole pte marker handling only when 
+dealing with hugetlb/shmem. Interesting, thanks. (we could skip 
+population in QEMU in that case as well -- we always do it for now)
 
-	/* config output base address */
-	dst_addr =3D vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
-	writel_relaxed(dst_addr, rkvdec->regs + RKVDEC_REG_DECOUT_BASE);
+>> 2) It would be applicable even when the zeropage is disallowed
+>>     (mm_forbids_zeropage())
+> 
+> Do you mean s390 can disable zeropage with mm_uses_skeys()?  So far uffd-wp
+> doesn't support s390 yet, I'm not sure whether we over worried on this
+> effect.
+> 
+> Or is there any other projects / ideas that potentially can enlarge forbid
+> zero pages to more contexts?
 
-	reg =3D RKVDEC_Y_VIRSTRIDE(y_virstride / 16);
-	writel_relaxed(reg, rkvdec->regs + RKVDEC_REG_Y_VIRSTRIDE);
+I think it was shown that zeropages can be used to build covert channels 
+(similar to memory deduplciation, because it effectively is memory 
+deduplication). It's mentioned as a note in [1] under VII. A. ("Only 
+Deduplicate Zero Pages.")
 
-	reg =3D RKVDEC_YUV_VIRSTRIDE(yuv_virstride / 16);
-	writel_relaxed(reg, rkvdec->regs + RKVDEC_REG_YUV_VIRSTRIDE);
 
-That looks like a base address and 2 strides only. For NV15M (multiple
-allocation) you'd need 2 addresses. It could be that RGA or newer chip have=
- that
-support, but as you know, we add formats only when actually using them.
+[1] https://www.ndss-symposium.org/wp-content/uploads/2022-81-paper.pdf
 
-regards,
-Nicolas
+> 
+>> 3) It would be possible to optimize even without the huge zeropage, by
+>>     using a PMD marker.
+> 
+> This patch doesn't need huge zeropage being exist.
 
-> > NV15 is a packed 10-bit 4:2:0 Y/CbCr format similar to P010 and P210 bu=
-t has no
-> > padding between components. Instead, luminance and chrominance samples =
-are grouped
-> > into 4s so that each group is packed into an integer number of bytes:
-> >=20
-> > YYYY =3D UVUV =3D 4 * 10 bits =3D 40 bits =3D 5 bytes
-> >=20
-> > The '15' suffix refers to the optimum effective bits per pixel
-> > which is achieved when the total number of luminance samples is a multi=
-ple
-> > of 8 for NV15.
-> >=20
-> > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> > ---
-> >   .../userspace-api/media/v4l/pixfmt-yuv-planar.rst  | 75 +++++++++++++=
-+++++++++
-> >   drivers/media/v4l2-core/v4l2-common.c              |  2 +
-> >   drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
-> >   include/uapi/linux/videodev2.h                     |  1 +
-> >   4 files changed, 79 insertions(+)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rs=
-t b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > index f1d5bb7b806d..7d8d228f8063 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > @@ -79,6 +79,13 @@ All components are stored with the same number of bi=
-ts per component.
-> >         - Cr, Cb
-> >         - Yes
-> >         - Linear
-> > +    * - V4L2_PIX_FMT_NV15
-> > +      - 'NV15'
-> > +      - 15
-> > +      - 4:2:0
-> > +      - Cb, Cr
-> > +      - Yes
-> > +      - Linear
-> >       * - V4L2_PIX_FMT_NV12M
-> >         - 'NM12'
-> >         - 8
-> > @@ -183,6 +190,7 @@ horizontally.
-> >=20
-> >   .. _V4L2-PIX-FMT-NV12:
-> >   .. _V4L2-PIX-FMT-NV21:
-> > +.. _V4L2-PIX-FMT-NV15:
-> >   .. _V4L2-PIX-FMT-NV12M:
-> >   .. _V4L2-PIX-FMT-NV21M:
-> >   .. _V4L2-PIX-FMT-P010:
-> > @@ -586,6 +594,73 @@ Data in the 10 high bits, zeros in the 6 low bits,=
- arranged in little endian ord
-> >         - Cb\ :sub:`11`
-> >         - Cr\ :sub:`11`
-> >=20
-> > +.. _V4L2_PIX_FMT_NV15:
-> > +
-> > +NV15
-> > +----
-> > +
-> > +Similar to P010, a semi-planar 10-bit Y/CbCr format, but all component=
-s are
-> > +packed without any padding between each other. As a side-effect, each =
-group of
-> > +4 components are stored over 5 bytes (YYYY or UVUV =3D 4 * 10 bits =3D=
- 40 bits =3D 5
-> > +bytes).
-> > +
-> > +.. flat-table:: Sample 4x4 NV15 Image
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +
-> > +    * - start + 0:
-> > +      - Y'\ :sub:`00`
-> > +      - Y'\ :sub:`01`
-> > +      - Y'\ :sub:`02`
-> > +      - Y'\ :sub:`03`
-> > +    * - start + 8:
-> > +      - Y'\ :sub:`04`
-> > +      - Y'\ :sub:`10`
-> > +      - Y'\ :sub:`11`
-> > +      - Y'\ :sub:`12`
-> > +    * - start + 16:
-> > +      - Y'\ :sub:`13`
-> > +      - Y'\ :sub:`14`
-> > +      - Y'\ :sub:`20`
-> > +      - Y'\ :sub:`21`
-> > +    * - start + 24:
-> > +      - Y'\ :sub:`22`
-> > +      - Y'\ :sub:`23`
-> > +      - Y'\ :sub:`24`
-> > +      - Y'\ :sub:`30`
-> > +    * - start + 32:
-> > +      - Y'\ :sub:`31`
-> > +      - Y'\ :sub:`32`
-> > +      - Y'\ :sub:`33`
-> > +      - Y'\ :sub:`34`
-> > +
-> > +    * - start + 0:
-> > +      - Cb\ :sub:`00`
-> > +      - Cr\ :sub:`00`
-> > +      - Cb\ :sub:`01`
-> > +      - Cr\ :sub:`01`
-> > +    * - start + 8:
-> > +      - Cb\ :sub:`02`
-> > +      - Cr\ :sub:`02`
-> > +      - Cb\ :sub:`03`
-> > +      - Cr\ :sub:`03`
-> > +    * - start + 16:
-> > +      - Cb\ :sub:`04`
-> > +      - Cr\ :sub:`04`
-> > +      - Cb\ :sub:`10`
-> > +      - Cr\ :sub:`10`
-> > +    * - start + 24:
-> > +      - Cb\ :sub:`11`
-> > +      - Cr\ :sub:`11`
-> > +      - Cb\ :sub:`12`
-> > +      - Cr\ :sub:`12`
-> > +    * - start + 32:
-> > +      - Cb\ :sub:`13`
-> > +      - Cr\ :sub:`13`
-> > +      - Cb\ :sub:`14`
-> > +      - Cr\ :sub:`14`
-> > +
-> > +.. raw:: latex
-> >=20
-> >   Fully Planar YUV Formats
-> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2=
--core/v4l2-common.c
-> > index 40f56e044640..be23e319fb3a 100644
-> > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32=
- format)
-> >                  /* YUV planar formats */
-> >                  { .format =3D V4L2_PIX_FMT_NV12,    .pixel_enc =3D V4L=
-2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0,=
- 0 }, .hdiv =3D 2, .vdiv =3D 2 },
-> >                  { .format =3D V4L2_PIX_FMT_NV21,    .pixel_enc =3D V4L=
-2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0,=
- 0 }, .hdiv =3D 2, .vdiv =3D 2 },
-> > +               { .format =3D V4L2_PIX_FMT_NV15,    .pixel_enc =3D V4L2=
-_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 5, 5, 0, =
-0 }, .hdiv =3D 2, .vdiv =3D 2,
-> > +                 .block_w =3D { 4, 2, 0, 0 }, .block_h =3D { 1, 1, 0, =
-0 } },
-> >                  { .format =3D V4L2_PIX_FMT_NV16,    .pixel_enc =3D V4L=
-2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0,=
- 0 }, .hdiv =3D 2, .vdiv =3D 1 },
-> >                  { .format =3D V4L2_PIX_FMT_NV61,    .pixel_enc =3D V4L=
-2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0,=
- 0 }, .hdiv =3D 2, .vdiv =3D 1 },
-> >                  { .format =3D V4L2_PIX_FMT_NV24,    .pixel_enc =3D V4L=
-2_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0,=
- 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-=
-core/v4l2-ioctl.c
-> > index 8e0a0ff62a70..1c80ad78ef00 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1343,6 +1343,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc =
-*fmt)
-> >          case V4L2_PIX_FMT_M420:         descr =3D "YUV 4:2:0 (M420)"; =
-break;
-> >          case V4L2_PIX_FMT_NV12:         descr =3D "Y/UV 4:2:0"; break;
-> >          case V4L2_PIX_FMT_NV21:         descr =3D "Y/VU 4:2:0"; break;
-> > +       case V4L2_PIX_FMT_NV15:         descr =3D "10-bit Y/UV 4:2:0 (P=
-acked)"; break;
-> >          case V4L2_PIX_FMT_NV16:         descr =3D "Y/UV 4:2:2"; break;
-> >          case V4L2_PIX_FMT_NV61:         descr =3D "Y/VU 4:2:2"; break;
-> >          case V4L2_PIX_FMT_NV24:         descr =3D "Y/UV 4:4:4"; break;
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
-ev2.h
-> > index 1befd181a4cc..e9731286dc77 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -621,6 +621,7 @@ struct v4l2_pix_format {
-> >   /* two planes -- one Y, one Cr + Cb interleaved  */
-> >   #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y=
-/CbCr 4:2:0  */
-> >   #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y=
-/CrCb 4:2:0  */
-> > +#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/=
-CbCr 4:2:0 10-bit packed */
-> >   #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y=
-/CbCr 4:2:2  */
-> >   #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y=
-/CrCb 4:2:2  */
-> >   #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y=
-/CbCr 4:4:4  */
-> >=20
-> > --
-> > 2.25.1
->=20
+Yes, and for that reason I think it may perform worse than what we 
+already have in some cases. Instead of populating a single PMD you'll 
+have to fill a full PTE table.
+
+> 
+>> 4) It would be possible to optimize even on the PUD level using a PMD
+>>     marker.
+> 
+> I think 3+4 is in general an interesting idea on using pte markers on
+> higher than pte levels, but that needs more changes.
+> 
+> Firstly, keep using pte markers is somehow preallocating the pgtables, so a
+> side effect of it could be speeding up future faults because they'll all
+> split into pmd locks and read doesn't need to fault at all, only writes.
+> 
+> Imagine when you hit a page fault on a pmd marker, it means you'll need to
+> spread that "marker" information to child ptes and you must - it moves the
+> slow operation of WP into future page faults in some way.  In some cases
+> (I'd say, most cases..) that's not wanted.  The same to PUDs.
+
+Right, but user space already has that option (see below).
+
+> 
+>>
+>> Especially when uffd-wp'ing large ranges that are possibly all unpopulated
+>> (thinking about the existing VM background snapshot use case either with
+>> untouched memory or with things like free page reporting), we might neither
+>> be reading or writing that memory any time soon.
+> 
+> Right, I think that's a trade-off. But I still think large portion of
+> totally unpopulated memory should be rare case rather than majority, or am
+> I wrong?  Not to mention that requires a more involved changeset to the
+> kernel.
+> 
+> So what I proposed here is the (AFAIU) simplest solution towards providing
+> such a feature in a complete form.  I think we have chance to implement it
+> in other ways like pte markers, but that's something we can work upon, and
+> so far I'm not sure how much benefit we can get out of it yet.
+> 
+
+What you propose here can already be achieved by user space fairly 
+easily (in fact, QEMU implementation could be further sped up using 
+MADV_POPULATE_READ). Usually, we only do that when there are very good 
+reasons to (performance).
+
+Using PTE markers would provide a real advantage IMHO for some users 
+(IMHO background snapshots), where we might want to avoid populating 
+zeropages/page tables as best as we can completely if the VM memory is 
+mostly untouched.
+
+Naturally, I wonder if UFFD_FEATURE_WP_ZEROPAGE is really worth it. Is 
+there is another good reason to combine the populate zeropage+wp that I 
+am missing (e.g., atomicity by doing both in one operation)?
+
+-- 
+Thanks,
+
+David / dhildenb
 
