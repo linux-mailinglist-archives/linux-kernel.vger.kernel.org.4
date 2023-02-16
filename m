@@ -2,135 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3DB6995E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08636995E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjBPNdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S229850AbjBPNeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:34:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBPNdF (ORCPT
+        with ESMTP id S229670AbjBPNeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:33:05 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2690028239;
-        Thu, 16 Feb 2023 05:33:04 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B43F21EC0758;
-        Thu, 16 Feb 2023 14:33:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676554382;
+        Thu, 16 Feb 2023 08:34:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494C35455C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676554396;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4It5WNTzj3y34rvlS749Hz/wiDmES420yCM4l9P4P7U=;
-        b=gf0e1sXnrMK9yS752n1XbBJTfBklzKLy7wB4qpiBtyaSiWE4u5Ms3bcAVOBWSRzBs7ZCi7
-        ETAO1fzNXRcZQ1jN2Sp0UDeGfWP3jiEh9EHGoEZdEJUy8MSZz1Hg3TttFzAuZAE1KbSkAw
-        nbmwnCc/eKTOd9FQYcQRUonTAtj6tZ8=
-Date:   Thu, 16 Feb 2023 14:32:59 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+4wiyepKU8IEr48@zn.tnic>
-References: <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aP8rHr6H3LIf/c@google.com>
- <Y+aVFxrE6a6b37XN@zn.tnic>
- <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic>
- <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
- <Y+auMQ88In7NEc30@google.com>
- <Y+av0SVUHBLCVdWE@google.com>
- <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+bXjxUtSf71E5SS@google.com>
+        bh=kDxOo4bfzqJtI+IAIUxoUzNCQsLES8Y2nciI7tqhkpk=;
+        b=RStcCQI4+3Ue7pWd8Dr7l0LMCG3Xjr9U7SK3pCrhgqKaJfK1bIIbs55OYBvqNEkFFG2QfB
+        ZWam/WwPZI0JJzuxIkXClk+xsogiGyOuifQrQ9Wny1IoT3wPKlomjQHMLcWXIWJWgCc21n
+        0J6uTQtDdzKJ+jbDWs/Jq2N5hEdG+VU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-lmYvAoRvNzS9R8i5ASnrcg-1; Thu, 16 Feb 2023 08:33:11 -0500
+X-MC-Unique: lmYvAoRvNzS9R8i5ASnrcg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE5BB85CBE5;
+        Thu, 16 Feb 2023 13:33:10 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-193-101.brq.redhat.com [10.40.193.101])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3D48E492B17;
+        Thu, 16 Feb 2023 13:33:08 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 16 Feb 2023 14:33:06 +0100 (CET)
+Date:   Thu, 16 Feb 2023 14:33:03 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gregory.price@memverge.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
+        krisman@collabora.com, corbet@lwn.net, shuah@kernel.org
+Subject: Re: [PATCH v9 1/1] ptrace,syscall_user_dispatch: checkpoint/restore
+ support for SUD
+Message-ID: <20230216133303.GB5200@redhat.com>
+References: <20230210072503.1808-1-gregory.price@memverge.com>
+ <20230210072503.1808-2-gregory.price@memverge.com>
+ <871qmttiqa.ffs@tglx>
+ <Y+rPH0T5r38+l2gB@memverge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+bXjxUtSf71E5SS@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y+rPH0T5r38+l2gB@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:47:27PM +0000, Sean Christopherson wrote:
-> I agree with Boris' comment that a one-off "other encrypted range" is a hack, but
-> that's just an API problem.  The kernel already has hypervisor specific hooks (and
-> for SEV-ES even), why not expand that?  That way figuring out which devices are
-> private is wholly contained in Hyper-V code, at least until there's a generic
-> solution for enumerating private devices, though that seems unlikely to happen
-> and will be a happy problem to solve if it does come about.
+On 02/13, Gregory Price wrote:
+>
+> On Mon, Feb 13, 2023 at 09:26:21PM +0100, Thomas Gleixner wrote:
+> > On Fri, Feb 10 2023 at 02:25, Gregory Price wrote:
+> > > +struct ptrace_sud_config {
+> > > +	__u64 mode;
+> > > +	__s8 *selector;
+> >
+> > How is this correct for a 32bit ptracer running on a 64bit kernel? Aside
+> > of not wiring up the compat syscall without any argumentation in the
+> > changelog.
+> >
+>
+> I'm having a little trouble wrapping my head around what is "right" here
+> with regard to compat.  Granted I've never had to deal with compat
+> issues, so please excuse the ignorance if this is a trivial issue.
 
-I feel ya and this all makes sense and your proposals look clean enough
-to me but we still need some way of determining whether this is a vTOM
-on hyperv because there's the next crapola with
+The problem is the sizeof(selector). 4 bytes for 32bit ptracer but the
+kernel will write 8 bytes. I think you should make "selector" __u64 too.
 
-https://lore.kernel.org/r/20230209072220.6836-4-jgross@suse.com
+Oleg.
 
-because apparently hyperv does PAT but disables MTRRs for such vTOM
-SEV-SNP guests and ... madness.
-
-But that's not the only example - Xen has been doing this thing too.
-
-And Jürgen has been trying to address this in a clean way but it is
-a pain.
-
-What I don't want to have is a gazillion ways to check what needs to
-happen for which guest type. Because people who change the kernel to run
-on baremetal, will break them. And I can't blame them. We try to support
-all kinds of guests in the x86 code but this support should be plain and
-simple.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
