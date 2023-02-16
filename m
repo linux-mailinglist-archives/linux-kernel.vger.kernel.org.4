@@ -2,137 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF17698F6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F26698F72
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjBPJNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S229502AbjBPJN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjBPJNH (ORCPT
+        with ESMTP id S229681AbjBPJNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:13:07 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2065.outbound.protection.outlook.com [40.107.102.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2035D13D61;
-        Thu, 16 Feb 2023 01:13:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZDU/nsHagMRmZIIWSF0pR11X4rVeIv7YBD+JwVad6sncv6qzJvZ6JqUoSjY+NDV68WO3V9Dmy6VWrvZy4nVZsXdzjmdw2QGm1/dWMGlH3gTNsJjWv3kqMIcNZBh5xXjdoQgxvlmXzLUnGjJrlsQ8iuOHabrB6z1rU6a2hRRBAoeFTDgwfPsBYRQOjyah1+yFa0al6l/mwGS0n3CqS9Sq6cLPOpQ1546u8/qlGD+gOopWjG4orUow3E++Hszbde2qfYgyI5gxXHzdHIIMCFweeD3p8gdvfOnQ2Gu7ZVaiOWK99DnUeFfXw/HYNLa+w02rXGpxYy4caR/6+5cSMEkjxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=klV0qTySTJ3ALfy+/Vq5u2Y+rjoQM8Pvf4C5WzfoIa4=;
- b=B6Nmb7o/BU463p6CVdNrhqH/Z0FYVkKpnmp2A7v37aGhmD+85yezkPnNUHuhOER9xcJlkQb3c+ZE1UDKjOq6yXQ431VmK2PE2jPZOGsgf+JRjECfPm0wXKij/ylVv79fQ3V37buMiBXoALS11KVSjoUZCpBQJPT4tkJloFfxxDjVuqMJ3L0VzNVr0ms/7LZY29CSVNSAN7DWmZPC9lZwj/AnZSqIvvJWZU3nok8FmT/V0h4i6aOlzuhsT0JDZ9Gt/39pt5EmZtkKnJYIhRaXSvJBVx7uzaJFZOhT/ATfQ9P2qESwTBBb/J9Qyf+qCJHq4aG/H/oPZuRAvSfFDYEQuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=klV0qTySTJ3ALfy+/Vq5u2Y+rjoQM8Pvf4C5WzfoIa4=;
- b=fJWJ9seQ4ByT7zhlciU23PlqEiA3aLQRbDZQQHqX4OUOPnN3QCKkN6vJXBsOelZKi1m1n8GYcxU07y11+S9hOmgOF+2LutTPQFfun4qpIaOC66iH5NCO8tDfkxgwHWAyr/8dHOH+bnn2upZUQXWZRju/iRDjXFZbFcWnfGp820w=
-Received: from BN7PR06CA0048.namprd06.prod.outlook.com (2603:10b6:408:34::25)
- by CH0PR12MB5073.namprd12.prod.outlook.com (2603:10b6:610:e0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Thu, 16 Feb
- 2023 09:13:03 +0000
-Received: from BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::ac) by BN7PR06CA0048.outlook.office365.com
- (2603:10b6:408:34::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
- Transport; Thu, 16 Feb 2023 09:13:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT100.mail.protection.outlook.com (10.13.177.100) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.13 via Frontend Transport; Thu, 16 Feb 2023 09:13:03 +0000
-Received: from [10.254.241.51] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Feb
- 2023 03:13:00 -0600
-Message-ID: <0bc626c8-492b-78ab-b054-0ae9f40cb967@amd.com>
-Date:   Thu, 16 Feb 2023 10:12:57 +0100
+        Thu, 16 Feb 2023 04:13:25 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C41DB8C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:13:20 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id bp13so119542qkb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvTTQogOGtuJI5d57aB6vuSavgR3Pr6gowBiCF6rMBs=;
+        b=agt2U3/iCT6IH8M9M+8iami1PIiKOzZiDvmtPQ/cbFdRYrA5Qxuk4tVehhtliFZvOY
+         nXJNdfP7Tk0+AYF8aWDxFaxD/mlqbJcVmscvHX5a9L7awpy3etV/elSWUQ4cJH4RzcGC
+         gV+Hbe3soDdJzdTMZFFSQrwJ+iUwxLVt0uGbYyvXa62q70TbxOj2PUWd7g9iRvVL2lZb
+         GCQHJxUC37xAzVAS7elLK6Gu2ybrJGZn4Z/qT3cy8licMLtfIaD95Z6m7eP6BKlvs7BP
+         nGiye/JNcvpbdkAx64EUoT2+qyrW1rahM/UQF3AMziXUutlPZBPHNY+ehj84ohn+a3oy
+         lCiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fvTTQogOGtuJI5d57aB6vuSavgR3Pr6gowBiCF6rMBs=;
+        b=LDWCZnp2duc9k90wptC7UjghYRL7Jj0jsPnVPI4DpQR0P5U+wCeTkBzvlJabHP0n7o
+         n09EGDIocn2xSHcPAktcb9VIsfCkKUAB1OVrqpTvGLFW+6Fl2Dl5XH52/MBmW75KEo+8
+         +4ZjM1N6cAKbQYaSVFxP54hnRBLJqK1Qqoz9OKKN3+PDjFShN12VCFAucwyUB9mhuAUu
+         i/ltAxnzN5FrAbb6ZikiQh2WsF2TjRLNfUJHF8v/bWZUTLG8fyOCptyxISBQ6YL7QX9j
+         hfz58AyMkxivtZNlmBBlBlOaYNItTidcN+IwoDin6cxwwKt+AK3sGvtHFkfSnRWkwmgx
+         vyaw==
+X-Gm-Message-State: AO0yUKXm1LGj/SnvXA/cxyaPZT4IKi7+fU2+3jYa8eDbEJXoqxiQkZWb
+        gNIKorW/eAMWLs23YNyuC/VgyNT+5bS+82fWzCc=
+X-Google-Smtp-Source: AK7set9Xv4gh7qKqCIx5F6cjPwymxNLxnJLQs1uZLaiPhYETECU8jBLCrY1UOk4eSSTbBnfiZKY2d4K5jODT7SDZ2mU=
+X-Received: by 2002:a37:bb82:0:b0:721:3a05:962a with SMTP id
+ l124-20020a37bb82000000b007213a05962amr294314qkf.145.1676538799288; Thu, 16
+ Feb 2023 01:13:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] i2c: xiic: Remove some dead code
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
-References: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT100:EE_|CH0PR12MB5073:EE_
-X-MS-Office365-Filtering-Correlation-Id: 280f2d5f-b161-4e25-bb46-08db0ffe01f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5xvy8Kl9YaxR6Ym2Ja26Xx7zbaqcBIGcQZPmDeQk8s5oGF/fkWcqKi0UCVw4934WfD5GcHiMv5uRIrTH4GZgzNP+nkyir0LQHN0ALAqTJF6DyiuQTHPSe0JOG3bNWibTWld0g21ezG14eh8vwRr9hqdf8v5D5ZuzERBecyb+L4aK0iLyvLcdkmnw2uTwZrZTC/C87f1E0XNXOD2u968RKIL0PYF8kdfRBBDrBY/3lNVj1IlRmlyM+Y17VNm1SjZuT9XvvDac5PFG4SsO2Apl42aCym4+0+bD7Uj9/2bBBo5kUhKFI1sosWsOWXdNqqfi/s4f6SNx7enITsXjIfByoZC0h+HG7mtcf5lITPmORjh8pHZf9VmJZ4VhBSOTelRRJ/fb7iWMEzR6T74fiI/oNTtn43pctmkV3qEcaS1z8RocZrdy5CtGmtVXmVYYM5GRIaJldeC9VMOSnPw477183o2eLTado4LFN5VWv4XGW0V6HGDKlX5fr9IPO6AQCtbgLz/twZZvGVBUmvSH1HMG1J04S2gdyH3jUGXfFX3Ps7xIv9gw6LSev6Cz4E91JhaeGh4gK3e1K9+Jr/a6HPqgMbs4jW6dQvmpNvSG7lOOaixXcJSC7hqJdmcXBdUZaNGto4CpAOMTtEYjrZOVoaJHbrLH2ldnpkrTIHkJFBN/LWRdES5lA4nK8Lto+izANfl9zh2w75X5NLfRq6vjT3+AezOPxMjvbinGjqJqZ2izpJ1rHhRyz4u0S1EjebbsTdkPBYQCGn3bdYYTwdCqTWs+TQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199018)(40470700004)(36840700001)(46966006)(110136005)(5660300002)(44832011)(4744005)(36860700001)(31696002)(2906002)(86362001)(40460700003)(6666004)(40480700001)(36756003)(53546011)(186003)(26005)(16526019)(478600001)(2616005)(336012)(82310400005)(70586007)(4326008)(356005)(8676002)(41300700001)(82740400003)(31686004)(81166007)(83380400001)(54906003)(70206006)(8936002)(316002)(47076005)(16576012)(426003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 09:13:03.1514
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 280f2d5f-b161-4e25-bb46-08db0ffe01f4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5073
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6214:1646:b0:56e:a6e3:3a2a with HTTP; Thu, 16 Feb 2023
+ 01:13:19 -0800 (PST)
+Reply-To: cristinacampel@outlook.com
+From:   "Mrs. Cristina Campbell" <cristtinacampbell@gmail.com>
+Date:   Thu, 16 Feb 2023 09:13:19 +0000
+Message-ID: <CAArciVppm5WivQT1imjX_68VwOOduD4tPmXubSnuYzGFZBdN5w@mail.gmail.com>
+Subject: =?UTF-8?B?2YfZhCDZitmF2YPZhtmDINmF2LPYp9i52K/YqtmK?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/15/23 11:38, Christophe JAILLET wrote:
-> 
-> wait_for_completion_timeout() never returns negative value.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/i2c/busses/i2c-xiic.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index 8503b5016aaf..5543f372ae60 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -1038,10 +1038,6 @@ static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
->                  i2c->rx_msg = NULL;
->                  i2c->nmsgs = 0;
->                  err = -ETIMEDOUT;
-> -       } else if (err < 0) {   /* Completion error */
-> -               i2c->tx_msg = NULL;
-> -               i2c->rx_msg = NULL;
-> -               i2c->nmsgs = 0;
->          } else {
->                  err = (i2c->state == STATE_DONE) ? num : -EIO;
->          }
-> --
-> 2.34.1
-> 
-
-Reviewed-by: Michal Simek <michal.simek@amd.com>
-
-Thanks,
-Michal
+2LnYstmK2LLZiiDYp9mE2K3YqNmK2Kgg2IwNCg0K2YrYsdis2Ykg2YLYsdin2KHYqSDZh9iw2Kcg
+2KjYqNi32KEg2YjYqNi52YbYp9mK2Kkg2Iwg2YTYo9mG2Ycg2YLYryDZitmD2YjZhiDYo9it2K8g
+2KPZh9mFINix2LPYp9im2YQg2KfZhNio2LHZitivDQrYp9mE2KXZhNmD2KrYsdmI2YbZiiDYp9mE
+2KrZiiDYqtiq2YTZgtin2YfYpyDYudmE2Ykg2KfZhNil2LfZhNin2YIg2Iwg2KPZhtinINin2YTY
+s9mK2K/YqSDZg9ix2YrYs9iq2YrZhtinINmD2KfZhdio2YQg2Iwg2YPZhtiqDQrZhdiq2LLZiNis
+2Kkg2YXZhiDYp9mE2LHYp9it2YQg2KXYr9mI2KfYsdivINmD2KfZhdio2YQg2Iwg2YjZg9in2YYg
+2YrYudmF2YQg2YXYuSDYtNix2YPYqSDYtNmEINmE2KrYt9mI2YrYsSDYp9mE2KjYqtix2YjZhA0K
+2KjZhNmG2K/ZhiDZiNmD2KfZhiDYo9mK2LbZi9inINmF2KrYudin2YLYryDZhdiq2YXYsdizINio
+2YXZhti32YLYqSDYtNix2YIg2KLYs9mK2Kcg2KrZiNmB2Yog2YrZiNmFINin2YTYrtmF2YrYsyAz
+MSDZitmI2YTZitmIDQoyMDAzINmB2Yog2KjYp9ix2YrYsy4g2YPZhtinINmF2KrYstmI2KzZitmG
+INmE2YXYr9ipINiz2KjYuSDYs9mG2YjYp9iqINio2K/ZiNmGINi32YHZhC4NCg0K2KjZitmG2YXY
+pyDYqtmC2LHYoyDZh9iw2Kcg2Iwg2YTYpyDYo9ix2YrYr9mDINij2YYg2KrYtNi52LEg2KjYp9mE
+2KPYs9mBINmF2YYg2KPYrNmE2Yog2Iwg2YTYo9mG2YbZiiDYo9i52KrZgtivINij2YYNCtin2YTY
+rNmF2YrYuSDYs9mK2YXZiNiq2YjZhiDZitmI2YXZi9inINmF2KcuINmE2YLYryDYqtmFINiq2LTY
+rtmK2LXZiiDYqNiz2LHYt9in2YYg2KfZhNmF2LHZitihINmI2KPYrtio2LHZhtmKINi32KjZitio
+2YoNCtij2YbZhtmKINmE2YYg2KPYs9iq2YXYsSDYt9mI2YrZhNin2Ysg2KjYs9io2Kgg2YXYtNin
+2YPZhNmKINin2YTYtdit2YrYqSDYp9mE2YXYudmC2K/YqS4NCg0K2KPYsdmK2K8g2KPZhiDZitix
+2K3ZhdmG2Yog2KfZhNmE2Ycg2YjZitmC2KjZhCDYsdmI2K3ZiiDYjCDZhNiw2YTZgyDZgtix2LHY
+qiDYo9mGINij2LnYt9mKINin2YTYtdiv2YLYp9iqINmE2YTZhdmG2LjZhdin2KoNCtin2YTYrtmK
+2LHZitipIC8g2KfZhNmD2YbYp9im2LMgLyDYp9mE2YXYudin2KjYryDYp9mE2KjZiNiw2YrYqSAv
+INin2YTZhdiz2KzYryAvINix2LbZiti52KfYqiDYqNmE2Kcg2KPZhSAvINij2YLZhA0K2KfZhdiq
+2YrYp9iy2YvYpyDZiNij2LHYp9mF2YQg2YTYo9mG2YbZiiDYo9ix2YrYryDYo9mGINmK2YPZiNmG
+INmH2LDYpyDZhdmGINii2K7YsSDYp9mE2KPYudmF2KfZhCDYp9mE2LXYp9mE2K3YqSDYo9mB2LnZ
+hCDYudmE2YkNCtin2YTYo9ix2LYg2YLYqNmEINij2YYg2KPZhdmI2KouINit2KrZiSDYp9mE2KLZ
+hiDYjCDZgtmF2Kog2KjYqtmI2LLZiti5INin2YTYo9mF2YjYp9mEINi52YTZiSDYqNi52LYg2KfZ
+hNmF2YbYuNmF2KfYqg0K2KfZhNiu2YrYsdmK2Kkg2YHZiiDYp9iz2YPYqtmE2YbYr9inINmI2YjZ
+itmE2LIg2YjYqNmG2YXYpyDZiNmB2YbZhNmG2K/YpyDZiNin2YTZitmI2YbYp9mGLiDYp9mE2KLZ
+hiDYqNi52K8g2KPZhiDYqtiv2YfZiNix2KoNCti12K3YqtmKINio2LTZg9mEINiz2YrYoSDYjCDZ
+hNinINmK2YXZg9mG2YbZiiDYp9mE2YLZitin2YUg2KjYsNmE2YMg2KjZhtmB2LPZiiDYqNi52K8g
+2KfZhNii2YYuDQoNCti32YTYqNiqINiw2KfYqiDZhdix2Kkg2YXZhiDYo9mB2LHYp9ivINi52KfY
+ptmE2KrZiiDYpdi62YTYp9mCINij2K3YryDYrdiz2KfYqNin2KrZiiDZiNiq2YjYstmK2Lkg2KfZ
+hNij2YXZiNin2YQg2KfZhNiq2YoNCtij2YXZhNmD2YfYpyDZh9mG2KfZgyDYpdmE2Ykg2YXZhti4
+2YXYqSDYrtmK2LHZitipINmB2Yog2YfZiNmE2YbYr9inINiMINmI2YLYt9inINiMINmI2KPZhNmF
+2KfZhtmK2Kcg2Iwg2YjYp9mE2KXZhdin2LHYp9iqDQrYp9mE2LnYsdio2YrYqSDYp9mE2YXYqtit
+2K/YqSDYjCDZiNiz2YjZitiz2LHYpyDYjCDZhNmD2YbZh9mFINix2YHYttmI2Kcg2YjYp9it2KrZ
+gdi42YjYpyDYqNin2YTZhdin2YQg2YTYo9mG2YHYs9mH2YUuINmE2YfZhQ0K2KjYudivINin2YTY
+otmGINiMINit2YrYqyDZitio2K/ZiCDYo9mG2YfZhSDZhNinINmK2KrZhtin2LLYudmI2YYg2YXY
+uSDZhdinINiq2LHZg9iq2Ycg2YTZh9mFLiDYotiu2LEg2KPZhdmI2KfZhNmKINin2YTYqtmKDQrZ
+hNinINmK2LnYsdmB2YfYpyDYo9it2K8g2YfZiCDYp9mE2KXZitiv2KfYuSDYp9mE2YbZgtiv2Yog
+2KfZhNi22K7ZhSDYp9mE2KjYp9mE2Log2LPYqtipINmF2YTYp9mK2YrZhiDYr9mI2YTYp9ixINij
+2YXYsdmK2YPZig0KNtiMMDAw2IwwMDAuMDAg2YTYr9mK2ZEg2YTYr9mJINij2K3YryDYp9mE2KjZ
+htmI2YMg2YHZiiDYqtin2YrZhNin2YbYryDYrdmK2Ksg2KPZiNiv2LnYqiDYp9mE2LXZhtiv2YjZ
+gi4g2LPYo9ix2LrYqA0K2YHZiiDYp9iz2KrYrtiv2KfZhSDZh9iw2Kcg2KfZhNi12YbYr9mI2YIg
+2YTZhNio2LHYp9mF2Kwg2KfZhNiu2YrYsdmK2Kkg2YjYr9i52YUg2KfZhNil2YbYs9in2YbZitip
+INmB2Yog2KjZhNiv2YMg2YHZgti3INil2LDYpw0K2YPZhtiqINmF2K7ZhNi12YvYpy4NCg0K2YTZ
+gtivINin2KrYrtiw2Kog2YfYsNinINin2YTZgtix2KfYsSDZhNij2YbZhyDZhNmK2LMg2YTYr9mK
+INij2Yog2LfZgdmEINmK2LHYqyDZh9iw2Kcg2KfZhNmF2KfZhCDYjCDZiNmE2Kcg2KPYrtin2YEg
+2YXZhg0K2KfZhNmF2YjYqiDZiNmF2YYg2KvZhSDYo9i52LHZgSDYpdmE2Ykg2KPZitmGINij2YbY
+pyDYsNin2YfYqCDYjCDZiNij2LnZhNmFINij2YbZhtmKINiz2KPZg9mI2YYg2YHZiiDYrdi22YYg
+2KfZhNix2KguDQrYqNmF2KzYsdivINij2YYg2KPYqtmE2YLZiSDYsdiv2YMg2Iwg2LPYo9i52LfZ
+itmDINis2YfYqSDYp9mE2KfYqti12KfZhCDYqNin2YTYqNmG2YMg2YjYo9i12K/YsSDZhNmDINiu
+2LfYp9ioINiq2YHZiNmK2LYg2YXZhg0K2LTYo9mG2Ycg2KrZhdmD2YrZhtmDINio2LXZgdiq2YMg
+2KfZhNmF2LPYqtmB2YrYryDYp9mE2KPYtdmE2Yog2YXZhiDZh9iw2Kcg2KfZhNi12YbYr9mI2YIg
+2YTYqNiv2KEg2YfYsNinINin2YTYqNix2YbYp9mF2KwNCtin2YTYrtmK2LHZiiDYudmE2Ykg2KfZ
+hNmB2YjYsSDZgdmKINio2YTYr9mDLg0KDQrZgdmC2Lcg2KfZhNit2YrYp9ipINin2YTYqtmKINmK
+2LnZiti02YfYpyDYp9mE2KLYrtix2YjZhiDZh9mKINit2YrYp9ipINis2K/Zitix2Kkg2KjYp9mE
+2KfZh9iq2YXYp9mFLiDYo9ix2YrYr9mDINij2YYg2KrYtdmE2YoNCtiv2KfYptmF2YvYpyDZhdmG
+INij2KzZhNmKINiMINij2Yog2KrYo9iu2YrYsSDZgdmKINix2K/ZgyDYs9mK2LnYt9mK2YbZiiDZ
+hdiz2KfYrdipINmB2Yog2KfZhNio2K3YqyDYudmGINi02K7YtSDYotiu2LENCtmE2YbZgdizINin
+2YTYutix2LYuINil2LDYpyDZhNmFINiq2YPZhiDZhdmH2KrZhdmL2Kcg2Iwg2YHZitix2KzZiSDY
+p9mE2LnZgdmIINi52YYg2KrZiNin2LXZhNmDINmF2LnZhtinLiDZitmF2YPZhtmDDQrYp9mE2KrZ
+iNin2LXZhCDZhdi52Yog2KPZiCDYp9mE2LHYryDYudmE2Ykg2KjYsdmK2K/ZiiDYp9mE2KXZhNmD
+2KrYsdmI2YbZiiDYp9mE2K7Yp9i1Og0KKGNyaXN0aW5hY2FtcGVsQG91dGxvb2suY29tKS4NCg0K
+2LTZg9ix2YvYp9iMDQrYqtmB2LbZhNmI2Kcg2KjZgtio2YjZhCDZgdin2KbZgiDYp9mE2KfYrdiq
+2LHYp9mF2IwNCtin2YTYs9mK2K/YqSDZg9ix2YrYs9iq2YrZhtinINmD2KfZhdio2YQNCtio2LHZ
+itivINil2YTZg9iq2LHZiNmG2YrYmyBjcmlzdGluYWNhbXBlbEBvdXRsb29rLmNvbQ0K
