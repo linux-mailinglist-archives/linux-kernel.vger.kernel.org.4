@@ -2,168 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CFA699389
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E540699397
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBPLrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S229678AbjBPLtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBPLrl (ORCPT
+        with ESMTP id S229575AbjBPLtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:47:41 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01675593;
-        Thu, 16 Feb 2023 03:47:39 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pScjg-0000CY-Ra; Thu, 16 Feb 2023 12:47:36 +0100
-Message-ID: <286293b4-5ae6-1348-9d69-7049ef5adf35@leemhuis.info>
-Date:   Thu, 16 Feb 2023 12:47:36 +0100
+        Thu, 16 Feb 2023 06:49:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C9E4DBE0;
+        Thu, 16 Feb 2023 03:49:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E482BB824B3;
+        Thu, 16 Feb 2023 11:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F0CC433EF;
+        Thu, 16 Feb 2023 11:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676548157;
+        bh=9vmuzx3tH6MHeToyGwqVw/F+KPzFPeoWov9zhDgvWbA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W7v0sWiqfGK/oPS+QDKM604v5mm/OXkQ52M7ak0hvSnFlSg7Lvae5AwUXMS+GoBzF
+         xkxSMfDiymFEDNKth8SD+T9R7IgRWJSZCmp+uPnr1MDdXeQ6+9MSqG5LpQJ3QdFEjC
+         zThsiToJSD1VuE1k62ADoCleoR0teQ0HRMkQrc3s=
+Date:   Thu, 16 Feb 2023 12:49:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kumaravel.Thiagarajan@microchip.com
+Cc:     michael@walle.cc, Tharunkumar.Pasumarthi@microchip.com,
+        UNGLinuxDriver@microchip.com, arnd@arndb.de,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Subject: Re: [PATCH v5 char-misc-next] misc: microchip: pci1xxxx: Add
+ OTP/EEPROM driver for the pci1xxxx switch
+Message-ID: <Y+4YO7HSmETanIU2@kroah.com>
+References: <20230212035743.231353-1-tharunkumar.pasumarthi@microchip.com>
+ <20230214082804.2761756-1-michael@walle.cc>
+ <BN8PR11MB36680842890C294566A156C3E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <7276bef47792e489abd093e4bd0044de@walle.cc>
+ <Y+yeyNCA48IbKOKC@kroah.com>
+ <BN8PR11MB36680D97C97B4894E321CAD9E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <BN8PR11MB3668A1E8541035E257F2C500E9A39@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <Y+zFo4SP5L/KkT/v@kroah.com>
+ <BN8PR11MB3668C37EFBB42FB3FFC7618FE9A09@BN8PR11MB3668.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu
- trace_pipe_raw blocks indefinitely
-Content-Language: en-US, de-DE
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, tanxiaofei@huawei.com,
-        jonathan.cameron@huawei.com, linuxarm@huawei.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        shiju.jose@huawei.com, mchehab@kernel.org,
-        linux-edac@vger.kernel.org
-References: <20230204193345.842-1-shiju.jose@huawei.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <20230204193345.842-1-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676548059;509d3c9d;
-X-HE-SMSGID: 1pScjg-0000CY-Ra
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN8PR11MB3668C37EFBB42FB3FFC7618FE9A09@BN8PR11MB3668.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On Thu, Feb 16, 2023 at 11:39:12AM +0000, Kumaravel.Thiagarajan@microchip.com wrote:
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Wednesday, February 15, 2023 5:15 PM
+> > To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
+> > Subject: Re: [PATCH v5 char-misc-next] misc: microchip: pci1xxxx: Add
+> > OTP/EEPROM driver for the pci1xxxx switch
 
-On 04.02.23 20:33, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> The error events are not received in the rasdaemon since kernel 6.1-rc6.
-> This issue is firstly detected and reported, when testing the CXL error
-> events in the rasdaemon.
+What is this header for?
 
-Thanks for working on this. This submission looks stalled, unless I
-missed something. This is unfortunate, as this afaics is fixing a
-regression (caused by a commit from Steven). Hence it would be good to
-get this fixed rather sooner than later. Or is the RFC in the subject
-the reason why there was no progress? Is it maybe time to remove it?
+Please fix your email client to not add this to the body of the text...
 
-> Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
-> return and this issue is seen after the commit
-> 42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-> polling block on watermark").
-> 
-> This also verified using a test application for poll()
-> and select() on trace_pipe_raw.
-> 
-> There is also a bug reported on this issue,
-> https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+> > > > Greg & Michael, I do not want to expose the entire or even partial
+> > > > set of device registers to the user space access directly for safety
+> > reasons.
+> > 
+> > But that's all exposed here through this block device, right?
+> The block device created by this driver does not expose the device registers to the user space applications.
 
+What is it exposing?
 
+And please use line-wrapping :)
 
+> The device hardware provides separate set of registers to read and write into the OTP memory and EEPROM.
+> The driver uses these hardware registers and abstracts the programming logic inside and exposes the only the memory as devices to the user space.
 
-> This issue occurs for the per_cpu case, which calls the
-> ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
-> buffer_percent > 0 and then wait until the percentage of pages are
-> available.The default value set for the buffer_percent is 50 in the
-> kernel/trace/trace.c. However poll() does not return even met the percentage
-> of pages condition.
-> 
-> As a fix, rasdaemon set buffer_percent as 0 through the
-> /sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
-> task will wake up as soon as data is added to any of the specific cpu
-> buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
-> indefinitely.
-> 
-> Dependency on the kernel RFC patch
-> tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+What memory is being exposed?  And how?
 
-BTW, this patch afaics should have these tags:
+> I don't have any user program to program the device. I use the Linux dd command only.
+> If I want to view the contents of the memory, I can use any hex editor tool in Linux this way.
 
-Fixes: 42fb0a1e84ff ("tracing/ring-buffer: Have polling block on watermark")
-Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Link:
-https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+Exposing the memory of a device as a block device is not normal, it
+should just be mmapped, right?
 
-An likely a
+> > And this is already exposed to userspace today, no need to add anything the
+> > kernel already provides this.
+> Can you explain this? Are you referring to any sysfs directories / files? What is the necessity to do this? I am trying to understand this.
 
-Cc: <stable@vger.kernel.org> # 6.1.x
+PCI device accesses can go through userspace directly.  Is this just
+memory mapped in your PCI device?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+> If this is for any debug purpose and whether kernel does this under some conditional compilation or is that the default behavior?
 
-#regzbot poke
-#regzbot ^backmonitor:
-https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+Is this only for debugging?  If so, please document it as such so that
+no one accidentally enables it as a valid build option.
 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Changes:
-> RFC V1 -> RFC V2
-> 1. Rename the patch header subject.
-> 2. Changes for the backward compatability to the old kernels.
-> ---
->  ras-events.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/ras-events.c b/ras-events.c
-> index 3691311..e505a0e 100644
-> --- a/ras-events.c
-> +++ b/ras-events.c
-> @@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
->  	int warnonce[n_cpus];
->  	char pipe_raw[PATH_MAX];
->  	int legacy_kernel = 0;
-> +	int fd;
-> +	char buf[10];
->  #if 0
->  	int need_sleep = 0;
->  #endif
-> @@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
->  		return -ENOMEM;
->  	}
->  
-> +	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
-> +	 * indefinitely with the default buffer_percent in the kernel trace system,
-> +	 * which is introduced by the following change in the kernel.
-> +	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
-> +	 * Set buffer_percent to 0 so that poll() will return immediately
-> +	 * when the trace data is available in the ras per_cpu trace pipe_raw
-> +	 */
-> +	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
-> +	if (fd >= 0) {
-> +		/* For the backward compatabilty to the old kernel, do not return
-> +		 * if fail to set the buffer_percent.
-> +		 */
-> +		snprintf(buf, sizeof(buf), "0");
-> +		size = write(fd, buf, strlen(buf));
-> +		if (size <= 0)
-> +			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
-> +		close(fd);
-> +	} else
-> +		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
-> +
->  	for (i = 0; i < (n_cpus + 1); i++)
->  		fds[i].fd = -1;
->  
+> Even if the user is a super user, should he be allowed to access the device hardware registers mandatorily. It should depend on the policy the system owner want to adopt. Right?
+
+Again, is this PCI memory that can be accessed directly?
+
+And again, a block device is very odd, that is not the normal way to
+access a device's memory.
+
+thanks,
+
+greg k-h
