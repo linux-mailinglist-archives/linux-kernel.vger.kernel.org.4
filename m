@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66422699158
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CC2699156
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjBPKdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:33:45 -0500
+        id S229990AbjBPKdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:33:43 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjBPKdn (ORCPT
+        with ESMTP id S229490AbjBPKdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:33:43 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3E653559
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676543595; x=1708079595;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=xewz+sS+QiFWv/ST2WtJNHlJXrBcta3cxPe5gr9V6N8=;
-  b=VOlt2ckNqQvEpaadrKiUZs14mHe0tm2QKqdw70335htCw2l9/4QE5ZYl
-   1O1SjpWqVX0n5dgvZuPBT4wMarakug1ENZB0zfRqsSs4NSRE3UYPJHrjk
-   CDZpuang1cHUyWyy64hVOcO1qxII7PvuAzD7kvg+BHfkT3Fju2ZVLEvZ/
-   5HNYU0LpeLHr03bQQmBRwoQZSA6IFkZv/SlchDu/9VPm3sJKdLdM9MCFR
-   PwfrBDOjnzeNxYDWIwGfdU9Bt2ogt/q5L4dVbSAEmJ4YhDS/7FIAWfuzU
-   q40/unViEwCZX7jR0yO9Y08wXZxZTqPc3j7KvwcLTWGPgoh67Y6+2c09h
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="417906727"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="417906727"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 02:33:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="702505653"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="702505653"
-Received: from aaronov-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.86])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 02:33:10 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH] drm/i915: Make kobj_type structures constant
-In-Reply-To: <20230216-kobj_type-i915-v1-1-ca65c9b93518@weissschuh.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230216-kobj_type-i915-v1-1-ca65c9b93518@weissschuh.net>
-Date:   Thu, 16 Feb 2023 12:33:07 +0200
-Message-ID: <87sff5293w.fsf@intel.com>
+        Thu, 16 Feb 2023 05:33:42 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9101042E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:12 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id o20so2207172lfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G28TAuy/6oFk/suK4dD0fVgYuOSi6iwQbnKbW0IjYhs=;
+        b=fQq4rkcz+L115UYJbdYTul6ajjgtT8qDegn+dhmI5X/Vt7lsw2szYwaC+e+FoWzVzS
+         UqnjA+aDLU4Hu0G1ujtKt3OiD9t9bbRmthTvyxQxFytX3bij9mu8+X6Y1T5ek6z9MDTe
+         dWl0WNVTyeCnQa4+2gFyZu2F7m4GPY54nXa8BUeWWiyI+brJDfqzsNZ8k2lH2MtcDiGq
+         nrjmRc5Vp3P0r50THhPSDvH69ViYPzsqDnCwszmXC3Q+SPNgsncu7kZuKKOJNMOv+yQM
+         11W4u57Otb3je3SCTBfjqFGkZVFasqzpNUnwGyA5lDUZ3J9jm+0SNJllNF2SR0L90nZF
+         kz9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G28TAuy/6oFk/suK4dD0fVgYuOSi6iwQbnKbW0IjYhs=;
+        b=XHwgUDOvJPabD0qGVLMCRb7EJpE4NwiqqobaNJNML5KIV/H156NYlgALhaL6mI4otz
+         BWqTeo/CuF9I8vQ+yAtuSWOb7/feayhMFvnBhJ+6oh0ShDXklAZlpw842EE4HJvTXyyI
+         z8v3PytwMYAPR4EGxq7NGdM2dYtzmyzwnNzv/sOik8oDQnCh4dKujKmgAisO2zmxOIVt
+         3zhgJbUSdOc+MNO2vyrPiOmtlVO3LmXl8x6qw3qiojDFEwz1wsIdk8vUUr0UtuKgdy8U
+         gyC3sdfNulqQ+dpgNNtOEh2yHJEZRbfuqJrHwo75BxhgFqSAfD17eXGWeJ5onoJg8wnj
+         f0cg==
+X-Gm-Message-State: AO0yUKUATaMfo2vYvZzvkZ/K7rkDXDBlacVzLviCOTcSktJBVLizm4cQ
+        RAeswbQK+zpNY/tlcnx8ABe2cg==
+X-Google-Smtp-Source: AK7set+ny/k21yqV1u4cmjdixiAmB7aht5jerIGcbd4dSjACtG8rjnomZdynpsWysY5VscuIlYDr3g==
+X-Received: by 2002:ac2:44b9:0:b0:4b5:1545:222b with SMTP id c25-20020ac244b9000000b004b51545222bmr1416421lfm.47.1676543591151;
+        Thu, 16 Feb 2023 02:33:11 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id y14-20020ac24e6e000000b004db00415a1asm242534lfs.248.2023.02.16.02.33.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 02:33:10 -0800 (PST)
+Message-ID: <e8f1110e-7f60-3031-25d4-d4993fa04cb9@linaro.org>
+Date:   Thu, 16 Feb 2023 11:33:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RESEND PATCH 01/12] arm64: dts: qcom: sdm845: Supply clock from
+ cpufreq node to CPUs
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org
+References: <20230215070400.5901-1-manivannan.sadhasivam@linaro.org>
+ <20230215070400.5901-2-manivannan.sadhasivam@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230215070400.5901-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
->
-> Take advantage of this to constify the structure definitions to prevent
-> modification at runtime.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
+On 15.02.2023 08:03, Manivannan Sadhasivam wrote:
+> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
+> to the CPU cores. But this relationship is not represented in DTS so far.
+> 
+> So let's make cpufreq node as the clock provider and CPU nodes as the
+> consumers. The clock index for each CPU node is based on the frequency
+> domain index.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  drivers/gpu/drm/i915/gt/intel_gt_sysfs.c | 2 +-
->  drivers/gpu/drm/i915/gt/sysfs_engines.c  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c b/drivers/gpu/drm/i=
-915/gt/intel_gt_sysfs.c
-> index 9486dd3bed99..df15b17caf89 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
-> @@ -71,7 +71,7 @@ static void kobj_gt_release(struct kobject *kobj)
->  {
->  }
->=20=20
-> -static struct kobj_type kobj_gt_type =3D {
-> +static const struct kobj_type kobj_gt_type =3D {
->  	.release =3D kobj_gt_release,
->  	.sysfs_ops =3D &kobj_sysfs_ops,
->  	.default_groups =3D id_groups,
-> diff --git a/drivers/gpu/drm/i915/gt/sysfs_engines.c b/drivers/gpu/drm/i9=
-15/gt/sysfs_engines.c
-> index f2d9858d827c..b5e0fe5dbf6c 100644
-> --- a/drivers/gpu/drm/i915/gt/sysfs_engines.c
-> +++ b/drivers/gpu/drm/i915/gt/sysfs_engines.c
-> @@ -421,7 +421,7 @@ static void kobj_engine_release(struct kobject *kobj)
->  	kfree(kobj);
->  }
->=20=20
-> -static struct kobj_type kobj_engine_type =3D {
-> +static const struct kobj_type kobj_engine_type =3D {
->  	.release =3D kobj_engine_release,
->  	.sysfs_ops =3D &kobj_sysfs_ops
->  };
->
-> ---
-> base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
-> change-id: 20230216-kobj_type-i915-886bebc36129
->
-> Best regards,
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+Konrad
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 479859bd8ab3..1d5e6ade8ae7 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -92,6 +92,7 @@ CPU0: cpu@0 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x0>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <611>;
+>  			dynamic-power-coefficient = <290>;
+> @@ -118,6 +119,7 @@ CPU1: cpu@100 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x100>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <611>;
+>  			dynamic-power-coefficient = <290>;
+> @@ -140,6 +142,7 @@ CPU2: cpu@200 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x200>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <611>;
+>  			dynamic-power-coefficient = <290>;
+> @@ -162,6 +165,7 @@ CPU3: cpu@300 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x300>;
+> +			clocks = <&cpufreq_hw 0>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <611>;
+>  			dynamic-power-coefficient = <290>;
+> @@ -184,6 +188,7 @@ CPU4: cpu@400 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x400>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <442>;
+> @@ -206,6 +211,7 @@ CPU5: cpu@500 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x500>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <442>;
+> @@ -228,6 +234,7 @@ CPU6: cpu@600 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x600>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <442>;
+> @@ -250,6 +257,7 @@ CPU7: cpu@700 {
+>  			device_type = "cpu";
+>  			compatible = "qcom,kryo385";
+>  			reg = <0x0 0x700>;
+> +			clocks = <&cpufreq_hw 1>;
+>  			enable-method = "psci";
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <442>;
+> @@ -5232,6 +5240,7 @@ cpufreq_hw: cpufreq@17d43000 {
+>  			clock-names = "xo", "alternate";
+>  
+>  			#freq-domain-cells = <1>;
+> +			#clock-cells = <1>;
+>  		};
+>  
+>  		wifi: wifi@18800000 {
