@@ -2,282 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DDF699A4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8291C699A59
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjBPQlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S229601AbjBPQmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjBPQlp (ORCPT
+        with ESMTP id S229737AbjBPQmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:41:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740B4CC98;
-        Thu, 16 Feb 2023 08:41:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E97F61D58;
-        Thu, 16 Feb 2023 16:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61ABC433D2;
-        Thu, 16 Feb 2023 16:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676565702;
-        bh=8sTJMeSGClWhu2e1UsvG81Ext9xqh2ISQ2oaTGOEIzk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PRjhpTf9yfcn4VnlqPX8DCJKwf2ZHtHDVvmiBQLvPU5YR4TsCgZBHvyr5RvlxpCKK
-         /8XHpvqSpRE+PGMXxEVTPGJ4fgFU8gVfhZVKeSn7ZBpDkjZAHUgqMO2bj6Is0EXlg7
-         T+dMGrEX8iyTxbFIxPLsJvU0EX8B3VPu0EwqKdXfHXevp/EQMF0yrcu4Wr4xhBnWoE
-         1cZnFiAJSIhFSuoR90bkajimWd7UDMLl8MSjL+bUZaX37RdrT4wjY9jX4Vn1PILdvz
-         muhsghyt1glVIzN9LSljLOz3PUoELOn3ADsftvI4MNoBLZGTGGSHla0n10uIFbVaxh
-         0npRcwmSZzQCw==
-Received: by mail-vs1-f45.google.com with SMTP id w22so1063436vsf.13;
-        Thu, 16 Feb 2023 08:41:42 -0800 (PST)
-X-Gm-Message-State: AO0yUKVvRN4hhd4PDrHMuLv5+zzI6qn3lqUsj/R1mfYlpYggdYSTvNpP
-        X7z7KVFjaiZPv9zcsCZzHRjD9+cSct4tVegBrQ==
-X-Google-Smtp-Source: AK7set+niv4ZSmswRovGksbtGiFL4MZld6t7lwQbAtr3Ngi7aeyzQ2baByBO1jfmnJ26M5xKBQLKKBDckB79adHICi4=
-X-Received: by 2002:a67:d812:0:b0:412:4fed:e7ad with SMTP id
- e18-20020a67d812000000b004124fede7admr1147102vsj.67.1676565701656; Thu, 16
- Feb 2023 08:41:41 -0800 (PST)
+        Thu, 16 Feb 2023 11:42:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293264CC97
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:41:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676565696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGhOP28VyueXX4Bi5IrKSysrswJXvg2hNJ3iS4PanEE=;
+        b=EccGF37Aj8U43UoWPOyKfwrTXiv4gDBQmWATp9h/czvxEe1MX/JPaoowjCgUT9x/hkHPRI
+        ca6ctn92VYyMRUFmmQuiQPc0hJJsdkZ3xGN8UvO5rYEVhpYmVsjfCdi/S6EKlhd0MpqKOw
+        HH24afgLvjpftDoqT7xF2yAFclfoLhU=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-592-Aq4LmizQMM-UffqMKgtwAw-1; Thu, 16 Feb 2023 11:41:35 -0500
+X-MC-Unique: Aq4LmizQMM-UffqMKgtwAw-1
+Received: by mail-io1-f72.google.com with SMTP id z23-20020a6b6517000000b00718172881acso1216499iob.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:41:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676565694;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGhOP28VyueXX4Bi5IrKSysrswJXvg2hNJ3iS4PanEE=;
+        b=ToZse72RECoDv9GV2RKBpM+PpFXZWQUVc1Ylzc1TRfTThal3qtVV5eIs9OAl4qDv4c
+         zzeKe+/EWf3zVcR5NbpLcITSrggo8Ybt8SzIbGrKNFerTL396t49I6EKwHvWLowPEdo6
+         v4qWABWriXkdLq1E5R0BuYmMqM+lZQWfvmRw2PsCLBfa8C1I3V41V3gcgRjHNK35xw+v
+         XjYnN+P5C5b3cz0jFkbvxseQp/7czqzp22AvATI0zeBCnQVfdCR1TUy/H8J2NVIA6zS6
+         C4r7Zdi0/G9vKxwO5028GoxvYU5PNrINrwlCdMVvhNNlOVOg1Whe7QzcbG9uZry6m0yV
+         at2Q==
+X-Gm-Message-State: AO0yUKUzzyJiPIzx3t56MoKAgrXiT1rN8C67UoK3vg1jplOPeFUJsCri
+        l1EytCvzvfMmwJpAi4lettUhh1GZ9/X0vF3Q1NfPkCGP0n9iMiukMxhTFgqr0mK06hrk+rvO/bK
+        AQy9JuaoD7gDxFsEJlLixlQLQ
+X-Received: by 2002:a05:6e02:1a64:b0:314:9f2b:f63b with SMTP id w4-20020a056e021a6400b003149f2bf63bmr5589345ilv.2.1676565694229;
+        Thu, 16 Feb 2023 08:41:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set8EQIpizwAeyF/gBQ87ce+QeJCbsggaFBRO0Ft/QkhDSyUr263BDqR9+/guGZoTRftR1ouFpw==
+X-Received: by 2002:a05:6e02:1a64:b0:314:9f2b:f63b with SMTP id w4-20020a056e021a6400b003149f2bf63bmr5589316ilv.2.1676565693804;
+        Thu, 16 Feb 2023 08:41:33 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id v14-20020a02b90e000000b003ab21c8fa84sm676437jan.121.2023.02.16.08.41.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 08:41:32 -0800 (PST)
+Date:   Thu, 16 Feb 2023 11:41:31 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Paul Gofman <pgofman@codeweavers.com>, david@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
+Message-ID: <Y+5cu9QMCy32ONBo@x1n>
+References: <20230213163124.2850816-1-usama.anjum@collabora.com>
+ <Y+prUgFQqmytC/5M@x1n>
+ <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
+ <Y+qnb/Ix8P5J3Kl4@x1n>
+ <0549bd0e-85c4-1547-3eaa-16c8a8883837@collabora.com>
+ <Y+wCDUpuDcSDSQAK@x1n>
+ <c9d3a306-0c5e-ad58-cffc-3c4c6b8b7433@collabora.com>
+ <Y+1SdZqwS7LbcfaQ@x1n>
+ <e35c7af0-d115-9808-61b5-cf8ab4356a35@collabora.com>
 MIME-Version: 1.0
-References: <20230216153339.19987-1-afd@ti.com> <20230216153339.19987-3-afd@ti.com>
-In-Reply-To: <20230216153339.19987-3-afd@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 16 Feb 2023 10:41:30 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+4JU=ZrLqiZuQHNZf6PdErwpBebcn9OVDdVd9YOjY7Jg@mail.gmail.com>
-Message-ID: <CAL_Jsq+4JU=ZrLqiZuQHNZf6PdErwpBebcn9OVDdVd9YOjY7Jg@mail.gmail.com>
-Subject: Re: [RFC 2/2] WIP: dt-bindings: omap: Convert omap.txt to yaml
-To:     Andrew Davis <afd@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e35c7af0-d115-9808-61b5-cf8ab4356a35@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 9:34 AM Andrew Davis <afd@ti.com> wrote:
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
+On Thu, Feb 16, 2023 at 11:25:51AM +0500, Muhammad Usama Anjum wrote:
+> On 2/16/23 2:45 AM, Peter Xu wrote:
+> > On Wed, Feb 15, 2023 at 12:08:11PM +0500, Muhammad Usama Anjum wrote:
+> >> Hi Peter,
+> >>
+> >> Thank you for your review!
+> >>
+> >> On 2/15/23 2:50 AM, Peter Xu wrote:
+> >>> On Tue, Feb 14, 2023 at 01:49:50PM +0500, Muhammad Usama Anjum wrote:
+> >>>> On 2/14/23 2:11 AM, Peter Xu wrote:
+> >>>>> On Mon, Feb 13, 2023 at 10:50:39PM +0500, Muhammad Usama Anjum wrote:
+> >>>>>> On 2/13/23 9:54 PM, Peter Xu wrote:
+> >>>>>>> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
+> >>>>>>>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
+> >>>>>>>> VMA. We are facing a use case where multiple VMAs are present in one
+> >>>>>>>> range of interest. For example, the following pseudocode reproduces the
+> >>>>>>>> error which we are trying to fix:
+> >>>>>>>>
+> >>>>>>>> - Allocate memory of size 16 pages with PROT_NONE with mmap
+> >>>>>>>> - Register userfaultfd
+> >>>>>>>> - Change protection of the first half (1 to 8 pages) of memory to
+> >>>>>>>>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+> >>>>>>>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+> >>>>>>>>   out.
+> >>>>>>>>
+> >>>>>>>> This is a simple use case where user may or may not know if the memory
+> >>>>>>>> area has been divided into multiple VMAs.
+> >>>>>>>>
+> >>>>>>>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+> >>>>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >>>>>>>> ---
+> >>>>>>>> Changes since v1:
+> >>>>>>>> - Correct the start and ending values passed to uffd_wp_range()
+> >>>>>>>> ---
+> >>>>>>>>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
+> >>>>>>>>  1 file changed, 22 insertions(+), 16 deletions(-)
+> >>>>>>>>
+> >>>>>>>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> >>>>>>>> index 65ad172add27..bccea08005a8 100644
+> >>>>>>>> --- a/mm/userfaultfd.c
+> >>>>>>>> +++ b/mm/userfaultfd.c
+> >>>>>>>> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+> >>>>>>>>  			unsigned long len, bool enable_wp,
+> >>>>>>>>  			atomic_t *mmap_changing)
+> >>>>>>>>  {
+> >>>>>>>> +	unsigned long end = start + len;
+> >>>>>>>> +	unsigned long _start, _end;
+> >>>>>>>>  	struct vm_area_struct *dst_vma;
+> >>>>>>>>  	unsigned long page_mask;
+> >>>>>>>>  	int err;
+> >>>>>>>
+> >>>>>>> I think this needs to be initialized or it can return anything when range
+> >>>>>>> not mapped.
+> >>>>>> It is being initialized to -EAGAIN already. It is not visible in this patch.
+> >>>>>
+> >>>>> I see, though -EAGAIN doesn't look suitable at all.  The old retcode for
+> >>>>> !vma case is -ENOENT, so I think we'd better keep using it if we want to
+> >>>>> have this patch.
+> >>>> I'll update in next version.
+> >>>>
+> >>>>>
+> >>>>>>
+> >>>>>>>
+> >>>>>>>> +	VMA_ITERATOR(vmi, dst_mm, start);
+> >>>>>>>>  
+> >>>>>>>>  	/*
+> >>>>>>>>  	 * Sanitize the command parameters:
+> >>>>>>>> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+> >>>>>>>>  	if (mmap_changing && atomic_read(mmap_changing))
+> >>>>>>>>  		goto out_unlock;
+> >>>>>>>>  
+> >>>>>>>> -	err = -ENOENT;
+> >>>>>>>> -	dst_vma = find_dst_vma(dst_mm, start, len);
+> >>>>>>>> +	for_each_vma_range(vmi, dst_vma, end) {
+> >>>>>>>> +		err = -ENOENT;
+> >>>>>>>>  
+> >>>>>>>> -	if (!dst_vma)
+> >>>>>>>> -		goto out_unlock;
+> >>>>>>>> -	if (!userfaultfd_wp(dst_vma))
+> >>>>>>>> -		goto out_unlock;
+> >>>>>>>> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> >>>>>>>> -		goto out_unlock;
+> >>>>>>>> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
+> >>>>>>>> +			break;
+> >>>>>>>> +		if (!userfaultfd_wp(dst_vma))
+> >>>>>>>> +			break;
+> >>>>>>>> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+> >>>>>>>> +			break;
+> >>>>>>>>  
+> >>>>>>>> -	if (is_vm_hugetlb_page(dst_vma)) {
+> >>>>>>>> -		err = -EINVAL;
+> >>>>>>>> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> >>>>>>>> -		if ((start & page_mask) || (len & page_mask))
+> >>>>>>>> -			goto out_unlock;
+> >>>>>>>> -	}
+> >>>>>>>> +		if (is_vm_hugetlb_page(dst_vma)) {
+> >>>>>>>> +			err = -EINVAL;
+> >>>>>>>> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
+> >>>>>>>> +			if ((start & page_mask) || (len & page_mask))
+> >>>>>>>> +				break;
+> >>>>>>>> +		}
+> >>>>>>>>  
+> >>>>>>>> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+> >>>>>>>> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
+> >>>>>>>> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
+> >>>>>>>>  
+> >>>>>>>> -	err = 0;
+> >>>>>>>> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
+> >>>>>>>> +		err = 0;
+> >>>>>>>> +	}
+> >>>>>>>>  out_unlock:
+> >>>>>>>>  	mmap_read_unlock(dst_mm);
+> >>>>>>>>  	return err;
+> >>>>>>>
+> >>>>>>> This whole patch also changes the abi, so I'm worried whether there can be
+> >>>>>>> app that relies on the existing behavior.
+> >>>>>> Even if a app is dependent on it, this change would just don't return error
+> >>>>>> if there are multiple VMAs under the hood and handle them correctly. Most
+> >>>>>> apps wouldn't care about VMAs anyways. I don't know if there would be any
+> >>>>>> drastic behavior change, other than the behavior becoming nicer.
+> >>>>>
+> >>>>> So this logic existed since the initial version of uffd-wp.  It has a good
+> >>>>> thing that it strictly checks everything and it makes sense since uffd-wp
+> >>>>> is per-vma attribute.  In short, the old code fails clearly.
+> >>>>>
+> >>>>> While the new proposal is not: if -ENOENT we really have no idea what
+> >>>>> happened at all; some ranges can be wr-protected but we don't know where
+> >>>>> starts to go wrong.
+> >>>> The return error codes can be made to return in better way somewhat. The
+> >>>> return error codes shouldn't block a correct functionality enhancement patch.
+> >>>>
+> >>>>>
+> >>>>> Now I'm looking at the original problem..
+> >>>>>
+> >>>>>  - Allocate memory of size 16 pages with PROT_NONE with mmap
+> >>>>>  - Register userfaultfd
+> >>>>>  - Change protection of the first half (1 to 8 pages) of memory to
+> >>>>>    PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+> >>>>>  - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+> >>>>>    out.
+> >>>>>
+> >>>>> Why the user app should wr-protect 16 pages at all?
+> >>>> Taking arguments from Paul here.
+> >>>>
+> >>>> The app is free to insert guard pages inside the range (with PROT_NONE) and
+> >>>> change the protection of memory freely. Not sure why it is needed to
+> >>>> complicate things by denying any flexibility. We should never restrict what
+> >>>> is possible and what not. All of these different access attributes and
+> >>>> their any combination of interaction _must_ work without question. The
+> >>>> application should be free to change protection on any sub-range and it
+> >>>> shouldn't break the PAGE_IS_WRITTEN + UFFD_WRITE_PROTECT promise which
+> >>>> PAGEMAP_IOCTL (patches are in progress) and UFFD makes.
+> >>>
+> >>> Because uffd-wp has a limitation on e.g. it cannot nest so far.  I'm fine
+> >>> with allowing mprotect() happening, but just to mention so far it cannot do
+> >>> "any combinations" yet.
+> >>>
+> >>>>
+> >>>>>
+> >>>>> If so, uffd_wp_range() will be ran upon a PROT_NONE range which doesn't
+> >>>>> make sense at all, no matter whether the user is aware of vma concept or
+> >>>>> not...  because it's destined that it's a vain effort.
+> >>>> It is not a vain effort. The user want to watch/find the dirty pages of a
+> >>>> range while working with it: reserve and watch at once while Write
+> >>>> protecting or un-protecting as needed. There may be several different use
+> >>>> cases. Inserting guard pages to catch out of range access, map something
+> >>>> only when it is needed; unmap or PROT_NONE pages when they are set free in
+> >>>> the app etc.
+> >>>
+> >>> Fair enough.
+> >>>
+> >>>>
+> >>>>>
+> >>>>> So IMHO it's the user app needs fixing here, not the interface?  I think
+> >>>>> it's the matter of whether the monitor is aware of mprotect() being
+> >>>>> invoked.
+> >>>> No. The common practice is to allocate a big memory chunk at once and have
+> >>>> own allocator over it (whether it is some specific allocator in a game or a
+> >>>> .net allocator with garbage collector). From the usage point of view it is
+> >>>> very limiting to demand constant memory attributes for the whole range.
+> >>>>
+> >>>> That said, if we do have the way to do exactly what we want with reset
+> >>>> through pagemap fd and it is just UFFD ioctl will be working differently,
+> >>>> it is not a blocker of course, just weird api design.
+> >>>
+> >>> Do you mean you'll disable ENGAGE_WP && !GET in your other series?  Yes, if
+> >>> this will service your goal, it'll be perfect to remove that interface.
+> >> No, we cannot remove it.
+> > 
+> > If this patch can land, I assume ioctl(UFFDIO_WP) can start to service the
+> > dirty tracking purpose, then why do you still need "ENGAGE_WP && !GET"?
+> We don't need it. We need the following operations only:
+> 1 GET
+> 2 ENGAGE_WP + GET
+> When we have these two operations, we had added the following as well:
+> 3 ENGAGE_WP + !GET or only ENGAGE_WP
+> This (3) can be removed from ioctl(PAGEMAP_IOCTL) if reviewers ask. I can
+> remove it in favour of this ioctl(UFFDIO_WP) patch for sure.
 
-Thanks for posting this!
+Yes I prefer not having it if this works, because then they'll be
+completely duplicated.
 
-> ---
->  .../devicetree/bindings/arm/omap/omap.yaml    | 174 ++++++++++++++++++
->  1 file changed, 174 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/omap/omap.yaml
+> 
+> > 
+> > Note, I'm not asking to drop ENGAGE_WP entirely, only when !GET.
+> > 
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>> In short, I hope we're working on things that helps at least someone, and
+> >>>>> we should avoid working on things that does not have clear benefit yet.
+> >>>>> With the WP_ENGAGE new interface being proposed, I just didn't see any
+> >>>>> benefit of changing the current interface, especially if the change can
+> >>>>> bring uncertainties itself (e.g., should we fail upon !uffd-wp vmas, or
+> >>>>> should we skip?).
+> >>>> We can work on solving uncertainties in case of error conditions. Fail if
+> >>>> !uffd-wp vma comes.
+> >>>
+> >>> Let me try to double check with you here:
+> >>>
+> >>> I assume you want to skip any vma that is not mapped at all, as the loop
+> >>> already does so.  So it'll succeed if there're memory holes.
+> >>>
+> >>> You also want to explicitly fail if some vma is not registered with uffd-wp
+> >>> when walking the vma list, am I right?  IOW, the tracee _won't_ ever have a
+> >>> chance to unregister uffd-wp itself, right?
+> >> Yes, fail if any VMA doesn't have uffd-wp. This fail means the
+> >> write-protection or un-protection failed on a region of memory with error
+> >> -ENOENT. This is already happening in this current patch. The unregister
+> >> code would remain same. The register and unregister ioctls are already
+> >> going over all the VMAs in a range. I'm not rigid on anything. Let me
+> >> define the interface below.
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>>>
+> >>>>>>>
+> >>>>>>> Is this for the new pagemap effort?  Can this just be done in the new
+> >>>>>>> interface rather than changing the old?
+> >>>>>> We found this bug while working on pagemap patches. It is already being
+> >>>>>> handled in the new interface. We just thought that this use case can happen
+> >>>>>> pretty easily and unknowingly. So the support should be added.
+> >>>>>
+> >>>>> Thanks.  My understanding is that it would have been reported if it
+> >>>>> affected any existing uffd-wp user.
+> >>>> I would consider the UFFD WP a recent functionality and it may not being
+> >>>> used in wide range of app scenarios.
+> >>>
+> >>> Yes I think so.
+> >>>
+> >>> Existing users should in most cases be applying the ioctl upon valid vmas
+> >>> somehow.  I think the chance is low that someone relies on the errcode to
+> >>> make other decisions, but I just cannot really tell because the user app
+> >>> can do many weird things.
+> >> Correct. The user can use any combination of operation
+> >> (mmap/mprotect/uffd). They must work in harmony.
+> > 
+> > No uffd - that's exactly what I'm saying: mprotect is fine here, but uffd
+> > is probably not, not in a nested way.  When you try to UFFDIO_REGISTER upon
+> > some range that already been registered (by the tracee), it'll fail for you
+> > immediately:
+> > 
+> > 		/*
+> > 		 * Check that this vma isn't already owned by a
+> > 		 * different userfaultfd. We can't allow more than one
+> > 		 * userfaultfd to own a single vma simultaneously or we
+> > 		 * wouldn't know which one to deliver the userfaults to.
+> > 		 */
+> > 		ret = -EBUSY;
+> > 		if (cur->vm_userfaultfd_ctx.ctx &&
+> > 		    cur->vm_userfaultfd_ctx.ctx != ctx)
+> > 			goto out_unlock;
+> > 
+> > So if this won't work for you, then AFAICT uffd-wp won't work for you (just
+> > like soft-dirty but in another way, sorry), at least not until someone
+> > starts to work on the nested.
+> I was referring to a case where user registers the WP on multiple VMAs and
+> all the VMAs haven't been registered before. It would work. Right?
 
-Move this to arm/ti,omap.yaml or arm/ti.yaml. The rest of omap/ dir
-should get moved elsewhere eventually.
+But what if the user wants to do that during when you're tracing it using
+userfaultfd?  Can it happen?
 
->
-> diff --git a/Documentation/devicetree/bindings/arm/omap/omap.yaml b/Documentation/devicetree/bindings/arm/omap/omap.yaml
-> new file mode 100644
-> index 0000000000000..cf07a7a7df279
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/omap/omap.yaml
-> @@ -0,0 +1,174 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/omap/omap.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments OMAP SoC architecture device tree bindings
+Thanks,
 
-Drop 'device tree bindings'
+-- 
+Peter Xu
 
-> +
-> +maintainers:
-> +  - Tony Lindgren <tony@atomide.com>
-> +
-> +description: |
-
-Drop '|'
-
-> +  Platforms based on Texas Instruments OMAP SoC architecture.
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +
-> +      - description: TI OMAP2420 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - ti,omap2420-h4 # TI OMAP2420 H4 board
-> +              - nokia,n800 # Nokia N800
-> +              - nokia,n810 # Nokia N810
-> +              - nokia,n810-wimax # Nokia N810 WiMax
-
-A bit more whitespace before the comments would be nice. Personally I
-don't see much value in pretty names that just reformat the compatible
-string, but either way is fine.
-
-> +          - const: ti,omap2420
-> +          - const: ti,omap2
-> +
-> +      - description: TI OMAP2430 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - ti,omap2430-sdp # TI OMAP2430 SDP
-> +          - const: ti,omap2430
-> +          - const: ti,omap2
-> +
-> +      - description: TI OMAP3430 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom OMAP35xx SOM-LV Development Kit
-> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom OMAP35xx Torpedo Development Kit
-> +              - ti,omap3430-sdp # TI OMAP3430 SDP
-> +              - ti,omap3-beagle # TI OMAP3 BeagleBoard
-> +              - compulab,omap3-cm-t3530 # CompuLab CM-T3530
-> +              - timll,omap3-devkit8000 # TimLL OMAP3 Devkit8000
-> +              - ti,omap3-evm # TI OMAP35XX EVM (TMDSEVM3530)
-> +              - ti,omap3-ldp # TI OMAP3430 LDP (Zoom1 Labrador)
-> +              - nokia,omap3-n900 # Nokia N900
-> +          - const: ti,omap3430
-> +          - const: ti,omap3
-> +
-> +      - description: TI OMAP3630 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom DM3730 SOM-LV Development Kit
-> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 Torpedo + Wireless Development Kit
-> +              - ti,omap3-beagle-xm # TI OMAP3 BeagleBoard xM
-> +              - compulab,omap3-cm-t3730 # CompuLab CM-T3730
-> +              - amazon,omap3-echo # Amazon Echo (first generation)
-> +              - ti,omap3-evm-37xx # TI OMAP37XX EVM (TMDSEVM3730)
-> +              - ti,omap3-gta04 # OMAP3 GTA04
-> +              - nokia,omap3-n9 # Nokia N9
-> +              - nokia,omap3-n950 # Nokia N950
-> +              - lg,omap3-sniper # LG Optimus Black
-> +              - ti,omap3-zoom3 # TI Zoom3
-> +          - const: ti,omap3630
-> +          - const: ti,omap3
-> +
-> +      - description: TI AM35 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - teejet,mt_ventoux # TeeJet Mt.Ventoux
-> +              - ti,am3517-craneboard # TI AM3517 CraneBoard (TMDSEVM3517)
-> +              - ti,am3517-evm # TI AM3517 EVM (AM3517/05 TMDSEVM3517)
-> +              - compulab,omap3-sbc-t3517 # CompuLab SBC-T3517 with CM-T3517
-> +          - const: ti,am3517
-> +          - const: ti,omap3
-> +
-> +      - description: TI OMAP4430 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - motorola,droid4 # Motorola Droid 4 XT894
-> +              - motorola,droid-bionic # Motorola Droid Bionic XT875
-> +              - amazon,omap4-kc1 # Amazon Kindle Fire (first generation)
-> +              - ti,omap4-panda # TI OMAP4 PandaBoard
-> +              - ti,omap4-sdp # TI OMAP4 SDP board
-> +          - const: ti,omap4430
-> +          - const: ti,omap4
-> +
-> +      - description: TI OMAP4460 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - ti,omap4-panda-es # TI OMAP4 PandaBoard-ES
-> +          - const: ti,omap4460
-> +          - const: ti,omap4
-> +
-> +      - description: TI OMAP543 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - compulab,omap5-cm-t54 # CompuLab CM-T54
-> +              - isee,omap5-igep0050 # IGEPv5
-> +              - ti,omap5-uevm # TI OMAP5 uEVM board
-> +          - const: ti,omap5
-> +
-> +      - description: TI AM33 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - ti,am335x-bone # TI AM335x BeagleBone
-> +              - compulab,cm-t335 # CompuLab CM-T335
-> +              - ti,am335x-evm # TI AM335x EVM
-> +              - ti,am335x-evmsk # TI AM335x EVM-SK
-> +              - bosch,am335x-guardian # Bosch AM335x Guardian
-> +              - ti,am3359-icev2 # TI AM3359 ICE-V2
-> +              - novatech,am335x-lxm # NovaTech OrionLXm
-> +              - moxa,uc-2101 # Moxa UC-2101
-> +              - moxa,uc-8100-me-t # Moxa UC-8100-ME-T
-> +              - gumstix,am335x-pepper # Gumstix Pepper
-> +              - tcl,am335x-sl50 # Toby Churchill SL50 Series
-> +          - pattern: '^ti,am33(5[1246789]|xx)$' # ti,am33xx is legacy please use full SoC name
-> +
-> +      - description: TI AM43 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - compulab,am437x-cm-t43 # CompuLab CM-T43
-> +              - ti,am437x-gp-evm # TI AM437x GP EVM
-> +              - ti,am437x-idk-evm # TI AM437x Industrial Development Kit
-> +              - ti,am437x-sk-evm # TI AM437x SK EVM
-> +          - pattern: '^ti,am4372[26789]$'
-> +          - const: ti,am43
-> +
-> +      - description: TI AM57 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - beagle,am5729-beagleboneai # BeagleBoard.org BeagleBone AI
-> +              - compulab,cl-som-am57x # CompuLab CL-SOM-AM57x
-> +              - ti,am5718-idk # TI AM5718 IDK
-> +              - ti,am5728-idk # TI AM5728 IDK
-> +              - ti,am5748-idk # TI AM5748 IDK
-> +          - pattern: '^ti,am57[0124][689]$'
-> +          - const: ti,am57
-> +
-> +      - description: TI DRA7 SoC based platforms
-> +        items:
-> +          - enum:
-> +              - ti,dra718-evm # TI DRA718 EVM
-> +              - ti,dra722-evm # TI DRA722 EVM
-> +              - ti,dra742-evm # TI DRA742 EVM
-> +              - ti,dra762-evm # TI DRA762 EVM
-> +          - pattern: '^ti,dra7[12456][024568p]$'
-> +          - const: ti,dra7
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    / {
-> +        model = "TI OMAP2430 SDP (Software Development Board)";
-> +        compatible = "ti,omap2430-sdp", "ti,omap2430", "ti,omap2";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +    };
-> +
-> +  - |
-> +    / {
-
-You can't have 2 root node examples. Well, you can, but they are just
-merged together...
-
-We normally don't have examples for these either.
-
-> +        model = "TI DRA762 EVM";
-> +        compatible = "ti,dra762-evm", "ti,dra762", "ti,dra7";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +    };
-> +
-> +...
-> --
-> 2.39.1
->
