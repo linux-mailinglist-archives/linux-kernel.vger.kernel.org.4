@@ -2,123 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D0E698984
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB4769898B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjBPAyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S229596AbjBPA4R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Feb 2023 19:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBPAyH (ORCPT
+        with ESMTP id S229496AbjBPA4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:54:07 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7A22CFCE;
-        Wed, 15 Feb 2023 16:54:06 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id cq19so715785edb.5;
-        Wed, 15 Feb 2023 16:54:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/Gw9QX7RE3l11rZTdHQJ4q7TrnGKJ9yItj3rNg7/Cyw=;
-        b=hmtJYth4qv8Dfpo2jd+z7ds8pPh8okO2eUjGAMrBaBGyHjqY14W79EBGUldzkRZ98W
-         ct8sIe6UtKRRpeOl+AzFtV0GYaz8I4DIdYGC19wkhAX/VpTEA/bYOxzoWzheghbFcDz/
-         Nb7KrpwGg1lslNbOghY/TBIar5IT26XpzIVqabW5zx9AHE/o74L6h7y9QCFWL3I41FUg
-         fr9UTsJbbHVv14V0SYsQ3GMzp1Cv6IDB8OyIWbgRw6re353Vh0qum/8gEmEGpDzE2HI/
-         HeRbNZQqm/kb6cWQ6aaBoTKoilQTFMl2gO59TWf5JBZvUUAhXNroTR6aD6ch7kWJ2amd
-         XAQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Gw9QX7RE3l11rZTdHQJ4q7TrnGKJ9yItj3rNg7/Cyw=;
-        b=rSD3S69HLb1KUVqzFBBdrOb6k7yfWesRgtCQ/1Cso04pmMqnPoNLQ9fPjkclFrcUIg
-         scNOtbeKFPZSrTLTwKZCG8focO8uTOR0KzIkyWaEqHUaJFkPuEf6niNIN5XtgOmi3zU3
-         5OHmjPgyDUGZlrrfx0O7tLGxHFUehQKhdjAe2kkmspiDe6O46QmXIGjg+g2cVoim/eHb
-         umqkjcrc2YplWxQ8htaZPqba4b3g+ruenfWd+RnClVcRe1DMo+AeyMctGj+1VbzSThgp
-         zY25sWOxmpFe89KCyCkMX5np4vV08MJofZ2v0aAIWVu5TUbb/cjlcabYvLfgvwiHmaem
-         gzqQ==
-X-Gm-Message-State: AO0yUKVsHdZGcYvqShSzGxe+JNF3OHHa25sNTgKsOGYnaS7opkPcNWC7
-        ZA0NdmGf1i6ewYY4JIHbp8RGQUUTA9XIqCHY
-X-Google-Smtp-Source: AK7set8x+9HjUcBC8t/4D8jsSIBwRWqVTGMwWlPjYPaaoJaen5OZmOBk2Fpwg7dU81Mn6wH+NOPloQ==
-X-Received: by 2002:aa7:d9c5:0:b0:4aa:a9c7:4224 with SMTP id v5-20020aa7d9c5000000b004aaa9c74224mr4007856eds.30.1676508845188;
-        Wed, 15 Feb 2023 16:54:05 -0800 (PST)
-Received: from smurf (80.71.142.58.ipv4.parknet.dk. [80.71.142.58])
-        by smtp.gmail.com with ESMTPSA id i5-20020a50c3c5000000b004aad8d2158dsm111897edf.66.2023.02.15.16.54.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 16:54:04 -0800 (PST)
-Date:   Thu, 16 Feb 2023 01:53:42 +0100 (CET)
-From:   Jesper Juhl <jesperjuhl76@gmail.com>
-To:     linux-kernel@vger.kernel.org
-cc:     linux-tegra@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Subject: [Patch] [tegra] Remove unneeded version.h includes pointed out by
- 'make versioncheck'
-Message-ID: <8611b610-a21b-6037-52ad-9439c4f44995@gmail.com>
-User-Agent: Alpine 2.26 (LNX 649 2022-06-02)
+        Wed, 15 Feb 2023 19:56:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F52A153;
+        Wed, 15 Feb 2023 16:56:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 645AAB8245D;
+        Thu, 16 Feb 2023 00:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A658C433EF;
+        Thu, 16 Feb 2023 00:56:11 +0000 (UTC)
+Date:   Wed, 15 Feb 2023 19:56:09 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jithu Joseph <jithu.joseph@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, gregkh@linuxfoundation.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+Subject: Re: [PATCH v2 5/7] platform/x86/intel/ifs: Trace support for array
+ test
+Message-ID: <20230215195609.288a5709@rorschach.local.home>
+In-Reply-To: <20230214234426.344960-6-jithu.joseph@intel.com>
+References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+        <20230214234426.344960-1-jithu.joseph@intel.com>
+        <20230214234426.344960-6-jithu.joseph@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 7264ec7d00ece4b56fe9fafa3237d4870cbe6785 Mon Sep 17 00:00:00 2001
-From: Jesper Juhl <jesperjuhl76@gmail.com>
-Date: Mon, 13 Feb 2023 02:49:50 +0100
-Subject: [PATCH 04/12] [tegra] Remove unneeded version.h includes pointed out
-  by 'make versioncheck'
+On Tue, 14 Feb 2023 15:44:24 -0800
+Jithu Joseph <jithu.joseph@intel.com> wrote:
 
-Signed-off-by: Jesper Juhl <jesperjuhl76@gmail.com>
----
-  drivers/soc/tegra/cbb/tegra-cbb.c    | 1 -
-  drivers/soc/tegra/cbb/tegra194-cbb.c | 1 -
-  drivers/soc/tegra/cbb/tegra234-cbb.c | 1 -
-  3 files changed, 3 deletions(-)
+> Enable tracing support in array test flow.
+> 
+> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
 
-diff --git a/drivers/soc/tegra/cbb/tegra-cbb.c b/drivers/soc/tegra/cbb/tegra-cbb.c
-index a8566b9dd8de..bd96204a68ee 100644
---- a/drivers/soc/tegra/cbb/tegra-cbb.c
-+++ b/drivers/soc/tegra/cbb/tegra-cbb.c
-@@ -16,7 +16,6 @@
-  #include <linux/of_address.h>
-  #include <linux/interrupt.h>
-  #include <linux/ioport.h>
--#include <linux/version.h>
-  #include <soc/tegra/fuse.h>
-  #include <soc/tegra/tegra-cbb.h>
+From the tracing POV:
 
-diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c b/drivers/soc/tegra/cbb/tegra194-cbb.c
-index d4112b683f00..a05fc2caff3b 100644
---- a/drivers/soc/tegra/cbb/tegra194-cbb.c
-+++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
-@@ -23,7 +23,6 @@
-  #include <linux/of_address.h>
-  #include <linux/interrupt.h>
-  #include <linux/ioport.h>
--#include <linux/version.h>
-  #include <soc/tegra/fuse.h>
-  #include <soc/tegra/tegra-cbb.h>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-diff --git a/drivers/soc/tegra/cbb/tegra234-cbb.c b/drivers/soc/tegra/cbb/tegra234-cbb.c
-index f33d094e5ea6..e23e8acfd7c7 100644
---- a/drivers/soc/tegra/cbb/tegra234-cbb.c
-+++ b/drivers/soc/tegra/cbb/tegra234-cbb.c
-@@ -24,7 +24,6 @@
-  #include <linux/of_address.h>
-  #include <linux/interrupt.h>
-  #include <linux/ioport.h>
--#include <linux/version.h>
-  #include <soc/tegra/fuse.h>
-  #include <soc/tegra/tegra-cbb.h>
+-- Steve
 
--- 
-2.39.2
-
+> ---
+>  include/trace/events/intel_ifs.h         | 25 ++++++++++++++++++++++++
+>  drivers/platform/x86/intel/ifs/runtest.c |  1 +
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/include/trace/events/intel_ifs.h b/include/trace/events/intel_ifs.h
+> index d7353024016c..d15037943b80 100644
+> --- a/include/trace/events/intel_ifs.h
