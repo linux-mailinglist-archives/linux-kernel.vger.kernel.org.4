@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFFE6998E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B41E6998EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjBPPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S230270AbjBPPcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjBPPak (ORCPT
+        with ESMTP id S230137AbjBPPb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:30:40 -0500
+        Thu, 16 Feb 2023 10:31:59 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3541234EF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:29:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3432E3773F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:31:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676561396;
+        s=mimecast20190719; t=1676561470;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O+OnUaBkHzkHXcVUDxA2W+iWYjA7NHTym1Lcryt4gOY=;
-        b=Ju1jYZGeMF+9YOP8YHLaOfTFLph/OZ9+fOJLzQi7kH8S6vol4JMV1dPBs7krHJqf5kiQWA
-        l9C8nVScBMv9P/QsPm+W6/O/4shz4CCbVR0kJsG96Ia2sjmakjNMjPAR5wLQgcnKb4cAeV
-        s8px1SrFIn/eSuAQTd01wpDWBkgRRt0=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=K37os/T782c+Ji/0fbHlVEJWHAsVkYLkQoth8fPzQm4=;
+        b=En86V+lIJBnNG2eualRlQwLIxNbWA8cxZWV9N0yKntGN+0Uy0DSXJlcBFSwS8uYcDZD4eR
+        NCvs+U2w1l/2YU74IP/7psSCRdcoMR6thKAsC4LP9L+EDQeBWWto07U/+7j9eY4algne5y
+        UpuZ+N1oKNoy3ZQWoJZXwewYz+lmU8A=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-586-9C9WHDM2OQCUrm_OA6x6Pg-1; Thu, 16 Feb 2023 10:29:53 -0500
-X-MC-Unique: 9C9WHDM2OQCUrm_OA6x6Pg-1
-Received: by mail-qk1-f198.google.com with SMTP id a198-20020ae9e8cf000000b007259083a3c8so1395575qkg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:29:52 -0800 (PST)
+ us-mta-70-_cr6QjY4OfS9V633-bZIFA-1; Thu, 16 Feb 2023 10:31:07 -0500
+X-MC-Unique: _cr6QjY4OfS9V633-bZIFA-1
+Received: by mail-il1-f200.google.com with SMTP id j6-20020a056e02014600b003155e564964so1466559ilr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:31:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O+OnUaBkHzkHXcVUDxA2W+iWYjA7NHTym1Lcryt4gOY=;
-        b=Iz+kJFgJh4Uz04QE3y+OE+azFTmzEny7wKJ+23WPZi9emlYsudO6jTfYGO1xnAJK7T
-         IsHZLee4lfrYlXsuC72S7CT+oQBBnNnx7e3rzOj3Ag14ExJq1QpGWnJXYfbeIk/WOc70
-         v9KOhx515ulQZNKbuETBXr7w+WwBoJGOmnSR4UuRFAFNm9QkQG7q89oe0lJnYF0GcFH2
-         TbYOi5JUdzbKRVyxY5xdQRnuZ/ak0FNjZHLJXMzYfqdyD72m+DsTjkAO5eX9+KiWVHpd
-         UDsTJlo3aMsdGd9kTwJ0/H45whEet1rP057JarBo3dOhBiU5uBop2+J4nOb3/l+7rz4v
-         kV6Q==
-X-Gm-Message-State: AO0yUKXHQId7jbt/ctaOet2I8aqUvWwBXow0g97vbEKCGcF1xkq8wZTb
-        dF8ffbfhuHAduMTjduwVwEWyVWd9BJcEntFUcQO29Hj3k5vF3R8PkTbs0EQlX0EiGKIEyf31mnm
-        9BzR5c95b/fgXDvQqxWaQt4oW
-X-Received: by 2002:a05:6214:20aa:b0:56e:adc7:da2c with SMTP id 10-20020a05621420aa00b0056eadc7da2cmr11354183qvd.45.1676561392264;
-        Thu, 16 Feb 2023 07:29:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set8jujUmYvQoNbsqIW6FTw3ePLT8M+JBb9cOjPHIvg9BVyvokaD0baxtMbtkCTkLtlm/CuRZaA==
-X-Received: by 2002:a05:6214:20aa:b0:56e:adc7:da2c with SMTP id 10-20020a05621420aa00b0056eadc7da2cmr11354147qvd.45.1676561391923;
-        Thu, 16 Feb 2023 07:29:51 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-167.retail.telecomitalia.it. [82.57.51.167])
-        by smtp.gmail.com with ESMTPSA id b64-20020a37b243000000b0072ad54e36b2sm1349762qkf.93.2023.02.16.07.29.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K37os/T782c+Ji/0fbHlVEJWHAsVkYLkQoth8fPzQm4=;
+        b=L9F8HY+YCgrL4MZQkgVuI84U81EUJeZv2vmuQvmtmiCdngFCWxbavgy16DSJbzV3cO
+         rbrRQaAVqJ3DuT6H5aM8HE1M4IywcSid7KNyb9pL27/v1z0c+OJuGX0vwNqcoAgbKXUX
+         JojGJwL4/ar5cne42/68LWz+Px/GKAbvdEiM/6U5VvNlZDxFgBS/njWc92FDjYvjSHEU
+         RUVlD2L11mzKQfrTzf9PjDMGOwh8MOKUrUALnLC9NV8YlZo0QvKsJk+mA7wKyXLhBh21
+         xQZJTR+6G7NhtEa/uoFuERyo+uDMznq5zolUulih3KwaZXcwTeg/JXyFKi2Vo35yTH+b
+         Xisw==
+X-Gm-Message-State: AO0yUKWBupXhmnsMm5uAhsJJFZqXF1aSJxKUPBf/uevA2F9gRP9/oufE
+        wOFnVIIYZ4tibVyVdBBiTk5WpnlXjj9iy0TB94n8z7bx455ZYmokwIsY9qalJcayL2LP+AIvRkg
+        lUeuBKUoT8CK+Mar1yUWTeKpPSm1MFZdEzmhSJqYTA5Au2EPU23yE3O5w+CyIdrOF7PmS6fP+Zb
+        B47gA=
+X-Received: by 2002:a05:6e02:1d0b:b0:315:29e8:6ef3 with SMTP id i11-20020a056e021d0b00b0031529e86ef3mr5031467ila.2.1676561465905;
+        Thu, 16 Feb 2023 07:31:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set/LlCcmK92UMfUs1F3JlPSX2iMzBZGJEL2IhKoQ8a21cfzcIzZTZ385IxNhGrfa0Mp8d7Jo9Q==
+X-Received: by 2002:a05:6e02:1d0b:b0:315:29e8:6ef3 with SMTP id i11-20020a056e021d0b00b0031529e86ef3mr5031443ila.2.1676561465541;
+        Thu, 16 Feb 2023 07:31:05 -0800 (PST)
+Received: from x1n.redhat.com ([70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id x11-20020a92060b000000b0031559a28169sm514793ilg.65.2023.02.16.07.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 07:29:51 -0800 (PST)
-Date:   Thu, 16 Feb 2023 16:29:45 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 12/12] test/vsock: MSG_ZEROCOPY support for
- vsock_perf
-Message-ID: <20230216152945.qdh6vrq66pl2bfxe@sgarzare-redhat>
-References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
- <03570f48-f56a-2af4-9579-15a685127aeb@sberdevices.ru>
+        Thu, 16 Feb 2023 07:31:05 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
+        regressions@leemhuis.info, Nick Bowler <nbowler@draconx.ca>
+Subject: [PATCH] mm/migrate: Fix wrongly apply write bit after mkdirty on sparc64
+Date:   Thu, 16 Feb 2023 10:30:59 -0500
+Message-Id: <20230216153059.256739-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <03570f48-f56a-2af4-9579-15a685127aeb@sberdevices.ru>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,257 +77,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 07:06:32AM +0000, Arseniy Krasnov wrote:
->To use this option pass '--zc' parameter:
+Nick Bowler reported another sparc64 breakage after the young/dirty
+persistent work for page migration (per "Link:" below).  That's after a
+similar report [2].
 
---zerocopy or --zero-copy maybe better follow what we did with the other 
-parameters :-)
+It turns out page migration was overlooked, and it wasn't failing before
+because page migration was not enabled in the initial report test environment.
 
->
->./vsock_perf --zc --sender <cid> --port <port> --bytes <bytes to send>
->
->With this option MSG_ZEROCOPY flag will be passed to the 'send()' call.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_perf.c | 127 +++++++++++++++++++++++++++++--
-> 1 file changed, 120 insertions(+), 7 deletions(-)
->
->diff --git a/tools/testing/vsock/vsock_perf.c b/tools/testing/vsock/vsock_perf.c
->index a72520338f84..1d435be9b48e 100644
->--- a/tools/testing/vsock/vsock_perf.c
->+++ b/tools/testing/vsock/vsock_perf.c
->@@ -18,6 +18,8 @@
-> #include <poll.h>
-> #include <sys/socket.h>
-> #include <linux/vm_sockets.h>
->+#include <sys/mman.h>
->+#include <linux/errqueue.h>
->
-> #define DEFAULT_BUF_SIZE_BYTES	(128 * 1024)
-> #define DEFAULT_TO_SEND_BYTES	(64 * 1024)
->@@ -28,9 +30,14 @@
-> #define BYTES_PER_GB		(1024 * 1024 * 1024ULL)
-> #define NSEC_PER_SEC		(1000000000ULL)
->
->+#ifndef SOL_VSOCK
->+#define SOL_VSOCK 287
->+#endif
+David proposed another way [2] to fix this from sparc64 side, but that
+patch didn't land somehow.  Neither did I check whether there's any other
+arch that has similar issues.
 
-I thought we use the current kernel headers when we compile the tests,
-do we need to fix something in the makefile?
+Let's fix it for now as simple as moving the write bit handling to be after
+dirty, like what we did before.
 
->+
-> static unsigned int port = DEFAULT_PORT;
-> static unsigned long buf_size_bytes = DEFAULT_BUF_SIZE_BYTES;
-> static unsigned long vsock_buf_bytes = DEFAULT_VSOCK_BUF_BYTES;
->+static bool zerocopy;
->
-> static void error(const char *s)
-> {
->@@ -247,15 +254,74 @@ static void run_receiver(unsigned long rcvlowat_bytes)
-> 	close(fd);
-> }
->
->+static void recv_completion(int fd)
->+{
->+	struct sock_extended_err *serr;
->+	char cmsg_data[128];
->+	struct cmsghdr *cm;
->+	struct msghdr msg;
->+	int ret;
->+
->+	msg.msg_control = cmsg_data;
->+	msg.msg_controllen = sizeof(cmsg_data);
->+
->+	ret = recvmsg(fd, &msg, MSG_ERRQUEUE);
->+	if (ret == -1)
->+		return;
->+
->+	cm = CMSG_FIRSTHDR(&msg);
->+	if (!cm) {
->+		fprintf(stderr, "cmsg: no cmsg\n");
->+		return;
->+	}
->+
->+	if (cm->cmsg_level != SOL_VSOCK) {
->+		fprintf(stderr, "cmsg: unexpected 'cmsg_level'\n");
->+		return;
->+	}
->+
->+	if (cm->cmsg_type) {
->+		fprintf(stderr, "cmsg: unexpected 'cmsg_type'\n");
->+		return;
->+	}
->+
->+	serr = (void *)CMSG_DATA(cm);
->+	if (serr->ee_origin != SO_EE_ORIGIN_ZEROCOPY) {
->+		fprintf(stderr, "serr: wrong origin\n");
->+		return;
->+	}
->+
->+	if (serr->ee_errno) {
->+		fprintf(stderr, "serr: wrong error code\n");
->+		return;
->+	}
->+
->+	if (zerocopy && (serr->ee_code & SO_EE_CODE_ZEROCOPY_COPIED))
->+		fprintf(stderr, "warning: copy instead of zerocopy\n");
->+}
->+
->+static void enable_so_zerocopy(int fd)
->+{
->+	int val = 1;
->+
->+	if (setsockopt(fd, SOL_SOCKET, SO_ZEROCOPY, &val, sizeof(val)))
->+		error("setsockopt(SO_ZEROCOPY)");
->+}
->+
-> static void run_sender(int peer_cid, unsigned long to_send_bytes)
-> {
-> 	time_t tx_begin_ns;
-> 	time_t tx_total_ns;
-> 	size_t total_send;
->+	time_t time_in_send;
-> 	void *data;
-> 	int fd;
->
->-	printf("Run as sender\n");
->+	if (zerocopy)
->+		printf("Run as sender MSG_ZEROCOPY\n");
->+	else
->+		printf("Run as sender\n");
->+
-> 	printf("Connect to %i:%u\n", peer_cid, port);
-> 	printf("Send %lu bytes\n", to_send_bytes);
-> 	printf("TX buffer %lu bytes\n", buf_size_bytes);
->@@ -265,25 +331,58 @@ static void run_sender(int peer_cid, unsigned long to_send_bytes)
-> 	if (fd < 0)
-> 		exit(EXIT_FAILURE);
->
->-	data = malloc(buf_size_bytes);
->+	if (zerocopy) {
->+		enable_so_zerocopy(fd);
->
->-	if (!data) {
->-		fprintf(stderr, "'malloc()' failed\n");
->-		exit(EXIT_FAILURE);
->+		data = mmap(NULL, buf_size_bytes, PROT_READ | PROT_WRITE,
->+			    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->+		if (data == MAP_FAILED) {
->+			perror("mmap");
->+			exit(EXIT_FAILURE);
->+		}
->+	} else {
->+		data = malloc(buf_size_bytes);
->+
->+		if (!data) {
->+			fprintf(stderr, "'malloc()' failed\n");
->+			exit(EXIT_FAILURE);
->+		}
-> 	}
+Note: this is based on mm-unstable, because the breakage was since 6.1 and
+we're at a very late stage of 6.2 (-rc8), so I assume for this specific
+case we should target this at 6.3.
 
-Eventually to simplify the code I think we can use the mmaped buffer in
-both cases.
+[1] https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
+[2] https://lore.kernel.org/all/20221212130213.136267-1-david@redhat.com/
 
->
-> 	memset(data, 0, buf_size_bytes);
-> 	total_send = 0;
->+	time_in_send = 0;
-> 	tx_begin_ns = current_nsec();
->
-> 	while (total_send < to_send_bytes) {
-> 		ssize_t sent;
->+		size_t rest_bytes;
->+		time_t before;
->+
->+		rest_bytes = to_send_bytes - total_send;
->
->-		sent = write(fd, data, buf_size_bytes);
->+		before = current_nsec();
->+		sent = send(fd, data, (rest_bytes > buf_size_bytes) ?
->+			    buf_size_bytes : rest_bytes,
->+			    zerocopy ? MSG_ZEROCOPY : 0);
->+		time_in_send += (current_nsec() - before);
->
-> 		if (sent <= 0)
-> 			error("write");
->
->+		if (zerocopy) {
->+			struct pollfd fds = { 0 };
->+
->+			fds.fd = fd;
+Cc: regressions@leemhuis.info
+Fixes: 2e3468778dbe ("mm: remember young/dirty bit for page migrations")
+Link: https://lore.kernel.org/all/CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com/
+Reported-by: Nick Bowler <nbowler@draconx.ca>
+Tested-by: Nick Bowler <nbowler@draconx.ca>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/huge_memory.c | 6 ++++--
+ mm/migrate.c     | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Which event are we waiting for here?
-
->+
->+			if (poll(&fds, 1, -1) < 0) {
->+				perror("poll");
->+				exit(EXIT_FAILURE);
->+			}
-
-We need this because we use only one buffer, but if we use more than
-one, we could take full advantage of zerocopy, right?
-
-Otherwise, I don't think it's a fair comparison with non-zerocopy.
-
-Thanks,
-Stefano
-
->+
->+			recv_completion(fd);
->+		}
->+
-> 		total_send += sent;
-> 	}
->
->@@ -294,9 +393,14 @@ static void run_sender(int peer_cid, unsigned long to_send_bytes)
-> 	       get_gbps(total_send * 8, tx_total_ns));
-> 	printf("total time in 'write()': %f sec\n",
-> 	       (float)tx_total_ns / NSEC_PER_SEC);
->+	printf("time in send %f\n", (float)time_in_send / NSEC_PER_SEC);
->
-> 	close(fd);
->-	free(data);
->+
->+	if (zerocopy)
->+		munmap(data, buf_size_bytes);
->+	else
->+		free(data);
-> }
->
-> static const char optstring[] = "";
->@@ -336,6 +440,11 @@ static const struct option longopts[] = {
-> 		.has_arg = required_argument,
-> 		.val = 'R',
-> 	},
->+	{
->+		.name = "zc",
->+		.has_arg = no_argument,
->+		.val = 'Z',
->+	},
-> 	{},
-> };
->
->@@ -351,6 +460,7 @@ static void usage(void)
-> 	       "  --help			This message\n"
-> 	       "  --sender   <cid>		Sender mode (receiver default)\n"
-> 	       "                                <cid> of the receiver to connect to\n"
->+	       "  --zc				Enable zerocopy\n"
-> 	       "  --port     <port>		Port (default %d)\n"
-> 	       "  --bytes    <bytes>KMG		Bytes to send (default %d)\n"
-> 	       "  --buf-size <bytes>KMG		Data buffer size (default %d). In sender mode\n"
->@@ -413,6 +523,9 @@ int main(int argc, char **argv)
-> 		case 'H': /* Help. */
-> 			usage();
-> 			break;
->+		case 'Z': /* Zerocopy. */
->+			zerocopy = true;
->+			break;
-> 		default:
-> 			usage();
-> 		}
->-- 
->2.25.1
->
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1343a7d88299..4fc43859e59a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3274,8 +3274,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+ 	pmde = mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot));
+ 	if (pmd_swp_soft_dirty(*pvmw->pmd))
+ 		pmde = pmd_mksoft_dirty(pmde);
+-	if (is_writable_migration_entry(entry))
+-		pmde = maybe_pmd_mkwrite(pmde, vma);
+ 	if (pmd_swp_uffd_wp(*pvmw->pmd))
+ 		pmde = pmd_mkuffd_wp(pmde);
+ 	if (!is_migration_entry_young(entry))
+@@ -3283,6 +3281,10 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+ 	/* NOTE: this may contain setting soft-dirty on some archs */
+ 	if (PageDirty(new) && is_migration_entry_dirty(entry))
+ 		pmde = pmd_mkdirty(pmde);
++	if (is_writable_migration_entry(entry))
++		pmde = maybe_pmd_mkwrite(pmde, vma);
++	else
++		pmde = pmd_wrprotect(pmde);
+ 
+ 	if (PageAnon(new)) {
+ 		rmap_t rmap_flags = RMAP_COMPOUND;
+diff --git a/mm/migrate.c b/mm/migrate.c
+index ef68a1aff35c..40c63e77e91f 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -225,6 +225,8 @@ static bool remove_migration_pte(struct folio *folio,
+ 			pte = maybe_mkwrite(pte, vma);
+ 		else if (pte_swp_uffd_wp(*pvmw.pte))
+ 			pte = pte_mkuffd_wp(pte);
++		else
++			pte = pte_wrprotect(pte);
+ 
+ 		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
+ 			rmap_flags |= RMAP_EXCLUSIVE;
+-- 
+2.39.1
 
