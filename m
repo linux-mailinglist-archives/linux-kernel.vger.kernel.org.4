@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56669699FD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53071699FD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjBPWjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        id S229966AbjBPWrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBPWjn (ORCPT
+        with ESMTP id S229571AbjBPWrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:39:43 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A04245F4F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:39:42 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id a23so2172970pga.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112; t=1676587182;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pi9noMYVGr57MR9lsBdKAfrR3AzH/XjRZ8qVHHkboUA=;
-        b=ilRc6bGW2j1NFXeJp6gWho2MZHvncBJzu3o1KNvsLnf408IY0rj98GTY1h6WayouH6
-         zAgn2nxBPGOD2xowZi/VXN3bUbI20JqRaTzKfy3y5c4iKIQWhO8IeGyTJE8L6oUnFIFW
-         9oAczAmKp1mk2OUmoC5dC+TF5MgmgKvbZNUFgn0o86KlPUcr2CunouQy8UkELwGt8eIb
-         S6rYMtbeDDSBbKR45nmx6nU/1u7nUeBwDQlpzNVciIAcYpLadY4lENO8qdNUXE3rH6Vu
-         206IgDTGJpznNkkoHas4BePgbrCGqmjfFWSt05RgNQMB02JOPpvg8YmuD/BWABva/Brz
-         tp6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676587182;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pi9noMYVGr57MR9lsBdKAfrR3AzH/XjRZ8qVHHkboUA=;
-        b=ve6Upav/j6p/qw+BqPZx6XwnXwIRe6EgNyS5Gwu2facg1jfMtEYFsufeAvqGnlo8Fz
-         MRa5u1ay9XlE6TsKtwpibGYPwy0OUxzGjArvCMaEs42wmzK35Ywyntx5M5EAfVHlhsl8
-         KESd7fMSouoPQlDdUTqZggxj+TEBfFtH60vvptS6Rcyg+LJvhMBKbOp78tof1GUBTdR1
-         8IxYrLsP3rjSLW1AntMTGMyUPnlpt02LRTGHJgraT7rI87hey16ubkeihBFz0J7bvxqx
-         mmwDONUV9C9vohzd/5MdRPaFlClY7/T1Bd2zEcemaQfMCj+LaVoXLl9JLnB23NaTA+oz
-         TNOw==
-X-Gm-Message-State: AO0yUKVHmtsuZACyAU3Mu/Q8Vi4XqSj290U+x1RSafzKDMkhwC/iv/Cs
-        au9nOnLF6v9Nn1hWWQDdSZmySMNkF7ULJ2e/X2IjVA==
-X-Google-Smtp-Source: AK7set9kKa9eBzDeIKikiiDIWuCL4AJkcboiiV1ZwSCTRe6TdvP3fkDrAkB5UJ/Dp6ALZBtj1NnGPoiFrl7lYrtlORM=
-X-Received: by 2002:a62:cd0a:0:b0:5a9:c837:5ad5 with SMTP id
- o10-20020a62cd0a000000b005a9c8375ad5mr207866pfg.14.1676587181637; Thu, 16 Feb
- 2023 14:39:41 -0800 (PST)
-MIME-Version: 1.0
-References: <0ca02b1f-ab00-9fa6-aecc-c2c46d624e49@leemhuis.info> <e0998928-0f4e-f2a9-2e77-3e4bab459688@leemhuis.info>
-In-Reply-To: <e0998928-0f4e-f2a9-2e77-3e4bab459688@leemhuis.info>
-From:   Josef Bacik <josef@toxicpanda.com>
-Date:   Thu, 16 Feb 2023 17:39:30 -0500
-Message-ID: <CAEzrpqc6tweHqKKPZYyVuOXH1Wd+hmrTPfcrpa-5-btU_Z24Fg@mail.gmail.com>
-Subject: Re: [Regression] Bug 216961 - Severe IO scheduling starvation issues
- with btrfs
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Wyatt Childers <kernel.dbwta@haxing.ninja>, pmacedo@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 17:47:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B6146164;
+        Thu, 16 Feb 2023 14:47:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB05DB828B5;
+        Thu, 16 Feb 2023 22:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC6ACC433EF;
+        Thu, 16 Feb 2023 22:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1676587619;
+        bh=9oeCHSLszN1ZlteZIP+mKzpT4ngVcpBp4cDal0zXZL0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XklABHGuz67Jr6L6q/GiqwCZqRGFa+meW1H0YZ/7JApSIsmEX8CEMBZVPkJ8B+60O
+         FlR0T0McnQ+zkZBfm7a39gFwYc8vtAuogsrnhflLLTuwcTv+vtD/qfquyn7FMcATsT
+         3jqW32IAcaubqFDEOIYbQmm1CSWaRBHcflvOu1P0=
+Date:   Thu, 16 Feb 2023 14:46:58 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        torvalds@linux-foundation.org, sj@kernel.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, david@redhat.com, osalvador@suse.de,
+        mike.kravetz@oracle.com, damon@lists.linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] mm: change to return bool for
+ isolate_movable_page()
+Message-Id: <20230216144658.18add74d133be070f07cf1f5@linux-foundation.org>
+In-Reply-To: <Y+z91pcxAuygc92J@casper.infradead.org>
+References: <cover.1676424378.git.baolin.wang@linux.alibaba.com>
+        <cb877f73f4fff8d309611082ec740a7065b1ade0.1676424378.git.baolin.wang@linux.alibaba.com>
+        <Y+z91pcxAuygc92J@casper.infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 12:43 PM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> Hi btrfs maintainers and developers.
->
-> I might be missing something, but it looks like the report was ignored.
-> Is there a reason for that?
->
+On Wed, 15 Feb 2023 15:44:22 +0000 Matthew Wilcox <willy@infradead.org> wrote:
 
-Mostly just being blind.  I've responded to the BZ, I'll investigate
-through the BZ.  Thanks,
+> >  extern struct page *alloc_migration_target(struct page *page, unsigned long private);
+> > -extern int isolate_movable_page(struct page *page, isolate_mode_t mode);
+> > +extern bool isolate_movable_page(struct page *page, isolate_mode_t mode);
+> 
+> You can drop the 'extern' here.
 
-Josef
+There are a bunch of them, so a separate patch would be better.
+
+
+--- a/include/linux/migrate.h~a
++++ a/include/linux/migrate.h
+@@ -62,16 +62,16 @@ extern const char *migrate_reason_names[
+ 
+ #ifdef CONFIG_MIGRATION
+ 
+-extern void putback_movable_pages(struct list_head *l);
++void putback_movable_pages(struct list_head *l);
+ int migrate_folio_extra(struct address_space *mapping, struct folio *dst,
+ 		struct folio *src, enum migrate_mode mode, int extra_count);
+ int migrate_folio(struct address_space *mapping, struct folio *dst,
+ 		struct folio *src, enum migrate_mode mode);
+-extern int migrate_pages(struct list_head *l, new_page_t new, free_page_t free,
+-		unsigned long private, enum migrate_mode mode, int reason,
+-		unsigned int *ret_succeeded);
+-extern struct page *alloc_migration_target(struct page *page, unsigned long private);
+-extern bool isolate_movable_page(struct page *page, isolate_mode_t mode);
++int migrate_pages(struct list_head *l, new_page_t new, free_page_t free,
++		  unsigned long private, enum migrate_mode mode, int reason,
++		  unsigned int *ret_succeeded);
++struct page *alloc_migration_target(struct page *page, unsigned long private);
++bool isolate_movable_page(struct page *page, isolate_mode_t mode);
+ 
+ int migrate_huge_page_move_mapping(struct address_space *mapping,
+ 		struct folio *dst, struct folio *src);
+@@ -142,8 +142,8 @@ const struct movable_operations *page_mo
+ }
+ 
+ #ifdef CONFIG_NUMA_BALANCING
+-extern int migrate_misplaced_page(struct page *page,
+-				  struct vm_area_struct *vma, int node);
++int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
++			   int node);
+ #else
+ static inline int migrate_misplaced_page(struct page *page,
+ 					 struct vm_area_struct *vma, int node)
+_
+
