@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF7C699D19
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BF2699D1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjBPTmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 14:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S229725AbjBPTnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjBPTmF (ORCPT
+        with ESMTP id S229512AbjBPTnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 14:42:05 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EF8442FB;
-        Thu, 16 Feb 2023 11:42:04 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id bg2so2943531pjb.4;
-        Thu, 16 Feb 2023 11:42:04 -0800 (PST)
+        Thu, 16 Feb 2023 14:43:31 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FCB4E5C7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:43:30 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id 139so3484066ybe.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:43:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G4QgR2qSWRsij/ehAnuEJjnt6z8m+Ffw0O1dyxbWKi0=;
-        b=nGuZSyaaUFlOotrvei+5M04+/P3PDPJxznFBTpleiPDhYXrhrPzelantnoxqJKlzol
-         JtMoH2it7/MHWSHkKXYF3DSxksQ2JfPwM08qd1YORMPdsIZyxCSHseWTpNBJSUQmqPAN
-         +pqbQihu3E6RPfpLoqplEB+pO3cbrGxNh7akbgRCnv3K05AXddd8TKkKGJR9EFHdUVan
-         PW6lxBaNx/52T4nv7Q94o9qhB03PJJCIRk0W9Q7CXpaaTjvJ9+MbXbPn3ffHZzoRL5+W
-         CyHlLDTc+NZtm0pVZ9beAa1JECG29mnLvk3aAgH1h3aobneE/IWVBQzC1zDuYAv9mCyB
-         3k5w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecCMrPuH47M6x+7l+8oSjk53rrpfDEPsyzkbMwvMYGE=;
+        b=nQjhqTpWmrsidiAuvoCcaH+1Nn+MdzCD0u1wOKp3+6nMie0EEOCShOkZxWAStmC0Z7
+         0DAiGxaTX/84wos6YcnH4ZcBy4oFJENSMkSF4PKWKvGrLfFlv9miv6D1euEV3WJw2Bja
+         U/Tc4VyRAp8gojN5lr+rESfLvTfTK5vezctBWGmB51gEhz9cXu1jwSFmGRSfVyIe7KJW
+         9985FtKADC1PSU2QKatY5svbWvXHeK/lG4CpKBFBZzA8TlGvpIV5VpHjgkpocjYvo2Sn
+         2t+SpqQDf8D5EE+w43rAN8WY2iOuZ6m2DhxKzx3UvSVmlCnkWCxNbjgkfk9I9fPsoDou
+         rcSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G4QgR2qSWRsij/ehAnuEJjnt6z8m+Ffw0O1dyxbWKi0=;
-        b=sA1okw6m/mMPR/IOsdP8rWTGI08msRIwwf1Pwc3ZNdF/PgklbqvogkV5QGd77lZ0mT
-         uiQ3vVB3v67Ld+wgusfBgWdGmzMMO7xiFC6gE6GuhymliYAn9CspoIrCT+f7zWjx+n3C
-         bsxBXW4OMJWBZjdCQFjPyJ+bd6d5fAt9b+SVejKxb/8aNsZDG7YSgFHgvV9fmL2qhd6p
-         bgSU20Cd0XxIVLzWwh+c7p4rkYq9SGOvK4GrpYQLOfuVnLfcjeteS/6OYUwGhpQoCX5q
-         iWPDm2Db8zF456iSgZQGDsFeSFWkNocRBT6Ak51/Lr652pwDdxioNdBVyoqKruU0NU33
-         Rn8Q==
-X-Gm-Message-State: AO0yUKVTm0rWwaxdEYVNCWzwZkyZ9qyUGXo3Zvch5Zzvl2RiT1gDbAPs
-        32+GtLsFAZANUgz0pGAIOi8=
-X-Google-Smtp-Source: AK7set9pXPabTV58jlzchU/RTq4w5XX28G9nXsYyqC1p9dhG5mJvlAcNZrtsEB0GnhZPsQNV1H7Peg==
-X-Received: by 2002:a05:6a21:339b:b0:c6:d6e9:c496 with SMTP id yy27-20020a056a21339b00b000c6d6e9c496mr4017506pzb.24.1676576523823;
-        Thu, 16 Feb 2023 11:42:03 -0800 (PST)
-Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i70-20020a639d49000000b004fbe302b3f6sm1559334pgd.74.2023.02.16.11.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 11:42:03 -0800 (PST)
-From:   Doug Berger <opendmb@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Wahren <wahrenst@gmx.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH net] net: bcmgenet: fix MoCA LED control
-Date:   Thu, 16 Feb 2023 11:41:28 -0800
-Message-Id: <20230216194128.3593734-1-opendmb@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=ecCMrPuH47M6x+7l+8oSjk53rrpfDEPsyzkbMwvMYGE=;
+        b=uCgMQ+QaX2kmLMSOnQLeziA4E0/2ALJM/cfJNcPLNTdui6L3r7BwXwSHiQxt/HU+tF
+         dPleWwN9LEyOLTUKZ/mLvH1tB+XulJPE31vny+onx9gNvFHYxjJOUqSrVUH/qQ6PY8wV
+         7JGnoOEF5ECJT4Bh/MpANrnoPRIuMN2LkmH6TFgRU7bKd1bSUx8OsdC7j+SotThT/gd6
+         1Nyixhb92yNrEkgsG/RwZ7/PBbyvFqcL5scZJsLtInC7L/855VeUa05TnB+zVm5u1sau
+         M3UmLikVauY3tWZwrUKH1LUCW0OZ1Wueve0BFF8oeiV3YNzY+dAAU0v+mLO+EKNNFewT
+         BYPQ==
+X-Gm-Message-State: AO0yUKVs4UoWIrbGvQ/Ugtlnb992OZJL/h2rx6pJbtzWAaSoG/p5tWZm
+        7GAaycIT0S4jsfZ2nTn9vcgc+LNO5ofX9AxYqL79cw==
+X-Google-Smtp-Source: AK7set+GOKNhzuykRCoIMckW7I82pXv7V9YjFwgSjZ09J90OxeIVOanNo7rnoi+gq6vhCwETbxbWJ7fJFGy2XpbKeOY=
+X-Received: by 2002:a25:9941:0:b0:90c:de27:7f15 with SMTP id
+ n1-20020a259941000000b0090cde277f15mr876421ybo.428.1676576609777; Thu, 16 Feb
+ 2023 11:43:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230216051750.3125598-1-surenb@google.com> <20230216051750.3125598-27-surenb@google.com>
+ <Y+5Pb4hGmV1YtNQp@casper.infradead.org>
+In-Reply-To: <Y+5Pb4hGmV1YtNQp@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 16 Feb 2023 11:43:18 -0800
+Message-ID: <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
+Subject: Re: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is
+ not yet set
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,45 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the bcmgenet_mii_config() code was refactored it was missed
-that the LED control for the MoCA interface got overwritten by
-the port_ctrl value. Its previous programming is restored here.
+On Thu, Feb 16, 2023 at 7:44 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Wed, Feb 15, 2023 at 09:17:41PM -0800, Suren Baghdasaryan wrote:
+> > When vma->anon_vma is not set, page fault handler will set it by either
+> > reusing anon_vma of an adjacent VMA if VMAs are compatible or by
+> > allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
+> > a compatible adjacent VMA and that requires not only the faulting VMA
+> > to be stable but also the tree structure and other VMAs inside that tree.
+> > Therefore locking just the faulting VMA is not enough for this search.
+> > Fall back to taking mmap_lock when vma->anon_vma is not set. This
+> > situation happens only on the first page fault and should not affect
+> > overall performance.
+>
+> I think I asked this before, but don't remember getting an aswer.
+> Why do we defer setting anon_vma to the first fault?  Why don't we
+> set it up at mmap time?
 
-Fixes: 4f8d81b77e66 ("net: bcmgenet: Refactor register access in bcmgenet_mii_config")
-Signed-off-by: Doug Berger <opendmb@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmmii.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+Yeah, I remember that conversation Matthew and I could not find the
+definitive answer at the time. I'll look into that again or maybe
+someone can answer it here.
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmmii.c b/drivers/net/ethernet/broadcom/genet/bcmmii.c
-index b615176338b2..be042905ada2 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
-@@ -176,15 +176,6 @@ void bcmgenet_phy_power_set(struct net_device *dev, bool enable)
- 
- static void bcmgenet_moca_phy_setup(struct bcmgenet_priv *priv)
- {
--	u32 reg;
--
--	if (!GENET_IS_V5(priv)) {
--		/* Speed settings are set in bcmgenet_mii_setup() */
--		reg = bcmgenet_sys_readl(priv, SYS_PORT_CTRL);
--		reg |= LED_ACT_SOURCE_MAC;
--		bcmgenet_sys_writel(priv, reg, SYS_PORT_CTRL);
--	}
--
- 	if (priv->hw_params->flags & GENET_HAS_MOCA_LINK_DET)
- 		fixed_phy_set_link_update(priv->dev->phydev,
- 					  bcmgenet_fixed_phy_link_update);
-@@ -217,6 +208,8 @@ int bcmgenet_mii_config(struct net_device *dev, bool init)
- 
- 		if (!phy_name) {
- 			phy_name = "MoCA";
-+			if (!GENET_IS_V5(priv))
-+				port_ctrl |= LED_ACT_SOURCE_MAC;
- 			bcmgenet_moca_phy_setup(priv);
- 		}
- 		break;
--- 
-2.25.1
-
+In the end rather than changing that logic I decided to skip
+vma->anon_vma==NULL cases because I measured them being less than
+0.01% of all page faults, so ROI from changing that would be quite
+low. But I agree that the logic is weird and maybe we can improve
+that. I will have to review that again when I'm working on eliminating
+all these special cases we skip, like swap/userfaults/etc.
