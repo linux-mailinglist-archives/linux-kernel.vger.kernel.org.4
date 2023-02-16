@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2354C699DD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 21:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EF6699DE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 21:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBPUgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 15:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S229804AbjBPUh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 15:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBPUgG (ORCPT
+        with ESMTP id S229803AbjBPUh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 15:36:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79446D505
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 12:36:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15C8860AB9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0F8C4339C;
-        Thu, 16 Feb 2023 20:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676579764;
-        bh=DXeKAcd3eTMKp1vG5AHL0YvvFqGMHFFeFHc22BJB0m4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GaPV64A7YUxU8YcWSm6XKvwee7LQS+D1voAY1SE7i3xwPM6V2E0hhj7fDPV+iliq3
-         cY5S6c5SQ6Obm/rfzXHAXwVZhIqBULvUv1i2E+Y2JAwwabcjPhv73FMW7f9MMWTpas
-         tSTfL/iiYPvhb72zfcLnxTjvltKrNKg9d4GNLVthuDLNiZCE2ZmDYgqcDHFSftTEhE
-         jRBcxFw2uW6CvbZEe39ECU8WL6aX+ttgyTG+aSSVENhemAdeKCNi6+Sumj1KHNAwM9
-         QYBQOk4D3Bye7q26+Pok6z4Wf+3AErDILC4cqnhS+9Vn8uJ7y/bcESZLn60OV0eesx
-         gmJIIWH0vm7Ng==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: [PATCH] objtool: Fix ORC 'signal' propagation
-Date:   Thu, 16 Feb 2023 12:34:41 -0800
-Message-Id: <97eef9db60cd86d376a9a40d49d77bb67a8f6526.1676579666.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Thu, 16 Feb 2023 15:37:57 -0500
+Received: from mailrelay4-1.pub.mailoutpod2-cph3.one.com (mailrelay4-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:403::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDE8D52C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 12:37:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=TAf5FaFWgaAobTsHmNZifXXinFg3H6wFJmu2/SVU+mQ=;
+        b=Sz7ZXf/2yyIOMtbTwbV1PlKgYf1m2Mw40QVOZwPQw6Aul7ZSJf/jowshvB3FazFGsXLn9h5ji+PKD
+         2m9xsB0IUx+a0oTypLroix0E3iQfSeFc48cnchHAhCgcZ115JBDQMUrSEGfKtttCx+oEJ7dOM9PtCF
+         KXXRpSSqxNZuue5ZgXsu3d8f4r1MH+O0zio4xfYnyP5P5O7b5eBCdwyqKoLqBmkH9rRe/hUF3UYREZ
+         2cZrKJRRxeIUw4+XGPfc52Z7kMP9wmHERxh1QursGQWQqvaIZLZ3WcKkb3M+gQAD7cjDqWlrzX+RFW
+         mA8iz9Hefb4v3dtqqEwL6A2T8mWrSEA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=TAf5FaFWgaAobTsHmNZifXXinFg3H6wFJmu2/SVU+mQ=;
+        b=CP3RWAZPoCyuX/quz9OsUdpj7pLihvKW+ldH3BK5kwNVKC/AZWMwa9wjmgpe4dzC28dwRDHNa6+ui
+         qoN7mfODA==
+X-HalOne-ID: c772af14-ae39-11ed-8e96-87783a957ad9
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4 (Halon) with ESMTPSA
+        id c772af14-ae39-11ed-8e96-87783a957ad9;
+        Thu, 16 Feb 2023 20:37:53 +0000 (UTC)
+Date:   Thu, 16 Feb 2023 21:37:51 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     neil.armstrong@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
+Message-ID: <Y+6UHxHaiF6Aw4du@ravnborg.org>
+References: <20230119163201.580858-1-konrad.dybcio@linaro.org>
+ <20230119163201.580858-2-konrad.dybcio@linaro.org>
+ <725a5727-fdde-e3ae-a448-2679c5c4c7f4@linaro.org>
+ <CAKMK7uFpc3Kg=Ym6ee_JTZo-0h2ig7Twtf2uwE7oV-1c6YRP=Q@mail.gmail.com>
+ <8ab061aa-a2fa-3070-a756-5682eb40a425@linaro.org>
+ <CAKMK7uHd7Lefc+ZjvuHtrttkQFYDF8XSsKUV2gfGs9=cw1GTKw@mail.gmail.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uHd7Lefc+ZjvuHtrttkQFYDF8XSsKUV2gfGs9=cw1GTKw@mail.gmail.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There have been some recently reported ORC unwinder warnings like:
+On Thu, Feb 16, 2023 at 01:49:23PM +0100, Daniel Vetter wrote:
+> On Thu, 16 Feb 2023 at 13:47, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+> >
+> > On 16/02/2023 13:32, Daniel Vetter wrote:
+> > > On Thu, 16 Feb 2023 at 12:59, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 19.01.2023 17:32, Konrad Dybcio wrote:
+> > >>> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > >>>
+> > >>> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
+> > >>> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
+> > >>> of smartphone manufacturing, it is impossible to retrieve a better name
+> > >>> for this panel.
+> > >>>
+> > >>> This revision adds support for the default 60 Hz configuration, however
+> > >>> there could possibly be some room for expansion, as the display panels
+> > >>> used on Sony devices have historically been capable of >2x refresh rate
+> > >>> overclocking.
+> > >>>
+> > >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > >>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > >>> ---
+> > >> Are there any outstanding issues with this driver, or perhaps I did
+> > >> not CC some important list? It has gotten very little activity ever
+> > >> since its initial submission around Sept'22..
+> > >
+> > > Sam is usually picking up panel drivers these days, but maybe we need
+> > > a bit more help in this area? If anyone from linaro has a handful of
+> > > drm patches landed in upstream they could apply for drm-misc commit
+> > > rights and help push these. I think linaro has lost a few of the
+> > > drm-misc committers so things tend to be stuck a bit more :-/
+> >
+> > I usually wait for Sam to comment before applying my panel patches drivers to drm-misc-next,
+> > but yeah panels would need some more help...
+> >
+> > If needed I can add myself to the panel drivers maintainance aswell.
+> 
+> I think that would be great, maybe just send out the MAINTAINERS patch
+> and ask Sam to ack?
 
-  WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
-  WARNING: stack going in the wrong direction? at __sys_setsockopt+0x2c6/0x5b0 net/socket.c:2271
+That would be great, and I am more than happy to ack it.
+According to MAINTAINERS Thierry is the panel maintainer and I am reviewer.
+So you should ask Thierry to ack it too.
 
-And a KASAN warning:
-
-  BUG: KASAN: stack-out-of-bounds in unwind_next_frame (arch/x86/include/asm/ptrace.h:136 arch/x86/kernel/unwind_orc.c:455)
-
-It turns out the 'signal' bit isn't getting propagated from the unwind
-hints to the ORC entries, making the unwinder confused at times.
-
-Fixes: ffb1b4a41016 ("x86/unwind/orc: Add 'signal' field to ORC metadata")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202302161616.85f13863-oliver.sang@intel.com
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Link: https://lkml.kernel.org/lkml/CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com/
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/check.c               | 1 +
- tools/objtool/include/objtool/cfi.h | 1 +
- tools/objtool/orc_gen.c             | 1 +
- 3 files changed, 3 insertions(+)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7c40bd51c75a..8b242634bc51 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2266,6 +2266,7 @@ static int read_unwind_hints(struct objtool_file *file)
- 
- 		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
- 		cfi.type = hint->type;
-+		cfi.signal = hint->signal;
- 		cfi.end = hint->end;
- 
- 		insn->cfi = cfi_hash_find_or_add(&cfi);
-diff --git a/tools/objtool/include/objtool/cfi.h b/tools/objtool/include/objtool/cfi.h
-index f11d1ac1dadf..b1258e79a1b7 100644
---- a/tools/objtool/include/objtool/cfi.h
-+++ b/tools/objtool/include/objtool/cfi.h
-@@ -34,6 +34,7 @@ struct cfi_state {
- 	unsigned char type;
- 	bool bp_scratch;
- 	bool drap;
-+	bool signal;
- 	bool end;
- };
- 
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index 1f22b7ebae58..57a4527d5988 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -27,6 +27,7 @@ static int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
- 	}
- 
- 	orc->end = cfi->end;
-+	orc->signal = cfi->signal;
- 
- 	if (cfi->cfa.base == CFI_UNDEFINED) {
- 		orc->sp_reg = ORC_REG_UNDEFINED;
--- 
-2.39.1
-
+	Sam
