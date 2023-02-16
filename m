@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4267D699C67
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5E7699C6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBPSgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S229635AbjBPSix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjBPSga (ORCPT
+        with ESMTP id S229461AbjBPSiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:36:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412074E5DD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:36:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B1A62074
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF67AC433D2;
-        Thu, 16 Feb 2023 18:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676572589;
-        bh=DtkaLL8BSRD3/dzYQBRNj9VnhYvYcu1rYrlfhiiB934=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=alPZVCoxG0eWM7tBpqqZ+yfhCE8I3NIJXzNreYf30iA48iG2ZMTt2NqugfNXC3bEb
-         GvI+wS31Z2PI/QyGVZQcV5LTmoBx0wf2lqQ5ZNloMm0f7jbyXQvnv+3mqlgxr4Nvyz
-         dWNlF989hEULM4fdhZsVjQTD4MQAPhNwR/uE4Ffups8O63qdGIi9dicAwRvma7oQw/
-         eD/FlDr2GEXDpX0OKH9o5WbVYTWe/Q/+abyhX1Y2Mm5zf0MssM59qRmDICWPM8XLpc
-         p8dD9b9TpWLqnUDfRCN4tMKz+I4GMf8b89kU9If9lvKxWhsofMBFa99Fb8kceCxpbC
-         bgKiuSM/u7qyg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 21C305C0AC7; Thu, 16 Feb 2023 10:36:26 -0800 (PST)
-Date:   Thu, 16 Feb 2023 10:36:26 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thu, 16 Feb 2023 13:38:51 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABB343930;
+        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 24so1840470pgt.7;
+        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SuLdwLtfLsyKrMS8dI+1/4NFezsn+c9OtrFVwK/ARsA=;
+        b=g7BW0FLF9CZ568xaYDBEUXjVspPkAaIk1NQp1MjeWnJC6NWS/5EC2HeQaOejVOXAa2
+         rnx2IjNt5yBPwecP9jkrTVCsT35F1fJ5UJbCrQwl9j1nbggCaKyJYZ/jeZlSX79sAss0
+         1DAX2SHHu7UeHAfH+biB99+2FcRoDk0oYmOeWajeIKzF9IRHTgNRYLWMWx1gpaIPFgjC
+         QxNHQgDrT71wwWHGv1row3zXEroWcF9QXR147Gr10WSlN6y2mKMMDppVvLknAjTprcLG
+         LgX8qkuMEUaNIZJXIlnodR+KgZw6KNPJBMNkjZi5R7ybWyoVDTWECotB7l1gxSgshjGV
+         tFaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SuLdwLtfLsyKrMS8dI+1/4NFezsn+c9OtrFVwK/ARsA=;
+        b=iet5/37M6/qCC1aFDARVjrVX6VX3GbR5eQa0AhGzzGCWc0evA+kAkVXw+z3KZ57hvO
+         AnWglYJlrk8mc+fLgRWFlZQsPW8lMLidbp1S2ISa8EJP/ayphgnxpGYcpin1cX/58ObA
+         5x1Ve8cPHGMx1Zn2og9ZAv9wpVGZvYCSEdz3iORmd75Q/PXZr9gP75YAzELcaVl8tJ6V
+         Z1PR8NHmK7ojOHKN8pWrZtVKo6nW8ALm/69pbQa7/LmUxc1j/1JeFJONFrMw+8rV7gHO
+         76guClMWXmKUf8iBxpAQiuLLtZxfvXJfGDbI1/4G2OCnZBap6DMTutoX7b+FzHZhyQgQ
+         khUQ==
+X-Gm-Message-State: AO0yUKUa2mf5USs4mX2cbtdHeMkw0+wosfkXA6NqO/Bw1bl5Q+f9Ug7a
+        Tae++KbjM5Hnx/GrrIUmvrAF1P5mCNk=
+X-Google-Smtp-Source: AK7set/aje9IQy6+W9Gi4gllMJPg9aafvoLMyhy5QeuG1pEKiKWelzO3bLxDFZ6vwCo/oMvjCgiNtA==
+X-Received: by 2002:a62:5250:0:b0:596:15de:ea1e with SMTP id g77-20020a625250000000b0059615deea1emr5729416pfb.9.1676572730265;
+        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
+Received: from google.com ([2620:15c:2d4:203:cb24:bfe1:41f4:4b12])
+        by smtp.gmail.com with ESMTPSA id n20-20020aa79054000000b005921c46cbadsm1663672pfo.99.2023.02.16.10.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 10:38:49 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+Date:   Thu, 16 Feb 2023 10:38:46 -0800
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
-Message-ID: <20230216183626.GR2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230215091503.1490152-1-arnd@kernel.org>
- <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
- <78b2ed7d-2585-479f-98b1-ed2574a64cb8@app.fastmail.com>
- <20230215224218.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNNz30RQMfX0Bv+hobdUp+k_jHwH2WniQj4g+b48tsoR9Q@mail.gmail.com>
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
+Message-ID: <Y+54Nla62F+dutdu@google.com>
+References: <20230214050452.26390-1-namhyung@kernel.org>
+ <20230214050452.26390-5-namhyung@kernel.org>
+ <Y+5YaQt7Fme65a78@krava>
+ <Y+5ajnitOAxjdn2C@kernel.org>
+ <Y+5bGS9clWPS+B5J@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANpmjNNz30RQMfX0Bv+hobdUp+k_jHwH2WniQj4g+b48tsoR9Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y+5bGS9clWPS+B5J@krava>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 08:00:00AM +0100, Marco Elver wrote:
-> On Wed, 15 Feb 2023 at 23:42, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Feb 15, 2023 at 10:48:11AM +0100, Arnd Bergmann wrote:
-> > > On Wed, Feb 15, 2023, at 10:25, Marco Elver wrote:
-> > > > On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > > Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
-> > > >
-> > > > Do you have a tree to take this through, or should it go through -rcu
-> > > > as usual for KCSAN patches?
-> > >
-> > > I don't have a tree for taking these build fixes, so it would be good if you could forward it as appropriate.
-> >
-> > Queued and pushed, thank you both!
-> >
-> > Is this ready for the upcoming merge window, or would you rather that
-> > I hold off until the v6.4 merge window?  (I am tempted to treat this
-> > as a bug fix, thus sending it earlier rather than later, but figured I
-> > should ask.)
+Hi Jiri and Arnaldo,
+
+On Thu, Feb 16, 2023 at 05:34:33PM +0100, Jiri Olsa wrote:
+> On Thu, Feb 16, 2023 at 01:32:14PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Thu, Feb 16, 2023 at 05:23:05PM +0100, Jiri Olsa escreveu:
+> > > On Mon, Feb 13, 2023 at 09:04:49PM -0800, Namhyung Kim wrote:
+> > > 
+> > > SNIP
+> > > 
+> > > > @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
+> > > >  
+> > > >  		for (int x = 0; x < xyarray__max_x(xy); x++) {
+> > > >  			for (int y = 0; y < xyarray__max_y(xy); y++) {
+> > > > -				__record__read_lost_samples(rec, evsel, lost, x, y);
+> > > > +				struct perf_counts_values count;
+> > > > +
+> > > > +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
+> > > > +					pr_err("read LOST count failed\n");
+> > > > +					goto out;
+> > > > +				}
+> > > > +
+> > > > +				if (count.lost) {
+> > > > +					__record__save_lost_samples(rec, evsel, lost,
+> > > > +								    x, y, count.lost, 0);
+> > > > +				}
+> > > >  			}
+> > > >  		}
+> > > > +
+> > > > +		lost_count = perf_bpf_filter__lost_count(evsel);
+> > > > +		if (lost_count)
+> > > > +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
+> > > > +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
+> > > 
+> > > hi,
+> > > I can't see PERF_RECORD_MISC_LOST_SAMPLES_BPF in the tip/perf/core so can't compile,
+> > > what do I miss?
+> > 
+> > Humm, but you shouldn't need kernel headers to build tools/perf/, right?
 > 
-> I'd consider it a bug fix. If it survives the usual -next exposure, no
-> harm in sending it as a fix.
+> right, should be also in tools/include headers
 
-It passed overnight tests, so I have sent it along to -next.  If there
-are no issues, I will push it by the end of this coming week (which is
-the first weke of the merge window).
+Yeah, sorry about that.  I'm not sure how I missed the part.
 
-							Thanx, Paul
+I put it in tools/lib/perf/include/perf/event.h only as it does nothing
+with kernel.  Will fix in v2.
+
+Thanks,
+Namhyung
+
+---8<---
+
+diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+index ad47d7b31046..51b9338f4c11 100644
+--- a/tools/lib/perf/include/perf/event.h
++++ b/tools/lib/perf/include/perf/event.h
+@@ -70,6 +70,8 @@ struct perf_record_lost {
+        __u64                    lost;
+ };
+
++#define PERF_RECORD_MISC_LOST_SAMPLES_BPF (1 << 15)
++
+ struct perf_record_lost_samples {
+        struct perf_event_header header;
+        __u64                    lost;
+
