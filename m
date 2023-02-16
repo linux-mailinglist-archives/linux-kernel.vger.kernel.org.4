@@ -2,121 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C250E6997FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5689369980B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjBPOzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S230288AbjBPO4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjBPOzq (ORCPT
+        with ESMTP id S229911AbjBPO4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:55:46 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95429521F6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:55:43 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d4so2035924wrj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYcBJmwo22zXAEb41ec+7a2ghO3grcXFIW0zx/RN0Ao=;
-        b=D6b8rwoeHE66moNlWxbd4At4ZlqXKYb+X+3F72Gt1qSuaRvXn1bkFru8o/ffp5idRb
-         qniUVuR/SW6eowoiS9OXOsDIdAr5Xz4Tfix9o4makmnFFR2VSIfNc8PG5iccWLINT2q9
-         gzWOMoWqMlFeCQEBgI0Q5aQcHocqdWEsMHAJeg7fQEQNwMZz8cMSqZfIPXFZB/j4IE9m
-         Rnxb7b//1+sAeFIFLqXWq8sLw8EOlM2QEDMaa4r9EFlXhG8YPfzIw0T2c3rOHJYtVES2
-         0OsoTZRYfViTjkS0wnFauGUeGzkVNnJSdb50jw3+jYP89CpcqD3PuWmxWiASLD2sBu+M
-         sIHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GYcBJmwo22zXAEb41ec+7a2ghO3grcXFIW0zx/RN0Ao=;
-        b=0qr2y5UosssmRbXYn7b5LWFaCIfRIWhzwxl9KWpPqVOh1uj012ZOpbfeoJL4Pj47Tm
-         dDO80gxVurz4Che4nk5Fduzna2MuCHlGEMryPj+EFRQ2HmElWS1qTEp1TFaOQCAO2KAU
-         30ZyD4A+vbjOjIV8nH7cLeWM/CjLWeJJwEsAVa9BzWFD3qM7bykFiwFtiMdgUanK6VDh
-         sUkPA/8vj9SDFhlpt5RuKm8XeH4KZdByxxOXH0bXNGQDBMz4nGzeL+2od2Rban1CHXUI
-         IChvbhKo9UHYbAmkZIyQqFdtW8njdn+i7kf8ZfDbg7EBgzQUSr9y+RvU9F9EccPmqzR3
-         DOJw==
-X-Gm-Message-State: AO0yUKXEu27hNBb58J7vxHyJID+qI85kmyRZ8f4Gr07RDW0IIR0Hoc4R
-        bIumhuP8JsVpAXLbwZed7V1vMw==
-X-Google-Smtp-Source: AK7set/gY8GYbV4sja3UZJe1bVwJ2rkyt+w0wuJeP9rAJ+KPlitdNZJkQiTO8K1DHIyF2Ft4tfPzhg==
-X-Received: by 2002:a5d:6691:0:b0:2c5:7c26:c2cc with SMTP id l17-20020a5d6691000000b002c57c26c2ccmr2398908wru.29.1676559342079;
-        Thu, 16 Feb 2023 06:55:42 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:7c5b:1160:db5d:72da])
-        by smtp.gmail.com with ESMTPSA id p9-20020adfce09000000b002c5493a17efsm1730012wrn.25.2023.02.16.06.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 06:55:41 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] gpio: fixes for v6.2
-Date:   Thu, 16 Feb 2023 15:55:36 +0100
-Message-Id: <20230216145536.121063-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
+        Thu, 16 Feb 2023 09:56:47 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2128.outbound.protection.outlook.com [40.107.255.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C1A5456B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:56:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KfCoRKDjNwZkf/AGFMA+ujEIbsb7Ry2/g0h/aRPpUdAnTCh8iDypIZGMuRTfZrjxbKwzs2h1uRON+wBy8/x8k3GNXlhqmomDULL7fVyb77u232+VVfE604C/4i9kuf2bYG7iBgvEJNSvZ4LClRbC3FRL6RJ7VhdhFflpjvgROVrxehCB0XV1NPNl1MEwlMEyVT3a6Q9gphatrl+LrW26BUcNQ+Pli96UM2Lyx98At8AxAqSBTQBWfSasW0NMv/viDzCmu/sSHukaKj7HwfiAySvc0ZUdPDVCT4uDfMe/hSfcPUpSoFSDzvO+B1K3pFew9z7kU9SH5Du/IcqcVfNO9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RQHbNpcMJh3MOvgeTQA8bvKfy6mnW3VY6ldmmLIrzys=;
+ b=I/faMSVCveVUFG7fvyPR5JfpnK0F2ANGXeHdyD8/lNr4qHLe01cZjuVZi0f5M0be5uSuNk0T9ZPPKw6LA2DlkO6JVhNpddmO22Rrnrr48Hkxq+3+2CtXaP9s3k2Rn7qeDMCh2I8Kh1Nl28qUsN+cwaEJmjFs10u3f7LgKfhZhCB8cFggMt4R97mje25XJLykT2EAzYygAt4qgjlwM+16SsNFWYvWATaagUEPnlQneSur9APw8iFJA277sG5S57OC5xBr2Knq/E+dJJae02yqCq7fxjA/XP17E5f5eRBOvcIwgicWixh7C/w5P1LwydewTAoBav5tWObUUAZtftovbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RQHbNpcMJh3MOvgeTQA8bvKfy6mnW3VY6ldmmLIrzys=;
+ b=oIqLi+zceOLgnULKHul8WdVYGhKaOEduPCs8dUEZCucJNU4/BfmDbIL8OCn4G6SYvMr4vFUk9qsiEEQn9/ws8lHFPhGRPvZhV/lDsfqKaYgYf8i/vZkGCoNi3cG1MQZWSwBx/COIJ1nswVmH0jHB/v8UFnUrlut5CWkom+ekAmrKMykuDyBfzdqqGXSWzEKZSS0nPjC5M/fxJbR7tOuPQpgHGN/hD6qqXO/dR7EZ1y+/5DKOl7pDt3+M1MR6iqwkcgpn4AShj43Y8j+wDuE4SjTw4/h7v16tKcuLYbDMl/jlLXp1izWGtgBHpPzqDrAM7xZIvWNVBqLYuk83sh00mQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by TY0PR06MB5104.apcprd06.prod.outlook.com (2603:1096:400:1b8::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.10; Thu, 16 Feb
+ 2023 14:56:27 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190%3]) with mapi id 15.20.6111.009; Thu, 16 Feb 2023
+ 14:56:27 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: convert to MAX_SBI_FLAG instead of 32 in stat_show()
+Date:   Thu, 16 Feb 2023 22:56:17 +0800
+Message-Id: <20230216145617.27150-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0004.apcprd02.prod.outlook.com
+ (2603:1096:3:17::16) To TYZPR06MB5275.apcprd06.prod.outlook.com
+ (2603:1096:400:1f5::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|TY0PR06MB5104:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3f12e81-288c-4cc1-e5bc-08db102dfab1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 04ZdL2WpDA2+Ug8QhJTud4EhKc/iBp0JxHFapXne4at4ZQau6T7nSAyTGklpO+rh8QQ4lOl2GzCWQtEA+yQtA3fPd15B1Mi+3HurxKs+vNVsI319J+fs1Mt/vQ27f7XrBFgMvCOS3c+b17FxMotUdQLjt9YvOnnx80QxNuIyod+wrMMA64EcfOgZg1Lu14k9NH6gLoVsCWDQ4xl+D6tNWwUIfE1O6FsHy2qYTZHkUYMa40MEEEtGkVrfrGUbdjPxNhXRsdpflRjj5HbWYSGWn2xkdfy7hPjoKOQF9GEEocVK6dxd0QAl/XTcaxzH+p3b9qTIRrGODRkVy1AdHGHnLMdrGuuyf7iKT9/8r2dcsT48je7BiKkJSpH2rlqNBvEh0LyjG8pEMwrt5iAtlsDaEVuEMnAGWrJLZR/LP69GJNHgGGzn1zYREkSWdqnAHlGP4ihneNjThtJAidvYQWDuFUs3XH5hhv/aErEhas5etIDRLu4+8+cMDVaJ/uu334QupXp+N80VZ8RwAm+PIF6y/DhXT6lnrKhopmh+isJPOUIhmvtpZtVpXoz5cwUcnEfgHLtE10JaDwcBu9quXFcPppqn8i9NBrULAMEMpHiREBy/BqyzDJHdHe7rPMw6ZBzDbgyoY5bSeFTohL3vXqHEEAw2dhAS7PAMqI/E3P4ShKFTvvvR+m21DgoVLH8u5vK/s/r79HJ1e1Q0+8Gt3TWIrQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199018)(107886003)(1076003)(186003)(26005)(6506007)(478600001)(6512007)(86362001)(6666004)(2616005)(6486002)(52116002)(83380400001)(316002)(66946007)(8936002)(5660300002)(8676002)(4326008)(66476007)(2906002)(66556008)(41300700001)(38100700002)(36756003)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nbGc5asf3DzXSnl4magDcosaKnPFvhXWqPWZgRoAH1Bcon9iE2JCr8V+lWkv?=
+ =?us-ascii?Q?Lxc/1xJHDJbv5vR98Bii8BbiCpIMKDsn1z0s3OxuKcL8kDICs90h0d/Q05vv?=
+ =?us-ascii?Q?5qE6yKDgDyLHOeropu0kaPbayGykpN/5KUtviCjBX+czO31rr3pK7e4WFdeF?=
+ =?us-ascii?Q?x0fxo6DdxX7QFnBY/YSQ9tj35UG2BOlRx2A8CQf7kHpzbCJhxBZu40aIi4YA?=
+ =?us-ascii?Q?9fnBQeU+m+tnO+q10xHddQ/B0p8V1xlPn42Rgryoq6z61NXGO8jc+ENKwVtq?=
+ =?us-ascii?Q?7IGpAcsmgo/aoQE3tK3wjwloYoRacFODMlGRWWMCwTBevOmdtTCaklAtvVTn?=
+ =?us-ascii?Q?dRFTALJPqcxj8vUvvtKIp/OOJrMIYZ+3fMUSJCq/NIK1m/mtvIEz3lqAyi8W?=
+ =?us-ascii?Q?IyQbTVjL+CMSmGXsN1jRnDofO3CawBsgXFAq0unn4d5JLp6E4vBhWlZ7FE+T?=
+ =?us-ascii?Q?p4SlHb+nj6tSmklgl/bhBLwGjA+FUk0wuLwSbw/VxyO0EpN0TG7SO0nslx8b?=
+ =?us-ascii?Q?x+51KCnjSCiHn6xRD6X1gOeLsWTcf+4lE6ykNcFT9e3afEIIYIH+upqE/eex?=
+ =?us-ascii?Q?BScePoP+Uf9dS9Y+r1YSX9dAF7wZc9dMnmYrmPMF3ukPNS9D/zW27qnQFyR4?=
+ =?us-ascii?Q?nKbxMMVKI2TUp+iSVCAlbH1410YtWA/xkH7PAA9A/giwgCe3t1wgF7yBcVDk?=
+ =?us-ascii?Q?qs5CLO46dbY70IXujjZ5/vMU2HV+eh6tV/2KcjAHvlckHiV7hKCZH9fiDOB3?=
+ =?us-ascii?Q?z9ht8lQIVG+USchbGLNdu5qLsosS31LVx4geFzFFR1+H33YldzjBwyLSSD7w?=
+ =?us-ascii?Q?xVtj1j1z8RyjReLI4LX5HBZdx7XUB4EmhQWYo4kDM6egaqjLBLjkvEf+KYTJ?=
+ =?us-ascii?Q?qu9k5D8cz4WR3SEfxmLEhAPQF66sZs1YZXdnLDrQGSAGsr76rEi4655KlX47?=
+ =?us-ascii?Q?3EssA9kr21Aas/VN7tZywOafEuKCgCYxuodPNT9k+3uJzM7Tyk3uAK2gV7+A?=
+ =?us-ascii?Q?ck4+vwDSYiEdnznLPmjHqJqogGeC4PsDwrBJcEcZBmj1N6VmCBfAqYgLF+2d?=
+ =?us-ascii?Q?5/2xrI5BqJ9L4cmbW6h/Il9OEudfaBvIhD3ML6OTqmjR9n+/MYZaY3j51j5l?=
+ =?us-ascii?Q?iPn/OxXCqRAm0Yf35TCJy6EC+Rgapkzy/C5aB0xHXbMTPEhW/4JZSSmOScs1?=
+ =?us-ascii?Q?D87YOCWXhbPn/mvFz5fUVTHSYaYT8u/hSmeVCDx3j0KlDGp5MqGkuwagAoOH?=
+ =?us-ascii?Q?8H+E50GnAHOjDUutbzQLUBYDRD6frmM0Ob6dOrxHVVFDDhwp42ULjQVhbb0J?=
+ =?us-ascii?Q?OzZgOcBrBPIKB74KAXaAZztECyYcDQQm1rnUUdTOZAG7gNDQ798hSGViyAVk?=
+ =?us-ascii?Q?4KdIu0KctnUONVVqJMyG79oen41Gh97sQ34SjDHJZoTY5F/mu3IF4s0OwvmI?=
+ =?us-ascii?Q?tUhK1/DvP1iOOgm5mZh9+4Jk4u7Q1dq/H3jdljyQGhmDZR4sFcPOub7YUQfr?=
+ =?us-ascii?Q?R/iD9mFDSO4qQQ7nNKQhG3vwDKO8MerOd8Ji2L9WQgmPdZGZTQmYS8LGIAd5?=
+ =?us-ascii?Q?BD8fJXYw5LDYVl3US3M8yfrTff2KH+Tjd4qhrZ8G?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3f12e81-288c-4cc1-e5bc-08db102dfab1
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 14:56:27.0167
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Mko74GjDBXDXIcxdMPaTgL/DRZh/iZSgn+bEk88ILAPIlrpaP3BIk5djzBT+CwaPPJlDdRFaN98NbxGHILyww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5104
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+BIT reduce the s_flag array size.
 
-Linus,
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/debug.c | 36 ++++++++++++++++++------------------
+ fs/f2fs/f2fs.h  |  6 +++++-
+ 2 files changed, 23 insertions(+), 19 deletions(-)
 
-Please pull the following set of late fixes for v6.2. Details are in the
-signed tag as usual.
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index 30a77936e3c5..ab3e9cbd53ee 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -336,22 +336,22 @@ static void update_mem_info(struct f2fs_sb_info *sbi)
+ #endif
+ }
+ 
+-static char *s_flag[] = {
+-	[SBI_IS_DIRTY]		= " fs_dirty",
+-	[SBI_IS_CLOSE]		= " closing",
+-	[SBI_NEED_FSCK]		= " need_fsck",
+-	[SBI_POR_DOING]		= " recovering",
+-	[SBI_NEED_SB_WRITE]	= " sb_dirty",
+-	[SBI_NEED_CP]		= " need_cp",
+-	[SBI_IS_SHUTDOWN]	= " shutdown",
+-	[SBI_IS_RECOVERED]	= " recovered",
+-	[SBI_CP_DISABLED]	= " cp_disabled",
+-	[SBI_CP_DISABLED_QUICK]	= " cp_disabled_quick",
+-	[SBI_QUOTA_NEED_FLUSH]	= " quota_need_flush",
+-	[SBI_QUOTA_SKIP_FLUSH]	= " quota_skip_flush",
+-	[SBI_QUOTA_NEED_REPAIR]	= " quota_need_repair",
+-	[SBI_IS_RESIZEFS]	= " resizefs",
+-	[SBI_IS_FREEZING]	= " freezefs",
++static char *s_flag[MAX_SBI_FLAG] = {
++	[SBI_IS_DIRTY]		= "fs_dirty",
++	[SBI_IS_CLOSE]		= "closing",
++	[SBI_NEED_FSCK]		= "need_fsck",
++	[SBI_POR_DOING]		= "recovering",
++	[SBI_NEED_SB_WRITE]	= "sb_dirty",
++	[SBI_NEED_CP]		= "need_cp",
++	[SBI_IS_SHUTDOWN]	= "shutdown",
++	[SBI_IS_RECOVERED]	= "recovered",
++	[SBI_CP_DISABLED]	= "cp_disabled",
++	[SBI_CP_DISABLED_QUICK]	= "cp_disabled_quick",
++	[SBI_QUOTA_NEED_FLUSH]	= "quota_need_flush",
++	[SBI_QUOTA_SKIP_FLUSH]	= "quota_skip_flush",
++	[SBI_QUOTA_NEED_REPAIR]	= "quota_need_repair",
++	[SBI_IS_RESIZEFS]	= "resizefs",
++	[SBI_IS_FREEZING]	= "freezefs",
+ };
+ 
+ static const char *ipu_mode_names[F2FS_IPU_MAX] = {
+@@ -384,8 +384,8 @@ static int stat_show(struct seq_file *s, void *v)
+ 			"Disabled" : (f2fs_cp_error(sbi) ? "Error" : "Good"));
+ 		if (sbi->s_flag) {
+ 			seq_puts(s, "[SBI:");
+-			for_each_set_bit(j, &sbi->s_flag, 32)
+-				seq_puts(s, s_flag[j]);
++			for_each_set_bit(j, &sbi->s_flag, MAX_SBI_FLAG)
++				seq_printf(s, " %s", s_flag[j]);
+ 			seq_puts(s, "]\n");
+ 		}
+ 		seq_printf(s, "[SB: 1] [CP: 2] [SIT: %d] [NAT: %d] ",
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 21596e0266ba..e24180c0e4af 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1293,7 +1293,10 @@ struct f2fs_gc_control {
+ 	unsigned int nr_free_secs;	/* # of free sections to do GC */
+ };
+ 
+-/* For s_flag in struct f2fs_sb_info */
++/*
++ * For s_flag in struct f2fs_sb_info
++ * Modification on enum should be synchronized with s_flag array
++ */
+ enum {
+ 	SBI_IS_DIRTY,				/* dirty flag for checkpoint */
+ 	SBI_IS_CLOSE,				/* specify unmounting */
+@@ -1310,6 +1313,7 @@ enum {
+ 	SBI_QUOTA_NEED_REPAIR,			/* quota file may be corrupted */
+ 	SBI_IS_RESIZEFS,			/* resizefs is in process */
+ 	SBI_IS_FREEZING,			/* freezefs is in process */
++	MAX_SBI_FLAG,
+ };
+ 
+ enum {
+-- 
+2.25.1
 
-Bartosz
-
-The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
-
-  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-fixes-for-v6.2
-
-for you to fetch changes up to b8b3b0bfb742f0cbb006c66b10216b724ce42e25:
-
-  Merge tag 'intel-gpio-v6.2-2' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current (2023-02-16 13:31:42 +0100)
-
-----------------------------------------------------------------
-gpio fixes for v6.2
-
-- fix a potential Kconfig issue with gpio-mlxbf2 not selecting
-  GPIOLIB_IRQCHIP
-- another immutable irqchip conversion, this time for gpio-vf610
-- fix a wakeup issue on Clevo NH5xAx
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      gpio: vf610: make irq_chip immutable
-
-Bartosz Golaszewski (1):
-      Merge tag 'intel-gpio-v6.2-2' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current
-
-Linus Walleij (1):
-      gpio: mlxbf2: select GPIOLIB_IRQCHIP
-
-Raag Jadav (1):
-      gpiolib: acpi: remove redundant declaration
-
-Werner Sembach (1):
-      gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-
- drivers/gpio/Kconfig        |  1 +
- drivers/gpio/gpio-vf610.c   | 41 +++++++++++++++++++++++------------------
- drivers/gpio/gpiolib-acpi.c | 12 ++++++++++++
- drivers/gpio/gpiolib-acpi.h |  1 -
- 4 files changed, 36 insertions(+), 19 deletions(-)
