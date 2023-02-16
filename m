@@ -2,223 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F4969953D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5756769953F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjBPNKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S230142AbjBPNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBPNKL (ORCPT
+        with ESMTP id S230120AbjBPNKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:10:11 -0500
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564741B7D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:10:07 -0800 (PST)
-X-QQ-mid: bizesmtp72t1676552978ty5olj5d
-Received: from localhost.localdomain ( [116.30.131.224])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 16 Feb 2023 21:09:37 +0800 (CST)
-X-QQ-SSF: 01200000006000C0T000B00A0000000
-X-QQ-FEAT: QityeSR92A1egmDK/srb02Zj/HLMIkUCoVBroipi3lqkgUo1nemMdgssHjlSK
-        QRCnrEnaXI7Dmj5vD07aoDU/TV9ARV9J8Lf7r6dz4+JJX35eRjhzeJj8M6ySUcukchltfXt
-        5hhmcy+kPK6rIXsO3WlHZBMiv9z0um4feqo/tUs2r6jHaodolU5na+GzTjSySjAbxMX4jaN
-        SIdO+5zV8eERcRVlSkLSXC22IN8SGtukFiqat1tbp4/19EgEOuOhYiz6/UhkCK3AUdDZDwM
-        08XcH5cfqGcOkOI1YhBIycORyqiTccCZUUPC7AtzOr+qD+xwATw1ZcUa8UTLFPEg/OHRwec
-        x/0VKyb5NC/N/lsuKPwUPFarDb2jQ4X3rJRTOZg
-X-QQ-GoodBg: 0
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        nicolas.pitre@linaro.org, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, Adam Borowski <kilobyte@angband.pl>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: Re: Kernel-only deployments?
-Date:   Thu, 16 Feb 2023 21:09:35 +0800
-Message-Id: <20230216130935.37976-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y+yqRwNERjb0/dSd@1wt.eu>
-References: 
+        Thu, 16 Feb 2023 08:10:48 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DA44DE21
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:10:46 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id pg6-20020a17090b1e0600b002349579949aso1679904pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:10:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a+xypixMughW65XcMfJ5RUjpJo+KQPzM3qaECKat7hU=;
+        b=ivlYUmDaHL1V+ezqc3EoED3ts6xvzfnxGXCXrkQ9RnNTRZMUi5D0EQo9HRsJ7KcbDo
+         9EPLWB/IV6o7KlSJAFrXeQ9VCZtjF37tf2BocQyvkLi0srPZrcO+txcf1LujOiKa+lQZ
+         YjlCNWWu1duP4ZahZ9KH5qjwBUdwtROV34p433XAvkQGANrKZDt1vKW6mLImQVxb7wZT
+         rg+iBB8lHUAOivOeGt0ME6T/Y1btoSyhPI1n4BXv46oHigHmwlJJsM8KoGa0AkB9jLpQ
+         JLKrvR/435zo3OBOVtCDPY+kWSZG+7Tb2gWrTzkPhFsp3yILAVj/Nh/Bz1XKN6fJBBpm
+         UJBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+xypixMughW65XcMfJ5RUjpJo+KQPzM3qaECKat7hU=;
+        b=y28FTP2OPqQpe25tgm2vJAXeyZwC2AK6EFzwpa9suEZr6k3UdGNrqqQVWkv8zI/uFU
+         /eCnsZwGGfkwxgbwlx0zuItVwwRwx/NDVsYn9G3MaGj4nWPIO0Mh+itwMuVcEX8b4mmY
+         wm//ozpHGP/ustz5rcpU4Kinw6hpUb9G1a0ezHBb7jyhsauVTHp1m/BWJXX4OpJWXukq
+         wV1FdM5LAnuAwnNsIjpujKJ3aQe0NIVGz0hrmypAt5MCoUnUYPdJu9d0Yw5u04UrVFig
+         KQMLwAAm8NcPABUbAjlx2QI+XqPmYrpCQvMLpqR5eVfiuM01pm3ZiqBpLf3BCvzvNtiZ
+         O3Qw==
+X-Gm-Message-State: AO0yUKVJH/r3L3qmHp+X35gz/aYxVZkmB+AvYdZ7M9nRI9g5SVc5vzvl
+        mPG8vdgZBj1aWEx4mBCRwuIG3A==
+X-Google-Smtp-Source: AK7set84QQW1gWwMw+9tWSZvR81EDhLx5/YUQLTX4RHZL97U/oxAMivJJPtVPGDoo6eOFa8MoRhEng==
+X-Received: by 2002:a17:902:e5ce:b0:19a:f556:e386 with SMTP id u14-20020a170902e5ce00b0019af556e386mr1598882plf.0.1676553045941;
+        Thu, 16 Feb 2023 05:10:45 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b0019896d29197sm1287436plb.46.2023.02.16.05.10.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 05:10:45 -0800 (PST)
+Message-ID: <8d2bc7cf-24f6-d413-bf43-adc818628c0e@kernel.dk>
+Date:   Thu, 16 Feb 2023 06:10:44 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
+ registered ring fd
+Content-Language: en-US
+To:     Josh Triplett <josh@joshtriplett.org>,
+        Dylan Yudaken <dylany@meta.com>
+Cc:     "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
+References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
+ <be9f297f68ee3149f67f781fd291b657cfe4166b.camel@meta.com>
+ <Y+4cG5yy8U0XGHP6@localhost>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y+4cG5yy8U0XGHP6@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
-
-> On Wed, 15 Feb 2023 10:47:51 +0100, Willy Tarreau wrote:
+On 2/16/23 5:05?AM, Josh Triplett wrote:
+> On Thu, Feb 16, 2023 at 09:35:44AM +0000, Dylan Yudaken wrote:
+>> On Tue, 2023-02-14 at 16:42 -0800, Josh Triplett wrote:
+>>> @@ -4177,17 +4177,37 @@ SYSCALL_DEFINE4(io_uring_register, unsigned
+>>> int, fd, unsigned int, opcode,
+>>>         struct io_ring_ctx *ctx;
+>>>         long ret = -EBADF;
+>>>         struct fd f;
+>>> +       bool use_registered_ring;
+>>> +
+>>> +       use_registered_ring = !!(opcode &
+>>> IORING_REGISTER_USE_REGISTERED_RING);
+>>> +       opcode &= ~IORING_REGISTER_USE_REGISTERED_RING;
+>>>  
+>>>         if (opcode >= IORING_REGISTER_LAST)
+>>>                 return -EINVAL;
+>>>  
+>>> -       f = fdget(fd);
+>>> -       if (!f.file)
+>>> -               return -EBADF;
+>>> +       if (use_registered_ring) {
+>>> +               /*
+>>> +                * Ring fd has been registered via
+>>> IORING_REGISTER_RING_FDS, we
+>>> +                * need only dereference our task private array to
+>>> find it.
+>>> +                */
+>>> +               struct io_uring_task *tctx = current->io_uring;
+>>>  
+>>> -       ret = -EOPNOTSUPP;
+>>> -       if (!io_is_uring_fops(f.file))
+>>> -               goto out_fput;
+>>> +               if (unlikely(!tctx || fd >= IO_RINGFD_REG_MAX))
+>>> +                       return -EINVAL;
+>>> +               fd = array_index_nospec(fd, IO_RINGFD_REG_MAX);
+>>> +               f.file = tctx->registered_rings[fd];
+>>> +               f.flags = 0;
+>>> +               if (unlikely(!f.file))
+>>> +                       return -EBADF;
+>>> +               opcode &= ~IORING_REGISTER_USE_REGISTERED_RING;
+>>
+>> ^ this line looks duplicated at the top of the function?
 > 
-> Hi Wu,
-> 
-> On Wed, Feb 15, 2023 at 10:35:57AM +0800, Zhangjin Wu wrote:
-> > Hi, Willy & Paul
-> > 
-> > Thanks very much for your work on nolibc, based on the nolibc feature
-> > and the gc-sections feature from Paul Burton, I have tried to 'gc' the
-> > dead system calls not used in the nolibc applications.
-> > 
-> > Tests shows, the gc-sections shrinks a minimal config of RISC-V 64 by
-> > ~10% and the gc-sections for syscalls shrinks another ~4.6% (~200k).
-> > 
-> > Since nolibc has been added into tools/include/nolibc, it may be
-> > possible to auto 'gc' the dead syscalls automatically while building the
-> > nolibc based initrd, but it requires to auto update the architecture
-> > specific system call table after building the nolibc application:
-> > 
-> > 1. Eliminate the unused functions and syscalls of the nolibc application
-> > 
-> >    add -ffunction-sections -fdata-sections and -Wl,--gc-sections to
-> >    compile the nolibc application
-> > 
-> > 2. Dump the used syscalls with the help of objdump
-> > 
-> >    This is architecture dependent, a RISC-V 64 example:
-> > 
-> >    riscv64-linux-gnu-objdump -d $nolibc_bin | \
-> >        egrep "li[[:space:]]*a7|ecall" | \
-> >        egrep -B1 ecall | \
-> >        egrep "li[[:space:]]*a7" | \
-> >        rev | cut -d ' ' -f1 | rev | cut -d ',' -f2 | \
-> >        sort -u -g
-> > 
-> >    Use a simple hello.c with reboot() at the end as an example, the
-> >    dumped syscall numbers are:
-> > 
-> >        64
-> >        93
-> >        142
-> > 
-> > 3. Update architecture specific system call table
-> > 
-> >    Use RISC-V 64 as an example, arch/riscv/kernel/syscall_table.c:
-> > 
-> >     diff --git a/arch/riscv/kernel/syscall_table.c b/arch/riscv/kernel/syscall_table.c
-> >     index 44b1420a2270..3b48a94c0ae8 100644
-> >     --- a/arch/riscv/kernel/syscall_table.c
-> >     +++ b/arch/riscv/kernel/syscall_table.c
-> >     @@ -14,5 +14,10 @@
-> > 
-> >      void * const sys_call_table[__NR_syscalls] = {
-> >             [0 ... __NR_syscalls - 1] = sys_ni_syscall,
-> >     -#include <asm/unistd.h>
-> >     +// AUTO INSERT START
-> >     +       [64] = sys_write,
-> >     +       [93] = sys_exit,
-> >     +       [142] = sys_reboot,
-> >     +// AUTO INSERT END
-> >     +// #include <asm/unistd.h>
-> >      };
-> > 
-> > 4. Build kernel with gc-sections, the unused syscalls will be eliminated
-> > 
-> > It is not that complicated, but to mainline such a feature and let it
-> > support more architectures, it is not that easy. I have written more
-> > about this here:
-> > https://lore.kernel.org/linux-riscv/20230214084229.42623-1-falcon@tinylab.org/
-> 
-> Yeah I noticed your message (though didn't yet have time to respond). If
-> find it interesting from an academic perspective at least.
->
+> Good catch!
 
-Thanks very much for your kindly reply and suggestion ;-)
+Indeed!
 
-> > So, is such a feature really useful? does anyone in the deep embedded
-> > space already do this? welcome your suggestion.
-> 
-> The thing is that you will clearly not be able to compile realistic
-> applications with nolibc. Its goal is just to support test programs
-> or ultra-basic shells or init programs for which a libc is either
-> annoying (e.g. for kernel development you prefer to use the -nolibc
-> toolchains) or overkill (you don't always want to inflate your embedded
-> initramfs by hundreds of kB for a 300 bytes program, especially when
-> your kernel size approaches the maximum size of your flash device like
-> I recently had).
-> 
-> But for real applications you will definitely need to have a real libc
-> such as klibc or musl.
->
+> Jens, since you've already applied this, can you remove this line or
+> would you like a patch doing so?
 
-Yeah, that is exactly the cause why I use nolibc as the base to think about
-dead system call elimination, currently, not for real applications, not for
-real products, only for possibility estimation, it is part of my long-term
-community tinylinux work: https://tinylab.org/tinylinux
+It's still top-of-tree, I just amended it.
 
-With nolibc, especially after its integration into the kernel source
-code tree, the kernel+user becomes a monolithic software, it can simply
-tell us what system calls (and of course may use some other kernel
-interfaces, such as /dev, /tmp, /proc, /sys, here we focus on syscalls)
-it uses and then we can put the 'C' lib part aside and focus on the
-kernel part.
+-- 
+Jens Axboe
 
-With a real bigger libc, even only with a small initramfs, the work to dig out
-the used system calls is very hard and time-cost, although it is possible,
-kernel+nolibc is such a good simplified 'model' for such a type of kernel
-development.
-
-> However the value I'm seeing in your work is to be able to show the
-> cost of families of syscalls and features. Instead of automatically
-> trimming them depending on what the application uses, I think it could
-> be useful to spot groups that dominate the size of these 200kB savings,
-> and possibly add build options to allow to remove them. In this case it
-> becomes easy to add tests for them (including using nolibc) that are
-> representative to what a some application would need and quickly verify
-> if a given kernel config has chances to work with this or that application.
-> 
-
-This is really a right direction, and I have tried to add many config
-options for different syscalls:
-https://github.com/tinyclub/tinylinux/tree/2.6.35/dev/syscall-cfg
-
-And under this kernel menu:
-
-    General setup  --->
-        Configure standard kernel features (expert users)  --->
-
-There have been more than 10+ syscall options, but this direction has at
-least two potential issues:
-
-- The manual splitting of a new system call option is very hard and the
-  upstream to mainline is hard too. If x 451 (__NR_syscalls in generic
-  unistd.h), the work will be huge.
-
-  But we still need to split some syscalls manually, for example, vdso
-  syscalls in some architectures (e.g. MIPS) are not configurable. some
-  other syscalls may be just 'referenced' directly in kernel space, but
-  not really 'used'. such ones should be found out.
-
-- The configure of the options is not that easy, the kernel engineers
-  should co-operate with the application engineers cheek by jowl and
-  then test them carefully, may fail, re-build, fail, re-build.
-
-With 'dead system call elimination', application engineers can care about their
-own functions development, kernel engineers can simply enable the 'dead system
-call elimination', the left parts could be submitted to a script to dump out
-all of the system calls used by the kernel+user monolithic software (the same
-to a real system, but need to do more).
-
-I have prepared several RFC patches to implement a draft support of 'dead
-system call elimination', will send them out later and welcome your review. 
-
-> This approach is even better because it won't force you to limit your
-> analysis to syscalls, but it can also cover other optional areas and
-> help application developers estimate the rough amount of savings they
-> can make by removing some parts if it's estimated that the application
-> will not use them.
-
-Yes, syscall elimination is only of the options to tinylinux, here are
-some others we tried: https://github.com/tinyclub/tinylinux/branches
-
-Thanks,
-- Zhangjin Wu
-
-> 
-> Just my two cents,
-> Willy
