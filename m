@@ -2,155 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5E7699C6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E655699C73
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBPSix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S229461AbjBPSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBPSiv (ORCPT
+        with ESMTP id S229786AbjBPSi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:38:51 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABB343930;
-        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 24so1840470pgt.7;
-        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SuLdwLtfLsyKrMS8dI+1/4NFezsn+c9OtrFVwK/ARsA=;
-        b=g7BW0FLF9CZ568xaYDBEUXjVspPkAaIk1NQp1MjeWnJC6NWS/5EC2HeQaOejVOXAa2
-         rnx2IjNt5yBPwecP9jkrTVCsT35F1fJ5UJbCrQwl9j1nbggCaKyJYZ/jeZlSX79sAss0
-         1DAX2SHHu7UeHAfH+biB99+2FcRoDk0oYmOeWajeIKzF9IRHTgNRYLWMWx1gpaIPFgjC
-         QxNHQgDrT71wwWHGv1row3zXEroWcF9QXR147Gr10WSlN6y2mKMMDppVvLknAjTprcLG
-         LgX8qkuMEUaNIZJXIlnodR+KgZw6KNPJBMNkjZi5R7ybWyoVDTWECotB7l1gxSgshjGV
-         tFaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SuLdwLtfLsyKrMS8dI+1/4NFezsn+c9OtrFVwK/ARsA=;
-        b=iet5/37M6/qCC1aFDARVjrVX6VX3GbR5eQa0AhGzzGCWc0evA+kAkVXw+z3KZ57hvO
-         AnWglYJlrk8mc+fLgRWFlZQsPW8lMLidbp1S2ISa8EJP/ayphgnxpGYcpin1cX/58ObA
-         5x1Ve8cPHGMx1Zn2og9ZAv9wpVGZvYCSEdz3iORmd75Q/PXZr9gP75YAzELcaVl8tJ6V
-         Z1PR8NHmK7ojOHKN8pWrZtVKo6nW8ALm/69pbQa7/LmUxc1j/1JeFJONFrMw+8rV7gHO
-         76guClMWXmKUf8iBxpAQiuLLtZxfvXJfGDbI1/4G2OCnZBap6DMTutoX7b+FzHZhyQgQ
-         khUQ==
-X-Gm-Message-State: AO0yUKUa2mf5USs4mX2cbtdHeMkw0+wosfkXA6NqO/Bw1bl5Q+f9Ug7a
-        Tae++KbjM5Hnx/GrrIUmvrAF1P5mCNk=
-X-Google-Smtp-Source: AK7set/aje9IQy6+W9Gi4gllMJPg9aafvoLMyhy5QeuG1pEKiKWelzO3bLxDFZ6vwCo/oMvjCgiNtA==
-X-Received: by 2002:a62:5250:0:b0:596:15de:ea1e with SMTP id g77-20020a625250000000b0059615deea1emr5729416pfb.9.1676572730265;
-        Thu, 16 Feb 2023 10:38:50 -0800 (PST)
-Received: from google.com ([2620:15c:2d4:203:cb24:bfe1:41f4:4b12])
-        by smtp.gmail.com with ESMTPSA id n20-20020aa79054000000b005921c46cbadsm1663672pfo.99.2023.02.16.10.38.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 10:38:49 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-Date:   Thu, 16 Feb 2023 10:38:46 -0800
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
-Message-ID: <Y+54Nla62F+dutdu@google.com>
-References: <20230214050452.26390-1-namhyung@kernel.org>
- <20230214050452.26390-5-namhyung@kernel.org>
- <Y+5YaQt7Fme65a78@krava>
- <Y+5ajnitOAxjdn2C@kernel.org>
- <Y+5bGS9clWPS+B5J@krava>
+        Thu, 16 Feb 2023 13:38:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160D350AC0;
+        Thu, 16 Feb 2023 10:38:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A6862077;
+        Thu, 16 Feb 2023 18:38:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56CB1C433A1;
+        Thu, 16 Feb 2023 18:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676572735;
+        bh=hl1r8WrgBVR11XLM9TAiwDCXOTiVcQCDtFTYvOcE4vk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pzcnRjPVAqaK3xKlZe1yzpskS9/WG+OMTloaSFKzBMCxOCkoRpNuoRNYa/3zPKJnz
+         6X0jJD8EJrjs7EW5Q3nhsFDWki1qsGGw5El1PvFSJCXlOCmUN+Sd3mN6zTUEUZzc4/
+         mNsCR3739yEFXFsyMHHJMQQvHiwVXyBZTBiMAN1UkqOhmnVWUd9WCzEFvocuiDiV1c
+         Eo7Y6nPnKYPTibCQ+j4JWOC/6OWWtqMh3gcXtNFiAG9L8vY3DcfS2b9I9DQMeEJSOl
+         hm19TO6FpEAODpm1nGfmYEAKY8rl2vEswAXObCCmDbCHiycLI4GP13uQYuypXaWSs7
+         6xGJABLDdsOig==
+Date:   Thu, 16 Feb 2023 10:38:51 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: [PATCH v2.1 03/24] arm/cpu: Add unreachable() to arch_cpu_idle_dead()
+Message-ID: <20230216183851.s5bnvniomq44rytu@treble>
+References: <cover.1676358308.git.jpoimboe@kernel.org>
+ <ed361403b8ee965f758fe491c47336dddcfb8fd5.1676358308.git.jpoimboe@kernel.org>
+ <Y+ttS0japRCzHoFM@shell.armlinux.org.uk>
+ <20230214183926.46trlpdror3v5sk5@treble>
+ <Y+wEubLjgDQDIbSO@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+5bGS9clWPS+B5J@krava>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y+wEubLjgDQDIbSO@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri and Arnaldo,
+arch_cpu_idle_dead() doesn't return.  Make that visible to the compiler
+with an unreachable() code annotation.
 
-On Thu, Feb 16, 2023 at 05:34:33PM +0100, Jiri Olsa wrote:
-> On Thu, Feb 16, 2023 at 01:32:14PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Feb 16, 2023 at 05:23:05PM +0100, Jiri Olsa escreveu:
-> > > On Mon, Feb 13, 2023 at 09:04:49PM -0800, Namhyung Kim wrote:
-> > > 
-> > > SNIP
-> > > 
-> > > > @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
-> > > >  
-> > > >  		for (int x = 0; x < xyarray__max_x(xy); x++) {
-> > > >  			for (int y = 0; y < xyarray__max_y(xy); y++) {
-> > > > -				__record__read_lost_samples(rec, evsel, lost, x, y);
-> > > > +				struct perf_counts_values count;
-> > > > +
-> > > > +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
-> > > > +					pr_err("read LOST count failed\n");
-> > > > +					goto out;
-> > > > +				}
-> > > > +
-> > > > +				if (count.lost) {
-> > > > +					__record__save_lost_samples(rec, evsel, lost,
-> > > > +								    x, y, count.lost, 0);
-> > > > +				}
-> > > >  			}
-> > > >  		}
-> > > > +
-> > > > +		lost_count = perf_bpf_filter__lost_count(evsel);
-> > > > +		if (lost_count)
-> > > > +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
-> > > > +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
-> > > 
-> > > hi,
-> > > I can't see PERF_RECORD_MISC_LOST_SAMPLES_BPF in the tip/perf/core so can't compile,
-> > > what do I miss?
-> > 
-> > Humm, but you shouldn't need kernel headers to build tools/perf/, right?
-> 
-> right, should be also in tools/include headers
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/arm/kernel/smp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yeah, sorry about that.  I'm not sure how I missed the part.
-
-I put it in tools/lib/perf/include/perf/event.h only as it does nothing
-with kernel.  Will fix in v2.
-
-Thanks,
-Namhyung
-
----8<---
-
-diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-index ad47d7b31046..51b9338f4c11 100644
---- a/tools/lib/perf/include/perf/event.h
-+++ b/tools/lib/perf/include/perf/event.h
-@@ -70,6 +70,8 @@ struct perf_record_lost {
-        __u64                    lost;
- };
-
-+#define PERF_RECORD_MISC_LOST_SAMPLES_BPF (1 << 15)
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index 0b8c25763adc..441ea5cff390 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -382,6 +382,8 @@ void arch_cpu_idle_dead(void)
+ 		: "r" (task_stack_page(current) + THREAD_SIZE - 8),
+ 		  "r" (current)
+ 		: "r0");
 +
- struct perf_record_lost_samples {
-        struct perf_event_header header;
-        __u64                    lost;
++	unreachable();
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+ 
+-- 
+2.39.1
 
