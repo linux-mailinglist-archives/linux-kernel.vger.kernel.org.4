@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D9069986A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E33D699873
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBPPIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S229838AbjBPPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBPPIo (ORCPT
+        with ESMTP id S229532AbjBPPKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:08:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B5D3251D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:07:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CDE3B82690
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9D2C433D2;
-        Thu, 16 Feb 2023 15:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676560046;
-        bh=+jQjyTtJNZoLvTJ7dAH55mjUgmu9ISpAsus6Fi/J13I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mb9CLrmShGTyWfqdZAE7XdP8oeL5c0Q/tNDYMMyzjLr8eiEuo2Z47hY5VZjz2ufZv
-         6qqSrJiWvDb3VNPmvL90Q7zem1CJOfmNQqXxMz1g/Rqu/wbBd7BqMD3fepeVVi6Jo9
-         QzDLZ1/WUj4db8VmI9Bj0PPbuFn04L3oaeRnn9n8=
-Date:   Thu, 16 Feb 2023 16:07:24 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Suweifeng (Weifeng, EulerOS)" <suweifeng1@huawei.com>
-Cc:     mst@redhat.com, linux-kernel@vger.kernel.org, shikemeng@huawei.com,
-        liuzhiqiang26@huawei.com, linfeilong@huawei.com,
-        zhanghongtao22@huawei.com
-Subject: Re: [PATCH] uio:uio_pci_generic:Don't clear master bit when the
- process does not exit
-Message-ID: <Y+5GrE6F++Lv4BO+@kroah.com>
-References: <20230214132157.472753-1-suweifeng1@huawei.com>
- <Y+uJ6ejVNl6RoQPk@kroah.com>
- <1601ce95-5ec7-3656-cdcd-bf052cf6d222@huawei.com>
+        Thu, 16 Feb 2023 10:10:24 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5D41B31F;
+        Thu, 16 Feb 2023 07:10:23 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSftt-0006pU-46; Thu, 16 Feb 2023 16:10:21 +0100
+Message-ID: <cbdc682f-87a6-3885-5853-328562569bdd@leemhuis.info>
+Date:   Thu, 16 Feb 2023 16:10:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1601ce95-5ec7-3656-cdcd-bf052cf6d222@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: =?UTF-8?Q?Re=3a_=5bRegression=5d_Bug=c2=a0216913_-_i2c_not_working_?=
+ =?UTF-8?Q?after_hibernation_=28i2c=5fdesignware=29?=
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Georg <g.wenzel@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <8c3fd22a-9a11-216c-891f-969475745d20@leemhuis.info>
+In-Reply-To: <8c3fd22a-9a11-216c-891f-969475745d20@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676560223;c5104e7a;
+X-HE-SMSGID: 1pSftt-0006pU-46
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:45:02PM +0800, Suweifeng (Weifeng, EulerOS) wrote:
-> On 2023/2/14 21:17, Greg KH wrote:
-> > On Tue, Feb 14, 2023 at 09:21:57PM +0800, Su Weifeng wrote:
-> > > From: Weifeng Su <suweifeng1@huawei.com>
-> > > 
-> > > The /dev/uioX device is used by multiple processes. The current behavior
-> > > is to clear the master bit when a process exits. This affects other
-> > > processes that use the device, resulting in command suspension and
-> > > timeout. This behavior cannot be sensed by the process itself.
-> > > The solution is to add the reference counting. The reference count is
-> > > self-incremented and self-decremented each time when the device open and
-> > > close. The master bit is cleared only when the last process exited.
-> > > 
-> > > Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
-> > > ---
-> > >   drivers/uio/uio_pci_generic.c | 18 +++++++++++++++++-
-> > >   1 file changed, 17 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
-> > > index e03f9b532..d36d3e08e 100644
-> > > --- a/drivers/uio/uio_pci_generic.c
-> > > +++ b/drivers/uio/uio_pci_generic.c
-> > > @@ -31,6 +31,7 @@
-> > >   struct uio_pci_generic_dev {
-> > >   	struct uio_info info;
-> > >   	struct pci_dev *pdev;
-> > > +	refcount_t  dev_refc;
-> > >   };
-> > >   static inline struct uio_pci_generic_dev *
-> > > @@ -39,10 +40,22 @@ to_uio_pci_generic_dev(struct uio_info *info)
-> > >   	return container_of(info, struct uio_pci_generic_dev, info);
-> > >   }
-> > > +static int open(struct uio_info *info, struct inode *inode)
-> > > +{
-> > > +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > > +
-> > > +	if (gdev)
-> > > +		refcount_inc(&gdev->dev_refc);
-> > 
-> > This flat out does not work, sorry.
-> > 
-> > You should never rely on trying to count open/release calls, just let
-> > the vfs layer handle that for us as it currently does so.
-> > 
-> > Think about what happens if you call dup() in userspace on a
-> > filehandle...
-> > 
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static int release(struct uio_info *info, struct inode *inode)
-> > >   {
-> > >   	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > > +	if (gdev && refcount_dec_not_one(&gdev->dev_refc))
-> > 
-> > I don't think you actually tested this as it is impossible for gdev to
-> > ever be NULL.
-> > 
-> > sorry, but this patch is not correct.
-> > 
-> > greg k-h
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
+
+On 12.01.23 13:51, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> Hi, this is your Linux kernel regression tracker.
 > 
-> First of all, thank you for taking the time to read this patch, your
-> comments are very enlightening, but I do have a strange problem here, I test
-> such programs on kernels 5.10 and 6.2.
-> fd = open("/dev/uio0". O_RDWR);
-> while (true)
-> 	sleep(1);
-> This program only opens the uio device. After starting multiple such
-> processes, I close one of them. From the added print, it can be seen that
-> the "uio_pci_generic.c:release" function is called and the master bit is
-> cleared, instead of being called when the last process exits as expected. I
-> think the vfs is not protected as it should be.
+> I noticed a regression report in bugzilla.kernel.org that sounds a lot
+> like it's a regression (it's not totally clear). As many (most?) kernel
+> developer don't keep an eye on it, I decided to forward it by mail.
+> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216913 :
+>
+> [...]
+> 
+> #regzbot introduced: v6.0..v6.1
+> https://bugzilla.kernel.org/show_bug.cgi?id=216913
+> #regzbot title: i2c: i2c_designware: i2c not working after hibernation
+> #regzbot ignore-activity
 
-Did your patch change this functionality?
+According to https://bugzilla.kernel.org/show_bug.cgi?id=216913#c7 :
 
-> Such a problem cannot be
-> handled in the user-mode program. We have to clear the master bit when the
-> last process exits. Otherwise, user-mode programs (for example, the DPDK
-> process that uses uio_pci_generic) cannot work properly.
+#regzbot fixed: 75507a319876a
+#regzbot ignore-activity
 
-Look at the big comment in the release() function in this file.  Does
-that explain the issues here?
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
-Just do not open the device multiple times, you have full control over
-this, right?
 
-If not, then perhaps your hardware should not be using the
-uio_pci_generic() driver but rather have a real kernel driver for it
-instead if it needs to handle this type of functionality?
-
-thanks,
-
-greg k-h
