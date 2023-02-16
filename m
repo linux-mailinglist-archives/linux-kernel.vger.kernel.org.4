@@ -2,169 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C01D699ABE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F29A699AD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjBPRFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S229981AbjBPRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPRFn (ORCPT
+        with ESMTP id S229561AbjBPRLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:05:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8019A4BEA7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:04:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676567098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EAJARXHQNAhyOCCyC2BnQ09ROyHtptUeMjLNwbeK/jY=;
-        b=Mzm/1fNPLM2/7K8u6GprUct9sm2Cb0jVfFtvk2bHScdWlA7+o9voj/DXVFB83+9Qv6/0A3
-        IVjuQ4pvfqdihm267QVFGl5fblz0J7m1PDzJSvSZoKsdEIOIRht8WCR1R+cfiyONfavPvR
-        Ze14Pb6iUjbxSenIkN+I4ZVz+qzZlkc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-522-Bx4Wo_wUP66nZ1AW_s2XTQ-1; Thu, 16 Feb 2023 12:04:57 -0500
-X-MC-Unique: Bx4Wo_wUP66nZ1AW_s2XTQ-1
-Received: by mail-wr1-f72.google.com with SMTP id i1-20020adfa501000000b002c54aaa28dcso341899wrb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:04:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EAJARXHQNAhyOCCyC2BnQ09ROyHtptUeMjLNwbeK/jY=;
-        b=Rw8BpOqVdUquOJQMS80vcAeTQdURFNalFPkyAXOHWP7w7ohZBVMwHXwjRHhAyXYEDR
-         teCml2BJ2ynVdvQaQ03DkuD4VEQ92MAh3WQs+nC9OT0p0cZGf+oGPfX22cDoZ2djIesC
-         2ghwI3Pd/g191Fqo3VxAbvassuaczcq92ffNoo9SZADvU0hJakYWXIyooVTxyXgext4A
-         DEWs6dRH2o5XwBX1COZ3fSNYcg8L6H8vYlxzoVBY8bU71olYTqd+5YRuFfsUB3OJdUCw
-         I5Na5v1blTP2CaTo181B/vYHzvcBS6A2h9/Hh9FKYpNRdMMF+tUBAQOv4IhB3OAPUnIJ
-         bbqw==
-X-Gm-Message-State: AO0yUKUdSJEc2qqVBxlnzVcwBDy1RyPW1V4/zsh+Hwnw65A5Ryii4KHB
-        uxsDPVwiwhxQCOZHarpgWvcET6Th2cazaruzABlJzTjkF81xsQMxx+da494MvyXXKBFFDhyLtRl
-        BpnFZnZMq56Atw7Ey0DCA898B
-X-Received: by 2002:a05:600c:1d0f:b0:3df:9858:c03f with SMTP id l15-20020a05600c1d0f00b003df9858c03fmr2424328wms.20.1676567095533;
-        Thu, 16 Feb 2023 09:04:55 -0800 (PST)
-X-Google-Smtp-Source: AK7set9iS3qwiL5Y9tVloR5loMJzSSh/RVxr2XYgvc64ngnOoIKwusZ8GTOPyQ1l0/LCC+Rtrdk7Uw==
-X-Received: by 2002:a05:600c:1d0f:b0:3df:9858:c03f with SMTP id l15-20020a05600c1d0f00b003df9858c03fmr2424281wms.20.1676567095128;
-        Thu, 16 Feb 2023 09:04:55 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
-        by smtp.gmail.com with ESMTPSA id l14-20020adffe8e000000b002c561805a4csm1966327wrr.45.2023.02.16.09.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 09:04:54 -0800 (PST)
-Message-ID: <3a3ee697-591d-dc3c-7c53-5965da219062@redhat.com>
-Date:   Thu, 16 Feb 2023 18:04:53 +0100
-MIME-Version: 1.0
+        Thu, 16 Feb 2023 12:11:46 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC06E3A0A1;
+        Thu, 16 Feb 2023 09:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676567505; x=1708103505;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=D9qh7pcQ/M7oxgKwAk4F4gicS5kkWM0GpbVFR3Nh+5g=;
+  b=kQgAcvCukx1zy+rliFV5NIgosMUDNpbg3iySB52Xk98SnDDBCn2IXBza
+   kWvgzii5iw/pSXoYCjJlI/V6ygSSbz+U97KWg5YxFwVTzd/xskfyd94jT
+   QFe7pGhG5GAMnZ3G9O3VcfI/km6rfVVNfRL4mkiIAvN9PY7trxBvE7maR
+   3V0aszzp5yZrl+mWKUl98y2mqNkuZtHDfADXjBC36OH+8BNpCdmDlk4LY
+   Z135JgvazgnNZecOCmP/9/pBoYA/wYKWvHOUeD7prOBvJFWrQ9Z8XyNlF
+   9Wm7KucxDvH3ekoQgrZJfdmlpw2iNCyErwtkeaf8w5PlEuwzGoBp09H+Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359207880"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="359207880"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 09:07:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="999110383"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="999110383"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Feb 2023 09:07:24 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 16 Feb 2023 09:07:23 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 16 Feb 2023 09:07:23 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 16 Feb 2023 09:07:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S6ftc6idJpQXP/vw/af9KlQ/yvM8QZ797AtI9MbFyO/XbqQcKm2ODJKD13PQLibTUorNxV9dUePVYFRcJP+XfwKfZF5UOGUnXXcdolIxPfYTsTyBUtWXPhSoWxNsAaH7oueFpUfvTz2HjWJqddyAOejx5ahvuqwGoHLVI9sWCwESyryFYNiMyDRsIATUZwH4bRWucqBIL7r9xLbXXxli5o72T8MKZ3nHiecyGxJaWAWarelgSbmuScr5puCJntGWSQJN01x2bZBUjWlGnJWC8648bi7HrJ4Eb/cVfWxUEdh9feCyMgullS7zIj0OvSOJG3MNhDF3kCSwnp8affcazw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6fC+dqm9IyXudZg/VL5KcxrxDRtnQJwRy2aW+jJRBr0=;
+ b=XIUG0Sz6TBnQVbiLpMDs2EpmehQDtWn8aCpCUOHCTxjYmTNeok0txQmfKsVXy81E2NerLlzACKmSego2AHJHDkNonIQ1a1Bk+c4t6NVviFR336LDE4xkfwjTd161MZ5zZN8FxX5XENQk9OXzAYiYXdsAz1hZ5TNWYXGZrav4fDxhn3Xn7Ls419WJwfjsPDb8drDK9pNWVWtur/cAbvY4Wc31GM/jcNFlag+8EqdF5L5o1WjlizjxtMUv2DjGAY7VVYNLTwMQAa6einZik7w6H6ZSLOi5J1q2AMkbdWccATBaTNmdj0aLUEMyI7q+GT7iQQyFGZ8CrrlgIyo4WopMeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by MW5PR11MB5785.namprd11.prod.outlook.com (2603:10b6:303:197::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Thu, 16 Feb
+ 2023 17:07:21 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6086.026; Thu, 16 Feb 2023
+ 17:07:21 +0000
+Message-ID: <597822c9-b859-7a08-6987-1d8a552f6f32@intel.com>
+Date:   Thu, 16 Feb 2023 18:05:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm/migrate: Fix wrongly apply write bit after mkdirty on
- sparc64
+ Thunderbird/102.7.1
+Subject: Re: [Patch] [testing][wireguard] Remove unneeded version.h include
+ pointed out by 'make versioncheck'
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        regressions@leemhuis.info, Nick Bowler <nbowler@draconx.ca>
-References: <20230216153059.256739-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230216153059.256739-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+To:     Jesper Juhl <jesperjuhl76@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <wireguard@lists.zx2c4.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+References: <83474b0e-9e44-642f-10c9-2e0ff94b06ca@gmail.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <83474b0e-9e44-642f-10c9-2e0ff94b06ca@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0170.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:99::19) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MW5PR11MB5785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 733c2a48-f8eb-4d66-dfbd-08db10404462
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uYdpamMQsLUbmgCC7Vssmz/0sa1DaCm75+ISoTDcYlemBV+lJvEWITcwXgtB4P2PMUmTWcsVFqirKQq4HDck5VHOlfsheLkIoCrwuxUCNiC1hq/avyZ/3SYwUpkCmcDg1iDCcUx62ksLn7YnNkEP8OqICBBCPB46VyqXNLVJQqEct0ShKqLrYWhMa4qmHMYyBJePK9ifYzdAA6lm646qq6r14hmOsNgJnF0KjEkq6MzwZ0/ys5e7acEsTi6u76vl+M2hW2tcS8qVTjGFJcE9fo+4w+VpFE6niWET6wMgNkOD6q72DBiCcoyBbypAhHUwdTp7tRkP2y7SWjGJxez0g2jdcMAM8lniTBkrzaSWkxo/Of54rSe/6skwNYBTDij/+7cv85kmTcMpjV+t1tLBaRcYqU79GJxJCiEZuf5Acvyz6+ZwoJFgIGxPM0qXg2jOk8/UMqlvvD65aJXW4G5KiyVVeY36W28co44lWrSp/QayQpckNG1KP4JExozhtnGayYnqNnxPoPGXZksFAcDvsanTKojyZedy7Php3R8Ii3Uad3CxIY4msv19kFGuAWCX1f+MPU7pFMR0kjTz76h+doN9u2MipW+KilU07y3GIKAaxWPegBSy0zRER9ZSQZRiGA+2Zw1tg8KCRaD+E9d5jkaKrYvNbnyGhBH61IiWUY83QagFE/18xPJ2g7k/3JtmPkELKUhysQ4VCZIcEHhEZJ5W8sIxIvj+zfJ6X/ZVQ8Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199018)(5660300002)(6486002)(31696002)(6512007)(2906002)(86362001)(36756003)(6666004)(6506007)(53546011)(186003)(478600001)(26005)(2616005)(4326008)(6916009)(8676002)(82960400001)(41300700001)(66476007)(31686004)(66556008)(83380400001)(54906003)(38100700002)(66946007)(316002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q05wSEQzT2w5VHFISCt5SjdOT1JCaFlGcittcFhsWUp4SHR5ZUN2Z2RSTDE1?=
+ =?utf-8?B?enJiOG55a1BVaVlwV3dTSkVBRzFjUTZYclBJU3dZWG5EaS9YSVNwQ3BHQm40?=
+ =?utf-8?B?ekpQQ2JVNlJZY1FzS0VpckJERitNZFh6cXc5TlpHeWYxdWYzSkxEZjZEbHVr?=
+ =?utf-8?B?OHdKdEZZaEt6OXFxWFJCY2hzeEdRRE11VHp4MjhRVEpkMzNXSzNOVTQrQ1FF?=
+ =?utf-8?B?RDBvY3ZHcGlHZmlvNFVmSW10d091VzFHcDl4Wndzejhnc3A4d2pWOTdhUDBw?=
+ =?utf-8?B?cGhFMlVGRU5ML2FsSTY2MmZ2RHArY0hRbncvWWNmTTVmdXo0V3pNR0tleFp2?=
+ =?utf-8?B?VFByRTdWT2hqc2pLUC9hQUNaTE41WWo5ZjBkTlFnVGxSS0huY1IybW03bU83?=
+ =?utf-8?B?Q3ZTMVJoVmtHZk4wcGlIRzlqSWgvTGRCeFBDL1VIT2JPRkhQaFYxaWN2VGJD?=
+ =?utf-8?B?MHErTGhqYU9HblQrYjFzWXpWY0tzZldQNHRQeDhMUlk0WHdEMDZsWXRRbERn?=
+ =?utf-8?B?ZnBGWXNlSTNkWmszQTRoT2ROcE1qcWZLbm9FUWp1QWwrR1BKdFpScHZZMkdh?=
+ =?utf-8?B?dDRjU2RORTVOQnVENU1MbVpXczR6SGpqaHNWWXh4YVIzN2pTM1k1eUZBZkhO?=
+ =?utf-8?B?TGdrcFZKMVFiSURzOUg1SDFnbmFZL0tQTXlWTmFWWWRGYWg5TlRqYzRqYzRl?=
+ =?utf-8?B?Unpkek1zMkJObE1IV1FSZ29mNThBekdreTlaTU5haFZKcmV0NXIrUzV6RmFT?=
+ =?utf-8?B?Q0hBSzZOZjVGU0dKWmVKVnFTR0R4bzFGNWFRV25abStXVitremdJL1REdEJF?=
+ =?utf-8?B?TmJubXZ3cVRlNHg4WmRQUjM2RENQbkdTbHFZNVdBZHRvWGYvNGJ5Um9WclJp?=
+ =?utf-8?B?Q3R2MVFWYkVtSXgvUS9yZm9uVkVWREdLWTdZUzYwSUtHVjFScllHL05qYlFj?=
+ =?utf-8?B?YnZ0L0daYTdiY2tjK3ZHRVdNcUZMbVhRRzUzMWZDY2Z5NDBvYTZFcDMwMVFN?=
+ =?utf-8?B?cXQ4R2xoUUxzNmcvQ0QyV29CbGVHdWFSbzdKTitoVnNjdU5iMEhudHdWTk5E?=
+ =?utf-8?B?YlB5dUJEemRoL09zUFJ4WC92UkgwSGM4dG9rMFd1MUN1ejd0dUdzTEZwSS91?=
+ =?utf-8?B?QkJtUGRERUJSOHRFa3RkSE5nN3ZwVXFmY0hrc0dYSExPcVp4WXlJOHZzTEVW?=
+ =?utf-8?B?L1BINE9wNWdGbVVZOHFJUXkxc3YxS3QvNk4wa3Zkd3daQW5hWHZoU2JGOCs5?=
+ =?utf-8?B?RXNaeS9mbVNoS214eUFnbTZIbjNheW9mWjhxcUVQd1FWdnN4R2ZpTDM2cVUw?=
+ =?utf-8?B?TVUxMEJRNlVZZXlzZFpTMWxxQnR6Qnc5SDJGK25KYnFHd3VrN3hsWmdWSHR6?=
+ =?utf-8?B?empHTjF6ZFhQT25sU3V2QzFJTmpEaXN3Y3RSSUZlbjZpdkZuUktLQlkwS2pS?=
+ =?utf-8?B?VWZjTVFoaWs3UjRrSy9TaHNCb0lQd3NlV3V5c3oxcXRJbDRYS2EybUhVN1Z0?=
+ =?utf-8?B?TzZodlRMVE02YUlDMjF1Z2FHbVQ4clhQOXF4SnVsRWlnRlBHR2tobVBtSFda?=
+ =?utf-8?B?bi9KMjRUTDB5d1N3T0pzaUpIL2R2U1JzUEJMc0FzVUhFQVVZUnZ1eWFHYVBR?=
+ =?utf-8?B?c0I4U0JoR2w2U2RqRE1WZjNKeHNXQldtL00rNkJaY3hqMUtPQy9uNzA3Zmh6?=
+ =?utf-8?B?MXFJc2NrVnlPMTc2aFhUUWhrVE1tS0pWUjE0QVBmeXFtMXpFalhHaDdPNUxH?=
+ =?utf-8?B?YnJVd3NHVG8xOHBtRnZNaXpNR29ybG5EOEh1SjdQR1pUK1RNV0tBbjlYcW43?=
+ =?utf-8?B?OXBkSDJrbk1lNEY4bllkOUxkWFAwZW1RT2t3YkV6ZkNzZmtzMVZWYjZzSGVJ?=
+ =?utf-8?B?NzdzT0hWeU1NUWRWaHMxNzE4aEU0TVd3VTdIT2xqdCtWc1kwUWJRQ0lZVVhI?=
+ =?utf-8?B?U3NWRlhTcDE2WkI4QmRpWHhxQzFqdkZEMktrRHdNQlIyQldyTEpMTEJqUzJK?=
+ =?utf-8?B?a2ZBYklObjh1KytLNUZRdzFTdFYydHVMZXlCZld4dk0rN2JOaStlRStGQ1VZ?=
+ =?utf-8?B?c2VaNHB4dXl6L1RHZEtKMXY0V3FUOFB2RWlEOXBYQjRyRGxSVnJPNFZ2emRT?=
+ =?utf-8?B?MWU3amo2MlVzd2xqVlRIYis5amEyUjY0L2JwR1NSYi9DU2duL0REdGdFRkJZ?=
+ =?utf-8?Q?9B3mUh2jKHNYNBofHl/vTuo=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 733c2a48-f8eb-4d66-dfbd-08db10404462
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 17:07:21.7151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +urx6KwRvnQTPv9q28rxxuiOSkK5uCLbXvxBMgb/gnXWMm2cljZyyrBMayPK0hvUweJvzZCe7V2LOgPCewXq71prhXfzegQrIGzZZVmibjs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5785
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.23 16:30, Peter Xu wrote:
-> Nick Bowler reported another sparc64 breakage after the young/dirty
-> persistent work for page migration (per "Link:" below).  That's after a
-> similar report [2].
+From: Jesper Juhl <jesperjuhl76@gmail.com>
+Date: Thu, 16 Feb 2023 02:01:05 +0100 (CET)
+
+>> From e2fa4955c676960d0809e4afe8273075c94451c9 Mon Sep 17 00:00:00 2001
+> From: Jesper Juhl <jesperjuhl76@gmail.com>
+> Date: Mon, 13 Feb 2023 02:58:36 +0100
+> Subject: [PATCH 06/12] [testing][wireguard] Remove unneeded version.h
+> include
+>  pointed out by 'make versioncheck'
+
+Your patch is broken, pls resend.
+Also I've no idea about the subject/prefix, shouldn't it be like:
+
+[PATCH net-next] wireguard: selftests: remove unneeded version.h
+
+?
+
 > 
-> It turns out page migration was overlooked, and it wasn't failing before
-> because page migration was not enabled in the initial report test environment.
-> 
-> David proposed another way [2] to fix this from sparc64 side, but that
-> patch didn't land somehow.  Neither did I check whether there's any other
-> arch that has similar issues.
-> 
-> Let's fix it for now as simple as moving the write bit handling to be after
-> dirty, like what we did before.
-> 
-> Note: this is based on mm-unstable, because the breakage was since 6.1 and
-> we're at a very late stage of 6.2 (-rc8), so I assume for this specific
-> case we should target this at 6.3.
-> 
-> [1] https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
-> [2] https://lore.kernel.org/all/20221212130213.136267-1-david@redhat.com/
-> 
-> Cc: regressions@leemhuis.info
-> Fixes: 2e3468778dbe ("mm: remember young/dirty bit for page migrations")
-> Link: https://lore.kernel.org/all/CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com/
-> Reported-by: Nick Bowler <nbowler@draconx.ca>
-> Tested-by: Nick Bowler <nbowler@draconx.ca>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Jesper Juhl <jesperjuhl76@gmail.com>
 > ---
->   mm/huge_memory.c | 6 ++++--
->   mm/migrate.c     | 2 ++
->   2 files changed, 6 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/wireguard/qemu/init.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 1343a7d88299..4fc43859e59a 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -3274,8 +3274,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
->   	pmde = mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot));
->   	if (pmd_swp_soft_dirty(*pvmw->pmd))
->   		pmde = pmd_mksoft_dirty(pmde);
-> -	if (is_writable_migration_entry(entry))
-> -		pmde = maybe_pmd_mkwrite(pmde, vma);
->   	if (pmd_swp_uffd_wp(*pvmw->pmd))
->   		pmde = pmd_mkuffd_wp(pmde);
->   	if (!is_migration_entry_young(entry))
-> @@ -3283,6 +3281,10 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
->   	/* NOTE: this may contain setting soft-dirty on some archs */
->   	if (PageDirty(new) && is_migration_entry_dirty(entry))
->   		pmde = pmd_mkdirty(pmde);
-> +	if (is_writable_migration_entry(entry))
-> +		pmde = maybe_pmd_mkwrite(pmde, vma);
-> +	else
-> +		pmde = pmd_wrprotect(pmde);
->   
->   	if (PageAnon(new)) {
->   		rmap_t rmap_flags = RMAP_COMPOUND;
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index ef68a1aff35c..40c63e77e91f 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -225,6 +225,8 @@ static bool remove_migration_pte(struct folio *folio,
->   			pte = maybe_mkwrite(pte, vma);
->   		else if (pte_swp_uffd_wp(*pvmw.pte))
->   			pte = pte_mkuffd_wp(pte);
-> +		else
-> +			pte = pte_wrprotect(pte);
->   
->   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
->   			rmap_flags |= RMAP_EXCLUSIVE;
+> diff --git a/tools/testing/selftests/wireguard/qemu/init.c
+> b/tools/testing/selftests/wireguard/qemu/init.c
+> index 3e49924dd77e..20d8d3192f75 100644
+> --- a/tools/testing/selftests/wireguard/qemu/init.c
+> +++ b/tools/testing/selftests/wireguard/qemu/init.c
+> @@ -24,7 +24,6 @@
+>  #include <sys/sysmacros.h>
+>  #include <sys/random.h>
+>  #include <linux/random.h>
+> -#include <linux/version.h>
+> 
+>  __attribute__((noreturn)) static void poweroff(void)
+>  {
 
-
-I'd really rather focus on fixing the root cause instead, anyhow if my 
-patch won't make it:
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
-
--- 
 Thanks,
-
-David / dhildenb
-
+Olek
