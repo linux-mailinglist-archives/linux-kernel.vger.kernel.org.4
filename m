@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2517A699DA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 21:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753CC699DA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 21:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjBPU0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 15:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S229628AbjBPU1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 15:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBPU0N (ORCPT
+        with ESMTP id S229637AbjBPU1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 15:26:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8DB2A6C2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 12:26:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E273FB829AC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBC2C4339B;
-        Thu, 16 Feb 2023 20:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676579169;
-        bh=vxkQYBCqGrTDGxO+NXqbzQIrCpV7K/FgvB58+L1RdUo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tOy7V9Fkh8AWGvLfImFPQhziAUT4qGUVizy4WDz2P/D0uFg6XDuchpdLKWoXScPhI
-         KCQ4tCaJYalTdLGoR+cJ/o+0UyhYoyLoDcCfKFUJWeG6KLHrYc3ek3ydaYueeOVi41
-         NeLrOj0GkZrUHoQHOcC+jpq90IaV/Cyg9FVxXfnS0aMKqf8rHIoYb6UmN7E2P7I93A
-         fZESA20UmsgTYJ28HfFGs14j229NkSgV2QPdvo1Cf89hnLL7/5bGZDcteqrrptHcsD
-         cWAQokishXCkHVXreYBu7F90yT3/0HtnpnQOb5Tj5DNLf5QzRwfxzqkBIO001C3fk5
-         awImgMGy+eOHQ==
-Date:   Thu, 16 Feb 2023 12:26:07 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [syzbot] WARNING: can't access registers at
- entry_SYSCALL_64_after_hwframe
-Message-ID: <20230216202607.c2nfp6exhoomjckp@treble>
-References: <000000000000ff304105f4d1cd36@google.com>
- <CACT4Y+Yq1knodAhoBnUe-Tf6QLrQCrGV5gyWC7An8poQDcfv6g@mail.gmail.com>
- <20230216185144.u5zijpev6o77xhaz@treble>
+        Thu, 16 Feb 2023 15:27:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59962A6C2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 12:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676579191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1oecOc+hiRofVEjCM7aQ0Wlwl5gfnG62Egd7W9YjTsU=;
+        b=K8p9QN6d+uBgLeJT0og9GzElw71uwxwgbSzwqgZTST4CNyhQcblO/H6zS7SbRwSjcp45p4
+        A8a1Q8mUNGN+f+YPH/RACcmOHzSnQsToafUbM/Gesk3AdktFu4RAr39uUM+TnTQUC0yx6w
+        Mfe/7QzsGyAv994jpJ2dgfxpiE/zLhE=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-628-LXbSz-aJMO6QWQqIUhfSEQ-1; Thu, 16 Feb 2023 15:26:30 -0500
+X-MC-Unique: LXbSz-aJMO6QWQqIUhfSEQ-1
+Received: by mail-qt1-f197.google.com with SMTP id l21-20020ac81495000000b003bd0d4e3a50so1384917qtj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 12:26:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676579190;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1oecOc+hiRofVEjCM7aQ0Wlwl5gfnG62Egd7W9YjTsU=;
+        b=NGJONLdMVRy6khd+/PaxIkVV44iDzGo9qjj5iHOGtTNjP9e+QhdQTIOwdJkMdsDWp2
+         +BpwOtCI3fEg1UtshRsC3f8yYk1h2eZznP1DOnigi/oAtEgj2PySFlSY7ueBd6gE7XFj
+         ETlYC8BaNWZJvXfy0B8PIiQ+y3TBXW+OQWgl8KsmD1wo+Qr7pZk/YCgwy+31agRQpx+K
+         xF8ecohnM+pEk+kZ+fWAgQUu83xfBMR7eGmSsC8B8I219PqpT/jgt6k6/ikspQOwKfek
+         fRJ6YOYW3IjJ7jrrj1oGPX1rvYC/RjGMhoJnnzRGTpbwmgvf4nlxI3LbMUW0daqUA/WF
+         zhsQ==
+X-Gm-Message-State: AO0yUKXCFe6tsAHiFEDq/2xCr1ZniLeGr3AjtYxRh0bkaA4OvgaXDrC7
+        4a+jQrW+/5lHy53dSsfVuTJ9CifiIpttnONHJuYEXYi7hKcAesouLGT8vUn5zjMvNlLesHUPRsl
+        aCvycGBqSvkqJwgaD4HDUraUt
+X-Received: by 2002:a05:622a:19aa:b0:39c:da22:47b8 with SMTP id u42-20020a05622a19aa00b0039cda2247b8mr13465404qtc.1.1676579189937;
+        Thu, 16 Feb 2023 12:26:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set/Xjpm1YuVpFOgB7Vc7SzNUNmso7z9n0j2QOFUD0tMjJXptDDPTST7C89smgOnvOS8E8ZLz6w==
+X-Received: by 2002:a05:622a:19aa:b0:39c:da22:47b8 with SMTP id u42-20020a05622a19aa00b0039cda2247b8mr13465386qtc.1.1676579189605;
+        Thu, 16 Feb 2023 12:26:29 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id f30-20020ac8015e000000b003bd0e7ff466sm1003888qtg.7.2023.02.16.12.26.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 12:26:28 -0800 (PST)
+Date:   Thu, 16 Feb 2023 15:26:27 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] mm/userfaultfd: add VM_WARN_ONCE()
+Message-ID: <Y+6Rc8RUiv7xAlKH@x1n>
+References: <20230216091656.2045471-1-usama.anjum@collabora.com>
+ <20230216091656.2045471-2-usama.anjum@collabora.com>
+ <4d29a9ec-027d-06b9-8543-87d386e58c94@redhat.com>
+ <c239e126-9b75-9a81-6142-a8e518e769e2@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230216185144.u5zijpev6o77xhaz@treble>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c239e126-9b75-9a81-6142-a8e518e769e2@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:51:44AM -0800, Josh Poimboeuf wrote:
-> On Thu, Feb 16, 2023 at 04:14:25PM +0100, Dmitry Vyukov wrote:
-> > On Thu, 16 Feb 2023 at 15:13, syzbot
-> > <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
-> > > git tree:       linux-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=144edcc8c80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a64cbb8ad0da425e
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=dac365e3ce07c3d0e496
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/70f0c6bb5351/disk-9d9019bc.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/7eed8686df34/vmlinux-9d9019bc.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/84bb6da6b00e/bzImage-9d9019bc.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com
-> > >
-> > > WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
+On Thu, Feb 16, 2023 at 02:48:51PM +0500, Muhammad Usama Anjum wrote:
+> On 2/16/23 2:24 PM, David Hildenbrand wrote:
+> > On 16.02.23 10:16, Muhammad Usama Anjum wrote:
+> >> Add VM_WARN_ONCE() to uffd_wp_range() to detect range (start, len) abuse.
+> >>
+> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >> ---
+> >>   mm/userfaultfd.c | 2 ++
+> >>   1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> >> index 77c5839e591c..d89ed44d2668 100644
+> >> --- a/mm/userfaultfd.c
+> >> +++ b/mm/userfaultfd.c
+> >> @@ -717,6 +717,8 @@ long uffd_wp_range(struct mm_struct *dst_mm, struct
+> >> vm_area_struct *dst_vma,
+> >>       struct mmu_gather tlb;
+> >>       long ret;
+> >>   +    VM_WARN_ONCE(start < dst_vma->vm_start || start + len >
+> >> dst_vma->vm_end,
+> >> +             "The address range exceeds VMA boundary.\n");
 > > 
-> > 
-> > This is another splat of reports we started getting recently. Looks
-> > like this may be ORC unwinder related as well.
-> 
-> Yeah... Also:
-> 
->   https://lkml.kernel.org/lkml/202302161616.85f13863-oliver.sang@intel.com
->   https://lkml.kernel.org/lkml/CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com
-> 
-> The problem seems to be commit ffb1b4a41016 ("x86/unwind/orc: Add
-> 'signal' field to ORC metadata") but right now I don't know why.
+> > VM_WARN_ON_ONCE is sufficient (sorry for spelling out the wrong variant
+> > earlier).
+> Will do in the next version. Thanks.
 
-Ah, figured it out:
-
-$ tools/objtool/objtool --dump=orc vmlinux |grep signal:1 |wc -l
-0
-
-The 'signal' bit isn't getting propagated from the unwind hints to the
-ORC entries :-(
-
-Will post a fix shortly.
+Shall we just squash the two patches?
 
 -- 
-Josh
+Peter Xu
+
