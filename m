@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B05B698E00
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D77698E02
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBPHqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S229779AbjBPHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBPHqv (ORCPT
+        with ESMTP id S229756AbjBPHq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:46:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0AC3B0C8;
-        Wed, 15 Feb 2023 23:46:50 -0800 (PST)
+        Thu, 16 Feb 2023 02:46:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED473D0B5;
+        Wed, 15 Feb 2023 23:46:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EDBAB825D5;
-        Thu, 16 Feb 2023 07:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E71C4339B;
-        Thu, 16 Feb 2023 07:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676533607;
-        bh=1fHVCAebbHEEGzBBOAxpM2zLnFRsw1EJNwYcko4owRM=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A986561E9B;
+        Thu, 16 Feb 2023 07:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A972C433D2;
+        Thu, 16 Feb 2023 07:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676533616;
+        bh=+zie8DFIW086ciac+xBLGHQtfLEE2mebhKoZUUc3aGc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHpQrgDeKRE19/jG0RzUwrvEKA0SZw+/lG7AQ/Kd5qEjSZqkXr8EXuuK2l0qArdIZ
-         qgHKFj9DRz0+A3JT+oeVigYFCF+1UrXArfuB9yFsPEzt0ne8zqdpX88hewzQwuXdXQ
-         xONNtHK/5GsRN4HR6ij65t2H5dHF+Qg3iYZYAHkY=
-Date:   Thu, 16 Feb 2023 08:46:44 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Yonggil Song <yonggil.song@samsung.com>
-Cc:     Chao Yu <chao@kernel.org>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daehojeong@google.com" <daehojeong@google.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
-Message-ID: <Y+3fZM/5g1RO+mR1@kroah.com>
-References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p4>
- <20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366@epcms2p4>
+        b=LCOQ4+MXazvsQMFJRVy+maqrEGE9X6jkTr2pA/aWhfbBmvuVtfsnS2mZn+y03mgfM
+         chhfleytQW5kGJUu0M+RD+ezD2Pl//aC7VHybrtlkc3bq8+R1CZdcvslCF6lINsSSE
+         5tKPI4e2KFHb8VA0ZrWKxIufRC+JWnTG3In9/PKY9vCpAy/Fj7X4+XVhmilJN3ecPm
+         9g1VYNTv6z/VJJJo3Y34Vq5l/8kEtOMltYSwtRCQliclIsOqH9FdSUZq5BPN3SMIAe
+         9LYyGQmnMYgQvmYcohC4a+10hz+Sdqh0s8aR0z2ccQGmT4gRKyATnSOJYrZvIlZwXG
+         Wl2AYv14epu2A==
+Date:   Thu, 16 Feb 2023 09:46:51 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        bhelgaas@google.com, jean-philippe@linaro.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
+Subject: Re: [PATCH] PCI/ATS:  Allow to enable ATS on VFs even if it is not
+ enabled on PF
+Message-ID: <Y+3fa/3HC1vsLRXa@unreal>
+References: <Y+ksmNWJdWNkGAU9@unreal>
+ <20230215205726.GA3213227@bhelgaas>
+ <Y+3al/a3HPrvfNgh@unreal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366@epcms2p4>
+In-Reply-To: <Y+3al/a3HPrvfNgh@unreal>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,57 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 04:44:27PM +0900, Yonggil Song wrote:
-> When f2fs skipped a gc round during victim migration, there was a bug which
-> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
-> was not initialized. It fixes the bug by correctly initializing the
-> skipped_gc_rwsem inside the gc loop.
+On Thu, Feb 16, 2023 at 09:26:15AM +0200, Leon Romanovsky wrote:
+> On Wed, Feb 15, 2023 at 02:57:26PM -0600, Bjorn Helgaas wrote:
+> > [+cc Will, Robin, Joerg for arm-smmu-v3 page size question]
+> > 
+> > On Sun, Feb 12, 2023 at 08:14:48PM +0200, Leon Romanovsky wrote:
+> > > On Wed, Feb 08, 2023 at 10:43:21AM -0800, Ganapatrao Kulkarni wrote:
+> > > > As per PCIe specification(section 10.5), If a VF implements an
+> > > > ATS capability, its associated PF must implement an ATS capability.
+> > > > The ATS Capabilities in VFs and their associated PFs are permitted to
+> > > > be enabled independently.
+> > > > Also, it states that the Smallest Translation Unit (STU) for VFs must be
+> > > > hardwired to Zero and the associated PF's value applies to VFs STU.
+> > > > 
+> > > > The current code allows to enable ATS on VFs only if it is already
+> > > > enabled on associated PF, which is not necessary as per the specification.
+> > > > 
+> > > > It is only required to have valid STU programmed on PF to enable
+> > > > ATS on VFs. Adding code to write the first VFs STU to a PF's STU
+> > > > when PFs ATS is not enabled.
+> > >
+> > > Can you please add here quotes from the spec and its version? I don't see
+> > > anything like this in my version of PCIe specification.
+> > 
+> > See PCIe r6.0, sec 10.5.1.
 > 
-> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
-> 
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index b22f49a6f128..81d326abaac1 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->  				prefree_segments(sbi));
->  
->  	cpc.reason = __get_cp_reason(sbi);
-> -	sbi->skipped_gc_rwsem = 0;
->  gc_more:
-> +	sbi->skipped_gc_rwsem = 0;
->  	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
->  		ret = -EINVAL;
->  		goto stop;
-> -- 
-> 2.34.1
+> Awesome, I have old versions.
 
-Hi,
+OK, where should I read about this sentence?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+"It is only required to have valid STU programmed on PF to enable
+ ATS on VFs. Adding code to write the first VFs STU to a PF's STU
+ when PFs ATS is not enabled."
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+From spec:
+"Smallest Translation Unit (STU) - This value indicates to the Function the minimum number of
+4096-byte blocks that is indicated in a Translation Completions or Invalidate Requests. This is a power of
+2 multiplier and the number of blocks is 2STU. A value of 0 0000b indicates one block and a value of
+1 1111b indicates 231 blocks (or 8 TB total)
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+For VFs, this field must be hardwired to Zero. The associated PF's value applies.
+Default value is 0 0000b"
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+And enable bit doesn't have any sentence about STU.
 
-thanks,
-
-greg k-h's patch email bot
+Thanks
