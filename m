@@ -2,106 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A251699907
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0139E699922
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjBPPhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S230381AbjBPPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjBPPh0 (ORCPT
+        with ESMTP id S229770AbjBPPmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:37:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBB554552
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:37:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B193A61843
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:37:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0770C433EF;
-        Thu, 16 Feb 2023 15:37:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676561844;
-        bh=2+KPvuaCpQD+82YcuDgvuCuUe3Ns8wL0cUpK01igajg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tXysuqPsAs6J2ADpVDn3NaSd6flR4exuDGjBW74aRiQyJN2pDl4rAUOfH/nNfJQK1
-         XS2Ig7Ly2vqYyyQxyRF4CeuJy/EafnvwX+bSfYLBgPPYGg/emI9CZW4KTCNNUeyk6y
-         XAycS4nRkZK9QH2V1EHzJmuKkqVvI/qSH/Axr3GxXhwM8mU+tdhv7aMSbpcc6Jc/bS
-         rckyp9C6ogk8/r7+ZgfXlYZb2I9viKSb+UuKEG9jyANrOxLbuEpDvvTLi/c2O7sYoi
-         Wqv2Idj3cjcZpAwfRp7ec1J3vbVmx7MtqusrR/exBUnwjzsT3Hp35ovK2wrw2Z7VjN
-         XWPAJuRtj1cPg==
-Date:   Thu, 16 Feb 2023 15:37:20 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lucas Tanure <lucas.tanure@collabora.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 8/9] ASoC: amd: vangogh: Centralize strings definition
-Message-ID: <Y+5NsB/Z5P+rVGbX@sirena.org.uk>
-References: <20230216103300.360016-1-lucas.tanure@collabora.com>
- <20230216103300.360016-9-lucas.tanure@collabora.com>
+        Thu, 16 Feb 2023 10:42:33 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753AF518C1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:42:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676562130; x=1708098130;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZiXDUFGLKyZJWKtsy/KxUXEoRcnEoHEMZePrHLGJ+VE=;
+  b=IywDMY45ACbodPNhiMP9bih+4vr67ugfUWeAHcCP3LdLR66PVzEsDO3Y
+   mqKaNez+Un2vxfKW6+y7cjg69wzo8Ycqnb4NS9GiAnYugNydCLmeXRn3o
+   HUmh1MtOOOH7n4oietlDEuVln/+jdPTNrupgz+niDpxewLSHsVmkEYC3+
+   QqTHfWGF50aa9ddOvOsGDqLCWlAOpc8YcbMARs/RCB/13uCFnYFwrh0VJ
+   HV0IX1vc8mCxyY9X5v1/o4Tf3lWhIxMnyStZKTd4YtDUJwd6arJOYoud7
+   KanhVullKI1pILMRsnoDWSBPX0aWT2+r+3oDssM23VjLZ7BUWekNlGYdq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359177966"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="359177966"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 07:41:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="700531728"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="700531728"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 16 Feb 2023 07:41:29 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSgO1-000AK7-0N;
+        Thu, 16 Feb 2023 15:41:29 +0000
+Date:   Thu, 16 Feb 2023 23:40:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cpu] BUILD SUCCESS
+ e067248949e3de7fbeae812b0ccbbee7a401e7aa
+Message-ID: <63ee4e77.RMLAHufK6SNSKXbQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qdQDcYIyMx1V5VX8"
-Content-Disposition: inline
-In-Reply-To: <20230216103300.360016-9-lucas.tanure@collabora.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+branch HEAD: e067248949e3de7fbeae812b0ccbbee7a401e7aa  Merge branch 'linus' into x86/cpu, to resolve conflict
 
---qdQDcYIyMx1V5VX8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+elapsed time: 1714m
 
-On Thu, Feb 16, 2023 at 10:32:59AM +0000, Lucas Tanure wrote:
+configs tested: 79
+configs skipped: 3
 
-> Replace occurrences of strings by their definition, avoiding bugs where
-> the string changed, but not all places have been modified
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  #define DRV_NAME			"acp5x_mach"
->  #define DUAL_CHANNEL			2
-> -#define ACP5X_NUVOTON_CODEC_DAI		"nau8821-hifi"
->  #define VG_JUPITER			1
-> -#define ACP5X_NUVOTON_BCLK		3072000
-> -#define ACP5X_NAU8821_FREQ_OUT		12288000
-> +#define NAU8821_BCLK			3072000
-> +#define NAU8821_FREQ_OUT		12288000
-> +#define NAU8821_DAI			"nau8821-hifi"
-> +#define CS35L41_LNAME			"spi-VLV1776:00"
-> +#define CS35L41_RNAME			"spi-VLV1776:01"
-> +#define CS35L41_DAI			"cs35l41-pcm"
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230212
+arc                  randconfig-r043-20230213
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm                  randconfig-r046-20230212
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                 randconfig-a011-20230213
+i386                 randconfig-a012-20230213
+i386                 randconfig-a013-20230213
+i386                 randconfig-a014-20230213
+i386                 randconfig-a015-20230213
+i386                 randconfig-a016-20230213
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                randconfig-r042-20230213
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                 randconfig-r044-20230213
+sh                               allmodconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64               randconfig-a011-20230213
+x86_64               randconfig-a012-20230213
+x86_64               randconfig-a013-20230213
+x86_64               randconfig-a014-20230213
+x86_64               randconfig-a015-20230213
+x86_64               randconfig-a016-20230213
+x86_64                               rhel-8.3
 
-These changes don't obviously correspond to the description of
-the patch.  It looks like there's at least some renaming and
-reindentation of things not related to DAI names here.  TBH I'm
-not sure the removal of namespacing is a good idea, it's probably
-not *super* likely but we might run into collisions.
+clang tested configs:
+arm                  randconfig-r046-20230213
+hexagon              randconfig-r041-20230212
+hexagon              randconfig-r041-20230213
+hexagon              randconfig-r045-20230212
+hexagon              randconfig-r045-20230213
+i386                 randconfig-a001-20230213
+i386                 randconfig-a002-20230213
+i386                 randconfig-a003-20230213
+i386                 randconfig-a004-20230213
+i386                 randconfig-a005-20230213
+i386                 randconfig-a006-20230213
+riscv                randconfig-r042-20230212
+s390                 randconfig-r044-20230212
+x86_64               randconfig-a001-20230213
+x86_64               randconfig-a002-20230213
+x86_64               randconfig-a003-20230213
+x86_64               randconfig-a004-20230213
+x86_64               randconfig-a005-20230213
+x86_64               randconfig-a006-20230213
 
---qdQDcYIyMx1V5VX8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuTbAACgkQJNaLcl1U
-h9CM/wgAhRWIiQuG2HbuVN3no2Nu6aNxDlLnUyWqA56pB1z0yMBH8FUpGknpjCN2
-gdXiAARXV9SzsasDJuDR7j1K7XDGV0HzQfmkRTsr7tFdvcmGqcX1VJpfPZHUaYLT
-TbrM3xmhCxJl0b4q9SErRcVnXigBqliQdQKP059F3S6QqSn0TfMu6be5Dem5AhS1
-BMuk64l4HKZkpn6zEJqmGzDv2gM+goq4gEZpo7MCwYdpSehUUT0xY1eR0T8/tUfr
-HC50ADfLeWqb3iMCN0kuUVPh/8lEELOY5dxpUSzb+B8oZ+i6lrDJQWWjUXEDw0iE
-b7W3A65dk2wwRFiL8K18FpSMdj3D9w==
-=xmrC
------END PGP SIGNATURE-----
-
---qdQDcYIyMx1V5VX8--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
