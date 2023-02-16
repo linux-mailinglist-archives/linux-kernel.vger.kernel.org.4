@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25976997DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835FF6997E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjBPOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S229861AbjBPOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBPOvq (ORCPT
+        with ESMTP id S230246AbjBPOwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:51:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D7E3A0AC;
-        Thu, 16 Feb 2023 06:51:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676559102; x=1708095102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x371ivh4xXBL5WHPoCYny9H2qed+c4NoN03Dsh6RNUM=;
-  b=V3niWVjStF2MXEujrINr6URB/lJ0pxJ++okCsiyZ7VZHXp6r9NANJx72
-   27/92BReNFhY23NqzvWZqGwZyA+BgVueQMKL4GbNj2AP9364T2YgRotAM
-   s4U/oPyUw0qAkAO8XAgnwS1WkeUQK9W27Ppta+mZQuAhPxhM7Gy7dfbKC
-   62bHBttTLn0ZsRrQiMQsVEs+SdTDXsmmPQjdIeD8eyqH1GzSbnUM3SCRo
-   3D/A7kItoP7jG+6SlB88F6tl+wJdVJSNaoans2FCtnqEYAR4paoBecrwa
-   HJA05K5ZgeVPq3j//X2xe01y0aLrAuG8YuEVvCLgwq7/l0xsreYar4ZOe
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="394160682"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="394160682"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 06:51:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="915682205"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="915682205"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2023 06:51:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pSfbl-007pIR-2r;
-        Thu, 16 Feb 2023 16:51:37 +0200
-Date:   Thu, 16 Feb 2023 16:51:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raag Jadav <raag.jadav@intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
-Subject: Re: [PATCH v1 2/3] gpio: merrifield: Adapt to tangier driver
-Message-ID: <Y+5C+YeeQJsIHayU@smile.fi.intel.com>
-References: <20230216132356.29922-1-raag.jadav@intel.com>
- <20230216132356.29922-3-raag.jadav@intel.com>
+        Thu, 16 Feb 2023 09:52:18 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1029521F5;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso6344715pju.0;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=cwz68VlmDebluJTDd3kSMGJs+22jJVLh0Fv0bcrZcbxWMLknLTS+Tig93Lq9LNTuwY
+         V5SiifT7xi1tRId07N0GCnnM4k3LCV4L7xKXbW8uFDrmLNNXcErsIb8FkXig368+U8IB
+         gwH2+13ufQE7YAbNisWxG/gB4r1KN0MAw8jCMwuAkmZcpZ5SUmMOhPUUT4OizXTOOKUu
+         2c9a4jwgTkeHUBZ73M4rJWvghAt/bBReKj25J4ixRMSVPADaSpbbQL6/CBnR8+fpnv1N
+         kk77iJW7wxWjk6/XNHa1gBmb0yXMD6kiD2jinSUPkYeQ6Y2GPG5/5r4thQ7xTjtYro0k
+         tQ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=PdxDr/xGkZOANSM1jBIjXDBYlPnBc81KQZqMVQZXZzHDEdMElf/Mytiw+sGXkOKAUj
+         DHKGN9EO+L5QDLH/QNmVv0yIRGxHgyRxC5POSbJ7SFcREsMG457I890ygUTSTDKPvj+e
+         h7WEo6V1csyuaf9Xnc27eMk1/4loHSrgUGrlRfo4m1wuqn+JTHPmKytlsbnqB3NNIAeL
+         q2IfAdutoG1LEtVQhgMypt+u5QXNKrggjMuuOorxbK69b1cW3KaY7vAqSzrxrEHXEbCQ
+         /vMs9huEeQtjYhgPfWv+ebVpS28e9To4UIjtJLjxdNdXICGpywz7ObGrWmI+fxWP9y9H
+         /5BQ==
+X-Gm-Message-State: AO0yUKUxuEfW+Sp+XPOwwStvbLUHBuMtUubohpnygRmACgTqeklIzd2W
+        FIxKDh44ZMgLU2JNQMTw9x4=
+X-Google-Smtp-Source: AK7set+7/LSgLUnPubFXxsFw4TXLoT5TlodOzauYcx+mvORzOE91ehJg5BdcehvsXAQ3G3HCcHMguA==
+X-Received: by 2002:a17:90a:c782:b0:233:ab9b:f86a with SMTP id gn2-20020a17090ac78200b00233ab9bf86amr7033557pjb.8.1676559137218;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090abd1700b00233db0db3dfsm3388472pjr.7.2023.02.16.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 06:52:16 -0800 (PST)
+From:   Taichi Nishimura <awkrail01@gmail.com>
+To:     rdunlap@infradead.org
+Cc:     andrii@kernel.org, ast@kernel.org, awkrail01@gmail.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        deso@posteo.net, haoluo@google.com, hawk@kernel.org,
+        iii@linux.ibm.com, joannelkoong@gmail.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
+        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
+        yhs@fb.com, ytcoode@gmail.com, gregkh@linuxfoundation.org
+Subject: [Re: PATCH bpf-next] Fix typos in selftest/bpf files
+Date:   Thu, 16 Feb 2023 23:51:45 +0900
+Message-Id: <20230216145145.548183-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
+References: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216132356.29922-3-raag.jadav@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 06:53:55PM +0530, Raag Jadav wrote:
-> From: Pandith N <pandith.n@intel.com>
-> 
-> Make use of Intel Tangier as a library driver for Merrifield.
+> This text is not needed in the changelog for a patch, please read the
+> section entitled "The canonical patch format" in the kernel file,
+> Documentation/process/submitting-patches.rst for what is needed in order
+> to properly describe the change.
 
-...
+> thanks,
 
-> -MODULE_LICENSE("GPL v2");
-> +MODULE_LICENSE("GPL");
+> greg k-h
 
-Stray change.
-No need to resend, it can be fixed when applying.
+> Hi,
+> The corrections all look good.
+> Of course, you need to fix what Greg mentioned, then you can resubmit
+> the patch with this added:
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
+> Thanks.
 
+Thank you for your reviewing and advices.
+I am a beginner so they are helpful.
+
+I read the docs and re-sent a patch.
+After sending it, I found forgetting to reply to this thread...
+Sorry in advance.
