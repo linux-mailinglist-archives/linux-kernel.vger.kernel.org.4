@@ -2,143 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D145C699C8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2971A699C95
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBPSnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S229746AbjBPSov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBPSm7 (ORCPT
+        with ESMTP id S229534AbjBPSop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:42:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54569766;
-        Thu, 16 Feb 2023 10:42:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A5C962067;
-        Thu, 16 Feb 2023 18:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2134C433D2;
-        Thu, 16 Feb 2023 18:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676572972;
-        bh=TlkXm7VNtzsJ7EfaEbNCQ0jrF6Prk2gRLM56xZV0kHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gKpTH6Xma+bwkChOl4NLqIndv0Q0HNEGdo6fSGe2zx9UY2BJokLjGScUyDUFIyjs9
-         wHG7zTGmWy1W1NXsvoAG52q2DP0SVTJfLhB/sg40zsXEkiXxqQfCmiK5HkoaXoi50K
-         RajXDINrwduwnFFcetLEurxPZRsCdQSD9lXzw5lPbEjrfxkkYiP49ODJA32x+gCeCZ
-         Qz7xF5LCN8Pkp+5JWe3iXQAVfIJDqbiEKe6CoSERnlnc9RX8jR98iPo7qWnXozME9c
-         lzv2gmFirTvDhgkYO8L7uGcZgBqTJWPnxzROBXQ924iZHTN2zPNmp9qGv97dKbm8K7
-         3PR4cj03EaGxg==
-Date:   Thu, 16 Feb 2023 10:42:49 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: [PATCH v2.1 09/24] mips/cpu: Expose play_dead()'s prototype
- definition
-Message-ID: <20230216184249.ogaqsaykottpxtcb@treble>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <39835bc75af2e812fce56400533cb2ab41bcf0e2.1676358308.git.jpoimboe@kernel.org>
- <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
- <20230214181101.3a2tscbmwdnwbqpu@treble>
- <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
+        Thu, 16 Feb 2023 13:44:45 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3632054D;
+        Thu, 16 Feb 2023 10:44:44 -0800 (PST)
+Received: from [192.168.0.114] (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 4C231419E9E6;
+        Thu, 16 Feb 2023 18:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 4C231419E9E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1676573082;
+        bh=EqOQx83BdAzg6o/suuDu9950m4TfKh84CKhroiqDSbU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gGw4XYyKx4goSLSPfdiNg0By5V0rh5fLI1+NxBntSDeVGdTG0wTDu5pqFRMK43QYB
+         K8yTN/rB/B7+cNKj9qDegisZxHu21G9Ky6ZeVxULL71PBnzBHd6ZXlJ3+ZZO3GEdEm
+         Qr2lIslyM3rxs0b5y3ef1TAskBBZ1m6YN/dqtTmg=
+Message-ID: <b867a165-3ca2-6ce7-4373-2a69d0a1341b@ispras.ru>
+Date:   Thu, 16 Feb 2023 21:44:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/1] wifi: ath9k: hif_usb: fix memory leak of remain_skbs
+Content-Language: en-US
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+References: <20230212145238.123055-1-pchelkin@ispras.ru>
+ <20230212145238.123055-2-pchelkin@ispras.ru> <87a61dsi1n.fsf@toke.dk>
+ <5d67552f-88dd-7bbe-ebeb-888d1efad985@ispras.ru> <87ttzlqyd4.fsf@toke.dk>
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+In-Reply-To: <87ttzlqyd4.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include <asm/smp.h> to make sure play_dead() matches its prototype going
-forward.
+On 16.02.2023 21:05, Toke Høiland-Jørgensen wrote:
+> Fedor Pchelkin <pchelkin@ispras.ru> writes:
+>
+>> On 16.02.2023 19:15, Toke Høiland-Jørgensen wrote:
+>>   > Erm, does this actually fix the leak? AFAICT, ath9k_hif_usb_dev_deinit()
+>>   > is only called on the error path of ath9k_hif_usb_firmware_cb(), not
+>>   > when the device is subsequently torn down in
+>>   > ath9k_htc_disconnect_device()?
+>>
+>> ath9k_hif_usb_dev_deinit() is also called inside
+>> ath9k_hif_usb_disconnect().
+> No it's not, as of:
+>
+> f099c5c9e2ba ("wifi: ath9k: Fix use-after-free in ath9k_hif_usb_disconnect()")
+>
+> I guess you're looking at an older tree? Please base your patches on an
+> up-to-date ath-next tree.
+>
+Oops, that's my fault, I indeed patched the wrong tree.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- arch/mips/cavium-octeon/smp.c | 1 +
- arch/mips/kernel/smp-bmips.c  | 1 +
- arch/mips/kernel/smp-cps.c    | 1 +
- arch/mips/loongson64/smp.c    | 1 +
- 4 files changed, 4 insertions(+)
-
-diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-index 89954f5f87fb..4212584e6efa 100644
---- a/arch/mips/cavium-octeon/smp.c
-+++ b/arch/mips/cavium-octeon/smp.c
-@@ -20,6 +20,7 @@
- #include <asm/mmu_context.h>
- #include <asm/time.h>
- #include <asm/setup.h>
-+#include <asm/smp.h>
- 
- #include <asm/octeon/octeon.h>
- 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index f5d7bfa3472a..df9158e8329d 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -38,6 +38,7 @@
- #include <asm/traps.h>
- #include <asm/barrier.h>
- #include <asm/cpu-features.h>
-+#include <asm/smp.h>
- 
- static int __maybe_unused max_cpus = 1;
- 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index bcd6a944b839..6d69a9ba8167 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -20,6 +20,7 @@
- #include <asm/mipsregs.h>
- #include <asm/pm-cps.h>
- #include <asm/r4kcache.h>
-+#include <asm/smp.h>
- #include <asm/smp-cps.h>
- #include <asm/time.h>
- #include <asm/uasm.h>
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index 660e1de4412a..4e24b317e7cb 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -14,6 +14,7 @@
- #include <linux/cpufreq.h>
- #include <linux/kexec.h>
- #include <asm/processor.h>
-+#include <asm/smp.h>
- #include <asm/time.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
--- 
-2.39.1
+Thanks for clarifying!
 
