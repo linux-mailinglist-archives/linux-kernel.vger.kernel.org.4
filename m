@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47162698934
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B057698946
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjBPAXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S229524AbjBPAas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjBPAXx (ORCPT
+        with ESMTP id S229505AbjBPAaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:23:53 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2268A3B659;
-        Wed, 15 Feb 2023 16:23:42 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id v17so578066qto.3;
-        Wed, 15 Feb 2023 16:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OiyfxnZYKa0ejr4Vi15wMWJbfw4gJ50Ts+oiXnH5Ts8=;
-        b=MZYsVkLpqEu4J/ZAhHgFeo3l/5dngnOlkJxzysI1JlCvv6sKZt7Nkh/DiJpzRodaCh
-         n0WqTlCNxbQZjtAE20wwKz3poYEGubhRVsreSxvQEC15ufwN0aUnu8baX8PlFMV2geSh
-         0EIGnJp3f/QzEWb7IuEkf/VVFR4tDuHfd1JWW+rY1en8AjbUL3OlpFh9cqOw0gnSlyQv
-         aOiyNj3v2I2F/r1UiPuULG38593xK5W5oXbQQIGiLHEdGgyFS7un3+p5pg3mkgljG2zM
-         wYWesyRIVG1ggec/u3tp+wIKIX8oGd4Wdqmpvp00lK3RPNwlxaUJSN9DU+sfQ3Wypy49
-         WQ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OiyfxnZYKa0ejr4Vi15wMWJbfw4gJ50Ts+oiXnH5Ts8=;
-        b=j4efDXyj2NYIWIBnvJWaJniiGrj9ct79rRXH/r5iJ+hgmO5nnLWh9m9hDwiunMCWzu
-         T2Ar77yWXCrFpe9E8jqCL0JwHRL+v5f3YF3KBUWA2ktE/sEkkOBes+bvYda2hEpRZKOd
-         +D/1GMPSWTO+Bw38AdwvPn6FTR4MMbWmjZARtpBxjrGGm5JvquG9u+a8pdE8vHA4Zwgk
-         O04eptA6UyN+8+RvE7AXmb0nS5Qge6J/Fow1rjjA90gGQmcrxKLgW5EGoUGnVFC9mTMR
-         jG+fX7FMtGeiaRFBbEbUWbS7aGZxFwJeuQf7HlapxucFB7732v3HekWugr56FpB2EoQF
-         fAPw==
-X-Gm-Message-State: AO0yUKUqdxfj0veQHp9UXTmaZMkUEv8tuWu/IPeHucPIQaxNi9Jkxp3U
-        7Zde/IxJXqNCegJKaw4xj0I=
-X-Google-Smtp-Source: AK7set9aA9YAe2RxaEDoDvH6GuIeEUwDt1kDnJlVo80r7irVOZ/HSf/EZeYC81fG71CKyUKUA/e24w==
-X-Received: by 2002:ac8:5955:0:b0:3b8:2ce4:3e9 with SMTP id 21-20020ac85955000000b003b82ce403e9mr6319623qtz.32.1676507021262;
-        Wed, 15 Feb 2023 16:23:41 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:f01c:d6c6:bce4:8b35? ([2600:1700:2442:6db0:f01c:d6c6:bce4:8b35])
-        by smtp.gmail.com with ESMTPSA id x12-20020ac8700c000000b003b691385327sm244476qtm.6.2023.02.15.16.23.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 16:23:40 -0800 (PST)
-Message-ID: <6ce9aa75-28d1-9702-c621-845cd7196789@gmail.com>
-Date:   Wed, 15 Feb 2023 18:23:40 -0600
+        Wed, 15 Feb 2023 19:30:46 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452EC42BC9;
+        Wed, 15 Feb 2023 16:30:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHG7c3dmVz4x5X;
+        Thu, 16 Feb 2023 11:30:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676507437;
+        bh=8ToH5Hy9Jqn84CJPYUsxz6idIucqqXBwd1ipim0YCnw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OULtGq/Ch1HhpMWfCjkC0TQ9QnddGZNdGAcPu1EBWsDg79n4WyxXzlLnyJ/vyy3CT
+         b9egGh7ZnsnPZzEnoYakrArVOH4Lrkkw7Oj7W6exhFU3uqtiNUuo+S+zXWwBZmSntP
+         aRocBO26V/c7LtuyO3XMHEmFTP3/k4U7KmZIP8R1VTNWcW5mojhWDn4p63Cp1918wW
+         E1IBzgNXiSVIPU81fcMH3UvYx4Vfk7NfBhCoCAUiiXeJqZaeyMlmipzIfoFSGX+Ky8
+         MmeNXiBdzGWs0TZsmO7JJ1dfi7m9K6/klUKdrwILi9SwnkhAiesmqSwS3Te3KZGXq2
+         TUO+Xar05/0TA==
+Date:   Thu, 16 Feb 2023 11:30:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     Alain Volmat <avolmat@me.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <20230216113035.3050871a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] of: Add of_property_present() helper
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230215215547.691573-1-robh@kernel.org>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20230215215547.691573-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_NQtuGwfo+tEnw0WYtHkIEX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FORGED_SPF_HELO,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 15:55, Rob Herring wrote:
-> Add an of_property_present() function similar to
-> fwnode_property_present(). of_property_read_bool() could be used
-> directly, but it is cleaner to not use it on non-boolean properties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> I plan to add this for v6.3 and send most of the conversion patches in
-> the next cycle.
-> ---
->  include/linux/of.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 8b9f94386dc3..b3e04021186f 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -1537,6 +1537,11 @@ static inline bool of_device_is_system_power_controller(const struct device_node
->  	return of_property_read_bool(np, "system-power-controller");
->  }
->  
-> +static inline bool of_property_present(const struct device_node *np, const char *propname)
-> +{
-> +	return of_property_read_bool(np, propname);
-> +}
-> +
->  /*
->   * Overlay support
->   */
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-of_property_present() needs a docbook header.
+Hi all,
 
-Otherwise, for patches 1 and 2:
+Today's linux-next merge of the spi tree got a conflict in:
 
-Reviewed-by: Frank Rowand <frowand.list@gmail.com>
-Tested-by: Frank Rowand <frowand.list@gmail.com>
+  MAINTAINERS
 
-Test was boot of 32 bit arm devboard with full devicetree unittest
+between commit:
+
+  b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+
+from the i2c tree and commit:
+
+  7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+
+from the spi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 71e92d3c51c6,daa33e7bb457..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -2791,7 -2925,8 +2791,8 @@@ M:	Patrice Chotard <patrice.chotard@fos
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+  S:	Maintained
+  W:	http://www.stlinux.com
++ F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+ -F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
+ +F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+  F:	arch/arm/boot/dts/sti*
+  F:	arch/arm/mach-sti/
+  F:	drivers/ata/ahci_st.c
+
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPteSsACgkQAVBC80lX
+0GwVhgf+O092/OcvSItvBp7tlxhdQ+X/IBaoE+0xte68jTS1YIvQCmJXPIJQhW6x
+yyOn+bvws9Fj3wO7+KG26IsspEx5SpWoJjCbgDOgiTBIvYccXhnbL/IB9dP4VaxV
+ckjhbiiO88thG6c3zhWNumFj5RYq8X24Pw4wYzwqHN73WzV7y8WnYOJETBN/dL3Q
+FFNhaRkzKgwT8ooU7wzL+Rv/uAkXkCoki5B7xh4BussCaVsh2dDUMYIEYGGz/aJT
+mWK347SczxgvHEdYy0Oktuvqz81y6fpUHaGPIjdKZuYMOpmpGqKDcsB0YW8wa5W1
+KzOhTvEuVKXUPzhx+4AnCIjXS1luNg==
+=dS3K
+-----END PGP SIGNATURE-----
+
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX--
