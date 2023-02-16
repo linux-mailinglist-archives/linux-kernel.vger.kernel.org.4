@@ -2,141 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9180B6993DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047816993EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBPMGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S229744AbjBPMKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBPMF5 (ORCPT
+        with ESMTP id S229506AbjBPMKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:05:57 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B801CF43;
-        Thu, 16 Feb 2023 04:05:52 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id EFCB932009A4;
-        Thu, 16 Feb 2023 07:05:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 16 Feb 2023 07:05:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-transfer-encoding:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1676549149; x=1676635549; bh=GP18igZLzqH6StqM5Abx0AVQb
-        dDetac0q1rbN6/756U=; b=C3kNiEkoOg/jd5BEEFOLuNsh+NwBxsTXG7UiHdkyU
-        DjssOvoA1Y8P3uDKEkqgyBjCcjW6OmSLNZcI7sslmxNaZ6PxD+knB/i8C9a1Wk6D
-        40cb7lV15UjSbnZbsZ1qNQLg4tmIuiSJjUDvPXkLxhmrMPL7dDWlu0UuJrWaGtyL
-        6Awoh7zPaEFy+vcV7Zt1xcsfJZIPbmCJvSq8osXlP+SBNPMsm+r9yZaw790vIiDh
-        gVzEgqZrXE+U5FMSI6AVeMNuFRW2kZwmMgl9N1IsgafN6fM5ylUAAuk/OaAGDJVJ
-        93TeQzrZoapN5eXVbmp5gFwiyKBLw93zJmNde+xvnruRg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676549149; x=
-        1676635549; bh=GP18igZLzqH6StqM5Abx0AVQbdDetac0q1rbN6/756U=; b=r
-        CHZOQENdL7fbYi5mzkKy0e5LgGzrEtTrTczjNSbLqWbjN7l+JuT76qosOc3Nsjim
-        GM258Mfi+Lm4LLZC6o/6sU7olACSsgEen/qylXnBdQj1/L4fv+mrdciLDoOu0o/t
-        L1zVIvqrfF9oTufIGa8eQoumK74ftJtrQ2o1PVc16I8G27shgYiVI9f36mVP4VAy
-        tWFuKbP8fjFotZZQ5q3Zx+mI3vJfSr3PeoquXcoZ0D/7j5khNT5QRnUFcF8dwv+M
-        krQ16iIlg6KrsJZeH4hKclXuCLGxOQ1U3QLvHOE8ef8dF02wT2EvNYpxa+vs91Bn
-        /L2GTRzNziDxceLDKHHDw==
-X-ME-Sender: <xms:HRzuYyUgpQH71_uiRMbuSin_yB3y_dmc2lNhYGOz7MM78iZ1FTmW9g>
-    <xme:HRzuY-kJQg7RqsifolV5aYtdcPpLOVqXqc1TPliwodsDgzR7lSRpZEFbxe9doAym3
-    7LBOUi2oub3LgSK7rA>
-X-ME-Received: <xmr:HRzuY2bmMY-ltNADHhfTkFrijjI-21lISmie0VkKscCJ2YmNp2FC6ZIoux0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeflohhs
-    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
-    cuggftrfgrthhtvghrnhepiefghfekgfeuieejveekfeeiueehjeegfeelfeelhefgvefh
-    ieevfefggeduvddtnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhr
-    ihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:HRzuY5UpKuxdjX9_RmSAlLPF53LOaK3mBUB8HQKbe12W1Xz723X97A>
-    <xmx:HRzuY8lW7zaQCFkXXCStAFh2Ndkm0oEXr2XSFicgPYA5KWOjLX1I9g>
-    <xmx:HRzuY-clEzzixF5bgQzFOzyYw7a5_bNzEhDl3XKAm8SmiqELorGRGA>
-    <xmx:HRzuY2jBDXyXDoaRW6JMbmn1gNl_UOTLx9kqoV_3KUlhHJPoOvNtzA>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Feb 2023 07:05:48 -0500 (EST)
-Date:   Thu, 16 Feb 2023 04:05:47 -0800
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Dylan Yudaken <dylany@meta.com>
-Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
-Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
- registered ring fd
-Message-ID: <Y+4cG5yy8U0XGHP6@localhost>
-References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
- <be9f297f68ee3149f67f781fd291b657cfe4166b.camel@meta.com>
+        Thu, 16 Feb 2023 07:10:38 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F3155E45;
+        Thu, 16 Feb 2023 04:10:36 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PHYcX6PTSz16Ncd;
+        Thu, 16 Feb 2023 20:08:12 +0800 (CST)
+Received: from [10.174.179.79] (10.174.179.79) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 16 Feb 2023 20:10:33 +0800
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+To:     Jason Wang <jasowang@redhat.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>, <mst@redhat.com>
+CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <wangrong68@huawei.com>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+ <3bb88db8-1283-f16d-d16a-5d3fb958b584@redhat.com>
+From:   Nanyong Sun <sunnanyong@huawei.com>
+Message-ID: <31bb1d1e-22ac-e576-110d-4e13fb822167@huawei.com>
+Date:   Thu, 16 Feb 2023 20:10:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <3bb88db8-1283-f16d-d16a-5d3fb958b584@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <be9f297f68ee3149f67f781fd291b657cfe4166b.camel@meta.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.79]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 09:35:44AM +0000, Dylan Yudaken wrote:
-> On Tue, 2023-02-14 at 16:42 -0800, Josh Triplett wrote:
-> > @@ -4177,17 +4177,37 @@ SYSCALL_DEFINE4(io_uring_register, unsigned
-> > int, fd, unsigned int, opcode,
-> >         struct io_ring_ctx *ctx;
-> >         long ret = -EBADF;
-> >         struct fd f;
-> > +       bool use_registered_ring;
-> > +
-> > +       use_registered_ring = !!(opcode &
-> > IORING_REGISTER_USE_REGISTERED_RING);
-> > +       opcode &= ~IORING_REGISTER_USE_REGISTERED_RING;
-> >  
-> >         if (opcode >= IORING_REGISTER_LAST)
-> >                 return -EINVAL;
-> >  
-> > -       f = fdget(fd);
-> > -       if (!f.file)
-> > -               return -EBADF;
-> > +       if (use_registered_ring) {
-> > +               /*
-> > +                * Ring fd has been registered via
-> > IORING_REGISTER_RING_FDS, we
-> > +                * need only dereference our task private array to
-> > find it.
-> > +                */
-> > +               struct io_uring_task *tctx = current->io_uring;
-> >  
-> > -       ret = -EOPNOTSUPP;
-> > -       if (!io_is_uring_fops(f.file))
-> > -               goto out_fput;
-> > +               if (unlikely(!tctx || fd >= IO_RINGFD_REG_MAX))
-> > +                       return -EINVAL;
-> > +               fd = array_index_nospec(fd, IO_RINGFD_REG_MAX);
-> > +               f.file = tctx->registered_rings[fd];
-> > +               f.flags = 0;
-> > +               if (unlikely(!f.file))
-> > +                       return -EBADF;
-> > +               opcode &= ~IORING_REGISTER_USE_REGISTERED_RING;
-> 
-> ^ this line looks duplicated at the top of the function?
+On 2023/2/16 12:43, Jason Wang wrote:
 
-Good catch!
+>
+> åœ¨ 2023/2/7 20:08, Nanyong Sun å†™é“:
+>> From: Rong Wang <wangrong68@huawei.com>
+>>
+>> Once enable iommu domain for one device, the MSI
+>> translation tables have to be there for software-managed MSI.
+>> Otherwise, platform with software-managed MSI without an
+>> irq bypass function, can not get a correct memory write event
+>> from pcie, will not get irqs.
+>> The solution is to obtain the MSI phy base address from
+>> iommu reserved region, and set it to iommu MSI cookie,
+>> then translation tables will be created while request irq.
+>>
+>> Change log
+>> ----------
+>>
+>> v1->v2:
+>> - add resv iotlb to avoid overlap mapping.
+>>
+>> Signed-off-by: Rong Wang <wangrong68@huawei.com>
+>> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+>> ---
+>> Â  drivers/iommu/iommu.c |Â  1 +
+>> Â  drivers/vhost/vdpa.cÂ  | 59 ++++++++++++++++++++++++++++++++++++++++---
+>> Â  2 files changed, 57 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 5f6a85aea501..af9c064ad8b2 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, 
+>> struct list_head *list)
+>> Â Â Â Â Â  if (ops->get_resv_regions)
+>> Â Â Â Â Â Â Â Â Â  ops->get_resv_regions(dev, list);
+>> Â  }
+>> +EXPORT_SYMBOL(iommu_get_resv_regions);
+>> Â  Â  /**
+>> Â Â  * iommu_put_resv_regions - release resered regions
+>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+>> index ec32f785dfde..a58979da8acd 100644
+>> --- a/drivers/vhost/vdpa.c
+>> +++ b/drivers/vhost/vdpa.c
+>> @@ -49,6 +49,7 @@ struct vhost_vdpa {
+>> Â Â Â Â Â  struct completion completion;
+>> Â Â Â Â Â  struct vdpa_device *vdpa;
+>> Â Â Â Â Â  struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
+>> +Â Â Â  struct vhost_iotlb resv_iotlb;
+>
+>
+> Nit: it might be better to rename this as resv_regions.
+>
 
-Jens, since you've already applied this, can you remove this line or
-would you like a patch doing so?
+Agree, and will do that in version3
 
-> Also - is there a liburing regression test for this?
+>
+>> Â Â Â Â Â  struct device dev;
+>> Â Â Â Â Â  struct cdev cdev;
+>> Â Â Â Â Â  atomic_t opened;
+>> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>> Â  Â Â Â Â Â  v->in_batch = 0;
+>> Â  +Â Â Â  vhost_iotlb_reset(&v->resv_iotlb);
+>> +
+>> Â Â Â Â Â  return vdpa_reset(vdpa);
+>> Â  }
+>> Â  @@ -1013,6 +1016,10 @@ static int 
+>> vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
+>> Â Â Â Â Â Â Â Â Â  msg->iova + msg->size - 1 > v->range.last)
+>> Â Â Â Â Â Â Â Â Â  return -EINVAL;
+>> Â  +Â Â Â  if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
+>> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  msg->iova + msg->size - 1))
+>> +Â Â Â Â Â Â Â  return -EINVAL;
+>> +
+>> Â Â Â Â Â  if (vhost_iotlb_itree_first(iotlb, msg->iova,
+>> Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  msg->iova + msg->size - 1))
+>> Â Â Â Â Â Â Â Â Â  return -EEXIST;
+>> @@ -1103,6 +1110,45 @@ static ssize_t 
+>> vhost_vdpa_chr_write_iter(struct kiocb *iocb,
+>> Â Â Â Â Â  return vhost_chr_write_iter(dev, from);
+>> Â  }
+>> Â  +static int vhost_vdpa_resv_iommu_region(struct iommu_domain 
+>> *domain, struct device *dma_dev,
+>> +Â Â Â  struct vhost_iotlb *resv_iotlb)
+>> +{
+>> +Â Â Â  struct list_head dev_resv_regions;
+>> +Â Â Â  phys_addr_t resv_msi_base = 0;
+>> +Â Â Â  struct iommu_resv_region *region;
+>> +Â Â Â  int ret = 0;
+>> +Â Â Â  bool with_sw_msi = false;
+>> +Â Â Â  bool with_hw_msi = false;
+>> +
+>> +Â Â Â  INIT_LIST_HEAD(&dev_resv_regions);
+>> +Â Â Â  iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+>> +
+>> +Â Â Â  list_for_each_entry(region, &dev_resv_regions, list) {
+>> +Â Â Â Â Â Â Â  ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
+>> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  region->start + region->length - 1,
+>> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  0, 0, NULL);
+>> +Â Â Â Â Â Â Â  if (ret) {
+>> +Â Â Â Â Â Â Â Â Â Â Â  vhost_iotlb_reset(resv_iotlb);
+>> +Â Â Â Â Â Â Â Â Â Â Â  break;
+>> +Â Â Â Â Â Â Â  }
+>> +
+>> +Â Â Â Â Â Â Â  if (region->type == IOMMU_RESV_MSI)
+>> +Â Â Â Â Â Â Â Â Â Â Â  with_hw_msi = true;
+>> +
+>> +Â Â Â Â Â Â Â  if (region->type == IOMMU_RESV_SW_MSI) {
+>> +Â Â Â Â Â Â Â Â Â Â Â  resv_msi_base = region->start;
+>> +Â Â Â Â Â Â Â Â Â Â Â  with_sw_msi = true;
+>> +Â Â Â Â Â Â Â  }
+>> +Â Â Â  }
+>> +
+>> +Â Â Â  if (!ret && !with_hw_msi && with_sw_msi)
+>> +Â Â Â Â Â Â Â  ret = iommu_get_msi_cookie(domain, resv_msi_base);
+>> +
+>> +Â Â Â  iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+>> +
+>> +Â Â Â  return ret;
+>> +}
+>
+>
+> As discussed in v1, I still prefer to factor out the common logic and 
+> move them to iommu.c. It helps to simplify the future bug fixing and 
+> enhancement.
 
-Userspace, including test: https://github.com/axboe/liburing/pull/664
+Ok, will do that in version3
+
+>
+>
+>> +
+>> Â  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>> Â  {
+>> Â Â Â Â Â  struct vdpa_device *vdpa = v->vdpa;
+>> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct 
+>> vhost_vdpa *v)
+>> Â  Â Â Â Â Â  ret = iommu_attach_device(v->domain, dma_dev);
+>> Â Â Â Â Â  if (ret)
+>> -Â Â Â Â Â Â Â  goto err_attach;
+>> +Â Â Â Â Â Â Â  goto err_alloc_domain;
+>> Â  -Â Â Â  return 0;
+>> +Â Â Â  ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, 
+>> &v->resv_iotlb);
+>> +Â Â Â  if (ret)
+>> +Â Â Â Â Â Â Â  goto err_attach_device;
+>> Â  -err_attach:
+>> +Â Â Â  return 0;
+>> +err_attach_device:
+>> +Â Â Â  iommu_detach_device(v->domain, dma_dev);
+>> +err_alloc_domain:
+>> Â Â Â Â Â  iommu_domain_free(v->domain);
+>> Â Â Â Â Â  return ret;
+>> Â  }
+>> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device 
+>> *vdpa)
+>> Â Â Â Â Â Â Â Â Â  goto err;
+>> Â Â Â Â Â  }
+>> Â  +Â Â Â  vhost_iotlb_init(&v->resv_iotlb, 0, 0);
+>> +
+>> Â Â Â Â Â  r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
+>> Â Â Â Â Â  if (r)
+>> Â Â Â Â Â Â Â Â Â  goto err;
+>
+>
+> We need clean resv_iotlb during release().
+
+I added vhost_iotlb_reset in vhost_vdpa_reset, so will clean while call vhost_vdpa_release() and vhost_vdpa_open().
+
+>
+> Other looks good.
+>
+> Thanks
+>
+> .
