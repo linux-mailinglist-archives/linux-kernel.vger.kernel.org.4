@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E655699C73
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EE6699C75
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBPSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S230020AbjBPSjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjBPSi6 (ORCPT
+        with ESMTP id S229746AbjBPSi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:38:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160D350AC0;
-        Thu, 16 Feb 2023 10:38:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A6862077;
-        Thu, 16 Feb 2023 18:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56CB1C433A1;
-        Thu, 16 Feb 2023 18:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676572735;
-        bh=hl1r8WrgBVR11XLM9TAiwDCXOTiVcQCDtFTYvOcE4vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pzcnRjPVAqaK3xKlZe1yzpskS9/WG+OMTloaSFKzBMCxOCkoRpNuoRNYa/3zPKJnz
-         6X0jJD8EJrjs7EW5Q3nhsFDWki1qsGGw5El1PvFSJCXlOCmUN+Sd3mN6zTUEUZzc4/
-         mNsCR3739yEFXFsyMHHJMQQvHiwVXyBZTBiMAN1UkqOhmnVWUd9WCzEFvocuiDiV1c
-         Eo7Y6nPnKYPTibCQ+j4JWOC/6OWWtqMh3gcXtNFiAG9L8vY3DcfS2b9I9DQMeEJSOl
-         hm19TO6FpEAODpm1nGfmYEAKY8rl2vEswAXObCCmDbCHiycLI4GP13uQYuypXaWSs7
-         6xGJABLDdsOig==
-Date:   Thu, 16 Feb 2023 10:38:51 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: [PATCH v2.1 03/24] arm/cpu: Add unreachable() to arch_cpu_idle_dead()
-Message-ID: <20230216183851.s5bnvniomq44rytu@treble>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <ed361403b8ee965f758fe491c47336dddcfb8fd5.1676358308.git.jpoimboe@kernel.org>
- <Y+ttS0japRCzHoFM@shell.armlinux.org.uk>
- <20230214183926.46trlpdror3v5sk5@treble>
- <Y+wEubLjgDQDIbSO@shell.armlinux.org.uk>
+        Thu, 16 Feb 2023 13:38:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D904B51D;
+        Thu, 16 Feb 2023 10:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676572737; x=1708108737;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0YUsWje/AVr75kqDIq2aTKdJn3ilr/9RYGzWerozeV4=;
+  b=O0byJqQyRWwJmXJHHUPDnQLKOMEQQto5Rq9YO5iNc6Q0Vqr8k6bXJ9HJ
+   57WzTSp0i6ZCyQK5YZYmW/Yjg7rOWc+HVn6lS/6ArUrAtGaUCG8r3G8uU
+   +pMS57Ypvn9qEQTtr9ZjMYv/lbd3H88MqbSJu06NZktb3HFYf+JzFlm/f
+   97e4bYWw43WAvjWBNEniq79zkHglTIAfyMABYJqGTPuqiKd09XX0LJVIv
+   nlc/O/FpThQC5TsHYb/7fOssEfVE6dgGD6p/Rn9SgIlZFwT8SQaBomcpP
+   +boR53xtuQozaLkKP+00O2W7BS1B6cOKL6TBGybMh2U0V1QK8MbQFxYgj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="396474691"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="396474691"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 10:38:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="647818994"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="647818994"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2023 10:38:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pSj9i-007tTP-13;
+        Thu, 16 Feb 2023 20:38:54 +0200
+Date:   Thu, 16 Feb 2023 20:38:54 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] Support NVIDIA BlueField-3 pinctrl driver
+Message-ID: <Y+54Prj3YiPex5lw@smile.fi.intel.com>
+References: <cover.1676042188.git.asmaa@nvidia.com>
+ <acd85e20d3e8d45ce3254e6ffe5ad2b5039b1a34.1676042188.git.asmaa@nvidia.com>
+ <Y+eCNEHcmo4qapcI@smile.fi.intel.com>
+ <CH2PR12MB38957ADFF0519278F33E9D57D7A09@CH2PR12MB3895.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+wEubLjgDQDIbSO@shell.armlinux.org.uk>
+In-Reply-To: <CH2PR12MB38957ADFF0519278F33E9D57D7A09@CH2PR12MB3895.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch_cpu_idle_dead() doesn't return.  Make that visible to the compiler
-with an unreachable() code annotation.
+On Thu, Feb 16, 2023 at 05:50:56PM +0000, Asmaa Mnebhi wrote:
+> > +config PINCTRL_MLXBF
+> > +	tristate "NVIDIA BlueField-3 SoC Pinctrl driver"
+> > +	depends on (MELLANOX_PLATFORM && ARM64 && ACPI)
+> 
+> This is wrong.
+> Please make sure you cover more testing.
+> Also, do you really need an ACPI dependency?
+> 
+> Could you please provide more details on why this is wrong? All our upstreamed drivers use the same "depends on"
+> Our pinctrl driver only applies to Mellanox platforms, ARM64 and use ACPI tables.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- arch/arm/kernel/smp.c | 2 ++
- 1 file changed, 2 insertions(+)
+This is wrong because it narrows down testing coverage.
 
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index 0b8c25763adc..441ea5cff390 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -382,6 +382,8 @@ void arch_cpu_idle_dead(void)
- 		: "r" (task_stack_page(current) + THREAD_SIZE - 8),
- 		  "r" (current)
- 		: "r0");
-+
-+	unreachable();
- }
- #endif /* CONFIG_HOTPLUG_CPU */
- 
+Besides that you need to define functional and build dependencies separately.
+
+ACPI probably is not what you are using in the driver. I do not believe you
+have at all dependency on it.
+
 -- 
-2.39.1
+With Best Regards,
+Andy Shevchenko
+
 
