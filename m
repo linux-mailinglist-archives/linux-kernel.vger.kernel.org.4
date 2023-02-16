@@ -2,89 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51765699B8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C01D699ABE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjBPRs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S230041AbjBPRFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBPRsz (ORCPT
+        with ESMTP id S229477AbjBPRFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:48:55 -0500
-X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Feb 2023 09:48:53 PST
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9D44C3F8;
-        Thu, 16 Feb 2023 09:48:53 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:45302)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pSgqj-00EmG5-FB; Thu, 16 Feb 2023 09:11:09 -0700
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:41456 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pSgqi-003fCi-F5; Thu, 16 Feb 2023 09:11:09 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230215131807.293556-1-omosnace@redhat.com>
-        <20230215124747.6f8df3c4675517eacf1e9a39@linux-foundation.org>
-Date:   Thu, 16 Feb 2023 10:07:53 -0600
-In-Reply-To: <20230215124747.6f8df3c4675517eacf1e9a39@linux-foundation.org>
-        (Andrew Morton's message of "Wed, 15 Feb 2023 12:47:47 -0800")
-Message-ID: <87a61d7fvq.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 16 Feb 2023 12:05:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8019A4BEA7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:04:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676567098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EAJARXHQNAhyOCCyC2BnQ09ROyHtptUeMjLNwbeK/jY=;
+        b=Mzm/1fNPLM2/7K8u6GprUct9sm2Cb0jVfFtvk2bHScdWlA7+o9voj/DXVFB83+9Qv6/0A3
+        IVjuQ4pvfqdihm267QVFGl5fblz0J7m1PDzJSvSZoKsdEIOIRht8WCR1R+cfiyONfavPvR
+        Ze14Pb6iUjbxSenIkN+I4ZVz+qzZlkc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-522-Bx4Wo_wUP66nZ1AW_s2XTQ-1; Thu, 16 Feb 2023 12:04:57 -0500
+X-MC-Unique: Bx4Wo_wUP66nZ1AW_s2XTQ-1
+Received: by mail-wr1-f72.google.com with SMTP id i1-20020adfa501000000b002c54aaa28dcso341899wrb.16
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:04:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EAJARXHQNAhyOCCyC2BnQ09ROyHtptUeMjLNwbeK/jY=;
+        b=Rw8BpOqVdUquOJQMS80vcAeTQdURFNalFPkyAXOHWP7w7ohZBVMwHXwjRHhAyXYEDR
+         teCml2BJ2ynVdvQaQ03DkuD4VEQ92MAh3WQs+nC9OT0p0cZGf+oGPfX22cDoZ2djIesC
+         2ghwI3Pd/g191Fqo3VxAbvassuaczcq92ffNoo9SZADvU0hJakYWXIyooVTxyXgext4A
+         DEWs6dRH2o5XwBX1COZ3fSNYcg8L6H8vYlxzoVBY8bU71olYTqd+5YRuFfsUB3OJdUCw
+         I5Na5v1blTP2CaTo181B/vYHzvcBS6A2h9/Hh9FKYpNRdMMF+tUBAQOv4IhB3OAPUnIJ
+         bbqw==
+X-Gm-Message-State: AO0yUKUdSJEc2qqVBxlnzVcwBDy1RyPW1V4/zsh+Hwnw65A5Ryii4KHB
+        uxsDPVwiwhxQCOZHarpgWvcET6Th2cazaruzABlJzTjkF81xsQMxx+da494MvyXXKBFFDhyLtRl
+        BpnFZnZMq56Atw7Ey0DCA898B
+X-Received: by 2002:a05:600c:1d0f:b0:3df:9858:c03f with SMTP id l15-20020a05600c1d0f00b003df9858c03fmr2424328wms.20.1676567095533;
+        Thu, 16 Feb 2023 09:04:55 -0800 (PST)
+X-Google-Smtp-Source: AK7set9iS3qwiL5Y9tVloR5loMJzSSh/RVxr2XYgvc64ngnOoIKwusZ8GTOPyQ1l0/LCC+Rtrdk7Uw==
+X-Received: by 2002:a05:600c:1d0f:b0:3df:9858:c03f with SMTP id l15-20020a05600c1d0f00b003df9858c03fmr2424281wms.20.1676567095128;
+        Thu, 16 Feb 2023 09:04:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
+        by smtp.gmail.com with ESMTPSA id l14-20020adffe8e000000b002c561805a4csm1966327wrr.45.2023.02.16.09.04.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 09:04:54 -0800 (PST)
+Message-ID: <3a3ee697-591d-dc3c-7c53-5965da219062@redhat.com>
+Date:   Thu, 16 Feb 2023 18:04:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1pSgqi-003fCi-F5;;;mid=<87a61d7fvq.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX18qIEApqQSqpUxdzdLE40wBYa/0PtjN14E=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] mm/migrate: Fix wrongly apply write bit after mkdirty on
+ sparc64
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        regressions@leemhuis.info, Nick Bowler <nbowler@draconx.ca>
+References: <20230216153059.256739-1-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230216153059.256739-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Andrew Morton <akpm@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 441 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (2.4%), b_tie_ro: 9 (2.1%), parse: 0.67 (0.2%),
-         extract_message_metadata: 11 (2.4%), get_uri_detail_list: 0.67 (0.2%),
-         tests_pri_-2000: 3.9 (0.9%), tests_pri_-1000: 2.2 (0.5%),
-        tests_pri_-950: 1.20 (0.3%), tests_pri_-900: 0.97 (0.2%),
-        tests_pri_-200: 0.82 (0.2%), tests_pri_-100: 3.4 (0.8%),
-        tests_pri_-90: 144 (32.7%), check_bayes: 135 (30.6%), b_tokenize: 4.2
-        (0.9%), b_tok_get_all: 4.9 (1.1%), b_comp_prob: 1.54 (0.3%),
-        b_tok_touch_all: 121 (27.5%), b_finish: 0.85 (0.2%), tests_pri_0: 153
-        (34.6%), check_dkim_signature: 0.45 (0.1%), check_dkim_adsp: 3.4
-        (0.8%), poll_dns_idle: 91 (20.7%), tests_pri_10: 3.1 (0.7%),
-        tests_pri_500: 103 (23.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] kernel/sys.c: fix and improve control flow in
- __sys_setres[ug]id()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+On 16.02.23 16:30, Peter Xu wrote:
+> Nick Bowler reported another sparc64 breakage after the young/dirty
+> persistent work for page migration (per "Link:" below).  That's after a
+> similar report [2].
+> 
+> It turns out page migration was overlooked, and it wasn't failing before
+> because page migration was not enabled in the initial report test environment.
+> 
+> David proposed another way [2] to fix this from sparc64 side, but that
+> patch didn't land somehow.  Neither did I check whether there's any other
+> arch that has similar issues.
+> 
+> Let's fix it for now as simple as moving the write bit handling to be after
+> dirty, like what we did before.
+> 
+> Note: this is based on mm-unstable, because the breakage was since 6.1 and
+> we're at a very late stage of 6.2 (-rc8), so I assume for this specific
+> case we should target this at 6.3.
+> 
+> [1] https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
+> [2] https://lore.kernel.org/all/20221212130213.136267-1-david@redhat.com/
+> 
+> Cc: regressions@leemhuis.info
+> Fixes: 2e3468778dbe ("mm: remember young/dirty bit for page migrations")
+> Link: https://lore.kernel.org/all/CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com/
+> Reported-by: Nick Bowler <nbowler@draconx.ca>
+> Tested-by: Nick Bowler <nbowler@draconx.ca>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/huge_memory.c | 6 ++++--
+>   mm/migrate.c     | 2 ++
+>   2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 1343a7d88299..4fc43859e59a 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -3274,8 +3274,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+>   	pmde = mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot));
+>   	if (pmd_swp_soft_dirty(*pvmw->pmd))
+>   		pmde = pmd_mksoft_dirty(pmde);
+> -	if (is_writable_migration_entry(entry))
+> -		pmde = maybe_pmd_mkwrite(pmde, vma);
+>   	if (pmd_swp_uffd_wp(*pvmw->pmd))
+>   		pmde = pmd_mkuffd_wp(pmde);
+>   	if (!is_migration_entry_young(entry))
+> @@ -3283,6 +3281,10 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+>   	/* NOTE: this may contain setting soft-dirty on some archs */
+>   	if (PageDirty(new) && is_migration_entry_dirty(entry))
+>   		pmde = pmd_mkdirty(pmde);
+> +	if (is_writable_migration_entry(entry))
+> +		pmde = maybe_pmd_mkwrite(pmde, vma);
+> +	else
+> +		pmde = pmd_wrprotect(pmde);
+>   
+>   	if (PageAnon(new)) {
+>   		rmap_t rmap_flags = RMAP_COMPOUND;
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index ef68a1aff35c..40c63e77e91f 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -225,6 +225,8 @@ static bool remove_migration_pte(struct folio *folio,
+>   			pte = maybe_mkwrite(pte, vma);
+>   		else if (pte_swp_uffd_wp(*pvmw.pte))
+>   			pte = pte_mkuffd_wp(pte);
+> +		else
+> +			pte = pte_wrprotect(pte);
+>   
+>   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
+>   			rmap_flags |= RMAP_EXCLUSIVE;
 
-> On Wed, 15 Feb 2023 14:18:07 +0100 Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
->> 1. First determine if CAP_SET[UG]ID is required and only then call
->>    ns_capable_setid(), to avoid bogus LSM (SELinux) denials.
->
-> Can we please have more details on the selinux failures?  Under what
-> circumstances?  What is the end-user impact?
 
-It is puzzling the structure with having the capability check first
-dates to 2.1.104 (when a hand coded test for root was replaced
-with capable(CAP_SETID).  Which means the basic structure and logic
-of the code is even older than that.
+I'd really rather focus on fixing the root cause instead, anyhow if my 
+patch won't make it:
 
-Eric
+Acked-by: David Hildenbrand <david@redhat.com>
+
+
+-- 
+Thanks,
+
+David / dhildenb
+
