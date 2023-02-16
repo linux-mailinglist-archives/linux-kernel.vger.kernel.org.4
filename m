@@ -2,369 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89247699A37
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E8E699A3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjBPQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S229631AbjBPQi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBPQiT (ORCPT
+        with ESMTP id S229676AbjBPQi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:38:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86675598
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676565455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WOsA7cg0NumLMK7P3utyWHEXKt+LNnfHgWC/priwxPs=;
-        b=iF+TdIhiwasXVqcHWcXn2BNuSlpQsVPt01h5O9qQXkEKScd8BoeiIQGaBovSNpGFFLpXGI
-        72IVIyNkR0cEWjSbMHAPoM5jFctkcIEiXiUWjqsQfdyrQygl5VQ+HJ5gTbmyeKb0us7RIh
-        Tf6IewOa684hP/cZJx2kZuUlwP2qExk=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-332-fmrZVUGWNDCCyISwAzL9Yg-1; Thu, 16 Feb 2023 11:37:34 -0500
-X-MC-Unique: fmrZVUGWNDCCyISwAzL9Yg-1
-Received: by mail-pf1-f197.google.com with SMTP id u31-20020a056a00099f00b005a8de178393so1491245pfg.23
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:37:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WOsA7cg0NumLMK7P3utyWHEXKt+LNnfHgWC/priwxPs=;
-        b=G8GPPtUWirLF1Sb3n0Of3DOww8UUERIGj4SYW9F9Ql/RDV6vK+52T7RiTkfTFvG/Ns
-         mTIxeQze2JNSFnVw82UrApA3Kaj4AK0AUJNI8GPEUY25+3jBwwO0RgqSBjHDyZvKhVHU
-         +jAXS5kd0Y8Tskt21+tNpEwKyb/vp3sVUml1xpw3Q0/AxZJ4lkuA2bcUTrVxtf2luKVj
-         ZGRAEPggc+ZgJ1sivMIIVwWEgx7040wL7M5/NI4KP7G9qaAE4Qcxgw9pnVGJEl+xDEy5
-         oH0Axp27k8edCNcq6B85xAwgHQEncybNwzUZxHfWgWgLuTOvnKNxKwCx+FsKG1UCrS62
-         i2Yg==
-X-Gm-Message-State: AO0yUKWeHwodVypqli+COWvQuApzW9TkyNhAcY2B78oInUyddNquSzlh
-        /DPnNFWVqqQxKombNn+ooOE9Ti4v4JADjBAghLB4eYYwkSeZX3aC1+29aCPIbl3ErKVqV8XT9A1
-        7eg/krL2jkkKKYwa9KtqP8gKR
-X-Received: by 2002:a17:90b:4b46:b0:234:e0c:caaa with SMTP id mi6-20020a17090b4b4600b002340e0ccaaamr7455142pjb.6.1676565452219;
-        Thu, 16 Feb 2023 08:37:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set+2LshNgnwu/tL02ECX5MGFoMM8xCd018g6MtMjwwUswbG40wqEeKEtHBxoDFB6DIoouE3b9g==
-X-Received: by 2002:a17:90b:4b46:b0:234:e0c:caaa with SMTP id mi6-20020a17090b4b4600b002340e0ccaaamr7455112pjb.6.1676565451791;
-        Thu, 16 Feb 2023 08:37:31 -0800 (PST)
-Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id ne9-20020a17090b374900b00233567a978csm3472180pjb.42.2023.02.16.08.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 08:37:31 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     gnault@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [PATCH net v3] l2tp: Avoid possible recursive deadlock in l2tp_tunnel_register()
-Date:   Fri, 17 Feb 2023 01:37:10 +0900
-Message-Id: <20230216163710.2508327-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 16 Feb 2023 11:38:26 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29FC4CC98;
+        Thu, 16 Feb 2023 08:38:23 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31G9v6W8006206;
+        Thu, 16 Feb 2023 16:38:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=xkLbnqJt/sijM+Co64dSaanSfQWhIPybj6CY+XxPrR8=;
+ b=bTZKxEEYXlAriNHGjQI+btGTq8axeObcfAi0eLBZkcOmP0y5eqQSz7PVdO7XU1dM/Uu3
+ Bn3kIHnGdnhfrYvEEp5j37Ybwcaprd/DHe5EcfrTmgdgNw2ONELRsj+WHQ+RXPicB3ny
+ wtHIBdr/3OXSWEkVbsZGDHt2wnxLIGWtzDYJcnLk4BJ3vDS2G83zSanes4FiqHYbOyf2
+ 1RNpQwtsw+cdZ9qtt3qjZ59ok5L4ebg6ip+0+YOFgkzYTo5N6LqhHjPOsLlTHXJnuEAE
+ sS2snKNS+JYN3b4Yk8DBR0B9KEonFURoVXIe4htDOLOYYoEBzyeHCdECz7jGjwK10ut9 6Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nsja910cs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 16:38:20 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31GGcJiQ011639
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 16:38:19 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 16 Feb 2023 08:38:18 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     <quic_eberman@quicinc.com>, Jassi Brar <jassisinghbrar@gmail.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sudeep.holla@arm.com>
+Subject: [PATCH 1/3] mailbox: Allow direct registration to a channel
+Date:   Thu, 16 Feb 2023 08:38:03 -0800
+Message-ID: <20230216163804.456714-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230213232537.2040976-1-quic_eberman@quicinc.com>
+References: <20230213232537.2040976-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8bNlDWfzueRAZh6CaVV4wflYTGdv_NWy
+X-Proofpoint-ORIG-GUID: 8bNlDWfzueRAZh6CaVV4wflYTGdv_NWy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-16_12,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302160144
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a file descriptor of pppol2tp socket is passed as file descriptor
-of UDP socket, a recursive deadlock occurs in l2tp_tunnel_register().
-This situation is reproduced by the following program:
+Support virtual mailbox controllers and clients which are not platform
+devices or come from the devicetree by allowing them to match client to
+channel via some other mechanism.
 
-int main(void)
-{
-	int sock;
-	struct sockaddr_pppol2tp addr;
-
-	sock = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
-	if (sock < 0) {
-		perror("socket");
-		return 1;
-	}
-
-	addr.sa_family = AF_PPPOX;
-	addr.sa_protocol = PX_PROTO_OL2TP;
-	addr.pppol2tp.pid = 0;
-	addr.pppol2tp.fd = sock;
-	addr.pppol2tp.addr.sin_family = PF_INET;
-	addr.pppol2tp.addr.sin_port = htons(0);
-	addr.pppol2tp.addr.sin_addr.s_addr = inet_addr("192.168.0.1");
-	addr.pppol2tp.s_tunnel = 1;
-	addr.pppol2tp.s_session = 0;
-	addr.pppol2tp.d_tunnel = 0;
-	addr.pppol2tp.d_session = 0;
-
-	if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
-		perror("connect");
-		return 1;
-	}
-
-	return 0;
-}
-
-This program causes the following lockdep warning:
-
- ============================================
- WARNING: possible recursive locking detected
- 6.2.0-rc5-00205-gc96618275234 #56 Not tainted
- --------------------------------------------
- repro/8607 is trying to acquire lock:
- ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: l2tp_tunnel_register+0x2b7/0x11c0
-
- but task is already holding lock:
- ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
-
- other info that might help us debug this:
-  Possible unsafe locking scenario:
-
-        CPU0
-        ----
-   lock(sk_lock-AF_PPPOX);
-   lock(sk_lock-AF_PPPOX);
-
-  *** DEADLOCK ***
-
-  May be due to missing lock nesting notation
-
- 1 lock held by repro/8607:
-  #0: ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
-
- stack backtrace:
- CPU: 0 PID: 8607 Comm: repro Not tainted 6.2.0-rc5-00205-gc96618275234 #56
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.1-2.fc37 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x100/0x178
-  __lock_acquire.cold+0x119/0x3b9
-  ? lockdep_hardirqs_on_prepare+0x410/0x410
-  lock_acquire+0x1e0/0x610
-  ? l2tp_tunnel_register+0x2b7/0x11c0
-  ? lock_downgrade+0x710/0x710
-  ? __fget_files+0x283/0x3e0
-  lock_sock_nested+0x3a/0xf0
-  ? l2tp_tunnel_register+0x2b7/0x11c0
-  l2tp_tunnel_register+0x2b7/0x11c0
-  ? sprintf+0xc4/0x100
-  ? l2tp_tunnel_del_work+0x6b0/0x6b0
-  ? debug_object_deactivate+0x320/0x320
-  ? lockdep_init_map_type+0x16d/0x7a0
-  ? lockdep_init_map_type+0x16d/0x7a0
-  ? l2tp_tunnel_create+0x2bf/0x4b0
-  ? l2tp_tunnel_create+0x3c6/0x4b0
-  pppol2tp_connect+0x14e1/0x1a30
-  ? pppol2tp_put_sk+0xd0/0xd0
-  ? aa_sk_perm+0x2b7/0xa80
-  ? aa_af_perm+0x260/0x260
-  ? bpf_lsm_socket_connect+0x9/0x10
-  ? pppol2tp_put_sk+0xd0/0xd0
-  __sys_connect_file+0x14f/0x190
-  __sys_connect+0x133/0x160
-  ? __sys_connect_file+0x190/0x190
-  ? lockdep_hardirqs_on+0x7d/0x100
-  ? ktime_get_coarse_real_ts64+0x1b7/0x200
-  ? ktime_get_coarse_real_ts64+0x147/0x200
-  ? __audit_syscall_entry+0x396/0x500
-  __x64_sys_connect+0x72/0xb0
-  do_syscall_64+0x38/0xb0
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-This patch fixes the issue by getting/creating the tunnel before
-locking the pppol2tp socket.
-
-Fixes: 0b2c59720e65 ("l2tp: close all race conditions in l2tp_tunnel_register()")
-Cc: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- net/l2tp/l2tp_ppp.c | 125 ++++++++++++++++++++++++--------------------
- 1 file changed, 67 insertions(+), 58 deletions(-)
+ drivers/mailbox/mailbox.c      | 96 ++++++++++++++++++++++++----------
+ include/linux/mailbox_client.h |  1 +
+ 2 files changed, 69 insertions(+), 28 deletions(-)
 
-diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
-index db2e584c625e..f011af6601c9 100644
---- a/net/l2tp/l2tp_ppp.c
-+++ b/net/l2tp/l2tp_ppp.c
-@@ -650,54 +650,22 @@ static int pppol2tp_tunnel_mtu(const struct l2tp_tunnel *tunnel)
- 	return mtu - PPPOL2TP_HEADER_OVERHEAD;
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 4229b9b5da98..adf36c05fa43 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -317,6 +317,71 @@ int mbox_flush(struct mbox_chan *chan, unsigned long timeout)
  }
+ EXPORT_SYMBOL_GPL(mbox_flush);
  
--/* connect() handler. Attach a PPPoX socket to a tunnel UDP socket
-- */
--static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
--			    int sockaddr_len, int flags)
-+static struct l2tp_tunnel *pppol2tp_tunnel_get(struct net *net,
-+					       const struct l2tp_connect_info *info,
-+					       bool *new_tunnel)
- {
--	struct sock *sk = sock->sk;
--	struct pppox_sock *po = pppox_sk(sk);
--	struct l2tp_session *session = NULL;
--	struct l2tp_connect_info info;
- 	struct l2tp_tunnel *tunnel;
--	struct pppol2tp_session *ps;
--	struct l2tp_session_cfg cfg = { 0, };
--	bool drop_refcnt = false;
--	bool drop_tunnel = false;
--	bool new_session = false;
--	bool new_tunnel = false;
- 	int error;
- 
--	error = pppol2tp_sockaddr_get_info(uservaddr, sockaddr_len, &info);
--	if (error < 0)
--		return error;
-+	*new_tunnel = false;
- 
--	lock_sock(sk);
--
--	/* Check for already bound sockets */
--	error = -EBUSY;
--	if (sk->sk_state & PPPOX_CONNECTED)
--		goto end;
--
--	/* We don't supporting rebinding anyway */
--	error = -EALREADY;
--	if (sk->sk_user_data)
--		goto end; /* socket is already attached */
--
--	/* Don't bind if tunnel_id is 0 */
--	error = -EINVAL;
--	if (!info.tunnel_id)
--		goto end;
--
--	tunnel = l2tp_tunnel_get(sock_net(sk), info.tunnel_id);
--	if (tunnel)
--		drop_tunnel = true;
-+	tunnel = l2tp_tunnel_get(net, info->tunnel_id);
- 
- 	/* Special case: create tunnel context if session_id and
- 	 * peer_session_id is 0. Otherwise look up tunnel using supplied
- 	 * tunnel id.
- 	 */
--	if (!info.session_id && !info.peer_session_id) {
-+	if (!info->session_id && !info->peer_session_id) {
- 		if (!tunnel) {
- 			struct l2tp_tunnel_cfg tcfg = {
- 				.encap = L2TP_ENCAPTYPE_UDP,
-@@ -706,40 +674,82 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
- 			/* Prevent l2tp_tunnel_register() from trying to set up
- 			 * a kernel socket.
- 			 */
--			if (info.fd < 0) {
--				error = -EBADF;
--				goto end;
--			}
-+			if (info->fd < 0)
-+				return ERR_PTR(-EBADF);
- 
--			error = l2tp_tunnel_create(info.fd,
--						   info.version,
--						   info.tunnel_id,
--						   info.peer_tunnel_id, &tcfg,
-+			error = l2tp_tunnel_create(info->fd,
-+						   info->version,
-+						   info->tunnel_id,
-+						   info->peer_tunnel_id, &tcfg,
- 						   &tunnel);
- 			if (error < 0)
--				goto end;
-+				return ERR_PTR(error);
- 
- 			l2tp_tunnel_inc_refcount(tunnel);
--			error = l2tp_tunnel_register(tunnel, sock_net(sk),
--						     &tcfg);
-+			error = l2tp_tunnel_register(tunnel, net, &tcfg);
- 			if (error < 0) {
- 				kfree(tunnel);
--				goto end;
-+				return ERR_PTR(error);
- 			}
--			drop_tunnel = true;
--			new_tunnel = true;
++static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
++{
++	struct device *dev = cl->dev;
++	unsigned long flags;
++	int ret;
 +
-+			*new_tunnel = true;
- 		}
- 	} else {
- 		/* Error if we can't find the tunnel */
--		error = -ENOENT;
- 		if (!tunnel)
--			goto end;
-+			return ERR_PTR(-ENOENT);
- 
- 		/* Error if socket is not prepped */
--		if (!tunnel->sock)
--			goto end;
-+		if (!tunnel->sock) {
-+			l2tp_tunnel_dec_refcount(tunnel);
-+			return ERR_PTR(-ENOENT);
++	if (chan->cl || !try_module_get(chan->mbox->dev->driver->owner)) {
++		dev_dbg(dev, "%s: mailbox not free\n", __func__);
++		return -EBUSY;
++	}
++
++	spin_lock_irqsave(&chan->lock, flags);
++	chan->msg_free = 0;
++	chan->msg_count = 0;
++	chan->active_req = NULL;
++	chan->cl = cl;
++	init_completion(&chan->tx_complete);
++
++	if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
++		chan->txdone_method = TXDONE_BY_ACK;
++
++	spin_unlock_irqrestore(&chan->lock, flags);
++
++	if (chan->mbox->ops->startup) {
++		ret = chan->mbox->ops->startup(chan);
++
++		if (ret) {
++			dev_err(dev, "Unable to startup the chan (%d)\n", ret);
++			mbox_free_channel(chan);
++			return ret;
 +		}
- 	}
- 
-+	return tunnel;
++	}
++
++	return 0;
 +}
 +
-+/* connect() handler. Attach a PPPoX socket to a tunnel UDP socket
++/**
++ * mbox_bind_client - Request a mailbox channel.
++ * @chan: The mailbox channel to bind the client to.
++ * @cl: Identity of the client requesting the channel.
++ *
++ * The Client specifies its requirements and capabilities while asking for
++ * a mailbox channel. It can't be called from atomic context.
++ * The channel is exclusively allocated and can't be used by another
++ * client before the owner calls mbox_free_channel.
++ * After assignment, any packet received on this channel will be
++ * handed over to the client via the 'rx_callback'.
++ * The framework holds reference to the client, so the mbox_client
++ * structure shouldn't be modified until the mbox_free_channel returns.
++ *
++ * Return: 0 if the channel was assigned to the client successfully.
++ *         <0 for request failure.
 + */
-+static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
-+			    int sockaddr_len, int flags)
++int mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
 +{
-+	struct sock *sk = sock->sk;
-+	struct pppox_sock *po = pppox_sk(sk);
-+	struct l2tp_session *session = NULL;
-+	struct l2tp_connect_info info;
-+	struct l2tp_tunnel *tunnel;
-+	struct pppol2tp_session *ps;
-+	struct l2tp_session_cfg cfg = { 0, };
-+	bool drop_refcnt = false;
-+	bool new_session = false;
-+	bool new_tunnel = false;
-+	int error;
++	int ret;
 +
-+	error = pppol2tp_sockaddr_get_info(uservaddr, sockaddr_len, &info);
-+	if (error < 0)
-+		return error;
++	mutex_lock(&con_mutex);
++	ret = __mbox_bind_client(chan, cl);
++	mutex_unlock(&con_mutex);
 +
-+	/* Don't bind if tunnel_id is 0 */
-+	if (!info.tunnel_id)
-+		return -EINVAL;
++	return ret;
++}
++EXPORT_SYMBOL_GPL(mbox_bind_client);
 +
-+	tunnel = pppol2tp_tunnel_get(sock_net(sk), &info, &new_tunnel);
-+	if (IS_ERR(tunnel))
-+		return PTR_ERR(tunnel);
-+
-+	lock_sock(sk);
-+
-+	/* Check for already bound sockets */
-+	error = -EBUSY;
-+	if (sk->sk_state & PPPOX_CONNECTED)
-+		goto end;
-+
-+	/* We don't supporting rebinding anyway */
-+	error = -EALREADY;
-+	if (sk->sk_user_data)
-+		goto end; /* socket is already attached */
-+
- 	if (tunnel->peer_tunnel_id == 0)
- 		tunnel->peer_tunnel_id = info.peer_tunnel_id;
+ /**
+  * mbox_request_channel - Request a mailbox channel.
+  * @cl: Identity of the client requesting the channel.
+@@ -340,7 +405,6 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+ 	struct mbox_controller *mbox;
+ 	struct of_phandle_args spec;
+ 	struct mbox_chan *chan;
+-	unsigned long flags;
+ 	int ret;
  
-@@ -840,8 +850,7 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 	if (!dev || !dev->of_node) {
+@@ -372,33 +436,9 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+ 		return chan;
  	}
- 	if (drop_refcnt)
- 		l2tp_session_dec_refcount(session);
--	if (drop_tunnel)
--		l2tp_tunnel_dec_refcount(tunnel);
-+	l2tp_tunnel_dec_refcount(tunnel);
- 	release_sock(sk);
  
- 	return error;
+-	if (chan->cl || !try_module_get(mbox->dev->driver->owner)) {
+-		dev_dbg(dev, "%s: mailbox not free\n", __func__);
+-		mutex_unlock(&con_mutex);
+-		return ERR_PTR(-EBUSY);
+-	}
+-
+-	spin_lock_irqsave(&chan->lock, flags);
+-	chan->msg_free = 0;
+-	chan->msg_count = 0;
+-	chan->active_req = NULL;
+-	chan->cl = cl;
+-	init_completion(&chan->tx_complete);
+-
+-	if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
+-		chan->txdone_method = TXDONE_BY_ACK;
+-
+-	spin_unlock_irqrestore(&chan->lock, flags);
+-
+-	if (chan->mbox->ops->startup) {
+-		ret = chan->mbox->ops->startup(chan);
+-
+-		if (ret) {
+-			dev_err(dev, "Unable to startup the chan (%d)\n", ret);
+-			mbox_free_channel(chan);
+-			chan = ERR_PTR(ret);
+-		}
+-	}
++	ret = __mbox_bind_client(chan, cl);
++	if (ret)
++		chan = ERR_PTR(ret);
+ 
+ 	mutex_unlock(&con_mutex);
+ 	return chan;
+diff --git a/include/linux/mailbox_client.h b/include/linux/mailbox_client.h
+index 65229a45590f..734694912ef7 100644
+--- a/include/linux/mailbox_client.h
++++ b/include/linux/mailbox_client.h
+@@ -37,6 +37,7 @@ struct mbox_client {
+ 	void (*tx_done)(struct mbox_client *cl, void *mssg, int r);
+ };
+ 
++int mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl);
+ struct mbox_chan *mbox_request_channel_byname(struct mbox_client *cl,
+ 					      const char *name);
+ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index);
 -- 
-2.39.0
+2.39.1
 
