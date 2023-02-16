@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12F1699A1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285DA699A33
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBPQel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S229925AbjBPQfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBPQek (ORCPT
+        with ESMTP id S229758AbjBPQfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:34:40 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA805598;
-        Thu, 16 Feb 2023 08:34:37 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id m10so2437013wrn.4;
-        Thu, 16 Feb 2023 08:34:37 -0800 (PST)
+        Thu, 16 Feb 2023 11:35:17 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935061B574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:35:15 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id r18so1978850wmq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:35:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V5mbbHr7+rxGbIXSGncjaubKdnUrIww50oZqIFjYJZo=;
-        b=BopkFU8dI1eMwvqpTHwxXPMlaxwMzh3V1KpkAyDnAEYyuni3jQqx0v3fR9FPfPGl1/
-         TPL59TjF1gTqIejaFGD8Y0DFla1UqZnD6kcIIEhFLyi8URhhpqYnOPupDFSek+AWC7nH
-         JHQspuQLuPg/I9ycUdLZ9qrOwQFdDajxjAqhlTK+pbgm0Hy1ApIeVFQRYKj3IDvlhLU0
-         Mh6+LVg4KKjiEQrWUg2gRLb2Py0fYiPHZWteonRaWewkqADCZY6P1Rtj6aZcSbKSBlrK
-         hSrbS6gkeqTLHeHyQwFrxqmfUJ3Pb0GtxO7DrRam5k1t+I4BkcDcn2dZEsMwS34w/F3w
-         TJxg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YvjzzplOyYWEsKigVOczYa0vP8bscsvw+TTYRzm8kTA=;
+        b=ZoTA6ZJXVLKPbFha4y+xPdeteo9LtJCJyQpII736FkH/gzol2AFDWafQWxmS9u6AQc
+         fkV48+8oJPFcsO5/lv3tcQrpHmY3p3XbDHxlawKTj9AF0bPHF5tYBMZhvo5IaAjdXoIE
+         FZYywLNHjXt2xmFY+llQF4SaB1lLvzFns8jBCfMbPc23GNLa4/N+YhZe8trEFASZmSCH
+         ZrSPNq4HCzR6EGqllpNqCxMDqSHboZtftaCrpf5K8F8vsoIXOe021c+TicDIvYKCC7d1
+         YsDsJYSutiT/EHUDO3VELGOsdm2mFSFGo0McaL12CvzxGfXxLG3TGAKCHt3IrPHgn4Ko
+         5MWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V5mbbHr7+rxGbIXSGncjaubKdnUrIww50oZqIFjYJZo=;
-        b=jHtVK//lmKPFueYxRMFlrhKUplkng8wk4RvhBM8jOgcnzplbXQUrWXto/JsqKHVjdc
-         jPt0cIrd/1PgYl8mb6BSXgU/78SILTm+1THGZSuSOds5jRyfgX4urx9K9NXx1x1CH7YZ
-         TFYzdihfMakJLLr/vwe5HJFzEVI+9y4GByiVQHWo1jKPDWoNOASqfQVzbwuvuz951kv2
-         wwdaNOhafwDtwwDXZlJlavvpLSpj7GUmSiQmxkSK5wfZMvZ1QzuiqYSCo3PbrmJj1ZhW
-         8PDKkM0cQBcTMfa1hZTtBtqc+0Iju7evZPZkoCtSdTcYCUFPXuWnBfDOSDIm+R7wf3oL
-         czLQ==
-X-Gm-Message-State: AO0yUKWfniFIt4HNTQbQpcnnEnaM+6Sd+SFspJrAiRzAXgYaWintoyuH
-        ejMeed8DE1P1qYHLDdNHFOo=
-X-Google-Smtp-Source: AK7set+cF5ukJVIj32LL2ud5SKNxFU7d1pPyGv2S4UZaYDjB/c+b5fRC/Jywu3sz+0NhCCjZ0ClJTQ==
-X-Received: by 2002:adf:fa45:0:b0:2c5:56f6:52c7 with SMTP id y5-20020adffa45000000b002c556f652c7mr5923045wrr.64.1676565276294;
-        Thu, 16 Feb 2023 08:34:36 -0800 (PST)
-Received: from krava ([81.6.34.132])
-        by smtp.gmail.com with ESMTPSA id n13-20020adfe34d000000b002c546d169ddsm1950227wrj.11.2023.02.16.08.34.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 08:34:35 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 16 Feb 2023 17:34:33 +0100
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 4/7] perf record: Record dropped sample count
-Message-ID: <Y+5bGS9clWPS+B5J@krava>
-References: <20230214050452.26390-1-namhyung@kernel.org>
- <20230214050452.26390-5-namhyung@kernel.org>
- <Y+5YaQt7Fme65a78@krava>
- <Y+5ajnitOAxjdn2C@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YvjzzplOyYWEsKigVOczYa0vP8bscsvw+TTYRzm8kTA=;
+        b=ujBwtw4HUB2Tn5+fpAQAREZ1emtp/sHCZizqhnoVBxK9NKt77yLHQQxbfCfGLEV2hR
+         CFG3z7jmXzT5e5pwyeRGtNZq9nj3sWfILpy/0LimlazpbhVnUc4gERBVfJ4zgZDehhbt
+         JD1hVrmOS71+9ORWAiHTRdKoZDgLHkd+Gv3rlGT7kqeONQiQYP9mF0UvmzNQI2/z6ZVF
+         giM+jfUSt9MwMmCoDctRizjEXPytw1OSgujkTqKArH3ZH8dwJmmN6bKIf21PrRImLt3y
+         cdRizLeoqIkpjV70XT4RUGUN247Y++cbh5XE50fjpoPaOUFGnZNVQuKAmRddY+Pl4FAH
+         8dHQ==
+X-Gm-Message-State: AO0yUKXJQXa/AIqX5NZVXuXeQCFhHaOEwZOgLeGXbLZVWDptWgYIMHcP
+        sY6TK2iVI21MnKO12Gxz9uTsh4+BOauZkcjXjtdBwA==
+X-Google-Smtp-Source: AK7set+mxzqP+2cX9xGG+98a7W1aFhcKpWtSQRoANqVGk5nbllqVo0cocFoUDZ94JXpln7JDwQwk8FwQ2GeMPClgJuc=
+X-Received: by 2002:a05:600c:46d0:b0:3dd:67c6:8c58 with SMTP id
+ q16-20020a05600c46d000b003dd67c68c58mr353816wmo.51.1676565313986; Thu, 16 Feb
+ 2023 08:35:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+5ajnitOAxjdn2C@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CA+G9fYvZqytp3gMnC4-no9EB=Jnzqmu44i8JQo6apiZat-xxPg@mail.gmail.com>
+In-Reply-To: <CA+G9fYvZqytp3gMnC4-no9EB=Jnzqmu44i8JQo6apiZat-xxPg@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Feb 2023 17:34:33 +0100
+Message-ID: <CAG_fn=V3a-kLkjE252V4ncHWDR0YhMby7nd1P6RNQA4aPf+fRw@mail.gmail.com>
+Subject: Re: next: x86_64: kunit test crashed and kernel panic
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
+        regressions@lists.linux.dev, Marco Elver <elver@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,42 +72,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 01:32:14PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Feb 16, 2023 at 05:23:05PM +0100, Jiri Olsa escreveu:
-> > On Mon, Feb 13, 2023 at 09:04:49PM -0800, Namhyung Kim wrote:
-> > 
-> > SNIP
-> > 
-> > > @@ -1929,12 +1923,27 @@ static void record__read_lost_samples(struct record *rec)
-> > >  
-> > >  		for (int x = 0; x < xyarray__max_x(xy); x++) {
-> > >  			for (int y = 0; y < xyarray__max_y(xy); y++) {
-> > > -				__record__read_lost_samples(rec, evsel, lost, x, y);
-> > > +				struct perf_counts_values count;
-> > > +
-> > > +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
-> > > +					pr_err("read LOST count failed\n");
-> > > +					goto out;
-> > > +				}
-> > > +
-> > > +				if (count.lost) {
-> > > +					__record__save_lost_samples(rec, evsel, lost,
-> > > +								    x, y, count.lost, 0);
-> > > +				}
-> > >  			}
-> > >  		}
-> > > +
-> > > +		lost_count = perf_bpf_filter__lost_count(evsel);
-> > > +		if (lost_count)
-> > > +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
-> > > +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
-> > 
-> > hi,
-> > I can't see PERF_RECORD_MISC_LOST_SAMPLES_BPF in the tip/perf/core so can't compile,
-> > what do I miss?
-> 
-> Humm, but you shouldn't need kernel headers to build tools/perf/, right?
+On Thu, Feb 16, 2023 at 1:13 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> Following kernel panic noticed while running KUNIT testing on qemu-x86_64
+> with KASAN enabled kernel.
+>
+> CONFIG_KASAN=y
+> CONFIG_KUNIT=y
+> CONFIG_KUNIT_ALL_TESTS=y
+>
 
-right, should be also in tools/include headers
+This is reproducible for me locally, taking a look...
 
-jirka
+
+> <4>[   38.796558]  ? kmalloc_memmove_negative_size+0xeb/0x1f0
+> <4>[   38.797376]  ? __pfx_kmalloc_memmove_negative_size+0x10/0x10
+
+Most certainly kmalloc_memmove_negative_size() is related.
+Looks like we fail to intercept the call to memmove() in this test,
+passing -2 to the actual __memmove().
