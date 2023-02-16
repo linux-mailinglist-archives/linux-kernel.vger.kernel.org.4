@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACABF699D21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A40F699D23
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBPTp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 14:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S229788AbjBPTqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBPTpY (ORCPT
+        with ESMTP id S229448AbjBPTqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 14:45:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFA550349;
-        Thu, 16 Feb 2023 11:45:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9F260ACA;
-        Thu, 16 Feb 2023 19:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D52C433EF;
-        Thu, 16 Feb 2023 19:45:22 +0000 (UTC)
-Date:   Thu, 16 Feb 2023 14:45:20 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: PATCH] tracing: Add BUILD_BUG() to make sure stacktrace fits in 
- strings
-Message-ID: <20230216144520.07f4aebf@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 16 Feb 2023 14:46:34 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584BF4E5C7;
+        Thu, 16 Feb 2023 11:46:34 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id r8so3230556pls.2;
+        Thu, 16 Feb 2023 11:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FQn5kHbEuEI7/gCiY9gJDSgAt0MsyTYkQR3CtPg1TBA=;
+        b=P3MOPqJt3MT9Gela1uA0v3HoCYDkwZRaN3In7MxigVxiF/CfRSWWa82e9bHtUKF2nr
+         1/FKTIDuaxU3xOoxWIVwMeYWeOBYLnWB6agREUbbncDd4ER2Vaa5ghgB2v5XRGcHnapA
+         Y4n8BP4DFYDOBnBQjcijTXZwOJ5I1G5oGwX7yzRGO5CqnVnNdYS+cJG5RU5hujgjsosF
+         RoXvzIeHfRPx6alzf2wkNWcMyKX06ySqpIJjZmqt4heNx1XPEkipyVxCYfw3Dm3hiu4I
+         cA3WnvupmR/Nilmj4XGTJg/ExgN3UCUkDWNTmncuLcvrqdZorV29NOklOb+T3aj0MPUO
+         3FAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FQn5kHbEuEI7/gCiY9gJDSgAt0MsyTYkQR3CtPg1TBA=;
+        b=YckklkPsfT8RsN+ooOENrxkr7RP686NTxfKjbRlhit+aemPgeuCAVLj8NP1i7XCOKx
+         OqUhtTUN9jl+ffvTgG6yREcEyCGpqTU0cYY3s839yo6VKfkpBYiX37GQMfP+kb4hfDrr
+         Fq6ydjOzhRwX6wM8edY418GWlp45QE8zKHgYFAGAsE8uqGYMAG3lZyxpxDsoWPffPHB2
+         GBhQx+24aUFHYY1xpjXQqtJFYBoJ8ADaOxMMeTidFCH4WYk4CNvguNWVe04lAoMYk1yl
+         H5OB1q6VUKhFAHVS5WkDR3XD67SfKfg7XCILxNmak9BeNFUqZoCOY1JoxORDFO+38rhq
+         XogA==
+X-Gm-Message-State: AO0yUKUV4ZaeK5mxe1jvZQ+5zxbOGYTGytDU28xhW3H/3H+38xnkZwvi
+        +mqQx4FgQw+6aa6fqUUNlsk=
+X-Google-Smtp-Source: AK7set+TfPacKB+pPKpTAkpFqha54VdEItkrfCIh0ZZ3/XtoiYYaIeWqgAKBFFAuYSz6VXRzmKy7OQ==
+X-Received: by 2002:a17:90b:4d05:b0:233:e426:6501 with SMTP id mw5-20020a17090b4d0500b00233e4266501mr8509983pjb.19.1676576793782;
+        Thu, 16 Feb 2023 11:46:33 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h5-20020a17090a648500b00233e860f69esm3506220pjj.56.2023.02.16.11.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 11:46:32 -0800 (PST)
+Message-ID: <05b4561e-ede0-4242-ee1c-c30628c08e3e@gmail.com>
+Date:   Thu, 16 Feb 2023 11:46:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net] net: bcmgenet: fix MoCA LED control
+Content-Language: en-US
+To:     Doug Berger <opendmb@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Wahren <wahrenst@gmx.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230216194128.3593734-1-opendmb@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230216194128.3593734-1-opendmb@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 2/16/23 11:41, Doug Berger wrote:
+> When the bcmgenet_mii_config() code was refactored it was missed
+> that the LED control for the MoCA interface got overwritten by
+> the port_ctrl value. Its previous programming is restored here.
+> 
+> Fixes: 4f8d81b77e66 ("net: bcmgenet: Refactor register access in bcmgenet_mii_config")
+> Signed-off-by: Doug Berger <opendmb@gmail.com>
 
-The max string length for a histogram variable is 256 bytes. The max depth
-of a stacktrace is 16. With 8byte words, that's 16 * 8 = 128. Which can
-easily fit in the string variable. The histogram stacktrace is being
-stored in the string value (with the given max length), with the
-assumption it will fit. To make sure that this is always the case (in the
-case that the stack trace depth increases), add a BUILD_BUG_ON() to test
-this.
-
-Link: https://lore.kernel.org/linux-trace-kernel/20230214002418.0103b9e765d3e5c374d2aa7d@kernel.org/
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-[ Note this is on top of:
-  https://patchwork.kernel.org/project/linux-trace-kernel/patch/1ed6906cd9d6477ef2bd8e63c61de20a9ffe64d7.1676063532.git.zanussi@kernel.org/
- ]
- kernel/trace/trace_events_hist.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index f21e42ddba69..6cef1def1da5 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -3119,6 +3119,9 @@ static inline void __update_field_vars(struct tracing_map_elt *elt,
- 	unsigned int i, j, var_idx;
- 	u64 var_val;
- 
-+	/* Make sure stacktrace can fit in the string variable length */
-+	BUILD_BUG_ON((HIST_STACKTRACE_DEPTH + 1) * sizeof(long) >= STR_VAR_LEN_MAX);
-+
- 	for (i = 0, j = field_var_str_start; i < n_field_vars; i++) {
- 		struct field_var *field_var = field_vars[i];
- 		struct hist_field *var = field_var->var;
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.39.1
+Florian
 
