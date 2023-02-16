@@ -2,166 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048FF699BF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83544699BF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 19:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjBPSMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 13:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
+        id S230148AbjBPSMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 13:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBPSMf (ORCPT
+        with ESMTP id S229817AbjBPSMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 13:12:35 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782DD50ACA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:12:30 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id w11so2501115oiv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:12:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AY71C+meiyBHhST24LKS8BIZ3aLMamU0OluZ9cJRz0Q=;
-        b=xtl+RSevCG8xi9SVW8+vJ5lb5IbVNKt5qlLrcXM3XmaeK75UzGIsdY83tC1giS2OMG
-         xG1n6D95s3ZRf6Ll2GXxe0GcsKW4/zz0pSBS+8gZuVkXasajLo35j0oZmbOm76nbIyYC
-         fmJT0KqAdUPsxtlVlH2i5GddJGrUf7OmoPC/zKzzwwcwk56LjxS2sqcbTGH1lJNs7tIv
-         AehR0wSFIM1SEBk+GqPrC4qytrQEvdI+eemKuSgmo6puOfJzFQxmN8oTAkQX+hAXplcN
-         OO7eZ9vUPly09+slBjhsmfqWnyMPlaoDO8j9YMrlKAw2WYQQ7ikll1lAE3T9swePdZSd
-         ju/w==
-X-Gm-Message-State: AO0yUKX35Kr7VVMeHdWE2dW+NBAny1ypR0msrsHDLpdv35NxNdPFLSNs
-        j4RB0UOpEjnZIpp2Q7b1A5E+HZ9mow==
-X-Google-Smtp-Source: AK7set/pbk6oZ0/SkxgTX5KHhHgxu5iymQgCl4ocNvHwABpkAaCU0q6GU9DfXqbnQVqUYbgXmiFHrQ==
-X-Received: by 2002:a05:6808:192:b0:378:6f44:2a2e with SMTP id w18-20020a056808019200b003786f442a2emr2751994oic.46.1676571149629;
-        Thu, 16 Feb 2023 10:12:29 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r124-20020acaf382000000b0035c073aa0d8sm821386oih.18.2023.02.16.10.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 10:12:29 -0800 (PST)
-Received: (nullmailer pid 2896124 invoked by uid 1000);
-        Thu, 16 Feb 2023 18:12:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thu, 16 Feb 2023 13:12:39 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CBE505EF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:12:38 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2E4A35C010D;
+        Thu, 16 Feb 2023 13:12:35 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 13:12:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1676571155; x=1676657555; bh=bS
+        ftew9gDz0nxHH+J/ZHM8BKvNdoOfwEqV6015Wt6UM=; b=U5UKHZUQDc1987amT/
+        6c7+8Je0d8GW+Gf4YZipuK0UHqck2Q4Nw9wZo/0HXhJle83a27m0dKX4gOUipn/Y
+        19BNTRmwdflnQ+gJnyZuu3CjUeLIdVBenCyn4qpN8cTIj9X5X4NxUtFVIkKwwvOf
+        xU9cF4WdzSgiT2oPJa4pnYANuGCmdhu3uSEqDWw23UsA/rEJ8YkBu8GRdwJBzTSj
+        kRk6QOT0rUUGfSird8dvn7MJxpQ/iGRAooiCnVjX+A+EubadC1DBGfgj4muoD/Db
+        wPRZyl6vyI5ba3pSTUVPx3/G5m1epxKjDUjxI4ZfvkRvKZKyk80tMo0QAtN5i4n8
+        4oMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676571155; x=1676657555; bh=bSftew9gDz0nxHH+J/ZHM8BKvNdo
+        OfwEqV6015Wt6UM=; b=Ho955abK3qFL6x04/8LI7suHmH9zzr19Bnf5ALDQsSbv
+        MzkIQXKf54e/1yiNW7QbqvcLPJHGZ91Q439eWrkDmK7neRquyWiabXsnF03y3kmW
+        hLyQympzdXeJSRKr3/HLT2D1c6s3Anpp5L9IemqBs1bd3SqKOhVQQMJSApmPZ3/9
+        Hf+AUrmWWB1nkA2BFBgG9B1ieRL34RoVpBm2+jK1e0v+8p70ZSTlgMuQIL6DcAaL
+        9X2pvATHQnBjt90mDLdGmi0Qq++xJrGyDhyf1WDvKK+DPYxnNfrKcoT+rlejt0z+
+        rsZ/kfR5XwcrKM+39lAjURnf+0/W3HJ3gYrzo3+S2w==
+X-ME-Sender: <xms:EnLuY559I808bVSgLnAVcgGda9J0JuKDqXPqN1UeSKY2msP9CD35dQ>
+    <xme:EnLuY26MllRHNLn5nZNAk5YdlLPIKqSacUHL-cEzgTjmez8Z5RfAxXhiaw2LGed1R
+    Fl3HilEzkDb94zagb8>
+X-ME-Received: <xmr:EnLuYwf3DBc07x7gYwxeTlPgIVbKtKVKU7faZjXO2tfeXVyVOm5p3O4k5zg7AVVs9jW_-w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:EnLuYyLkzIfUk2BTS24GveS4bqgd-S6FyXnAYRvK6M4OKHRKLEgF0g>
+    <xmx:EnLuY9Jyz-4x5BdbtIT8aRIuFXZmiT2MSe_SK-X1Ypa6hDfXk1uD5g>
+    <xmx:EnLuY7wr-4VBeYZ4QVmf1WrR-O86mvd1e8POtbrBdCvgHtE44N1EIQ>
+    <xmx:E3LuY0-vE7s97im3M9fHEI1v4JUsa5g3Zuh-Srhg63_CiARFx0AJTw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Feb 2023 13:12:34 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3D2E110968A; Thu, 16 Feb 2023 21:12:30 +0300 (+03)
+Date:   Thu, 16 Feb 2023 21:12:30 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Isaku Yamahata <isaku.yamahata@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, kexec@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] bus: mvebu-mbus: Remove open coded "ranges" parsing
-Date:   Thu, 16 Feb 2023 12:12:04 -0600
-Message-Id: <20230216181204.2895676-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.1
+Subject: Re: [PATCH 0/2] Kexec enabling in TDX guest
+Message-ID: <20230216181230.3jn5hebv3xkdivbx@box.shutemov.name>
+References: <20230213234836.3683-1-kirill.shutemov@linux.intel.com>
+ <65fc95bb-5ad9-b589-d6a4-762289b3f6bc@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65fc95bb-5ad9-b589-d6a4-762289b3f6bc@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"ranges" is a standard property, and we have common helper functions for
-parsing it, so let's use them.
+On Thu, Feb 16, 2023 at 09:50:32AM -0800, Dave Hansen wrote:
+> On 2/13/23 15:48, Kirill A. Shutemov wrote:
+> > The patch brings basic enabling of kexec in TDX guests.
+> > 
+> > By "basic enabling" I mean, kexec in the guests with a single CPU.
+> > TDX guests use ACPI MADT MPWK to bring up secondary CPUs. The mechanism
+> > doesn't allow to put a CPU back offline if it has woken up.
+> > 
+> > We are looking into this, but it might take time.
+> 
+> This is simple enough.  But, nobody will _actually_ use this code as-is,
+> right?  What's the point of applying it now?
 
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Cc: Gregory Clement <gregory.clement@bootlin.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-Compile tested only!
----
- drivers/bus/mvebu-mbus.c | 58 ++++++----------------------------------
- 1 file changed, 8 insertions(+), 50 deletions(-)
+Why nobody? Single CPU VMs are not that uncommon.
 
-diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-index d51573ac525e..00cb792bda18 100644
---- a/drivers/bus/mvebu-mbus.c
-+++ b/drivers/bus/mvebu-mbus.c
-@@ -1179,74 +1179,32 @@ static int __init mbus_dt_setup_win(struct mvebu_mbus_state *mbus,
- 	return 0;
- }
- 
--static int __init
--mbus_parse_ranges(struct device_node *node,
--		  int *addr_cells, int *c_addr_cells, int *c_size_cells,
--		  int *cell_count, const __be32 **ranges_start,
--		  const __be32 **ranges_end)
--{
--	const __be32 *prop;
--	int ranges_len, tuple_len;
--
--	/* Allow a node with no 'ranges' property */
--	*ranges_start = of_get_property(node, "ranges", &ranges_len);
--	if (*ranges_start == NULL) {
--		*addr_cells = *c_addr_cells = *c_size_cells = *cell_count = 0;
--		*ranges_start = *ranges_end = NULL;
--		return 0;
--	}
--	*ranges_end = *ranges_start + ranges_len / sizeof(__be32);
--
--	*addr_cells = of_n_addr_cells(node);
--
--	prop = of_get_property(node, "#address-cells", NULL);
--	*c_addr_cells = be32_to_cpup(prop);
--
--	prop = of_get_property(node, "#size-cells", NULL);
--	*c_size_cells = be32_to_cpup(prop);
--
--	*cell_count = *addr_cells + *c_addr_cells + *c_size_cells;
--	tuple_len = (*cell_count) * sizeof(__be32);
--
--	if (ranges_len % tuple_len) {
--		pr_warn("malformed ranges entry '%pOFn'\n", node);
--		return -EINVAL;
--	}
--	return 0;
--}
--
- static int __init mbus_dt_setup(struct mvebu_mbus_state *mbus,
- 				struct device_node *np)
- {
--	int addr_cells, c_addr_cells, c_size_cells;
--	int i, ret, cell_count;
--	const __be32 *r, *ranges_start, *ranges_end;
-+	int ret;
-+	struct of_range_parser parser;
-+	struct of_range range;
- 
--	ret = mbus_parse_ranges(np, &addr_cells, &c_addr_cells,
--				&c_size_cells, &cell_count,
--				&ranges_start, &ranges_end);
-+	ret = of_range_parser_init(&parser, np);
- 	if (ret < 0)
--		return ret;
-+		return 0;
- 
--	for (i = 0, r = ranges_start; r < ranges_end; r += cell_count, i++) {
--		u32 windowid, base, size;
-+	for_each_of_range(&parser, &range) {
-+		u32 windowid = upper_32_bits(range.bus_addr);
- 		u8 target, attr;
- 
- 		/*
- 		 * An entry with a non-zero custom field do not
- 		 * correspond to a static window, so skip it.
- 		 */
--		windowid = of_read_number(r, 1);
- 		if (CUSTOM(windowid))
- 			continue;
- 
- 		target = TARGET(windowid);
- 		attr = ATTR(windowid);
- 
--		base = of_read_number(r + c_addr_cells, addr_cells);
--		size = of_read_number(r + c_addr_cells + addr_cells,
--				      c_size_cells);
--		ret = mbus_dt_setup_win(mbus, base, size, target, attr);
-+		ret = mbus_dt_setup_win(mbus, range.cpu_addr, range.size, target, attr);
- 		if (ret < 0)
- 			return ret;
- 	}
 -- 
-2.39.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
