@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE4A698E46
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 735F1698E48
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjBPIGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S229781AbjBPIHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBPIF6 (ORCPT
+        with ESMTP id S229523AbjBPIHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:05:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D571DB90
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:05:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676534712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPP7smI1cpshU/GMno3GoPT39TEoAepG2OWkse01iXs=;
-        b=bBywNir9AYVnlOMKhxelz2Er+OAXXN9OLFMIPHXIoz6/2GDhp8w/XWN0F4NJzQkNO+8Fr8
-        B8ySblgRLPNRxK4Zj49FdnsE8VGOnFFOcXsVC+9La/sOdiaqSftTdzuBbE6qYUjdUmxMMD
-        eI+ujOaD7y5jSeeG4f1P8qysDndxqXM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-8MiVrkdFMj-kP1UFOzV6dg-1; Thu, 16 Feb 2023 03:05:08 -0500
-X-MC-Unique: 8MiVrkdFMj-kP1UFOzV6dg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDD793C0DDBB;
-        Thu, 16 Feb 2023 08:05:07 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-193-101.brq.redhat.com [10.40.193.101])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 94FED40C945A;
-        Thu, 16 Feb 2023 08:05:04 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 16 Feb 2023 09:05:03 +0100 (CET)
-Date:   Thu, 16 Feb 2023 09:04:59 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     David Vernet <void@manifault.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, kernel-team@meta.com,
-        torvalds@linux-foundation.org, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tasks: Extract rcu_users out of union
-Message-ID: <20230216080459.GA5200@redhat.com>
-References: <20230215233033.889644-1-void@manifault.com>
+        Thu, 16 Feb 2023 03:07:17 -0500
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3EF1DB90
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:07:15 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id SZINpy0rG7c7GSZINpcPrN; Thu, 16 Feb 2023 09:07:13 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 16 Feb 2023 09:07:13 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <736566bd-b8bc-07d0-bb07-b8abb8bc09eb@wanadoo.fr>
+Date:   Thu, 16 Feb 2023 09:07:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215233033.889644-1-void@manifault.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 4/5] usb: fotg210: Switch to use dev_err_probe()
+Content-Language: fr, en-US
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+ <20230120154437.22025-4-andriy.shevchenko@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230120154437.22025-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I won't argue with this patch, but I can't understand the changelog...
+Le 20/01/2023 à 16:44, Andy Shevchenko a écrit :
+> Switch to use dev_err_probe() to simplify the error paths and
+> unify message template.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>
+> ---
+>   drivers/usb/fotg210/fotg210-core.c | 6 ++----
+>   drivers/usb/fotg210/fotg210-hcd.c  | 8 +++-----
+>   drivers/usb/fotg210/fotg210-udc.c  | 2 +-
+>   3 files changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/fotg210/fotg210-core.c b/drivers/usb/fotg210/fotg210-core.c
+> index c06f8eb3acbd..ce00d9407ce5 100644
+> --- a/drivers/usb/fotg210/fotg210-core.c
+> +++ b/drivers/usb/fotg210/fotg210-core.c
+> @@ -50,10 +50,8 @@ static int fotg210_gemini_init(struct fotg210 *fotg, struct resource *res,
+>   	int ret;
+>   
+>   	map = syscon_regmap_lookup_by_phandle(np, "syscon");
+> -	if (IS_ERR(map)) {
+> -		dev_err(dev, "no syscon\n");
+> -		return PTR_ERR(map);
+> -	}
+> +	if (IS_ERR(map))
+> +		return dev_err_probe(dev, PTR_ERR(map), "no syscon\n");
+>   	fotg->map = map;
+>   	wakeup = of_property_read_bool(np, "wakeup-source");
+>   
+> diff --git a/drivers/usb/fotg210/fotg210-hcd.c b/drivers/usb/fotg210/fotg210-hcd.c
+> index 5a934f5343a7..613d29f04bcb 100644
+> --- a/drivers/usb/fotg210/fotg210-hcd.c
+> +++ b/drivers/usb/fotg210/fotg210-hcd.c
+> @@ -5575,8 +5575,7 @@ int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg)
+>   	hcd = usb_create_hcd(&fotg210_fotg210_hc_driver, dev,
+>   			dev_name(dev));
+>   	if (!hcd) {
+> -		dev_err(dev, "failed to create hcd\n");
+> -		retval = -ENOMEM;
+> +		retval = dev_err_probe(dev, -ENOMEM, "failed to create hcd\n");
+>   		goto fail_create_hcd;
+>   	}
+>   
+> @@ -5600,7 +5599,7 @@ int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg)
+>   
+>   	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
+>   	if (retval) {
+> -		dev_err(dev, "failed to add hcd with err %d\n", retval);
+> +		dev_err_probe(dev, retval, "failed to add hcd\n");
+>   		goto failed_put_hcd;
+>   	}
+>   	device_wakeup_enable(hcd->self.controller);
+> @@ -5611,8 +5610,7 @@ int fotg210_hcd_probe(struct platform_device *pdev, struct fotg210 *fotg)
+>   failed_put_hcd:
+>   	usb_put_hcd(hcd);
+>   fail_create_hcd:
+> -	dev_err(dev, "init %s fail, %d\n", dev_name(dev), retval);
+> -	return retval;
+> +	return dev_err_probe(dev, retval, "init %s fail\n", dev_name(dev));
 
-On 02/15, David Vernet wrote:
->
-> Similarly, in sched_ext, schedulers are using integer pids to remember
-> tasks, and then looking them up with find_task_by_pid_ns(). This is
-> slow, error prone, and adds complexity. It would be more convenient and
-> performant if BPF schedulers could instead store tasks directly in maps,
-> and then leverage RCU to ensure they can be safely accessed with low
-> overhead.
+Hi,
+the patch is already applied, but is dev_name(dev) needed here?
 
-To simplify, suppose we have
+CJ
 
-	int global_pid;
-
-	void func(void)
-	{
-		rcu_read_lock();
-		task = find_task_by_pid(global_pid);
-		do_something(task);
-		rcu_read_unlock();
-	}
-
-Could you explain how exactly can this patch help to turn global_pid into
-"task_struct *" ? Why do you need to increment task->rcu_users ?
-
->    a task that's successfully looked
->    up in e.g. the pid_list with find_task_by_pid_ns(), can always have a
->    'usage' reference acquired on them, as it's guaranteed to be >
->    0 until after the next gp.
-
-Yes. So it seems you need another key-to-task_struct map with rcu-safe
-lookup/get and thus the add() method needs inc_not_zero(task->rcu_users) ?
-
-I am just curious,
-
-Oleg.
+>   }
+>   
+>   /*
+> diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+> index 18d254125186..5b515f5cb2d7 100644
+> --- a/drivers/usb/fotg210/fotg210-udc.c
+> +++ b/drivers/usb/fotg210/fotg210-udc.c
+> @@ -1258,7 +1258,7 @@ int fotg210_udc_probe(struct platform_device *pdev, struct fotg210 *fotg)
+>   	ret = request_irq(irq, fotg210_irq, IRQF_SHARED,
+>   			  udc_name, fotg210);
+>   	if (ret < 0) {
+> -		dev_err(dev, "request_irq error (%d)\n", ret);
+> +		dev_err_probe(dev, ret, "request_irq error\n");
+>   		goto err_req;
+>   	}
+>   
 
