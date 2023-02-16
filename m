@@ -2,173 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F9069892C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7889369892B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBPAX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S229605AbjBPAWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBPAXY (ORCPT
+        with ESMTP id S229454AbjBPAWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:23:24 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB703B659;
-        Wed, 15 Feb 2023 16:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676507003; x=1708043003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8ub891B3fPpkj3mueotLCmXkHLe4y9GlGIlZf1yrC38=;
-  b=l9lTzsi/y2azk9ps9AL/r1UQyqVMFpYYGSTWAATX2oLEwx96qRnb4q2U
-   19kkYMjlZM0UN9L7KUdn3/ioZ1Mb9a4I/qYrn7ts5/HWC7wPLQCK5ASTt
-   RUDKHZoS7pCdQiS1qVuPG9y6+oFf6qYdmv6TY59HxOHs2UaURl8DwH4cH
-   SDT9mJuq8yXHxXGgv9WYTLM5515LDAayIrwir7MA0Bw7588T+kJXfm/+t
-   gCHTFP3aAuwI5qXziVkwNKjd00nx04vaa3tkcSEKwve58PstV0RzTFq2t
-   XOlbZ5VKVzSdwUTAtcl9qTlZaIYo+glBRJMVi1VWS9yheh255LGqqNRRW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="332899449"
-X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
-   d="scan'208";a="332899449"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 16:23:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="779141899"
-X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
-   d="scan'208";a="779141899"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Feb 2023 16:23:11 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSS3K-0009tb-1H;
-        Thu, 16 Feb 2023 00:23:10 +0000
-Date:   Thu, 16 Feb 2023 08:22:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>
-Subject: Re: [PATCH v4 12/21] net/tcp: Verify inbound TCP-AO signed segments
-Message-ID: <202302160834.wX7iq8Lo-lkp@intel.com>
-References: <20230215183335.800122-13-dima@arista.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215183335.800122-13-dima@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 19:22:19 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3D38E86
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:22:17 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4cddba76f55so1960187b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:22:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OO/XTincpCiOXImHy7SwOjlBWMW8XPG1CnOI7CA/ZcY=;
+        b=LnBstyJy4LT3mEIvdskbIgeDS+rclo6poLMV+Nv5ZzkibiXvVIGYgkx+eOYc5BJHvL
+         0zETyvNfNI/evJrwJjztLvCpN2ptg7Fb4ErZw3wTbRnLzZmYj7aGlhQrL7iJI0yGogOP
+         rfyh44a+Gh2NWZVrepHI5BJIpv/+R24uMLgypUhJXK8IzqTxcYLcadWw38FdHhM2ZR8t
+         O4QkPfZroFOoYjKZqdQ7aQQHblRW81SOmO6DpONJjDgKmi+9IrJrKWbRF7I6XkGDYUmo
+         2gyVpBEA5dHppBpAM2NvB3AMfRXKL0UlijifmMlLRS7DVO4EL6O+XkniDfrgCR2HNKPO
+         2Vwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OO/XTincpCiOXImHy7SwOjlBWMW8XPG1CnOI7CA/ZcY=;
+        b=h3gSkG9qVOG2zjUuC+OtliREUmBfYq4DQuWCyaI8TXJmMMWmF/D6yAa03wnfCt2dCy
+         xLFP/aeYUlBDUx7jSqOuti5ZDbr+k5w0iJ8DsoJayYr34eyYmbMqpmd9M0pxSwefP9SE
+         NzMdCsG2EO6aZ32NJnJf3s4uTBqzNiUxoi0aZq4oGN9KBqTJk3vUr7Fmt9EJMHnltN/M
+         nO8BDjQCh7CEBBnVYNGPBVPkoW7cH/2ztLxp1rSs6RZAFxHuR+sl/1w42y9DZ4WtYxhD
+         Gn2HnQij4yA94Y2Hk13u3qjTd/AWA/5aII3wSoCKZeeBkUNfS/DkIJdDLwmqPRTjYwVB
+         5iDA==
+X-Gm-Message-State: AO0yUKUl8mit3X9b3q+V3xZExFcmBoxIFf4WijdHPs7T3P0iHEhCdE/n
+        XEhsOlEGZIIoGv3BaBv3HOzbYssfYAc=
+X-Google-Smtp-Source: AK7set8TtgAp+JveubF1EyRpmR0tyRaCPAWGn+TbxCeFDcJCSfFyMY0Gdzt5kzn4yrgBcM4KmuI5pUnnlgk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a5b:bcd:0:b0:8ac:a1b7:6fa3 with SMTP id
+ c13-20020a5b0bcd000000b008aca1b76fa3mr458932ybr.278.1676506937147; Wed, 15
+ Feb 2023 16:22:17 -0800 (PST)
+Date:   Wed, 15 Feb 2023 16:22:15 -0800
+In-Reply-To: <Y+1f/En6rvqoe6st@google.com>
+Mime-Version: 1.0
+References: <20221129193717.513824-1-mlevitsk@redhat.com> <20221129193717.513824-8-mlevitsk@redhat.com>
+ <Y9mWFlGdzoa8ZDW7@google.com> <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
+ <Y+PIdJZtCsGH2Sw3@google.com> <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com> <Y+1f/En6rvqoe6st@google.com>
+Message-ID: <Y+13N/Ky19VK0rzq@google.com>
+Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection interface
+From:   Sean Christopherson <seanjc@google.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Wed, Feb 15, 2023, Sean Christopherson wrote:
+> On Tue, Feb 14, 2023, Santosh Shukla wrote:
+> > "
+> > V_NMI_MASK: Indicates whether virtual NMIs are masked. The processor will set V_NMI_MASK
+> > once it takes the virtual NMI. V_NMI_MASK is cleared when the guest successfully completes an
+> > IRET instruction or #VMEXIT occurs while delivering the virtual NMI
+> > "
+> >
+> > In my initial implementation I had changed V_NMI_MASK for the SMM scenario [1],
+> > This is also not required as HW will save the V_NMI/V_NMI_MASK on 
+> > SMM entry and restore them on RSM.
+> > 
+> > That said the svm_{get,set}_nmi_mask will look something like:
 
-Thank you for the patch! Perhaps something to improve:
+...
 
-[auto build test WARNING on e1c04510f521e853019afeca2a5991a5ef8d6a5b]
+> >  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> >  {
+> >         struct vcpu_svm *svm = to_svm(vcpu);
+> > 
+> > +       if (is_vnmi_enabled(svm))
+> > +               return;
+> > +
+> >         if (masked) {
+> >                 svm->nmi_masked = true;
+> >                 svm_set_iret_intercept(svm);
+> > 
+> > is there any inputs on above approach?
+> 
+> What happens if software clears the "NMIs are blocked" flag?  If KVM can't clear
+> the flag, then we've got problems.  E.g. if KVM emulates IRET or SMI+RSM.  And I
+> I believe there are use cases that use KVM to snapshot and reload vCPU state,
+> e.g. record+replay?, in which case KVM_SET_VCPU_EVENTS needs to be able to adjust
+> NMI blocking too.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230216-023836
-base:   e1c04510f521e853019afeca2a5991a5ef8d6a5b
-patch link:    https://lore.kernel.org/r/20230215183335.800122-13-dima%40arista.com
-patch subject: [PATCH v4 12/21] net/tcp: Verify inbound TCP-AO signed segments
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230216/202302160834.wX7iq8Lo-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9f88af338e9c573f154bba8ba7692b1756b0e216
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230216-023836
-        git checkout 9f88af338e9c573f154bba8ba7692b1756b0e216
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash net/ipv4/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302160834.wX7iq8Lo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   net/ipv4/tcp_ao.c:290:5: warning: no previous prototype for 'tcp_ao_calc_key_sk' [-Wmissing-prototypes]
-     290 | int tcp_ao_calc_key_sk(struct tcp_ao_key *mkt, u8 *key,
-         |     ^~~~~~~~~~~~~~~~~~
->> net/ipv4/tcp_ao.c:324:5: warning: no previous prototype for 'tcp_ao_calc_key_skb' [-Wmissing-prototypes]
-     324 | int tcp_ao_calc_key_skb(struct tcp_ao_key *mkt, u8 *key,
-         |     ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/tcp_ao_calc_key_skb +324 net/ipv4/tcp_ao.c
-
-   289	
- > 290	int tcp_ao_calc_key_sk(struct tcp_ao_key *mkt, u8 *key,
-   291			       const struct sock *sk,
-   292			       __be32 sisn, __be32 disn,
-   293			       bool send)
-   294	{
-   295		if (mkt->family == AF_INET)
-   296			return tcp_v4_ao_calc_key_sk(mkt, key, sk, sisn, disn, send);
-   297		else
-   298			return tcp_v6_ao_calc_key_sk(mkt, key, sk, sisn, disn, send);
-   299	}
-   300	
-   301	int tcp_v4_ao_calc_key_rsk(struct tcp_ao_key *mkt, u8 *key,
-   302				   struct request_sock *req)
-   303	{
-   304		struct inet_request_sock *ireq = inet_rsk(req);
-   305	
-   306		return tcp_v4_ao_calc_key(mkt, key,
-   307					  ireq->ir_loc_addr, ireq->ir_rmt_addr,
-   308					  htons(ireq->ir_num), ireq->ir_rmt_port,
-   309					  htonl(tcp_rsk(req)->snt_isn),
-   310					  htonl(tcp_rsk(req)->rcv_isn));
-   311	}
-   312	
-   313	int tcp_v4_ao_calc_key_skb(struct tcp_ao_key *mkt, u8 *key,
-   314				   const struct sk_buff *skb, __be32 sisn,
-   315				   __be32 disn)
-   316	{
-   317		const struct iphdr *iph = ip_hdr(skb);
-   318		const struct tcphdr *th = tcp_hdr(skb);
-   319	
-   320		return tcp_v4_ao_calc_key(mkt, key, iph->saddr, iph->daddr,
-   321					     th->source, th->dest, sisn, disn);
-   322	}
-   323	
- > 324	int tcp_ao_calc_key_skb(struct tcp_ao_key *mkt, u8 *key,
-   325				const struct sk_buff *skb, __be32 sisn,
-   326				__be32 disn, int family)
-   327	{
-   328		if (family == AF_INET)
-   329			return tcp_v4_ao_calc_key_skb(mkt, key, skb, sisn, disn);
-   330		else
-   331			return tcp_v6_ao_calc_key_skb(mkt, key, skb, sisn, disn);
-   332	}
-   333	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Actually, what am I thinking.  Any type of state save/restore will need to stuff
+NMI blocking.  E.g. live migration of a VM that is handling an NMI (V_NMI_MASK=1)
+_and_ has a pending NMI (V_NMI=1) absolutely needs to set V_NMI_MASK=1 on the dest,
+otherwise the pending NMI will get serviced when the guest expects NMIs to be blocked.
