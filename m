@@ -2,114 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5CE6997DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289006997E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjBPOwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S230246AbjBPOxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjBPOwM (ORCPT
+        with ESMTP id S229687AbjBPOxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:52:12 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2DF39CEB;
-        Thu, 16 Feb 2023 06:52:11 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5A2FD5C0144;
-        Thu, 16 Feb 2023 09:52:09 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 16 Feb 2023 09:52:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676559129; x=1676645529; bh=NIjxx9AOK+
-        F7JHTOG3oPUrVs9nZK8w72u3K+EL5dm5g=; b=Ket9xA39E8fhhUTFhkTIYG/3Ph
-        OWvXEXCQQCRMHIt/UZV7JbM9ZqVgVa4MjDJb6JAZQ9pXgF7sV81tY5K5n9DhRsEJ
-        pD//pZK9wLrQYVOaQt0ZDTMc4yr39ujLUG9tlNkbKxcjGzrShzzIBwE26LuF6eAi
-        /YdqUEJtOiwIRe24BQA35A0IqFn5BmwDHziCyLE0Iq0DGdFV5YSf2ZngIfewzl3x
-        diepT4Elgn2M+vFsDerQFwLpea2PXFc8WzD4vibI/dwxFiOvKR2YJmzN5Z6nwqYq
-        teE/GTe7onUjWT/OuLsKkcfmdqIvUlfGcSWMV1N/YOPQKRlUqRgwcJR79BzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676559129; x=1676645529; bh=NIjxx9AOK+F7JHTOG3oPUrVs9nZK
-        8w72u3K+EL5dm5g=; b=YBE0LyzAKrzRPMcDFCamvHwT8mGKAAG2C1CiSL3mDSA6
-        DtxGoaVKO4UscN/zNE1duxDTyvEFyT5c9W9E+/P4vCzyfDrQZXNI/8rGmRXt3rLd
-        nEa3moiqRRENkdA4N7GRzBhWHz1n+T4W+kx3T6SUWe96gFFq/YsLLpcZ+FZfmv/G
-        FOAysoPiFuIQJ60cDNf12AayUPtE7qVsmbvsGprUfYrvvvU2OLhBbeIxPYwKobuT
-        Fg/JA1LXkbj52QyDHNQz/RYl8OrpnpJM4l8CCW1fD+GM3kz/OMIdS3Z8JRwL8Zzy
-        I0/SG7dd0Dk3I+HqK5R93NXTEmTzTEtvWeinObEUZQ==
-X-ME-Sender: <xms:GEPuY2p0Gn8WNgXPhgUF9ln2vvFTC8KwJPtVqxipVpHV7P5dhYz1wg>
-    <xme:GEPuY0rpiGhyl51PGpLgytJONHWVrIkdbdwoX0mtM2nGlgQuvK2cIJlbkFIDy1D4c
-    WiWIEV9aG9a5AJ4Ts0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:GUPuY7MofLcuzWlhXXB7nd0kvZKUpeDMNTmY2RxbtQIA6QlhF-ZciA>
-    <xmx:GUPuY16SVbACVZ-h2zL1VeBC1E4RDOn1siWwYD017x3ZfFjfXEsEpQ>
-    <xmx:GUPuY16K26QFHX0l3MYoZYvQUgfImpEFY0kFQnYqu_ZFktzJKUGtFQ>
-    <xmx:GUPuYyxw0RUaKWhXgzOUm7vQA65KfMx4Z2F12Akgw0cIo6gQmIVtrg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D9E9FB60086; Thu, 16 Feb 2023 09:52:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <f93fdb4e-05e0-4301-95c9-3e1b1200d9b2@app.fastmail.com>
-In-Reply-To: <Y+5B/PmGinjCk/fN@MiWiFi-R3L-srv>
-References: <20230216123419.461016-1-bhe@redhat.com>
- <20230216123419.461016-2-bhe@redhat.com>
- <056cc71f-7fb9-4d38-a442-a05de6f7d437@app.fastmail.com>
- <Y+5B/PmGinjCk/fN@MiWiFi-R3L-srv>
-Date:   Thu, 16 Feb 2023 15:51:50 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Baoquan He" <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "David Laight" <David.Laight@aculab.com>,
-        "Stafford Horne" <shorne@gmail.com>,
-        "Brian Cain" <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v4 01/16] hexagon: mm: Convert to GENERIC_IOREMAP
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 09:53:10 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D514AFE0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:53:09 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id t5so1907386oiw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQYLZn0bQAL+yoROTgZjs5gfeNZ6HZmmMBdCUxpu0fU=;
+        b=S/t6Rm+/iIWUBvAg+mq74Pn8wXnKGCZmK2vnjgnbpv5UR3w8oH5NKJZwxYFKuClEgU
+         2aLXa6fpACCBr8nzhkE32hDuOTmnGdyKYHT0DBbYoGkY6TzXh1AtaEkD38AtAoxahP+d
+         onFMvmSxs1aoywi/2HLYkbRxDqOGx0SURD3YqPy3Z7ki9dXnSk2I1q+PxcTKvHCmtNaK
+         zYEoQyasZPenKd0XwdqGOOpYs4J7KH2KXTvaKRlR34Yov3jl8OsnScqguNxyQhRFxEzn
+         DRRR+pFcdFMaysgAhaaGhvVlmQap632MfnZbE1Vbr3ax7pBlzwXjP6nql6GQFqngiwJK
+         SnyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pQYLZn0bQAL+yoROTgZjs5gfeNZ6HZmmMBdCUxpu0fU=;
+        b=Yvrc4z2jPSm041nblzVTvn/cEmE1fxGnLkrTcyI8TQN7aQpWyIog8DhTAb64jzsPUm
+         JPvolODzUY4PM+kc9cI5jRdQMUe6vm+yWzJQDP6ibIeruPWrMbdMQMwVxqwwBpxVc+S4
+         L+3A+fZBMmWhcf1fqqBtJzlPqd/pwK8PPtsJ7E5uQDesOeGN133rjjAlkYJJTp5qB/F5
+         hEwxQkxbF41+yGlVaGUr8uLYUst4wef7CP/IP2JMeIoZDE+Bs+VOfWYmQ3aNL0VfhWGD
+         DmesBxqIcj/9467ZZOOKp+Tk1cM2n4IyAXOzphsuRbIciofU8xKC9tnfQwliVHO+0GKT
+         mB0A==
+X-Gm-Message-State: AO0yUKUhvGB7FaEi9grXTaeAihSDB0k0F3J3oWkdy4gwmOcEBs9T8GQc
+        AyxO605LS+OVcKbwH/Iy2k77LnwFjg03dhvRdWQ=
+X-Google-Smtp-Source: AK7set9+635aGGSGXuMavk+jxtmZTf8z5uamIZF5wF94ONM5UsNDW03w287rSqyPCDuCfLS6m0HCo582oc5Yj18ZayA=
+X-Received: by 2002:a05:6808:2007:b0:35b:d93f:cbc4 with SMTP id
+ q7-20020a056808200700b0035bd93fcbc4mr209182oiw.96.1676559189108; Thu, 16 Feb
+ 2023 06:53:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20230216102856.11987-1-orlandoch.dev@gmail.com>
+In-Reply-To: <20230216102856.11987-1-orlandoch.dev@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 16 Feb 2023 09:52:57 -0500
+Message-ID: <CADnq5_OMA3+FXwUB5eK=Y3qcGW1xNY6RjQAtywT3_bh6HmJztA@mail.gmail.com>
+Subject: Re: [PATCHv2] drm/amdgpu: register a vga_switcheroo client for
+ MacBooks with apple-gmux
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     amd-gfx@lists.freedesktop.org, Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Aditya Garg <gargaditya08@live.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023, at 15:47, Baoquan He wrote:
-> On 02/16/23 at 01:53pm, Arnd Bergmann wrote:
->> On Thu, Feb 16, 2023, at 13:34, Baoquan He wrote:
->> I see that there are only two callers of {devm_,}ioremap_uc() left in the
->> tree, so maybe we can even take that final step and remove it from
->> the interface. Maybe we can revisit [1] as part of this series.
+On Thu, Feb 16, 2023 at 8:45 AM Orlando Chamberlain
+<orlandoch.dev@gmail.com> wrote:
 >
-> I see now. Christoph Hellwig ever mentioned in v2 reviewing, I
-> didn't get why. Thanks for the details. 
-> https://lore.kernel.org/all/YwHX98KBEnZw9t6e@infradead.org/T/#u
+> Commit 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
+> vga_switcheroo") made amdgpu only register a vga_switcheroo client for
+> GPU's with PX, however AMD GPUs in dual gpu Apple Macbooks do need to
+> register, but don't have PX. Instead of AMD's PX, they use apple-gmux.
 >
-> I am not sure if it's OK to do the change in this patchset, maybe
-> another patch?
+> Use apple_gmux_detect() to identify these gpus, and
+> pci_is_thunderbolt_attached() to ensure eGPUs connected to Dual GPU
+> Macbooks don't register with vga_switcheroo.
+>
+> Fixes: 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and vga_switcheroo")
+> Link: https://lore.kernel.org/amd-gfx/20230210044826.9834-10-orlandoch.dev@gmail.com/
+> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
 
-Yes, a separate patch would be ideal. If you do the same change in
-more than one architecture (other than ia64 and x86), you can combine
-those into one patch.
+This needs ifdefs around the apple_gmux stuff so that it will build
+without the gmux support.
 
-    Arnd
+Alex
+
+> ---
+> v1->v2: Use apple_gmux_detect()
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index 2f28a8c02f64..ef8b996f0622 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/devcoredump.h>
+>  #include <generated/utsrelease.h>
+>  #include <linux/pci-p2pdma.h>
+> +#include <linux/apple-gmux.h>
+>
+>  #include <drm/drm_aperture.h>
+>  #include <drm/drm_atomic_helper.h>
+> @@ -3919,12 +3920,15 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+>         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
+>                 vga_client_register(adev->pdev, amdgpu_device_vga_set_decode);
+>
+> -       if (amdgpu_device_supports_px(ddev)) {
+> -               px = true;
+> +       px = amdgpu_device_supports_px(ddev);
+> +
+> +       if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
+> +                               apple_gmux_detect(NULL, NULL)))
+>                 vga_switcheroo_register_client(adev->pdev,
+>                                                &amdgpu_switcheroo_ops, px);
+> +
+> +       if (px)
+>                 vga_switcheroo_init_domain_pm_ops(adev->dev, &adev->vga_pm_domain);
+> -       }
+>
+>         if (adev->gmc.xgmi.pending_reset)
+>                 queue_delayed_work(system_wq, &mgpu_info.delayed_reset_work,
+> @@ -4029,6 +4033,7 @@ void amdgpu_device_fini_hw(struct amdgpu_device *adev)
+>  void amdgpu_device_fini_sw(struct amdgpu_device *adev)
+>  {
+>         int idx;
+> +       bool px;
+>
+>         amdgpu_fence_driver_sw_fini(adev);
+>         amdgpu_device_ip_fini(adev);
+> @@ -4048,10 +4053,16 @@ void amdgpu_device_fini_sw(struct amdgpu_device *adev)
+>
+>         kfree(adev->bios);
+>         adev->bios = NULL;
+> -       if (amdgpu_device_supports_px(adev_to_drm(adev))) {
+> +
+> +       px = amdgpu_device_supports_px(adev_to_drm(adev));
+> +
+> +       if (px || (!pci_is_thunderbolt_attached(adev->pdev) &&
+> +                               apple_gmux_detect(NULL, NULL)))
+>                 vga_switcheroo_unregister_client(adev->pdev);
+> +
+> +       if (px)
+>                 vga_switcheroo_fini_domain_pm_ops(adev->dev);
+> -       }
+> +
+>         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
+>                 vga_client_unregister(adev->pdev);
+>
+> --
+> 2.39.1
+>
