@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBE66990A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F7F6990AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjBPKE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S229717AbjBPKEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBPKEX (ORCPT
+        with ESMTP id S229508AbjBPKEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:04:23 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE26D4DBFE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:19 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id y25so2093210lfa.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:19 -0800 (PST)
+        Thu, 16 Feb 2023 05:04:42 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9663A4DBFF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:37 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id eq11so2024258edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iC4G6Chpv1TwtaQwrHEgm0cQhdw6ILUAcXbBMMjaI3I=;
-        b=OC41sN/IZzwtlfqWw88+8lhJoyzGOPS0Kj4SBGJ7/81+5c8vboPc13pf0GlMGe99dV
-         X9/gS+o08YrGj0NhSF2Tpi81ZF5ifQcA8vLA12LNjFTJgKi7dscPo25tQwrKJNAOXC3r
-         gzJ192bgsCiZ/qImclprAJ0Ne4qP+2UqEsyGtO9CI7axJVZAG08llLN8VBodKnDDG4Vw
-         pQyKp6e525LKacW3b4d78Zn5b0r2PeaWcdenpltgwXXdJSyQ6cFIFXSnl1SpvuucBXhB
-         7o3O2n8x7EE8xiHgDCMdbVIq6CmSD1A9kG0idn5KdmXoucBbX0VXr9Dcm42G9tEmeM3l
-         qPWg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uHOyQ5lmh44/x0N5o9EsWAl8D2lj1V8oYJTQzd4/iwg=;
+        b=bjZQpJ3lzdwQ8hGv3TiVKeTU35vniZY/thIN9btZzz90XUJOLhcN9Z7phrwR7ME7jb
+         XNm/51PJRU2HHchyrEc8hwF7cdzv7z4r+93iuikWUBkyxjgFKu3gxT9bjSmgPNT4Pl6d
+         Bv2Ws/i4ScQ9647GxmC2sxRX1idbw5LtIJ9cdtmJnoyNduPYEGa5xPI2josYcuT5Fllh
+         lsssLoSR0N8rc0QYXHSOHtTtcmeY6toL74u5lem43ZI+jAa7IJua79bHUW3TVpdCaoxt
+         wQDDndTj0CAlUME4H68ScsnMzc8nPyAgBhr3Y1qJS979xJeDTQM/S46vbI9pL4tjg+C4
+         q35Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iC4G6Chpv1TwtaQwrHEgm0cQhdw6ILUAcXbBMMjaI3I=;
-        b=ylRsr38SZ7Ocj9ueMycBwCqa0AoTsas0DHPkoYt8M9mdlh/8JLsBTlt7sEoqonabOV
-         C4NLPVNf5sjr/nA/PA7VA3dl4qq08G8AOV+AmIirQBQrFUjmoGcpWhDddwUQ7zfbyHME
-         HiD6EuQlWPHbj2bb2auQPkM0a7FD5DMZAmQnsAik1OFTo3aSlIGWszbudUd/uoppqTxf
-         Z+bH6+Un8N1ZsWoK3+kkWN2O6EFqgdE6gRCySXkXIV6nui/UxCzyOzIdZwcyNBjew0KP
-         2U7mJJjkOHossc6scB3JhtmnWLNoAMoB2AWLBjaJ4//TaThiLfw/GN3EJ6RnMT6yorgZ
-         RqiA==
-X-Gm-Message-State: AO0yUKW3ptGcAAKFzVZMsYzKuJtT54NmSxtxd7iO6HkOTp3S1SjNmJhu
-        e7TJVAzYOmuB8CCXJENrZ3QUrL39ubjuT7SnvjyTpQ==
-X-Google-Smtp-Source: AK7set8DBh29ZMgrX8CBnHNMbWMxKn/kt4U0dnk9NpCe5ik8g7wyoxdQMEgGbV+W3gg4GFVBxJuwXanX9utnx96XXnA=
-X-Received: by 2002:ac2:54b8:0:b0:4db:2c5a:e4f6 with SMTP id
- w24-20020ac254b8000000b004db2c5ae4f6mr1462667lfk.3.1676541858071; Thu, 16 Feb
- 2023 02:04:18 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHOyQ5lmh44/x0N5o9EsWAl8D2lj1V8oYJTQzd4/iwg=;
+        b=fqi9AquRebX3I6riyzHc2wHvSQt7tDlJPTwP/6U9lCdunvdFkCadAm5RoaBfjRc72F
+         /z/o1lpMl/VS9ydVUcNFZsBPpofKhswEbj7UR964KR1Emk1VTBolZY7P7hZFzGhokhQG
+         7OfuFxxL2f8bwr9sKiyceAEGl0y1LwRXC72l6rV8kjw6Dr15iaJ9QiAJQhLdna4LaR4H
+         W3drjgaV91qHcPIdq+myJrh5Orl20lc4o6ab6leI83A9mhq/868jEkQ/bOatxZNoXiRn
+         f/UaiN+/VI6RoavpRa2tCLVcc+aWZY/t3Qcze7MAG8A3y5oOs+Y+II95fXrCwtmZQcEB
+         DBvg==
+X-Gm-Message-State: AO0yUKWoSbosUijJVge5hmJXc7wEbHgDFjc0qSeMU2D71/tiN4eXlnG1
+        VicDdTR4H6snBizoFOLl7Fhfig==
+X-Google-Smtp-Source: AK7set9uWaBpaH1PbK5+K7zWxGk9xtocPZW9k0aRimgCx3zjxnmc6I9YqaLLs+v34zBVzX/5pzScEg==
+X-Received: by 2002:aa7:d28b:0:b0:4a0:e31a:434 with SMTP id w11-20020aa7d28b000000b004a0e31a0434mr5546917edq.27.1676541876140;
+        Thu, 16 Feb 2023 02:04:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i5-20020a50c3c5000000b004aad8d2158dsm579668edf.66.2023.02.16.02.04.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 02:04:35 -0800 (PST)
+Message-ID: <485d74fe-bfb5-c55e-724f-304476624abd@linaro.org>
+Date:   Thu, 16 Feb 2023 11:04:33 +0100
 MIME-Version: 1.0
-References: <000000000000035bbc05f4ce4501@google.com>
-In-Reply-To: <000000000000035bbc05f4ce4501@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 16 Feb 2023 11:04:05 +0100
-Message-ID: <CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com>
-Subject: Re: [syzbot] WARNING: stack going in the wrong direction? at __sys_setsockopt
-To:     syzbot <syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com>,
-        jpoimboe@kernel.org, Ingo Molnar <mingo@kernel.org>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] ASoC: dt-bindings: sama7g5-pdmc: add
+ microchip,startup-delay-us binding
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de, perex@perex.cz,
+        tiwai@suse.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230214161435.1088246-1-claudiu.beznea@microchip.com>
+ <20230214161435.1088246-3-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214161435.1088246-3-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 at 11:00, syzbot
-<syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11ad7710c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=60f48e09dc64b527
-> dashboard link: https://syzkaller.appspot.com/bug?extid=91c3651bb190d53b4d16
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7a22fa9fb779/disk-9d9019bc.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/68851ce42fd7/vmlinux-9d9019bc.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/09be0a2c410b/bzImage-9d9019bc.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com
->
-> WARNING: stack going in the wrong direction? at __sys_setsockopt+0x2c6/0x5b0 net/socket.c:2271
-
-+Josh, Ingo,
-
-Yesterday we started seeing lots of "stack going in the wrong
-direction" all over the kernel.
-
-I see there is only your recent commit to ORC unwinder:
-"x86/unwind/orc: Add 'signal' field to ORC metadata"
-
-Can it be related?
-
-
+On 14/02/2023 17:14, Claudiu Beznea wrote:
+> Add microchip,startup-delay-us binding to let PDMC users to specify
+> startup delay.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>  .../devicetree/bindings/sound/microchip,sama7g5-pdmc.yaml   | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/microchip,sama7g5-pdmc.yaml b/Documentation/devicetree/bindings/sound/microchip,sama7g5-pdmc.yaml
+> index c4cf1e5ab84b..9b40268537cb 100644
+> --- a/Documentation/devicetree/bindings/sound/microchip,sama7g5-pdmc.yaml
+> +++ b/Documentation/devicetree/bindings/sound/microchip,sama7g5-pdmc.yaml
+> @@ -67,6 +67,12 @@ properties:
+>      maxItems: 4
+>      uniqueItems: true
+>  
+> +  microchip,startup-delay-us:
+> +    description: |
+> +      Specifies the delay in microseconds that needs to be applied after
+> +      enabling the PDMC microphones to avoid unwanted noise due to microphones
+> +      not being ready.
+
+Is this some hardware delay? Or OS? If OS, why Linux specific delay is
+put into DT?
+
+Best regards,
+Krzysztof
+
