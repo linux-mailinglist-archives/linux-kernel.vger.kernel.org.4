@@ -2,50 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86505698E2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD6E698DFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjBPH4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        id S229801AbjBPHog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBPH4v (ORCPT
+        with ESMTP id S229674AbjBPHod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:56:51 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E58474DC;
-        Wed, 15 Feb 2023 23:56:15 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PHRyC712nz16Ndg;
-        Thu, 16 Feb 2023 15:53:07 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Thu, 16 Feb 2023 15:44:23 +0800
-Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
- journal record without error
-To:     Baokun Li <libaokun1@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
-        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-References: <20230214022905.765088-1-yebin@huaweicloud.com>
- <20230214022905.765088-2-yebin@huaweicloud.com>
- <501b98e2-9345-d57f-bc70-432ae342b1e8@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <63EDDED7.90406@huawei.com>
-Date:   Thu, 16 Feb 2023 15:44:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
-MIME-Version: 1.0
-In-Reply-To: <501b98e2-9345-d57f-bc70-432ae342b1e8@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        Thu, 16 Feb 2023 02:44:33 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE743B0C8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:44:31 -0800 (PST)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230216074429epoutp01afd7589a044142d3b2d6febbbdc9c15e~EPk7R3iby2123921239epoutp01g
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:44:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230216074429epoutp01afd7589a044142d3b2d6febbbdc9c15e~EPk7R3iby2123921239epoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1676533469;
+        bh=oEJl9mI2BPZgtqcU4ebRMNclNVoy/K+7rH+uFc8JogA=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=u/mdwkn69McCwBKe+B0gOHcSguDuCTw0QDDR9kca5fgTEUk3R5b4X2XuCI37K06Od
+         BFcAFtNuU8bfielerD+TPNPhCzPnPBSy5mI5bVNAlWRM0Hx6ttgCGnqoZcJU9TJH3X
+         S87HvRIgFjdcBkcxtfhvGgOt6Oeqza5uYLsf96ZQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230216074428epcas2p14a2330c2d00e8976848f16f37027ceff~EPk6eeJuO0558405584epcas2p1s;
+        Thu, 16 Feb 2023 07:44:28 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PHRmD2K6Bz4x9QB; Thu, 16 Feb
+        2023 07:44:28 +0000 (GMT)
+X-AuditID: b6c32a46-743fa70000007a4b-af-63eddedc5314
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        90.8D.31307.CDEDDE36; Thu, 16 Feb 2023 16:44:28 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     Chao Yu <chao@kernel.org>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daehojeong@google.com" <daehojeong@google.com>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366@epcms2p4>
+Date:   Thu, 16 Feb 2023 16:44:27 +0900
+X-CMS-MailID: 20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZdljTQvfOvbfJBn/vslucnnqWyWJq+15G
+        i+bF69ksnqyfxWxxaZG7xeVdc9gsFmx8xOjA7rFgU6nHplWdbB77565h99i94DOTx+dNcgGs
+        Udk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBHKCmU
+        JeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyBChOy
+        M/a3b2UseMNW0bRvBXsD403WLkYODgkBE4l53fxdjFwcQgI7GCX6nnxmAonzCghK/N0hDGIK
+        C9hI/L1h18XICVSiJHHtQC8LiC0soC+xefEydhCbTUBX4u+G5ewgY0QEJjNJTPiyggkkwSxQ
+        JNE3+y9YkYQAr8SM9qcsELa0xPblWxkhbA2JH8t6mSFsUYmbq9+yw9jvj82HqhGRaL13FqpG
+        UOLBz91QcUmJRYfOM0HY+RJ/V1xng7BrJLY2tEHF9SWudWwE28sr4CvRvXQZK4jNIqAqMWXe
+        Sah7XCQu3/vCDnGzvMT2t3OYQX5nFtCUWL9LHxJSyhJHbrFAVPBJdBxG+GrHvCdQm9QkNm/a
+        zAphy0hceNwGdaWHxKSt98AmCgkEStw6qDCBUWEWIphnIVk7C2HtAkbmVYxiqQXFuempxUYF
+        RvCITc7P3cQITotabjsYp7z9oHeIkYmD8RCjBAezkgjvpptvkoV4UxIrq1KL8uOLSnNSiw8x
+        mgI9PJFZSjQ5H5iY80riDU0sDUzMzAzNjUwNzJXEeaVtTyYLCaQnlqRmp6YWpBbB9DFxcEo1
+        MK2U/n1pR+4to4Jg+b64X0+eP6sJ3K2wb5vR9l1av1WupF1SYxfjVZ2w8ImePE97+sETH+P+
+        vs7/bbf44dSLOzeoiwg9So/ZFc1QNHn3uviTySfPL5jUtien4d6UYuvb1+zWdZyNFXnwmH3/
+        uZez5Rakhrw+6nVvr2ZO/r/tG5xO/E5/skPx973zGwymFE8qbjxive30m4lia7kW/u7KcXbb
+        66I/j3+TlRbDn4OJtZnT11Rf2HfYROik7/wZmWYHTiYk3vLamd604Of/Z9aTa2wTZpZXRe4O
+        vP34hvq7DSfMhEUdvKovvJpWtXLPguLemTcMbz8NtP75kj1Md3/R9jldPnNdKqzytNx/WBit
+        qXm6UomlOCPRUIu5qDgRANiXqR0UBAAA
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-CMS-RootMailID: 20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6
+References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p4>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,77 +96,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When f2fs skipped a gc round during victim migration, there was a bug which
+would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
+was not initialized. It fixes the bug by correctly initializing the
+skipped_gc_rwsem inside the gc loop.
 
+Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+Cc: stable@vger.kernel.org
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 
-On 2023/2/16 15:17, Baokun Li wrote:
-> On 2023/2/14 10:29, Ye Bin wrote:
->> From: Ye Bin <yebin10@huawei.com>
->>
->> Now, 'es->s_state' maybe covered by recover journal. And journal errno
->> maybe not recorded in journal sb as IO error. ext4_update_super() only
->> update error information when 'sbi->s_add_error_count' large than zero.
->> Then 'EXT4_ERROR_FS' flag maybe lost.
->> To solve above issue commit error information after recover journal.
->>
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/super.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->> index dc3907dff13a..b94754ba8556 100644
->> --- a/fs/ext4/super.c
->> +++ b/fs/ext4/super.c
->> @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct 
->> super_block *sb,
->>           goto err_out;
->>       }
->>   +    if (unlikely(es->s_error_count && !jbd2_journal_errno(journal) &&
->> +             !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
->> +        EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
->> +        es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
->> +        err = ext4_commit_super(sb);
->> +        if (err) {
->> +            ext4_msg(sb, KERN_ERR,
->> +                 "Failed to commit error information, please repair 
->> fs force!");
->> +            goto err_out;
->> +        }
->> +    }
->> +
->>       EXT4_SB(sb)->s_journal = journal;
->>       err = ext4_clear_journal_err(sb, es);
->>       if (err) {
-> I think we don't need such a complicated judgment, after the journal 
-> replay and saving the error info,
-> if there is EXT4_ERROR_FS flag in ext4_sb_info->s_mount_state, just 
-> add this flag directly to es->s_state.
-> This way the EXT4_ERROR_FS flag and the error message will be written 
-> to disk the next time
-
-Thanks for your suggestion. There are two reasons for this:
-1. We want to write the error mark to the disk as soon as possible.
-2. Here we deal with the case where there is no error mark bit but there 
-is an error record.
-In this case, the file system should be marked with an error and the 
-user should be prompted.
-> ext4_commit_super() is executed. The code change is as follows:
->
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 260c1b3e3ef2..341b11c589b3 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -5935,6 +5935,7 @@ static int ext4_load_journal(struct super_block 
-> *sb,
->                         memcpy(((char *) es) + EXT4_S_ERR_START,
->                                save, EXT4_S_ERR_LEN);
->                 kfree(save);
-> +               es->s_state |= cpu_to_le16(EXT4_SB(sb)->s_mount_state 
-> & EXT4_ERROR_FS);
->         }
->
->         if (err) {
->
-
-
-
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index b22f49a6f128..81d326abaac1 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 				prefree_segments(sbi));
+ 
+ 	cpc.reason = __get_cp_reason(sbi);
+-	sbi->skipped_gc_rwsem = 0;
+ gc_more:
++	sbi->skipped_gc_rwsem = 0;
+ 	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
+ 		ret = -EINVAL;
+ 		goto stop;
+-- 
+2.34.1
