@@ -2,162 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A3E699F1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B33699F25
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBPVqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 16:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S229908AbjBPVrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 16:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBPVqO (ORCPT
+        with ESMTP id S229741AbjBPVrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 16:46:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613804A1FE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:45:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676583948; x=1708119948;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=24/nSbWBot7SwsjfPbGwoCccBJSqxGicpY3ET49VlBs=;
-  b=SbULYiMyd73nJwsx3pxBR4kVe8aflX2uUVcW6PPR+vui6xN/jN+Ox0Ph
-   qGeoqgPYjgGQLAeXREDcv4tbFoCicrf275rbWMoyd7nADSB2bIzzeTh+5
-   r3rnSREkf0X7kuoJQp+U5BpCXrf33wLDhxmGqpeZHyGIwjvQEg0CFWOVL
-   hqM6JppCRKcjiWTBGjx7XkBft3RDGEY1w44KeTQoB1YNU5vvtwIBkph0h
-   vSva6MnrgufQMnRwYHxX6JP4DGSi2WsdtdP3TyDDsFMovGqNG5u4Da1pu
-   3OY7z1drkAC+utlXXe67ATRgr0NgAyb7qhPOz+QDEa1cuQUK+F4u1uGM3
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="329569485"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="329569485"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 13:45:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="813143639"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="813143639"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Feb 2023 13:45:47 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSm4Y-000ArJ-0l;
-        Thu, 16 Feb 2023 21:45:46 +0000
-Date:   Fri, 17 Feb 2023 05:45:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- cf8bcc2d0f4c94bb429c8fd14efb1a08b064214b
-Message-ID: <63eea3fa.ryJ6BYsH4wtsjN5n%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 16 Feb 2023 16:47:03 -0500
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B183E60C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:47:00 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 911AC3F623;
+        Thu, 16 Feb 2023 22:46:57 +0100 (CET)
+Date:   Thu, 16 Feb 2023 22:46:55 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Archit Taneja <architt@codeaurora.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH 1/3] drm/msm/dpu: Read previously-uninitialized SSPP
+ scaler version from hw
+Message-ID: <20230216214655.a3ajtegqwattn2rt@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Archit Taneja <architt@codeaurora.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        phone-devel@vger.kernel.org
+References: <20230215-sspp-scaler-version-v1-0-416b1500b85b@somainline.org>
+ <20230215-sspp-scaler-version-v1-1-416b1500b85b@somainline.org>
+ <CAA8EJpq1L32VQ1eQEk2YQWqCwHgdFQfuWPhQx=PmhzXvazLgPA@mail.gmail.com>
+ <20230216083119.6ispk2xhahhzn5sx@SoMainline.org>
+ <305a468a-d792-4f51-5a7a-bf38b9c685eb@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <305a468a-d792-4f51-5a7a-bf38b9c685eb@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: cf8bcc2d0f4c94bb429c8fd14efb1a08b064214b  Merge branch 'linus'
+On 2023-02-16 18:34:43, Dmitry Baryshkov wrote:
+> On 16/02/2023 10:31, Marijn Suijten wrote:
+> > On 2023-02-16 04:22:13, Dmitry Baryshkov wrote:
+> >> On Thu, 16 Feb 2023 at 01:02, Marijn Suijten
+> >> <marijn.suijten@somainline.org> wrote:
+> >>>
+> >>> DPU's catalog never assigned dpu_scaler_blk::version leading to
+> >>> initialization code in dpu_hw_setup_scaler3 to wander the wrong
+> >>> codepaths.  Instead of hardcoding the correct QSEED algorithm version,
+> >>> read it back from a hardware register.
+> >>>
+> >>> Note that this register is only available starting with QSEED3, where
+> >>> 0x1002 corresponds to QSEED3, 0x2004 to QSEED3LITE and 0x3000 to QSEED4.
+> >>
+> >> This is not purely accurate. 0x1003 (sdm845) also corresponds to QSEED3.
+> >> I'd say instead that there are several variations of QSEED3 scalers,
+> >> where starting from 0x2004 it is called QSEED3LITE and starting from
+> >> 0x3000 it is called QSEED4.
+> > 
+> > Good catch, I'll update that.
+> > 
+> >>> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+> >>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> >>> ---
+> >>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 --
+> >>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c    | 8 +++++++-
+> >>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h    | 3 +++
+> >>>   3 files changed, 10 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> >>> index ddab9caebb18..96ce1766f4a1 100644
+> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> >>> @@ -324,11 +324,9 @@ struct dpu_src_blk {
+> >>>   /**
+> >>>    * struct dpu_scaler_blk: Scaler information
+> >>>    * @info:   HW register and features supported by this sub-blk
+> >>> - * @version: qseed block revision
+> >>>    */
+> >>>   struct dpu_scaler_blk {
+> >>>          DPU_HW_SUBBLK_INFO;
+> >>> -       u32 version;
+> >>
+> >> No. Please keep the version in the scaler subblk.  It is a version of
+> >> the QSEED (scaler block), not the SSPP's version.
+> > 
+> > You are right that the new variable in the parent (SSPP) block is
+> > nondescriptive and should have been named scaler_version.
+> > 
+> > However.
+> > 
+> > dpu_scaler_blk is only used as a const static struct in the catalog,
+> > meaning we cannot (should not!) store a runtime-read register value
+> > here.  Instead I followed your IRC suggestion to read the register in
+> > dpu_hw_sspp_init, but my original implementation called
+> > dpu_hw_get_scaler3_ver in _dpu_hw_sspp_setup_scaler3 where we already
+> > have access to the subblk_offset, allowing us to delete
+> > _dpu_hw_sspp_get_scaler3_ver.  Would you rather have that?  We don't
+> > need the register value anywhere else.
+> 
+> After giving it another thought, let's follow the vendor's approach and 
+> store the predefined scaler_version in hw catalog (in dpu_scaler_blk, as 
+> it currently is). This way we can still drop all QSEED3/3LITE/4 
+> crazyness, while keeping the data sane.
 
-elapsed time: 724m
+You want to drop the descriptive #define's, and replace them with magic
+0x1002/0x2004/0x3000 and whatever other values we know?  That seems
+impossible to port without reading back the register value, which we've
+only done for a handful of SoCs.  I hope I'm misunderstanding you?
+After all the vendor approach (in a random 4.14 kernel I have open now)
+is to read the register value at runtime but their catalog is also
+dynamic and built at runtime based on version ranges and register reads,
+which sometimes is more sensible.  Ours is const.
 
-configs tested: 79
-configs skipped: 3
+> Then _dpu_hw_sspp_get_scaler3_ver() can also be dropped (or you can use 
+> it as a safety guard while doing dpu_hw_sspp init).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That (safety guard) is exactly what Abhinav requested against, since the
+kernel (and our catalog) should be trustworthy.  I'll let you two fight
+this out and come to a consensus before sending v2.
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230212
-arc                  randconfig-r043-20230213
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230212
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a011-20230213
-i386                 randconfig-a012-20230213
-i386                 randconfig-a013-20230213
-i386                 randconfig-a014-20230213
-i386                 randconfig-a015-20230213
-i386                 randconfig-a016-20230213
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230213
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230213
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64               randconfig-a011-20230213
-x86_64               randconfig-a012-20230213
-x86_64               randconfig-a013-20230213
-x86_64               randconfig-a014-20230213
-x86_64               randconfig-a015-20230213
-x86_64               randconfig-a016-20230213
-x86_64                               rhel-8.3
+> >> There is a block called DS (destination scaler), which can be used to
+> >> scale the resulting image after the LM. This block also uses the
+> >> QSEED3(,LITE,4) scaler block.
+> > 
+> > Is this already supported in mainline, and is it the reason for
+> > previously having qseed_type globally available?  Is my understanding
+> > correct that this scaler subblk in the SSPP is merely an interface to
+> > it, allowing the same hardware to be used from the SSPP for intputs and
+> > after the LM for outputs?
+> 
+> No, I think qseed_type is a leftover from having the same thing 
+> implemented in three different ways. Maybe because of NIH syndrome?
 
-clang tested configs:
-arm                  randconfig-r046-20230213
-hexagon              randconfig-r041-20230212
-hexagon              randconfig-r041-20230213
-hexagon              randconfig-r045-20230212
-hexagon              randconfig-r045-20230213
-i386                 randconfig-a001-20230213
-i386                 randconfig-a002-20230213
-i386                 randconfig-a003-20230213
-i386                 randconfig-a004-20230213
-i386                 randconfig-a005-20230213
-i386                 randconfig-a006-20230213
-riscv                randconfig-r042-20230212
-s390                 randconfig-r044-20230212
-x86_64               randconfig-a001-20230213
-x86_64               randconfig-a002-20230213
-x86_64               randconfig-a003-20230213
-x86_64               randconfig-a004-20230213
-x86_64               randconfig-a005-20230213
-x86_64               randconfig-a006-20230213
+Could be, downstream uses it to steer its catalog logic for example
+(which happens before later reading the version register).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> DS is not supported, it was removed in the commit 
+> b033def8741aab3fb58e4bf6c1d5cd73b3beb357. I do not have a clear usecase 
+> for this block and of course we don't have uABI for it.
+
+Is there no common DRM property to composite at a lower resolution and
+upscale the final displayed image to match a CRTC/encoder?  I wish I
+understood the commit message better :)
+
+> It would still be nice to keep it in the picture though. It was the main 
+> reason for moving scaler code from dpu_hw_sspp to dpu_hw_util.
+
+Downstream SDE already has this code moved to sde_hw_util as far as I
+can see (and SSPP and DS call into it).  But I fully agree as a
+mostly-oblivious-outsider: it seems like there are a lot of features,
+hardware blocks and optimizations not implemented, things which I still
+have no knowledge/experience/understanding of/about.  Let's first focus
+on making it work _on all relevant SoCs and boards_ though :)
+
+- Marijn
