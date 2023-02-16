@@ -2,102 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5014C698A7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E416698A81
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBPCXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 21:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229583AbjBPC0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 21:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBPCXv (ORCPT
+        with ESMTP id S229462AbjBPC0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:23:51 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB0431E36
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:23:50 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id s203so572205ybc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NT9uNCMBWl794fkp+SMakMeJNNkxNGDXw7tBHf8Uvgo=;
-        b=wlNPmA17KOY6pK6YSw5++8aMVTR+4h8QzLMUDAs/l/GgEN8eLFJjblVBAL4l+8UMVo
-         VTNvpLOPQe0tCs8ZSBaPmCUh9VK2S35jr9LXhVu57g0MVbUxlVvoBO80fVRTxB/I/RIx
-         +akHOGbDrVDLObPLO141W2tYDUHhJog0ukTM/eLTBFppp3LXIP16krE2YUTVKv6nVvB5
-         DD3wYChintddtUpp8K+Y/2dZp6OviOiV3/Z2H0iulxFADBwcqMao8Um8A8dyZonyUOaN
-         VjBCHyPX3eNae7TtWuiXWoU1BLix/mjHbA701x837guejw8xRKnxIaw7zAdnQbzpzTlX
-         e+8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NT9uNCMBWl794fkp+SMakMeJNNkxNGDXw7tBHf8Uvgo=;
-        b=B5VXWfmHX4PITsKWQC+39Q5Zq9a+fMjGrxmwJGjVurjvwIXg5/5pyHk4CUVsfSqzUy
-         /CNaQgd8cJMS4CmEhVfBsG0/DX1Uxs1Lgf9uxp9i19r7w62eSbrKbIVk0YIv0gK9zk3e
-         XUnP2XEuesSV8/mKZAfctczT8pQBRT3ptFLDRAJBDK2x1GZ9A4Kea5Gy/HqlyKL+LXQc
-         oTN1lq15RmcyV6dtU2qIyRFbQ8BOIRhplp3A4+41AwX4s6qy6EZzvRP5gDG/yxb6BPN2
-         f4wOkPvhHW9Xt9FW/mqBHCyh8tzBGkVUkb6AuwIxlvVsZKSB6wTwScHCN9KY7w+uxYBb
-         DGbA==
-X-Gm-Message-State: AO0yUKWG48ul1s94TQLD97ANi7wOl0YPWptDvn54ZkAnbhXSrQh0Xz/1
-        zW5iMwftF0S2WoUTk4epE/VQOCyBvmXde0l2HVl9pw==
-X-Google-Smtp-Source: AK7set+g5Iz6F+qTqpXxLN+bqfm0nIW/gdEpwcM8ofiNU5qAy9sZmhZSKBYet6qwAIKNsRoqh0H5TZPmCHA79wcHMxk=
-X-Received: by 2002:a25:9a49:0:b0:86a:e417:b66e with SMTP id
- r9-20020a259a49000000b0086ae417b66emr520370ybo.382.1676514229770; Wed, 15 Feb
- 2023 18:23:49 -0800 (PST)
+        Wed, 15 Feb 2023 21:26:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB0A2A17F;
+        Wed, 15 Feb 2023 18:26:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 507E461E1D;
+        Thu, 16 Feb 2023 02:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDA3C433D2;
+        Thu, 16 Feb 2023 02:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676514393;
+        bh=+1YgH0xe/A2Be/JRKsegZL1u9xW7M8fr+U7CjP8kcnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p5vu/bydpgc5fAjGag4PVvXBMRbaLA3+xas/NcqmGtL5rHT0URl6/1kkFf1Scs6YH
+         ePWpkHM+DhAYAAtFkj4fc4SnbffGMw7dfWuUPXmwOZD41GawM3vzriUZOS1S0UIdKn
+         ZGPWu6X7kwyhqgsbkuHSn6aWN2plhao3m2HNbgPe0CfvkwmhwWrWxnU9s8K0UIePrl
+         jY+9OI7xbsGIQSsq+WJcdywce1UhOT0iVqK3c69fbEqN8qydYYxO2sYNCBnIateTSh
+         r6T097bvogzFx0IQsglYstF7c7PPs3V4VT1Fv48W+wSycw4TEzvKOtZHitv/z/yKDA
+         Qp30YNHgD2Shw==
+Date:   Wed, 15 Feb 2023 18:26:30 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@digitalocean.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH 2/3] livepatch,sched: Add livepatch task switching to
+ cond_resched()
+Message-ID: <20230216022630.h6mfl5cdqt5vbjno@treble>
+References: <cover.1675969869.git.jpoimboe@kernel.org>
+ <58cd637f7557e829142a2eb255daa91fa57e6321.1675969869.git.jpoimboe@kernel.org>
+ <Y+zefMw6wqaXHZSz@alley>
 MIME-Version: 1.0
-References: <20230215-sspp-scaler-version-v1-0-416b1500b85b@somainline.org> <20230215-sspp-scaler-version-v1-2-416b1500b85b@somainline.org>
-In-Reply-To: <20230215-sspp-scaler-version-v1-2-416b1500b85b@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 16 Feb 2023 04:23:38 +0200
-Message-ID: <CAA8EJpr7v4waXaaahuMq3Ti18Gd-sg4HGSSof=yEX5kC7+CKnA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm/msm/dpu: Drop unused get_scaler_ver callback from SSPP
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Archit Taneja <architt@codeaurora.org>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        phone-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+zefMw6wqaXHZSz@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 at 01:02, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> This pointer callback is never used and should be removed.  The helper
-> _dpu_hw_sspp_get_scaler3_ver function is retained as it is being used by
-> dpu_hw_sspp_init which didn't itself compute _sspp_subblk_offset yet.
->
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+On Wed, Feb 15, 2023 at 02:30:36PM +0100, Petr Mladek wrote:
+> >  static inline int _cond_resched(void)
+> >  {
+> > +	klp_sched_try_switch();
+> >  	return __cond_resched();
+> 
+> My only concern is if it might cause any performance problems.
+> 
+> On one hand, cond_resched() is used in code paths that are slow
+> on its own. Also it will do nothing most of the time.
+> 
+> On the other hand, cond_resched() is typically used in cycles.
+> One cycle might be fast. The code might be slow because there
+> are too many cycles. Repeating the same failing test might
+> prolong the time significantly.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Yes, but it should hopefully be very rare to patch a function in the
+call stack of a kthread loop.  In general it's a good idea for the patch
+author to avoid that.
 
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c | 4 +---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h | 6 ------
->  2 files changed, 1 insertion(+), 9 deletions(-)
+> An idea is to try the switch only when it was not done during
+> a real schedule. Something like:
+> 
+> static inline int _cond_resched(void)
+> {
+> 	int scheduled;
+> 
+> 	scheduled = __cond_resched();
+> 	if (scheduled)
+> 		klp_sched_try_switch();
+> 
+> 	return scheduled();
+> }
+> 
+> But it would make it less reliable/predictable. Also it won't work
+> in configurations when cond_resched() is always a nop.
+> 
+> I am probably too careful. We might keep it simple until any real
+> life problems are reported.
 
+If we can get away with it, I much prefer the simple unconditional
+klp_sched_try_switch() because of the predictability and quickness with
+which the kthread gets patched.
+
+> > --- a/kernel/livepatch/transition.c
+> > +++ b/kernel/livepatch/transition.c
+> > @@ -76,6 +96,8 @@ static void klp_complete_transition(void)
+> >  		 klp_transition_patch->mod->name,
+> >  		 klp_target_state == KLP_PATCHED ? "patching" : "unpatching");
+> >  
+> > +	klp_cond_resched_disable();
+> > +
+> 
+> Nit: Strictly speaking, this is not needed when klp_complete_transition()
+>      is called from klp_cancel_transition(). In this case,
+>      klp_cond_resched_enable() was not called. So it might be moved into
+>      klp_try_complete_transition().
+
+Argh, I always forget about that pesky klp_cancel_transition().
+
+> More important thing, thinking loudly:
+> 
+> We need to make sure that no task is in the middle
+> klp_cond_resched_disable() when we modify anything that is used there.
+> 
+> We seem to be on the safe side in klp_complete_transition(). We are
+> here only when all tasks have TIF_PATCH_PENDING cleared. In this case,
+> __klp_sched_try_switch() just returns. Also it calls
+> klp_synchronize_transition() so that all tasks finish the critical part
+> in __klp_sched_try_switch() before any new transition starts.
+> 
+> But it is not the case in klp_reverse_transition(). It modifies
+> klp_target_state() when __klp_sched_try_switch might be in the middle
+> of klp_check_stack() and it might give wrong result.
+> 
+> klp_reverse_transition() already solves similar race with
+> klp_update_patch_state() by clearing all TIF_PATCH_PENDING flags
+> and calling klp_synchronize_transition(). We just need to do
+> it earlier. Something like:
+
+Yes!  Thanks, I can always count on you to find the race conditions ;-)
+
+This highlights the similarities between klp_target_state(current) and
+__klp_sched_try_switch(), they both access TIF_PATCH_PENDING
+out-of-band.
+
+Also, I'll update the comment in klp_copy_process(). It should be safe
+for with __klp_sched_try_switch() for the same reason as
+klp_update_patch_state(current): they all only work on 'current'.
 
 -- 
-With best wishes
-Dmitry
+Josh
