@@ -2,259 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996606992D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE616992CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjBPLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S230385AbjBPLK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjBPLKi (ORCPT
+        with ESMTP id S230379AbjBPLK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:10:38 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D66956ECC;
-        Thu, 16 Feb 2023 03:10:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676545833; x=1708081833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J6BNHHswTkDcX5jOI5ShWTSFAJ7P3SXfiqTD8tl74ZA=;
-  b=HclVVJpJ1L8+UNiq0TyJU+4RP4WTMDaTFv1KPej9mxZMT/PeaUTbB8ex
-   V3HzSv0M+aWvD2mznhj4IGllgpIZ66Od4XBzgbR09kDpweHTPJJ/pf/Nx
-   O0wVGaZIVDeE+s8LM63BW8i2fLCb4Qd+n+t6SDfP7V/6DAL5QdvWH6qy+
-   ofJo7fPT669r/BvPs9WwYHt7pRF/socml9GzPCxeWHars3G9VD9LvhAVh
-   ztFYVFHNllLoFZ5qAayXK/4tgfsULMP1vnhgjD1y9IvF0ouwNzyAB5TmY
-   Gnp29YKF8jM6aGkMlbSnwyCkoyOfioKm7nYvBqL7l4kyPJqq5ieIF7BN3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="417913088"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="417913088"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 03:10:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="670089954"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="670089954"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2023 03:10:25 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSc9g-000ADR-1N;
-        Thu, 16 Feb 2023 11:10:24 +0000
-Date:   Thu, 16 Feb 2023 19:09:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform
- ops
-Message-ID: <202302161942.xItsHIi1-lkp@intel.com>
-References: <20230214212457.3319814-1-quic_eberman@quicinc.com>
+        Thu, 16 Feb 2023 06:10:27 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A217233C8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:10:23 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so5464511pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2GMpHHfGRg7/TnbDsGNUndyh27UCOxxExN1x1g/Vmrg=;
+        b=hTkcONNFXhyyY6b+D1ngopuY82WAhB/NaOhpHMDWLIlwvdvRg0/psMnu1kQEEQ0B1z
+         oUHVVSgEiR25dQvFxBiA2SucfwrTpHiXJ5/Ghf8ii4DkuTdiQ8oMMDZcnifjHY8dNYwi
+         GaAzLQjP/ceDYPNM5KQ9UY98gt98gWbbg8z92hoVcCex4tgqVMFh7abkPK/xYrleOdp7
+         PYkAwUbON4UkmveexyELeeNTGKo2hhg5PKqzTC+XDwoDHgO6NjL2JxJDpzIJccHuxm8Q
+         DXd7FfiIssXFM/MZs08PWx2atXvhcH5Mvtyz/19jldfY2ISmEhBkURCEKTfDUN8VNSTl
+         PC0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2GMpHHfGRg7/TnbDsGNUndyh27UCOxxExN1x1g/Vmrg=;
+        b=raIIOMO0A7yzkKCCWrvMjdIVON3RolW/G5Xv/keg2asZeF039RDjpuiyNyOwNp5oVO
+         JvuPaEF5DqX8RwMux7J7cKfixsTxf+D070NSfYL+ozw3jBtit+2ZCRyqLBVACfKTCrsL
+         Z2abYNp0GtlWM2LutqiN5Ms5RraBofts1BWL5ZebHz+fcm06hDjr0PUrrLDGqncZJsHi
+         rN3a0KUmw2QgPhwZgiXxCxC9iRUdAT3BcE8gpKk7INmWr7r0+7XBlmJaERMQjP2uaaz8
+         MO8ee8+UtMYRtf03p/O5Y1YbjcrTOjMO1yF8TXLWyEJZEYwMi6ZkmMJxOO1qMyM1LG9g
+         pblA==
+X-Gm-Message-State: AO0yUKXTxL0WtfxWnkp+35z8bK+uZ6rdmm2Vk8FaNcfH8wa5dVKNOiTq
+        fllcx8KhaTZiNyZaKUIqcIvQQT1gjFUVlgNpiTtTVQ==
+X-Google-Smtp-Source: AK7set8sFgvSikw6hx/6n458aH1ciSDwVvfUnHw2qVF4We+bIcN9aEfWrb7Lc6P7xngKucLCMsUke8NhifxhmQYvZtA=
+X-Received: by 2002:a17:90b:2d86:b0:233:d176:4e5d with SMTP id
+ sj6-20020a17090b2d8600b00233d1764e5dmr468611pjb.121.1676545822458; Thu, 16
+ Feb 2023 03:10:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214212457.3319814-1-quic_eberman@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230215155410.80944-1-andriy.shevchenko@linux.intel.com> <20230215155410.80944-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230215155410.80944-2-andriy.shevchenko@linux.intel.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 16 Feb 2023 12:09:46 +0100
+Message-ID: <CAPDyKFoghVAiyG4bko6AXrKeV5pqiXP48Sh8Mk8evwK2oayw7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] mmc: atmel-mci: Convert to agnostic GPIO API
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Chas Williams <3chas3@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Elliot,
++ Arnd, Balamanikandan
 
-Thank you for the patch! Yet something to improve:
+On Wed, 15 Feb 2023 at 16:53, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The of_gpio.h is going to be removed. In preparation of that convert
+> the driver to the agnostic API.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[auto build test ERROR on 3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb]
+This is the third attempt to get this done, within this release cycle. :-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
-base:   3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb
-patch link:    https://lore.kernel.org/r/20230214212457.3319814-1-quic_eberman%40quicinc.com
-patch subject: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform ops
-config: hexagon-randconfig-r041-20230212 (https://download.01.org/0day-ci/archive/20230216/202302161942.xItsHIi1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/33f0c4b130c7b249a1524da8076dd12333aa7cde
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
-        git checkout 33f0c4b130c7b249a1524da8076dd12333aa7cde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
+Arnd's:
+https://lore.kernel.org/netdev/20230126135034.3320638-1-arnd@kernel.org/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302161942.xItsHIi1-lkp@intel.com/
+Balamanikandan's:
+https://lore.kernel.org/all/20221226073908.17317-1-balamanikandan.gunasundar@microchip.com/
 
-All errors (new ones prefixed by >>):
+Actually, Balamanikandan's version was acked already in December by
+Linus Walleij and Ludovic, but I failed to apply it so I was
+requesting a rebase.
 
-   In file included from drivers/firmware/qcom_scm.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/firmware/qcom_scm.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/firmware/qcom_scm.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/firmware/qcom_scm.c:1335:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
-                                                   &src_cpy, new_perms, mem_parcel->n_acl_entries);
-                                                   ^~~~~~~~
-   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
-                           unsigned int *srcvm,
-                                         ^
-   drivers/firmware/qcom_scm.c:1353:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
-                                                   &src_cpy, new_perms, 1));
-                                                   ^~~~~~~~
-   include/asm-generic/bug.h:147:18: note: expanded from macro 'WARN_ON_ONCE'
-           DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-                           ^~~~~~~~~
-   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
-                   bool __ret_do_once = !!(condition);                     \
-                                           ^~~~~~~~~
-   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
-                           unsigned int *srcvm,
-                                         ^
-   drivers/firmware/qcom_scm.c:1385:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
-                                                   &src_cpy, &new_perms, 1);
-                                                   ^~~~~~~~
-   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
-                           unsigned int *srcvm,
-                                         ^
-   6 warnings and 3 errors generated.
+That said, I think we should give BalaBalamanikandan some more time
+for a re-spin (unless someone is willing to help him out in this
+regard), as it's getting late for v6.3 anyway.
 
+Kind regards
+Uffe
 
-vim +1335 drivers/firmware/qcom_scm.c
-
-  1303	
-  1304	static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
-  1305	{
-  1306		struct qcom_scm_vmperm *new_perms;
-  1307		u64 src, src_cpy;
-  1308		int ret = 0, i, n;
-  1309		u16 vmid;
-  1310	
-  1311		new_perms = kcalloc(mem_parcel->n_acl_entries, sizeof(*new_perms), GFP_KERNEL);
-  1312		if (!new_perms)
-  1313			return -ENOMEM;
-  1314	
-  1315		for (n = 0; n < mem_parcel->n_acl_entries; n++) {
-  1316			vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
-  1317			if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
-  1318				new_perms[n].vmid = vmid;
-  1319			else
-  1320				new_perms[n].vmid = QCOM_SCM_RM_MANAGED_VMID;
-  1321			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_X)
-  1322				new_perms[n].perm |= QCOM_SCM_PERM_EXEC;
-  1323			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_W)
-  1324				new_perms[n].perm |= QCOM_SCM_PERM_WRITE;
-  1325			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_R)
-  1326				new_perms[n].perm |= QCOM_SCM_PERM_READ;
-  1327		}
-  1328	
-  1329		src = (1ull << QCOM_SCM_VMID_HLOS);
-  1330	
-  1331		for (i = 0; i < mem_parcel->n_mem_entries; i++) {
-  1332			src_cpy = src;
-  1333			ret = qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
-  1334							le64_to_cpu(mem_parcel->mem_entries[i].size),
-> 1335							&src_cpy, new_perms, mem_parcel->n_acl_entries);
-  1336			if (ret) {
-  1337				src = 0;
-  1338				for (n = 0; n < mem_parcel->n_acl_entries; n++) {
-  1339					vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
-  1340					if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
-  1341						src |= (1ull << vmid);
-  1342					else
-  1343						src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
-  1344				}
-  1345	
-  1346				new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
-  1347	
-  1348				for (i--; i >= 0; i--) {
-  1349					src_cpy = src;
-  1350					WARN_ON_ONCE(qcom_scm_assign_mem(
-  1351							le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
-  1352							le64_to_cpu(mem_parcel->mem_entries[i].size),
-  1353							&src_cpy, new_perms, 1));
-  1354				}
-  1355				break;
-  1356			}
-  1357		}
-  1358	
-  1359		kfree(new_perms);
-  1360		return ret;
-  1361	}
-  1362	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  drivers/mmc/host/atmel-mci.c | 106 ++++++++++++++++-------------------
+>  1 file changed, 48 insertions(+), 58 deletions(-)
+>
+> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+> index fad5e6b4c654..79876e3152e6 100644
+> --- a/drivers/mmc/host/atmel-mci.c
+> +++ b/drivers/mmc/host/atmel-mci.c
+> @@ -11,7 +11,7 @@
+>  #include <linux/dmaengine.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/err.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+> @@ -19,7 +19,6 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/seq_file.h>
+> @@ -44,8 +43,8 @@
+>  /**
+>   * struct mci_slot_pdata - board-specific per-slot configuration
+>   * @bus_width: Number of data lines wired up the slot
+> - * @detect_pin: GPIO pin wired to the card detect switch
+> - * @wp_pin: GPIO pin wired to the write protect sensor
+> + * @wp_gpio: GPIO pin wired to the write protect sensor
+> + * @detect_gpio: GPIO pin wired to the card detect switch
+>   * @detect_is_active_high: The state of the detect pin when it is active
+>   * @non_removable: The slot is not removable, only detect once
+>   *
+> @@ -60,8 +59,8 @@
+>   */
+>  struct mci_slot_pdata {
+>         unsigned int            bus_width;
+> -       int                     detect_pin;
+> -       int                     wp_pin;
+> +       struct gpio_desc        *wp_gpio;
+> +       struct gpio_desc        *detect_gpio;
+>         bool                    detect_is_active_high;
+>         bool                    non_removable;
+>  };
+> @@ -399,12 +398,12 @@ struct atmel_mci {
+>   *     &struct atmel_mci.
+>   * @clock: Clock rate configured by set_ios(). Protected by host->lock.
+>   * @flags: Random state bits associated with the slot.
+> - * @detect_pin: GPIO pin used for card detection, or negative if not
+> - *     available.
+> - * @wp_pin: GPIO pin used for card write protect sending, or negative
+> + * @wp_gpio: GPIO pin used for card write protect sending, or NULL
+>   *     if not available.
+> + * @detect_gpio: GPIO pin used for card detection, or negative if not
+> + *     available.
+>   * @detect_is_active_high: The state of the detect pin when it is active.
+> - * @detect_timer: Timer used for debouncing @detect_pin interrupts.
+> + * @detect_timer: Timer used for debouncing @detect_gpio interrupts.
+>   */
+>  struct atmel_mci_slot {
+>         struct mmc_host         *mmc;
+> @@ -422,8 +421,9 @@ struct atmel_mci_slot {
+>  #define ATMCI_CARD_NEED_INIT   1
+>  #define ATMCI_SHUTDOWN         2
+>
+> -       int                     detect_pin;
+> -       int                     wp_pin;
+> +       struct gpio_desc        *wp_gpio;
+> +
+> +       struct gpio_desc        *detect_gpio;
+>         bool                    detect_is_active_high;
+>
+>         struct timer_list       detect_timer;
+> @@ -637,7 +637,8 @@ MODULE_DEVICE_TABLE(of, atmci_dt_ids);
+>  static struct mci_platform_data*
+>  atmci_of_init(struct platform_device *pdev)
+>  {
+> -       struct device_node *np = pdev->dev.of_node;
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *np = dev->of_node;
+>         struct device_node *cnp;
+>         struct mci_platform_data *pdata;
+>         u32 slot_id;
+> @@ -669,8 +670,10 @@ atmci_of_init(struct platform_device *pdev)
+>                                          &pdata->slot[slot_id].bus_width))
+>                         pdata->slot[slot_id].bus_width = 1;
+>
+> -               pdata->slot[slot_id].detect_pin =
+> -                       of_get_named_gpio(cnp, "cd-gpios", 0);
+> +               pdata->slot[slot_id].detect_gpio = devm_gpiod_get_optional(dev, "cd", GPIOD_IN);
+> +               if (!pdata->slot[slot_id].detect_gpio)
+> +                       dev_dbg(dev, "no detect pin available\n");
+> +               gpiod_set_consumer_name(pdata->slot[slot_id].detect_gpio, "mmc_detect");
+>
+>                 pdata->slot[slot_id].detect_is_active_high =
+>                         of_property_read_bool(cnp, "cd-inverted");
+> @@ -678,8 +681,10 @@ atmci_of_init(struct platform_device *pdev)
+>                 pdata->slot[slot_id].non_removable =
+>                         of_property_read_bool(cnp, "non-removable");
+>
+> -               pdata->slot[slot_id].wp_pin =
+> -                       of_get_named_gpio(cnp, "wp-gpios", 0);
+> +               pdata->slot[slot_id].wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_IN);
+> +               if (!pdata->slot[slot_id].wp_gpio)
+> +                       dev_dbg(dev, "no WP pin available\n");
+> +               gpiod_set_consumer_name(pdata->slot[slot_id].wp_gpio, "mmc_wp");
+>         }
+>
+>         return pdata;
+> @@ -1535,8 +1540,8 @@ static int atmci_get_ro(struct mmc_host *mmc)
+>         int                     read_only = -ENOSYS;
+>         struct atmel_mci_slot   *slot = mmc_priv(mmc);
+>
+> -       if (gpio_is_valid(slot->wp_pin)) {
+> -               read_only = gpio_get_value(slot->wp_pin);
+> +       if (slot->wp_gpio) {
+> +               read_only = gpiod_get_value(slot->wp_gpio);
+>                 dev_dbg(&mmc->class_dev, "card is %s\n",
+>                                 read_only ? "read-only" : "read-write");
+>         }
+> @@ -1544,14 +1549,18 @@ static int atmci_get_ro(struct mmc_host *mmc)
+>         return read_only;
+>  }
+>
+> +static bool is_card_present(struct atmel_mci_slot *slot)
+> +{
+> +       return !(gpiod_get_raw_value(slot->detect_gpio) ^ slot->detect_is_active_high);
+> +}
+> +
+>  static int atmci_get_cd(struct mmc_host *mmc)
+>  {
+>         int                     present = -ENOSYS;
+>         struct atmel_mci_slot   *slot = mmc_priv(mmc);
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               present = !(gpio_get_value(slot->detect_pin) ^
+> -                           slot->detect_is_active_high);
+> +       if (slot->detect_gpio) {
+> +               present = is_card_present(slot);
+>                 dev_dbg(&mmc->class_dev, "card is %spresent\n",
+>                                 present ? "" : "not ");
+>         }
+> @@ -1663,9 +1672,8 @@ static void atmci_detect_change(struct timer_list *t)
+>         if (test_bit(ATMCI_SHUTDOWN, &slot->flags))
+>                 return;
+>
+> -       enable_irq(gpio_to_irq(slot->detect_pin));
+> -       present = !(gpio_get_value(slot->detect_pin) ^
+> -                   slot->detect_is_active_high);
+> +       enable_irq(gpiod_to_irq(slot->detect_gpio));
+> +       present = is_card_present(slot);
+>         present_old = test_bit(ATMCI_CARD_PRESENT, &slot->flags);
+>
+>         dev_vdbg(&slot->mmc->class_dev, "detect change: %d (was %d)\n",
+> @@ -2254,18 +2262,18 @@ static int atmci_init_slot(struct atmel_mci *host,
+>         slot = mmc_priv(mmc);
+>         slot->mmc = mmc;
+>         slot->host = host;
+> -       slot->detect_pin = slot_data->detect_pin;
+> -       slot->wp_pin = slot_data->wp_pin;
+> +       slot->wp_gpio = slot_data->wp_gpio;
+> +       slot->detect_gpio = slot_data->detect_gpio;
+>         slot->detect_is_active_high = slot_data->detect_is_active_high;
+>         slot->sdc_reg = sdc_reg;
+>         slot->sdio_irq = sdio_irq;
+>
+>         dev_dbg(&mmc->class_dev,
+> -               "slot[%u]: bus_width=%u, detect_pin=%d, "
+> -               "detect_is_active_high=%s, wp_pin=%d\n",
+> -               id, slot_data->bus_width, slot_data->detect_pin,
+> +               "slot[%u]: bus_width=%u, detect_gpio=%d, "
+> +               "detect_is_active_high=%s, wp_gpio=%d\n",
+> +               id, slot_data->bus_width, desc_to_gpio(slot_data->detect_gpio),
+>                 slot_data->detect_is_active_high ? "true" : "false",
+> -               slot_data->wp_pin);
+> +               desc_to_gpio(slot_data->wp_gpio));
+>
+>         mmc->ops = &atmci_ops;
+>         mmc->f_min = DIV_ROUND_UP(host->bus_hz, 512);
+> @@ -2301,32 +2309,16 @@ static int atmci_init_slot(struct atmel_mci *host,
+>
+>         /* Assume card is present initially */
+>         set_bit(ATMCI_CARD_PRESENT, &slot->flags);
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               if (devm_gpio_request(&host->pdev->dev, slot->detect_pin,
+> -                                     "mmc_detect")) {
+> -                       dev_dbg(&mmc->class_dev, "no detect pin available\n");
+> -                       slot->detect_pin = -EBUSY;
+> -               } else if (gpio_get_value(slot->detect_pin) ^
+> -                               slot->detect_is_active_high) {
+> +       if (slot->detect_gpio) {
+> +               if (!is_card_present(slot))
+>                         clear_bit(ATMCI_CARD_PRESENT, &slot->flags);
+> -               }
+> -       }
+> -
+> -       if (!gpio_is_valid(slot->detect_pin)) {
+> +       } else {
+>                 if (slot_data->non_removable)
+>                         mmc->caps |= MMC_CAP_NONREMOVABLE;
+>                 else
+>                         mmc->caps |= MMC_CAP_NEEDS_POLL;
+>         }
+>
+> -       if (gpio_is_valid(slot->wp_pin)) {
+> -               if (devm_gpio_request(&host->pdev->dev, slot->wp_pin,
+> -                                     "mmc_wp")) {
+> -                       dev_dbg(&mmc->class_dev, "no WP pin available\n");
+> -                       slot->wp_pin = -EBUSY;
+> -               }
+> -       }
+> -
+>         host->slot[id] = slot;
+>         mmc_regulator_get_supply(mmc);
+>         ret = mmc_add_host(mmc);
+> @@ -2335,18 +2327,18 @@ static int atmci_init_slot(struct atmel_mci *host,
+>                 return ret;
+>         }
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> +       if (slot->detect_gpio) {
+>                 timer_setup(&slot->detect_timer, atmci_detect_change, 0);
+>
+> -               ret = request_irq(gpio_to_irq(slot->detect_pin),
+> +               ret = request_irq(gpiod_to_irq(slot->detect_gpio),
+>                                 atmci_detect_interrupt,
+>                                 IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
+>                                 "mmc-detect", slot);
+>                 if (ret) {
+>                         dev_dbg(&mmc->class_dev,
+>                                 "could not request IRQ %d for detect pin\n",
+> -                               gpio_to_irq(slot->detect_pin));
+> -                       slot->detect_pin = -EBUSY;
+> +                               gpiod_to_irq(slot->detect_gpio));
+> +                       slot->detect_gpio = NULL;
+>                 }
+>         }
+>
+> @@ -2365,10 +2357,8 @@ static void atmci_cleanup_slot(struct atmel_mci_slot *slot,
+>
+>         mmc_remove_host(slot->mmc);
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               int pin = slot->detect_pin;
+> -
+> -               free_irq(gpio_to_irq(pin), slot);
+> +       if (slot->detect_gpio) {
+> +               free_irq(gpiod_to_irq(slot->detect_gpio), slot);
+>                 del_timer_sync(&slot->detect_timer);
+>         }
+>
+> --
+> 2.39.1
+>
