@@ -2,294 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D7C69940C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F044699410
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjBPMNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S230049AbjBPMOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjBPMNr (ORCPT
+        with ESMTP id S229746AbjBPMOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:13:47 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE4D132
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:13:46 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id g12so382438uae.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=W8yheI6Ev2vCWCjtqaZ1PTSNedyk7XdbtOBVzcTh5Mo=;
-        b=SoDnVhC41LL6wFNmGyX5Vu7DkwpvaanFGtINn0JZXqoRQMW4HOgonWEOvlUcJwjKso
-         CP/VxCATdBJvV1ySHRZxBe3wevGT8KOs53sfSzwn2w+eHOQzXJblRABK7tRebPhVGfKE
-         IhoNTxdA8CWsA5CVLyNajdyU/W73WuPsoYKGz8gHbSiw0cASjn7/w+lDxOS41sgMCNx6
-         gydTLj7np2/yzZKacvQcKWb7vEEqRA1HFGvLpl0xhMIWPH5Cl+wHXDQjGWMyFh4wOkuA
-         132v+ArUd6PVgQjRbsps6mg8tBZwIFswk1yIVSYyi1NTOrPTEi5XuXxLcwbODKHcyzft
-         bFaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W8yheI6Ev2vCWCjtqaZ1PTSNedyk7XdbtOBVzcTh5Mo=;
-        b=yEos9nTDZYgaWPUwu3U0RWj5Yti8Nw+CP+D2453REwS8I7SAXFI/ZtfMD3e7Y3KePL
-         GVa+2uzMBAIbSo8lb4gfsI/XgN5PGtBfR3Tyn40WB88qX2c7fPiaoENn5kseTqYJWSHq
-         9ZzHF5qEklc4NeG3QrGCrlC3Vbe7KVslgQn1Aj/5M78I17EiFls9jLMho1HwpvgiDDLt
-         KS/bN1qFkWgUa76FbCFcNlJiXSBalv30p/tAeC8cVc8OBBrBqjoRbcZWkHikQ9ObnYXc
-         RfYkN87qO1cP0WZUoOf6JDgtW2nhzVKYRcTFH+O0jH52nca3GaAucPRQy/N4LFMpKQTM
-         wq8w==
-X-Gm-Message-State: AO0yUKVvyXa5ngIFvb0X3GR30JbU4HcalbTrdnBfhrw5veyqJRgsWtIY
-        qbgWT3/qa4O21U0bL1J9aYoqp6ILtoHWEHuU7SO2jg==
-X-Google-Smtp-Source: AK7set/yBX5AxVIAAM5oq2ruaCPCEwFwFCPpQF8EWudXEtAoomjo+m++zJHMYcLh3C0Zy6qIWr4QKVAfagX4LFDHyxc=
-X-Received: by 2002:ab0:7552:0:b0:68a:751e:a4a with SMTP id
- k18-20020ab07552000000b0068a751e0a4amr625307uaq.9.1676549624973; Thu, 16 Feb
- 2023 04:13:44 -0800 (PST)
+        Thu, 16 Feb 2023 07:14:46 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF24132;
+        Thu, 16 Feb 2023 04:14:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jXVXv+gMvR8vAGRweMPPnCLdrzntR/BT09IoSKaeNek=; b=Gg7lbHJlh80SoTt5vF3lfnYtbC
+        ee8SuciTUSmAa6J/7ILuVvBETYViroI6jqIVcW2OzThG98/oSh7X9mOfRUvq3j9jdsw5sV1drrAP2
+        Os7viU81YxERtw2SiGSEmiPGj8JTDquIPPVOGBf22J8XQ1x6tJUm+9ZHP2iYshE85i6gKE/Mod14i
+        LOh1aSkwmrCIRoxL6IPmMovm+9I5bAd2IO7JsItBA/kPQ6Yf9Jas/IGdLNTfvsjJ+pZV8paAyvE2t
+        EgIMTTLq7i3dORB3J4Gsgwkw3OabyoSzJ2a4XntZQMrFBt6+klUwvnn2bjcDbPNanDMGsxpfv3mJp
+        lR9VpmrA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49696)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pSd9t-00082N-QS; Thu, 16 Feb 2023 12:14:41 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pSd9q-0005pl-Rl; Thu, 16 Feb 2023 12:14:38 +0000
+Date:   Thu, 16 Feb 2023 12:14:38 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [RFC v1 net-next 0/7] add support for ocelot external ports
+Message-ID: <Y+4eLmpX9oX3JBVJ@shell.armlinux.org.uk>
+References: <20230216075321.2898003-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Feb 2023 17:43:33 +0530
-Message-ID: <CA+G9fYvZqytp3gMnC4-no9EB=Jnzqmu44i8JQo6apiZat-xxPg@mail.gmail.com>
-Subject: next: x86_64: kunit test crashed and kernel panic
-To:     kasan-dev <kasan-dev@googlegroups.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
-        regressions@lists.linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216075321.2898003-1-colin.foster@in-advantage.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel panic noticed while running KUNIT testing on qemu-x86_64
-with KASAN enabled kernel.
-
-CONFIG_KASAN=y
-CONFIG_KUNIT=y
-CONFIG_KUNIT_ALL_TESTS=y
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Boot log:
----------
-<5>[    0.000000] Linux version 6.2.0-rc8-next-20230216
-(tuxmake@tuxmake) (x86_64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU
-ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1676522550
-<6>[    0.000000] Command line: console=ttyS0,115200 rootwait
-root=/dev/sda debug verbose console_msg_format=syslog earlycon
-<6>[    0.000000] x86/fpu: x87 FPU will use FXSAVE
-<6>[    0.000000] signal: max sigframe size: 1440
+On Wed, Feb 15, 2023 at 11:53:14PM -0800, Colin Foster wrote:
+> Part 3 will, at a minimum, add support for ports 4-7, which are
+> configured to use QSGMII to an external phy (Return Of The QSGMII). With
+> any luck, and some guidance, support for SGMII, SFPs, etc. will also be
+> part of this series.
+> 
+> 
+> This patch series is absolutely an RFC at this point. While all 8 copper
+> ports on the VSC7512 are currently functional, I recognize there are a
+> couple empty function callbacks in the last patch that likely need to be
+> implemented.
+> 
 ...
-<6>[    0.001000] kasan: KernelAddressSanitizer initialized
-...
-<6>[   16.570308] KTAP version 1
-<6>[   16.570801] 1..62
-<6>[   16.574277]     KTAP version 1
-...
-<6>[   38.688296]     ok 16 kmalloc_uaf_16
-<3>[   38.692992]     # kmalloc_oob_in_memset: EXPECTATION FAILED at
-mm/kasan/kasan_test.c:558
-<3>[   38.692992]     KASAN failure expected in \"memset(ptr, 0, size
-+ KASAN_GRANULE_SIZE)\", but none occurred
-<6>[   38.695659]     not ok 17 kmalloc_oob_in_memset
-<3>[   38.702362]     # kmalloc_oob_memset_2: EXPECTATION FAILED at
-mm/kasan/kasan_test.c:505
-<3>[   38.702362]     KASAN failure expected in \"memset(ptr + size -
-1, 0, 2)\", but none occurred
-<6>[   38.704750]     not ok 18 kmalloc_oob_memset_2
-<3>[   38.710076]     # kmalloc_oob_memset_4: EXPECTATION FAILED at
-mm/kasan/kasan_test.c:518
-<3>[   38.710076]     KASAN failure expected in \"memset(ptr + size -
-3, 0, 4)\", but none occurred
-<6>[   38.712349]     not ok 19 kmalloc_oob_memset_4
-<3>[   38.718545]     # kmalloc_oob_memset_8: EXPECTATION FAILED at
-mm/kasan/kasan_test.c:531
-<3>[   38.718545]     KASAN failure expected in \"memset(ptr + size -
-7, 0, 8)\", but none occurred
-<6>[   38.721274]     not ok 20 kmalloc_oob_memset_8
-<3>[   38.726201]     # kmalloc_oob_memset_16: EXPECTATION FAILED at
-mm/kasan/kasan_test.c:544
-<3>[   38.726201]     KASAN failure expected in \"memset(ptr + size -
-15, 0, 16)\", but none occurred
-<6>[   38.728269]     not ok 21 kmalloc_oob_memset_16
-<4>[   38.735350] general protection fault, probably for non-canonical
-address 0xa0de1c2100000008: 0000 [#1] PREEMPT SMP KASAN PTI
-<4>[   38.737084] CPU: 0 PID: 131 Comm: kunit_try_catch Tainted: G
-B            N 6.2.0-rc8-next-20230216 #1
-<4>[   38.738232] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-BIOS 1.14.0-2 04/01/2014
-<4>[   38.739202] RIP: 0010:__stack_depot_save+0x16b/0x4a0
-<4>[   38.740158] Code: 29 c8 89 c3 48 8b 05 bc ef 4a 03 89 de 23 35
-ac ef 4a 03 4c 8d 04 f0 4d 8b 20 4d 85 e4 75 0b eb 77 4d 8b 24 24 4d
-85 e4 74 6e <41> 39 5c 24 08 75 f0 41 3b 54 24 0c 75 e9 31 c0 49 8b 7c
-c4 18 49
-<4>[   38.742135] RSP: 0000:ffff88815b409a00 EFLAGS: 00000286
-<4>[   38.743055] RAX: ffff88815a600000 RBX: 00000000a0de1c21 RCX:
-000000000000000e
-<4>[   38.744084] RDX: 000000000000000e RSI: 00000000000e1c21 RDI:
-00000000282127a7
-<4>[   38.745061] RBP: ffff88815b409a58 R08: ffff88815ad0e108 R09:
-0000000005d4305e
-<4>[   38.746039] R10: ffffed1020693eb9 R11: ffff88815b409ff8 R12:
-a0de1c2100000000
-<4>[   38.747012] R13: 0000000000000001 R14: 0000000000000800 R15:
-ffff88815b409a68
-<4>[   38.748039] FS:  0000000000000000(0000)
-GS:ffff88815b400000(0000) knlGS:0000000000000000
-<4>[   38.749066] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[   38.749848] CR2: a0de1c2100000008 CR3: 000000012c2ae000 CR4:
-00000000000006f0
-<4>[   38.750769] DR0: ffffffff97419b80 DR1: ffffffff97419b81 DR2:
-ffffffff97419b82
-<4>[   38.751712] DR3: ffffffff97419b83 DR6: 00000000ffff0ff0 DR7:
-0000000000000600
-<4>[   38.752692] Call Trace:
-<4>[   38.753288]  <IRQ>
-<4>[   38.753795]  kasan_save_stack+0x4c/0x60
-<4>[   38.754479]  ? kasan_save_stack+0x3c/0x60
-<4>[   38.755112]  ? kasan_set_track+0x29/0x40
-<4>[   38.756690]  ? kasan_save_free_info+0x32/0x50
-<4>[   38.757186]  ? ____kasan_slab_free+0x175/0x1d0
-<4>[   38.757830]  ? __kasan_slab_free+0x16/0x20
-<4>[   38.758525]  ? __kmem_cache_free+0x18c/0x300
-<4>[   38.759187]  ? kfree+0x7c/0x120
-<4>[   38.759756]  ? free_kthread_struct+0x78/0xa0
-<4>[   38.760516]  ? free_task+0x96/0xa0
-<4>[   38.761127]  ? __put_task_struct+0x1a2/0x1f0
-<4>[   38.761843]  ? delayed_put_task_struct+0xec/0x110
-<4>[   38.762595]  ? rcu_core+0x4e3/0x1010
-<4>[   38.763180]  ? rcu_core_si+0x12/0x20
-<4>[   38.763842]  ? __do_softirq+0x18f/0x502
-<4>[   38.764464]  ? __irq_exit_rcu+0xa1/0xe0
-<4>[   38.764982]  ? irq_exit_rcu+0x12/0x20
-<4>[   38.765760]  ? sysvec_apic_timer_interrupt+0x7d/0xa0
-<4>[   38.766544]  ? asm_sysvec_apic_timer_interrupt+0x1f/0x30
-<4>[   38.767391]  ? memmove+0x3c/0x1c0
-<4>[   38.767994]  ? kunit_try_run_case+0x8e/0x130
-<4>[   38.768718]  ? kunit_generic_run_threadfn_adapter+0x33/0x50
-<4>[   38.769477]  ? kthread+0x17f/0x1b0
-<4>[   38.769871]  ? ret_from_fork+0x2c/0x50
-<4>[   38.770841]  ? kfree+0x7c/0x120
-<4>[   38.771470]  kasan_set_track+0x29/0x40
-<4>[   38.772101]  kasan_save_free_info+0x32/0x50
-<4>[   38.772855]  ____kasan_slab_free+0x175/0x1d0
-<4>[   38.773536]  ? free_kthread_struct+0x78/0xa0
-<4>[   38.774175]  __kasan_slab_free+0x16/0x20
-<4>[   38.774865]  __kmem_cache_free+0x18c/0x300
-<4>[   38.775553]  kfree+0x7c/0x120
-<4>[   38.776137]  free_kthread_struct+0x78/0xa0
-<4>[   38.776840]  free_task+0x96/0xa0
-<4>[   38.777220]  __put_task_struct+0x1a2/0x1f0
-<4>[   38.778103]  delayed_put_task_struct+0xec/0x110
-<4>[   38.778786]  rcu_core+0x4e3/0x1010
-<4>[   38.779450]  ? __pfx_rcu_core+0x10/0x10
-<4>[   38.780147]  ? __pfx_read_tsc+0x10/0x10
-<4>[   38.780750]  ? __do_softirq+0x11f/0x502
-<4>[   38.781480]  rcu_core_si+0x12/0x20
-<4>[   38.782073]  __do_softirq+0x18f/0x502
-<4>[   38.782755]  ? __pfx___do_softirq+0x10/0x10
-<4>[   38.783442]  ? trace_preempt_on+0x20/0xa0
-<4>[   38.784070]  ? __irq_exit_rcu+0x17/0xe0
-<4>[   38.784767]  __irq_exit_rcu+0xa1/0xe0
-<4>[   38.785377]  irq_exit_rcu+0x12/0x20
-<4>[   38.786028]  sysvec_apic_timer_interrupt+0x7d/0xa0
-<4>[   38.786781]  </IRQ>
-<4>[   38.787107]  <TASK>
-<4>[   38.787639]  asm_sysvec_apic_timer_interrupt+0x1f/0x30
-<4>[   38.788698] RIP: 0010:memmove+0x3c/0x1c0
-<4>[   38.789436] Code: 49 39 f8 0f 8f b5 00 00 00 48 83 fa 20 0f 82
-01 01 00 00 0f 1f 44 00 00 48 81 fa a8 02 00 00 72 05 40 38 fe 74 48
-48 83 ea 20 <48> 83 ea 20 4c 8b 1e 4c 8b 56 08 4c 8b 4e 10 4c 8b 46 18
-48 8d 76
-<4>[   38.791297] RSP: 0000:ffff888103507e08 EFLAGS: 00000286
-<4>[   38.792130] RAX: ffff8881033e9000 RBX: ffff8881033e9000 RCX:
-0000000000000000
-<4>[   38.792969] RDX: fffffffffff8727e RSI: ffff888103461d64 RDI:
-ffff888103461d60
-<4>[   38.793818] RBP: ffff888103507eb8 R08: 0000000100000000 R09:
-0000000000000000
-<4>[   38.794643] R10: 0000000000000000 R11: 0000000000000000 R12:
-1ffff110206a0fc2
-<4>[   38.795458] R13: ffff888100327b60 R14: ffff888103507e90 R15:
-fffffffffffffffe
-<4>[   38.796558]  ? kmalloc_memmove_negative_size+0xeb/0x1f0
-<4>[   38.797376]  ? __pfx_kmalloc_memmove_negative_size+0x10/0x10
-<4>[   38.798257]  ? __kasan_check_write+0x18/0x20
-<4>[   38.798923]  ? _raw_spin_lock_irqsave+0xa2/0x110
-<4>[   38.799617]  ? _raw_spin_unlock_irqrestore+0x2c/0x60
-<4>[   38.800491]  ? trace_preempt_on+0x20/0xa0
-<4>[   38.801150]  ? __kthread_parkme+0x4f/0xd0
-<4>[   38.801778]  kunit_try_run_case+0x8e/0x130
-<4>[   38.802505]  ? __pfx_kunit_try_run_case+0x10/0x10
-<4>[   38.803197]  ? __pfx_kunit_generic_run_threadfn_adapter+0x10/0x10
-<4>[   38.803997]  kunit_generic_run_threadfn_adapter+0x33/0x50
-<4>[   38.804749]  kthread+0x17f/0x1b0
-<4>[   38.805377]  ? __pfx_kthread+0x10/0x10
-<4>[   38.806025]  ret_from_fork+0x2c/0x50
-<4>[   38.806716]  </TASK>
-<4>[   38.807261] Modules linked in:
-<4>[   38.809163] ---[ end trace 0000000000000000 ]---
-<4>[   38.809731] RIP: 0010:__stack_depot_save+0x16b/0x4a0
-<4>[   38.810988] Code: 29 c8 89 c3 48 8b 05 bc ef 4a 03 89 de 23 35
-ac ef 4a 03 4c 8d 04 f0 4d 8b 20 4d 85 e4 75 0b eb 77 4d 8b 24 24 4d
-85 e4 74 6e <41> 39 5c 24 08 75 f0 41 3b 54 24 0c 75 e9 31 c0 49 8b 7c
-c4 18 49
-<4>[   38.812911] RSP: 0000:ffff88815b409a00 EFLAGS: 00000286
-<4>[   38.813435] RAX: ffff88815a600000 RBX: 00000000a0de1c21 RCX:
-000000000000000e
-<4>[   38.815407] RDX: 000000000000000e RSI: 00000000000e1c21 RDI:
-00000000282127a7
-<4>[   38.816630] RBP: ffff88815b409a58 R08: ffff88815ad0e108 R09:
-0000000005d4305e
-<4>[   38.817540] R10: ffffed1020693eb9 R11: ffff88815b409ff8 R12:
-a0de1c2100000000
-<4>[   38.818685] R13: 0000000000000001 R14: 0000000000000800 R15:
-ffff88815b409a68
-<4>[   38.819949] FS:  0000000000000000(0000)
-GS:ffff88815b400000(0000) knlGS:0000000000000000
-<4>[   38.821375] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[   38.822431] CR2: a0de1c2100000008 CR3: 000000012c2ae000 CR4:
-00000000000006f0
-<4>[   38.823562] DR0: ffffffff97419b80 DR1: ffffffff97419b81 DR2:
-ffffffff97419b82
-<4>[   38.824702] DR3: ffffffff97419b83 DR6: 00000000ffff0ff0 DR7:
-0000000000000600
-<0>[   38.826157] Kernel panic - not syncing: Fatal exception in interrupt
-<0>[   38.828641] Kernel Offset: 0x12400000 from 0xffffffff81000000
-(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-<0>[   38.830146] ---[ end Kernel panic - not syncing: Fatal exception
-in interrupt ]---
+> 
+> Also, with patch 7 ("net: dsa: ocelot_ext: add support for external phys")
+> my basis was the function mscc_ocelot_init_ports(), but there were several
+> changes I had to make for DSA / Phylink. Are my implementations of
+> ocelot_ext_parse_port_node() and ocelot_ext_phylink_create() barking up
+> the right tree?
 
+DSA already creates phylink instances per DSA port, and provides many
+of the phylink MAC operations to the DSA driver via the .phylink_*
+operations in the dsa_switch_ops structure, and this phylink instance
+should be used for managing the status and configuring the port
+according to phylink's callbacks. The core felix code already makes
+use of this, implementing the mac_link_down() and mac_link_up()
+operations to handle when the link comes up or goes down.
 
-links:
-----
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230216/testrun/14817835/suite/log-parser-test/test/check-kernel-panic/log
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230216/testrun/14817835/suite/log-parser-test/tests/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230216/testrun/14817835/suite/log-parser-test/test/check-kernel-panic/details/
+I don't see why one would need to create a separate phylink instance
+to support external PHYs, SFPs, etc on a DSA switch. The phylink
+instance created by DSA is there for the DSA driver to make use of
+for the port, and should be sufficient for this.
 
+I think if you use the DSA-created phylink instance, then you don't
+need any of patch 6. I'm not yet convinced that you need anything
+from patch 7, but maybe you could explain what patch 7 provides that
+the existing felix phylink implementation doesn't already provide.
 
-steps to reproduce:
----
-tuxrun  \
- --runtime podman  \
- --device qemu-x86_64  \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Lo0yXyxgpsuMQhyLdw5jKk9nSj/bzImage
- \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Lo0yXyxgpsuMQhyLdw5jKk9nSj/modules.tar.xz
- \
- --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2LUxobLpTjiRrzSKqqYOwhong7e/images/intel-corei7-64/lkft-tux-image-intel-corei7-64-20230209111930.rootfs.ext4.gz
- \
- --parameters SKIPFILE=skipfile-lkft.yaml  \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f  \
- --tests kunit  \
- --timeouts boot=15 kunit=30
+I do get the impression that the use of the PCS instance in patch 7
+is an attempt to work around the use of a private instance,
+redirecting the pcs_config and pcs_link_up methods to the
+corresponding MAC operations as a workaround for having the private
+instance.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+It looks like you need to hook into the mac_config(), mac_link_up()
+and mac_link_down() methods at the core felix layer, so I would
+suggest looking at the felix_info structure, adding methods there for
+each of these, and arranging for the core felix code to forward these
+calls down to the implementation as required.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
