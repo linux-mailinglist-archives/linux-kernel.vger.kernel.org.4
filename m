@@ -2,276 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128BD699087
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C0E69908D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjBPJyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S229764AbjBPJ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjBPJyg (ORCPT
+        with ESMTP id S229522AbjBPJ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:54:36 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395433770D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676541275; x=1708077275;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4fhomCS6ZCHtJK33xQiwO7vO/8//ALFhpWX9zuzfGKo=;
-  b=EAoZOlio1Ikk/cxlPPb6v5KCiqQ7anfwpfU9v01dT9siXahjhxaZ5qEY
-   kTAd166Tc+OZ4kfT4EZ4rLPaVal10tpg0GE4SeG07B1hpuzhdpPrBrW1S
-   tPejjwTa3hdvyLamk8fPbYCXDTAmcctujJSKR+HafgexyXmBtc0AK6eGd
-   7lcGfewHVuiT0Cws2Dc0qil/1EMUkuqA3x4Ka4Y6iB7/l8UE6bx6lieAf
-   JZ31XTXKLCFO/dQEGxwVGY1HDBnjMd97Q7fqasEh+KM+J3BKZ/H61LxXf
-   rq544R3HDB53NJj+Dv9MB0Tz6OAlWev61Cv0Mn5Z0ZSpgZ9vnbzd7+wx1
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,302,1669046400"; 
-   d="scan'208";a="335418121"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 16 Feb 2023 17:54:33 +0800
-IronPort-SDR: VD2EJfEpBwTx9KmdK8rWqFQ9NmO51mIEklx6ZYJ6pZthFKc7bI10rSkTdhvj/qh0ETSgWh0ey0
- LyACNvR8EmicASc/YlDNqimNZIgomDmaE6SyujunmLlXM8HDd8l9NIX6pbu9ds0vmOaF5HCp3/
- bu1A/XUR/qJjmIe6sY8OvMU1KRSEwvS3WnMl+xdQa5tU6okG6mIcco0D1L/APWSoybASoYr04S
- o0HMdtNxyhAZVhiYbC0m9uEPAQzPNk/yOpymsxjqPg2sleT1cP8u5ZFidrzwIv84KzwSLVE8kq
- WVk=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Feb 2023 01:11:39 -0800
-IronPort-SDR: XgHGSZXJgkifl5Eq7qXJvW7a6gEgWHIVcUjZpWF/R1DnXEzd1Mev8rVdHJKRlUcu2ipJbM4AUh
- x2JzikrZpzfdj3QQ8U3BNr2N4AL4OVfZJc6LKdfXCYsQrzfogAcbgTY3Wkx4ADrBV44f5N0b4V
- CP9dF8kVgVE9FyfoC6jTJyK3ihouU75bQkbMVWD14fHwyVinH35mNpnysBWOMYlL5c/H/UORNI
- FHc/eq2dVcgjjUANBqfBKzyqlubtJJOHQgfkAg1H8nITDxf13tptIvE5W794iYcDtpt4LnDN+2
- eRs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Feb 2023 01:54:33 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PHVfJ4MqZz1RwvL
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:54:32 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676541270; x=1679133271; bh=4fhomCS6ZCHtJK33xQiwO7vO/8//ALFhpWX
-        9zuzfGKo=; b=nd/EIczt8SWaLhuHF0Xux/hhdAm5R/NeH0EGl1qrWHoWqEbL7YZ
-        qqQ+AzSx7UyVgoLZOOPeLALrsGL5G01xtdQR4m59Ye0pwMAv+YdwpFek6SonuTJk
-        FuJsCGVKBufLNX53RhwIUheio4R6A8bhzWLibfYFMKaQMsvusPWB5+uEhbBPmTxi
-        0oUuWl4i8rMszGk/XTi0Kor4L2IkLTYPkl1uAyYCCpt+txtbjrc6ieRniTgaXhPz
-        wFf1pFzC96CG+0flQGjZh4AUS1t9bgcFj6pIKyPoaH6llnexsxxNTaMzWaREmJ45
-        tbY265zMlUg2NPCOzC5+JFZzJOG9y0FRhNw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QHnmk5piYDm0 for <linux-kernel@vger.kernel.org>;
-        Thu, 16 Feb 2023 01:54:30 -0800 (PST)
-Received: from [10.225.163.121] (unknown [10.225.163.121])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PHVfC3cSjz1RvLy;
-        Thu, 16 Feb 2023 01:54:27 -0800 (PST)
-Message-ID: <37e469ad-3cee-6e3e-4ddd-90681b94338b@opensource.wdc.com>
-Date:   Thu, 16 Feb 2023 18:54:25 +0900
+        Thu, 16 Feb 2023 04:56:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BFF3770D;
+        Thu, 16 Feb 2023 01:56:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C932B826A9;
+        Thu, 16 Feb 2023 09:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475D7C433EF;
+        Thu, 16 Feb 2023 09:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676541412;
+        bh=DUg3YOeKnzjay7egaWmLgW5mZl9+u14ElLFt8uiDPNQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=s1tmRVfnx92JRM7mIPYIcWP4TGf7u0UFD2RnL7Yw1ZuQnMFty8PoUbRPkenE+GRHS
+         xVxRX4LzYVhIhunIPQZ4fmj2XSgjQBFWyjXZFxv1t52mQ6dugSjfZ5T1aFOa+ch5GK
+         2lN+O/xYDeoeLnPQD/TZUtNK2EsA9TIW3WDHWD3rj7oepJoC4j43ZIDKnxHgHPFvSZ
+         iIJ667+hzuYaIrcYfwj6MQmyAFes9rUCJUU3Z+mD8QIzm/131ww3nqAHBOUVRDqttV
+         bDsS30ipKqU3hIpYiLpKmVgw3BBUHfYTdIfYUaaUxWUCsT4dm/PZNf6qYLF65lI6VW
+         rg+MJvRP7qpvw==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v1 0/4] Support bpf trampoline for RV64
+In-Reply-To: <20230215135205.1411105-1-pulehui@huaweicloud.com>
+References: <20230215135205.1411105-1-pulehui@huaweicloud.com>
+Date:   Thu, 16 Feb 2023 10:56:49 +0100
+Message-ID: <8735763pcu.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/9] PCI: rockchip: Remove writes to unused registers
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-2-rick.wertenbroek@gmail.com>
- <2ebd33e2-46ef-356d-ff4c-81b74950d02f@opensource.wdc.com>
- <CAAEEuhr273bKFBWiTVyTjhHhxjuTK=TVd+5K2B07WfWMD+N7mA@mail.gmail.com>
- <559bdd8c-9cc8-d7ae-a937-ffee9cfbb8a6@opensource.wdc.com>
- <5c15e1d1-c7e9-0b7c-9b14-f95543c70383@opensource.wdc.com>
- <CAAEEuhoYjq9WythKJdLbXL3H_927wbJScWrdbU-tHHvysBg_tQ@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAAEEuhoYjq9WythKJdLbXL3H_927wbJScWrdbU-tHHvysBg_tQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/23 17:43, Rick Wertenbroek wrote:
-> On Thu, Feb 16, 2023 at 8:28 AM Damien Le Moal
-> <damien.lemoal@opensource.wdc.com> wrote:
->>
->> On 2/15/23 18:58, Damien Le Moal wrote:
->> [...]
->>> WRITE ( 131072 bytes):                OKAY
->>> WRITE (1024000 bytes):                OKAY
->>>
->>> Then stops here doing the 1024001 B case. The host waits for a completion that
->>> does not come. On the EP side, I see:
->>>
->>> [   94.307215] pci_epf_test pci_epf_test.0: READ src addr 0xffd00000, 1024001 B
->>> [   94.307960] pci_epc fd000000.pcie-ep: Map region 1 phys addr 0xfa100000 to
->>> pci addr 0xffd00000, 1024001 B
->>> [   94.308924] rockchip-pcie-ep fd000000.pcie-ep: Set atu: region 1, cpu addr
->>> 0xfa100000, pci addr 0xffd00000, 1024001 B
->>> [  132.309645] dma-pl330 ff6e0000.dma-controller: Reset Channel-2
->>> CS-20000e FTC-40000
->>>
->>>                                                   ^^^^^^^^^^^^^^^
->>> The DMA engine does not like something at all. Back to where I was when I tried
->>> your series initially, which is why I tried removing patch 1 to see what happens...
->>>
->>> [  132.370479] pci_epf_test pci_epf_test.0: READ => Size: 1024001 B, DMA: YES,
->>> Time: 38.059623935 s, Rate: 26 KB/s
->>> [  132.372152] pci_epc fd000000.pcie-ep: Unmap region 1
->>> [  132.372780] pci_epf_test pci_epf_test.0: RAISE MSI IRQ 1
->>> [  132.373312] rockchip-pcie-ep fd000000.pcie-ep: Send MSI IRQ 1
->>> [  132.373844] rockchip-pcie-ep fd000000.pcie-ep: MSI disabled
->>> [  132.374388] pci_epf_test pci_epf_test.0: Raise IRQ failed -22
->>>
->>> And it looks like the PCI core crashed or something because MSI does not work
->>> anymore as well (note that this is wheat I see with my nvme epf driver too, but
->>> I do not have that DMA channel reset message...)
->>>
->>> If I run the tests without DMA (mmio only), everything seems fine:
->>>
->>> ## Read Tests (No DMA)
->>> READ (      1 bytes):         OKAY
->>> READ (   1024 bytes):         OKAY
->>> READ (   1025 bytes):         OKAY
->>> READ (1024000 bytes):         OKAY
->>> READ (1024001 bytes):         OKAY
->>>
->>> ## Write Tests (No DMA)
->>> WRITE (      1 bytes):                OKAY
->>> WRITE (   1024 bytes):                OKAY
->>> WRITE (   1025 bytes):                OKAY
->>> WRITE (1024000 bytes):                OKAY
->>> WRITE (1024001 bytes):                OKAY
->>>
->>> ## Copy Tests (No DMA)
->>> COPY (      1 bytes):         OKAY
->>> COPY (   1024 bytes):         OKAY
->>> COPY (   1025 bytes):         OKAY
->>> COPY (1024000 bytes):         OKAY
->>> COPY (1024001 bytes):         OKAY
->>>
->>> So it looks like translation is working with your patch, but that the driver is
->>> still missing something for DMA to work correctly...
->>
->> I kept testing this and realized that I was not getting a consistent behavior.
->> Sometimes all tests passed, but would not repeat (running again would fail
->> everything), sometimes NMIs from bad accesses, and other times "hang" (test not
->> completing but no real machine hang/crash). So it started to hint at something
->> randomly initialized...
->>
->> Re-reading the TRM, particularly section 17.5.5.1.1, I realized that the lower
->> 16 bits of the desc2 register are used for the translation, but we never set
->> them with the current code. Only desc0 and desc1... So I added a write(0) to
->> desc2 and now it is finally working well. Running the tests in a loop, they all
->> pass and no bad behavior is observed.
->>
->> My cleaned-up rockchip_pcie_prog_ep_ob_atu() function now looks like this:
->>
->> static void rockchip_pcie_prog_ep_ob_atu(struct rockchip_pcie *rockchip, u8 fn,
->>                                          u32 r, u32 type, u64 phys_addr,
->>                                          u64 pci_addr, size_t size)
->> {
->>         u64 sz = 1ULL << fls64(size - 1);
->>         int num_pass_bits = ilog2(sz);
->>         u32 addr0, addr1, desc0;
->>
->>         /* Sanity checks */
->>         if (WARN_ON_ONCE(type == AXI_WRAPPER_NOR_MSG))
->>                 return;
->>         if (WARN_ON_ONCE(ALIGN_DOWN(phys_addr, SZ_1M) != phys_addr))
->>                 return;
->>         if (WARN_ON_ONCE(rockchip_ob_region(phys_addr + size - 1) != r))
->>                 return;
->>
->>         /* We must pass at least 8 bits of PCI bus address */
->>         if (num_pass_bits < 8)
->>                 num_pass_bits = 8;
->>
->>         /* PCI bus address region */
->>         addr0 = ((num_pass_bits - 1) & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
->>                 (lower_32_bits(pci_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
->>         addr1 = upper_32_bits(pci_addr);
->>         desc0 = ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(fn) | type;
->>
->>         rockchip_pcie_write(rockchip, addr0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r));
->>         rockchip_pcie_write(rockchip, addr1,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r));
->>         rockchip_pcie_write(rockchip, desc0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC2(r));
->> }
->>
->> And the function rockchip_pcie_clear_ep_ob_atu() also clears desc2:
->>
->> static void rockchip_pcie_clear_ep_ob_atu(struct rockchip_pcie *rockchip,
->>                                           u32 region)
->> {
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(region));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(region));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC0(region));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC1(region));
->>         rockchip_pcie_write(rockchip, 0,
->>                             ROCKCHIP_PCIE_AT_OB_REGION_DESC2(region));
->> }
->>
->> Thoughts ?
->>
->> --
->> Damien Le Moal
->> Western Digital Research
->>
-> 
-> desc2 dictates the bits [79-64] of the PCIe header descriptor.
-> These bits are for the PF TLP Processing hints.
-> I did not set them because I thought the default value (0) would be fine.
-> The TRM section 17.6.8.2.5 says that this register values are reset
-> to 0, therefore, the write here (0) to desc2 should not change anything unless
-> that register is written somewhere (I don't think it is).
-> Anyways, it's not a bad idea to set desc2 to 0 in those two functions.
+Pu Lehui <pulehui@huaweicloud.com> writes:
 
-I wonder if that register changes when TLPs are processed... So when the region
-is remapped, previous values still there cause the problems I am seeing ?
+> BPF trampoline is the critical infrastructure of the bpf
+> subsystem, acting as a mediator between kernel functions
+> and BPF programs. Numerous important features, such as
+> using ebpf program for zero overhead kernel introspection,
+> rely on this key component. We can't wait to support bpf
+> trampoline on RV64. Since RV64 does not support ftrace
+> direct call yet, the current RV64 bpf trampoline is only
+> used in bpf context.
+>
+> As most of riscv cpu support unaligned memory accesses,
+> we temporarily use patch [1] to facilitate testing. The
+> test results are as follow, and test_verifier with no
+> new failure ceses.
+>
+> - fexit_bpf2bpf:OK
+> - dummy_st_ops:OK
+> - xdp_bpf2bpf:OK
+>
+> [1] https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuan=
+g5@huawei.com/
+>
+> v1:
+> - Remove the logic of bpf_arch_text_poke supported for
+>   kernel functions. (Kuohai and Bj=C3=B6rn)
+> - Extend patch_text for multiple instructions. (Bj=C3=B6rn)
+> - Fix OOB issue when image too big. (Bj=C3=B6rn)
 
-As mentioned, with this "fix", the pcitest.sh is now solid. But I am still
-seeing the same issues with my nvme endpoint driver when Linux takes over from
-BIOS. Bios works, but not Linux, still no IRQs at all. So there is likely still
-another issue that I cannot see at the moment. No hints whatsoever.
+This series is ready to go in as is.
 
--- 
-Damien Le Moal
-Western Digital Research
+@Palmer I'd like to take this series via the bpf-next tree (as usual),
+but note that there are some non-BPF changes as well, related to text
+poking.
 
+@Lehui I'd like to see two follow-up patches:
+
+1. Enable kfunc for RV64, by adding:
+ | bool bpf_jit_supports_kfunc_call(void)
+ | {
+ |         return true;
+ | }
+
+2. Remove the checkpatch warning on patch 4:
+ | WARNING: kfree(NULL) is safe and this check is probably not required
+ | #313: FILE: arch/riscv/net/bpf_jit_comp64.c:984:
+ | +	if (branches_off)
+ | +		kfree(branches_off);
+
+
+For the series:
+
+Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
