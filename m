@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DCB698BC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D22698BC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjBPFU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S229615AbjBPFVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjBPFT6 (ORCPT
+        with ESMTP id S229744AbjBPFT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:19:58 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E063E47432
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:02 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4bdeb1bbeafso8706637b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:02 -0800 (PST)
+        Thu, 16 Feb 2023 00:19:59 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886A47435
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:05 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-52f1641b79aso8473097b3.16
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+haucx/0aUjNKP4B5JYWnKqFhX48IZcct98M2E1/jbw=;
-        b=aDErRd7kkY+Kp4AaU6gjM3F503YHpBTPjjocmaNoc4zXVCAuMI2RAQKjzcRAbLtJge
-         uySjaOCoHcGS53W7o3RYdOQoeaAfeHvH08PuG1fh1bxXWOGZDVGDBlzIfGuJz8kR8m0P
-         4LCu9IW21ZFA5+XCq7hXP9c4LIZtK/mDOJpY3r8EhzjVEo7Ti1XlFspuAz3gf99Vo08U
-         GQhyt4xy4/c9ROtLln2G8n+ixCeeiCqz1U0tO8VqF1k+R16fVXyhOw17lx8zHct64i1Z
-         f89mO/K5qgtX3vlh4Aty7U18axNicxnQBp8nhqlTIla4iaOnphrb06qKzWIf+oeLlfcz
-         N8gg==
+        bh=2G5AxmmOVrsRnXlCrW6/hvh5FUxSjD+0mS6LSWzYfho=;
+        b=sqrDU+BCO7AIuj2EKpC5JjJjchpfs4e7nICzmha43sQtLyfoiEZwLUOwsCD209H5Ui
+         lu0l/EwT0lWrDRHYoglaYWRXNYPJ1g8O+GpgkaLO5UTCsF2sShD98xQNq7PDWtH66r6g
+         ZsB+oua1JfA0KymwRm2/PgdgPfreEDDqnwQyHLX1ndmfndQgCQh8neVqDDo8QNluQIit
+         psaYv9QythR+X2eyBbc1tAjHl/fZRS54lIuiB1Ux7odRjp5k2KlmRL+IIzajgpgWcCV1
+         agKdJl/mJ1QtI4UVDWAjmp+dEFlVMZYnML3DG7HfRey4EeaADk1hZvmemdIk3Yb/sCoK
+         4MXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+haucx/0aUjNKP4B5JYWnKqFhX48IZcct98M2E1/jbw=;
-        b=vXvJ/jmmr8cilTQtDwSdBP8CsN/q9SuLvltAFG8UvI2R0R5hMj+Kq6MUK6SkLZ53Rt
-         XcyyIW9gpU+L5xxQsTfhd77ZxzcOJ4JCdSiHVivWPLbF4A/R8zx9QlWWQlXf/d5VoF8a
-         FgvXXwo66wc2uvZMqNgZO+Fxpqa1D6WmNPYbSqW9EoxmUWr/Jx+F050nEj4kIbB5eTMs
-         LvxnN7MXQO1maObCExB10pge0LyvHy5kMnEqiJThAvyYqngbH83isJTwbCRMEnx4fk86
-         ya2dLL8+euGIVAtNNEy49vl+fp3ZPK2NEOkrp6XiegjNLcvJAnw3kAFjeNGwH4+e4lrw
-         4URA==
-X-Gm-Message-State: AO0yUKVGFbz20h6ipSOryVd1Dya+CyG7oDRmF5XfadjTFb1sSyrg8vvY
-        n5ibRy+z0ce2YWQNEBbuQZIutRIB6BQ=
-X-Google-Smtp-Source: AK7set9hR8JRk82RlKZHeYCMxCYi1ok7+igo70HcdJvHzw/Nn50rv4GE5Ev7Sgo0D41w7o23DTD5b6roJhQ=
+        bh=2G5AxmmOVrsRnXlCrW6/hvh5FUxSjD+0mS6LSWzYfho=;
+        b=qcvcJ7dngs44avmgN2LjXdG3axYwu76OjwEDxZMCxitMtZmyibKsvEieuLyIaDIgMT
+         Ux9wBggc/OxN5ps3xj4qIVEzv1iLEt8Qj2FkAkXpspsWYuaSL6zSiuSy1ab/2sS0RNXb
+         KM8f6tyGsD//Z+eT5vtsJJZHDI95ML/IT6riKW13ChKKyTuOOIWwCg2EBjdrN5fsf7X7
+         KFPkdUlkTBooBc9ux+B4zvNL3AttzdcrIlMsXsBTk7UZsNHeES0g3T5g5Q4W+eThqu4U
+         zFCmeMyvQazWW1qHwvKxGempdmVRABGpRMde9dpQKLqTV8u2UVG+zyhPM5SRK/rgR1R9
+         esGw==
+X-Gm-Message-State: AO0yUKXlruymgF53lwLGKjQnHxo2z7Ccm+A2u2ihQPj9RIP0GdTT2KRm
+        8gFlMHt/odByyC+J98YaIDEquQxG4zw=
+X-Google-Smtp-Source: AK7set/QuR9OxnmNolAau/sd0Kj8g/BkdB7enEU88ehNvfonJ32Y6Yzdt5dUleuzBy4yluRtxlQTgtsiJAU=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f781:d5ed:1806:6ebb])
- (user=surenb job=sendgmr) by 2002:a5b:c41:0:b0:91d:ddda:665f with SMTP id
- d1-20020a5b0c41000000b0091dddda665fmr396601ybr.589.1676524741694; Wed, 15 Feb
- 2023 21:19:01 -0800 (PST)
-Date:   Wed, 15 Feb 2023 21:17:43 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:13c6:b0:8da:3163:224 with SMTP id
+ y6-20020a05690213c600b008da31630224mr7ybu.0.1676524744013; Wed, 15 Feb 2023
+ 21:19:04 -0800 (PST)
+Date:   Wed, 15 Feb 2023 21:17:44 -0800
 In-Reply-To: <20230216051750.3125598-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230216051750.3125598-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230216051750.3125598-29-surenb@google.com>
-Subject: [PATCH v3 28/35] mm: prevent do_swap_page from handling page faults
- under VMA lock
+Message-ID: <20230216051750.3125598-30-surenb@google.com>
+Subject: [PATCH v3 29/35] mm: prevent userfaults to be handled under per-vma lock
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -74,8 +73,7 @@ Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Suren Baghdasaryan <surenb@google.com>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>
+        Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -87,32 +85,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the possibility of do_swap_page dropping mmap_lock, abort fault
+Due to the possibility of handle_userfault dropping mmap_lock, avoid fault
 handling under VMA lock and retry holding mmap_lock. This can be handled
 more gracefully in the future.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>
+Suggested-by: Peter Xu <peterx@redhat.com>
 ---
- mm/memory.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/memory.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index 13369ff15ec1..555612d153ad 100644
+index 555612d153ad..751aebc1b29f 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -3688,6 +3688,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	if (!pte_unmap_same(vmf))
- 		goto out;
+@@ -5254,6 +5254,15 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+ 	if (!vma_start_read(vma))
+ 		goto inval;
  
-+	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-+		ret = VM_FAULT_RETRY;
-+		goto out;
++	/*
++	 * Due to the possibility of userfault handler dropping mmap_lock, avoid
++	 * it for now and fall back to page fault handling under mmap_lock.
++	 */
++	if (userfaultfd_armed(vma)) {
++		vma_end_read(vma);
++		goto inval;
 +	}
 +
- 	entry = pte_to_swp_entry(vmf->orig_pte);
- 	if (unlikely(non_swap_entry(entry))) {
- 		if (is_migration_entry(entry)) {
+ 	/* Check since vm_start/vm_end might change before we lock the VMA */
+ 	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
+ 		vma_end_read(vma);
 -- 
 2.39.1
 
