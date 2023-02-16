@@ -2,149 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BA1698FEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB7C699027
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjBPJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S230111AbjBPJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBPJhJ (ORCPT
+        with ESMTP id S230090AbjBPJhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:37:09 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B63E623
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:37:08 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id c20so2023968lfv.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oTDvGM9p1jJCryqrt+aMoXej/NnnEuuvfQsw+EzO32s=;
-        b=y2mQvmmUVj3HR0h5kau6zCrKsh4HXqe/j4fug+zGCIRzs7GU3A0y8VkVmN/AnB4t+I
-         Rkdjb2Znj4eZUteiBWpj0wCeSBmKzOqWYDccpcouTRnGsszTJVYP+8lwINCQ+u3lx+0I
-         PE5VPgdzWxC/djxtmhCEwjGPrMT8ug832gann1eOu+EjyS8Y1Iym3kNGwmDGaOdWCIDe
-         UOwuAe5FEW3xV9Ag6i//giVsAR7eWTT4NNz/gv5lpwaH0uIqcNGULCo6FAG41MHbhnNO
-         1BMKNh/xGUkN3eFlxy3jMFR3hhNnJ/uspr9BEr3wGz5WDeF7+yJkoOmdUk7xBoP+HKlo
-         GUww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oTDvGM9p1jJCryqrt+aMoXej/NnnEuuvfQsw+EzO32s=;
-        b=t1JExgo2ecx/wRsXzBgP92dn+orkf42m9KFiR8DeEo3k0O4Dx2jHAEH+uM51l9VxFs
-         v/H18e2ZyEL/iw5CuVlwLXifOAN/HheoKZNcI8gaJtEPWFdlRzaQx4CuhBLmgO9NXAID
-         JpuStl6r6GkF1o7J3XJ6kty8SU3hiXXRDBtYYB3KiCK6lY4Mds5uXWXh2OSkT1bNUHTL
-         yb8b9+erJ+caj77CbEwEmijD9MiOpnmvxAihEmJMnbsvVXAMWs3YvflntgzvLwPtawzD
-         UHVJzN0GQEwHSikm6Y2zYa4+SkOJxvaDFEfKOd1jy/cM2V6U5mzf8V8qhbxVCke1IPsn
-         uifg==
-X-Gm-Message-State: AO0yUKWJdEP5mAlN0peO9n3IJxNqcpV7/rCnpyjGYcYN2byrYQcx+FrJ
-        00TggWuq3FLLpVIUjPAnrPxzaw==
-X-Google-Smtp-Source: AK7set/UuZ3iGPgCIG1LjJxkZdfB0cTOEeTV65m/CJRDE6EpngVKikEyoHCuLAvayFQk+4GEcnqLMw==
-X-Received: by 2002:ac2:4c29:0:b0:4b3:d6e1:26bb with SMTP id u9-20020ac24c29000000b004b3d6e126bbmr1460112lfq.29.1676540226776;
-        Thu, 16 Feb 2023 01:37:06 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.219])
-        by smtp.gmail.com with ESMTPSA id r3-20020a19ac43000000b004d8758a452asm229069lfc.288.2023.02.16.01.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 01:37:06 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
+        Thu, 16 Feb 2023 04:37:54 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B54DBE4;
+        Thu, 16 Feb 2023 01:37:25 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 1F53832001BB;
+        Thu, 16 Feb 2023 04:37:24 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 04:37:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1676540243; x=
+        1676626643; bh=3qtMvMYknHGfh40A4UZz8DLaQZp4jnMbRhe8LWR0t+w=; b=Z
+        a29HGkgXDBwGZutqlRmhhXBtrfdhm+RQSPaXkaZfv7g2H8BUD+XGxD9Z3gOZL3VD
+        hDST43RArWz6FqW2ciSohYdggFEBr7DrSMh3JtSwgJ1U27jjoGAx1KN6HLKKTFe5
+        8Vu0GYbQom02qG9k8k9ZjKF1USmDBVvEP+kwJdziu5kj8hIj7DCTKa4NCcq6hVn0
+        CFwK0kG5AOMhSCGb/5uENc44bB/706/cvPX3lnHZDDA9a8hoOZpHjN9xez9FIIfM
+        4QwXZ7nntvAnzJHNq32+GlRbcZ4PHfAYbbNQApR/vDj/WD2MckYLxIr1R4aKmifH
+        tqy3VHLIjgR8U4LxJ042Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676540243; x=
+        1676626643; bh=3qtMvMYknHGfh40A4UZz8DLaQZp4jnMbRhe8LWR0t+w=; b=j
+        xevGVtKl+Wj3W5n+dwZnJO7A9RahIL2woSK1vX0bN9ORfgETkXVv62w05plyBVr5
+        3j8121hBMzLwT5mrHp9ok/JKRM0RBe+MOPmPnQ5fJ30Z59Qvm0gPWBM5KHVJmtEQ
+        I+iXsn6/cZjFh3nNFqw+mCQtICfB0Nlu2CV8orbowthY6+XyE2JQUq72aGdNvIaN
+        ukaMhd+p4hKFkfj8O1GAEBt9nXeTbsEceRxj9Htx8jjt/xl6EEKc8/SB2Zu9m0L4
+        HEpxtbnLdCOV0rg/Z2t05fbpcL9BWEuDIeQQicg4NSp+ysxcubfmHw//uOCbAjO2
+        1YhfqZjcxV8CN9Inc+zlQ==
+X-ME-Sender: <xms:U_ntY25cIggzzknlxJrQ0N09Is7mpzeycTAGYsY9N2ROL0tAAlyhlA>
+    <xme:U_ntY_5KCjdyhs1C9G_UoHhs0NxHxckj-yxAUvjZyto6XlaTD6iLHinToxGqhp9DQ
+    Yf-IMa575qJVvtU9fQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:U_ntY1d6SgyMH17ULVOhD4DJptvKdByotyBYzOBQxgU29yBP28cXzA>
+    <xmx:U_ntYzKtt6TIGFh0Eoye6b0NWjCLUeHSLT5-UVxlJEr3sb1DO82PiQ>
+    <xmx:U_ntY6JuK2oheuOZhcyArJWfesQyJyQiNprbSWDuaNAddh0SwyGAvw>
+    <xmx:U_ntYy-5tyK7S_OmCci68nz7ncPUWIV2ERa62n7GEA4EKnV-BzpQ4A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 02688B60089; Thu, 16 Feb 2023 04:37:23 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <2c8d97ad-126d-4912-b4eb-37437d8c3407@app.fastmail.com>
+In-Reply-To: <4f98164406cfd6da084f9ef617a6668dc4e8d44b.camel@linux.ibm.com>
+References: <20230216073403.451455-1-bhe@redhat.com>
+ <4f98164406cfd6da084f9ef617a6668dc4e8d44b.camel@linux.ibm.com>
 Date:   Thu, 16 Feb 2023 10:37:03 +0100
-Subject: [PATCH 02/17] gpio: adnp: Convert to immutable irq_chip
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230215-immutable-chips-v1-2-51a8f224a5d0@linaro.org>
-References: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
-In-Reply-To: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
-To:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH 1/2] pcmcia : make PCMCIA depend on HAS_IOMEM
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the driver to immutable irq-chip with a bit of
-intuition.
+On Thu, Feb 16, 2023, at 10:05, Niklas Schnelle wrote:
+> On Thu, 2023-02-16 at 15:34 +0800, Baoquan He wrote:
+>> diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+>> index 1525023e49b6..7c412bbe8bbe 100644
+>> --- a/drivers/pcmcia/Kconfig
+>> +++ b/drivers/pcmcia/Kconfig
+>> @@ -20,6 +20,7 @@ if PCCARD
+>> =20
+>>  config PCMCIA
+>>  	tristate "16-bit PCMCIA support"
+>> +	depends on HAS_IOMEM
+>>  	select CRC32
+>>  	default y
+>>  	help
+>
+> Not sure how many PCMCIA drivers only use I/O memory but not I/O ports
+> the latter of which are badly stubbed out on s390, though at leat they
+> compile. I have a series on that part that I intend to send a new
+> version for soon=E2=84=A2. That said yes this does solve the compilati=
+on issue
+> and there could be drivers which rely only on I/O memory and are not
+> broken in principle.
 
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-adnp.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+There are no platforms that have I/O ports but don't set HAS_IOMEM, so it
+doesn't really matter.
 
-diff --git a/drivers/gpio/gpio-adnp.c b/drivers/gpio/gpio-adnp.c
-index a6439e3daff0..9b01c391efce 100644
---- a/drivers/gpio/gpio-adnp.c
-+++ b/drivers/gpio/gpio-adnp.c
-@@ -307,6 +307,7 @@ static void adnp_irq_mask(struct irq_data *d)
- 	unsigned int pos = d->hwirq & 7;
- 
- 	adnp->irq_enable[reg] &= ~BIT(pos);
-+	gpiochip_disable_irq(gc, irqd_to_hwirq(d));
- }
- 
- static void adnp_irq_unmask(struct irq_data *d)
-@@ -316,6 +317,7 @@ static void adnp_irq_unmask(struct irq_data *d)
- 	unsigned int reg = d->hwirq >> adnp->reg_shift;
- 	unsigned int pos = d->hwirq & 7;
- 
-+	gpiochip_enable_irq(gc, irqd_to_hwirq(d));
- 	adnp->irq_enable[reg] |= BIT(pos);
- }
- 
-@@ -372,13 +374,15 @@ static void adnp_irq_bus_unlock(struct irq_data *d)
- 	mutex_unlock(&adnp->irq_lock);
- }
- 
--static struct irq_chip adnp_irq_chip = {
-+static const struct irq_chip adnp_irq_chip = {
- 	.name = "gpio-adnp",
- 	.irq_mask = adnp_irq_mask,
- 	.irq_unmask = adnp_irq_unmask,
- 	.irq_set_type = adnp_irq_set_type,
- 	.irq_bus_lock = adnp_irq_bus_lock,
- 	.irq_bus_sync_unlock = adnp_irq_bus_unlock,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
- static int adnp_irq_setup(struct adnp *adnp)
-@@ -469,7 +473,8 @@ static int adnp_gpio_setup(struct adnp *adnp, unsigned int num_gpios,
- 			return err;
- 
- 		girq = &chip->irq;
--		girq->chip = &adnp_irq_chip;
-+		gpio_irq_chip_set_chip(girq, &adnp_irq_chip);
-+
- 		/* This will let us handle the parent IRQ in the driver */
- 		girq->parent_handler = NULL;
- 		girq->num_parents = 0;
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
--- 
-2.34.1
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
