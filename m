@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1106994DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E54D6994DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjBPMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S229660AbjBPMxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjBPMxE (ORCPT
+        with ESMTP id S230384AbjBPMxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:53:04 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C263410A8
+        Thu, 16 Feb 2023 07:53:05 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FB93C7A2
         for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:53:03 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id l2so1802104wry.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:53:02 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d4so1664808wrj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:53:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WOlcxYbFV1QWfu0q4yI7Y8XhpMc15c4VHRcGdANSUSE=;
-        b=vGywFXh9F/9t/qsH78rosSvNnut2PMCb0Rr2tiIPebqHzYdOlyFbdB2WyxqDxmcpCT
-         gAtP6i/WYxYWUF2XNXreu9hMUsiU4I6UFwFQLRLhe2KNY/fAQuB3ET3ZqYY1K5kH2kYi
-         96PfurybC3c88s07+0UZKNuY8+XIYyDAIOLzBiqNrCdLK1c30WPbt7IBNW1msA1dNnSl
-         1tGoJNgOFELeSvLD1B3edfJRcT8Y/pw+rZzZw/pBu1dJHKftCF8ajgQ8z7s8hjA/egXE
-         F7SQSMJ6ERJ1vfvmemiiglicQruruZUbR46RbdsZdn5GZXVvmUYR2r7LkgahmEhmCmHG
-         dkdw==
+        bh=NuXf3qcdLoRKFYAi7wFYWNuVj8BPbd9z/6kD6caVGIg=;
+        b=U6wziLk5VK0em7tZCPVllUbuxwAfADINXVKJgchub5Xt0p8tk/6TpgL4lsQBVaZPSX
+         eb8Xie8uI0r7VG2QrkiVXz89K39Ylvt4Ab6s+R0RwFeW6oKwPpduB7T9hAnh3Y3vwMTV
+         U57h4W8djMI3cP6HcKpSrJu3jvtE+RQy9028yg/5OhY/gNIXan4xpClJFQSlVALKJpc0
+         0sU4ZmQ8+ZrIib70a+6qtBmhrPRij2Ha/Ph/yjH+eqSaXqu6jkb390hWg01n7b8VEfBm
+         G8fnLeWbk+o1UunBOyHK4IM4R1+WhWmDezJ+qullKL5WvRtWrD6pOKq5NrSegTpuRtKX
+         V9Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WOlcxYbFV1QWfu0q4yI7Y8XhpMc15c4VHRcGdANSUSE=;
-        b=2cLGFPglAIcAuWarRg2OLVE5CKIGyRpqk5bmKYhjj0VmUTXbwXCZGNvoF3UG+f2Fbj
-         ELNnjWKZC2kvzJTTYzyF1lKChbO+kX6ZTfM0BChWuT+Z06Ukr6Z1CDx8ExItydw+6CBS
-         UXoZzpqsFM70SS9+uY6mvwkBrz7ktrSyQDKMfNISOnXI2QeYy6hRVE+dYDHLJ3MvDezH
-         msrCibUQss+aNB0M/SOwPAM7VwkEdkbxLSfL4xCcoDl2r08NQXPSzzsmjH5Hr7JOUkEh
-         2rwnHikD+gCXFiQUcqkpZ7bd8VDzQQGaJ1kEmisvHVbsPj5DOa9QXPQpYWOmqSimDfXv
-         ndLg==
-X-Gm-Message-State: AO0yUKUGTpcE4z/tLvGgNGnd6PZ9u4lBLKaR+pN1ca6ER8v54JFRDu9i
-        quQwB+NCICZDwIJ4dp6ma+DFSg==
-X-Google-Smtp-Source: AK7set/k5C/fxcrmxqhk/K0SZwIXRY9xmR4qvAhJbJJstjG6jrsIC2EqYZxDfP/z5G4+e6SlOSrv6A==
-X-Received: by 2002:a05:6000:120e:b0:2c5:63df:1171 with SMTP id e14-20020a056000120e00b002c563df1171mr5365114wrx.19.1676551981509;
-        Thu, 16 Feb 2023 04:53:01 -0800 (PST)
+        bh=NuXf3qcdLoRKFYAi7wFYWNuVj8BPbd9z/6kD6caVGIg=;
+        b=oPfnswn+itxh15ZmGIoQuttioPKVmD6jd29RNfnlQLCaFF17WHBxbyHTNuELPuZDng
+         xYrC+wk0O5YynCJEcOCKPHdsEQ7XYNHCDYvHWrHTfRa/xliKdb4OXiYFBRs0G5Tm/cgy
+         gyBvndffzihE1AlC9pywC0H7Y3nEY3y5hcGZ3ldn2AW7cO9YYcisA2BDQR3tACSbkPic
+         xruPlzjmLRsQkZFS13Cx7CWF4nB3c4vESSDEsXL4IuuAAFIwFCmKTuMbPgUuhF26FReA
+         fuyjOdNBiaEMMkam7vbLh7INPg6e7oJGrBj6J/ZaHrU3+E8jdDijWMAfB/NsYtr0MBwI
+         tRnw==
+X-Gm-Message-State: AO0yUKUhbPp+8pShGp+sem85wMfRUZ139+KxzeRz4/nLyFIOfs2BnqoV
+        7v1w+cKBMVvy2SdZXr/bT6xCiA==
+X-Google-Smtp-Source: AK7set/fppPwIypQ59Se3kjutRGbfgpFr0UJHzPZY4k7kOOsYAY+qMJ4Y57KhOKVmvGrdJs2QFOvOg==
+X-Received: by 2002:a5d:6685:0:b0:2c1:28e7:5081 with SMTP id l5-20020a5d6685000000b002c128e75081mr4263665wru.68.1676551982466;
+        Thu, 16 Feb 2023 04:53:02 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:7c5b:1160:db5d:72da])
-        by smtp.gmail.com with ESMTPSA id h18-20020adffd52000000b002be5bdbe40csm1453292wrs.27.2023.02.16.04.53.00
+        by smtp.gmail.com with ESMTPSA id h18-20020adffd52000000b002be5bdbe40csm1453292wrs.27.2023.02.16.04.53.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 04:53:01 -0800 (PST)
+        Thu, 16 Feb 2023 04:53:02 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v3 1/9] arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
-Date:   Thu, 16 Feb 2023 13:52:49 +0100
-Message-Id: <20230216125257.112300-2-brgl@bgdev.pl>
+Subject: [PATCH v3 2/9] arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
+Date:   Thu, 16 Feb 2023 13:52:50 +0100
+Message-Id: <20230216125257.112300-3-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230216125257.112300-1-brgl@bgdev.pl>
 References: <20230216125257.112300-1-brgl@bgdev.pl>
@@ -78,37 +78,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add the second instance of the QUPv3 engine to the sa8775p.dtsi.
+Enable the second instance of the QUPv3 engine on the sa8775p-ride board.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index 565c1376073e..894c0662afb4 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -491,6 +491,19 @@ &clk_virt SLAVE_QUP_CORE_1 0>,
- 			};
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+index 3adf7349f4e5..a538bb79c04a 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+@@ -24,6 +24,10 @@ &qupv3_id_1 {
+ 	status = "okay";
+ };
  
-+		qupv3_id_2: geniqup@8c0000 {
-+			compatible = "qcom,geni-se-qup";
-+			reg = <0x0 0x8c0000 0x0 0x6000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			clocks = <&gcc GCC_QUPV3_WRAP_2_M_AHB_CLK>,
-+				 <&gcc GCC_QUPV3_WRAP_2_S_AHB_CLK>;
-+			clock-names = "m-ahb", "s-ahb";
-+			iommus = <&apps_smmu 0x5a3 0x0>;
-+			status = "disabled";
-+		};
++&qupv3_id_2 {
++	status = "okay";
++};
 +
- 		intc: interrupt-controller@17a00000 {
- 			compatible = "arm,gic-v3";
- 			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
+ &sleep_clk {
+ 	clock-frequency = <32764>;
+ };
 -- 
 2.37.2
 
