@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E809698BAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3AC698BAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjBPFTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S229759AbjBPFTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBPFSw (ORCPT
+        with ESMTP id S229620AbjBPFTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:18:52 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4285245F6C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:23 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-52a8f97c8ccso8654047b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:23 -0800 (PST)
+        Thu, 16 Feb 2023 00:19:04 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26784608B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:25 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id n20-20020a25da14000000b008fa1d22bd55so839670ybf.21
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OfsRQat1IE0fDeYSs5Psw7qjLLZE8mkiXmSdSDqQs6E=;
-        b=MfUNnuRVqilTlETV75doNo5d3X2f1I64PkztavWwbIZWW2j+3a5GtwWp8jaeE2FAS7
-         MLS5o+W6QzlLw73Ic3jcbhKR5fcnDvpJtAm6NUi7rdrBvnG1z5U94zlj5p9Rf6AtiMXB
-         /0WTQWR4hibDfKvJz8o49Ph/XAqUGXxJaWOev01ngzcVh9Xd6JHGOFVoBB6DDs9XGB0U
-         jDPi/dJdwD6mt/I/Iobb8XMkCnfA0C9OXZWj96tLYiXqom79AFLMHYYopE8HfxvEiMuA
-         aI5RyI6LPkvxen53dNb8XfFirBUFuNssxJItswg1uaEv8wS3br6uTFvWft0h1+Cz189K
-         IN3Q==
+        bh=S0NkKUx4dkIelWS5aTsq7UgpXIDBIhGrMRdd8DrqTMg=;
+        b=jg6fXXyNPA7kGzHuabxhVQS/lUkV32r/2v7x3huSOdcQqflpdfqhoIlNaR0t9wMIZ5
+         tNsdAuEIvz4tV4UF6ouWYwPH6jjBst45X8ZS39R/or9bhVEvk/hAhXAhGiG6HODkz0Ti
+         4+W9CepIhu/sbVVhPdRUrFOaALk+XM5cteC/he2x1EN76QEzJ6hbvpDzGk804gLMUejh
+         OhIx76lfAQ2Aj8i3vKfn29ePpUTgzAK6jOUxJ6v4seZ7ANgrIyb45IfAAVauV03+BjjR
+         E1pd5h52L83bbDKmbPDtlCRxv6trm/z+Fa4Qs6PgKsiEdeHNP77Ta8uAxqqtUigosnhI
+         vlvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OfsRQat1IE0fDeYSs5Psw7qjLLZE8mkiXmSdSDqQs6E=;
-        b=0INJSZZGRj5H2sQcuUY0td4iWSAnT1XYft+W7vQ8n31jU7wcv5lT+ju/qvpI/+FpD1
-         FfArRVteTZ9cv+jMavW5HeCtFEYrcHI2Ugb+k5X64pLkARHIVHdz+1DhYsvgEBrvuTBV
-         xTZ/i9+TD/KUxEEKaJrwOPLZOt7Tmc8zt/UkfQmu8JCTAqBpqT/LPtj9E7dCSScg7j6c
-         AjhAFC0MFGwSexfHTCmz0MMC1VkMGvB/GN82u5fpZ0wyQl/ge9DvnE5aWZuuDeX5lr5q
-         pwhPENknly0wFvNT7ibOzStD0vlJLrBCIeH8lbiQI3Fx9jRzxV9V8mey9yNWuwNOeoSr
-         6jnA==
-X-Gm-Message-State: AO0yUKU8lGwq22vHBgm5Q2nw+NNwVJWO6oDg/HYyQQoONaquZTDnIk6a
-        3mV6EVCycZ8+CxePqkBE6iLX6YXgw3c=
-X-Google-Smtp-Source: AK7set/k5YICRmbO5PrlJaB9Zo139wu7UxHEXvq6ujpnvYnblxA9RcHNr8XeBP6uxC5C9xnIzXdi58p2CG0=
+        bh=S0NkKUx4dkIelWS5aTsq7UgpXIDBIhGrMRdd8DrqTMg=;
+        b=Q/Uo+RLjMFlihdIzbmlPSUbkIaJIJTcb4c1bneOax/ntNJhAvKFQNBA3zN7ZkhUV6E
+         TSq8Ut3FpDf8slbbScMCpDenD3Cd3JES5REoGe3cO5trmE5yibGopWva8oVLtDtD/bEy
+         lejdZd2FZixobs1qwJLUU/dT9wcfOpx58hnC5UoPKa3k9k5JgW+r08WVcaptBZUAabcS
+         kIfK4Djaj1ftiC69xa8dRpF+ci1O9rtH53yRUNPaqx64sbPSjCUcFX94gnFsOZmRe54h
+         R/gYsFnjZrtvpG/G+Ff8UZQi12G20IbytQCfogSXTe1M5sWx+0dV5QCAwc3I0UW8ZfjY
+         T0PQ==
+X-Gm-Message-State: AO0yUKWsCjeq4Mak6wb73UXpvEvAk8M08+g3nCfQYOvwFXPwMmV+CWxx
+        0VPXwSTgUoGD2IqroIftbGIHBDYB4mM=
+X-Google-Smtp-Source: AK7set9uXuFcAAjB5O0QV0Xb2ftT+HcRWdedCtf2z+W+4L/MaBisfzCjx3cFBAo6If411AuBWDXU7wCyXBg=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f781:d5ed:1806:6ebb])
- (user=surenb job=sendgmr) by 2002:a25:8e8c:0:b0:965:bac9:d458 with SMTP id
- q12-20020a258e8c000000b00965bac9d458mr0ybl.11.1676524701625; Wed, 15 Feb 2023
- 21:18:21 -0800 (PST)
-Date:   Wed, 15 Feb 2023 21:17:26 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:13c6:b0:8da:3163:224 with SMTP id
+ y6-20020a05690213c600b008da31630224mr5ybu.0.1676524704439; Wed, 15 Feb 2023
+ 21:18:24 -0800 (PST)
+Date:   Wed, 15 Feb 2023 21:17:27 -0800
 In-Reply-To: <20230216051750.3125598-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230216051750.3125598-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230216051750.3125598-12-surenb@google.com>
-Subject: [PATCH v3 11/35] mm: move mmap_lock assert function definitions
+Message-ID: <20230216051750.3125598-13-surenb@google.com>
+Subject: [PATCH v3 12/35] mm: add per-VMA lock and helper functions to control it
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -85,56 +85,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move mmap_lock assert function definitions up so that they can be used
-by other mmap_lock routines.
+Introduce per-VMA locking. The lock implementation relies on a
+per-vma and per-mm sequence counters to note exclusive locking:
+  - read lock - (implemented by vma_start_read) requires the vma
+    (vm_lock_seq) and mm (mm_lock_seq) sequence counters to differ.
+    If they match then there must be a vma exclusive lock held somewhere.
+  - read unlock - (implemented by vma_end_read) is a trivial vma->lock
+    unlock.
+  - write lock - (vma_start_write) requires the mmap_lock to be held
+    exclusively and the current mm counter is assigned to the vma counter.
+    This will allow multiple vmas to be locked under a single mmap_lock
+    write lock (e.g. during vma merging). The vma counter is modified
+    under exclusive vma lock.
+  - write unlock - (vma_end_write_all) is a batch release of all vma
+    locks held. It doesn't pair with a specific vma_start_write! It is
+    done before exclusive mmap_lock is released by incrementing mm
+    sequence counter (mm_lock_seq).
+  - write downgrade - if the mmap_lock is downgraded to the read lock, all
+    vma write locks are released as well (effectivelly same as write
+    unlock).
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mmap_lock.h | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ include/linux/mm.h        | 82 +++++++++++++++++++++++++++++++++++++++
+ include/linux/mm_types.h  |  8 ++++
+ include/linux/mmap_lock.h | 13 +++++++
+ kernel/fork.c             |  4 ++
+ mm/init-mm.c              |  3 ++
+ 5 files changed, 110 insertions(+)
 
-diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
-index 96e113e23d04..e49ba91bb1f0 100644
---- a/include/linux/mmap_lock.h
-+++ b/include/linux/mmap_lock.h
-@@ -60,6 +60,18 @@ static inline void __mmap_lock_trace_released(struct mm_struct *mm, bool write)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2992a2d55aee..a056ee170e34 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -623,6 +623,87 @@ struct vm_operations_struct {
+ 					  unsigned long addr);
+ };
  
- #endif /* CONFIG_TRACING */
- 
-+static inline void mmap_assert_locked(struct mm_struct *mm)
++#ifdef CONFIG_PER_VMA_LOCK
++static inline void vma_init_lock(struct vm_area_struct *vma)
 +{
-+	lockdep_assert_held(&mm->mmap_lock);
-+	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
++	init_rwsem(&vma->lock);
++	vma->vm_lock_seq = -1;
 +}
 +
-+static inline void mmap_assert_write_locked(struct mm_struct *mm)
++/*
++ * Try to read-lock a vma. The function is allowed to occasionally yield false
++ * locked result to avoid performance overhead, in which case we fall back to
++ * using mmap_lock. The function should never yield false unlocked result.
++ */
++static inline bool vma_start_read(struct vm_area_struct *vma)
 +{
-+	lockdep_assert_held_write(&mm->mmap_lock);
-+	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
++	/* Check before locking. A race might cause false locked result. */
++	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
++		return false;
++
++	if (unlikely(down_read_trylock(&vma->lock) == 0))
++		return false;
++
++	/*
++	 * Overflow might produce false locked result.
++	 * False unlocked result is impossible because we modify and check
++	 * vma->vm_lock_seq under vma->lock protection and mm->mm_lock_seq
++	 * modification invalidates all existing locks.
++	 */
++	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
++		up_read(&vma->lock);
++		return false;
++	}
++	return true;
 +}
++
++static inline void vma_end_read(struct vm_area_struct *vma)
++{
++	rcu_read_lock(); /* keeps vma alive till the end of up_read */
++	up_read(&vma->lock);
++	rcu_read_unlock();
++}
++
++static inline void vma_start_write(struct vm_area_struct *vma)
++{
++	int mm_lock_seq;
++
++	mmap_assert_write_locked(vma->vm_mm);
++
++	/*
++	 * current task is holding mmap_write_lock, both vma->vm_lock_seq and
++	 * mm->mm_lock_seq can't be concurrently modified.
++	 */
++	mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
++	if (vma->vm_lock_seq == mm_lock_seq)
++		return;
++
++	down_write(&vma->lock);
++	vma->vm_lock_seq = mm_lock_seq;
++	up_write(&vma->lock);
++}
++
++static inline void vma_assert_write_locked(struct vm_area_struct *vma)
++{
++	mmap_assert_write_locked(vma->vm_mm);
++	/*
++	 * current task is holding mmap_write_lock, both vma->vm_lock_seq and
++	 * mm->mm_lock_seq can't be concurrently modified.
++	 */
++	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
++}
++
++#else /* CONFIG_PER_VMA_LOCK */
++
++static inline void vma_init_lock(struct vm_area_struct *vma) {}
++static inline bool vma_start_read(struct vm_area_struct *vma)
++		{ return false; }
++static inline void vma_end_read(struct vm_area_struct *vma) {}
++static inline void vma_start_write(struct vm_area_struct *vma) {}
++static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
++
++#endif /* CONFIG_PER_VMA_LOCK */
++
+ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+ {
+ 	static const struct vm_operations_struct dummy_vm_ops = {};
+@@ -631,6 +712,7 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+ 	vma->vm_mm = mm;
+ 	vma->vm_ops = &dummy_vm_ops;
+ 	INIT_LIST_HEAD(&vma->anon_vma_chain);
++	vma_init_lock(vma);
+ }
+ 
+ /* Use when VMA is not part of the VMA tree and needs no locking */
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index fb4e2afad787..e268723eaf44 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -508,6 +508,11 @@ struct vm_area_struct {
+ 		vm_flags_t __private __vm_flags;
+ 	};
+ 
++#ifdef CONFIG_PER_VMA_LOCK
++	int vm_lock_seq;
++	struct rw_semaphore lock;
++#endif
++
+ 	/*
+ 	 * For areas with an address space and backing store,
+ 	 * linkage into the address_space->i_mmap interval tree.
+@@ -633,6 +638,9 @@ struct mm_struct {
+ 					  * init_mm.mmlist, and are protected
+ 					  * by mmlist_lock
+ 					  */
++#ifdef CONFIG_PER_VMA_LOCK
++		int mm_lock_seq;
++#endif
+ 
+ 
+ 		unsigned long hiwater_rss; /* High-watermark of RSS usage */
+diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+index e49ba91bb1f0..aab8f1b28d26 100644
+--- a/include/linux/mmap_lock.h
++++ b/include/linux/mmap_lock.h
+@@ -72,6 +72,17 @@ static inline void mmap_assert_write_locked(struct mm_struct *mm)
+ 	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+ }
+ 
++#ifdef CONFIG_PER_VMA_LOCK
++static inline void vma_end_write_all(struct mm_struct *mm)
++{
++	mmap_assert_write_locked(mm);
++	/* No races during update due to exclusive mmap_lock being held */
++	WRITE_ONCE(mm->mm_lock_seq, mm->mm_lock_seq + 1);
++}
++#else
++static inline void vma_end_write_all(struct mm_struct *mm) {}
++#endif
 +
  static inline void mmap_init_lock(struct mm_struct *mm)
  {
  	init_rwsem(&mm->mmap_lock);
-@@ -150,18 +162,6 @@ static inline void mmap_read_unlock_non_owner(struct mm_struct *mm)
- 	up_read_non_owner(&mm->mmap_lock);
+@@ -114,12 +125,14 @@ static inline bool mmap_write_trylock(struct mm_struct *mm)
+ static inline void mmap_write_unlock(struct mm_struct *mm)
+ {
+ 	__mmap_lock_trace_released(mm, true);
++	vma_end_write_all(mm);
+ 	up_write(&mm->mmap_lock);
  }
  
--static inline void mmap_assert_locked(struct mm_struct *mm)
--{
--	lockdep_assert_held(&mm->mmap_lock);
--	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
--}
--
--static inline void mmap_assert_write_locked(struct mm_struct *mm)
--{
--	lockdep_assert_held_write(&mm->mmap_lock);
--	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
--}
--
- static inline int mmap_lock_is_contended(struct mm_struct *mm)
+ static inline void mmap_write_downgrade(struct mm_struct *mm)
  {
- 	return rwsem_is_contended(&mm->mmap_lock);
+ 	__mmap_lock_trace_acquire_returned(mm, false, true);
++	vma_end_write_all(mm);
+ 	downgrade_write(&mm->mmap_lock);
+ }
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 314d51eb91da..9141427a98b2 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -474,6 +474,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
+ 		 */
+ 		data_race(memcpy(new, orig, sizeof(*new)));
+ 		INIT_LIST_HEAD(&new->anon_vma_chain);
++		vma_init_lock(new);
+ 		dup_anon_vma_name(orig, new);
+ 	}
+ 	return new;
+@@ -1147,6 +1148,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	seqcount_init(&mm->write_protect_seq);
+ 	mmap_init_lock(mm);
+ 	INIT_LIST_HEAD(&mm->mmlist);
++#ifdef CONFIG_PER_VMA_LOCK
++	mm->mm_lock_seq = 0;
++#endif
+ 	mm_pgtables_bytes_init(mm);
+ 	mm->map_count = 0;
+ 	mm->locked_vm = 0;
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index c9327abb771c..33269314e060 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -37,6 +37,9 @@ struct mm_struct init_mm = {
+ 	.page_table_lock =  __SPIN_LOCK_UNLOCKED(init_mm.page_table_lock),
+ 	.arg_lock	=  __SPIN_LOCK_UNLOCKED(init_mm.arg_lock),
+ 	.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
++#ifdef CONFIG_PER_VMA_LOCK
++	.mm_lock_seq	= 0,
++#endif
+ 	.user_ns	= &init_user_ns,
+ 	.cpu_bitmap	= CPU_BITS_NONE,
+ #ifdef CONFIG_IOMMU_SVA
 -- 
 2.39.1
 
