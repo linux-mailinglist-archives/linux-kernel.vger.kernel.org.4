@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8951C69890C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65618698912
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjBPAGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S229696AbjBPAGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBPAGG (ORCPT
+        with ESMTP id S229554AbjBPAGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:06:06 -0500
+        Wed, 15 Feb 2023 19:06:36 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F41244B4;
-        Wed, 15 Feb 2023 16:06:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055443AAC;
+        Wed, 15 Feb 2023 16:06:36 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E80C1660206C;
-        Thu, 16 Feb 2023 00:06:03 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C5130660206C;
+        Thu, 16 Feb 2023 00:06:34 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676505964;
-        bh=KEfpZq7IdD+eaPUgdu9g3gUwaWmdEspQ5sy9QxFoAlo=;
+        s=mail; t=1676505994;
+        bh=ilI/10v5PJHrttNszyQv4HKgv/kX2fQrPAogzLEUmLo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UguVS4qENdalJFN5bZ1Mf9T6pVUwznfFp0KJGxPeuRQY2peo6F04LgbwelRB0WkAW
-         pYbVYHXcmX5Zn67WJCvw0aOIEaVQ7BNqHg5wQvrzGdDEbC0jqt+D6jX2TUITbia9Mj
-         1AGJIABlr2s89n8RigXQ6DXwxWT9of7G4MiDrYXQQMLMG0S8/+d62ts+xBQkDJ9vNv
-         pe5tXQTXwXaSk83zl7Rx8mNm8AmnsghTvc98KHhd6AT3Yte9mxsxBU4LluOALlkYzy
-         ZA1/9tREJ3s4fpONoYIxvAAFJBXe9thPZyF+kt3AUkWlSqu55i8mjJWiRgKB3Lqesl
-         dDsFSL0TG+mhQ==
+        b=CGhhDI3X55N6XQ6XTTyAKis7UV7HjrOviPyti7t5sgqYMgxWv/uUFTVvfmdyPxmaA
+         0siYj9OwOfBSViwYAhc9QuZghkCQVt0KGv20LaTbhxcQuwNYGXtv8MMow7PGdifBgn
+         aPtSTDH/qiHtZd2b40CSV4l9oAntETrWEOSOSm0OTdRluCaBTgEFVYdKFawn7J6nSd
+         6fPQlQ/5SHUeELuNRas8YSIqumiT68MjyDHeNmJz7O4+Ndy9lHzDKQmlC20S+kcfCn
+         EKhnIF6XYblCLJLpm3I8+mOR/tP0GY6CHPjK8v846WI+w06jCs/v3PK1iolb68LSWJ
+         b3nJAQS2R6MmQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 80FB710603FE; Thu, 16 Feb 2023 01:06:01 +0100 (CET)
-Date:   Thu, 16 Feb 2023 01:06:01 +0100
+        id B779B10603FE; Thu, 16 Feb 2023 01:06:31 +0100 (CET)
+Date:   Thu, 16 Feb 2023 01:06:31 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: leds: explicitly include linux/leds.h
-Message-ID: <20230216000601.u76o7mow7m3pgre5@mercury.elektranox.org>
-References: <20230215-power_supply-leds-pm-v1-1-fa79f846b04d@weissschuh.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, marijn.suijten@somainline.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: pm8941-coincell: Add
+ PM8998 compatible
+Message-ID: <20230216000631.2vpwbgajr7u5ysnc@mercury.elektranox.org>
+References: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="si27b542cyafcae4"
+        protocol="application/pgp-signature"; boundary="vsxp4rzne67m5cq4"
 Content-Disposition: inline
-In-Reply-To: <20230215-power_supply-leds-pm-v1-1-fa79f846b04d@weissschuh.net>
+In-Reply-To: <20230214090849.2186370-1-konrad.dybcio@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,68 +63,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---si27b542cyafcae4
-Content-Type: text/plain; charset=iso-8859-1
+--vsxp4rzne67m5cq4
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Feb 15, 2023 at 01:12:55AM +0000, Thomas Wei=DFschuh wrote:
-> Instead of relying on an accidental, transitive inclusion of linux/leds.h
-> use it directly.
+On Tue, Feb 14, 2023 at 10:08:47AM +0100, Konrad Dybcio wrote:
+> Add a specific compatible for the coincell charger present on PM8998.
 >=20
-> Signed-off-by: Thomas Wei=DFschuh <linux@weissschuh.net>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/power_supply_leds.c | 1 +
->  1 file changed, 1 insertion(+)
+> v1 -> v2:
 >=20
-> diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/sup=
-ply/power_supply_leds.c
-> index d69880cc3593..702bf83f6e6d 100644
-> --- a/drivers/power/supply/power_supply_leds.c
-> +++ b/drivers/power/supply/power_supply_leds.c
-> @@ -13,6 +13,7 @@
->  #include <linux/device.h>
->  #include <linux/power_supply.h>
->  #include <linux/slab.h>
-> +#include <linux/leds.h>
+> - Pick up ab
+>=20
+>  .../bindings/power/supply/qcom,pm8941-coincell.yaml       | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-c=
+oincell.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-c=
+oincell.yaml
+> index 0450f4dd4e51..b7b58aed3f3c 100644
+> --- a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell=
+=2Eyaml
+> +++ b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell=
+=2Eyaml
+> @@ -16,7 +16,13 @@ maintainers:
 > =20
->  #include "power_supply.h"
+>  properties:
+>    compatible:
+> -    const: qcom,pm8941-coincell
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - qcom,pm8998-coincell
+> +          - const: qcom,pm8941-coincell
+> +
+> +      - const: qcom,pm8941-coincell
 > =20
->=20
-> ---
-> base-commit: e1c04510f521e853019afeca2a5991a5ef8d6a5b
-> change-id: 20230215-power_supply-leds-pm-b32236dfb4df
->=20
-> Best regards,
+>    reg:
+>      maxItems: 1
 > --=20
-> Thomas Wei=DFschuh <linux@weissschuh.net>
+> 2.39.1
 >=20
 
---si27b542cyafcae4
+--vsxp4rzne67m5cq4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPtc2kACgkQ2O7X88g7
-+ppdBQ/+Kj6TGSUe+3AwCMitfCkF3/9gR2RjR5JksfG+aUKEETR2GbN4mwqIDpe/
-VoYLN06D0ZL35Few7VK/KHFiIYxbXWM4sNFlzaQNJ5Nlt0DejlnxwTN0myzkkTsX
-CTgTPD7wtBGRwA5bDw05cdNijWzCwROKhRHr5OjM2XMF51xGlhSWZFXFCYdKSZfw
-v1NqYyfOwMmgc541T8v5C5ey093ih3Z36sDq1eZK4Ykpa/JXk+bIytekWsBPgYMP
-sRRfrNCHNKqThQYOVMprHV+mcGm3Gn4uSqVT/HuHj5te0Zeo5jGKGddaRWxImvkd
-TTb8wb8wmbF7Qy/qnbbpHlzBdB1WKHK/wYqPRKi0cxzwmREyAcHWfBbSsBvvfCF6
-1fTnJnxUvjYL6Hxox6+WQrfzmlgPxxbsErhotehBgHl32buPFhc1c/2s9MX+Pl41
-II87AnF1VblXTZCG0+QuYHkeclArpjN7eQVZnRXL/kDaia1FvaaF4OT9insJOqtl
-70v9iUs1ItwLeI7Znb3SOT4f2nw36taT5/dCRqU60gp6kelO/Lk5mPwJdio2OLCP
-8o1HmwdDC+qQzlLBE7tHTPO6X2QsyYam99xl2mhotNvRTlwhOutaOS8WsGqTfQNb
-2b9W29vzFRaG2nIIj9OU6MApgVlmLJIpyXUQ0cyz26IQ7GG7kdM=
-=YYe4
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPtc4cACgkQ2O7X88g7
++ppwjg/+OflPejHjoX4Jx2r0sgHANAq5wme+KIdm/jJxHIIbzG8XS54rTp82vbP7
+UCBL4S8tEn6AJuvembTJmIcw89EWwZydOipaWFLWKOqX38rtvG0VyRHg8W18901c
+JYsuFguR/xpJRCaK118e40ZWJHCOvAibu+3WU4/euJAe4yMbP+ljZPu5/l1DvSDi
+05eSNlinA36XgswvFvLpESSS/PW5loCr/F1S5iZxd10aAMe0eDeM+qZn8aSvQcH4
+kZybBqw4ED+SZ4ZpzR9cpfR2CcRTpZYN+ZQ6FcIqpv7crpxMnqTnP/k1dTxG8TH/
+HreQN6SyAOCQbYEROdz60TENNR116EWpCAJtLQsGUiiFZD83+g5vekPEy7kap1sX
+3sDqtnkH6mLu5ZQKsnwIz9/YSeBOl2YFOiD0+qyVqx12xIpLSSQHSsNqnvKdlzAZ
+nExfMfpJtRM94xvROwFfFDhjmSh12DFEI+MUfz+rPwAe9vKJcbbVNMufQzzKTsrQ
+39SLnsNX1y6WLnJ+GY9ov6NojlWmx7C/hOBim9Pac3VbIW1mGdF2guF4a/I1cFqj
+QYqKtwkY7KX6ZuFHNLRJnMQKSRju0vIEW3CLukKrhc9390//jprIm4iiLuaqnfvB
+UXinkYvJ9IaOM+yJFmDbaDNSybO/a7Ml34DxkyLWAkvt4ogA9bc=
+=9WL4
 -----END PGP SIGNATURE-----
 
---si27b542cyafcae4--
+--vsxp4rzne67m5cq4--
