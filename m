@@ -2,171 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9320E698D6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A968698D71
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjBPGyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S229740AbjBPG4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBPGyN (ORCPT
+        with ESMTP id S229460AbjBPG4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:54:13 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F761F5E1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:54:11 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id hg24-20020a05600c539800b003e1f5f2a29cso3363153wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yj0QG8nvf21hIQsxvEw/yH0NICoBtXBJwbjm1rJDX4g=;
-        b=GR7U/Owre8s0XiYTvIEUDjTSL9qJG1HtM6Q96Flz67RcIWcxn6EyZu2cr4KIy7SAGA
-         nnA5K5ZbavE6J1U+bVh8n8Qa4q5g5pfiAXjmluOrBEmOd+5jGvM61sztIQCw4/ZISvbD
-         mPYCqhfhaQ52pkjXJJDt0KqqiWOxd95iaYAJRPAoS+sJ4D6PpYKCy9aECN3h5ToDMqqX
-         1aUHgakw1YFmBUutySraoFiZsk6SwMlPIcySrAMqNU0w6Q5wJdYbpEreKZY5x6rGJJs+
-         YGYyIOPRhWlLVhzO3sFZjWmA7RB2lUA1k+s6YZzavohmR9QnJimke0ef5D3ySSoMw83q
-         Tahw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yj0QG8nvf21hIQsxvEw/yH0NICoBtXBJwbjm1rJDX4g=;
-        b=MsM4BPI4tKvJSBM95U6f/6CiBjf/+oELeEKnCBh5Shd+ICgIYLJlENa92bWnuKiazB
-         2G3UbvxFYhn12yyCTFxSR0Z3JSXUzsvOWd3Dk8u95+jawStQbyXmvKGp8YSUBdivBcwF
-         cLLapUdEH4p7XFzy9cycX1UCzSGp+H2ihgQVjQtEzrgNfYh3YcZRKmeY+IxoDuTB/ygv
-         G9lTbTiYkPQAujh+cldlbdjXHg8YueqeJOPVH+1sPqA6+e+iRN0GbQmGPvqwokazfw5g
-         aYfA5249dPYsAL3DUpJJamH/9HhZH2yEjnPMk8wu8bcWJSfW/T1VT8u4B1IZ+ue9V7ll
-         7ryA==
-X-Gm-Message-State: AO0yUKUEEPpVJM0p9atSXHrqG+/8z8mqCmJJzhM0l6jYUGHVzYEpgXej
-        Jy/1W6mlnffV65ExBl5n1Qc=
-X-Google-Smtp-Source: AK7set+8kwws3RW3mynoq97vnkutzu6opAd6GOoSaDXlmG7IlhZ3rKd7N74Ffm9xHSLOL3rXGRwbgA==
-X-Received: by 2002:a05:600c:90f:b0:3df:3bd6:63e5 with SMTP id m15-20020a05600c090f00b003df3bd663e5mr3948253wmp.12.1676530450236;
-        Wed, 15 Feb 2023 22:54:10 -0800 (PST)
-Received: from suse.localnet (host-79-49-12-231.retail.telecomitalia.it. [79.49.12.231])
-        by smtp.gmail.com with ESMTPSA id c9-20020a7bc009000000b003dc4a47605fsm4457083wmb.8.2023.02.15.22.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 22:54:09 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in usb_tx_block/usb_submit_urb
-Date:   Thu, 16 Feb 2023 07:54:08 +0100
-Message-ID: <2136128.irdbgypaU6@suse>
-In-Reply-To: <20230215110515.3833-1-hdanton@sina.com>
-References: <20230215110515.3833-1-hdanton@sina.com>
+        Thu, 16 Feb 2023 01:56:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338961F5E1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:56:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C329061A1E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337A6C4339B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:56:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676530592;
+        bh=KTt3PVoUKhjeVgfW8ilo26U9ErpIJj2Y4fMqhuE5aa4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FO9U3rWOhTslIIK3R2HWl0KU0SNkOYA3nKfMHU6jkDZowyqVdCVvWSkxn3kICbP0Y
+         waRw8ykuSQ6pqogANMQFjHU64w9o30YJElshSJvqRCghF7EJHy/t4so5blpppc0hy4
+         UCFduCZzaXjbIr7Uu2/OXMu2rOwsP58yEpT6ZKUziXKW/lej9GUMU227LliFym0syX
+         gJOYSpNNqdMI83TKKEo+Sip8TzaVIIe4FjMON6ZSx2tgiWNDP6H8MAqTFhEuTjj0Pf
+         h3tfmL21YUeonWqIOtMOXZEg8vNEA0DxUjL1eXFNFsnschnbGKdE3rjQWkMb4PuP80
+         A1P4KloOd0X/w==
+Received: by mail-ej1-f46.google.com with SMTP id ky6so2907365ejc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:56:32 -0800 (PST)
+X-Gm-Message-State: AO0yUKUVI13W81p/Pwb36mjFnFPNhyM4shhfLh6JOvvpZWLVO3t8aWVU
+        XsiPOArjEgbu7AEB4SAw8HgCP2UnqBpquGdNtM8=
+X-Google-Smtp-Source: AK7set/u0QW8gGZONF9Ge49yzbkg9oekboobMtq8+hlKDYN6nhW6TOSFvd0g+jrt4fXJmjP1sBMQuFbE2GSDz56aQ88=
+X-Received: by 2002:a17:906:9442:b0:87b:db53:2d7d with SMTP id
+ z2-20020a170906944200b0087bdb532d7dmr2357547ejx.1.1676530590453; Wed, 15 Feb
+ 2023 22:56:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
+ <1676018856-26520-3-git-send-email-tangyouling@loongson.cn>
+ <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
+ <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn> <848e2985-9ba3-c14d-23ac-a7f1c218215f@loongson.cn>
+In-Reply-To: <848e2985-9ba3-c14d-23ac-a7f1c218215f@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 16 Feb 2023 14:56:20 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7+_1U=H3TgUUzG+aOc7ftuvn2vbwn7eC4HDv9cUhf8RQ@mail.gmail.com>
+Message-ID: <CAAhV-H7+_1U=H3TgUUzG+aOc7ftuvn2vbwn7eC4HDv9cUhf8RQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] LoongArch: Use la.pcrel instead of la.abs for
+ exception handlers
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin lv <lvjianmin@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 15 febbraio 2023 12:05:15 CET Hillf Danton wrote:
-> On Tue, 14 Feb 2023 23:00:47 -0800
->=20
-> > syzbot found the following issue on:
-> >=20
-> > HEAD commit:    f87b564686ee dt-bindings: usb: amlogic,meson-g12a-usb-
-ctrl..
-> > git tree:     =20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-test=
-ing
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1670f2b3480=
-000
-> Kill urb in flight after submitting it.
->=20
-> #syz test https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=
-=20
-> f87b564686ee
->=20
-> --- x/drivers/net/wireless/marvell/libertas/if_usb.c
-> +++ y/drivers/net/wireless/marvell/libertas/if_usb.c
-> @@ -763,9 +763,7 @@ static int if_usb_issue_boot_command(str
->  	memset(bootcmd->pad, 0, sizeof(bootcmd->pad));
->=20
->  	/* Issue command */
-> -	usb_tx_block(cardp, cardp->ep_out_buf, sizeof(*bootcmd));
-> -
-> -	return 0;
-> +	return usb_tx_block(cardp, cardp->ep_out_buf, sizeof(*bootcmd));
->  }
->=20
->=20
-> @@ -853,10 +851,12 @@ restart:
->  	}
+On Thu, Feb 16, 2023 at 10:32 AM Youling Tang <tangyouling@loongson.cn> wrote:
+>
+> Hi folks,
+>
+> On 02/10/2023 05:18 PM, Youling Tang wrote:
+> >
+> >
+> > On 02/10/2023 05:09 PM, Huacai Chen wrote:
+> >> Hi, Youling and Ruoyao,
+> >>
+> >> Thank you very much for implementing the per-node exceptions. But I
+> >> want to know if the per-node solution is really worthy for a PIE
+> >> kernel. So, could you please test the performance? Maybe we can reduce
+> >> the complexity if we give up the per-node solution.
+>
+> Tested on Loongson-3C5000L-LL machine, using CLFS7.3 system.
+>
+> - nopernode:
+>    Based on the v1 patch method, and remove the else branch process in
+>    setup_tlb_handler().
+>
+> - pernode: Based on the v4 patch method.
+>
+> - pie: Enable RANDOMIZE_BASE (KASLR).
+>
+> - nopie: Disable RANDOMIZE_BASE and RELOCATABLE.
+>
+>
+> The UnixBench test results are as follows:
+>
+> - nopernode-nopie: 3938.7
+>
+> - pernode-nopie: 4062.2
+>
+> - nopernode-pie: 4009.7
+>
+> - pernode-pie: 4028.7
+>
+> In general, `pernode` is higher than `nopernode`, and `nopie` is higher
+> than `pie`. (except that nopernode-pie is higher than nopernode-nopie,
+> which is not as expected, which may be caused by the instability of the
+> machine).
+>
+> Everyone is more inclined to use `pernode` or `nopernode` to implement
+> in the exception handling process?
+From my point of view, for the PIE kernel the performance difference
+between pernode and nopoernode is negligible. On the other hand,
+pernode implementation needs some compiler hackings and makes the
+logic significantly complex. So I prefer to remove the pernode
+exception support.
 
->=20
->  	cardp->bootcmdresp =3D 0;
-> +	ret =3D if_usb_issue_boot_command(cardp, BOOT_CMD_FW_BY_USB);
-> +	if (ret)
-> +		goto done;
-
-I think that you are changing the logic here (please read below)...
-
->  	do {
->  		int j =3D 0;
->  		i++;
-> -		if_usb_issue_boot_command(cardp, BOOT_CMD_FW_BY_USB);
-
-Don't we need to call if_usb_issue_boot_command() in a loop in order to ret=
-ry=20
-the command?
-
->  		/* wait for command response */
->  		do {
->  			j++;
-> @@ -864,6 +864,8 @@ restart:
->  		} while (cardp->bootcmdresp =3D=3D 0 && j < 10);
->  	} while (cardp->bootcmdresp =3D=3D 0 && i < 5);
->=20
-> +	usb_kill_urb(cardp->tx_urb);
-> +
-
-I'm not an expert in the USB core, anyway calling usb_kill_urb() looks good=
- to=20
-me, but I think we should call it after each call of=20
-if_usb_issue_boot_command() in the above outer loop.
-
->  	if (cardp->bootcmdresp =3D=3D BOOT_CMD_RESP_NOT_SUPPORTED) {
->  		/* Return to normal operation */
->  		ret =3D -EOPNOTSUPP;
-> --
-
-Can the following work?
-
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=20
-f87b564686ee
-
-diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/
-wireless/marvell/libertas/if_usb.c
-index 20436a289d5c..626357d0c7b0 100644
-=2D-- a/drivers/net/wireless/marvell/libertas/if_usb.c
-+++ b/drivers/net/wireless/marvell/libertas/if_usb.c
-@@ -859,6 +859,7 @@ static void if_usb_prog_firmware(struct lbs_private *pr=
-iv,=20
-int ret,
-                        j++;
-                        msleep_interruptible(100);
-                } while (cardp->bootcmdresp =3D=3D 0 && j < 10);
-+               usb_kill_urb(cardp->tx_urb):
-        } while (cardp->bootcmdresp =3D=3D 0 && i < 5);
-=20
-        if (cardp->bootcmdresp =3D=3D BOOT_CMD_RESP_NOT_SUPPORTED) {
-=2D-
-
-Thanks,
-
-=46abio
-
-
+Huacai
+>
+> Youling.
+>
+>
