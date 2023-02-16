@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C59699253
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6379469925B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjBPKzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229905AbjBPK4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjBPKzG (ORCPT
+        with ESMTP id S229571AbjBPK4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:55:06 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FDD5648E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:54:51 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ky6so4220626ejc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:54:50 -0800 (PST)
+        Thu, 16 Feb 2023 05:56:30 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E4857743
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:55:47 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id p14so1551302vsn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9d0PrkqVR7RWwHDAQb7ACiH4nug2M7E1Iiu+Ew45btw=;
-        b=oOQtFOZ4rMwIG462fFPhvF0fRSWeGqZRzJQqJlJvB6KU/GVRRBfo3KVtwdFRWjwrjn
-         yNkTum0WsAp5TPeimhOLlSkfC5ogTLg4e3p11WMf7oZdEFtC8/h1rszKYNXXtmcWIqu8
-         1vUoXh0mW8iGFC67KqVtCxR81gr/FkHuEJsniUR+0DUvOzmZGC7saQK8Yxls8Yi+6SA4
-         GMNYxwXH9ONtnDNTBw+r1eQ7LXdxY5ptKcfLFhTrvYhguMNCy5w+rN0rqZGJDB1m3HpI
-         J+mpjJiEys+Jek3OdRodV9878Ti6vu07IPBslwqgHArmXZpTnVR1ZLSbzV+gy3YEK7Ol
-         gjiw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zwzrytKcGK6J02tRdTcyqtWr69LMQ1V040meAEqQm/k=;
+        b=FqZCf6BIpw8mQzSkpFjZJU+ChtW8JK4Q4m1K9wKTgdR6oqnvR084AUnCAual8LqGmt
+         ojESksxzlOI7nXXoWAUvxR0mNEGpYu52c9hzYIFv5TLu6DN4PlAa0gs9OQMWGgj2XdEu
+         8EPu1VNHlZ4tjLfAkdPbbId6oz2M9aYW/lGIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9d0PrkqVR7RWwHDAQb7ACiH4nug2M7E1Iiu+Ew45btw=;
-        b=nx0U03BNmbPLGdqpWzILx8RZQKmIAAJ9aie4N0Dh9i+KXqHdOQMm41Nkp6Wjf8OWQJ
-         NYFlOojRegUgucPbzV8fbNZKPApoFfhZiixjiLNqxb+f3HdVXpwcbSkqpyXAHFmnd1yP
-         D0hcIfrbp2ggHWPse5L7uIurM96tyynX1SYWRCWtUcSSSJa7oNjv8y3sEETl0z/YDFLZ
-         cIByTJWs/VJrmeNdQ1riHsDKF4JaEdNPYpeZKG9RFpKfbxhayZ++2c3pBzndA0zXBfoX
-         5cGaZKBDgYMdMSTFnm2s5pa+LwEkx5HBohPtcwu+IY2CnQRnpZy4k1Mq22QRV5DrSfff
-         WO2A==
-X-Gm-Message-State: AO0yUKWlK0k2sBNe/aee3uXymc3zN0LcNrF4aIihoANgG8q+9sa5ZThB
-        Wfn9RAgQIIwvMJs7oT8pDfLuw7N49zY=
-X-Google-Smtp-Source: AK7set9Oy5S9Yr0n0nlHFC1PAlfEeEbH2+wRc0QeKP4E6Cs5jxyLs1qTlkGK9gKllKR2VYjHmZZr0w==
-X-Received: by 2002:a17:907:1303:b0:8b1:2cdb:b8dd with SMTP id vj3-20020a170907130300b008b12cdbb8ddmr4254548ejb.58.1676544889508;
-        Thu, 16 Feb 2023 02:54:49 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id k26-20020a50ce5a000000b004a2470f920esm670835edj.25.2023.02.16.02.54.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 02:54:48 -0800 (PST)
-Date:   Thu, 16 Feb 2023 13:54:36 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Riana Tauro <riana.tauro@intel.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        Badal Nilawar <badal.nilawar@intel.com>,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>
-Subject: drivers/gpu/drm/i915/i915_hwmon.c:69 hwm_in_read() error:
- uninitialized symbol 'reg_value'.
-Message-ID: <202302161256.eeoRFhSo-lkp@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zwzrytKcGK6J02tRdTcyqtWr69LMQ1V040meAEqQm/k=;
+        b=EppeUmymt3JjUmV4iMlcnMogIHwCtSsKYkdJzpr6vtVjZT/0gN1dV8b1O29+eRgxbJ
+         ragnMKJWuo1j6Ga8sjeHOBOwy1XPEfyyWag1qU3Ufe7fEwSxpvwQ0A7Xk0DjylwOhVxk
+         wlUVsLDiHNiYYs8RC7VxXsPynAmyIrft6qvfATwqGmx3CAvu9+79zExnds5/yWmGHRKL
+         G/PAiqDYHwa7rzzqsXO6d7/zWbvZsWuSPDtU2/PihzCfKm9K6eO07VfAKkYVZoAkdLtg
+         dUKitXP//HL23J3N1F1X7uEn+qh+aWu8Zowa2dfpaBB35sAMIdIQifDsYZeibpSPWQV5
+         JU7w==
+X-Gm-Message-State: AO0yUKU/kQ74OBpC0bkgTVsK+eLZewDKBCB8ZcoTsUplnbK3W0rdrl+1
+        q/RsgeOwfFdLT3eBa3VY9S9GRlvomWPEa8ePE3DB0w==
+X-Google-Smtp-Source: AK7set+wt7rp+1cILEpIFwYvVl4saH+TpOxvH8a7hVqFk6+SLeAtwsmJrkP7H1j1ZOkGe5o5irDI97UoijSEBGRRa70=
+X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
+ w9-20020a67f749000000b003fc058df90fmr1013119vso.60.1676544946210; Thu, 16 Feb
+ 2023 02:55:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-26-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214134127.59273-26-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 16 Feb 2023 18:55:34 +0800
+Message-ID: <CAGXv+5GSTD+9_VwL+PniBGZ1gjt4TrNK3EOpjxeSFiMMmTjzbA@mail.gmail.com>
+Subject: Re: [PATCH v2 25/47] clk: mediatek: mt7622: Convert to platform
+ driver and simple probe
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   033c40a89f55525139fd5b6342281b09b97d05bf
-commit: f8572bb675250ee527d9ba35fa1ce17480407399 drm/i915/hwmon: Add HWMON current voltage support
-config: x86_64-randconfig-m001-20230213 (https://download.01.org/0day-ci/archive/20230216/202302161256.eeoRFhSo-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Convert the MT7622 topckgen and pericfg clock drivers to platform
+> drivers and use the simple probe mechanism. This also allows to
+> build these clocks as modules.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302161256.eeoRFhSo-lkp@intel.com/
-
-smatch warnings:
-drivers/gpu/drm/i915/i915_hwmon.c:69 hwm_in_read() error: uninitialized symbol 'reg_value'.
-
-vim +/reg_value +69 drivers/gpu/drm/i915/i915_hwmon.c
-
-f8572bb675250e Riana Tauro 2022-10-13  57  static int
-f8572bb675250e Riana Tauro 2022-10-13  58  hwm_in_read(struct hwm_drvdata *ddat, u32 attr, long *val)
-f8572bb675250e Riana Tauro 2022-10-13  59  {
-f8572bb675250e Riana Tauro 2022-10-13  60  	struct i915_hwmon *hwmon = ddat->hwmon;
-f8572bb675250e Riana Tauro 2022-10-13  61  	intel_wakeref_t wakeref;
-f8572bb675250e Riana Tauro 2022-10-13  62  	u32 reg_value;
-f8572bb675250e Riana Tauro 2022-10-13  63  
-f8572bb675250e Riana Tauro 2022-10-13  64  	switch (attr) {
-f8572bb675250e Riana Tauro 2022-10-13  65  	case hwmon_in_input:
-f8572bb675250e Riana Tauro 2022-10-13  66  		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
-f8572bb675250e Riana Tauro 2022-10-13  67  			reg_value = intel_uncore_read(ddat->uncore, hwmon->rg.gt_perf_status);
-
-The with_intel_runtime_pm() macro is a complicated if statement, but
-written as a for loop so it can do a get() and a put()?  reg_value is
-not initialized in the without pm case.
-
-f8572bb675250e Riana Tauro 2022-10-13  68  		/* HW register value in units of 2.5 millivolt */
-f8572bb675250e Riana Tauro 2022-10-13 @69  		*val = DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value) * 25, 10);
-f8572bb675250e Riana Tauro 2022-10-13  70  		return 0;
-f8572bb675250e Riana Tauro 2022-10-13  71  	default:
-f8572bb675250e Riana Tauro 2022-10-13  72  		return -EOPNOTSUPP;
-f8572bb675250e Riana Tauro 2022-10-13  73  	}
-f8572bb675250e Riana Tauro 2022-10-13  74  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
