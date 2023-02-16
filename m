@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835FF6997E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5CE6997DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjBPOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S230242AbjBPOwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBPOwS (ORCPT
+        with ESMTP id S230204AbjBPOwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:52:18 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1029521F5;
-        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso6344715pju.0;
-        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
-        b=cwz68VlmDebluJTDd3kSMGJs+22jJVLh0Fv0bcrZcbxWMLknLTS+Tig93Lq9LNTuwY
-         V5SiifT7xi1tRId07N0GCnnM4k3LCV4L7xKXbW8uFDrmLNNXcErsIb8FkXig368+U8IB
-         gwH2+13ufQE7YAbNisWxG/gB4r1KN0MAw8jCMwuAkmZcpZ5SUmMOhPUUT4OizXTOOKUu
-         2c9a4jwgTkeHUBZ73M4rJWvghAt/bBReKj25J4ixRMSVPADaSpbbQL6/CBnR8+fpnv1N
-         kk77iJW7wxWjk6/XNHa1gBmb0yXMD6kiD2jinSUPkYeQ6Y2GPG5/5r4thQ7xTjtYro0k
-         tQ2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
-        b=PdxDr/xGkZOANSM1jBIjXDBYlPnBc81KQZqMVQZXZzHDEdMElf/Mytiw+sGXkOKAUj
-         DHKGN9EO+L5QDLH/QNmVv0yIRGxHgyRxC5POSbJ7SFcREsMG457I890ygUTSTDKPvj+e
-         h7WEo6V1csyuaf9Xnc27eMk1/4loHSrgUGrlRfo4m1wuqn+JTHPmKytlsbnqB3NNIAeL
-         q2IfAdutoG1LEtVQhgMypt+u5QXNKrggjMuuOorxbK69b1cW3KaY7vAqSzrxrEHXEbCQ
-         /vMs9huEeQtjYhgPfWv+ebVpS28e9To4UIjtJLjxdNdXICGpywz7ObGrWmI+fxWP9y9H
-         /5BQ==
-X-Gm-Message-State: AO0yUKUxuEfW+Sp+XPOwwStvbLUHBuMtUubohpnygRmACgTqeklIzd2W
-        FIxKDh44ZMgLU2JNQMTw9x4=
-X-Google-Smtp-Source: AK7set+7/LSgLUnPubFXxsFw4TXLoT5TlodOzauYcx+mvORzOE91ehJg5BdcehvsXAQ3G3HCcHMguA==
-X-Received: by 2002:a17:90a:c782:b0:233:ab9b:f86a with SMTP id gn2-20020a17090ac78200b00233ab9bf86amr7033557pjb.8.1676559137218;
-        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
-Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090abd1700b00233db0db3dfsm3388472pjr.7.2023.02.16.06.52.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 06:52:16 -0800 (PST)
-From:   Taichi Nishimura <awkrail01@gmail.com>
-To:     rdunlap@infradead.org
-Cc:     andrii@kernel.org, ast@kernel.org, awkrail01@gmail.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        deso@posteo.net, haoluo@google.com, hawk@kernel.org,
-        iii@linux.ibm.com, joannelkoong@gmail.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
-        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
-        sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
-        yhs@fb.com, ytcoode@gmail.com, gregkh@linuxfoundation.org
-Subject: [Re: PATCH bpf-next] Fix typos in selftest/bpf files
-Date:   Thu, 16 Feb 2023 23:51:45 +0900
-Message-Id: <20230216145145.548183-1-awkrail01@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
-References: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 09:52:12 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2DF39CEB;
+        Thu, 16 Feb 2023 06:52:11 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5A2FD5C0144;
+        Thu, 16 Feb 2023 09:52:09 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 09:52:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676559129; x=1676645529; bh=NIjxx9AOK+
+        F7JHTOG3oPUrVs9nZK8w72u3K+EL5dm5g=; b=Ket9xA39E8fhhUTFhkTIYG/3Ph
+        OWvXEXCQQCRMHIt/UZV7JbM9ZqVgVa4MjDJb6JAZQ9pXgF7sV81tY5K5n9DhRsEJ
+        pD//pZK9wLrQYVOaQt0ZDTMc4yr39ujLUG9tlNkbKxcjGzrShzzIBwE26LuF6eAi
+        /YdqUEJtOiwIRe24BQA35A0IqFn5BmwDHziCyLE0Iq0DGdFV5YSf2ZngIfewzl3x
+        diepT4Elgn2M+vFsDerQFwLpea2PXFc8WzD4vibI/dwxFiOvKR2YJmzN5Z6nwqYq
+        teE/GTe7onUjWT/OuLsKkcfmdqIvUlfGcSWMV1N/YOPQKRlUqRgwcJR79BzQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676559129; x=1676645529; bh=NIjxx9AOK+F7JHTOG3oPUrVs9nZK
+        8w72u3K+EL5dm5g=; b=YBE0LyzAKrzRPMcDFCamvHwT8mGKAAG2C1CiSL3mDSA6
+        DtxGoaVKO4UscN/zNE1duxDTyvEFyT5c9W9E+/P4vCzyfDrQZXNI/8rGmRXt3rLd
+        nEa3moiqRRENkdA4N7GRzBhWHz1n+T4W+kx3T6SUWe96gFFq/YsLLpcZ+FZfmv/G
+        FOAysoPiFuIQJ60cDNf12AayUPtE7qVsmbvsGprUfYrvvvU2OLhBbeIxPYwKobuT
+        Fg/JA1LXkbj52QyDHNQz/RYl8OrpnpJM4l8CCW1fD+GM3kz/OMIdS3Z8JRwL8Zzy
+        I0/SG7dd0Dk3I+HqK5R93NXTEmTzTEtvWeinObEUZQ==
+X-ME-Sender: <xms:GEPuY2p0Gn8WNgXPhgUF9ln2vvFTC8KwJPtVqxipVpHV7P5dhYz1wg>
+    <xme:GEPuY0rpiGhyl51PGpLgytJONHWVrIkdbdwoX0mtM2nGlgQuvK2cIJlbkFIDy1D4c
+    WiWIEV9aG9a5AJ4Ts0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:GUPuY7MofLcuzWlhXXB7nd0kvZKUpeDMNTmY2RxbtQIA6QlhF-ZciA>
+    <xmx:GUPuY16SVbACVZ-h2zL1VeBC1E4RDOn1siWwYD017x3ZfFjfXEsEpQ>
+    <xmx:GUPuY16K26QFHX0l3MYoZYvQUgfImpEFY0kFQnYqu_ZFktzJKUGtFQ>
+    <xmx:GUPuYyxw0RUaKWhXgzOUm7vQA65KfMx4Z2F12Akgw0cIo6gQmIVtrg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D9E9FB60086; Thu, 16 Feb 2023 09:52:08 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <f93fdb4e-05e0-4301-95c9-3e1b1200d9b2@app.fastmail.com>
+In-Reply-To: <Y+5B/PmGinjCk/fN@MiWiFi-R3L-srv>
+References: <20230216123419.461016-1-bhe@redhat.com>
+ <20230216123419.461016-2-bhe@redhat.com>
+ <056cc71f-7fb9-4d38-a442-a05de6f7d437@app.fastmail.com>
+ <Y+5B/PmGinjCk/fN@MiWiFi-R3L-srv>
+Date:   Thu, 16 Feb 2023 15:51:50 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "David Laight" <David.Laight@aculab.com>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Brian Cain" <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v4 01/16] hexagon: mm: Convert to GENERIC_IOREMAP
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This text is not needed in the changelog for a patch, please read the
-> section entitled "The canonical patch format" in the kernel file,
-> Documentation/process/submitting-patches.rst for what is needed in order
-> to properly describe the change.
+On Thu, Feb 16, 2023, at 15:47, Baoquan He wrote:
+> On 02/16/23 at 01:53pm, Arnd Bergmann wrote:
+>> On Thu, Feb 16, 2023, at 13:34, Baoquan He wrote:
+>> I see that there are only two callers of {devm_,}ioremap_uc() left in the
+>> tree, so maybe we can even take that final step and remove it from
+>> the interface. Maybe we can revisit [1] as part of this series.
+>
+> I see now. Christoph Hellwig ever mentioned in v2 reviewing, I
+> didn't get why. Thanks for the details. 
+> https://lore.kernel.org/all/YwHX98KBEnZw9t6e@infradead.org/T/#u
+>
+> I am not sure if it's OK to do the change in this patchset, maybe
+> another patch?
 
-> thanks,
+Yes, a separate patch would be ideal. If you do the same change in
+more than one architecture (other than ia64 and x86), you can combine
+those into one patch.
 
-> greg k-h
-
-> Hi,
-> The corrections all look good.
-> Of course, you need to fix what Greg mentioned, then you can resubmit
-> the patch with this added:
-
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-> Thanks.
-
-Thank you for your reviewing and advices.
-I am a beginner so they are helpful.
-
-I read the docs and re-sent a patch.
-After sending it, I found forgetting to reply to this thread...
-Sorry in advance.
+    Arnd
