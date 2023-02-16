@@ -2,420 +2,516 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E84D6994B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432706994B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjBPMq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S230280AbjBPMrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjBPMqQ (ORCPT
+        with ESMTP id S229512AbjBPMrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:46:16 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961242D67
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:46:12 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8EE611EC0943;
-        Thu, 16 Feb 2023 13:46:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676551565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g3JIFlnaJQRDgNkGvcx8YEAWZPMhNS41V9JKJbQrAyA=;
-        b=MI2GxdKUCdYFf/4QR3REXNoSfTUt7EVZMSHhcPshKbKSxYacwRxS5+VE17vt2nKRXiM0eE
-        UViGCOb/aR5ig3QkbQ8i3pD5nl6CiqtHF4Aq18/IKhpWWY5mqYUBtiHafmzClim52dE+bE
-        H5Ui1NNRqVL4qdB57cxgMKGqUsbG2ho=
-From:   Borislav Petkov <bp@alien8.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Peter Gonda <pgonda@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        linux-coco@lists.linux.dev, x86@kernel.org
-Subject: [PATCH 11/11] x86/sev: Change snp_guest_issue_request()'s fw_err argument
-Date:   Thu, 16 Feb 2023 13:46:02 +0100
-Message-Id: <20230216124602.26849-6-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230216124602.26849-1-bp@alien8.de>
-References: <20230216124120.26578-1-bp@alien8.de>
- <20230216124602.26849-1-bp@alien8.de>
+        Thu, 16 Feb 2023 07:47:45 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5322D67
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:47:43 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h16so1698620wrz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:47:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=34SlAft5nBndBMH1wv3gGHbYW+V7JqrfRxB/+uo0K40=;
+        b=k4irtiDtjNlhdW018JWXx1dij/s+1g+7Q5Fy3LgR6lsuGoUztYq7KKgBaOjHDWGhQ9
+         k6NqLkna/4kGkC8Me1uVnP55JK04rDiNUbouBTrGy9aokO+1gkA7If4HcerreWaRTGvr
+         iypXTgQ8ryCdwtPdH8yKAs7jyY/OI/Q+4Sy/8vehlb5yO/uuNiDlvT9RUyXpvpZgI6zb
+         utZiTdkJAYWOJnbb6h0WfkdaDVVZ9euaWZouwJ2DnS+rYPqvYEThEYb1QIH0WPmF5w04
+         gzYQNcw+dXDIiJLTOr9JkKFbNSW+xmzJMLV/Sytl35arUaIqs2VcdeSZHVU+TL2CeT/j
+         TuRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=34SlAft5nBndBMH1wv3gGHbYW+V7JqrfRxB/+uo0K40=;
+        b=xWHWFoKtvrQ2ZIh6JfOKUDYSzUT03hXwBgY42SEx/8HZBsa0+PWiivDuwYGHFDnn4T
+         QSEcJr2KkEDU36NtioF4XLBpq+JbE1XKmo+bvHcrYb01pv7E8N/qJ0j2hijZTKgm16jw
+         2N8r+KKRic75GnE7IkG4yePLomhS7GRdGcg6r96y1PK+JzORb1YsVqSJqihWbiUGZcHY
+         h19/EC4zZvRGQI7kiC1NbE0GbYFzlKeBl+ZA4PvbMSDtfl7RJdMb6CZiBMi1BOL5JaNz
+         uAjL37SGINe94ceVUTKj8DN2tUY0jzKcExnFJ2pH7K3XFnpZ1iUYdzxGJ+h295XucjLC
+         CPLg==
+X-Gm-Message-State: AO0yUKUSCAQ6RA+kfG1rXQhkGCLWM8x0QuxhsIXdShcbq/No5mZX/LgO
+        RZbqNFdrAI0OvCCH9U+XiYeKRA==
+X-Google-Smtp-Source: AK7set+bh7dKL02EZyRAHjRQuEJ05iWGQL3/viE5Tq/1O6pt1in9B0DJv309/UkQU3MpZGzRATBBxw==
+X-Received: by 2002:a5d:638d:0:b0:2c5:9fc4:8844 with SMTP id p13-20020a5d638d000000b002c59fc48844mr209036wru.9.1676551661709;
+        Thu, 16 Feb 2023 04:47:41 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:13e4:d5bc:1ce7:c1b6? ([2a01:e0a:982:cbb0:13e4:d5bc:1ce7:c1b6])
+        by smtp.gmail.com with ESMTPSA id d3-20020adff2c3000000b002c56046a3b5sm1495987wrp.53.2023.02.16.04.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 04:47:41 -0800 (PST)
+Message-ID: <8ab061aa-a2fa-3070-a756-5682eb40a425@linaro.org>
+Date:   Thu, 16 Feb 2023 13:47:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v4 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230119163201.580858-1-konrad.dybcio@linaro.org>
+ <20230119163201.580858-2-konrad.dybcio@linaro.org>
+ <725a5727-fdde-e3ae-a448-2679c5c4c7f4@linaro.org>
+ <CAKMK7uFpc3Kg=Ym6ee_JTZo-0h2ig7Twtf2uwE7oV-1c6YRP=Q@mail.gmail.com>
+Content-Language: en-US
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <CAKMK7uFpc3Kg=Ym6ee_JTZo-0h2ig7Twtf2uwE7oV-1c6YRP=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dionna Glaze <dionnaglaze@google.com>
+On 16/02/2023 13:32, Daniel Vetter wrote:
+> On Thu, 16 Feb 2023 at 12:59, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 19.01.2023 17:32, Konrad Dybcio wrote:
+>>> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>
+>>> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
+>>> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
+>>> of smartphone manufacturing, it is impossible to retrieve a better name
+>>> for this panel.
+>>>
+>>> This revision adds support for the default 60 Hz configuration, however
+>>> there could possibly be some room for expansion, as the display panels
+>>> used on Sony devices have historically been capable of >2x refresh rate
+>>> overclocking.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> ---
+>> Are there any outstanding issues with this driver, or perhaps I did
+>> not CC some important list? It has gotten very little activity ever
+>> since its initial submission around Sept'22..
+> 
+> Sam is usually picking up panel drivers these days, but maybe we need
+> a bit more help in this area? If anyone from linaro has a handful of
+> drm patches landed in upstream they could apply for drm-misc commit
+> rights and help push these. I think linaro has lost a few of the
+> drm-misc committers so things tend to be stuck a bit more :-/
 
-The GHCB specification declares that the firmware error value for
-a guest request will be stored in the lower 32 bits of EXIT_INFO_2.  The
-upper 32 bits are for the VMM's own error code. The fw_err argument to
-snp_guest_issue_request() is thus a misnomer, and callers will need
-access to all 64 bits.
+I usually wait for Sam to comment before applying my panel patches drivers to drm-misc-next,
+but yeah panels would need some more help...
 
-The type of unsigned long also causes problems, since sw_exit_info2 is
-u64 (unsigned long long) vs the argument's unsigned long*. Change this
-type for issuing the guest request. Pass the ioctl command struct's error
-field directly instead of in a local variable, since an incomplete guest
-request may not set the error code, and uninitialized stack memory would
-be written back to user space.
+If needed I can add myself to the panel drivers maintainance aswell.
 
-The firmware might not even be called, so bookend the call with the no
-firmware call error and clear the error.
+Neil
 
-Since the "fw_err" field is really exitinfo2 split into the upper bits'
-vmm error code and lower bits' firmware error code, convert the 64 bit
-value to a union.
-
-  [ bp: Massage commit message, adjust code. ]
-
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230214164638.1189804-5-dionnaglaze@google.com
----
- Documentation/virt/coco/sev-guest.rst   | 20 ++++++----
- arch/x86/include/asm/sev-common.h       |  4 --
- arch/x86/include/asm/sev.h              |  4 +-
- arch/x86/kernel/sev.c                   | 16 +++++---
- drivers/virt/coco/sev-guest/sev-guest.c | 51 ++++++++++++-------------
- include/uapi/linux/sev-guest.h          | 18 ++++++++-
- 6 files changed, 66 insertions(+), 47 deletions(-)
-
-diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
-index aa3e4c6a1f90..68b0d2363af8 100644
---- a/Documentation/virt/coco/sev-guest.rst
-+++ b/Documentation/virt/coco/sev-guest.rst
-@@ -37,11 +37,11 @@ along with a description:
-       the return value.  General error numbers (-ENOMEM, -EINVAL)
-       are not detailed, but errors with specific meanings are.
- 
--The guest ioctl should be issued on a file descriptor of the /dev/sev-guest device.
--The ioctl accepts struct snp_user_guest_request. The input and output structure is
--specified through the req_data and resp_data field respectively. If the ioctl fails
--to execute due to a firmware error, then fw_err code will be set. Otherwise, fw_err
--will be set to 0x00000000ffffffff, i.e., the lower 32-bits are -1.
-+The guest ioctl should be issued on a file descriptor of the /dev/sev-guest
-+device.  The ioctl accepts struct snp_user_guest_request. The input and
-+output structure is specified through the req_data and resp_data field
-+respectively. If the ioctl fails to execute due to a firmware error, then
-+the fw_error code will be set, otherwise fw_error will be set to -1.
- 
- The firmware checks that the message sequence counter is one greater than
- the guests message sequence counter. If guest driver fails to increment message
-@@ -57,8 +57,14 @@ counter (e.g. counter overflow), then -EIO will be returned.
-                 __u64 req_data;
-                 __u64 resp_data;
- 
--                /* firmware error code on failure (see psp-sev.h) */
--                __u64 fw_err;
-+                /* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+                union {
-+                        __u64 exitinfo2;
-+                        struct {
-+                                __u32 fw_error;
-+                                __u32 vmm_error;
-+                        };
-+                };
-         };
- 
- 2.1 SNP_GET_REPORT
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b63be696b776..0759af9b1acf 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -128,10 +128,6 @@ struct snp_psc_desc {
- 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
- } __packed;
- 
--/* Guest message request error codes */
--#define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
--#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
--
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
- #define GHCB_MSR_TERM_REASON_SET_MASK	0xf
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index ebc271bb6d8e..05de34d10d89 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
- static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
--					  unsigned long *fw_err)
-+					  u64 *exitinfo2)
- {
- 	return -ENOTTY;
- }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 612453eb7ab3..1035d3eed77e 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -22,6 +22,8 @@
- #include <linux/efi.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/psp-sev.h>
-+#include <uapi/linux/sev-guest.h>
- 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2175,7 +2177,7 @@ static int __init init_sev_config(char *str)
- }
- __setup("sev=", init_sev_config);
- 
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
- {
- 	struct ghcb_state state;
- 	struct es_em_ctxt ctxt;
-@@ -2183,9 +2185,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	struct ghcb *ghcb;
- 	int ret;
- 
--	if (!fw_err)
-+	if (!exitinfo2)
- 		return -EINVAL;
- 
-+	*exitinfo2 = SEV_RET_NO_FW_CALL;
-+
- 	/*
- 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
- 	 * a per-CPU GHCB.
-@@ -2209,16 +2213,16 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (ret)
- 		goto e_put;
- 
--	*fw_err = ghcb->save.sw_exit_info_2;
--	switch (*fw_err) {
-+	*exitinfo2 = ghcb->save.sw_exit_info_2;
-+	switch (*exitinfo2) {
- 	case 0:
- 		break;
- 
--	case SNP_GUEST_REQ_ERR_BUSY:
-+	case SNP_GUEST_VMM_ERR(SNP_GUEST_VMM_ERR_BUSY):
- 		ret = -EAGAIN;
- 		break;
- 
--	case SNP_GUEST_REQ_INVALID_LEN:
-+	case SNP_GUEST_VMM_ERR(SNP_GUEST_VMM_ERR_INVALID_LEN):
- 		/* Number of expected pages are returned in RBX */
- 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST) {
- 			input->data_npages = ghcb_get_rbx(ghcb);
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 070c6f414bfd..a5b68e43fa27 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -332,11 +332,11 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
- 	return __enc_payload(snp_dev, req, payload, sz);
- }
- 
--static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
-+static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
-+				  struct snp_guest_request_ioctl *req_ioctl)
- {
--	unsigned long err = 0xff, override_err = 0;
--	unsigned int override_npages = 0;
- 	unsigned long req_start = jiffies;
-+	unsigned int override_npages = 0;
- 	int rc;
- 
- retry_request:
-@@ -346,7 +346,7 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
- 	 * sequence number must be incremented or the VMPCK must be deleted to
- 	 * prevent reuse of the IV.
- 	 */
--	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-+	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &req_ioctl->exitinfo2);
- 	switch (rc) {
- 	case -ENOSPC:
- 		/*
-@@ -357,14 +357,14 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
- 		 * IV reuse.
- 		 */
- 		override_npages = snp_dev->input.data_npages;
--		exit_code	= SVM_VMGEXIT_GUEST_REQUEST;
-+		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
- 
- 		/*
- 		 * Override the error to inform callers the given extended
- 		 * request buffer size was too small and give the caller the
- 		 * required buffer size.
- 		 */
--		override_err	= SNP_GUEST_REQ_INVALID_LEN;
-+		req_ioctl->vmm_error = SNP_GUEST_VMM_ERR_INVALID_LEN;
- 
- 		/*
- 		 * If this call to the firmware succeeds, the sequence number can
-@@ -377,7 +377,7 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
- 		goto retry_request;
- 
- 	/*
--	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
-+	 * The host may return SNP_GUEST_VMM_ERR_BUSY if the request has been
- 	 * throttled. Retry in the driver to avoid returning and reusing the
- 	 * message sequence number on a different message.
- 	 */
-@@ -390,18 +390,16 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
- 		goto retry_request;
- 	}
- 
--	if (fw_err)
--		*fw_err = override_err ?: err;
--
- 	if (override_npages)
- 		snp_dev->input.data_npages = override_npages;
- 
- 	return rc;
- }
- 
--static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
--				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
--				u32 resp_sz, __u64 *fw_err)
-+static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
-+				struct snp_guest_request_ioctl *req_ioctl, u8 type,
-+				void *req_buf, size_t req_sz, void *resp_buf,
-+				u32 resp_sz)
- {
- 	u64 seqno;
- 	int rc;
-@@ -415,7 +413,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
- 
- 	/* Encrypt the userspace provided payload in snp_dev->secret_request. */
--	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
-+	rc = enc_payload(snp_dev, seqno, req_ioctl->msg_version, type, req_buf, req_sz);
- 	if (rc)
- 		return rc;
- 
-@@ -426,9 +424,11 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	memcpy(snp_dev->request, &snp_dev->secret_request,
- 	       sizeof(snp_dev->secret_request));
- 
--	rc = __handle_guest_request(snp_dev, exit_code, fw_err);
-+	rc = __handle_guest_request(snp_dev, exit_code, req_ioctl);
- 	if (rc) {
--		dev_alert(snp_dev->dev, "Detected error from ASP request. rc: %d, fw_err: %llu\n", rc, *fw_err);
-+		dev_alert(snp_dev->dev,
-+			  "Detected error from ASP request. rc: %d, exitinfo2: %llu\n",
-+			  rc, req_ioctl->exitinfo2);
- 		snp_disable_vmpck(snp_dev);
- 		return rc;
- 	}
-@@ -471,9 +471,9 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
- 	if (!resp)
- 		return -ENOMEM;
- 
--	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
-+	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
- 				  SNP_MSG_REPORT_REQ, &req, sizeof(req), resp->data,
--				  resp_len, &arg->fw_err);
-+				  resp_len);
- 	if (rc)
- 		goto e_free;
- 
-@@ -511,9 +511,8 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
- 	if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
- 		return -EFAULT;
- 
--	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
--				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
--				  &arg->fw_err);
-+	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
-+				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len);
- 	if (rc)
- 		return rc;
- 
-@@ -573,12 +572,12 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 		return -ENOMEM;
- 
- 	snp_dev->input.data_npages = npages;
--	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
-+	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg,
- 				   SNP_MSG_REPORT_REQ, &req.data,
--				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
-+				   sizeof(req.data), resp->data, resp_len);
- 
- 	/* If certs length is invalid then copy the returned length */
--	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
-+	if (arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
- 		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
- 
- 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
-@@ -613,7 +612,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 	if (copy_from_user(&input, argp, sizeof(input)))
- 		return -EFAULT;
- 
--	input.fw_err = 0xff;
-+	input.exitinfo2 = 0xff;
- 
- 	/* Message version must be non-zero */
- 	if (!input.msg_version)
-@@ -644,7 +643,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 
- 	mutex_unlock(&snp_cmd_mutex);
- 
--	if (input.fw_err && copy_to_user(argp, &input, sizeof(input)))
-+	if (input.exitinfo2 && copy_to_user(argp, &input, sizeof(input)))
- 		return -EFAULT;
- 
- 	return ret;
-diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
-index 256aaeff7e65..2aa39112cf8d 100644
---- a/include/uapi/linux/sev-guest.h
-+++ b/include/uapi/linux/sev-guest.h
-@@ -52,8 +52,14 @@ struct snp_guest_request_ioctl {
- 	__u64 req_data;
- 	__u64 resp_data;
- 
--	/* firmware error code on failure (see psp-sev.h) */
--	__u64 fw_err;
-+	/* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+	union {
-+		__u64 exitinfo2;
-+		struct {
-+			__u32 fw_error;
-+			__u32 vmm_error;
-+		};
-+	};
- };
- 
- struct snp_ext_report_req {
-@@ -77,4 +83,12 @@ struct snp_ext_report_req {
- /* Get SNP extended report as defined in the GHCB specification version 2. */
- #define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
- 
-+/* Guest message request EXIT_INFO_2 constants */
-+#define SNP_GUEST_FW_ERR_MASK		GENMASK_ULL(31, 0)
-+#define SNP_GUEST_VMM_ERR_SHIFT		32
-+#define SNP_GUEST_VMM_ERR(x)		(((u64)x) << SNP_GUEST_VMM_ERR_SHIFT)
-+
-+#define SNP_GUEST_VMM_ERR_INVALID_LEN	1
-+#define SNP_GUEST_VMM_ERR_BUSY		2
-+
- #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
--- 
-2.35.1
+> -Daniel
+> 
+>>
+>> Konrad
+>>> v3 -> v4:
+>>> - De-magicize some numbers
+>>> - Pick up rb
+>>>   drivers/gpu/drm/panel/Kconfig                 |  10 +
+>>>   drivers/gpu/drm/panel/Makefile                |   1 +
+>>>   drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
+>>>   3 files changed, 340 insertions(+)
+>>>   create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
+>>>
+>>> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+>>> index d03a64155d15..8da741f1c2ba 100644
+>>> --- a/drivers/gpu/drm/panel/Kconfig
+>>> +++ b/drivers/gpu/drm/panel/Kconfig
+>>> @@ -677,6 +677,16 @@ config DRM_PANEL_SONY_ACX565AKM
+>>>          Say Y here if you want to enable support for the Sony ACX565AKM
+>>>          800x600 3.5" panel (found on the Nokia N900).
+>>>
+>>> +config DRM_PANEL_SONY_TD4353_JDI
+>>> +     tristate "Sony TD4353 JDI panel"
+>>> +     depends on GPIOLIB && OF
+>>> +     depends on DRM_MIPI_DSI
+>>> +     depends on BACKLIGHT_CLASS_DEVICE
+>>> +     help
+>>> +       Say Y here if you want to enable support for the Sony Tama
+>>> +       TD4353 JDI command mode panel as found on some Sony Xperia
+>>> +       XZ2 and XZ2 Compact smartphones.
+>>> +
+>>>   config DRM_PANEL_SONY_TULIP_TRULY_NT35521
+>>>        tristate "Sony Tulip Truly NT35521 panel"
+>>>        depends on GPIOLIB && OF
+>>> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+>>> index 1630dd0c69ae..22155d62bec0 100644
+>>> --- a/drivers/gpu/drm/panel/Makefile
+>>> +++ b/drivers/gpu/drm/panel/Makefile
+>>> @@ -68,6 +68,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
+>>>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
+>>>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
+>>>   obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
+>>> +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
+>>>   obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
+>>>   obj-$(CONFIG_DRM_PANEL_SONY_SYNAPTICS_JDI) += panel-sony-synaptics-jdi.o
+>>>   obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
+>>> diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
+>>> new file mode 100644
+>>> index 000000000000..8d8813dbaa45
+>>> --- /dev/null
+>>> +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
+>>> @@ -0,0 +1,329 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> + *
+>>> + * Generated with linux-mdss-dsi-panel-driver-generator with a
+>>> + * substantial amount of manual adjustments.
+>>> + *
+>>> + * SONY Downstream kernel calls this one:
+>>> + * - "JDI ID3" for Akari  (XZ2)
+>>> + * - "JDI ID4" for Apollo (XZ2 Compact)
+>>> + */
+>>> +
+>>> +#include <linux/delay.h>
+>>> +#include <linux/gpio/consumer.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/of.h>
+>>> +#include <linux/of_device.h>
+>>> +#include <linux/regulator/consumer.h>
+>>> +
+>>> +#include <video/mipi_display.h>
+>>> +
+>>> +#include <drm/drm_mipi_dsi.h>
+>>> +#include <drm/drm_modes.h>
+>>> +#include <drm/drm_panel.h>
+>>> +
+>>> +enum {
+>>> +     TYPE_TAMA_60HZ,
+>>> +     /*
+>>> +      * Leaving room for expansion - SONY very often uses
+>>> +      * *truly reliably* overclockable panels on their flagships!
+>>> +      */
+>>> +};
+>>> +
+>>> +struct sony_td4353_jdi {
+>>> +     struct drm_panel panel;
+>>> +     struct mipi_dsi_device *dsi;
+>>> +     struct regulator_bulk_data supplies[3];
+>>> +     struct gpio_desc *panel_reset_gpio;
+>>> +     struct gpio_desc *touch_reset_gpio;
+>>> +     bool prepared;
+>>> +     int type;
+>>> +};
+>>> +
+>>> +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
+>>> +{
+>>> +     return container_of(panel, struct sony_td4353_jdi, panel);
+>>> +}
+>>> +
+>>> +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
+>>> +{
+>>> +     struct mipi_dsi_device *dsi = ctx->dsi;
+>>> +     struct device *dev = &dsi->dev;
+>>> +     int ret;
+>>> +
+>>> +     dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 1080 - 1);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set column address: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 2160 - 1);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set page address: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set tear scanline: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set tear on: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set pixel format: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
+>>> +                       0x00, 0x00, 0x08, 0x6f);
+>>> +
+>>> +     ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +     msleep(70);
+>>> +
+>>> +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_display_on(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to turn display on: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
+>>> +{
+>>> +     struct mipi_dsi_device *dsi = ctx->dsi;
+>>> +     struct device *dev = &dsi->dev;
+>>> +     int ret;
+>>> +
+>>> +     dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_display_off(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set display off: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +     msleep(22);
+>>> +
+>>> +     ret = mipi_dsi_dcs_set_tear_off(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to set tear off: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +     msleep(80);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
+>>> +{
+>>> +     gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
+>>> +     gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
+>>> +     usleep_range(5000, 5100);
+>>> +}
+>>> +
+>>> +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
+>>> +{
+>>> +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
+>>> +     struct device *dev = &ctx->dsi->dev;
+>>> +     int ret;
+>>> +
+>>> +     if (ctx->prepared)
+>>> +             return 0;
+>>> +
+>>> +     ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to enable regulators: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     msleep(100);
+>>> +
+>>> +     sony_td4353_assert_reset_gpios(ctx, 1);
+>>> +
+>>> +     ret = sony_td4353_jdi_on(ctx);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to power on panel: %d\n", ret);
+>>> +             sony_td4353_assert_reset_gpios(ctx, 0);
+>>> +             regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ctx->prepared = true;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
+>>> +{
+>>> +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
+>>> +     struct device *dev = &ctx->dsi->dev;
+>>> +     int ret;
+>>> +
+>>> +     if (!ctx->prepared)
+>>> +             return 0;
+>>> +
+>>> +     ret = sony_td4353_jdi_off(ctx);
+>>> +     if (ret < 0)
+>>> +             dev_err(dev, "Failed to power off panel: %d\n", ret);
+>>> +
+>>> +     sony_td4353_assert_reset_gpios(ctx, 0);
+>>> +     regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+>>> +
+>>> +     ctx->prepared = false;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
+>>> +     .clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
+>>> +     .hdisplay = 1080,
+>>> +     .hsync_start = 1080 + 4,
+>>> +     .hsync_end = 1080 + 4 + 8,
+>>> +     .htotal = 1080 + 4 + 8 + 8,
+>>> +     .vdisplay = 2160,
+>>> +     .vsync_start = 2160 + 259,
+>>> +     .vsync_end = 2160 + 259 + 8,
+>>> +     .vtotal = 2160 + 259 + 8 + 8,
+>>> +     .width_mm = 64,
+>>> +     .height_mm = 128,
+>>> +};
+>>> +
+>>> +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
+>>> +                                struct drm_connector *connector)
+>>> +{
+>>> +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
+>>> +     struct drm_display_mode *mode = NULL;
+>>> +
+>>> +     if (ctx->type == TYPE_TAMA_60HZ)
+>>> +             mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
+>>> +     else
+>>> +             return -EINVAL;
+>>> +
+>>> +     if (!mode)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     drm_mode_set_name(mode);
+>>> +
+>>> +     mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
+>>> +     connector->display_info.width_mm = mode->width_mm;
+>>> +     connector->display_info.height_mm = mode->height_mm;
+>>> +     drm_mode_probed_add(connector, mode);
+>>> +
+>>> +     return 1;
+>>> +}
+>>> +
+>>> +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
+>>> +     .prepare = sony_td4353_jdi_prepare,
+>>> +     .unprepare = sony_td4353_jdi_unprepare,
+>>> +     .get_modes = sony_td4353_jdi_get_modes,
+>>> +};
+>>> +
+>>> +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
+>>> +{
+>>> +     struct device *dev = &dsi->dev;
+>>> +     struct sony_td4353_jdi *ctx;
+>>> +     int ret;
+>>> +
+>>> +     ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>>> +     if (!ctx)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     ctx->type = (uintptr_t)of_device_get_match_data(dev);
+>>> +
+>>> +     ctx->supplies[0].supply = "vddio";
+>>> +     ctx->supplies[1].supply = "vsp";
+>>> +     ctx->supplies[2].supply = "vsn";
+>>> +     ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
+>>> +                                   ctx->supplies);
+>>> +     if (ret < 0)
+>>> +             return dev_err_probe(dev, ret, "Failed to get regulators\n");
+>>> +
+>>> +     ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
+>>> +     if (IS_ERR(ctx->panel_reset_gpio))
+>>> +             return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
+>>> +                                  "Failed to get panel-reset-gpios\n");
+>>> +
+>>> +     ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
+>>> +     if (IS_ERR(ctx->touch_reset_gpio))
+>>> +             return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
+>>> +                                  "Failed to get touch-reset-gpios\n");
+>>> +
+>>> +     ctx->dsi = dsi;
+>>> +     mipi_dsi_set_drvdata(dsi, ctx);
+>>> +
+>>> +     dsi->lanes = 4;
+>>> +     dsi->format = MIPI_DSI_FMT_RGB888;
+>>> +     dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
+>>> +
+>>> +     drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
+>>> +                    DRM_MODE_CONNECTOR_DSI);
+>>> +
+>>> +     ret = drm_panel_of_backlight(&ctx->panel);
+>>> +     if (ret)
+>>> +             return dev_err_probe(dev, ret, "Failed to get backlight\n");
+>>> +
+>>> +     drm_panel_add(&ctx->panel);
+>>> +
+>>> +     ret = mipi_dsi_attach(dsi);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
+>>> +             drm_panel_remove(&ctx->panel);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
+>>> +{
+>>> +     struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
+>>> +     int ret;
+>>> +
+>>> +     ret = mipi_dsi_detach(dsi);
+>>> +     if (ret < 0)
+>>> +             dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
+>>> +
+>>> +     drm_panel_remove(&ctx->panel);
+>>> +}
+>>> +
+>>> +static const struct of_device_id sony_td4353_jdi_of_match[] = {
+>>> +     { .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
+>>> +     { /* sentinel */ }
+>>> +};
+>>> +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
+>>> +
+>>> +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
+>>> +     .probe = sony_td4353_jdi_probe,
+>>> +     .remove = sony_td4353_jdi_remove,
+>>> +     .driver = {
+>>> +             .name = "panel-sony-td4353-jdi",
+>>> +             .of_match_table = sony_td4353_jdi_of_match,
+>>> +     },
+>>> +};
+>>> +module_mipi_dsi_driver(sony_td4353_jdi_driver);
+>>> +
+>>> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
+>>> +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
+>>> +MODULE_LICENSE("GPL");
+> 
+> 
+> 
 
