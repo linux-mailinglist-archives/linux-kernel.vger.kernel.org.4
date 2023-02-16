@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA83699097
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354C669909C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBPJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S229623AbjBPKAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBPJ6q (ORCPT
+        with ESMTP id S229563AbjBPKAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:58:46 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A38C39BBC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:58:46 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="331676416"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="331676416"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 01:58:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="915604748"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="915604748"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2023 01:58:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1pSb2J-007hle-1Y;
-        Thu, 16 Feb 2023 11:58:43 +0200
-Date:   Thu, 16 Feb 2023 11:58:43 +0200
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] stop mainaining UUID
-Message-ID: <Y+3+Uw1Ya2XPn03z@smile.fi.intel.com>
-References: <20230216063110.2152087-1-hch@lst.de>
+        Thu, 16 Feb 2023 05:00:44 -0500
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204739CD4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:00:42 -0800 (PST)
+Received: by mail-io1-f79.google.com with SMTP id y22-20020a5d94d6000000b007076e06ba3dso637085ior.20
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:00:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lDnfJ1dcCq4jGhqjTRDEcjJ28dGZDlx2+0rdS8Nyp4k=;
+        b=TynoMlEkYDvU8IEsOC68IZ+qHybjQzf77aExDhuCZh0Zy/BPX6TH1WmseE5oCSSZ9i
+         sAtlBvlQBqWjODb46tTQNunZ3HEy17eudz7rX1xEYXUKjcRF07rSTb77u64+/ElABPNi
+         U0u01ooETsER+dvcRCwHOgbsNAwVWyJxHwn+a/BtyZ2OmUr68/UNi+yRZuvK9VlDmYjQ
+         35jyuOcJac8GcPUFTNM/KWK4W1qOmj9S1N43ciaLSkOG9UVP7ZPx9tQGiPjbaihwCeKg
+         LgHBKCaiYZe5bplmTopvJd6Zm9uhggp5i7fFMfvNkDSaknprBWnvBNx5bUQ/sBeSRoF0
+         79TQ==
+X-Gm-Message-State: AO0yUKUDwTB/EyxoXQtyQzbflEcwd9jW6uqne4m7NhUCbWjzn/tBEmRt
+        B1xUqKjYFEOkl8SqN8rxsowykS/0QFKKmJ/o9rziVFWH5ux1
+X-Google-Smtp-Source: AK7set91nvf836WmEXMUJ41R2WvFbN4crhm0/mRPhBowUcbIBv9BAjw5YK1kajdWwOacI9uhJ1deZT8R+YGmx8oGgnduAeN+DqGf
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216063110.2152087-1-hch@lst.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+X-Received: by 2002:a05:6638:4183:b0:3c4:88de:524 with SMTP id
+ az3-20020a056638418300b003c488de0524mr2320152jab.3.1676541641839; Thu, 16 Feb
+ 2023 02:00:41 -0800 (PST)
+Date:   Thu, 16 Feb 2023 02:00:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000035bbc05f4ce4501@google.com>
+Subject: [syzbot] WARNING: stack going in the wrong direction? at __sys_setsockopt
+From:   syzbot <syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,42 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 07:31:10AM +0100, Christoph Hellwig wrote:
-> The uuid code is very low maintainance now that the major overhaul
-> has completed, and doesn't need it's own tree.  All the recent work
-> has been done by Andy who'd like to stay on as a reviewer without an
-> explicit tree.
+Hello,
 
-Confirmed.
-Acked-by: Andy Shevchenko <andy@kernel.org>
+syzbot found the following issue on:
 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  MAINTAINERS | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 225c3ce347a217..6a47510d15920f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21818,11 +21818,9 @@ W:	http://en.wikipedia.org/wiki/Util-linux
->  T:	git git://git.kernel.org/pub/scm/utils/util-linux/util-linux.git
->  
->  UUID HELPERS
-> -M:	Christoph Hellwig <hch@lst.de>
->  R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->  L:	linux-kernel@vger.kernel.org
->  S:	Maintained
-> -T:	git git://git.infradead.org/users/hch/uuid.git
->  F:	include/linux/uuid.h
->  F:	include/uapi/linux/uuid.h
->  F:	lib/test_uuid.c
-> -- 
-> 2.39.1
-> 
+HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ad7710c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=60f48e09dc64b527
+dashboard link: https://syzkaller.appspot.com/bug?extid=91c3651bb190d53b4d16
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-With Best Regards,
-Andy Shevchenko
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7a22fa9fb779/disk-9d9019bc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/68851ce42fd7/vmlinux-9d9019bc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09be0a2c410b/bzImage-9d9019bc.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com
+
+WARNING: stack going in the wrong direction? at __sys_setsockopt+0x2c6/0x5b0 net/socket.c:2271
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
