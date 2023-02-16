@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E510A6989C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563C06989C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBPBMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 20:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S229701AbjBPBON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 20:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjBPBM3 (ORCPT
+        with ESMTP id S229651AbjBPBOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 20:12:29 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC4E2D14D;
-        Wed, 15 Feb 2023 17:12:29 -0800 (PST)
+        Wed, 15 Feb 2023 20:14:11 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441483C2BF;
+        Wed, 15 Feb 2023 17:14:10 -0800 (PST)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676509947;
-        bh=kc10ysum1fgE8G0TGJD9iTwul53Fadc9NPF5PzVzIRg=;
+        s=mail; t=1676510048;
+        bh=UR4vbRpjhoZfLc+MuBzlPXgF1uQAu6tpAvHYcRD8A1Q=;
         h=From:Date:Subject:To:Cc:From;
-        b=MJgsD76EQTYHTItU7zHR1kL/6enTjHlZGnXC59lcJwKs5Y6lK9aAZsAmmInnHm3Mu
-         xAvtegaZtP6snFbMBDX7knQ5jIyMqRUahZ8k9NpJ+JOBWrbsBNppib3j9dS/HgJ2qz
-         Xh+6wo1SKdpPCm6NoNsSpCEafDmAl/YRQPjGqC+w=
-Date:   Thu, 16 Feb 2023 01:12:25 +0000
-Subject: [PATCH] PCI/sysfs: Make kobj_type structure constant
+        b=iyYb3idp+As89CUlExHZ3mu8uPoPO7RGrXeni/3AEYmdR7ig965KPb7CGhXqWO1jF
+         3rxonGsdI5wVc9OhpoG6+bW6DXgnoq33CVUyMaya6ihnNE1eIX+UKUo50M0nmYMt5n
+         lfPttNKtu/Sd36k1fmoP485BI5Q23i8zSLq3gsco=
+Date:   Thu, 16 Feb 2023 01:14:06 +0000
+Subject: [PATCH] chardev: make kobj_type structures constant
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230216-kobj_type-pci-v1-1-46a63c8612b5@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAPiC7WMC/x2N0QqDMAwAf0XyvEDbMR/2K2OMJsYZlVpaNybiv
- y/4eAfH7VClqFS4NzsU+WrVJRn4SwM8xPQW1M4YggtXF3yL00Lja92yYGbFW+uDY8+OmMAailW
- QSkw8WJU+82wyF+n1d04ez+P4A/z6ttt0AAAA
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-Id: <20230216-kobj_type-chardev-v1-1-94e213b73e85@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAF2D7WMC/x2N0QqCQBBFf0XmuYF1C6l+JSJ23WtOySqzJYr47
+ w09nnM53I0KVFDoWm2kmKXImA3qQ0VtH/ITLMmYvPNH5+uG32N8PT7rBLZdE2buXDqfcGkiPMi
+ 6GAo4ashtb2X+DoPJSdHJ8j+63ff9B1lCcQl4AAAA
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676509945; l=1024;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676510046; l=1082;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=kc10ysum1fgE8G0TGJD9iTwul53Fadc9NPF5PzVzIRg=;
- b=nBHSR5OXBM+Ng6q1iZbSBbnSSPh+rCujb5zkRIerfTPKT+OzqAlXXmmtbDGf0SARS07Eo2HLr
- nfuywLpMy4ADY0GoGdYoDcnpN9crUYoYBY4/lstsHHTXniWZooFG5dH
+ bh=UR4vbRpjhoZfLc+MuBzlPXgF1uQAu6tpAvHYcRD8A1Q=;
+ b=8GAC7gGXwSeDxPLUuXlTzzPKDXM0MmNqYTSid6lYULq4FC6fzQV+Vi4TrhiCxTAX1nZLoc0UO
+ XOHl9K/yhP4Ahma+SFr/YbdySPVM/bGcOeQ/p2OQbESiLZpNPezahNv
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,31 +55,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
 the driver core allows the usage of const struct kobj_type.
 
-Take advantage of this to constify the structure definition to prevent
+Take advantage of this to constify the structure definitions to prevent
 modification at runtime.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/pci/slot.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/char_dev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/slot.c b/drivers/pci/slot.c
-index a0c67191a8b9..0f87cade10f7 100644
---- a/drivers/pci/slot.c
-+++ b/drivers/pci/slot.c
-@@ -98,7 +98,7 @@ static struct attribute *pci_slot_default_attrs[] = {
- };
- ATTRIBUTE_GROUPS(pci_slot_default);
+diff --git a/fs/char_dev.c b/fs/char_dev.c
+index 13deb45f1ec6..b33331cb97cd 100644
+--- a/fs/char_dev.c
++++ b/fs/char_dev.c
+@@ -624,11 +624,11 @@ static void cdev_dynamic_release(struct kobject *kobj)
+ 	kobject_put(parent);
+ }
  
--static struct kobj_type pci_slot_ktype = {
-+static const struct kobj_type pci_slot_ktype = {
- 	.sysfs_ops = &pci_slot_sysfs_ops,
- 	.release = &pci_slot_release,
- 	.default_groups = pci_slot_default_groups,
+-static struct kobj_type ktype_cdev_default = {
++static const struct kobj_type ktype_cdev_default = {
+ 	.release	= cdev_default_release,
+ };
+ 
+-static struct kobj_type ktype_cdev_dynamic = {
++static const struct kobj_type ktype_cdev_dynamic = {
+ 	.release	= cdev_dynamic_release,
+ };
+ 
 
 ---
 base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
-change-id: 20230216-kobj_type-pci-56120c1c0bcb
+change-id: 20230216-kobj_type-chardev-f0d84e96be2e
 
 Best regards,
 -- 
