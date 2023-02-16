@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3F06999F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AF36999FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjBPQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S229517AbjBPQ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBPQ0y (ORCPT
+        with ESMTP id S229725AbjBPQ07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:26:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FC497D2;
-        Thu, 16 Feb 2023 08:26:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166D661573;
-        Thu, 16 Feb 2023 16:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D196C433EF;
-        Thu, 16 Feb 2023 16:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676564812;
-        bh=vbHAxZJYXbMklTvORNYKsL9yojiYsRz76iRI93JSV+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9N4tdFyLM4rwcMlvUTogdhaXT8q6UoM0R5s4pwJV6N/Hh7BgROd7RR0LjlIHBqhv
-         YB5TrGtkf/F77Gq4O9KwDd7uimRwPjZ9riPIn+VvNL5Lr1LwcV9q+WfDfSGKLgMTNP
-         jRxneHSml4ox+hH6lu0OYgm5W4mmn2FLyvi0O1r48iOzzuGqodiRSXdxNcq9whhAza
-         YqfhZa7tAoZSMf9t2ZpdVxTVxaU/r6Acl8P9q15u0c2b4qTWl9DfgSz9djf+Ma8BLI
-         jboKBSUxfk3Z+9GSJfxdbD0m2o8CZp98xrPCMfZiqhxVaLKh6wN0C5rTYlDNiYE+uh
-         piALQ540mdpdQ==
+        Thu, 16 Feb 2023 11:26:59 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36C644AE;
+        Thu, 16 Feb 2023 08:26:56 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pSh5w-0004pf-1E;
+        Thu, 16 Feb 2023 17:26:52 +0100
 Date:   Thu, 16 Feb 2023 16:26:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] SPI updates for v6.2-rc8-abi
-Message-ID: <Y+5ZSUB8WYPdA0az@sirena.org.uk>
-References: <20230216131125.4A6FAC433D2@smtp.kernel.org>
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: Re: [PATCH v2 2/2] pinctrl: add mt7981 pinctrl driver
+Message-ID: <Y+5ZSUURaK/hq1iq@makrotopia.org>
+References: <cover.1674693008.git.daniel@makrotopia.org>
+ <ef5112946d16cacc67e65e439ba7b52a9950c1bb.1674693008.git.daniel@makrotopia.org>
+ <88ef812b-b8e8-f640-f9f7-a1579ea69d31@arinc9.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nmlF8D8AVX6jJdyq"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230216131125.4A6FAC433D2@smtp.kernel.org>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <88ef812b-b8e8-f640-f9f7-a1579ea69d31@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 16, 2023 at 04:50:57PM +0300, Arınç ÜNAL wrote:
+> Hi Daniel,
+> 
+> On 26.01.2023 03:34, Daniel Golle wrote:
+> > Add pinctrl driver for the MediaTek MT7981 SoC, based on the driver
+> > which can also be found the SDK.
+> > 
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > ---
+> >   drivers/pinctrl/mediatek/Kconfig          |    5 +
+> >   drivers/pinctrl/mediatek/Makefile         |    1 +
+> >   drivers/pinctrl/mediatek/pinctrl-mt7981.c | 1048 +++++++++++++++++++++
+> >   3 files changed, 1054 insertions(+)
+> >   create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt7981.c
+> > 
+> > diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
+> > index fed02c6fea062..f20c28334bcbf 100644
+> > --- a/drivers/pinctrl/mediatek/Kconfig
+> > +++ b/drivers/pinctrl/mediatek/Kconfig
+> > @@ -127,6 +127,11 @@ config PINCTRL_MT7622
+> >   	default ARM64 && ARCH_MEDIATEK
+> >   	select PINCTRL_MTK_MOORE
+> > +config PINCTRL_MT7981
+> > +	bool "Mediatek MT7981 pin control"
+> > +	depends on OF
+> > +	select PINCTRL_MTK_MOORE
+> > +
+> 
+> Is there a reason why you removed these lines from v1?
 
---nmlF8D8AVX6jJdyq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 16, 2023 at 01:11:08PM +0000, Mark Brown wrote:
-
-> spi: Update for v6.2
->=20
-> One more last minute patch for v6.2 updating the parsing of the
-> newly added spi-cs-setup-delay-ns - it's been pointed out that
-
-Sorry, operator error here - this is clearly pulling in far more
-than I had intended.  Please ignore this pull request.
-
---nmlF8D8AVX6jJdyq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWUgACgkQJNaLcl1U
-h9AfIgf9FJvjYEVplolqrBAzdYUxCPtzJvQL3nMjuRMRJpL/8gEhPYnsx3U7bDAh
-HIkPavuh8t6SvLJwF72RhHgC50VQfkkcqB4gRQZA+gDQ+D8sKInMAEHKeqGa4zmN
-i3XbVCgk05q3pTLczOctWYBGtjizc0GnA92BEaOJCKvuTgOwLixCTInua98tDKhl
-oPSR+ITrA87XNailk/C2G7Zv8a3Y51HLpTKyCG9bcD6A0K29Jed71UTAevnx3mw0
-4y5Vae6eOpnCF2pKSaONIWyIWapPyeblzo9kPqE+ST1nlFWdbVu81Ke63Bj+Sjfk
-nfJuzMPDq2ctWHHXe87RroqRRcLd4Q==
-=YH4M
------END PGP SIGNATURE-----
-
---nmlF8D8AVX6jJdyq--
+Oh, that seemed to have happened by accident. Imho it'd be better
+to have these two lines there as well.
