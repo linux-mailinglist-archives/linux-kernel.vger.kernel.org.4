@@ -2,176 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68950699510
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622EB699515
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjBPNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S230049AbjBPNCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjBPNAe (ORCPT
+        with ESMTP id S230001AbjBPNCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:00:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8553E60A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:00:33 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 417C266021B1;
-        Thu, 16 Feb 2023 13:00:32 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676552432;
-        bh=RccccoYIg2VDJV5r2fovP6KY9nTyOOMC3E5fFvlWdFY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CZwvRMWpjpMt9A3c2h48lxb4llxSXlmhnZvFdgt0z/bAH+AKBliugLhJm1Kpn1zpx
-         Qprb22EehySQH2hh43Bs0e8DkBlWgXT8n2F7C3MOPwocTtb1xOEYSFDIhbmwJC7ML0
-         dQVP+EkF3DcnAVBPLRPYCExiAe4L7BjBENJVYC4EaSKIb/KSZ7k+Sr9uv1WO3aDtYI
-         2KmtK0fUzNjNhvYGxvpI11b4immJn4pBHIfAfVEwRnkerh7R7/Ra8zxof/9FUZPdQb
-         YUJ00ZbDuh344LvhqrrZrOEH5cHfWb2dZbDq/+PCTvS2IA98Vgqqhf8FzKBROmBc12
-         GYvV4w5LTC2Fg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     jason-jh.lin@mediatek.com, chunkuang.hu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 9/9] soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)
-Date:   Thu, 16 Feb 2023 14:00:21 +0100
-Message-Id: <20230216130021.64875-10-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230216130021.64875-1-angelogioacchino.delregno@collabora.com>
-References: <20230216130021.64875-1-angelogioacchino.delregno@collabora.com>
+        Thu, 16 Feb 2023 08:02:38 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6793E634;
+        Thu, 16 Feb 2023 05:02:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676552550; x=1708088550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Os0cbA1NKAY1dAa1OM2C6w4bQcGQRi9Ty+JzgyPKLI=;
+  b=XLOHhQTgLpPuOhcK1ggfZfnnyZEcgQuYFBsMcoS+MOQ4zBC5rb9lg19X
+   Ij/NzxRD7Czv4J6cfClavhAgmipcg8w1QDpS4ZzKU1mjXV58DbMCqvFAH
+   nbHgCVD6s2uLzvHJBFxfjMpQ/QOsU7ldwXKyDN0l/F9BX3Tc7UgssRYb2
+   Ysa+HDhWJuZfEHvc5KRKFEfs4ZJWy2xdIBM9/LhgGdpMvrwPIQf1+ESVV
+   4nAv8/1NgBOSNpwtVOQcNInE4WNEYEhx9AN6wgK71BOwQ4DHGDE5S5pk3
+   AboofXbOCkzlOIUi65w1fnwOgHCRCYQ0wfLKDP2949cbHsSpsJWKtv7b3
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,302,1669100400"; 
+   d="asc'?scan'208";a="200985890"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Feb 2023 06:02:30 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 16 Feb 2023 06:02:29 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Thu, 16 Feb 2023 06:02:26 -0700
+Date:   Thu, 16 Feb 2023 13:02:00 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Hal Feng <hal.feng@starfivetech.com>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
+ VisionFive 2 board device tree
+Message-ID: <Y+4pSMS0vCQi7e/U@wendy>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-8-hal.feng@starfivetech.com>
+ <CAJM55Z9Y_fF+4Dtu++C_jVS0+ohXp5U0GyuJCBpUh-SpTMGrVA@mail.gmail.com>
+ <af42ed91-95aa-014a-1efb-6f70ee5a0433@starfivetech.com>
+ <CAJM55Z-+Cz8d=YySRaFJSAffDfoZ4Madx322qCX100-nAcx+5Q@mail.gmail.com>
+ <Y+38bT8cnahu19bw@wendy>
+ <Y+4AxDSDLyL1WAqh@wendy>
+ <CAJM55Z9M2xgNBRxG8cNefGt5hn4fbZmgHWzC2e8AfmKUq9Gw7A@mail.gmail.com>
+ <fbf82563-0b2c-d813-2c7c-08ea712ea91d@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aNjJmvAN8VFzp7As"
+Content-Disposition: inline
+In-Reply-To: <fbf82563-0b2c-d813-2c7c-08ea712ea91d@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the mtk-cmdq.h header contains inline functions for cases
-in which the driver is not enabled (either module or built-in), we
-can safely go on with cleaning up ifdefs for CMDQ handling.
+--aNjJmvAN8VFzp7As
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This also shows in a clearer manner that writing through CMDQ HW is
-optional and used only for performance purposes when/where wanted,
-needed and/or required.
+On Thu, Feb 16, 2023 at 08:27:42PM +0800, Hal Feng wrote:
+> On Thu, 16 Feb 2023 11:32:31 +0100, Emil Renner Berthing wrote:
+> > On Thu, 16 Feb 2023 at 11:09, Conor Dooley <conor.dooley@microchip.com>=
+ wrote:
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-mmsys.c | 22 +++++++++-------------
- drivers/soc/mediatek/mtk-mutex.c | 15 +++------------
- 2 files changed, 12 insertions(+), 25 deletions(-)
+> >=20
+> > No, I'm sorry for being late here. The below definitely looks better to=
+ me.
+> >=20
+> > Hal, would you be fine with this change?
+>=20
+> I'm fine with this. It will be more exact. Thanks.
 
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 0f0fa27e17a5..8da5c8d26ed0 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -131,21 +131,18 @@ struct mtk_mmsys {
- static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val,
- 				  struct cmdq_pkt *cmdq_pkt)
- {
-+	int ret;
- 	u32 tmp;
- 
--#if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	if (cmdq_pkt) {
--		if (mmsys->cmdq_base.size == 0) {
--			pr_err("mmsys lose gce property, failed to update mmsys bits with cmdq");
-+	if (mmsys->cmdq_base.size && cmdq_pkt) {
-+		ret = cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
-+					  mmsys->cmdq_base.offset + offset, val,
-+					  mask);
-+		if (ret)
-+			pr_debug("CMDQ unavailable: using CPU write\n");
-+		else
- 			return;
--		}
--		cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
--				    mmsys->cmdq_base.offset + offset, val,
--				    mask);
--		return;
- 	}
--#endif
--
- 	tmp = readl_relaxed(mmsys->regs + offset);
- 	tmp = (tmp & ~mask) | (val & mask);
- 	writel_relaxed(tmp, mmsys->regs + offset);
-@@ -332,11 +329,10 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	/* CMDQ is optional */
- 	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
- 	if (ret)
- 		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
--#endif
- 
- 	platform_set_drvdata(pdev, mmsys);
- 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index 07eff509580a..78c04cc5457a 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -770,23 +770,18 @@ int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
- 						 mutex[mutex->id]);
--#if IS_REACHABLE(CONFIG_MTK_CMDQ)
- 	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
- 
- 	WARN_ON(&mtx->mutex[mutex->id] != mutex);
- 
- 	if (!mtx->cmdq_reg.size) {
- 		dev_err(mtx->dev, "mediatek,gce-client-reg hasn't been set");
--		return -EINVAL;
-+		return -ENODEV;
- 	}
- 
- 	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
- 		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
- 	return 0;
--#else
--	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
--	return -ENODEV;
--#endif
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
- 
-@@ -881,10 +876,7 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
- 	struct resource *regs;
--	int i;
--#if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	int ret;
--#endif
-+	int i, ret;
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
- 	if (!mtx)
-@@ -911,11 +903,10 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 	}
- 	mtx->addr = regs->start;
- 
--#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	/* CMDQ is optional */
- 	ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
- 	if (ret)
- 		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
--#endif
- 
- 	platform_set_drvdata(pdev, mtx);
- 
--- 
-2.39.1
+I'll convert these both to Acked-by & send this as a real patch then.
+Thanks!
 
+> >> -- >8 --
+> >> From 4d44e8a83716d1caa314f25a95bd21ac8904909e Mon Sep 17 00:00:00 2001
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >> Date: Thu, 16 Feb 2023 09:58:22 +0000
+> >> Subject: [PATCH] dt-bindings: riscv: correct starfive visionfive 2 com=
+patibles
+> >>
+> >> Using "va" and "vb" doesn't match what's written on the board, or the
+> >> communications from StarFive.
+> >> Switching to using the silkscreened version number will ease confusion=
+ &
+> >> the risk of another spin of the board containing a "conflicting" versi=
+on
+> >> identifier.
+> >>
+> >> Suggested-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> >> Fixes: 97b7ed072784 ("dt-bindings: riscv: Add StarFive JH7110 SoC and =
+VisionFive 2 board")
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/D=
+ocumentation/devicetree/bindings/riscv/starfive.yaml
+> >> index 60c7c03fcdce..cc4d92f0a1bf 100644
+> >> --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+> >> +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> >> @@ -26,8 +26,8 @@ properties:
+> >>
+> >>        - items:
+> >>            - enum:
+> >> -              - starfive,visionfive-2-va
+> >> -              - starfive,visionfive-2-vb
+> >> +              - starfive,visionfive-2-v1.2a
+> >> +              - starfive,visionfive-2-v1.3b
+> >>            - const: starfive,jh7110
+> >>
+> >>  additionalProperties: true
+> >> --
+> >> 2.39.0
+> >>
+> >>
+>=20
+>=20
+
+--aNjJmvAN8VFzp7As
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+4pSAAKCRB4tDGHoIJi
+0hWTAPsF72hFmfBpwWWe1huxbfD6A8AQj7JWhe5LZj8JTj/YIQD/Ul9+sm7R2NEE
+Www1V7URz90OHBMRDrhYgZzhCTViVAM=
+=sfbd
+-----END PGP SIGNATURE-----
+
+--aNjJmvAN8VFzp7As--
