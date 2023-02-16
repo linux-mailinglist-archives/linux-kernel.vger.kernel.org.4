@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8291C699A59
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F297699A4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjBPQmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S229515AbjBPQlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjBPQmW (ORCPT
+        with ESMTP id S229948AbjBPQlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:42:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293264CC97
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:41:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676565696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bGhOP28VyueXX4Bi5IrKSysrswJXvg2hNJ3iS4PanEE=;
-        b=EccGF37Aj8U43UoWPOyKfwrTXiv4gDBQmWATp9h/czvxEe1MX/JPaoowjCgUT9x/hkHPRI
-        ca6ctn92VYyMRUFmmQuiQPc0hJJsdkZ3xGN8UvO5rYEVhpYmVsjfCdi/S6EKlhd0MpqKOw
-        HH24afgLvjpftDoqT7xF2yAFclfoLhU=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-592-Aq4LmizQMM-UffqMKgtwAw-1; Thu, 16 Feb 2023 11:41:35 -0500
-X-MC-Unique: Aq4LmizQMM-UffqMKgtwAw-1
-Received: by mail-io1-f72.google.com with SMTP id z23-20020a6b6517000000b00718172881acso1216499iob.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:41:35 -0800 (PST)
+        Thu, 16 Feb 2023 11:41:47 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DE53B872;
+        Thu, 16 Feb 2023 08:41:45 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g28so3570108lfv.0;
+        Thu, 16 Feb 2023 08:41:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T82iQacn0HrZjSBA8i6g9doGMcTElWG37x9Wz0+zpmY=;
+        b=pmorjVQjLvbFSm5E/m/lHBFcCidY0K28WNtsXIPbzqcX0PAl+d2LMKLUQwaTX1xZbt
+         LqRSBM7QaXNPL9HhMBZV/c1QqXS7TS8LREv17tnB/iXp9r6bEkGI2qNVumbLBBChO7Md
+         Kw9WFo2m3hot+mdtrZN5sXDdnOCA7fqwIqK4B0C7OSVwdjcP7CaA+28ecEzjtpoaHi0k
+         +ndKrOtnDpd0IKbUvG/NL5wdV1jvQKcYSXYMKXgWSCysq3xAT7ko5qMIarqav1SzEG79
+         DEXU3ieBWWFrQiYvMZ584rKwxKpW1Tlet9ApLl87jgyrifRMDS95gd5KzLRJKzdtvZ98
+         PTzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676565694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bGhOP28VyueXX4Bi5IrKSysrswJXvg2hNJ3iS4PanEE=;
-        b=ToZse72RECoDv9GV2RKBpM+PpFXZWQUVc1Ylzc1TRfTThal3qtVV5eIs9OAl4qDv4c
-         zzeKe+/EWf3zVcR5NbpLcITSrggo8Ybt8SzIbGrKNFerTL396t49I6EKwHvWLowPEdo6
-         v4qWABWriXkdLq1E5R0BuYmMqM+lZQWfvmRw2PsCLBfa8C1I3V41V3gcgRjHNK35xw+v
-         XjYnN+P5C5b3cz0jFkbvxseQp/7czqzp22AvATI0zeBCnQVfdCR1TUy/H8J2NVIA6zS6
-         C4r7Zdi0/G9vKxwO5028GoxvYU5PNrINrwlCdMVvhNNlOVOg1Whe7QzcbG9uZry6m0yV
-         at2Q==
-X-Gm-Message-State: AO0yUKUzzyJiPIzx3t56MoKAgrXiT1rN8C67UoK3vg1jplOPeFUJsCri
-        l1EytCvzvfMmwJpAi4lettUhh1GZ9/X0vF3Q1NfPkCGP0n9iMiukMxhTFgqr0mK06hrk+rvO/bK
-        AQy9JuaoD7gDxFsEJlLixlQLQ
-X-Received: by 2002:a05:6e02:1a64:b0:314:9f2b:f63b with SMTP id w4-20020a056e021a6400b003149f2bf63bmr5589345ilv.2.1676565694229;
-        Thu, 16 Feb 2023 08:41:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set8EQIpizwAeyF/gBQ87ce+QeJCbsggaFBRO0Ft/QkhDSyUr263BDqR9+/guGZoTRftR1ouFpw==
-X-Received: by 2002:a05:6e02:1a64:b0:314:9f2b:f63b with SMTP id w4-20020a056e021a6400b003149f2bf63bmr5589316ilv.2.1676565693804;
-        Thu, 16 Feb 2023 08:41:33 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id v14-20020a02b90e000000b003ab21c8fa84sm676437jan.121.2023.02.16.08.41.32
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T82iQacn0HrZjSBA8i6g9doGMcTElWG37x9Wz0+zpmY=;
+        b=xZ8j6jT+JDxxxCFGO7UxmiLKUcKSDf9fSZp8Y4q3N3hKyjfQFO2PtDXqigUzQ2u8pE
+         Blx2+fcIgCsm5l/DWigc31Pl+/CUdPLbz1lMGKalNx4huxxWgnL2PJdTCkDRo+IwU8Bw
+         D8up9gzeTBYbN3S4vbos8hF9Pgw1duqpOrS6kvdyn1jT9NItDjOWDFByYx2q3gn9MLWy
+         3jk+yYo55vU47L7MERVBvPOmZlk0XVDDj2lUXTb0BX9r8hnUs73rUyRp2E5FBwZ+1MHo
+         eaOWgus1OZA9W+bI8Bv4fE6IK6xJRvnNrPVjZPiJawkoPfxnSESwouyTAdeQo5SujG5U
+         EIwQ==
+X-Gm-Message-State: AO0yUKUdfre9rlGbAVUDgN4xEMcw/WrQetmZ3ByBiov7NWvthWyUjSHO
+        pYlZE1C5HQTgJZFadapp0bz6fQIo76g=
+X-Google-Smtp-Source: AK7set+OLiXWj5m8hOuNdr1a6EYCHTSTGugv9As2Bk0paD1ZdKhdMHeTU7lEFk1IG9FqPw8RDmvnXg==
+X-Received: by 2002:ac2:4845:0:b0:4cc:a166:e27f with SMTP id 5-20020ac24845000000b004cca166e27fmr1635447lfy.3.1676565703266;
+        Thu, 16 Feb 2023 08:41:43 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056512376500b004cc7026d95asm354734lft.259.2023.02.16.08.41.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 08:41:32 -0800 (PST)
-Date:   Thu, 16 Feb 2023 11:41:31 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Paul Gofman <pgofman@codeweavers.com>, david@redhat.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
-Message-ID: <Y+5cu9QMCy32ONBo@x1n>
-References: <20230213163124.2850816-1-usama.anjum@collabora.com>
- <Y+prUgFQqmytC/5M@x1n>
- <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
- <Y+qnb/Ix8P5J3Kl4@x1n>
- <0549bd0e-85c4-1547-3eaa-16c8a8883837@collabora.com>
- <Y+wCDUpuDcSDSQAK@x1n>
- <c9d3a306-0c5e-ad58-cffc-3c4c6b8b7433@collabora.com>
- <Y+1SdZqwS7LbcfaQ@x1n>
- <e35c7af0-d115-9808-61b5-cf8ab4356a35@collabora.com>
+        Thu, 16 Feb 2023 08:41:42 -0800 (PST)
+Date:   Thu, 16 Feb 2023 19:41:40 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Sergey.Semin@baikalelectronics.ru,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20230216164140.vvivovdzy2jzthvw@mobilestation>
+References: <20230213132411.65524-1-cai.huoqing@linux.dev>
+ <20230213132411.65524-4-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e35c7af0-d115-9808-61b5-cf8ab4356a35@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230213132411.65524-4-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,292 +80,540 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:25:51AM +0500, Muhammad Usama Anjum wrote:
-> On 2/16/23 2:45 AM, Peter Xu wrote:
-> > On Wed, Feb 15, 2023 at 12:08:11PM +0500, Muhammad Usama Anjum wrote:
-> >> Hi Peter,
-> >>
-> >> Thank you for your review!
-> >>
-> >> On 2/15/23 2:50 AM, Peter Xu wrote:
-> >>> On Tue, Feb 14, 2023 at 01:49:50PM +0500, Muhammad Usama Anjum wrote:
-> >>>> On 2/14/23 2:11 AM, Peter Xu wrote:
-> >>>>> On Mon, Feb 13, 2023 at 10:50:39PM +0500, Muhammad Usama Anjum wrote:
-> >>>>>> On 2/13/23 9:54 PM, Peter Xu wrote:
-> >>>>>>> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
-> >>>>>>>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
-> >>>>>>>> VMA. We are facing a use case where multiple VMAs are present in one
-> >>>>>>>> range of interest. For example, the following pseudocode reproduces the
-> >>>>>>>> error which we are trying to fix:
-> >>>>>>>>
-> >>>>>>>> - Allocate memory of size 16 pages with PROT_NONE with mmap
-> >>>>>>>> - Register userfaultfd
-> >>>>>>>> - Change protection of the first half (1 to 8 pages) of memory to
-> >>>>>>>>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
-> >>>>>>>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
-> >>>>>>>>   out.
-> >>>>>>>>
-> >>>>>>>> This is a simple use case where user may or may not know if the memory
-> >>>>>>>> area has been divided into multiple VMAs.
-> >>>>>>>>
-> >>>>>>>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
-> >>>>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>>>>>> ---
-> >>>>>>>> Changes since v1:
-> >>>>>>>> - Correct the start and ending values passed to uffd_wp_range()
-> >>>>>>>> ---
-> >>>>>>>>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
-> >>>>>>>>  1 file changed, 22 insertions(+), 16 deletions(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> >>>>>>>> index 65ad172add27..bccea08005a8 100644
-> >>>>>>>> --- a/mm/userfaultfd.c
-> >>>>>>>> +++ b/mm/userfaultfd.c
-> >>>>>>>> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
-> >>>>>>>>  			unsigned long len, bool enable_wp,
-> >>>>>>>>  			atomic_t *mmap_changing)
-> >>>>>>>>  {
-> >>>>>>>> +	unsigned long end = start + len;
-> >>>>>>>> +	unsigned long _start, _end;
-> >>>>>>>>  	struct vm_area_struct *dst_vma;
-> >>>>>>>>  	unsigned long page_mask;
-> >>>>>>>>  	int err;
-> >>>>>>>
-> >>>>>>> I think this needs to be initialized or it can return anything when range
-> >>>>>>> not mapped.
-> >>>>>> It is being initialized to -EAGAIN already. It is not visible in this patch.
-> >>>>>
-> >>>>> I see, though -EAGAIN doesn't look suitable at all.  The old retcode for
-> >>>>> !vma case is -ENOENT, so I think we'd better keep using it if we want to
-> >>>>> have this patch.
-> >>>> I'll update in next version.
-> >>>>
-> >>>>>
-> >>>>>>
-> >>>>>>>
-> >>>>>>>> +	VMA_ITERATOR(vmi, dst_mm, start);
-> >>>>>>>>  
-> >>>>>>>>  	/*
-> >>>>>>>>  	 * Sanitize the command parameters:
-> >>>>>>>> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
-> >>>>>>>>  	if (mmap_changing && atomic_read(mmap_changing))
-> >>>>>>>>  		goto out_unlock;
-> >>>>>>>>  
-> >>>>>>>> -	err = -ENOENT;
-> >>>>>>>> -	dst_vma = find_dst_vma(dst_mm, start, len);
-> >>>>>>>> +	for_each_vma_range(vmi, dst_vma, end) {
-> >>>>>>>> +		err = -ENOENT;
-> >>>>>>>>  
-> >>>>>>>> -	if (!dst_vma)
-> >>>>>>>> -		goto out_unlock;
-> >>>>>>>> -	if (!userfaultfd_wp(dst_vma))
-> >>>>>>>> -		goto out_unlock;
-> >>>>>>>> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
-> >>>>>>>> -		goto out_unlock;
-> >>>>>>>> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
-> >>>>>>>> +			break;
-> >>>>>>>> +		if (!userfaultfd_wp(dst_vma))
-> >>>>>>>> +			break;
-> >>>>>>>> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
-> >>>>>>>> +			break;
-> >>>>>>>>  
-> >>>>>>>> -	if (is_vm_hugetlb_page(dst_vma)) {
-> >>>>>>>> -		err = -EINVAL;
-> >>>>>>>> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
-> >>>>>>>> -		if ((start & page_mask) || (len & page_mask))
-> >>>>>>>> -			goto out_unlock;
-> >>>>>>>> -	}
-> >>>>>>>> +		if (is_vm_hugetlb_page(dst_vma)) {
-> >>>>>>>> +			err = -EINVAL;
-> >>>>>>>> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
-> >>>>>>>> +			if ((start & page_mask) || (len & page_mask))
-> >>>>>>>> +				break;
-> >>>>>>>> +		}
-> >>>>>>>>  
-> >>>>>>>> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
-> >>>>>>>> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
-> >>>>>>>> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
-> >>>>>>>>  
-> >>>>>>>> -	err = 0;
-> >>>>>>>> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
-> >>>>>>>> +		err = 0;
-> >>>>>>>> +	}
-> >>>>>>>>  out_unlock:
-> >>>>>>>>  	mmap_read_unlock(dst_mm);
-> >>>>>>>>  	return err;
-> >>>>>>>
-> >>>>>>> This whole patch also changes the abi, so I'm worried whether there can be
-> >>>>>>> app that relies on the existing behavior.
-> >>>>>> Even if a app is dependent on it, this change would just don't return error
-> >>>>>> if there are multiple VMAs under the hood and handle them correctly. Most
-> >>>>>> apps wouldn't care about VMAs anyways. I don't know if there would be any
-> >>>>>> drastic behavior change, other than the behavior becoming nicer.
-> >>>>>
-> >>>>> So this logic existed since the initial version of uffd-wp.  It has a good
-> >>>>> thing that it strictly checks everything and it makes sense since uffd-wp
-> >>>>> is per-vma attribute.  In short, the old code fails clearly.
-> >>>>>
-> >>>>> While the new proposal is not: if -ENOENT we really have no idea what
-> >>>>> happened at all; some ranges can be wr-protected but we don't know where
-> >>>>> starts to go wrong.
-> >>>> The return error codes can be made to return in better way somewhat. The
-> >>>> return error codes shouldn't block a correct functionality enhancement patch.
-> >>>>
-> >>>>>
-> >>>>> Now I'm looking at the original problem..
-> >>>>>
-> >>>>>  - Allocate memory of size 16 pages with PROT_NONE with mmap
-> >>>>>  - Register userfaultfd
-> >>>>>  - Change protection of the first half (1 to 8 pages) of memory to
-> >>>>>    PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
-> >>>>>  - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
-> >>>>>    out.
-> >>>>>
-> >>>>> Why the user app should wr-protect 16 pages at all?
-> >>>> Taking arguments from Paul here.
-> >>>>
-> >>>> The app is free to insert guard pages inside the range (with PROT_NONE) and
-> >>>> change the protection of memory freely. Not sure why it is needed to
-> >>>> complicate things by denying any flexibility. We should never restrict what
-> >>>> is possible and what not. All of these different access attributes and
-> >>>> their any combination of interaction _must_ work without question. The
-> >>>> application should be free to change protection on any sub-range and it
-> >>>> shouldn't break the PAGE_IS_WRITTEN + UFFD_WRITE_PROTECT promise which
-> >>>> PAGEMAP_IOCTL (patches are in progress) and UFFD makes.
-> >>>
-> >>> Because uffd-wp has a limitation on e.g. it cannot nest so far.  I'm fine
-> >>> with allowing mprotect() happening, but just to mention so far it cannot do
-> >>> "any combinations" yet.
-> >>>
-> >>>>
-> >>>>>
-> >>>>> If so, uffd_wp_range() will be ran upon a PROT_NONE range which doesn't
-> >>>>> make sense at all, no matter whether the user is aware of vma concept or
-> >>>>> not...  because it's destined that it's a vain effort.
-> >>>> It is not a vain effort. The user want to watch/find the dirty pages of a
-> >>>> range while working with it: reserve and watch at once while Write
-> >>>> protecting or un-protecting as needed. There may be several different use
-> >>>> cases. Inserting guard pages to catch out of range access, map something
-> >>>> only when it is needed; unmap or PROT_NONE pages when they are set free in
-> >>>> the app etc.
-> >>>
-> >>> Fair enough.
-> >>>
-> >>>>
-> >>>>>
-> >>>>> So IMHO it's the user app needs fixing here, not the interface?  I think
-> >>>>> it's the matter of whether the monitor is aware of mprotect() being
-> >>>>> invoked.
-> >>>> No. The common practice is to allocate a big memory chunk at once and have
-> >>>> own allocator over it (whether it is some specific allocator in a game or a
-> >>>> .net allocator with garbage collector). From the usage point of view it is
-> >>>> very limiting to demand constant memory attributes for the whole range.
-> >>>>
-> >>>> That said, if we do have the way to do exactly what we want with reset
-> >>>> through pagemap fd and it is just UFFD ioctl will be working differently,
-> >>>> it is not a blocker of course, just weird api design.
-> >>>
-> >>> Do you mean you'll disable ENGAGE_WP && !GET in your other series?  Yes, if
-> >>> this will service your goal, it'll be perfect to remove that interface.
-> >> No, we cannot remove it.
-> > 
-> > If this patch can land, I assume ioctl(UFFDIO_WP) can start to service the
-> > dirty tracking purpose, then why do you still need "ENGAGE_WP && !GET"?
-> We don't need it. We need the following operations only:
-> 1 GET
-> 2 ENGAGE_WP + GET
-> When we have these two operations, we had added the following as well:
-> 3 ENGAGE_WP + !GET or only ENGAGE_WP
-> This (3) can be removed from ioctl(PAGEMAP_IOCTL) if reviewers ask. I can
-> remove it in favour of this ioctl(UFFDIO_WP) patch for sure.
-
-Yes I prefer not having it if this works, because then they'll be
-completely duplicated.
-
+On Mon, Feb 13, 2023 at 09:24:08PM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
 > 
-> > 
-> > Note, I'm not asking to drop ENGAGE_WP entirely, only when !GET.
-> > 
-> >>
-> >>>
-> >>>>
-> >>>>>
-> >>>>> In short, I hope we're working on things that helps at least someone, and
-> >>>>> we should avoid working on things that does not have clear benefit yet.
-> >>>>> With the WP_ENGAGE new interface being proposed, I just didn't see any
-> >>>>> benefit of changing the current interface, especially if the change can
-> >>>>> bring uncertainties itself (e.g., should we fail upon !uffd-wp vmas, or
-> >>>>> should we skip?).
-> >>>> We can work on solving uncertainties in case of error conditions. Fail if
-> >>>> !uffd-wp vma comes.
-> >>>
-> >>> Let me try to double check with you here:
-> >>>
-> >>> I assume you want to skip any vma that is not mapped at all, as the loop
-> >>> already does so.  So it'll succeed if there're memory holes.
-> >>>
-> >>> You also want to explicitly fail if some vma is not registered with uffd-wp
-> >>> when walking the vma list, am I right?  IOW, the tracee _won't_ ever have a
-> >>> chance to unregister uffd-wp itself, right?
-> >> Yes, fail if any VMA doesn't have uffd-wp. This fail means the
-> >> write-protection or un-protection failed on a region of memory with error
-> >> -ENOENT. This is already happening in this current patch. The unregister
-> >> code would remain same. The register and unregister ioctls are already
-> >> going over all the VMAs in a range. I'm not rigid on anything. Let me
-> >> define the interface below.
-> >>
-> >>>
-> >>>>
-> >>>>>
-> >>>>>>
-> >>>>>>>
-> >>>>>>> Is this for the new pagemap effort?  Can this just be done in the new
-> >>>>>>> interface rather than changing the old?
-> >>>>>> We found this bug while working on pagemap patches. It is already being
-> >>>>>> handled in the new interface. We just thought that this use case can happen
-> >>>>>> pretty easily and unknowingly. So the support should be added.
-> >>>>>
-> >>>>> Thanks.  My understanding is that it would have been reported if it
-> >>>>> affected any existing uffd-wp user.
-> >>>> I would consider the UFFD WP a recent functionality and it may not being
-> >>>> used in wide range of app scenarios.
-> >>>
-> >>> Yes I think so.
-> >>>
-> >>> Existing users should in most cases be applying the ioctl upon valid vmas
-> >>> somehow.  I think the chance is low that someone relies on the errcode to
-> >>> make other decisions, but I just cannot really tell because the user app
-> >>> can do many weird things.
-> >> Correct. The user can use any combination of operation
-> >> (mmap/mprotect/uffd). They must work in harmony.
-> > 
-> > No uffd - that's exactly what I'm saying: mprotect is fine here, but uffd
-> > is probably not, not in a nested way.  When you try to UFFDIO_REGISTER upon
-> > some range that already been registered (by the tracee), it'll fail for you
-> > immediately:
-> > 
-> > 		/*
-> > 		 * Check that this vma isn't already owned by a
-> > 		 * different userfaultfd. We can't allow more than one
-> > 		 * userfaultfd to own a single vma simultaneously or we
-> > 		 * wouldn't know which one to deliver the userfaults to.
-> > 		 */
-> > 		ret = -EBUSY;
-> > 		if (cur->vm_userfaultfd_ctx.ctx &&
-> > 		    cur->vm_userfaultfd_ctx.ctx != ctx)
-> > 			goto out_unlock;
-> > 
-> > So if this won't work for you, then AFAICT uffd-wp won't work for you (just
-> > like soft-dirty but in another way, sorry), at least not until someone
-> > starts to work on the nested.
-> I was referring to a case where user registers the WP on multiple VMAs and
-> all the VMAs haven't been registered before. It would work. Right?
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
+> 
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA,
+> so this patch add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.
+> The same applies when you have multiple write channels.
+> 
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are alignmented to byte.
+> 
+> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
+> ---
+>  drivers/dma/dw-edma/Makefile          |   5 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c | 315 ++++++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.h |  17 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-regs.h | 129 +++++++++++
+>  4 files changed, 464 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 
+> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> index 8d45c0d5689d..b1c91ef2c63d 100644
+> --- a/drivers/dma/dw-edma/Makefile
+> +++ b/drivers/dma/dw-edma/Makefile
+> @@ -2,6 +2,7 @@
+>  
+>  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+>  dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> -dw-edma-objs			:= dw-edma-core.o \
+> -					dw-edma-v0-core.o $(dw-edma-y)
+> +dw-edma-objs			:= dw-edma-core.o	\
+> +				   dw-edma-v0-core.o	\
+> +				   dw-hdma-v0-core.o $(dw-edma-y)
+>  obj-$(CONFIG_DW_EDMA_PCIE)	+= dw-edma-pcie.o
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> new file mode 100644
+> index 000000000000..7e4f98987e29
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -0,0 +1,315 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 core
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +
+> +#include "dw-edma-core.h"
+> +#include "dw-hdma-v0-core.h"
+> +#include "dw-hdma-v0-regs.h"
+> +
+> +enum dw_hdma_control {
+> +	DW_HDMA_V0_CB					= BIT(0),
+> +	DW_HDMA_V0_TCB					= BIT(1),
+> +	DW_HDMA_V0_LLP					= BIT(2),
+> +	DW_HDMA_V0_LIE					= BIT(3),
+> +	DW_HDMA_V0_RIE					= BIT(4),
+> +	DW_HDMA_V0_CCS					= BIT(8),
+> +	DW_HDMA_V0_LLE					= BIT(9),
+> +};
+> +
+> +static inline struct dw_hdma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
+> +{
+> +	return dw->chip->reg_base;
+> +}
+> +
+> +static inline struct dw_hdma_v0_ch_regs __iomem *
+> +__dw_ch_regs(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch)
+> +{
+> +	if (dir == EDMA_DIR_WRITE)
+> +		return &(__dw_regs(dw)->ch[ch].wr);
+> +	else
+> +		return &(__dw_regs(dw)->ch[ch].rd);
+> +}
+> +
+> +#define SET_CH_32(dw, dir, ch, name, value) \
+> +	writel(value, &(__dw_ch_regs(dw, dir, ch)->name))
+> +
+> +#define GET_CH_32(dw, dir, ch, name) \
+> +	readl(&(__dw_ch_regs(dw, dir, ch)->name))
+> +
+> +#define SET_BOTH_CH_32(dw, ch, name, value) \
+> +	do {					\
+> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_WRITE, ch)->name));		\
+> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_READ, ch)->name));	\
+> +	} while (0)
+> +
+> +/* HDMA management callbacks */
+> +static void dw_hdma_v0_core_off(struct dw_edma *dw)
+> +{
+> +	int id;
+> +
+> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> +		SET_BOTH_CH_32(dw, id, int_setup,
+> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
+> +		SET_BOTH_CH_32(dw, id, int_clear,
+> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
+> +		SET_BOTH_CH_32(dw, id, ch_en, 0);
+> +	}
+> +}
+> +
+> +static u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
+> +{
+> +	u32 num_ch = 0;
+> +	int id;
+> +
+> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> +		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
+> +			num_ch++;
+> +	}
+> +
+> +	if (num_ch > HDMA_V0_MAX_NR_CH)
+> +		num_ch = HDMA_V0_MAX_NR_CH;
+> +
+> +	return (u16)num_ch;
+> +}
+> +
+> +static enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +	u32 tmp;
+> +
+> +	tmp = FIELD_GET(HDMA_V0_CH_STATUS_MASK,
+> +			GET_CH_32(dw, chan->id, chan->dir, ch_stat));
+> +
+> +	if (tmp == 1)
+> +		return DMA_IN_PROGRESS;
+> +	else if (tmp == 3)
+> +		return DMA_COMPLETE;
+> +	else
+> +		return DMA_ERROR;
+> +}
+> +
+> +static void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +
+> +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_STOP_INT_MASK);
+> +}
+> +
+> +static void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +
+> +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_ABORT_INT_MASK);
+> +}
+> +
+> +static u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +
+> +	return GET_CH_32(dw, chan->dir, chan->id, int_stat);
+> +}
+> +
+> +static u32 dw_hdma_v0_core_check_done_int(u32 val)
+> +{
+> +	return FIELD_GET(HDMA_V0_STOP_INT_MASK, val);
+> +}
+> +
+> +static u32 dw_hdma_v0_core_check_abort_int(u32 val)
+> +{
+> +	return FIELD_GET(HDMA_V0_ABORT_INT_MASK, val);
+> +}
+> +
+> +static
+> +void dw_hdma_v0_core_done_handle(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir)
+> +{
+> +	struct dw_edma *dw = dw_irq->dw;
+> +	unsigned long total, pos, val;
+> +	unsigned long off, mask;
+> +
+> +	if (dir == EDMA_DIR_WRITE) {
+> +		total = dw->wr_ch_cnt;
+> +		off = 0;
+> +		mask = dw_irq->wr_mask;
+> +	} else {
+> +		total = dw->rd_ch_cnt;
+> +		off = dw->wr_ch_cnt;
+> +		mask = dw_irq->rd_mask;
+> +	}
+> +
+> +	for_each_set_bit(pos, &mask, total) {
+> +		struct dw_edma_chan *chan = &dw->chan[pos + off];
+> +
+> +		val = dw_hdma_v0_core_status_int(chan);
+> +		if (dw_hdma_v0_core_check_done_int(val))
+> +			dw_edma_done_interrupt(chan);
+> +	}
+> +}
+> +
+> +static
+> +void dw_hdma_v0_core_abort_handle(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir)
+> +{
+> +	struct dw_edma *dw = dw_irq->dw;
+> +	unsigned long total, pos, val;
+> +	unsigned long off, mask;
+> +
+> +	if (dir == EDMA_DIR_WRITE) {
+> +		total = dw->wr_ch_cnt;
+> +		off = 0;
+> +		mask = dw_irq->wr_mask;
+> +	} else {
+> +		total = dw->rd_ch_cnt;
+> +		off = dw->wr_ch_cnt;
+> +		mask = dw_irq->rd_mask;
+> +	}
+> +
+> +	for_each_set_bit(pos, &mask, total) {
+> +		struct dw_edma_chan *chan = &dw->chan[pos + off];
+> +
+> +		val = dw_hdma_v0_core_status_int(chan);
+> +		if (dw_hdma_v0_core_check_abort_int(val))
+> +			dw_edma_abort_interrupt(&dw->chan[pos + off]);
+> +	}
+> +}
+> +
+> +static void dw_hdma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
+> +				     u32 control, u32 size, u64 sar, u64 dar)
+> +{
+> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
+> +
+> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		struct dw_hdma_v0_lli *lli = chunk->ll_region.vaddr.mem + ofs;
+> +
+> +		lli->control = control;
+> +		lli->transfer_size = size;
+> +		lli->sar.reg = sar;
+> +		lli->dar.reg = dar;
+> +	} else {
+> +		struct dw_hdma_v0_lli __iomem *lli = chunk->ll_region.vaddr.io + ofs;
+> +
+> +		writel(control, &lli->control);
+> +		writel(size, &lli->transfer_size);
+> +		writeq(sar, &lli->sar.reg);
+> +		writeq(dar, &lli->dar.reg);
+> +	}
+> +}
+> +
+> +static void dw_hdma_v0_write_ll_link(struct dw_edma_chunk *chunk,
+> +				     int i, u32 control, u64 pointer)
+> +{
+> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
+> +
+> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		struct dw_hdma_v0_llp *llp = chunk->ll_region.vaddr.mem + ofs;
+> +
+> +		llp->control = control;
+> +		llp->llp.reg = pointer;
+> +	} else {
+> +		struct dw_hdma_v0_llp __iomem *llp = chunk->ll_region.vaddr.io + ofs;
+> +
+> +		writel(control, &llp->control);
+> +		writeq(pointer, &llp->llp.reg);
+> +	}
+> +}
+> +
+> +static void dw_hdma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
+> +{
+> +	struct dw_edma_burst *child;
+> +	struct dw_edma_chan *chan = chunk->chan;
+> +	u32 control = 0, i = 0;
+> +	int j;
+> +
+> +	if (chunk->cb)
+> +		control = DW_HDMA_V0_CB;
+> +
+> +	j = chunk->bursts_alloc;
+> +	list_for_each_entry(child, &chunk->burst->list, list) {
+> +		j--;
+> +		if (!j) {
+> +			control |= DW_HDMA_V0_LIE;
+> +			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
+> +				control |= DW_HDMA_V0_RIE;
+> +		}
+> +
+> +		dw_hdma_v0_write_ll_data(chunk, i++, control, child->sz,
+> +					 child->sar, child->dar);
+> +	}
+> +
+> +	control = DW_HDMA_V0_LLP | DW_HDMA_V0_TCB;
+> +	if (!chunk->cb)
+> +		control |= DW_HDMA_V0_CB;
+> +
+> +	dw_hdma_v0_write_ll_link(chunk, i, control, chunk->ll_region.paddr);
+> +}
+> +
+> +static void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+> +{
+> +	struct dw_edma_chan *chan = chunk->chan;
+> +	struct dw_edma *dw = chan->dw;
+> +	u32 tmp;
+> +
+> +	dw_hdma_v0_core_write_chunk(chunk);
+> +
+> +	if (first) {
+> +		/* Enable engine */
+> +		SET_CH_32(dw, chan->dir, chan->id, ch_en, BIT(0));
+> +		/* Interrupt enable&unmask - done, abort */
+> +		tmp = GET_CH_32(dw, chan->dir, chan->id, int_setup) | HDMA_V0_STOP_INT_MASK |
+> +		      HDMA_V0_ABORT_INT_MASK | HDMA_V0_LOCAL_STOP_INT_EN |
+> +		      HDMA_V0_LOCAL_STOP_INT_EN;
+> +		SET_CH_32(dw, chan->dir, chan->id, int_setup, tmp);
+> +		/* Channel control */
+> +		SET_CH_32(dw, chan->dir, chan->id, control1, HDMA_V0_LINKLIST_EN);
+> +		/* Linked list */
+> +		/* llp is not aligned on 64bit -> keep 32bit accesses */
+> +		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+> +			  lower_32_bits(chunk->ll_region.paddr));
+> +		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+> +			  upper_32_bits(chunk->ll_region.paddr));
+> +	}
+> +	/* Set consumer cycle */
+> +	SET_CH_32(dw, chan->dir, chan->id, cycle_sync,
+> +		  HDMA_V0_CONSUMER_CYCLE_STAT | HDMA_V0_CONSUMER_CYCLE_BIT);
+> +	/* Doorbell */
+> +	SET_CH_32(dw, chan->dir, chan->id, doorbell, HDMA_V0_DOORBELL_START);
+> +}
+> +
+> +static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +
+> +	/* MSI done addr - low, high */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.lsb, chan->msi.address_lo);
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.msb, chan->msi.address_hi);
+> +	/* MSI abort addr - low, high */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.lsb, chan->msi.address_lo);
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
+> +	/* config MSI data */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_msgdata, chan->msi.data);
+> +}
+> +
+> +/* HDMA debugfs callbacks */
+> +static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+> +{
+> +}
+> +
 
-But what if the user wants to do that during when you're tracing it using
-userfaultfd?  Can it happen?
+> +static const struct dw_edma_core_ops hdma_core = {
 
-Thanks,
+Please use the dw_hdma_v0_core structure instance name to maintain the
+local naming convention.
 
--- 
-Peter Xu
+-Serge(y)
 
+> +	.off = dw_hdma_v0_core_off,
+> +	.ch_count = dw_hdma_v0_core_ch_count,
+> +	.ch_status = dw_hdma_v0_core_ch_status,
+> +	.clear_done_int = dw_hdma_v0_core_clear_done_int,
+> +	.clear_abort_int = dw_hdma_v0_core_clear_abort_int,
+> +	.done_handle = dw_hdma_v0_core_done_handle,
+> +	.abort_handle = dw_hdma_v0_core_abort_handle,
+> +	.start = dw_hdma_v0_core_start,
+> +	.ch_config = dw_hdma_v0_core_ch_config,
+> +	.debugfs_on = dw_hdma_v0_core_debugfs_on,
+> +};
+> +
+> +void dw_hdma_v0_core_register(struct dw_edma *dw)
+> +{
+> +	dw->core = &hdma_core;
+> +}
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.h b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> new file mode 100644
+> index 000000000000..c373b4f0bd8a
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 core
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_CORE_H
+> +#define _DW_HDMA_V0_CORE_H
+> +
+> +#include <linux/dma/edma.h>
+> +
+> +/* HDMA core register */
+> +void dw_hdma_v0_core_register(struct dw_edma *dw);
+> +
+> +#endif /* _DW_HDMA_V0_CORE_H */
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> new file mode 100644
+> index 000000000000..f6b2bd03060c
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> @@ -0,0 +1,129 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 reg
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_REGS_H
+> +#define _DW_HDMA_V0_REGS_H
+> +
+> +#include <linux/dmaengine.h>
+> +
+> +#define HDMA_V0_MAX_NR_CH			8
+> +#define HDMA_V0_LOCAL_ABORT_INT_EN		BIT(6)
+> +#define HDMA_V0_REMOTE_ABORT_INT_EN		BIT(5)
+> +#define HDMA_V0_LOCAL_STOP_INT_EN		BIT(4)
+> +#define HDMA_V0_REMOTEL_STOP_INT_EN		BIT(3)
+> +#define HDMA_V0_ABORT_INT_MASK			BIT(2)
+> +#define HDMA_V0_STOP_INT_MASK			BIT(0)
+> +#define HDMA_V0_LINKLIST_EN			BIT(0)
+> +#define HDMA_V0_CONSUMER_CYCLE_STAT		BIT(1)
+> +#define HDMA_V0_CONSUMER_CYCLE_BIT		BIT(0)
+> +#define HDMA_V0_DOORBELL_START			BIT(0)
+> +#define HDMA_V0_CH_STATUS_MASK			GENMASK(1, 0)
+> +
+> +struct dw_hdma_v0_ch_regs {
+> +	u32 ch_en;				/* 0x0000 */
+> +	u32 doorbell;				/* 0x0004 */
+> +	u32 prefetch;				/* 0x0008 */
+> +	u32 handshake;				/* 0x000c */
+> +	union {
+> +		u64 reg;			/* 0x0010..0x0014 */
+> +		struct {
+> +			u32 lsb;		/* 0x0010 */
+> +			u32 msb;		/* 0x0014 */
+> +		};
+> +	} llp;
+> +	u32 cycle_sync;				/* 0x0018 */
+> +	u32 transfer_size;			/* 0x001c */
+> +	union {
+> +		u64 reg;			/* 0x0020..0x0024 */
+> +		struct {
+> +			u32 lsb;		/* 0x0020 */
+> +			u32 msb;		/* 0x0024 */
+> +		};
+> +	} sar;
+> +	union {
+> +		u64 reg;			/* 0x0028..0x002c */
+> +		struct {
+> +			u32 lsb;		/* 0x0028 */
+> +			u32 msb;		/* 0x002c */
+> +		};
+> +	} dar;
+> +
+> +	u32 watermark_en;			/* 0x0030 */
+> +	u32	control1;			/* 0x0034 */
+> +	u32	func_num;			/* 0x0038 */
+> +	u32	qos;				/* 0x003c */
+> +	u32	reserved;			/* 0x0040..0x007c */
+> +	u32 ch_stat;				/* 0x0080 */
+> +	u32 int_stat;				/* 0x0084 */
+> +	u32 int_setup;				/* 0x0088 */
+> +	u32 int_clear;				/* 0x008c */
+> +	union {
+> +		u64 reg;			/* 0x0090..0x0094 */
+> +		struct {
+> +			u32 lsb;		/* 0x0090 */
+> +			u32 msb;		/* 0x0094 */
+> +		};
+> +	} msi_stop;
+> +	union {
+> +		u64 reg;			/* 0x0098..0x009c */
+> +		struct {
+> +			u32 lsb;		/* 0x0098 */
+> +			u32 msb;		/* 0x009c */
+> +		};
+> +	} msi_watermark;
+> +	union {
+> +		u64 reg;			/* 0x00a0..0x00a4 */
+> +		struct {
+> +			u32 lsb;		/* 0x00a0 */
+> +			u32 msb;		/* 0x00a4 */
+> +		};
+> +	} msi_abort;
+> +	u32	msi_msgdata;			/* 0x00a8 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_ch {
+> +	struct dw_hdma_v0_ch_regs wr;		/* 0x0000 */
+> +	struct dw_hdma_v0_ch_regs rd;		/* 0x0100 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_regs {
+> +	struct dw_hdma_v0_ch ch[HDMA_V0_MAX_NR_CH];	/* 0x0000..0x0fa8 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_lli {
+> +	u32 control;
+> +	u32 transfer_size;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} sar;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} dar;
+> +} __packed;
+> +
+> +struct dw_hdma_v0_llp {
+> +	u32 control;
+> +	u32 reserved;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} llp;
+> +} __packed;
+> +
+> +#endif /* _DW_HDMA_V0_REGS_H */
+> -- 
+> 2.34.1
+> 
