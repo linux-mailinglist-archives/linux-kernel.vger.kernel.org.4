@@ -2,127 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C2969A24D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8EE69A254
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjBPXXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S229852AbjBPX0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjBPXXX (ORCPT
+        with ESMTP id S229592AbjBPX0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:23:23 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2089.outbound.protection.outlook.com [40.107.104.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B096654D0B;
-        Thu, 16 Feb 2023 15:22:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KtDJZN9GfiRzJG4CXvflTDA/3s1MUctkag9xoebsJpVoXJTWomzUHVnYBMNkynnMwMzlVorQd7EQzEOVHIBKaV54aIM8IZoStsDLjuH0BIs01RotPzXgVSPHjLHwH1EtTLm0K8hVlZM3JrTbM9WDEwVUM+1KdWe0dowEPxH/La35dJlV5U+ZVdb25nVVicsOhas5fD+Z7PU+w/s15Nx4ODdlg63j6VpkXBAyivlyUEua5Er7IAn85EQH59229/76vWhODfUxxnQwzmOsYiRL94yTKfXJag4ciXxHUwhMih8tr0AyZntzx0nKeGs5XalnezukZ7sJIEojoN3pQ7aAiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3T4BHjiL3x/4CkYmBq68my7S7dLUmIM77eYFaSDln3Y=;
- b=avMDexf4SZFh79TntXD43ucLqscCCVe2hzMKGMtpXDtjbljyhgQh5USnACu9sfil73LwAjuCJjYZkYB6WJgGP7tJCys41wE+ih0YrxyMmuta7cXpnlnG8n020uINQCnvjKx2jeDZvxmobHWpXzM+phGTqxYdwAw4hFKF9MNa2OBBeWY134xEMDGyw6Xula2+BAfT7jJApqVfmK//5oSC4c/v39N1Zs1s0xVCtQ03y2tczIPlY7ZEa8RaJrQYRYSSL4+T1onx/t2lLMJtu9F82ZTZps69BJq10gSf9gbBVPDWdITAJPNe1oxF4tSnKmygHqY6SfKv2tj9Fia6uz/1dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3T4BHjiL3x/4CkYmBq68my7S7dLUmIM77eYFaSDln3Y=;
- b=qfBwBuuAfmsUsyN1Dt0Ot7Nkng5G0l940hsX4G/ooOqx/YyfkMMpGyEhC8r8oQvnC8zBmdX6pEyJPug8d0vnpNNWleRSh83y687aoGxlKJiWBgo8BRCd2439bkn63gVuoITz+YosUljZ56yRRhFxK+D3EQaD+WgkpY3T54n4Awk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PR3PR04MB7436.eurprd04.prod.outlook.com (2603:10a6:102:87::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
- 2023 23:21:53 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.6086.026; Thu, 16 Feb 2023
- 23:21:53 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 12/12] net: enetc: add support for preemptible traffic classes
-Date:   Fri, 17 Feb 2023 01:21:26 +0200
-Message-Id: <20230216232126.3402975-13-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230216232126.3402975-1-vladimir.oltean@nxp.com>
-References: <20230216232126.3402975-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0501CA0018.eurprd05.prod.outlook.com
- (2603:10a6:800:92::28) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Thu, 16 Feb 2023 18:26:44 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888054552;
+        Thu, 16 Feb 2023 15:25:58 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id oa11-20020a17090b1bcb00b002341a2656e5so3783718pjb.1;
+        Thu, 16 Feb 2023 15:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ABjPVU12WrMxreYuXZjOBMhR9lai6xEABmod60F0HHY=;
+        b=Alveik9+v9zSaUIJ8cvMjjjh129agFFmYHKTmRQKD2iyNv51jgNwAM3ellbxhqlCfk
+         vplKMJZru7fEh/MlJ32lXJSp7SgOwkx2v7gBN64pnofYnSmCUozQaC1OvT93qXvAim52
+         F8qoSO+griLYs+PB0pR+E93maOKinDcV02/CwRJT0LgdD8phpQJalmYAR7YIDI4YbYe5
+         Igq+aPSySyBWY02zGDNgEPnbXviOTBbUh63bV+1JYc9SEBlBKq3LLAjgTa+1oG2HO5RO
+         +HDc0fnShYUbdjXHvFc+Dp2J/EgOCPun5idxZIMQR6Blkk0B2w14vi+RVMFVUZEhQk3A
+         pWuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ABjPVU12WrMxreYuXZjOBMhR9lai6xEABmod60F0HHY=;
+        b=1EJ0vdRUYJXWY9mAyzB8BuJV5vRPOcAAytw6h6kaAZ4o8BuUwvCbBZk3tV/shgwVXu
+         2kp79fTMNPpPgkACjFs8bX2zVYGVAtcm7X59rV56FG75U2yoKX/fupM1Fk1Tf5BhPhRj
+         hsyw0LJNH+fGgIM4lJfLqLAgG/h3xapvjnR6EfLk4i4+fqcmE8Vn2pMsby4F3LO6ECoN
+         vsODHMY9FBjm7L9OjTJRYxK64tKQml/sBH1STDqT7K6KztKGklTcqUskDZO7Zn39RyN+
+         MoTZcSI5PqQ28bQFU2Fb2phx4A1k0OlICBd0NFBShsn6BB2d50dxUqKLzrvmtmHE3I77
+         P13w==
+X-Gm-Message-State: AO0yUKWIlSB0zVpnnVJIk88odVdz9XkAW2YsdBtqJGwx1awHsFtcUf46
+        GQlp+2dn1LEaa4dmeKWd7dk=
+X-Google-Smtp-Source: AK7set/ZDu19d6B35y6ZvYgEpj/cysRBNdfzRTmlV+iT4oqvhTMJZ9VtFFOuY20L9a4dH2mDL89kAQ==
+X-Received: by 2002:a17:902:e1c5:b0:19b:dbf7:f9d1 with SMTP id t5-20020a170902e1c500b0019bdbf7f9d1mr411210pla.37.1676589883882;
+        Thu, 16 Feb 2023 15:24:43 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170902b78a00b001994e74c094sm1799205pls.275.2023.02.16.15.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 15:24:43 -0800 (PST)
+Date:   Fri, 17 Feb 2023 10:24:35 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Seth Forshee <sforshee@kernel.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>
+Subject: Re: [PATCH v2 2/5] apple-gmux: refactor gmux types
+Message-ID: <20230217102435.3fabf965@redecorated-mbp>
+In-Reply-To: <bac7cf14-fa40-fddf-b19a-5333b86f3c70@redhat.com>
+References: <20230216122342.5918-1-orlandoch.dev@gmail.com>
+        <20230216122342.5918-3-orlandoch.dev@gmail.com>
+        <bac7cf14-fa40-fddf-b19a-5333b86f3c70@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PR3PR04MB7436:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8911449-bddc-44a0-99fb-08db107496d7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rsSqckUAYaUWd4B4rLVrwbIP+CttgSC7u03LVFj5/a8CG1q3iQWLWkxYHoZXapa35hyTWW4+lvy3DqSZNlqjEhYLVBE6rp9cZZHFkC6hJVkUbSiSQslwJ6Zc4mw9I8+nhocAHV1F5naonXO3LA3RGwpQtjPnSeBtZklM4MAPNTp9gtRJEgO15JPmM3J0ZdJRO2BQXgCAP3DwXJKnsgsKFhRm59BiCGY0YO9CZ/siUAOy6Sel7KqEPRYguhJYPft5AMKiaXvPXH/MJzyTek+UEpR1rNZlPcb2WWHEhJeBVTldwmz5g2lZ5o70fRniZ//ARdXbJcx7uIrbXax/WYtGNDeOVzVbm5TgYAnMVFXlcS6y3UDkFgp2qtBYGeDRHIfLeB0cX22bq5cONcEEJr/LWfY/Gab+xXT+dTaLM1mA50t/+YdlGtd5m7FFVwL1XUd5OxpZcjIbBLxgKsp4AEaikh0r7mxJutbxVymkcB+2+JO00g/pL8JEGeaDDsOrG55qlDy7Dw4KsNNLwwcYxWkF12puT2Fd2bUGN21wldMOIrlVQ1mdFrDc16mHPCLJbf1oNAg0uWJHSaJG0fKnrMCSgYTKwp/S+a/FHoWr7q8wqFQ3q02PVvqnzm4qHiNi0ImyCxeJK2OlCA5ppMmgKgjoGkpmRSjF5bmoyGpQeebc/KEwEl+zmXnp1A+BuWiK9MoYjWTDwpwrMkC83t4Pct715w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199018)(38100700002)(2906002)(38350700002)(44832011)(7416002)(83380400001)(66476007)(2616005)(86362001)(478600001)(6916009)(66556008)(36756003)(5660300002)(41300700001)(6506007)(52116002)(6666004)(4326008)(66946007)(6486002)(54906003)(186003)(316002)(8936002)(26005)(6512007)(1076003)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EWs83fWYUA0o1FfJgzqm/4Nanj7jEWQm8hl2VmhspHNV1NNZ/3yvpbae+OVb?=
- =?us-ascii?Q?bzfRTfkx8mV7+QlnitU+axjLqZYc4isuidGetge+X0iDF4b/guj9KerHPHcz?=
- =?us-ascii?Q?EyYSJXV2gzb60KEv32SYPcQhvPYUiZBgGC76SQM3x8GeoqNNdG6PKzTpJSH+?=
- =?us-ascii?Q?77Ym5Y7EWAV0oOMXxYUclaEklKwxOoIOK6E1IWbG5nsrUBt+kR2UnQZr+cgM?=
- =?us-ascii?Q?62FBpzgY/l2UvHFHmrTYV2Cww71PWaQJnxNiLkSjb8zCn2kTiwuCHriqrwyx?=
- =?us-ascii?Q?UtJdEteOPKB+WO2xN8R2ORFOWoIt10nbO8A3dtN9o+xvtZxtqLW0puvBhfar?=
- =?us-ascii?Q?v/BgUcbsrcaPEyas6T1dbO7vN5ekyfM8XZK4yoQOWFHhBckMtItMAgdGX6yD?=
- =?us-ascii?Q?IFdG8l4oLNtEKcO5KaVAo5Pbu1ZIMHhWD9g8GO6cZcllz22bari9OHMNlCis?=
- =?us-ascii?Q?/G+P+/lSOI1Zmp1sjakzmFLNAwMEht8elI2/mAKiiHqyMth2Cj69QzU8lEMv?=
- =?us-ascii?Q?aq3jxXH3hJZJH1SWZV7kboYGqu8X1zDgDTfQhX3QE73Jcau6UCnCiwZy/bOD?=
- =?us-ascii?Q?ATLsP/7KtmNv/6UqWWla7s+nZXfsAdp9NEMaCO/axR9nMRWxx9Wq6ayCDrIa?=
- =?us-ascii?Q?iBjQqIrrveAnqW6oUQ+oI+6k0duqws5Lk5jwyWmkJ2TjZMTneD2AwVlzVe77?=
- =?us-ascii?Q?1pQUuYte6mmPMBo7h4PXXFhaScRaVmp9TZAKLlErYxFiyzBl5qcSxWoVFzZC?=
- =?us-ascii?Q?Lsyj/sMpkHzaoQf6NV0McOBZJcFUenMv274GUaCXHF8ODguR5qmwBnZ3xLLM?=
- =?us-ascii?Q?XgFkWQ4WnH/NJmkU9XF09TA+vsEW3zw8tzaD5UU90xaY7wfZwhjgPuAlEnI/?=
- =?us-ascii?Q?/Ki9hLvoJxf5Lv8Q+UqLaBC2Bzggp7wJg7tzaJHxrC+97wm2u7hYGaRKDfas?=
- =?us-ascii?Q?ZDm/faMVq8F1Q617xW4diDJQgkzw6hu1Wkh+be9OoLJhCiAzI/1BUzG0N8eY?=
- =?us-ascii?Q?C/w/46iaNOt9tdUH9rBSykb56SX5RZafqbveBE2GqRmbw9kXGg12tr4y0AQD?=
- =?us-ascii?Q?AEvSFyyBEVEZ10jBbx8ya/P2ZsEQBCCmEkjdCedVFBdwRv8hOgi4VAjSJM7j?=
- =?us-ascii?Q?7BjiT7vQHr1C1bjCE/785o+rFpcUHcowRY0wZXYbHqD8C8urLL76Kg1D9lMR?=
- =?us-ascii?Q?YC7L0zIDELA9sZrXsyJW4tgBq2jv2lbDyqR8gGlygZ6ZY5d/Mx4A3LM2fDPh?=
- =?us-ascii?Q?9YNXtbiFd1Kxk7e+45Ge7TZg6OPgtzqCn4CR7sxA5gmGprxeUDkurA/ziCq4?=
- =?us-ascii?Q?COMeHGT4f1kIbkwvCA6zD7j8n9Swn15Zu9cBHZl+CAhnWAJqRr11C10GUCvw?=
- =?us-ascii?Q?Vf5ayZUQub0T+lNKlOwW01sIl3ZY8DoSF3hHP9IGgK+OP4NvkH1uSxBsFMnE?=
- =?us-ascii?Q?jzOOJfGdMvX7hLjg1mbHMQ/d2KsbcGn/j/QGw9Qv9g4dryjD/vTG39ZBBHkU?=
- =?us-ascii?Q?meUfFSIMOG3cExsz3Bt3ewJIQL/TEgi+vfDqV4dlzsIp2aLa4yqbZo3zN7nA?=
- =?us-ascii?Q?BbmrhcUik0AKgvskOmOVwH+Gicr9cnI3Y+TSqXORBAlWwCWxpxrl/dFeEBMW?=
- =?us-ascii?Q?4w=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8911449-bddc-44a0-99fb-08db107496d7
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 23:21:53.7582
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nu3vfOyMkgFsQ+i7S2Kkaai4W59X+YOK6gLYNSB2OB8GnqFS0Pe79stX6FEJaVgLQoZqNiV413H/h5DMMCU0Xw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7436
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,101 +80,300 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PFs which support the MAC Merge layer also have a set of 8 registers
-called "Port traffic class N frame preemption register (PTC0FPR - PTC7FPR)".
-Through these, a traffic class (group of TX rings of same dequeue
-priority) can be mapped to the eMAC or to the pMAC.
+On Thu, 16 Feb 2023 14:13:25 +0100
+Hans de Goede <hdegoede@redhat.com> wrote:
 
-There's nothing particularly spectacular here. We should probably only
-commit the preemptible TCs to hardware once the MAC Merge layer became
-active, but unlike Felix, we don't have an IRQ that notifies us of that.
-We'd have to sleep for up to verifyTime (127 ms) to wait for a
-resolution coming from the verification state machine; not only from the
-ndo_setup_tc() code path, but also from enetc_mm_link_state_update().
-Since it's relatively complicated and has a relatively small benefit,
-I'm not doing it.
+> Hi,
+> 
+> One small nit below.
+> 
+> On 2/16/23 13:23, Orlando Chamberlain wrote:
+> > Add apple_gmux_config struct containing operations and data
+> > specific to each mux type.
+> > 
+> > This is in preparation for adding a third, MMIO based, gmux type.
+> > 
+> > Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> > ---
+> > v1->v2: Handle the two ways of reading the version as part of this
+> > type system (read_version_as_u32).
+> >  drivers/platform/x86/apple-gmux.c | 93
+> > ++++++++++++++++++++----------- include/linux/apple-gmux.h        |
+> > 18 ++++-- 2 files changed, 74 insertions(+), 37 deletions(-)
+> > 
+> > diff --git a/drivers/platform/x86/apple-gmux.c
+> > b/drivers/platform/x86/apple-gmux.c index
+> > ec99e05e532c..36208e93d745 100644 ---
+> > a/drivers/platform/x86/apple-gmux.c +++
+> > b/drivers/platform/x86/apple-gmux.c @@ -5,6 +5,7 @@
+> >   *  Copyright (C) Canonical Ltd. <seth.forshee@canonical.com>
+> >   *  Copyright (C) 2010-2012 Andreas Heider <andreas@meetr.de>
+> >   *  Copyright (C) 2015 Lukas Wunner <lukas@wunner.de>
+> > + *  Copyright (C) 2023 Orlando Chamberlain
+> > <orlandoch.dev@gmail.com> */
+> >  
+> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > @@ -43,10 +44,12 @@
+> >   *
+> > http://www.renesas.com/products/mpumcu/h8s/h8s2100/h8s2113/index.jsp
+> > */ 
+> > +struct apple_gmux_config;
+> > +
+> >  struct apple_gmux_data {
+> >  	unsigned long iostart;
+> >  	unsigned long iolen;
+> > -	bool indexed;
+> > +	const struct apple_gmux_config *config;
+> >  	struct mutex index_lock;
+> >  
+> >  	struct backlight_device *bdev;
+> > @@ -64,6 +67,18 @@ struct apple_gmux_data {
+> >  
+> >  static struct apple_gmux_data *apple_gmux_data;
+> >  
+> > +struct apple_gmux_config {
+> > +	u8 (*read8)(struct apple_gmux_data *gmux_data, int port);
+> > +	void (*write8)(struct apple_gmux_data *gmux_data, int
+> > port, u8 val);
+> > +	u32 (*read32)(struct apple_gmux_data *gmux_data, int port);
+> > +	void (*write32)(struct apple_gmux_data *gmux_data, int
+> > port, u32 val);
+> > +	const struct vga_switcheroo_handler *gmux_handler;
+> > +	enum vga_switcheroo_handler_flags_t handler_flags;
+> > +	unsigned long resource_type;
+> > +	bool read_version_as_u32;
+> > +	char *name;
+> > +};
+> > +
+> >  #define GMUX_INTERRUPT_ENABLE		0xff
+> >  #define GMUX_INTERRUPT_DISABLE		0x00
+> >  
+> > @@ -195,35 +210,23 @@ static void gmux_index_write32(struct
+> > apple_gmux_data *gmux_data, int port, 
+> >  static u8 gmux_read8(struct apple_gmux_data *gmux_data, int port)
+> >  {
+> > -	if (gmux_data->indexed)
+> > -		return gmux_index_read8(gmux_data, port);
+> > -	else
+> > -		return gmux_pio_read8(gmux_data, port);
+> > +	return gmux_data->config->read8(gmux_data, port);
+> >  }
+> >  
+> >  static void gmux_write8(struct apple_gmux_data *gmux_data, int
+> > port, u8 val) {
+> > -	if (gmux_data->indexed)
+> > -		gmux_index_write8(gmux_data, port, val);
+> > -	else
+> > -		gmux_pio_write8(gmux_data, port, val);
+> > +	return gmux_data->config->write8(gmux_data, port, val);
+> >  }
+> >  
+> >  static u32 gmux_read32(struct apple_gmux_data *gmux_data, int port)
+> >  {
+> > -	if (gmux_data->indexed)
+> > -		return gmux_index_read32(gmux_data, port);
+> > -	else
+> > -		return gmux_pio_read32(gmux_data, port);
+> > +	return gmux_data->config->read32(gmux_data, port);
+> >  }
+> >  
+> >  static void gmux_write32(struct apple_gmux_data *gmux_data, int
+> > port, u32 val)
+> >  {
+> > -	if (gmux_data->indexed)
+> > -		gmux_index_write32(gmux_data, port, val);
+> > -	else
+> > -		gmux_pio_write32(gmux_data, port, val);
+> > +	return gmux_data->config->write32(gmux_data, port, val);
+> >  }
+> >  
+> >  /**
+> > @@ -463,19 +466,43 @@ static enum vga_switcheroo_client_id
+> > gmux_get_client_id(struct pci_dev *pdev) return VGA_SWITCHEROO_DIS;
+> >  }
+> >  
+> > -static const struct vga_switcheroo_handler gmux_handler_indexed = {
+> > +static const struct vga_switcheroo_handler gmux_handler_no_ddc = {
+> >  	.switchto = gmux_switchto,
+> >  	.power_state = gmux_set_power_state,
+> >  	.get_client_id = gmux_get_client_id,
+> >  };
+> >  
+> > -static const struct vga_switcheroo_handler gmux_handler_classic = {
+> > +static const struct vga_switcheroo_handler gmux_handler_ddc = {
+> >  	.switchto = gmux_switchto,
+> >  	.switch_ddc = gmux_switch_ddc,
+> >  	.power_state = gmux_set_power_state,
+> >  	.get_client_id = gmux_get_client_id,
+> >  };
+> >  
+> > +static const struct apple_gmux_config apple_gmux_pio = {
+> > +	.read8 = &gmux_pio_read8,
+> > +	.write8 = &gmux_pio_write8,
+> > +	.read32 = &gmux_pio_read32,
+> > +	.write32 = &gmux_pio_write32,
+> > +	.gmux_handler = &gmux_handler_ddc,
+> > +	.handler_flags = VGA_SWITCHEROO_CAN_SWITCH_DDC,
+> > +	.resource_type = IORESOURCE_IO,
+> > +	.read_version_as_u32 = false,
+> > +	.name = "classic"
+> > +};
+> > +
+> > +static const struct apple_gmux_config apple_gmux_index = {
+> > +	.read8 = &gmux_index_read8,
+> > +	.write8 = &gmux_index_write8,
+> > +	.read32 = &gmux_index_read32,
+> > +	.write32 = &gmux_index_write32,
+> > +	.gmux_handler = &gmux_handler_no_ddc,
+> > +	.handler_flags = VGA_SWITCHEROO_NEEDS_EDP_CONFIG,
+> > +	.resource_type = IORESOURCE_IO,
+> > +	.read_version_as_u32 = true,
+> > +	.name = "indexed"
+> > +};
+> > +
+> >  /**
+> >   * DOC: Interrupt
+> >   *
+> > @@ -565,13 +592,13 @@ static int gmux_probe(struct pnp_dev *pnp,
+> > const struct pnp_device_id *id) int ret = -ENXIO;
+> >  	acpi_status status;
+> >  	unsigned long long gpe;
+> > -	bool indexed = false;
+> > +	enum apple_gmux_type type;
+> >  	u32 version;
+> >  
+> >  	if (apple_gmux_data)
+> >  		return -EBUSY;
+> >  
+> > -	if (!apple_gmux_detect(pnp, &indexed)) {
+> > +	if (!apple_gmux_detect(pnp, &type)) {
+> >  		pr_info("gmux device not present\n");
+> >  		return -ENODEV;
+> >  	}
+> > @@ -581,6 +608,16 @@ static int gmux_probe(struct pnp_dev *pnp,
+> > const struct pnp_device_id *id) return -ENOMEM;
+> >  	pnp_set_drvdata(pnp, gmux_data);
+> >  
+> > +	switch (type) {
+> > +	case APPLE_GMUX_TYPE_INDEXED:
+> > +		gmux_data->config = &apple_gmux_index;
+> > +		mutex_init(&gmux_data->index_lock);
+> > +		break;
+> > +	case APPLE_GMUX_TYPE_PIO:
+> > +		gmux_data->config = &apple_gmux_pio;
+> > +		break;
+> > +	}
+> > +
+> >  	res = pnp_get_resource(pnp, IORESOURCE_IO, 0);
+> >  	gmux_data->iostart = res->start;
+> >  	gmux_data->iolen = resource_size(res);
+> > @@ -591,9 +628,7 @@ static int gmux_probe(struct pnp_dev *pnp,
+> > const struct pnp_device_id *id) goto err_free;
+> >  	}
+> >  
+> > -	if (indexed) {
+> > -		mutex_init(&gmux_data->index_lock);
+> > -		gmux_data->indexed = true;
+> > +	if (gmux_data->config->read_version_as_u32) {
+> >  		version = gmux_read32(gmux_data,
+> > GMUX_PORT_VERSION_MAJOR); ver_major = (version >> 24) & 0xff;
+> >  		ver_minor = (version >> 16) & 0xff;
+> > @@ -604,7 +639,7 @@ static int gmux_probe(struct pnp_dev *pnp,
+> > const struct pnp_device_id *id) ver_release = gmux_read8(gmux_data,
+> > GMUX_PORT_VERSION_RELEASE); }
+> >  	pr_info("Found gmux version %d.%d.%d [%s]\n", ver_major,
+> > ver_minor,
+> > -		ver_release, (gmux_data->indexed ? "indexed" :
+> > "classic"));
+> > +		ver_release, gmux_data->config->name);
+> >  
+> >  	memset(&props, 0, sizeof(props));
+> >  	props.type = BACKLIGHT_PLATFORM;
+> > @@ -694,12 +729,8 @@ static int gmux_probe(struct pnp_dev *pnp,
+> > const struct pnp_device_id *id) *
+> >  	 * Pre-retina MacBook Pros can switch the panel's DDC
+> > separately. */
+> > -	if (gmux_data->indexed)
+> > -		ret =
+> > vga_switcheroo_register_handler(&gmux_handler_indexed,
+> > -
+> > VGA_SWITCHEROO_NEEDS_EDP_CONFIG);
+> > -	else
+> > -		ret =
+> > vga_switcheroo_register_handler(&gmux_handler_classic,
+> > -
+> > VGA_SWITCHEROO_CAN_SWITCH_DDC);
+> > +	ret =
+> > vga_switcheroo_register_handler(gmux_data->config->gmux_handler,
+> > +			gmux_data->config->handler_flags);
+> >  	if (ret) {
+> >  		pr_err("Failed to register vga_switcheroo
+> > handler\n"); goto err_register_handler;
+> > diff --git a/include/linux/apple-gmux.h b/include/linux/apple-gmux.h
+> > index 1f68b49bcd68..5f658439f7f8 100644
+> > --- a/include/linux/apple-gmux.h
+> > +++ b/include/linux/apple-gmux.h
+> > @@ -36,6 +36,11 @@
+> >  
+> >  #define GMUX_MIN_IO_LEN
+> > (GMUX_PORT_BRIGHTNESS + 4) 
+> > +enum apple_gmux_type {
+> > +	APPLE_GMUX_TYPE_PIO,
+> > +	APPLE_GMUX_TYPE_INDEXED  
+> 
+> In the kernel with things like enum "values" or array initializers we
+> typically add a , at the end of the last entry, to avoid needless
+> churn when adding more entry.
+> 
+> The one exception is this when there is a special entry which
+> marks the end of the array / enum. But that is not the case here.
+> 
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/ethernet/freescale/enetc/enetc.c  | 22 +++++++++++++++++++
- drivers/net/ethernet/freescale/enetc/enetc.h  |  1 +
- .../net/ethernet/freescale/enetc/enetc_hw.h   |  4 ++++
- 3 files changed, 27 insertions(+)
+Thanks, I'll fix that up in v3.
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index e0207b01ddd6..41c194c1672d 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -25,6 +25,24 @@ void enetc_port_mac_wr(struct enetc_si *si, u32 reg, u32 val)
- }
- EXPORT_SYMBOL_GPL(enetc_port_mac_wr);
- 
-+void enetc_set_ptcfpr(struct enetc_hw *hw, unsigned long preemptible_tcs)
-+{
-+	u32 val;
-+	int tc;
-+
-+	for (tc = 0; tc < 8; tc++) {
-+		val = enetc_port_rd(hw, ENETC_PTCFPR(tc));
-+
-+		if (preemptible_tcs & BIT(tc))
-+			val |= ENETC_PTCFPR_FPE;
-+		else
-+			val &= ~ENETC_PTCFPR_FPE;
-+
-+		enetc_port_wr(hw, ENETC_PTCFPR(tc), val);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(enetc_set_ptcfpr);
-+
- static int enetc_num_stack_tx_queues(struct enetc_ndev_priv *priv)
- {
- 	int num_tx_rings = priv->num_tx_rings;
-@@ -2640,6 +2658,8 @@ static void enetc_reset_tc_mqprio(struct net_device *ndev)
- 	}
- 
- 	enetc_debug_tx_ring_prios(priv);
-+
-+	enetc_set_ptcfpr(hw, 0);
- }
- 
- int enetc_setup_tc_mqprio(struct net_device *ndev, void *type_data)
-@@ -2694,6 +2714,8 @@ int enetc_setup_tc_mqprio(struct net_device *ndev, void *type_data)
- 
- 	enetc_debug_tx_ring_prios(priv);
- 
-+	enetc_set_ptcfpr(hw, mqprio->preemptible_tcs);
-+
- 	return 0;
- 
- err_reset_tc:
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
-index 8010f31cd10d..143078a9ef16 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.h
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.h
-@@ -486,6 +486,7 @@ static inline void enetc_cbd_free_data_mem(struct enetc_si *si, int size,
- 
- void enetc_reset_ptcmsdur(struct enetc_hw *hw);
- void enetc_set_ptcmsdur(struct enetc_hw *hw, u32 *queue_max_sdu);
-+void enetc_set_ptcfpr(struct enetc_hw *hw, unsigned long preemptible_tcs);
- 
- #ifdef CONFIG_FSL_ENETC_QOS
- int enetc_qos_query_caps(struct net_device *ndev, void *type_data);
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc_hw.h b/drivers/net/ethernet/freescale/enetc/enetc_hw.h
-index de2e0ee8cdcb..36bb2d6d5658 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc_hw.h
-+++ b/drivers/net/ethernet/freescale/enetc/enetc_hw.h
-@@ -965,6 +965,10 @@ static inline u32 enetc_usecs_to_cycles(u32 usecs)
- 	return (u32)div_u64(usecs * ENETC_CLK, 1000000ULL);
- }
- 
-+/* Port traffic class frame preemption register */
-+#define ENETC_PTCFPR(n)			(0x1910 + (n) * 4) /* n = [0 ..7] */
-+#define ENETC_PTCFPR_FPE		BIT(31)
-+
- /* port time gating control register */
- #define ENETC_PTGCR			0x11a00
- #define ENETC_PTGCR_TGE			BIT(31)
--- 
-2.34.1
+> 
+> > +};
+> > +
+> >  #if IS_ENABLED(CONFIG_APPLE_GMUX)
+> >  static inline bool apple_gmux_is_indexed(unsigned long iostart)
+> >  {
+> > @@ -65,13 +70,13 @@ static inline bool
+> > apple_gmux_is_indexed(unsigned long iostart)
+> >   * Return: %true if a supported gmux ACPI device is detected and
+> > the kernel
+> >   * was configured with CONFIG_APPLE_GMUX, %false otherwise.
+> >   */
+> > -static inline bool apple_gmux_detect(struct pnp_dev *pnp_dev, bool
+> > *indexed_ret) +static inline bool apple_gmux_detect(struct pnp_dev
+> > *pnp_dev, enum apple_gmux_type *type_ret) {
+> >  	u8 ver_major, ver_minor, ver_release;
+> >  	struct device *dev = NULL;
+> >  	struct acpi_device *adev;
+> >  	struct resource *res;
+> > -	bool indexed = false;
+> > +	enum apple_gmux_type type = APPLE_GMUX_TYPE_PIO;
+> >  	bool ret = false;
+> >  
+> >  	if (!pnp_dev) {
+> > @@ -99,13 +104,14 @@ static inline bool apple_gmux_detect(struct
+> > pnp_dev *pnp_dev, bool *indexed_ret) ver_minor = inb(res->start +
+> > GMUX_PORT_VERSION_MINOR); ver_release = inb(res->start +
+> > GMUX_PORT_VERSION_RELEASE); if (ver_major == 0xff && ver_minor ==
+> > 0xff && ver_release == 0xff) {
+> > -		indexed = apple_gmux_is_indexed(res->start);
+> > -		if (!indexed)
+> > +		if (apple_gmux_is_indexed(res->start))
+> > +			type = APPLE_GMUX_TYPE_INDEXED;
+> > +		else
+> >  			goto out;
+> >  	}
+> >  
+> > -	if (indexed_ret)
+> > -		*indexed_ret = indexed;
+> > +	if (type_ret)
+> > +		*type_ret = type;
+> >  
+> >  	ret = true;
+> >  out:  
+> 
 
