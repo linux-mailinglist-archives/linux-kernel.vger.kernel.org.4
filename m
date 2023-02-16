@@ -2,109 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3FA69A2B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFE669A2A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjBPXxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:53:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S229686AbjBPXwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjBPXxb (ORCPT
+        with ESMTP id S229483AbjBPXwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:53:31 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC065958C;
-        Thu, 16 Feb 2023 15:53:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHsFq0GS4z4x89;
-        Fri, 17 Feb 2023 10:53:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676591584;
-        bh=fP7M6V+cjNdWp1AJeaYpecLEvF9ZpOfTM+q7vfHAObU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rACrYxab0E15ubVIDUkicHNZ9A7o6QYmslTZDcOJQfv/F/0NBjWDNSogqxgIeXY6/
-         ES7W5herbayThve7MD61VmbV1VgH9umTLzCioelUwYSDn5NuYy2zyhj33GJlWsir8a
-         ulpOs7iyxfs3sCIy0239wGGeto2v+Mo4XuIdQOnmhKX8lsw/gpAqMubXK7uzmr+MjE
-         fsVJHz/hJPLnVYPKrLNaflekWVbGGbrv7w8dC0g5WWu6f2WLbfm5nYmyePabZYU7Tz
-         xBdgnLQfW2lEvmPa2LK2SR31sA6tFbYUXnUOPsQzeJnqx7s55RErGykHtpIo2Udk4K
-         i8Rj2sYAlIr1g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 00/10] Add the PowerQUICC audio support using the QMC
-In-Reply-To: <20230216134226.1692107-1-herve.codina@bootlin.com>
-References: <20230216134226.1692107-1-herve.codina@bootlin.com>
-Date:   Fri, 17 Feb 2023 10:52:58 +1100
-Message-ID: <87mt5dyxph.fsf@mpe.ellerman.id.au>
+        Thu, 16 Feb 2023 18:52:23 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED214BEAA;
+        Thu, 16 Feb 2023 15:52:22 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id b5so3838244plz.5;
+        Thu, 16 Feb 2023 15:52:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9SlhoB6i+2mk1EJVjbBztFsISdkHxk3ce01t+gVZR5M=;
+        b=kiXZiS3WWc/7Zy1SOoCV4QCxMSZr2DwCbhgt7byORT2MyV/qZLAxeyapO5zzm0kcC2
+         Vu9kWR+1yENW1Zin4ITOqpflqF8GLkKK+2sK+P/vupS822b8xdRXeI9XYkedmzvmoSRt
+         ZbIj2fgFmy8/tofLpFBpdN014PlUsXt731e5BRrehQolhAD73tSgdPZy4FNZe9jCkiGw
+         PWFE+zmf3riS83yyP4eonhJNHaZ62AiOuscD7b6RKmlFPc0DXQCV1yXvL7nGCdxwqI3P
+         Ck0RM6D6Hw2otibc0NyFeC8l5z6gYZ0g3bUBOg39yKfdrY+ZrTMi9YFGkUz9uAMYSESG
+         w0YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9SlhoB6i+2mk1EJVjbBztFsISdkHxk3ce01t+gVZR5M=;
+        b=uPS6En0Ggd6VUyjlpnyxuIiIecY4UhFf/6HNWBCJxv8bJhtT7zZF+CRxg0yGZPlbUg
+         XmadK9Sri98yqXUC708eLuXmhFdxeMOESu63pdWETmraY3RKPODV7m60qU7zrdVDptTy
+         iB8wB4pnEVpH2PIA2+Z7B1Fs6rNvVIA2Znlay2FNhda1Xz4KWEzE5sTU5vqO/Ch/Jd7Z
+         BIDj5/E51Qjq2GLRNzCpPmk57+/HqEr3ZXhOQECBemh+fYLmC4lue3o0I9RU0Fmtid7W
+         1TnYnOJPJmWkQiqc8Jc9wQOoPFg8qxGduFsLatrBw+8PXhaS62mhyw1Rwn7K0tYCXW9V
+         mXiQ==
+X-Gm-Message-State: AO0yUKWOrno7yxjwCoqy9SXhNmtSQBHAlwgW/cagB3aSru30n4ZiE1sC
+        0DrDCv4VNF+GXYJhN1J1mm/xZiv2pwg=
+X-Google-Smtp-Source: AK7set+ZgLvFcBOHeA3PISBcN6oxKM9ZjIkdXMjIQLNGinDBRIUlYLibkQ52ZGgO4lUV+58uVYPxkQ==
+X-Received: by 2002:a17:902:d486:b0:19a:b033:2bb1 with SMTP id c6-20020a170902d48600b0019ab0332bb1mr10260416plg.44.1676591541853;
+        Thu, 16 Feb 2023 15:52:21 -0800 (PST)
+Received: from localhost ([47.89.225.180])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b00194caf3e975sm1830488plw.208.2023.02.16.15.52.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Feb 2023 15:52:21 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: [PATCH V3 10/14] kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in nested_ept_invalidate_addr()
+Date:   Fri, 17 Feb 2023 07:53:17 +0800
+Message-Id: <20230216235321.735214-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20230216154115.710033-1-jiangshanlai@gmail.com>
+References: <20230216154115.710033-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herve Codina <herve.codina@bootlin.com> writes:
-> Hi,
->
-> This series adds support for audio using the QMC controller available in
-> some Freescale PowerQUICC SoCs.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Who's going to take this series?
+Use kvm_mmu_invalidate_addr() instead open calls to mmu->invlpg().
 
-By lines of code it's mostly in drivers/soc/fsl, so I was expecting it
-would go via that tree.
+No functional change intended.
 
-Or is it a sound series that should go via one of the sound trees?
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+---
+ arch/x86/kvm/mmu/mmu.c    | 1 +
+ arch/x86/kvm/vmx/nested.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-cheers
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index c48f98fbd6ae..9b5e3afbcdb4 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5791,6 +5791,7 @@ void kvm_mmu_invalidate_addr(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+ 			mmu->invlpg(vcpu, addr, mmu->prev_roots[i].hpa);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(kvm_mmu_invalidate_addr);
+ 
+ void kvm_mmu_invlpg(struct kvm_vcpu *vcpu, gva_t gva)
+ {
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 557b9c468734..cb502bbaee87 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -358,6 +358,7 @@ static bool nested_ept_root_matches(hpa_t root_hpa, u64 root_eptp, u64 eptp)
+ static void nested_ept_invalidate_addr(struct kvm_vcpu *vcpu, gpa_t eptp,
+ 				       gpa_t addr)
+ {
++	unsigned long roots = 0;
+ 	uint i;
+ 	struct kvm_mmu_root_info *cached_root;
+ 
+@@ -368,8 +369,10 @@ static void nested_ept_invalidate_addr(struct kvm_vcpu *vcpu, gpa_t eptp,
+ 
+ 		if (nested_ept_root_matches(cached_root->hpa, cached_root->pgd,
+ 					    eptp))
+-			vcpu->arch.mmu->invlpg(vcpu, addr, cached_root->hpa);
++			roots |= KVM_MMU_ROOT_PREVIOUS(i);
+ 	}
++	if (roots)
++		kvm_mmu_invalidate_addr(vcpu, vcpu->arch.mmu, addr, roots);
+ }
+ 
+ static void nested_ept_inject_page_fault(struct kvm_vcpu *vcpu,
+-- 
+2.19.1.6.gb485710b
 
-...
->  .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      |  172 ++
->  .../bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml |  234 +++
->  .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
->  MAINTAINERS                                   |   25 +
->  arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
->  drivers/soc/fsl/qe/Kconfig                    |   23 +
->  drivers/soc/fsl/qe/Makefile                   |    2 +
->  drivers/soc/fsl/qe/qmc.c                      | 1533 +++++++++++++++++
->  drivers/soc/fsl/qe/tsa.c                      |  869 ++++++++++
->  drivers/soc/fsl/qe/tsa.h                      |   42 +
->  include/dt-bindings/soc/fsl,tsa.h             |   13 +
->  include/soc/fsl/qe/qmc.h                      |   71 +
->  sound/soc/fsl/Kconfig                         |    9 +
->  sound/soc/fsl/Makefile                        |    2 +
->  sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
->  15 files changed, 3848 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml
->  create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
->  create mode 100644 drivers/soc/fsl/qe/qmc.c
->  create mode 100644 drivers/soc/fsl/qe/tsa.c
->  create mode 100644 drivers/soc/fsl/qe/tsa.h
->  create mode 100644 include/dt-bindings/soc/fsl,tsa.h
->  create mode 100644 include/soc/fsl/qe/qmc.h
->  create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
