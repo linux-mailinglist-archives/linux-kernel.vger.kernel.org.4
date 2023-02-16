@@ -2,147 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3336992C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 996606992D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBPLJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S230396AbjBPLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBPLJc (ORCPT
+        with ESMTP id S230407AbjBPLKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:09:32 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFF5526D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:09:30 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id eq11so2253461edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:09:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R3iiqH06nUTpPWYilgK2IFHj13BbO9uCZQ5Bymri4gs=;
-        b=cmzSs1x1uugc4EQOj+4Gw22iLIlzjJkEO/Pz7kDoPraCLYFaLp7LK7gxHRSb4Rhrxj
-         PXPCvcsjd1LOKa5sC/+YFMAol7I6Gi6WcmqSSNf3J8Vb8dpJEyEwlHJHLJ7Rkd6wgDV1
-         I4GfUatKxHSck7cIL7jhaQAUuxr2hJ6WECjfITXdl9UGxvQwsnHEjiQiah0j4Pa4Fw4P
-         WbfM/yLLq093PHgwbM5x+UMEqFPhoXiRlvfneB3BP9THB7DmxbDR0suzmIs8kqazRPBT
-         muSRLpK2kvpJWKUtlL5RZ5HSh71t8OJsdD+mOrGnGxaIhAvp598jeJ010eAQwXbzGuMZ
-         B4Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3iiqH06nUTpPWYilgK2IFHj13BbO9uCZQ5Bymri4gs=;
-        b=vuTo2t/YJTJV0LVwHCtARYVq2X18hIy/m9G7yszDKJdp9aRyqfXH7wy/ry3eMdm4Z0
-         xh8kFxfEKAYShsXZCdxSAeibqN2wR8OFUnzR0tf4AmSVdpaH+F8O8AgxKC8ra0AyuI+i
-         /VOuBC32vN9w933eOIgBGsnp9unJJSnBy+VtCE076VMx8gB1PQ6B0A/XpVwXLW/XFpv1
-         PFRCgbCYOKUx4E8z+aDtqoBVCyKwaMzyiiasOjl/y3tYCr5UeTsWc3RzhgvKRG2zxCUR
-         YTGgGf33TBjd44iBKxKxOgURbxN+ST2TyjLA0JiRMXA64cTM1/rW4XNf1+0GC6CuNopc
-         hHFg==
-X-Gm-Message-State: AO0yUKWr+IR/wVLa/dc6ikHQkKWjFbRGX/RkWcqCS/9CFq5wZcA/hMAO
-        qc5HvVINj4TCIipk+VijZUStSQ==
-X-Google-Smtp-Source: AK7set+atTYUvsw9Bi58sXSveqCbuDXNoORblsEZyFSBSAF12mVmwb9zx0f0LjR4QO0iZYzNQH+X0w==
-X-Received: by 2002:aa7:d4c1:0:b0:4ad:6fc6:ae9c with SMTP id t1-20020aa7d4c1000000b004ad6fc6ae9cmr466265edr.17.1676545769139;
-        Thu, 16 Feb 2023 03:09:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b12-20020a50cccc000000b004acc123cd94sm693183edj.30.2023.02.16.03.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 03:09:28 -0800 (PST)
-Message-ID: <a8f0cd74-6094-d24a-b126-ea7737e39a01@linaro.org>
-Date:   Thu, 16 Feb 2023 12:09:26 +0100
+        Thu, 16 Feb 2023 06:10:38 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D66956ECC;
+        Thu, 16 Feb 2023 03:10:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676545833; x=1708081833;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J6BNHHswTkDcX5jOI5ShWTSFAJ7P3SXfiqTD8tl74ZA=;
+  b=HclVVJpJ1L8+UNiq0TyJU+4RP4WTMDaTFv1KPej9mxZMT/PeaUTbB8ex
+   V3HzSv0M+aWvD2mznhj4IGllgpIZ66Od4XBzgbR09kDpweHTPJJ/pf/Nx
+   O0wVGaZIVDeE+s8LM63BW8i2fLCb4Qd+n+t6SDfP7V/6DAL5QdvWH6qy+
+   ofJo7fPT669r/BvPs9WwYHt7pRF/socml9GzPCxeWHars3G9VD9LvhAVh
+   ztFYVFHNllLoFZ5qAayXK/4tgfsULMP1vnhgjD1y9IvF0ouwNzyAB5TmY
+   Gnp29YKF8jM6aGkMlbSnwyCkoyOfioKm7nYvBqL7l4kyPJqq5ieIF7BN3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="417913088"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="417913088"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 03:10:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="670089954"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="670089954"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2023 03:10:25 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSc9g-000ADR-1N;
+        Thu, 16 Feb 2023 11:10:24 +0000
+Date:   Thu, 16 Feb 2023 19:09:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform
+ ops
+Message-ID: <202302161942.xItsHIi1-lkp@intel.com>
+References: <20230214212457.3319814-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 13/16] PCI: samsung: Rename common functions to samsung
-Content-Language: en-US
-To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
-        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
-        m.szyprowski@samsung.com, jh80.chung@samsung.co,
-        pankaj.dubey@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214121333.1837-1-shradha.t@samsung.com>
- <CGME20230214121456epcas5p36603c8d717588699d1b5575229d19114@epcas5p3.samsung.com>
- <20230214121333.1837-14-shradha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214121333.1837-14-shradha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214212457.3319814-1-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 13:13, Shradha Todi wrote:
-> Use samsung instead of exynos for all common functions
-> like probe/remove/suspend/resume.
-> 
-> Suggested-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
-> ---
->  drivers/pci/controller/dwc/pci-samsung.c | 42 ++++++++++++------------
->  1 file changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-samsung.c b/drivers/pci/controller/dwc/pci-samsung.c
-> index 719d284e1552..dc8ec0b546fd 100644
-> --- a/drivers/pci/controller/dwc/pci-samsung.c
-> +++ b/drivers/pci/controller/dwc/pci-samsung.c
-> @@ -60,7 +60,7 @@ struct samsung_pcie {
->  	struct regulator_bulk_data	supplies[2];
->  };
->  
-> -static int exynos_pcie_init_clk_resources(struct samsung_pcie *sp)
-> +static int samsung_pcie_init_clk_resources(struct samsung_pcie *sp)
+Hi Elliot,
 
-Same as before - I don't see here benefit.
+Thank you for the patch! Yet something to improve:
 
->  {
->  	struct device *dev = sp->pci.dev;
->  	int ret;
-> @@ -74,7 +74,7 @@ static int exynos_pcie_init_clk_resources(struct samsung_pcie *sp)
->  	return clk_bulk_prepare_enable(sp->clk_cnt, sp->clks);
->  }
->  
+[auto build test ERROR on 3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb]
 
-(...)
+url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
+base:   3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb
+patch link:    https://lore.kernel.org/r/20230214212457.3319814-1-quic_eberman%40quicinc.com
+patch subject: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform ops
+config: hexagon-randconfig-r041-20230212 (https://download.01.org/0day-ci/archive/20230216/202302161942.xItsHIi1-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/33f0c4b130c7b249a1524da8076dd12333aa7cde
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
+        git checkout 33f0c4b130c7b249a1524da8076dd12333aa7cde
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
 
->  
-> -static struct platform_driver exynos_pcie_driver = {
-> -	.probe		= exynos_pcie_probe,
-> -	.remove		= __exit_p(exynos_pcie_remove),
-> +static struct platform_driver samsung_pcie_driver = {
-> +	.probe		= samsung_pcie_probe,
-> +	.remove		= __exit_p(samsung_pcie_remove),
->  	.driver = {
-> -		.name	= "exynos-pcie",
-> -		.of_match_table = exynos_pcie_of_match,
-> -		.pm		= &exynos_pcie_pm_ops,
-> +		.name	= "samsung-pcie",
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302161942.xItsHIi1-lkp@intel.com/
 
-This "name" has some point... but I think it would break now all module
-users.
+All errors (new ones prefixed by >>):
 
-> +		.of_match_table = samsung_pcie_of_match,
-> +		.pm		= &samsung_pcie_pm_ops,
->  	},
->  };
-> -module_platform_driver(exynos_pcie_driver);
-> +module_platform_driver(samsung_pcie_driver);
->  MODULE_LICENSE("GPL v2");
-> -MODULE_DEVICE_TABLE(of, exynos_pcie_of_match);
-> +MODULE_DEVICE_TABLE(of, samsung_pcie_of_match);
+   In file included from drivers/firmware/qcom_scm.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/firmware/qcom_scm.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/firmware/qcom_scm.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/firmware/qcom_scm.c:1335:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
+                                                   &src_cpy, new_perms, mem_parcel->n_acl_entries);
+                                                   ^~~~~~~~
+   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
+                           unsigned int *srcvm,
+                                         ^
+   drivers/firmware/qcom_scm.c:1353:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
+                                                   &src_cpy, new_perms, 1));
+                                                   ^~~~~~~~
+   include/asm-generic/bug.h:147:18: note: expanded from macro 'WARN_ON_ONCE'
+           DO_ONCE_LITE_IF(condition, WARN_ON, 1)
+                           ^~~~~~~~~
+   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
+                   bool __ret_do_once = !!(condition);                     \
+                                           ^~~~~~~~~
+   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
+                           unsigned int *srcvm,
+                                         ^
+   drivers/firmware/qcom_scm.c:1385:7: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'unsigned int *' [-Werror,-Wincompatible-pointer-types]
+                                                   &src_cpy, &new_perms, 1);
+                                                   ^~~~~~~~
+   drivers/firmware/qcom_scm.c:912:18: note: passing argument to parameter 'srcvm' here
+                           unsigned int *srcvm,
+                                         ^
+   6 warnings and 3 errors generated.
 
-Best regards,
-Krzysztof
 
+vim +1335 drivers/firmware/qcom_scm.c
+
+  1303	
+  1304	static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
+  1305	{
+  1306		struct qcom_scm_vmperm *new_perms;
+  1307		u64 src, src_cpy;
+  1308		int ret = 0, i, n;
+  1309		u16 vmid;
+  1310	
+  1311		new_perms = kcalloc(mem_parcel->n_acl_entries, sizeof(*new_perms), GFP_KERNEL);
+  1312		if (!new_perms)
+  1313			return -ENOMEM;
+  1314	
+  1315		for (n = 0; n < mem_parcel->n_acl_entries; n++) {
+  1316			vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
+  1317			if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
+  1318				new_perms[n].vmid = vmid;
+  1319			else
+  1320				new_perms[n].vmid = QCOM_SCM_RM_MANAGED_VMID;
+  1321			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_X)
+  1322				new_perms[n].perm |= QCOM_SCM_PERM_EXEC;
+  1323			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_W)
+  1324				new_perms[n].perm |= QCOM_SCM_PERM_WRITE;
+  1325			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_R)
+  1326				new_perms[n].perm |= QCOM_SCM_PERM_READ;
+  1327		}
+  1328	
+  1329		src = (1ull << QCOM_SCM_VMID_HLOS);
+  1330	
+  1331		for (i = 0; i < mem_parcel->n_mem_entries; i++) {
+  1332			src_cpy = src;
+  1333			ret = qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+  1334							le64_to_cpu(mem_parcel->mem_entries[i].size),
+> 1335							&src_cpy, new_perms, mem_parcel->n_acl_entries);
+  1336			if (ret) {
+  1337				src = 0;
+  1338				for (n = 0; n < mem_parcel->n_acl_entries; n++) {
+  1339					vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
+  1340					if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
+  1341						src |= (1ull << vmid);
+  1342					else
+  1343						src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
+  1344				}
+  1345	
+  1346				new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
+  1347	
+  1348				for (i--; i >= 0; i--) {
+  1349					src_cpy = src;
+  1350					WARN_ON_ONCE(qcom_scm_assign_mem(
+  1351							le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+  1352							le64_to_cpu(mem_parcel->mem_entries[i].size),
+  1353							&src_cpy, new_perms, 1));
+  1354				}
+  1355				break;
+  1356			}
+  1357		}
+  1358	
+  1359		kfree(new_perms);
+  1360		return ret;
+  1361	}
+  1362	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
