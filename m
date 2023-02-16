@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CC7699AC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8803F699ACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjBPRIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S229893AbjBPRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPRII (ORCPT
+        with ESMTP id S229461AbjBPRLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:08:08 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B4E311F1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:08:05 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id x31so1701754pgl.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:08:05 -0800 (PST)
+        Thu, 16 Feb 2023 12:11:08 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EB43A0A1;
+        Thu, 16 Feb 2023 09:11:03 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c20so3609296lfv.6;
+        Thu, 16 Feb 2023 09:11:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
-        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/2sJEtgCqWcHpyGZltlmPEurvS6k94QmmYnvcA73iU=;
-        b=HrngW0waqUUxWaiLQaqsCTivnazUQTmHjOxeLm/mFtO19NgCdcrwi37YEy0pxkPocb
-         BzneYYkc1A/e/REiS3zJk3ZB5d3u3mvOsv/kcc4aqABPkqdtgP6exurBCsgOisGjl+bV
-         YciY56Z/S2iH3oYj5q4CeS1Az3UyTPAc4McPga1/ofbz0ChWWLnziUnMDPq+nqKqUn+Z
-         uS1ll6Mzo7zc1uEhQZvxseGqB+QzfDgMxJR6Q2N/28YXO9Nr+DsTqFPD7O9AZK8Yfes3
-         FzMv9aEfH2kkTyEzmp2LApIX42OvkqIwgKBg8dI8iKazf5t2cQVl1/UmWnKgqBYE/pVy
-         0hWA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4f5Guh6O+Er90p8RJpc81QhGfIifglAIud62OdlqqVg=;
+        b=PXg2oMtQiUwyIfWKSaIiPCjXtx5SVicibxvae8g+TZUbyDun2Wb3yMt9uQIRKflYmO
+         E4RkUohPnoGMfXYtzAEC2UiHvfl2hcpUafLj20Z5AJvZbQtWii/fxHgLDLYOqIoSPbVv
+         KKTP9SOiEwu6AnFwnxqIaM2rnsErbTDGKmETbFFQe2ynAQk6TGCoIzZcyqt1fby9mzur
+         3FilvTZe4SutefJR6w3PPLBhHpzJdaSCHPdAEpRyok4VUPpausS4lFkMSCfVSyb3oO3t
+         9kFlGpSRFTrZDtnChpsNK8GOPXoAfFRRhKp2iWEpqgWSLd64wBdBWp4MusQi7V3Mdjsx
+         aeQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/2sJEtgCqWcHpyGZltlmPEurvS6k94QmmYnvcA73iU=;
-        b=pYJgRKcrgK03jOh/XVJw+9t2RkwgvFJZJ3tCCSTyacXlo5KFVatHBUOU8LkLIlIqAh
-         cRMBlB1ZbQ+wauqvypoA+fBtivTB94n045wbo+mw9RNfQiFu5TRB1fLEoMnPCcXeQdss
-         ErDtQ5sxtNusQ76Yo9HPfQ2rjP4AGFGyR395z3+MM4KfzM0kG8PEXLe9w7GGQRVuXse2
-         uzmq8CkN05XQdB4xZVyriYhWJoda9r5plXK6C/KHjv8KmJhXV7ka71B5vtmw0EVzHcEY
-         zKw2N+7u+JoxsJlAajuFWRO51PM5kKj2/A5NcAIbWDUeWxvaFWzt8nt8UuX1drv5CO9M
-         mEfQ==
-X-Gm-Message-State: AO0yUKU0CGln0+pYW31zij3RidftbBUqrru5KDYJEVXjXRIaJbu9Ebhe
-        dB2DZyI+e/9NCbU7yT9l4K+mdQ==
-X-Google-Smtp-Source: AK7set/vsgz2uYkbAgIUfKJq8MNuQDSWydhwoc+XsfsLDQnsHATccPNNhCSyzm6SRxLozkV9aFO81g==
-X-Received: by 2002:a62:6386:0:b0:5a8:4c55:db6f with SMTP id x128-20020a626386000000b005a84c55db6fmr5338963pfb.19.1676567285185;
-        Thu, 16 Feb 2023 09:08:05 -0800 (PST)
-Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
-        by smtp.gmail.com with ESMTPSA id x52-20020a056a000bf400b00592591d1634sm1597492pfu.97.2023.02.16.09.08.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Feb 2023 09:08:04 -0800 (PST)
-From:   Andreas Dilger <adilger@dilger.ca>
-Message-Id: <542D3378-3214-4D0D-AA63-5A149E2B00EE@dilger.ca>
-Content-Type: multipart/signed;
- boundary="Apple-Mail=_2AA5044B-1570-4816-8AA0-ED824D970CD1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
- i_prealloc_list
-Date:   Thu, 16 Feb 2023 10:07:39 -0700
-In-Reply-To: <20230210143753.ofh6wouk7vi7ygcl@quack3>
-Cc:     Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-To:     Jan Kara <jack@suse.cz>
-References: <20230116080216.249195-8-ojaswin@linux.ibm.com>
- <20230116122334.k2hlom22o2hlek3m@quack3>
- <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230117110335.7dtlq4catefgjrm3@quack3>
- <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230127144312.3m3hmcufcvxxp6f4@quack3>
- <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230209105418.ucowiqnnptbpwone@quack3>
- <Y+UzQJRIJEiAr4Z4@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230210143753.ofh6wouk7vi7ygcl@quack3>
-X-Mailer: Apple Mail (2.3273)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4f5Guh6O+Er90p8RJpc81QhGfIifglAIud62OdlqqVg=;
+        b=lMnYUf96W6cuhcfd2tzxH4P6AkoV+bYN7MKbLabUmjBE7SCAREksNWUracDSzI3gWG
+         56pghbNdchQKkakEzMSwxbGy4xxXmE/Iqxf8tI37IePzj3MQsPn/wwKnGx543/NfdP6M
+         g+6sQlLju2dmHVC7+Px94DI8i3dQFvtK+1Rjt7Cj0qd7iw0aTXE6EJ3rAJV80Vp9xzsh
+         zjabPt+qUqjGsLmb9C4I60iPaP7fYFGyuWajlFtAZN3r1h4ar9gq1qTb1p3s0EDcTp15
+         O+Swt6wLEzdJfj140G0/EN/igr8x4+GAEFfkFjGFmHWOoU0cxb5/xq9BD6aOARQT359n
+         q6dw==
+X-Gm-Message-State: AO0yUKUMVk2tUOIrzLUG0ftk4Xo3enCNnFzbW1FfwTthgHjTiCEwtqCQ
+        ifom7hO9UBu/PNcrmDeBQ9A=
+X-Google-Smtp-Source: AK7set9eU/at3h+mo5rSpX2NbkmXo12VKMArpwHeN3uJ5JzyWbSGz7FLFrMPDa0Aiq4xjA1rKFHQKQ==
+X-Received: by 2002:ac2:59cf:0:b0:4db:379c:ae15 with SMTP id x15-20020ac259cf000000b004db379cae15mr1880207lfn.57.1676567461897;
+        Thu, 16 Feb 2023 09:11:01 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id q14-20020ac246ee000000b004cafa01ebbfsm357268lfo.101.2023.02.16.09.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 09:11:01 -0800 (PST)
+Date:   Thu, 16 Feb 2023 20:10:58 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Sergey.Semin@baikalelectronics.ru,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
+Message-ID: <20230216171058.iypslnps5bvlw3qv@mobilestation>
+References: <20230213132411.65524-1-cai.huoqing@linux.dev>
+ <20230213132411.65524-5-cai.huoqing@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213132411.65524-5-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,57 +80,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 09:24:09PM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
+> 
+> Add HDMA DebugFS support to show register information
+> 
+> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
+> ---
+>  drivers/dma/dw-edma/Makefile             |   3 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 175 +++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
+>  4 files changed, 201 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> 
+> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> index b1c91ef2c63d..83ab58f87760 100644
+> --- a/drivers/dma/dw-edma/Makefile
+> +++ b/drivers/dma/dw-edma/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+> -dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> +dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
+> +				   dw-hdma-v0-debugfs.o
+>  dw-edma-objs			:= dw-edma-core.o	\
+>  				   dw-edma-v0-core.o	\
+>  				   dw-hdma-v0-core.o $(dw-edma-y)
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> index 7e4f98987e29..3723d5d8127c 100644
+> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -9,6 +9,7 @@
+>  #include "dw-edma-core.h"
+>  #include "dw-hdma-v0-core.h"
+>  #include "dw-hdma-v0-regs.h"
+> +#include "dw-hdma-v0-debugfs.h"
+>  
+>  enum dw_hdma_control {
+>  	DW_HDMA_V0_CB					= BIT(0),
+> @@ -294,6 +295,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
+>  /* HDMA debugfs callbacks */
+>  static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+>  {
+> +	dw_hdma_v0_debugfs_on(dw);
+>  }
+>  
+>  static const struct dw_edma_core_ops hdma_core = {
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> new file mode 100644
+> index 000000000000..a0fafd788c14
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> @@ -0,0 +1,175 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/bitfield.h>
+> +
+> +#include "dw-hdma-v0-debugfs.h"
+> +#include "dw-hdma-v0-regs.h"
+> +#include "dw-edma-core.h"
+> +
+> +#define REGS_ADDR(dw, name)						       \
+> +	({								       \
+> +		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
+> +									       \
+> +		(void __iomem *)&__regs->name;				       \
+> +	})
+> +
+> +#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
+> +	({								       \
+> +		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
+> +									       \
+> +		if (_dir == EDMA_DIR_READ)				       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
+> +		else							       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
+> +									       \
+> +		(void __iomem *)&__ch_regs->name;			       \
+> +	})
+> +
+> +#define CTX_REGISTER(dw, name, dir, ch) \
+> +	{ dw, #name, REGS_CH_ADDR(dw, name, dir, ch), dir, ch }
+> +
+> +#define REGISTER(dw, name) \
+> +	{ dw, #name, REGS_ADDR(dw, name) }
+> +
+> +#define WRITE_STR				"write"
+> +#define READ_STR				"read"
+> +#define CHANNEL_STR				"channel"
+> +#define REGISTERS_STR				"registers"
+> +
+> +struct dw_hdma_debugfs_entry {
+> +	struct dw_edma				*dw;
+> +	const char				*name;
+> +	void __iomem				*reg;
+> +	enum dw_edma_dir			dir;
+> +	u16					ch;
+> +};
+> +
+> +static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
+> +{
+> +	void __iomem *reg = (void __force __iomem *)data;
+> +	*val = readl(reg);
+> +
+> +	return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
+> +
+> +static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
+> +				       const struct dw_hdma_debugfs_entry ini[],
+> +				       int nr_entries, struct dentry *dent)
+> +{
+> +	struct dw_hdma_debugfs_entry *entries;
+> +	int i;
+> +
+> +	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
+> +			       GFP_KERNEL);
+> +	for (i = 0; i < nr_entries; i++) {
+> +		entries[i] = ini[i];
+> +
+> +		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
+> +					   &entries[i], &fops_x32);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+> +				    u16 ch, struct dentry *dent)
+> +{
+> +	int nr_entries;
 
---Apple-Mail=_2AA5044B-1570-4816-8AA0-ED824D970CD1
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain;
-	charset=us-ascii
+> +	struct dw_hdma_debugfs_entry debugfs_regs[] = {
 
-On Feb 10, 2023, at 7:37 AM, Jan Kara <jack@suse.cz> wrote:
-> So I belive mballoc tries to align everything (offsets & lengths)
-> to powers of two to reduce fragmentation and simplify the work for
-> the buddy allocator.  If ac->ac_b_ex.fe_len is a power-of-two, the
-> alignment makes sense. But once we had to resort to higher allocator
-> passes and just got some random-length extent, the alignment stops
-> making sense.
+should be const.
 
-In addition to optimizing for the buddy allocator, the other reason that
-the allocations are aligned to power-of-two offsets is to better align
-with underlying RAID stripes.  Otherwise, unaligned writes will cause
-parity read-modify-write updates to multiple RAID stripes.  This alignment
-can also help (though to a lesser degree) with NAND flash erase blocks.
+> +		CTX_REGISTER(dw, ch_en, dir, ch),
+> +		CTX_REGISTER(dw, doorbell, dir, ch),
 
-Cheers, Andreas
+Did you intentionally miss the prefetch and handshake fields here?
 
+> +		CTX_REGISTER(dw, llp.lsb, dir, ch),
+> +		CTX_REGISTER(dw, llp.msb, dir, ch),
+> +		CTX_REGISTER(dw, cycle_sync, dir, ch),
+> +		CTX_REGISTER(dw, transfer_size, dir, ch),
+> +		CTX_REGISTER(dw, sar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, sar.msb, dir, ch),
+> +		CTX_REGISTER(dw, dar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, dar.msb, dir, ch),
 
+watermark_en field?
 
+> +		CTX_REGISTER(dw, control1, dir, ch),
 
+func_num, qos?
 
+> +		CTX_REGISTER(dw, ch_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_setup, dir, ch),
+> +		CTX_REGISTER(dw, int_clear, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
 
---Apple-Mail=_2AA5044B-1570-4816-8AA0-ED824D970CD1
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
+msi_watermark?
 
------BEGIN PGP SIGNATURE-----
-Comment: GPGTools - http://gpgtools.org
+Why did you miss all of these fields? It was no problem to add all
+them seeing they are declared in the dw_hdma_v0_ch_regs structure.
 
-iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmPuYtsACgkQcqXauRfM
-H+Cu9g//YCZ+jwypTgq+CU4GrHRWfQgwIIsAagt/+hIQ49+p2psufXRuWBYuVvXo
-JhbGVzk6yztNm81QBZp1unYEnm5Gkkeq7AD1J19zE3v2muHTU413Xf5UFTP7ZzLt
-6s84jHucEbPITzX+YkxxbAMF819KdgN7UDMnJ9K5mC1bvJtFOE5TWkMXCZSZEyhb
-Njg2UWRZ1L+JfFejIPmiDStL89Ae4ryhatVYg5LLEGmXMNx1Su/n2Vd8mqzq6KnF
-Ek0Z8Hz1XI0GGNugZiG+LziCzGXsE53in34LXUwXd7ZnU/OIZ0B/GF6q8SbKW2C5
-VdrED+FifNFXsxhUCxDhfl5wEO8TASMPaUuF6qbNXsXF3cSPb3qb+ec5e+0EycjC
-TpGGPHDo2Ik3/wLtGJ/oTl9sdv8SPDxlStfL4+oL6jmcGOoF2Ihh9Hg80UnQHLnR
-9dWU6PYcR8KKBaqJH9euWzLr6cTx8MxBzZDDUCJxT6UWpK+WjBebLazSarvVqS4h
-yxAGZDaKtF3CjYkb24nrrz7yUDTO7uaj93NJO5ADwg4KszHAVxBSUStxKgCyUR/Y
-bEigne4D7B7TaH4l2kPckhfwwCpxnhqmCoYqAyWqKHRySkXxFVcjw4/ApLQ+/KPX
-2UlaN5gf6z8PUSkp0mXLCWBFDsXvJTFqF1gy7Fv2YfCHaaMBKaI=
-=C/5g
------END PGP SIGNATURE-----
+> +		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_msgdata, dir, ch),
+> +	};
 
---Apple-Mail=_2AA5044B-1570-4816-8AA0-ED824D970CD1--
+Use reverse xmas tree order as per the driver convention.
+
+> +
+> +	nr_entries = ARRAY_SIZE(debugfs_regs);
+> +	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	int i;
+> +	char name[16];
+
+reverse xmas tree order
+
+> +
+> +	regs_dent = debugfs_create_dir(WRITE_STR, dent);
+> +	if (!regs_dent)
+> +		return;
+> +
+> +	for (i = 0; i < dw->wr_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +		if (!ch_dent)
+> +			return;
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	int i;
+> +	char name[16];
+
+reverse xmas tree order.
+
+-Serge(y)
+
+> +
+> +	regs_dent = debugfs_create_dir(READ_STR, dent);
+> +	if (!regs_dent)
+> +		return;
+> +
+> +	for (i = 0; i < dw->rd_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +		if (!ch_dent)
+> +			return;
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs(struct dw_edma *dw)
+> +{
+> +	struct dentry *regs_dent;
+> +
+> +	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
+> +	if (!regs_dent)
+> +		return;
+> +
+> +	dw_hdma_debugfs_regs_wr(dw, regs_dent);
+> +	dw_hdma_debugfs_regs_rd(dw, regs_dent);
+> +}
+> +
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +	if (!debugfs_initialized())
+> +		return;
+> +
+> +	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
+> +	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
+> +	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
+> +
+> +	dw_hdma_debugfs_regs(dw);
+> +}
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> new file mode 100644
+> index 000000000000..e6842c83777d
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_DEBUG_FS_H
+> +#define _DW_HDMA_V0_DEBUG_FS_H
+> +
+> +#include <linux/dma/edma.h>
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
+> +#else
+> +static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +}
+> +#endif /* CONFIG_DEBUG_FS */
+> +
+> +#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+> -- 
+> 2.34.1
+> 
