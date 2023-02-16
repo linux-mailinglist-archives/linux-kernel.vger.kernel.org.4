@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80036699892
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D3869989B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjBPPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S229935AbjBPPTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjBPPR3 (ORCPT
+        with ESMTP id S229554AbjBPPTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:17:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8D64D60F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:17:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2F8CB824EE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AA1C4339B;
-        Thu, 16 Feb 2023 15:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676560644;
-        bh=o7oNEOhWP2srNW6OJPdkZ0zsCNFAkePZ5wbwbnYQX7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMt9wVxmQVm1Ankvw9ayTEHxSECKaIQygmOKBL1NEG1jfe65+dHmtjKVRINhhMiYd
-         kYjb3zHJzqtxlQ3hXK5iRsuIl4rX0rBQBFAX/OZEvFvKkEr/WH/GjI6WHANasF36a2
-         BLJU8eJDo0D3zbFAmlUrQWn7hPkbKN+JjxUPWV0eFQHiHI3QtQNjiVXJR/5F01XWZp
-         SJfnmdmj6M8rllvVnO4NLSDCXFd+wyjSPoYJIZy0OVqpyR+nFFBD2E00kuxzVcf5yu
-         kF7r76g3C/pV9YohnE+w+792ifG2xzY9M4zsr67xkkf4AblSn9/EqrtAqL64NwExTh
-         ZuKH+IIPfd7rA==
-Date:   Thu, 16 Feb 2023 15:17:19 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Janne Grunau <j@jannau.net>, linux-arm-kernel@lists.infradead.org,
-        asahi@lists.linux.dev, ecurtin@redhat.com, lina@asahilina.net,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        ravi.bangoria@amd.com
-Subject: Re: [PATCH 1/2] arm_pmu: fix event CPU filtering
-Message-ID: <20230216151718.GA21275@willie-the-truck>
-References: <20230216141240.3833272-1-mark.rutland@arm.com>
- <20230216141240.3833272-2-mark.rutland@arm.com>
- <20230216143519.GI17933@jannau.net>
- <Y+5IByR9RelBDm2+@FVFF77S0Q05N.cambridge.arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+5IByR9RelBDm2+@FVFF77S0Q05N.cambridge.arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 10:19:14 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210205BA1;
+        Thu, 16 Feb 2023 07:19:13 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8BA695C0124;
+        Thu, 16 Feb 2023 10:19:12 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 10:19:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676560752; x=1676647152; bh=49NICBxgGx
+        nnjAx58twpWVSX1WEaNXOQiLgYDGoweK4=; b=Gg46NggAttq0c1pgshG9Mi5GCp
+        Nd2rekLY6VpuO6VuJtzKBmHaf+RN3uQJYt/nJ0WiCPpmgtyY4W51MoIWw8lJG8dE
+        IghhJ53N7MUZLBLfAPXNgkxGhm6JaVb5MiGMQc5VhT3/ZCU3MfvRNaUnfs0qjfq/
+        Dcq5tzQXkxZ/C99cWr9y53htCfjPUU7C1rYE0v5uRj/xXTTk4hit0VNktKSqWuXW
+        14JEQ75GTVTGxpIPKn9sctbuP2LrEZc3/qIK6BBGtLFqs6NVkpYxbQPTyvh2EKXn
+        tj+SrUb99Y99GGf70r5BjCWaK48ZqY4HujJNQvXYdeXmW52DXJqaJOcWgfNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676560752; x=1676647152; bh=49NICBxgGxnnjAx58twpWVSX1WEa
+        NXOQiLgYDGoweK4=; b=ArJjDllGnCZwKClYxdAqyKTogUH4VDaikwbdLSv2SfDF
+        iYespx92/YMtEjerfRexTk/+3ygtThogm5mDiLGfE7o9PBFDgeX54hw2fID4Mszy
+        2l3j0Yl1pFnCPINFoNoHJvLq9cR1ycxN7VWaMji5qzaaELap9dHzWn12ICiCCpmr
+        7MtYHyH90RfmvkMpmdxhYVRSAPyCPihQsx/B7Qkhn/1zN0gDlxkC2nP32H/TJWwr
+        69jyOhP52vfT4FE5SAduOgBSvyeZKJmy/RCLJI8/r6WYIRwTLAw8WYwCgB4XHf3f
+        PNYMG9yfu5SawRo0cEp5MM7qGsyTciD2wVGpNUSiOQ==
+X-ME-Sender: <xms:cEnuY15wBOvnMO8oei6WuJLwSyxxNFDYim8aLjOevSh3qYacS8bOQw>
+    <xme:cEnuYy5odnBzQaTFPAjSSN_u0A7pktF7AQDTc5jLaD3JyZWAIXpLp5Kzsc5VD_VOV
+    uE19ZyDOjes8a69AFg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cEnuY8cHzCmuy7wpoALRjvEc8wcuk7LTuY3RoF-V7HK_DzJMvI25mA>
+    <xmx:cEnuY-KFMx09jU1k4BLojaVxYMnljXjGrTA4wGGPExxg-JItua3lig>
+    <xmx:cEnuY5LR1F0XONHSVnPEbQdoyZeK7fF5TRV94jGrk-TQ5Rm0L5KD1Q>
+    <xmx:cEnuYzBuLX-oJUHD2a2xa3e43CUe5F0gZuHzgb-ER_cPnyenrL0DpQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 053E1B60086; Thu, 16 Feb 2023 10:19:12 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <bff4f286-ccf8-40bc-8fe5-d4041adf89f5@app.fastmail.com>
+In-Reply-To: <Y+5Fcc6wsbr0qmoN@MiWiFi-R3L-srv>
+References: <20230216123419.461016-1-bhe@redhat.com>
+ <20230216123419.461016-13-bhe@redhat.com>
+ <Y+40p3oegc2Of9w2@casper.infradead.org> <Y+5Fcc6wsbr0qmoN@MiWiFi-R3L-srv>
+Date:   Thu, 16 Feb 2023 16:18:53 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>,
+        "Matthew Wilcox" <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "David Laight" <David.Laight@aculab.com>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Helge Deller" <deller@gmx.de>, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v4 12/16] parisc: mm: Convert to GENERIC_IOREMAP
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 03:13:11PM +0000, Mark Rutland wrote:
-> On Thu, Feb 16, 2023 at 03:35:19PM +0100, Janne Grunau wrote:
-> > On 2023-02-16 14:12:38 +0000, Mark Rutland wrote:
-> > > Fix the CPU filtering by performing this consistently in
-> > > armpmu_filter(), and remove the redundant arm_pmu::filter() callback and
-> > > armv8pmu_filter() implementation.
-> > > 
-> > > Commit bd2756811766 also silently removed the CHAIN event filtering from
-> > > armv8pmu_filter(), which will be addressed by a separate patch without
-> > > using the filter callback.
-> 
-> [...]
-> 
-> > This works as well. I limited the patch to the minimal fix this                                                   
-> > this late in the cycle.
-> 
-> I did appreciate that you'd made the effort for the minimal fix; had the issue
-> with CHAIN events not existed I would have acked that as-is and done the
-> simplification later. Given the CHAIN issue and given the simplification make
-> the code "obviously correct" I think it's preferable to do both bits now.
-> 
-> > Tested-by: Janne Grunau <j@jannau.net>
-> 
-> Thanks!
-> 
-> Hopefully Will or Peter can pick this up shortly; I'm assuming that Will can
-> take this via the arm64 tree.
+On Thu, Feb 16, 2023, at 16:02, Baoquan He wrote:
+> On 02/16/23 at 01:50pm, Matthew Wilcox wrote:
+> It's not if including asm-generic/iomap.h. The ARCH_HAS_IOREMAP_xx is to
+> avoid redefinition there.
+>
+> include/asm-generic/iomap.h:
+> ----
+> #ifndef ARCH_HAS_IOREMAP_WC
+> #define ioremap_wc ioremap
+> #endif
 
-I'll grab 'em.
+I'd change that to the usual '#ifndef ioremap_wc' in that case.
 
-Will
+      Arnd
