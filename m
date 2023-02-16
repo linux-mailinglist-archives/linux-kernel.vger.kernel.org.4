@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3C0699269
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6799569926F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjBPK5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S230206AbjBPK6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjBPK5c (ORCPT
+        with ESMTP id S230049AbjBPK6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:57:32 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47CF56497
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:57:09 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id c1so2229064edt.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=THtAgCOl9QgR+PBCQKm+XDfV9tIc7qpiTl9QgWvXcHg=;
-        b=U6H4iC7hYR/chymc+q+RyndAL4se27QK3fvzV8WqQIXuxxRKB3uUKGFgBjrA7pUhA3
-         TxIdXtyaKdN2b9jgQ/IS7kSk1qgAAicfUPdajYmMdO68hu6gElAWF2tGciziJJJ2dLBy
-         unTddpuWUJKM5PW0GhDoICAGoSiD8ND3c6o/LqYpOJTFrtts6Z0Ctnc88pmdzINdTmOL
-         z0G4cJOvTfV9H9Pe2fA72wHz2Y5/i1cyOIXzZmUQSlvV5V8FGEkKBISBPaNJfSQrpW6q
-         xDWxuzZRmspaKsBw+tYYoLaPol80grKVz8IS3y1SyxRIZUxnJpQNorzRPOwfXEQA/bpf
-         2MdQ==
+        Thu, 16 Feb 2023 05:58:19 -0500
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D84E30B04
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:58:00 -0800 (PST)
+Received: by mail-il1-f207.google.com with SMTP id 15-20020a92190f000000b00315509b129aso1055145ilz.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:58:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=THtAgCOl9QgR+PBCQKm+XDfV9tIc7qpiTl9QgWvXcHg=;
-        b=XXVT1U7A9ewJhqahbgFo7CStz8LisxLb1/QWirXjPj2Ac5pGVmiIc+8zH7RCMouGKw
-         7/xiAi/Equ8YXKM6PfZ+7sfVsD+F/iRG3NGEbFbPq5O8FBCcVUP9ffqx4enTg/tgoJtW
-         Kr5bKoznxrSH+PNYbGg3iZP8/pFPCBSZnv1cRE3NTpQPDoEuLSYqx9rW7ftfyMmp8aYS
-         a3Qnk58E7nTnR16VT5wYSWl+L1T+s0wj3tFVoGieAYvnxNsrBvBv2l2ED16FRoMtokLQ
-         vZwe3DjIa5pFjm6mmseuOLGn0IuN6m+Y/2yCv79f4IrHtGEnsiXUOrFjYg0x41ndddEg
-         dAKg==
-X-Gm-Message-State: AO0yUKWuKtq8GyT4duW1D1Sm97uT45+zlIIbwL41WLeP+t6jbARI/oaC
-        g9mn6Ivx8w01XWSxjZrPKKy+5w==
-X-Google-Smtp-Source: AK7set9OfkNt5LKvITUMHqNbfAMut7qF3b/o8biOq9I1xBhTpbQURE55MHNjA797MY9Vjl5S1t9X0Q==
-X-Received: by 2002:aa7:d4c1:0:b0:4ad:6fc6:ae9c with SMTP id t1-20020aa7d4c1000000b004ad6fc6ae9cmr432542edr.17.1676545023642;
-        Thu, 16 Feb 2023 02:57:03 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x72-20020a50bace000000b004acbe8255f1sm669464ede.86.2023.02.16.02.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:57:03 -0800 (PST)
-Message-ID: <97a62d16-42cf-d778-f9a2-ddc7cc936d1d@linaro.org>
-Date:   Thu, 16 Feb 2023 11:57:01 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7RKon+041bE2xuGsQnoylSgzlyJUt+HUwDZ7efY9dW0=;
+        b=3B5S6iZod4VZKhU+w5rj4KAJpPx9SONwgMaQsVMjGjkj3tDjAy/QvDduAB0oiMNL8B
+         lOtcUcNCESNc2gPmAsASjGqP89uJebkEXM8M7yYjKWJlaLyUJwO9M9AMuAf5hRWRuCVS
+         19Ee0AKvtwEzQBXtxUXtJkGEoL7960sxqJ4WqCUXimVxT1U0qSAal7kZbCdeWBYwpvFc
+         Z0SkgJ8en0C53ErLCx01BWqZQBEczn6fWxknRnk4G6cZqp6d0NZNZb59ak4QSCaoaTb1
+         8MKPNoJ6C2P59L8Ztm9fg8DLOM6w/UcLNxHRkUp+DbdFN+KY+cXESkgybjpaaDLRHGWV
+         k0wg==
+X-Gm-Message-State: AO0yUKVazMBjmV17R7ZEUx7hwxQ5P8C6v3XrvkF4rc9cPIeMWnPG4eXk
+        LLyczNBCYCJ4Ww+sgrGh6SWUMyo9gnlM3MSOoIzlEv3SWpjz
+X-Google-Smtp-Source: AK7set96u8/LK1D1mK32dqMQ97H6GTZVYbKj1nuy8d9DL1R4D4pKusnZuLtUMTagmqdzkl5n+Vb2U7s7jbQO2+ZuAnPG3v4bTZuZ
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 00/16] Refactor Exynos PCIe driver to make it generic
-Content-Language: en-US
-To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
-        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
-        m.szyprowski@samsung.com, jh80.chung@samsung.co,
-        pankaj.dubey@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CGME20230214121348epcas5p48a3b2b225f616d748cc20622d01edb97@epcas5p4.samsung.com>
- <20230214121333.1837-1-shradha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214121333.1837-1-shradha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:93a3:0:b0:3c2:b776:e8e5 with SMTP id
+ z32-20020a0293a3000000b003c2b776e8e5mr2014230jah.6.1676545069873; Thu, 16 Feb
+ 2023 02:57:49 -0800 (PST)
+Date:   Thu, 16 Feb 2023 02:57:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000057042905f4cf1130@google.com>
+Subject: [syzbot] WARNING in do_mknodat
+From:   syzbot <syzbot+3509066790782614b600@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 13:13, Shradha Todi wrote:
-> Currently pci-exynos is being used as a PCIe driver for Exynos5433
-> only. This patch set refactors the driver to make it extensible to
-> other Samsung manufactured SoCs having DWC PCIe controllers.
-> The major change points are:
-> - Renaming all common functions/structures to use "samsung" instead
->   of "exynos". Make common probe/remove/suspend/resume
-> - Making clock/regulator get/enable/disable generic
-> - Adding private struct to hold platform specific function ops
+Hello,
 
-Thanks for the work. I appreciate it.
+syzbot found the following issue on:
 
-Some comments in individual patches.
+HEAD commit:    0a924817d2ed Merge tag '6.2-rc-smb3-client-fixes-part2' of..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12437928480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
+dashboard link: https://syzkaller.appspot.com/bug?extid=3509066790782614b600
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Best regards,
-Krzysztof
+Unfortunately, I don't have any reproducer for this issue yet.
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b0959a409a79/disk-0a924817.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/388daa76797b/vmlinux-0a924817.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b9d2d406c075/bzImage-0a924817.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3509066790782614b600@syzkaller.appspotmail.com
+
+WARNING: CPU: 1 PID: 8065 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
+WARNING: CPU: 1 PID: 8065 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Modules linked in:
+CPU: 1 PID: 8065 Comm: syz-executor.1 Not tainted 6.1.0-syzkaller-14321-g0a924817d2ed #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
+RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Code: c7 00 ac ed 8a 48 c7 c6 a0 ae ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 9b 59 e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 98 8a 96 8e 80 e1 07 80 c1 03 38 c1
+RSP: 0000:ffffc90016557d20 EFLAGS: 00010292
+RAX: 4e2f149d5ad82600 RBX: ffffffff8aedace0 RCX: 0000000000040000
+RDX: ffffc9000b6bc000 RSI: 000000000001920b RDI: 000000000001920c
+RBP: ffffc90016557df0 R08: ffffffff816f2c9d R09: fffff52002caaf5d
+R10: fffff52002caaf5d R11: 1ffff92002caaf5c R12: 0000000000000000
+R13: ffff88807799b6d0 R14: 1ffff92002caafac R15: dffffc0000000000
+FS:  00007f84df1f6700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff06e74d68 CR3: 0000000021050000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ inode_unlock include/linux/fs.h:761 [inline]
+ done_path_create fs/namei.c:3857 [inline]
+ do_mknodat+0x4e1/0x740 fs/namei.c:3980
+ __do_sys_mknod fs/namei.c:3998 [inline]
+ __se_sys_mknod fs/namei.c:3996 [inline]
+ __x64_sys_mknod+0x8a/0xa0 fs/namei.c:3996
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f84de48c0a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f84df1f6168 EFLAGS: 00000246
+ ORIG_RAX: 0000000000000085
+RAX: ffffffffffffffda RBX: 00007f84de5ac050 RCX: 00007f84de48c0a9
+RDX: 0000000000000702 RSI: 00000000ffffc000 RDI: 00000000200001c0
+RBP: 00007f84de4e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc94aa0aef R14: 00007f84df1f6300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
