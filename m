@@ -2,135 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3218769A21B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA33F69A21C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjBPXIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
+        id S229556AbjBPXKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBPXIR (ORCPT
+        with ESMTP id S229448AbjBPXKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:08:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971BC4C6FA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676588849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U1i355zZnPAPOV+7l8sV2CTmBt7VeakOe3eIo5ILPXc=;
-        b=Fyz+AU23YmgWSxW+L7pwdSAh5+jWwFJGQh9Bw019v4dY4wLjr/tJqhfZzWzTYOaotkYpZY
-        sbxtUVfSDTd5oIjFdJnJwqGUgh3+4g5E8xHzBNQ+IP8w8sO9WqSJWGAqg/wk2lrSWXDw3N
-        q2iM2SldvlOLSNEMcFf7ldwuBrge93o=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-670-N8GqmPcsMqOz2jE0FyYZlQ-1; Thu, 16 Feb 2023 18:07:28 -0500
-X-MC-Unique: N8GqmPcsMqOz2jE0FyYZlQ-1
-Received: by mail-qk1-f197.google.com with SMTP id s7-20020ae9f707000000b007294677a6e8so2131299qkg.17
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:07:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U1i355zZnPAPOV+7l8sV2CTmBt7VeakOe3eIo5ILPXc=;
-        b=kiWn5G37GRHTgW0KgMCKkTPDMxkzxfHpAIlhbN2EkOlrmrKsYsCpobtZ0tq8EYl2/Y
-         tAUEQq9KoK4s9kZE/cSf/ZA/UH1HDfi4DyXk9m9/04xXepkSBi4NmUe17vMthjQZ4ZSa
-         RT0sYTRsM1LWfvjUXZ6FjIqugj3f0WKtX3TYjtYzXJ6g+7lrK8fRANpIdyhe4AW1SaR0
-         9OUMToxwJUPVFBRtoPQuGRCGQPXzv/7oq1zC7fLL7bOxFqPq2tAFwAe+f9iMyrjTgubN
-         IRbIHVBg296eMmn1q/v7NYW/QJRXoLyB1+kUov5NLUQ1VER9WnOFXdNKApPMloAeTewP
-         wVWQ==
-X-Gm-Message-State: AO0yUKVsbI2QPK1RAydfZt3ngxeJvTj9E5gwNI/KKclsUh1ypLHeQvEJ
-        HtYheF0F68iYlNoFlTLF4nTjOXYj6zk2mzp4gTtipN63Hn6eI94qavI5djuoJgxOdfELU11bCEz
-        WuhSC9SwSglbsdoQmCiP9vbWh
-X-Received: by 2002:a05:622a:110a:b0:3bd:d8f:2da9 with SMTP id e10-20020a05622a110a00b003bd0d8f2da9mr5554076qty.2.1676588847925;
-        Thu, 16 Feb 2023 15:07:27 -0800 (PST)
-X-Google-Smtp-Source: AK7set8TDXBD8/ctrYlut9+45E6qFFpg/9ja49qyzef3+g8lBYY5BB+I0S1SlMPM9d6OMKBy+cv3Hg==
-X-Received: by 2002:a05:622a:110a:b0:3bd:d8f:2da9 with SMTP id e10-20020a05622a110a00b003bd0d8f2da9mr5554050qty.2.1676588847668;
-        Thu, 16 Feb 2023 15:07:27 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 207-20020a3708d8000000b0071de2b6d439sm2142783qki.49.2023.02.16.15.07.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 15:07:27 -0800 (PST)
-Date:   Thu, 16 Feb 2023 18:07:25 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-Message-ID: <Y+63LQo49CCyXRQn@x1n>
-References: <20230214075710.2401855-1-stevensd@google.com>
- <20230214075710.2401855-2-stevensd@google.com>
- <Y+1hMsm4eQIUtag5@x1n>
- <CAD=HUj69L2e-Z4TB19qFt8h1cn0r1oGbWovJGMOjjyvfDcQ7NA@mail.gmail.com>
- <Y+5Akpz4CvGywt6R@x1n>
- <CAHbLzkqUF8Y759ZBVGXWdKwDS4f+ZJakUhoqf8Dqvx0Jam4c1g@mail.gmail.com>
+        Thu, 16 Feb 2023 18:10:00 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DA637F20
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:09:58 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB13A66021BB;
+        Thu, 16 Feb 2023 23:09:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676588997;
+        bh=eJ31KjQvfQ1OAUYYt2ngpiSKt3yk0pd1vQYJrvXlQMU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=drPUZkvM1cTe3zfqASEwhAq9wlIuEQsSzLLIfL5qT2oxH/SQ0Bfrei/mCstanGeLK
+         cJYU0TNIFgJXWmHPvm/YbM2Xx8LuaVWuFguMhmQ4jPpbXPdEF2dTdyxXX8vt5glsgX
+         lP6ejH5vqDDT9UnIqfdc+1FM+4mUaJxwurG6EOLNUFp4omIvej9iH0O8EFdxXaacvP
+         cMw4nvB7aZxGViBHxO7H0hYMt7qD8puLPMM06aPp4AFI81rqZBXNi9wkZDasbLHh4u
+         SlbU0kG/t+5g49Y6kgzqsudtvkg85pDbcHy6O/NcpNhXqd25D9uYm9F1LFZjCd+iPc
+         OGL8CFg4/kTkQ==
+Date:   Thu, 16 Feb 2023 18:09:46 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Xin Ji <xji@analogixsemi.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: anx7625: Drop device lock before
+ drm_helper_hpd_irq_event()
+Message-ID: <20230216230946.g3ojtx7na3smogbx@notapiano>
+References: <20230116072234.3970768-1-wenst@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHbLzkqUF8Y759ZBVGXWdKwDS4f+ZJakUhoqf8Dqvx0Jam4c1g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230116072234.3970768-1-wenst@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yang,
+Hi,
 
-On Thu, Feb 16, 2023 at 01:58:55PM -0800, Yang Shi wrote:
-> > IIUC we released it before copying the pages:
+On Mon, Jan 16, 2023 at 03:22:34PM +0800, Chen-Yu Tsai wrote:
+> The device lock is used to serialize the low level power sequencing
+> operations. Since drm_helper_hpd_irq_event() could end up calling
+> .atomic_enable, which also calls power sequencing functions through
+> runtime PM, this results in a real deadlock. This was observed on an
+> MT8192-based Chromebook's external display (with appropriate patches [1]
+> and DT changes applied).
 > 
-> The huge page is locked until the copy is done. It should be fine
-> unless the users inspect the page content without acquiring page lock.
-
-The current patch from David has replaced "insert hpage into holes" with
-"insert RETRY entries into holes", so IMHO the hpage is not visible at all
-when releasing page cache lock here.
-
-All the accessors (including RCU protected ones to access page cache; those
-may not need to take the page lock) should be spinning on the RETRY entry,
-which it seems fine to me.  But my question was whether it's legal to keep
-them spinning even after releasing the page cache lock.
-
-Thanks,
-
+> Move the drm_helper_hpd_irq_event() call outside of the lock range. The
+> lock only needs to be held so that the device status can be read back.
+> This is the bare minimum change to avoid the deadlock. The lock could
+> be dropped completely and have pm_runtime_get_if_in_use() increase the
+> reference count, but this is not the same as pm_runtime_suspended().
+> This also causes the internal display of the same device to not
+> function correctly. Both the internal and external display of said
+> device each use one anx7625 bridge.
 > 
-> >
-> > xa_locked:
-> >         xas_unlock_irq(&xas);  <-------------------------------- here
-> > xa_unlocked:
-> >
-> >         /*
-> >          * If collapse is successful, flush must be done now before copying.
-> >          * If collapse is unsuccessful, does flush actually need to be done?
-> >          * Do it anyway, to clear the state.
-> >          */
-> >         try_to_unmap_flush();
-> >
-> > Before insertion of the multi-index:
-> >
-> >         /* Join all the small entries into a single multi-index entry. */
-> >         xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> >         xas_store(&xas, hpage);
-> >
-> > Thanks,
-> >
-> > --
-> > Peter Xu
-> >
+> [1] https://lore.kernel.org/dri-devel/20230112042104.4107253-1-treapking@chromium.org/
 > 
+> Fixes: 60487584a79a ("drm/bridge: anx7625: refactor power control to use runtime PM framework")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+> FWIW I'm aware that this driver could be refactored a lot better.
+> The work function might be simplified and merged into the threaded
+> interrupt handler. The .detect op should be reading the HPD state
+> from the hardware, not some cached state.
+> 
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 7e1fb93a6ce4..bf1770b79bba 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -1597,18 +1597,17 @@ static void anx7625_work_func(struct work_struct *work)
+>  
+>  	mutex_lock(&ctx->lock);
+>  
+> -	if (pm_runtime_suspended(&ctx->client->dev))
+> -		goto unlock;
+> +	if (pm_runtime_suspended(&ctx->client->dev)) {
+> +		mutex_unlock(&ctx->lock);
+> +		return;
+> +	}
+>  
+>  	event = anx7625_hpd_change_detect(ctx);
+> -	if (event < 0)
 
--- 
-Peter Xu
+Are you intentionally dropping this early-return on error?
 
+> -		goto unlock;
+> +
+> +	mutex_unlock(&ctx->lock);
+>  
+>  	if (ctx->bridge_attached)
+>  		drm_helper_hpd_irq_event(ctx->bridge.dev);
+> -
+> -unlock:
+> -	mutex_unlock(&ctx->lock);
+>  }
+>  
+>  static irqreturn_t anx7625_intr_hpd_isr(int irq, void *data)
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
