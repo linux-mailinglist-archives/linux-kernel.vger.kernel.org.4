@@ -2,321 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B619699ED0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BBB699EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjBPVNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 16:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S230038AbjBPVQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 16:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBPVNg (ORCPT
+        with ESMTP id S229705AbjBPVQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 16:13:36 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5E3B864
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:13:35 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id d21-20020a170902cb9500b0019ab46166a3so1640375ply.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676582015;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlVa9splVyzqnhqvt9h5jnOme1Iy46ppwguKl1FDCZE=;
-        b=OnVZY9iopErbk020fpsboEJ6EJqdhlF2gqW2pyiMU408pfLN5kgSRtPX1huRH8JGt6
-         jmlF2LjjbYL7bMy8pu9KD+3rEvKqx7jlmYolKtJyON6Qzh6+vrmYsnT/8mIpMXFXkLO5
-         cYlyNJEpssTohMMbGIhv3d6ViLZhKNAZOBuKiippf0KBsdjEKVIQgecRWQeq6hkn++wx
-         K34kazsMKvmdk7T2+nHBAm1UpcKlnM0iKe+X7h80IqIPULUTN/JUfF7/WbGdlzS9bnOL
-         bgtnm2Xej/MC0STdM+ynWazKlp3zsNQtyKc4aCzkuhnp/DqKwr6BMqtlQN76wUx945Kc
-         wEkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676582015;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlVa9splVyzqnhqvt9h5jnOme1Iy46ppwguKl1FDCZE=;
-        b=OLpqhmwaq5ZMOWnUoay5QFs5Y+BhnAFKeYaBAscwCbksy7Jh0Q/36MWX3AKGSgocTe
-         3zA19DEjVVCu+5JsymPltI7B97wCdpHm/4T0r5Y/T6R5n5xSdct6AKHGj2hySOzeIwaj
-         VXaqJsVryTcVSy91CzUPI1Hks94qwZ/df2PNmmFJDH7DiS19DNVKao2twJVvEFA3/9q7
-         znGw3+hkpvvi8NX7mW1tMhE/o2EoDruU+iqf7qo9vcW5ekDOOyyH3MEy62nwMT1m2Vuj
-         pg0sZlMxtRqZJkNOBgmDrb2CT2qdfZFCG/Z0NLWkPr/cg4GKs/Ksfe8zeFYkGSag740n
-         i0JA==
-X-Gm-Message-State: AO0yUKVPg9KFrrFM4vtwVdM0ei3scCf8JnPmxUemdUZApu0lyyS1LJ06
-        irvlkNRJN51CcPwureq5FRw2J6A6RT8=
-X-Google-Smtp-Source: AK7set8qgZdMtz5e6sInPdvDe+pDwMVY+dD+RTxqlRiFeKQsrT4/7459onPcwRYN/PVnhZ7cp5I/W+EaoLY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d709:b0:19a:f556:e379 with SMTP id
- w9-20020a170902d70900b0019af556e379mr585159ply.15.1676582015033; Thu, 16 Feb
- 2023 13:13:35 -0800 (PST)
-Date:   Thu, 16 Feb 2023 13:13:33 -0800
-In-Reply-To: <20230214050757.9623-3-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230214050757.9623-1-likexu@tencent.com> <20230214050757.9623-3-likexu@tencent.com>
-Message-ID: <Y+6cfen/CpO3/dLO@google.com>
-Subject: Re: [PATCH v4 02/12] KVM: VMX: Refactor intel_pmu_set_msr() to align
- with other set_msr() helpers
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thu, 16 Feb 2023 16:16:12 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370123B864;
+        Thu, 16 Feb 2023 13:16:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676582171; x=1708118171;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pYDMhUJZT9iTDU3s07U04jLG4mJ8llVyNJOCxQLrvys=;
+  b=nNuF6jmyfHs9N041cyo/vys5s7lPSc9ZQEKUx6KN1BL2S9BQlLpL+ovD
+   cvBcex696Ttpjj6Q3ijJcFrH14cSh264vVbDBvSe7S/GM01QAn8okej5E
+   DkB6316GPCwIjr7YrJYc0ZL/I6/81+FKy/zYTmxCdyi3AfjLTLNNG1lru
+   HPz8ubHsUwHJYqSg4y6tp+CLbs+PjlTkqSpGqBkZIdC+aXAH6Iacz3Xch
+   icTE7tS36WHG5vi6CYGxIqxvfT8cLL2kDp9u4n0N7li+KqcIdZiWVpN/L
+   NZq0IxyWmBPhfmrhEdDnjjqt5syIZUQ3MMJusM1HwauOiswgCCs2FDcZq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="396517089"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="396517089"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 13:16:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="813136929"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="813136929"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Feb 2023 13:16:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pSlbq-007wYS-0d;
+        Thu, 16 Feb 2023 23:16:06 +0200
+Date:   Thu, 16 Feb 2023 23:16:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
+        Lendacky Thomas <Thomas.Lendacky@amd.com>,
+        herbert@gondor.apana.org.au,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 6/6] i2c: designware: Use PCI PSP driver for communication
+Message-ID: <Y+6dFYd/0tSKriaj@smile.fi.intel.com>
+References: <20230209223811.4993-1-mario.limonciello@amd.com>
+ <20230209223811.4993-7-mario.limonciello@amd.com>
+ <703033aa-1293-307d-42a2-9734a51c7190@linux.intel.com>
+ <ca9c0f77-c191-d88a-22a1-315ca97f17e8@amd.com>
+ <Y+5EI3XGBzuwwVBV@smile.fi.intel.com>
+ <9523a6ce-0220-e939-392d-2b48b2a4dc48@amd.com>
+ <Y+6ZMEoQ2UoH7SxD@smile.fi.intel.com>
+ <d8a11223-36d1-a3bd-bfa2-a1c67b9ef250@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d8a11223-36d1-a3bd-bfa2-a1c67b9ef250@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023, Like Xu wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/pmu_intel.c | 81 +++++++++++++++++++-----------------
->  1 file changed, 42 insertions(+), 39 deletions(-)
+On Thu, Feb 16, 2023 at 03:01:35PM -0600, Limonciello, Mario wrote:
+> On 2/16/2023 14:59, Andy Shevchenko wrote:
+> > On Thu, Feb 16, 2023 at 02:55:07PM -0600, Limonciello, Mario wrote:
+> > > On 2/16/2023 08:56, Andy Shevchenko wrote:
+> > > > On Thu, Feb 16, 2023 at 07:29:53AM -0600, Mario Limonciello wrote:
+> > > > > On 2/16/23 07:27, Jarkko Nikula wrote:
+> > > > > > On 2/10/23 00:38, Mario Limonciello wrote:
+
+...
+
+> > > > > > >       config I2C_DESIGNWARE_AMDPSP
+> > > > > > >         bool "AMD PSP I2C semaphore support"
+> > > > > > > -    depends on X86_MSR
+> > > > > > >         depends on ACPI
+> > > > > > >         depends on I2C_DESIGNWARE_PLATFORM
+> > > > > > > +    depends on CRYPTO_DEV_SP_PSP && !(I2C_DESIGNWARE_PLATFORM=y &&
+> > > > > > > CRYPTO_DEV_CCP_DD=m)
+> > > > > > >         help
+> > > > > > 
+> > > > > > Would this look better if split? I.e.
+> > > > > > 
+> > > > > >       depends on CRYPTO_DEV_SP_PSP
+> > > > > >       depends on !(I2C_DESIGNWARE_PLATFORM=y && CRYPTO_DEV_CCP_DD=m)
+> > > > > Yes, thanks I'll change that for next version.
+> > > > 
+> > > > I'm wondering if this is homegrown implementation of 'imply' keyword?
+> > > 
+> > > Like this?
+> > > 
+> > > config I2C_DESIGNWARE_AMDPSP
+> > >     depends on CRYPTO_DEV_SP_PSP
+> > >     depends on CRYPTO_DEV_CCP_DD
+> > > 
+> > > config CRYPTO_DEV_CCP_DD
+> > >     imply I2C_DESIGNWARE_PLATFORM
+> > 
+> > Looks okay, but I'm not familiar with this code. The documentation about
+> > 'imply' can be found here:
+> > 
+> > https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html#menu-attributes
 > 
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index e8a3be0b9df9..6a2f8b4ed061 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -402,44 +402,43 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+> Yeah I found that, but this was my first time using imply, so I was hoping
+> someone who has used it could validate I interpreted it correctly.
+> 
+> Following the example CRYPTO_DEV_CCP_DD would be FOO and
+> I2C_DESIGNWARE_PLATFORM would be BAZ so I thought so.
 
-Gah, I forgot to post a patch that gives intel_pmu_get_msr() the same treatment.
-I'll replace this patch with the combined version below when applying, or will
-post it separately if a v5 is needed.
+'imply' == weak 'select', it means that the target option may or may not be
+selected. I.o.w. "optional" dependency.
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Thu, 26 Jan 2023 17:08:03 -0800
-Subject: [PATCH] KVM: VMX: Refactor intel_pmu_{g,}set_msr() to align with
- other helpers
+Does CRYPTO_DEV_CCP_DD use I2C DesignWare code?
 
-Invert the flows in intel_pmu_{g,s}et_msr()'s case statements so that
-they follow the kernel's preferred style of:
+If I understand correctly the "depends on !(I2C_DESIGNWARE_PLATFORM=y &&
+CRYPTO_DEV_CCP_DD=m)" you want to have IS_REACHABLE() in your code and actually
+"imply CRYPTO_DEV_CCP_DD" in the I2C_DESIGNWARE_AMDPSP.
 
-        if (<not valid>)
-                return <error>
 
-        <commit change>
-        return <success>
-
-which is also the style used by every other {g,s}et_msr() helper (except
-AMD's PMU variant, which doesn't use a switch statement).
-
-Modify the "set" paths with costly side effects, i.e. that reprogram
-counters, to skip only the side effects, i.e. to perform reserved bits
-checks even if the value is unchanged.  None of the reserved bits checks
-are expensive, so there's no strong justification for skipping them, and
-guarding only the side effect makes it slightly more obvious what is being
-skipped and why.
-
-No functional change intended (assuming no reserved bit bugs).
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/pmu_intel.c | 109 ++++++++++++++++++-----------------
- 1 file changed, 57 insertions(+), 52 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index e8a3be0b9df9..432662f71207 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -351,45 +351,47 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	switch (msr) {
- 	case MSR_CORE_PERF_FIXED_CTR_CTRL:
- 		msr_info->data = pmu->fixed_ctr_ctrl;
--		return 0;
-+		break;
- 	case MSR_CORE_PERF_GLOBAL_STATUS:
- 		msr_info->data = pmu->global_status;
--		return 0;
-+		break;
- 	case MSR_CORE_PERF_GLOBAL_CTRL:
- 		msr_info->data = pmu->global_ctrl;
--		return 0;
-+		break;
- 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
- 		msr_info->data = 0;
--		return 0;
-+		break;
- 	case MSR_IA32_PEBS_ENABLE:
- 		msr_info->data = pmu->pebs_enable;
--		return 0;
-+		break;
- 	case MSR_IA32_DS_AREA:
- 		msr_info->data = pmu->ds_area;
--		return 0;
-+		break;
- 	case MSR_PEBS_DATA_CFG:
- 		msr_info->data = pmu->pebs_data_cfg;
--		return 0;
-+		break;
- 	default:
- 		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
- 		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
- 			u64 val = pmc_read_counter(pmc);
- 			msr_info->data =
- 				val & pmu->counter_bitmask[KVM_PMC_GP];
--			return 0;
-+			break;
- 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
- 			u64 val = pmc_read_counter(pmc);
- 			msr_info->data =
- 				val & pmu->counter_bitmask[KVM_PMC_FIXED];
--			return 0;
-+			break;
- 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
- 			msr_info->data = pmc->eventsel;
--			return 0;
--		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, true))
--			return 0;
-+			break;
-+		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, true)) {
-+			break;
-+		}
-+		return 1;
- 	}
- 
--	return 1;
-+	return 0;
- }
- 
- static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-@@ -402,44 +404,43 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 
- 	switch (msr) {
- 	case MSR_CORE_PERF_FIXED_CTR_CTRL:
--		if (pmu->fixed_ctr_ctrl == data)
--			return 0;
--		if (!(data & pmu->fixed_ctr_ctrl_mask)) {
-+		if (data & pmu->fixed_ctr_ctrl_mask)
-+			return 1;
-+
-+		if (pmu->fixed_ctr_ctrl != data)
- 			reprogram_fixed_counters(pmu, data);
--			return 0;
--		}
- 		break;
- 	case MSR_CORE_PERF_GLOBAL_STATUS:
--		if (msr_info->host_initiated) {
--			pmu->global_status = data;
--			return 0;
--		}
--		break; /* RO MSR */
-+		if (!msr_info->host_initiated)
-+			return 1; /* RO MSR */
-+
-+		pmu->global_status = data;
-+		break;
- 	case MSR_CORE_PERF_GLOBAL_CTRL:
--		if (pmu->global_ctrl == data)
--			return 0;
--		if (kvm_valid_perf_global_ctrl(pmu, data)) {
-+		if (!kvm_valid_perf_global_ctrl(pmu, data))
-+			return 1;
-+
-+		if (pmu->global_ctrl != data) {
- 			diff = pmu->global_ctrl ^ data;
- 			pmu->global_ctrl = data;
- 			reprogram_counters(pmu, diff);
--			return 0;
- 		}
- 		break;
- 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
--		if (!(data & pmu->global_ovf_ctrl_mask)) {
--			if (!msr_info->host_initiated)
--				pmu->global_status &= ~data;
--			return 0;
--		}
-+		if (data & pmu->global_ovf_ctrl_mask)
-+			return 1;
-+
-+		if (!msr_info->host_initiated)
-+			pmu->global_status &= ~data;
- 		break;
- 	case MSR_IA32_PEBS_ENABLE:
--		if (pmu->pebs_enable == data)
--			return 0;
--		if (!(data & pmu->pebs_enable_mask)) {
-+		if (data & pmu->pebs_enable_mask)
-+			return 1;
-+
-+		if (pmu->pebs_enable != data) {
- 			diff = pmu->pebs_enable ^ data;
- 			pmu->pebs_enable = data;
- 			reprogram_counters(pmu, diff);
--			return 0;
- 		}
- 		break;
- 	case MSR_IA32_DS_AREA:
-@@ -447,15 +448,14 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		if (is_noncanonical_address(data, vcpu))
- 			return 1;
-+
- 		pmu->ds_area = data;
--		return 0;
-+		break;
- 	case MSR_PEBS_DATA_CFG:
--		if (pmu->pebs_data_cfg == data)
--			return 0;
--		if (!(data & pmu->pebs_data_cfg_mask)) {
--			pmu->pebs_data_cfg = data;
--			return 0;
--		}
-+		if (data & pmu->pebs_data_cfg_mask)
-+			return 1;
-+
-+		pmu->pebs_data_cfg = data;
- 		break;
- 	default:
- 		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
-@@ -463,33 +463,38 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			if ((msr & MSR_PMC_FULL_WIDTH_BIT) &&
- 			    (data & ~pmu->counter_bitmask[KVM_PMC_GP]))
- 				return 1;
-+
- 			if (!msr_info->host_initiated &&
- 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
- 				data = (s64)(s32)data;
- 			pmc->counter += data - pmc_read_counter(pmc);
- 			pmc_update_sample_period(pmc);
--			return 0;
-+			break;
- 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
- 			pmc->counter += data - pmc_read_counter(pmc);
- 			pmc_update_sample_period(pmc);
--			return 0;
-+			break;
- 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
--			if (data == pmc->eventsel)
--				return 0;
- 			reserved_bits = pmu->reserved_bits;
- 			if ((pmc->idx == 2) &&
- 			    (pmu->raw_event_mask & HSW_IN_TX_CHECKPOINTED))
- 				reserved_bits ^= HSW_IN_TX_CHECKPOINTED;
--			if (!(data & reserved_bits)) {
-+			if (data & reserved_bits)
-+				return 1;
-+
-+			if (data != pmc->eventsel) {
- 				pmc->eventsel = data;
- 				kvm_pmu_request_counter_reprogam(pmc);
--				return 0;
- 			}
--		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, false))
--			return 0;
-+			break;
-+		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, false)) {
-+			break;
-+		}
-+		/* Not a known PMU MSR. */
-+		return 1;
- 	}
- 
--	return 1;
-+	return 0;
- }
- 
- static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
-
-base-commit: 62ef199250cd46fb66fe98267137b7f64e0b41b4
 -- 
+With Best Regards,
+Andy Shevchenko
+
+
