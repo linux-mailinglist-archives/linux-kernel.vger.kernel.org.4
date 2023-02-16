@@ -2,126 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFFB698F69
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903CC698F67
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjBPJMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S229818AbjBPJMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBPJML (ORCPT
+        with ESMTP id S229787AbjBPJL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:12:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D173B3CB
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676538682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/okeBeRsb4OotsLW2a18goWoRP3o4W4D8CZab0OhEhg=;
-        b=Jo9tphMBHtXdt5gjWmaDLiKBQK+jhw7z8DDJkxDXXIswBxtjUuvtv5N7sUCx8fieqJxwal
-        B1urZ2YDtfDuuwmB9qYqATKj+r4Bzlazk4TU5pI5xjwJh8EMgl+wM7sKA9wYXU4wDGkZmc
-        ZTbk4Uy6n+pXA0TOhNGjG5sZF9EAmnc=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-632-daS80nYyNM2KEm-aW0M18w-1; Thu, 16 Feb 2023 04:11:21 -0500
-X-MC-Unique: daS80nYyNM2KEm-aW0M18w-1
-Received: by mail-ed1-f70.google.com with SMTP id w7-20020a05640234c700b004ad6e399b73so188766edc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:11:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/okeBeRsb4OotsLW2a18goWoRP3o4W4D8CZab0OhEhg=;
-        b=ntdNr4Yn9IFOpIyEw8R+W9ru19evhqUqxR4IksgFyiv91IeCD3gQ3PY0SMGBgBPdT/
-         d3eoKskfeD3Wf0+2eoNwt0eROSJkaexBnZfbVRzSQxWQYCwAVrolseJH2XfL0XtCHIKx
-         BBFWgu24JyhFKfBjiF53wMLnSd1uOUQ7bvtWkjGJ0MgIBgGm1tCRb4k0V1Wi1EJu/v1Y
-         uyWKvNwGHT0QRln3Vmy5ZbTkRIWrhzK4o6m0PESjvsS42QsvZcv61jpl4urxq7Af3lfi
-         GIYHMIBNEGur4MA+zl31WAeajmOHRFTvvvZX9/FGnG1R1TBJKvRBzq6mAU3gmfVtGK+q
-         N1gw==
-X-Gm-Message-State: AO0yUKVSBGSZOLafbCDeUoFz38p+zl6IJF49rJErvc5G/YhIaA117kxL
-        KaBESqXeA+bCBj3yK8uL4RnPPW8MUZ9xuC5iMTIt77bguIQ2Xen5t4i8xo7q0ZOwtk/Q0I2gJwk
-        FsHbLzc37pkNuv/rtfGMozadz
-X-Received: by 2002:aa7:d34e:0:b0:4ac:d2bc:32f9 with SMTP id m14-20020aa7d34e000000b004acd2bc32f9mr4605258edr.4.1676538680564;
-        Thu, 16 Feb 2023 01:11:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set+aC12lXhGWdqfz+x2ivny9MrkR9240xDnd1qIFSZpK6v8evidTu3DaP/z5Re+Jvc6Eaizy5g==
-X-Received: by 2002:aa7:d34e:0:b0:4ac:d2bc:32f9 with SMTP id m14-20020aa7d34e000000b004acd2bc32f9mr4605247edr.4.1676538680334;
-        Thu, 16 Feb 2023 01:11:20 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id u21-20020a17090657d500b007c11e5ac250sm543493ejr.91.2023.02.16.01.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 01:11:19 -0800 (PST)
-Message-ID: <f80d506d-3292-bc03-c2e9-b167e1b5e71a@redhat.com>
-Date:   Thu, 16 Feb 2023 10:11:19 +0100
+        Thu, 16 Feb 2023 04:11:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2CD5FF0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:11:57 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pSaIr-00079B-RU; Thu, 16 Feb 2023 10:11:45 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pSaIo-0007sN-8F; Thu, 16 Feb 2023 10:11:42 +0100
+Date:   Thu, 16 Feb 2023 10:11:42 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Larysa Zaremba <larysa.zaremba@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH net-next v1 7/7] net: fec: add support for PHYs with
+ SmartEEE support
+Message-ID: <20230216091142.GA1974@pengutronix.de>
+References: <20230214090314.2026067-1-o.rempel@pengutronix.de>
+ <20230214090314.2026067-8-o.rempel@pengutronix.de>
+ <Y+uMDEyWW15gerN0@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: acerhdf thermal question
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Peter Kaestle <peter@piie.net>,
-        Mark Gross <markgross@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>
-Cc:     "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <59c24c3d-eb1e-cdee-3d2e-aa1dda5a96fe@linaro.org>
- <ee826228-3fbb-bf66-b2a1-8e8be2776175@redhat.com>
-In-Reply-To: <ee826228-3fbb-bf66-b2a1-8e8be2776175@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+uMDEyWW15gerN0@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Andrew,
 
-On 2/16/23 10:08, Hans de Goede wrote:
-> Hi Daniel,
+On Tue, Feb 14, 2023 at 02:26:36PM +0100, Andrew Lunn wrote:
+> On Tue, Feb 14, 2023 at 10:03:14AM +0100, Oleksij Rempel wrote:
+> I can see two different ways we do this. As you have here, we modify
+> every MAC driver which is paired to a SmartEEE PHY and have it call
+> into phylib. Or we modify the ethtool core, if it gets -EOPNOTSUPP,
+> and there is an ndev->phydev call directly into phylib. That should
+> make all boards with SmartEEE supported. We do this for a few calls,
+> TS Info, and SFP module info.
+
+ACK. I'm working on this.
+
+> Either way, i don't think we need phy_has_smarteee() exposed outside
+> of phylib. SmartEEE is supposed to be transparent to the MAC, so it
+> should not need to care. Same as WOL, the MAC does not care if the PHY
+> supports WoL, it should just call the APIs to get and set WoL and
+> assume they do the right thing.
 > 
-> On 2/16/23 09:57, Daniel Lezcano wrote:
->>
->> Hi,
->>
->> the polling interval is specified and modified via a kernel module parameter [1]
->>
->> The value is used to change the polling interval of the thermal zone, implying that is accessing the thermal zone device structure internals directly [2]
->>
->> In real use case, is the interval changed at runtime? Or just when the module is loaded? If the latter, the interval can be passed to the thermal zone at init time without doing a polling change rate after the thermal zone started. In this case, we can remove the polling_delay_jiffies change in the code and fix the structure leakage in this driver.
+> What is also unclear to me is how we negotiate between EEE and
+> SmartEEE. I assume if the MAC is EEE capable, we prefer that over
+> SmartEEE. But i don't think i've seen anything in these patches which
+> addresses this. Maybe we want phy_init_eee() to disable SmartEEE?
 > 
-> I believe this very likely only is used at module load-time.
-> So the changes you suggest are fine with me.
+> 	  Andrew
 > 
-> I have added Paul Gortmaker to the Cc, Paul is the last person
-> to have done any real (*) work on acerhfd AFAICT.
-> 
-> Paul any objections against making the acerhdf.interval parameter
-> something which only works when set at boot / module load time
-> and removing the ability to change it at runtime ?
 
-p.s.
+I would prefer to not touch phy_init_eee(). At least not in this patch
+set. With this function we have following situation:
+drivers/net/dsa/b53/b53_common.c:2173:
 
-I see now that Peter Kaestle is also still active in acking / reviewing
-acerhfd changes. So lets wait for Peter's input on this too.
+This driver will enable EEE if link partners agreed to do so. But never
+disable it, if link partner decided to turn off EEE or other link partner
+without EEE support was attached.
 
-Regards,
+drivers/net/dsa/mt7530.c:2862:
 
-Hans
+Seems to be ok.
 
+drivers/net/ethernet/broadcom/genet/bcmgenet.c:1353:
 
-> *) Real as in not related to keeping it aligned with the thermal
-> framework/core
+EEE is not enabled link up. It will work only with ethtool and only if
+link was already active.
 
+drivers/net/ethernet/freescale/fec_main.c:3078:
 
+EEE is not enabled link up. It will work only with ethtool and only if
+link was already active.
+
+drivers/net/ethernet/marvell/mvneta.c:4225:
+
+Seems to be ok.
+
+drivers/net/ethernet/microchip/lan743x_ethtool.c:1115:
+
+EEE is not enabled link up. It will work only with ethtool and only if
+link was already active.
+
+drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c:130:
+
+EEE will be enabled on open, but only if PHY was fast enough to detect
+the link.
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:1084:
+
+May partially work, by driver has many reason to not enable EEE, even if
+PHY will continue to advertise it.
+
+In all broken or partially broken cases, the PHY will continue to advertise
+EEE support. And the link partner will even potentially try to make use of it.
+No Idea if this works good.
+
+Hm.. I need to admit, EEE should not be advertised by default. Only
+if MAC driver calls something like phy_support_eee(), we should start doing it.
+
+In case some Intel Ethernet drivers developer read this. There are some issue
+too. For example:
+net/ethernet/intel/igb/igb_ethtool.c
+  igb_get_eee()
+	if (adapter->link_duplex == HALF_DUPLEX) {
+		edata->eee_enabled = false;
+		edata->eee_active = false;
+		edata->tx_lpi_enabled = false;
+		edata->advertised &= ~edata->advertised;
+	}
+
+This part of code will make EEE permanently disabled if link partner switched
+to HALF duplex and then back to full duplex.
+
+It can be reproduce with following steps:
+system B:
+ethtool -s end0 advertise 0x008
+system A:
+ethtool --show-eee enp1s0f1
+	EEE status: enabled - active
+system B:
+ethtool -s end0 advertise 0x004
+system A:
+ethtool --show-eee enp1s0f1
+	EEE status: disabled
+system B:
+ethtool -s end0 advertise 0x008
+ethtool --show-eee enp1s0f1
+	EEE status: disabled
+
+drivers/net/ethernet/intel/igc/igc_ethtool.c is affected as well.
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
