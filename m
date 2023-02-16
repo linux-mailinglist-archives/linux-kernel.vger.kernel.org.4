@@ -2,230 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE573699A61
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2062699A67
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBPQnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S229973AbjBPQn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBPQnR (ORCPT
+        with ESMTP id S229525AbjBPQnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:43:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8EE5A5D6;
-        Thu, 16 Feb 2023 08:43:15 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DAA381042;
-        Thu, 16 Feb 2023 08:43:57 -0800 (PST)
-Received: from [10.34.100.128] (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 389A93F881;
-        Thu, 16 Feb 2023 08:43:14 -0800 (PST)
-Message-ID: <19209817-6451-76de-70a4-1f89808bc82a@arm.com>
-Date:   Thu, 16 Feb 2023 17:43:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] arm64: efi: Make efi_rt_lock a raw_spinlock
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-efi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230215161047.94803-1-pierre.gondois@arm.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230215161047.94803-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 11:43:53 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E954CC99;
+        Thu, 16 Feb 2023 08:43:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676565816; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=SX2i5Tos38Fgwi7WtqJ+Djt6Hh/XIDXXlqs4vzzhRHYCrSEzYERiDrjAyM12u1gGn/
+    BEMVwVfVId0ucms5nEGYKzMZ7v1qzZAwUTG8tIM9yC+dJT477lgwesC0j7BQdwY7OV/T
+    3BA1jYaU25ILVmhdP+0/s1a6xC6ut3xG6GShqqLZuTn2l2iQq5vvmj+LpSSK2T6XJP29
+    E4a+9Jah+cR8ahtWXCL9+QsLfyki4HBdxToYx9HEaVt5BHMQe2Bn8php4NTKsfPhbsgQ
+    VQmvYNBLUzlBoayL8pEYTC3kd1kujYW+vMueUs2qjSlwInEyPfvQuGgdcks24VL6Uisz
+    ERWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676565816;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=KMpn1IroileXPCsxjh9VYqExYDjc8Zq6GFm4REmK/QM=;
+    b=ShCcQC/IJNKfhorlbLJfPnTV9LgEtOOfIdsQK6n86HHOZZ5y/S0QpFAQGiIGMtX8QU
+    pWpYDAqydCStB8/QTcRCWB9bYjZH44HB+idoL9nZp3GihsW50BXinA4rOeCuEX6/li3j
+    /lWZOATPZn0zGi+bEIi0DrJrNPU1a70eLDVf1+mVoEuB/EJ4yaO1zgDhSJJ1ea/EiEAT
+    CVYbUNOLcQtWUzPnSaW3aJTl4xbbgC55QVU7SReU4wBuhRYY98jsPyTL6myTsV7qqUuW
+    dH2IngqC8WExj9CAdybWyOYweuB675Mj4ENh2AuxzZa/RZEVVWxVuLbnrrv1hOsxZ0L3
+    JukA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676565816;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=KMpn1IroileXPCsxjh9VYqExYDjc8Zq6GFm4REmK/QM=;
+    b=dATuccg1g273KSxWYcYfBAAP2/GC3yDsUKac+O7ad1YstcfcoG3Q3n5lbHo9xYYGxw
+    dplgtY7MjSswWRJF6pUg6CQTOeJnm3f5F5nzA/3dMlPSrKVV77GBv5vP3P0OMvwbyggA
+    uYd9bV7K4ZXf981x3/N2DZhhOWD6ue5ipySCgVxBqM/NoUqbE1kS5rwo+AnXaUWRlVkn
+    SjyLjySx5dvuNX7SiGiJU+d2XV9VpfLq4GfZVOBaeLsHVutPCIIf/lg/ZgtaoxW2rA1j
+    5+Bvgbi8Ha4ne34lRs4p8+X63o29OxP8OqdKsyZgpeATDJ08v6mNAg5erK8qpj6WqD6p
+    6FBQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGfq2U="
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
+    with ESMTPSA id 326d57z1GGhahTJ
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 16 Feb 2023 17:43:36 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [RFC 2/2] WIP: dt-bindings: omap: Convert omap.txt to yaml
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <814cd5f3-b46d-13f3-1d05-f26a29914c9b@ti.com>
+Date:   Thu, 16 Feb 2023 17:43:35 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2F8C8151-73E4-49A2-B49A-F190AF2F3BFA@goldelico.com>
+References: <20230216153339.19987-1-afd@ti.com>
+ <20230216153339.19987-3-afd@ti.com>
+ <B4B86F81-3483-400B-8D14-AC92940D2B57@goldelico.com>
+ <814cd5f3-b46d-13f3-1d05-f26a29914c9b@ti.com>
+To:     Andrew Davis <afd@ti.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-Please ignore this patch for now. While running a kernel with this patch,
-the following was triggered once (among multiple reboots). IRQ flags might
-need to be saved, along with this present patch.
+Hi Andrew,
 
-Regards,
-Pierre
+> Am 16.02.2023 um 17:19 schrieb Andrew Davis <afd@ti.com>:
+>=20
+> On 2/16/23 10:08 AM, H. Nikolaus Schaller wrote:
+>> Hi,
+>>> Am 16.02.2023 um 16:33 schrieb Andrew Davis <afd@ti.com>:
+>>>=20
+>>> Signed-off-by: Andrew Davis <afd@ti.com>
+>>> ---
+>>> .../devicetree/bindings/arm/omap/omap.yaml    | 174 =
+++++++++++++++++++
+>>> 1 file changed, 174 insertions(+)
+>>> create mode 100644 =
+Documentation/devicetree/bindings/arm/omap/omap.yaml
+>>>=20
+>>> diff --git a/Documentation/devicetree/bindings/arm/omap/omap.yaml =
+b/Documentation/devicetree/bindings/arm/omap/omap.yaml
+>>> new file mode 100644
+>>> index 0000000000000..cf07a7a7df279
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/arm/omap/omap.yaml
+>>> @@ -0,0 +1,174 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/arm/omap/omap.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Texas Instruments OMAP SoC architecture device tree bindings
+>>> +
+>>> +maintainers:
+>>> +  - Tony Lindgren <tony@atomide.com>
+>>> +
+>>> +description: |
+>>> +  Platforms based on Texas Instruments OMAP SoC architecture.
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    const: '/'
+>>> +  compatible:
+>>> +    oneOf:
+>>> +
+>>> +      - description: TI OMAP2420 SoC based platforms
+>>> +        items:
+>>> +          - enum:
+>>> +              - ti,omap2420-h4 # TI OMAP2420 H4 board
+>>> +              - nokia,n800 # Nokia N800
+>>> +              - nokia,n810 # Nokia N810
+>>> +              - nokia,n810-wimax # Nokia N810 WiMax
+>>> +          - const: ti,omap2420
+>>> +          - const: ti,omap2
+>>> +
+>>> +      - description: TI OMAP2430 SoC based platforms
+>>> +        items:
+>>> +          - enum:
+>>> +              - ti,omap2430-sdp # TI OMAP2430 SDP
+>>> +          - const: ti,omap2430
+>>> +          - const: ti,omap2
+>>> +
+>>> +      - description: TI OMAP3430 SoC based platforms
+>>> +        items:
+>>> +          - enum:
+>>> +              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom =
+OMAP35xx SOM-LV Development Kit
+>>> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom =
+OMAP35xx Torpedo Development Kit
+>>> +              - ti,omap3430-sdp # TI OMAP3430 SDP
+>>> +              - ti,omap3-beagle # TI OMAP3 BeagleBoard
+>>> +              - compulab,omap3-cm-t3530 # CompuLab CM-T3530
+>>> +              - timll,omap3-devkit8000 # TimLL OMAP3 Devkit8000
+>>> +              - ti,omap3-evm # TI OMAP35XX EVM (TMDSEVM3530)
+>>> +              - ti,omap3-ldp # TI OMAP3430 LDP (Zoom1 Labrador)
+>>> +              - nokia,omap3-n900 # Nokia N900
+>>> +          - const: ti,omap3430
+>>> +          - const: ti,omap3
+>>> +
+>>> +      - description: TI OMAP3630 SoC based platforms
+>>> +        items:
+>>> +          - enum:
+>>> +              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom DM3730 =
+SOM-LV Development Kit
+>>> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 =
+Torpedo + Wireless Development Kit
+>>> +              - ti,omap3-beagle-xm # TI OMAP3 BeagleBoard xM
+>>> +              - compulab,omap3-cm-t3730 # CompuLab CM-T3730
+>>> +              - amazon,omap3-echo # Amazon Echo (first generation)
+>>> +              - ti,omap3-evm-37xx # TI OMAP37XX EVM (TMDSEVM3730)
+>>> +              - ti,omap3-gta04 # OMAP3 GTA04
+>> precisely the GTA04 was not a TI product, but from Golden Delicious =
+Computers.
+>> It got this compatible because it originally shared a lot of device =
+tree with the ti,omap3-beagle-xm.
+>> Well, we could add a vendor prefix ("goldelico") and update the =
+device trees to "goldelico,gta04".
+>> Generally, there is also the OpenPandora with both OMAP3 variants =
+(3430 and 3630):
+>> compatible =3D "openpandora,omap3-pandora-600mhz", "ti,omap3430", =
+"ti,omap3";
+>> compatible =3D "openpandora,omap3-pandora-1ghz", "ti,omap3630", =
+"ti,omap36xx", "ti,omap3";
+>> But it is also missing a vendor prefix. Should I send a patch for =
+both topics?
+>> Before the scheme is merged or afterwards?
+>=20
+> I'd suggest we get as many fixes into the actual DT files before the =
+schemas
+> are solidified. Doing it after would mean changes in two places vs =
+one.
 
-random: crng init done
-[Firmware Bug]: Unable to handle write to read-only memory in EFI runtime service
-------------[ cut here ]------------
-WARNING: CPU: 7 PID: 325 at drivers/firmware/efi/runtime-wrappers.c:113 efi_call_virt_check_flags+0x48/0xb0
-Modules linked in: btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq crct10dif_ce
-CPU: 7 PID: 325 Comm: kworker/u64:1 Tainted: G        W I        6.2.0-rc8-rt1-[...]
-Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.0 06/28/2019
-Workqueue: efi_rts_wq efi_call_rts
-pstate: 00000085 (nzcv daIf -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : efi_call_virt_check_flags+0x48/0xb0
-lr : efi_call_rts+0x240/0x4b0
-sp : ffff80000def3cf0
-x29: ffff80000def3cf0 x28: ffff000801d10b05 x27: ffff80000b16d000
-x26: 0000000000000000 x25: ffff80000b17e4a0 x24: ffff80000c84bd48
-x23: ffff80000c84bd00 x22: ffff80000c84bd0c x21: 0000000000000080
-x20: ffff80000a41d0e0 x19: 0000000000000000 x18: ffff80000a22b3a8
-x17: 0000000000000000 x16: ffff80000d2dc000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000000 x10: 0000000000000000 x9 : ffff80000927cd60
-x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : ffff80000a7d1008 x4 : 0000008ffd1d0018 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : ffff80000a41d0e0 x0 : 0000000000000080
-Call trace:
-  efi_call_virt_check_flags+0x48/0xb0
-  efi_call_rts+0x240/0x4b0
-  process_one_work+0x2c8/0x7a0
-  worker_thread+0x54/0x410
-  kthread+0x130/0x140
-  ret_from_fork+0x10/0x20
-irq event stamp: 540538
-hardirqs last  enabled at (540537): [<ffff80000927d97c>] efi_virtmap_load+0x28c/0x328
-hardirqs last disabled at (540538): [<ffff8000095c8590>] el1_abort+0x28/0x100
-softirqs last  enabled at (534078): [<ffff80000819cec8>] __local_bh_enable_ip+0xa8/0x2a8
-softirqs last disabled at (534066): [<ffff80000934b408>] neigh_managed_work+0x8/0x100
----[ end trace 0000000000000000 ]---
-Disabling lock debugging due to kernel taint
-efi: [Firmware Bug]: IRQ flags corrupted (0x00000000=>0x00000080) by EFI set_variable
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 14 at drivers/firmware/efi/runtime-wrappers.c:341 virt_efi_set_variable+0x164/0x1c0
-Modules linked in: btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq crct10dif_ce
-CPU: 0 PID: 14 Comm: kworker/0:1 Tainted: G        W I        6.2.0-rc8-rt1-custom-[...]
-Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.0 06/28/2019
-Workqueue: events refresh_nv_rng_seed
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : virt_efi_set_variable+0x164/0x1c0
-lr : virt_efi_set_variable+0x150/0x1c0
-sp : ffff80000c84bcc0
-x29: ffff80000c84bcc0 x28: ffff008f35feb905 x27: ffff80000b16d000
-x26: ffff80000b16ced0 x25: 0000000000000000 x24: ffff80000c344000
-x23: ffff80000a41b2b0 x22: ffff80000c84bd38 x21: 8000000000000015
-x20: ffff80000b63ecf8 x19: ffff80000c344480 x18: ffff80000a22b3a8
-x17: 000000005a8ae2d0 x16: 0000000000000000 x15: ffff80000b16cfb8
-x14: 0000000000000001 x13: 0000000000000030 x12: 0101010101010101
-x11: 0000000571f160b9 x10: 0000000000002460 x9 : ffff8000095e2064
-x8 : ffff80000a7d1008 x7 : 0000000000000004 x6 : ffff80000c84bb28
-x5 : ffff80000c84c000 x4 : ffff80000c848000 x3 : ffff80000c84bc40
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 8000000000000015
-Call trace:
-  virt_efi_set_variable+0x164/0x1c0
-  refresh_nv_rng_seed+0x84/0xb8
-  process_one_work+0x2c8/0x7a0
-  worker_thread+0x54/0x410
-  kthread+0x130/0x140
-  ret_from_fork+0x10/0x20
-irq event stamp: 35886
-hardirqs last  enabled at (35885): [<ffff8000095e2050>] _raw_spin_unlock_irq+0x40/0xb8
-hardirqs last disabled at (35886): [<ffff8000095e215c>] _raw_spin_lock_irq+0x94/0x98
-softirqs last  enabled at (10754): [<ffff80000819cec8>] __local_bh_enable_ip+0xa8/0x2a8
-softirqs last disabled at (10746): [<ffff800008256de0>] srcu_invoke_callbacks+0x100/0x1a8
----[ end trace 0000000000000000 ]---
-[...]
-In-situ OAM (IOAM) with IPv6
-efi: EFI Runtime Services are disabled!
-efivars: get_next_variable: status=8000000000000007
-[...]
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-rtc-efi rtc-efi.0: can't read time
-[...]
+Ok, I'll prepare and send a patch set asap.
+
+BR and thanks,
+Nikolaus
 
 
-On 2/15/23 17:10, Pierre Gondois wrote:
-> Running a rt-kernel base on 6.2.0-rc3-rt1 on an Ampere Altra outputs
-> the following:
->    BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
->    in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 9, name: kworker/u320:0
->    preempt_count: 2, expected: 0
->    RCU nest depth: 0, expected: 0
->    3 locks held by kworker/u320:0/9:
->    #0: ffff3fff8c27d128 ((wq_completion)efi_rts_wq){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
->    #1: ffff80000861bdd0 ((work_completion)(&efi_rts_work.work)){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
->    #2: ffffdf7e1ed3e460 (efi_rt_lock){+.+.}-{3:3}, at: efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
->    Preemption disabled at:
->    efi_virtmap_load (./arch/arm64/include/asm/mmu_context.h:248)
->    CPU: 0 PID: 9 Comm: kworker/u320:0 Tainted: G        W          6.2.0-rc3-rt1
->    Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
->    Workqueue: efi_rts_wq efi_call_rts
->    Call trace:
->    dump_backtrace (arch/arm64/kernel/stacktrace.c:158)
->    show_stack (arch/arm64/kernel/stacktrace.c:165)
->    dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
->    dump_stack (lib/dump_stack.c:114)
->    __might_resched (kernel/sched/core.c:10134)
->    rt_spin_lock (kernel/locking/rtmutex.c:1769 (discriminator 4))
->    efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
->    [...]
-> 
-> This seems to come from commit ff7a167961d1 ("arm64: efi: Execute
-> runtime services from a dedicated stack") which adds a spinlock. This
-> spinlock is taken through:
-> efi_call_rts()
-> \-efi_call_virt()
->    \-efi_call_virt_pointer()
->      \-arch_efi_call_virt_setup()
-> 
-> Make 'efi_rt_lock' a raw_spinlock to avoid being preempted.
-> 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->   arch/arm64/include/asm/efi.h | 6 +++---
->   arch/arm64/kernel/efi.c      | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/efi.h b/arch/arm64/include/asm/efi.h
-> index 31d13a6001df..37dc2e8c3500 100644
-> --- a/arch/arm64/include/asm/efi.h
-> +++ b/arch/arm64/include/asm/efi.h
-> @@ -33,7 +33,7 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
->   ({									\
->   	efi_virtmap_load();						\
->   	__efi_fpsimd_begin();						\
-> -	spin_lock(&efi_rt_lock);					\
-> +	raw_spin_lock(&efi_rt_lock);					\
->   })
->   
->   #undef arch_efi_call_virt
-> @@ -42,12 +42,12 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
->   
->   #define arch_efi_call_virt_teardown()					\
->   ({									\
-> -	spin_unlock(&efi_rt_lock);					\
-> +	raw_spin_unlock(&efi_rt_lock);					\
->   	__efi_fpsimd_end();						\
->   	efi_virtmap_unload();						\
->   })
->   
-> -extern spinlock_t efi_rt_lock;
-> +extern raw_spinlock_t efi_rt_lock;
->   efi_status_t __efi_rt_asm_wrapper(void *, const char *, ...);
->   
->   #define ARCH_EFI_IRQ_FLAGS_MASK (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT)
-> diff --git a/arch/arm64/kernel/efi.c b/arch/arm64/kernel/efi.c
-> index fab05de2e12d..216933cf47ee 100644
-> --- a/arch/arm64/kernel/efi.c
-> +++ b/arch/arm64/kernel/efi.c
-> @@ -145,7 +145,7 @@ asmlinkage efi_status_t efi_handle_corrupted_x18(efi_status_t s, const char *f)
->   	return s;
->   }
->   
-> -DEFINE_SPINLOCK(efi_rt_lock);
-> +DEFINE_RAW_SPINLOCK(efi_rt_lock);
->   
->   asmlinkage u64 *efi_rt_stack_top __ro_after_init;
->   
