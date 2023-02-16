@@ -2,226 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FC2698D4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2683698D4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjBPGon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
+        id S229520AbjBPGok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjBPGol (ORCPT
+        with ESMTP id S229551AbjBPGoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:44:41 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2042.outbound.protection.outlook.com [40.107.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE071AB;
-        Wed, 15 Feb 2023 22:44:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j6TUR4umE0kc9ChOpg3yc2Gus934xBZIwS0rc2Q6batU6Y8kDJmtliAxoGW66I8D1XeNOeVQppMMYPB48ojSvMkUiGFxzu6A6H3HzHIDRD57VlT2fcojFlmu0fxL1y+4U5JRuIWGPoSKRMMQgFDJTUcZTu5XRbpHu3GWXJfm7kNGHDup0ZR/7POfksatKCaQaIqq3iQ3ykhc9FqsDrNX5aYNjBEb/qkIRbzAG+w/IOAu4nbgPMy+VRn0EAJDru8JRXEkAaNhWgCO6ydvMHGrXoy3KGdCbic03eOVoY15epcFoOg6uM72Virxg9BoRIdYn1y+WNHYwTXKtbrHMrAn5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qIJB3o3/8CCuHw9ZgkpuddZVsdLp7jl1qf+KeBDlDWw=;
- b=hT/GCVFD/p6hzG18MF0wuiUl3xFkzKnHVU4r1iouE1QBcZlzT4n03txsRiAFFgQ1JUO+B5jq0F0AOgWDsP2yGVM1N5pS6itnamaw70/wQiHt75nl8tI1txBZiBj9K42ZIJMftsK48EsHwKlniMD4KJw7hCk2iG8kxqYwCMIRZCqFyoWavPYavkZcEPsLn2bGUqvlYfILV+NS3+6LhI0xltnal14SSWT2PPik/d9gkFjgtaY0SMmb8TBa7tPXn0vqAErFsXgcqCEiGCGusm3sw6EDfBJRCFbtZl4ZJEM4M/+44ciQNFeWh9RYeE+6Hm8c7nvUrLRLBotRaK+K6tHiog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qIJB3o3/8CCuHw9ZgkpuddZVsdLp7jl1qf+KeBDlDWw=;
- b=IiaeLktwedxPrMrX4fARGZoiuYO+hA14xvZxnSkDnWPe2B7U1qsp83g1sAL/Mpg6Ay3HujKRxJHmp0JXdhkTk+LKpc9y4Z/mAET3ciaIvQeW+4wuZtNj/nCRjQntV9xfrcBcNgSA2u6J8FnJbR1sdM32GOxjDhBHD1GjyaV1PfY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by SJ1PR12MB6291.namprd12.prod.outlook.com (2603:10b6:a03:456::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Thu, 16 Feb
- 2023 06:44:36 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
- 06:44:36 +0000
-Date:   Thu, 16 Feb 2023 06:44:22 +0000
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Shukla, Santosh" <Santosh.Shukla@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        Tor Vic <torvic9@mailbox.org>
-Subject: Re: [PATCH v6 4/6] Documentation: amd_pstate: Move amd_pstate param
- to alphabetical order
-Message-ID: <Y+3QxifmInvLA076@beas>
-References: <20230206172157.49887-1-wyes.karny@amd.com>
- <20230206172157.49887-5-wyes.karny@amd.com>
- <Y+3JSn5uVCxMShV/@amd.com>
- <Y+3ON855qAWNcuYE@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+3ON855qAWNcuYE@amd.com>
-X-ClientProxiedBy: PN3PR01CA0039.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::15) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        Thu, 16 Feb 2023 01:44:39 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 526551BEC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:44:29 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8DxldjL0O1jFzkBAA--.2484S3;
+        Thu, 16 Feb 2023 14:44:27 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+TI0O1j21o0AA--.61764S3;
+        Thu, 16 Feb 2023 14:44:25 +0800 (CST)
+Subject: Re: [PATCH v3 2/3] LoongArch: Add ptrace single step support
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230215092358.30368-1-zhangqing@loongson.cn>
+ <20230215092358.30368-3-zhangqing@loongson.cn>
+ <2b759af4-4047-4ac6-acbb-42e91c14fb48@loongson.cn>
+ <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <4a4a159d-f0d3-67cd-f145-202ef2a7e794@loongson.cn>
+Date:   Thu, 16 Feb 2023 14:44:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SJ1PR12MB6291:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8fac58e-dc46-4bbb-6abd-08db0fe944a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9QOzWAGa6gLkoMPEtc0BBVJ9SLhSSvFhlrNtmoHXS1cnXt3ipDJmir2KdS8kNsv4YwGo2D2xAybYrGUl65GSGePMkSpWFplNVk11cjbBBHAVwWSu5rdf/NU/1tAnHzZiGgDJDg0+ayukEccg5ZErjJL8wGKN9wejyGkvaLgePSUaN9M4LtNb/J8xQ0RR6racLg63GRbSrBX6AR/fXUgxg3CR0ymXZFz7RmKQnuk/g0Rsv1VewAjXfqZ5p/RYp8K8ZNLRft2Wmyl7yZaTCQ+F5kAQHtPUnMWWORH41RnIgVjowMO2QMZcea5DHWvlTJbcjKk2B9YnZge8FgTevqHv3jhMIxsIP2r8/918bZ7zCmM53u/mJhywrl7WbI+4OpKmXZM8bJbdkUdol/YkYKA9NoEw6iwmymwg83vi/PYlPxgz86Qw/Du/GsNRtgamRAqew6g25h/W/na87w2Iq/x8KGxXJaSEt+mVaw4In0ANmkzQa83bmDLImJQdaM3ilDv9MmQLuduqExT3Lvpxr9p6p/i9NRqgXbJvZkE0krFtPwp6RC6GUpFKveS9XCMGA1wCuEKJwGGOPo0Zlh2eUi8cGUfQHAul16CNc4uRTM1ThdiZi4M6JPKmuVKQT7fjJSm4WAAWastmTy5+pjRIxDuMPAgdscQyJu0u4rK7fJLcjgNSufi3RJUhUhB5ML+4JaSa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199018)(6636002)(54906003)(316002)(6862004)(8936002)(6506007)(6512007)(9686003)(186003)(86362001)(478600001)(6486002)(38100700002)(33716001)(6666004)(26005)(83380400001)(44832011)(5660300002)(7416002)(2906002)(66476007)(66556008)(66946007)(8676002)(4326008)(41300700001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9tuYcfsSyI0thjeYmGCJoX15ydKPoVUy5AR1FpqqiGk9Kx4B3hKsqTnMqnZW?=
- =?us-ascii?Q?+UKg8QyCxe2OuuHpUVs1VtkwKHAgsCb3Npqo4Or2m1xBCjTxyA975G7hpWTU?=
- =?us-ascii?Q?Jyubpep42d3kj1BOh+2V1s8BkffWQrQRA0RLJVb1m5rZhbs1VSOKxx+MtPy0?=
- =?us-ascii?Q?S0vbR2ykqiLzlXkd6qZox00DNzJcVF1zJ9Q5z6SiZ3gKbgFpPp+KMruVKmye?=
- =?us-ascii?Q?qnQxEH5PX7QxzC1LLlXqCQPW2KMfWZmMEFgacIjVzEv++1r/gtcEpH0TGtnv?=
- =?us-ascii?Q?sMWQvKZWb+BVyt2LJd65OtN5W688arzhKjNiJrmVBTiFNuHFIZXsV5pcftw9?=
- =?us-ascii?Q?zH7hDVH4H2+UCNt5i+4gx7vjaGoICpOfm2xqhB2Db/bAq6rbCAgF2lfowY0Z?=
- =?us-ascii?Q?wCGLFShwSMZmZbQCxezfym4frUGi7MPTczkYof9DuKQGuJBjuLqgDG+38Wrh?=
- =?us-ascii?Q?wSFCvuLtq4mq3v2NWEdG++vO6G5WqPkED9wO7DM5Wb0h1NJoq68bscqeU4zP?=
- =?us-ascii?Q?uGOfZnq/hFKIjXYJCwfrLMaLUQY8ee4k7hoGim8cdlzPts6Jt5qbGsTecnrN?=
- =?us-ascii?Q?KQO5txvPIEz7PyMtuorCuYXhfoDo4RdAZVkOFOq5HtyCrAUFBJ9Zkq+ZZXPW?=
- =?us-ascii?Q?pM/Y5hChVAJ+t6CnBNRGbRCtysdH2rTttXunwdIYjoInj/d1YIdR2MNXGLLB?=
- =?us-ascii?Q?Gret4gNkFl4OYqKm4KI5Su2gCJKCX9d2y1DFInQyU+Lcd4Z51Dc/x2bLa1OW?=
- =?us-ascii?Q?LKCvKdT5ADLSrSLJDSmJSfrW3DXjEWGRYeIskH31hZaWa0CF+rVqOuz6FW9A?=
- =?us-ascii?Q?QDpKJdkba189BudiSl5NfwNI6yCzfmnfF1+F7m9x7paeMDItFASnEqtwOy7W?=
- =?us-ascii?Q?lVh7G0p38t2pkSbIWT8bhCCiLQUxXB5f7yMwA7pJztqKRrZBq/GvskIU2JvW?=
- =?us-ascii?Q?lrYX8095WCKBScVQwRkRHfoo2yZBOXWiSXydGYFo4hmKQHurhfX+fzFq9kzl?=
- =?us-ascii?Q?6YgbsKGoKP+mhQZuTMl/xzJ8Ro+NDHV6IS2+eOsyrhXrTKNpV5Fq93UKbLhG?=
- =?us-ascii?Q?mCT9V3Now/XOlepvCiBFQ3EZvMTOm6vzId9XOdboHSTAcSoPTfWdqXyBnQqU?=
- =?us-ascii?Q?R4MNeLly0jKpnjOTo0TSOmSGd3oa4HEsuY1KJTCIn8rfETQRZo3bgjZ4Ho6M?=
- =?us-ascii?Q?vRcva6o5pQeRnhdCbq70L/2hlBnF+98ikLB7F96+mA2upAiphUHTfi8Trws/?=
- =?us-ascii?Q?RK/qdh9HK0L3xQUogv7EHbNhY17f6zwgomWRgQPqkJXXcCL8XpxN9rH+/eGI?=
- =?us-ascii?Q?WX8fUJtraZsSlyY8CWUH+92EzWrpailZDD4NXSawt6f0ep1ve8oi5TMmGMBe?=
- =?us-ascii?Q?jpLg9Y+NcFxNg2rtwCzYLF/Vbqmfg9YP83IuQJJpWAhuptBLmUz7dn4VGj2M?=
- =?us-ascii?Q?SU0xq51Zu9ExG6G3mghe7AJcCpxvNnuEiJ+xwsJA4uC8bXlXxUpn8XhjFmnK?=
- =?us-ascii?Q?OgEP3Nv56IMdsfkSYuhSNnDpn8QVRv5st86Obro3jYKr8N9D8L35+WXVXG8q?=
- =?us-ascii?Q?WKd1DHpotS2Ziaa1ATuozDmbCnnmmjK61VauEr8Z?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8fac58e-dc46-4bbb-6abd-08db0fe944a6
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 06:44:35.9110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DOebsvncAuu/pOCatXntR25tb00+DBr/CQFBNc+fqlXxj3bDe+BHdV+xkB5fcQly9iZHlit18rA5K0Peul0Fsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6291
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Bxb+TI0O1j21o0AA--.61764S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3ur1DXr45tFWDtF48ZrW5ZFb_yoWkXrW5pF
+        1kAFWDGrW5Grn5Jr12gw1UAFy5tr18XanrXr10qa4Yyrsrtr1agr1UWr1q9F15Aw48Jr1I
+        vr15WrsIvF43XaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8CksDUUUUU==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16 Feb 14:33, Huang Rui wrote:
-> On Thu, Feb 16, 2023 at 02:12:53PM +0800, Huang Rui wrote:
-> > On Tue, Feb 07, 2023 at 01:21:55AM +0800, Karny, Wyes wrote:
-> > > Move amd_pstate command line param description to correct alphabetical
-> > > order.
-> > > 
-> > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > 
-> > Wyes, could you squeeze this minor patch to patch 3? I think we won't need
-> > an additional patch to fix alphabetical order in the documentation.
-> 
-> Alternative, you can move this patch prior patch3, then patch3 (guided
-> autonomous" can add the documentation in correct order.
 
-Sure, will reorder this.
+On 2023-02-16 11:13, Youling Tang wrote:
+>
+>
+> On 02/16/2023 10:07 AM, Jinyang He wrote:
+>>
+>> On 2023-02-15 17:23, Qing Zhang wrote:
+>>> Use the generic ptrace_resume code for PTRACE_SYSCALL, PTRACE_CONT,
+>>> PTRACE_KILL and PTRACE_SINGLESTEP. This implies defining
+>>> arch_has_single_step in  and implementing the
+>>> user_enable_single_step and user_disable_single_step functions.
+>>>
+>>> LongArch has no hardware single-step register. the hardware single-step
+>>> function multiplex fetch instruction watchpoint(FWPS) and specifies 
+>>> that
+>>> the next instruction must trigger the watch exception by setting the
+>>> mask bit.
+>>>
+>>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>>> ---
+>>>   arch/loongarch/include/asm/processor.h |  3 ++
+>>>   arch/loongarch/include/asm/ptrace.h    |  2 +
+>>>   arch/loongarch/kernel/hw_breakpoint.c  | 35 +++++++++++--
+>>>   arch/loongarch/kernel/ptrace.c         | 68 
+>>> ++++++++++++++++++++++++++
+>>>   arch/loongarch/kernel/traps.c          | 20 ++++++--
+>>>   5 files changed, 120 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/arch/loongarch/include/asm/processor.h
+>>> b/arch/loongarch/include/asm/processor.h
+>>> index db060c5a976f..3ea0f1910c23 100644
+>>> --- a/arch/loongarch/include/asm/processor.h
+>>> +++ b/arch/loongarch/include/asm/processor.h
+>>> @@ -131,6 +131,9 @@ struct thread_struct {
+>>>       struct perf_event    *hbp_break[LOONGARCH_MAX_BRP];
+>>>       struct perf_event    *hbp_watch[LOONGARCH_MAX_WRP];
+>>>   +    /* Used by ptrace single_step */
+>>> +    unsigned long single_step;
+>>> +
+>>>       /*
+>>>        * FPU & vector registers, must be at last because
+>>>        * they are conditionally copied at fork().
+>>> diff --git a/arch/loongarch/include/asm/ptrace.h
+>>> b/arch/loongarch/include/asm/ptrace.h
+>>> index 58596c4f8a0f..66a0e6c480a3 100644
+>>> --- a/arch/loongarch/include/asm/ptrace.h
+>>> +++ b/arch/loongarch/include/asm/ptrace.h
+>>> @@ -150,4 +150,6 @@ static inline void user_stack_pointer_set(struct
+>>> pt_regs *regs,
+>>>       regs->regs[3] = val;
+>>>   }
+>>>   +#define arch_has_single_step()        (1)
+>>> +
+>>>   #endif /* _ASM_PTRACE_H */
+>>> diff --git a/arch/loongarch/kernel/hw_breakpoint.c
+>>> b/arch/loongarch/kernel/hw_breakpoint.c
+>>> index 6431cd319c32..94967b887d92 100644
+>>> --- a/arch/loongarch/kernel/hw_breakpoint.c
+>>> +++ b/arch/loongarch/kernel/hw_breakpoint.c
+>>> @@ -153,6 +153,22 @@ static int hw_breakpoint_slot_setup(struct
+>>> perf_event **slots, int max_slots,
+>>>    */
+>>>   void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
+>>>   {
+>>> +    int i;
+>>> +    struct thread_struct *t = &tsk->thread;
+>>> +
+>>> +    for (i = 0; i < LOONGARCH_MAX_BRP; i++) {
+>>> +        if (t->hbp_break[i]) {
+>>> +            unregister_hw_breakpoint(t->hbp_break[i]);
+>>> +            t->hbp_break[i] = NULL;
+>>> +        }
+>>> +    }
+>>> +
+>>> +    for (i = 0; i < LOONGARCH_MAX_WRP; i++) {
+>>> +        if (t->hbp_watch[i]) {
+>>> +            unregister_hw_breakpoint(t->hbp_watch[i]);
+>>> +            t->hbp_watch[i] = NULL;
+>>> +        }
+>>> +    }
+>>>   }
+>>>     void ptrace_hw_copy_thread(struct task_struct *tsk)
+>>> @@ -498,11 +514,20 @@ arch_initcall(arch_hw_breakpoint_init);
+>>>   void hw_breakpoint_thread_switch(struct task_struct *next)
+>>>   {
+>>>       struct pt_regs *regs = task_pt_regs(next);
+>>> -
+>>> -    /* Update breakpoints */
+>>> -    update_bp_registers(regs, 1, 0);
+>>> -    /* Update watchpoints */
+>>> -    update_bp_registers(regs, 1, 1);
+>>> +    u64 addr, mask;
+>>> +
+>>> +    if (test_bit(TIF_SINGLESTEP, &task_thread_info(next)->flags)) {
+>>> +        addr = read_wb_reg(CSR_CFG_ADDR, 0, 0);
+>>> +        mask = read_wb_reg(CSR_CFG_MASK, 0, 0);
+>>> +        if ((task_pt_regs(next)->csr_era & ~mask) == (addr & ~mask))
+>>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
+>>> +        regs->csr_prmd |= CSR_PRMD_PWE;
+>>> +    } else {
+>>> +        /* Update breakpoints */
+>>> +        update_bp_registers(regs, 1, 0);
+>>> +        /* Update watchpoints */
+>>> +        update_bp_registers(regs, 1, 1);
+>>> +    }
+>>>   }
+>>>     void hw_breakpoint_pmu_read(struct perf_event *bp)
+>>> diff --git a/arch/loongarch/kernel/ptrace.c
+>>> b/arch/loongarch/kernel/ptrace.c
+>>> index bee4194177fd..52a3ee4366f4 100644
+>>> --- a/arch/loongarch/kernel/ptrace.c
+>>> +++ b/arch/loongarch/kernel/ptrace.c
+>>> @@ -20,6 +20,7 @@
+>>>   #include <linux/context_tracking.h>
+>>>   #include <linux/elf.h>
+>>>   #include <linux/errno.h>
+>>> +#include <linux/hw_breakpoint.h>
+>>>   #include <linux/mm.h>
+>>>   #include <linux/ptrace.h>
+>>>   #include <linux/regset.h>
+>>> @@ -30,6 +31,7 @@
+>>>   #include <linux/stddef.h>
+>>>   #include <linux/seccomp.h>
+>>>   #include <linux/uaccess.h>
+>>> +#include <linux/thread_info.h>
+>>>     #include <asm/byteorder.h>
+>>>   #include <asm/cpu.h>
+>>> @@ -39,6 +41,7 @@
+>>>   #include <asm/page.h>
+>>>   #include <asm/pgtable.h>
+>>>   #include <asm/processor.h>
+>>> +#include <asm/ptrace.h>
+>>>   #include <asm/reg.h>
+>>>   #include <asm/syscall.h>
+>>>   @@ -541,3 +544,68 @@ long arch_ptrace(struct task_struct *child,
+>>> long request,
+>>>         return ret;
+>>>   }
+>>> +
+>>> +void ptrace_triggered(struct perf_event *bp,
+>>> +              struct perf_sample_data *data, struct pt_regs *regs)
+>>> +{
+>>> +    struct perf_event_attr attr;
+>>> +
+>>> +    attr = bp->attr;
+>>> +    attr.disabled = true;
+>>> +    modify_user_hw_breakpoint(bp, &attr);
+>>> +}
+>>> +
+>>> +static int set_single_step(struct task_struct *tsk, unsigned long 
+>>> addr)
+>>> +{
+>>> +    struct thread_struct *thread = &tsk->thread;
+>>> +    struct perf_event *bp;
+>>> +    struct perf_event_attr attr;
+>>> +    struct arch_hw_breakpoint *info;
+>>> +
+>>> +    bp = thread->hbp_break[0];
+>>> +    if (!bp) {
+>>> +        ptrace_breakpoint_init(&attr);
+>>> +
+>>> +        attr.bp_addr = addr;
+>>> +        attr.bp_len = HW_BREAKPOINT_LEN_8;
+>>> +        attr.bp_type = HW_BREAKPOINT_X;
+>>> +
+>>> +        bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
+>>> +                         NULL, tsk);
+>>> +        if (IS_ERR(bp))
+>>> +            return PTR_ERR(bp);
+>>> +
+>>> +        thread->hbp_break[0] = bp;
+>>> +    } else {
+>>> +        int err;
+>>> +
+>>> +        attr = bp->attr;
+>>> +        attr.bp_addr = addr;
+>>> +        /* reenable breakpoint */
+>>> +        attr.disabled = false;
+>>> +        err = modify_user_hw_breakpoint(bp, &attr);
+>>> +        if (unlikely(err))
+>>> +            return err;
+>>> +
+>>> +        csr_write64(attr.bp_addr, LOONGARCH_CSR_IB0ADDR);
+>>> +    }
+>>> +    info = counter_arch_bp(bp);
+>>> +    info->mask = 0xffffffffffff;
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +/* ptrace API */
+>>> +void user_enable_single_step(struct task_struct *task)
+>>> +{
+>>> +    struct thread_info *ti = task_thread_info(task);
+>>> +
+>>> +    set_single_step(task, task_pt_regs(task)->csr_era);
+>>> +    task->thread.single_step = task_pt_regs(task)->csr_era;
+>>> +    set_ti_thread_flag(ti, TIF_SINGLESTEP);
+>>> +}
+>>> +
+>>> +void user_disable_single_step(struct task_struct *task)
+>>> +{
+>>> +    clear_tsk_thread_flag(task, TIF_SINGLESTEP);
+>>> +}
+>>> diff --git a/arch/loongarch/kernel/traps.c
+>>> b/arch/loongarch/kernel/traps.c
+>>> index 2b133079e0f3..56d7d076153c 100644
+>>> --- a/arch/loongarch/kernel/traps.c
+>>> +++ b/arch/loongarch/kernel/traps.c
+>>> @@ -511,9 +511,23 @@ asmlinkage void noinstr do_watch(struct pt_regs
+>>> *regs)
+>>>   #ifdef CONFIG_HAVE_HW_BREAKPOINT
+>>>       irqentry_state_t state = irqentry_enter(regs);
+>>>   -    breakpoint_handler(regs);
+>>> -    watchpoint_handler(regs);
+>>> -    force_sig(SIGTRAP);
+>>> +    if (test_tsk_thread_flag(current, TIF_SINGLESTEP)) {
+>>> +        int llbit = (csr_read32(LOONGARCH_CSR_LLBCTL) & 0x1);
+>>> +        unsigned long pc = regs->csr_era;
+>>> +
+>>> +        if (llbit) {
+>>
+>> Hi, Qing,
+>>
+>>
+>> It should be noted here. When the ll-sc combo is encountered, it is
+>> regarded as an single instruction. So donnot clear llbit and reset
+>> CSR.FWPS.Skip until the llsc execution is completed.
+>>
+>>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
+>>> +            csr_write32(0x4, LOONGARCH_CSR_LLBCTL);
+>>> +        } else if (pc == current->thread.single_step) {
+>> Note here as well. Because 3A5000 has a strange hardware issue that
+>> certain insns are occasionally not skipped when CSR.FWPS.Skip is set,
+>> such as fld.d/fst.d. Singlestep needs compare whether the csr_era is
+>> equal to the value of singlestep which last time set, as in most case
+>>
+>> they should be not equal.
+>
+> BTW, I prefer to separate this special processing from this patch (for
+> example, add two patchs in this series, add special processing of
+> instructions such as LL-SC, and FLD.D/FST.D, etc.), and add
+> corresponding test cases to describe the phenomenon and reason, this
+> is conducive to everyone's understanding of the code.
 
-Thanks,
-Wyes
-> 
-> Thanks,
-> Ray
-> 
-> > 
-> > Thanks,
-> > Ray
-> > 
-> > > ---
-> > >  .../admin-guide/kernel-parameters.txt         | 46 +++++++++----------
-> > >  1 file changed, 23 insertions(+), 23 deletions(-)
-> > > 
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index 56d5c189e458..d7685b4268ba 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -339,6 +339,29 @@
-> > >  			             This mode requires kvm-amd.avic=1.
-> > >  			             (Default when IOMMU HW support is present.)
-> > >  
-> > > +	amd_pstate=	[X86]
-> > > +			disable
-> > > +			  Do not enable amd_pstate as the default
-> > > +			  scaling driver for the supported processors
-> > > +			passive
-> > > +			  Use amd_pstate with passive mode as a scaling driver.
-> > > +			  In this mode autonomous selection is disabled.
-> > > +			  Driver requests a desired performance level and platform
-> > > +			  tries to match the same performance level if it is
-> > > +			  satisfied by guaranteed performance level.
-> > > +			active
-> > > +			  Use amd_pstate_epp driver instance as the scaling driver,
-> > > +			  driver provides a hint to the hardware if software wants
-> > > +			  to bias toward performance (0x0) or energy efficiency (0xff)
-> > > +			  to the CPPC firmware. then CPPC power algorithm will
-> > > +			  calculate the runtime workload and adjust the realtime cores
-> > > +			  frequency.
-> > > +			guided
-> > > +			  Activate guided autonomous mode. Driver requests minimum and
-> > > +			  maximum performance level and the platform autonomously
-> > > +			  selects a performance level in this range and appropriate
-> > > +			  to the current workload.
-> > > +
-> > >  	amijoy.map=	[HW,JOY] Amiga joystick support
-> > >  			Map of devices attached to JOY0DAT and JOY1DAT
-> > >  			Format: <a>,<b>
-> > > @@ -7009,26 +7032,3 @@
-> > >  				memory, and other data can't be written using
-> > >  				xmon commands.
-> > >  			off	xmon is disabled.
-> > > -
-> > > -	amd_pstate=	[X86]
-> > > -			disable
-> > > -			  Do not enable amd_pstate as the default
-> > > -			  scaling driver for the supported processors
-> > > -			passive
-> > > -			  Use amd_pstate with passive mode as a scaling driver.
-> > > -			  In this mode autonomous selection is disabled.
-> > > -			  Driver requests a desired performance level and platform
-> > > -			  tries to match the same performance level if it is
-> > > -			  satisfied by guaranteed performance level.
-> > > -			active
-> > > -			  Use amd_pstate_epp driver instance as the scaling driver,
-> > > -			  driver provides a hint to the hardware if software wants
-> > > -			  to bias toward performance (0x0) or energy efficiency (0xff)
-> > > -			  to the CPPC firmware. then CPPC power algorithm will
-> > > -			  calculate the runtime workload and adjust the realtime cores
-> > > -			  frequency.
-> > > -			guided
-> > > -			  Activate guided autonomous mode. Driver requests minimum and
-> > > -			  maximum performance level and the platform autonomously
-> > > -			  selects a performance level in this range and appropriate
-> > > -			  to the current workload.
-> > > -- 
-> > > 2.34.1
-> > > 
+Agree.
+
+
+>
+>>
+>>
+>> And for this condition expression, some potentially strange insns may
+>> cause bugs. For example, "b 0" or "jr rd" where rd is equal to its PC
+>> will cause cannot stop the singlestep. These insns is so strange that
+>> we did not consider in OW. However, I think we should consider this
+>> case for robustness in upstream.
+>>
+>
+> I don't know if there will be instructions like "b 0" or "jr rd (rd =
+> pc)" in the executable file after linking?
+
+So I said that is strange, and it can be fatal if happened. :-)
+
+
+>
+> Youling.
+>
+>> It is better to use macros avoid direct numbers when csr_write* is 
+>> invoked.
+>>
+>>
+>> Thanks,
+>>
+>> Jinyang
+>>
+>>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
+>>> +        } else {
+>>> +            force_sig(SIGTRAP);
+>>> +        }
+>>> +    } else {
+>>> +        breakpoint_handler(regs);
+>>> +        watchpoint_handler(regs);
+>>> +        force_sig(SIGTRAP);
+>>> +    }
+>>>         irqentry_exit(regs, state);
+>>>   #endif
+>>
+>
+
