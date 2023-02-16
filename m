@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9A1699249
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E264C69924E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjBPKx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S230293AbjBPKyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjBPKxy (ORCPT
+        with ESMTP id S230171AbjBPKyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:53:54 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE58BB776
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:53:50 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id bi17so977505vkb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:53:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ZZSbDFZdEfEaPyBSTQ15cgo/opqxszYeJsFt/XNG7M=;
-        b=QDeUzI9Je50AAgNQq2xsr6jwaIdXh/sg9XnfmLstxf8PruPDgJBxlYv9Ps8Sk/ysOz
-         hWe77FiSlo0d1waoUne9N+N6ir/Bwa4x0vtDDfk6A713G+TNc9Di8o4NP9NXnDkn9zdV
-         Pf2QGG9/CT0qZkX05DsPCbTRAnOsS76jIhReM=
+        Thu, 16 Feb 2023 05:54:18 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B130233C0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:54:16 -0800 (PST)
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7C82D3F581
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676544852;
+        bh=gruy2zJzC/Dvg5LfaZvUjx5AlRrilw/uF54bkVyz1LI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=my2FKxAceRajQCknYILlflW5Srkmz6+LXyCbs/Wpw2+EonQtwz/0k0HT28VlF6RQa
+         SNBeeMsTw9Shj9aiKtyJZIAVa4AL2uSgObQUMTfpWjIcfwv910Rgpk3YzAhO5djPk3
+         ie0QNLh1Fke5g3hFKqTK1Hn7clBSSWBDkW6V9FfXU99QDPo2SOKbWYEheIZUITE1je
+         gRODiJ9GJ6bJ7cRuz+pICEY8Y4H/qkxrN+G1npup0nxB6/v9eTbnP1Ce24T7V+yIJc
+         +f1qWIYL3hdJXcbJDvGRMn+tPEQ1QcwrI26UO8MIoOu7pf/UFTAog4iaLZAVBTGYDB
+         N8MfE4WzZ5sJg==
+Received: by mail-qt1-f198.google.com with SMTP id p6-20020a05622a048600b003b9a3ab9153so978824qtx.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:54:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9ZZSbDFZdEfEaPyBSTQ15cgo/opqxszYeJsFt/XNG7M=;
-        b=YW0O3btxd+/gdwjd/tAuOZRcYcLKQtJRVmlNd4F8/yqb8/Y1Yc6spxAc5KLYaS+jBP
-         ZoPdCJ59pY5wPWbxHOC1zKxFQV2ZcRs6LE9WfAfnMo6qthCFhtt0hnn83ThTv0tcYo7u
-         7YVl5aLa+ftyEUoWko1zPMhGvoueY6XoxviaCwgBMf/rz8ThPHSotdENS6D2fh8mTALu
-         WuqKoiZ1NQAhFTVI3ap0hWk5+uOS///+XllJCnvV9BW2I6hGCHsSEBhRQmQgN0TlcrNG
-         5AMo+sDBOg3giVHkIiLH0FZa6BhcH9tagImfcNBnDgsgyigrs1DaZntAdu+S5SBij4co
-         BXaw==
-X-Gm-Message-State: AO0yUKVKcnkteZYuIQMqMLulrcAf2VNgMaqyJtwYK1TTx3bu003BtMSc
-        plv5GJ0ynYTAE/BNQgA3dLXi9ujY3+NoUWyzkYjDjw==
-X-Google-Smtp-Source: AK7set+4875E+RvNe3i179TDI8aAI5xqgZHcUPIULqYbeKtQL2Yp7FSemOSYazgMxk92BeQAouA2zQrE2am+d8QiTxI=
-X-Received: by 2002:a1f:a447:0:b0:3e8:66ce:a639 with SMTP id
- n68-20020a1fa447000000b003e866cea639mr840320vke.2.1676544829970; Thu, 16 Feb
- 2023 02:53:49 -0800 (PST)
+        bh=gruy2zJzC/Dvg5LfaZvUjx5AlRrilw/uF54bkVyz1LI=;
+        b=jIHKYtMFdhu/B31ISiArL84pZKsB1z5M0rnyYwbH+Qux4NHzAxZriL97Eib9lrNcAC
+         Nex3/JNUcfHOeqLL4KKgtYpdllDrSyurz4dSiaRm5EzbpAKpL9Pa1ia2KZS5UOVqJBBI
+         qBSbKXZfJFbwT2P7GBrJvfmZiVllxw4igVtrCgvVQeccy/zhHwKhi3+LX1b+YctG2la1
+         XPPfj4u6vAqZZJAV5H4uIHbQozYEu9n0lnh2RTHXoyAiAg4dGxPlxS0+XtDjj/RHWLMY
+         7GI5WMzbTQeLJnyRAHjkzL6Ub+uUJzqilZyVlWUxo6veMwy6AkvAUuDwSBnkc4t25IH0
+         vq+Q==
+X-Gm-Message-State: AO0yUKU/bVvpLtI9JmXjIIrQSTAUm9NxiXq/q/Xe2PYcOEm7Rf0u1p8Y
+        yiEB4XXejTb6b3aU3UYSFuvlKQp6ot6m7qQgYmirOzoCmriAOjY7SZm8OYZGxplqIcOQIHB9CTm
+        bgVyQ+rF1Hdcq1gs9+rK9wFDO6xPNhBeeJPYkpv10hucEz1Yq0eaC54NmPA==
+X-Received: by 2002:a37:4249:0:b0:73b:3411:48b1 with SMTP id p70-20020a374249000000b0073b341148b1mr258755qka.219.1676544849145;
+        Thu, 16 Feb 2023 02:54:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set8RgkG6eMdqF8jxqjfdXJZdtj3ENMaszkBMb9ohdLgmVNvM9xdjiQ+QAglQRtGNY4Vekk3FndXf/3llRfs0a1k=
+X-Received: by 2002:a37:4249:0:b0:73b:3411:48b1 with SMTP id
+ p70-20020a374249000000b0073b341148b1mr258743qka.219.1676544848837; Thu, 16
+ Feb 2023 02:54:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-25-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-25-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 16 Feb 2023 18:53:39 +0800
-Message-ID: <CAGXv+5EOQbZWrCZNf4qtxytDC=HdcZCxpkXb_Y=QFaW_g8urfQ@mail.gmail.com>
-Subject: Re: [PATCH v2 24/47] clk: mediatek: mt7622: Move infracfg to clk-mt7622-infracfg.c
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com> <20230118061701.30047-6-yanhong.wang@starfivetech.com>
+In-Reply-To: <20230118061701.30047-6-yanhong.wang@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 16 Feb 2023 11:53:51 +0100
+Message-ID: <CAJM55Z-zvb5CJq4PU4c=YKvY0xPY216MAALFsmWTcVFjSd=wEA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/7] net: stmmac: Add glue layer for StarFive JH7110 SoCs
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,143 +87,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Wed, 18 Jan 2023 at 07:20, Yanhong Wang
+<yanhong.wang@starfivetech.com> wrote:
 >
-> The infracfg driver cannot be converted to clk_mtk_simple_probe() as
-> it registers cpumuxes, which is not supported on the common probing
-> mechanism: for this reason, move it to its own file.
+> This adds StarFive dwmac driver support on the StarFive JH7110 SoCs.
 >
-> While at it, also convert it to be a platform driver instead.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 > ---
->  drivers/clk/mediatek/Makefile              |   3 +-
->  drivers/clk/mediatek/clk-mt7622-infracfg.c | 127 +++++++++++++++++++++
->  drivers/clk/mediatek/clk-mt7622.c          |  78 +------------
->  3 files changed, 134 insertions(+), 74 deletions(-)
->  create mode 100644 drivers/clk/mediatek/clk-mt7622-infracfg.c
+>  MAINTAINERS                                   |   1 +
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>  .../stmicro/stmmac/dwmac-starfive-plat.c      | 118 ++++++++++++++++++
+>  4 files changed, 132 insertions(+)
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
 >
-> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-> index c1bee331eebf..0f2cd735d9fd 100644
-> --- a/drivers/clk/mediatek/Makefile
-> +++ b/drivers/clk/mediatek/Makefile
-> @@ -46,7 +46,8 @@ obj-$(CONFIG_COMMON_CLK_MT2712_MFGCFG) += clk-mt2712-mfg.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_MMSYS) += clk-mt2712-mm.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_VDECSYS) += clk-mt2712-vdec.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_VENCSYS) += clk-mt2712-venc.o
-> -obj-$(CONFIG_COMMON_CLK_MT7622) += clk-mt7622.o clk-mt7622-apmixedsys.o
-> +obj-$(CONFIG_COMMON_CLK_MT7622) += clk-mt7622.o clk-mt7622-apmixedsys.o \
-> +                                  clk-mt7622-infracfg.o
->  obj-$(CONFIG_COMMON_CLK_MT7622_ETHSYS) += clk-mt7622-eth.o
->  obj-$(CONFIG_COMMON_CLK_MT7622_HIFSYS) += clk-mt7622-hif.o
->  obj-$(CONFIG_COMMON_CLK_MT7622_AUDSYS) += clk-mt7622-aud.o
-> diff --git a/drivers/clk/mediatek/clk-mt7622-infracfg.c b/drivers/clk/mediatek/clk-mt7622-infracfg.c
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 56be59bb09f7..5b50b52d3dbb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19609,6 +19609,7 @@ F:      include/dt-bindings/clock/starfive*
+>  STARFIVE DWMAC GLUE LAYER
+>  M:     Yanhong Wang <yanhong.wang@starfivetech.com>
+>  S:     Maintained
+> +F:     Documentation/devicetree/bindings/net/dwmac-starfive-plat.c
+>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+>
+>  STARFIVE PINCTRL DRIVER
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index 31ff35174034..f9a4ad4abd54 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -235,6 +235,18 @@ config DWMAC_INTEL_PLAT
+>           the stmmac device driver. This driver is used for the Intel Keem Bay
+>           SoC.
+>
+> +config DWMAC_STARFIVE_PLAT
+> +       tristate "StarFive dwmac support"
+> +       depends on OF && COMMON_CLK
+> +       depends on STMMAC_ETH
+> +       default SOC_STARFIVE
+> +       help
+> +         Support for ethernet controllers on StarFive RISC-V SoCs
+> +
+> +         This selects the StarFive platform specific glue layer support for
+> +         the stmmac device driver. This driver is used for StarFive JH7110
+> +         ethernet controller.
+> +
+>  config DWMAC_VISCONTI
+>         tristate "Toshiba Visconti DWMAC support"
+>         default ARCH_VISCONTI
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> index d4e12e9ace4f..a63ab0ab5071 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> @@ -31,6 +31,7 @@ obj-$(CONFIG_DWMAC_DWC_QOS_ETH)       += dwmac-dwc-qos-eth.o
+>  obj-$(CONFIG_DWMAC_INTEL_PLAT) += dwmac-intel-plat.o
+>  obj-$(CONFIG_DWMAC_GENERIC)    += dwmac-generic.o
+>  obj-$(CONFIG_DWMAC_IMX8)       += dwmac-imx.o
+> +obj-$(CONFIG_DWMAC_STARFIVE_PLAT)      += dwmac-starfive-plat.o
+
+Hi Yanhong,
+
+For the next version could you please drop the _PLAT from the config
+symbol and -plat from filename. I know the intel wrapper does the
+same, but it's the only one, so lets do like the majority of other
+wrappers and not add more different ways of doing things.
+
+>  obj-$(CONFIG_DWMAC_VISCONTI)   += dwmac-visconti.o
+>  stmmac-platform-objs:= stmmac_platform.o
+>  dwmac-altr-socfpga-objs := altr_tse_pcs.o dwmac-socfpga.o
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
 > new file mode 100644
-> index 000000000000..09d8ac4d483a
+> index 000000000000..e441d920933a
 > --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt7622-infracfg.c
-> @@ -0,0 +1,127 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: GPL-2.0+
 > +/*
-> + * Copyright (c) 2017 MediaTek Inc.
-> + * Copyright (c) 2023 Collabora, Ltd.
-> + *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + * StarFive DWMAC platform driver
+> + *
+> + * Copyright(C) 2022 StarFive Technology Co., Ltd.
+> + *
 > + */
 > +
-> +#include <dt-bindings/clock/mt7622-clk.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
+> +#include <linux/of_device.h>
 > +
-> +#include "clk-cpumux.h"
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "reset.h"
+> +#include "stmmac_platform.h"
 > +
-> +#define GATE_INFRA(_id, _name, _parent, _shift)                                \
-> +       GATE_MTK(_id, _name, _parent, &infra_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
-> +
-> +static const struct mtk_gate_regs infra_cg_regs = {
-> +       .set_ofs = 0x40,
-> +       .clr_ofs = 0x44,
-> +       .sta_ofs = 0x48,
+> +struct starfive_dwmac {
+> +       struct device *dev;
+> +       struct clk *clk_tx;
+> +       struct clk *clk_gtx;
+> +       struct clk *clk_gtxc;
 > +};
+
+I like this name. For the next version could you also
+s/starfive_eth_plat_/starfive_dwmac_/ on the function/struct names
+below for consistency.
+
 > +
-> +static const char * const infra_mux1_parents[] = {
-> +       "clkxtal",
-> +       "armpll",
-> +       "main_core_en",
-> +       "armpll"
-> +};
-> +
-> +static const struct mtk_composite cpu_muxes[] = {
-> +       MUX(CLK_INFRA_MUX1_SEL, "infra_mux1_sel", infra_mux1_parents, 0x000, 2, 2),
-> +};
-> +
-> +static const struct mtk_gate infra_clks[] = {
-> +       GATE_INFRA(CLK_INFRA_DBGCLK_PD, "infra_dbgclk_pd", "axi_sel", 0),
-> +       GATE_INFRA(CLK_INFRA_TRNG, "trng_ck", "axi_sel", 2),
-> +       GATE_INFRA(CLK_INFRA_AUDIO_PD, "infra_audio_pd", "aud_intbus_sel", 5),
-> +       GATE_INFRA(CLK_INFRA_IRRX_PD, "infra_irrx_pd", "irrx_sel", 16),
-> +       GATE_INFRA(CLK_INFRA_APXGPT_PD, "infra_apxgpt_pd", "f10m_ref_sel", 18),
-> +       GATE_INFRA(CLK_INFRA_PMIC_PD, "infra_pmic_pd", "pmicspi_sel", 22),
-> +};
-> +
-> +static u16 infrasys_rst_ofs[] = { 0x30 };
-> +
-> +static const struct mtk_clk_rst_desc clk_rst_desc = {
-> +       .version = MTK_RST_SIMPLE,
-> +       .rst_bank_ofs = infrasys_rst_ofs,
-> +       .rst_bank_nr = ARRAY_SIZE(infrasys_rst_ofs),
-> +};
-> +
-> +static const struct of_device_id of_match_clk_mt7622_infracfg[] = {
-> +       { .compatible = "mediatek,mt7622-infracfg" },
-> +       { /* sentinel */ }
-> +};
-> +
-> +static int clk_mt7622_infracfg_probe(struct platform_device *pdev)
+> +static void starfive_eth_plat_fix_mac_speed(void *priv, unsigned int speed)
 > +{
-> +       struct clk_hw_onecell_data *clk_data;
-> +       struct device_node *node = pdev->dev.of_node;
-> +       void __iomem *base;
-> +       int ret;
+> +       struct starfive_dwmac *dwmac = priv;
+> +       unsigned long rate;
+> +       int err;
 > +
-> +       base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(base))
-> +               return PTR_ERR(base);
+> +       rate = clk_get_rate(dwmac->clk_gtx);
 > +
-> +       clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
-> +       if (!clk_data)
+> +       switch (speed) {
+> +       case SPEED_1000:
+> +               rate = 125000000;
+> +               break;
+> +       case SPEED_100:
+> +               rate = 25000000;
+> +               break;
+> +       case SPEED_10:
+> +               rate = 2500000;
+> +               break;
+> +       default:
+> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> +               break;
+> +       }
+> +
+> +       err = clk_set_rate(dwmac->clk_gtx, rate);
+> +       if (err)
+> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+> +}
+> +
+> +static int starfive_eth_plat_probe(struct platform_device *pdev)
+> +{
+> +       struct plat_stmmacenet_data *plat_dat;
+> +       struct stmmac_resources stmmac_res;
+> +       struct starfive_dwmac *dwmac;
+> +       int err;
+> +
+> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
+> +       if (err)
+> +               return err;
+> +
+> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> +       if (IS_ERR(plat_dat)) {
+> +               dev_err(&pdev->dev, "dt configuration failed\n");
+> +               return PTR_ERR(plat_dat);
+> +       }
+> +
+> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
+> +       if (!dwmac)
 > +               return -ENOMEM;
 > +
-> +       ret = mtk_register_reset_controller_with_dev(&pdev->dev, &clk_rst_desc);
-> +       if (ret)
-> +               goto free_clk_data;
+> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
+> +       if (IS_ERR(dwmac->clk_tx))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
+> +                                               "error getting tx clock\n");
 > +
-> +       ret = mtk_clk_register_gates(&pdev->dev, node, infra_clks,
-> +                                    ARRAY_SIZE(infra_clks), clk_data);
-> +       if (ret)
-> +               goto free_clk_data;
+> +       dwmac->clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
+> +       if (IS_ERR(dwmac->clk_gtx))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtx),
+> +                                               "error getting gtx clock\n");
 > +
-> +       ret = mtk_clk_register_cpumuxes(&pdev->dev, node, cpu_muxes,
-> +                                       ARRAY_SIZE(cpu_muxes), clk_data);
-> +       if (ret)
-> +               goto unregister_gates;
+> +       dwmac->clk_gtxc = devm_clk_get_enabled(&pdev->dev, "gtxc");
+> +       if (IS_ERR(dwmac->clk_gtxc))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtxc),
+> +                                               "error getting gtxc clock\n");
 > +
-> +       ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-> +       if (ret)
-> +               goto unregister_cpumuxes;
+> +       dwmac->dev = &pdev->dev;
+> +       plat_dat->fix_mac_speed = starfive_eth_plat_fix_mac_speed;
+> +       plat_dat->init = NULL;
+> +       plat_dat->bsp_priv = dwmac;
+> +       plat_dat->dma_cfg->dche = true;
+> +
+> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> +       if (err) {
+> +               stmmac_remove_config_dt(pdev, plat_dat);
+> +               return err;
+> +       }
 > +
 > +       return 0;
+> +}
 > +
-> +unregister_cpumuxes:
-> +       mtk_clk_unregister_cpumuxes(cpu_muxes, ARRAY_SIZE(cpu_muxes), clk_data);
-> +unregister_gates:
-> +       mtk_clk_unregister_gates(infra_clks, ARRAY_SIZE(infra_clks), clk_data);
-> +free_clk_data:
-> +       mtk_free_clk_data(clk_data);
-
-Implementing error handling deserves a separate commit, or at least a mention.
-
-ChenYu
+> +static const struct of_device_id starfive_eth_plat_match[] = {
+> +       { .compatible = "starfive,jh7110-dwmac" },
+> +       { }
+> +};
+> +
+> +static struct platform_driver starfive_eth_plat_driver = {
+> +       .probe  = starfive_eth_plat_probe,
+> +       .remove = stmmac_pltfr_remove,
+> +       .driver = {
+> +               .name = "starfive-eth-plat",
+> +               .pm = &stmmac_pltfr_pm_ops,
+> +               .of_match_table = starfive_eth_plat_match,
+> +       },
+> +};
+> +
+> +module_platform_driver(starfive_eth_plat_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
+> +MODULE_AUTHOR("Yanhong Wang <yanhong.wang@starfivetech.com>");
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
