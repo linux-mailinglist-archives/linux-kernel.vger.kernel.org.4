@@ -2,84 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD5169966F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05117699674
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBPN4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S229550AbjBPN6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjBPN4Y (ORCPT
+        with ESMTP id S229462AbjBPN6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:56:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE673B220
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:55:36 -0800 (PST)
+        Thu, 16 Feb 2023 08:58:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3E726AF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:57:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676555736;
+        s=mimecast20190719; t=1676555868;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hii/hEJ9PZyd5sM9pg8DiE74V3lS3n6PlgGZ2jOvQQA=;
-        b=hqHZ2K7N1FEyU91dO0tSTZrKz+YpIas6Zmlfz7ppDkaHrDrygBo6UDLy87TDkuCFYSrVzu
-        YBeihVyE622TS1K1w70j8le1hS/hai53YeLlacQnbIJpqq2ZD6PMe/J1AB8aNzb3fUbwQf
-        zZxDi7bYAD2jH6wvgn97u9tzi1+L1Qg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-578-5R24a1KVNNSk2gPiDZI-_w-1; Thu, 16 Feb 2023 08:55:35 -0500
-X-MC-Unique: 5R24a1KVNNSk2gPiDZI-_w-1
-Received: by mail-qk1-f197.google.com with SMTP id a13-20020a05620a438d00b0073b88cae2f5so1213432qkp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:55:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hii/hEJ9PZyd5sM9pg8DiE74V3lS3n6PlgGZ2jOvQQA=;
-        b=v4u3fFfsGIJAY7W4FkqQZkfXP5Yl5VKeYVWHhhOCwc1kSalv592j0Vk4Qnj7BBh5ba
-         mWiinz8WIJ+5Ki5jGJf5571IP8vFiCUU7KoUjxTgrr2Svp0i1qeeis1nYMftFjIW67kP
-         EMsNpGUvUKUc0KeKvhD9Y5hZjvzdwZsfMlifUTCTfZ6C3S3Pb7NJD4Kpon59n9Fb/N2d
-         /Y/Kaikj0cC4tkpqiUcBzavPvR32AEm+7iNPjLNEFiX/hrxfNs8E2J4C5Qxtfe5WEKrO
-         VBmMuz0vaeDb5f3nwRwVFxA+8El+xEQpMSYX3TxQlI/JpfQEfwFKJH+Us+kE7+5LIsE+
-         UKXA==
-X-Gm-Message-State: AO0yUKXFup5u7Ec2UngZ460VdoGPnzNLeL7QWmvkBeCBpWr90ljBZfYo
-        7MMMaKOGI5GE+9ZPw44xRTrgfkHbFzXOHUeWRTO7tPSszCuQ1SlJtxg01Z/M5cbopcBaDBBW5z9
-        8NSga4QtaCqkpjdz+D+skCO+D
-X-Received: by 2002:ac8:5bd5:0:b0:3bb:8f10:6029 with SMTP id b21-20020ac85bd5000000b003bb8f106029mr10792544qtb.50.1676555734667;
-        Thu, 16 Feb 2023 05:55:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set+JnPrAuwzQGhfHNhTBc/+z66FBbT4aDZCX6sfMD4/mj4mAXZ+i5dm9S21S3kppDEVaj0vlBQ==
-X-Received: by 2002:ac8:5bd5:0:b0:3bb:8f10:6029 with SMTP id b21-20020ac85bd5000000b003bb8f106029mr10792507qtb.50.1676555734312;
-        Thu, 16 Feb 2023 05:55:34 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-167.retail.telecomitalia.it. [82.57.51.167])
-        by smtp.gmail.com with ESMTPSA id r188-20020a37a8c5000000b00729a26e836esm1206352qke.84.2023.02.16.05.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 05:55:33 -0800 (PST)
-Date:   Thu, 16 Feb 2023 14:55:28 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 02/12] vsock: read from socket's error queue
-Message-ID: <20230216135528.ge4otfhfv22p3htc@sgarzare-redhat>
-References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
- <7b2f00ce-296c-3f59-9861-468c6340300e@sberdevices.ru>
+        bh=YnxDLMWCCiMGyvneSFxls7U85vzv18A/rrjPRaBLYi4=;
+        b=ArSkjEfoAVFlZDWty8OWQTXg/PltF6yMk0jT2NdYZ72ZwVRlGwL9McwtUYM5ZrqTUzmDHE
+        5ab4x4Rn9RGJ/JjGcfGPedYRP/wxJY3UYkI6JcXPKtBxI/4U6eNoMgJjlFMF7UCf4NijEJ
+        6R0CQS4+8xC60vvHbQHE6PJbotDOziU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-zkewakoCOiGPe08EjN_aTQ-1; Thu, 16 Feb 2023 08:57:45 -0500
+X-MC-Unique: zkewakoCOiGPe08EjN_aTQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 116E480D0E0;
+        Thu, 16 Feb 2023 13:57:45 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-193-101.brq.redhat.com [10.40.193.101])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 6B765492B0E;
+        Thu, 16 Feb 2023 13:57:42 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 16 Feb 2023 14:57:41 +0100 (CET)
+Date:   Thu, 16 Feb 2023 14:57:38 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 2/2] ptrace,syscall_user_dispatch: checkpoint/restore
+ support for SUD
+Message-ID: <20230216135737.GC5200@redhat.com>
+References: <20230214085215.106708-1-gregory.price@memverge.com>
+ <20230214085215.106708-3-gregory.price@memverge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b2f00ce-296c-3f59-9861-468c6340300e@sberdevices.ru>
+In-Reply-To: <20230214085215.106708-3-gregory.price@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -90,90 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:54:51AM +0000, Arseniy Krasnov wrote:
->This adds handling of MSG_ERRQUEUE input flag for receive call, thus
->skb from socket's error queue is read.
+On 02/14, Gregory Price wrote:
+>
+> +struct compat_ptrace_sud_config {
+> +        compat_ulong_t mode;
+> +        compat_uptr_t selector;
+> +        compat_ulong_t offset;
+> +        compat_ulong_t len;
+> +};
 
-A general tip, add a little more description in the commit messages,
-especially to explain why these changes are necessary.
-Otherwise, even review becomes difficult because one has to look at all
-the patches to understand what the previous ones are for.
-I know it's boring, but it's very useful for those who review and even
-then if we have to bisect ;-)
+...
 
-Thanks,
-Stefano
+> +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+> +		                     void __user *data)
+> +{
+> +	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
+> +#ifdef CONFIG_COMPAT
+> +	if (unlikely(in_compat_syscall())) {
+> +		struct compat_ptrace_sud_config cfg32;
+> +
+> +		if (size != sizeof(struct compat_ptrace_sud_config))
+> +			return -EINVAL;
+> +
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> include/linux/socket.h   |  1 +
-> net/vmw_vsock/af_vsock.c | 26 ++++++++++++++++++++++++++
-> 2 files changed, 27 insertions(+)
->
->diff --git a/include/linux/socket.h b/include/linux/socket.h
->index 13c3a237b9c9..19a6f39fa014 100644
->--- a/include/linux/socket.h
->+++ b/include/linux/socket.h
->@@ -379,6 +379,7 @@ struct ucred {
-> #define SOL_MPTCP	284
-> #define SOL_MCTP	285
-> #define SOL_SMC		286
->+#define SOL_VSOCK	287
->
-> /* IPX options */
-> #define IPX_TYPE	1
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index b5e51ef4a74c..f752b30b71d6 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -110,6 +110,7 @@
-> #include <linux/workqueue.h>
-> #include <net/sock.h>
-> #include <net/af_vsock.h>
->+#include <linux/errqueue.h>
->
-> static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
-> static void vsock_sk_destruct(struct sock *sk);
->@@ -2086,6 +2087,27 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
-> 	return err;
-> }
->
->+static int vsock_err_recvmsg(struct sock *sk, struct msghdr *msg)
->+{
->+	struct sock_extended_err *ee;
->+	struct sk_buff *skb;
->+	int err;
->+
->+	lock_sock(sk);
->+	skb = sock_dequeue_err_skb(sk);
->+	release_sock(sk);
->+
->+	if (!skb)
->+		return -EAGAIN;
->+
->+	ee = &SKB_EXT_ERR(skb)->ee;
->+	err = put_cmsg(msg, SOL_VSOCK, 0, sizeof(*ee), ee);
->+	msg->msg_flags |= MSG_ERRQUEUE;
->+	consume_skb(skb);
->+
->+	return err;
->+}
->+
-> static int
-> vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> 			  int flags)
->@@ -2096,6 +2118,10 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> 	int err;
->
-> 	sk = sock->sk;
->+
->+	if (unlikely(flags & MSG_ERRQUEUE))
->+		return vsock_err_recvmsg(sk, msg);
->+
-> 	vsk = vsock_sk(sk);
-> 	err = 0;
->
->-- 
->2.25.1
+Horror ;) why?
+
+See my reply to v9, just make
+
+	struct ptrace_sud_config {
+		__u8  mode;
+		__u64 selector;
+		__u64 offset;
+		__u64 len;
+	};
+
+Oleg.
 
