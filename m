@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60136990B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C076990B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBPKJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S229740AbjBPKJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBPKJU (ORCPT
+        with ESMTP id S229495AbjBPKJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:09:20 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093743D0A4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:09:19 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSbCX-0003iE-2L; Thu, 16 Feb 2023 11:09:17 +0100
-Message-ID: <e9923ff8-4027-9188-fd04-77d0bbbc6573@leemhuis.info>
-Date:   Thu, 16 Feb 2023 11:09:16 +0100
+        Thu, 16 Feb 2023 05:09:33 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3683E616
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:09:31 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id ct17so1098322pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3BgJ9YnLOtro5qrAnHroTnQbB+rS3iDxL2X2KHZzO+g=;
+        b=XpVToGJ4oo35ISQ1Gkf0XvYJ3zSIced0PfMDTIKkGUv+wH9HLpBa99QgVP8Rqd71Fg
+         y5B0xx1xCqT/vihkwtzF03p3fUJ/Xkk1yOxRN/lrXEEZyEnFP+5w3RvuMNvIMKrI7ls5
+         qIVVpljvNsyPcUYRHZQRrfZDW2TnmVOYZpX0ly4yTEyH0O7m0C0wKrL8s6IhUqehO9uJ
+         xKE8U0Jg3dOr+p5vQZ9b6AkquQ/Yo/2QxUUKXpQbBcsnW//qJiTdjvGCl/S61WPzZnEM
+         Zf3iI3Qddxrw1CtRqEbyymNgaxsjnL77MTdfAKKd3zCa9nA31htZdHBNrBi8SukirRiu
+         fBKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3BgJ9YnLOtro5qrAnHroTnQbB+rS3iDxL2X2KHZzO+g=;
+        b=jk8uCgOl/v4ert6diDC8DZwUJhVBiAtrofBp/lqorwN73AQ2l//ifQtVaaUgZkTxqp
+         Q6vEVPU56U0JMWFGqiGJGgWygsTNJnFKqlrkyaq7L/69JsCS3R7p6IkXIPSDxZxu1AZz
+         gFnV7sBMB9tGnVC1pzYsJAZ/02NWDSTZ5LevzmnZiw8rfXUt7vMK/Qp2+qTUnjT9UmRN
+         N9cfdJnk07Wn405n0oi0Kx99KU9Zr8oX5kzxIs8Ys2OBTWD+jZc2oBsetIglLonARVmV
+         I0vSyglw7JoHyg1jlnqHRFj6NppPnPj7ipDsXjARHFAqKrlD8Sw3Hlgxb3G/1ZoGCPkj
+         ldCQ==
+X-Gm-Message-State: AO0yUKUeWsHgTSoHg7C10DY033rj72oayRqHutPnadsbzbSrmXBJJuQU
+        dH3/KSDPvvZ+HsNPSai5SH5u6IhPwL5A8T2xrV4=
+X-Google-Smtp-Source: AK7set8GQ8Bw/aTJFq8RaJH7pyhHHf89PX6rFy0Qfqkr3Vc4R2pItW/AFFfecF1r91mAqIDrJBgWB2mV3pCLoNjSBnc=
+X-Received: by 2002:a62:84d3:0:b0:5a8:6730:306d with SMTP id
+ k202-20020a6284d3000000b005a86730306dmr918050pfd.31.1676542170177; Thu, 16
+ Feb 2023 02:09:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: 6.2-rc7 fails building on Talos II: memory.c:(.text+0x2e14):
- undefined reference to `hash__tlb_flush'
-Content-Language: en-US, de-DE
-To:     "Erhard F." <erhard_f@mailbox.org>, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230216005535.6bff7aa6@yea>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230216005535.6bff7aa6@yea>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676542159;6ff4c7b3;
-X-HE-SMSGID: 1pSbCX-0003iE-2L
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:bc8b:b0:99:84ec:f633 with HTTP; Thu, 16 Feb 2023
+ 02:09:29 -0800 (PST)
+From:   Zahiri Keen <zahirizahirikeen002@gmail.com>
+Date:   Thu, 16 Feb 2023 10:09:29 +0000
+Message-ID: <CAPWzGoUg+O3SfNjePR89Bpwc6zXP8YbDm7hm=jOk1oN=XX3q2Q@mail.gmail.com>
+Subject: VERY VERY URGENT.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+    I know this email might come to you as a surprise because is
+coming from someone you haven=E2=80=99t met with before.
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
-On 16.02.23 00:55, Erhard F. wrote:
-> Just noticed a build failure on 6.2-rc7 for my Talos 2 (.config attached):
-> 
->  # make
->   CALL    scripts/checksyscalls.sh
->   UPD     include/generated/utsversion.h
->   CC      init/version-timestamp.o
->   LD      .tmp_vmlinux.kallsyms1
-> ld: ld: DWARF error: could not find abbrev number 6
-> mm/memory.o: in function `unmap_page_range':
-> memory.c:(.text+0x2e14): undefined reference to `hash__tlb_flush'
-> ld: memory.c:(.text+0x2f8c): undefined reference to `hash__tlb_flush'
-> ld: ld: DWARF error: could not find abbrev number 3117
-> mm/mmu_gather.o: in function `tlb_remove_table':
-> mmu_gather.c:(.text+0x584): undefined reference to `hash__tlb_flush'
-> ld: mmu_gather.c:(.text+0x6c4): undefined reference to `hash__tlb_flush'
-> ld: mm/mmu_gather.o: in function `tlb_flush_mmu':
-> mmu_gather.c:(.text+0x80c): undefined reference to `hash__tlb_flush'
-> ld: mm/mmu_gather.o:mmu_gather.c:(.text+0xbe0): more undefined references to `hash__tlb_flush' follow
-> make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Fehler 1
-> make: *** [Makefile:1264: vmlinux] Error 2
-> 
-> As 6.2-rc6 was good on this machine I did a quick bisect which revealed this commit:
-> 
->  # git bisect bad
-> 1665c027afb225882a5a0b014c45e84290b826c2 is the first bad commit
-> [...]
-
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 1665c027afb225
-#regzbot title powerpc: 6.2-rc7 fails building on Talos II
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Regards,
+Mr.Zahiri
