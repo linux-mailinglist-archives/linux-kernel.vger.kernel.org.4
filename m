@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AAB699367
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E247699369
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjBPLm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S229541AbjBPLnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjBPLmx (ORCPT
+        with ESMTP id S230448AbjBPLnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:42:53 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9B77EFE;
-        Thu, 16 Feb 2023 03:42:51 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id a2so1557198wrd.6;
-        Thu, 16 Feb 2023 03:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OKI2TnFH1VivBlI9Zu+f4DLD1Oxh3uwKhDHr4Ttuqi4=;
-        b=gZrP2qlYh/6CWJTLqXysnOcvuh52GIC3d9yfVG0MJpITqyjaFvdpUPeyAbqMkcM3Fa
-         zXUSjvUfnTXjRU7JDXzCXkJPfg6imR/g6SaSUTLojExscX49w9mtfsR46pXfNAxLJ+SD
-         N4MbZhH7U5Ch1QWp0RK+7HQaoLs7hNEkBRUrc98Go21KPDvJYo9k5Jxcwg60I34kBiO+
-         jzOdiyIcNvEffCQDJ+R+4oiEbHiYpWCC7SztqVRM0a5mkaA2h1vc8A30s9hJVYxiQTtx
-         Ib/y5W17q02KtYLuNS7y2CNKXljk01bV4+sm4WZKuiGzO7rasB8rgb2OEWJAWVzLw/kI
-         0D+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OKI2TnFH1VivBlI9Zu+f4DLD1Oxh3uwKhDHr4Ttuqi4=;
-        b=w4Bqb3NmkmIH15iXQJRYguHwIXXT4MeeO5EWlOGTnuctijPipv0WSxGhL1Xt+kJblX
-         ob7KK8njsuXRNyAaGhFOtTXtaxG8oWEMu03dIl6J55NqLYepaZCeUFiHiuuDdVCUO1sK
-         M39z/LW90p5822zQ1qp7VmYd8VcA/V6Yywi4SkoHbFAJgbLazm5ajk2i9RXxdxqAtQ3P
-         +Qxn6+DliA77sk4hCIMTrRvjKukBWidyzg1EABAx3Wv4EUR6oQy4W+0apdeBvP8tzSWz
-         z4CpQTxlciq5q/nfE1KVssz2CPSEmxKPmNX/XnfacHoNkqvByvGnW0kn9h2/JdYEjrdi
-         EdCQ==
-X-Gm-Message-State: AO0yUKV90d1j88EhOR09ZPYVUOfwdWqYY9QViticrKtToDr+T4Zlrh3u
-        vxaHw3eznnDOp7ny8A9rpuE=
-X-Google-Smtp-Source: AK7set+dKyKPNF2+oXsuE4x1TqOXOhwS+x+LUr+rCYzBOGgJDag9Cq+SNQNNO/rL9nq18lzBFFSx1w==
-X-Received: by 2002:a5d:4486:0:b0:2c3:da8a:192 with SMTP id j6-20020a5d4486000000b002c3da8a0192mr4607178wrq.15.1676547769878;
-        Thu, 16 Feb 2023 03:42:49 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id g1-20020a5d46c1000000b002c55306f6edsm1309313wrs.54.2023.02.16.03.42.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 03:42:49 -0800 (PST)
-Message-ID: <a08cb6a6-2453-34fe-f6f3-9ff81585d65d@gmail.com>
-Date:   Thu, 16 Feb 2023 12:42:47 +0100
+        Thu, 16 Feb 2023 06:43:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011603C2BD;
+        Thu, 16 Feb 2023 03:43:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D1161F9B;
+        Thu, 16 Feb 2023 11:43:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4746C4339B;
+        Thu, 16 Feb 2023 11:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676547781;
+        bh=JgsxLNy3EStMHUkIrduc9xOwjZIjmp6lKYwNiGQvzhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m9RSQ3div2cJc4CfrDUe8b+1Q8fwWyhBMvK3RSpRAOCUrvHH8Us2lg1M6pHnkE4L1
+         X09I0yjY1oZqZWk+qfSet5SVUijV38zZcg9ScSMbncJp06j6jt+VxknEjTdKyjobG5
+         C3CCMVt839M7ONlOCej/8AewOk2V+lRqCFOERjgE=
+Date:   Thu, 16 Feb 2023 12:42:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     David Sands <david.sands@biamp.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        david.sands3@gmail.com
+Subject: Re: [PATCH RFC] USB: gadget: f_hid: Add GET_REPORT via userspace
+ IOCTL
+Message-ID: <Y+4Wwm1kFTUEED89@kroah.com>
+References: <20230215231529.2513236-1-david.sands@biamp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230215041257.14548-1-tinghan.shen@mediatek.com>
- <20230215041257.14548-5-tinghan.shen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v7 04/12] remoteproc: mediatek: Add SCP core 1 register
- definitions
-In-Reply-To: <20230215041257.14548-5-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215231529.2513236-1-david.sands@biamp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 15/02/2023 05:12, Tinghan Shen wrote:
-> Add MT8195 SCP core 1 related register definitions.
+On Thu, Feb 16, 2023 at 09:15:29AM +1000, David Sands wrote:
+> While supporting GET_REPORT is a mandatory request per the HID
+> specification the current implementation of the GET_REPORT request responds
+> to the USB Host with an empty reply of the request length. However, some
+> USB Hosts will request the contents of feature reports via the GET_REPORT
+> request. In addition, some proprietary HID 'protocols' will expect
+> different data, for the same report ID, to be to become available in the
+> feature report by sending a preceding SET_REPORT to the USB Device that
+> defines what data is to be presented when that feature report is
+> subsequently retrieved via GET_REPORT (with a very fast < 5ms turn around
+> between the SET_REPORT and the GET_REPORT).
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-In general I would say this patch should be squashed into 5/12, but please see 
-comments below.
-
-> ---
->   drivers/remoteproc/mtk_common.h | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
+> There are two other patch sets already submitted for adding GET_REPORT
+> support. The first [1] allows for pre-priming a list of reports via IOCTLs
+> which then allows the USB Host to perform the request, with no further
+> userspace interaction possible during the GET_REPORT request. And another
+> [2] which allows for a single report to be setup by userspace via IOCTL,
+> which will be fetched and returned by the kernel for subsequent GET_REPORT
+> requests by the USB Host, also with no further userspace interaction
+> possible.
 > 
-> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-> index ea6fa1100a00..3778894c96f3 100644
-> --- a/drivers/remoteproc/mtk_common.h
-> +++ b/drivers/remoteproc/mtk_common.h
-> @@ -47,6 +47,7 @@
->   #define MT8192_SCP2SPM_IPC_CLR		0x4094
->   #define MT8192_GIPC_IN_SET		0x4098
->   #define MT8192_HOST_IPC_INT_BIT		BIT(0)
-> +#define MT8195_CORE1_HOST_IPC_INT_BIT	BIT(4)
->   
->   #define MT8192_CORE0_SW_RSTN_CLR	0x10000
->   #define MT8192_CORE0_SW_RSTN_SET	0x10004
-> @@ -56,6 +57,26 @@
->   
->   #define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
->   
-> +#define MT8195_CPU1_SRAM_PD			0x1084
-> +#define MT8195_SSHUB2APMCU_IPC_SET		0x4088
-> +#define MT8195_SSHUB2APMCU_IPC_CLR		0x408C
-> +#define MT8195_CORE1_SW_RSTN_CLR		0x20000
-> +#define MT8195_CORE1_SW_RSTN_SET		0x20004
-> +#define MT8195_CORE1_MEM_ATT_PREDEF		0x20008
-> +#define MT8195_CORE1_WDT_IRQ			0x20030
+> This patch, while loosely based on both the patch sets, differs by allowing
+> the option for userspace to respond to each GET_REPORT request by setting
+> up a poll to notify userspace that a new GET_REPORT request has arrived. To
+> support this, two extra IOCTLs are supplied. The first of which is used to
+> retrieve the report ID of the GET_REPORT request (in the case of having
+> non-zero report IDs in the HID descriptor). The second IOCTL allows for
+> storing report responses in a list for responding to requests.
+> 
+> The report responses are stored in a list (it will be either added if it
+> does not exist or updated if it exists already). A flag (userspace_req) can
+> be set to whether subsequent requests notify userspace or not.
+> 
+> Basic operation when a GET_REPORT request arrives from USB Host:
+> 
+> - If the report ID exists in the list and it is set for immediate return
+>   (i.e. userspace_req == false) then response is sent immediately,
+> userspace is not notified
+> 
+> - The report ID does not exist, or exists but is set to notify userspace
+>   (i.e. userspace_req == true) then notify userspace via poll:
+> 
+> 	- If userspace responds, and either adds or update the response in
+> 	  the list and respond to the host with the contents
+> 
+> 	- If userspace does not respond within the fixed timeout (2500ms)
+> 	  but the report has been set prevously, then send 'old' report
+> contents
+> 
+> 	- If userspace does not respond within the fixed timeout (2500ms)
+> 	  and the report does not exist in the list then send an empty
+> report
 
-Should be part of 10/12 maybe?
+Odd line-wrapping.
 
-> +#define MT8195_CORE1_WDT_CFG			0x20034
+And what will take this to go from a RFC to a real submission?
+
+Do you have any example userspace code for this?
+
+One note on the user/kernel api:
+
+> --- /dev/null
+> +++ b/include/uapi/linux/usb/g_hid.h
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 > +
-> +#define MT8195_SEC_CTRL				0x85000
-> +#define MT8195_CORE_OFFSET_ENABLE_D		BIT(13)
-> +#define MT8195_CORE_OFFSET_ENABLE_I		BIT(12)
-> +#define MT8195_L2TCM_OFFSET_RANGE_0_LOW		0x850b0
-> +#define MT8195_L2TCM_OFFSET_RANGE_0_HIGH	0x850b4
-> +#define MT8195_L2TCM_OFFSET			0x850d0
-
-Should be part of 9/12 maybe
-
-> +#define SCP_SRAM_REMAP_LOW			0
-> +#define SCP_SRAM_REMAP_HIGH			1
-> +#define SCP_SRAM_REMAP_OFFSET			2
-> +#define SCP_SRAM_REMAP_SIZE			3
-
-Never used.
-
+> +#ifndef __UAPI_LINUX_USB_G_HID_H
+> +#define __UAPI_LINUX_USB_G_HID_H
 > +
->   #define SCP_FW_VER_LEN			32
->   #define SCP_SHARE_BUFFER_SIZE		288
->   
+> +#include <linux/types.h>
+> +
+> +// Maximum HID report length for High-Speed USB (i.e. USB 2.0)
+> +#define MAX_REPORT_LENGTH 64
+> +
+> +struct usb_hidg_report {
+> +	__u8 report_id;
+> +	bool userspace_req;
+
+bool is not a valid type to cross the user/kernel boundry.  Make it __u8
+please.
+
+And document this structure with kerneldoc so that people know how to
+use it.
+
+thanks,
+
+greg k-h
+
+
+> +	__u16 length;
+> +	__u8 data[MAX_REPORT_LENGTH];
+> +};
+> +
+> +/* The 'g' code is also used by gadgetfs and hid gadget ioctl requests.
+> + * Don't add any colliding codes to either driver, and keep
+> + * them in unique ranges (size 0x20 for now).
+
+0x20?
+
+> + */
+> +
+> +#define GADGET_HID_READ_GET_REPORT_ID   _IOR('g', 0x41, __u8)
+> +#define GADGET_HID_WRITE_GET_REPORT     _IOW('g', 0x42, struct usb_hidg_report)
+
+You are using 0x41 and 0x42 here...
+
+thanks,
+
+greg k-h
