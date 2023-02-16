@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FF3699FC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC72699FC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjBPWaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S229884AbjBPWaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjBPW37 (ORCPT
+        with ESMTP id S229492AbjBPWaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:29:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E341D3CE2A;
-        Thu, 16 Feb 2023 14:29:57 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GLltR3024093;
-        Thu, 16 Feb 2023 22:29:53 GMT
+        Thu, 16 Feb 2023 17:30:12 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A4253836;
+        Thu, 16 Feb 2023 14:30:05 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GM7cTF012913;
+        Thu, 16 Feb 2023 22:29:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=tiA2gvI+uyGquoUjUmTcg2crn7ZEmUC+rk424fK0SxQ=;
- b=n+wEd+np8eianICqUNupvDfZUxdfzfymknOyvlD1foZm4vWOs1SAJQK8nLNcoJHc1Jh3
- VYeiEWz7XYXDS0TiGTa45lJ8+3ajIcq3qTsFSJMt298xCH5xMPdSWktsrOMW3+zpBKVZ
- qgaDUD6zSMVdTB/xI5oWw9TujlxWCYm9MNiCVkKu4jixhq+Nj6l2DHHwv2CjLPKhKHYI
- gqPc3w1ufuT4krdb5yxmgWoFcPZM9Re1kwALY6xcElyq2NmfvF0BxCt7EPMzTKvUvweX
- Tww/aYHft/CVzGZrmH4K0jlwKKabgSRSWV7AghpRMb3SMs3nY8F6nj55gId53Lpv97aV HQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ns343c0k5-1
+ bh=fLxPF8eCKppWTaLwryyhSnKF0mhre4/Id5PxFMHvSGE=;
+ b=YiN1KAt87FeZAQDNKcSEUx3t6/y4w19qaVbeWhI38JJ2aUdpUmY5g6S5hLPW31EwDltJ
+ /Dri4pxw4yxV+FfGem6BXxP9hNqTL7eGTLDdcf0hkbr+Bashb5Q/cgnRSAKf1xkSvmt+
+ PrAl+GL34D1YfcXWfbHkXxQXFNhSS3FSAFBbclmN2X6LJcEEYiOpfuE5PV0TyJWwgJaV
+ zXqfyBDJCJziGTNFhk8zIX5/fr+2tC0ZKBwsFk/Rv3LaWPszO+Ls+J+ZVqXSnlbH4XkG
+ jfXJm40N1FkHZz2os8WL+rva5ZQPktFoxZpn4ScYQA9W8YfAkAknvziBNDoulXGK9ZNo cA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ns85kb8cp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 16 Feb 2023 22:29:53 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31GMTqYx005978;
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31GMTq0c003773;
         Thu, 16 Feb 2023 22:29:52 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTP id 3ns328g790-1;
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 3ns32ng2cx-1;
         Thu, 16 Feb 2023 22:29:52 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GMTqGT005962;
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GMTj6E003724;
         Thu, 16 Feb 2023 22:29:52 GMT
 Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTP id 31GMTqeS005961;
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 31GMTqA0003762;
         Thu, 16 Feb 2023 22:29:52 +0000
 Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 3352D20E54; Thu, 16 Feb 2023 14:29:52 -0800 (PST)
+        id 35E2620E55; Thu, 16 Feb 2023 14:29:52 -0800 (PST)
 From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
 To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
         balbi@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
         Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v5 4/5] usb: dwc3: Add function suspend and function wakeup support
-Date:   Thu, 16 Feb 2023 14:29:47 -0800
-Message-Id: <1676586588-25989-5-git-send-email-quic_eserrao@quicinc.com>
+Subject: [PATCH v5 5/5] usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+Date:   Thu, 16 Feb 2023 14:29:48 -0800
+Message-Id: <1676586588-25989-6-git-send-email-quic_eserrao@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1676586588-25989-1-git-send-email-quic_eserrao@quicinc.com>
 References: <1676586588-25989-1-git-send-email-quic_eserrao@quicinc.com>
@@ -60,172 +60,251 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 1492mWv8mMP8swMe_qQ8H4e8RLu4cZQo
-X-Proofpoint-GUID: 1492mWv8mMP8swMe_qQ8H4e8RLu4cZQo
+X-Proofpoint-GUID: DtNKhKIzEav9a3CqteWf8GebE3IZ5VCZ
+X-Proofpoint-ORIG-GUID: DtNKhKIzEav9a3CqteWf8GebE3IZ5VCZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-16_16,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=960 malwarescore=0 spamscore=0 phishscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160192
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ clxscore=1015 bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=891
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302160192
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB host sends function suspend and function resume notifications to
-the interface through SET_FEATURE/CLEAR_FEATURE setup packets.
-Add support to handle these packets by delegating the requests to
-composite layer. Also add support to handle function wake notification
-requests to exit from function suspend state.
+When host sends a suspend notification to the device, handle
+the suspend callbacks in the function driver. Enhanced super
+speed devices can support function suspend feature to put the
+function in suspend state. Handle function suspend callback.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Depending on the remote wakeup capability the device can either
+trigger a remote wakeup or wait for the host initiated resume to
+start data transfer again.
+
 Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
 ---
- drivers/usb/dwc3/core.h   |  3 +++
- drivers/usb/dwc3/debug.h  |  2 ++
- drivers/usb/dwc3/ep0.c    | 12 ++++--------
- drivers/usb/dwc3/gadget.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+), 8 deletions(-)
+ drivers/usb/gadget/function/f_ecm.c   | 68 +++++++++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c | 63 ++++++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |  4 +++
+ 3 files changed, 135 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index cc78236..1565b21 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -526,6 +526,7 @@
- #define DWC3_DGCMD_SET_ENDPOINT_NRDY	0x0c
- #define DWC3_DGCMD_SET_ENDPOINT_PRIME	0x0d
- #define DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK	0x10
-+#define DWC3_DGCMD_DEV_NOTIFICATION	0x07
+diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
+index a7ab30e..d50c1a4 100644
+--- a/drivers/usb/gadget/function/f_ecm.c
++++ b/drivers/usb/gadget/function/f_ecm.c
+@@ -633,6 +633,8 @@ static void ecm_disable(struct usb_function *f)
  
- #define DWC3_DGCMD_STATUS(n)		(((n) >> 12) & 0x0F)
- #define DWC3_DGCMD_CMDACT		BIT(10)
-@@ -538,6 +539,8 @@
- #define DWC3_DGCMDPAR_TX_FIFO			BIT(5)
- #define DWC3_DGCMDPAR_LOOPBACK_DIS		(0 << 0)
- #define DWC3_DGCMDPAR_LOOPBACK_ENA		BIT(0)
-+#define DWC3_DGCMDPAR_DN_FUNC_WAKE		BIT(0)
-+#define DWC3_DGCMDPAR_INTF_SEL(n)		((n) << 4)
- 
- /* Device Endpoint Command Register */
- #define DWC3_DEPCMD_PARAM_SHIFT		16
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index 8bb2c9e..09d7038 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -72,6 +72,8 @@ dwc3_gadget_generic_cmd_string(u8 cmd)
- 		return "Set Endpoint Prime";
- 	case DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK:
- 		return "Run SoC Bus Loopback Test";
-+	case DWC3_DGCMD_DEV_NOTIFICATION:
-+		return "Device Notification";
- 	default:
- 		return "UNKNOWN";
- 	}
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index f90fa55..1e7cc15 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -30,6 +30,8 @@
- static void __dwc3_ep0_do_control_status(struct dwc3 *dwc, struct dwc3_ep *dep);
- static void __dwc3_ep0_do_control_data(struct dwc3 *dwc,
- 		struct dwc3_ep *dep, struct dwc3_request *req);
-+static int dwc3_ep0_delegate_req(struct dwc3 *dwc,
-+				 struct usb_ctrlrequest *ctrl);
- 
- static void dwc3_ep0_prepare_one_trb(struct dwc3_ep *dep,
- 		dma_addr_t buf_dma, u32 len, u32 type, bool chain)
-@@ -368,7 +370,7 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
- 		 * Function Remote Wake Capable	D0
- 		 * Function Remote Wakeup	D1
- 		 */
--		break;
-+		return dwc3_ep0_delegate_req(dwc, ctrl);
- 
- 	case USB_RECIP_ENDPOINT:
- 		dep = dwc3_wIndex_to_dep(dwc, ctrl->wIndex);
-@@ -514,13 +516,7 @@ static int dwc3_ep0_handle_intf(struct dwc3 *dwc,
- 
- 	switch (wValue) {
- 	case USB_INTRF_FUNC_SUSPEND:
--		/*
--		 * REVISIT: Ideally we would enable some low power mode here,
--		 * however it's unclear what we should be doing here.
--		 *
--		 * For now, we're not doing anything, just making sure we return
--		 * 0 so USB Command Verifier tests pass without any errors.
--		 */
-+		ret = dwc3_ep0_delegate_req(dwc, ctrl);
- 		break;
- 	default:
- 		ret = -EINVAL;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 10003b7..9d6b753 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2391,6 +2391,47 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
- 	return ret;
+ 	usb_ep_disable(ecm->notify);
+ 	ecm->notify->desc = NULL;
++	f->func_suspended = false;
++	f->func_wakeup_armed = false;
  }
  
-+static void dwc3_resume_gadget(struct dwc3 *dwc);
-+
-+static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+ /*-------------------------------------------------------------------------*/
+@@ -885,6 +887,68 @@ static struct usb_function_instance *ecm_alloc_inst(void)
+ 	return &opts->func_inst;
+ }
+ 
++static void ecm_suspend(struct usb_function *f)
 +{
-+	struct  dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
-+	int			ret;
-+	int			link_state;
++	struct f_ecm *ecm = func_to_ecm(f);
++	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
 +
-+	if (!dwc->wakeup_configured) {
-+		dev_err(dwc->dev, "remote wakeup not configured\n");
-+		return -EINVAL;
++	if (f->func_suspended) {
++		DBG(cdev, "Function already suspended\n");
++		return;
 +	}
 +
-+	spin_lock_irqsave(&dwc->lock, flags);
++	DBG(cdev, "ECM Suspend\n");
++
++	gether_suspend(&ecm->port);
++}
++
++static void ecm_resume(struct usb_function *f)
++{
++	struct f_ecm *ecm = func_to_ecm(f);
++	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
++
 +	/*
-+	 * If the link is in U3, signal for remote wakeup and wait for the
-+	 * link to transition to U0 before sending device notification.
++	 * If the function is in USB3 Function Suspend state, resume is
++	 * canceled. In this case resume is done by a Function Resume request.
 +	 */
-+	link_state = dwc3_gadget_get_link_state(dwc);
-+	if (link_state == DWC3_LINK_STATE_U3) {
-+		ret = __dwc3_gadget_wakeup(dwc, false);
-+		if (ret) {
-+			spin_unlock_irqrestore(&dwc->lock, flags);
-+			return -EINVAL;
++	if (f->func_suspended)
++		return;
++
++	DBG(cdev, "ECM Resume\n");
++
++	gether_resume(&ecm->port);
++}
++
++static int ecm_get_status(struct usb_function *f)
++{
++	return (f->func_wakeup_armed ? USB_INTRF_STAT_FUNC_RW : 0) |
++		USB_INTRF_STAT_FUNC_RW_CAP;
++}
++
++static int ecm_func_suspend(struct usb_function *f, u8 options)
++{
++	struct f_ecm *ecm = func_to_ecm(f);
++	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
++
++	DBG(cdev, "func susp %u cmd\n", options);
++
++	f->func_wakeup_armed = !!(options & (USB_INTRF_FUNC_SUSPEND_RW >> 8));
++
++	if (options & (USB_INTRF_FUNC_SUSPEND_LP >> 8)) {
++		if (!f->func_suspended) {
++			ecm_suspend(f);
++			f->func_suspended = true;
 +		}
-+		dwc3_resume_gadget(dwc);
-+		dwc->link_state = DWC3_LINK_STATE_U0;
++	} else {
++		if (f->func_suspended) {
++			f->func_suspended = false;
++			ecm_resume(f);
++		}
 +	}
 +
-+	ret = dwc3_send_gadget_generic_command(dwc, DWC3_DGCMD_DEV_NOTIFICATION,
-+					       DWC3_DGCMDPAR_DN_FUNC_WAKE |
-+					       DWC3_DGCMDPAR_INTF_SEL(intf_id));
-+	if (ret)
-+		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
++	return 0;
++}
 +
-+	spin_unlock_irqrestore(&dwc->lock, flags);
+ static void ecm_free(struct usb_function *f)
+ {
+ 	struct f_ecm *ecm;
+@@ -952,6 +1016,10 @@ static struct usb_function *ecm_alloc(struct usb_function_instance *fi)
+ 	ecm->port.func.setup = ecm_setup;
+ 	ecm->port.func.disable = ecm_disable;
+ 	ecm->port.func.free_func = ecm_free;
++	ecm->port.func.suspend = ecm_suspend;
++	ecm->port.func.get_status = ecm_get_status;
++	ecm->port.func.func_suspend = ecm_func_suspend;
++	ecm->port.func.resume = ecm_resume;
+ 
+ 	return &ecm->port.func;
+ }
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index f259975..8eba018 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -437,6 +437,20 @@ static inline int is_promisc(u16 cdc_filter)
+ 	return cdc_filter & USB_CDC_PACKET_TYPE_PROMISCUOUS;
+ }
+ 
++static int ether_wakeup_host(struct gether *port)
++{
++	int			ret;
++	struct usb_function	*func = &port->func;
++	struct usb_gadget	*gadget = func->config->cdev->gadget;
++
++	if (func->func_suspended)
++		ret = usb_func_wakeup(func);
++	else
++		ret = usb_gadget_wakeup(gadget);
 +
 +	return ret;
 +}
 +
- static int dwc3_gadget_set_remote_wakeup(struct usb_gadget *g, int set)
+ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
+ 					struct net_device *net)
  {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-@@ -3028,6 +3069,7 @@ static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-+	.func_wakeup		= dwc3_gadget_func_wakeup,
- 	.set_remote_wakeup	= dwc3_gadget_set_remote_wakeup,
- 	.set_selfpowered	= dwc3_gadget_set_selfpowered,
- 	.pullup			= dwc3_gadget_pullup,
+@@ -456,6 +470,15 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
+ 		in = NULL;
+ 		cdc_filter = 0;
+ 	}
++
++	if (dev->port_usb->is_suspend) {
++		DBG(dev, "Port suspended. Triggering wakeup\n");
++		netif_stop_queue(net);
++		spin_unlock_irqrestore(&dev->lock, flags);
++		ether_wakeup_host(dev->port_usb);
++		return NETDEV_TX_BUSY;
++	}
++
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	if (!in) {
+@@ -1014,6 +1037,45 @@ int gether_set_ifname(struct net_device *net, const char *name, int len)
+ }
+ EXPORT_SYMBOL_GPL(gether_set_ifname);
+ 
++void gether_suspend(struct gether *link)
++{
++	struct eth_dev *dev = link->ioport;
++	unsigned long flags;
++
++	if (!dev)
++		return;
++
++	if (atomic_read(&dev->tx_qlen)) {
++		/*
++		 * There is a transfer in progress. So we trigger a remote
++		 * wakeup to inform the host.
++		 */
++		ether_wakeup_host(dev->port_usb);
++		return;
++	}
++	spin_lock_irqsave(&dev->lock, flags);
++	link->is_suspend = true;
++	spin_unlock_irqrestore(&dev->lock, flags);
++}
++EXPORT_SYMBOL_GPL(gether_suspend);
++
++void gether_resume(struct gether *link)
++{
++	struct eth_dev *dev = link->ioport;
++	unsigned long flags;
++
++	if (!dev)
++		return;
++
++	if (netif_queue_stopped(dev->net))
++		netif_start_queue(dev->net);
++
++	spin_lock_irqsave(&dev->lock, flags);
++	link->is_suspend = false;
++	spin_unlock_irqrestore(&dev->lock, flags);
++}
++EXPORT_SYMBOL_GPL(gether_resume);
++
+ /*
+  * gether_cleanup - remove Ethernet-over-USB device
+  * Context: may sleep
+@@ -1176,6 +1238,7 @@ void gether_disconnect(struct gether *link)
+ 
+ 	spin_lock(&dev->lock);
+ 	dev->port_usb = NULL;
++	link->is_suspend = false;
+ 	spin_unlock(&dev->lock);
+ }
+ EXPORT_SYMBOL_GPL(gether_disconnect);
+diff --git a/drivers/usb/gadget/function/u_ether.h b/drivers/usb/gadget/function/u_ether.h
+index 4014454..851ee10 100644
+--- a/drivers/usb/gadget/function/u_ether.h
++++ b/drivers/usb/gadget/function/u_ether.h
+@@ -79,6 +79,7 @@ struct gether {
+ 	/* called on network open/close */
+ 	void				(*open)(struct gether *);
+ 	void				(*close)(struct gether *);
++	bool				is_suspend;
+ };
+ 
+ #define	DEFAULT_FILTER	(USB_CDC_PACKET_TYPE_BROADCAST \
+@@ -258,6 +259,9 @@ int gether_set_ifname(struct net_device *net, const char *name, int len);
+ 
+ void gether_cleanup(struct eth_dev *dev);
+ 
++void gether_suspend(struct gether *link);
++void gether_resume(struct gether *link);
++
+ /* connect/disconnect is handled by individual functions */
+ struct net_device *gether_connect(struct gether *);
+ void gether_disconnect(struct gether *);
 -- 
 2.7.4
 
