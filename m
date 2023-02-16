@@ -2,224 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDCC6990E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5B26990ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjBPKQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S229897AbjBPKRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBPKQJ (ORCPT
+        with ESMTP id S229818AbjBPKR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:16:09 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2134.outbound.protection.outlook.com [40.107.22.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CA6518DB;
-        Thu, 16 Feb 2023 02:15:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FCXMC/UvtHxtmkXlP3bk9IRQ6TOvzEs4El4K7O0CaxNPwKxugYsx3NSymtsQezey844L7pvVCH38EHGP051OciUBCZ5+9CSDQIpNMLo6IdlY0nIa8zKUcwIMbiGAgB4YJGmBGwlTfZW9TVQviQuAEjlgcJv2kH9NKVBIUuqhfWdbhmIV02LG/znajTVfuglTgpP3ibxc7KXSkFtBi63M0YhsVzuy9p3KWrie5tIn3v0mxXA+DKWCc/3exY0wwvOutPdFa4xiJuXD1ac1NLlQVTe1cKrW7VMOeux7OSoC+5/EDPqTOTuIWHNlXnkRw5tI0LFWwlJdHmjitM2qf3MhGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=irBYu6S4A228jiXL1L1B8vhYtqDqfzcJCtA2ZcDTUH8=;
- b=dAdDS026atsG4EpiHLa3bl2nkxJi3T+uw0RgDHVv/ZktffHN8pBON3Rja1DKU1y8NHXrW3H5KV90w9FK6MT31y1cpKK3ZLIS1lCPgJ5zNfZfDDEVRe6H9iGY0+65gVN4s/NkVOmAAz1vgTxIDbKy1v6dza9KXxE1xWlgUsjpz5ewmLT7X3qpE6MHOW9pOnZj5Ebl64CLHF1k0H8aG/sfYu1Ntwt7P77pH2yKK+COeHGp+ECQM8MvM83shperb6meXP3v6lU7xkvexwq5a5Lbf18yFOt32m3PWlAdowi8Wf+OVUXfQLoqNtGVb7YL+2aswQdgIcKMKf/0OocQ1PGRLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=irBYu6S4A228jiXL1L1B8vhYtqDqfzcJCtA2ZcDTUH8=;
- b=TAPQQYqB+j5fMbvNfa5mg79mLDCTnQD39F/KNFta2gESk9bgFWPYaa0GVhA8BT8MGNxs91ZcVoQrgt4v6O3QgRbF2vvN5Z9xQx9A8xfwOg78Fg0p1dG5ZvrhjelXc55rQ36sofDTwq/toa3gDO/5lCrHN3sK1pMsh2dzT8w4hlU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by DU2PR10MB7814.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:49d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
- 2023 10:15:57 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::59e9:ea90:b6ea:3863]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::59e9:ea90:b6ea:3863%4]) with mapi id 15.20.6086.026; Thu, 16 Feb 2023
- 10:15:56 +0000
-Message-ID: <531dce76-2767-80be-ecd0-4b54e9ec2eea@kontron.de>
-Date:   Thu, 16 Feb 2023 11:15:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 1/6] dt-bindings: regulator: pca9450: Document new usage
- of sd-vsel-gpios
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Marek Vasut <marex@denx.de>
-Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Robin Gong <yibin.gong@nxp.com>,
-        Per-Daniel Olsson <perdo@axis.com>,
-        Rickard x Andersson <rickaran@axis.com>
-References: <20230213155833.1644366-1-frieder@fris.de>
- <20230213155833.1644366-2-frieder@fris.de>
- <20230215200213.GA467386-robh@kernel.org>
- <a32979ac-d272-0865-f453-c65d405814c8@denx.de>
- <CAL_JsqJ3o3Z+jLy-GBJW2i1h7=uN=fPEaC+YTU07P+LbEoq5Vg@mail.gmail.com>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <CAL_JsqJ3o3Z+jLy-GBJW2i1h7=uN=fPEaC+YTU07P+LbEoq5Vg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P191CA0020.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d9::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+        Thu, 16 Feb 2023 05:17:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB4B518CF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676542599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k/s3z/K3lmbyo3jKgGFl7HdCfZ2nwsRj+PuGxWblknM=;
+        b=BP0/Uk1ByoOH1m2RWLXnG/Q1agF9WCR6azn0HRHUKRjntchWwDXLvsJiKg/s58L/cFC7JN
+        XGk74XjXDRVQRY7SUEQg0p219njPQCkihbg6H8FqKDHjflURMgN4MJY+81UkLu+zsel17r
+        lPjzRdaVv9kcH7J1DeT0Vn/3RWveBKY=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-251-TZe_wXtmOOyIx-lRtyRkBg-1; Thu, 16 Feb 2023 05:16:37 -0500
+X-MC-Unique: TZe_wXtmOOyIx-lRtyRkBg-1
+Received: by mail-qv1-f71.google.com with SMTP id r10-20020a0562140c8a00b0056ed45f262dso822959qvr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:16:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k/s3z/K3lmbyo3jKgGFl7HdCfZ2nwsRj+PuGxWblknM=;
+        b=4eatUW6og+J7RIzUm3HwEL3YNM0ex6ls+jtugUcfvYjJTljpd1EKSaXBhPGZjS10EW
+         d/FP01QOdv9QOzjiHKf0wBKwOsQviYeKDdO2Zkk+TUk4YDd4hLdBRKOWUwvOdFEKuoPi
+         ZTQNPhRAOgSr+Kew/o4RN7aQqDS1VJpotdYLRO3XZcbiZEAmOusoVa2lqnH/F9xpwl6Z
+         f3TOPCKKpcaUgRJ3sHHgGGmDeNQx4p3mszYcRR+Xf9dknHdJ7ZBAiOUhyRe9avjkEx2G
+         Ujv3tUBPJFFaDqs3GojnqMEkx/841YEcs9HHLnKYwIaYdFLGApy8Zp+mYTDUI4kHEzHt
+         ZYBQ==
+X-Gm-Message-State: AO0yUKXC2eld06pR0BMgJoexWTnIBjLW+8G5zgaRYyzF03Yv7zQ7U/Ti
+        Btaxy1rVt1TKOoUawvKRtx6guDNCiNOw3w9sUqpZ2VjpkFai3OT2BcMLyDbgSnpJBoNQ4J72b+s
+        bL+vsMR3uNhHRuZSVv+R7ahpd
+X-Received: by 2002:a05:6214:c2f:b0:56e:bfda:a14f with SMTP id a15-20020a0562140c2f00b0056ebfdaa14fmr9539621qvd.9.1676542597079;
+        Thu, 16 Feb 2023 02:16:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set/7erKu7JlmNSZNtANo2ENIubiFUB6Q9MQmhbJPU7u43h3bSc2LEqwIScpXL3Ip7O3tVadXLA==
+X-Received: by 2002:a05:6214:c2f:b0:56e:bfda:a14f with SMTP id a15-20020a0562140c2f00b0056ebfdaa14fmr9539586qvd.9.1676542596758;
+        Thu, 16 Feb 2023 02:16:36 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-167.retail.telecomitalia.it. [82.57.51.167])
+        by smtp.gmail.com with ESMTPSA id q4-20020a378e04000000b006ce580c2663sm911676qkd.35.2023.02.16.02.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 02:16:36 -0800 (PST)
+Date:   Thu, 16 Feb 2023 11:16:28 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Bobby Eshleman <bobbyeshleman@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jakub@cloudflare.com, hdanton@sina.com, cong.wang@bytedance.com
+Subject: Re: [PATCH RFC net-next v2 3/3] selftests/bpf: Add a test case for
+ vsock sockmap
+Message-ID: <20230216101628.7z672auaimoauvi7@sgarzare-redhat>
+References: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
+ <20230118-support-vsock-sockmap-connectible-v2-3-58ffafde0965@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|DU2PR10MB7814:EE_
-X-MS-Office365-Filtering-Correlation-Id: db55ea9e-5cc5-43db-2473-08db1006cb25
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HnD+F4UZ9Cp2iPSLMn8iroSxZQC9veybLfDQRX01cGtGGbXqnSqKDkXVdcHERIYP9WHYlZe+An3nRrXaQFMclHFtqHCfaiWRTUfyg0+TcQqxgaw/MAuN8aJCkSegYTZpF0CtnyLy+0jw6Rv3D4etrdt57j6Y/+4tpmTdAJJRMXf2pYu4MvhlAlhNUnFHkW2cOz0u3/2Ep/rqLg3lf6Z0Gjr1tcNF/0vkvdt0ttrAiKK6wRPnA9I0K8oMOBCwAI4RyVueqAFGpBo8E8FBj3Ig0Uz8l8cQSc1Y3Kdf7ypbUnFLwSdlUlvWYpxB8GnYRoV6A+60rguC8wc4UWNBPChKZAzNlRkwWJdD1H32gQZfgk2pkAMTU0u3o+20YLIPbuUjaLUmQnBfSi1soHwJencqQ6BFwg1sdy0oq81U/tL29MF23sBRVwCPO2GQhWX/yyHm+BCNKxO8ZP7wk2++L9QEZUD5/dv7MeyTg9f3KlR4Qc0VKwmcRHzRhWg3ORMscrzyXCUeE998Poriy5XoHL1KXnU4E8onXdJUE8FNEPM9NnTa+36uefaJ84+62qEASa7k6e60AS9QKMD/pji6KiBxlVEqsyd0l8E/PedHCZJViNZexbCVePa3qX1Z7hqKrAosFTAdK1JQBBt0Z9PhUhM4IvwhQcwfbojhh1y3zCZeSNLEqBanBHk83tUKahyGzVHp+at8L3iq0ksVF0unWobsZu2dRvpl0IMYRi95AS6LpEM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199018)(8936002)(41300700001)(36756003)(5660300002)(44832011)(2906002)(7416002)(966005)(66946007)(4326008)(478600001)(66476007)(316002)(8676002)(66556008)(110136005)(6486002)(54906003)(38100700002)(31686004)(186003)(2616005)(53546011)(6506007)(6512007)(86362001)(31696002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDdRY0Z0V3FlL1FOcWF3azNqNjg4eGl2ZkFtaXk0MWJXT2lnbUVlazFLVE5l?=
- =?utf-8?B?RjhoekRpRWlSOTRuK2xRUG5UVXhWdzFGNWt4aEVFaXRBbHhNVEh0a1c0SHZk?=
- =?utf-8?B?aVhaVktPaUI0N0hKSlByNG5VdFVOUWhwdzVHOEVpUnp5NEd3Sk96d3VXNlBu?=
- =?utf-8?B?amE3WEUrZ3dibFJMQVlJYWlQU2Z3aEZNalRjWHJjd3VIWjd4OUpTSFZFeGFL?=
- =?utf-8?B?R2c3QStQZWdXSE5yMHhMWUVFeFlqZ3hlM21GNDczSCs3UFhFMXl0RmxKN3VK?=
- =?utf-8?B?VFRhVkhaSWc3VCthT1dkSVVnSTdJQmd2VmtzUmZuN1BHUCtWR2VKU2liR0Vx?=
- =?utf-8?B?dmNVNytUQ0hRUFhOSGhCOS9jNCs0K0NjOXczUXFRcFZuTVJDUVAvVW9WeGly?=
- =?utf-8?B?aVMrVnRxaFNiZ1JBN0FhbnRDL0MyVW1qcnpRMUllK2dWVGlreFQ3YjJMMEh3?=
- =?utf-8?B?MXN1N09Zc1Z5WkxSYmczeW5IQXhsVlp3V09FaHdIRWJZSmpEZTRuYWpTVjFF?=
- =?utf-8?B?V2VvT0NmTm14OXpGeSt4MndoM0UwS2x5U0hXempnY3RjQ0Q2VkxLdjdjd2J4?=
- =?utf-8?B?ajE2UlZyQmhiREJkK2M4KzMyRGJiU1JoU0xkbDZhdnhaRmJqUmR4cW1jWEV6?=
- =?utf-8?B?QzBZa2hIQyswbGJjTHVZeWZPdnM4a1V2NTByTlcyNXR5UGVXODBiQklMMXp3?=
- =?utf-8?B?ZGp6Y0d3VmNCS2RreE53WmFwYXR2eEZnbmV2RkRtaVVZM29VdWxkN3JKSGhJ?=
- =?utf-8?B?ZnV3ckZTRC91Y3JyTkdYalUzTFV5UHAwWTdZYkpSUlJrWnRRWnN3SVM5a1J0?=
- =?utf-8?B?NStQMjhnVThzWU5PS0NUSlNLOTFNL2ZYYk42Q1hJRmlNNVUza3pDWmhPM21m?=
- =?utf-8?B?U21yRTBZQzIxL2wzZXhrSkp4aUxVNW55RzJ4c0xTOGFUa09CbE1Xak1XS0xP?=
- =?utf-8?B?VmYwQnNEMG5EWklvdTBPMWR1YURIaTBIaThFTEs0Mk1RSENJSHI5cUNzT0dY?=
- =?utf-8?B?NHZ4cDY4K0NHK3I4Rk9yTHRUTE1LaVI5MFpxa2Zhbml3cTVFVndPaVBmWTF0?=
- =?utf-8?B?SEJZdk1UUjN3VFl2VnJxVm1taU5oMkVIcXNkQW5EMmRvcjFYQnNDcElCdHl4?=
- =?utf-8?B?ZWpWeG16cFl0SDdJY2pQVjJwQStIM1J2RFB3MFN3cjJ0YzhrSXZnVkNIdTRL?=
- =?utf-8?B?eGRCTkdWclRnZy9yQjFDWWpPZjVnQytMSE44eXJraHYzQ2g3amxDN3o5OHF6?=
- =?utf-8?B?YlNHTmpqclphM3drT2lUYm14bHV3anhMODd1anAxZUp4V21pOXNyaURQcXh6?=
- =?utf-8?B?SmU5U1Z2ZkxRZU9mYmlnd2JIWlA1dmJkUmVuUWgydjM3YUNOTGRhUXd5QU55?=
- =?utf-8?B?c3Y1dVQ1eVNka1JFbEpJTkZELzgrTE92TzRZZXBsUE9SYXdTRXQrdTVlQmlN?=
- =?utf-8?B?alVUc09vNXhFQm44R0J1QmRORVJYaStQdEFSQzNIbzFGK0psUUVqb050U09v?=
- =?utf-8?B?bmxEc1pkVkRBeXJHYVpTck5OMDV1ODh5MW9vbkM0N2hUL05VMFlqb2drN2Fs?=
- =?utf-8?B?YUhPR0ZNanl5N05DZGJkT205ck5pZDBIajhCNTBtQ1lTSk9ES3dGcVNyb1Nj?=
- =?utf-8?B?MXExem1lajlPMktYQ3VxTkVOODFZR2Jqb05oVzdsMDBRbHZ1RzdiVzZwcWZi?=
- =?utf-8?B?aUhGNVZOZTRLbzF0MjBuQUZ6eDNFNy9KZGMrYzVSRm9kT2JZRlhnWHVTMEtV?=
- =?utf-8?B?OWl0Nmt3OGppVjNvcDNkck9nMXpITUtEOWluZEx4eldER1RBWitZQ3FIamYv?=
- =?utf-8?B?T2ROd0JOMUcrbnc4NkxWeU9aR2xNOEZjTlhBQjRybzNTTEMvSUc2RURhcTBZ?=
- =?utf-8?B?eUxFU29Ea3FzNzdML1o0dHhsMGVYSkhlWEt0RXcxaUVqTmdnR2o5UC9hU0xH?=
- =?utf-8?B?SDJJeXp6Ym1DUWMxQ3lXV3JJN25oWDVSWkdmS3NFd2hrcjBObllnZXRnMXVT?=
- =?utf-8?B?TlcramlORi9LVXAvWldGcTVWTHhrUGNKMFRIRUo4NnUzWWZLRTFhR0RRanl4?=
- =?utf-8?B?c2RrNXVWR0pkOTVWcW5kU2dhYmxGZ3hxdFBOL0ErUlVSSXI2YlcwYUIxMWE0?=
- =?utf-8?B?SG5mUkt1Tm95YVFKMWVIL3czazJQVEk5K1J4bkRaUlE0TXhqRmNPcjJoWm1q?=
- =?utf-8?Q?BnjxJrq20lgxq3TvbMWRsaaAs0IBDzLrDaxi7YSdr9oG?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: db55ea9e-5cc5-43db-2473-08db1006cb25
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 10:15:56.8364
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M3elgFNQ6YWeylEou8Pm4UsUxWbq7xg0d3RqER5P6cido72HUq8nAaAuw7JKMtW2Mh01OBQzCKkJdCMCdw5hvyDnAtn193rAQ8u4O5ziA08=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR10MB7814
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230118-support-vsock-sockmap-connectible-v2-3-58ffafde0965@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.23 03:30, Rob Herring wrote:
-> On Wed, Feb 15, 2023 at 7:27 PM Marek Vasut <marex@denx.de> wrote:
->>
->> On 2/15/23 21:02, Rob Herring wrote:
->>> On Mon, Feb 13, 2023 at 04:58:19PM +0100, Frieder Schrempf wrote:
->>>> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->>>>
->>>> The sd-vsel-gpios property is abandoned in its current meaning as an
->>>> output. We now use it to specify an optional signal that can be
->>>> evaluated by the driver in order to retrieve the current status
->>>> of the SD_VSEL signal that is used to select the control register
->>>> of LDO5.
->>>>
->>>> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
->>>> ---
->>>>   .../regulator/nxp,pca9450-regulator.yaml      | 23 ++++++++++++++-----
->>>>   1 file changed, 17 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
->>>> index 835b53302db8..c86534538a4e 100644
->>>> --- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
->>>> +++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
->>>> @@ -40,8 +40,24 @@ properties:
->>>>       description: |
->>>>         list of regulators provided by this controller
->>>>
->>>> +    properties:
->>>> +      LDO5:
->>>> +        type: object
->>>> +        $ref: regulator.yaml#
->>>> +        description:
->>>> +          Properties for single LDO5 regulator.
->>>> +
->>>> +        properties:
->>>> +          sd-vsel-gpios:
->>>
->>> It is a pin on the device, right? Then it belongs in the device node as
->>> it was.
+On Mon, Jan 30, 2023 at 08:35:14PM -0800, Bobby Eshleman wrote:
+>Add a test case testing the redirection from connectible AF_VSOCK
+>sockets to connectible AF_UNIX sockets.
+>
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>---
+> .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
+> 1 file changed, 163 insertions(+)
 
-Physically it's a pin on the PCA9450 chip. If you look at the block
-diagram in the datasheet [1] (page 3) you can see though, that the
-SD_VSEL signal is routed to the LD05 regulator block inside the chip.
-This makes me think that the signal is best described inside the LDO5 node.
+For the vsock part:
 
->>>
->>> Can't the direction of the signal tell you how it is used? Assuming the
->>> pin is bidirectional?
->>
->> The pin is input to the PMIC, it is unidirection, i.e.
->>
->> SoC(output)---->(input)PMIC
->>
->>> The binding should support any possible way the device is wired, not
->>> just what's been seen so far on some boards.
->>
->> The usage is always the above as far as I can tell.
+Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 
-There is only one usage that is likely to occur and that is the one we
-describe here.
+>
+>diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>index 2cf0c7a3fe23..8b5a2e09c9ed 100644
+>--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>@@ -18,6 +18,7 @@
+> #include <string.h>
+> #include <sys/select.h>
+> #include <unistd.h>
+>+#include <linux/vm_sockets.h>
+>
+> #include <bpf/bpf.h>
+> #include <bpf/libbpf.h>
+>@@ -249,6 +250,16 @@ static void init_addr_loopback6(struct sockaddr_storage *ss, socklen_t *len)
+> 	*len = sizeof(*addr6);
+> }
+>
+>+static void init_addr_loopback_vsock(struct sockaddr_storage *ss, socklen_t *len)
+>+{
+>+	struct sockaddr_vm *addr = memset(ss, 0, sizeof(*ss));
+>+
+>+	addr->svm_family = AF_VSOCK;
+>+	addr->svm_port = VMADDR_PORT_ANY;
+>+	addr->svm_cid = VMADDR_CID_LOCAL;
+>+	*len = sizeof(*addr);
+>+}
+>+
+> static void init_addr_loopback(int family, struct sockaddr_storage *ss,
+> 			       socklen_t *len)
+> {
+>@@ -259,6 +270,9 @@ static void init_addr_loopback(int family, struct sockaddr_storage *ss,
+> 	case AF_INET6:
+> 		init_addr_loopback6(ss, len);
+> 		return;
+>+	case AF_VSOCK:
+>+		init_addr_loopback_vsock(ss, len);
+>+		return;
+> 	default:
+> 		FAIL("unsupported address family %d", family);
+> 	}
+>@@ -1434,6 +1448,8 @@ static const char *family_str(sa_family_t family)
+> 		return "IPv6";
+> 	case AF_UNIX:
+> 		return "Unix";
+>+	case AF_VSOCK:
+>+		return "VSOCK";
+> 	default:
+> 		return "unknown";
+> 	}
+>@@ -1644,6 +1660,151 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
+> 	unix_skb_redir_to_connected(skel, map, sotype);
+> }
+>
+>+/* Returns two connected loopback vsock sockets */
+>+static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
+>+{
+>+	struct sockaddr_storage addr;
+>+	socklen_t len = sizeof(addr);
+>+	int s, p, c;
+>+
+>+	s = socket_loopback(AF_VSOCK, sotype);
+>+	if (s < 0)
+>+		return -1;
+>+
+>+	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
+>+	if (c == -1)
+>+		goto close_srv;
+>+
+>+	if (getsockname(s, sockaddr(&addr), &len) < 0)
+>+		goto close_cli;
+>+
+>+	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
+>+		FAIL_ERRNO("connect");
+>+		goto close_cli;
+>+	}
+>+
+>+	len = sizeof(addr);
+>+	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
+>+	if (p < 0)
+>+		goto close_cli;
+>+
+>+	*v0 = p;
+>+	*v1 = c;
+>+
+>+	return 0;
+>+
+>+close_cli:
+>+	close(c);
+>+close_srv:
+>+	close(s);
+>+
+>+	return -1;
+>+}
+>+
+>+static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
+>+					 enum redir_mode mode, int sotype)
+>+{
+>+	const char *log_prefix = redir_mode_str(mode);
+>+	char a = 'a', b = 'b';
+>+	int u0, u1, v0, v1;
+>+	int sfd[2];
+>+	unsigned int pass;
+>+	int err, n;
+>+	u32 key;
+>+
+>+	zero_verdict_count(verd_mapfd);
+>+
+>+	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
+>+		return;
+>+
+>+	u0 = sfd[0];
+>+	u1 = sfd[1];
+>+
+>+	err = vsock_socketpair_connectible(sotype, &v0, &v1);
+>+	if (err) {
+>+		FAIL("vsock_socketpair_connectible() failed");
+>+		goto close_uds;
+>+	}
+>+
+>+	err = add_to_sockmap(sock_mapfd, u0, v0);
+>+	if (err) {
+>+		FAIL("add_to_sockmap failed");
+>+		goto close_vsock;
+>+	}
+>+
+>+	n = write(v1, &a, sizeof(a));
+>+	if (n < 0)
+>+		FAIL_ERRNO("%s: write", log_prefix);
+>+	if (n == 0)
+>+		FAIL("%s: incomplete write", log_prefix);
+>+	if (n < 1)
+>+		goto out;
+>+
+>+	n = recv(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), MSG_DONTWAIT);
+>+	if (n < 0)
+>+		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
+>+	if (n == 0)
+>+		FAIL("%s: incomplete recv", log_prefix);
+>+	if (b != a)
+>+		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
+>+
+>+	key = SK_PASS;
+>+	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
+>+	if (err)
+>+		goto out;
+>+	if (pass != 1)
+>+		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+>+out:
+>+	key = 0;
+>+	bpf_map_delete_elem(sock_mapfd, &key);
+>+	key = 1;
+>+	bpf_map_delete_elem(sock_mapfd, &key);
+>+
+>+close_vsock:
+>+	close(v0);
+>+	close(v1);
+>+
+>+close_uds:
+>+	close(u0);
+>+	close(u1);
+>+}
+>+
+>+static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
+>+					     struct bpf_map *inner_map,
+>+					     int sotype)
+>+{
+>+	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
+>+	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
+>+	int sock_map = bpf_map__fd(inner_map);
+>+	int err;
+>+
+>+	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
+>+	if (err)
+>+		return;
+>+
+>+	skel->bss->test_ingress = false;
+>+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
+>+	skel->bss->test_ingress = true;
+>+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
+>+
+>+	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
+>+}
+>+
+>+static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
+>+{
+>+	const char *family_name, *map_name;
+>+	char s[MAX_TEST_NAME];
+>+
+>+	family_name = family_str(AF_VSOCK);
+>+	map_name = map_type_str(map);
+>+	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
+>+	if (!test__start_subtest(s))
+>+		return;
+>+
+>+	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
+>+	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
+>+}
+>+
+> static void test_reuseport(struct test_sockmap_listen *skel,
+> 			   struct bpf_map *map, int family, int sotype)
+> {
+>@@ -2015,12 +2176,14 @@ void serial_test_sockmap_listen(void)
+> 	run_tests(skel, skel->maps.sock_map, AF_INET6);
+> 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
+> 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
+>+	test_vsock_redir(skel, skel->maps.sock_map);
+>
+> 	skel->bss->test_sockmap = false;
+> 	run_tests(skel, skel->maps.sock_hash, AF_INET);
+> 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
+> 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
+> 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
+>+	test_vsock_redir(skel, skel->maps.sock_hash);
+>
+> 	test_sockmap_listen__destroy(skel);
+> }
+>
+>-- 
+>2.35.1
+>
 
-There are other ways to wire up the signal of course and in some
-unlikely event a hardware engineer might have the idea to hard-wire the
-SD_VSEL to a fixed level or wire it up to a SoC pin that doesn't have
-the VSELECT mux option.
-
-But I don't really see a good reason for covering these cases in the
-binding/driver if there are good chances we won't ever need them.
-
-> This patch is saying the opposite though. Something else drives the
-> signal, but the signal is also routed to the SoC to sample the state.
-
-SoC                                  PMIC
-+-----------------------+           +-------------------+
-|                       |           |                   |
-|                       |           |                   |
-|  GPIO <----------+    |           |                   |
-|                  |    |    SD_VSEL|   +-------+       |
-|  USHC_VSELECT -->+------------------->| LDO5  |       |
-|                       |           |   +-------+       |
-|                       |           |                   |
-+-----------------------+           +-------------------+
-
-This is how the setup looks like. The SD_VSEL on the PMIC is always an
-input. It's driven by the SoC's VSELECT signal (controlled by the USDHC
-controller) and we use the SION bit in the IOMUX to internally loop back
-the signal in order to sample it using the GPIO.
-
-[1] https://www.nxp.com/docs/en/data-sheet/PCA9450DS.pdf
