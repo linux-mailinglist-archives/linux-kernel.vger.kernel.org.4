@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E973698DDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B99698DE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBPHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S229637AbjBPHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBPHfp (ORCPT
+        with ESMTP id S229461AbjBPHlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:35:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8953A08C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676532864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K8gjNmTSR559OlRy9/RjmiyCYfUP8oDtfxDvTzbUrgI=;
-        b=SkpWc/TiozrqE7zFRcbVQjqQAKRIcSGvfAePr72p+pDYmUbqjbrPuWj9eL1kIDO4kQ3pJz
-        L1EKVY8T2C8qVOKHVsJNlssXZv1G1o3UpCCr4gJG0AO3A0tZYjbLOUR3CI+9nbna8D/+wT
-        REdKO+F2fArUH6RiCqp8vvGcdi+/Dvo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-qFMrDV1tMX6QrEoyM6s7bg-1; Thu, 16 Feb 2023 02:34:18 -0500
-X-MC-Unique: qFMrDV1tMX6QrEoyM6s7bg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 16 Feb 2023 02:41:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567243A875;
+        Wed, 15 Feb 2023 23:40:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B46D811E6E;
-        Thu, 16 Feb 2023 07:34:18 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-99.pek2.redhat.com [10.72.12.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F227C140EBF6;
-        Thu, 16 Feb 2023 07:34:12 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, schnelle@linux.ibm.com,
-        linux-s390@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: [PATCH 2/2] dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
-Date:   Thu, 16 Feb 2023 15:34:03 +0800
-Message-Id: <20230216073403.451455-2-bhe@redhat.com>
-In-Reply-To: <20230216073403.451455-1-bhe@redhat.com>
-References: <20230216073403.451455-1-bhe@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0F1E61EB0;
+        Thu, 16 Feb 2023 07:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F04C433D2;
+        Thu, 16 Feb 2023 07:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676533258;
+        bh=CsjYBJv3KoyajR+dTDD6EPW6J8/wsE97iPGoBTCmLjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=asoBJcP4g5hiqe6+H63ficVX5ZhIUHvvvRqgP/o21FJASYhO+1Q0dELVGFI3Of2+7
+         czmYWZd+RqRnQRT8PJJgScEeKS5aJvlxx9qiuL2z5NOfeNUy5RQBmeB4oyrK47Y78B
+         WTL+PMlJkVxcIqKoy1977rXuV7I5EOtKreScHcDwtPEQkfyMeItcPiDFIwVttVBmpN
+         zcssRomtuKczYGSQc/jBu4qOGj/TocjNzf4eqYd/Vlo5GWaNY0BAh+SRYORWX2BHpj
+         gqsOC9hKXvLPXIIxuWP6NTtO5EyRmSUcVgloTCQxaI3rqUZ0EIrSurOeM2AQ1PLPNc
+         li1Edq5IRJ7KQ==
+Date:   Thu, 16 Feb 2023 13:10:40 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Po-Wen Kao <powen.kao@mediatek.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
+        mason.zhang@mediatek.com, quic_asutoshd@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] scsi: ufs: core: Fix mcq tag calcualtion
+Message-ID: <20230216074040.GB2420@thinkpad>
+References: <20230215123750.15785-1-powen.kao@mediatek.com>
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230215123750.15785-1-powen.kao@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On s390 systems (aka mainframes), it has classic channel devices for
-networking and permanent storage that are currently even more common
-than PCI devices. Hence it could have a fully functional s390 kernel
-with CONFIG_PCI=n, then the relevant iomem mapping functions
-[including ioremap(), devm_ioremap(), etc.] are not available.
+On Wed, Feb 15, 2023 at 08:37:45PM +0800, Po-Wen Kao wrote:
+> Transfer command descriptor is allocated in ufshcd_memory_alloc()
+> and referenced by transfer request descriptor with stride size
+> sizeof_utp_transfer_cmd_desc()
+> instead of
+> sizeof(struct utp_transfer_cmd_desc).
+> 
+> Consequently, computing tag by address offset should also refer to the
+> same stride.
+> 
+> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
 
-Here let QCOM_HIDMA depend on HAS_IOMEM so that it won't be built to
-cause below compiling error if PCI is unset.
+Fixes tag?
 
---------------------------------------------------------
-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-hidma.c:(.text+0x4b46): undefined reference to `devm_ioremap_resource'
-ld: hidma.c:(.text+0x4b9e): undefined reference to `devm_ioremap_resource'
-make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
-make: *** [Makefile:1264: vmlinux] Error 2
+> ---
+>  drivers/ufs/core/ufs-mcq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+> index 31df052fbc41..3a27fa4b0024 100644
+> --- a/drivers/ufs/core/ufs-mcq.c
+> +++ b/drivers/ufs/core/ufs-mcq.c
+> @@ -265,7 +265,7 @@ static int ufshcd_mcq_get_tag(struct ufs_hba *hba,
+>  	addr = (le64_to_cpu(cqe->command_desc_base_addr) & CQE_UCD_BA) -
+>  		hba->ucdl_dma_addr;
+>  
+> -	return div_u64(addr, sizeof(struct utp_transfer_cmd_desc));
+> +	return div_u64(addr, sizeof_utp_transfer_cmd_desc(hba));
 
-Link: https://lore.kernel.org/all/Y0TcaZD4nB1w+mAQ@MiWiFi-R3L-srv/T/#u
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: dmaengine@vger.kernel.org
----
- drivers/dma/qcom/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+I think it is not a good practice to name variables after the standard
+operators like sizeof(). It is confusing at its best.
 
-diff --git a/drivers/dma/qcom/Kconfig b/drivers/dma/qcom/Kconfig
-index 3f926a653bd8..ace75d7b835a 100644
---- a/drivers/dma/qcom/Kconfig
-+++ b/drivers/dma/qcom/Kconfig
-@@ -45,6 +45,7 @@ config QCOM_HIDMA_MGMT
- 
- config QCOM_HIDMA
- 	tristate "Qualcomm Technologies HIDMA Channel support"
-+	depends on HAS_IOMEM
- 	select DMA_ENGINE
- 	help
- 	  Enable support for the Qualcomm Technologies HIDMA controller.
+How about renaming this function to get_ucd_size() or something relevant?
+
+But the change itself LGTM!
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+>  }
+>  
+>  static void ufshcd_mcq_process_cqe(struct ufs_hba *hba,
+> -- 
+> 2.18.0
+> 
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
