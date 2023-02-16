@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96EA6990A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBE66990A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjBPKEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S229740AbjBPKE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBPKEG (ORCPT
+        with ESMTP id S229506AbjBPKEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:04:06 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E55E3A84D;
-        Thu, 16 Feb 2023 02:04:03 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6A99660219B;
-        Thu, 16 Feb 2023 10:04:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676541841;
-        bh=dtOc+ZZc2I4hPdN4XFqAP28l1JSPbCkDmYJF5WgaDoI=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=TQ9IdzWUsFTqwnTox4KdvD3IMxJsZNshsfb6VkT8iXkrIAmYXqwclrICzx0/s8Wov
-         MO08Wo0DXh73HxcZC5k0IC/u8Ehx39eEYM1KHKNAqqYErEba9ZYncaIaLy4RnSs62g
-         hYrzresK+58n3oWCOADtWZdb0ljKm6hfUwXpYKJtUaBMIxvlPwB0JYOdMXR1nWgHWL
-         g+YNWQpNS5Ue5IHCxJpiJRv+jdHnD6pErIc0RZg5LYyYYnsPs2BaOQrh1Wu99cuSIS
-         hFr0dE0bF2nN8WvscdxT4fj9V2MEyMlXIxv/9IG8GYxj6XAF0DExw5AMVlXOhj6bEx
-         CZUyVJ35VrFFA==
-Message-ID: <84de90f5-da77-d3f2-c14a-d2e5c53bbf1c@collabora.com>
-Date:   Thu, 16 Feb 2023 11:03:58 +0100
+        Thu, 16 Feb 2023 05:04:23 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE26D4DBFE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:19 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id y25so2093210lfa.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:04:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iC4G6Chpv1TwtaQwrHEgm0cQhdw6ILUAcXbBMMjaI3I=;
+        b=OC41sN/IZzwtlfqWw88+8lhJoyzGOPS0Kj4SBGJ7/81+5c8vboPc13pf0GlMGe99dV
+         X9/gS+o08YrGj0NhSF2Tpi81ZF5ifQcA8vLA12LNjFTJgKi7dscPo25tQwrKJNAOXC3r
+         gzJ192bgsCiZ/qImclprAJ0Ne4qP+2UqEsyGtO9CI7axJVZAG08llLN8VBodKnDDG4Vw
+         pQyKp6e525LKacW3b4d78Zn5b0r2PeaWcdenpltgwXXdJSyQ6cFIFXSnl1SpvuucBXhB
+         7o3O2n8x7EE8xiHgDCMdbVIq6CmSD1A9kG0idn5KdmXoucBbX0VXr9Dcm42G9tEmeM3l
+         qPWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iC4G6Chpv1TwtaQwrHEgm0cQhdw6ILUAcXbBMMjaI3I=;
+        b=ylRsr38SZ7Ocj9ueMycBwCqa0AoTsas0DHPkoYt8M9mdlh/8JLsBTlt7sEoqonabOV
+         C4NLPVNf5sjr/nA/PA7VA3dl4qq08G8AOV+AmIirQBQrFUjmoGcpWhDddwUQ7zfbyHME
+         HiD6EuQlWPHbj2bb2auQPkM0a7FD5DMZAmQnsAik1OFTo3aSlIGWszbudUd/uoppqTxf
+         Z+bH6+Un8N1ZsWoK3+kkWN2O6EFqgdE6gRCySXkXIV6nui/UxCzyOzIdZwcyNBjew0KP
+         2U7mJJjkOHossc6scB3JhtmnWLNoAMoB2AWLBjaJ4//TaThiLfw/GN3EJ6RnMT6yorgZ
+         RqiA==
+X-Gm-Message-State: AO0yUKW3ptGcAAKFzVZMsYzKuJtT54NmSxtxd7iO6HkOTp3S1SjNmJhu
+        e7TJVAzYOmuB8CCXJENrZ3QUrL39ubjuT7SnvjyTpQ==
+X-Google-Smtp-Source: AK7set8DBh29ZMgrX8CBnHNMbWMxKn/kt4U0dnk9NpCe5ik8g7wyoxdQMEgGbV+W3gg4GFVBxJuwXanX9utnx96XXnA=
+X-Received: by 2002:ac2:54b8:0:b0:4db:2c5a:e4f6 with SMTP id
+ w24-20020ac254b8000000b004db2c5ae4f6mr1462667lfk.3.1676541858071; Thu, 16 Feb
+ 2023 02:04:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 1/2] hwrng: add driver for MediaTek TRNG SMC
-To:     Daniel Golle <daniel@makrotopia.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Mingming Su <Mingming.Su@mediatek.com>,
-        linux-crypto@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <89865515728cb937b6591160ad9c30b4bcc8dd41.1676467500.git.daniel@makrotopia.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <89865515728cb937b6591160ad9c30b4bcc8dd41.1676467500.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000035bbc05f4ce4501@google.com>
+In-Reply-To: <000000000000035bbc05f4ce4501@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 16 Feb 2023 11:04:05 +0100
+Message-ID: <CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: stack going in the wrong direction? at __sys_setsockopt
+To:     syzbot <syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com>,
+        jpoimboe@kernel.org, Ingo Molnar <mingo@kernel.org>
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/02/23 14:27, Daniel Golle ha scritto:
-> Add driver providing kernel-side support for the Random Number
-> Generator hardware found on Mediatek SoCs which have a driver in ARM
-> TrustedFirmware-A allowing Linux to read random numbers using a
-> non-standard vendor-defined Secure Monitor Call.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On Thu, 16 Feb 2023 at 11:00, syzbot
+<syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11ad7710c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=60f48e09dc64b527
+> dashboard link: https://syzkaller.appspot.com/bug?extid=91c3651bb190d53b4d16
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/7a22fa9fb779/disk-9d9019bc.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/68851ce42fd7/vmlinux-9d9019bc.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/09be0a2c410b/bzImage-9d9019bc.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+91c3651bb190d53b4d16@syzkaller.appspotmail.com
+>
+> WARNING: stack going in the wrong direction? at __sys_setsockopt+0x2c6/0x5b0 net/socket.c:2271
 
-Hello Daniel,
++Josh, Ingo,
 
-incidentally, I've also done some research on this one some months ago, when
-I was deep in adding support for the Helio X10 SoC (MT6795) on Xperia M5.
+Yesterday we started seeing lots of "stack going in the wrong
+direction" all over the kernel.
 
-The rng-v2 is simply the same rng but hypervised by the TF-A... and the only
-difference is, well, as you're also pointing out, that we're using secure
-monitor calls instead of direct MMIO handling.
+I see there is only your recent commit to ORC unwinder:
+"x86/unwind/orc: Add 'signal' field to ORC metadata"
 
-There's also not much more than what you've implemented here and the only kind
-of addition that we will ever see on this one will be about changing the SIP
-command (as some older SoCs use a different one)... so...
+Can it be related?
 
-...I don't think that adding an entirely new driver is worth the noise, hence
-I propose to simply add handling for the Secure RNG to mtk-rng.c instead: it's
-shorter and we would only need to address one if branch on that probe function
-to set a different callback.
-
-The clock should then be optional for *some* of those "v2 handling" devices,
-as if I recall correctly, some do need the clock to be handled from Linux
-anyway... otherwise this v2 driver will be "soon" looking bloody similar to
-the "v1", adding a bit of code duplication around.
-
-What do you think?
-
-Regards,
-Angelo
 
 > ---
->   MAINTAINERS                         |  1 +
->   drivers/char/hw_random/Kconfig      | 16 +++++++
->   drivers/char/hw_random/Makefile     |  1 +
->   drivers/char/hw_random/mtk-rng-v2.c | 74 +++++++++++++++++++++++++++++
->   4 files changed, 92 insertions(+)
->   create mode 100644 drivers/char/hw_random/mtk-rng-v2.c
-> 
-
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
