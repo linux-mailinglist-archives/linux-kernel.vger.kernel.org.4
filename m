@@ -2,70 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4113B698DF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86505698E2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjBPHoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S229720AbjBPH4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPHoT (ORCPT
+        with ESMTP id S229584AbjBPH4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:44:19 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00A03A084
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:44:18 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id r8-20020a92cd88000000b00313f4759a73so830597ilb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:44:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FcvFc+W0uSULQLuVloDLR2nfD6ofXaM8O2gBExayvaE=;
-        b=NfEoQL/ZNvklEhQQD6V+zzSLTLiIyt3NR5Tt3U6liWPaSuFQu1DIptm0NBEGUf0DZw
-         JMHog5wSe4I8+7sIU/iRxtMnIuESPLaWnK8OWK7mRdX0JV3woPesjbQLc3WuYRFlLgv5
-         5wU4VAC4jFGqhfYWOcxyOZruCwI+AkqAoYH33pk/+6OpcVrsQrWYrQEaoG6tJx0lab/X
-         Cv7r8CXwXskcB0q3g1EKNLgYtpCPRbInzZY2xebxD9m4XzHei9SlkuAUTgO65JqCuGY3
-         Le2GTXnSdPvWxAW9IwBDybb3CeXuWC8gMagcl6XCRsvrwPdoFC71/wNU6zc31kKTbivK
-         4XgQ==
-X-Gm-Message-State: AO0yUKVGH9pYXCdfOPrlnSHGqKWKx7lD+9yYWZ0KzkZ3VopDF49WNHuW
-        z+WNrIatZPlVj8RcDrp7YMYvxJT0AQdA7lMfeKnUTARlP/qa
-X-Google-Smtp-Source: AK7set/5dsD6k138yBAhvshUd8mxKdmSGY+rwHrUWwY3QWv9BalE1TClNfUsQOFcEGGKmliYhJWGNnk7r/hCvJXq+jv5xQ+jVxdN
+        Thu, 16 Feb 2023 02:56:51 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E58474DC;
+        Wed, 15 Feb 2023 23:56:15 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PHRyC712nz16Ndg;
+        Thu, 16 Feb 2023 15:53:07 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Thu, 16 Feb 2023 15:44:23 +0800
+Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
+ journal record without error
+To:     Baokun Li <libaokun1@huawei.com>, Ye Bin <yebin@huaweicloud.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <20230214022905.765088-2-yebin@huaweicloud.com>
+ <501b98e2-9345-d57f-bc70-432ae342b1e8@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <63EDDED7.90406@huawei.com>
+Date:   Thu, 16 Feb 2023 15:44:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a811:0:b0:73d:7478:5c00 with SMTP id
- c17-20020a5ea811000000b0073d74785c00mr1529701ioa.20.1676533458099; Wed, 15
- Feb 2023 23:44:18 -0800 (PST)
-Date:   Wed, 15 Feb 2023 23:44:18 -0800
-In-Reply-To: <2136128.irdbgypaU6@suse>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000039636e05f4cc5da3@google.com>
-Subject: Re: [syzbot] WARNING in usb_tx_block/usb_submit_urb
-From:   syzbot <syzbot+355c68b459d1d96c4d06@syzkaller.appspotmail.com>
-To:     fmdefrancesco@gmail.com, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <501b98e2-9345-d57f-bc70-432ae342b1e8@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot tried to test the proposed patch but the build/boot failed:
-
-drivers/net/wireless/marvell/libertas/if_usb.c:865:43: error: expected ';' before ':' token
 
 
-Tested on:
+On 2023/2/16 15:17, Baokun Li wrote:
+> On 2023/2/14 10:29, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> Now, 'es->s_state' maybe covered by recover journal. And journal errno
+>> maybe not recorded in journal sb as IO error. ext4_update_super() only
+>> update error information when 'sbi->s_add_error_count' large than zero.
+>> Then 'EXT4_ERROR_FS' flag maybe lost.
+>> To solve above issue commit error information after recover journal.
+>>
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   fs/ext4/super.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>> index dc3907dff13a..b94754ba8556 100644
+>> --- a/fs/ext4/super.c
+>> +++ b/fs/ext4/super.c
+>> @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct 
+>> super_block *sb,
+>>           goto err_out;
+>>       }
+>>   +    if (unlikely(es->s_error_count && !jbd2_journal_errno(journal) &&
+>> +             !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
+>> +        EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+>> +        es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+>> +        err = ext4_commit_super(sb);
+>> +        if (err) {
+>> +            ext4_msg(sb, KERN_ERR,
+>> +                 "Failed to commit error information, please repair 
+>> fs force!");
+>> +            goto err_out;
+>> +        }
+>> +    }
+>> +
+>>       EXT4_SB(sb)->s_journal = journal;
+>>       err = ext4_clear_journal_err(sb, es);
+>>       if (err) {
+> I think we don't need such a complicated judgment, after the journal 
+> replay and saving the error info,
+> if there is EXT4_ERROR_FS flag in ext4_sb_info->s_mount_state, just 
+> add this flag directly to es->s_state.
+> This way the EXT4_ERROR_FS flag and the error message will be written 
+> to disk the next time
 
-commit:         f87b5646 dt-bindings: usb: amlogic,meson-g12a-usb-ctrl..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1414acf0c80000
+Thanks for your suggestion. There are two reasons for this:
+1. We want to write the error mark to the disk as soon as possible.
+2. Here we deal with the case where there is no error mark bit but there 
+is an error record.
+In this case, the file system should be marked with an error and the 
+user should be prompted.
+> ext4_commit_super() is executed. The code change is as follows:
+>
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 260c1b3e3ef2..341b11c589b3 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5935,6 +5935,7 @@ static int ext4_load_journal(struct super_block 
+> *sb,
+>                         memcpy(((char *) es) + EXT4_S_ERR_START,
+>                                save, EXT4_S_ERR_LEN);
+>                 kfree(save);
+> +               es->s_state |= cpu_to_le16(EXT4_SB(sb)->s_mount_state 
+> & EXT4_ERROR_FS);
+>         }
+>
+>         if (err) {
+>
+
+
 
