@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42EB699426
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 532F6699429
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjBPMSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S229964AbjBPMT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjBPMSK (ORCPT
+        with ESMTP id S229580AbjBPMTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:18:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAED474CD;
-        Thu, 16 Feb 2023 04:18:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Feb 2023 07:19:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C8F358D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:19:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7DB1B824B3;
-        Thu, 16 Feb 2023 12:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB81C433D2;
-        Thu, 16 Feb 2023 12:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676549881;
-        bh=DPESuOOr7V0LeGavGf6dXtvT3qVHvt0gYIZ5AS49RxA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YLWbyTWM0ow9c7+XpUpV8vqI6GPN87f3U+j2q5tkOuWw10cQBUZbeWnJ/kotw1Dr8
-         1AgKLzGM+o8dWBYGVeQXGsGInCve9tuoIDhd7eD5rNPiXvwB7l50LuQWPhu53hrGve
-         FxdTkkmRXlRpg/1bd/Y01rOKh0qdkTGAdib+CxxXiHCoqvlRKaaqG7nw7tsChOe96k
-         qns4NY6j2RJS0CLXw4sEXGzCpCgPKzk6RqVC52dEU6PlgDaKSlU6vYSZTEFigV8Yza
-         w3HiapqakEXP+SvdNcVnLw5dS+bihIa/gWygmmGfbXneZNRiu3Elyyq4chSXuKmGbV
-         +b/FuiUDOaZaQ==
-Received: by mail-oi1-f181.google.com with SMTP id bi19so1471893oib.2;
-        Thu, 16 Feb 2023 04:18:01 -0800 (PST)
-X-Gm-Message-State: AO0yUKV0I87ROO5nc/D9cx61EfbNPlGttgIp1ydy8ycQapU5qVys/WOe
-        cg83KlOaJiW1X96M/rU2R2iSkwqU2WZHQIRWs14=
-X-Google-Smtp-Source: AK7set9RyPqNmZf9Zjs0/eojM/pEzcwyuIJE3CPwhxFpdlUO52eA+VuJrlP2bi03Jhf70K5bxPA7um/8dtShdpBdDgc=
-X-Received: by 2002:a05:6808:1888:b0:37b:8b8e:5e71 with SMTP id
- bi8-20020a056808188800b0037b8b8e5e71mr104048oib.194.1676549880809; Thu, 16
- Feb 2023 04:18:00 -0800 (PST)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BD382256B;
+        Thu, 16 Feb 2023 12:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676549963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GcGc5Fs3o+GhbZ98oBi6ykMMQB3zQFbUQKKaXMUlVA8=;
+        b=somzvnDnwCEc+MN/x+FFwBeMFnmdMiQuT1Gu77b4xX9IpkBeQMpr/cfyGgNCM0y6eKASfZ
+        TmwaQxyA/hv7B8PL84IpsWjChJZoSC5xcLZPepvMeY8k9srCWSwz6Hnr95HqBKZtMMOP6n
+        T5CEYuaDwD/Gg4S1geOcGEfV98xrpd0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3C6A8131FD;
+        Thu, 16 Feb 2023 12:19:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 52k2DUsf7mPmPQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 16 Feb 2023 12:19:23 +0000
+Message-ID: <e5138aad-175e-d9bb-93f2-2fc563e09a41@suse.com>
+Date:   Thu, 16 Feb 2023 13:19:22 +0100
 MIME-Version: 1.0
-References: <CGME20230208130800eucas1p2fbcba741dbd7483bb0a9b2d4b6c6dbfd@eucas1p2.samsung.com>
- <20230208130732.63172-1-l.stelmach@samsung.com>
-In-Reply-To: <20230208130732.63172-1-l.stelmach@samsung.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 16 Feb 2023 21:17:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASjsRYyRCAy_EujsX1o2ybR3KUQRA2HuPxeN=ppUpBa_A@mail.gmail.com>
-Message-ID: <CAK7LNASjsRYyRCAy_EujsX1o2ybR3KUQRA2HuPxeN=ppUpBa_A@mail.gmail.com>
-Subject: Re: [PATCH v2] merge_config.sh: do not report some differencess
- between input and output
-To:     =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <cc6c58a8-b162-a6eb-37d4-40786f532837@suse.com> <Y+4SqDN2Hssau4fq@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+In-Reply-To: <Y+4SqDN2Hssau4fq@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------2y2KcSCeLuKlTR6z3mIx3kRS"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,111 +72,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 10:08 PM =C5=81ukasz Stelmach <l.stelmach@samsung.co=
-m> wrote:
->
-> If an input config file contains CONFIG_FOO=3Dn the output one
-> will contain a line '# CONFIG_FOO is not set'. merge_config.sh
-> should not report it as difference because the end result of
-> CONFIG_FOO being disabled is achieved.
->
-> Inexistence of CONFIG_FOO (because of unment dependencies) in case
-> CONFIG_FOO=3Dn is requested, should also be ignored.
->
-> Change-Id: I129f3a0b4205a76d8c42020f8adb72b1889d75fb
-> Signed-off-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
-> ---
-> Changes in v2:
-> - suppress reports reports if an option was "not set" in input files
->   but is missing from the filnal .config due to unmet dependecies.
-> - apply the same logic to suppress some reports during the merging
->   phase
->
-> BTW. Do you think adding "| sort -u" after "grep -w" to avoid reports
-> about repeated entries may make sense or do you want such reports to
-> be printed.
->
->  scripts/kconfig/merge_config.sh | 30 ++++++++++++++++++++----------
->  1 file changed, 20 insertions(+), 10 deletions(-)
->
-> diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_conf=
-ig.sh
-> index e5b46980c22a..1086bdc7abf2 100755
-> --- a/scripts/kconfig/merge_config.sh
-> +++ b/scripts/kconfig/merge_config.sh
-> @@ -144,12 +144,17 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
->                         echo
->                         BUILTIN_FLAG=3Dtrue
->                 elif [ "x$PREV_VAL" !=3D "x$NEW_VAL" ] ; then
-> -                       echo Value of $CFG is redefined by fragment $ORIG=
-_MERGE_FILE:
-> -                       echo Previous  value: $PREV_VAL
-> -                       echo New value:       $NEW_VAL
-> -                       echo
-> -                       if [ "$STRICT" =3D "true" ]; then
-> -                               STRICT_MODE_VIOLATED=3Dtrue
-> +                       if [ \( "x$PREV_VAL" !=3D "x$CFG=3Dn" -a \
-> +                               "x$PREV_VAL" !=3D "x# $CFG is not set" \)=
- -o \
-> +                            \( "x$NEW_VAL" !=3D "x"  -a \
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------2y2KcSCeLuKlTR6z3mIx3kRS
+Content-Type: multipart/mixed; boundary="------------8GME1A4O8ZBAj40UTbs7FvY7";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <e5138aad-175e-d9bb-93f2-2fc563e09a41@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <cc6c58a8-b162-a6eb-37d4-40786f532837@suse.com> <Y+4SqDN2Hssau4fq@zn.tnic>
+In-Reply-To: <Y+4SqDN2Hssau4fq@zn.tnic>
 
+--------------8GME1A4O8ZBAj40UTbs7FvY7
+Content-Type: multipart/mixed; boundary="------------N150eovGJJQf0olzfsZWugIk"
 
+--------------N150eovGJJQf0olzfsZWugIk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-In which case does $NEW_VAL become empty?
+T24gMTYuMDIuMjMgMTI6MjUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBG
+ZWIgMTYsIDIwMjMgYXQgMTA6MzI6MjhBTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IElzIHRoYXQgZmxhZyBfcmVhbGx5XyBtZWFudCB0byBpbmRpY2F0ZSB3ZSBhcmUgcnVu
+bmluZyBhcyBhIFNFVi1TTlAgZ3Vlc3Q/DQo+IA0KPiBZZXMuDQo+IA0KPj4gR2l2ZW4gdGhh
+dCB0aGUgcmVmZXJlbmNlZCBwYXRjaCBpcyBwYXJ0IG9mIHRoZSBTRVYtU05QIGhvc3Qgc3Vw
+cG9ydCBzZXJpZXMsDQo+PiBJJ20gaW5jbGluZWQgdG8gc3VzcGVjdCBpdCB3b24ndCBiZSBz
+ZXQgZm9yIHN1cmUgaW4gSHlwZXJWIFNFVi1TTlAgZ3Vlc3RzLg0KPiANCj4gSXQgYmV0dGVy
+IGJlLiBJZiBpdCBpcyBhIG1vZGlmaWVkIGd1ZXN0IC0gbm8gbWF0dGVyIGhvdyBtb2RpZmll
+ZCAtIGl0DQo+IHNob3VsZCBzZXQgdGhhdCBmbGFnLiBUaGUgdlRPTSB0aGluZyBpcyBzdGls
+bCBiZWluZyBkaXNjdXNzZWQuDQo+IA0KPj4gQW5kIHdobyBpcyBzZXR0aW5nIGl0IGZvciBL
+Vk0gU0VWLVNOUCBndWVzdHM/DQo+IA0KPiBUaGF0IHNhbWUgcGF0Y2ggZG9lcy4NCg0KSG1t
+LCBJIG11c3QgYmUgYmxpbmQuIEkgY2FuJ3Qgc3BvdCBpdC4NCg0KSSdtIHNlZWluZyBvbmx5
+IHRoZSBmZWF0dXJlIGJpdCAjZGVmaW5lIGFuZCBhIGNhbGwgb2YNCnNldHVwX2NsZWFyX2Nw
+dV9jYXAoWDg2X0ZFQVRVUkVfU0VWX1NOUCkgaW4gdGhpcyBwYXRjaC4NCg0KT3IgaXMgaXQg
+ZG9uZSBieSBoYXJkd2FyZSBvciB0aGUgaHlwZXJ2aXNvcj8NCg0KDQpKdWVyZ2VuDQo=
+--------------N150eovGJJQf0olzfsZWugIk
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-I think it is opposite.
-$PREV_VAL might be empty, $NEW_VAL may specified as =3Dn.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
+--------------N150eovGJJQf0olzfsZWugIk--
 
+--------------8GME1A4O8ZBAj40UTbs7FvY7--
 
+--------------2y2KcSCeLuKlTR6z3mIx3kRS
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPuH0oFAwAAAAAACgkQsN6d1ii/Ey8N
+8Qf8Cljg+r2WO2K/giaYbQ4GdS3AC03ibOeQj0yOwV+jkAc9IPWXM8CuwBMWtsixOzRQoPCt6Yqh
+32tHqloKFKPRMZ4KC6NLCU0pMSv+yRoUGA3TSNqjbFLAPZCu2o3TLMrCjRV2ORpnK+WAX6eNloN3
+22gnGBy/uNILKDEgqYHwFXIxvjBLQpoztHqzV7A8ig7OQIVrEVGY9XTFKOpwF+uUGDJZ5ZSHW4OJ
+YsEsRqHQOzcRtkr/ORCjcrqIqZMk6+wu5vMYL8IFmw/2D1hsUspgZBPQQLtDRiPqnJICvOHXnSUF
++a1aURPCqq3S0TSwY4ZcvwcEP0kO8VJNUXmIPIZq7w==
+=3bIb
+-----END PGP SIGNATURE-----
 
-
-
-> +                               "x$NEW_VAL" !=3D "x# $CFG is not set" \) =
-]; then
-> +                               echo Value of $CFG is redefined by fragme=
-nt $ORIG_MERGE_FILE:
-> +                               echo Previous  value: $PREV_VAL
-> +                               echo New value:       $NEW_VAL
-> +                               echo
-> +                               if [ "$STRICT" =3D "true" ]; then
-> +                                       STRICT_MODE_VIOLATED=3Dtrue
-> +                               fi
->                         fi
->                 elif [ "$WARNREDUN" =3D "true" ]; then
->                         echo Value of $CFG is redundant by fragment $ORIG=
-_MERGE_FILE:
-> @@ -196,9 +201,14 @@ for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_C=
-ONFIG_EXP2" $TMP_FILE); do
->         REQUESTED_VAL=3D$(grep -w -e "$CFG" $TMP_FILE)
->         ACTUAL_VAL=3D$(grep -w -e "$CFG" "$KCONFIG_CONFIG" || true)
->         if [ "x$REQUESTED_VAL" !=3D "x$ACTUAL_VAL" ] ; then
-> -               echo "Value requested for $CFG not in final .config"
-> -               echo "Requested value:  $REQUESTED_VAL"
-> -               echo "Actual value:     $ACTUAL_VAL"
-> -               echo ""
-> +               if [ \( "x$REQUESTED_VAL" !=3D "x$CFG=3Dn" -a \
-> +                       "x$REQUESTED_VAL" !=3D "x# $CFG is not set" \) -o=
- \
-> +                    \( "x$ACTUAL_VAL" !=3D "x"  -a \
-> +                       "x$ACTUAL_VAL" !=3D "x# $CFG is not set" \) ]; th=
-en
-> +                       echo "Value requested for $CFG not in final .conf=
-ig"
-> +                       echo "Requested value:  $REQUESTED_VAL"
-> +                       echo "Actual value:     $ACTUAL_VAL"
-> +                       echo ""
-> +               fi
->         fi
->  done
-> --
-> 2.30.2
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+--------------2y2KcSCeLuKlTR6z3mIx3kRS--
