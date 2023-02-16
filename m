@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E33D699873
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E6699876
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjBPPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S230034AbjBPPLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBPPKY (ORCPT
+        with ESMTP id S229532AbjBPPLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:10:24 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5D41B31F;
-        Thu, 16 Feb 2023 07:10:23 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pSftt-0006pU-46; Thu, 16 Feb 2023 16:10:21 +0100
-Message-ID: <cbdc682f-87a6-3885-5853-328562569bdd@leemhuis.info>
-Date:   Thu, 16 Feb 2023 16:10:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: =?UTF-8?Q?Re=3a_=5bRegression=5d_Bug=c2=a0216913_-_i2c_not_working_?=
- =?UTF-8?Q?after_hibernation_=28i2c=5fdesignware=29?=
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Georg <g.wenzel@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <8c3fd22a-9a11-216c-891f-969475745d20@leemhuis.info>
-In-Reply-To: <8c3fd22a-9a11-216c-891f-969475745d20@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676560223;c5104e7a;
-X-HE-SMSGID: 1pSftt-0006pU-46
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 16 Feb 2023 10:11:08 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F69C86B5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:11:02 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5339cd92124so7718457b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qqMGnRjZj67H+uo/a7kB+5tYajP931OKisC+PcDlIto=;
+        b=H+7jbbNtNvxP239FK+id+MguHSSyGo2wTrvtY9DDS0YNvTi2vK1PYnwq4u0t2aUz27
+         VuZALewfZHlf7Iw22G+iTM/KiJZ3/MvkLEp/ANWkO7KkWLCAKjMgaoDFR3P+dEefVYiw
+         LRx4EA4DIlnY2NRgdUoDo4+Q0lyxd0jZct5acbtithq61ldynvyN4Fg4IrGT84wzaPbZ
+         xh9+ci6UuhPoL6KjcwwToZjI2Zu1j6DJeqHIUtkAJ0m5unNIy3PT//8dsLnkkZJ/0J9c
+         3EUKBtYX8JzHkrp+ZEevQeb6O5PHhpJfZ3SmzF8PlAugTnwiVgyQuP8xN7qiJ9rFYzeD
+         ePDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qqMGnRjZj67H+uo/a7kB+5tYajP931OKisC+PcDlIto=;
+        b=mOeLse/Kg5bLdlx2l0c7roQP0hBrt6ZX93mdWTEoFUEswQwkRqFkTRMAgbfp2LE1mu
+         oITlP7pvm9rxqm6sLej9h7WkVY6vxzifdwLFCVEzs9TYBCY1yHERsT1g/BB0K3fW1eYn
+         hyXKZx/X2J6nbR5DXfDmj1s2Miesln3vvi2nbXEPmfFWuclhEIzf0sMeEdFWpKLccLM9
+         eYvtDB4Y9uYDhhnB9SBcqvp0YknS/6gpdbrG707M36hRcVtO8Ggi3/IZkC+CbhE1Hvej
+         4XmC5adSnhjetStnHQC2SOstiaI225p42/ox9gsKNc/laTazjCFVZ1udD5oGWRYbqm+b
+         Zk5Q==
+X-Gm-Message-State: AO0yUKU1TS2/9LEboiStBuCQ7AhQRGMcRfJ54FNlTSZF4qIEuq3ubHFC
+        0I9ZCuAk2QE3CPigQX4X+ylPqHdqPGka1oM9
+X-Google-Smtp-Source: AK7set9X88/pH1hQHbIhksYYJvB721b36NsXG60z78UMXCaavH1Nz2n8Mx60CJfndOiBASHbzp6vqRzikm6KKLh0
+X-Received: from zenghuchen.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:2448])
+ (user=zenghuchen job=sendgmr) by 2002:a81:ac60:0:b0:52e:bb8a:1cc4 with SMTP
+ id z32-20020a81ac60000000b0052ebb8a1cc4mr8ywj.6.1676560260836; Thu, 16 Feb
+ 2023 07:11:00 -0800 (PST)
+Date:   Thu, 16 Feb 2023 10:10:57 -0500
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230216151057.293764-1-zenghuchen@google.com>
+Subject: [PATCH v3] i3c: update dw-i3c-master i3c_clk_cfg function
+From:   Jack Chen <zenghuchen@google.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Mark Slevinsky <markslevinsky@google.com>,
+        Jack Chen <zenghuchen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,34 +68,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+Bus-speed could be default(12.5MHz) or defined by users in dts.
+Dw-i3c-master should not hard-code the initial speed to be
+I3C_BUS_TYP_I3C_SCL_RATE (12.5MHz)
+And because of Synopsys's I3C controller limit (hcnt/lcnt register
+length) and core-clk provided, there is a limit to bus speed, too.
+For example, when core-clk is 250 MHz, the bus speed cannot be
+lowered below 1MHz.
 
-On 12.01.23 13:51, Linux kernel regression tracking (Thorsten Leemhuis)
-wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org that sounds a lot
-> like it's a regression (it's not totally clear). As many (most?) kernel
-> developer don't keep an eye on it, I decided to forward it by mail.
-> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216913 :
->
-> [...]
-> 
-> #regzbot introduced: v6.0..v6.1
-> https://bugzilla.kernel.org/show_bug.cgi?id=216913
-> #regzbot title: i2c: i2c_designware: i2c not working after hibernation
-> #regzbot ignore-activity
+Tested: tested with an i3c sensor and captured with a logic analyzer.
 
-According to https://bugzilla.kernel.org/show_bug.cgi?id=216913#c7 :
+Signed-off-by: Jack Chen <zenghuchen@google.com>
+---
+[v3]
+- change the target tree to be i3c/next
+[v2]
+- replace max with max_t
 
-#regzbot fixed: 75507a319876a
-#regzbot ignore-activity
+ drivers/i3c/master/dw-i3c-master.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
+diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i3c-master.c
+index 51a8608203de..48954d3e6571 100644
+--- a/drivers/i3c/master/dw-i3c-master.c
++++ b/drivers/i3c/master/dw-i3c-master.c
+@@ -531,7 +531,7 @@ static int dw_i3c_clk_cfg(struct dw_i3c_master *master)
+ 	if (hcnt < SCL_I3C_TIMING_CNT_MIN)
+ 		hcnt = SCL_I3C_TIMING_CNT_MIN;
+ 
+-	lcnt = DIV_ROUND_UP(core_rate, I3C_BUS_TYP_I3C_SCL_RATE) - hcnt;
++	lcnt = DIV_ROUND_UP(core_rate, master->base.bus.scl_rate.i3c) - hcnt;
+ 	if (lcnt < SCL_I3C_TIMING_CNT_MIN)
+ 		lcnt = SCL_I3C_TIMING_CNT_MIN;
+ 
+@@ -541,7 +541,8 @@ static int dw_i3c_clk_cfg(struct dw_i3c_master *master)
+ 	if (!(readl(master->regs + DEVICE_CTRL) & DEV_CTRL_I2C_SLAVE_PRESENT))
+ 		writel(BUS_I3C_MST_FREE(lcnt), master->regs + BUS_FREE_TIMING);
+ 
+-	lcnt = DIV_ROUND_UP(I3C_BUS_TLOW_OD_MIN_NS, core_period);
++	lcnt = max_t(u8,
++		     DIV_ROUND_UP(I3C_BUS_TLOW_OD_MIN_NS, core_period), lcnt);
+ 	scl_timing = SCL_I3C_TIMING_HCNT(hcnt) | SCL_I3C_TIMING_LCNT(lcnt);
+ 	writel(scl_timing, master->regs + SCL_I3C_OD_TIMING);
+ 
+-- 
+2.39.2.637.g21b0678d19-goog
 
