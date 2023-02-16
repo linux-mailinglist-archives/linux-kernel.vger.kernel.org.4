@@ -2,176 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2899E6992E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C47D6992F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjBPLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S230409AbjBPLTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjBPLMa (ORCPT
+        with ESMTP id S229740AbjBPLTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:12:30 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B385283F7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:12:27 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id hg24-20020a05600c539800b003e1f5f2a29cso3859122wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=om86lkZfJsY4anvwokkpK35xQ29f8CqUJvo8NLWwWIc=;
-        b=b7Di8OKegz1NYy+ugYqHyN5vi1A78FcTbBM2sZ11SQcIHppc3NYDsu2TCY0dOc+n6f
-         7So+jsquf5asNx1ZUb5BiiEjHkduo0Kswx5zVG9Y2yz8He9MzEf5tAAP+au/s6F+OWzV
-         WEgoO90M5DAQ6ta0zxMQIcZKU+JhfYuyzhF3DAZvhKaMFFZMPdQtv8s3q8ud3i/mFCQX
-         2iKXFQ5VjeyRTFX1qZ8C1KQC/aB6FrxB2ghYOJB6y1y5RWDWefMiMi+gThQv17foHDBr
-         p6RxHAenlih3jV///aQ+ojoFKixPfvcd6JFiCuEdqXCUeVbT304GtKP0HPQd3usA5mXT
-         TG0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=om86lkZfJsY4anvwokkpK35xQ29f8CqUJvo8NLWwWIc=;
-        b=vOufElziBFgq+yEnw+VnA/ScP0EFn8JJoxJYYCkZMvDhsqnXLc6ecmp303U+EAiIb4
-         YprvW2XOjVKGC5jwQrDayHtWukgIH29QQ+wEDLni0cDajOLysixvk5R4d3xzr9YMh1wr
-         vB/7y+adgElyJYxwxn8b870U1KbCIwZdpZPrE+LLra6Gwrw5/yCE/F1WVjvAT/faX/CZ
-         IDY2PhmdishTmAW+o/IkOWjYPHaElGKpIajlDMgPTs6XiP3VKt3J78qtmH8C7aRHwFoT
-         fE8AbySdmp7zu1vub+ZqxLm2QOiRAcLgm6XtWa3MbZ/11juBcx8g7u7ee2Tj3QtIMloy
-         QGOg==
-X-Gm-Message-State: AO0yUKWpOygi2LC1Ib5v2sa7KCX8JiN9x9YAbrs5VJ6/Pd13ryr32yiS
-        57tPATJot0cCjrA74GVIrdDqew==
-X-Google-Smtp-Source: AK7set/uPweYVu6MAtPL+QX+e4WnluRTA8Ib+OTCn3hxd/IgE0ct5FP6T04lRolBRQ2LyvEUj7LOTg==
-X-Received: by 2002:a05:600c:746:b0:3de:d52:2cd2 with SMTP id j6-20020a05600c074600b003de0d522cd2mr4376053wmn.4.1676545946170;
-        Thu, 16 Feb 2023 03:12:26 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dc4aae4739sm4841874wmc.27.2023.02.16.03.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 03:12:25 -0800 (PST)
-Date:   Thu, 16 Feb 2023 11:12:24 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bhelgaas@google.com, darren@os.amperecomputing.com,
-        scott@os.amperecomputing.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-Subject: Re: [PATCH] PCI/ATS:  Allow to enable ATS on VFs even if it is not
- enabled on PF
-Message-ID: <Y+4PmJb2rBGMhS1y@myrica>
-References: <Y+ksmNWJdWNkGAU9@unreal>
- <20230215205726.GA3213227@bhelgaas>
+        Thu, 16 Feb 2023 06:19:12 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1C8C36468;
+        Thu, 16 Feb 2023 03:19:09 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTP Server V5.0(23450:0:AUTH_RELAY)
+        (envelope-from <chiaen_wu@richtek.com>); Thu, 16 Feb 2023 19:18:58 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Thu, 16 Feb
+ 2023 19:18:58 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Thu, 16 Feb 2023 19:18:58 +0800
+From:   ChiaEn Wu <chiaen_wu@richtek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <sre@kernel.org>
+CC:     <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <peterwu.pub@gmail.com>, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: [PATCH v2][next] dt-bindings: power: supply: Revise Richtek RT9467 compatible name
+Date:   Thu, 16 Feb 2023 19:17:48 +0800
+Message-ID: <b72052c0bdfb209d5583ce0741686e8a2a9e8dd2.1676573862.git.chiaen_wu@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215205726.GA3213227@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 02:57:26PM -0600, Bjorn Helgaas wrote:
-> [+cc Will, Robin, Joerg for arm-smmu-v3 page size question]
-> 
-> On Sun, Feb 12, 2023 at 08:14:48PM +0200, Leon Romanovsky wrote:
-> > On Wed, Feb 08, 2023 at 10:43:21AM -0800, Ganapatrao Kulkarni wrote:
-> > > As per PCIe specification(section 10.5), If a VF implements an
-> > > ATS capability, its associated PF must implement an ATS capability.
-> > > The ATS Capabilities in VFs and their associated PFs are permitted to
-> > > be enabled independently.
-> > > Also, it states that the Smallest Translation Unit (STU) for VFs must be
-> > > hardwired to Zero and the associated PF's value applies to VFs STU.
-> > > 
-> > > The current code allows to enable ATS on VFs only if it is already
-> > > enabled on associated PF, which is not necessary as per the specification.
-> > > 
-> > > It is only required to have valid STU programmed on PF to enable
-> > > ATS on VFs. Adding code to write the first VFs STU to a PF's STU
-> > > when PFs ATS is not enabled.
-> >
-> > Can you please add here quotes from the spec and its version? I don't see
-> > anything like this in my version of PCIe specification.
-> 
-> See PCIe r6.0, sec 10.5.1.
-> 
-> > > Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-> > > ---
-> > >  drivers/pci/ats.c | 15 +++++++++++----
-> > >  1 file changed, 11 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-> > > index f9cc2e10b676..a97ec67201d1 100644
-> > > --- a/drivers/pci/ats.c
-> > > +++ b/drivers/pci/ats.c
-> > > @@ -67,13 +67,20 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
-> > >  	if (ps < PCI_ATS_MIN_STU)
-> > >  		return -EINVAL;
-> > >  
-> > > -	/*
-> > > -	 * Note that enabling ATS on a VF fails unless it's already enabled
-> > > -	 * with the same STU on the PF.
-> > > -	 */
-> > >  	ctrl = PCI_ATS_CTRL_ENABLE;
-> > >  	if (dev->is_virtfn) {
-> > >  		pdev = pci_physfn(dev);
-> > > +
-> > > +		if (!pdev->ats_enabled &&
-> > > +				(pdev->ats_stu < PCI_ATS_MIN_STU)) {
-> > > +			u16 ctrl2;
-> > > +
-> > > +			/* Associated PF's STU value applies to VFs. */
-> > > +			pdev->ats_stu = ps;
-> > > +			ctrl2 = PCI_ATS_CTRL_STU(pdev->ats_stu - PCI_ATS_MIN_STU);
-> > > +			pci_write_config_word(pdev, pdev->ats_cap + PCI_ATS_CTRL, ctrl2);
-> > > +		}
-> 
-> For reference, it is this way because of edc90fee916b ("PCI: Allocate
-> ATS struct during enumeration").  The rationale was that since the PF
-> STU applies to all VFs, we should require that the PF STU be
-> programmed before enabling ATS on any of the VFs.
-> 
-> This patch relaxes that so the PF STU would be set either by (a)
-> enabling ATS on the PF or (b) enabling ATS on the first VF.
-> 
-> This looks racy because theoretically drivers for VF A and VF B could
-> independently call pci_enable_ats() with different IOMMU page sizes,
-> and we don't know which will get there first.
-> 
-> Most callers supply a compile-time constant (PAGE_SHIFT or
-> VTD_PAGE_SHIFT), so it won't matter.  arm_smmu_enable_ats() is
-> fancier, but I *assume* it would still supply the same IOMMU page size
-> for all VFs of a given PF.
-> 
-> But it's still kind of ugly to call pci_enable_ats(dev_A) and have it
-> muck with the configuration of dev_B.  Maybe we should configure the
-> PF STU (without enabling ATS) at enumeration-time in pci_ats_init()?
-> Is there some way to get the IOMMU page size at that time?
+Revise RT9467 compatible name from "richtek,rt9467-charger" to
+"richtek,rt9467" because it has to match the "compatible name" in
+the source code.
 
-Not really, on Arm the supported page sizes are discovered when probing
-the SMMU registers, which may happen later than enumeration, during module
-loading.
+Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+---
+v2:
+- Add more description about this change in the commit message.
+- Rename "richtek,rt9467-charger.yaml" to "richtek,rt9467.yaml".
+- Rename "$id" as above.
 
-What this patch is trying to solve is:
-* want the PF to bypass SMMU translation, and the VF to undergo SMMU
-  translation (in order to assign it to a VM)
-* SMMU forbids enabling ATS for a configuration that bypasses translation.
-  So the PF ATS capability must be left disabled.
+---
+ .../power/supply/richtek,rt9467-charger.yaml       | 82 ----------------------
+ .../bindings/power/supply/richtek,rt9467.yaml      | 82 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+), 82 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
 
-For this situation I wonder if we could do: the SMMU driver, seeing that
-the PF is configured to bypass, calls a new function "pci_configure_ats()"
-instead of pci_enable_ats(), which would only set the STU but leave the
-cap disabled. Then when setting up translation for the VF, the SMMU driver
-calls pci_enable_ats() as usual, which sees the PF's STU set appropriately
-and succeeds.
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+deleted file mode 100644
+index 92c5706..00000000
+--- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
++++ /dev/null
+@@ -1,82 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/power/supply/richtek,rt9467-charger.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Richtek RT9467 Switching Battery Charger with Power Path Management
+-
+-maintainers:
+-  - ChiYuan Huang <cy_huang@richtek.com>
+-  - ChiaEn Wu <chiaen_wu@richtek.com>
+-
+-description: |
+-  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
+-  portable applications. It integrates a synchronous PWM controller, power
+-  MOSFETs, input current sensing and regulation, high-accuracy voltage
+-  regulation, and charge termination. The charge current is regulated through
+-  integrated sensing resistors.
+-
+-  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
+-  D+/D- pin for USB host/charging port detection.
+-
+-  Datasheet is available at
+-  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
+-
+-properties:
+-  compatible:
+-    const: richtek,rt9467-charger
+-
+-  reg:
+-    maxItems: 1
+-
+-  wakeup-source: true
+-
+-  interrupts:
+-    maxItems: 1
+-
+-  charge-enable-gpios:
+-    description: GPIO is used to turn on and off charging.
+-    maxItems: 1
+-
+-  usb-otg-vbus-regulator:
+-    type: object
+-    description: OTG boost regulator.
+-    unevaluatedProperties: false
+-    $ref: /schemas/regulator/regulator.yaml#
+-
+-    properties:
+-      enable-gpios: true
+-
+-required:
+-  - compatible
+-  - reg
+-  - wakeup-source
+-  - interrupts
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    #include <dt-bindings/interrupt-controller/irq.h>
+-    #include <dt-bindings/gpio/gpio.h>
+-    i2c {
+-      #address-cells = <1>;
+-      #size-cells = <0>;
+-
+-      charger@5b {
+-        compatible = "richtek,rt9467-charger";
+-        reg = <0x5b>;
+-        wakeup-source;
+-        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
+-        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
+-
+-        rt9467_otg_vbus: usb-otg-vbus-regulator {
+-          regulator-name = "rt9467-usb-otg-vbus";
+-          regulator-min-microvolt = <4425000>;
+-          regulator-max-microvolt = <5825000>;
+-          regulator-min-microamp = <500000>;
+-          regulator-max-microamp = <3000000>;
+-        };
+-      };
+-    };
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+new file mode 100644
+index 00000000..3723717
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/richtek,rt9467.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Richtek RT9467 Switching Battery Charger with Power Path Management
++
++maintainers:
++  - ChiYuan Huang <cy_huang@richtek.com>
++  - ChiaEn Wu <chiaen_wu@richtek.com>
++
++description: |
++  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
++  portable applications. It integrates a synchronous PWM controller, power
++  MOSFETs, input current sensing and regulation, high-accuracy voltage
++  regulation, and charge termination. The charge current is regulated through
++  integrated sensing resistors.
++
++  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
++  D+/D- pin for USB host/charging port detection.
++
++  Datasheet is available at
++  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
++
++properties:
++  compatible:
++    const: richtek,rt9467
++
++  reg:
++    maxItems: 1
++
++  wakeup-source: true
++
++  interrupts:
++    maxItems: 1
++
++  charge-enable-gpios:
++    description: GPIO is used to turn on and off charging.
++    maxItems: 1
++
++  usb-otg-vbus-regulator:
++    type: object
++    description: OTG boost regulator.
++    unevaluatedProperties: false
++    $ref: /schemas/regulator/regulator.yaml#
++
++    properties:
++      enable-gpios: true
++
++required:
++  - compatible
++  - reg
++  - wakeup-source
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      charger@5b {
++        compatible = "richtek,rt9467";
++        reg = <0x5b>;
++        wakeup-source;
++        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
++        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
++
++        rt9467_otg_vbus: usb-otg-vbus-regulator {
++          regulator-name = "rt9467-usb-otg-vbus";
++          regulator-min-microvolt = <4425000>;
++          regulator-max-microvolt = <5825000>;
++          regulator-min-microamp = <500000>;
++          regulator-max-microamp = <3000000>;
++        };
++      };
++    };
+-- 
+2.7.4
 
-Thanks,
-Jean
