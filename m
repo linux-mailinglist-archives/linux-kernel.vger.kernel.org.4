@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9799D69946F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79193699470
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjBPMf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S230258AbjBPMf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBPMfY (ORCPT
+        with ESMTP id S230238AbjBPMf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:35:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872FFCDE6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:34:37 -0800 (PST)
+        Thu, 16 Feb 2023 07:35:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AC2305C1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:34:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676550876;
+        s=mimecast20190719; t=1676550885;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jhvPVxO7HKch5jwG7N0cXvfQIm4P3qjh9xaFc8eVobY=;
-        b=ac5eWq+AlXi68Ehmfc2Jv7kCApTipQHJDos6IEoTbR57uxg19wupgSnoITJ/QshMLufM43
-        D7mxz6dTaLdOy418YfQRpKMLuEtx6bJJzoDiNexxOQvgFbEly7RvovLCLHROyIrda5ZC9W
-        YXskuKUJp2Pxc5ECpSxLq6PBTW8lrCs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v0nZZRtgRBEjd1TuZoUTX3TC1k0a64a2n3jlsJishp4=;
+        b=QyBOkhQ7VDc2RZaizK9tgFQZ2dEivWG7TFlHXkFCWt+sgsaa0TL4moF9/wPhEv8rSDbAND
+        kcyRyN1ZVX4u4pNyYAd+ZTqch7yyj7c5Nk59yfOHRyV8GsTY/fYsPhvtwVd8CjMSRzQqME
+        lemIuMgTVuj9PUJREoHE7idFEvO1Un4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-bmk6FFvsMcSBig668S-IgQ-1; Thu, 16 Feb 2023 07:34:31 -0500
-X-MC-Unique: bmk6FFvsMcSBig668S-IgQ-1
+ us-mta-630-IqQp3gjfNf6Iot1Z8qjFEQ-1; Thu, 16 Feb 2023 07:34:39 -0500
+X-MC-Unique: IqQp3gjfNf6Iot1Z8qjFEQ-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD35A3C16EA0;
-        Thu, 16 Feb 2023 12:34:30 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 936D0830F82;
+        Thu, 16 Feb 2023 12:34:38 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-99.pek2.redhat.com [10.72.12.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BDC5492C3C;
-        Thu, 16 Feb 2023 12:34:23 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A24A492C3C;
+        Thu, 16 Feb 2023 12:34:31 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
         christophe.leroy@csgroup.eu, hch@infradead.org,
         agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
         schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
-        arnd@arndb.de, Baoquan He <bhe@redhat.com>
-Subject: [PATCH v4 00/16] mm: ioremap:  Convert architectures to take GENERIC_IOREMAP way
-Date:   Thu, 16 Feb 2023 20:34:03 +0800
-Message-Id: <20230216123419.461016-1-bhe@redhat.com>
+        arnd@arndb.de, Baoquan He <bhe@redhat.com>,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: [PATCH v4 01/16] hexagon: mm: Convert to GENERIC_IOREMAP
+Date:   Thu, 16 Feb 2023 20:34:04 +0800
+Message-Id: <20230216123419.461016-2-bhe@redhat.com>
+In-Reply-To: <20230216123419.461016-1-bhe@redhat.com>
+References: <20230216123419.461016-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,173 +65,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Motivation and implementation:
-==============================
-Currently, many architecutres have't taken the standard GENERIC_IOREMAP
-way to implement ioremap_prot(), iounmap(), and ioremap_xx(), but make
-these functions specifically under each arch's folder. Those cause many
-duplicated codes of ioremap() and iounmap().
+By taking GENERIC_IOREMAP method, the generic ioremap_prot() and
+iounmap() are visible and available to arch. This change will
+simplify implementation by removing duplicated codes with generic
+ioremap_prot() and iounmap(), and has the equivalent functioality.
 
-In this patchset, firstly introduce generic_ioremap_prot() and
-generic_iounmap() to extract the generic codes for GENERIC_IOREMAP.
-By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-and iounmap() are all visible and available to arch. Arch needs to
-provide wrapper functions to override the generic version if there's
-arch specific handling in its corresponding ioremap_prot(), ioremap()
-or iounmap(). With these changes, duplicated ioremap/iounmap() code uder
-ARCH-es are removed, and the equivalent functioality is kept as before.
+For hexagon, the current ioremap() and iounmap() are the same as
+generic version. After taking GENERIC_IOREMAP way, the old ioremap()
+and iounmap() can be completely removed.
 
-Background info:
-================
-1)
-The converting more architectures to take GENERIC_IOREMAP way is
-suggested by Christoph in below discussion:
-https://lore.kernel.org/all/Yp7h0Jv6vpgt6xdZ@infradead.org/T/#u
-
-2)
-In the previous v1 to v3, it's basically further action after arm64
-has converted to GENERIC_IOREMAP way in below patchset. It's done by
-adding hook ioremap_allowed() and iounmap_allowed() in ARCH to add
-ARCH specific handling the middle of ioremap_prot() and iounmap().
-
-[PATCH v5 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
-https://lore.kernel.org/all/20220607125027.44946-1-wangkefeng.wang@huawei.com/T/#u
-
-Later, during v3 reviewing, Christophe Leroy suggested to introduce
-generic_ioremap_prot() and generic_iounmap() to generic codes, and ARCH
-can provide wrapper function ioremap_prot(), ioremap() or iounmap() if
-needed. Christophe made a RFC patchset as below to specially demonstrate
-his idea. This is what v4 is doing.
-
-[RFC PATCH 0/8] mm: ioremap: Convert architectures to take GENERIC_IOREMAP way
-https://lore.kernel.org/all/cover.1665568707.git.christophe.leroy@csgroup.eu/T/#u
-
-Testing:
-========
-- It's running well on arm64, s390x, ppc64le with this patchset applied
-  on the latest upstream kernel 6.2-rc8+.
-- Cross compiling passed on arc, ia64, parisc, sh, xtensa.
-- cross compiling is not tried on hexagon, openrisc and powerpc 32bit
-  because:
-  - Didn't find cross compiling tools for hexagon, ppc 32bit;
-  - there's error with openrisc compiling, while I have no idea how to
-    fix it. Please see below pasted log:
-    ---------------------------------------------------------------------
-    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc defconfig
-    *** Default configuration is based on 'or1ksim_defconfig'
-    #
-    # configuration written to .config
-    #
-    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc -j320 CROSS_COMPILE=/usr/bin/openrisc-linux-gnu-
-      SYNC    include/config/auto.conf.cmd
-      CC      scripts/mod/empty.o
-    ./scripts/check-local-export: /usr/bin/openrisc-linux-gnu-nm failed
-    make[1]: *** [scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
-    make[1]: *** Deleting file 'scripts/mod/empty.o'
-    make: *** [Makefile:1275: prepare0] Error 2
-    ----------------------------------------------------------------------
-
-History:
-=======
-v3->v4:
-- Change to contain arch specific handling in wrapper function
-  ioremap(), ioremap_prot() or iounmap() to replace the old hook
-  ioremap|iounmap_allowed() hook way for each arch.
-- Add two patches to convert powerpc to GENERIC_IOREMAP. They are
-  picked from above Christophe's RFC patchset, I made some changes
-  to make them formal.
-
-v2->v3:
-- Rewrite log of all patches to add more details as Christoph suggested.
-
-- Merge the old patch 1 and 2 which adjusts return values and
-  parameters of arch_ioremap() into one patch, namely the current
-  patch 3. Christoph suggested this.
-
-- Change the return value of arch_iounmap() to bool type since we only
-  do arch specific address filtering or address checking, bool value
-  can reflect the checking better. This is pointed out by Niklas when
-  he reviewed the s390 patch.
-
-- Put hexagon patch at the beginning of patchset since hexagon has the
-  same ioremap() and iounmap() as standard ones, no arch_ioremap() and
-  arch_iounmap() hooks need be introduced. So the later arch_ioremap
-  and arch_iounmap() adjustment are not related in hexagon. Christophe
-  suggested this.
-
-- Remove the early ioremap code from openrisc ioremap() firstly since
-  openrisc doesn't have early ioremap handling in openrisc arch code.
-  This simplifies the later converting to GENERIC_IOREMAP method.
-  Christoph and Stafford suggersted this.
-
-- Fix compiling erorrs reported by lkp in parisc and sh patches.
-  Adding macro defintions for those port|mem io functions in
-  <asm/io.h> to avoid repeated definition in <asm-generic/io.h>.
-
-v1->v2:
-- Rename io[re|un]map_allowed() to arch_io[re|un]map() and made
-  some minor changes in patch 1~2 as per Alexander and Kefeng's
-  suggestions. Accordingly, adjust patches~4~11 because of the renaming
-  arch_io[re|un]map().
-
-Baoquan He (13):
-  hexagon: mm: Convert to GENERIC_IOREMAP
-  openrisc: mm: remove unneeded early ioremap code
-  mm: ioremap: allow ARCH to have its own ioremap method definition
-  mm/ioremap: add slab availability checking in ioremap_prot
-  arc: mm: Convert to GENERIC_IOREMAP
-  ia64: mm: Convert to GENERIC_IOREMAP
-  openrisc: mm: Convert to GENERIC_IOREMAP
-  s390: mm: Convert to GENERIC_IOREMAP
-  sh: mm: Convert to GENERIC_IOREMAP
-  xtensa: mm: Convert to GENERIC_IOREMAP
-  parisc: mm: Convert to GENERIC_IOREMAP
-  arm64 : mm: add wrapper function ioremap_prot()
-  mm: ioremap: remove unneeded ioremap_allowed and iounmap_allowed
-
-Christophe Leroy (3):
-  mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
-  mm/ioremap: Consider IOREMAP space in generic ioremap
-  powerpc: mm: Convert to GENERIC_IOREMAP
-
- arch/arc/Kconfig                  |  1 +
- arch/arc/include/asm/io.h         |  7 ++--
- arch/arc/mm/ioremap.c             | 49 ++---------------------
- arch/arm64/include/asm/io.h       |  3 +-
- arch/arm64/mm/ioremap.c           | 10 +++--
- arch/hexagon/Kconfig              |  1 +
- arch/hexagon/include/asm/io.h     |  9 ++++-
- arch/hexagon/mm/ioremap.c         | 44 ---------------------
- arch/ia64/Kconfig                 |  1 +
- arch/ia64/include/asm/io.h        | 13 +++----
- arch/ia64/mm/ioremap.c            | 41 +++----------------
- arch/openrisc/Kconfig             |  1 +
- arch/openrisc/include/asm/io.h    | 11 ++++--
- arch/openrisc/mm/ioremap.c        | 58 +--------------------------
- arch/parisc/Kconfig               |  1 +
- arch/parisc/include/asm/io.h      | 17 +++++---
- arch/parisc/mm/ioremap.c          | 62 ++---------------------------
- arch/powerpc/Kconfig              |  1 +
- arch/powerpc/include/asm/io.h     |  8 ++--
- arch/powerpc/mm/ioremap.c         | 26 +------------
- arch/powerpc/mm/ioremap_32.c      | 19 +++++----
- arch/powerpc/mm/ioremap_64.c      | 12 +-----
- arch/s390/Kconfig                 |  1 +
- arch/s390/include/asm/io.h        | 21 +++++-----
- arch/s390/pci/pci.c               | 57 +++++----------------------
- arch/sh/Kconfig                   |  1 +
- arch/sh/include/asm/io.h          | 65 ++++++++++++++++---------------
- arch/sh/include/asm/io_noioport.h |  7 ++++
- arch/sh/mm/ioremap.c              | 65 ++++++-------------------------
- arch/xtensa/Kconfig               |  1 +
- arch/xtensa/include/asm/io.h      | 32 ++++++---------
- arch/xtensa/mm/ioremap.c          | 58 +++++++--------------------
- include/asm-generic/io.h          | 31 +++------------
- mm/ioremap.c                      | 41 +++++++++++++------
- 34 files changed, 214 insertions(+), 561 deletions(-)
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: linux-hexagon@vger.kernel.org
+---
+ arch/hexagon/Kconfig          |  1 +
+ arch/hexagon/include/asm/io.h |  9 +++++--
+ arch/hexagon/mm/ioremap.c     | 44 -----------------------------------
+ 3 files changed, 8 insertions(+), 46 deletions(-)
  delete mode 100644 arch/hexagon/mm/ioremap.c
 
+diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
+index 54eadf265178..17afffde1a7f 100644
+--- a/arch/hexagon/Kconfig
++++ b/arch/hexagon/Kconfig
+@@ -25,6 +25,7 @@ config HEXAGON
+ 	select NEED_SG_DMA_LENGTH
+ 	select NO_IOPORT_MAP
+ 	select GENERIC_IOMAP
++	select GENERIC_IOREMAP
+ 	select GENERIC_SMP_IDLE_THREAD
+ 	select STACKTRACE_SUPPORT
+ 	select GENERIC_CLOCKEVENTS_BROADCAST
+diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
+index 46a099de85b7..dcd9cbbf5934 100644
+--- a/arch/hexagon/include/asm/io.h
++++ b/arch/hexagon/include/asm/io.h
+@@ -170,8 +170,13 @@ static inline void writel(u32 data, volatile void __iomem *addr)
+ #define writew_relaxed __raw_writew
+ #define writel_relaxed __raw_writel
+ 
+-void __iomem *ioremap(unsigned long phys_addr, unsigned long size);
+-#define ioremap_uc(X, Y) ioremap((X), (Y))
++/*
++ * I/O memory mapping functions.
++ */
++#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_READ | _PAGE_WRITE | \
++		       (__HEXAGON_C_DEV << 6))
++
++#define ioremap_uc(addr, size) ioremap((addr), (size))
+ 
+ 
+ #define __raw_writel writel
+diff --git a/arch/hexagon/mm/ioremap.c b/arch/hexagon/mm/ioremap.c
+deleted file mode 100644
+index 255c5b1ee1a7..000000000000
+--- a/arch/hexagon/mm/ioremap.c
++++ /dev/null
+@@ -1,44 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * I/O remap functions for Hexagon
+- *
+- * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
+- */
+-
+-#include <linux/io.h>
+-#include <linux/vmalloc.h>
+-#include <linux/mm.h>
+-
+-void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+-{
+-	unsigned long last_addr, addr;
+-	unsigned long offset = phys_addr & ~PAGE_MASK;
+-	struct vm_struct *area;
+-
+-	pgprot_t prot = __pgprot(_PAGE_PRESENT|_PAGE_READ|_PAGE_WRITE
+-					|(__HEXAGON_C_DEV << 6));
+-
+-	last_addr = phys_addr + size - 1;
+-
+-	/*  Wrapping not allowed  */
+-	if (!size || (last_addr < phys_addr))
+-		return NULL;
+-
+-	/*  Rounds up to next page size, including whole-page offset */
+-	size = PAGE_ALIGN(offset + size);
+-
+-	area = get_vm_area(size, VM_IOREMAP);
+-	addr = (unsigned long)area->addr;
+-
+-	if (ioremap_page_range(addr, addr+size, phys_addr, prot)) {
+-		vunmap((void *)addr);
+-		return NULL;
+-	}
+-
+-	return (void __iomem *) (offset + addr);
+-}
+-
+-void iounmap(const volatile void __iomem *addr)
+-{
+-	vunmap((void *) ((unsigned long) addr & PAGE_MASK));
+-}
 -- 
 2.34.1
 
