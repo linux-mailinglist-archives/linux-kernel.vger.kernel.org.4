@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5E4699AB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A444699AB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBPQ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S230018AbjBPQ7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBPQ6l (ORCPT
+        with ESMTP id S229681AbjBPQ7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:58:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CB827999
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:58:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6213B828EE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE5EC4339B;
-        Thu, 16 Feb 2023 16:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676566718;
-        bh=IhmvxlJspa2eGobP6VwQOR1zhRUci0/yKcaXi30XFpE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yoh5S7VjxGZiFPWWDGbpD3kgiDoOT1KF8plT+rccMtd7rjaCn3rsDD9AgEQruK7nf
-         cXUvzIawF2G9h/MVv3khEOis7IVLy+od7YBhD+uS4HQeJX+H8oPHte9aOFipIf41qz
-         rG2/+2EHQ29UzzbhKbozqHrW/f3GVHtFWulERCn3xbvadXZVqbqrIhOg2kjbzn0ugd
-         Q3porULFPs/NWiswQPn8BkwnhdjcbrIjFgYs/yYK2gwpVB+g693Bbwin4VxcYtH+2l
-         hMcZGf+Sb9F3CI0xWpPORe0y9J4aWlKY2IhDEdhN5jhn60ni8MdohItXGdk2pOVIvu
-         cLoyBsGTCJmWg==
-Date:   Thu, 16 Feb 2023 08:58:36 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP
- instruction
-Message-ID: <20230216165836.wgcgr6n6gmojbqjk@treble>
-References: <cover.1676068346.git.jpoimboe@kernel.org>
- <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
- <20230213234357.1fe194b2767d9bc431202d4c@kernel.org>
- <Y+tx6DZyoQ362lUM@hirez.programming.kicks-ass.net>
- <20230214170552.glhdytvunczyxxao@treble>
- <Y+yzMmL7gUprDru3@hirez.programming.kicks-ass.net>
- <20230215231637.laryjsua5p4wcd57@treble>
- <Y+4JhmEGDR16EVpi@hirez.programming.kicks-ass.net>
- <Y+4T0EV8SBN09KxA@hirez.programming.kicks-ass.net>
- <20230216233519.eacdf4166d4ec20f3046a1e2@kernel.org>
+        Thu, 16 Feb 2023 11:59:20 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816877AAB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:59:19 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pShbJ-0007uE-5Z; Thu, 16 Feb 2023 17:59:17 +0100
+Message-ID: <611c1202-1978-8886-eec3-929933ee75cd@leemhuis.info>
+Date:   Thu, 16 Feb 2023 17:59:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230216233519.eacdf4166d4ec20f3046a1e2@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] mm/migrate: Fix wrongly apply write bit after mkdirty on
+ sparc64
+Content-Language: en-US, de-DE
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Bowler <nbowler@draconx.ca>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20230216153059.256739-1-peterx@redhat.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230216153059.256739-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676566759;174ec9e1;
+X-HE-SMSGID: 1pShbJ-0007uE-5Z
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:35:19PM +0900, Masami Hiramatsu wrote:
-> > It could be I'm just confusing things... when #DB traps it is actually
-> > because the instruction is complete, so looking up the ORC based on the
-> > next instruction is correct, while when #DB faults, it is because the
-> > instruction has not yet completed and again ORC lookup on IP just works.
-> > 
-> > So while determining if #DB is trap or fault is a giant pain in the
-> > arse, it does not actually matter for the unwinder in this case.
-> > 
-> > And with the INT3 thing the problem is that we've replaced an
-> > instruction that was supposed to do a stack op.
-> > 
-> 
-> If the kprobe checks whether the original instruction do a stack op and
-> if so, setting a flag on current_kprobe will help unwinder finds that case?
-> 
-> Of course all INT3 user may need to do this but it should be limited.
+On 16.02.23 16:30, Peter Xu wrote:
+> Nick Bowler reported another sparc64 breakage after the young/dirty
+> persistent work for page migration (per "Link:" below).  That's after a
+> similar report [2].
 
-No, for INT3, even if the original instruction wasn't a stack op, we can
-treat it the same way.  Either way, we know the instruction hasn't
-executed so we can still use that address to look up the ORC entry.
+Thx for handling this.
 
--- 
-Josh
+> [...]
+>
+> Note: this is based on mm-unstable, because the breakage was since 6.1 and
+> we're at a very late stage of 6.2 (-rc8), so I assume for this specific
+> case we should target this at 6.3.
+> 
+> [1] https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
+> [2] https://lore.kernel.org/all/20221212130213.136267-1-david@redhat.com/
+> 
+> Cc: regressions@leemhuis.info
+
+Not that it matters much, but feel free to use this instead:
+
+CC: regressions@lists.linux.dev
+
+Then things don't depend on me (in case I ever get help with my cat
+herding job). And it also make it even more obvious that this patch
+fixes a regression to anyone who handles it downstream.
+
+> Fixes: 2e3468778dbe ("mm: remember young/dirty bit for page migrations")
+
+That's a commit from 6.1, hence this should likely have:
+
+Cc: stable@vger.kernel.org # 6.1.y
+
+[no, a fixes tag alone does not suffice, see docs]
+
+> Link: https://lore.kernel.org/all/CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com/
+> Reported-by: Nick Bowler <nbowler@draconx.ca>
+> [...]
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
