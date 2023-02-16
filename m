@@ -2,138 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86BA698DAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B6E698DAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjBPHTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S229646AbjBPHTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBPHS7 (ORCPT
+        with ESMTP id S229454AbjBPHTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:18:59 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E6C227A1;
-        Wed, 15 Feb 2023 23:18:58 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PHR5G157qzFqSK;
-        Thu, 16 Feb 2023 15:14:10 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Thu, 16 Feb 2023 15:18:09 +0800
-Message-ID: <fa2c6946-ab52-47f4-e5d2-49043eb2bd50@huawei.com>
-Date:   Thu, 16 Feb 2023 15:18:09 +0800
+        Thu, 16 Feb 2023 02:19:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133982D14D;
+        Wed, 15 Feb 2023 23:19:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C52761E4C;
+        Thu, 16 Feb 2023 07:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF40C433D2;
+        Thu, 16 Feb 2023 07:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676531990;
+        bh=4cOlQKhnkUYakVFHP70NRzk/2OLrwiPte5M4Y3+erf4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SfhmpwJ3vlOmoAOU5LIcz20o/WlcqLMWq8+GrcdKzUjRa4AE1PyUhRFq9MfXo+wEK
+         MQ4rPztND1BVVKpAKNnHC+kxvNpcQJtJ0p5Vk2sMUFH8IVqAEmsj7BFYhpP6oM8DwV
+         06VPnI+PazkceCIOWXIJp66mkSeXOXyg20/d+v/o=
+Date:   Thu, 16 Feb 2023 08:19:47 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Qi Feng <fengqi706@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        rydberg@bitmath.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fengqi <fengqi@xiaomi.com>
+Subject: Re: [PATCH v2] HID: add KEY_CAMERA_FOCUS event in HID
+Message-ID: <Y+3ZE7Pv1JaMmh+E@kroah.com>
+References: <20230131114632.14078-1-fengqi706@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 0/2] fix error flag covered by journal recovery
-To:     Ye Bin <yebin@huaweicloud.com>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        Ye Bin <yebin10@huawei.com>
-References: <20230214022905.765088-1-yebin@huaweicloud.com>
-Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230214022905.765088-1-yebin@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131114632.14078-1-fengqi706@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/14 10:29, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
->
-> Diff v3 Vs v2:
-> Only fix fs error flag lost when previous journal errno is not record
-> in disk. As this may lead to drop orphan list, however fs not record
-> error flag, then fsck will not repair deeply.
->
-> Diff v2 vs v1:
-> Move call 'j_replay_prepare_callback' and 'j_replay_end_callback' from
-> ext4_load_journal() to jbd2_journal_recover().
->
-> When do fault injection test, got issue as follows:
-> EXT4-fs (dm-5): warning: mounting fs with errors, running e2fsck is recommended
-> EXT4-fs (dm-5): Errors on filesystem, clearing orphan list.
-> EXT4-fs (dm-5): recovery complete
-> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
->
-> EXT4-fs (dm-5): recovery complete
-> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
->
-> Without do file system check, file system is clean when do second mount.
-> Theoretically, the kernel will not clear fs error flag. In errors=remount-ro
-> mode the last super block is commit directly. So super block in journal is
-> not uptodate. When do jounral recovery, the uptodate super block will be
-> covered by jounral data. If super block submit all failed after recover
-> journal, then file system error flag is lost. When do "fsck -a" couldn't
-> repair file system deeply.
-> To solve above issue we need to do extra handle when do super block journal
-> recovery.
->
->
-> Ye Bin (2):
->    ext4: commit super block if fs record error when journal record
->      without error
->    ext4: make sure fs error flag setted before clear journal error
->
->   fs/ext4/super.c | 18 ++++++++++++++++--
->   1 file changed, 16 insertions(+), 2 deletions(-)
-When we proceed in the flow of ( uninstall after injecting fault 
-triggered error -> mount
-kernel replay journal -> umount to view fsck info ), there are three cases:
+On Tue, Jan 31, 2023 at 07:46:32PM +0800, Qi Feng wrote:
+> From: fengqi <fengqi@xiaomi.com>
+> 
+> Our HID device need KEY_CAMERA_FOCUS event to control camera, but this
+> event is non-existent in current HID driver.we add this event in hid-input.c
 
-1. When an injection fault causes the ERROR_FS flag to not be saved to 
-disk, but j_errno
-is successfully saved to disk, PATCH 2/2 effectively ensures that 
-ERROR_FS is saved to disk
-so that fsck performs a force check to discover the error correctly.
+Please read the section entitled "The canonical patch format" in the
+kernel file, Documentation/process/submitting-patches.rst for what is
+needed in order to properly describe the change.
 
-2. When j_errno is lost and the ERROR_FS flag is saved, after the 
-journal replay：
-     a. The ext4_super_block on disk has neither error info nor ERROR_FS 
-flag;
-     b. The ext4_super_block in memory contains error info but no 
-ERROR_FS flag
-         because the error info is copied additionally during journal 
-replay;
-     c. The ext4_sb_info in memory contains both error info and ERROR_FS 
-flag.
-This means that the ext4_super_block in memory will be written to disk 
-the next time
-ext4_commit_super is executed, while the ERROR_FS flag in ext4_sb_info 
-will not be written
-to disk until ext4_put_super is called. So if there is a disk 
-deletion/power failure/disk offline,
-we will lose the ERROR_FS flag or even the error info.
+> We committed this v2 version following your previous suggestion
 
-(In this case, repairing directly with e2fsck will not do a force check 
-either, because it
-relies on j_errno to recover the ERROR_FS flag after the journal replay. 
-And it reloads
-the information from the disk into memory after the journal replay, so the
-ERROR_FS flag and error info are completely lost.)
+This line is not needed in a changelog text.
 
-3. If neither the ERROR_FS flag nor j_errno are saved to disk, we seem 
-to be unable to
-determine if a deep sweep is currently needed. But I think when journal 
-replay is needed
-it means that the file system exits abnormally,
-*Is it possible to consider e2fsck to do a force check after the journal 
-replay?*
+> 
+> Signed-off-by: fengqi <fengqi@xiaomi.com>
+> ---
+>  drivers/hid/hid-input.c | 7 +++++++
+>  include/linux/hid.h     | 1 +
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> index 9b59e436df0a..05fa3e191574 100644
+> --- a/drivers/hid/hid-input.c
+> +++ b/drivers/hid/hid-input.c
+> @@ -1221,6 +1221,13 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+>  			return;
+>  		}
+>  		goto unknown;
+> +	case HID_UP_CAMERA:
+> +		switch (usage->hid & HID_USAGE){
+> +		case 0x020: map_key_clear(KEY_CAMERA_FOCUS);	break;
+> +		case 0x021: map_key_clear(KEY_CAMERA);		break;
+> +		default: 	goto ignore;
+> +		}
+> +		break;		
 
--- 
-With Best Regards,
-Baokun Li
-.
+Always run checkpatch.pl on your submission before sending it out,
+otherwise it obviously can not be accepted.
+
+thanks,
+
+greg k-h
