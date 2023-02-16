@@ -2,142 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3F1698D81
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9159A698D86
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjBPG7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S229549AbjBPHBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjBPG7s (ORCPT
+        with ESMTP id S229436AbjBPHBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:59:48 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB2D2004E;
-        Wed, 15 Feb 2023 22:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=eY8wjfcgSH3TrP9aL+s7xjVwlZT7Woyw5umIiF3o8S8=; b=2KkqIt13a+TiK4mqr89tOn1EbA
-        eSu5Gt2io1moYL8IXByXPSP4FXKPxAMedbCjMqo++5ctfPbDLfz8PCVxPJyFTEUOId3bGKMGMIS2z
-        TEy1RqHWNRaEKyG5N+dwh5s3bZXJ1SDSq4eo8CxlHsiMO631i4eOzhbaFTUOkSuL5k7jx8u/IXF1P
-        mVCbBZXYLkmBnr5AJ8G+1+mxlTqJZ4Vo1KVo9gm7kjaAA5UWYlhtZJnMdWlR27LyPeW6C5VpGnuZF
-        eEubs9ZMzsXUHt0SpqJ9r9yqxGAp2ADxViljmD5pnrPcZQrIIdHvSEJt0BFXM42yokggP6SjvE4VV
-        D/t3HjNw==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSYEy-008l0g-2Z; Thu, 16 Feb 2023 06:59:36 +0000
-Message-ID: <a2a7806b-ba53-9f37-938b-d3f48ea217f2@infradead.org>
-Date:   Wed, 15 Feb 2023 22:59:35 -0800
+        Thu, 16 Feb 2023 02:01:13 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CDD8A62
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:01:13 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id z15so954287vsj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1676530872;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JiWCeaDHu0d2DzRL5Q2rZ6Kr6gE5UVc7HS7E+8OLbNo=;
+        b=LXLuI0lukZpk+g+34EKNeybLCdvtI60f3JqDjW9eZwsuc8GRIV+jom5gw8fFiJfADo
+         Jxm+4n3vY7Y+Jx82/QkJZEWa4JRyQdsZN2jw4XysXlCIKNQKyjX8HqhwVKfLnnxg410E
+         CWDtNMB6D9/07yQnsCQPr4gEWqrI4GhFDZVjiNk3nMBAhIHIpBU2srKbNaED8HgkltG0
+         zQfpf+naNmlc19OdXMwsCJrb4RFR457LAOZNCrY8eJkZE7UrGIspwj/v0AZFNiYlzslA
+         hXpWXi33OmPBXaRZTyMKg4LgC2OcNdJFJvkt6GKabZRinmiwjcULHxSrkp15BNZAtnPO
+         EGZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676530872;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JiWCeaDHu0d2DzRL5Q2rZ6Kr6gE5UVc7HS7E+8OLbNo=;
+        b=uqP519ZJr6YdculxwYqJuljeMHxyy1biZO5kC/Xz56JDtOXQ2P+R4qFIharn4guNSt
+         8ihZ/bprgfagzwnNOTrBbHKlJ6YZbZLTKj7U4WHhOnLQG53kp1EC/fv/NxjykuDhXbCx
+         DnCCjn7fXvTHF1L88udZiZNmTUzqgqL3AY5znSVK9m0ICQ5C13S5k7EPRRI9abIXkOHl
+         Cz7gzRGTKKFcxLOc87Ovmr1qZl4O3n6JWZZ/28iQwKUMRL3cJrpWbx6m/sEq5SgKqkqV
+         qij6WDAilmZK9BrOqg05VHno5K5EWYGWcX3lQEW2GzK0wvVEOCsPxrw8LGEFcG5rYOfj
+         lolw==
+X-Gm-Message-State: AO0yUKUIwqm3z9zcVbpbQcp6IEKB/UAl/AVM3SNGLPmg6scs7qCikU1k
+        oxkSGD1ZuoAS/++qf87w3tjcuJ+3gdnAgkBQfnkqjw==
+X-Google-Smtp-Source: AK7set/iZ9HDFoy3dkRKzNhXAalE4+M+T5REPdJmheDtz5Ua0bEUDb7IEvMbPkQ6G1arh9iIICsR9GlWSn3DLkw82UA=
+X-Received: by 2002:a67:70c6:0:b0:412:2e92:21a6 with SMTP id
+ l189-20020a6770c6000000b004122e9221a6mr913571vsc.13.1676530872160; Wed, 15
+ Feb 2023 23:01:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
-Content-Language: en-US
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+References: <20230215091503.1490152-1-arnd@kernel.org> <CANpmjNNz+zuV5LpWj5sqeR1quK4GcumgQjjDbNx2m+jzeg_C7w@mail.gmail.com>
+ <78b2ed7d-2585-479f-98b1-ed2574a64cb8@app.fastmail.com> <20230215224218.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230215224218.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 16 Feb 2023 08:00:00 +0100
+Message-ID: <CANpmjNNz30RQMfX0Bv+hobdUp+k_jHwH2WniQj4g+b48tsoR9Q@mail.gmail.com>
+Subject: Re: [PATCH] kcsan: select CONFIG_CONSTRUCTORS
+To:     paulmck@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, kasan-dev@googlegroups.com,
         linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Qais Yousef <qyousef@layalina.io>
-References: <20230214010942.25143-1-rdunlap@infradead.org>
- <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 15 Feb 2023 at 23:42, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Wed, Feb 15, 2023 at 10:48:11AM +0100, Arnd Bergmann wrote:
+> > On Wed, Feb 15, 2023, at 10:25, Marco Elver wrote:
+> > > On Wed, 15 Feb 2023 at 10:15, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > > Looks like KASAN does select CONSTRUCTORS already, so KCSAN should as well.
+> > >
+> > > Do you have a tree to take this through, or should it go through -rcu
+> > > as usual for KCSAN patches?
+> >
+> > I don't have a tree for taking these build fixes, so it would be good if you could forward it as appropriate.
+>
+> Queued and pushed, thank you both!
+>
+> Is this ready for the upcoming merge window, or would you rather that
+> I hold off until the v6.4 merge window?  (I am tempted to treat this
+> as a bug fix, thus sending it earlier rather than later, but figured I
+> should ask.)
 
-On 2/13/23 23:40, Philippe Mathieu-Daudé wrote:
-> Hi Randy,
-> 
-> On 14/2/23 02:09, Randy Dunlap wrote:
->> When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
->> declared. This causes the build to fail with:
->>
->> mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
->> arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
->>
->> Fix this by declaring a 0-value physical_memsize with neither LANTIQ
->> nor MIPS_MALTA is set, like LANTIQ does.
->>
->> Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
->> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
->> Cc: John Crispin <john@phrozen.org>
->> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->> Cc: linux-mips@vger.kernel.org
->> ---
->> How has this build error not been detected for 10 years?
->>
->>   arch/mips/kernel/vpe-mt.c |    9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
->> --- a/arch/mips/kernel/vpe-mt.c
->> +++ b/arch/mips/kernel/vpe-mt.c
->> @@ -22,6 +22,15 @@ static int major;
->>   /* The number of TCs and VPEs physically available on the core */
->>   static int hw_tcs, hw_vpes;
->>   +#if !defined(CONFIG_MIPS_MALTA) && !defined(CONFIG_LANTIQ)
->> +/* The 2 above provide their own 'physical_memsize' variable. */
-> 
-> Which seems dubious. The variable should be defined once, likely in
-> arch/mips/kernel/vpe-mt.c, since arch/mips/include/asm/vpe.h declares
-> it.
+I'd consider it a bug fix. If it survives the usual -next exposure, no
+harm in sending it as a fix.
 
-That doesn't work for CONFIG_MIPS_MALTA=y and MIPS_VPE_LOADER is not set.
-
-In the current (before a consolidation patch) code, mti-malta/malta-memory.c declares
-'physical_memsize' and malta-dtshim.c uses it (thru an 'extern'), so
-MIPS_VPE_LOADER and MIPS_VPE_LOADER_MT are not required to be enabled.
-
-> I'm surprised CONFIG_MIPS_MALTA always links malta-dtshim.o, but
-> malta-dtshim.o depends on MIPS_VPE_LOADER_MT, and I can't find a
-> CONFIG_MIPS_MALTA -> MIPS_VPE_LOADER_MT Kconfig dep.
-
-Why does malta-dtshim.o depend on MIPS_VPE_LOADER_MT?
-
-MIPS_MALTA selects SUPPORTS_VPE_LOADER and SYS_SUPPORTS_MULTITHREADING
-but does not require MIPS_VPE_LOADER or MIPS_VPE_LOADER_MT.
-It builds fine with those symbols being enabled (before any patch).
-
->> +/*
->> + * This is needed by the vpe-mt loader code, just set it to 0 and assume
->> + * that the firmware hardcodes this value to something useful.
->> + */
->> +unsigned long physical_memsize = 0L;
-> 
-> I agree this is where this variable has be be declared / initialized,
-> but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
-> doesn't seem right.
-
-So far I have been able to consolidate the LANTIQ code into a general
-patch, but not MALTA.
-
->> +#endif
->> +
->>   /* We are prepared so configure and start the VPE... */
->>   int vpe_run(struct vpe *v)
->>   {
-> 
-> Regards,
-> 
-> Phil.
-
-Thanks.
--- 
-~Randy
+Thanks,
+-- Marco
