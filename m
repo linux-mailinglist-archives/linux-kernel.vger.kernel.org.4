@@ -2,143 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BBB699EDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E543F699EEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjBPVQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 16:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S230107AbjBPVTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 16:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjBPVQM (ORCPT
+        with ESMTP id S229561AbjBPVTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 16:16:12 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370123B864;
-        Thu, 16 Feb 2023 13:16:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676582171; x=1708118171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pYDMhUJZT9iTDU3s07U04jLG4mJ8llVyNJOCxQLrvys=;
-  b=nNuF6jmyfHs9N041cyo/vys5s7lPSc9ZQEKUx6KN1BL2S9BQlLpL+ovD
-   cvBcex696Ttpjj6Q3ijJcFrH14cSh264vVbDBvSe7S/GM01QAn8okej5E
-   DkB6316GPCwIjr7YrJYc0ZL/I6/81+FKy/zYTmxCdyi3AfjLTLNNG1lru
-   HPz8ubHsUwHJYqSg4y6tp+CLbs+PjlTkqSpGqBkZIdC+aXAH6Iacz3Xch
-   icTE7tS36WHG5vi6CYGxIqxvfT8cLL2kDp9u4n0N7li+KqcIdZiWVpN/L
-   NZq0IxyWmBPhfmrhEdDnjjqt5syIZUQ3MMJusM1HwauOiswgCCs2FDcZq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="396517089"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="396517089"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 13:16:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="813136929"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="813136929"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Feb 2023 13:16:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pSlbq-007wYS-0d;
-        Thu, 16 Feb 2023 23:16:06 +0200
-Date:   Thu, 16 Feb 2023 23:16:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
-        Lendacky Thomas <Thomas.Lendacky@amd.com>,
-        herbert@gondor.apana.org.au,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] i2c: designware: Use PCI PSP driver for communication
-Message-ID: <Y+6dFYd/0tSKriaj@smile.fi.intel.com>
-References: <20230209223811.4993-1-mario.limonciello@amd.com>
- <20230209223811.4993-7-mario.limonciello@amd.com>
- <703033aa-1293-307d-42a2-9734a51c7190@linux.intel.com>
- <ca9c0f77-c191-d88a-22a1-315ca97f17e8@amd.com>
- <Y+5EI3XGBzuwwVBV@smile.fi.intel.com>
- <9523a6ce-0220-e939-392d-2b48b2a4dc48@amd.com>
- <Y+6ZMEoQ2UoH7SxD@smile.fi.intel.com>
- <d8a11223-36d1-a3bd-bfa2-a1c67b9ef250@amd.com>
+        Thu, 16 Feb 2023 16:19:38 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F94A1F1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 13:19:37 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSlfB-0005Xn-0k; Thu, 16 Feb 2023 22:19:33 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSlf8-005REf-1T; Thu, 16 Feb 2023 22:19:31 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSlf8-0048j7-G2; Thu, 16 Feb 2023 22:19:30 +0100
+Date:   Thu, 16 Feb 2023 22:19:28 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [PATCH v7 04/10] pwm: dwc: move memory alloc to own function
+Message-ID: <20230216211928.53yodfcu3wjccpfq@pengutronix.de>
+References: <20221223153820.404565-1-ben.dooks@sifive.com>
+ <20221223153820.404565-5-ben.dooks@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ydxaayw27syloonj"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d8a11223-36d1-a3bd-bfa2-a1c67b9ef250@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221223153820.404565-5-ben.dooks@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 03:01:35PM -0600, Limonciello, Mario wrote:
-> On 2/16/2023 14:59, Andy Shevchenko wrote:
-> > On Thu, Feb 16, 2023 at 02:55:07PM -0600, Limonciello, Mario wrote:
-> > > On 2/16/2023 08:56, Andy Shevchenko wrote:
-> > > > On Thu, Feb 16, 2023 at 07:29:53AM -0600, Mario Limonciello wrote:
-> > > > > On 2/16/23 07:27, Jarkko Nikula wrote:
-> > > > > > On 2/10/23 00:38, Mario Limonciello wrote:
 
-...
+--ydxaayw27syloonj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > > > >       config I2C_DESIGNWARE_AMDPSP
-> > > > > > >         bool "AMD PSP I2C semaphore support"
-> > > > > > > -    depends on X86_MSR
-> > > > > > >         depends on ACPI
-> > > > > > >         depends on I2C_DESIGNWARE_PLATFORM
-> > > > > > > +    depends on CRYPTO_DEV_SP_PSP && !(I2C_DESIGNWARE_PLATFORM=y &&
-> > > > > > > CRYPTO_DEV_CCP_DD=m)
-> > > > > > >         help
-> > > > > > 
-> > > > > > Would this look better if split? I.e.
-> > > > > > 
-> > > > > >       depends on CRYPTO_DEV_SP_PSP
-> > > > > >       depends on !(I2C_DESIGNWARE_PLATFORM=y && CRYPTO_DEV_CCP_DD=m)
-> > > > > Yes, thanks I'll change that for next version.
-> > > > 
-> > > > I'm wondering if this is homegrown implementation of 'imply' keyword?
-> > > 
-> > > Like this?
-> > > 
-> > > config I2C_DESIGNWARE_AMDPSP
-> > >     depends on CRYPTO_DEV_SP_PSP
-> > >     depends on CRYPTO_DEV_CCP_DD
-> > > 
-> > > config CRYPTO_DEV_CCP_DD
-> > >     imply I2C_DESIGNWARE_PLATFORM
-> > 
-> > Looks okay, but I'm not familiar with this code. The documentation about
-> > 'imply' can be found here:
-> > 
-> > https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html#menu-attributes
-> 
-> Yeah I found that, but this was my first time using imply, so I was hoping
-> someone who has used it could validate I interpreted it correctly.
-> 
-> Following the example CRYPTO_DEV_CCP_DD would be FOO and
-> I2C_DESIGNWARE_PLATFORM would be BAZ so I thought so.
+On Fri, Dec 23, 2022 at 03:38:14PM +0000, Ben Dooks wrote:
+> In preparation for adding other bus support, move the allocation
+> of the pwm struct out of the main driver code.
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+>  drivers/pwm/pwm-dwc.c | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
+> index c706ef9a7ba1..61f11e0a9319 100644
+> --- a/drivers/pwm/pwm-dwc.c
+> +++ b/drivers/pwm/pwm-dwc.c
+> @@ -196,13 +196,29 @@ static const struct pwm_ops dwc_pwm_ops =3D {
+>  	.owner =3D THIS_MODULE,
+>  };
+> =20
+> +static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
+> +{
+> +	struct dwc_pwm *dwc;
+> +
+> +	dwc =3D devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+> +	if (!dwc)
+> +		return NULL;
+> +
+> +	dwc->chip.dev =3D dev;
+> +	dwc->chip.ops =3D &dwc_pwm_ops;
+> +	dwc->chip.npwm =3D DWC_TIMERS_TOTAL;
+> +
+> +	dev_set_drvdata(dev, dwc);
 
-'imply' == weak 'select', it means that the target option may or may not be
-selected. I.o.w. "optional" dependency.
+I don't particularily like that this dev_set_drvdata is matched by
+pci_get_drvdata in .remove(), but this isn't going to break I guess. So:
 
-Does CRYPTO_DEV_CCP_DD use I2C DesignWare code?
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-If I understand correctly the "depends on !(I2C_DESIGNWARE_PLATFORM=y &&
-CRYPTO_DEV_CCP_DD=m)" you want to have IS_REACHABLE() in your code and actually
-"imply CRYPTO_DEV_CCP_DD" in the I2C_DESIGNWARE_AMDPSP.
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
--- 
-With Best Regards,
-Andy Shevchenko
+--ydxaayw27syloonj
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPundwACgkQwfwUeK3K
+7Alu3wf7Bw70SXKIrkUAq2DI5XEfW34R6/6Or3z+5sPMSZwpLIqWdeuXEwLskAgT
+RpRLoexEppof9scc6zfxGBrqev/4edShXM26Cy9TyhdHt+GzoGeQMG/SWMf50lzB
+4Adjn/efnMEU6RaMJINsFg2Xl7gLioE/7ckm3ruQPENUFayytxaYQWZ3t5JS23ca
+WU6c+4QnghxpBW0n6ZbX+Sxj4zGzlxg6d5A4sAoiIQmnBWwMFEEOrRzVKvj19Z6S
+4OFuuVxnyp51T/bJgGCeh1hIRfpAUMlNY/gNQH8GyTf1oAMol2om7JqcmE/Ajh0F
+4obnnQXMyblpULC4U5/vdM/iElpOHw==
+=DKE+
+-----END PGP SIGNATURE-----
+
+--ydxaayw27syloonj--
