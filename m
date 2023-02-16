@@ -2,74 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F74699702
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E18699713
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjBPOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S229803AbjBPOT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjBPOSi (ORCPT
+        with ESMTP id S230091AbjBPOTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:18:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E74BEA5;
-        Thu, 16 Feb 2023 06:18:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B09A60EC0;
-        Thu, 16 Feb 2023 14:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E34C433EF;
-        Thu, 16 Feb 2023 14:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676557109;
-        bh=qljvpZ/qaq0j/2hLjwXx+T0T6rRMPZee1Sgmk5JkV5s=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=KHM3W282p+2pGgneRpfxPG7goMRfcWSjxq+xnpldW2w6JKhwLtH9SUtQ9uCMqHv3p
-         a46V69bXxy/hnrnMq35qIj8cqE8XfTOjDLhIhYITviDP5nRF+/bLiKoutFgj/5nyDE
-         MrVaVCBr048D9Y5XBEwxDkNBzGNDkFalukjJvXR/ddsp4c3mN9RNRqV1NiBqY9ByTV
-         ob1AOegXvqCiUhT9eYo8BzBL1pMwCWast2u53LjsF1EV10j4DUcUqINnbp2uCbZ02X
-         I7qFmto24muf2R66k6TuP2qlXgrT4Azacnm5kD3FwMr/O+p3rmaK95uwGS8bPV/esM
-         caYELCP7NDwpA==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-16cc1e43244so2617535fac.12;
-        Thu, 16 Feb 2023 06:18:29 -0800 (PST)
-X-Gm-Message-State: AO0yUKXp5bw4BuXRVGB1Or9RafWUhm8Fd82Gba7xTHQGW6uAHeNDGMyT
-        ovLsWiZzTDd6+YGKDv8fmnj5K4rxD0e7bp0N2GA=
-X-Google-Smtp-Source: AK7set+JOHjtHJPlCIP6J9C0GtafRUfyZrmiSNoFjxYGcBGoBYUuE6dkoj9qz2KAqUi+7K1RFNkMv4FpIxTJOpnEUVo=
-X-Received: by 2002:a05:6870:b52c:b0:16a:b198:74e9 with SMTP id
- v44-20020a056870b52c00b0016ab19874e9mr192502oap.215.1676557109059; Thu, 16
- Feb 2023 06:18:29 -0800 (PST)
+        Thu, 16 Feb 2023 09:19:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961BACC0A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676557143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pchzyi+iGSx4x4FUy9UsNRB/fTEcGnGSHaYZsjr+hLc=;
+        b=XoPKYFhoHfI6N26kj0JoQveaX/HNnEFqoM9JpCATC93jVFp6LsGQZ9NTMW2RY6JRauZuRu
+        QBBiiSQOPrsxuC3Ph4ud9D6aCwPQicIJAsTwN8b0d3GR4NmB8ARjhQH1LJcWgaXp9QPThu
+        pdA9SRpCiu9lFZXWxJhHbtA7w8kUoRM=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-107-Y1g8hT92O_OGe_eXjGAbUw-1; Thu, 16 Feb 2023 09:19:02 -0500
+X-MC-Unique: Y1g8hT92O_OGe_eXjGAbUw-1
+Received: by mail-qv1-f70.google.com with SMTP id z16-20020a0cfc10000000b0056f0794632bso149823qvo.18
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:19:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pchzyi+iGSx4x4FUy9UsNRB/fTEcGnGSHaYZsjr+hLc=;
+        b=QEL7fNzRpgJaHNpKFHBgjQPCHIShPa8r6RWIBZvepYaQTT9jV/WrZC+LEIADw9iPY2
+         Hb3WamqMsW5XutBlybTkZrh2dcXrhTmaaZAOgG7+LBj1yI+pGoVRplZuVMj+CVCDwziu
+         oiKEr3y24m7lR40f592HCmNAPiQKXb+lUNm/rLGGRteG2WmFwli0AECVzf2CaSQhO/9U
+         3ozsfkjstoZ3Ex7s88VBtX5KSYzrT7XsP2pFBjz25ImrEyr9fMGaNjzGV4o0fhVvMr8p
+         UYHPZPJEazDtugOAczyb4tlnPEbKrYPyJ8htRAliBN2C5616L+7IBrO2DIac+lqjWR3r
+         wMyg==
+X-Gm-Message-State: AO0yUKU3P73jPh3ECr3602hBPI0/wT+W0OkwKqtVeF9WY+b11f52SL+x
+        wj8uP/mlSFFEuJXW/OImHenMEmMP7qv3oiayPHY8gfX+9+Munm4J4fWXucbiznuqqmkimx1+s3a
+        wNWT4rBXEaB6ZU7C4GN4D3PFy
+X-Received: by 2002:a05:622a:1492:b0:3b8:52b6:a313 with SMTP id t18-20020a05622a149200b003b852b6a313mr11672815qtx.30.1676557142029;
+        Thu, 16 Feb 2023 06:19:02 -0800 (PST)
+X-Google-Smtp-Source: AK7set+fxS4JhBoepOcXeUJoLRmfP/igXjolczTeDHypWOV4T3CC6+zz+5nMobryi+/8kbpvaTg/2g==
+X-Received: by 2002:a05:622a:1492:b0:3b8:52b6:a313 with SMTP id t18-20020a05622a149200b003b852b6a313mr11672776qtx.30.1676557141742;
+        Thu, 16 Feb 2023 06:19:01 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-167.retail.telecomitalia.it. [82.57.51.167])
+        by smtp.gmail.com with ESMTPSA id 205-20020a370ad6000000b0073b76f9409csm1278267qkk.14.2023.02.16.06.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 06:19:01 -0800 (PST)
+Date:   Thu, 16 Feb 2023 15:18:56 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 05/12] vsock/virtio: non-linear skb support
+Message-ID: <20230216141856.fnczv3ui6d3lpujy@sgarzare-redhat>
+References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
+ <b3060caf-df19-f1df-6d27-4e58f894c417@sberdevices.ru>
 MIME-Version: 1.0
-Received: by 2002:a8a:355:0:b0:4a5:1048:434b with HTTP; Thu, 16 Feb 2023
- 06:18:28 -0800 (PST)
-In-Reply-To: <20230214063650.12832-1-hbh25y@gmail.com>
-References: <20230214063650.12832-1-hbh25y@gmail.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 16 Feb 2023 23:18:28 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9bfOOTfFVFvx_gakLiPqZSZrNvT12OnRMq2cUBHcPzAA@mail.gmail.com>
-Message-ID: <CAKYAXd9bfOOTfFVFvx_gakLiPqZSZrNvT12OnRMq2cUBHcPzAA@mail.gmail.com>
-Subject: Re: [PATCH v4] ksmbd: fix possible memory leak in smb2_lock()
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
-        hyc.lee@gmail.com, lsahlber@redhat.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <b3060caf-df19-f1df-6d27-4e58f894c417@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-02-14 15:36 GMT+09:00, Hangyu Hua <hbh25y@gmail.com>:
-> argv needs to be free when setup_async_work fails or when the current
-> process is woken up.
+On Mon, Feb 06, 2023 at 06:58:24AM +0000, Arseniy Krasnov wrote:
+>Use pages of non-linear skb as buffers in virtio tx queue.
 >
-> Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/virtio_transport.c | 31 +++++++++++++++++++++++++------
+> 1 file changed, 25 insertions(+), 6 deletions(-)
+>
+>diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>index 28b5a8e8e094..b8a7d6dc9f46 100644
+>--- a/net/vmw_vsock/virtio_transport.c
+>+++ b/net/vmw_vsock/virtio_transport.c
+>@@ -100,7 +100,8 @@ virtio_transport_send_pkt_work(struct work_struct *work)
+> 	vq = vsock->vqs[VSOCK_VQ_TX];
+>
+> 	for (;;) {
+>-		struct scatterlist hdr, buf, *sgs[2];
+>+		struct scatterlist *sgs[MAX_SKB_FRAGS + 1];
+>+		struct scatterlist bufs[MAX_SKB_FRAGS + 1];
 
-Thanks.
++ 1 is for the header, right?
+I'd add a comment just to be clear ;-)
+
+> 		int ret, in_sg = 0, out_sg = 0;
+> 		struct sk_buff *skb;
+> 		bool reply;
+>@@ -111,12 +112,30 @@ virtio_transport_send_pkt_work(struct work_struct *work)
+>
+> 		virtio_transport_deliver_tap_pkt(skb);
+> 		reply = virtio_vsock_skb_reply(skb);
+>+		sg_init_one(&bufs[0], virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
+>+		sgs[out_sg++] = &bufs[0];
+>+
+>+		if (skb_is_nonlinear(skb)) {
+>+			int i;
+>+
+>+			for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+>+				struct page *data_page = skb_shinfo(skb)->frags[i].bv_page;
+>+
+>+				/* We will use 'page_to_virt()' for userspace page here,
+>+				 * because virtio layer will call 'virt_to_phys()' later
+>+				 * to fill buffer descriptor. We don't touch memory at
+>+				 * "virtual" address of this page.
+>+				 */
+
+IIUC data_page is a user page, so since we are exposing it to the host,
+I think we should pin it.
+
+Is data_page always a user page, or can it be a kernel page when skb is 
+nonlinear?
+
+Thanks,
+Stefano
+
+>+				sg_init_one(&bufs[i + 1],
+>+					    page_to_virt(data_page), PAGE_SIZE);
+>+				sgs[out_sg++] = &bufs[i + 1];
+>+			}
+>+		} else {
+>+			if (skb->len > 0) {
+>+				sg_init_one(&bufs[1], skb->data, skb->len);
+>+				sgs[out_sg++] = &bufs[1];
+>+			}
+>
+>-		sg_init_one(&hdr, virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
+>-		sgs[out_sg++] = &hdr;
+>-		if (skb->len > 0) {
+>-			sg_init_one(&buf, skb->data, skb->len);
+>-			sgs[out_sg++] = &buf;
+> 		}
+>
+> 		ret = virtqueue_add_sgs(vq, sgs, out_sg, in_sg, skb, GFP_KERNEL);
+>-- 
+>2.25.1
+
