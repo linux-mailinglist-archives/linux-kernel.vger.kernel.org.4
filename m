@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D40A698B23
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 04:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E956698B26
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 04:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjBPDXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 22:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S229702AbjBPDYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 22:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBPDXI (ORCPT
+        with ESMTP id S229477AbjBPDYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 22:23:08 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F494209
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 19:23:01 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d13-20020a17090ad3cd00b0023127b2d602so849578pjw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 19:23:01 -0800 (PST)
+        Wed, 15 Feb 2023 22:24:32 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD0C11B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 19:24:31 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id bt14so592939pfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 19:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wSAq29/mCiPpKWHkZynEgD7uMUv36BUxMUrUtzUBeEU=;
-        b=wppkv/odYVwj0FnhjFJohR0ecllKQVhktGGqxY5UjCmC1Vrn9USsrLoIDeUPs6qOWM
-         d1EgMMgXYYmhWVBXaU7H3ZgBlW60EZiqJRvBhhsaqp4eGUeDNTiE8upY7WJmUFkrU8og
-         gCY7DDfLcRpSivtqZEplFB2ZNcJWI0NeQDZ3MtLLuMYtPamVB27a9tfddkwj8EbHs/6P
-         nrsUSEbNEX6Zv1Z4Qg8zK/3hsygxW7Be6zqvuhVPNPHpQcfn5eisc7bRH979/YXgAae+
-         Fmj2k5jJRP9YRb0kgt/h5KA9qgDb5ya1rwfYamq5lzrTTkpySK+9pSqMaFjNzHY3UGYN
-         Af1A==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676517871;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1CxXVwJvCGxbjVLdA6DHb6xyckHUyCHSVSgGkRQjt50=;
+        b=N1C4S8OUx3gL48Sj22kdzKzqy0JlUSEyWkZ0wJxR86y2BOMoEiNuED9/wIqYl6EafK
+         UCpBXcIsvZycdO+9oxLFg1mhbiWfDBuCjlB8kD0m/5/vFAvpzxwIza1+ZeG4KQTUFaVU
+         Jzynds2ptMKi0PrMqw89enoLR+pjpgl20IyOJ92NvrWhuw/NvTuSUPwcoT4S6upG20YV
+         o2VrWzWzfphHfQGCsabLrbYRLjKHmfew99RjxOiRV6JglhcLG6URl3Ccw2CQ8+GFg/jx
+         NczQt+PC0oZDNRAwYzkqGDVaJM1APtTnXub6vKWalMgiDCsCi/9IyOv5qmzRCYaw/bSe
+         JHAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wSAq29/mCiPpKWHkZynEgD7uMUv36BUxMUrUtzUBeEU=;
-        b=s60J0cBGjo87nC3VdXnPaQRpFbkgi7yIzqu7ggySEh1beZScimv9UtRdMpg2EZjCe0
-         fm9CrCdNDiIjvnRw1in/SkYKChHA1Zv1IZsZAvlai0/gV7MaF2bG/0lMQlriufppf7mI
-         +xo8Rdmv61gdxYBSDyOPK5UBswC+2H0hnpiNF5d+4QxuCETsw0TQTrz37rE9L0qlR6mO
-         ATggUslSHqWb/PigMEVta3E9CbdYrXxuwdgv+JAYHwAg+05Y/50owadrNkNVjCBi57D0
-         c9sMiKNR9dcf8MzHUuXLtrg0qaO691n/ILqTqiAjVCoAFjXtLES6EU3holD6pnRr45uM
-         PCbg==
-X-Gm-Message-State: AO0yUKUkvsT75mOohs0Wux0pgUWgDtKnGmZsjDqLVqfOhto8Bxtaawtk
-        ovnbHMNZSTVyQPihh2uJkdetog==
-X-Google-Smtp-Source: AK7set/y4uOnGOjN61uhNUj3p7NepqLJY1qEmi0+cAKryf4NPqQfCWi53c/3ygr+6Unpw+bIJoAPJw==
-X-Received: by 2002:a05:6a20:938e:b0:bf:1662:b2f4 with SMTP id x14-20020a056a20938e00b000bf1662b2f4mr5054907pzh.49.1676517780651;
-        Wed, 15 Feb 2023 19:23:00 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id c21-20020aa781d5000000b005a84ef49c63sm68930pfn.214.2023.02.15.19.22.58
+        d=1e100.net; s=20210112; t=1676517871;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1CxXVwJvCGxbjVLdA6DHb6xyckHUyCHSVSgGkRQjt50=;
+        b=IvAInKpXwPS4Ae0LRdhVPnxJS9YCaOceNKZkX156CexUa7kP/kh07EMClIE1gia1wD
+         FnrB9qN25Ano2v9eTqruaJRJqH11XoDkfVtQO/tZVm4brXTsiB3XTW8jWrHEzTmAf7Xw
+         SXnkKT3FFWvxWgQOCMxz8R7Z+b96KHfakVKTKD5jNjTVHshHC3p/dI7+r+CYl/m9v/Gg
+         fAjq+R3mI+ymZl64u55vqu6WXzcZRf0mvQM7hbSGBOP8UjB2wsHDVXpNRgXTds9f4dpd
+         Nnoza2mVuhVe45pYd1ZxQY3SvBmxW784sMlSY7OPWqzUOIGm4ozTUaVbIVGiewSzPYDb
+         NIBg==
+X-Gm-Message-State: AO0yUKWu3Reil9f5LqktVOKwg6fEcOVeCeunX+iRUgtrIn1WVLpM1Cdg
+        6ZXpq7BOPZkVuCyapc5ZfH0Ynw==
+X-Google-Smtp-Source: AK7set9iGY1Slp6qvesKRBrqY77wNZOHJDRfriucWC07srPWSrUoHNZe7WZvzaiVlzXi52QGYIk/QA==
+X-Received: by 2002:a62:d104:0:b0:5a8:bbd7:d7aa with SMTP id z4-20020a62d104000000b005a8bbd7d7aamr3596157pfg.1.1676517870626;
+        Wed, 15 Feb 2023 19:24:30 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id a13-20020a62e20d000000b005906dbf5f80sm85300pfi.163.2023.02.15.19.24.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 19:23:00 -0800 (PST)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     axboe@kernel.dk, ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev, Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH] block: Fix io statistics for cgroup in throttle path
-Date:   Thu, 16 Feb 2023 11:22:50 +0800
-Message-Id: <20230216032250.74230-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Wed, 15 Feb 2023 19:24:30 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
+References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
+Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
+ registered ring fd
+Message-Id: <167651786995.206662.11602698726754502938.b4-ty@kernel.dk>
+Date:   Wed, 15 Feb 2023 20:24:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,59 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
 
-In the current code, io statistics are missing for cgroup when bio
-was throttled by blk-throttle. Fix it by moving the unreaching code
-to submit_bio_noacct_nocheck.
+On Tue, 14 Feb 2023 16:42:22 -0800, Josh Triplett wrote:
+> Add a new flag IORING_REGISTER_USE_REGISTERED_RING (set via the high bit
+> of the opcode) to treat the fd as a registered index rather than a file
+> descriptor.
+> 
+> This makes it possible for a library to open an io_uring, register the
+> ring fd, close the ring fd, and subsequently use the ring entirely via
+> registered index.
+> 
+> [...]
 
-Fixes: 3f98c753717c ("block: don't check bio in blk_throtl_dispatch_work_fn")
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- block/blk-core.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+Applied, thanks!
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 46d12b3344c9..82b5b2c53f1e 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -684,6 +684,18 @@ static void __submit_bio_noacct_mq(struct bio *bio)
- 
- void submit_bio_noacct_nocheck(struct bio *bio)
- {
-+	blk_cgroup_bio_start(bio);
-+	blkcg_bio_issue_init(bio);
-+
-+	if (!bio_flagged(bio, BIO_TRACE_COMPLETION)) {
-+		trace_block_bio_queue(bio);
-+		/*
-+		 * Now that enqueuing has been traced, we need to trace
-+		 * completion as well.
-+		 */
-+		bio_set_flag(bio, BIO_TRACE_COMPLETION);
-+	}
-+
- 	/*
- 	 * We only want one ->submit_bio to be active at a time, else stack
- 	 * usage with stacked devices could be a problem.  Use current->bio_list
-@@ -792,17 +804,6 @@ void submit_bio_noacct(struct bio *bio)
- 
- 	if (blk_throtl_bio(bio))
- 		return;
--
--	blk_cgroup_bio_start(bio);
--	blkcg_bio_issue_init(bio);
--
--	if (!bio_flagged(bio, BIO_TRACE_COMPLETION)) {
--		trace_block_bio_queue(bio);
--		/* Now that enqueuing has been traced, we need to trace
--		 * completion as well.
--		 */
--		bio_set_flag(bio, BIO_TRACE_COMPLETION);
--	}
- 	submit_bio_noacct_nocheck(bio);
- 	return;
- 
+[1/1] io_uring: Support calling io_uring_register with a registered ring fd
+      commit: 04eb372cac91a4f70c9b921c1b86758f5553d311
+
+Best regards,
 -- 
-2.20.1
+Jens Axboe
+
+
 
