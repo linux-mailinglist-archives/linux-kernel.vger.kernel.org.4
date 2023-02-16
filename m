@@ -2,309 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC72699FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E05699FC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjBPWaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S229516AbjBPWcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBPWaM (ORCPT
+        with ESMTP id S229475AbjBPWcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:30:12 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A4253836;
-        Thu, 16 Feb 2023 14:30:05 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GM7cTF012913;
-        Thu, 16 Feb 2023 22:29:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=fLxPF8eCKppWTaLwryyhSnKF0mhre4/Id5PxFMHvSGE=;
- b=YiN1KAt87FeZAQDNKcSEUx3t6/y4w19qaVbeWhI38JJ2aUdpUmY5g6S5hLPW31EwDltJ
- /Dri4pxw4yxV+FfGem6BXxP9hNqTL7eGTLDdcf0hkbr+Bashb5Q/cgnRSAKf1xkSvmt+
- PrAl+GL34D1YfcXWfbHkXxQXFNhSS3FSAFBbclmN2X6LJcEEYiOpfuE5PV0TyJWwgJaV
- zXqfyBDJCJziGTNFhk8zIX5/fr+2tC0ZKBwsFk/Rv3LaWPszO+Ls+J+ZVqXSnlbH4XkG
- jfXJm40N1FkHZz2os8WL+rva5ZQPktFoxZpn4ScYQA9W8YfAkAknvziBNDoulXGK9ZNo cA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ns85kb8cp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 22:29:53 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31GMTq0c003773;
-        Thu, 16 Feb 2023 22:29:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 3ns32ng2cx-1;
-        Thu, 16 Feb 2023 22:29:52 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GMTj6E003724;
-        Thu, 16 Feb 2023 22:29:52 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 31GMTqA0003762;
-        Thu, 16 Feb 2023 22:29:52 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 35E2620E55; Thu, 16 Feb 2023 14:29:52 -0800 (PST)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        balbi@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v5 5/5] usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
-Date:   Thu, 16 Feb 2023 14:29:48 -0800
-Message-Id: <1676586588-25989-6-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1676586588-25989-1-git-send-email-quic_eserrao@quicinc.com>
-References: <1676586588-25989-1-git-send-email-quic_eserrao@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DtNKhKIzEav9a3CqteWf8GebE3IZ5VCZ
-X-Proofpoint-ORIG-GUID: DtNKhKIzEav9a3CqteWf8GebE3IZ5VCZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_16,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0
- suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=891
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302160192
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 17:32:23 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651AA4C3FA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:32:12 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m20-20020a05600c3b1400b003e1e754657aso5417202wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:32:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5vXNR+H0c80bTIPdRkMX1RbvYvrD4ce9/JGf1xe3NU=;
+        b=k61SMX1KONa9iIwehIQCaziylg3pU9/0NrlOH9Hn+OQjDN6wbgXkM9RHYX+r7+lAuu
+         jzbuPTNK3M1N0Mfo+tF9uRANQzUn0/Xrg/ZLfBvQSxV8+UYN8Gp00TGUCcohgzIF0vSC
+         K0c790y0PII1LJ+rOuYrg5NSkGlyCJ0I9lhbnkKV1dYzsNi2T11orf7ZW9Wjkgh0+axh
+         QMTI99YrfV/oYznnM1UnHvo6ERVyd088YMzgY6DMRxt5dKbz+m4feKuOjcsNMRM08GBN
+         ys0kI7EP/NtksrCM1J/xa8vzp7W8qdToxAKrqfm41cFFbQO2tSpnksTHYIX7OFuaFSyB
+         qzSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f5vXNR+H0c80bTIPdRkMX1RbvYvrD4ce9/JGf1xe3NU=;
+        b=vNkG3Ei7PLCyyU+YEGMcLuzTaYTgqEl0lbA8y1khj72/x38lZdzvMAtoo/me+s85k2
+         NDuP/WzbnTFMDrbt7hQYCVn60UthGybbKTZHaNqEA0/YPoMCH1zoCJ4xguY0Vk7D4E3M
+         YVB/dHonMJT59bHVlpPlj4EXvVt6ZjBsnlZOvSgUu35giM9Mi47pnKkBfOj/s2HWCxrl
+         YbtSU5b1XqrORezI1nyQb4sIIrJdVdi54L/HjbmBz86vCseFbPiKRWrM2xm/sQwwJOGo
+         AEeIawNSZ849VYRp7fcbCNkALFSBLmpsspxlRfql61nrQqSfivmnsSPEGC2nLfrSi/F2
+         nv5A==
+X-Gm-Message-State: AO0yUKXa4xlXbRcpC4AHpRhDAJiZqBJQI+lJCHbCJMfJ6LSSN2ex6VDz
+        0VRPs4QpQ2uQXZV8PvAYk/JHXh78mnE=
+X-Google-Smtp-Source: AK7set+ZGMp24px+TnsXdQfuQM0UG+V8p3bLk8k/icBDJpYn/wMn48jL5+ckyQFjW2ImbFFmLdt5uQ==
+X-Received: by 2002:a05:600c:816:b0:3dc:5390:6499 with SMTP id k22-20020a05600c081600b003dc53906499mr6517227wmp.1.1676586730839;
+        Thu, 16 Feb 2023 14:32:10 -0800 (PST)
+Received: from localhost (94.197.187.145.threembb.co.uk. [94.197.187.145])
+        by smtp.gmail.com with ESMTPSA id bg30-20020a05600c3c9e00b003db012d49b7sm14516056wmb.2.2023.02.16.14.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 14:32:10 -0800 (PST)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     broonie@kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] regmap-irq: Remove unused type_invert flag
+Date:   Thu, 16 Feb 2023 22:31:59 +0000
+Message-Id: <20230216223200.150679-1-aidanmacdonald.0x0@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When host sends a suspend notification to the device, handle
-the suspend callbacks in the function driver. Enhanced super
-speed devices can support function suspend feature to put the
-function in suspend state. Handle function suspend callback.
+type_invert is deprecated and no longer used; it can now be removed.
 
-Depending on the remote wakeup capability the device can either
-trigger a remote wakeup or wait for the host initiated resume to
-start data transfer again.
-
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/usb/gadget/function/f_ecm.c   | 68 +++++++++++++++++++++++++++++++++++
- drivers/usb/gadget/function/u_ether.c | 63 ++++++++++++++++++++++++++++++++
- drivers/usb/gadget/function/u_ether.h |  4 +++
- 3 files changed, 135 insertions(+)
+ drivers/base/regmap/regmap-irq.c | 11 ++---------
+ include/linux/regmap.h           |  3 ---
+ 2 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
-index a7ab30e..d50c1a4 100644
---- a/drivers/usb/gadget/function/f_ecm.c
-+++ b/drivers/usb/gadget/function/f_ecm.c
-@@ -633,6 +633,8 @@ static void ecm_disable(struct usb_function *f)
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index a8f185430a07..e3092f522107 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -189,12 +189,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 			if (!d->type_buf_def[i])
+ 				continue;
+ 			reg = d->get_irq_reg(d, d->chip->type_base, i);
+-			if (d->chip->type_invert)
+-				ret = regmap_update_bits(d->map, reg,
+-					d->type_buf_def[i], ~d->type_buf[i]);
+-			else
+-				ret = regmap_update_bits(d->map, reg,
+-					d->type_buf_def[i], d->type_buf[i]);
++			ret = regmap_update_bits(d->map, reg,
++						 d->type_buf_def[i], d->type_buf[i]);
+ 			if (ret != 0)
+ 				dev_err(d->map->dev, "Failed to sync type in %x\n",
+ 					reg);
+@@ -1028,9 +1024,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
  
- 	usb_ep_disable(ecm->notify);
- 	ecm->notify->desc = NULL;
-+	f->func_suspended = false;
-+	f->func_wakeup_armed = false;
- }
+ 			ret = regmap_read(map, reg, &d->type_buf_def[i]);
  
- /*-------------------------------------------------------------------------*/
-@@ -885,6 +887,68 @@ static struct usb_function_instance *ecm_alloc_inst(void)
- 	return &opts->func_inst;
- }
- 
-+static void ecm_suspend(struct usb_function *f)
-+{
-+	struct f_ecm *ecm = func_to_ecm(f);
-+	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
-+
-+	if (f->func_suspended) {
-+		DBG(cdev, "Function already suspended\n");
-+		return;
-+	}
-+
-+	DBG(cdev, "ECM Suspend\n");
-+
-+	gether_suspend(&ecm->port);
-+}
-+
-+static void ecm_resume(struct usb_function *f)
-+{
-+	struct f_ecm *ecm = func_to_ecm(f);
-+	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
-+
-+	/*
-+	 * If the function is in USB3 Function Suspend state, resume is
-+	 * canceled. In this case resume is done by a Function Resume request.
-+	 */
-+	if (f->func_suspended)
-+		return;
-+
-+	DBG(cdev, "ECM Resume\n");
-+
-+	gether_resume(&ecm->port);
-+}
-+
-+static int ecm_get_status(struct usb_function *f)
-+{
-+	return (f->func_wakeup_armed ? USB_INTRF_STAT_FUNC_RW : 0) |
-+		USB_INTRF_STAT_FUNC_RW_CAP;
-+}
-+
-+static int ecm_func_suspend(struct usb_function *f, u8 options)
-+{
-+	struct f_ecm *ecm = func_to_ecm(f);
-+	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
-+
-+	DBG(cdev, "func susp %u cmd\n", options);
-+
-+	f->func_wakeup_armed = !!(options & (USB_INTRF_FUNC_SUSPEND_RW >> 8));
-+
-+	if (options & (USB_INTRF_FUNC_SUSPEND_LP >> 8)) {
-+		if (!f->func_suspended) {
-+			ecm_suspend(f);
-+			f->func_suspended = true;
-+		}
-+	} else {
-+		if (f->func_suspended) {
-+			f->func_suspended = false;
-+			ecm_resume(f);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static void ecm_free(struct usb_function *f)
- {
- 	struct f_ecm *ecm;
-@@ -952,6 +1016,10 @@ static struct usb_function *ecm_alloc(struct usb_function_instance *fi)
- 	ecm->port.func.setup = ecm_setup;
- 	ecm->port.func.disable = ecm_disable;
- 	ecm->port.func.free_func = ecm_free;
-+	ecm->port.func.suspend = ecm_suspend;
-+	ecm->port.func.get_status = ecm_get_status;
-+	ecm->port.func.func_suspend = ecm_func_suspend;
-+	ecm->port.func.resume = ecm_resume;
- 
- 	return &ecm->port.func;
- }
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index f259975..8eba018 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -437,6 +437,20 @@ static inline int is_promisc(u16 cdc_filter)
- 	return cdc_filter & USB_CDC_PACKET_TYPE_PROMISCUOUS;
- }
- 
-+static int ether_wakeup_host(struct gether *port)
-+{
-+	int			ret;
-+	struct usb_function	*func = &port->func;
-+	struct usb_gadget	*gadget = func->config->cdev->gadget;
-+
-+	if (func->func_suspended)
-+		ret = usb_func_wakeup(func);
-+	else
-+		ret = usb_gadget_wakeup(gadget);
-+
-+	return ret;
-+}
-+
- static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
- 					struct net_device *net)
- {
-@@ -456,6 +470,15 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
- 		in = NULL;
- 		cdc_filter = 0;
- 	}
-+
-+	if (dev->port_usb->is_suspend) {
-+		DBG(dev, "Port suspended. Triggering wakeup\n");
-+		netif_stop_queue(net);
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		ether_wakeup_host(dev->port_usb);
-+		return NETDEV_TX_BUSY;
-+	}
-+
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	if (!in) {
-@@ -1014,6 +1037,45 @@ int gether_set_ifname(struct net_device *net, const char *name, int len)
- }
- EXPORT_SYMBOL_GPL(gether_set_ifname);
- 
-+void gether_suspend(struct gether *link)
-+{
-+	struct eth_dev *dev = link->ioport;
-+	unsigned long flags;
-+
-+	if (!dev)
-+		return;
-+
-+	if (atomic_read(&dev->tx_qlen)) {
-+		/*
-+		 * There is a transfer in progress. So we trigger a remote
-+		 * wakeup to inform the host.
-+		 */
-+		ether_wakeup_host(dev->port_usb);
-+		return;
-+	}
-+	spin_lock_irqsave(&dev->lock, flags);
-+	link->is_suspend = true;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+}
-+EXPORT_SYMBOL_GPL(gether_suspend);
-+
-+void gether_resume(struct gether *link)
-+{
-+	struct eth_dev *dev = link->ioport;
-+	unsigned long flags;
-+
-+	if (!dev)
-+		return;
-+
-+	if (netif_queue_stopped(dev->net))
-+		netif_start_queue(dev->net);
-+
-+	spin_lock_irqsave(&dev->lock, flags);
-+	link->is_suspend = false;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+}
-+EXPORT_SYMBOL_GPL(gether_resume);
-+
- /*
-  * gether_cleanup - remove Ethernet-over-USB device
-  * Context: may sleep
-@@ -1176,6 +1238,7 @@ void gether_disconnect(struct gether *link)
- 
- 	spin_lock(&dev->lock);
- 	dev->port_usb = NULL;
-+	link->is_suspend = false;
- 	spin_unlock(&dev->lock);
- }
- EXPORT_SYMBOL_GPL(gether_disconnect);
-diff --git a/drivers/usb/gadget/function/u_ether.h b/drivers/usb/gadget/function/u_ether.h
-index 4014454..851ee10 100644
---- a/drivers/usb/gadget/function/u_ether.h
-+++ b/drivers/usb/gadget/function/u_ether.h
-@@ -79,6 +79,7 @@ struct gether {
- 	/* called on network open/close */
- 	void				(*open)(struct gether *);
- 	void				(*close)(struct gether *);
-+	bool				is_suspend;
- };
- 
- #define	DEFAULT_FILTER	(USB_CDC_PACKET_TYPE_BROADCAST \
-@@ -258,6 +259,9 @@ int gether_set_ifname(struct net_device *net, const char *name, int len);
- 
- void gether_cleanup(struct eth_dev *dev);
- 
-+void gether_suspend(struct gether *link);
-+void gether_resume(struct gether *link);
-+
- /* connect/disconnect is handled by individual functions */
- struct net_device *gether_connect(struct gether *);
- void gether_disconnect(struct gether *);
+-			if (d->chip->type_invert)
+-				d->type_buf_def[i] = ~d->type_buf_def[i];
+-
+ 			if (ret) {
+ 				dev_err(map->dev, "Failed to get type defaults at 0x%x: %d\n",
+ 					reg, ret);
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index a3bc695bcca0..2114679729ce 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1547,8 +1547,6 @@ struct regmap_irq_chip_data;
+  * @ack_invert:  Inverted ack register: cleared bits for ack.
+  * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupts.
+  * @wake_invert: Inverted wake register: cleared bits are wake enabled.
+- * @type_invert: Invert the type flags. Deprecated, use config registers
+- *		 instead.
+  * @type_in_mask: Use the mask registers for controlling irq type. Use this if
+  *		  the hardware provides separate bits for rising/falling edge
+  *		  or low/high level interrupts and they should be combined into
+@@ -1625,7 +1623,6 @@ struct regmap_irq_chip {
+ 	unsigned int clear_ack:1;
+ 	unsigned int wake_invert:1;
+ 	unsigned int runtime_pm:1;
+-	unsigned int type_invert:1;
+ 	unsigned int type_in_mask:1;
+ 	unsigned int clear_on_unmask:1;
+ 	unsigned int not_fixed_stride:1;
 -- 
-2.7.4
+2.39.2
 
