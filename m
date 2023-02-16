@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BA86996D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AACBD6996D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjBPONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S229952AbjBPOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjBPOM6 (ORCPT
+        with ESMTP id S229719AbjBPOOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C7A197;
-        Thu, 16 Feb 2023 06:12:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB9F3B82844;
-        Thu, 16 Feb 2023 14:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745D1C433EF;
-        Thu, 16 Feb 2023 14:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676556769;
-        bh=9HZ9vYETc82yRvH6hFWcF0ZaI4CRW+Kohg12okAsFPg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uJrKmpbdkwkQu3yTbl7rFJ1AOMNa3xMW/3dTxJfbzssqP6KvPyg9Ta26e4jWjALju
-         mDJnceG7KM4ZFdGD2YN4DFUP+MZjuPfOAbcki9KZa+KXduC86fUXfrHKRh4jlKavqb
-         SEYMx3xzksE1jE/XLzs7G76t1KMxrMosh7+Q5AciDTiaRzuOsictqYMTauaNGU6gYE
-         BmBi7+fgxL7qeuzeLk49fofadwN21gjpS7ltehhR7bbVgmU1ZZeazYH6fZDXzZp9d2
-         JVQPim2YQNdufCAF9UniqnBPgvMYkJgWbc8kMySNAfB1qO466+xVy37ozNw58gxrZn
-         bxjNhdNsKvxqg==
-Date:   Thu, 16 Feb 2023 23:12:44 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
-        <davem@davemloft.net>, <ast@kernel.org>, <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] kprobes: Fix issues related to optkprobe
-Message-Id: <20230216231244.54e18b8a8656338eeb43b8cb@kernel.org>
-In-Reply-To: <20230216034247.32348-1-yangjihong1@huawei.com>
-References: <20230216034247.32348-1-yangjihong1@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 09:14:00 -0500
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B9112F14
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:13:45 -0800 (PST)
+Received: by mail-il1-f206.google.com with SMTP id w11-20020a92d2cb000000b003157a4fddf3so1313932ilg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:13:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v9UIk2+qIQp21GX8GRQum2ZmiqDewH+7EzkQQQ3GTTM=;
+        b=YzyZ6LDkeVQShylikmfs6p0rEypMvjetk01eqXBuqi5woqD+kKOvRnQ1wvc3QszJm2
+         biZL3rZ6l1VfAi6K45SIwmEzK6VfwfHXTKu3TAg4AkUscYlH2u7aqrOONCY2j/ORe3Fh
+         7u+PRQ1vfK1AIDDIPqInJALpEdvZSXmf7AULA1LDdYtRLF1RPwZ3wCttpfyPsa7DnDo0
+         cF3LzjbQOLd4e2vFWjFnfx5/JdRjaQo1TLAD3hyhLGpEypKBSB+mCAhe9uZ+CFiI32MZ
+         J1/L+qW3AU/f48/KlE98O8g0L0Rn2UCgK9YEsB10X36RcjCQd9YemxY83KfD7WEfwkcz
+         ON+g==
+X-Gm-Message-State: AO0yUKUFwPzYs2ah26SAouRt1+gcJKRrs6toWAb/OnHdP7eY/s8yaHyA
+        PqFN8QrW/Cfwzi43rye32qHdn7a4icaR30snNZSI4RXKWSejGE9smQ==
+X-Google-Smtp-Source: AK7set95Hfj5gIz0mhTwedM+FZk54SJUwqas9bzF89g0nQIpOr5Mg8gkBX5aWi6+tdONEQNbQywolPfbHQ4P6LJGhg12/F342yWQ
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:bf4:b0:310:9afc:aa6 with SMTP id
+ d20-20020a056e020bf400b003109afc0aa6mr1703846ilu.0.1676556824946; Thu, 16 Feb
+ 2023 06:13:44 -0800 (PST)
+Date:   Thu, 16 Feb 2023 06:13:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ff304105f4d1cd36@google.com>
+Subject: [syzbot] WARNING: can't access registers at entry_SYSCALL_64_after_hwframe
+From:   syzbot <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 11:42:45 +0800
-Yang Jihong <yangjihong1@huawei.com> wrote:
+Hello,
 
-> Fixed optkprobe issues, mainly related to the x86 architecture.
-> 
-> Yang Jihong (2):
->   x86/kprobes: Fix __recover_optprobed_insn check optimizing logic
->   x86/kprobes: Fix arch_check_optimized_kprobe check within
->     optimized_kprobe range
-> 
->  arch/x86/kernel/kprobes/opt.c | 6 +++---
->  include/linux/kprobes.h       | 2 ++
->  kernel/kprobes.c              | 4 ++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
+syzbot found the following issue on:
 
-Thanks for updating! These look good to me! 
+HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=144edcc8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a64cbb8ad0da425e
+dashboard link: https://syzkaller.appspot.com/bug?extid=dac365e3ce07c3d0e496
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thank you,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/70f0c6bb5351/disk-9d9019bc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7eed8686df34/vmlinux-9d9019bc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/84bb6da6b00e/bzImage-9d9019bc.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com
 
-> 
-> -- 
-> 
-> Changes since v1:
->   - Remove patch1 since there is already a fix patch.
->   - Add "cc stable" and modify comment for patch2.
->   - Use "kprobe_disarmed" instead of "kprobe_disabled" for patch3.
->   - Add fix commmit and "cc stable" for patch3.
-> 
-> 2.30.GIT
-> 
+WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
