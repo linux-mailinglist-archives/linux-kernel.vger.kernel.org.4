@@ -2,171 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC99A69958D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EF169958B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjBPNTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S229478AbjBPNSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjBPNTR (ORCPT
+        with ESMTP id S229794AbjBPNSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:19:17 -0500
-Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6830855A9;
-        Thu, 16 Feb 2023 05:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1676553553;
-        bh=KhLIQn1nRpMe0qe3qC/c0JThjzwovc1ATByKz1BoxQs=;
-        h=From:To:Cc:Subject:Date;
-        b=mJtgZRg+iUz++zdyfs3WtBioVhZe2cZn3UD6UH2+kYG3dbwr+wKFFjIIQOhH0xjEJ
-         bhELfMjmOg2e+qd/DaopBABUEsAdtZvIwfKNgyTUp2waYx0s/GjXFsqWOCWKr2byej
-         p+vNb0xxnT/7Qm7q9S5TcRFvZ0e8JhSliTlp7p/0=
-Received: from localhost.localdomain ([222.182.118.161])
-        by newxmesmtplogicsvrsza2-0.qq.com (NewEsmtp) with SMTP
-        id 47107C78; Thu, 16 Feb 2023 21:17:49 +0800
-X-QQ-mid: xmsmtpt1676553469tde6widka
-Message-ID: <tencent_47F9893DA354D9509F06DD4C52A7EB30130A@qq.com>
-X-QQ-XMAILINFO: MAehWEgsdgwGizySxY9t5M4K/wNKQ08/FL35yST6mq3FuiDqOOextsvC5qcr8E
-         +gU4AxKxogDmEA2c5WkRU+E86X0RndGXqsWzWvTBhAKWXNQ5RI03w/C+kWvQGrIQRg83p9n7HBNG
-         0QIx5sT7E1pIBC+zEDECjR39xMmgd0ysUO8TQc2wN2T9zi6r6p9udgOrD8X+r35IeuigGHAv229B
-         unJ3DGvIN9PVnhjoMyYfYZA/BIeNZ2oXlaRKanw/vrhsgEghB+B7i+RaGu5CPYWC3B0sa3VjNkiv
-         h77wXyQtXFNcW6ulNHaGQKSiZ/xcLrVI3gMwEB47Yzf19kdT7WAu18k6j7YuxPIqCMTMnBWgUWki
-         8ILe2i3C1LAQmr5YPKL+CIRs57l4F2FyDV5alHbw+ZdEnU6wb93Y/YnNgI7YaFStnx7DYhPmAuzd
-         rxd+LAt7XWx7ThTqJlgMIPBZEipWVzGX6usJoaj3Uf4Wct+oBMSmVsOfca92WqRa8N7xkv8Uu9uz
-         I7bfWj6XshRQgsIjrKUORhmN4H3UEn+DHFz+kuDXfCOIJ8xqA1uF+pMopquQCg6YqcGzPKPnCDIY
-         Er3czH+3ESXNDO+69NdSgj5ic18rPZKoahCjBJgFR0+a22ZgJTDUK20DMGi7HIXWfgjEjhbOnMwL
-         FMl+JcUlqAzKibOMLj6wvusuMsGzLWksvjGfLDdZcNmQK9nk8yzf50IQoGCojzZRgG/9RKZyIxAg
-         ScCVP3ni9+tIiQWpknAe1BTrTa3Sbx19Opq1oALZxxq2pyM9Z0RpJMxqEBwLygUqFXdCAkTOyHkv
-         b7KEtgTyGGlAoYMNMw5F1nVRe6dRjJf+uu0YBLVlU3PQannK2ETdbLJdmnjQmDdJ/Sy64GGOCnZX
-         4xwJrXZzTn0Q9lRV5QJ0tBNEWeXV66s8xIQVOoujzx+1sX1BQa7bj58yZMClx4STlSlQXl3OQ7hi
-         AyklrpAmUrlMe79blEIret94Q4LUYxbeVm1cglo8k3ssw+LrcRMamFDDm2lLhYCtmkhah4ryiFJ3
-         9kH8Fv3g==
-From:   wenyang.linux@foxmail.com
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michal Nazarewicz <m.nazarewicz@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] eventfd: use wait_event_interruptible_locked_irq() helper
-Date:   Thu, 16 Feb 2023 21:17:39 +0800
-X-OQ-MSGID: <20230216131739.823787-1-wenyang.linux@foxmail.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 16 Feb 2023 08:18:21 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB6B6EAB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:18:20 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so5802669pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:18:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BasQDVUhurl87t0hpFhoxQNL2hqiCDlndiGLEWf2YIg=;
+        b=e6GETn7l2vcxSJQ1UrJXmcgR+LftxMQ2UCF214QnLzEnMcKu4WmHh+XjuFpT7wPRdI
+         iCN7fV0o0DQIHwj2S3qBKO9pPeCTRtNFAH+AkKOSZLj3zJSUPshR9ockkYnjSQ77h8Z7
+         jK26OGe0mMXDJ7GZ4bTGOfXbwi09PtfAlVTq9KswUGStnKq6D+ezhLs3ZxjcledusDFF
+         z0xldEXzhhodYU8oEtTCl63nlpjzATBmCYNfvo9vKcBDXVC/cSEDKmEoAPI4VsNRsIXN
+         j8jCeN8kA+5SWYn//gcccLXZ0bfdCOGFDA58daksSy1l2V99BZ1J7SmpE8C9l9n73Y4k
+         vtRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BasQDVUhurl87t0hpFhoxQNL2hqiCDlndiGLEWf2YIg=;
+        b=l+44XTPxZfHGQi6fbossAzxl2tQIqYZX818vNXHMEkSoUVqFInv+dczzoljznns1UA
+         alDwWbVws9g+rRVQKvCG/3G0ZMSNq/3dOnqalk/vy4mq3P9SnZgbQQ02EnCr/edimcKL
+         LJ2zzwE+UygdWZrE6GHrZmIcKJD3915d6r5R84bRYVSxPLXuG2jEwByBvxkWW/tSGAYJ
+         YzcZmn+gE5pTHcuzThelQVXkXKt0UL03DsRCFTXd3NUtfMnCjB8xXxUMfWMQP120OWtO
+         eEnneg2ryy7P/+U+leQwlJlRr8h+ODKo402xO6uDHa/i4cvhq76swgdg3YT4qHjrlc3U
+         AAfg==
+X-Gm-Message-State: AO0yUKWT3/DLVTlG1+DgylUxhZzuCKbrhj24adCitENvQwu1KyXMTFuX
+        HPwpJl9b73mvG3O+IPV41gwBug==
+X-Google-Smtp-Source: AK7set+IxZ2YhBW4Zz/crU+HiSF+PTucxIXFjy9VXhXjSMp1xKGCq6DYBy28/DhgNw1fbQdcwxKQtg==
+X-Received: by 2002:a17:902:fa0e:b0:199:190c:3c15 with SMTP id la14-20020a170902fa0e00b00199190c3c15mr4990981plb.49.1676553499520;
+        Thu, 16 Feb 2023 05:18:19 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170902b78a00b001994e74c094sm1259307pls.275.2023.02.16.05.18.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 05:18:18 -0800 (PST)
+Message-ID: <757f143b-0c5d-4dd9-f7a1-5450da3b86b5@bytedance.com>
+Date:   Thu, 16 Feb 2023 21:18:08 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v6 0/4] sched/fair: Improve scan efficiency of SIS
+Content-Language: en-US
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Yicong Yang <yangyicong@huawei.com>,
+        Barry Song <21cnbao@gmail.com>, linux-kernel@vger.kernel.org
+References: <20221019122859.18399-1-wuyun.abel@bytedance.com>
+ <01eb35f2-4a34-7fbc-da48-c9558dca7212@amd.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <01eb35f2-4a34-7fbc-da48-c9558dca7212@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Yang <wenyang.linux@foxmail.com>
+Hi Prateek, thanks very much for your solid testings!
 
-wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
-("wait_event_interruptible_locked() interface"), but older code such as
-eventfd_{write,read} still uses the open code implementation.
-Inspired by commit 8120a8aadb20
-("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
-patch replaces the open code implementation with a single macro call.
+On 2/7/23 11:42 AM, K Prateek Nayak wrote:
+> Hello Abel,
+> 
+> I've retested the patches with on the updated tip and the results
+> are still promising.
+> 
+> tl;dr
+> 
+> o Hackbench sees improvements when the machine is overloaded.
+> o tbench shows improvements when the machine is overloaded.
+> o The unixbench regression seen previously seems to be unrelated
+>    to the patch as the spawn test scores are vastly different
+>    after a reboot/kexec for the same kernel.
+> o Other benchmarks show slight improvements or are comparable to
+>    the numbers on tip.
 
-No functional change intended.
+Cheers! Yet I still see some minor regressions in the report
+below. As we discussed last time, reducing unnecessary updates
+on the idle cpumask when LLC is overloaded should help.
 
-Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Dylan Yudaken <dylany@fb.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: David Woodhouse <dwmw@amazon.co.uk>
-Cc: Fu Wei <wefu@redhat.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Michal Nazarewicz <m.nazarewicz@samsung.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- fs/eventfd.c | 40 ++++++----------------------------------
- 1 file changed, 6 insertions(+), 34 deletions(-)
-
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index 249ca6c0b784..2b6a8a4d80a1 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -228,7 +228,6 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
- 	struct file *file = iocb->ki_filp;
- 	struct eventfd_ctx *ctx = file->private_data;
- 	__u64 ucnt = 0;
--	DECLARE_WAITQUEUE(wait, current);
- 
- 	if (iov_iter_count(to) < sizeof(ucnt))
- 		return -EINVAL;
-@@ -239,23 +238,11 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
- 			spin_unlock_irq(&ctx->wqh.lock);
- 			return -EAGAIN;
- 		}
--		__add_wait_queue(&ctx->wqh, &wait);
--		for (;;) {
--			set_current_state(TASK_INTERRUPTIBLE);
--			if (ctx->count)
--				break;
--			if (signal_pending(current)) {
--				__remove_wait_queue(&ctx->wqh, &wait);
--				__set_current_state(TASK_RUNNING);
--				spin_unlock_irq(&ctx->wqh.lock);
--				return -ERESTARTSYS;
--			}
-+
-+		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count)) {
- 			spin_unlock_irq(&ctx->wqh.lock);
--			schedule();
--			spin_lock_irq(&ctx->wqh.lock);
-+			return -ERESTARTSYS;
- 		}
--		__remove_wait_queue(&ctx->wqh, &wait);
--		__set_current_state(TASK_RUNNING);
- 	}
- 	eventfd_ctx_do_read(ctx, &ucnt);
- 	current->in_eventfd = 1;
-@@ -275,7 +262,6 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
- 	struct eventfd_ctx *ctx = file->private_data;
- 	ssize_t res;
- 	__u64 ucnt;
--	DECLARE_WAITQUEUE(wait, current);
- 
- 	if (count < sizeof(ucnt))
- 		return -EINVAL;
-@@ -288,23 +274,9 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
- 	if (ULLONG_MAX - ctx->count > ucnt)
- 		res = sizeof(ucnt);
- 	else if (!(file->f_flags & O_NONBLOCK)) {
--		__add_wait_queue(&ctx->wqh, &wait);
--		for (res = 0;;) {
--			set_current_state(TASK_INTERRUPTIBLE);
--			if (ULLONG_MAX - ctx->count > ucnt) {
--				res = sizeof(ucnt);
--				break;
--			}
--			if (signal_pending(current)) {
--				res = -ERESTARTSYS;
--				break;
--			}
--			spin_unlock_irq(&ctx->wqh.lock);
--			schedule();
--			spin_lock_irq(&ctx->wqh.lock);
--		}
--		__remove_wait_queue(&ctx->wqh, &wait);
--		__set_current_state(TASK_RUNNING);
-+		res = wait_event_interruptible_locked_irq(
-+				ctx->wqh, ULLONG_MAX - ctx->count > ucnt) ?
-+			-ERESTARTSYS : sizeof(ucnt);
- 	}
- 	if (likely(res > 0)) {
- 		ctx->count += ucnt;
--- 
-2.37.2
-
+Thanks & Best regards,
+	Abel
