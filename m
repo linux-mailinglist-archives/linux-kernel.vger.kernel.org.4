@@ -2,226 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D131698C22
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE12F698C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBPFf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S229831AbjBPFh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjBPFfz (ORCPT
+        with ESMTP id S229493AbjBPFhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:35:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FF4740F;
-        Wed, 15 Feb 2023 21:35:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 483481FF61;
-        Thu, 16 Feb 2023 05:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676525732; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G6KVzt/M6du488H+frf1ioxhNrIj4VV3NUSS1K7UwVg=;
-        b=KUic2fQWikvwmcsRqXcn210CqLceiRP5MGg9IGqK3SvyqR46B3+F7ApGsKYLZp3VAzgDL6
-        EsGJQZRJ190JAYs/iZtDZVeVCxX0fhx7U8RS80kKa/2vjSyU8u5XgttRebskf6Y3bcJbZu
-        BQFCnMoxHVBxtdgR52hkpuA4r8+O5zE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4F2C13A26;
-        Thu, 16 Feb 2023 05:35:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NcHCJqPA7WMyTgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 16 Feb 2023 05:35:31 +0000
-Message-ID: <a6a58de7-0c32-8c9e-244d-a5fa2aa13192@suse.com>
-Date:   Thu, 16 Feb 2023 06:35:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+        Thu, 16 Feb 2023 00:37:25 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31E0B76D;
+        Wed, 15 Feb 2023 21:37:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cZbXF151vpmACsammCwPK1iLi1Bbw4kM2WnF8jOFJyd7UVZdk8S7b9SwD0trUlTfSX5NZ56v17OBvEHUVdnC5z/s1nCqUbXn2l/B7LuLdt03P/lg4TdIYl6WmvAv+0cBQMLWnNfb8MM/ynR4VOx8MASDAQo2sOwok/4lkYO1ucNDOPzLgmY5o5Ht4swSqa59vTydZ366jc7T7fPqakZkKN3eBA5FFqgrb14poX0XqI3N6a2bhV5HEZWAmpMEcmkDLCuehNwCxWXInRahkLNyi6Xxt1jJ3Li0KJPANCUXX2TjYDH3n0ATw1Cma/gvg7P7YUvbrH1CfxQjs1kI7FwsAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mh3Lx1A9h5N0Y46de8xL++i4vY/8f+R01W/uE9wtWf8=;
+ b=eGc2XLyyVgxPXKHajFT6Bd64ztObqfLz88IbINHvnCSmRd2y3vaEnBa42RBLlBv/FvjsW3+/tepNR1m4zsPKDK0xeYuOJx/YLpJ0z5uB7DgW9Oj/hwQpsT+7DxuVIo6unCcI2XWzwFo3+BEg1v3XQNDsXvDCJ2a7Nk/0RRRjLc2K/OEVrV19RSbx5+/2NGhYiE7riVmJGGESd92K+lJkAAs4dV5WjVSa0DbA6BrHcQDeoZN4gTEcckPMUUSDnFHfrVQPfm4gI3BtaK05s7GkHcH6prqfCVdhlAuWiP+66saMc8ROb+aDlkcpY/t4TJ8XFHj2owOB2RgLYCxB1VK5OA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mh3Lx1A9h5N0Y46de8xL++i4vY/8f+R01W/uE9wtWf8=;
+ b=vGU5+HP0XDQhFIZ+ygyEbM699xbd667fF2JTdq+IPHPCLZy3auWwjZEfRfxmDmPa1aweL3Z9ffoOeBnDDyEIQhu9P61G914DZ3wS7jX6Bk4b0qlxM7X+aZsZGKkuVhMlOfEYnDiaBIfKexStFNNz0s9ZkPFP/YpR4T9JpCx5mws=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
+ DM4PR12MB8557.namprd12.prod.outlook.com (2603:10b6:8:18b::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.26; Thu, 16 Feb 2023 05:37:21 +0000
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::56d2:cfa0:4e19:40cd]) by DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::56d2:cfa0:4e19:40cd%4]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
+ 05:37:21 +0000
+Message-ID: <9103b537-62c3-d6b2-b576-713406635455@amd.com>
+Date:   Thu, 16 Feb 2023 11:07:06 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
+ =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
+ =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "lists@nerdbynature.de" <lists@nerdbynature.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Cui, Dexuan" <decui@microsoft.com>,
-        "mikelley@microsoft.com" <mikelley@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <20230209072220.6836-1-jgross@suse.com>
- <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
- <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com>
- <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
- <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
- <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
-In-Reply-To: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------YKwwJCQbPzGtuJPV0v0m0ee8"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Liu, Aaron" <Aaron.Liu@amd.com>, Joerg Roedel <jroedel@suse.de>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230215153913.GA3189407@bhelgaas>
+ <e3b866eb-830c-9037-39c7-978714aaf4d2@amd.com> <Y+18UuVTKIshk8EF@nvidia.com>
+From:   Vasant Hegde <vasant.hegde@amd.com>
+In-Reply-To: <Y+18UuVTKIshk8EF@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0073.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:9a::6) To DS7PR12MB6048.namprd12.prod.outlook.com
+ (2603:10b6:8:9f::5)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|DM4PR12MB8557:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d0fecd4-5528-4c54-a5aa-08db0fdfdfea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: srAtfSpFI+3MSnD3GkoAEw3SrUiDP4JMFAnoiY9w8OBcqIwZkpC2tsBu2o2qaaLux7D5hnKzc6b4a3n+bNLXLLuSg8WrLrFVMPd+vAAJvukCrD4q4xUCBYBVM7nsgs+Kz9nGQzZ5nP4i4GPM3aQldF60w/cYEh/yF1P6ow8MppVaaRwXkfTqBEtpYprpejhtZBtuCgBL5JR7GgzJW5PntXkYvLJ7dl9oxDWeG3PlNRyFyq4/d9eu0m9qtmbETVEynudGCHylpvHxU5tg2r3ETz7dBqi0O5d4GpbDG0Um7lyBc9+QqAMg4+mwNgKcElC2rcwuas3r6rkdXvnRN8BbjjzsGO8st/fIVQAg9cS7c7uMXZeo7VWK7jZ0l9GOY8hqGpGpBEOcmpO4hw4wIaQvc7rA20eWZnXrIicedBLUUnwJzRY0VXzA/0OTkuDC2JhgH/avcX8zsAHJNPndMfwSnur7+81IcABny4pA9ljLnD4FmmU/Qak4mPPpo+tykyFeP8Yaic3fLAwXHonOZPJ1bA6uTrvlxyq3feHlDzeDI5Wj49swN5DhCikHDPo73e5oEX66O2k+1i9ZpvDrB7QLNSF7P/UGVRe4pbZC2zUR/iIhy9j3X4Hxf0vW/fo/auWj7G5Tfs2vbd0h3+U96bkhcQ2Ay/1Z9IVeTJXlNUi5YNtVn2ZctX8yDnzvPphe2BmI2A5xkDFY/uxWtLBDhSHOo4xlhNYVTWC4gkfGpslaffY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199018)(186003)(44832011)(26005)(6506007)(5660300002)(41300700001)(53546011)(6512007)(6666004)(7416002)(31696002)(86362001)(38100700002)(8936002)(36756003)(2906002)(478600001)(31686004)(110136005)(6486002)(966005)(6636002)(316002)(54906003)(2616005)(4326008)(66556008)(66476007)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aDVPSjRqaEpsV0ppcGVneHMyUzV5VGZta3NBUWJsazJ0dTlJZEVzSVZpSTU3?=
+ =?utf-8?B?aG1kV3l0bkExbGRNSERIN0xWdXFrVWVOaEhsWC9DRDFENXRjYXF3OWtVcXRQ?=
+ =?utf-8?B?MkxCRyt0Z29PUXpOdTlOZ0ZSM3g2RWU4RTMxcmRYTjJkbm1ibkhaWHFaVHNO?=
+ =?utf-8?B?RWlEYWp6V25CLzlxdzh6NHpBNGZxMGJqSVM2Vjd5QXN1U1NVY1BEY0hwWm9L?=
+ =?utf-8?B?UlYrT05hUFdKZUJRbitXcjhnWG1nUjNJQmN4ZlNub2tXVkh6VjdiZVlmWm5h?=
+ =?utf-8?B?Rk4wd0h0SExrazB5YmRDZVJjNUZpMEVuU09JeC9PTTAwU1ZvU2NjcWxoK0Ix?=
+ =?utf-8?B?Z0xKUGphdkF3TGY0VGg2dWFteDIwOHN0dVN5NjFYOHlvbDZjWlllR3JKK2hS?=
+ =?utf-8?B?akZLY1JYTnZSMEZHK0NMelZnaGpIRk9EclhENlBWOUV2YXQybitjL2J5Tm5C?=
+ =?utf-8?B?ZU42TFdUZk9WRDYvMmlSMTJUTGZqZmlqUndyS1Q1c0h6NWZicnQ3dnVXbDR3?=
+ =?utf-8?B?VndwNVJmZ0EvM3d5L1ZDV0hMa3RJQkVFdkFCS2dnT2w5UkRZQTc3S2xRS0dn?=
+ =?utf-8?B?TU1IeVlXWk85R0UyT3NtV0RYWm1oTE5jTHVrTnBYbFpac0NvU0JLNFFqVitZ?=
+ =?utf-8?B?MnFCbTd2b2dNWG1sa2d0K3dqeTV3RGZiUmRncFJoRWlBUkVuMGhHSkdpQzNj?=
+ =?utf-8?B?azg5NElJaDd6ZkJxK3d4Y3h2MjZGTUw4alhvQWIxVjBaV2I1WmE0Wml3QVM5?=
+ =?utf-8?B?djVpdWtzbWprUDVYZFNpYjk2U09iQkVkT2hoeWRINHFlVnB5ZHRBUFpzREto?=
+ =?utf-8?B?eFBsLyt4WjdMSVF0YmpqcUUxV0xLaURoT0lRWnVmOFl3N1k4T2FMbU84VmM5?=
+ =?utf-8?B?cFI4U0VHYk11RW1MZjJnZDZIMXRmemh6c3R3a1BpY1QybytRNHV5TEVGOHNI?=
+ =?utf-8?B?aW9zM2E5WTd5R2FYNzBRTThyYWxMVlFXdzF5NWFhQVVGL1dMZzJ6QWcxTzlw?=
+ =?utf-8?B?WTJYc0x5Mlg4Q0U5cElwcG4rZzlnc21VeHR0RTVpT25WV1piY1JaWlRGclJN?=
+ =?utf-8?B?cWx0UHR6aUNHTHFHZ0pHekozZXpSdGpWZ29MeXRRRVR4ajVtWHZ5MTAxK0JW?=
+ =?utf-8?B?SStPYk9rM2tmeHVLZXRIZUt5QUNhM29QSXc0OURvWWhULzFaMG9ZVXJnV2E2?=
+ =?utf-8?B?VFNEakN2SGJRR3JkVHNqRkFlSldDNFBINmZ5UXp2SlhJRXdQNDMzWE1wRHFu?=
+ =?utf-8?B?TmhoSlRVRDU3ZDM3R2YxWlc1dXRwMkNOSEZWQ05DZ3ZRdEFGU2xKSFVOcDhS?=
+ =?utf-8?B?YU5TUjh5S0x1YnBSREw3a2t3RzJCd3N2SEp3YmZaNEZiSW9lSDUzTVp4Tk1l?=
+ =?utf-8?B?QkRhR2k4V1huVWdyTzVVZjlkT0M3RjRBeUN0L0pxK3FiMnJNVmZzS1J6a0py?=
+ =?utf-8?B?T3N6Zi9QR2ovZ1M5RVVFVlJtSHFJb1hNSUFBV1N1aU0zRGpxZG1lK3l4YVY5?=
+ =?utf-8?B?VWFkRG1PdmVrWEZoVmMza1VEMzBIVVNHSm1TaDl4L0xTak0wbWhOR25lRTJS?=
+ =?utf-8?B?QzdlczJtUnlWd2tOb1BEbHorM0xVUmpPR0UzNmFvTll1bjRtdlJiRVF2ZGtr?=
+ =?utf-8?B?Zi9mRU82RzlRWlJCRGRwcHZBZjRFczFWQ3JxVC9ybXNVUEJQYmZuVVVHR2Nh?=
+ =?utf-8?B?VnUxWnk3cnBSTkRQUC9xVTRZcFpSTjEwZU9xcGtXU3lzU2hMNy8zV3drZUxN?=
+ =?utf-8?B?citDWjFzZ2hOa24xUzRHaTRmR3R6bXZPR0FHQ3RSYUppY05YckZRMFBISG4r?=
+ =?utf-8?B?MHM2ZlJZSmhaRzQ2QTlBS0FBaGVzYTQ4RDNJM1UrT3haQXhKUWQ4UU9LSXJs?=
+ =?utf-8?B?NERZdThuR29FVzBLRkZzMWxKT3RtNllWc0E3S0NtYWR5bUlTWmZVSGJJQlpz?=
+ =?utf-8?B?TGE1WUdSbGVTN0U2N2Z0djhNOU9zKzNVSXdTbUlTVm9NcXU4WHBvK0VxOEpo?=
+ =?utf-8?B?UlF0M0ZnbGFsV3FGbzRMSFN5OTBvb0krMUVGODFhVlY4UFFGNjJ4M2hJQi9Z?=
+ =?utf-8?B?UVIvNFV6dEdXU0t6UHBBOE5EQ3ZSa3Q0c2ZtSzZwMlNTbWFrVDdkNWVwODV1?=
+ =?utf-8?Q?g63BEMN5WSG8ZdzF44rVxM68T?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d0fecd4-5528-4c54-a5aa-08db0fdfdfea
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 05:37:21.5627
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hnJKC/9FAv/7hmTAiOQxWIk/w3mjplnXjHBq+9iqEh/T6ecr01SG5sjX1CTv2bv77FPsgrjj8+Jvcvyd83Zxnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8557
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------YKwwJCQbPzGtuJPV0v0m0ee8
-Content-Type: multipart/mixed; boundary="------------DmHZP3C4bBUlqODfBhke002u";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "kys@microsoft.com" <kys@microsoft.com>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "lists@nerdbynature.de" <lists@nerdbynature.de>,
- "hpa@zytor.com" <hpa@zytor.com>, "mingo@redhat.com" <mingo@redhat.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>, "Lutomirski, Andy"
- <luto@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
- "Cui, Dexuan" <decui@microsoft.com>,
- "mikelley@microsoft.com" <mikelley@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-Message-ID: <a6a58de7-0c32-8c9e-244d-a5fa2aa13192@suse.com>
-Subject: Re: [PATCH v2 0/8] x86/mtrr: fix handling with PAT but without MTRR
-References: <20230209072220.6836-1-jgross@suse.com>
- <efeaec9b303e8a3ec7a7af826c61669d18fd22dc.camel@intel.com>
- <e983da4b-71d5-1c9d-5efa-be7935dab8fc@suse.com>
- <cb98f918fbc8b58e0a8d6823b4f92ad1d4265cfe.camel@intel.com>
- <51a67208-3374-bbd9-69be-650d515c519f@suse.com>
- <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
-In-Reply-To: <CAHk-=wg2zK6GRFLv+LkDevcjcYqhGi-GazcHmr0F1j_9BXQ6Pg@mail.gmail.com>
+Hi Jason,
 
---------------DmHZP3C4bBUlqODfBhke002u
-Content-Type: multipart/mixed; boundary="------------gm608TjOsxg4CvHzaDMSqB0Y"
 
---------------gm608TjOsxg4CvHzaDMSqB0Y
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 2/16/2023 6:14 AM, Jason Gunthorpe wrote:
+> On Wed, Feb 15, 2023 at 07:35:45PM -0500, Felix Kuehling wrote:
+>>
+>> If I understand this correctly, the HW or the BIOS is doing something wrong
+>> about reporting ACS. I don't know what the GPU driver can do other than add
+>> some quirk to stop using AMD IOMMUv2 on this HW/BIOS.
+> 
+> How about this:
+> 
+> diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+> index 864e4ffb6aa94e..cc027ce9a6e86f 100644
+> --- a/drivers/iommu/amd/iommu_v2.c
+> +++ b/drivers/iommu/amd/iommu_v2.c
+> @@ -732,6 +732,7 @@ EXPORT_SYMBOL(amd_iommu_unbind_pasid);
+>  
+>  int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
+>  {
+> +	struct iommu_dev_data *dev_data = dev_iommu_priv_get(&pdev->dev);
+>  	struct device_state *dev_state;
+>  	struct iommu_group *group;
+>  	unsigned long flags;
+> @@ -740,6 +741,9 @@ int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
+>  
+>  	might_sleep();
+>  
+> +	if (!dev_data->ats.enabled)
+> +		return -EINVAL;
+> +
 
-T24gMTYuMDIuMjMgMDA6MjIsIExpbnVzIFRvcnZhbGRzIHdyb3RlOg0KPiBPbiBXZWQsIEZl
-YiAxNSwgMjAyMyBhdCAxMjoyNSBBTSBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+
-IHdyb3RlOg0KPj4NCj4+IFRoZSBwcm9ibGVtIGFyaXNlcyBpbiBjYXNlIGEgbGFyZ2UgbWFw
-cGluZyBpcyBzcGFubmluZyBtdWx0aXBsZSBNVFJScywNCj4+IGV2ZW4gaWYgdGhleSBkZWZp
-bmUgdGhlIHNhbWUgY2FjaGluZyB0eXBlICh1bmlmb3JtIGlzIHNldCB0byAwIGluIHRoaXMN
-Cj4+IGNhc2UpLg0KPiANCj4gT2gsIEkgdGhpbmsgdGhlbiB5b3Ugc2hvdWxkIGZpeCB1bmlm
-b3JtIHRvIGJlIDEuDQo+IA0KPiBJT1csIHdlIHNob3VsZCBub3QgdGhpbmsgIm11bHRpcGxl
-IE1UUlJzIiBtZWFucyAibm9uLXVuaWZvcm0iLiBPbmx5DQo+ICJkaWZmZXJlbnQgYWN0dWFs
-IG1lbW9yeSB0eXBlcyIgc2hvdWxkIG1lYW4gbm9uLXVuaWZvcm1pdHkuDQoNClRoYW5rcyBm
-b3IgY29uZmlybWF0aW9uLiBJIGNvbXBsZXRlbHkgYWdyZWUuDQoNCj4gSWYgSSByZW1lbWJl
-ciBjb3JyZWN0bHksIHRoZXJlIHdlcmUgZ29vZCByZWFzb25zIHRvIGhhdmUgb3ZlcmxhcHBp
-bmcNCj4gTVRSUidzLiBJbiBmYWN0LCB5b3UgY2FuIGdlbmVyYXRlIGEgc2luZ2xlIE1UUlIg
-dGhhdCBkZXNjcmliZWQgYQ0KPiBtZW1vcnkgdHR5cGUgdGhhdCB3YXNuJ3QgZXZlbiBjb250
-aWd1b3VzIGlmIHlvdSBoYWQgb2RkIG1lbW9yeSBzZXR1cHMuDQo+IA0KPiBJbnRlbCBkZWZp
-bml0ZWx5IGRlZmluZXMgaG93IG92ZXJsYXBwaW5nIE1UUlIncyB3b3JrLCBhbmQgInNhbWUg
-dHlwZXMNCj4gb3ZlcmxhcHMiIGlzIGRvY3VtZW50ZWQgYXMgYSByZWFsIHRoaW5nLg0KDQpZ
-ZXMuIEFuZCBpdCBpcyBoYW5kbGVkIHdyb25nIGluIGN1cnJlbnQgY29kZS4NCg0KSGFuZGxp
-bmcgaXQgY29ycmVjdGx5IHdpbGwgcmVxdWlyZSBxdWl0ZSBzb21lIHJld29ya2luZyBvZiB0
-aGUgY29kZSwNCndoaWNoIEkndmUgYWxyZWFkeSBzdGFydGVkIHRvIHdvcmsgb24uIEkgd2ls
-bCBkZWZlciB0aGUgcHVkX3NldF9odWdlKCkvDQpwbWRfc2V0X2h1Z2UoKSBtb2RpZnlpbmcg
-cGF0Y2ggdG8gYWZ0ZXIgdGhpcyByZXdvcmsuDQoNCg0KSnVlcmdlbg0K
---------------gm608TjOsxg4CvHzaDMSqB0Y
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Thanks for the proposed fix. But aactually this will not solve the issue because
+current flow is :
+  - in this function it tries to allocate new domain
+  - Calls iommu_attach_group() which will call attach_device. In that path
+    it will try to enable ATS/PASID and hitting error.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+As I mentioned in other reply I think even current code returns error from
+amd_iommu_init_device() to GPU. But the issue is, in __iommu_attach_group() path
+it detached device from current domain, failed to attach to new domain and
+returned error. We didn't put the device back to old domain thats causing the
+issue. Below series should fix this issue.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+https://lore.kernel.org/linux-iommu/20230215052642.6016-1-vasant.hegde@amd.com/
 
---------------gm608TjOsxg4CvHzaDMSqB0Y--
+-Vasant
 
---------------DmHZP3C4bBUlqODfBhke002u--
-
---------------YKwwJCQbPzGtuJPV0v0m0ee8
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPtwKMFAwAAAAAACgkQsN6d1ii/Ey9u
-Swf+O1os54HshD4sOldY+rYmr6S3inwHW4nfOwo1eFXH0e7c7tFQ3NOtwdYtHBvBMCYImcPreoh+
-6k0TQg94jQZB+5H2vqQs5xPtc0QNEgMGzSfSO0aLxvkLxDzHX0NgRR3hcXxoRQDNr79RbC4GE0F6
-PLz8JScT6Pcnf3TE9ozBfc1gRc5wkvanpcn93mvhlGeo/sWJ3k5gyL+zzSGzEDyeMInk+BT91za4
-BR9F/JGLFn1D9RTkc7ZgCv304PSTjoc9fYgXuuFkVv3iZKqskcHKI+BU9ZrHiPHHkwihv7kx735Z
-nTOD+WQ4k5wc5I77gy0vk4mIDcpoWp5LMCQARYS5Og==
-=ykA5
------END PGP SIGNATURE-----
-
---------------YKwwJCQbPzGtuJPV0v0m0ee8--
