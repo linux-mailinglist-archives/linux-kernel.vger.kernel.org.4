@@ -2,113 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B3269951C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40EC699532
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjBPNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S229985AbjBPNIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBPNFO (ORCPT
+        with ESMTP id S229462AbjBPNIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:05:14 -0500
+        Thu, 16 Feb 2023 08:08:41 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15844DBC0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:04:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85B841B7D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:07:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676552656;
+        s=mimecast20190719; t=1676552878;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WpU46aDI0Nq+Pm5BTLIuPyiBJXqm15CgT5zEhAsrlS0=;
-        b=JBwNSp+1/ky85tZURB8ChYshnV5sgL9m4qc1zVQF36we71vKLrd53OpP46lLFMjRGIqwcx
-        KlT3voBNRotuNNqFQljjCfoYzzHtWIT5ojsM62JZtYvrfJu5Ci6MyShHLrqWOMstJ5zE+m
-        n9HoMiH963d3oS/KTTDtVvllp+Qw0OA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5tfNziE7I62EYh6SyterE30kSNHMO9z+RTw6lOah7rY=;
+        b=P1gXkVfDiLyxnIDITYnlU8G3A4SrdZCt5ZFRwO63duS0CuYubSOcY2DWvz90AjQ1AnCjlv
+        YzVXdcNE0Ejp8GsspGlgPATJ+XejJpHB5vDcvup0ghxBcHH/UXNbbaqbFtmJvwRYigfgOC
+        FxHlwZ/kXzV5kxO6dBBY/V0vCQzOAgw=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-299-GAgVXDQ6MNWqwAvSV6x5Fg-1; Thu, 16 Feb 2023 08:04:15 -0500
-X-MC-Unique: GAgVXDQ6MNWqwAvSV6x5Fg-1
-Received: by mail-wr1-f69.google.com with SMTP id r11-20020a5d498b000000b002c5588d962fso231523wrq.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:04:15 -0800 (PST)
+ us-mta-201-nLOYMrq-O7K7uzXDzX2z3A-1; Thu, 16 Feb 2023 08:07:56 -0500
+X-MC-Unique: nLOYMrq-O7K7uzXDzX2z3A-1
+Received: by mail-ej1-f70.google.com with SMTP id 19-20020a170906309300b008b14b9cb779so1510942ejv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:07:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WpU46aDI0Nq+Pm5BTLIuPyiBJXqm15CgT5zEhAsrlS0=;
-        b=51mz9qENlnlVdRgobI7x4+o+7Gj2ksqCklu2FVYQy/V+NdlO8xgvmOHw4wZwgfRYnq
-         KJWIVPEYlbPirSzgqw2KyRtL4Tuxmyhio8hX+pGrRn9D3WmDesGcW+3Bn+F3JGVCIPXt
-         Zy9RmoDJI6qEEJPgH1X5+GlI2ZS3ZrzyWIVxUGOADXlS9kXPpFpwldODJTzJy9YJgn5k
-         zr1N3DJzR/HGyKV++ZMYdl0HUt46+8fIhB609GX4FKSCsKuqB4TB65kHHLTxNY15pVnx
-         boaQU2kvZXR3X0Ef5oVyG1U3ViD/qlSv6ZJRQCTwpI4wynCYO6KYBAwV9y5ViYJfFP53
-         DFZw==
-X-Gm-Message-State: AO0yUKVwFwoRfzXEsle9WpaAkU6T2o9OtBEKem8XGZl/354cCaWHZ5fG
-        o4/6CBceVkjlIQx+ZK9H4FNupS96h6bS4nf46TmYponPEcCwWOCEz+tMSuLV0CxtydLedCrtp+6
-        bLB81xZec771/kO8rshibERgj
-X-Received: by 2002:a1c:cc17:0:b0:3df:e549:da54 with SMTP id h23-20020a1ccc17000000b003dfe549da54mr4335138wmb.17.1676552654230;
-        Thu, 16 Feb 2023 05:04:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set8sW89+S6rdN2PFz8dxoWKxIGVdYL9e5lSreJUROczAagSAkfFun80bRQhysfYeh1OT/RcUMQ==
-X-Received: by 2002:a1c:cc17:0:b0:3df:e549:da54 with SMTP id h23-20020a1ccc17000000b003dfe549da54mr4335106wmb.17.1676552653903;
-        Thu, 16 Feb 2023 05:04:13 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003e00c453447sm4756678wmc.48.2023.02.16.05.04.12
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5tfNziE7I62EYh6SyterE30kSNHMO9z+RTw6lOah7rY=;
+        b=MyE2rJyTEz/mZ5x/zmDn8IxRoldhrdWFxnn95jEwmWF46o80gq3r7xGKxe/LY9AKXr
+         G6pVJh66S3KGdNVDBn4xQSN691rWA245NWmgx2tezjjrRBt24Y7mLq8W82EyOJPaopme
+         NZItdjIsm/xHGfrN1q8HkJA27XMhhcSrJ/qOJ2Mz/Jn3fGZyd0+q7pB8R/I3ZX9O9e4f
+         XpwVJh0+Fr7A8RyQeSHc0gqo/BPKYkN6698iCn5AQ80QHhf50QHsRDsNvaLiP/aHXD4j
+         uCp58pepigVNio0N+xCWBvT3173k/Z3HT7G4aK29SErP1jOqYwNiPwUWzGH/E1Eu5y8k
+         BRNQ==
+X-Gm-Message-State: AO0yUKUtXSbSQZnhkd48dci1X/7vZzuP5VJjSGIL8pjHDNVC0zLq8nrq
+        VGMlN9xQuxFRi6AnYnSz6xwdXKlXaRoPB9WGDYgM10s8putRt/ftWut80YOaNJ4w4fArhasLMwE
+        BCwPHpjwP0a68kEm34ogiwaJm
+X-Received: by 2002:a17:906:3e56:b0:878:7f6e:38a7 with SMTP id t22-20020a1709063e5600b008787f6e38a7mr8203984eji.44.1676552875794;
+        Thu, 16 Feb 2023 05:07:55 -0800 (PST)
+X-Google-Smtp-Source: AK7set8aFKVTZuW4klTERDVT/XIBaEprwulezxA3vaCx0kdfWJ10kXqR4fJS7bvMAEgGFDcTi7eIbQ==
+X-Received: by 2002:a17:906:3e56:b0:878:7f6e:38a7 with SMTP id t22-20020a1709063e5600b008787f6e38a7mr8203959eji.44.1676552875492;
+        Thu, 16 Feb 2023 05:07:55 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ky13-20020a170907778d00b008b138528a53sm771141ejc.224.2023.02.16.05.07.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 05:04:13 -0800 (PST)
-Message-ID: <2e1d3f81-9cc0-bf96-abde-a270a58701a1@redhat.com>
-Date:   Thu, 16 Feb 2023 14:04:12 +0100
+        Thu, 16 Feb 2023 05:07:54 -0800 (PST)
+Message-ID: <87d2068b-2644-0307-d722-5539b1f9fb36@redhat.com>
+Date:   Thu, 16 Feb 2023 14:07:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 1/1] KVM: s390: vsie: clarifications on setting the
- APCB
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, thuth@redhat.com,
-        imbrenda@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        svens@linux.ibm.com
-References: <20230214122841.13066-1-pmorel@linux.ibm.com>
- <20230214122841.13066-2-pmorel@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230214122841.13066-2-pmorel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/5] apple-gmux: Use GMSP acpi method for interrupt
+ clear
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Seth Forshee <sforshee@kernel.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>
+References: <20230216122342.5918-1-orlandoch.dev@gmail.com>
+ <20230216122342.5918-4-orlandoch.dev@gmail.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230216122342.5918-4-orlandoch.dev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 13:28, Pierre Morel wrote:
-> The APCB is part of the CRYCB.
-> The calculation of the APCB origin can be done by adding
-> the APCB offset to the CRYCB origin.
+Hi Orlando,
+
+Thank you for the new version patches 1 + 2 look good,
+one small remark on this one.
+
+On 2/16/23 13:23, Orlando Chamberlain wrote:
+> This is needed for interrupts to be cleared correctly on MMIO based
+> gmux's. It is untested if this helps/hinders other gmux types, so
+> currently this is only enabled for the MMIO gmux's.
 > 
-> Current code makes confusing transformations, converting
-> the CRYCB origin to a pointer to calculate the APCB origin.
+> There is also a "GMLV" acpi method, and the "GMSP" method can be called
+> with 1 as its argument, but the purposes of these aren't known and they
+> don't seem to be needed.
 > 
-> Let's make things simpler and keep the CRYCB origin to make
-> these calculations.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
 > ---
+> v1->v2: Only enable this on MMIO gmux's
+>  drivers/platform/x86/apple-gmux.c | 30 +++++++++++++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+> index 36208e93d745..12a93fc49c36 100644
+> --- a/drivers/platform/x86/apple-gmux.c
+> +++ b/drivers/platform/x86/apple-gmux.c
+> @@ -76,6 +76,7 @@ struct apple_gmux_config {
+>  	enum vga_switcheroo_handler_flags_t handler_flags;
+>  	unsigned long resource_type;
+>  	bool read_version_as_u32;
+> +	bool use_acpi_gmsp;
+>  	char *name;
+>  };
+>  
+> @@ -488,6 +489,7 @@ static const struct apple_gmux_config apple_gmux_pio = {
+>  	.handler_flags = VGA_SWITCHEROO_CAN_SWITCH_DDC,
+>  	.resource_type = IORESOURCE_IO,
+>  	.read_version_as_u32 = false,
+> +	.use_acpi_gmsp = false,
+>  	.name = "classic"
+>  };
+>  
+> @@ -500,6 +502,7 @@ static const struct apple_gmux_config apple_gmux_index = {
+>  	.handler_flags = VGA_SWITCHEROO_NEEDS_EDP_CONFIG,
+>  	.resource_type = IORESOURCE_IO,
+>  	.read_version_as_u32 = true,
+> +	.use_acpi_gmsp = false,
+>  	.name = "indexed"
+>  };
+>  
+> @@ -511,8 +514,29 @@ static const struct apple_gmux_config apple_gmux_index = {
+>   * MCP79, on all following generations it's GPIO pin 6 of the Intel PCH.
+>   * The GPE merely signals that an interrupt occurred, the actual type of event
+>   * is identified by reading a gmux register.
+> + *
+> + * On MMIO gmux's, we also need to call the acpi method GMSP to properly clear
+> + * interrupts.
+>   */
+>  
+> +static int gmux_call_acpi_gmsp(struct apple_gmux_data *gmux_data, int arg)
+> +{
+> +	acpi_status status = AE_OK;
+> +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+> +	struct acpi_object_list arg_list = { 1, &arg0 };
+> +
+> +	arg0.integer.value = arg;
+> +
+> +	status = acpi_evaluate_object(gmux_data->dhandle, "GMSP", &arg_list, NULL);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("GMSP call failed: %s\n",
+> +		       acpi_format_exception(status));
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static inline void gmux_disable_interrupts(struct apple_gmux_data *gmux_data)
+>  {
+>  	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_ENABLE,
+> @@ -536,7 +560,11 @@ static void gmux_clear_interrupts(struct apple_gmux_data *gmux_data)
+>  
+>  	/* to clear interrupts write back current status */
+>  	status = gmux_interrupt_get_status(gmux_data);
+> -	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+> +	if (status) {
+> +		gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+> +		if (gmux_data->config->use_acpi_gmsp)
+> +			gmux_call_acpi_gmsp(gmux_data, 0);
+> +	}
 
-Much better
+This changes the behavior on the existing supported models to
+only write back status when it is non 0. This is likely fine
+but given that we seem to lack testers for the old models
+I would prefer to not change the behavior there.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+So how about:
 
--- 
-Thanks,
+	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+	if (status && gmux_data->config->use_acpi_gmsp)
+		gmux_call_acpi_gmsp(gmux_data, 0);
 
-David / dhildenb
+?
+
+The 0 write to what presumably is a register with
+write 1 to clear bits should be harmless.
+
+You can test that it is harmless on the new MMIO models
+and this way we don't change the behavior on the older models.
+
+Regards,
+
+Hans
 
