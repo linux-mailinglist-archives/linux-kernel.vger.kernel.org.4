@@ -2,127 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97114699500
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBC1699507
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBPM5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S229739AbjBPNAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBPM5H (ORCPT
+        with ESMTP id S229616AbjBPNA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:57:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBDD3B858
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:56:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676552176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0brO8VK06ZnIcshoHVvytI1fhIpz6iPLFoXabkZbK1Y=;
-        b=hwwdyHcZsebtKDs7I9jLlFB315caVPD1Uc4RvNeQoxG5AgZ3ec6hO7Bsz6u0UNemtNzfFL
-        ucy8IHdZRggpsdj8qdF9gFtSojDsJYdOubkIdzkB0Wij9COsbDfhh0dRSKLmnc6o+z4ZdU
-        0AySlsP9A4zXVcftVcfNGo9S3CfNHg0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-563-Dh76mL1NPr6cqhjfsMiJVg-1; Thu, 16 Feb 2023 07:56:15 -0500
-X-MC-Unique: Dh76mL1NPr6cqhjfsMiJVg-1
-Received: by mail-wm1-f69.google.com with SMTP id bg9-20020a05600c3c8900b003e1e7d3db06so1084374wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:56:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0brO8VK06ZnIcshoHVvytI1fhIpz6iPLFoXabkZbK1Y=;
-        b=LuTnvJJuAk0H9ItvLU9i1nREvoxs0VUgXFadSMQyHfYrTXKV6pKDX0sqmRr/L1uxp6
-         5DjDX+a6XnfEnvkAiOBzbucNC7ZGc2d6FaO034BImtmJrY0XxkIHDkkGF/n9/3eo/bRy
-         exspKxQisZEyYy91Y0AeuoKdvmAlOpRWjSoQCkpLOIK0NlyaFjQIi93Uyty0i5FIrvhT
-         LfNmLwdrvt3EExhEwvhIFgbdKeXsqLdtxQ/HFfvcvA0/tzS80nA0hJ2yUvDnt6WhwiOg
-         cngG1iFw37yaSKDTn0GYll8eIPzuIej+5vg4LxQU/sEuOXoa8rzuDd2PBa07XWJWSYUD
-         KzYw==
-X-Gm-Message-State: AO0yUKXtes3PWZ1ppasSHj9n4CQTGEBsnLx2htTpKMoa+Yat72XZIZ57
-        1eKj4+/zSRDuacEOS6ePU7qRIUiJPeYkI5CB9QgozwBqSWFTI+NGsWW0mi2SlKzdKUdGXWeItGm
-        NKcNGbsZfKCHBp/Pfb5aNVRxe
-X-Received: by 2002:a5d:4382:0:b0:2c5:5da4:a3b1 with SMTP id i2-20020a5d4382000000b002c55da4a3b1mr5067815wrq.69.1676552174377;
-        Thu, 16 Feb 2023 04:56:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set8ga4/l/6qx8d8pgKP4FREWjdTFn59p9XK8gw6tuQF/ZAJU23f5WU3594HK3YmofYUfawVPeA==
-X-Received: by 2002:a5d:4382:0:b0:2c5:5da4:a3b1 with SMTP id i2-20020a5d4382000000b002c55da4a3b1mr5067803wrq.69.1676552173996;
-        Thu, 16 Feb 2023 04:56:13 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
-        by smtp.gmail.com with ESMTPSA id e14-20020a5d530e000000b002c553e061fdsm1373550wrv.112.2023.02.16.04.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 04:56:13 -0800 (PST)
-Message-ID: <30bc98f3-2048-1b2e-88b5-4e54dff8e0fa@redhat.com>
-Date:   Thu, 16 Feb 2023 13:56:12 +0100
+        Thu, 16 Feb 2023 08:00:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5813D089
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:00:28 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 614B06602065;
+        Thu, 16 Feb 2023 13:00:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676552426;
+        bh=6V0LBeMxyzmdIgkojbhJapEL9BumEDxNoGGGL1jLNno=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VZIglA4hRWDHBMNDyLCl637wB/QAW4DwTwYcBf3O+j+xJ8ZqSEB/iPMbR4n4TLQol
+         3EOi5k05tJR1OtAxO0DrKwHgSuuCMouNmwZFLsrtbU4NRXQM6SHOB+jL4EBNdsPbSO
+         Z9zNO5qGmeriBDF961rIJ8UCWgxsYZwf5KSbq8XeAZknyi0pwOQoc0vCHzqTFoyUXB
+         8S6GK3O3u6c0EhfFGCQYSBlaeANQfswAnrWjogQmSj49cwJ6Ei28QXGbTcmrx8MkET
+         sZzuLyVlq5r8AEjMzFcXfuURPnvgn7ynJMDySbiHAGYg0qE/469OcQ/BHGpWEF9XMl
+         Y8Lgy+eI+26uQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     jason-jh.lin@mediatek.com, chunkuang.hu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 0/9] soc/mediatek: Cleanup mmsys, mutex, cmdq header
+Date:   Thu, 16 Feb 2023 14:00:12 +0100
+Message-Id: <20230216130021.64875-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] sh: initialize max_mapnr
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org
-References: <20230214140729.1649961-1-rppt@kernel.org>
- <20230214140729.1649961-3-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230214140729.1649961-3-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 15:07, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> sh never initializes max_mapnr which is used by the generic
-> implementation of pfn_valid().
-> 
-> Initialize max_mapnr with set_max_mapnr() in sh::paging_init().
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: e5080a967785 ("mm, arch: add generic implementation of pfn_valid() for FLATMEM")
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->   arch/sh/mm/init.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-> index 506784702430..bf1b54055316 100644
-> --- a/arch/sh/mm/init.c
-> +++ b/arch/sh/mm/init.c
-> @@ -301,6 +301,7 @@ void __init paging_init(void)
->   	 */
->   	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
->   	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
-> +	set_max_mapnr(max_low_pfn - min_low_pfn);
->   
->   	nodes_clear(node_online_map);
->   
+This series adds a proper remove callback for mtk-mmsys, adds light
+cleanups on mtk-mutex and, more importantly, adds a cleanup for the
+CMDQ helpers.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Special mention goes to the latter: this is just in preparation for
+a larger cleanup that I plan to do as soon as possible on other cmdq
+helpers users, being mediatek-drm and mtk-mdp3; that's not performed
+right now because, in the case of drm/mdp3, the cleanup is not entirely
+trivial.
+
+AngeloGioacchino Del Regno (9):
+  soc: mediatek: mtk-mmsys: Add .remove() callback
+  soc: mediatek: mtk-mmsys: Use module_platform_driver() macro
+  soc: mediatek: mtk-mmsys: Compress of_device_id array entries
+  soc: mediatek: mtk-mmsys: Add MODULE_DEVICE_TABLE() to allow auto-load
+  soc: mediatek: mtk-mutex: Compress of_device_id array entries
+  soc: mediatek: mtk-mutex: Replace max handles number with definition
+  soc: mediatek: mtk-mutex: Use module_platform_driver() macro
+  soc: mediatek: cmdq: Add inline functions for !CONFIG_MTK_CMDQ
+  soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)
+
+ drivers/soc/mediatek/mtk-mmsys.c      | 135 +++++++++-----------------
+ drivers/soc/mediatek/mtk-mutex.c      |  77 +++++----------
+ include/linux/soc/mediatek/mtk-cmdq.h | 114 ++++++++++++++++++++++
+ 3 files changed, 181 insertions(+), 145 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.1
 
