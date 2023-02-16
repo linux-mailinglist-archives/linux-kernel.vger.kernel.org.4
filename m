@@ -2,257 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E012699600
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA1B699604
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjBPNlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S230139AbjBPNmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjBPNlb (ORCPT
+        with ESMTP id S229653AbjBPNmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:41:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF3846D6D;
-        Thu, 16 Feb 2023 05:41:30 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GCi6TG010500;
-        Thu, 16 Feb 2023 13:41:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4GW9HGTcCea+TxaGteRpkHZ0UVUKrvCVO/dKrvjpaFk=;
- b=sZAyuuCyfW664a5V1OxANXuiJU7KVJ9PVK35vgBt6A2zYQp5XhfKlJrP0Cnj7JUiB1Me
- wevnkDMh3+1c1GTZKVLKa3meSkwL0YMMgM60DaQyr7r8wWkHPDs4u+tlCBEARaZp8cN6
- lKoyilRS1le79AHUAvmQmSK3ANi6RHl82CT1PvBhq4+C/LoiZOFoPY9TJpAclIE53Qrx
- 0RvOsmgNEKVw8GODiNlVQvwCQDDjlvLYZRzgtyA0QZkAHJFBUleDyNpZ9vMBBFzK3wx4
- FnjVJMRlXxWtn+XYUaujihBeg2mf5/nT4dJ9yEOFpy/b/hb5Je2zzia9+AHRAzE0vv0/ sA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsmrd1dxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:41:29 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GDBr0K008790;
-        Thu, 16 Feb 2023 13:41:28 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsmrd1dwa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:41:28 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31FMktdQ028428;
-        Thu, 16 Feb 2023 13:41:27 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3np2n6mycp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:41:26 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31GDfMEW47448338
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 13:41:23 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D733F20043;
-        Thu, 16 Feb 2023 13:41:22 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 459EE20040;
-        Thu, 16 Feb 2023 13:41:22 +0000 (GMT)
-Received: from [9.171.30.51] (unknown [9.171.30.51])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Feb 2023 13:41:22 +0000 (GMT)
-Message-ID: <d32a4080-3c74-27f0-2ef7-78755da98022@linux.ibm.com>
-Date:   Thu, 16 Feb 2023 14:41:22 +0100
+        Thu, 16 Feb 2023 08:42:23 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65A55291;
+        Thu, 16 Feb 2023 05:42:01 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id s8so1989749ljp.2;
+        Thu, 16 Feb 2023 05:42:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ZYjJggXOXL46dSil1ea0yixaiqpsLjMvxrmPaE0WG0=;
+        b=oKTFXsstpnYaCaBevgN8Lj1oymM/nUslVw1Nw1lQuomTN4jqn4lowPuakc7+zPjmMp
+         gE1cYP5ZdDzNKmKmIq4yZ93xQg/3mbY1sIVgzbSOhhI5+EDTOPyycnChCyeTRIFfal+J
+         +I+a6/l1YkjPCxlR/TGIbLO3+qRJmnRi/SolFzeM8CDDklqRx1ymPGrQOyh3arXQg2lD
+         cs75LTnR2e+vBlt4lrAOgtcvjJikDiq/utimAKGXbuqzgZc+SCZWQZbNDtJ1Qg6/Blqd
+         GirM4+l25D4GHg+jYIjh6eFp2YKntDrC9IVFbEeV7feSbFAqMm/EDht7yOKLlXpP/l+D
+         tmLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8ZYjJggXOXL46dSil1ea0yixaiqpsLjMvxrmPaE0WG0=;
+        b=XiNZ8cppHM1aQfAOMB+sA0SthYapGgc3DRNqHYZYbbH1wS8wKMWxFfYoQ0ABzbnq41
+         /uXLNPqSxH3bS/PZZnabfKthTkQ+2oPPEYjRbDeRco4TJ6yUEruh/Tyc01G2AS/q6Dy7
+         md6LAP0ivlKvm/GQhmqi66EtsOehFn5JhYwcZIG+5u7SiINwA3DF8HX1XGB4sEdgaYlK
+         50LeU3lTSaXOQvJq2q27snl7sfqVIsG73xCy730v1wD1AJweVKF7V/scVG4N1zWZxUFx
+         gXMTA4WlQ3o5NrMLuOkn88OzE8AoJ/FNAOf/QOhZXmTgw2QucpzanNfKguysix84O3d/
+         0wAQ==
+X-Gm-Message-State: AO0yUKXckvJQ5n59ZGlYYPApGlI/Q2VHAT915GRfnTzbRe/J043/Wn/T
+        HX5lCw4N0poI8bEDjC6tjP4=
+X-Google-Smtp-Source: AK7set8Za8XwYW7+bDk0HqpPPwan/LM87m2COo8k54tL9H4vaOF2w1WtsouEynf8foe7MZ+9SE31Fw==
+X-Received: by 2002:a2e:550:0:b0:294:6d2d:c18c with SMTP id 77-20020a2e0550000000b002946d2dc18cmr231543ljf.36.1676554919729;
+        Thu, 16 Feb 2023 05:41:59 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id l14-20020a2e868e000000b0029328acc669sm205131lji.75.2023.02.16.05.41.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 05:41:59 -0800 (PST)
+Date:   Thu, 16 Feb 2023 16:41:56 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Sergey.Semin@baikalelectronics.ru,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dmaengine: dw-edma: Rename dw_edma_core_ops
+ structure to dw_edma_plat_ops
+Message-ID: <20230216134156.enjanyzwfhamve6q@mobilestation>
+References: <20230213132411.65524-1-cai.huoqing@linux.dev>
+ <20230213132411.65524-2-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3 1/1] KVM: s390: vsie: clarifications on setting the
- APCB
-To:     Pierre Morel <pmorel@linux.ibm.com>, david@redhat.com
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        cohuck@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com
-References: <20230214122841.13066-1-pmorel@linux.ibm.com>
- <20230214122841.13066-2-pmorel@linux.ibm.com>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230214122841.13066-2-pmorel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bSWWLV9L_XbwnFL-Niq7IURztR_TMqGI
-X-Proofpoint-GUID: g1ymuem39vjcjT2YxTKVN2lwGVDeUa2l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_10,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- clxscore=1015 impostorscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160116
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213132411.65524-2-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 13:28, Pierre Morel wrote:
-> The APCB is part of the CRYCB.
-> The calculation of the APCB origin can be done by adding
-> the APCB offset to the CRYCB origin.
+On Mon, Feb 13, 2023 at 09:24:06PM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
 > 
-> Current code makes confusing transformations, converting
-> the CRYCB origin to a pointer to calculate the APCB origin.
+> Rename dw_edma_core_ops structure to dw_edma_plat_ops, the ops is platform
+> specific operations: the DMA device environment configs like IRQs,
+> address translation, etc.
 > 
-> Let's make things simpler and keep the CRYCB origin to make
-> these calculations.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-LGTM:
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
+> The dw_edma_pcie_plat_ops name was supposed to refer to the platform which
 
+s/dw_edma_pcie_plat_ops/dw_edma_plat_ops
+* The main goal is to update the structure name.
+
+> the DW eDMA engine is embedded to, like PCIe end-point (accessible via
+> the PCIe bus) or a PCIe root port (directly accessible by CPU).
+> Needless to say that for them the IRQ-vector and PCI-addresses are
+> differently determined. The suggested name has a connection with the
+> kernel platform device only as a private case of the eDMA/hDMA embedded
+> into the DW PCI Root ports, though basically it was supposed to refer to
+> any platform in which the DMA hardware lives.
+> 
+> Anyway the renaming was necessary to distinguish two types of
+> the implementation callbacks:
+> 1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
+> setups in one or another aspect of the DMA-engine initialization.
+> 2. DW eDMA/hDMA platform specific operations: the DMA device
+> environment configs like IRQs, address translation, etc.
+> 
+
+> dw_edma_pcie_core_ops is supposed to be used for the case 1, and
+> dw_edma_pcie_plat_ops - for the case 2.
+
+ditto
+
+> 
+> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
 > ---
->   arch/s390/kvm/vsie.c | 50 +++++++++++++++++++++++++-------------------
->   1 file changed, 29 insertions(+), 21 deletions(-)
+>  drivers/dma/dw-edma/dw-edma-pcie.c           | 4 ++--
+>  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>  include/linux/dma/edma.h                     | 7 ++++---
+>  3 files changed, 7 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-> index b6a0219e470a..8d6b765abf29 100644
-> --- a/arch/s390/kvm/vsie.c
-> +++ b/arch/s390/kvm/vsie.c
-> @@ -138,11 +138,15 @@ static int prepare_cpuflags(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->   }
->   /* Copy to APCB FORMAT1 from APCB FORMAT0 */
->   static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
-> -			unsigned long apcb_o, struct kvm_s390_apcb1 *apcb_h)
-> +			unsigned long crycb_gpa, struct kvm_s390_apcb1 *apcb_h)
->   {
->   	struct kvm_s390_apcb0 tmp;
-> +	unsigned long apcb_gpa;
->   
-> -	if (read_guest_real(vcpu, apcb_o, &tmp, sizeof(struct kvm_s390_apcb0)))
-> +	apcb_gpa = crycb_gpa + offsetof(struct kvm_s390_crypto_cb, apcb0);
-> +
-> +	if (read_guest_real(vcpu, apcb_gpa, &tmp,
-> +			    sizeof(struct kvm_s390_apcb0)))
->   		return -EFAULT;
->   
->   	apcb_s->apm[0] = apcb_h->apm[0] & tmp.apm[0];
-> @@ -157,15 +161,19 @@ static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
->    * setup_apcb00 - Copy to APCB FORMAT0 from APCB FORMAT0
->    * @vcpu: pointer to the virtual CPU
->    * @apcb_s: pointer to start of apcb in the shadow crycb
-> - * @apcb_o: pointer to start of original apcb in the guest2
-> + * @crycb_gpa: guest physical address to start of original guest crycb
->    * @apcb_h: pointer to start of apcb in the guest1
->    *
->    * Returns 0 and -EFAULT on error reading guest apcb
->    */
->   static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-> -			unsigned long apcb_o, unsigned long *apcb_h)
-> +			unsigned long crycb_gpa, unsigned long *apcb_h)
->   {
-> -	if (read_guest_real(vcpu, apcb_o, apcb_s,
-> +	unsigned long apcb_gpa;
-> +
-> +	apcb_gpa = crycb_gpa + offsetof(struct kvm_s390_crypto_cb, apcb0);
-> +
-> +	if (read_guest_real(vcpu, apcb_gpa, apcb_s,
->   			    sizeof(struct kvm_s390_apcb0)))
->   		return -EFAULT;
->   
-> @@ -178,16 +186,20 @@ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
->    * setup_apcb11 - Copy the FORMAT1 APCB from the guest to the shadow CRYCB
->    * @vcpu: pointer to the virtual CPU
->    * @apcb_s: pointer to start of apcb in the shadow crycb
-> - * @apcb_o: pointer to start of original guest apcb
-> + * @crycb_gpa: guest physical address to start of original guest crycb
->    * @apcb_h: pointer to start of apcb in the host
->    *
->    * Returns 0 and -EFAULT on error reading guest apcb
->    */
->   static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-> -			unsigned long apcb_o,
-> +			unsigned long crycb_gpa,
->   			unsigned long *apcb_h)
->   {
-> -	if (read_guest_real(vcpu, apcb_o, apcb_s,
-> +	unsigned long apcb_gpa;
-> +
-> +	apcb_gpa = crycb_gpa + offsetof(struct kvm_s390_crypto_cb, apcb1);
-> +
-> +	if (read_guest_real(vcpu, apcb_gpa, apcb_s,
->   			    sizeof(struct kvm_s390_apcb1)))
->   		return -EFAULT;
->   
-> @@ -200,7 +212,7 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
->    * setup_apcb - Create a shadow copy of the apcb.
->    * @vcpu: pointer to the virtual CPU
->    * @crycb_s: pointer to shadow crycb
-> - * @crycb_o: pointer to original guest crycb
-> + * @crycb_gpa: guest physical address of original guest crycb
->    * @crycb_h: pointer to the host crycb
->    * @fmt_o: format of the original guest crycb.
->    * @fmt_h: format of the host crycb.
-> @@ -211,50 +223,46 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
->    * Return 0 or an error number if the guest and host crycb are incompatible.
->    */
->   static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
-> -	       const u32 crycb_o,
-> +	       const u32 crycb_gpa,
->   	       struct kvm_s390_crypto_cb *crycb_h,
->   	       int fmt_o, int fmt_h)
->   {
-> -	struct kvm_s390_crypto_cb *crycb;
-> -
-> -	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
-> -
->   	switch (fmt_o) {
->   	case CRYCB_FORMAT2:
-> -		if ((crycb_o & PAGE_MASK) != ((crycb_o + 256) & PAGE_MASK))
-> +		if ((crycb_gpa & PAGE_MASK) != ((crycb_gpa + 256) & PAGE_MASK))
->   			return -EACCES;
->   		if (fmt_h != CRYCB_FORMAT2)
->   			return -EINVAL;
->   		return setup_apcb11(vcpu, (unsigned long *)&crycb_s->apcb1,
-> -				    (unsigned long) &crycb->apcb1,
-> +				    crycb_gpa,
->   				    (unsigned long *)&crycb_h->apcb1);
->   	case CRYCB_FORMAT1:
->   		switch (fmt_h) {
->   		case CRYCB_FORMAT2:
->   			return setup_apcb10(vcpu, &crycb_s->apcb1,
-> -					    (unsigned long) &crycb->apcb0,
-> +					    crycb_gpa,
->   					    &crycb_h->apcb1);
->   		case CRYCB_FORMAT1:
->   			return setup_apcb00(vcpu,
->   					    (unsigned long *) &crycb_s->apcb0,
-> -					    (unsigned long) &crycb->apcb0,
-> +					    crycb_gpa,
->   					    (unsigned long *) &crycb_h->apcb0);
->   		}
->   		break;
->   	case CRYCB_FORMAT0:
-> -		if ((crycb_o & PAGE_MASK) != ((crycb_o + 32) & PAGE_MASK))
-> +		if ((crycb_gpa & PAGE_MASK) != ((crycb_gpa + 32) & PAGE_MASK))
->   			return -EACCES;
->   
->   		switch (fmt_h) {
->   		case CRYCB_FORMAT2:
->   			return setup_apcb10(vcpu, &crycb_s->apcb1,
-> -					    (unsigned long) &crycb->apcb0,
-> +					    crycb_gpa,
->   					    &crycb_h->apcb1);
->   		case CRYCB_FORMAT1:
->   		case CRYCB_FORMAT0:
->   			return setup_apcb00(vcpu,
->   					    (unsigned long *) &crycb_s->apcb0,
-> -					    (unsigned long) &crycb->apcb0,
-> +					    crycb_gpa,
->   					    (unsigned long *) &crycb_h->apcb0);
->   		}
->   	}
+> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
+> index 2b40f2b44f5e..1c6043751dc9 100644
+> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
+> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
+> @@ -109,7 +109,7 @@ static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
+>  	return region.start;
+>  }
+>  
+> -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
+> +static const struct dw_edma_plat_ops dw_edma_pcie_plat_ops = {
+>  	.irq_vector = dw_edma_pcie_irq_vector,
+>  	.pci_address = dw_edma_pcie_address,
+>  };
+> @@ -225,7 +225,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
+>  
+>  	chip->mf = vsec_data.mf;
+>  	chip->nr_irqs = nr_irqs;
+> -	chip->ops = &dw_edma_pcie_core_ops;
+> +	chip->ops = &dw_edma_pcie_plat_ops;
+>  
+>  	chip->ll_wr_cnt = vsec_data.wr_ch_cnt;
+>  	chip->ll_rd_cnt = vsec_data.rd_ch_cnt;
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 53a16b8b6ac2..44e90b71d429 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -828,7 +828,7 @@ static int dw_pcie_edma_irq_vector(struct device *dev, unsigned int nr)
+>  	return platform_get_irq_byname_optional(pdev, name);
+>  }
+>  
+> -static struct dw_edma_core_ops dw_pcie_edma_ops = {
+> +static struct dw_edma_plat_ops dw_pcie_edma_ops = {
+>  	.irq_vector = dw_pcie_edma_irq_vector,
+>  };
+>  
+> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> index d2638d9259dc..b2f3dd5e7e1a 100644
+> --- a/include/linux/dma/edma.h
+> +++ b/include/linux/dma/edma.h
+> @@ -40,7 +40,7 @@ struct dw_edma_region {
+>   *			iATU windows. That will be done by the controller
+>   *			automatically.
+>   */
+> -struct dw_edma_core_ops {
+> +struct dw_edma_plat_ops {
+>  	int (*irq_vector)(struct device *dev, unsigned int nr);
+>  	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
+>  };
+> @@ -48,7 +48,8 @@ struct dw_edma_core_ops {
+>  enum dw_edma_map_format {
+>  	EDMA_MF_EDMA_LEGACY = 0x0,
+>  	EDMA_MF_EDMA_UNROLL = 0x1,
+> -	EDMA_MF_HDMA_COMPAT = 0x5
+> +	EDMA_MF_HDMA_COMPAT = 0x5,
 
+> +	EDMA_MF_HDMA_NATIVE = 0x7
+                                 ^
+Please add a comma here ---------+
+
+Thus if there is a new entry is added to the enum list in future the
+update will consist of a single-line change. It's a common practice in
+kernel to terminate the last entry in enums or struct initializers if
+there is a possibility to add new entries to the list afterwards.
+
+>  };
+>  
+>  /**
+> @@ -80,7 +81,7 @@ enum dw_edma_chip_flags {
+>  struct dw_edma_chip {
+>  	struct device		*dev;
+>  	int			nr_irqs;
+
+> -	const struct dw_edma_core_ops   *ops;
+> +	const struct dw_edma_plat_ops   *ops;
+                                     \ /
+                                      ^
+These are just three white-spaces ----+
+Please replace them with either a tab or with a single space.
+
+-Serge(y)
+
+>  	u32			flags;
+>  
+>  	void __iomem		*reg_base;
+> -- 
+> 2.34.1
+> 
