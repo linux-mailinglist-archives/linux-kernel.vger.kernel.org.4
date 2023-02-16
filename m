@@ -2,162 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9116996F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDC46996FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBPORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S229712AbjBPOSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBPORr (ORCPT
+        with ESMTP id S229704AbjBPOSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:17:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC83BBBBC;
-        Thu, 16 Feb 2023 06:17:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 581C360EC4;
-        Thu, 16 Feb 2023 14:17:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA7FC433EF;
-        Thu, 16 Feb 2023 14:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676557065;
-        bh=msau/2K38eSyS0QwdkrUAtAJXdcgOWtGHzcKJ1Q6qLA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=YClAdZH0sHW2m6gPD+IhbEqbVY7ZRtsHvQbv0rKFQWSe9yqxlTdylkMHArEEBaGly
-         46dojse6vdz3dti93+mXI1V0axFEzRdmdp9bw7h3oCeXsAP0o14SG/uF9M5DliniWW
-         rTng24YEdcmORe02wayAef6shn5KWkUxyj4OduDFDqEgNkXjONwgKeSsWFM6hZBcFY
-         sQg01jkgYLCW3Svj/HCCtyPqVT5/1fCijyE1LY9aGwSBM+ePMQQO8JCpa537b05mvE
-         GdOe/WxfdMioa6kNV1NcPycYIBrUF+ylYmr8QGmjD1KLdJmfaeYoIwlcunw+Om5adx
-         94v8odGqc4Y9g==
-Message-ID: <3c0ad963-ce69-bd5b-20cd-888e5fbdecaf@kernel.org>
-Date:   Thu, 16 Feb 2023 15:17:40 +0100
+        Thu, 16 Feb 2023 09:18:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AAE4EC7;
+        Thu, 16 Feb 2023 06:18:06 -0800 (PST)
+Date:   Thu, 16 Feb 2023 15:17:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676557083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yC70dxR3j3o6dABPqhp3X+zunb/UJz6Yh+UqMQ9x8v0=;
+        b=GYxNiX9V2EWsDAli1sgzN6Erxn3zxIom6rvzvUwcYW5yHbug400DMTmaHz3kDpF9Iz0JR8
+        A/YZa3blN5fpTiaZWlaJ6LVEmaKYHI89WETGz3EDERF8gI9+nGCd56M6bQAXIo0Jtl6bQ4
+        JhkcdPk8B8URAn4T2F8oDOqDwM3oFH2Vy9HUabTIMgGxX9nkstUyOZ4J901CRJt0bbZYq2
+        bZ946cz/Oq8Vl8psdpY/Nsy4NqG+Jqe8rWKhH9YL6cfNMdOlr9S/KXEhyRF6ejexPycabo
+        084lNSeTJZIPwk8xZDKd6Pl/4sO1Z43Tq/sV2KqFd6Vsm1c9yRVd9vBvU8T/Qg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676557083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yC70dxR3j3o6dABPqhp3X+zunb/UJz6Yh+UqMQ9x8v0=;
+        b=5+9pvFUkhxXBGMs6TLBuyPGAh9RI+q3+DwLnyBsJ6RQCjsyJk7QKgtqbJh/2qKJFkCczk6
+        sWZMfEKtXXz+u6Aw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Crystal Wood <swood@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        John Keeping <john@metanate.com>,
+        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: rtmutex, pi_blocked_on, and blk_flush_plug()
+Message-ID: <Y+47FVJ+hI+NA2In@linutronix.de>
+References: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2 4/6] dt-bindings: timestamp: Add Tegra234 support
-Content-Language: en-US
-To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev
-References: <20230214115553.10416-1-dipenp@nvidia.com>
- <20230214115553.10416-5-dipenp@nvidia.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230214115553.10416-5-dipenp@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 12:55, Dipen Patel wrote:
-> Added timestamp provider support for the Tegra234 in devicetree
-> bindings.
+On 2023-02-09 22:31:57 [-0600], Crystal Wood wrote:
+> Hello!
+Hi,
 
-1. Your commit does much more. You need to explain it why you drop some
-property.
+> It is possible for blk_flush_plug() to be called while
+> current->pi_blocked_on is set, in the process of trying to acquire an rwsem.
+> If the block flush blocks trying to acquire some lock, then it appears that
+> current->pi_blocked_on will be overwritten, and then set to NULL once that
+> lock is acquired, even though the task is still blocked on the original
+> rwsem.  Am I missing something that deals with this situation?  It seems
+> like the lock types that are supposed to call blk_flush_plug() should do so
+> before calling task_blocks_on_rt_mutex().
 
-2. Bindings go before its usage (in the patchset).
+Do you experience a problem in v6.1-RT?
 
-3. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.  It might happen, that command when run on an
-older kernel, gives you outdated entries.  Therefore please be sure you
-base your patches on recent Linux kernel.
+> I originally noticed this while investigating a related issue on an older
+> RHEL kernel where task_blocked_on_mutex() has a BUG_ON if entered with
+> current->pi_blocked_on non-NULL.  Current kernels lack this check.
 
+The logic is different but the deadlock should be avoided:
+- mutex_t and rw_semaphore invoke schedule() while blocking on a lock.
+  As part of schedule() sched_submit_work() is invoked.
+  This is the same in RT and !RT so I don't expect any dead lock since
+  the involved locks are the same.
 
-> 
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> ---
-> v2:
-> - Removed nvidia,slices property
-> - Added nvidia,gpio-controller based on review comments from Thierry,
->   this will help simplify the  hte provider driver.
-> 
->  .../timestamp/nvidia,tegra194-hte.yaml        | 30 ++++++++++++-------
->  1 file changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> index c31e207d1652..d0f4ed75baee 100644
-> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/timestamp/nvidia,tegra194-hte.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Tegra194 on chip generic hardware timestamping engine (HTE)
-> +title: Tegra on chip generic hardware timestamping engine (HTE) provider
->  
->  maintainers:
->    - Dipen Patel <dipenp@nvidia.com>
-> @@ -23,6 +23,8 @@ properties:
->      enum:
->        - nvidia,tegra194-gte-aon
->        - nvidia,tegra194-gte-lic
-> +      - nvidia,tegra234-gte-aon
-> +      - nvidia,tegra234-gte-lic
->  
->    reg:
->      maxItems: 1
-> @@ -38,14 +40,11 @@ properties:
->      minimum: 1
->      maximum: 256
->  
-> -  nvidia,slices:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
-> +  nvidia,gpio-controller:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->      description:
-> -      HTE lines are arranged in 32 bit slice where each bit represents different
-> -      line/signal that it can enable/configure for the timestamp. It is u32
-> -      property and depends on the HTE instance in the chip. The value 3 is for
-> -      GPIO GTE and 11 for IRQ GTE.
-> -    enum: [3, 11]
-> +      The phandle to AON gpio controller instance. This is required to handle
-> +      namespace conversion between GPIO and GTE.
->  
->    '#timestamp-cells':
->      description:
-> @@ -55,11 +54,21 @@ properties:
->        mentioned in the nvidia GPIO device tree binding document.
->      const: 1
->  
-> +if:
+- spinlock_t invokes schedule_rtlock() which avoids sched_submit_work().
+  This is the behaviour as with !RT because it spins and does not submit
+  work either.
+  rwlock_t should be have the same way but invokes schedule() instead.
+  This looks wrong. And it could deadlock in sched_submit_work().
 
-Keep it under allOf (so you no need to re-indent it on next if statement
-in the future) and put entire allOf after "required:".
+> To demonstrate that the recursive blocking scenario can happen (without
+> actually waiting to hit the scenario where the second lock is contended),
+> I put a WARN_ON_ONCE(current->pi_blocked_on) in rtlock_lock() (plus a few
+> other places, but this is the one I hit):
 
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - nvidia,tegra194-gte-aon
+XFS does not use rwlock_t directly.
 
-This is an ABI break. Does your driver handle it?
+> -Crystal
 
-> +          - nvidia,tegra234-gte-aon
-> +then:
-> +  required:
-> +    - nvidia,gpio-controller
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
-> -  - nvidia,slices
->    - "#timestamp-cells"
-
-
-Best regards,
-Krzysztof
-
+Sebastian
