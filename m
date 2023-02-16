@@ -2,267 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B1B699B71
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944EB699B73
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjBPRnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S229769AbjBPRnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBPRnh (ORCPT
+        with ESMTP id S229785AbjBPRnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:43:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECC24C3D2;
-        Thu, 16 Feb 2023 09:43:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 887ED61760;
-        Thu, 16 Feb 2023 17:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D63CC433EF;
-        Thu, 16 Feb 2023 17:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676569414;
-        bh=yjFdrf5URuxKcfaupImQzlljUh6WAuRwcY13YuisMos=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Q8E4zEPwDhpgojNgSf+AYlmRQ+QP3bSPX071+UzN4sndY9zHvIg/NQI3sSg+/W0J7
-         QKV5G+uvwbOryR6v/fyOGlttXn4t+0cZ2+4bzX2L7bR8AzQkzsmbf7JtuLe1DkT9MK
-         Ms/CeYNe5Pr6WkDGjbVmKDBOzsmaz/MQZgaBmMqUFObsGHhHjA7A+apcnLFD7jqyLU
-         0os6U9znvDfvDboIEsbAAcG8OadYp/Qo4/FFAvqImPgvjls0aCcaoIsJQ+cEs4KA1Z
-         akIU2JwIoK08hPpvXlP/A8U/bPp+Lcyfn/qa70Xw1fbqvvuP0npOLflUQ6lhvD3m/A
-         nM3c8ywXNOVJQ==
-Date:   Thu, 16 Feb 2023 11:43:33 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Subject: Re: [PATCH v2 0/7] MODULE_LICENSE removals, first tranche
-Message-ID: <20230216174333.GA3313434@bhelgaas>
+        Thu, 16 Feb 2023 12:43:43 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7854D623;
+        Thu, 16 Feb 2023 09:43:39 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSiID-0006eO-HB; Thu, 16 Feb 2023 18:43:37 +0100
+Message-ID: <e0998928-0f4e-f2a9-2e77-3e4bab459688@leemhuis.info>
+Date:   Thu, 16 Feb 2023 18:43:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216152410.4312-1-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [Regression] Bug 216961 - Severe IO scheduling starvation issues
+ with btrfs
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     David Sterba <dsterba@suse.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wyatt Childers <kernel.dbwta@haxing.ninja>, pmacedo@gmail.com
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <0ca02b1f-ab00-9fa6-aecc-c2c46d624e49@leemhuis.info>
+In-Reply-To: <0ca02b1f-ab00-9fa6-aecc-c2c46d624e49@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676569419;494f3f7c;
+X-HE-SMSGID: 1pSiID-0006eO-HB
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc PCI folks, who got the patches but not this cover letter, and
-participants from the v1 posting]
+Hi btrfs maintainers and developers.
 
-On Thu, Feb 16, 2023 at 03:24:03PM +0000, Nick Alcock wrote:
-> This series, based on current modules-next, is part of a treewide cleanup
-> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
-> files/objects that are not tristate.  Due to recent changes to kbuild, these
-> uses are now problematic.  See the commit logs for more details.
-> 
-> (The commit log prefixes and Cc lists are automatically determined using
-> the script mentioned below.  I've eyeballed them, and they seem reasonable:
-> my apologies if they are not.)
-> 
-> This is a small initial tranche to see if the general approach is valid:
-> larger tranches can follow if desired and if these patches seem OK.
-> I'll be sending a second 24-patch tranche in a few hours if this
-> one meets with general approval.
-> 
-> (In total, there are 121 patches in this series.)
-> 
-> 
-> Differences from v1:
->  - just remove MODULE_LICENSE, don't comment it out
->  - Cc: paid maintainers as well as unpaid ones
->  - improvements to the prefix determination code (notable in
->    PCI: versatile in particular)
-> 
-> The series at a whole can be found here:
->   https://github.com/nickalcock/linux module-license
-> 
-> The patch splitter (not for upstreaming!) used to prepare these
-> commits can be found here:
->   https://github.com/nickalcock/linux mass-split
-> 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Nick Alcock (7):
->   kbuild, PCI: versatile: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: mobiveil: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: tegra: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: endpoint: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: hip: remove MODULE_LICENSE in non-modules
->   kbuild, shpchp: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: dwc: remove MODULE_LICENSE in non-modules
-> 
->  drivers/pci/controller/dwc/pcie-histb.c              | 1 -
->  drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c | 1 -
->  drivers/pci/controller/pci-tegra.c                   | 1 -
->  drivers/pci/controller/pci-versatile.c               | 1 -
->  drivers/pci/controller/pcie-hisi-error.c             | 1 -
->  drivers/pci/endpoint/pci-ep-cfs.c                    | 1 -
->  drivers/pci/endpoint/pci-epc-core.c                  | 1 -
->  drivers/pci/endpoint/pci-epc-mem.c                   | 1 -
->  drivers/pci/endpoint/pci-epf-core.c                  | 1 -
->  drivers/pci/hotplug/shpchp_core.c                    | 1 -
->  10 files changed, 10 deletions(-)
+I might be missing something, but it looks like the report was ignored.
+Is there a reason for that?
 
-I squashed these and applied to pci/kbuild for v6.3, thanks!
+FWIW, meanwhile another user showed up in the report that apparently is
+affected by the same issue:
 
-I added examples from the v1 posting to the commit log; let me know if
-I got anything wrong:
+>  pmacedo 2023-02-07 12:47:31 UTC
+> 
+> This matches my experience on Debian with kernel from their unstable
+> repository (6.1.4-1). I've rolled back to the current stable kernel
+> from Bullseye (5.10.0-20-amd64, which according to the changelog is
+> based on 5.10.158-2) about a week ago after finding this bug and the
+> long IO stalls have disappeared.
+> 
+> Looks like Debian had 6.0 in backports, so I'll give it a try and
+> report back.
+> 
+> [reply] [−] Comment 5 pmacedo 2023-02-07 19:22:55 UTC
+> 
+> From my testing, this seems to be between 5.19 and 6.0 - on 6.0 I've
+> seen mkdir take up to 40 seconds, while on 5.19 it doesn't seem to
+> ever go above half a second.
+> 
+> My setup is raid 6 for data, raid1c3 for metadata; in my case the
+> stalls seem to happen more frequently after a large number of
+> deletions and btrfs-transaction will appear to be very busy according
+> to iotop, with everything else just stalling.
 
-commit 84cee45bafcb ("PCI: Remove MODULE_LICENSE so boolean drivers don't look like modules")
-Author: Nick Alcock <nick.alcock@oracle.com>
-Date:   Thu Feb 16 15:24:04 2023 +0000
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-    PCI: Remove MODULE_LICENSE so boolean drivers don't look like modules
-    
-    Since 8b41fc4454e3 ("kbuild: create modules.builtin without
-    Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations are
-    used to identify modules. As a consequence, MODULE_LICENSE in non-modules
-    causes modprobe to misidentify the object file as a module when it is not,
-    and modprobe might succeed rather than failing with a suitable error
-    message.
-    
-    For tristate modules that can be either built-in or loaded at runtime,
-    modprobe succeeds in both cases:
-    
-      # modprobe ext4
-      [exit status zero if CONFIG_EXT4_FS=y or =m]
-    
-    For boolean modules like the Standard Hot Plug Controller driver (shpchp)
-    that cannot be loaded at runtime, modprobe should always fail like this:
-    
-      # modprobe shpchp
-      modprobe: FATAL: Module shpchp not found in directory /lib/modules/...
-      [exit status non-zero regardless of CONFIG_HOTPLUG_PCI_SHPC]
-    
-    but prior to this commit, shpchp_core.c contained MODULE_LICENSE, so
-    "modprobe shpchp" silently succeeded when it should have failed.
-    
-    Remove MODULE_LICENSE in files that cannot be built as modules.
-    
-    [bhelgaas: commit log, squash]
-    Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-    Link: https://lore.kernel.org/r/20230216152410.4312-1-nick.alcock@oracle.com/
-    Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Cc: Luis Chamberlain <mcgrof@kernel.org>
-    Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-    Cc: Rob Herring <robh@kernel.org>
-    Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+#regzbot poke
 
-diff --git a/drivers/pci/controller/dwc/pcie-histb.c b/drivers/pci/controller/dwc/pcie-histb.c
-index 43c27812dd6d..927ae05dc920 100644
---- a/drivers/pci/controller/dwc/pcie-histb.c
-+++ b/drivers/pci/controller/dwc/pcie-histb.c
-@@ -450,4 +450,3 @@ static struct platform_driver histb_pcie_platform_driver = {
- module_platform_driver(histb_pcie_platform_driver);
- 
- MODULE_DESCRIPTION("HiSilicon STB PCIe host controller driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c b/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-index f6fcd95c2bf5..c5bb87ff6d9a 100644
---- a/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-+++ b/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-@@ -56,6 +56,5 @@ static struct platform_driver mobiveil_pcie_driver = {
- 
- builtin_platform_driver(mobiveil_pcie_driver);
- 
--MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("Mobiveil PCIe host controller driver");
- MODULE_AUTHOR("Subrahmanya Lingappa <l.subrahmanya@mobiveil.co.in>");
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index 929f9363e94b..5bb05564d6f8 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -2814,4 +2814,3 @@ static struct platform_driver tegra_pcie_driver = {
- 	.remove = tegra_pcie_remove,
- };
- module_platform_driver(tegra_pcie_driver);
--MODULE_LICENSE("GPL");
-diff --git a/drivers/pci/controller/pci-versatile.c b/drivers/pci/controller/pci-versatile.c
-index 7991d334e0f1..e9a6758fe2c1 100644
---- a/drivers/pci/controller/pci-versatile.c
-+++ b/drivers/pci/controller/pci-versatile.c
-@@ -169,4 +169,3 @@ static struct platform_driver versatile_pci_driver = {
- module_platform_driver(versatile_pci_driver);
- 
- MODULE_DESCRIPTION("Versatile PCI driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/controller/pcie-hisi-error.c b/drivers/pci/controller/pcie-hisi-error.c
-index 7959c9c8d2bc..7d88eb696b06 100644
---- a/drivers/pci/controller/pcie-hisi-error.c
-+++ b/drivers/pci/controller/pcie-hisi-error.c
-@@ -324,4 +324,3 @@ static struct platform_driver hisi_pcie_error_handler_driver = {
- module_platform_driver(hisi_pcie_error_handler_driver);
- 
- MODULE_DESCRIPTION("HiSilicon HIP PCIe controller error handling driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-ep-cfs.c b/drivers/pci/endpoint/pci-ep-cfs.c
-index d4850bdd837f..4b8ac0ac84d5 100644
---- a/drivers/pci/endpoint/pci-ep-cfs.c
-+++ b/drivers/pci/endpoint/pci-ep-cfs.c
-@@ -728,4 +728,3 @@ module_exit(pci_ep_cfs_exit);
- 
- MODULE_DESCRIPTION("PCI EP CONFIGFS");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 2542196e8c3d..dd750ad29485 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -861,4 +861,3 @@ module_exit(pci_epc_exit);
- 
- MODULE_DESCRIPTION("PCI EPC Library");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epc-mem.c b/drivers/pci/endpoint/pci-epc-mem.c
-index a97b56a6d2db..7dcf6f480b82 100644
---- a/drivers/pci/endpoint/pci-epc-mem.c
-+++ b/drivers/pci/endpoint/pci-epc-mem.c
-@@ -260,4 +260,3 @@ EXPORT_SYMBOL_GPL(pci_epc_mem_free_addr);
- 
- MODULE_DESCRIPTION("PCI EPC Address Space Management");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-index 9ed556936f48..2036e38be093 100644
---- a/drivers/pci/endpoint/pci-epf-core.c
-+++ b/drivers/pci/endpoint/pci-epf-core.c
-@@ -568,4 +568,3 @@ module_exit(pci_epf_exit);
- 
- MODULE_DESCRIPTION("PCI EPF Library");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/hotplug/shpchp_core.c b/drivers/pci/hotplug/shpchp_core.c
-index 53692b048301..56c7795ed890 100644
---- a/drivers/pci/hotplug/shpchp_core.c
-+++ b/drivers/pci/hotplug/shpchp_core.c
-@@ -32,7 +32,6 @@ int shpchp_poll_time;
- 
- MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
--MODULE_LICENSE("GPL");
- 
- module_param(shpchp_debug, bool, 0644);
- module_param(shpchp_poll_mode, bool, 0644);
+On 26.01.23 12:17, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216961 :
+> 
+>>  Wyatt Childers 2023-01-23 17:44:13 UTC
+>>
+>> There seems to be an issue with btrfs in Kernel 6 (first seen in at least 6.0.12-300.fc37.x86_64, possibly earlier) and still observed in 6.1 (6.1.5-200.fc37.x86_64).
+>>
+>> This has manifested in prolonged user space hangs. I first noticed this in internal tooling for my employer where simple IO operations like a trivial cp commands that typically take under 100ms (when run with many other concurrent IO operations of a similar ilk) are observing "scheduling starvation" being stalled in a disk sleep state for nearly a minute.
+>>
+>> This also seems to be manifesting in hangs to Kwin that correlate with btrfs usage and things as routine and trivial (even on high performance systems) as system updates https://bugs.kde.org/show_bug.cgi?id=463353
+>>
+>> I would also not be surprised if this behavior is responsible for things like this reddit thread: https://www.reddit.com/r/btrfs/comments/102or0t/btrfs_on_luks_whole_system_freezing_under_high_io/
+>>
+>> [reply] [−] Comment 1 Wyatt Childers 2023-01-23 17:57:47 UTC
+>>
+>> As additional context, here are some sample kernel traces (echo w > /proc/sysrq-trigger):
+>>
+>> Dec 16 14:10:02 localhost kernel: sysrq: Show Blocked State
+>> Dec 16 14:10:02 localhost kernel: task:kworker/u64:6   state:D stack:    0 pid:2673507 ppid:     2 flags:0x00004000
+>> Dec 16 14:10:02 localhost kernel: Workqueue: btrfs-worker btrfs_work_helper
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  ? __sbitmap_get_word+0x37/0x80
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  blk_mq_get_tag+0x10c/0x290
+>> Dec 16 14:10:02 localhost kernel:  ? dequeue_task_stop+0x70/0x70
+>> Dec 16 14:10:02 localhost kernel:  __blk_mq_alloc_requests+0x183/0x2b0
+>> Dec 16 14:10:02 localhost kernel:  blk_mq_submit_bio+0x2b7/0x5b0
+>> Dec 16 14:10:02 localhost kernel:  __submit_bio+0xf5/0x180
+>> Dec 16 14:10:02 localhost kernel:  submit_bio_noacct_nocheck+0x20d/0x2a0
+>> Dec 16 14:10:02 localhost kernel:  btrfs_submit_bio+0x17a/0x3d0
+>> Dec 16 14:10:02 localhost kernel:  btrfs_work_helper+0x14b/0x380
+>> Dec 16 14:10:02 localhost kernel:  process_one_work+0x1c7/0x380
+>> Dec 16 14:10:02 localhost kernel:  worker_thread+0x4d/0x380
+>> Dec 16 14:10:02 localhost kernel:  ? _raw_spin_lock_irqsave+0x23/0x50
+>> Dec 16 14:10:02 localhost kernel:  ? rescuer_thread+0x380/0x380
+>> Dec 16 14:10:02 localhost kernel:  kthread+0xe9/0x110
+>> Dec 16 14:10:02 localhost kernel:  ? kthread_complete_and_exit+0x20/0x20
+>> Dec 16 14:10:02 localhost kernel:  ret_from_fork+0x22/0x30
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+>> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422766 ppid:2410777 flags:0x00000002
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  ? btrfs_delayed_update_inode+0x102/0x1f0
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+>> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+>> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+>> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+>> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+>> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+>> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+>> Dec 16 14:10:02 localhost kernel:  ? security_file_ioctl+0x3c/0x60
+>> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+>> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+>> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+>> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? do_user_addr_fault+0x1ef/0x690
+>> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+>> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7f07d2d7dbaf
+>> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffc4ba5bf40 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f07d2d7dbaf
+>> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+>> Dec 16 14:10:02 localhost kernel: RBP: 00007ffc4ba5d8cc R08: 0000000000000001 R09: 00000000000001a4
+>> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc4ba5c3e0
+>> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffc4ba5c7b0
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+>> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422815 ppid:2419287 flags:0x00000002
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  ? btrfs_dirty_inode+0x91/0xe0
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+>> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+>> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+>> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+>> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+>> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+>> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+>> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+>> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+>> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7f1e8dc22baf
+>> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffd65479d50 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f1e8dc22baf
+>> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+>> Dec 16 14:10:02 localhost kernel: RBP: 00007ffd6547b8cc R08: 0000000000000001 R09: 00000000000001a4
+>> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd6547a1f0
+>> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffd6547a5c0
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+>> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422818 ppid:2421995 flags:0x00000002
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+>> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+>> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+>> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+>> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+>> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+>> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+>> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+>> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+>> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+>> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7ffa2a678baf
+>> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffe77c03de0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007ffa2a678baf
+>> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+>> Dec 16 14:10:02 localhost kernel: RBP: 00007ffe77c058cc R08: 0000000000000001 R09: 00000000000001a4
+>> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe77c04280
+>> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffe77c04650
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+>> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422821 ppid:2420167 flags:0x00000002
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  ? _raw_spin_unlock_irqrestore+0x23/0x40
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+>> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+>> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+>> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+>> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+>> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+>> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+>> Dec 16 14:10:02 localhost kernel:  ? security_file_ioctl+0x3c/0x60
+>> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+>> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+>> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7fafe34febaf
+>> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007fff79bee930 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fafe34febaf
+>> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+>> Dec 16 14:10:02 localhost kernel: RBP: 00007fff79bef8f6 R08: 0000000000000001 R09: 00000000000001a4
+>> Dec 16 14:10:02 localhost kernel: R10: 0000000000000004 R11: 0000000000000246 R12: 00007fff79beedd0
+>> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000002 R15: 00007fff79bef1a0
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+>> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422911 ppid:2401445 flags:0x00000002
+>> Dec 16 14:10:02 localhost kernel: Call Trace:
+>> Dec 16 14:10:02 localhost kernel:  <TASK>
+>> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+>> Dec 16 14:10:02 localhost kernel:  ? __btrfs_end_transaction+0xf8/0x240
+>> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+>> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+>> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+>> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+>> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+>> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+>> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+>> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+>> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+>> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+>> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+>> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+>> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+>> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+>> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+>> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7ff280aeebaf
+>> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffdbfa595c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007ff280aeebaf
+>> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+>> Dec 16 14:10:02 localhost kernel: RBP: 00007ffdbfa5a8cc R08: 0000000000000001 R09: 00000000000001a4
+>> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffdbfa59a60
+>> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffdbfa59e30
+>> Dec 16 14:10:02 localhost kernel:  </TASK>
+> See the ticket for more details.
+> 
+> 
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
+> 
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks (I for now
+> assume it was introduced between v5.19..v6.0, even if I don't know for
+> sure ):
+> 
+> #regzbot introduced: v5.19..v6.0
+> https://bugzilla.kernel.org/show_bug.cgi?id=216961
+> #regzbot title: btrfs: severe IO scheduling starvation issues with btrfs
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
