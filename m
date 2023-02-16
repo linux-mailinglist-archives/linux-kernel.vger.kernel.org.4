@@ -2,111 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0530B699356
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12A4699361
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBPLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S230021AbjBPLmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjBPLkS (ORCPT
+        with ESMTP id S229558AbjBPLmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:40:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948B41ADD1;
-        Thu, 16 Feb 2023 03:40:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24E5361F9D;
-        Thu, 16 Feb 2023 11:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3CFC433EF;
-        Thu, 16 Feb 2023 11:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676547615;
-        bh=KfQe95F5R5pIIWdhzzdP5vS+mRvaXLlq2Xw25O4HEhk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lzakMt7lQ7cGxLebeZ8m8wF13H85lO12iPaf2P8Vwy+i+cp16XZDylLVZY80S++pv
-         jkBlhn1O+vNrnQlP41xZU1O+YdAq+jaY58xqAu4F70Ob5BVcEVzHBSZ9AuqkuvZCDg
-         0rDUJkQr6Um6J9ONuR4FJ7kmfTVDHqNlkclE9EYA=
-Date:   Thu, 16 Feb 2023 12:40:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Elson Roy Serrao <quic_eserrao@quicinc.com>
-Cc:     Thinh.Nguyen@synopsys.com, balbi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH] usb: gadget: Do not handle OS Descriptors config
- separately
-Message-ID: <Y+4WHGNdWTZ5Hc6Y@kroah.com>
-References: <1676331925-4771-1-git-send-email-quic_eserrao@quicinc.com>
+        Thu, 16 Feb 2023 06:42:06 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF772BF;
+        Thu, 16 Feb 2023 03:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676547725; x=1708083725;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DZtMdMHG1rZUSnjA3M8Y0P2RY5raVZxMdIWzLiuWreo=;
+  b=ghMQ64ki6Qsk2e+IPb+eDDR6i6L53vute/EnDq+/6AE6lin+yMSYsedx
+   IBFLCsM3/qF29uId/xQfkv46Co3dZYOK5tH5L6KzkHlmrqDn97OIkn/D4
+   KaRKCQVSXIa40Y3qbgC6iMRyj21jWfkXGqMfFk3pmUjJXTfvLkcMrnMWq
+   xCjroer8Cz3EBZSCN/IMiEaxX/oxRqPpfQNQgNGc9mK07apGDdTb7uxu8
+   ot0vIM6CCWnQzew8Wghf4Au3eTbY3JkHBwquiWN5VjV1PU0iHlDrex4XU
+   G8vvm/dbUJh1l0SvwgveuL/ho0rqehB8pe/UYuD1bI5bIx3p7Vtcws7AT
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="359124735"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="359124735"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 03:42:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="999003906"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="999003906"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Feb 2023 03:42:00 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 780BE1A6; Thu, 16 Feb 2023 13:42:40 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next v1 1/2] string: Make memscan() to take const
+Date:   Thu, 16 Feb 2023 13:42:33 +0200
+Message-Id: <20230216114234.36343-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1676331925-4771-1-git-send-email-quic_eserrao@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 03:45:25PM -0800, Elson Roy Serrao wrote:
-> Consider a multi-configuration composition in which the last
-> configuration uses OS descriptors. Since this configuration will
-> be sent first, the host may choose this config if it matches the
-> choosing criteria and ignore the user configured order of the
-> multi-config composition.
+Make memscan() to take const so it will be easier replace
+some memchr() cases with it.
 
-That is up to the host, so why is this an issue?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/s390/include/asm/string.h          | 4 ++--
+ arch/s390/lib/string.c                  | 2 +-
+ arch/sparc/include/asm/asm-prototypes.h | 4 ++--
+ arch/sparc/include/asm/string.h         | 7 ++++---
+ arch/x86/include/asm/string_32.h        | 2 +-
+ arch/x86/lib/string_32.c                | 2 +-
+ include/linux/string.h                  | 2 +-
+ lib/string.c                            | 2 +-
+ 8 files changed, 13 insertions(+), 12 deletions(-)
 
-> Moreover linux based hosts do not re-order
-> the received configurations based on their indices but process them
-> in FIFO order.
+diff --git a/arch/s390/include/asm/string.h b/arch/s390/include/asm/string.h
+index 3fae93ddb322..0196fd466a39 100644
+--- a/arch/s390/include/asm/string.h
++++ b/arch/s390/include/asm/string.h
+@@ -120,7 +120,7 @@ static inline void *memchr(const void * s, int c, size_t n)
+ #endif
+ 
+ #ifdef __HAVE_ARCH_MEMSCAN
+-static inline void *memscan(void *s, int c, size_t n)
++static inline void *memscan(const void *s, int c, size_t n)
+ {
+ 	const void *ret = s + n;
+ 
+@@ -205,7 +205,7 @@ static inline size_t strnlen(const char * s, size_t n)
+ #endif
+ #else /* IN_ARCH_STRING_C */
+ void *memchr(const void * s, int c, size_t n);
+-void *memscan(void *s, int c, size_t n);
++void *memscan(const void *s, int c, size_t n);
+ char *strcat(char *dst, const char *src);
+ char *strcpy(char *dst, const char *src);
+ size_t strlen(const char *s);
+diff --git a/arch/s390/lib/string.c b/arch/s390/lib/string.c
+index 7d8741818239..ec9786fde1dd 100644
+--- a/arch/s390/lib/string.c
++++ b/arch/s390/lib/string.c
+@@ -331,7 +331,7 @@ EXPORT_SYMBOL(memcmp);
+  * the area if @c is not found
+  */
+ #ifdef __HAVE_ARCH_MEMSCAN
+-void *memscan(void *s, int c, size_t n)
++void *memscan(const void *s, int c, size_t n)
+ {
+ 	const void *ret = s + n;
+ 
+diff --git a/arch/sparc/include/asm/asm-prototypes.h b/arch/sparc/include/asm/asm-prototypes.h
+index 4987c735ff56..3a82a86a27a6 100644
+--- a/arch/sparc/include/asm/asm-prototypes.h
++++ b/arch/sparc/include/asm/asm-prototypes.h
+@@ -13,8 +13,8 @@
+ #include <asm/oplib.h>
+ #include <linux/atomic.h>
+ 
+-void *__memscan_zero(void *, size_t);
+-void *__memscan_generic(void *, int, size_t);
++void *__memscan_zero(const void *, size_t);
++void *__memscan_generic(const void *, int, size_t);
+ void *__bzero(void *, size_t);
+ void VISenter(void); /* Dummy prototype to supress warning */
+ #undef memcpy
+diff --git a/arch/sparc/include/asm/string.h b/arch/sparc/include/asm/string.h
+index 001a17baf2d5..7761a037b377 100644
+--- a/arch/sparc/include/asm/string.h
++++ b/arch/sparc/include/asm/string.h
+@@ -21,10 +21,11 @@ void *memmove(void *, const void *, __kernel_size_t);
+ 
+ #define memscan(__arg0, __char, __arg2)						\
+ ({										\
+-	void *__memscan_zero(void *, size_t);					\
+-	void *__memscan_generic(void *, int, size_t);				\
+-	void *__retval, *__addr = (__arg0);					\
++	void *__memscan_zero(const void *, size_t);				\
++	void *__memscan_generic(const void *, int, size_t);			\
++	const void *__addr = (__arg0);						\
+ 	size_t __size = (__arg2);						\
++	void *__retval;								\
+ 										\
+ 	if(__builtin_constant_p(__char) && !(__char))				\
+ 		__retval = __memscan_zero(__addr, __size);			\
+diff --git a/arch/x86/include/asm/string_32.h b/arch/x86/include/asm/string_32.h
+index 32c0d981a82a..30245f7707e7 100644
+--- a/arch/x86/include/asm/string_32.h
++++ b/arch/x86/include/asm/string_32.h
+@@ -223,7 +223,7 @@ static inline void *memset32(uint32_t *s, uint32_t v, size_t n)
+  * find the first occurrence of byte 'c', or 1 past the area if none
+  */
+ #define __HAVE_ARCH_MEMSCAN
+-extern void *memscan(void *addr, int c, size_t size);
++extern void *memscan(const void *addr, int c, size_t size);
+ 
+ #endif /* __KERNEL__ */
+ 
+diff --git a/arch/x86/lib/string_32.c b/arch/x86/lib/string_32.c
+index 53b3f202267c..4124d6678f72 100644
+--- a/arch/x86/lib/string_32.c
++++ b/arch/x86/lib/string_32.c
+@@ -198,7 +198,7 @@ EXPORT_SYMBOL(memchr);
+ #endif
+ 
+ #ifdef __HAVE_ARCH_MEMSCAN
+-void *memscan(void *addr, int c, size_t size)
++void *memscan(const void *addr, int c, size_t size)
+ {
+ 	if (!size)
+ 		return addr;
+diff --git a/include/linux/string.h b/include/linux/string.h
+index c062c581a98b..a7bff7ed3cb0 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -150,7 +150,7 @@ extern void * memcpy(void *,const void *,__kernel_size_t);
+ extern void * memmove(void *,const void *,__kernel_size_t);
+ #endif
+ #ifndef __HAVE_ARCH_MEMSCAN
+-extern void * memscan(void *,int,__kernel_size_t);
++extern void * memscan(const void *,int,__kernel_size_t);
+ #endif
+ #ifndef __HAVE_ARCH_MEMCMP
+ extern int memcmp(const void *,const void *,__kernel_size_t);
+diff --git a/lib/string.c b/lib/string.c
+index 3d55ef890106..30a63048d4cc 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -725,7 +725,7 @@ EXPORT_SYMBOL(bcmp);
+  * returns the address of the first occurrence of @c, or 1 byte past
+  * the area if @c is not found
+  */
+-void *memscan(void *addr, int c, size_t size)
++void *memscan(const void *addr, int c, size_t size)
+ {
+ 	unsigned char *p = addr;
+ 
+-- 
+2.39.1
 
-s/linux/Linux/
-
-> This may result in the host never choosing the user
-> desired configuration because of the re-order caused by sending the
-> OS descriptor config first. To avoid this, follow the user configured
-> order and do not handle OS descriptor config separately.
-
-I do not understand, what reordering is happening, and by whom?
-
-> 
-> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
-
-What commit does this fix?
-
-> ---
->  drivers/usb/gadget/composite.c | 9 ---------
->  1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index fa7dd6c..685003a 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -589,18 +589,9 @@ static int config_desc(struct usb_composite_dev *cdev, unsigned w_value)
->  	w_value &= 0xff;
->  
->  	pos = &cdev->configs;
-> -	c = cdev->os_desc_config;
-> -	if (c)
-> -		goto check_config;
-> -
->  	while ((pos = pos->next) !=  &cdev->configs) {
->  		c = list_entry(pos, typeof(*c), list);
->  
-> -		/* skip OS Descriptors config which is handled separately */
-> -		if (c == cdev->os_desc_config)
-> -			continue;
-> -
-> -check_config:
-
-This feels wrong, are you sure that this code isn't here for a reason?
-How did you test this?
-
-thanks,
-
-greg k-h
