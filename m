@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7486999D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE526999E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 17:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBPQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 11:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S229728AbjBPQXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 11:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBPQV4 (ORCPT
+        with ESMTP id S229717AbjBPQXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 11:21:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB24A5DD;
-        Thu, 16 Feb 2023 08:21:55 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GEMwAY033903;
-        Thu, 16 Feb 2023 16:21:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=vhvQd1wNetEKT30I30i5O1b+GpLLHgl74WlgyXtRCtg=;
- b=Tzj5Z6Vl2KE1duDgOzsrtmdSpM3WGFtU4CnwHhqYtCdNaHOybbFdQqDaNsVNRbSBUWUa
- VPDQqSmKKraImAF1j9Cl+A6G2q0GTX0dCGlFUVkdQLb6Ni1U/iaZb7u3a6R6YuMohxmG
- OdeI3I+eSUHbIhzD1sEHBrsytLSDYbaGzG/+qiWPLVwt+eQJGf4sIsMhksammW4zIlI1
- V25aH+ws0lnlOBZz8jdx2QBwivdW0OjEyjLQz2MtCdFJblWWCvQLRI+QnLbwxchs3f+L
- iXlny4DU+RvY75arv0zBi5uzwSY7cPKbqm6qunzoZL5XllzM31flltr1lmVXILz3ceme Uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v377p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 16:21:29 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GG7bJd036992;
-        Thu, 16 Feb 2023 16:21:29 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v376j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 16:21:28 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31GFRm5B002747;
-        Thu, 16 Feb 2023 16:21:26 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3np2n6d2vd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 16:21:26 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31GGLMSS46596382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 16:21:22 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9AC2220040;
-        Thu, 16 Feb 2023 16:21:22 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBE642004D;
-        Thu, 16 Feb 2023 16:21:21 +0000 (GMT)
-Received: from [9.179.9.244] (unknown [9.179.9.244])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Feb 2023 16:21:21 +0000 (GMT)
-Message-ID: <9bb1154b07dc21e5d3dda8cc5238c5385f32c2e0.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 09/16] s390: mm: Convert to GENERIC_IOREMAP
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        christophe.leroy@csgroup.eu, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com, arnd@arndb.de,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Date:   Thu, 16 Feb 2023 17:21:21 +0100
-In-Reply-To: <20230216123419.461016-10-bhe@redhat.com>
-References: <20230216123419.461016-1-bhe@redhat.com>
-         <20230216123419.461016-10-bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 16 Feb 2023 11:23:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7111F20D23
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:23:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC724B828E3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:23:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28273C433EF;
+        Thu, 16 Feb 2023 16:23:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676564582;
+        bh=vkIDRo1FtU4bdhqJCU8/sKrR9uWhJNwYm0CALFCj3VE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UiSLNcmLeLUN5WOChgq4bE6fCx33leWZzSPX9W9B4P5HZmsn2BsVOESz+DKNBEGFP
+         qlaYjTB/fPX3+YsS1G+6Hw/9t9AEpUvluE3OqUoWRGzcyjpcv+0Bmm4HoyVly+18Xo
+         M5Wtm6RDpt2pMISesyWuq9DxLkJwNKbdJOmlViCDOXVmY7FXxypiMldYdBPJyVT+4E
+         Z2KQugdYCbosc8rQqTzrbUrbGhqOdWih00WZNk1QAsBVryNi51b+oma45jCQXcakB3
+         c+48UkoFaqhkwPhPbuxH2QTedoIZMZw/ZDMoxcZxB53QCWPGedq5sn+fBj0mf+hdG9
+         0Twh6tYHtnf1g==
+Date:   Thu, 16 Feb 2023 16:22:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kristina Martsenko <kristina.martsenko@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/10] arm64: mops: detect and enable FEAT_MOPS
+Message-ID: <Y+5YY7RtNYZKTiNn@sirena.org.uk>
+References: <20230216160012.272345-1-kristina.martsenko@arm.com>
+ <20230216160012.272345-10-kristina.martsenko@arm.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9xO_MywEeQpNO1MwfUJY1z_LUXf6-KBN
-X-Proofpoint-ORIG-GUID: J6qgyDyHBYSAhlv6qk0SA4JUog3pF7Uk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_12,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=811
- clxscore=1011 lowpriorityscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iebF125Yz+Y6P7Q8"
+Content-Disposition: inline
+In-Reply-To: <20230216160012.272345-10-kristina.martsenko@arm.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-16 at 20:34 +0800, Baoquan He wrote:
-> By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> and iounmap() are all visible and available to arch. Arch needs to
-> provide wrapper functions to override the generic versions if there's
-> arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> This change will simplify implementation by removing duplicated codes
-> with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> functioality as before.
+
+--iebF125Yz+Y6P7Q8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 16, 2023 at 04:00:11PM +0000, Kristina Martsenko wrote:
+
+> The Arm v8.8/9.3 FEAT_MOPS feature provides new instructions that
+> perform a memory copy or set. Wire up the cpufeature code to detect the
+> presence of FEAT_MOPS and enable it.
 >=20
-> Here, add wrapper functions ioremap_prot() and iounmap() for s390's
-> special operation when ioremap() and iounmap().
->=20
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
 > ---
->  arch/s390/Kconfig          |  1 +
->  arch/s390/include/asm/io.h | 21 ++++++++------
->  arch/s390/pci/pci.c        | 57 +++++++-------------------------------
->  3 files changed, 23 insertions(+), 56 deletions(-)
+>  Documentation/arm64/cpu-feature-registers.rst |  2 ++
+>  Documentation/arm64/elf_hwcaps.rst            |  3 +++
+>  arch/arm64/include/asm/hwcap.h                |  1 +
+>  arch/arm64/include/uapi/asm/hwcap.h           |  1 +
+>  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
+>  arch/arm64/kernel/cpuinfo.c                   |  1 +
+>  arch/arm64/tools/cpucaps                      |  1 +
+>  7 files changed, 28 insertions(+)
 
-Thanks for the patch. This is a very clear improvement for us! I tested
-this series with s390 systems with and without the PCI memory-I/O (MIO)
-support and everything works as expected.
+Please also add this to the hwcaps selftest.
 
-One thing I did stumble upon but which is independent from this patch
-is that I think memremap(=E2=80=A6, MEMREMAP_WB) on system RAM outside the
-direct map is broken for us. At least on systems without PCI memory-I/O
-support. I think with this series it would be much easier to fix
-though. Basically I think we would have to define arch_memremap_wb() to
-generic_ioremap_prot(=E2=80=A6, PAGE_KERNEL) and then have iounmap() check
-is_ioremap_addr() to see if it is an actual mapping or an address
-cookie. But again this is independent of this patch which doesn't
-change the behavior in this area.
+--iebF125Yz+Y6P7Q8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So feel free to add my:
+-----BEGIN PGP SIGNATURE-----
 
-Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWGIACgkQJNaLcl1U
+h9ChWAf/dwfCz3sdklcf13AUvRi8cnyD9UEYYPEfOSFVtz5/fo3doRUwwauL4hkN
+gBKhXLqsl+byDLExSGhh0gxtfYwRrJjTh4PlNC/3l5p5wzVixNV5pRJFz00pfksM
+fF3fdUD5J99sQbarL0x9RxHT+roEGNm+nvbRrWzMGq9Jnw6jRZ+OUq7nZAon+yib
+0d+hoHmsd/lD2LrNkbpId1GvaLV1h6OW0bH0xH4QxV/O8Imdcbmj1nkbfazk6GD/
+HnRdMXSj2aM5mlDEq3fjeRdbbnAT9xBOYhOUOEoklhuJJ3oDKjAVOWRWejq/bmcM
+ltgZXxXVW2W4MgHfxq/GxyDe39bnkQ==
+=kNhl
+-----END PGP SIGNATURE-----
 
-
+--iebF125Yz+Y6P7Q8--
