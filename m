@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79849699786
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B0069978A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjBPOfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S230096AbjBPOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBPOfC (ORCPT
+        with ESMTP id S229975AbjBPOfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:35:02 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB622A2E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676558101; x=1708094101;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=siBGOBrCnKsQgHByWYvfIh8c+pPvjEnmeaipTTpKHZg=;
-  b=KVjWIAR0cdl3SHMFghypAUJxsfzVwUp/aFNo1oUL05/RAbDC0v32Hmz1
-   RtsfL6qcjYgzvFWT7m5Cie/QRkzzfPQgRXsU55+Y9DOFRY+uBbHOuipq4
-   ZyzXw5d5iszpcDpcuImQUzVr89tJ3bsEaADVTuWaaulPLDtyKgEBMIVRq
-   kVC1mnBi4ecqIEMopZ34q/9IiV/LzL+7t/HE7mK8wMBhz1GmZ5RryIQSB
-   Y3IZjFdoWBrXKgTlAJPy725rzG6GQCI5NlSXYyVh8eJ48H7//97d/aUFD
-   SozkC8GveU2ZvLp0/sljcC7FbMvmnSbKNqvEH2Kjc6PQ0BNxtE/v9/Lrt
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,302,1669071600"; 
-   d="scan'208";a="29134876"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Feb 2023 15:34:56 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 16 Feb 2023 15:34:56 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 16 Feb 2023 15:34:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676558096; x=1708094096;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=siBGOBrCnKsQgHByWYvfIh8c+pPvjEnmeaipTTpKHZg=;
-  b=AUE4OA7V3+SlJYkfrzHbmR5Nam/XO6OBzJwdfg1ZvYv06CMxmZg9yXJi
-   orJYBQwfd3fUm/FNlqUyviXT/ba0NnYlCWzQcaB6mPmEx+p5mjDtVtYgX
-   v5xcKq1gPqHeZnK6rtOBztTll/fijIgYGwdW3vuFG/LqV4YCieewSjc7H
-   r+6SgnVCqqX6hmNtUCF6sFtuwldxypgvXmv2X+QFWSxc16L5tVQrs3Ne6
-   PANoy/hc5Yl46Q26udXHWXZTUENpcb80qTA8Az9okByAvOJaIMlf8GKWK
-   a/okiGaUV0r3lWkEs+R78qJsx2NCGkXkNNF6edmrZqbI1Ua6oY+CtZ2Lt
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,302,1669071600"; 
-   d="scan'208";a="29134875"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Feb 2023 15:34:56 +0100
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 925BB280073;
-        Thu, 16 Feb 2023 15:34:56 +0100 (CET)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
-        linux@ew.tq-group.com,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 3/3] mfd: tqmx86: correct board names for TQMxE39x
-Date:   Thu, 16 Feb 2023 15:34:24 +0100
-Message-Id: <31d3180d870dbfd386d5e21b3cdf2dd166f5d92f.1676557968.git.matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <59041b6d888c886edef5a97fc6e3319d235e101a.1676557968.git.matthias.schiffer@ew.tq-group.com>
-References: <59041b6d888c886edef5a97fc6e3319d235e101a.1676557968.git.matthias.schiffer@ew.tq-group.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 16 Feb 2023 09:35:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C54C6C5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:35:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B11A6147B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31ABC4339B;
+        Thu, 16 Feb 2023 14:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676558123;
+        bh=uztuERdBi+ZME82Ls63RsPH7tNHhc39ttuHzQDKz+EI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rj7zfed5o7/NpMhAYNSviQWbh1DOhWAk8Zypyy5Qh9CnZC7ydNyjk1E5kWemgIwuR
+         qH9on2OvfHj8/B4Y4arUlI2i4kRxqlpbjEG1oHYRIqS24L0lp2AxxwVeMk3O1OSuHX
+         Nzux9xkzg6zXKVnPgsEY+Wy3ryrWFE054FskCbiA57ugRnjBPRHmfcyyumnMQMXnC+
+         uQKPrGLa+4mSjasvIYagBqBqNDfYWbqlQ+e4CerUgKjK37lfAwmU+alHqlmZJ8dF5i
+         zFulYB70VKKazBCD5jEMbN25nZ7sCQlV/BdrWrNBmFNNmq7CHXJo10B34QWR4A8HuU
+         +xAUX5HGa2Piw==
+Date:   Thu, 16 Feb 2023 23:35:19 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP
+ instruction
+Message-Id: <20230216233519.eacdf4166d4ec20f3046a1e2@kernel.org>
+In-Reply-To: <Y+4T0EV8SBN09KxA@hirez.programming.kicks-ass.net>
+References: <cover.1676068346.git.jpoimboe@kernel.org>
+        <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
+        <20230213234357.1fe194b2767d9bc431202d4c@kernel.org>
+        <Y+tx6DZyoQ362lUM@hirez.programming.kicks-ass.net>
+        <20230214170552.glhdytvunczyxxao@treble>
+        <Y+yzMmL7gUprDru3@hirez.programming.kicks-ass.net>
+        <20230215231637.laryjsua5p4wcd57@treble>
+        <Y+4JhmEGDR16EVpi@hirez.programming.kicks-ass.net>
+        <Y+4T0EV8SBN09KxA@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,109 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems that this driver was developed based on preliminary documentation.
-Report the correct names for all TQMxE39x variants, as they are used by
-the released hardware revisions:
+On Thu, 16 Feb 2023 12:30:24 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-- Fix names for TQMxE39C1/C2 board IDs
-- Distinguish TQMxE39M and TQMxE39S, which use the same board ID
+> On Thu, Feb 16, 2023 at 11:46:30AM +0100, Peter Zijlstra wrote:
+> > On Wed, Feb 15, 2023 at 03:16:37PM -0800, Josh Poimboeuf wrote:
+> > > On Wed, Feb 15, 2023 at 11:25:54AM +0100, Peter Zijlstra wrote:
+> > 
+> > > > Well, I was specifically thinking about #DB, why don't we need to
+> > > > decrement when we put a hardware breakpoint on a stack modifying op?
+> > > 
+> > > I assume you mean the INT1 instruction.  Yeah, maybe we should care
+> > > about that.
+> > 
+> > Nah, I was thinking #DB from DR7, but ...
+> > 
+> > > I'm struggling to come up with any decent ideas about how to implement
+> > > that.  Presumably the #DB handler would have to communicate to the
+> > > unwinder somehow whether the given frame is a trap.
+> > 
+> > ... I had forgotten that #DB is not unconditionally trap :/ The worst
+> > part seems to be that code breakpoints are faults while data breakpoints
+> > are traps.
+> > 
+> > And you so don't want to go decode the DR registers in the unwinder,
+> > quality mess this :/
+> > 
+> > Put a breakpoint on the stack and you've got PUSH doing a trap, put a
+> > breakpoint on the PUSH instruction and you get a fault, and lo and
+> > behold, you get a different unwind :-(
+> 
+> It could be I'm just confusing things... when #DB traps it is actually
+> because the instruction is complete, so looking up the ORC based on the
+> next instruction is correct, while when #DB faults, it is because the
+> instruction has not yet completed and again ORC lookup on IP just works.
+> 
+> So while determining if #DB is trap or fault is a giant pain in the
+> arse, it does not actually matter for the unwinder in this case.
+> 
+> And with the INT3 thing the problem is that we've replaced an
+> instruction that was supposed to do a stack op.
+> 
 
-The TQMxE39M/S are distinguished using the SAUC (Sanctioned Alternate
-Uses Configuration) register of the GPIO controller. This also prepares
-for the correct handling of the differences between the GPIO controllers
-of our COMe and SMARC modules.
+If the kprobe checks whether the original instruction do a stack op and
+if so, setting a flag on current_kprobe will help unwinder finds that case?
 
-Fixes: 2f17dd34ffed ("mfd: tqmx86: IO controller with I2C, Wachdog and GPIO")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/mfd/tqmx86.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+Of course all INT3 user may need to do this but it should be limited.
 
-diff --git a/drivers/mfd/tqmx86.c b/drivers/mfd/tqmx86.c
-index 1957db881c3a1..e80100dee7019 100644
---- a/drivers/mfd/tqmx86.c
-+++ b/drivers/mfd/tqmx86.c
-@@ -30,9 +30,9 @@
- #define TQMX86_REG_BOARD_ID_50UC	2
- #define TQMX86_REG_BOARD_ID_E38C	3
- #define TQMX86_REG_BOARD_ID_60EB	4
--#define TQMX86_REG_BOARD_ID_E39M	5
--#define TQMX86_REG_BOARD_ID_E39C	6
--#define TQMX86_REG_BOARD_ID_E39x	7
-+#define TQMX86_REG_BOARD_ID_E39MS	5
-+#define TQMX86_REG_BOARD_ID_E39C1	6
-+#define TQMX86_REG_BOARD_ID_E39C2	7
- #define TQMX86_REG_BOARD_ID_70EB	8
- #define TQMX86_REG_BOARD_ID_80UC	9
- #define TQMX86_REG_BOARD_ID_110EB	11
-@@ -48,6 +48,7 @@
- #define TQMX86_REG_IO_EXT_INT_12		3
- #define TQMX86_REG_IO_EXT_INT_MASK		0x3
- #define TQMX86_REG_IO_EXT_INT_GPIO_SHIFT	4
-+#define TQMX86_REG_SAUC		0x17
- 
- #define TQMX86_REG_I2C_DETECT	0x1a7
- #define TQMX86_REG_I2C_DETECT_SOFT		0xa5
-@@ -110,7 +111,7 @@ static const struct mfd_cell tqmx86_devs[] = {
- 	},
- };
- 
--static const char *tqmx86_board_id_to_name(u8 board_id)
-+static const char *tqmx86_board_id_to_name(u8 board_id, u8 sauc)
- {
- 	switch (board_id) {
- 	case TQMX86_REG_BOARD_ID_E38M:
-@@ -121,12 +122,12 @@ static const char *tqmx86_board_id_to_name(u8 board_id)
- 		return "TQMxE38C";
- 	case TQMX86_REG_BOARD_ID_60EB:
- 		return "TQMx60EB";
--	case TQMX86_REG_BOARD_ID_E39M:
--		return "TQMxE39M";
--	case TQMX86_REG_BOARD_ID_E39C:
--		return "TQMxE39C";
--	case TQMX86_REG_BOARD_ID_E39x:
--		return "TQMxE39x";
-+	case TQMX86_REG_BOARD_ID_E39MS:
-+		return (sauc == 0xff) ? "TQMxE39M" : "TQMxE39S";
-+	case TQMX86_REG_BOARD_ID_E39C1:
-+		return "TQMxE39C1";
-+	case TQMX86_REG_BOARD_ID_E39C2:
-+		return "TQMxE39C2";
- 	case TQMX86_REG_BOARD_ID_70EB:
- 		return "TQMx70EB";
- 	case TQMX86_REG_BOARD_ID_80UC:
-@@ -159,9 +160,9 @@ static int tqmx86_board_id_to_clk_rate(struct device *dev, u8 board_id)
- 	case TQMX86_REG_BOARD_ID_E40C1:
- 	case TQMX86_REG_BOARD_ID_E40C2:
- 		return 24000;
--	case TQMX86_REG_BOARD_ID_E39M:
--	case TQMX86_REG_BOARD_ID_E39C:
--	case TQMX86_REG_BOARD_ID_E39x:
-+	case TQMX86_REG_BOARD_ID_E39MS:
-+	case TQMX86_REG_BOARD_ID_E39C1:
-+	case TQMX86_REG_BOARD_ID_E39C2:
- 		return 25000;
- 	case TQMX86_REG_BOARD_ID_E38M:
- 	case TQMX86_REG_BOARD_ID_E38C:
-@@ -175,7 +176,7 @@ static int tqmx86_board_id_to_clk_rate(struct device *dev, u8 board_id)
- 
- static int tqmx86_probe(struct platform_device *pdev)
- {
--	u8 board_id, rev, i2c_det, io_ext_int_val;
-+	u8 board_id, sauc, rev, i2c_det, io_ext_int_val;
- 	struct device *dev = &pdev->dev;
- 	u8 gpio_irq_cfg, readback;
- 	const char *board_name;
-@@ -205,7 +206,8 @@ static int tqmx86_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	board_id = ioread8(io_base + TQMX86_REG_BOARD_ID);
--	board_name = tqmx86_board_id_to_name(board_id);
-+	sauc = ioread8(io_base + TQMX86_REG_SAUC);
-+	board_name = tqmx86_board_id_to_name(board_id, sauc);
- 	rev = ioread8(io_base + TQMX86_REG_BOARD_REV);
- 
- 	dev_info(dev,
+Thank you, 
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
