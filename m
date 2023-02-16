@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEB3698AA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D04FE698AA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjBPCur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 21:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S229643AbjBPCwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 21:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBPCup (ORCPT
+        with ESMTP id S229436AbjBPCwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:50:45 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B4146096
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:50:44 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PHKFG6RlXz5PkHg;
-        Thu, 16 Feb 2023 10:50:42 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 31G2oW6Z085296;
-        Thu, 16 Feb 2023 10:50:33 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 16 Feb 2023 10:50:33 +0800 (CST)
-Date:   Thu, 16 Feb 2023 10:50:33 +0800 (CST)
-X-Zmail-TransId: 2af963ed99f925ed814a
-X-Mailer: Zmail v1.0
-Message-ID: <202302161050336958071@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <p.zabel@pengutronix.de>
-Cc:     <eugeniy.paltsev@synopsys.com>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIHYyXSByZXNldDogYXhzMTB4OiBVc2UgZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31G2oW6Z085296
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63ED9A02.000 by FangMail milter!
-X-FangMail-Envelope: 1676515842/4PHKFG6RlXz5PkHg/63ED9A02.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63ED9A02.000/4PHKFG6RlXz5PkHg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 15 Feb 2023 21:52:06 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1666C45F41;
+        Wed, 15 Feb 2023 18:52:05 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PHKD34FxwznV32;
+        Thu, 16 Feb 2023 10:49:39 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 16 Feb 2023 10:52:01 +0800
+Subject: Re: [PATCH 1/3] kprobes: Fixed probe nodes not correctly removed when
+ forcibly unoptimized
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <ast@kernel.org>, <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+References: <20230215115430.236046-1-yangjihong1@huawei.com>
+ <20230215115430.236046-2-yangjihong1@huawei.com>
+ <20230215235517.800c5089318b5353e7304b67@kernel.org>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <94ffd94f-23b6-8d11-43c5-cd5ff16cac65@huawei.com>
+Date:   Thu, 16 Feb 2023 10:52:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <20230215235517.800c5089318b5353e7304b67@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+Hello Masami,
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to Use devm_platform_ioremap_resource(), as this is exactly
-what this function does.
+On 2023/2/15 22:55, Masami Hiramatsu (Google) wrote:
+> Hi Yang,
+> 
+> Thanks for reporting, but maybe this is a part of following fix.
+> 
+> https://lore.kernel.org/all/167448024501.3253718.13037333683110512967.stgit@devnote3/
+> 
+> Can you confirm that fixes the same issue?
+Yes, I've tested and confirmed that the patch you mentioned above fixes 
+the same issue.
 
-Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
-v1 -> v2
-change devm_platform_get_and_ioremap_resource() to
-devm_platform_ioremap_resource().
- drivers/reset/reset-axs10x.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Will remove it in next version.
 
-diff --git a/drivers/reset/reset-axs10x.c b/drivers/reset/reset-axs10x.c
-index a854ef41364d..115f69e0db33 100644
---- a/drivers/reset/reset-axs10x.c
-+++ b/drivers/reset/reset-axs10x.c
-@@ -44,14 +44,12 @@ static const struct reset_control_ops axs10x_reset_ops = {
- static int axs10x_reset_probe(struct platform_device *pdev)
- {
- 	struct axs10x_rst *rst;
--	struct resource *mem;
-
- 	rst = devm_kzalloc(&pdev->dev, sizeof(*rst), GFP_KERNEL);
- 	if (!rst)
- 		return -ENOMEM;
-
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	rst->regs_rst = devm_ioremap_resource(&pdev->dev, mem);
-+	rst->regs_rst = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rst->regs_rst))
- 		return PTR_ERR(rst->regs_rst);
-
--- 
-2.25.1
+Thanks
+Yang.
