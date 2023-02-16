@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B13D699163
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66422699158
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjBPKeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S230033AbjBPKdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjBPKd6 (ORCPT
+        with ESMTP id S230020AbjBPKdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:33:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0974D241E1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:48 -0800 (PST)
-Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8386566021A2;
-        Thu, 16 Feb 2023 10:33:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676543598;
-        bh=UYYJ0M2hdv/ks6BhqzkrJ1QZa+6pdX9WvWLId0MXbes=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=htA0/nVIfuHIK/ZlEBWjGYeFc0DijyYp0DzlKu2YTcm+yiPCm0zhTUEpwo96JG4Rx
-         UFmBf/1gABVxj3WthcHUt/cn4iVtZ9VTDHVPrY4D+cH87kBMICI7f+/H3/TCBa4iAF
-         W3RRIy40XQdW1JCKYGZcP7/8EQhbYKVQ2cn7NoMSDx7HXlBgBCp6PLbBqXE3nVMQ9m
-         6HNC7dfgHQedpEj34syVxc3nSyzPLGWFbJEYw1okzF80Iiq+nTHo5W8ey7j1ZKQ0Ht
-         XZbJhFI9KK2VSxTQR4Pi0YI1YFMd5meKCfvya+BVu8XNJ3zzaaBk3Y0nKc5kN4tZ9p
-         9UL6lMKGkPmqQ==
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Lucas Tanure <lucas.tanure@collabora.com>, kernel@collabora.com
-Subject: [PATCH 9/9] ASoC: amd: vangogh: Include cs35l41 in structs names
-Date:   Thu, 16 Feb 2023 10:33:00 +0000
-Message-Id: <20230216103300.360016-10-lucas.tanure@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230216103300.360016-1-lucas.tanure@collabora.com>
-References: <20230216103300.360016-1-lucas.tanure@collabora.com>
+        Thu, 16 Feb 2023 05:33:43 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3E653559
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676543595; x=1708079595;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=xewz+sS+QiFWv/ST2WtJNHlJXrBcta3cxPe5gr9V6N8=;
+  b=VOlt2ckNqQvEpaadrKiUZs14mHe0tm2QKqdw70335htCw2l9/4QE5ZYl
+   1O1SjpWqVX0n5dgvZuPBT4wMarakug1ENZB0zfRqsSs4NSRE3UYPJHrjk
+   CDZpuang1cHUyWyy64hVOcO1qxII7PvuAzD7kvg+BHfkT3Fju2ZVLEvZ/
+   5HNYU0LpeLHr03bQQmBRwoQZSA6IFkZv/SlchDu/9VPm3sJKdLdM9MCFR
+   PwfrBDOjnzeNxYDWIwGfdU9Bt2ogt/q5L4dVbSAEmJ4YhDS/7FIAWfuzU
+   q40/unViEwCZX7jR0yO9Y08wXZxZTqPc3j7KvwcLTWGPgoh67Y6+2c09h
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="417906727"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="417906727"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 02:33:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="702505653"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="702505653"
+Received: from aaronov-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.86])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 02:33:10 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH] drm/i915: Make kobj_type structures constant
+In-Reply-To: <20230216-kobj_type-i915-v1-1-ca65c9b93518@weissschuh.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230216-kobj_type-i915-v1-1-ca65c9b93518@weissschuh.net>
+Date:   Thu, 16 Feb 2023 12:33:07 +0200
+Message-ID: <87sff5293w.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include cs35l41 in structs names so future platforms can be added and
-reference the correct sound card
+On Thu, 16 Feb 2023, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+>
+> Take advantage of this to constify the structure definitions to prevent
+> modification at runtime.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
----
- sound/soc/amd/vangogh/acp5x-mach.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
-diff --git a/sound/soc/amd/vangogh/acp5x-mach.c b/sound/soc/amd/vangogh/acp5x-mach.c
-index 74c7b267dcfd..129cadcdf468 100644
---- a/sound/soc/amd/vangogh/acp5x-mach.c
-+++ b/sound/soc/amd/vangogh/acp5x-mach.c
-@@ -251,7 +251,7 @@ static struct snd_soc_codec_conf cs35l41_conf[] = {
- SND_SOC_DAILINK_DEF(cs35l41, DAILINK_COMP_ARRAY(COMP_CODEC(CS35L41_LNAME, CS35L41_DAI),
- 						COMP_CODEC(CS35L41_RNAME, CS35L41_DAI)));
- 
--static struct snd_soc_dai_link acp5x_dai[] = {
-+static struct snd_soc_dai_link acp5x_8821_35l41_dai[] = {
- 	{
- 		.name = "acp5x-8821-play",
- 		.stream_name = "Playback/Capture",
-@@ -273,7 +273,7 @@ static struct snd_soc_dai_link acp5x_dai[] = {
- 	},
- };
- 
--static const struct snd_soc_dapm_widget acp5x_8821_widgets[] = {
-+static const struct snd_soc_dapm_widget acp5x_8821_35l41_widgets[] = {
- 	SND_SOC_DAPM_HP("Headphone", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- 	SND_SOC_DAPM_MIC("Int Mic", NULL),
-@@ -281,7 +281,7 @@ static const struct snd_soc_dapm_widget acp5x_8821_widgets[] = {
- 			    platform_clock_control, SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
- };
- 
--static const struct snd_soc_dapm_route acp5x_8821_audio_route[] = {
-+static const struct snd_soc_dapm_route acp5x_8821_35l41_audio_route[] = {
- 	/* HP jack connectors - unknown if we have jack detection */
- 	{ "Headphone", NULL, "HPOL" },
- 	{ "Headphone", NULL, "HPOR" },
-@@ -294,15 +294,15 @@ static const struct snd_soc_dapm_route acp5x_8821_audio_route[] = {
- 	{ "Int Mic", NULL, "Platform Clock" },
- };
- 
--static struct snd_soc_card acp5x_card = {
-+static struct snd_soc_card acp5x_8821_35l41_card = {
- 	.name = "acp5x",
- 	.owner = THIS_MODULE,
--	.dai_link = acp5x_dai,
--	.num_links = ARRAY_SIZE(acp5x_dai),
--	.dapm_widgets = acp5x_8821_widgets,
--	.num_dapm_widgets = ARRAY_SIZE(acp5x_8821_widgets),
--	.dapm_routes = acp5x_8821_audio_route,
--	.num_dapm_routes = ARRAY_SIZE(acp5x_8821_audio_route),
-+	.dai_link = acp5x_8821_35l41_dai,
-+	.num_links = ARRAY_SIZE(acp5x_8821_35l41_dai),
-+	.dapm_widgets = acp5x_8821_35l41_widgets,
-+	.num_dapm_widgets = ARRAY_SIZE(acp5x_8821_35l41_widgets),
-+	.dapm_routes = acp5x_8821_35l41_audio_route,
-+	.num_dapm_routes = ARRAY_SIZE(acp5x_8821_35l41_audio_route),
- 	.codec_conf = cs35l41_conf,
- 	.num_configs = ARRAY_SIZE(cs35l41_conf),
- 	.controls = acp5x_8821_controls,
-@@ -341,7 +341,7 @@ static int acp5x_probe(struct platform_device *pdev)
- 	dmi_check_system(acp5x_vg_quirk_table);
- 	switch (acp5x_machine_id) {
- 	case VG_JUPITER:
--		card = &acp5x_card;
-+		card = &acp5x_8821_35l41_card;
- 		break;
- 	default:
- 		return -ENODEV;
--- 
-2.39.2
+> ---
+>  drivers/gpu/drm/i915/gt/intel_gt_sysfs.c | 2 +-
+>  drivers/gpu/drm/i915/gt/sysfs_engines.c  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c b/drivers/gpu/drm/i=
+915/gt/intel_gt_sysfs.c
+> index 9486dd3bed99..df15b17caf89 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
+> @@ -71,7 +71,7 @@ static void kobj_gt_release(struct kobject *kobj)
+>  {
+>  }
+>=20=20
+> -static struct kobj_type kobj_gt_type =3D {
+> +static const struct kobj_type kobj_gt_type =3D {
+>  	.release =3D kobj_gt_release,
+>  	.sysfs_ops =3D &kobj_sysfs_ops,
+>  	.default_groups =3D id_groups,
+> diff --git a/drivers/gpu/drm/i915/gt/sysfs_engines.c b/drivers/gpu/drm/i9=
+15/gt/sysfs_engines.c
+> index f2d9858d827c..b5e0fe5dbf6c 100644
+> --- a/drivers/gpu/drm/i915/gt/sysfs_engines.c
+> +++ b/drivers/gpu/drm/i915/gt/sysfs_engines.c
+> @@ -421,7 +421,7 @@ static void kobj_engine_release(struct kobject *kobj)
+>  	kfree(kobj);
+>  }
+>=20=20
+> -static struct kobj_type kobj_engine_type =3D {
+> +static const struct kobj_type kobj_engine_type =3D {
+>  	.release =3D kobj_engine_release,
+>  	.sysfs_ops =3D &kobj_sysfs_ops
+>  };
+>
+> ---
+> base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
+> change-id: 20230216-kobj_type-i915-886bebc36129
+>
+> Best regards,
 
+--=20
+Jani Nikula, Intel Open Source Graphics Center
