@@ -2,493 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEE0699462
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9799D69946F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjBPMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S229925AbjBPMf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBPMci (ORCPT
+        with ESMTP id S229501AbjBPMfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:32:38 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8572B0AC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:32:35 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id cz14so1472668oib.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/mbVCUW37SP5uqxmbuctI4JAQmuxWJTA6baY6ZYJ+0=;
-        b=Ry6UpXEvwhJlC97SvhjGppSOLiW7Gf//PSyU+lyZXjAVAXIeTogm+hN8vh9AiEneBq
-         Qi+rB3DjeqBdOwtRYJW8ucQOQQ+uJAAezupE1zTREaqdwetEO+EVxtJbHt8MT428mgnl
-         MHAPQ+pT/tdV14Kk0YafC40Lm3KpP4m/9i+IY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O/mbVCUW37SP5uqxmbuctI4JAQmuxWJTA6baY6ZYJ+0=;
-        b=YOTUmSRbqkHJbtqserHgx/y+aur5tyBafVXasDSSJ6+FQdPaIDDDV5F5UDD7VDK50L
-         9B0+f6FD7o2HuCXfoOPq62HpZVqnAa4xJsr2Ka+GD35iAZcQCDgk6qU49JrMrDbi1BeA
-         vWoqhcF5S/fjbUeBF/VT3esdRL8OWElSNbG0RR5rXtna49QSWeZz/7To18e5l1E7IePk
-         2k1oYhpFWeHuS0qDxno+D10uXlddz7IEqdjFc/9hcLlSuef3sqOCEFmQ6N57qtjb9kc9
-         IpECIzJwAYpPlqMFMEOkycsttPDUbZ6w4dUSzo27zOBZXpXv3mThQS5zL3hNra8Hv5LA
-         7alg==
-X-Gm-Message-State: AO0yUKUE3eia/C84KlwlSdpHIZ0oA5wtyxMPlF+9PTge1OL4a6SVU4h4
-        fq8DaMkJGifDffJsoI9tpojqDOkNSjCkWdWw4vgUbw==
-X-Google-Smtp-Source: AK7set+Sr1eQOm0FWTiwt/xpuW9UUzdGx1RYsJnEMYw92LldArjz5Tz+ayVou6oWXjFrF+tQe0dkfqk99tKRv/CFndE=
-X-Received: by 2002:a05:6808:3203:b0:368:ca97:3a2a with SMTP id
- cb3-20020a056808320300b00368ca973a2amr197482oib.261.1676550754202; Thu, 16
- Feb 2023 04:32:34 -0800 (PST)
+        Thu, 16 Feb 2023 07:35:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872FFCDE6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676550876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jhvPVxO7HKch5jwG7N0cXvfQIm4P3qjh9xaFc8eVobY=;
+        b=ac5eWq+AlXi68Ehmfc2Jv7kCApTipQHJDos6IEoTbR57uxg19wupgSnoITJ/QshMLufM43
+        D7mxz6dTaLdOy418YfQRpKMLuEtx6bJJzoDiNexxOQvgFbEly7RvovLCLHROyIrda5ZC9W
+        YXskuKUJp2Pxc5ECpSxLq6PBTW8lrCs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-167-bmk6FFvsMcSBig668S-IgQ-1; Thu, 16 Feb 2023 07:34:31 -0500
+X-MC-Unique: bmk6FFvsMcSBig668S-IgQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD35A3C16EA0;
+        Thu, 16 Feb 2023 12:34:30 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-99.pek2.redhat.com [10.72.12.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BDC5492C3C;
+        Thu, 16 Feb 2023 12:34:23 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        christophe.leroy@csgroup.eu, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
+        arnd@arndb.de, Baoquan He <bhe@redhat.com>
+Subject: [PATCH v4 00/16] mm: ioremap:  Convert architectures to take GENERIC_IOREMAP way
+Date:   Thu, 16 Feb 2023 20:34:03 +0800
+Message-Id: <20230216123419.461016-1-bhe@redhat.com>
 MIME-Version: 1.0
-References: <20230119163201.580858-1-konrad.dybcio@linaro.org>
- <20230119163201.580858-2-konrad.dybcio@linaro.org> <725a5727-fdde-e3ae-a448-2679c5c4c7f4@linaro.org>
-In-Reply-To: <725a5727-fdde-e3ae-a448-2679c5c4c7f4@linaro.org>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 16 Feb 2023 13:32:22 +0100
-Message-ID: <CAKMK7uFpc3Kg=Ym6ee_JTZo-0h2ig7Twtf2uwE7oV-1c6YRP=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 at 12:59, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 19.01.2023 17:32, Konrad Dybcio wrote:
-> > From: Konrad Dybcio <konrad.dybcio@somainline.org>
-> >
-> > Add support for the Sony TD4353 JDI 2160x1080 display panel used in
-> > some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
-> > of smartphone manufacturing, it is impossible to retrieve a better name
-> > for this panel.
-> >
-> > This revision adds support for the default 60 Hz configuration, however
-> > there could possibly be some room for expansion, as the display panels
-> > used on Sony devices have historically been capable of >2x refresh rate
-> > overclocking.
-> >
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> Are there any outstanding issues with this driver, or perhaps I did
-> not CC some important list? It has gotten very little activity ever
-> since its initial submission around Sept'22..
+Motivation and implementation:
+==============================
+Currently, many architecutres have't taken the standard GENERIC_IOREMAP
+way to implement ioremap_prot(), iounmap(), and ioremap_xx(), but make
+these functions specifically under each arch's folder. Those cause many
+duplicated codes of ioremap() and iounmap().
 
-Sam is usually picking up panel drivers these days, but maybe we need
-a bit more help in this area? If anyone from linaro has a handful of
-drm patches landed in upstream they could apply for drm-misc commit
-rights and help push these. I think linaro has lost a few of the
-drm-misc committers so things tend to be stuck a bit more :-/
--Daniel
+In this patchset, firstly introduce generic_ioremap_prot() and
+generic_iounmap() to extract the generic codes for GENERIC_IOREMAP.
+By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+and iounmap() are all visible and available to arch. Arch needs to
+provide wrapper functions to override the generic version if there's
+arch specific handling in its corresponding ioremap_prot(), ioremap()
+or iounmap(). With these changes, duplicated ioremap/iounmap() code uder
+ARCH-es are removed, and the equivalent functioality is kept as before.
 
->
-> Konrad
-> > v3 -> v4:
-> > - De-magicize some numbers
-> > - Pick up rb
-> >  drivers/gpu/drm/panel/Kconfig                 |  10 +
-> >  drivers/gpu/drm/panel/Makefile                |   1 +
-> >  drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
-> >  3 files changed, 340 insertions(+)
-> >  create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> >
-> > diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> > index d03a64155d15..8da741f1c2ba 100644
-> > --- a/drivers/gpu/drm/panel/Kconfig
-> > +++ b/drivers/gpu/drm/panel/Kconfig
-> > @@ -677,6 +677,16 @@ config DRM_PANEL_SONY_ACX565AKM
-> >         Say Y here if you want to enable support for the Sony ACX565AKM
-> >         800x600 3.5" panel (found on the Nokia N900).
-> >
-> > +config DRM_PANEL_SONY_TD4353_JDI
-> > +     tristate "Sony TD4353 JDI panel"
-> > +     depends on GPIOLIB && OF
-> > +     depends on DRM_MIPI_DSI
-> > +     depends on BACKLIGHT_CLASS_DEVICE
-> > +     help
-> > +       Say Y here if you want to enable support for the Sony Tama
-> > +       TD4353 JDI command mode panel as found on some Sony Xperia
-> > +       XZ2 and XZ2 Compact smartphones.
-> > +
-> >  config DRM_PANEL_SONY_TULIP_TRULY_NT35521
-> >       tristate "Sony Tulip Truly NT35521 panel"
-> >       depends on GPIOLIB && OF
-> > diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> > index 1630dd0c69ae..22155d62bec0 100644
-> > --- a/drivers/gpu/drm/panel/Makefile
-> > +++ b/drivers/gpu/drm/panel/Makefile
-> > @@ -68,6 +68,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
-> >  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
-> >  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
-> >  obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-> > +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
-> >  obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
-> >  obj-$(CONFIG_DRM_PANEL_SONY_SYNAPTICS_JDI) += panel-sony-synaptics-jdi.o
-> >  obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
-> > diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> > new file mode 100644
-> > index 000000000000..8d8813dbaa45
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> > @@ -0,0 +1,329 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
-> > + *
-> > + * Generated with linux-mdss-dsi-panel-driver-generator with a
-> > + * substantial amount of manual adjustments.
-> > + *
-> > + * SONY Downstream kernel calls this one:
-> > + * - "JDI ID3" for Akari  (XZ2)
-> > + * - "JDI ID4" for Apollo (XZ2 Compact)
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/regulator/consumer.h>
-> > +
-> > +#include <video/mipi_display.h>
-> > +
-> > +#include <drm/drm_mipi_dsi.h>
-> > +#include <drm/drm_modes.h>
-> > +#include <drm/drm_panel.h>
-> > +
-> > +enum {
-> > +     TYPE_TAMA_60HZ,
-> > +     /*
-> > +      * Leaving room for expansion - SONY very often uses
-> > +      * *truly reliably* overclockable panels on their flagships!
-> > +      */
-> > +};
-> > +
-> > +struct sony_td4353_jdi {
-> > +     struct drm_panel panel;
-> > +     struct mipi_dsi_device *dsi;
-> > +     struct regulator_bulk_data supplies[3];
-> > +     struct gpio_desc *panel_reset_gpio;
-> > +     struct gpio_desc *touch_reset_gpio;
-> > +     bool prepared;
-> > +     int type;
-> > +};
-> > +
-> > +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
-> > +{
-> > +     return container_of(panel, struct sony_td4353_jdi, panel);
-> > +}
-> > +
-> > +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
-> > +{
-> > +     struct mipi_dsi_device *dsi = ctx->dsi;
-> > +     struct device *dev = &dsi->dev;
-> > +     int ret;
-> > +
-> > +     dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-> > +
-> > +     ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 1080 - 1);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set column address: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 2160 - 1);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set page address: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set tear scanline: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set tear on: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
-> > +
-> > +     ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set pixel format: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
-> > +                       0x00, 0x00, 0x08, 0x6f);
-> > +
-> > +     ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +     msleep(70);
-> > +
-> > +     mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
-> > +
-> > +     ret = mipi_dsi_dcs_set_display_on(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to turn display on: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
-> > +{
-> > +     struct mipi_dsi_device *dsi = ctx->dsi;
-> > +     struct device *dev = &dsi->dev;
-> > +     int ret;
-> > +
-> > +     dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-> > +
-> > +     ret = mipi_dsi_dcs_set_display_off(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set display off: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +     msleep(22);
-> > +
-> > +     ret = mipi_dsi_dcs_set_tear_off(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to set tear off: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +     msleep(80);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
-> > +{
-> > +     gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
-> > +     gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
-> > +     usleep_range(5000, 5100);
-> > +}
-> > +
-> > +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
-> > +{
-> > +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> > +     struct device *dev = &ctx->dsi->dev;
-> > +     int ret;
-> > +
-> > +     if (ctx->prepared)
-> > +             return 0;
-> > +
-> > +     ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to enable regulators: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     msleep(100);
-> > +
-> > +     sony_td4353_assert_reset_gpios(ctx, 1);
-> > +
-> > +     ret = sony_td4353_jdi_on(ctx);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to power on panel: %d\n", ret);
-> > +             sony_td4353_assert_reset_gpios(ctx, 0);
-> > +             regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ctx->prepared = true;
-> > +     return 0;
-> > +}
-> > +
-> > +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
-> > +{
-> > +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> > +     struct device *dev = &ctx->dsi->dev;
-> > +     int ret;
-> > +
-> > +     if (!ctx->prepared)
-> > +             return 0;
-> > +
-> > +     ret = sony_td4353_jdi_off(ctx);
-> > +     if (ret < 0)
-> > +             dev_err(dev, "Failed to power off panel: %d\n", ret);
-> > +
-> > +     sony_td4353_assert_reset_gpios(ctx, 0);
-> > +     regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> > +
-> > +     ctx->prepared = false;
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
-> > +     .clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
-> > +     .hdisplay = 1080,
-> > +     .hsync_start = 1080 + 4,
-> > +     .hsync_end = 1080 + 4 + 8,
-> > +     .htotal = 1080 + 4 + 8 + 8,
-> > +     .vdisplay = 2160,
-> > +     .vsync_start = 2160 + 259,
-> > +     .vsync_end = 2160 + 259 + 8,
-> > +     .vtotal = 2160 + 259 + 8 + 8,
-> > +     .width_mm = 64,
-> > +     .height_mm = 128,
-> > +};
-> > +
-> > +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
-> > +                                struct drm_connector *connector)
-> > +{
-> > +     struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> > +     struct drm_display_mode *mode = NULL;
-> > +
-> > +     if (ctx->type == TYPE_TAMA_60HZ)
-> > +             mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
-> > +     else
-> > +             return -EINVAL;
-> > +
-> > +     if (!mode)
-> > +             return -ENOMEM;
-> > +
-> > +     drm_mode_set_name(mode);
-> > +
-> > +     mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-> > +     connector->display_info.width_mm = mode->width_mm;
-> > +     connector->display_info.height_mm = mode->height_mm;
-> > +     drm_mode_probed_add(connector, mode);
-> > +
-> > +     return 1;
-> > +}
-> > +
-> > +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
-> > +     .prepare = sony_td4353_jdi_prepare,
-> > +     .unprepare = sony_td4353_jdi_unprepare,
-> > +     .get_modes = sony_td4353_jdi_get_modes,
-> > +};
-> > +
-> > +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
-> > +{
-> > +     struct device *dev = &dsi->dev;
-> > +     struct sony_td4353_jdi *ctx;
-> > +     int ret;
-> > +
-> > +     ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> > +     if (!ctx)
-> > +             return -ENOMEM;
-> > +
-> > +     ctx->type = (uintptr_t)of_device_get_match_data(dev);
-> > +
-> > +     ctx->supplies[0].supply = "vddio";
-> > +     ctx->supplies[1].supply = "vsp";
-> > +     ctx->supplies[2].supply = "vsn";
-> > +     ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-> > +                                   ctx->supplies);
-> > +     if (ret < 0)
-> > +             return dev_err_probe(dev, ret, "Failed to get regulators\n");
-> > +
-> > +     ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
-> > +     if (IS_ERR(ctx->panel_reset_gpio))
-> > +             return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
-> > +                                  "Failed to get panel-reset-gpios\n");
-> > +
-> > +     ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
-> > +     if (IS_ERR(ctx->touch_reset_gpio))
-> > +             return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
-> > +                                  "Failed to get touch-reset-gpios\n");
-> > +
-> > +     ctx->dsi = dsi;
-> > +     mipi_dsi_set_drvdata(dsi, ctx);
-> > +
-> > +     dsi->lanes = 4;
-> > +     dsi->format = MIPI_DSI_FMT_RGB888;
-> > +     dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
-> > +
-> > +     drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
-> > +                    DRM_MODE_CONNECTOR_DSI);
-> > +
-> > +     ret = drm_panel_of_backlight(&ctx->panel);
-> > +     if (ret)
-> > +             return dev_err_probe(dev, ret, "Failed to get backlight\n");
-> > +
-> > +     drm_panel_add(&ctx->panel);
-> > +
-> > +     ret = mipi_dsi_attach(dsi);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-> > +             drm_panel_remove(&ctx->panel);
-> > +             return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
-> > +{
-> > +     struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
-> > +     int ret;
-> > +
-> > +     ret = mipi_dsi_detach(dsi);
-> > +     if (ret < 0)
-> > +             dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-> > +
-> > +     drm_panel_remove(&ctx->panel);
-> > +}
-> > +
-> > +static const struct of_device_id sony_td4353_jdi_of_match[] = {
-> > +     { .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
-> > +     { /* sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
-> > +
-> > +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
-> > +     .probe = sony_td4353_jdi_probe,
-> > +     .remove = sony_td4353_jdi_remove,
-> > +     .driver = {
-> > +             .name = "panel-sony-td4353-jdi",
-> > +             .of_match_table = sony_td4353_jdi_of_match,
-> > +     },
-> > +};
-> > +module_mipi_dsi_driver(sony_td4353_jdi_driver);
-> > +
-> > +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
-> > +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
-> > +MODULE_LICENSE("GPL");
+Background info:
+================
+1)
+The converting more architectures to take GENERIC_IOREMAP way is
+suggested by Christoph in below discussion:
+https://lore.kernel.org/all/Yp7h0Jv6vpgt6xdZ@infradead.org/T/#u
 
+2)
+In the previous v1 to v3, it's basically further action after arm64
+has converted to GENERIC_IOREMAP way in below patchset. It's done by
+adding hook ioremap_allowed() and iounmap_allowed() in ARCH to add
+ARCH specific handling the middle of ioremap_prot() and iounmap().
 
+[PATCH v5 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
+https://lore.kernel.org/all/20220607125027.44946-1-wangkefeng.wang@huawei.com/T/#u
+
+Later, during v3 reviewing, Christophe Leroy suggested to introduce
+generic_ioremap_prot() and generic_iounmap() to generic codes, and ARCH
+can provide wrapper function ioremap_prot(), ioremap() or iounmap() if
+needed. Christophe made a RFC patchset as below to specially demonstrate
+his idea. This is what v4 is doing.
+
+[RFC PATCH 0/8] mm: ioremap: Convert architectures to take GENERIC_IOREMAP way
+https://lore.kernel.org/all/cover.1665568707.git.christophe.leroy@csgroup.eu/T/#u
+
+Testing:
+========
+- It's running well on arm64, s390x, ppc64le with this patchset applied
+  on the latest upstream kernel 6.2-rc8+.
+- Cross compiling passed on arc, ia64, parisc, sh, xtensa.
+- cross compiling is not tried on hexagon, openrisc and powerpc 32bit
+  because:
+  - Didn't find cross compiling tools for hexagon, ppc 32bit;
+  - there's error with openrisc compiling, while I have no idea how to
+    fix it. Please see below pasted log:
+    ---------------------------------------------------------------------
+    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc defconfig
+    *** Default configuration is based on 'or1ksim_defconfig'
+    #
+    # configuration written to .config
+    #
+    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc -j320 CROSS_COMPILE=/usr/bin/openrisc-linux-gnu-
+      SYNC    include/config/auto.conf.cmd
+      CC      scripts/mod/empty.o
+    ./scripts/check-local-export: /usr/bin/openrisc-linux-gnu-nm failed
+    make[1]: *** [scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
+    make[1]: *** Deleting file 'scripts/mod/empty.o'
+    make: *** [Makefile:1275: prepare0] Error 2
+    ----------------------------------------------------------------------
+
+History:
+=======
+v3->v4:
+- Change to contain arch specific handling in wrapper function
+  ioremap(), ioremap_prot() or iounmap() to replace the old hook
+  ioremap|iounmap_allowed() hook way for each arch.
+- Add two patches to convert powerpc to GENERIC_IOREMAP. They are
+  picked from above Christophe's RFC patchset, I made some changes
+  to make them formal.
+
+v2->v3:
+- Rewrite log of all patches to add more details as Christoph suggested.
+
+- Merge the old patch 1 and 2 which adjusts return values and
+  parameters of arch_ioremap() into one patch, namely the current
+  patch 3. Christoph suggested this.
+
+- Change the return value of arch_iounmap() to bool type since we only
+  do arch specific address filtering or address checking, bool value
+  can reflect the checking better. This is pointed out by Niklas when
+  he reviewed the s390 patch.
+
+- Put hexagon patch at the beginning of patchset since hexagon has the
+  same ioremap() and iounmap() as standard ones, no arch_ioremap() and
+  arch_iounmap() hooks need be introduced. So the later arch_ioremap
+  and arch_iounmap() adjustment are not related in hexagon. Christophe
+  suggested this.
+
+- Remove the early ioremap code from openrisc ioremap() firstly since
+  openrisc doesn't have early ioremap handling in openrisc arch code.
+  This simplifies the later converting to GENERIC_IOREMAP method.
+  Christoph and Stafford suggersted this.
+
+- Fix compiling erorrs reported by lkp in parisc and sh patches.
+  Adding macro defintions for those port|mem io functions in
+  <asm/io.h> to avoid repeated definition in <asm-generic/io.h>.
+
+v1->v2:
+- Rename io[re|un]map_allowed() to arch_io[re|un]map() and made
+  some minor changes in patch 1~2 as per Alexander and Kefeng's
+  suggestions. Accordingly, adjust patches~4~11 because of the renaming
+  arch_io[re|un]map().
+
+Baoquan He (13):
+  hexagon: mm: Convert to GENERIC_IOREMAP
+  openrisc: mm: remove unneeded early ioremap code
+  mm: ioremap: allow ARCH to have its own ioremap method definition
+  mm/ioremap: add slab availability checking in ioremap_prot
+  arc: mm: Convert to GENERIC_IOREMAP
+  ia64: mm: Convert to GENERIC_IOREMAP
+  openrisc: mm: Convert to GENERIC_IOREMAP
+  s390: mm: Convert to GENERIC_IOREMAP
+  sh: mm: Convert to GENERIC_IOREMAP
+  xtensa: mm: Convert to GENERIC_IOREMAP
+  parisc: mm: Convert to GENERIC_IOREMAP
+  arm64 : mm: add wrapper function ioremap_prot()
+  mm: ioremap: remove unneeded ioremap_allowed and iounmap_allowed
+
+Christophe Leroy (3):
+  mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
+  mm/ioremap: Consider IOREMAP space in generic ioremap
+  powerpc: mm: Convert to GENERIC_IOREMAP
+
+ arch/arc/Kconfig                  |  1 +
+ arch/arc/include/asm/io.h         |  7 ++--
+ arch/arc/mm/ioremap.c             | 49 ++---------------------
+ arch/arm64/include/asm/io.h       |  3 +-
+ arch/arm64/mm/ioremap.c           | 10 +++--
+ arch/hexagon/Kconfig              |  1 +
+ arch/hexagon/include/asm/io.h     |  9 ++++-
+ arch/hexagon/mm/ioremap.c         | 44 ---------------------
+ arch/ia64/Kconfig                 |  1 +
+ arch/ia64/include/asm/io.h        | 13 +++----
+ arch/ia64/mm/ioremap.c            | 41 +++----------------
+ arch/openrisc/Kconfig             |  1 +
+ arch/openrisc/include/asm/io.h    | 11 ++++--
+ arch/openrisc/mm/ioremap.c        | 58 +--------------------------
+ arch/parisc/Kconfig               |  1 +
+ arch/parisc/include/asm/io.h      | 17 +++++---
+ arch/parisc/mm/ioremap.c          | 62 ++---------------------------
+ arch/powerpc/Kconfig              |  1 +
+ arch/powerpc/include/asm/io.h     |  8 ++--
+ arch/powerpc/mm/ioremap.c         | 26 +------------
+ arch/powerpc/mm/ioremap_32.c      | 19 +++++----
+ arch/powerpc/mm/ioremap_64.c      | 12 +-----
+ arch/s390/Kconfig                 |  1 +
+ arch/s390/include/asm/io.h        | 21 +++++-----
+ arch/s390/pci/pci.c               | 57 +++++----------------------
+ arch/sh/Kconfig                   |  1 +
+ arch/sh/include/asm/io.h          | 65 ++++++++++++++++---------------
+ arch/sh/include/asm/io_noioport.h |  7 ++++
+ arch/sh/mm/ioremap.c              | 65 ++++++-------------------------
+ arch/xtensa/Kconfig               |  1 +
+ arch/xtensa/include/asm/io.h      | 32 ++++++---------
+ arch/xtensa/mm/ioremap.c          | 58 +++++++--------------------
+ include/asm-generic/io.h          | 31 +++------------
+ mm/ioremap.c                      | 41 +++++++++++++------
+ 34 files changed, 214 insertions(+), 561 deletions(-)
+ delete mode 100644 arch/hexagon/mm/ioremap.c
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
