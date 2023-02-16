@@ -2,147 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0277D699CEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44FB699CED
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjBPTRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 14:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S229632AbjBPTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBPTRv (ORCPT
+        with ESMTP id S229593AbjBPTTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 14:17:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B56270F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:17:48 -0800 (PST)
-Received: from [192.168.2.109] (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 00E3D66020C5;
-        Thu, 16 Feb 2023 19:17:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676575067;
-        bh=KelSBIcFPOMpwc6QrwAztZm3NSF4137ddDvT1p48FBw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dM+uL5TQseZUO7mMSdY2OYwFJ3km5PZW1CGa1qU+JeYSFYJiYH/9ZgVMCXGAbm0lW
-         QfDkhY34pl5mZrAOiIWn/vBBQ09EGZaBrNeeMjHIyKSFbW0SRNKCNr8puOH+zGv0x8
-         w6CjG2Xc6tu8muZ6eaCtMfLkbLy6lP/p89HlOTfxt0NkkQ6esf+rz0S9GUAytZ2NlO
-         gQR1jAFBpz4jLaehwwpCxhUpw1woYFB2rOkAlHGElysU9y+KsA9F5a65Fy57L7w4sp
-         KV7S3bEp6s2MwKwx5xrU3ccSNfmMWBywNvhXK8w/vsxSXdcUCGrXtjNs/saoFlebSi
-         ou197pcV4eq6g==
-Message-ID: <88191cc6-e751-daa9-37f5-eda92d541098@collabora.com>
-Date:   Thu, 16 Feb 2023 22:17:44 +0300
+        Thu, 16 Feb 2023 14:19:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB7EC65B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676575125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vq/8D3nKqtw1WIOPbD3NZdoxax4+1C1opON75SAH+KA=;
+        b=gnn+mw4fAVZP34XSIwtPEMYOMav5ZfFIMkgj6H/cwxDsH3hMbNLAnkCcsYOpC5moQ+C8HB
+        dguudob2Dt9msIDhxl9a1fh+vNqabMj7AZPedmnqPUUeFbWgIUBRAnRjA8YypCFhJdVQ4H
+        AU0Zr21XS86d02yV2BTFYqThqxwCvg0=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-KZAnHyNOO0qDHJPspJ6R_w-1; Thu, 16 Feb 2023 14:18:44 -0500
+X-MC-Unique: KZAnHyNOO0qDHJPspJ6R_w-1
+Received: by mail-qv1-f71.google.com with SMTP id ib5-20020a0562141c8500b0053c23b938a0so1632620qvb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:18:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676575123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vq/8D3nKqtw1WIOPbD3NZdoxax4+1C1opON75SAH+KA=;
+        b=l7XvU/NDXte24FSEhHLW3nYnLqrnKd4N5CgqHO6UT3fd9BXHACRXkHMRL0mdANe2U9
+         7G26wI4RqZcxLak1KadtKPWmJG/DkLsF1Sgv26KaEFxAi+MNbgF72PVmZWijuDO/1dvz
+         neRyMh/76O0MmaH9eU/OEueKbZ4O0Nz7yOmgw4lKl+tjZkvVD26AItAMUWX9D/GRe4qj
+         TszPxvEhHLYgE6jN0awHxJjh/s+FlfVAy09t+RASyeRiibyBt2CJEUj4QLGALpTJB0nb
+         ZWQRJlyxi0Q6zqxYvhhjhfboaan86G/Cb5yQqJBBCcwW3+hwavaNksyEVeNS1YAruCkH
+         23aA==
+X-Gm-Message-State: AO0yUKVuvC3JEhXCkVxSqlI94riOEXwV5TFTKRIGdajzfK3EIU40O+gd
+        2BqReOD74xUnNdVDUMpFhAlBxw2PfjSDI46Q3uYrD5eaLRSQoCA702g0EUFmsEOsTXa3qOEfpDN
+        6zWkj5mX7WL2Wb9g3J3ZGH/Bs
+X-Received: by 2002:a05:622a:1c1:b0:3b8:4951:57bb with SMTP id t1-20020a05622a01c100b003b8495157bbmr13365172qtw.5.1676575123587;
+        Thu, 16 Feb 2023 11:18:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set94r9QdJOHGjbfUETh7ovLgpkDfMBET1BqCT/UpQvalJnj5Q431hrj7SLkgGPpOCMlAFoI5Jw==
+X-Received: by 2002:a05:622a:1c1:b0:3b8:4951:57bb with SMTP id t1-20020a05622a01c100b003b8495157bbmr13365134qtw.5.1676575123243;
+        Thu, 16 Feb 2023 11:18:43 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id m9-20020a05622a054900b003a530a32f67sm360565qtx.65.2023.02.16.11.18.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 11:18:42 -0800 (PST)
+Date:   Thu, 16 Feb 2023 14:18:41 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Bowler <nbowler@draconx.ca>
+Subject: Re: [PATCH] mm/migrate: Fix wrongly apply write bit after mkdirty on
+ sparc64
+Message-ID: <Y+6BkcrLBKJyGZUn@x1n>
+References: <20230216153059.256739-1-peterx@redhat.com>
+ <611c1202-1978-8886-eec3-929933ee75cd@leemhuis.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
-Content-Language: en-US
-To:     Yaroslav Boliukin <iam@lach.pw>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>
-References: <20220118170037.14584-1-iam@lach.pw>
- <5d5a8183-aebc-6660-9cbc-03950f9b14b8@collabora.com>
- <87v8k5vqg6.fsf@intel.com>
- <831e7daf-48ae-cea8-a5d2-3786317b3b65@collabora.com>
- <87sff9vl6j.fsf@intel.com>
- <b5f6c63e-adf3-38a6-18fb-c92c764c23f3@collabora.com>
- <d6f66bf7-356a-4bd9-fa21-a3197c0dff50@lach.pw>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <d6f66bf7-356a-4bd9-fa21-a3197c0dff50@lach.pw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <611c1202-1978-8886-eec3-929933ee75cd@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/23 21:26, Iaroslav Boliukin wrote:
-> On 2/14/23 12:50, Dmitry Osipenko wrote:
->> On 2/13/23 14:50, Jani Nikula wrote:
->>> On Mon, 13 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>> wrote:
->>>> On 2/13/23 12:56, Jani Nikula wrote:
->>>>> On Sun, 12 Feb 2023, Dmitry Osipenko
->>>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 1/18/22 20:00, Yaroslav Bolyukin wrote:
->>>>>>
->>>>>> Add a brief commit message, describing a user-visible effect of this
->>>>>> patch. Tell that this change prevents exposing headset as a regular
->>>>>> display to the system, while it will work with SteamVR.
->>>>>>
->>>>>>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
->>>>>>> ---
->>>>>>>   drivers/gpu/drm/drm_edid.c | 3 ++-
->>>>>>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
->>>>>>> index 12893e7be..fdb8f0a6f 100644
->>>>>>> --- a/drivers/gpu/drm/drm_edid.c
->>>>>>> +++ b/drivers/gpu/drm/drm_edid.c
->>>>>>> @@ -200,9 +200,10 @@ static const struct edid_quirk {
->>>>>>>       EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
->>>>>>>       EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
->>>>>>>   -    /* HTC Vive and Vive Pro VR Headsets */
->>>>>>> +    /* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
->>>>>>
->>>>>> Nit: I'd keep the original comment, or change it to a generic "HTC VR
->>>>>> Headsets" to prevent further comment changes
->>>>>>
->>>>>>>       EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
->>>>>>>       EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
->>>>>>> +    EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
->>>>>>>         /* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
->>>>>>>       EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
->>>>>>>
->>>>>>> base-commit: 99613159ad749543621da8238acf1a122880144e
->>>>>>
->>>>>> Please send the v2 patch with the added EDID for Cosmos VR and the
->>>>>> addressed comments. Thanks!
->>>>>
->>>>> Yeah, we'll need to EDID to check that it doesn't have the Microsoft
->>>>> VSDB to indicate non-desktop. See 2869f599c0d8 ("drm/edid: support
->>>>> Microsoft extension for HMDs and specialized monitors").
->>>>
->>>> Do you mean to skip using the EDID_QUIRK_NON_DESKTOP if MS VSDB entry
->>>> presents in the EDID?
->>>>
->>>> These HTC EDIDs don't have MS VSDB, otherwise the quirk wouldn't be
->>>> needed.
->>>
->>> Okay, I didn't know that. I just observed that the original patch was
->>> sent before the the MS VSDB parsing was added.
->>
->> This will be good to mention in the v2 commit message.
->>
+On Thu, Feb 16, 2023 at 05:59:16PM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 16.02.23 16:30, Peter Xu wrote:
+> > Nick Bowler reported another sparc64 breakage after the young/dirty
+> > persistent work for page migration (per "Link:" below).  That's after a
+> > similar report [2].
 > 
-> This headset does support some kind of HMD signalling, however, this is
-> not a microsoft-specific extension (0xca125c) but part of the DisplayId
-> spec, "Display Product Primary Use Case" field is set to "7".
+> Thx for handling this.
 > 
-> The problem is, I have no idea what spec I should refer to, as I can't
-> find this errata in the original spec, and the only reference to this
-> value I see is in https://git.linuxtv.org/edid-decode.git utility:
+> > [...]
+> >
+> > Note: this is based on mm-unstable, because the breakage was since 6.1 and
+> > we're at a very late stage of 6.2 (-rc8), so I assume for this specific
+> > case we should target this at 6.3.
+> > 
+> > [1] https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
+> > [2] https://lore.kernel.org/all/20221212130213.136267-1-david@redhat.com/
+> > 
+> > Cc: regressions@leemhuis.info
 > 
-> https://git.linuxtv.org/edid-decode.git/tree/parse-displayid-block.cpp?ref=aa956e0dd5fb85271dde900ea1ebdda795af7f8b#n1676
+> Not that it matters much, but feel free to use this instead:
 > 
-> I would like to implement this feature, but I need some spec reference.
+> CC: regressions@lists.linux.dev
+> 
+> Then things don't depend on me (in case I ever get help with my cat
+> herding job). And it also make it even more obvious that this patch
+> fixes a regression to anyone who handles it downstream.
 
-The [1] says it's "VESA DisplayID Standard v2.0", which should be okay
-to refer, IMO.
+Sure.
 
-[1]
-https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors-edid-extension
+> 
+> > Fixes: 2e3468778dbe ("mm: remember young/dirty bit for page migrations")
+> 
+> That's a commit from 6.1, hence this should likely have:
+> 
+> Cc: stable@vger.kernel.org # 6.1.y
+> 
+> [no, a fixes tag alone does not suffice, see docs]
+
+Oops, I just forgot that.  We definitely need to cc:stable.  I'll make sure
+it's there if there's a new version, or I hope Andrew could help to attach
+otherwise.
+
+Thanks,
 
 -- 
-Best regards,
-Dmitry
+Peter Xu
 
