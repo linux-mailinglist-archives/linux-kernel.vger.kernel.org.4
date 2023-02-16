@@ -2,360 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2683698D4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A9B698D53
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBPGok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S229551AbjBPGpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBPGoj (ORCPT
+        with ESMTP id S229478AbjBPGpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:44:39 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 526551BEC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:44:29 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8DxldjL0O1jFzkBAA--.2484S3;
-        Thu, 16 Feb 2023 14:44:27 +0800 (CST)
-Received: from [10.136.12.26] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+TI0O1j21o0AA--.61764S3;
-        Thu, 16 Feb 2023 14:44:25 +0800 (CST)
-Subject: Re: [PATCH v3 2/3] LoongArch: Add ptrace single step support
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230215092358.30368-1-zhangqing@loongson.cn>
- <20230215092358.30368-3-zhangqing@loongson.cn>
- <2b759af4-4047-4ac6-acbb-42e91c14fb48@loongson.cn>
- <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <4a4a159d-f0d3-67cd-f145-202ef2a7e794@loongson.cn>
-Date:   Thu, 16 Feb 2023 14:44:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 16 Feb 2023 01:45:39 -0500
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E14DD2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 22:45:38 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id SY1Nph9XNm8TdSY1NpF4Iy; Thu, 16 Feb 2023 07:45:36 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 16 Feb 2023 07:45:36 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <95af8972-478f-12b8-efea-30c7e249f449@wanadoo.fr>
+Date:   Thu, 16 Feb 2023 07:45:33 +0100
 MIME-Version: 1.0
-In-Reply-To: <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: mdio: thunder: Do not unregister buses that have not
+ been registered
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        David Daney <david.daney@cavium.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <918382e19fdeb172f3836234d07e706460b7d06b.1620906605.git.christophe.jaillet@wanadoo.fr>
+ <20210513121634.GX1336@shell.armlinux.org.uk>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20210513121634.GX1336@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8Bxb+TI0O1j21o0AA--.61764S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3ur1DXr45tFWDtF48ZrW5ZFb_yoWkXrW5pF
-        1kAFWDGrW5Grn5Jr12gw1UAFy5tr18XanrXr10qa4Yyrsrtr1agr1UWr1q9F15Aw48Jr1I
-        vr15WrsIvF43XaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8CksDUUUUU==
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 13/05/2021 à 14:16, Russell King - ARM Linux admin a écrit :
+> On Thu, May 13, 2021 at 01:51:40PM +0200, Christophe JAILLET wrote:
+>> In the probe, if 'of_mdiobus_register()' fails, 'nexus->buses[i]' will
+>> still have a non-NULL value.
+>> So in the remove function, we will try to unregister a bus that has not
+>> been registered.
+>>
+>> In order to avoid that NULLify 'nexus->buses[i]'.
+>> 'oct_mdio_writeq(0,...)' must also be called here.
+>>
+>> Suggested-by: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+>> Fixes: 379d7ac7ca31 ("phy: mdio-thunder: Add driver for Cavium Thunder SoC MDIO buses.")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Calling 'devm_mdiobus_free()' would also be cleaner, IMHO.
+>> I've not added it because:
+>>     - it should be fine, even without it
+>>     - I'm not sure how to use it
+> 
+> devm_mdiobus_free() is a static function not intended to be used by
+> drivers. There is no devm.*free() function available for this, so
+> this memory will only ever be freed when either probe fails or the
+> driver is unbound from its device.
+> 
+> That should be fine, but it would be nice to give that memory back
+> to the system. Without having a function for drivers to use though,
+> that's not possible. Such a function should take a struct device
+> pointer and the struct mii_bus pointer returned by the devm
+> allocation function.
+> 
+> So, unless Andrew things we really need to free that, what you're
+> doing below should be fine as far as setting the pointer to NULL.
+> 
+> I think I'd want comments from Cavium on setting the register to
+> zero - as we don't know how this hardware behaves, and whether that
+> would have implications we aren't aware of. So, I'm copying in
+> David Daney (the original driver author) for comment, if his email
+> address still works!
 
-On 2023-02-16 11:13, Youling Tang wrote:
->
->
-> On 02/16/2023 10:07 AM, Jinyang He wrote:
->>
->> On 2023-02-15 17:23, Qing Zhang wrote:
->>> Use the generic ptrace_resume code for PTRACE_SYSCALL, PTRACE_CONT,
->>> PTRACE_KILL and PTRACE_SINGLESTEP. This implies defining
->>> arch_has_single_step in  and implementing the
->>> user_enable_single_step and user_disable_single_step functions.
->>>
->>> LongArch has no hardware single-step register. the hardware single-step
->>> function multiplex fetch instruction watchpoint(FWPS) and specifies 
->>> that
->>> the next instruction must trigger the watch exception by setting the
->>> mask bit.
->>>
->>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>> ---
->>>   arch/loongarch/include/asm/processor.h |  3 ++
->>>   arch/loongarch/include/asm/ptrace.h    |  2 +
->>>   arch/loongarch/kernel/hw_breakpoint.c  | 35 +++++++++++--
->>>   arch/loongarch/kernel/ptrace.c         | 68 
->>> ++++++++++++++++++++++++++
->>>   arch/loongarch/kernel/traps.c          | 20 ++++++--
->>>   5 files changed, 120 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/arch/loongarch/include/asm/processor.h
->>> b/arch/loongarch/include/asm/processor.h
->>> index db060c5a976f..3ea0f1910c23 100644
->>> --- a/arch/loongarch/include/asm/processor.h
->>> +++ b/arch/loongarch/include/asm/processor.h
->>> @@ -131,6 +131,9 @@ struct thread_struct {
->>>       struct perf_event    *hbp_break[LOONGARCH_MAX_BRP];
->>>       struct perf_event    *hbp_watch[LOONGARCH_MAX_WRP];
->>>   +    /* Used by ptrace single_step */
->>> +    unsigned long single_step;
->>> +
->>>       /*
->>>        * FPU & vector registers, must be at last because
->>>        * they are conditionally copied at fork().
->>> diff --git a/arch/loongarch/include/asm/ptrace.h
->>> b/arch/loongarch/include/asm/ptrace.h
->>> index 58596c4f8a0f..66a0e6c480a3 100644
->>> --- a/arch/loongarch/include/asm/ptrace.h
->>> +++ b/arch/loongarch/include/asm/ptrace.h
->>> @@ -150,4 +150,6 @@ static inline void user_stack_pointer_set(struct
->>> pt_regs *regs,
->>>       regs->regs[3] = val;
->>>   }
->>>   +#define arch_has_single_step()        (1)
->>> +
->>>   #endif /* _ASM_PTRACE_H */
->>> diff --git a/arch/loongarch/kernel/hw_breakpoint.c
->>> b/arch/loongarch/kernel/hw_breakpoint.c
->>> index 6431cd319c32..94967b887d92 100644
->>> --- a/arch/loongarch/kernel/hw_breakpoint.c
->>> +++ b/arch/loongarch/kernel/hw_breakpoint.c
->>> @@ -153,6 +153,22 @@ static int hw_breakpoint_slot_setup(struct
->>> perf_event **slots, int max_slots,
->>>    */
->>>   void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
->>>   {
->>> +    int i;
->>> +    struct thread_struct *t = &tsk->thread;
->>> +
->>> +    for (i = 0; i < LOONGARCH_MAX_BRP; i++) {
->>> +        if (t->hbp_break[i]) {
->>> +            unregister_hw_breakpoint(t->hbp_break[i]);
->>> +            t->hbp_break[i] = NULL;
->>> +        }
->>> +    }
->>> +
->>> +    for (i = 0; i < LOONGARCH_MAX_WRP; i++) {
->>> +        if (t->hbp_watch[i]) {
->>> +            unregister_hw_breakpoint(t->hbp_watch[i]);
->>> +            t->hbp_watch[i] = NULL;
->>> +        }
->>> +    }
->>>   }
->>>     void ptrace_hw_copy_thread(struct task_struct *tsk)
->>> @@ -498,11 +514,20 @@ arch_initcall(arch_hw_breakpoint_init);
->>>   void hw_breakpoint_thread_switch(struct task_struct *next)
->>>   {
->>>       struct pt_regs *regs = task_pt_regs(next);
->>> -
->>> -    /* Update breakpoints */
->>> -    update_bp_registers(regs, 1, 0);
->>> -    /* Update watchpoints */
->>> -    update_bp_registers(regs, 1, 1);
->>> +    u64 addr, mask;
->>> +
->>> +    if (test_bit(TIF_SINGLESTEP, &task_thread_info(next)->flags)) {
->>> +        addr = read_wb_reg(CSR_CFG_ADDR, 0, 0);
->>> +        mask = read_wb_reg(CSR_CFG_MASK, 0, 0);
->>> +        if ((task_pt_regs(next)->csr_era & ~mask) == (addr & ~mask))
->>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
->>> +        regs->csr_prmd |= CSR_PRMD_PWE;
->>> +    } else {
->>> +        /* Update breakpoints */
->>> +        update_bp_registers(regs, 1, 0);
->>> +        /* Update watchpoints */
->>> +        update_bp_registers(regs, 1, 1);
->>> +    }
->>>   }
->>>     void hw_breakpoint_pmu_read(struct perf_event *bp)
->>> diff --git a/arch/loongarch/kernel/ptrace.c
->>> b/arch/loongarch/kernel/ptrace.c
->>> index bee4194177fd..52a3ee4366f4 100644
->>> --- a/arch/loongarch/kernel/ptrace.c
->>> +++ b/arch/loongarch/kernel/ptrace.c
->>> @@ -20,6 +20,7 @@
->>>   #include <linux/context_tracking.h>
->>>   #include <linux/elf.h>
->>>   #include <linux/errno.h>
->>> +#include <linux/hw_breakpoint.h>
->>>   #include <linux/mm.h>
->>>   #include <linux/ptrace.h>
->>>   #include <linux/regset.h>
->>> @@ -30,6 +31,7 @@
->>>   #include <linux/stddef.h>
->>>   #include <linux/seccomp.h>
->>>   #include <linux/uaccess.h>
->>> +#include <linux/thread_info.h>
->>>     #include <asm/byteorder.h>
->>>   #include <asm/cpu.h>
->>> @@ -39,6 +41,7 @@
->>>   #include <asm/page.h>
->>>   #include <asm/pgtable.h>
->>>   #include <asm/processor.h>
->>> +#include <asm/ptrace.h>
->>>   #include <asm/reg.h>
->>>   #include <asm/syscall.h>
->>>   @@ -541,3 +544,68 @@ long arch_ptrace(struct task_struct *child,
->>> long request,
->>>         return ret;
->>>   }
->>> +
->>> +void ptrace_triggered(struct perf_event *bp,
->>> +              struct perf_sample_data *data, struct pt_regs *regs)
->>> +{
->>> +    struct perf_event_attr attr;
->>> +
->>> +    attr = bp->attr;
->>> +    attr.disabled = true;
->>> +    modify_user_hw_breakpoint(bp, &attr);
->>> +}
->>> +
->>> +static int set_single_step(struct task_struct *tsk, unsigned long 
->>> addr)
->>> +{
->>> +    struct thread_struct *thread = &tsk->thread;
->>> +    struct perf_event *bp;
->>> +    struct perf_event_attr attr;
->>> +    struct arch_hw_breakpoint *info;
->>> +
->>> +    bp = thread->hbp_break[0];
->>> +    if (!bp) {
->>> +        ptrace_breakpoint_init(&attr);
->>> +
->>> +        attr.bp_addr = addr;
->>> +        attr.bp_len = HW_BREAKPOINT_LEN_8;
->>> +        attr.bp_type = HW_BREAKPOINT_X;
->>> +
->>> +        bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
->>> +                         NULL, tsk);
->>> +        if (IS_ERR(bp))
->>> +            return PTR_ERR(bp);
->>> +
->>> +        thread->hbp_break[0] = bp;
->>> +    } else {
->>> +        int err;
->>> +
->>> +        attr = bp->attr;
->>> +        attr.bp_addr = addr;
->>> +        /* reenable breakpoint */
->>> +        attr.disabled = false;
->>> +        err = modify_user_hw_breakpoint(bp, &attr);
->>> +        if (unlikely(err))
->>> +            return err;
->>> +
->>> +        csr_write64(attr.bp_addr, LOONGARCH_CSR_IB0ADDR);
->>> +    }
->>> +    info = counter_arch_bp(bp);
->>> +    info->mask = 0xffffffffffff;
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/* ptrace API */
->>> +void user_enable_single_step(struct task_struct *task)
->>> +{
->>> +    struct thread_info *ti = task_thread_info(task);
->>> +
->>> +    set_single_step(task, task_pt_regs(task)->csr_era);
->>> +    task->thread.single_step = task_pt_regs(task)->csr_era;
->>> +    set_ti_thread_flag(ti, TIF_SINGLESTEP);
->>> +}
->>> +
->>> +void user_disable_single_step(struct task_struct *task)
->>> +{
->>> +    clear_tsk_thread_flag(task, TIF_SINGLESTEP);
->>> +}
->>> diff --git a/arch/loongarch/kernel/traps.c
->>> b/arch/loongarch/kernel/traps.c
->>> index 2b133079e0f3..56d7d076153c 100644
->>> --- a/arch/loongarch/kernel/traps.c
->>> +++ b/arch/loongarch/kernel/traps.c
->>> @@ -511,9 +511,23 @@ asmlinkage void noinstr do_watch(struct pt_regs
->>> *regs)
->>>   #ifdef CONFIG_HAVE_HW_BREAKPOINT
->>>       irqentry_state_t state = irqentry_enter(regs);
->>>   -    breakpoint_handler(regs);
->>> -    watchpoint_handler(regs);
->>> -    force_sig(SIGTRAP);
->>> +    if (test_tsk_thread_flag(current, TIF_SINGLESTEP)) {
->>> +        int llbit = (csr_read32(LOONGARCH_CSR_LLBCTL) & 0x1);
->>> +        unsigned long pc = regs->csr_era;
->>> +
->>> +        if (llbit) {
->>
->> Hi, Qing,
->>
->>
->> It should be noted here. When the ll-sc combo is encountered, it is
->> regarded as an single instruction. So donnot clear llbit and reset
->> CSR.FWPS.Skip until the llsc execution is completed.
->>
->>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
->>> +            csr_write32(0x4, LOONGARCH_CSR_LLBCTL);
->>> +        } else if (pc == current->thread.single_step) {
->> Note here as well. Because 3A5000 has a strange hardware issue that
->> certain insns are occasionally not skipped when CSR.FWPS.Skip is set,
->> such as fld.d/fst.d. Singlestep needs compare whether the csr_era is
->> equal to the value of singlestep which last time set, as in most case
->>
->> they should be not equal.
->
-> BTW, I prefer to separate this special processing from this patch (for
-> example, add two patchs in this series, add special processing of
-> instructions such as LL-SC, and FLD.D/FST.D, etc.), and add
-> corresponding test cases to describe the phenomenon and reason, this
-> is conducive to everyone's understanding of the code.
+Hi,
 
-Agree.
+drivers/net/mdio/mdio-thunder.c has been touched recently, so i take the 
+opportunity to ping on this old patch.
 
+It does not cleanly apply anymore, but still look valid to me.
 
->
->>
->>
->> And for this condition expression, some potentially strange insns may
->> cause bugs. For example, "b 0" or "jr rd" where rd is equal to its PC
->> will cause cannot stop the singlestep. These insns is so strange that
->> we did not consider in OW. However, I think we should consider this
->> case for robustness in upstream.
->>
->
-> I don't know if there will be instructions like "b 0" or "jr rd (rd =
-> pc)" in the executable file after linking?
+CJ
 
-So I said that is strange, and it can be fatal if happened. :-)
-
-
->
-> Youling.
->
->> It is better to use macros avoid direct numbers when csr_write* is 
->> invoked.
+> 
+>> ---
+>>   drivers/net/mdio/mdio-thunder.c | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/mdio/mdio-thunder.c b/drivers/net/mdio/mdio-thunder.c
+>> index 822d2cdd2f35..140c405d4a41 100644
+>> --- a/drivers/net/mdio/mdio-thunder.c
+>> +++ b/drivers/net/mdio/mdio-thunder.c
+>> @@ -97,8 +97,14 @@ static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
+>>   		bus->mii_bus->write = cavium_mdiobus_write;
+>>   
+>>   		err = of_mdiobus_register(bus->mii_bus, node);
+>> -		if (err)
+>> +		if (err) {
+>>   			dev_err(&pdev->dev, "of_mdiobus_register failed\n");
+>> +			/* non-registered buses must not be unregistered in
+>> +			 * the .remove function
+>> +			 */
+>> +			oct_mdio_writeq(0, bus->register_base + SMI_EN);
+>> +			nexus->buses[i] = NULL;
+>> +		}
+>>   
+>>   		dev_info(&pdev->dev, "Added bus at %llx\n", r.start);
+>>   		if (i >= ARRAY_SIZE(nexus->buses))
+>> -- 
+>> 2.30.2
 >>
 >>
->> Thanks,
->>
->> Jinyang
->>
->>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
->>> +        } else {
->>> +            force_sig(SIGTRAP);
->>> +        }
->>> +    } else {
->>> +        breakpoint_handler(regs);
->>> +        watchpoint_handler(regs);
->>> +        force_sig(SIGTRAP);
->>> +    }
->>>         irqentry_exit(regs, state);
->>>   #endif
->>
->
+> 
 
