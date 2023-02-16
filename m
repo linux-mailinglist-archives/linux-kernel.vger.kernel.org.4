@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B94698BF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F5F698BFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjBPFaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S229732AbjBPFaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBPF3w (ORCPT
+        with ESMTP id S229656AbjBPFaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:29:52 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFEE212B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:29:40 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 16 Feb 2023 00:30:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E71C3A89;
+        Wed, 15 Feb 2023 21:30:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id BDDF341F5F;
-        Thu, 16 Feb 2023 05:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1676525377;
-        bh=e6DAgQRi5MFXTXSKQZA5Z1t1Z/OvapR2NonqZSP/OUw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=NU3rs1LqYtg8Hh/lQkJIUmAKRvW2ml0vNJvOELF8xlQqbflM+up8ovJSjPEd6zjoE
-         zd3yVg4cvasPJCorOA6pOMi2H5XFMhEWM2m4cKNXop8FAt2YsM9iXc3UCFENJWd3+J
-         wXua6CiNIQ1z3NZBHyU7fuS13t9DWxO6puuIBJxmJ6z7oL9vNS3LQiI1oJcYIVbR2c
-         on5eln9raV/kdlqgACd4+zXLClEWqxlpvuBEW1jAehPFUdHkwcq6++ASBVlorca9vj
-         F3MmKP0TLOdk0rdgDQU9vyi2iISdiaowsUc0eaD8yTAwW9nsk0gVRkgH2Jh8Q8EiNs
-         2RrBNtKCvh6ig==
-Message-ID: <90f3e529-715c-f7b1-da2d-1de7798aa248@asahilina.net>
-Date:   Thu, 16 Feb 2023 14:29:33 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0ADB61E90;
+        Thu, 16 Feb 2023 05:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D023C433A1;
+        Thu, 16 Feb 2023 05:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676525419;
+        bh=xzLvVfruIJbJT9woMw5dDxFNpZ6lxwEO9gPlweIEkyM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=X7VKndTzQr6njoCl0qfjgE/go685s4fxuGpQdmcadhqcYL5BZSSta/llVLlc9t9y5
+         4w1OaL/kU2xIwVsG7xtrM8JHUrCNMXNTiEs4wpqsHYz0MysLq1W91Ko8Q8r8s14fgG
+         lWfwI9zh92PDJotEVrRWa4YuCcKr2RQzJKgecQZSuKM0/DMM2Sk3wD4EQ3Y33kootJ
+         WEJBKC5T6KRvAXbHpzV7Pfe2WzcfkwAOr0wOBn9cLs0/HW7CyRazREGq/+SPKFG8Ah
+         zD9+2d04qsEzjSNkY+5cHYf1wMQDrhdsfCZyLqqbOOc9fyAzZQZBp/cCFpEN0NoXjd
+         d0DLcPTyDa0JA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F3CF0E21EC4;
+        Thu, 16 Feb 2023 05:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm_pmu: Invert fallback armpmu_filter() return value
- (*6.2 regression*)
-Content-Language: en-US
-To:     Janne Grunau <j@jannau.net>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-References: <20230215-arm_pmu_m1_regression-v1-1-f5a266577c8d@jannau.net>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <20230215-arm_pmu_m1_regression-v1-1-f5a266577c8d@jannau.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v1 1/1] net: phy: c45: genphy_c45_an_config_aneg():
+ fix uninitialized symbol error
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167652541899.5481.5030550372807599560.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Feb 2023 05:30:18 +0000
+References: <20230215050453.2251360-1-o.rempel@pengutronix.de>
+In-Reply-To: <20230215050453.2251360-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lkp@intel.com, error27@gmail.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2023 20.27, Janne Grunau wrote:
-> Fixes a regression in "perf: Rewrite core context handling" for arm_pmu
-> based drivers without a filter function pointer as the Apple M1 PMU.
-> The event is ignored if filter() returns 'true' opposite to
-> filter_match(). The refactoring failed to invert the return value if
-> arm_pmu has no filter() function pointer of its own.
-> 
-> Fixes: bd2756811766 ("perf: Rewrite core context handling")
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
->  drivers/perf/arm_pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 9b593f985805..9cb22f36cf66 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -556,7 +556,7 @@ static bool armpmu_filter(struct pmu *pmu, int cpu)
->  	if (ret && armpmu->filter)
->  		return armpmu->filter(pmu, cpu);
->  
-> -	return ret;
-> +	return !ret;
->  }
->  
->  static ssize_t cpus_show(struct device *dev,
-> 
-> ---
-> base-commit: ceaa837f96adb69c0df0397937cd74991d5d821a
-> change-id: 20230215-arm_pmu_m1_regression-b6dd48d0c792
-> 
-> Best regards,
+Hello:
 
-Tested-by: Asahi Lina <lina@asahilina.net>
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-This fixes `perf` being completely broken on 6.2. Adding a note to the
-subject, I hope this can get picked up before release...
+On Wed, 15 Feb 2023 06:04:53 +0100 you wrote:
+> Fix warning:
+> drivers/net/phy/phy-c45.c:712 genphy_c45_write_eee_adv() error: uninitialized symbol 'changed'
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202302150232.q6idsV8s-lkp@intel.com/
+> Fixes: 022c3f87f88e ("net: phy: add genphy_c45_ethtool_get/set_eee() support")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> [...]
 
-~~ Lina
+Here is the summary with links:
+  - [net-next,v1,1/1] net: phy: c45: genphy_c45_an_config_aneg(): fix uninitialized symbol error
+    https://git.kernel.org/netdev/net-next/c/c24a34f5a3d7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
