@@ -2,67 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C83698D20
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA06C698D28
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 07:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjBPGfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 01:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S229541AbjBPGhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 01:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBPGfq (ORCPT
+        with ESMTP id S229460AbjBPGhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:35:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9141B50;
-        Wed, 15 Feb 2023 22:35:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B2861A1B;
-        Thu, 16 Feb 2023 06:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50420C433EF;
-        Thu, 16 Feb 2023 06:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676529344;
-        bh=Y4GfQlxzKwZbc0WydlxWK4dEsOXa7BMquXaZxUfXd5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eXq4JXzM6NOSyHEZD/wWTDygA1Lp21jSkGgMc3yKGLtu10FTY1hwRxExaVou4vrnz
-         lLTxftZcN4ly8Bya8/VY+zR951hX4698mg3RebcNAGyIigevqSJrDeEEwd01iXeTfl
-         8iZuaZihwaLA3VVCAXI6y5UjVfztgl+BPqamx4MY=
-Date:   Thu, 16 Feb 2023 07:35:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v10 13/26] gunyah: vm_mgr: Add ioctls to support basic
- non-proxy VM boot
-Message-ID: <Y+3Ou02LwsfS0TLl@kroah.com>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212427.3316544-1-quic_eberman@quicinc.com>
+        Thu, 16 Feb 2023 01:37:43 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C0341B50;
+        Wed, 15 Feb 2023 22:37:41 -0800 (PST)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PHQD84kcYzRs4F;
+        Thu, 16 Feb 2023 14:35:04 +0800 (CST)
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 16 Feb 2023 14:37:38 +0800
+From:   Huisong Li <lihuisong@huawei.com>
+To:     <robbiek@xsightlabs.com>, <sudeep.holla@arm.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
+        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
+        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
+        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>,
+        <lihuisong@huawei.com>
+Subject: [PATCH 0/2] mailbox: pcc: Support platform notification for type4 and shared interrupt
+Date:   Thu, 16 Feb 2023 14:36:51 +0800
+Message-ID: <20230216063653.1995-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20221016034043.52227-1-lihuisong@huawei.com>
+References: <20221016034043.52227-1-lihuisong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214212427.3316544-1-quic_eberman@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.79.22]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,22 +52,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:24:26PM -0800, Elliot Berman wrote:
-> +	case GH_VM_SET_DTB_CONFIG: {
-> +		struct gh_vm_dtb_config dtb_config;
-> +
-> +		if (copy_from_user(&dtb_config, argp, sizeof(dtb_config)))
-> +			return -EFAULT;
-> +
-> +		dtb_config.size = PAGE_ALIGN(dtb_config.size);
-> +		ghvm->dtb_config = dtb_config;
+PCC supports processing platform notification for slave subspaces and
+shared interrupt for multiple subspaces.
 
-Do you really mean to copy this tiny structure twice (once from
-userspace and the second time off of the stack)?  If so, why?
+---
+ -v1: using subspace type to replace comm_flow_dir in patch [1/2]
+ -rfc-v3: split V2 into two patches.
+ -rfc-v2: don't use platform interrupt ack register to identify if the given
+      channel should respond interrupt.
 
-And where are the values of the structure checked for validity?  Can any
-64bit value work for size and "gpa"?
+Huisong Li (2):
+  mailbox: pcc: Add processing platform notification for slave subspaces
+  mailbox: pcc: Support shared interrupt for multiple subspaces
 
-thanks,
+ drivers/mailbox/pcc.c | 102 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 93 insertions(+), 9 deletions(-)
 
-greg k-h
+-- 
+2.33.0
+
