@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179D5699FAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF43699FAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjBPWWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S230329AbjBPWWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjBPWWq (ORCPT
+        with ESMTP id S229998AbjBPWWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:22:46 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7264D609;
-        Thu, 16 Feb 2023 14:22:44 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r2so3254229wrv.7;
-        Thu, 16 Feb 2023 14:22:44 -0800 (PST)
+        Thu, 16 Feb 2023 17:22:47 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75354DE3D;
+        Thu, 16 Feb 2023 14:22:45 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso2870053wmo.3;
+        Thu, 16 Feb 2023 14:22:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GB5CWEtRRQ/o56HacmvmZRAx5GJevROntZ+kKSL5iO8=;
-        b=qqpYGGbA3EK1W5Gn54tb5U1zMHyUnfj31FQuJHudxn4854XyLZriOeJ1t97uCJHcP+
-         L8xpEUipLf4aBaZVgV23BKnZbRab0PQpwBFfAoQun0I08i27RUDWgT2oOBj9FE6kuOl3
-         F6pJA/FeI3vorwgxysyKO57pgmDIrauAORmoF6dToTufJK2RCTZPYOr+iXlzT6QIVrP8
-         JZ/H4YLrAqSldVW0Ohf/F6CrcZ9xPzMltAszQdAJStD7Xw71/RzXAPXaxf2kZQnEPK4e
-         aEs7EloXSLlQnESijedLzjrpiiUxLHs1UOJEGwCd98zaaAm00FdTzSzeW7hhIukifYtK
-         6GaA==
+        bh=Pp58CIBG02KXGk1txeBbKf4zNNPlRPTq+Ixgxzw1mRw=;
+        b=jfkRFZt6bRlU1H9VKgxP0Okjuym44rOMXLgWUzzvfrw2yGLTzSZ8eHs93ObsPCO1B8
+         RsXiuOt3qOOIi2KMun15zawR5BAUzcyFqLrrN1sY3WsycauEsopKkqGrhXlj5hY7zwzN
+         5VwUCFpCqP/oMk1a0be75dedxsxB71eXewNID/48j/cQuQAHSI3tVhvD+5FaDmzWSPZ8
+         REaPZHCQSfKRbCJ804fFHwi03EpWUDdOn0x9lcVMMpsh87UhrLKN7Cz8FW49tOE5ieSd
+         xjBVEkBS44HC9suY6i0mVOdemi5BNirzJh084aTEhVOFoY5cb3+keFQV/ETHGilblNb4
+         8hpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GB5CWEtRRQ/o56HacmvmZRAx5GJevROntZ+kKSL5iO8=;
-        b=gqD7vbmMD6QABouhdqiGzcHLdBFGqbfYhq8jYYaT1x2friU2R9t6D0u4EfwTBIr9Vz
-         68iVVtEZO8uIeYB9zloExk4XA5/bmLX1xFKsOTswKunugPvGNHY7jDJTYjiZCkfp5KSM
-         6zQKBDW41N1VgzIVlfvRyuRIbxxCXBxZRdjXrRfzp0IkTNgXZNUiYjlvql8AF8rrIqJ5
-         lnCVGcbGnfUpzyRWxZKMVbUZX3sE2iEDe5vq9CiUko6BIYoMYaAmh3vr8Kng/KeNQz5F
-         yNqLO5EkWWdY07kYY2X3nsAKDhuhpI4Ni1xh5r4Pl9WUtvw4yfErsU8tZ6RJv1e/BidO
-         SR5Q==
-X-Gm-Message-State: AO0yUKX6zButRkT2LkIAMsmM8+5PWbhmjRHhT0gpzzcycYKL7QPgCrs/
-        5fO8Uj4XMSZ0koBa9DJUSy0=
-X-Google-Smtp-Source: AK7set+7cVcdAirTc/5V4kqJRyZ7voG6Az/Vfp2AlmRKd++HwB6Y88P3QPkCxy51b3BLsEi58oqmdA==
-X-Received: by 2002:a5d:574a:0:b0:2c5:582b:bad1 with SMTP id q10-20020a5d574a000000b002c5582bbad1mr6336974wrw.30.1676586163058;
-        Thu, 16 Feb 2023 14:22:43 -0800 (PST)
+        bh=Pp58CIBG02KXGk1txeBbKf4zNNPlRPTq+Ixgxzw1mRw=;
+        b=EoGjZKEuUh4/hlwDznO7TW9FfBtcfoYatNjpm/kNzR950Yd7sU3Rr+6sUTE5371A8g
+         s028b3w2LxwLJGh+adlplWoY85XISx+e0ePBnKZciJSzBsuJlxKFGhHa4cQjUrQgx6it
+         rGPRoO//rPzsq5aznC78jNttO4B5IetkVzcwmS3Vfv0pZDGye6VBbRcGmdyenwea0udN
+         GMRunqCP7RSBD2z1NsTgAMp/j82zVu/SQf6ZpHNCjGUonfsz5F660piaIGyhzBr4mQto
+         HbglHlrCG0X+mJduWtUrDLpAbsd0ycY60E0eWUcnm+hjSh6nh70D900AHuoyVxFSS00E
+         Ymjw==
+X-Gm-Message-State: AO0yUKU/oj7Hsx68zvwyGWsLnsMvUIrGbhUNpgzG+GWowEaVU2EQdE2H
+        9tKSBOC/l/669sryL/vmA1Q=
+X-Google-Smtp-Source: AK7set+Qhk6bABAxPel04wKMvkovGmILHYpkyLGIhfIKcf5OkxvtiiY9T0HFyQsttPEStullc85MCA==
+X-Received: by 2002:a05:600c:2b0f:b0:3cf:85f7:bbc4 with SMTP id y15-20020a05600c2b0f00b003cf85f7bbc4mr5687718wme.2.1676586164331;
+        Thu, 16 Feb 2023 14:22:44 -0800 (PST)
 Received: from localhost (94.197.187.145.threembb.co.uk. [94.197.187.145])
-        by smtp.gmail.com with ESMTPSA id g9-20020adff3c9000000b002c54d8b89efsm2696211wrp.26.2023.02.16.14.22.42
+        by smtp.gmail.com with ESMTPSA id t15-20020a1c770f000000b003dc3f195abesm2894346wmi.39.2023.02.16.14.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 14:22:42 -0800 (PST)
+        Thu, 16 Feb 2023 14:22:44 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     agross@kernel.org, andersson@kernel.org, lee@kernel.org
 Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/4] mfd: qcom-pm8008: Convert irq chip to config regs
-Date:   Thu, 16 Feb 2023 22:22:12 +0000
-Message-Id: <20230216222214.138671-3-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v1 3/4] mfd: qcom-pm8008: Use .get_irq_reg() for irq chip
+Date:   Thu, 16 Feb 2023 22:22:13 +0000
+Message-Id: <20230216222214.138671-4-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20230216222214.138671-1-aidanmacdonald.0x0@gmail.com>
 References: <20230216222214.138671-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -71,127 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace type and virtual registers, which are both deprecated,
-with config registers. This also simplifies the driver because
-IRQ types are set in one place, the set_type_config() callback.
+Replace the deprecated not_fixed_stride flag and the associated
+hierarchy of offsets with a .get_irq_reg() callback.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/qcom-pm8008.c | 50 +++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ drivers/mfd/qcom-pm8008.c | 56 +++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index 39fd2a792e73..2b6763605cd7 100644
+index 2b6763605cd7..4bcdf0e50c40 100644
 --- a/drivers/mfd/qcom-pm8008.c
 +++ b/drivers/mfd/qcom-pm8008.c
-@@ -66,15 +66,16 @@ static struct regmap_irq_sub_irq_map pm8008_sub_reg_offsets[] = {
- 	REGMAP_IRQ_MAIN_REG_OFFSET(p3_offs),
- };
+@@ -44,28 +44,6 @@ enum {
+ #define PM8008_GPIO1_ADDR	PM8008_PERIPH_2_BASE
+ #define PM8008_GPIO2_ADDR	PM8008_PERIPH_3_BASE
  
--static unsigned int pm8008_virt_regs[] = {
--	PM8008_POLARITY_HI_BASE,
--	PM8008_POLARITY_LO_BASE,
+-#define PM8008_STATUS_BASE	(PM8008_PERIPH_0_BASE | INT_LATCHED_STS_OFFSET)
+-#define PM8008_MASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_CLR_OFFSET)
+-#define PM8008_UNMASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_SET_OFFSET)
+-#define PM8008_TYPE_BASE	(PM8008_PERIPH_0_BASE | INT_SET_TYPE_OFFSET)
+-#define PM8008_ACK_BASE		(PM8008_PERIPH_0_BASE | INT_LATCHED_CLR_OFFSET)
+-#define PM8008_POLARITY_HI_BASE	(PM8008_PERIPH_0_BASE | INT_POL_HIGH_OFFSET)
+-#define PM8008_POLARITY_LO_BASE	(PM8008_PERIPH_0_BASE | INT_POL_LOW_OFFSET)
+-
+-#define PM8008_PERIPH_OFFSET(paddr)	(paddr - PM8008_PERIPH_0_BASE)
+-
+-static unsigned int p0_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_0_BASE)};
+-static unsigned int p1_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_1_BASE)};
+-static unsigned int p2_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_2_BASE)};
+-static unsigned int p3_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_3_BASE)};
+-
+-static struct regmap_irq_sub_irq_map pm8008_sub_reg_offsets[] = {
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p0_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p1_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p2_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p3_offs),
 -};
 -
  enum {
-+	SET_TYPE_INDEX,
+ 	SET_TYPE_INDEX,
  	POLARITY_HI_INDEX,
- 	POLARITY_LO_INDEX,
--	PM8008_NUM_VIRT_REGS,
-+};
-+
-+static unsigned int pm8008_config_regs[] = {
-+	PM8008_TYPE_BASE,
-+	PM8008_POLARITY_HI_BASE,
-+	PM8008_POLARITY_LO_BASE,
+@@ -73,9 +51,9 @@ enum {
+ };
+ 
+ static unsigned int pm8008_config_regs[] = {
+-	PM8008_TYPE_BASE,
+-	PM8008_POLARITY_HI_BASE,
+-	PM8008_POLARITY_LO_BASE,
++	INT_SET_TYPE_OFFSET,
++	INT_POL_HIGH_OFFSET,
++	INT_POL_LOW_OFFSET,
  };
  
  static struct regmap_irq pm8008_irqs[] = {
-@@ -88,32 +89,36 @@ static struct regmap_irq pm8008_irqs[] = {
+@@ -89,6 +67,23 @@ static struct regmap_irq pm8008_irqs[] = {
  	REGMAP_IRQ_REG(PM8008_IRQ_GPIO2,	PM8008_GPIO2,	BIT(0)),
  };
  
--static int pm8008_set_type_virt(unsigned int **virt_buf,
--				      unsigned int type, unsigned long hwirq,
--				      int reg)
-+static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
-+				  const struct regmap_irq *irq_data, int idx)
- {
- 	switch (type) {
- 	case IRQ_TYPE_EDGE_FALLING:
- 	case IRQ_TYPE_LEVEL_LOW:
--		virt_buf[POLARITY_HI_INDEX][reg] &= ~pm8008_irqs[hwirq].mask;
--		virt_buf[POLARITY_LO_INDEX][reg] |= pm8008_irqs[hwirq].mask;
-+		buf[POLARITY_HI_INDEX][idx] &= ~irq_data->mask;
-+		buf[POLARITY_LO_INDEX][idx] |= irq_data->mask;
- 		break;
- 
- 	case IRQ_TYPE_EDGE_RISING:
- 	case IRQ_TYPE_LEVEL_HIGH:
--		virt_buf[POLARITY_HI_INDEX][reg] |= pm8008_irqs[hwirq].mask;
--		virt_buf[POLARITY_LO_INDEX][reg] &= ~pm8008_irqs[hwirq].mask;
-+		buf[POLARITY_HI_INDEX][idx] |= irq_data->mask;
-+		buf[POLARITY_LO_INDEX][idx] &= ~irq_data->mask;
- 		break;
- 
- 	case IRQ_TYPE_EDGE_BOTH:
--		virt_buf[POLARITY_HI_INDEX][reg] |= pm8008_irqs[hwirq].mask;
--		virt_buf[POLARITY_LO_INDEX][reg] |= pm8008_irqs[hwirq].mask;
-+		buf[POLARITY_HI_INDEX][idx] |= irq_data->mask;
-+		buf[POLARITY_LO_INDEX][idx] |= irq_data->mask;
- 		break;
- 
- 	default:
- 		return -EINVAL;
- 	}
- 
-+	if (type & IRQ_TYPE_EDGE_BOTH)
-+		buf[SET_TYPE_INDEX][idx] |= irq_data->mask;
-+	else
-+		buf[SET_TYPE_INDEX][idx] &= ~irq_data->mask;
++static const unsigned int pm8008_periph_base[] = {
++	PM8008_PERIPH_0_BASE,
++	PM8008_PERIPH_1_BASE,
++	PM8008_PERIPH_2_BASE,
++	PM8008_PERIPH_3_BASE,
++};
 +
- 	return 0;
- }
- 
-@@ -121,21 +126,20 @@ static struct regmap_irq_chip pm8008_irq_chip = {
- 	.name			= "pm8008_irq",
- 	.main_status		= I2C_INTR_STATUS_BASE,
- 	.num_main_regs		= 1,
--	.num_virt_regs		= PM8008_NUM_VIRT_REGS,
++static unsigned int pm8008_get_irq_reg(struct regmap_irq_chip_data *data,
++				       unsigned int base, int index)
++{
++	/* Simple linear addressing for the main status register */
++	if (base == I2C_INTR_STATUS_BASE)
++		return base + index;
++
++	return pm8008_periph_base[index] + base;
++}
++
+ static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
+ 				  const struct regmap_irq *irq_data, int idx)
+ {
+@@ -129,17 +124,16 @@ static struct regmap_irq_chip pm8008_irq_chip = {
  	.irqs			= pm8008_irqs,
  	.num_irqs		= ARRAY_SIZE(pm8008_irqs),
  	.num_regs		= PM8008_NUM_PERIPHS,
- 	.not_fixed_stride	= true,
- 	.sub_reg_offsets	= pm8008_sub_reg_offsets,
--	.set_type_virt		= pm8008_set_type_virt,
- 	.status_base		= PM8008_STATUS_BASE,
- 	.mask_base		= PM8008_MASK_BASE,
- 	.unmask_base		= PM8008_UNMASK_BASE,
+-	.not_fixed_stride	= true,
+-	.sub_reg_offsets	= pm8008_sub_reg_offsets,
+-	.status_base		= PM8008_STATUS_BASE,
+-	.mask_base		= PM8008_MASK_BASE,
+-	.unmask_base		= PM8008_UNMASK_BASE,
++	.status_base		= INT_LATCHED_STS_OFFSET,
++	.mask_base		= INT_EN_CLR_OFFSET,
++	.unmask_base		= INT_EN_SET_OFFSET,
  	.mask_unmask_non_inverted = true,
--	.type_base		= PM8008_TYPE_BASE,
- 	.ack_base		= PM8008_ACK_BASE,
--	.virt_reg_base		= pm8008_virt_regs,
--	.num_type_reg		= PM8008_NUM_PERIPHS,
-+	.config_base		= pm8008_config_regs,
-+	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
-+	.num_config_regs	= PM8008_NUM_PERIPHS,
-+	.set_type_config	= pm8008_set_type_config,
+-	.ack_base		= PM8008_ACK_BASE,
++	.ack_base		= INT_LATCHED_CLR_OFFSET,
+ 	.config_base		= pm8008_config_regs,
+ 	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
+ 	.num_config_regs	= PM8008_NUM_PERIPHS,
+ 	.set_type_config	= pm8008_set_type_config,
++	.get_irq_reg		= pm8008_get_irq_reg,
  };
  
  static struct regmap_config qcom_mfd_regmap_cfg = {
-@@ -185,11 +189,7 @@ static int pm8008_probe_irq_peripherals(struct device *dev,
- 	for (i = 0; i < ARRAY_SIZE(pm8008_irqs); i++) {
- 		type = &pm8008_irqs[i].type;
- 
--		type->type_reg_offset	  = pm8008_irqs[i].reg_offset;
--		type->type_rising_val	  = pm8008_irqs[i].mask;
--		type->type_falling_val	  = pm8008_irqs[i].mask;
--		type->type_level_high_val = 0;
--		type->type_level_low_val  = 0;
-+		type->type_reg_offset = pm8008_irqs[i].reg_offset;
- 
- 		if (type->type_reg_offset == PM8008_MISC)
- 			type->types_supported = IRQ_TYPE_EDGE_RISING;
 -- 
 2.39.2
 
