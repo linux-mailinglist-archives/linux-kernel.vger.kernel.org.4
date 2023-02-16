@@ -2,84 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072BA698E66
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FFC698E6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjBPIN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S229723AbjBPIQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPIN1 (ORCPT
+        with ESMTP id S229598AbjBPIQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:13:27 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B062449A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:13:25 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id he33so3155683ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:13:25 -0800 (PST)
+        Thu, 16 Feb 2023 03:16:02 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0656F2449A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:16:01 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id b2so3198263ejz.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:16:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=B6MIr9w0JhLAMdjA5iNWKYrwooq+WRfPQyN5izB+i3U=;
-        b=pM5IQ7LP/GCPE4auZwxMqseFV38G3mMxAdbs6vTFEwJjVhIfIsGImLrwsSeHpVXrbu
-         /TFZ9CUB0VU3lHMSpNGgs0cVL6xrQT489uLY+s37f/W3rXBDMvYrbUg1rkHC9ZopIku6
-         sAvxuqT64Tg7HF8NhlG0JylB6yCUyFGzrYYpnWcAUKjwGLSPsQAfWayFbKV3ezbTPBOT
-         eAPPtHp1DApkbBPIbPd3NTOpTEfIieg97i18aor8pSWJ82izcLoObiv4ZHBqIpJeYz77
-         Y2/jqAh/Gcdic+qAQVoUhVSrpcJ0dV8kYbl6yxbnxJN7uvDuANeY/dyM5z7emqCj3hNa
-         9tSQ==
+        bh=BUKG5YPhru70hIY0uF2wn2wEXa9HKzbQaUOh/EWXtKE=;
+        b=TviBwG1j/4T74Vy5Q6UPni7S2+k88DB0D9XxQuZPZ3KxBM6rmpF6ejlSi7F9MJPGZI
+         VtDzQ+ZLdUhLt9yF/yoMkJEdDt9PGO01fOVFuPUp7FudOFGBR+d+K6Z81gx0quW7LdaK
+         aKeCWpx1thXc+SxM5UjxbR8Xvng8gU1PhdSyo5RcTu5uJEtyeYTyw9oA+Loeuk0Rxb/8
+         53xcK6jF7OaaYuqfl/f+KJu3Q9N6MQUJza5K+UxS8H468npU1g5pJZHtTCeb0Wy8oOxZ
+         YdMEN98CfqUjWYrIkhfK7U6lb7h82Kq/f3Q/gS/bOacLGpxcBFdFFPtN2u1HZpiTuoiy
+         FldA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6MIr9w0JhLAMdjA5iNWKYrwooq+WRfPQyN5izB+i3U=;
-        b=rAGB1wykrbVNvQqEOJTtEMLjbqgvg8xXh2d2CyBMz78cn830zT+YZfWOwrpHaYwhFV
-         g20WYd9THMvmx7A7rT/HagRj1dqVow+pJvix6DNYWYuszxC7+Z06W3OU3wzOfFsel91m
-         UPTM1Rq8Pw+RcC4MsjzQ14TZF71ZbjN+ICA3gz3y8VsAwvvyM/AfB+16brzKYfuEaUVN
-         7xkfHOhPwBhgtfcwSbbuoT+gbM37eAQ4RNB6ZnlbVCll9n6x3SBImlywmrl5QIw8BwTR
-         VrykjjdyFQubHRlwJ6s0yDSoA43OdXNs9yfE/MwAZibMstLLyGkg9zc9KW77a++oKabz
-         15Xg==
-X-Gm-Message-State: AO0yUKXiQEmI0+fLqFralKClgiTgAAUZRXMqNxxVdzlGUucKU9yecEaG
-        YGnaU5+ZapG+tT6kiD41X3Tfzw==
-X-Google-Smtp-Source: AK7set/Uy+Hmc8Q4dAMmjxdpjZHwIV47rA2IrMvPHIp0cqv896niQ9ZsYsSe1BbZoyLJJfKLOqFwug==
-X-Received: by 2002:a17:906:6c87:b0:7d3:c516:6ef4 with SMTP id s7-20020a1709066c8700b007d3c5166ef4mr5921075ejr.20.1676535203797;
-        Thu, 16 Feb 2023 00:13:23 -0800 (PST)
+        bh=BUKG5YPhru70hIY0uF2wn2wEXa9HKzbQaUOh/EWXtKE=;
+        b=T+UGQsKEed6x1/maLK7QP5FD4loH8FibRkGG0GsiD2xDZ/NvLcXwsJ48SfCeHPddgI
+         hl9mMQXE0NIrLYI8TFGOQPbp1O6ZkZAz8pLInUXelC2efgBLjhEYCMDuGXTT0uHk77Dp
+         E7o8XlV0Cb1oE39OyM7vYRjFb1A3+xZ43503A6JSbln2rgznWbElOcARRBB/U5PyW4f+
+         vP30DdE7Md0/grGFixh+3F60e5QEO50fSIJiV2uHROpfRZJyM+yA4yGcZucK0u6fW5a0
+         DpBbndUHlOsTtZFOpXsG4tVb0r7REcUfwcneavRm7F2tFn9MuUpJSPNErVqckXcKQTGt
+         JB3Q==
+X-Gm-Message-State: AO0yUKUkvszX64aCxvyqUj5JroyGUUsUnb+vBvP3oC+GSoXk3jgVXjIM
+        z/zoYFRKFkF7zEg90m44GgGYNw==
+X-Google-Smtp-Source: AK7set9NqBS/MqufYv5CckvhPlTpKHEyZXD1IaqYeAqa8KMVWLtyfPIOV1bTl9tEMBgo6Lcejy4AYA==
+X-Received: by 2002:a17:906:68c7:b0:8a6:93a4:c892 with SMTP id y7-20020a17090668c700b008a693a4c892mr5133777ejr.44.1676535359466;
+        Thu, 16 Feb 2023 00:15:59 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id my10-20020a1709065a4a00b0084d35ffbc20sm483150ejc.68.2023.02.16.00.13.22
+        by smtp.gmail.com with ESMTPSA id g24-20020a170906395800b008b1315bff9fsm480986eje.148.2023.02.16.00.15.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 00:13:23 -0800 (PST)
-Message-ID: <2bc63ab2-2fd6-3fae-33d5-a6096b78cec0@linaro.org>
-Date:   Thu, 16 Feb 2023 09:13:21 +0100
+        Thu, 16 Feb 2023 00:15:58 -0800 (PST)
+Message-ID: <fa013fbc-dc54-6d20-7935-2ce01afc37be@linaro.org>
+Date:   Thu, 16 Feb 2023 09:15:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
- number of resets and reset-names
+Subject: Re: [PATCH 2/3] dt-bindings: hwlock: sun6i: Add missing names
 Content-Language: en-US
-To:     yanhong wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Bastian Germann <bage@debian.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-3-yanhong.wang@starfivetech.com>
- <15a87640-d8c7-d7aa-bdfb-608fa2e497cb@linaro.org>
- <c9ab22b5-3ffb-d034-b8b8-b056b82a96ce@starfivetech.com>
- <aa85caa3-6051-46ab-d927-8c552d5a718d@linaro.org>
- <e066920c-26a9-0f0e-3304-2b9940274d57@starfivetech.com>
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+References: <20230213231931.6546-1-bage@debian.org>
+ <20230213231931.6546-3-bage@debian.org> <20230214104554.35338faa@posteo.net>
+ <43336959-643d-4041-d11a-b0c030fbf050@linaro.org>
+ <20230214181138.4a8f4beb@donnerap.cambridge.arm.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e066920c-26a9-0f0e-3304-2b9940274d57@starfivetech.com>
+In-Reply-To: <20230214181138.4a8f4beb@donnerap.cambridge.arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,64 +88,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2023 08:46, yanhong wang wrote:
+On 14/02/2023 19:11, Andre Przywara wrote:
+> On Tue, 14 Feb 2023 13:37:20 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
+> Hi Krzysztof,
 > 
-> On 2023/2/7 15:59, Krzysztof Kozlowski wrote:
->> On 07/02/2023 03:43, yanhong wang wrote:
+>> On 14/02/2023 10:45, Wilken Gottwalt wrote:
+>>> On Tue, 14 Feb 2023 00:19:29 +0100
+>>> Bastian Germann <bage@debian.org> wrote:
+>>>   
+>>>> The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
+>>>> and reset-names set to "ahb" as required by the driver.  
 >>>
+>>> Hmm, this one is a bit odd. If you look into my earlier versions of the
+>>> patchset, you may notice, that I actually included these bindings and they
+>>> were refused. I think the argumentation was like
+>>> "there is only one bus = no need for it".
 >>>
->>> On 2023/1/18 23:47, Krzysztof Kozlowski wrote:
->>>> On 18/01/2023 07:16, Yanhong Wang wrote:
->>>>> Some boards(such as StarFive VisionFive v2) require more than one value
->>>>> which defined by resets property, so the original definition can not
->>>>> meet the requirements. In order to adapt to different requirements,
->>>>> adjust the maxitems number definition.
->>>>>
->>>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 9 +++------
->>>>>  1 file changed, 3 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> index e26c3e76ebb7..baf2c5b9e92d 100644
->>>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> @@ -133,12 +133,9 @@ properties:
->>>>>          - ptp_ref
->>>>>  
->>>>>    resets:
->>>>> -    maxItems: 1
->>>>
->>>> Also, this does not make sense on its own and messes constraints for all
->>>> other users. So another no for entire patch.
->>>>
->>>
->>> Thanks. Change the properties of 'resets' and reset-names like this:
->>>
->>>   resets:
->>>     minItems: 1
->>>     maxItems: 2
->>>
->>>   reset-names:
->>>     minItems: 1
->>>     maxItems: 2
->>>
->>> Is it right?  Do you have any other better suggestions?
+>>> If it gets accepted now, I really like to know why. (It was some trouble
+>>> back then to get the documentation properly done and accepted.)  
 >>
->> Isn't this allowing two reset items for every variant of snps,dwmac?
+>> The clock names and resent names are not correct. They should have never
+>> been added. If you got comments about this and did not update driver,
+>> that's not nice. You just shoved incomplete bindings. :(
 >>
+>> So indeed to avoid precedence - people pushing fake bindings and
+>> avoiding review - NAK on this.
 > 
-> Sorry for not getting back to you faster.
-> After referring to the above modification, i used the command 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> to check all the bindings(including 'starfive,jh7110-dwmac.yaml'), no errors are reported,
-> and the errors reported by Rob Herring are gone.
+> Maybe it's just me, but I don't think this tone is necessary.
+> 
+> Wilken's original submission was correct. Later there was a comment just
+> on the binding patch, to remove the not needed clock-names and reset-names
+> properties. But there was not a word in there that the driver requires
+> changing as well, and I don't think it's fair to blame Wilken on this, or
+> somewhat even implying intention. There were several patch revisions after
+> this was raised, and this just slipped through review. But surely no one
+> wanted this or pushed for that.
 
-I don't see how does it answer my question. I claim you loosen the
-constraints and allow now two resets for everyone. You say you don't see
-errors. I never claimed there will be errors. I claimed what I said -
-you allow now to reset everywhere, which might not be correct
-description of every hardware.
+I would say it is quite obvious. Otherwise you could remove entire
+binding and still submit the driver, right? Isn't the entire point of
+the binding to match what the driver is doing, as it is the description
+of interface used by driver towards DTS?
+
+> 
+> If anything, it tells us that we should be more careful when merging
+> drivers without users: if there would have been a DT patch, possibly even
+> a consumer, this would have been flagged by dtbs_check.
+
+Sure. To me it tells - this patch is a no-go and driver should be fixed.
 
 Best regards,
 Krzysztof
