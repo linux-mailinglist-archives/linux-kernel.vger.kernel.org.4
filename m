@@ -2,117 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B057698946
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E59D698948
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBPAas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S229553AbjBPAbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBPAaq (ORCPT
+        with ESMTP id S229462AbjBPAbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:30:46 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452EC42BC9;
-        Wed, 15 Feb 2023 16:30:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHG7c3dmVz4x5X;
-        Thu, 16 Feb 2023 11:30:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676507437;
-        bh=8ToH5Hy9Jqn84CJPYUsxz6idIucqqXBwd1ipim0YCnw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OULtGq/Ch1HhpMWfCjkC0TQ9QnddGZNdGAcPu1EBWsDg79n4WyxXzlLnyJ/vyy3CT
-         b9egGh7ZnsnPZzEnoYakrArVOH4Lrkkw7Oj7W6exhFU3uqtiNUuo+S+zXWwBZmSntP
-         aRocBO26V/c7LtuyO3XMHEmFTP3/k4U7KmZIP8R1VTNWcW5mojhWDn4p63Cp1918wW
-         E1IBzgNXiSVIPU81fcMH3UvYx4Vfk7NfBhCoCAUiiXeJqZaeyMlmipzIfoFSGX+Ky8
-         MmeNXiBdzGWs0TZsmO7JJ1dfi7m9K6/klUKdrwILi9SwnkhAiesmqSwS3Te3KZGXq2
-         TUO+Xar05/0TA==
-Date:   Thu, 16 Feb 2023 11:30:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-Cc:     Alain Volmat <avolmat@me.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: linux-next: manual merge of the spi tree with the i2c tree
-Message-ID: <20230216113035.3050871a@canb.auug.org.au>
+        Wed, 15 Feb 2023 19:31:37 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BB942BC9;
+        Wed, 15 Feb 2023 16:31:36 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id t5so234976oiw.1;
+        Wed, 15 Feb 2023 16:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iVrrRlGXt+tU2jQz14Ueq33ChGNBSAVNSFytqXCqf5M=;
+        b=kigpvrQNnggC1qsASExSzpBIxjDP61w8/6hkbob6Byddg7PutyFfbm/oFA9X/k0Kw9
+         fOYv6EZYAQ+LzujozK+qv/nP0bpJqySKRxQ10BWprPp+CwusvxshgL34WmP+nube0oNL
+         q+kWLsecRXiJ4pXeDidZB4+6AqAm3wB2mLuHxUtmc1G9P09ET2QEN2FdHZxKH2nzvOXn
+         jOCLz30R/a1ycGZ5WHCWyMc4/OMxEjxTTJT8+ln+i9ObP8LBGGqvLfWVvJ1mKeByi7vZ
+         kJfW/5rH68py4XMloDDzW11TSErH7Lm/D0IdLBu1Nexiy72rw0L4yS4mhWS2kHHnSFJk
+         KdBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iVrrRlGXt+tU2jQz14Ueq33ChGNBSAVNSFytqXCqf5M=;
+        b=fq8+Pg/XPMAGfiF+BUNVsyWxbyy+GpbqHP7YXg5XY5+tRn+jyLCLIVpi4BLc0JMTMe
+         k63Ry4QxRT7xLaeZOFTDyTTbr56g/l344DuibFJWMTQOJ3E0Jc5573Cv5LkuYDzepRb9
+         AUdrNBw7noIkfIw19g1OafEC++9dBgI+K7WmZrEiC+SErtyD583fVywn9vzO82FbSgiX
+         MpflcqWKE/SdU842niKuAxjh4xLu3GDpb5BtkQXRt0J3GskohWRnYZPp0ZF7nMiS8m9b
+         HTJysw+7Obpcdw+1czCnTjPG2G5T09hLdgXelw+3RyVmTrV6ZlBIhM8sis7z93OOccs9
+         oXkw==
+X-Gm-Message-State: AO0yUKU6gcc9NnRZKuWY98R1QDfkmxCxoxoJHSVTpx9LWyYRjWaEZG4D
+        B0to1cLhKMCkvaaFcradUow=
+X-Google-Smtp-Source: AK7set8cTCE1WjeM68Ki7l28jimn2FfmNctBooDBcHIHMCktu7f0rSMIP7yaIiQFuUl0Bxjo4YDO1A==
+X-Received: by 2002:aca:2412:0:b0:364:e7cd:747a with SMTP id n18-20020aca2412000000b00364e7cd747amr1895629oic.43.1676507495385;
+        Wed, 15 Feb 2023 16:31:35 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id x189-20020acae0c6000000b0037868f9e657sm1761545oig.37.2023.02.15.16.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 16:31:34 -0800 (PST)
+Date:   Wed, 15 Feb 2023 16:31:32 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Bruno Goncalves <bgoncalv@redhat.com>
+Cc:     Networking <netdev@vger.kernel.org>, alan.maguire@oracle.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        CKI Project <cki-project@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [6.2.0-rc7] BUG: KASAN: slab-out-of-bounds in hop_cmp+0x26/0x110
+Message-ID: <Y+15ZIVyiOWNnTZ8@yury-laptop>
+References: <CA+QYu4qkVzZaB2OTaTLniZB9OCbTYUr2qvvvCmAnMkaq43OOLA@mail.gmail.com>
+ <Y+ubkJtpmc6l0gOt@yury-laptop>
+ <CA+QYu4rBbstxtewRVF2hSaVK1i3-CzifPnchfSaxe_EALhR1rA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_NQtuGwfo+tEnw0WYtHkIEX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FORGED_SPF_HELO,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+QYu4rBbstxtewRVF2hSaVK1i3-CzifPnchfSaxe_EALhR1rA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_NQtuGwfo+tEnw0WYtHkIEX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
++ Kees Cook <keescook@chromium.org>
++ Miguel Ojeda <ojeda@kernel.org>
++ Nick Desaulniers <ndesaulniers@google.com>
 
-Hi all,
+On Wed, Feb 15, 2023 at 09:24:52AM +0100, Bruno Goncalves wrote:
+> On Tue, 14 Feb 2023 at 15:32, Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > On Tue, Feb 14, 2023 at 02:23:06PM +0100, Bruno Goncalves wrote:
+> > > Hello,
+> > >
+> > > recently when testing kernel with debug options set from net-next [1]
+> > > and bpf-next [2] the following call trace happens:
+> > >
+> > Hi Bruno,
+> >
+> > Thanks for report.
+> >
+> > This looks weird, because the hop_cmp() spent for 3 month in -next till
+> > now. Anyways, can you please share your NUMA configuration so I'll try
+> > to reproduce the bug locally? What 'numactl -H' outputs?
+> >
+> 
+> Here is the output:
+> 
+> numactl -H
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1 2 3 4 5 6 7 32 33 34 35 36 37 38 39
+> node 0 size: 32063 MB
+> node 0 free: 31610 MB
+> node 1 cpus: 8 9 10 11 12 13 14 15 40 41 42 43 44 45 46 47
+> node 1 size: 32248 MB
+> node 1 free: 31909 MB
+> node 2 cpus: 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55
+> node 2 size: 32248 MB
+> node 2 free: 31551 MB
+> node 3 cpus: 24 25 26 27 28 29 30 31 56 57 58 59 60 61 62 63
+> node 3 size: 32239 MB
+> node 3 free: 31468 MB
+> node distances:
+> node   0   1   2   3
+>   0:  10  21  31  21
+>   1:  21  10  21  31
+>   2:  31  21  10  21
+>   3:  21  31  21  10
+> 
+> Bruno
 
-Today's linux-next merge of the spi tree got a conflict in:
+So, I was able to reproduce it, and it seems like a compiler issue.
 
-  MAINTAINERS
+The problem is that hop_cmp() calculates pointer to a previous hop
+object unconditionally at the beginning of the function:
 
-between commit:
+       struct cpumask **prev_hop = *((struct cpumask ***)b - 1);
+ 
+Obviously, for the first hop, there's no such thing like a previous
+one, and later in the code 'prev_hop' is used conditionally on that:
 
-  b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+       k->w = (b == k->masks) ? 0 : cpumask_weight_and(k->cpus, prev_hop[k->node]);
 
-from the i2c tree and commit:
+To me the code above looks like it instructs the compiler to dereference
+'b - 1' only if b != k->masks, i.e. when b is not the first hop. But GCC
+does that unconditionally, which looks wrong.
 
-  7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+If I defer dereferencing manually like in the snippet below, the kasan
+warning goes away.
 
-from the spi tree.
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 48838a05c008..5f297f81c574 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -2081,14 +2081,14 @@ struct __cmp_key {
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+ static int hop_cmp(const void *a, const void *b)
+ {
+-       struct cpumask **prev_hop = *((struct cpumask ***)b - 1);
+        struct cpumask **cur_hop = *(struct cpumask ***)b;
+        struct __cmp_key *k = (struct __cmp_key *)a;
 
---=20
-Cheers,
-Stephen Rothwell
+        if (cpumask_weight_and(k->cpus, cur_hop[k->node]) <= k->cpu)
+                return 1;
 
-diff --cc MAINTAINERS
-index 71e92d3c51c6,daa33e7bb457..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -2791,7 -2925,8 +2791,8 @@@ M:	Patrice Chotard <patrice.chotard@fos
-  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-  S:	Maintained
-  W:	http://www.stlinux.com
-+ F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
- -F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
- +F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
-  F:	arch/arm/boot/dts/sti*
-  F:	arch/arm/mach-sti/
-  F:	drivers/ata/ahci_st.c
+-       k->w = (b == k->masks) ? 0 : cpumask_weight_and(k->cpus, prev_hop[k->node]);
++       k->w = (b == k->masks) ? 0 :
++               cpumask_weight_and(k->cpus, (*((struct cpumask ***)b - 1))[k->node]);
+        if (k->w <= k->cpu)
+                return 0;
 
---Sig_/_NQtuGwfo+tEnw0WYtHkIEX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I don't understand why GCC doesn't optimize out unneeded dereferencing.
+It does that even if I replace ternary operator with if-else construction.
+To me it looks like a compiler bug.
 
------BEGIN PGP SIGNATURE-----
+However, I acknowledge that I'm not a great expert in C standard, so
+it's quite possible that there may be some rule that prevents from
+doing such optimizations, even for non-volatile variables.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPteSsACgkQAVBC80lX
-0GwVhgf+O092/OcvSItvBp7tlxhdQ+X/IBaoE+0xte68jTS1YIvQCmJXPIJQhW6x
-yyOn+bvws9Fj3wO7+KG26IsspEx5SpWoJjCbgDOgiTBIvYccXhnbL/IB9dP4VaxV
-ckjhbiiO88thG6c3zhWNumFj5RYq8X24Pw4wYzwqHN73WzV7y8WnYOJETBN/dL3Q
-FFNhaRkzKgwT8ooU7wzL+Rv/uAkXkCoki5B7xh4BussCaVsh2dDUMYIEYGGz/aJT
-mWK347SczxgvHEdYy0Oktuvqz81y6fpUHaGPIjdKZuYMOpmpGqKDcsB0YW8wa5W1
-KzOhTvEuVKXUPzhx+4AnCIjXS1luNg==
-=dS3K
------END PGP SIGNATURE-----
+Adding compiler people. Guys, could you please clarify on that?
+If it's my fault, I'll submit fix shortly.
 
---Sig_/_NQtuGwfo+tEnw0WYtHkIEX--
+Thanks,
+Yury
