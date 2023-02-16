@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F92698A8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2C8698A8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBPCcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 21:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S229635AbjBPCdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 21:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBPCcO (ORCPT
+        with ESMTP id S229460AbjBPCdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:32:14 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF4636472;
-        Wed, 15 Feb 2023 18:32:13 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id bj22so416395oib.11;
-        Wed, 15 Feb 2023 18:32:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KOuLr4scIF1NfqJ8T0M99xrYHbB7KQ22DgnSgEZbsMk=;
-        b=c4PkKwkHgI//2uC5MFjnlmtuMa7Y2BImiCAfOfbklBahuvHPM72G7NpUMN80YI2gqV
-         CayArmTfDAUadfY/x/ASQFrnjZWwt3sUhJOcUllJVTmpVrJ/k+EgXV0e0PN8mtS/jeXu
-         uZAowfhOy3Dn7Gvu27YDt5+4glkS3gXzSulmDPIDQnYRY/ClJhrWaMQW/9Fve1+ai8cE
-         QCs1Mw9n7kIwF89KIdjySd4GE6cvedl0j05yaMynt4HAqzTue3/Qsm9l8W+hhPGWMaCE
-         VEDXseR3Ovi2n65+7roMXXjCPd43FGNJA45KTPOjY81KTDZP7z6CDGMJB2K7QmMhk0IB
-         ou5A==
-X-Gm-Message-State: AO0yUKULKz/xQw+1Sj5+uALtfWxDbq8YSWKK7LkAdSeYDUoXAXt41pHJ
-        dwYjomT4hIMBECI8eE7ZOg==
-X-Google-Smtp-Source: AK7set/YKv86MiKqaVAX4xz6xbPDlGpjyc03s+rvbI5f7CRlAlu6x8dJZTXBA89nFKc+/LzMvuW88A==
-X-Received: by 2002:aca:2213:0:b0:35a:d192:9a53 with SMTP id b19-20020aca2213000000b0035ad1929a53mr1864308oic.41.1676514732936;
-        Wed, 15 Feb 2023 18:32:12 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05680814c900b0037d59e90a07sm48171oiw.55.2023.02.15.18.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 18:32:12 -0800 (PST)
-Received: (nullmailer pid 1200075 invoked by uid 1000);
-        Thu, 16 Feb 2023 02:32:11 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 15 Feb 2023 21:33:12 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F693270C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:32:50 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8CxxtjRle1j7iUBAA--.2225S3;
+        Thu, 16 Feb 2023 10:32:49 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxUuXQle1j+i40AA--.62363S3;
+        Thu, 16 Feb 2023 10:32:48 +0800 (CST)
+Subject: Re: [PATCH v4 2/5] LoongArch: Use la.pcrel instead of la.abs for
+ exception handlers
+To:     Huacai Chen <chenhuacai@kernel.org>, Xi Ruoyao <xry111@xry111.site>
+References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
+ <1676018856-26520-3-git-send-email-tangyouling@loongson.cn>
+ <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
+ <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin lv <lvjianmin@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <848e2985-9ba3-c14d-23ac-a7f1c218215f@loongson.cn>
+Date:   Thu, 16 Feb 2023 10:32:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com
-In-Reply-To: <20230216013230.22978-13-ansuelsmth@gmail.com>
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <20230216013230.22978-13-ansuelsmth@gmail.com>
-Message-Id: <167651373836.1183034.17900591036429665419.robh@kernel.org>
-Subject: Re: [PATCH v8 12/13] dt-bindings: net: phy: Document support for
- leds node
-Date:   Wed, 15 Feb 2023 20:32:11 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxUuXQle1j+i40AA--.62363S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrur13tF17uFyrKrWrJryUGFg_yoWktFb_WF
+        y0g34UC34aganaqFsFyFnrCF45Ww13uF1UGr45Wa17t3s5Jr4kJFZ8tr4Fqw1kJrWxu343
+        WrZrWF43G3Z2qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5
+        m7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E
+        6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VWrMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
+        I48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7xRE6wZ7
+        UUUUU==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi folks,
 
-On Thu, 16 Feb 2023 02:32:29 +0100, Christian Marangi wrote:
-> Document support for leds node in phy and add an example for it.
-> Phy led will have to match led-phy pattern and should be treated as a
-> generic led.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
+On 02/10/2023 05:18 PM, Youling Tang wrote:
+>
+>
+> On 02/10/2023 05:09 PM, Huacai Chen wrote:
+>> Hi, Youling and Ruoyao,
+>>
+>> Thank you very much for implementing the per-node exceptions. But I
+>> want to know if the per-node solution is really worthy for a PIE
+>> kernel. So, could you please test the performance? Maybe we can reduce
+>> the complexity if we give up the per-node solution.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Tested on Loongson-3C5000L-LL machine, using CLFS7.3 system.
 
-yamllint warnings/errors:
+- nopernode:
+   Based on the v1 patch method, and remove the else branch process in
+   setup_tlb_handler().
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.example.dtb: ethernet-phy@0: leds:led-phy@0:linux,default-trigger: 'oneOf' conditional failed, one must be fixed:
-	'netdev' is not one of ['backlight', 'default-on', 'heartbeat', 'disk-activity', 'ide-disk', 'timer', 'pattern']
-	'netdev' does not match '^mmc[0-9]+$'
-	'netdev' does not match '^cpu[0-9]*$'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+- pernode: Based on the v4 patch method.
 
-doc reference errors (make refcheckdocs):
+- pie: Enable RANDOMIZE_BASE (KASLR).
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230216013230.22978-13-ansuelsmth@gmail.com
+- nopie: Disable RANDOMIZE_BASE and RELOCATABLE.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+The UnixBench test results are as follows:
 
-pip3 install dtschema --upgrade
+- nopernode-nopie: 3938.7
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+- pernode-nopie: 4062.2
+
+- nopernode-pie: 4009.7
+
+- pernode-pie: 4028.7
+
+In general, `pernode` is higher than `nopernode`, and `nopie` is higher
+than `pie`. (except that nopernode-pie is higher than nopernode-nopie,
+which is not as expected, which may be caused by the instability of the
+machine).
+
+Everyone is more inclined to use `pernode` or `nopernode` to implement
+in the exception handling process?
+
+Youling.
 
