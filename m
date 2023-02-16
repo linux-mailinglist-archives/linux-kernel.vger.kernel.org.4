@@ -2,124 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889369892B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85A1698931
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjBPAWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S229657AbjBPAXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBPAWT (ORCPT
+        with ESMTP id S229496AbjBPAX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:22:19 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3D38E86
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:22:17 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4cddba76f55so1960187b3.23
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OO/XTincpCiOXImHy7SwOjlBWMW8XPG1CnOI7CA/ZcY=;
-        b=LnBstyJy4LT3mEIvdskbIgeDS+rclo6poLMV+Nv5ZzkibiXvVIGYgkx+eOYc5BJHvL
-         0zETyvNfNI/evJrwJjztLvCpN2ptg7Fb4ErZw3wTbRnLzZmYj7aGlhQrL7iJI0yGogOP
-         rfyh44a+Gh2NWZVrepHI5BJIpv/+R24uMLgypUhJXK8IzqTxcYLcadWw38FdHhM2ZR8t
-         O4QkPfZroFOoYjKZqdQ7aQQHblRW81SOmO6DpONJjDgKmi+9IrJrKWbRF7I6XkGDYUmo
-         2gyVpBEA5dHppBpAM2NvB3AMfRXKL0UlijifmMlLRS7DVO4EL6O+XkniDfrgCR2HNKPO
-         2Vwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OO/XTincpCiOXImHy7SwOjlBWMW8XPG1CnOI7CA/ZcY=;
-        b=h3gSkG9qVOG2zjUuC+OtliREUmBfYq4DQuWCyaI8TXJmMMWmF/D6yAa03wnfCt2dCy
-         xLFP/aeYUlBDUx7jSqOuti5ZDbr+k5w0iJ8DsoJayYr34eyYmbMqpmd9M0pxSwefP9SE
-         NzMdCsG2EO6aZ32NJnJf3s4uTBqzNiUxoi0aZq4oGN9KBqTJk3vUr7Fmt9EJMHnltN/M
-         nO8BDjQCh7CEBBnVYNGPBVPkoW7cH/2ztLxp1rSs6RZAFxHuR+sl/1w42y9DZ4WtYxhD
-         Gn2HnQij4yA94Y2Hk13u3qjTd/AWA/5aII3wSoCKZeeBkUNfS/DkIJdDLwmqPRTjYwVB
-         5iDA==
-X-Gm-Message-State: AO0yUKUl8mit3X9b3q+V3xZExFcmBoxIFf4WijdHPs7T3P0iHEhCdE/n
-        XEhsOlEGZIIoGv3BaBv3HOzbYssfYAc=
-X-Google-Smtp-Source: AK7set8TtgAp+JveubF1EyRpmR0tyRaCPAWGn+TbxCeFDcJCSfFyMY0Gdzt5kzn4yrgBcM4KmuI5pUnnlgk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a5b:bcd:0:b0:8ac:a1b7:6fa3 with SMTP id
- c13-20020a5b0bcd000000b008aca1b76fa3mr458932ybr.278.1676506937147; Wed, 15
- Feb 2023 16:22:17 -0800 (PST)
-Date:   Wed, 15 Feb 2023 16:22:15 -0800
-In-Reply-To: <Y+1f/En6rvqoe6st@google.com>
-Mime-Version: 1.0
-References: <20221129193717.513824-1-mlevitsk@redhat.com> <20221129193717.513824-8-mlevitsk@redhat.com>
- <Y9mWFlGdzoa8ZDW7@google.com> <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
- <Y+PIdJZtCsGH2Sw3@google.com> <2b5994e2-15ba-dd57-285c-fb33827a5275@amd.com> <Y+1f/En6rvqoe6st@google.com>
-Message-ID: <Y+13N/Ky19VK0rzq@google.com>
-Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection interface
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 19:23:28 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906DC3B659;
+        Wed, 15 Feb 2023 16:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676507006; x=1708043006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZBoSCAtz6fkkZle3VLj8Y/RmveUth+ypvnNypFuDpJs=;
+  b=cIVCy0MQB7CqTgZnQ8iNJ+eEEX+eNJTMVQH3fJ38bNb1Bc5R/hIpAdlZ
+   t7RVRuMtLl41/6fRIXd7Dn/2KBvaUteNkdHapk/pIR7XgzaKiiVNHP7fr
+   x1r3aWvcYfBe14hsOQNm2TNkZ1gw7hhTEPZdTDaYo4YIqfOkTBa10IQcs
+   nRG7UT2NV/cr97k8ukJAcQ0lOoayhlVCz13PhkdLNJe895CXmGFn03D3X
+   /5I6rhOokzXpu5dK8tOxUrVH+hQ0/Kvb3ZQa0DyN5nSMXu77x5bYVanDU
+   N0CR4LNH10yoMka6U08Txly4dCXxp9h4jBVvjhsitxS5XZ0ERRcNq0Y1y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="332899460"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="332899460"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 16:23:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="779141898"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="779141898"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Feb 2023 16:23:11 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSS3K-0009tZ-0n;
+        Thu, 16 Feb 2023 00:23:10 +0000
+Date:   Thu, 16 Feb 2023 08:22:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform
+ ops
+Message-ID: <202302160838.BTq7ertw-lkp@intel.com>
+References: <20230214212457.3319814-1-quic_eberman@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214212457.3319814-1-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023, Sean Christopherson wrote:
-> On Tue, Feb 14, 2023, Santosh Shukla wrote:
-> > "
-> > V_NMI_MASK: Indicates whether virtual NMIs are masked. The processor will set V_NMI_MASK
-> > once it takes the virtual NMI. V_NMI_MASK is cleared when the guest successfully completes an
-> > IRET instruction or #VMEXIT occurs while delivering the virtual NMI
-> > "
-> >
-> > In my initial implementation I had changed V_NMI_MASK for the SMM scenario [1],
-> > This is also not required as HW will save the V_NMI/V_NMI_MASK on 
-> > SMM entry and restore them on RSM.
-> > 
-> > That said the svm_{get,set}_nmi_mask will look something like:
+Hi Elliot,
 
-...
+Thank you for the patch! Yet something to improve:
 
-> >  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
-> >  {
-> >         struct vcpu_svm *svm = to_svm(vcpu);
-> > 
-> > +       if (is_vnmi_enabled(svm))
-> > +               return;
-> > +
-> >         if (masked) {
-> >                 svm->nmi_masked = true;
-> >                 svm_set_iret_intercept(svm);
-> > 
-> > is there any inputs on above approach?
-> 
-> What happens if software clears the "NMIs are blocked" flag?  If KVM can't clear
-> the flag, then we've got problems.  E.g. if KVM emulates IRET or SMI+RSM.  And I
-> I believe there are use cases that use KVM to snapshot and reload vCPU state,
-> e.g. record+replay?, in which case KVM_SET_VCPU_EVENTS needs to be able to adjust
-> NMI blocking too.
+[auto build test ERROR on 3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb]
 
-Actually, what am I thinking.  Any type of state save/restore will need to stuff
-NMI blocking.  E.g. live migration of a VM that is handling an NMI (V_NMI_MASK=1)
-_and_ has a pending NMI (V_NMI=1) absolutely needs to set V_NMI_MASK=1 on the dest,
-otherwise the pending NMI will get serviced when the guest expects NMIs to be blocked.
+url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
+base:   3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb
+patch link:    https://lore.kernel.org/r/20230214212457.3319814-1-quic_eberman%40quicinc.com
+patch subject: [PATCH v10 16/26] firmware: qcom_scm: Register Gunyah platform ops
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230216/202302160838.BTq7ertw-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/33f0c4b130c7b249a1524da8076dd12333aa7cde
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Elliot-Berman/docs-gunyah-Introduce-Gunyah-Hypervisor/20230215-055721
+        git checkout 33f0c4b130c7b249a1524da8076dd12333aa7cde
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302160838.BTq7ertw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/firmware/qcom_scm.c: In function 'qcom_scm_gh_rm_pre_mem_share':
+>> drivers/firmware/qcom_scm.c:1335:49: error: passing argument 3 of 'qcom_scm_assign_mem' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1335 |                                                 &src_cpy, new_perms, mem_parcel->n_acl_entries);
+         |                                                 ^~~~~~~~
+         |                                                 |
+         |                                                 u64 * {aka long long unsigned int *}
+   drivers/firmware/qcom_scm.c:912:39: note: expected 'unsigned int *' but argument is of type 'u64 *' {aka 'long long unsigned int *'}
+     912 |                         unsigned int *srcvm,
+         |                         ~~~~~~~~~~~~~~^~~~~
+   In file included from include/asm-generic/bug.h:7,
+                    from arch/m68k/include/asm/bug.h:32,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/m68k/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from arch/m68k/include/asm/irqflags.h:6,
+                    from include/linux/irqflags.h:16,
+                    from arch/m68k/include/asm/atomic.h:6,
+                    from include/linux/atomic.h:7,
+                    from include/linux/rcupdate.h:25,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/firmware/qcom_scm.c:5:
+   drivers/firmware/qcom_scm.c:1353:49: error: passing argument 3 of 'qcom_scm_assign_mem' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1353 |                                                 &src_cpy, new_perms, 1));
+         |                                                 ^~~~~~~~
+         |                                                 |
+         |                                                 u64 * {aka long long unsigned int *}
+   include/linux/once_lite.h:28:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+      28 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   drivers/firmware/qcom_scm.c:1350:33: note: in expansion of macro 'WARN_ON_ONCE'
+    1350 |                                 WARN_ON_ONCE(qcom_scm_assign_mem(
+         |                                 ^~~~~~~~~~~~
+   drivers/firmware/qcom_scm.c:912:39: note: expected 'unsigned int *' but argument is of type 'u64 *' {aka 'long long unsigned int *'}
+     912 |                         unsigned int *srcvm,
+         |                         ~~~~~~~~~~~~~~^~~~~
+   drivers/firmware/qcom_scm.c: In function 'qcom_scm_gh_rm_post_mem_reclaim':
+   drivers/firmware/qcom_scm.c:1385:49: error: passing argument 3 of 'qcom_scm_assign_mem' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1385 |                                                 &src_cpy, &new_perms, 1);
+         |                                                 ^~~~~~~~
+         |                                                 |
+         |                                                 u64 * {aka long long unsigned int *}
+   drivers/firmware/qcom_scm.c:912:39: note: expected 'unsigned int *' but argument is of type 'u64 *' {aka 'long long unsigned int *'}
+     912 |                         unsigned int *srcvm,
+         |                         ~~~~~~~~~~~~~~^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/qcom_scm_assign_mem +1335 drivers/firmware/qcom_scm.c
+
+  1303	
+  1304	static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
+  1305	{
+  1306		struct qcom_scm_vmperm *new_perms;
+  1307		u64 src, src_cpy;
+  1308		int ret = 0, i, n;
+  1309		u16 vmid;
+  1310	
+  1311		new_perms = kcalloc(mem_parcel->n_acl_entries, sizeof(*new_perms), GFP_KERNEL);
+  1312		if (!new_perms)
+  1313			return -ENOMEM;
+  1314	
+  1315		for (n = 0; n < mem_parcel->n_acl_entries; n++) {
+  1316			vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
+  1317			if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
+  1318				new_perms[n].vmid = vmid;
+  1319			else
+  1320				new_perms[n].vmid = QCOM_SCM_RM_MANAGED_VMID;
+  1321			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_X)
+  1322				new_perms[n].perm |= QCOM_SCM_PERM_EXEC;
+  1323			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_W)
+  1324				new_perms[n].perm |= QCOM_SCM_PERM_WRITE;
+  1325			if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_R)
+  1326				new_perms[n].perm |= QCOM_SCM_PERM_READ;
+  1327		}
+  1328	
+  1329		src = (1ull << QCOM_SCM_VMID_HLOS);
+  1330	
+  1331		for (i = 0; i < mem_parcel->n_mem_entries; i++) {
+  1332			src_cpy = src;
+  1333			ret = qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+  1334							le64_to_cpu(mem_parcel->mem_entries[i].size),
+> 1335							&src_cpy, new_perms, mem_parcel->n_acl_entries);
+  1336			if (ret) {
+  1337				src = 0;
+  1338				for (n = 0; n < mem_parcel->n_acl_entries; n++) {
+  1339					vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
+  1340					if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
+  1341						src |= (1ull << vmid);
+  1342					else
+  1343						src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
+  1344				}
+  1345	
+  1346				new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
+  1347	
+  1348				for (i--; i >= 0; i--) {
+  1349					src_cpy = src;
+  1350					WARN_ON_ONCE(qcom_scm_assign_mem(
+  1351							le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+  1352							le64_to_cpu(mem_parcel->mem_entries[i].size),
+  1353							&src_cpy, new_perms, 1));
+  1354				}
+  1355				break;
+  1356			}
+  1357		}
+  1358	
+  1359		kfree(new_perms);
+  1360		return ret;
+  1361	}
+  1362	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
