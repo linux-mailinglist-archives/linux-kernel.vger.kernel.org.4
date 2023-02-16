@@ -2,137 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57E7698975
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15E069895C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjBPAtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S229606AbjBPAle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBPAtJ (ORCPT
+        with ESMTP id S229489AbjBPAlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:49:09 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252AE29E07
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676508549; x=1708044549;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=abVxdTrQXyJIRwvmXFMJIhwBu4SaHWDquF+Ed+Z40fE=;
-  b=D7g0r4qV3VPfKFQg05nG/pfwYo22Ncbp8B+BA7XlRyuzE3JAtBa63GEQ
-   jmC5GvlkrrUdKNfT5ux2VKUM7AkQEIYImTtoy/VN8lfS3PfmsdgV0shiH
-   T2xTKxpIkHK/GCJPcke4w4carzw3XeNBxgmpktK5Z3eqmDDF+vzv0LZVw
-   If9xZB6toIULqYTNGYF2HBC7sH7Ow1ZGLUy/Af5pGzUy4YBtAxw3jfEnT
-   Bomk6ovLybjuMn37SovhVNrp5jx1vZHA5ZHJK0PxDycrpklxIUoMv4xur
-   QipDbsB4J9MBE+w9BL6oiBubnKNfZTxdEGLmtpgrAmpKFe204lNivF8PP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="311950481"
-X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
-   d="scan'208";a="311950481"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 16:49:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="843934984"
-X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
-   d="scan'208";a="843934984"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2023 16:49:06 -0800
-Message-ID: <ba0fab4b-61dc-a5de-cc0e-70a6e6f66f51@linux.intel.com>
-Date:   Thu, 16 Feb 2023 08:40:42 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] iommu: Add dev_iommu->ops_rwsem
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20230213074941.919324-1-baolu.lu@linux.intel.com>
- <20230213074941.919324-2-baolu.lu@linux.intel.com>
- <Y+pGUOkLVUMFYWOb@nvidia.com>
- <9f516f44-3dc9-6f15-11d0-10bfb1b29b1e@linux.intel.com>
- <d4f1b33d-dec7-6582-34a1-495bacfcd396@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <d4f1b33d-dec7-6582-34a1-495bacfcd396@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Feb 2023 19:41:31 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7161D42DED
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:41:30 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id q7-20020a170902eb8700b0019ace17fa33so209441plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyDL7aG5vadqxs1ZDVMtNmlMp6h+pTwRitO0Vsd+xXA=;
+        b=UlyGz18Rq6eKdsAzT90nvKAGzObDlWojIa+4RUu1raCFtQqRUYcy3SspX0jxdJ9rb0
+         Nw7weHMdrBLZ31wvo1gRWxGi06bUObPJDZmDnyE3qo/jMx6/HDaZTvkl6TQazEiCG569
+         utifp/LkZIaUBLsxN8fp/8hujvgldojhDyaXNaI8MeFAbY3JeVjvD0NkW2/MUJ28e42V
+         ZMWfGCIgfQWx7Q2YfH7HNWCie5aE+GUgO/fc5leiKryY6MB/sRZht4uh4VjIQkc1sgzj
+         o5tcKSvOUm3vBr0kx5kdnMHT1xneMoUIuFwr5LQO2CkBOhtS2iifTcqrX4jc6sGsYjIC
+         IkyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KyDL7aG5vadqxs1ZDVMtNmlMp6h+pTwRitO0Vsd+xXA=;
+        b=YBNs9C8Hd+q6Qcl9utReZHgU01rtVRigncP/iF3566QyDJdsixwh3uxrWaukOhU11G
+         I4jcYATyL9DEHXz7dh3hqLBgnzDW+VCqVQUu9kU7wkghtz7OyW+z41d0phiXfnDPlYs8
+         hQMNzBlIfdYNEhYb1U1a0RC/Ar+r6JHg/0hhWp+SHYBj/RZrrul+rc8x+6vpRCCee5oi
+         27rKFevofPtGKdSfRlv74MaMMcMtRVcxMbfd/pfUTVd6bRDaA8xDENNUC8fuJcRgR0Sd
+         TXYpn+KlY+9YSHJ5sh5+mGysl/WFlHUK3Ybd7CKA4aR79jw0zSbDBz481SQRlAI5kyO/
+         ijdQ==
+X-Gm-Message-State: AO0yUKUhfsB2ty8KILpMU1CKK+QtW9PrMwRfzDykZZQU8lA0wx+qa3xr
+        O3JQxTot2xU9mxSpYVyNMSh/6+bU3NlP+FEktw==
+X-Google-Smtp-Source: AK7set9ULYqZvTPKnXy7w+XwzeOZWCcMQ4uqZfm4qVlxGYvM8N3GKtC4fbQQyb++BnxdRdIQAt0St6aX14Ha/b9zJw==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a63:7a1c:0:b0:4fb:ab27:fa7 with SMTP
+ id v28-20020a637a1c000000b004fbab270fa7mr637750pgc.0.1676508089776; Wed, 15
+ Feb 2023 16:41:29 -0800 (PST)
+Date:   Thu, 16 Feb 2023 00:41:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
+Message-ID: <cover.1676507663.git.ackerleytng@google.com>
+Subject: [RFC PATCH 0/2] Providing mount for memfd_restricted() syscall
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org
+Cc:     chao.p.peng@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
+        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
+        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
+        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
+        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
+        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
+        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
+        yu.c.zhang@linux.intel.com, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 7:24 PM, Robin Murphy wrote:
-> On 2023-02-15 05:34, Baolu Lu wrote:
->> On 2/13/23 10:16 PM, Jason Gunthorpe wrote:
->>> On Mon, Feb 13, 2023 at 03:49:38PM +0800, Lu Baolu wrote:
->>>
->>>> +static int iommu_group_freeze_dev_ops(struct iommu_group *group)
->>>> +{
->>>> +    struct group_device *device;
->>>> +    struct device *dev;
->>>> +
->>>> +    mutex_lock(&group->mutex);
->>>> +    list_for_each_entry(device, &group->devices, list) {
->>>> +        dev = device->dev;
->>>> +        down_read(&dev->iommu->ops_rwsem);
->>>
->>> This isn't allowed, you can't obtain locks in a loop like this, it
->>> will deadlock.
->>>
->>> You don't need more locks, we already have the group mutex, the
->>> release path should be fixed to use it properly as I was trying to do 
->>> here:
->>>
->>> https://lore.kernel.org/kvm/4-v1-ef00ffecea52+2cb-iommu_group_lifetime_jgg@nvidia.com/
->>> https://lore.kernel.org/kvm/YyyTxx0HnA3maxEk@nvidia.com/
->>>
->>> Then what you'd do in a path like this is:
->>>
->>>    mutex_lock(&group->mutex);
->>>    dev = iommu_group_first_device(group)
->>>    if (!dev)
->>>       /* Racing with group cleanup */
->>>       return -EINVAL;
->>>    /* Now dev->ops is valid and must remain valid so long as
->>>       group->mutex is held */
->>>
->>> The only reason this doesn't work already is because of the above
->>> stuff about release not holding the group mutex when manipulating the
->>> devices in the group. This is simply mis-locked.
->>>
->>> Robin explained it was done like this because
->>> arm_iommu_detach_device() re-enters the iommu core during release_dev,
->>> so I suggest fixing that by simply not doing that (see above)
->>>
->>> Below is the lastest attempt I had tried, I didn't have time to get back
->>> to it and we fixed the bug another way. It needs a bit of adjusting to
->>> also remove the device from the group after release is called within
->>> the same mutex critical region.
->>
->> Yes. If we can make remove device from list and device release in the
->> same mutex critical region, we don't need any other lock mechanism
->> anymore.
->>
->> The ipmmu driver supports default domain.
-> 
-> It supports default domains *on arm64*. Nothing on 32-bit ARM uses 
-> default domains, they won't even exist since iommu-dma is not enabled, 
-> and either way the ARM DMA ops don't understand groups. I don't see an 
-> obvious satisfactory solution while the arm_iommu_* APIs still exist, 
-> but if we need bodges in the interim could we please try to concentrate 
-> them in ARM-specific code?
+Hello,
 
-Yes, sure. Thanks for the guide.
+This patchset builds upon the memfd_restricted() system call that has
+been discussed in the =E2=80=98KVM: mm: fd-based approach for supporting KV=
+M=E2=80=99
+patch series, at
+https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.int=
+el.com/T/#m7e944d7892afdd1d62a03a287bd488c56e377b0c
 
-Best regards,
-baolu
+The tree can be found at:
+https://github.com/googleprodkernel/linux-cc/tree/restrictedmem-provide-mou=
+nt-path
+
+In this patchset, a modification to the memfd_restricted() syscall is
+proposed, which allows userspace to provide a mount, on which the file
+will be created and returned from the memfd_restricted().
+
+Allowing userspace to provide a mount allows userspace to control
+various memory binding policies via tmpfs mount options, such as
+Transparent HugePage memory allocation policy through
+=E2=80=98huge=3Dalways/never=E2=80=99 and NUMA memory allocation policy thr=
+ough
+=E2=80=98mpol=3Dlocal/bind:*=E2=80=99.
+
+Dependencies:
++ Sean=E2=80=99s iteration of the =E2=80=98KVM: mm: fd-based approach for s=
+upporting
+  KVM=E2=80=99 patch series at
+  https://github.com/sean-jc/linux/tree/x86/upm_base_support
++ Proposed fixes for these issues mentioned on the mailing list:
+    + https://lore.kernel.org/lkml/diqzzga0fv96.fsf@ackerleytng-cloudtop-sg=
+.c.googlers.com/
+
+Future work/TODOs:
++ man page for the memfd_restricted() syscall
++ Support for per file Transparent HugePage allocation hints
++ Support for per file NUMA binding hints
+
+Ackerley Tng (2):
+  mm: restrictedmem: Allow userspace to specify mount_path for
+    memfd_restricted
+  selftests: restrictedmem: Check hugepage-ness of shmem file backing
+    restrictedmem fd
+
+ include/linux/syscalls.h                      |   2 +-
+ include/uapi/linux/restrictedmem.h            |   8 +
+ mm/restrictedmem.c                            |  63 +++-
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/restrictedmem/.gitignore        |   3 +
+ .../testing/selftests/restrictedmem/Makefile  |  14 +
+ .../testing/selftests/restrictedmem/common.c  |   9 +
+ .../testing/selftests/restrictedmem/common.h  |   8 +
+ .../restrictedmem_hugepage_test.c             | 344 ++++++++++++++++++
+ 9 files changed, 445 insertions(+), 7 deletions(-)
+ create mode 100644 include/uapi/linux/restrictedmem.h
+ create mode 100644 tools/testing/selftests/restrictedmem/.gitignore
+ create mode 100644 tools/testing/selftests/restrictedmem/Makefile
+ create mode 100644 tools/testing/selftests/restrictedmem/common.c
+ create mode 100644 tools/testing/selftests/restrictedmem/common.h
+ create mode 100644 tools/testing/selftests/restrictedmem/restrictedmem_hug=
+epage_test.c
+
+--
+2.39.1.637.g21b0678d19-goog
