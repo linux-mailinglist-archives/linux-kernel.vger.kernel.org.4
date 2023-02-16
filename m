@@ -2,176 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF934699F75
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0E7699F7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 22:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjBPVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 16:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S230182AbjBPVyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 16:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjBPVvN (ORCPT
+        with ESMTP id S229947AbjBPVyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 16:51:13 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C304654D6E;
-        Thu, 16 Feb 2023 13:49:40 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id cp18so1068840pjb.0;
-        Thu, 16 Feb 2023 13:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XX55PL86vSqpwFy0eLM4CL0pVCfJIrQzfm/lyyBo490=;
-        b=VMA7fP3agf6wAhVY7RwqEa/5+EvrIFixDyKwb5JDyrcPoltSegFgCMDxXYht5EA0Fk
-         ZT+Y8rM+QjTFb5YHfQTGAdzxakSvej1tP0XA50pYpSJFxI6+qS+y4xh7haQjvn+edGrU
-         MiVxRNy5BnzfcZK4/aEbJUxtSBA+YbHvhx1a8S6WxD6EcBmVQIfL12iBmyPj7Nue7FG4
-         Wd+KOTHcsukmbB8K5PNYGOOKKU9MF3Ek4y7+T+7gE/QLKZmFJoMYpWEjuFKHFK2Pc6AR
-         5IjoUX0CCePe7wk6tHg5GEthu+cWlfV85LqNP3+xEAInGMS6PPZBempeiq1/7AM1R+nd
-         kpiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XX55PL86vSqpwFy0eLM4CL0pVCfJIrQzfm/lyyBo490=;
-        b=qp3rA1oNNpYffslL8pvPd+4N0+rzelXBqwUico+pRAJjzwAegF9n/lIpINok5zUEYN
-         Soo1BxZlDMawY6zd7ttn08OTU/MjPMFaYC5rky/smB9FfU/vDZw5zkvACfuaGL2vMSjC
-         6VUzx5YOcStG9PAfUBzi6ezEaOS2KbZZxIvD0s/faMLyr+Wv9vkD7JpZucXYUjLfzL4o
-         fDSOFbbDG3nATSynXvRQG722UPP3zvW+pAr6KC9YzBh1HfJRai5dF6bYxVOrMoCdOwan
-         q3KWJMghERY0hl4RWbjzmhISmmNGluG9SEd9y7Erby44YmW07KpaFOFaXQ7naMaFn15K
-         h41g==
-X-Gm-Message-State: AO0yUKWjVoHQKH1lZPeGKLsKizu97wbxx5lnxog8KwJAHYETCwFSCZPe
-        1UoguiqdeffbZfSrjwas+GE0kGXP4/GPylRwc6M=
-X-Google-Smtp-Source: AK7set/T7+Q5Ke9RAIXNTmgqQbtMEUTRVqygR/D0yPOOLVxW7rdMx82FATVHqvrUVFUW95IfthV6DaNu7gewVFyrgNA=
-X-Received: by 2002:a17:90b:1e47:b0:230:b973:a726 with SMTP id
- pi7-20020a17090b1e4700b00230b973a726mr937824pjb.23.1676584180003; Thu, 16 Feb
- 2023 13:49:40 -0800 (PST)
+        Thu, 16 Feb 2023 16:54:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D119772;
+        Thu, 16 Feb 2023 13:54:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F07CBB829C0;
+        Thu, 16 Feb 2023 21:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EEA3C4339E;
+        Thu, 16 Feb 2023 21:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676584390;
+        bh=/89NA4NAoXcXzdPfjHUemplkBWp+8gbW+gPen4ZFpgo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xx7q4GXXB4Ze6YTbHhjjCXHrGwNp71BIJV5GuJj4gBwBiwzTg6nkKStAHxNTmYAcy
+         qbDmYTSljpicwjrAbhw5o/ypDDD0tgcN26EfyZPgeM1yI1U7lOOg7oHb35651sjpBe
+         PZ3IeInK+WNQUl00mwuiCFvStJUKoaCwq6saPl6xj8Aa3Se3DH/+s8LiyHyAFtqu+H
+         dsRq+jSUQU7Ns+eRE5UkrZotfNyo1vvj0nuOX633djBUYop/B4g5vkZjFroJsa5C8D
+         ptZXCA31Et8eKsHz+ywE8GbM+0R51PxwoNZwLz68UUZrQNR0n+X07KI3BbaeeNo1gW
+         mupdA/vmOkC8w==
+Date:   Thu, 16 Feb 2023 21:53:02 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        daire.mcnamara@microchip.com
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 02/12] dt-bindings: riscv: sifive-ccache: Add
+ 'uncached-offset' property
+Message-ID: <Y+6lvizTUhF9t+xk@spud>
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-3-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-References: <20230214190221.1156876-1-shy828301@gmail.com> <alpine.LRH.2.21.2302150716120.5940@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHbLzkr4RrKpR1pGZxs7JdB=R539SiNgO2+Fr7X-rVKcBh5tQQ@mail.gmail.com> <alpine.LRH.2.21.2302161204300.18393@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.21.2302161204300.18393@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 16 Feb 2023 13:49:28 -0800
-Message-ID: <CAHbLzkp8odDNqX49mrEQc9Pk3=-3KxXvuhOe5Ny80ABwjBhx=w@mail.gmail.com>
-Subject: Re: [dm-devel] [v2 PATCH 0/5] Introduce mempool pages bulk allocator
- and use it in dm-crypt
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, akpm@linux-foundation.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+OUnDp7k4pWMwsmV"
+Content-Disposition: inline
+In-Reply-To: <20230211031821.976408-3-cristian.ciocaltea@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 9:45 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
->
->
-> On Wed, 15 Feb 2023, Yang Shi wrote:
->
-> > On Wed, Feb 15, 2023 at 4:23 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
-> > >
-> > >
-> > >
-> > > On Tue, 14 Feb 2023, Yang Shi wrote:
-> > >
-> > > >
-> > > > Changelog:
-> > > > RFC -> v2:
-> > > >   * Added callback variant for page bulk allocator and mempool bulk allocator
-> > > >     per Mel Gorman.
-> > > >   * Used the callback version in dm-crypt driver.
-> > > >   * Some code cleanup and refactor to reduce duplicate code.
-> > > >
-> > > > rfc: https://lore.kernel.org/linux-mm/20221005180341.1738796-1-shy828301@gmail.com/
-> > >
-> > > Hi
-> > >
-> > > This seems like unneeded complication to me. We have alloc_pages(), it can
-> > > allocate multiple pages efficiently, so why not use it?
-> >
-> > The alloc_pages() allocates *contiguous* pages, but dm-crypt doesn't
-> > need contiguous pages at all. This may incur unnecessary compaction
->
-> It doesn't hurt that the pages are contiguous - and allocating and freeing
-> a few compound pages is even faster than allocating and freeing many
-> 0-order pages.
 
-If "allocating many order-0 pages" means calling alloc_page() multiple
-times, just like what the dm-crypt code does before this patchset,
-yeah, allocating a compound page may be faster.
+--+OUnDp7k4pWMwsmV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But it may be not true with bulk allocator. And it also depends on how
-bad the fragmentation is and how contended the zone lock is. When
-allocating order-0 page, the bulk allocator just could take the pages
-from pcp list within one call. And the pcp list could hold a lot pages
-actually, on my test machine per pcp list could have more than 1000
-pages.
+Hey all,
 
->
-> > overhead to the dm-crypt layer when memory is fragmented.
->
-> The compaction overhead may be suppressed by the GFP flags (i.e. don't use
-> __GFP_DIRECT_RECLAIM).
+On Sat, Feb 11, 2023 at 05:18:11AM +0200, Cristian Ciocaltea wrote:
+> Add the 'uncached-offset' property to be used for specifying the
+> uncached memory offset required for handling non-coherent DMA
+> transactions.
+>=20
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml =
+b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> index 2b864b2f12c9..60cd87a2810a 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> @@ -82,6 +82,11 @@ properties:
+> =20
+>    next-level-cache: true
+> =20
+> +  uncached-offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint64
+> +    description: |
+> +      Uncached memory offset for handling non-coherent DMA transactions.
 
-You could, but you may pressure the mempool quite more often when
-light memory pressure and fragmentation exist. The bulk allocator may
-just succeed with light reclamation without allocating from mempool.
+Firstly, this pretty tied to the StarFive stuff, where there is only one
+"bank" of memory that neatly maps to one bank of non-cached memory.
+On PolarFire SoC, where we would also like to make use of non-coherent
+DMA for some transfers using the FPGA fabric, things are a bit more
+complex.
+Instead of a region & a non-cached alias, we have 2 regions and 2
+non-cached regions.
+These regions lie at 0x8000_0000 & 0x10_0000_0000 and the non-cached
+regions are at 0xc000_0000 & 0x14_0000_0000. As you can tell, one fixed
+offset isn't going to work there!
 
->
-> > The bulk allocator is a good fit to this usecase, which allocates
-> > multiple order-0 pages.
-> >
-> > In addition, filesystem writeback doesn't guarantee power-of-2 pages
-> > every time IIUC. But alloc_pages() just can allocate power-of-2 pages.
->
-> So, we can allocate more compound pages for the non-power-of-2 case - see
-> the next patch that I'm sending.
+The other bit of a problem is that there is no fixed concept of aliases,
+as seems to be the case on the jh7100. Instead, where the regions
+"point" to in physical DDR is something that is configurable at runtime.
+Practically speaking, it is set by firmware very early on in boot & is
+fixed from there out, but will vary between boards and FPGA fabric
+configuration. Effectively that means that from the PoV of a Devicetree
+it is constant, but a good bit of flexibility is going to be needed.
 
-Thanks for the patch. If the callers are willing to handle the
-complexity (calculating the proper orders, dealing with the compound
-pages, etc), it is definitely an option for them.
+What we have been doing on PolarFire SoC (although mostly internally at
+this point) is, rather than creating a property like uncached-offset, we
+instead are using the dma-ranges properties to induce the same affect.
 
->
-> > >
-> > > I suggest to modify crypt_alloc_buffer() to use alloc_pages() and if
-> > > alloc_pages() fails (either because the system is low on memory or because
-> > > memory is too fragmented), fall back to the existing code that does
-> > > mempool_alloc().
-> >
-> > My PoC patches just did this way, but called bulk allocator. There may
-> > be other potential mepool users as I listed in this cover letter,
-> > which may get benefits from bulk allocator. So introducing a new bulk
-> > mempool API seems better for long run although we just have one user
-> > for now. And it makes other uses easier to gain the benefit by just
-> > calling the new API.
->
-> This mempool bulk refactoring just makes the code bigger. And it is not
-> needed - dm-crypt can fall-back to non-bulk mempool allocations.
+In an example configuration with memory at:
+	reg =3D <0x0 0x80000000 0x0 0x4000000>;
+	reg =3D <0x0 0x8a000000 0x0 0x8000000>;
+	reg =3D <0x0 0xc4000000 0x0 0x6000000>;
+	reg =3D <0x10 0x22000000 0x0 0x5e000000>;
+	reg =3D <0x14 0x12000000 0x0 0x10000000>;
 
-Do you mean the mempool code? It may be inevitable by adding a new
-API. But it is not significantly bigger. And the API hides all the
-details and complexity from the callers, as well as handle all the
-allocation corner cases in mm layer. It would make the users life much
-easier. Of course if the callers are happy to handle all the
-complexity by themselves, they don't have to call the API.
+a reserved memory section then covering the non-cached region at
+0x14_0000_0000:
+	dma_non_cached_high: non-cached-high-buffer {
+		compatible =3D "shared-dma-pool";
+		size =3D <0x0 0x10000000>;
+		no-map;
+		linux,dma-default;
+		alloc-ranges =3D <0x14 0x12000000 0x0 0x10000000>;
+	};
 
->
-> In the next email, I'm sending a patch that is noticeably smaller and that
-> uses alloc_pages()/__free_pages().
+and dma-ranges:
+	dma-ranges =3D <0x14 0x0 0x0 0x80000000 0x0 0x4000000>,
+		     <0x14 0x4000000 0x0 0xc4000000 0x0 0x6000000>,
+		     <0x14 0xa000000 0x0 0x8a000000 0x0 0x8000000>,
 
-Thanks for the patch. But if other potential users would like to do
-the same optimization, the code have to be duplicated everywhere.
-Maybe not every one is happy to handle this by themselves.
+In this configuration, 0x8000_0000, 0x10_0000_0000, 0xc000_0000 &
+0x14_0000_0000 are all aliases of the same address.
+With this setup, we're able to do non-coherent DMA to the FPGA fabric,
+to the PCI for example.
+The DTS does grow a bit of complexity, with reserved memory regions and
+dma-ranges - but at least they're standard properties!
 
->
-> Mikulas
->
+Emil, if you want to take a look at that it is here:
+https://github.com/linux4microchip/linux linux-5.15-mchp
+I think I said to you before that it was based on one of Atish's early
+approaches, the one from the 5.15 development cycle IIRC since we're
+using that LTS.
+Obviously it'll need changes to be upstreamable so we're not wedded to
+this approach. For instance, it's being controlled by a compile time
+option at the moment, so that clearly needs to become runtime for
+upstream (and realistically needs to be one in our vendor tree too...)
+
+I'll try to hack that approach into the visionfive v1 soonTM and see how
+it goes, but it'll not be this side of March before I have time to do
+that.
+
+Cheers,
+Conor.
+
+
+--+OUnDp7k4pWMwsmV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+6lvgAKCRB4tDGHoIJi
+0ulqAQCULkPATgqWtudHs9arilghmWnIl+5HOdnui0TiEobVIwD9EJWZRVVAGTBQ
+VrKlrkCPLqc12a+YcCC0aBjkaR6SDwI=
+=ZTRK
+-----END PGP SIGNATURE-----
+
+--+OUnDp7k4pWMwsmV--
