@@ -2,206 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0806D698FDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C909698FE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjBPJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S229570AbjBPJfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBPJeT (ORCPT
+        with ESMTP id S229554AbjBPJft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:34:19 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CFA2DE5D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:34:17 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id dr8so3600346ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xlE78N7SwGUFP9az71FkKXaJ04noS1VC//kRi/UVdqM=;
-        b=qk2ho0Dn+kiBw+yOLu9QE+mJzyhgW5YHK7yfLKrCDk+7P6TY2nUpDYs4QuUT9FNQ0U
-         SBQL9P8vhjDkHUz66C2I+MxGGXFiO1vzGi26LNgF87ZuacxT2PO6WNrqGosIi/w6/Kpo
-         Bt+IL1ruRfny21fybHwrw1TRWSXi4dGF2wIuJvRLdf15g8Dg5rr+PiR5UuQMKyuRbvmC
-         VHLCP6y3krEFfnMq7QdoyZ5Nx1/ChUiYWqaYsJ6m1kMotTeQ7f8/r88ETnMKkT0PNCuG
-         N/xcsFyTWgvdc+dY8quFVuXM3F49oNAjBTXczae77BTR0q5NyE1mC+ctqviU/XC4C9KN
-         IKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlE78N7SwGUFP9az71FkKXaJ04noS1VC//kRi/UVdqM=;
-        b=FnIPAR+/tz0U1K4NBTgQrUSprbpDrkFjKFBCMIdqf8i60jDBo2Zl5pSHQSoOhGKo1v
-         S61zqYmGztTIG9cEuB77XJrm9j2Xs1FvqgMYXj4wQ+mea4P6tvrt8UdhEq2siyvVb/KI
-         xxjfkY4r3DVk0B0KqMv/b2GiFFdcb3gRB4MHQ3GH9G11H3seL5z0bb+99mppfxI4uep3
-         1SVljPQHKRtWTs88mq+kMi3symz6WGLsKlETHBZGjbvFcqQadcKntQ1AeAEa5v7Lxki/
-         q97PUnINTjqtjO5/zfnx1kiUbay0Ucwnr7roGiV6PK27UNGKYRax8Yl/+pVat0nLF8ZW
-         qBfQ==
-X-Gm-Message-State: AO0yUKUgm42hdUQkgBdDxqSzrSw1BYcd59DwqUCTzvL66ObNr1shlo4E
-        hOX0sCqIyVHOHCYUOI/va7rvxQ==
-X-Google-Smtp-Source: AK7set9DgurDP4wEVrFOs7M52beuPRqtI24FolaG8A6C0viAI6f+7xUUlXY8RCpQPV9oU7R/0Dg27A==
-X-Received: by 2002:a17:906:dfd2:b0:877:7113:71f3 with SMTP id jt18-20020a170906dfd200b00877711371f3mr5305331ejc.25.1676540056008;
-        Thu, 16 Feb 2023 01:34:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id dk14-20020a170906f0ce00b0087bd2924e74sm553002ejb.205.2023.02.16.01.34.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 01:34:14 -0800 (PST)
-Message-ID: <0f5f367e-5531-e209-9be3-94a94c4ad65c@linaro.org>
-Date:   Thu, 16 Feb 2023 10:34:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
+        Thu, 16 Feb 2023 04:35:49 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322C830B35;
+        Thu, 16 Feb 2023 01:35:48 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31G8Iqe1002114;
+        Thu, 16 Feb 2023 01:35:48 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=SL/T2E9zoHvblX+NvmN0qtWInTjNQ2z4u5TCpooVc6Y=;
+ b=mfzTXiU1EePuXgBhtm3YoiY8zNk2bfwTzTOwezNVkqQ/xLZaLv/nO9mfS/zC3NWG1n4h
+ NUD4wm+MITKY4auKJpqEwBhaj7uee4Iwun8AKCDcJ+jTQPvKIuIdVUNF4E0qPk2NJ3/2
+ Bjz6WqDWQPY3CjsIrdLWSe3AmBrGAdXScsdVqY8eiM35NNTmpkbq+WeLfPoM4/Qi9ryh
+ C+eSXCbQqIgc5UhcEGghWxXLMyXl/JvSq1g64F75aCCT3EmGr+XcMqRlYK6MS0gJLRQC
+ R/ZojfGE1nLVlt4M+ZFWxZXcoQlY7HddIXg4fhW37LkD3e5D/ANRwcqglhsWmH0Cc5J7 Ag== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nrwhgf68x-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 01:35:47 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TnjKAwENRP7ph+RDkCkiSMKfSg40P5hYk47EHw0Pq9rML7FnnC74++kLM5lBWaNstQxMZhFi7toxzrn3tih3UmU9EGiIIdgTwMXUon8f6qilKd4aAwrcp1PPkv4OwLufvn9u7hM5z5ikreaIK9V7Of/kQ9PxKoDJTZIcIqgKXj2gBWF8k4hrUhih1XNxRP2xfZwUozo+YWu+yVo0Bi4eiry4Eo4o3+LWXUJ7tnJcWhBCbBmIngL5yJhHxu1qeJee/fkoKN6SOKV6eHOY70K8tvSQOYiVolYP3WaDkurqgxYVEqzCVz6vJBOQnFAe0rPF9i9VBIA++ReA4Wm6GwiAAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SL/T2E9zoHvblX+NvmN0qtWInTjNQ2z4u5TCpooVc6Y=;
+ b=kWWe1LX5Fd69fcR2EkFnzqRP01PbxE8oWwSUE7vTPxCM0FH9o//e3Xz6PWe68Lq6QvdThcrjjf8gy9HWRIGGYAwiLXsTOo8cepmdo5LaXNMwbp+XsJx9olBt5U7pypUeIcqcP0DljMFKCra8osihIKQDEUlLdpGSv2kjttptf2oULJfiV9QQ/CKKb9nmsSeRZCvJy3fY8jrgGgNPz1xz2K1QUkPkC/71H99Hwz1c3wIoFqrdmDrzcFfWv3mcT4RE/qFlpiHvC16qEI3aC8j6hNDlAhLy1g0Hw66dVxwD8aqPCCdRZefwlMQHOhPm7AXElEz/Krk/jelTw0p4UfmFng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB4854.namprd15.prod.outlook.com (2603:10b6:806:1e1::19)
+ by MW4PR15MB4665.namprd15.prod.outlook.com (2603:10b6:303:10a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
+ 2023 09:35:44 +0000
+Received: from SA1PR15MB4854.namprd15.prod.outlook.com
+ ([fe80::fb33:6145:8feb:8054]) by SA1PR15MB4854.namprd15.prod.outlook.com
+ ([fe80::fb33:6145:8feb:8054%2]) with mapi id 15.20.6111.013; Thu, 16 Feb 2023
+ 09:35:44 +0000
+From:   Dylan Yudaken <dylany@meta.com>
+To:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
+Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
+ registered ring fd
+Thread-Topic: [PATCHv2] io_uring: Support calling io_uring_register with a
+ registered ring fd
+Thread-Index: AQHZQNZlbGg7EnGO+k6Pl64fuX2v6q7RUlaA
+Date:   Thu, 16 Feb 2023 09:35:44 +0000
+Message-ID: <be9f297f68ee3149f67f781fd291b657cfe4166b.camel@meta.com>
+References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
+In-Reply-To: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
- <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
- <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org>
- <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
- <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
- <CAAhV-H6+aDYZ4JAPpdkefPR0P3QFqKCmt=RsZiw+FZRRax5TgA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAhV-H6+aDYZ4JAPpdkefPR0P3QFqKCmt=RsZiw+FZRRax5TgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB4854:EE_|MW4PR15MB4665:EE_
+x-ms-office365-filtering-correlation-id: a4867bb4-ffae-43f4-2a69-08db10012d4b
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AwC5iu9XcdJG+zTTGoqHi03e5ya1P8PQRRfwnngcKDXulND8L8TPL9Q45rgP8bO73T5UEdb/PwZk6uQCf+eKXrwK/flxA+q6FI1geakOFMQ79RFjYKige1JVDzJ6ROX0vwc4lv0IKvW2d/iCXKOOEQZ/BZ7VMs7101JpOgCdectMNdyl3+iSj+Cw5lcfYVeq5V54QifcK7U9a228/L+9HoXHZedjbNXnnucVNmKH1Afn1wQ6/KAPhp4nTxQx0iBIYjNTczmzd7LzLnpFQXXunpcHtutckH8DJGRt9JD84JBYW5MBBHNHt1J23Z1d/uQpd08Bh6nO4mfYJiljgbEzgT2cJSXHP/18xF9gVJGJfZVYMZEP0stCkiZEh9wvkzr047ljCmmZGLf3KrsuYknRUD6Fmxw1aR1CLX9ySKtmOaRybjFIO9xHJdFVCHlYZ/5MOQyA7qSYW6ZOx9m4n2b2yNC48g2C4wpNbVLcSm0ob4fiQ9nu34NcZjn/Gy0JU9ZmwuFl8ik4GKl2n3cbUJ7guDULdeJ5Cd1mTXToSfBgOY4avunM0JdaUgwmVQ9L+SLYs1/mfZ6AZIyzZw44/datBwgNqEdJSN+3XqFKzBFSLBLlFKT2HkA6Ry+XdpMz3Xi/ZMeCRd3r89W5LWag/96d15fkzwHC3/sMIzKkmD85XIK00CkZGYasNZojNAgogyj9tz4gtBjsndBLiP6D3lxReQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB4854.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199018)(86362001)(38070700005)(122000001)(38100700002)(6486002)(36756003)(478600001)(71200400001)(6512007)(2616005)(186003)(6506007)(66476007)(64756008)(8676002)(66446008)(66946007)(4326008)(76116006)(2906002)(91956017)(5660300002)(8936002)(66556008)(41300700001)(316002)(54906003)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dWxuTTEyY2ZzU29rekRjcUFkR3FRd0QzendRN3JUQlRNOUxaWG1weklXSWdB?=
+ =?utf-8?B?dzBTd0djNEhVZXFIWjE1SWZpenoxQmlnUEZ1RmgvQS9pVGVYQk5xbXZrVHRL?=
+ =?utf-8?B?bng2RE15cGExbmxXcnZMZkZ3KzRvSVlQdEsyb0FSQ3BBMXhUaVVQSkQ1QXBR?=
+ =?utf-8?B?UTB1YkVMd1NiWkxOeUdyY2QvOWdYRTlTZllFL1JjZ3c1WXFRbDQyUWVBSnUy?=
+ =?utf-8?B?MUtjaTJkWGpWbkpKN1poNzhaMUtpVnJJZ0dFbVJpaXdxbEZ3TmdMV1liaVhz?=
+ =?utf-8?B?bmVxTnNrUysyaG52aUlKN2tGVHRIVUNvT2ppbkNDNnV6S3A2STBxcGo4ak55?=
+ =?utf-8?B?c2ZWOHFiOUp4T2pzNi9MS25YbngxZWJjUkRXRzkxMm9mUDR3UGRSVlB1TlRX?=
+ =?utf-8?B?ano0ZGh3SmhkLzZLSTVYYU1rUzlYMW9pZllVMDgwNkpibmJ6WWpQR0prZUJJ?=
+ =?utf-8?B?aWwrSnl3MloycTVpUEU5OU92bkZwbzBjNnltenYzTzdiaU9jN0NFUXAvQmN3?=
+ =?utf-8?B?TUFnZlU3eHVxcHBiVHRrT0VseE0rRXhRbUV3WDA1VUowN05XTHE2c1dNdTFu?=
+ =?utf-8?B?M3RiMDIxQWNWZGJYemoxZVhUb0dxOEF2KzhabUVJdVFjQm5NOG5ySEdpZUdZ?=
+ =?utf-8?B?RVFQNEtvMk9jV1NaemZRKzkzMThyZW1BbUhCaFptNkFzQWFSN2RUUWhoVkNs?=
+ =?utf-8?B?YTBjeE5ZeDIrVTlEWkJCbnNPUGRaQUdYVEtjdGV2NmJIWmhlOWMvMUp1TS9v?=
+ =?utf-8?B?V1JzaXEwb1FFa0dJZ2FidEFRSnhBV2ZYdnN6enArUmVvRTU3aUUrMTErRW9u?=
+ =?utf-8?B?U3ZaME8xOWQxK0ZzYUttdEgrWkhKL1ZoWndzek9nMlAvOVo3VzdaVHk4NGJL?=
+ =?utf-8?B?aHpYa2VLVVcwQldYTzNYc1FlSWRucU5WcDBCVkpMYmsvS3JhNy9ZZUdmOXpW?=
+ =?utf-8?B?YWdpazdJdjNzQVZYNVlGMGNJQ0daQWFBZjM3YWp2YVFmRUdUWEhBZFhTUjNX?=
+ =?utf-8?B?S3BjRk9iYmhZOEwxNDlLVkdHTXRYWTJKWWhQNHpmVENpSldJODI3K2M3aWNt?=
+ =?utf-8?B?Q3lUTkZrbm5mUDZsZWR1M0diSU5Qd0tXckdBSkxlQW52UkdkZDArOWswM0Vs?=
+ =?utf-8?B?RUw0Y2wzZkZRdzFIV3FwdHNPYlA1NVpFeFo1S1lkeGVJcmhPVC9ZNUJFa0JL?=
+ =?utf-8?B?Qy9BMUg5NW9RampwZVlzNVhLcUdQU2svbXBWeHJ4dUhXTmJKcDVVbTBtb2lj?=
+ =?utf-8?B?dkJlT3U3d2Z4VjFsWmtEdFZxSit3Sk95K3FhYTRBMlE2S1ZSWTluZU1oZS9V?=
+ =?utf-8?B?Y1pRUkg1cklySWpUNVpvd2xDQWlLVDBlY3VmYmthQ1N4Z2dRTjhpRjFZY3la?=
+ =?utf-8?B?TEZ1VEtyNzJwdXJLR29QR0djNEhMRFpOZ09aWE5DZGlZLzdyYmdSS09IRmxH?=
+ =?utf-8?B?TFduMUFiUi92a0JoZlRlb0o5TUhVQWhiZ2I4bGN2RXRLNGc2ck9OTGpGVjZT?=
+ =?utf-8?B?TEFjTktsLytORjZRdm42SmRSSFFvRnVVZm1RMWRZWjdscGVyWkt0cjFzVkF6?=
+ =?utf-8?B?Ry9DMjZ3SzM4aUtCUnYzdTRSWG0veU0wU3QxeHhNOThoUnYzMWxvZGpHeHFv?=
+ =?utf-8?B?TXA3N3lwUU9zeVpkQjNVZkpvOGVOVU52UjU2K2JzWVNQNzZMVnhLb0lMQ2ZG?=
+ =?utf-8?B?blFkYnBtQUNFK1ZRVGZmQUMzdXlMSmRGaDJCS1VJRVBIbGVLQnQ5MlJ2V3RP?=
+ =?utf-8?B?K2lHcUpGdUxlTnV3L2ZkRGNJQVprZTFEZWM1T2pvOUtCTEZ5RzV3R0lodFBX?=
+ =?utf-8?B?dkhXZmk5R3l1bXhsT0VDK0FycXp6QW8wTENPdnNsRUNEa3NpaWZaZTIwT2Fa?=
+ =?utf-8?B?RlBCNkd0Titic1ZJVS9aaHI4UDlhL1lReFgrWUJtKzNCUW1oS3JWQithMGxw?=
+ =?utf-8?B?QVd5S3pCeTZlY2ZSSWo2d3F2cTd4eTFEWSs3M2RVckFmRExYdVBpWHJGemxl?=
+ =?utf-8?B?enZ4RmlDZnVQdjZXaEFKRmp0ejdyVGdYcjNieHUwd2V5a0NnNWJFWHRadWJE?=
+ =?utf-8?B?MVlaTmZETmZsdjdCZm95TUcrV0ZXT3BaN1dEbWhmV2hRUEtzZWxWT1lGaWhi?=
+ =?utf-8?B?Qis4TVRweW5jSzlhaml1UTg2S283NWFaZVorcnU0dDVpQVkxSVZ3RC91YTFQ?=
+ =?utf-8?Q?954f91bLdySAog6dIRV2fps=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A6E056DDF56BE44192BE56280A3429D4@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB4854.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4867bb4-ffae-43f4-2a69-08db10012d4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2023 09:35:44.3657
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aLXOECtEjr2u+C0rsZtiLSDvG9G0DM/DJzshW25omYUgIVlS+F5/hGh4M2W2AjQK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4665
+X-Proofpoint-GUID: SdcF-IdIdVlzuduJSexSNWEjDYt_9nCL
+X-Proofpoint-ORIG-GUID: SdcF-IdIdVlzuduJSexSNWEjDYt_9nCL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-16_07,2023-02-15_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 10:30, Huacai Chen wrote:
-> Hi, Krzysztof,
-> 
-> On Thu, Feb 16, 2023 at 4:10 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 16/02/2023 02:46, Binbin Zhou wrote:
->>> On Tue, Feb 14, 2023 at 8:43 PM Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 14/02/2023 13:40, Binbin Zhou wrote:
->>>>> On Tue, Feb 14, 2023 at 5:53 PM Krzysztof Kozlowski
->>>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>>
->>>>>> On 13/02/2023 13:15, Binbin Zhou wrote:
->>>>>>> Add Loongson Extended I/O Interrupt controller binding with DT schema
->>>>>>> format using json-schema.
->>>>>>>
->>>>>>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
->>>>>>> ---
->>>>>>>  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
->>>>>>>  1 file changed, 80 insertions(+)
->>>>>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..88580297f955
->>>>>>> --- /dev/null
->>>>>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>>>>> @@ -0,0 +1,80 @@
->>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>> +%YAML 1.2
->>>>>>> +---
->>>>>>> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
->>>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>>>>>
->>>>>> Drop quotes from bopth.
->>>>>>
->>>>>>> +
->>>>>>> +title: Loongson Extended I/O Interrupt Controller
->>>>>>> +
->>>>>>> +maintainers:
->>>>>>> +  - Binbin Zhou <zhoubinbin@loongson.cn>
->>>>>>> +
->>>>>>> +description: |
->>>>>>> +  This interrupt controller is found on the Loongson-3 family chips and
->>>>>>> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
->>>>>>> +  individual cores without forwarding them through the HT's interrupt line.
->>>>>>> +
->>>>>>> +allOf:
->>>>>>> +  - $ref: /schemas/interrupt-controller.yaml#
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    enum:
->>>>>>> +      - loongson,eiointc-1.0
->>>>>>
->>>>>> Why not using SoC based compatible? It is preferred.
->>>>>
->>>>> Hi Krzysztof:
->>>>>
->>>>> So far, from the datasheet, I know that only the EXIOINTC of the
->>>>> Loongson-2K0500 is different from the other chips, and that is the
->>>>> "loongson,eio-num-vecs" below, which is 128, while all the others are
->>>>> 256.
->>>>> My original idea was to add this property to make compatible
->>>>> consistent, and also to make it easier to add new chips if they have
->>>>> different eio-num-vecs.
->>>>
->>>> We talk about different things. SoC based compatibles are preferred over
->>>> version ones. This was on the lists expressed many times. Please provide
->>>> a reason why you deviate from general recommendation. Flexibility and
->>>> genericness of bindings is not a reason - it's the opposite of the
->>>> argument, thus this will be a: NAK. :(
->>>>
->>>>
->>> Hi Krzysztof:
->>>
->>> Allow me to give a brief overview of the current status of eiointc (DT-based):
->>>      Loongson-3A series supports eiointc;
->>>      Loongson-2K1000 does not support eiointc now;
->>>      Loongson-2K0500 supports eiointc, with differences from
->>> Loongson-3, e.g. only up to 128 devices are supported;
->>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
->>>      ....
->>>
->>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
->>>
->>> The design of eiointc is probably refined step by step with the chip.
->>> The same version of eiointc can be used for multiple chips, and the
->>> same chip series may also use different versions of eiointc. Low-end
->>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
->>> depending on the time it's produced.
->>>
->>> So in the Loongson-2K series I have defined the current state as
->>> eiointc-1.0, using the dts property to indicate the maximum number of
->>> devices supported by eiointc that can be used directly in the driver.
->>>
->>> If there are new changes to the design later on, such as the
->>> definition of registers, we can call it eiointc-2.0, which can also
->>> cover more than one chip.
->>
->> Just go with SoC-based compatibles. If your version is not specific
->> enough, then it is not a good way to represent the hardware.
-> EIOINTC is a bit like the existing LIOINTC which is already use
-> version to represent hardware.
-
-Heh, so why did you go with version in compatible for liointc if it also
-does not match it correctly?
-
-Best regards,
-Krzysztof
-
+T24gVHVlLCAyMDIzLTAyLTE0IGF0IDE2OjQyIC0wODAwLCBKb3NoIFRyaXBsZXR0IHdyb3RlOgo+
+IEBAIC00MTc3LDE3ICs0MTc3LDM3IEBAIFNZU0NBTExfREVGSU5FNChpb191cmluZ19yZWdpc3Rl
+ciwgdW5zaWduZWQKPiBpbnQsIGZkLCB1bnNpZ25lZCBpbnQsIG9wY29kZSwKPiDCoMKgwqDCoMKg
+wqDCoMKgc3RydWN0IGlvX3JpbmdfY3R4ICpjdHg7Cj4gwqDCoMKgwqDCoMKgwqDCoGxvbmcgcmV0
+ID0gLUVCQURGOwo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZmQgZjsKPiArwqDCoMKgwqDCoMKg
+wqBib29sIHVzZV9yZWdpc3RlcmVkX3Jpbmc7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHVzZV9yZWdp
+c3RlcmVkX3JpbmcgPSAhIShvcGNvZGUgJgo+IElPUklOR19SRUdJU1RFUl9VU0VfUkVHSVNURVJF
+RF9SSU5HKTsKPiArwqDCoMKgwqDCoMKgwqBvcGNvZGUgJj0gfklPUklOR19SRUdJU1RFUl9VU0Vf
+UkVHSVNURVJFRF9SSU5HOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmIChvcGNvZGUgPj0gSU9S
+SU5HX1JFR0lTVEVSX0xBU1QpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1
+cm4gLUVJTlZBTDsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoGYgPSBmZGdldChmZCk7Cj4gLcKgwqDC
+oMKgwqDCoMKgaWYgKCFmLmZpbGUpCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
+dHVybiAtRUJBREY7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKHVzZV9yZWdpc3RlcmVkX3JpbmcpIHsK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLyoKPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgICogUmluZyBmZCBoYXMgYmVlbiByZWdpc3RlcmVkIHZpYQo+IElPUklOR19S
+RUdJU1RFUl9SSU5HX0ZEUywgd2UKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICog
+bmVlZCBvbmx5IGRlcmVmZXJlbmNlIG91ciB0YXNrIHByaXZhdGUgYXJyYXkgdG8KPiBmaW5kIGl0
+Lgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgc3RydWN0IGlvX3VyaW5nX3Rhc2sgKnRjdHggPSBjdXJyZW50LT5pb191
+cmluZzsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoHJldCA9IC1FT1BOT1RTVVBQOwo+IC3CoMKgwqDC
+oMKgwqDCoGlmICghaW9faXNfdXJpbmdfZm9wcyhmLmZpbGUpKQo+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBnb3RvIG91dF9mcHV0Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBpZiAodW5saWtlbHkoIXRjdHggfHwgZmQgPj0gSU9fUklOR0ZEX1JFR19NQVgpKQo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FSU5W
+QUw7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZkID0gYXJyYXlfaW5kZXhfbm9z
+cGVjKGZkLCBJT19SSU5HRkRfUkVHX01BWCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGYuZmlsZSA9IHRjdHgtPnJlZ2lzdGVyZWRfcmluZ3NbZmRdOwo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBmLmZsYWdzID0gMDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaWYgKHVubGlrZWx5KCFmLmZpbGUpKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FQkFERjsKPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgb3Bjb2RlICY9IH5JT1JJTkdfUkVHSVNURVJfVVNFX1JFR0lTVEVSRURfUklO
+RzsKCl4gdGhpcyBsaW5lIGxvb2tzIGR1cGxpY2F0ZWQgYXQgdGhlIHRvcCBvZiB0aGUgZnVuY3Rp
+b24/CgoKQWxzbyAtIGlzIHRoZXJlIGEgbGlidXJpbmcgcmVncmVzc2lvbiB0ZXN0IGZvciB0aGlz
+Pwo=
