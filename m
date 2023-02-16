@@ -2,82 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91C0698ED2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16081698ED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjBPIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S229936AbjBPIhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBPIhd (ORCPT
+        with ESMTP id S229928AbjBPIhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:37:33 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5545134C3B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:37:32 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:4605:3635:9491:c6bc])
-        by albert.telenet-ops.be with bizsmtp
-        id MkdU2900V3wKl5506kdUJU; Thu, 16 Feb 2023 09:37:29 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pSZlK-0099qN-1G;
-        Thu, 16 Feb 2023 09:37:28 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pSZlg-005Dq1-Nw;
-        Thu, 16 Feb 2023 09:37:28 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Martin Liu <liumartin@google.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] of: reserved_mem: Use proper binary prefix
-Date:   Thu, 16 Feb 2023 09:37:25 +0100
-Message-Id: <20230216083725.1244817-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Thu, 16 Feb 2023 03:37:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4923F367DA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:37:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0504121F53;
+        Thu, 16 Feb 2023 08:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676536655; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g4CCLPR51y3yHN6YwtMOG4JMBdiFnLbz6AWl2eLi+1c=;
+        b=R+4cxp4ZawyHb+84pmMw2htlDCb8+OqzyWl6j1Yg3GNKtjSaFMs7o+Rhp2Gv5waH4wr1Ae
+        T+BZmT+wHSnO8RK/nIwcJbrFxh828eULul0ZWKFYVKGC6xI3W47Ryx5i19uLLrP0bkUHiM
+        3/q9uANkRJ9CkztM+aiOkKJ2yZBApw4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9D2E13484;
+        Thu, 16 Feb 2023 08:37:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id i28/Mk7r7WO5EQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 16 Feb 2023 08:37:34 +0000
+Date:   Thu, 16 Feb 2023 09:37:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, david@redhat.com,
+        rppt@kernel.org, willy@infradead.org, mgorman@techsingularity.net,
+        osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>
+Subject: Re: [PATCH 0/2] handle memoryless nodes more appropriately
+Message-ID: <Y+3rTq9lBhHnJZ19@dhcp22.suse.cz>
+References: <20230215152412.13368-1-zhengqi.arch@bytedance.com>
+ <Y+0KKnN8BU6ky6oP@dhcp22.suse.cz>
+ <3426457c-99bf-9f7c-f663-c29474d9fa73@bytedance.com>
+ <Y+3gb/blCDJnQ0Ik@dhcp22.suse.cz>
+ <767893ef-f8c2-c478-f1a0-e785bbf2da09@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <767893ef-f8c2-c478-f1a0-e785bbf2da09@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The printed reserved memory information uses the non-standard "K"
-prefix, while all other printed values use proper binary prefixes.
-Fix this by using "Ki" instead.
+On Thu 16-02-23 16:21:54, Qi Zheng wrote:
+> 
+> 
+> On 2023/2/16 15:51, Michal Hocko wrote:
+> > On Thu 16-02-23 07:11:19, Qi Zheng wrote:
+> > > 
+> > > 
+> > > On 2023/2/16 00:36, Michal Hocko wrote:
+> > > > On Wed 15-02-23 23:24:10, Qi Zheng wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > Currently, in the process of initialization or offline memory, memoryless
+> > > > > nodes will still be built into the fallback list of itself or other nodes.
+> > > > > 
+> > > > > This is not what we expected, so this patch series removes memoryless
+> > > > > nodes from the fallback list entirely.
+> > > > > 
+> > > > > Comments and suggestions are welcome.
+> > > 
+> > > Hi Michal,
+> > > 
+> > > > 
+> > > > This is a tricky area full of surprises and it is really easy to
+> > > 
+> > > Would you mind giving an example of a "new problem"?
+> > 
+> > The initialization is spread over several places and it is quite easy to
+> > introduce bugs because it is hard to review this area. Been there done
+> > that. Just look into the git log.
+> 
+> I understand your concern, but should we therefore reject all revisions
+> to this?
 
-While at it, drop the superfluous spaces inside the parentheses, to
-reduce printed line length.
+No, but either somebode is willing to invest a non-trivial amount of
+time and unify the NUMA initialization code that is spread over arch
+specific code in different places or we should just focus on addressing
+bugs.
 
-Fixes: aeb9267eb6b1df99 ("of: reserved-mem: print out reserved-mem details during boot")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-K = Kelvin
-k = kilo
-Ki = kibi
----
- drivers/of/of_reserved_mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > introduce new problems. What kind of problem/issue are you trying to
+> > > > solve/handle by these changes?
+> > > 
+> > > IIUC, I think there are two reasons:
+> > > 
+> > > Firstly, as mentioned in commit message, the memoryless node has no
+> > > memory to allocate (If it can be allocated, it may also cause the panic
+> > > I mentioned in [1]), so we should not continue to traverse it when
+> > > allocating memory at runtime, which will have a certain overhead.
+> > 
+> > Sure that is not the most optimal implementation but does this matter in
+> > practice? Can you observe any actual measurable performance penalty?
+> 
+> No, and the original reason for noticing this place was the panic I
+> mentioned in [1] (< NODE_MIN_SIZE). And if we had handled the memoryless
+> node's zonelist correctly before, we wouldn't have had that panic at
+> all.
 
-diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-index 27de0d32145939e3..948efa9f99e3bc90 100644
---- a/drivers/of/of_reserved_mem.c
-+++ b/drivers/of/of_reserved_mem.c
-@@ -290,7 +290,7 @@ void __init fdt_init_reserved_mem(void)
- 				bool reusable =
- 					(of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
- 
--				pr_info("%pa..%pa ( %lu KB ) %s %s %s\n",
-+				pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
- 					&rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
- 					nomap ? "nomap" : "map",
- 					reusable ? "reusable" : "non-reusable",
+Yes, this is another good example of how subtle the code is. Mike has
+posted a patch that simply drops the NODE_MIN_SIZE constrain and I
+believe that is the right thing to do at this stage. There is a non-zero
+risk of regression but at least we will be forced to fix the original
+problem properly or at least document is properly.
+
+> > Currently we are just sacrificing some tiny performance for a
+> > simplicity.
+> Hmm, I don't think my modification complicates the code.
+> 
+> > > Secondly, from the perspective of semantic correctness, why do we remove
+> > > the memoryless node from the fallback list of other normal nodes
+> > > (N_MEMORY), but not from its own fallback list (PATCH[1/2])? Why should
+> > > an upcoming memoryless node continue exist in the fallback list of
+> > > itself and other normal nodes (PATCH[2/2])?
+> > 
+> > I am not sure I follow. What is the semantic correctness issue?
+> 
+> Sorry for the ambiguity, what I meant was that memoryless nodes should
+> never have been built into any fallback list, not just for performance
+> optimizations.
+
+Well, I am not 100% sure I agree with you here. The performance would be
+the only reason why to drop those nodes from zonelists. Other than that
+zonelists are a useful abstraction for the node distance ordering. Even
+if those nodes do not have any memory at all in principle there is no
+big difference from depleted nodes.
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
