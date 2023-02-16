@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D63169896D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04B4698971
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 01:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjBPAoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 19:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S229578AbjBPAq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 19:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBPAoI (ORCPT
+        with ESMTP id S229493AbjBPAq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 19:44:08 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2041.outbound.protection.outlook.com [40.107.95.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3C42DEF;
-        Wed, 15 Feb 2023 16:44:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFVkptLrgmR3vMzyetOYCmOQcJSMh/AGaDJJMi01g7tB8YpFcMQHez9aGDpfbFuo5T44/bLPMv5V8UG7EXJZnwRZ/FnsbeMHZYd6iLa2FQUK5NhCIcAWR8mwn+3Z7sU+w/3zo29/00TFo66/p6fTu/OrOTL3Ygkg8ILOMotEP7MUff6XdzxwmRJbH4wLfA3mjXbDyPpiMukoHW0ilrHd6sMsUlUzeCP9XIStTPAWGgXyNy+ig+5EctkoxRMALKoc6R4cLmVjrdFYbYGbKaSyODFs2hqJmPNqlH4E9bOhaIpiHGPI3HBl3iZaRkSA23PRsxP7yf0ccGAtAVagLu/NsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b1WiwM08iaH6dS3vN/wNueHYTM1QC3KCjdTzEEAZPAY=;
- b=Bb/JU7VnqiAdTByvWTj1FKrVqIteYPpcGJvAt0vm/L4qVPwGmhZ77Ef0wQHgS88OBS+jd3ixoc6uQnkHbD+bxvRuuz898nS6geyl4Hf39rpDNpguQJ3cdmMxWotD3tCESNVirlTi+d1wG4006hwxNv3AQAY93usUmjLpWx1knm2vomxPUrZzuoxhdJF7h9kjwTJxSqkmYLcAGvk/WGfqfDoCD/NWsd2uKJz9ln5JnmWhpzzvsgEItAxuyK6qShIl7/aPe42PmqgTWJNDUbVtEqNYL81dcZ7ZeAECk7in0n21o1VOWUMJ07QbZqQ+jkMpFtUBdD8QMQViw6CAmU82/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b1WiwM08iaH6dS3vN/wNueHYTM1QC3KCjdTzEEAZPAY=;
- b=d0qPxm3EGETL6hbQbVm4OjE4a6VRg/lbZv/z02TIXQfVN/DlBZRFKNlgyEduYUCD8sL6asPidm9EekbBg/Zprodf6hE/xNcrHjVIW1kfJ8FO/30vL8z4UHS8H98646B/3O1OkUwGhH3apGPJWCyto9isL2WTjHiVAkWBcbHLLuLFX+KHjYMBfj6pEfMH3ihrwElRprGcvxVW6BQjAJs99r9zv6qmPHNsnIBZbrK8g3331CJI5oGF1s671sdP09gzJwR37Ok+XeNGQNO6tk0zBkno1sirO6e+35MFnCQd+JcctrpsGIOIjcWadt9F3qbdoK6J1qQDhHqrw7uXHcWAIQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN2PR12MB4470.namprd12.prod.outlook.com (2603:10b6:208:260::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
- 2023 00:44:04 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
- 00:44:04 +0000
-Date:   Wed, 15 Feb 2023 20:44:02 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Liu, Aaron" <Aaron.Liu@amd.com>, Joerg Roedel <jroedel@suse.de>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "Hegde, Vasant" <Vasant.Hegde@amd.com>,
-        amd-gfx@lists.freedesktop.org, LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: [regression, bisected, =?utf-8?Q?pci?=
- =?utf-8?Q?=2Fiommu=5D_Bug=C2=A0216865_-_Black_screen_whe?= =?utf-8?Q?n?=
- amdgpu started during 6.2-rc1 boot with AMD IOMMU enabled
-Message-ID: <Y+18UuVTKIshk8EF@nvidia.com>
-References: <20230215153913.GA3189407@bhelgaas>
- <e3b866eb-830c-9037-39c7-978714aaf4d2@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3b866eb-830c-9037-39c7-978714aaf4d2@amd.com>
-X-ClientProxiedBy: MN2PR15CA0016.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::29) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 15 Feb 2023 19:46:57 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0FA40C3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:46:56 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id d40so677271eda.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 16:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fuxSle/7VvyyEfqb3L8hKgbEW79fzi/M20PQmmhhCGI=;
+        b=BczsKBMIsMXi+vcypGU+kFU34+YcUgAav5jjaYwXx+TYEtH7pqgM6jcvxJlSR9OehH
+         eMLAinNikuUFoM+n5Mcyh2jY1+gO3UF3rsv2zA4qZmmPKnKPdSkRzFTAKfahGkfqjHbk
+         GjcXAVQe9KDvS56Mz7yF0CqSzh2nj2HKy9HhML1qlVfiMjGuzo9hNCrjvACTFt2KicOL
+         qQSESD8QfFoovHxtS7jUpGczBhpiIMUAXnTQ1BK6OpvBa55owheH0ima1Ad2LrLbSAYc
+         hzkAGxIKboE/wKbV4QvCKIPkAkSD7CPSlQFWAQuXXlRgZeaqWPKcZ/Ob8KrEy2z8CxIe
+         JZSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fuxSle/7VvyyEfqb3L8hKgbEW79fzi/M20PQmmhhCGI=;
+        b=eS9hsUt6YfCjCivKDZ4Btt5pVo9uSBDq2ZnI6UbfntQ/zJzp4hgMdCZC7ErUy1EtaL
+         BSilQu3oYBLV+N7jLmDG4HpybEnNqs1TRBFnTs9vXhi/QWupEOpWf1PzxZ+HULd+Ambj
+         +YeWj2qNAmUb8eomQoFfa9iH0lKTZSfMjZiTEExbWgTeK2WdeCjKtLVkF4yE5VVqqN8R
+         jZUk/sUPNJsG3YcF+sjPz9YGaAYCKmmG5bsJM0jzEqQBFyMT8IVpjER+Zk8OQIzmHaW5
+         qLAacemy4G8IvNIAdmtxav5hoiM5EsmLar4ZpXNvx1iLLSPHMbcKXLjzfH8zKpty+mHr
+         ra/Q==
+X-Gm-Message-State: AO0yUKWZLBWacDUbpeiLMPFdXJArpDaZ9jKXjQk/2qJA3mu4SoGdmrrS
+        dLZYsD503IMIvwCZfHJ7uI+CMmPFRlls8g==
+X-Google-Smtp-Source: AK7set/ZvRzMA0RVZ0aGLObzJGvgbUbY8uFJaTY484R7V8/RtvEDwGlXhatBMFhbvZdwtb898I22WQ==
+X-Received: by 2002:a05:6402:e94:b0:4aa:dedd:41e0 with SMTP id h20-20020a0564020e9400b004aadedd41e0mr510729eda.8.1676508414823;
+        Wed, 15 Feb 2023 16:46:54 -0800 (PST)
+Received: from smurf (80.71.142.58.ipv4.parknet.dk. [80.71.142.58])
+        by smtp.gmail.com with ESMTPSA id r15-20020a50aacf000000b004acbe846b8fsm119459edc.34.2023.02.15.16.46.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 16:46:54 -0800 (PST)
+Date:   Thu, 16 Feb 2023 01:46:30 +0100 (CET)
+From:   Jesper Juhl <jesperjuhl76@gmail.com>
+To:     linux-kernel@vger.kernel.org
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        speakup@linux-speakup.org
+Subject: [Patch] [drivers/accessibility] Remove unneeded version.h
+Message-ID: <ce52283d-7fbe-cb9e-de8d-069fcb0af916@gmail.com>
+User-Agent: Alpine 2.26 (LNX 649 2022-06-02)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4470:EE_
-X-MS-Office365-Filtering-Correlation-Id: 323a7478-d51e-4ef8-e55a-08db0fb6e734
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J5lxuPqWp3/Hht4qsgHWsfHTNhjT6Aac7/DqubMwuEl8rfGUU+R5KOCz5l37PecsBAH7pAX9U54/FO7cuTIQ22gtVWb1330Ctrukrp3/bNoSoyVUe/+9oFlXMWDWg+s1evZWyerKZjOdFFKda926hmU2Hz7lEgkoD9BD8XSd5ZEAE5061EseeUdwleG1afq2F3PBasXVPMUdjnbrqOueZ1PwQf665D/qDAVx5giCvEwDTAp0oVlboSXEM6jz07+J2yaoyJYFwh0jA5YObfeGxmxs+buVH+tdB6a47/htCy3skpkQaqlSsv9D2KiDcopzybyyb7v+g+sjuxsEonMG9iPbXsvoaJtlhiF4aDaqyVAGmSUcUdIdDBWwpcLpqFBxuf3llCmeMuv+oeZDr8S078R/HBILxdgVrM6ydQkzU8HZW0zDG1BdL2heqqAMQxkM6vsc7eZRK7diYQC+RqWDCsIev40SB2qL3S5W4sqVpjDGxyTlLuExP3EbHvpQqixnLEjLFeRW29yl3+st4cmb3nCEdiEJL12V6BuUTFjvISw1ybIYGd/yhEY9mjrPyJWrsvFo4e9akWHvOlHULfHcRITNIuKxSQT+Ynod2mjuBnCB5+2eOZtjeo7xdPN7xfGFqAOZxJoIYuxS7GNmVYE2az6cY82U3jyFFzjs6Tx2KnNjUCs1+e4ELhkki2yp7zb2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(366004)(376002)(346002)(451199018)(86362001)(38100700002)(36756003)(6486002)(478600001)(6512007)(6506007)(186003)(2616005)(26005)(41300700001)(66556008)(2906002)(66946007)(6916009)(4326008)(66476007)(5660300002)(7416002)(8936002)(54906003)(316002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eGNQIPMdQ4xrC9eMhoRn4fQTXVQs2scvff20VfVeX++6CV9wFe/fRRar9IB5?=
- =?us-ascii?Q?UcDTBCk6M85/BxRqiBSil96vRNsYXbdC6eZ9Z6RbGQ5zxjIjbBDguur0rByN?=
- =?us-ascii?Q?6BukQU5b4tlty4iEMNIgGOk7hXj42C6BdW/gdEJSGQ0BiN7n05ZO/FfD7kwv?=
- =?us-ascii?Q?9UMyfl3oONDAs6p/34y2CMeMJIbJ95f4MFLajxQDgUH2+3uxlg/TKspd4UuR?=
- =?us-ascii?Q?TRuHJz856Qqf8A5T+MNAFFtSaNar0JnJI8q1I5TgMkAzYLTih/F2raV/Tz2k?=
- =?us-ascii?Q?nbYjg8eZkc+2cpCSZZKHj3SBvPzrDC5Wypxjg2y+3soXlGJ9q9y/Su+bk30G?=
- =?us-ascii?Q?FgSCk9bQolQR3gb0PoOonRwpao0uJA3A8E3WOIxgR3uJLhA6G3c5xMKWTm7X?=
- =?us-ascii?Q?CkEC2/7EtbL1dUjVqRrVVINNiCF0PcUnYtWeat8Ju3V+50XR0CTqTdpCwVQA?=
- =?us-ascii?Q?I/fBT95NVNM+A70Szqra5PiLGw6B2zYjIafjMpe2uLrP/QN4a7uaV3SYHNPo?=
- =?us-ascii?Q?PEzqpQiMjQKDhBofVtSEuKvSw0nxMYOtg3v6FlGW1GjiIyyYXxHRC1E6xwIh?=
- =?us-ascii?Q?9p+kpa+QSmreGRBeemQTuvJ3eEjf/5NfbJfDrA4eA/OqmpnY+0y0OhbVFddX?=
- =?us-ascii?Q?nlF4xBsvjGO0OWpNFM8Nd2jCZ1qjavYF3a/xzSWKVbrgleNnd3FqbdU4Ygl4?=
- =?us-ascii?Q?w6eHIQsXi0M09UTPtQ4lU/X9UdfTV35Q0WeVqDWKvVwDX+e6ywksNzgWbOFJ?=
- =?us-ascii?Q?K1Tm+kOLlS68hgG491htgE+nAoA49QnZNsvAxGxg7WjSSz2eGfQKIhchcf6N?=
- =?us-ascii?Q?JYxtjYdPbkVYDVH6RXKrleIHPhNcY+uiHrNQ+xW/Lw1eGygIxDQIwXbTtBXM?=
- =?us-ascii?Q?97hINWxxSl6VS6InTruyvegTX6eU7Z1dPhMVItHGF7PYUuzltzI6wDzM+2z6?=
- =?us-ascii?Q?yofzumzrZNtasaSCE//0XCI2UI/PAx0FK0GVli1rx1MViSXoj1Mz1GDLhQdi?=
- =?us-ascii?Q?KixIK/nTTHoUBHV0EouDFWQ+Jer2F034vEfaBm0+8Ml45eCBOynt1G7ptXFS?=
- =?us-ascii?Q?ihCEgcP42ZqBDObFpOgl12WqRcED579xgzxx88SelB7BLfvKf/OsJFCuhX7p?=
- =?us-ascii?Q?Oa54NeEDQn6GJTkSxyRrb/M2ai9PCGWZdiNxQSZ/y4oY19M7n2FKtJLAYECE?=
- =?us-ascii?Q?oR5AZNLQR6Hs2KYAg6JKNF002h7AIG8PDVFm2U7FZJKxgWJaJOK2ZS0bTRpA?=
- =?us-ascii?Q?rjsL3Zt/o+t6WJg4zonn/Tsi+ffrz+L8X3BHYfULdVnChDTYKagJmmzD6xAV?=
- =?us-ascii?Q?+hfS6+Dr+yMuhU4hO0d8sQ2xi80wn/tP3uoAzrExHh9L8jXinz3CZG88oqaB?=
- =?us-ascii?Q?MazEx03AcvA1G+p+0OCX+uysT904hNuPgiL32DhBZE9Zyl93fpz4Sq7M7EeL?=
- =?us-ascii?Q?/CbEyMkw6bzSKIbME8N/RU9L3Wosn1H7f6T7vfgGLx+AijenhBOy1+Q8Ezca?=
- =?us-ascii?Q?2Ebrtpz6BYvv95/oR0Wg+OAMLzMJ+NYDEbOXsPMps1gE4TXLyjwnulaSZiwG?=
- =?us-ascii?Q?TXI9jsXHwsPbYr+87IWq7KO2e9hyaJmJkQ4goMr3?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 323a7478-d51e-4ef8-e55a-08db0fb6e734
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 00:44:04.2087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mwp6GwrEFp/UGyIjsZAddWnILK412xjX455mU5IilZyB0hEsJ132zaQJGsA9I7fY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4470
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 07:35:45PM -0500, Felix Kuehling wrote:
-> 
-> If I understand this correctly, the HW or the BIOS is doing something wrong
-> about reporting ACS. I don't know what the GPU driver can do other than add
-> some quirk to stop using AMD IOMMUv2 on this HW/BIOS.
+From bf38cc9d1c32d3debdc846d30ae6a0523c5a64d3 Mon Sep 17 00:00:00 2001
+From: Jesper Juhl <jesperjuhl76@gmail.com>
+Date: Mon, 13 Feb 2023 02:44:01 +0100
+Subject: [PATCH 01/12] [drivers/accessibility] Remove unneeded version.h
+  includes found by 'make versioncheck'
 
-How about this:
+Signed-off-by: Jesper Juhl <jesperjuhl76@gmail.com>
+---
+  drivers/accessibility/speakup/genmap.c      | 1 -
+  drivers/accessibility/speakup/makemapdata.c | 1 -
+  2 files changed, 2 deletions(-)
 
-diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
-index 864e4ffb6aa94e..cc027ce9a6e86f 100644
---- a/drivers/iommu/amd/iommu_v2.c
-+++ b/drivers/iommu/amd/iommu_v2.c
-@@ -732,6 +732,7 @@ EXPORT_SYMBOL(amd_iommu_unbind_pasid);
- 
- int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
- {
-+	struct iommu_dev_data *dev_data = dev_iommu_priv_get(&pdev->dev);
- 	struct device_state *dev_state;
- 	struct iommu_group *group;
- 	unsigned long flags;
-@@ -740,6 +741,9 @@ int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
- 
- 	might_sleep();
- 
-+	if (!dev_data->ats.enabled)
-+		return -EINVAL;
-+
- 	/*
- 	 * When memory encryption is active the device is likely not in a
- 	 * direct-mapped domain. Forbid using IOMMUv2 functionality for now.
+diff --git a/drivers/accessibility/speakup/genmap.c b/drivers/accessibility/speakup/genmap.c
+index 0125000e00d9..0882bab10fb8 100644
+--- a/drivers/accessibility/speakup/genmap.c
++++ b/drivers/accessibility/speakup/genmap.c
+@@ -10,7 +10,6 @@
+  #include <stdio.h>
+  #include <libgen.h>
+  #include <string.h>
+-#include <linux/version.h>
+  #include <ctype.h>
+  #include "utils.h"
+
+diff --git a/drivers/accessibility/speakup/makemapdata.c b/drivers/accessibility/speakup/makemapdata.c
+index d7d41bb9b05f..55e4ef8a93dc 100644
+--- a/drivers/accessibility/speakup/makemapdata.c
++++ b/drivers/accessibility/speakup/makemapdata.c
+@@ -10,7 +10,6 @@
+  #include <stdio.h>
+  #include <libgen.h>
+  #include <string.h>
+-#include <linux/version.h>
+  #include <ctype.h>
+  #include "utils.h"
+
+-- 
+2.39.2
+
