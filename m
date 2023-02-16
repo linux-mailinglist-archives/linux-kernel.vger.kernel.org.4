@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A0F6997A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328DA6997A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjBPOka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S230134AbjBPOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjBPOkY (ORCPT
+        with ESMTP id S230110AbjBPOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:40:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67522311C3;
-        Thu, 16 Feb 2023 06:40:23 -0800 (PST)
+        Thu, 16 Feb 2023 09:41:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98BA3B870
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:41:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0381060EC0;
-        Thu, 16 Feb 2023 14:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B152C433EF;
-        Thu, 16 Feb 2023 14:40:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D6260ABC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30C0C433D2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676558422;
-        bh=HOpcvbihO1wM9wl0npQyoYRB+fMquamFRbYEfFcVv+Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lbbDU0u+8cphkIEh9l2u4kET+FuefVPHSlioXqWcClJk0opi2PWU6hQos03XLgZ3g
-         69p6En+FTP0lGNfYtPFrWpntYaqX25xOb6X5nqomgvJHNKeqr8d9mkG7C5SD02LlIL
-         4r/TPZw/uC/SyKmeDrkP3om+43bu8tf0+8nPtQfvrXinM4/Ye5EFXZBZQygiVkRaFj
-         jwYyBu//4R+MMwxYSTpBgdjG9tJLBSBRgdlefZYt5+Mq7QGehGvdaM6B9awoaEzt+d
-         2AqavL1joTLYDPTPgySTC2hQG6zHSFqFrFRE8KL71UOVM2EW3ArbeXW3GKnMkmPzsx
-         N+DSLDy2Vnj5g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B9D1E21EC4;
-        Thu, 16 Feb 2023 14:40:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1676558468;
+        bh=3T3iubz/OzIX0beQkVOfl0dMIVw8Iyg1LerT7YWobYA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bqQdIYUKwEG5ap8m+zzzPrf5h3r6C+0jf6sHYHwV190X0QtgalUXbdIi1Cy0aqc2N
+         neV0HY0Zv5cIdOBDZXqVduO1QnfxoD3r/FgREYaZGYm91iUgBL++FTFFb1JPbb/0+S
+         ypLbVoHZO8OwCCWzXp/vMD5UXLYPdjgKgdGAJjRALO+rMNbj7jmp0YVhUGCZz0HsFI
+         /vnyh+V5LMoWqjqaQz+jk5TTtaDY2AEov4Q9fxoY7zVagneZ78U36boJMRgq1yoREB
+         YLhiKa8SacNh2lQF3KRcTxx/BFfiSwxdvm71QEnDz1fAzg3EsezqCKchwOL7G6QsrB
+         y2JQXCplly4hA==
+Received: by mail-yb1-f176.google.com with SMTP id b1so2405350ybn.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:41:07 -0800 (PST)
+X-Gm-Message-State: AO0yUKWIMo1mnenIjd/0s6DE33g14KV+Jj0BKJqZAm1qjFugdM+3nIci
+        j0B5w9pqtEBFmJUBxqINFp/fRkpNrWx7m7LWeTs=
+X-Google-Smtp-Source: AK7set9fg7j+rXsB4sX4MXRApXhhmd2yEefhAqabXERggxwLpuEIZ/pW61+utdeRTgwKZDUiZuJjs+WKbjmhss3iYCE=
+X-Received: by 2002:a25:e906:0:b0:91f:507f:f261 with SMTP id
+ n6-20020a25e906000000b0091f507ff261mr618556ybd.463.1676558467046; Thu, 16 Feb
+ 2023 06:41:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next 0/3] seg6: add PSP flavor support for SRv6 End behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167655842216.23013.1967734576952648169.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Feb 2023 14:40:22 +0000
-References: <20230215134659.7613-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20230215134659.7613-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230208155450.1941608-1-trix@redhat.com> <20230213071241.GA2799422@linux.intel.com>
+In-Reply-To: <20230213071241.GA2799422@linux.intel.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Thu, 16 Feb 2023 16:40:40 +0200
+X-Gmail-Original-Message-ID: <CAFCwf132HuNbXjQfLe9QjotE6FnwOxUKi99bytp0BbL5GyL0-g@mail.gmail.com>
+Message-ID: <CAFCwf132HuNbXjQfLe9QjotE6FnwOxUKi99bytp0BbL5GyL0-g@mail.gmail.com>
+Subject: Re: [PATCH] habanalabs: change unused extern decl of hdev to forward
+ decl of hl_device
+To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc:     Tom Rix <trix@redhat.com>, nathan@kernel.org,
+        ndesaulniers@google.com, kelbaz@habana.ai, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +64,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed, 15 Feb 2023 14:46:56 +0100 you wrote:
-> Segment Routing for IPv6 (SRv6 in short) [1] is the instantiation of the
-> Segment Routing (SR) [2] architecture on the IPv6 dataplane.
-> In SRv6, the segment identifiers (SID) are IPv6 addresses and the segment list
-> (SID List) is carried in the Segment Routing Header (SRH). A segment may be
-> bound to a specific packet processing operation called "behavior". The RFC8986
-> [3] defines and standardizes the most common/relevant behaviors for network
-> operators, e.g., End, End.X and End.T and so on.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/3] seg6: factor out End lookup nexthop processing to a dedicated function
-    https://git.kernel.org/netdev/net-next/c/525c65ff5696
-  - [net-next,2/3] seg6: add PSP flavor support for SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/bdf3c0b9c10b
-  - [net-next,3/3] selftests: seg6: add selftest for PSP flavor in SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/5198cb408fcf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Mon, Feb 13, 2023 at 9:12 AM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Wed, Feb 08, 2023 at 07:54:50AM -0800, Tom Rix wrote:
+> > Building with clang W=3D2 has several similar warnings
+> > drivers/accel/habanalabs/common/decoder.c:46:51: error: declaration sha=
+dows a variable in the global scope [-Werror,-Wshadow]
+> > static void dec_error_intr_work(struct hl_device *hdev, u32 base_addr, =
+u32 core_id)
+> >                                                   ^
+> > drivers/accel/habanalabs/common/security.h:13:26: note: previous declar=
+ation is here
+> > extern struct hl_device *hdev;
+> >                          ^
+> >
+> > There is no global definition of hdev, so the extern is not needed.
+> > Searched with
+> > grep -r '^struct' . | grep hl_dev
+> >
+> > Change to an forward decl to resolve these issues
+> > drivers/accel/habanalabs/common/mmu/../security.h:133:40: error: =E2=80=
+=98struct hl_device=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration [-Werror]
+> >   133 |         bool (*skip_block_hook)(struct hl_device *hdev,
+> >       |                                        ^~~~~~~~~
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+>
+> > ---
+> >  drivers/accel/habanalabs/common/security.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/accel/habanalabs/common/security.h b/drivers/accel=
+/habanalabs/common/security.h
+> > index 234b4a6ed8bc..d7a3b3e82ea4 100644
+> > --- a/drivers/accel/habanalabs/common/security.h
+> > +++ b/drivers/accel/habanalabs/common/security.h
+> > @@ -10,7 +10,7 @@
+> >
+> >  #include <linux/io-64-nonatomic-lo-hi.h>
+> >
+> > -extern struct hl_device *hdev;
+> > +struct hl_device;
+> >
+> >  /* special blocks */
+> >  #define HL_MAX_NUM_OF_GLBL_ERR_CAUSE         10
+> > --
+> > 2.26.3
+> >
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Thanks, applied to -next.
+Oded
