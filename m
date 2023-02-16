@@ -2,250 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CD9698B72
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 05:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3232698B77
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 05:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjBPEn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 23:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        id S229490AbjBPEtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 23:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBPEn5 (ORCPT
+        with ESMTP id S229454AbjBPEtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 23:43:57 -0500
+        Wed, 15 Feb 2023 23:49:50 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAA52E0EB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 20:43:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1477F30EA6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 20:49:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676522589;
+        s=mimecast20190719; t=1676522942;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3DDHO8i0zvrnMlu2LxipZBzY2ZSSiL5SyYkVWHiaTdo=;
-        b=VTkjZLv4aDGdghk9qh2B1loERMLXGSuuiNwNJDRNq6xYYJxjU+ng44yk/8UncSWzcvYAeU
-        cKzDyTgnLPXOQHRvMKJnUBGf7AOPalBqKyKj610Eg8YUd3ddz12iEH4TegLdul71+F7ppr
-        XkEi05UPVUDKpER5V8bTfDl7+dBMYVs=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NlDKmPgYGuj2vp+iCLyrQRKv19uw3gvLOjVZhG1ou+Q=;
+        b=PNVKDaTW8yNG0XsC0np7/4yDUd/JWrwvcCMVk3QbAoYHbYVgq5RExsornDBqDsNGGYjnpX
+        /l7jbaL7roVwHkgxUatT80ajFI2VtS6hMH/cK+5R+ZbxfP0hYIJ4RQFWRtsxA6+Xo7eY1D
+        H0ktdsD8BAK3N5ElbJ5q48E+jZiJur4=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-404-sVIXLAa3MDmPa271Tl_CCg-1; Wed, 15 Feb 2023 23:43:08 -0500
-X-MC-Unique: sVIXLAa3MDmPa271Tl_CCg-1
-Received: by mail-pj1-f69.google.com with SMTP id pv3-20020a17090b3c8300b002342e23955cso428013pjb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 20:43:08 -0800 (PST)
+ us-mta-88-71hlEWRxP8iyB14xaKlf0Q-1; Wed, 15 Feb 2023 23:49:00 -0500
+X-MC-Unique: 71hlEWRxP8iyB14xaKlf0Q-1
+Received: by mail-oo1-f72.google.com with SMTP id s20-20020a4adb94000000b0051f988b6656so176561oou.14
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 20:49:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3DDHO8i0zvrnMlu2LxipZBzY2ZSSiL5SyYkVWHiaTdo=;
-        b=yT6sGoJK5aheFX+lddImk5XnmQyMPWMteTcaz0poLi0YHaj02ZrEHerUkAyxXL+RFn
-         vimgZOwyEsX/72gVKwRtkL0o/aMCcy+eaXsBtQZ+rIHbgy224ErkZCGjzbO8JgeKpJbC
-         0hwokcvHaV2rc3UZVBhhmpiabvucJMZP1akRrgcBqOhhrG0cNAgu0KOpBINSQ+92VGWz
-         U5JrCrtNDOOXuiJUrCOCE0yNkM9QWQVEuYUSuLeHCvO++2lf2Vl+v/GcVg+vm/Y/NVVc
-         MCgVY/iGmvuD1tulXYB/fsx6CF5108fxHApie5gXrSOmNjsxebWGKBq1Px+uuRvVOvZ4
-         vcnA==
-X-Gm-Message-State: AO0yUKVbCNh4aaiT1RAviVvARKf4aEDzl/62GIwf6hfrDA94wcDJ8uuG
-        ze2oyU+O1220hH3CXNZjC7uoH19q7Q6bfEIiaLUjLeuJ0YX0BFSnYUdTJX3LsClsnjK3crj3GOX
-        nS5nBoAfwrR2UmC7LkaGU7zrY
-X-Received: by 2002:a17:90b:4c04:b0:234:bf0:86bc with SMTP id na4-20020a17090b4c0400b002340bf086bcmr5369920pjb.31.1676522587176;
-        Wed, 15 Feb 2023 20:43:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set/qQ5O/TZ0PJALyrxA2Lethp9rxzMGA6y2yAhomtgRtTLlXGq4nNUzsUdYKVT2TS5pjlJl+Xw==
-X-Received: by 2002:a17:90b:4c04:b0:234:bf0:86bc with SMTP id na4-20020a17090b4c0400b002340bf086bcmr5369907pjb.31.1676522586789;
-        Wed, 15 Feb 2023 20:43:06 -0800 (PST)
-Received: from [10.72.12.253] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id l2-20020a17090aec0200b00233b5d6b4b5sm2306741pjy.16.2023.02.15.20.43.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 20:43:06 -0800 (PST)
-Message-ID: <3bb88db8-1283-f16d-d16a-5d3fb958b584@redhat.com>
-Date:   Thu, 16 Feb 2023 12:43:00 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NlDKmPgYGuj2vp+iCLyrQRKv19uw3gvLOjVZhG1ou+Q=;
+        b=tLKtEaQ8KBBC+PpZCeIPXLMGB0rV6yBr+8mxvQXx2LGksLnlNBJkOfbAfFQ/+iUd41
+         6xv742TpHdHR93gnCuhGLAyEG4ETodE44cZzvfM9RlqFzccAVvAOTgDFcr7mJK2zMNyV
+         tnzTH7YYrOzDdbLyYDQeGQv7v31JC6htfA5/VngzPz8LZZWGjghyyanMb8QsKT7KmvFd
+         3Hi5ly6JbNKF/ZQbZdstrLp5gCHWcirbAeiKZiAt6Ma6ysfnuA2/5tsS0ijclqXokmgG
+         n39nSRpY0OHDe0yAyZYH9u2c8NV8DpQDvLYA4Sywc77+Fesq8bO+N8N9X4mnKgdYjq7G
+         knKw==
+X-Gm-Message-State: AO0yUKWvurU0msIqpKw6E126jSZUvGkK4uOUNaC/QOihY+j45VgNY6yJ
+        9SiVPgDTQipO6E0oHYPhqQihbwK8l23WYlnXpPqN+/mp2Y7p6oN3GJN6pSVfcjLF6OzxOHNoQle
+        oMqXRQPlMB2lq+JjBae/z4w4kQ5DYVSRpUg+bp4zf
+X-Received: by 2002:a05:6808:3186:b0:37d:5d77:e444 with SMTP id cd6-20020a056808318600b0037d5d77e444mr59820oib.35.1676522940042;
+        Wed, 15 Feb 2023 20:49:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set/penI+mI8fHaWiIdLRXLv5ATb6NdjbtjsVWvqsvhX3hGUAZ5SRLsbEAlIOAgsLajHHCClQY8yHruiDl9lWezI=
+X-Received: by 2002:a05:6808:3186:b0:37d:5d77:e444 with SMTP id
+ cd6-20020a056808318600b0037d5d77e444mr59814oib.35.1676522939846; Wed, 15 Feb
+ 2023 20:48:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-Content-Language: en-US
-To:     Nanyong Sun <sunnanyong@huawei.com>, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, mst@redhat.com
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, wangrong68@huawei.com
-References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+References: <1676424640-11673-1-git-send-email-si-wei.liu@oracle.com>
+In-Reply-To: <1676424640-11673-1-git-send-email-si-wei.liu@oracle.com>
 From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20230207120843.1580403-1-sunnanyong@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 16 Feb 2023 12:48:48 +0800
+Message-ID: <CACGkMEuckWowpA9q+ez0-U4FicamQ+5zXfumtQMA25jXpvL7uw@mail.gmail.com>
+Subject: Re: [PATCH v3] vdpa/mlx5: should not activate virtq object when suspended
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     mst@redhat.com, elic@nvidia.com, parav@nvidia.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/2/7 20:08, Nanyong Sun 写道:
-> From: Rong Wang <wangrong68@huawei.com>
+On Wed, Feb 15, 2023 at 9:31 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
 >
-> Once enable iommu domain for one device, the MSI
-> translation tables have to be there for software-managed MSI.
-> Otherwise, platform with software-managed MSI without an
-> irq bypass function, can not get a correct memory write event
-> from pcie, will not get irqs.
-> The solution is to obtain the MSI phy base address from
-> iommu reserved region, and set it to iommu MSI cookie,
-> then translation tables will be created while request irq.
+> Otherwise the virtqueue object to instate could point to invalid address
+> that was unmapped from the MTT:
 >
-> Change log
-> ----------
+>   mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
+>   CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
+>   bad parameter(0x3), syndrome (0x5fa1c), err(-22)
 >
-> v1->v2:
-> - add resv iotlb to avoid overlap mapping.
+> Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
+> Cc: Eli Cohen <elic@nvidia.com>
+> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+> Reviewed-by: Eli Cohen <elic@nvidia.com>
 >
-> Signed-off-by: Rong Wang <wangrong68@huawei.com>
-> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
 > ---
->   drivers/iommu/iommu.c |  1 +
->   drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
->   2 files changed, 57 insertions(+), 3 deletions(-)
+> v3: move suspended to struct mlx5_vdpa_dev
+> v2: removed the change for improving warning message
+> ---
+>  drivers/vdpa/mlx5/core/mlx5_vdpa.h | 1 +
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 6 +++++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 5f6a85aea501..af9c064ad8b2 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
->   	if (ops->get_resv_regions)
->   		ops->get_resv_regions(dev, list);
->   }
-> +EXPORT_SYMBOL(iommu_get_resv_regions);
->   
->   /**
->    * iommu_put_resv_regions - release resered regions
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index ec32f785dfde..a58979da8acd 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -49,6 +49,7 @@ struct vhost_vdpa {
->   	struct completion completion;
->   	struct vdpa_device *vdpa;
->   	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
-> +	struct vhost_iotlb resv_iotlb;
+> diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> index 058fbe2..25fc412 100644
+> --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> @@ -96,6 +96,7 @@ struct mlx5_vdpa_dev {
+>         struct mlx5_control_vq cvq;
+>         struct workqueue_struct *wq;
+>         unsigned int group2asid[MLX5_VDPA_NUMVQ_GROUPS];
+> +       bool suspended;
+>  };
+>
+>  int mlx5_vdpa_alloc_pd(struct mlx5_vdpa_dev *dev, u32 *pdn, u16 uid);
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 3a6dbbc6..daac3ab 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2411,7 +2411,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+>         if (err)
+>                 goto err_mr;
+>
+> -       if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> +       if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || mvdev->suspended)
 
+One more thought,
 
-Nit: it might be better to rename this as resv_regions.
-
-
->   	struct device dev;
->   	struct cdev cdev;
->   	atomic_t opened;
-> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
->   
->   	v->in_batch = 0;
->   
-> +	vhost_iotlb_reset(&v->resv_iotlb);
-> +
->   	return vdpa_reset(vdpa);
->   }
->   
-> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
->   	    msg->iova + msg->size - 1 > v->range.last)
->   		return -EINVAL;
->   
-> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
-> +					msg->iova + msg->size - 1))
-> +		return -EINVAL;
-> +
->   	if (vhost_iotlb_itree_first(iotlb, msg->iova,
->   				    msg->iova + msg->size - 1))
->   		return -EEXIST;
-> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
->   	return vhost_chr_write_iter(dev, from);
->   }
->   
-> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
-> +	struct vhost_iotlb *resv_iotlb)
-> +{
-> +	struct list_head dev_resv_regions;
-> +	phys_addr_t resv_msi_base = 0;
-> +	struct iommu_resv_region *region;
-> +	int ret = 0;
-> +	bool with_sw_msi = false;
-> +	bool with_hw_msi = false;
-> +
-> +	INIT_LIST_HEAD(&dev_resv_regions);
-> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
-> +
-> +	list_for_each_entry(region, &dev_resv_regions, list) {
-> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
-> +				region->start + region->length - 1,
-> +				0, 0, NULL);
-> +		if (ret) {
-> +			vhost_iotlb_reset(resv_iotlb);
-> +			break;
-> +		}
-> +
-> +		if (region->type == IOMMU_RESV_MSI)
-> +			with_hw_msi = true;
-> +
-> +		if (region->type == IOMMU_RESV_SW_MSI) {
-> +			resv_msi_base = region->start;
-> +			with_sw_msi = true;
-> +		}
-> +	}
-> +
-> +	if (!ret && !with_hw_msi && with_sw_msi)
-> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
-> +
-> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
-> +
-> +	return ret;
-> +}
-
-
-As discussed in v1, I still prefer to factor out the common logic and 
-move them to iommu.c. It helps to simplify the future bug fixing and 
-enhancement.
-
-
-> +
->   static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->   {
->   	struct vdpa_device *vdpa = v->vdpa;
-> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->   
->   	ret = iommu_attach_device(v->domain, dma_dev);
->   	if (ret)
-> -		goto err_attach;
-> +		goto err_alloc_domain;
->   
-> -	return 0;
-> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
-> +	if (ret)
-> +		goto err_attach_device;
->   
-> -err_attach:
-> +	return 0;
-> +err_attach_device:
-> +	iommu_detach_device(v->domain, dma_dev);
-> +err_alloc_domain:
->   	iommu_domain_free(v->domain);
->   	return ret;
->   }
-> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->   		goto err;
->   	}
->   
-> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
-> +
->   	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
->   	if (r)
->   		goto err;
-
-
-We need clean resv_iotlb during release().
-
-Other looks good.
+Does this mean set_map() is forbidden during suspending? I'm not sure
+this is correct or at least we need restrict in in the vDPA core.
 
 Thanks
+
+>                 goto err_mr;
+>
+>         restore_channels_info(ndev);
+> @@ -2579,6 +2579,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+>         clear_vqs_ready(ndev);
+>         mlx5_vdpa_destroy_mr(&ndev->mvdev);
+>         ndev->mvdev.status = 0;
+> +       ndev->mvdev.suspended = false;
+>         ndev->cur_num_vqs = 0;
+>         ndev->mvdev.cvq.received_desc = 0;
+>         ndev->mvdev.cvq.completed_desc = 0;
+> @@ -2815,6 +2816,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+>         struct mlx5_vdpa_virtqueue *mvq;
+>         int i;
+>
+> +       mlx5_vdpa_info(mvdev, "suspending device\n");
+> +
+>         down_write(&ndev->reslock);
+>         ndev->nb_registered = false;
+>         mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+> @@ -2824,6 +2827,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+>                 suspend_vq(ndev, mvq);
+>         }
+>         mlx5_vdpa_cvq_suspend(mvdev);
+> +       mvdev->suspended = true;
+>         up_write(&ndev->reslock);
+>         return 0;
+>  }
+> --
+> 1.8.3.1
+>
 
