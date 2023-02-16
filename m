@@ -2,148 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8533699138
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D006669913C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjBPKaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S230036AbjBPKa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBPKaV (ORCPT
+        with ESMTP id S230020AbjBPKaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Feb 2023 05:30:21 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B4B4A1CD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:30:01 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id h38so218429lfv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIiSyw9cDcFKGu9JiEWZhqoDuiISHZ5PB5xSHIIzqMI=;
-        b=Y+C1NRwyCeSwP2pWEBIAFBwKnvarVgwxp+NowE9shA8W18j5YmMnMJNmiWltbEBEFb
-         DXYsOb7nWHlVMfRNgNyA1R34RISlYa+77UP0wW/jhdZPnzUC6Dh6jCeZZniMvgh3RSVj
-         L3GyhVZFZlCl5q1+GWpPrC3tzscRcQZ2EhfklETZiyhMuVLBPuIgC5ZtQaweI4f6QnKj
-         66QjY91fT6NB3Fk6/BRf1ZBFE+fH3wZ/3hpf00NxfSwb3rzshX4OstmUkDE1QliJE+LA
-         Oa9UOyABzlm/6xHuC77g0KaX9Y16ahd5RuqomuVFyK8tpxbyfVwlmfjBAQefhxNbsF63
-         8uOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AIiSyw9cDcFKGu9JiEWZhqoDuiISHZ5PB5xSHIIzqMI=;
-        b=NBFtXVq75Onn5IFl2SqsT0AVL44Kvtm2eLdKIZlzbwqFaXACG4/IOKmOtJqq9mmJQv
-         NTLrK+c9aG5hJf7bwn6seGS53dint0e78jyTWaWb7TfGuglCT1iUtwJC/dk1AngVeZfm
-         sztgVT1nmqC6Es4dtgqMhNcQIIjPXqGPhwcZmXUzWuhDXdnDlcEeoYcvkbxqmj3LZXRc
-         fuoVGT04K/ipnNBwq2BklfR9YZ1R7XG/XFtpz8D5Q00ODQvs2EqDAVwDXSNmbHHgFufN
-         Q0ym5LtOs3zwGKrJBBrw95XFDtD6/QSvv7ydHjTBWp3sex8Rl/q9DbZ0FnlCuj5PhFnF
-         Dfew==
-X-Gm-Message-State: AO0yUKW35YCSwKTfXmJUb5BbcAHO4hCmYvcXibrqa+If8ck+VcFcXUA2
-        1F0aSBJkmaFllag7HhFUOjq7Lg==
-X-Google-Smtp-Source: AK7set+AsBrPxK/iLXBU4CBCQGE5gMYcTd4JVJtj8eimPknD2U5P1kWnppbLIOylyikXZJ6IlAh6eA==
-X-Received: by 2002:ac2:4439:0:b0:4d8:6a30:fbd7 with SMTP id w25-20020ac24439000000b004d86a30fbd7mr1498333lfl.67.1676543399248;
-        Thu, 16 Feb 2023 02:29:59 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id p2-20020a19f002000000b0048a9e899693sm248308lfc.16.2023.02.16.02.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 02:29:58 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: qcom-hw: Simplify counting frequency domains
-Date:   Thu, 16 Feb 2023 11:29:56 +0100
-Message-Id: <20230216102956.3933639-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FAE4A1D7;
+        Thu, 16 Feb 2023 02:30:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B17261F39;
+        Thu, 16 Feb 2023 10:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169CEC433EF;
+        Thu, 16 Feb 2023 10:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676543400;
+        bh=pQgiiYH8YW53nQKkaQLS7CH2z7qDXD8pnYiJrlqLTe0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I9ECIJlv23U8AB1qrZHhoEmOc69Q/y0+VSSr1mWB5yBYoOZ82K2oxgX3KE8yqezqx
+         pOZc67EOcazyAx5AJuy3gvvBjJlGxEu+dJPC6+P4rr/Fu+7MKnUPRc5m2qjLG1RyRp
+         jKt666HmLGJK5cJLqKvaozTRn9MXEKzCWzP4rULs=
+Date:   Thu, 16 Feb 2023 11:29:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usb: serial: add support for CH348
+Message-ID: <Y+4Fpd0lcJkQrXef@kroah.com>
+References: <20230106135338.643951-1-clabbe@baylibre.com>
+ <20230106135338.643951-2-clabbe@baylibre.com>
+ <Y+30EYVTiAuhj1iK@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+30EYVTiAuhj1iK@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For quite some time, this driver has been doing performing some
-quite low-level DT operations. Simplify that using
-platform_get_resource.
+On Thu, Feb 16, 2023 at 10:14:57AM +0100, Johan Hovold wrote:
+> > +	if (urb->actual_length < 2) {
+> > +		dev_dbg(&port->dev, "%s:%d empty rx buffer\n", __func__, __LINE__);
+> 
+> I'm sure I've asked you drop __LINE__. Please be more careful when
+> considering review comments.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 28 ++++++----------------------
- 1 file changed, 6 insertions(+), 22 deletions(-)
+FYI, __func__ and __LINE__ are included automatically in dev_dbg() calls
+so any addition in the string for them is redundant and should never be
+there (it's also a hint that no one used this debug statement as the
+redundancy would be kind of obvious...)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 2f581d2d617d..023a18c0886f 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -29,6 +29,8 @@
- 
- #define GT_IRQ_STATUS			BIT(2)
- 
-+#define MAX_FREQ_DOMAINS		3
-+
- struct qcom_cpufreq_soc_data {
- 	u32 reg_enable;
- 	u32 reg_domain_state;
-@@ -651,10 +653,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
--	struct device_node *soc_node;
- 	struct device *cpu_dev;
- 	struct clk *clk;
--	int ret, i, num_domains, reg_sz;
-+	int ret, i, num_domains;
- 
- 	clk = clk_get(dev, "xo");
- 	if (IS_ERR(clk))
-@@ -681,24 +682,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
--	soc_node = of_get_parent(dev->of_node);
--	if (!soc_node)
--		return -EINVAL;
--
--	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
--	if (ret)
--		goto of_exit;
--
--	ret = of_property_read_u32(soc_node, "#size-cells", &i);
--	if (ret)
--		goto of_exit;
--
--	reg_sz += i;
--
--	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
--	if (num_domains <= 0)
--		return num_domains;
-+	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
-+		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
-+			break;
- 
- 	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
- 					 GFP_KERNEL);
-@@ -762,8 +748,6 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	else
- 		dev_dbg(dev, "QCOM CPUFreq HW driver initialized\n");
- 
--of_exit:
--	of_node_put(soc_node);
- 
- 	return ret;
- }
--- 
-2.39.1
+thanks,
 
+greg k-h
