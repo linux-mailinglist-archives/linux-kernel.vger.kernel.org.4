@@ -2,114 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A978698C4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E732D698C59
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjBPFrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S229920AbjBPFtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjBPFq6 (ORCPT
+        with ESMTP id S229623AbjBPFtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:46:58 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169927D48
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:46:54 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bp15so1402566lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AXnpNrsFLRDRV5H6+heFUubgTFXomAt3idt+/hXx6hk=;
-        b=DR5HTzIRcGCfsQZrTk3dPz403ec4zkZ7v2QGxwWTqW4brRantS4Q8hbkgcqIPGDnZS
-         beeohWGG8lv6h/Eaw0k9W4ezb2NlcjU1wrTKlGBQ126PtulC+7xJHPBmlJBQy0gWzNN7
-         LKKa59sNKBZIwArta868ZHgo1AHIxCgFw63Mk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AXnpNrsFLRDRV5H6+heFUubgTFXomAt3idt+/hXx6hk=;
-        b=orbCXSOv7gp+9sQvIAWm0tb00vywbtfFBXSwa1OWrhCJeL1iWgzT2dZHR69FpOzb+p
-         p7IvA1ny2rRKl1Ib9p8wuTJwwRpqXBb7b4LEgD/IuTibsrrrPCECt0cWpHKDaTKwZ9DR
-         DSZuYPn5/HVDNqvVa57YChmJVxtFfwcewGFsKrn+DqzIXgJfR0/Ig6TjCQlug/INAIp1
-         xGUb5TnpY8sAcUNCl3FKuDmGdpMOrFxeBTMKJKiIx7lcnQBZNF/QcHAarZlBkx668riU
-         rL/+i9pRxNhQjqncnd8cDfpaSHPvByFz9meT6IVZZrunX1+BShK6lJDcn6G5A7aolgWh
-         PeyQ==
-X-Gm-Message-State: AO0yUKXM5xFMrSOgByfk4zFkLhfRlcaKGuCeQG+EaXupbBWlOmpDurRF
-        1ciEJbtILuM5/15AmcHDoeTxnTnjxceTnJpVeaE50A==
-X-Google-Smtp-Source: AK7set8f23g7p+AR/YkqBF1Ux4RWNPz/KaYIccAQgKR03jXTvlUKhYKx543msIPep5T6lNeGd07g3VsILIOSERAdQrc=
-X-Received: by 2002:a05:6512:239a:b0:4db:1809:29a1 with SMTP id
- c26-20020a056512239a00b004db180929a1mr565281lfv.2.1676526412762; Wed, 15 Feb
- 2023 21:46:52 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Feb 2023 21:46:52 -0800
+        Thu, 16 Feb 2023 00:49:10 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CA627D6E;
+        Wed, 15 Feb 2023 21:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676526549; x=1708062549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=02DmWapRv96DfLbRgUMaYDNcw8lOqY8xdF9Gy5/72BA=;
+  b=iy1STufC2I12EM/vOujsciKcUWp/xiza3UE2KXUXXn2lbEDr4HvQbHdb
+   acZ7cxJoNyGfit6QtJqqGBqK0KfaYxQRHkl8kX24xCRqFQtmDJeSy/Cqu
+   Qus056UgwZXyOTBF4MfDs9OCXlMVxAf6gfbJS5M9tfrC/uguT9cpgb4JT
+   YEgmOGqbTCuwdU+kwLDxfAY0xhXk4LaIPfG1cE28rMJhOOZ0/ro8C0ea0
+   HmtpOVh/jIz5HNegPTd6jCzKSbUgK1HLnEMuAb2mg+Il4GuyE4V3T/4ql
+   cEOvND7mYsHWviHvsx4pfttDO0D3DIiR4Cg08QhcnV5fozb6oWxUAjYoP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="359060288"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="359060288"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 21:49:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="812847031"
+X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
+   d="scan'208";a="812847031"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2023 21:49:06 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id EB5681A6; Thu, 16 Feb 2023 07:49:46 +0200 (EET)
+Date:   Thu, 16 Feb 2023 07:49:46 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>, Sanju.Mehta@amd.com,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] thunderbolt: Adjust how NVM reading works
+Message-ID: <Y+3D+nRCXM4xhtwv@black.fi.intel.com>
+References: <20230215172520.8925-1-mario.limonciello@amd.com>
+ <20230215172520.8925-2-mario.limonciello@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20230213165743.1.I6f03f86546e6ce9abb1d24fd9ece663c3a5b950c@changeid>
-References: <20230213165743.1.I6f03f86546e6ce9abb1d24fd9ece663c3a5b950c@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 15 Feb 2023 21:46:52 -0800
-Message-ID: <CAE-0n51OSS=Nh2pZmPO3mg4QCvqGZsJ+AFBTAUGr-TZBHCPLCw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7180: Fix trogdor qspi pull direction
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     amstan@chromium.org, mka@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230215172520.8925-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2023-02-13 16:57:51)
-> Though it shouldn't matter very much, we've decided that it's slightly
-> better to park the qspi lines for trogdor with an internal pulldown
-> instead of an internal pullup. There was a footnote that Cr50 (which
-> connects to these lines too) may have pulldowns configured on one of
-> the data lines and we don't want to have fighting pulls.
+Hi Mario,
 
-Ok.
+On Wed, Feb 15, 2023 at 11:25:19AM -0600, Mario Limonciello wrote:
+> Some TBT3 devices have a hard time reliably responding to bit banging
+> requests correctly when connected to AMD USB4 hosts running Linux.
+> 
+> These problems are not reported in any other CM supported on AMD platforms,
+> and comparing the Windows and Pre-OS implementations the Linux CM is the
+> only one that utilizes bit banging to access the DROM.
+> Other CM implementations access the DROM directly from the NVM instead of
+> bit banging.
+> 
+> Adjust the flow to use this method to fetch the NVM when the downstream
+> device is Thunderbolt 3 and only use bit banging to access TBT 2 or TBT 1
+> devices. As the flow is modified, also remove the retry sequence that was
+> introduced from commit f022ff7bf377 ("thunderbolt: Retry DROM read once
+> if parsing fails") as it will not be necessary if the NVM is fetched this
+> way.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: f022ff7bf377 ("thunderbolt: Retry DROM read once if parsing fails")
 
-> This also
-> means that if the pulls somehow get left powered in S3 (which I'm
-> uncertain about) that they won't be pulling up lines on an unpowered
-> SPI part.
+I don't think it fixes a regression of above commit and I don't think
+this is stable material because it is quite a big change. I would rather
+let it sit in -rcX for a while to make sure no user visible changes are
+accidentally introduced. Is this OK for you?
 
-As far as I know, the pulls are maintained in S3. There's verbage about
-"keeper" on the pins.
+Did you check that the UUID of these (and other possible) devices stay
+the same before and after the patch?
 
-The SPI part is powered in S3 though. I believe it only loses power in
-S5. Can you reword this statement?
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * Update commit message to indicate which CMs are tested
+>  * Adjust flow to only fetch DROM from NVM on TBT3 and bit bang on TBT1/2
+> ---
+>  drivers/thunderbolt/eeprom.c | 145 +++++++++++++++++++----------------
+>  1 file changed, 80 insertions(+), 65 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+> index c90d22f56d4e..d1be72b6afdb 100644
+> --- a/drivers/thunderbolt/eeprom.c
+> +++ b/drivers/thunderbolt/eeprom.c
+> @@ -416,7 +416,7 @@ static int tb_drom_parse_entries(struct tb_switch *sw, size_t header_size)
+>  		if (pos + 1 == drom_size || pos + entry->len > drom_size
+>  				|| !entry->len) {
+>  			tb_sw_warn(sw, "DROM buffer overrun\n");
+> -			return -EILSEQ;
+> +			return -EIO;
+>  		}
+>  
+>  		switch (entry->type) {
+> @@ -544,7 +544,37 @@ static int tb_drom_read_n(struct tb_switch *sw, u16 offset, u8 *val,
+>  	return tb_eeprom_read_n(sw, offset, val, count);
+>  }
+>  
+> -static int tb_drom_parse(struct tb_switch *sw)
+> +static int tb_drom_bit_bang(struct tb_switch *sw, u16 *size)
+> +{
+> +	int res;
+> +
+> +	res = tb_drom_read_n(sw, 14, (u8 *) size, 2);
+> +	if (res)
+> +		return res;
+> +	*size &= 0x3ff;
+> +	*size += TB_DROM_DATA_START;
+> +	tb_sw_dbg(sw, "reading drom (length: %#x)\n", *size);
+> +	if (*size < sizeof(struct tb_drom_header)) {
+> +		tb_sw_warn(sw, "drom too small, aborting\n");
+> +		return -EIO;
+> +	}
+> +
+> +	sw->drom = kzalloc(*size, GFP_KERNEL);
+> +	if (!sw->drom)
+> +		return -ENOMEM;
+> +
+> +	res = tb_drom_read_n(sw, 0, sw->drom, *size);
+> +	if (res)
+> +		goto err;
+> +
+> +	return 0;
+> +err:
+> +	kfree(sw->drom);
+> +	sw->drom = NULL;
+> +	return res;
+> +}
 
-The fighting pulls should be resolved though. Or maybe it is better to
-simply not put any pull on the line? Presumably the pull is there to
-avoid seeing 0->1 transitions on the data lines when inactive, but I'm
-not really convinced that is going to happen because the SPI chip itself
-would have to be doing that driving, and the chip select isn't changing.
+Can you split the refactoring part into a separate patch?
 
->
-> Originally the pullup was picked because SPI transfers are active low
-> and thus the high state is somewhat more "idle", but that really isn't
-> that important because the chip select won't be asserted when the bus
-> is idle. The chip select has a nice external pullup on it that's
-> powered by the same power rail as the SPI flash.
->
-> This shouldn't have any functionality impact w/ reading/writing the
-> SPI since the lines are always push-pull when SPI transfers are
-> actually taking place.
->
+> +
+> +static int tb_drom_parse_v1(struct tb_switch *sw)
+>  {
+>  	const struct tb_drom_header *header =
+>  		(const struct tb_drom_header *)sw->drom;
+> @@ -555,7 +585,7 @@ static int tb_drom_parse(struct tb_switch *sw)
+>  		tb_sw_warn(sw,
+>  			"DROM UID CRC8 mismatch (expected: %#x, got: %#x)\n",
+>  			header->uid_crc8, crc);
+> -		return -EILSEQ;
+> +		return -EIO;
+>  	}
+>  	if (!sw->uid)
+>  		sw->uid = header->uid;
+> @@ -589,6 +619,43 @@ static int usb4_drom_parse(struct tb_switch *sw)
+>  	return tb_drom_parse_entries(sw, USB4_DROM_HEADER_SIZE);
+>  }
+>  
+> +static int tb_drom_parse(struct tb_switch *sw, u16 *size)
+> +{
+> +	struct tb_drom_header *header = (void *) sw->drom;
+> +	int res;
+> +
+> +	if (header->data_len + TB_DROM_DATA_START != *size) {
+> +		tb_sw_warn(sw, "drom size mismatch\n");
+> +		goto err;
+> +	}
+> +
+> +	tb_sw_dbg(sw, "DROM version: %d\n", header->device_rom_revision);
+> +
+> +	switch (header->device_rom_revision) {
+> +	case 3:
+> +		res = usb4_drom_parse(sw);
+> +		break;
+> +	default:
+> +		tb_sw_warn(sw, "DROM device_rom_revision %#x unknown\n",
+> +			   header->device_rom_revision);
+> +		fallthrough;
+> +	case 1:
+> +		res = tb_drom_parse_v1(sw);
+> +		break;
+> +	}
+> +
+> +	if (res) {
+> +		tb_sw_warn(sw, "parsing DROM failed\n");
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +err:
+> +	kfree(sw->drom);
+> +	sw->drom = NULL;
+> +	return -EIO;
+> +}
+> +
+>  /**
+>   * tb_drom_read() - Copy DROM to sw->drom and parse it
+>   * @sw: Router whose DROM to read and parse
+> @@ -602,8 +669,7 @@ static int usb4_drom_parse(struct tb_switch *sw)
+>  int tb_drom_read(struct tb_switch *sw)
+>  {
+>  	u16 size;
+> -	struct tb_drom_header *header;
+> -	int res, retries = 1;
+> +	int res;
+>  
+>  	if (sw->drom)
+>  		return 0;
+> @@ -614,11 +680,11 @@ int tb_drom_read(struct tb_switch *sw)
+>  		 * in a device property. Use it if available.
+>  		 */
+>  		if (tb_drom_copy_efi(sw, &size) == 0)
+> -			goto parse;
+> +			return tb_drom_parse(sw, &size);
+>  
+>  		/* Non-Apple hardware has the DROM as part of NVM */
+>  		if (tb_drom_copy_nvm(sw, &size) == 0)
+> -			goto parse;
+> +			return tb_drom_parse(sw, &size);
+>  
+>  		/*
+>  		 * USB4 hosts may support reading DROM through router
+> @@ -627,7 +693,7 @@ int tb_drom_read(struct tb_switch *sw)
+>  		if (tb_switch_is_usb4(sw)) {
+>  			usb4_switch_read_uid(sw, &sw->uid);
+>  			if (!usb4_copy_host_drom(sw, &size))
+> -				goto parse;
+> +				return tb_drom_parse(sw, &size);
+>  		} else {
+>  			/*
+>  			 * The root switch contains only a dummy drom
+> @@ -640,64 +706,13 @@ int tb_drom_read(struct tb_switch *sw)
+>  		return 0;
+>  	}
+>  
+> -	res = tb_drom_read_n(sw, 14, (u8 *) &size, 2);
+> +	/* TBT3 devices have the DROM as part of NVM */
+> +	if (sw->generation < 3)
 
-Right.
+This is true for TBT2 devices too. I think you want to check for the
+sw->cap_lc here instead. If it is set the device has LC and therefore we
+can use the LC UUID registers to figure out the UUID in later stages.
+Otherwise we need to read it through bitbanging.
+
+> +		res = tb_drom_bit_bang(sw, &size);
+> +	else
+> +		res = tb_drom_copy_nvm(sw, &size);
+>  	if (res)
+>  		return res;
+> -	size &= 0x3ff;
+> -	size += TB_DROM_DATA_START;
+> -	tb_sw_dbg(sw, "reading drom (length: %#x)\n", size);
+> -	if (size < sizeof(*header)) {
+> -		tb_sw_warn(sw, "drom too small, aborting\n");
+> -		return -EIO;
+> -	}
+> -
+> -	sw->drom = kzalloc(size, GFP_KERNEL);
+> -	if (!sw->drom)
+> -		return -ENOMEM;
+> -read:
+> -	res = tb_drom_read_n(sw, 0, sw->drom, size);
+> -	if (res)
+> -		goto err;
+> -
+> -parse:
+> -	header = (void *) sw->drom;
+> -
+> -	if (header->data_len + TB_DROM_DATA_START != size) {
+> -		tb_sw_warn(sw, "drom size mismatch\n");
+> -		if (retries--) {
+> -			msleep(100);
+> -			goto read;
+> -		}
+> -		goto err;
+> -	}
+>  
+> -	tb_sw_dbg(sw, "DROM version: %d\n", header->device_rom_revision);
+> -
+> -	switch (header->device_rom_revision) {
+> -	case 3:
+> -		res = usb4_drom_parse(sw);
+> -		break;
+> -	default:
+> -		tb_sw_warn(sw, "DROM device_rom_revision %#x unknown\n",
+> -			   header->device_rom_revision);
+> -		fallthrough;
+> -	case 1:
+> -		res = tb_drom_parse(sw);
+> -		break;
+> -	}
+> -
+> -	/* If the DROM parsing fails, wait a moment and retry once */
+> -	if (res == -EILSEQ && retries--) {
+> -		tb_sw_warn(sw, "parsing DROM failed\n");
+> -		msleep(100);
+> -		goto read;
+> -	}
+> -
+> -	if (!res)
+> -		return 0;
+> -
+> -err:
+> -	kfree(sw->drom);
+> -	sw->drom = NULL;
+> -	return -EIO;
+> +	return tb_drom_parse(sw, &size);
+>  }
+> -- 
+> 2.34.1
