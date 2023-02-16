@@ -2,259 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894E86998F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA3E6998F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjBPPeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S230303AbjBPPeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBPPeK (ORCPT
+        with ESMTP id S230283AbjBPPen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:34:10 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234EA1421B;
-        Thu, 16 Feb 2023 07:34:08 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXgTH122100;
-        Thu, 16 Feb 2023 09:33:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676561622;
-        bh=JdiG6mmYGnA6sHUWLSIHsE9Q/nBRYbImdIQ8CP+p1vc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=rL9IZ3iolob3P0qRu/FCR60rWN+UhuWLkPBXI1C7VWiNShUJ4FJ7K79l4IWw4/Yru
-         ZF7bWis5dTfkHI/r64M/9+ODDpnucZ38IhNz6AAUqFTjpzSjV/BiXfv3fxqu5v/Rco
-         OdI5qqhDqIfJLqkBOiDuyWa5uXlX2wXnN4ql/0SY=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31GFXg1P040329
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Feb 2023 09:33:42 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
- Feb 2023 09:33:42 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 16 Feb 2023 09:33:42 -0600
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31GFXdcf018680;
-        Thu, 16 Feb 2023 09:33:41 -0600
-From:   Andrew Davis <afd@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: [RFC 2/2] WIP: dt-bindings: omap: Convert omap.txt to yaml
-Date:   Thu, 16 Feb 2023 09:33:39 -0600
-Message-ID: <20230216153339.19987-3-afd@ti.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230216153339.19987-1-afd@ti.com>
-References: <20230216153339.19987-1-afd@ti.com>
+        Thu, 16 Feb 2023 10:34:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0158420D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:33:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676561635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qeQYQxyJSAMsBVRXT+gaV/xgFEd8Rxkvo3bIKZXtNYs=;
+        b=XSasYzT7XDMjLvFw0txKY6Rij+kdjh1O5A79ZTFiR/s2wCXsh9U3t6FeKz9SGAk8GlUXPf
+        OF7fHWXOggaWfjLxn3IYnGrmkoXCaN0/m96a8hU8rqJPgHRkqPuRwVHJ6sSNLotoS/8QRd
+        +FhzdmWZ+rLiEGrkDkz17k+FUvjrqQU=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-583-RM_hQxpeOEeQOE9MbmAuFQ-1; Thu, 16 Feb 2023 10:33:54 -0500
+X-MC-Unique: RM_hQxpeOEeQOE9MbmAuFQ-1
+Received: by mail-il1-f200.google.com with SMTP id k13-20020a92c24d000000b003127853ef5dso1483009ilo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:33:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qeQYQxyJSAMsBVRXT+gaV/xgFEd8Rxkvo3bIKZXtNYs=;
+        b=XQRltur2BS7oGUahTCXmIRhga0edovMcpE4iWpm/Ca2tJd5brfLV/QyLCUCXqrFpdV
+         frZ4MUy6E/aDZXmoftESGvTpjm9xQ99uSlqibRtRFfMnlkYoS2MWqI72KKxCDRGOO7ze
+         XPFx2ruUNXsnp74gaawuQVyl+CPlqSbIYvcyUFO9RfuZzn1mAFuQ8A80+sRow/DGNHSt
+         fVAV9h1rUA0+hrdcn6ASfNOTaE1Gd9prPulUAVxr3wO5nrka+GJKkmKUQjTMGXIhQbog
+         tNKwF3aTJOIzootGLj2eQcYtsrjh+m6CGgf23dfv7w6CxMGi2rhnPM1VhNuWGt1HTlYZ
+         vjsw==
+X-Gm-Message-State: AO0yUKWpj3bIjLFvLMfvjzovVsTc+uF1EAYz8jyDSXN+Jh8BFPFoOm4Q
+        +XcW4Pnsb+Hr80t9u3FSp/kgDU1Fs28xQqq/Sa7T2YxvJwaUIhrLDnYVe3QQkFgo0QOJ3MiX/Mi
+        J31wgDd+31K7ByMJ5GXkYTdGvVY8j0g==
+X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr3727048iox.0.1676561632907;
+        Thu, 16 Feb 2023 07:33:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set+h4rAfOjfEETcRvGoeKLhBvNlkJkZqTyazjzNPwMYB/1qXXAYupXsUtXuE7aklEhW9g2jibA==
+X-Received: by 2002:a05:6602:5cd:b0:73a:6c75:5a85 with SMTP id w13-20020a05660205cd00b0073a6c755a85mr3727038iox.0.1676561632677;
+        Thu, 16 Feb 2023 07:33:52 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id w5-20020a6bd605000000b007407ea5d07csm559095ioa.51.2023.02.16.07.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 07:33:52 -0800 (PST)
+Date:   Thu, 16 Feb 2023 10:33:50 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nick Bowler <nbowler@draconx.ca>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1
+ (regression)
+Message-ID: <Y+5M3qezT2t0wPx+@x1n>
+References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+ <Y9bvwz4FIOQ+D8c4@x1n>
+ <CADyTPEzsvdRC15+Z5T3oryofwRYqHmHzwqRmJKJoHB3d7Tdayw@mail.gmail.com>
+ <91b38494-f296-d01d-3b98-6bc51406cad0@leemhuis.info>
+ <Y+z4XlhDzokAMTI1@x1n>
+ <CADyTPEzcJxgFgQAwopsHz3b-e+hmHJqidpjzDhow8KkkAyyo8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADyTPEzcJxgFgQAwopsHz3b-e+hmHJqidpjzDhow8KkkAyyo8g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- .../devicetree/bindings/arm/omap/omap.yaml    | 174 ++++++++++++++++++
- 1 file changed, 174 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/omap/omap.yaml
+On Thu, Feb 16, 2023 at 12:32:54AM -0500, Nick Bowler wrote:
+> On 2023-02-15, Peter Xu <peterx@redhat.com> wrote:
+> > On Wed, Feb 15, 2023 at 03:49:56PM +0100, Linux regression tracking
+> > (Thorsten Leemhuis) wrote:
+> >> On 31.01.23 02:46, Nick Bowler wrote:
+> >> > I'll keep running this for a while to see if any other problems come
+> >> > up.
+> >>
+> >> Nick, I assume no other problems showed up?
+> >>
+> >> In that case Peter could send the patch in for merging. Or did you do
+> >> that already?
+> >
+> > Thanks for raising this again.  Nop, I'm just waiting for a final ack from
+> > Nick to make sure that nothing went wrong after the longer run.
+> 
+> Oh, yes, it wasn't so much a "run" as just continuing to use the
+> computer normally.
+> 
+> Everything seems stable enough.
 
-diff --git a/Documentation/devicetree/bindings/arm/omap/omap.yaml b/Documentation/devicetree/bindings/arm/omap/omap.yaml
-new file mode 100644
-index 0000000000000..cf07a7a7df279
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/omap/omap.yaml
-@@ -0,0 +1,174 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/omap/omap.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments OMAP SoC architecture device tree bindings
-+
-+maintainers:
-+  - Tony Lindgren <tony@atomide.com>
-+
-+description: |
-+  Platforms based on Texas Instruments OMAP SoC architecture.
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+
-+      - description: TI OMAP2420 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap2420-h4 # TI OMAP2420 H4 board
-+              - nokia,n800 # Nokia N800
-+              - nokia,n810 # Nokia N810
-+              - nokia,n810-wimax # Nokia N810 WiMax
-+          - const: ti,omap2420
-+          - const: ti,omap2
-+
-+      - description: TI OMAP2430 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap2430-sdp # TI OMAP2430 SDP
-+          - const: ti,omap2430
-+          - const: ti,omap2
-+
-+      - description: TI OMAP3430 SoC based platforms
-+        items:
-+          - enum:
-+              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom OMAP35xx SOM-LV Development Kit
-+              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom OMAP35xx Torpedo Development Kit
-+              - ti,omap3430-sdp # TI OMAP3430 SDP
-+              - ti,omap3-beagle # TI OMAP3 BeagleBoard
-+              - compulab,omap3-cm-t3530 # CompuLab CM-T3530
-+              - timll,omap3-devkit8000 # TimLL OMAP3 Devkit8000
-+              - ti,omap3-evm # TI OMAP35XX EVM (TMDSEVM3530)
-+              - ti,omap3-ldp # TI OMAP3430 LDP (Zoom1 Labrador)
-+              - nokia,omap3-n900 # Nokia N900
-+          - const: ti,omap3430
-+          - const: ti,omap3
-+
-+      - description: TI OMAP3630 SoC based platforms
-+        items:
-+          - enum:
-+              - logicpd,dm3730-som-lv-devkit # LogicPD Zoom DM3730 SOM-LV Development Kit
-+              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 Torpedo + Wireless Development Kit
-+              - ti,omap3-beagle-xm # TI OMAP3 BeagleBoard xM
-+              - compulab,omap3-cm-t3730 # CompuLab CM-T3730
-+              - amazon,omap3-echo # Amazon Echo (first generation)
-+              - ti,omap3-evm-37xx # TI OMAP37XX EVM (TMDSEVM3730)
-+              - ti,omap3-gta04 # OMAP3 GTA04
-+              - nokia,omap3-n9 # Nokia N9
-+              - nokia,omap3-n950 # Nokia N950
-+              - lg,omap3-sniper # LG Optimus Black
-+              - ti,omap3-zoom3 # TI Zoom3
-+          - const: ti,omap3630
-+          - const: ti,omap3
-+
-+      - description: TI AM35 SoC based platforms
-+        items:
-+          - enum:
-+              - teejet,mt_ventoux # TeeJet Mt.Ventoux
-+              - ti,am3517-craneboard # TI AM3517 CraneBoard (TMDSEVM3517)
-+              - ti,am3517-evm # TI AM3517 EVM (AM3517/05 TMDSEVM3517)
-+              - compulab,omap3-sbc-t3517 # CompuLab SBC-T3517 with CM-T3517
-+          - const: ti,am3517
-+          - const: ti,omap3
-+
-+      - description: TI OMAP4430 SoC based platforms
-+        items:
-+          - enum:
-+              - motorola,droid4 # Motorola Droid 4 XT894
-+              - motorola,droid-bionic # Motorola Droid Bionic XT875
-+              - amazon,omap4-kc1 # Amazon Kindle Fire (first generation)
-+              - ti,omap4-panda # TI OMAP4 PandaBoard
-+              - ti,omap4-sdp # TI OMAP4 SDP board
-+          - const: ti,omap4430
-+          - const: ti,omap4
-+
-+      - description: TI OMAP4460 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap4-panda-es # TI OMAP4 PandaBoard-ES
-+          - const: ti,omap4460
-+          - const: ti,omap4
-+
-+      - description: TI OMAP543 SoC based platforms
-+        items:
-+          - enum:
-+              - compulab,omap5-cm-t54 # CompuLab CM-T54
-+              - isee,omap5-igep0050 # IGEPv5
-+              - ti,omap5-uevm # TI OMAP5 uEVM board
-+          - const: ti,omap5
-+
-+      - description: TI AM33 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,am335x-bone # TI AM335x BeagleBone
-+              - compulab,cm-t335 # CompuLab CM-T335
-+              - ti,am335x-evm # TI AM335x EVM
-+              - ti,am335x-evmsk # TI AM335x EVM-SK
-+              - bosch,am335x-guardian # Bosch AM335x Guardian
-+              - ti,am3359-icev2 # TI AM3359 ICE-V2
-+              - novatech,am335x-lxm # NovaTech OrionLXm
-+              - moxa,uc-2101 # Moxa UC-2101
-+              - moxa,uc-8100-me-t # Moxa UC-8100-ME-T
-+              - gumstix,am335x-pepper # Gumstix Pepper
-+              - tcl,am335x-sl50 # Toby Churchill SL50 Series
-+          - pattern: '^ti,am33(5[1246789]|xx)$' # ti,am33xx is legacy please use full SoC name
-+
-+      - description: TI AM43 SoC based platforms
-+        items:
-+          - enum:
-+              - compulab,am437x-cm-t43 # CompuLab CM-T43
-+              - ti,am437x-gp-evm # TI AM437x GP EVM
-+              - ti,am437x-idk-evm # TI AM437x Industrial Development Kit
-+              - ti,am437x-sk-evm # TI AM437x SK EVM
-+          - pattern: '^ti,am4372[26789]$'
-+          - const: ti,am43
-+
-+      - description: TI AM57 SoC based platforms
-+        items:
-+          - enum:
-+              - beagle,am5729-beagleboneai # BeagleBoard.org BeagleBone AI
-+              - compulab,cl-som-am57x # CompuLab CL-SOM-AM57x
-+              - ti,am5718-idk # TI AM5718 IDK
-+              - ti,am5728-idk # TI AM5728 IDK
-+              - ti,am5748-idk # TI AM5748 IDK
-+          - pattern: '^ti,am57[0124][689]$'
-+          - const: ti,am57
-+
-+      - description: TI DRA7 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,dra718-evm # TI DRA718 EVM
-+              - ti,dra722-evm # TI DRA722 EVM
-+              - ti,dra742-evm # TI DRA742 EVM
-+              - ti,dra762-evm # TI DRA762 EVM
-+          - pattern: '^ti,dra7[12456][024568p]$'
-+          - const: ti,dra7
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    / {
-+        model = "TI OMAP2430 SDP (Software Development Board)";
-+        compatible = "ti,omap2430-sdp", "ti,omap2430", "ti,omap2";
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+    };
-+
-+  - |
-+    / {
-+        model = "TI DRA762 EVM";
-+        compatible = "ti,dra762-evm", "ti,dra762", "ti,dra7";
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+    };
-+
-+...
+Thanks Nick.
+
+I've just posted a formal patch with you copied.  There's a slight tweak
+due to rebasing to the latest akpm tree, but I still attached your
+tested-by for appreciations on the help, and I assume it should have the
+same functional change.
+
 -- 
-2.39.1
+Peter Xu
 
