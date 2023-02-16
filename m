@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F71698F62
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFFB698F69
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjBPJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S229787AbjBPJMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjBPJKh (ORCPT
+        with ESMTP id S229739AbjBPJML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:10:37 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A921A490
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:10:36 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id v17so1943712lfd.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:10:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=itpmqCRSbaIVC7wZtfr9HbCli3IWfUbTikhRIPulXqo=;
-        b=ehpbVRDY3uFTXff1WZrb6WzdSKIUhNZKsSYQj+UUJ9tM4zj5sKYMMEnr2n0/mMzn/o
-         IecrjHyF7rqlAAAr0WXGO/Ou4CQWwvq4ZdaGLW6n9piiT0pmaBCHTJARw3TxpUoZfwim
-         ASsW9LVa9EB64amERKkSIZrA4RkOAajtj/XTJlY+n2AOWieHVDCD5B5Ret+Gxsg7mFVV
-         Vry1hqxCXl1i4WP+jUXmGt3XZLHNge0QPVZG+WCZjm2ONoixoQpWa21B9LY92Lu2UvJU
-         0OT1aL4himfNuIXrdFYrwOeOtzCie75xXunGHoVbinRum48bgpgsmeWgYM9ONIqtcZqJ
-         Fyzw==
+        Thu, 16 Feb 2023 04:12:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D173B3CB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676538682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/okeBeRsb4OotsLW2a18goWoRP3o4W4D8CZab0OhEhg=;
+        b=Jo9tphMBHtXdt5gjWmaDLiKBQK+jhw7z8DDJkxDXXIswBxtjUuvtv5N7sUCx8fieqJxwal
+        B1urZ2YDtfDuuwmB9qYqATKj+r4Bzlazk4TU5pI5xjwJh8EMgl+wM7sKA9wYXU4wDGkZmc
+        ZTbk4Uy6n+pXA0TOhNGjG5sZF9EAmnc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-632-daS80nYyNM2KEm-aW0M18w-1; Thu, 16 Feb 2023 04:11:21 -0500
+X-MC-Unique: daS80nYyNM2KEm-aW0M18w-1
+Received: by mail-ed1-f70.google.com with SMTP id w7-20020a05640234c700b004ad6e399b73so188766edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:11:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=itpmqCRSbaIVC7wZtfr9HbCli3IWfUbTikhRIPulXqo=;
-        b=OVIgKsUjt5iFf462zGLonbzP7qxnKbqgy7/Ow55hToFMgtbonDO322wvzEOx4/6BAM
-         bvo4HZ1K4r/tkhKlWIA6V6WKYmBGsTnh9rWn2aXbTVFEBP1p2Yz0/S3nj7MLwSCr2EAX
-         HNd7AYprVTWHerQJRSS4r6dp/Rol6WLd8GhV1ETTQOSxW+yIaGcPOSv/G5AKgboOaO1Z
-         A5um2eV/emdUzUtr5KzeydDvryGmBmIvw9J/cpnn92D32J5sRwvcZaNH/kkwxNUknkEO
-         AzQbok7U6lsEra+L8jzip49Syr8OkS2ZZoFS6Fs6esTnC8ChAqTupQWEg7e8Q8SZS9cE
-         tpPQ==
-X-Gm-Message-State: AO0yUKWUatrSOYc19sHv4FBUs8vD5NbMruzmuzA2pmFh85k4HwpEga9n
-        rL0S2qmj4Tb1Ycbi5XawTL0+Vw==
-X-Google-Smtp-Source: AK7set8ACLYGt8o/dN9L05F77GXMyAo0T/IhKox4F0xKScHW5FBT6vZ462WamvK/b6Hz9W8WtuuerQ==
-X-Received: by 2002:ac2:5ec8:0:b0:4cc:7ff3:ab4d with SMTP id d8-20020ac25ec8000000b004cc7ff3ab4dmr1530785lfq.20.1676538634978;
-        Thu, 16 Feb 2023 01:10:34 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id q14-20020ac246ee000000b004d6ebbad989sm220855lfo.1.2023.02.16.01.10.33
+        bh=/okeBeRsb4OotsLW2a18goWoRP3o4W4D8CZab0OhEhg=;
+        b=ntdNr4Yn9IFOpIyEw8R+W9ru19evhqUqxR4IksgFyiv91IeCD3gQ3PY0SMGBgBPdT/
+         d3eoKskfeD3Wf0+2eoNwt0eROSJkaexBnZfbVRzSQxWQYCwAVrolseJH2XfL0XtCHIKx
+         BBFWgu24JyhFKfBjiF53wMLnSd1uOUQ7bvtWkjGJ0MgIBgGm1tCRb4k0V1Wi1EJu/v1Y
+         uyWKvNwGHT0QRln3Vmy5ZbTkRIWrhzK4o6m0PESjvsS42QsvZcv61jpl4urxq7Af3lfi
+         GIYHMIBNEGur4MA+zl31WAeajmOHRFTvvvZX9/FGnG1R1TBJKvRBzq6mAU3gmfVtGK+q
+         N1gw==
+X-Gm-Message-State: AO0yUKVSBGSZOLafbCDeUoFz38p+zl6IJF49rJErvc5G/YhIaA117kxL
+        KaBESqXeA+bCBj3yK8uL4RnPPW8MUZ9xuC5iMTIt77bguIQ2Xen5t4i8xo7q0ZOwtk/Q0I2gJwk
+        FsHbLzc37pkNuv/rtfGMozadz
+X-Received: by 2002:aa7:d34e:0:b0:4ac:d2bc:32f9 with SMTP id m14-20020aa7d34e000000b004acd2bc32f9mr4605258edr.4.1676538680564;
+        Thu, 16 Feb 2023 01:11:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set+aC12lXhGWdqfz+x2ivny9MrkR9240xDnd1qIFSZpK6v8evidTu3DaP/z5Re+Jvc6Eaizy5g==
+X-Received: by 2002:aa7:d34e:0:b0:4ac:d2bc:32f9 with SMTP id m14-20020aa7d34e000000b004acd2bc32f9mr4605247edr.4.1676538680334;
+        Thu, 16 Feb 2023 01:11:20 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id u21-20020a17090657d500b007c11e5ac250sm543493ejr.91.2023.02.16.01.11.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 01:10:34 -0800 (PST)
-Message-ID: <71078188-1443-d84e-658c-967991f3b590@linaro.org>
-Date:   Thu, 16 Feb 2023 10:10:33 +0100
+        Thu, 16 Feb 2023 01:11:19 -0800 (PST)
+Message-ID: <f80d506d-3292-bc03-c2e9-b167e1b5e71a@redhat.com>
+Date:   Thu, 16 Feb 2023 10:11:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 2/2] Revert "splice: Do splice read from a buffered file
- without using ITER_PIPE"
-To:     David Howells <dhowells@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-mm@kvack.org
-References: <20230215-topic-next-20230214-revert-v1-2-c58cd87b9086@linaro.org>
- <20230215-topic-next-20230214-revert-v1-0-c58cd87b9086@linaro.org>
- <3055589.1676466118@warthog.procyon.org.uk>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <3055589.1676466118@warthog.procyon.org.uk>
+ Thunderbird/102.7.1
+Subject: Re: acerhdf thermal question
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Peter Kaestle <peter@piie.net>,
+        Mark Gross <markgross@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
+        <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <59c24c3d-eb1e-cdee-3d2e-aa1dda5a96fe@linaro.org>
+ <ee826228-3fbb-bf66-b2a1-8e8be2776175@redhat.com>
+In-Reply-To: <ee826228-3fbb-bf66-b2a1-8e8be2776175@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 15.02.2023 14:01, David Howells wrote:
-> Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On 2/16/23 10:08, Hans de Goede wrote:
+> Hi Daniel,
 > 
->> next-20230213 introduced commit d9722a475711 ("splice: Do splice read from
->> a buffered file without using ITER_PIPE") which broke booting on any
->> Qualcomm ARM64 device I grabbed, dereferencing a null pointer in
->> generic_filesplice_read+0xf8/x598. Revert it to make the devices
->> bootable again.
+> On 2/16/23 09:57, Daniel Lezcano wrote:
 >>
->> This reverts commit d9722a47571104f7fa1eeb5ec59044d3607c6070.
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> Hi,
+>>
+>> the polling interval is specified and modified via a kernel module parameter [1]
+>>
+>> The value is used to change the polling interval of the thermal zone, implying that is accessing the thermal zone device structure internals directly [2]
+>>
+>> In real use case, is the interval changed at runtime? Or just when the module is loaded? If the latter, the interval can be passed to the thermal zone at init time without doing a polling change rate after the thermal zone started. In this case, we can remove the polling_delay_jiffies change in the code and fix the structure leakage in this driver.
 > 
-> Commit d9722a47571104f7fa1eeb5ec59044d3607c6070 was part of v13 of my
-> patches.  This got replaced yesterday by a newer version which may or may not
-> have made it into linux-next.
+> I believe this very likely only is used at module load-time.
+> So the changes you suggest are fine with me.
 > 
-> This is probably a known bug fixed in the v14 by making shmem have its own
-> splice-read function.
+> I have added Paul Gortmaker to the Cc, Paul is the last person
+> to have done any real (*) work on acerhfd AFAICT.
 > 
-> Can you try this?
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
-next-20230216 boots fine again, thanks!
+> Paul any objections against making the acerhdf.interval parameter
+> something which only works when set at boot / module load time
+> and removing the ability to change it at runtime ?
 
-> 
-> (Also, can you include me in the cc list as I'm the author of the patch you
-> reverted?)
-Ugh.. I thought b4 would have done that for me.. weird..
+p.s.
 
-Konrad
-> 
-> Thanks,
-> David
-> 
+I see now that Peter Kaestle is also still active in acking / reviewing
+acerhfd changes. So lets wait for Peter's input on this too.
+
+Regards,
+
+Hans
+
+
+> *) Real as in not related to keeping it aligned with the thermal
+> framework/core
+
+
