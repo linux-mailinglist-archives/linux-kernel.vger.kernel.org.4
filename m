@@ -2,154 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C6069A2B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3FA69A2B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjBPXxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S230150AbjBPXxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjBPXxR (ORCPT
+        with ESMTP id S229614AbjBPXxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:53:17 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5223B211F2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:52:55 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id b22so2276683pgw.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:52:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676591569;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQQttzFDRF1k4K8Lrrl35IKonA1RDweLLR+nTYZXoZo=;
-        b=AZwUiVgv6L1VRiwCkkgGm0FdffD39p58AAM7b3WBm7WMtV8qgOpJ4ygj0PXdRtvxxv
-         dI8sn/vFALEo4qIahSgeKWlQvl3V7/pABfItlo45RyvkTwKix/zYDsQTTSyypKHWFR6U
-         Na58oaNpMHG/d0a/+gqiHGTKxjfmLHrviiVujOpcQzMmeJ7yTzeY2Tf9yeZEwV/fdDEj
-         4loH5MdFbcqh9BnvaA1fJqc8PH/kO81xTuw4ZoyQLQ4QfjNkIoSvrKZHQzSsAQ5R08Vg
-         SXkN+qpERH3lQDZQF6fT4RCUp8+tfwQ4KiciMUVxYlTkwSpmVjxJi/zG2SA9DgBJyqhV
-         wOeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676591569;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cQQttzFDRF1k4K8Lrrl35IKonA1RDweLLR+nTYZXoZo=;
-        b=yZjk/ueupNdCmGQlRtzcuqZbE/OGPP+822gWKdewL8YmIy/+1vfaTSNsY4ViIwHV1f
-         hoqOL3uKrO7xU2DSp8Z+jXjWySXwGf+XiMO4SdqO/FvuwkWu2OuHEqa+yuwGucz36Ipi
-         kFUXP/XmKv1uu0SdeyKBL8s13V3ONR2+dasK7KBePwSFJjXQoEfJToKbb4Y6ueoct8vO
-         qkpk4Km7S12Eox0MkLDLNSkWX9ApMm8KR3u5LgV+8kQipGZtLTVItYBa5xLST0Q72RiW
-         58OYOrM3fwJnpz6W6z9LOpR5TPyoKigQKagpKVZIVJtCJpxr4uwx/8gyAGJwjhWFJ8bB
-         +YNw==
-X-Gm-Message-State: AO0yUKWU67UbdfLfpNkfmQmu8HD7LskJVmtVUrLDDoAv89khwgjxLhkc
-        AeiuJM8mQ531MomOwP73xV9F1ph+wHNPWDu/NSE=
-X-Google-Smtp-Source: AK7set/XxDEp84qJkQ2ZGaZgeYodfzB/yLWkoCQb3R4uSy4sCDEm86zWbXqWAmfoU1Mlv/me9SR+M158K3SJvt1XlDo=
-X-Received: by 2002:aa7:9510:0:b0:5a8:b987:b71f with SMTP id
- b16-20020aa79510000000b005a8b987b71fmr1325317pfp.20.1676591569455; Thu, 16
- Feb 2023 15:52:49 -0800 (PST)
+        Thu, 16 Feb 2023 18:53:31 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC065958C;
+        Thu, 16 Feb 2023 15:53:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHsFq0GS4z4x89;
+        Fri, 17 Feb 2023 10:53:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1676591584;
+        bh=fP7M6V+cjNdWp1AJeaYpecLEvF9ZpOfTM+q7vfHAObU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rACrYxab0E15ubVIDUkicHNZ9A7o6QYmslTZDcOJQfv/F/0NBjWDNSogqxgIeXY6/
+         ES7W5herbayThve7MD61VmbV1VgH9umTLzCioelUwYSDn5NuYy2zyhj33GJlWsir8a
+         ulpOs7iyxfs3sCIy0239wGGeto2v+Mo4XuIdQOnmhKX8lsw/gpAqMubXK7uzmr+MjE
+         fsVJHz/hJPLnVYPKrLNaflekWVbGGbrv7w8dC0g5WWu6f2WLbfm5nYmyePabZYU7Tz
+         xBdgnLQfW2lEvmPa2LK2SR31sA6tFbYUXnUOPsQzeJnqx7s55RErGykHtpIo2Udk4K
+         i8Rj2sYAlIr1g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 00/10] Add the PowerQUICC audio support using the QMC
+In-Reply-To: <20230216134226.1692107-1-herve.codina@bootlin.com>
+References: <20230216134226.1692107-1-herve.codina@bootlin.com>
+Date:   Fri, 17 Feb 2023 10:52:58 +1100
+Message-ID: <87mt5dyxph.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20230214075710.2401855-1-stevensd@google.com> <20230214075710.2401855-2-stevensd@google.com>
- <Y+1hMsm4eQIUtag5@x1n> <CAD=HUj69L2e-Z4TB19qFt8h1cn0r1oGbWovJGMOjjyvfDcQ7NA@mail.gmail.com>
- <Y+5Akpz4CvGywt6R@x1n> <CAHbLzkqUF8Y759ZBVGXWdKwDS4f+ZJakUhoqf8Dqvx0Jam4c1g@mail.gmail.com>
- <Y+63LQo49CCyXRQn@x1n>
-In-Reply-To: <Y+63LQo49CCyXRQn@x1n>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 16 Feb 2023 15:52:37 -0800
-Message-ID: <CAHbLzkokih0j=niLuWJLBDfTS8biiDTjC6gudw+qcDCBpMneAA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 3:07 PM Peter Xu <peterx@redhat.com> wrote:
+Herve Codina <herve.codina@bootlin.com> writes:
+> Hi,
 >
-> Hi, Yang,
->
-> On Thu, Feb 16, 2023 at 01:58:55PM -0800, Yang Shi wrote:
-> > > IIUC we released it before copying the pages:
-> >
-> > The huge page is locked until the copy is done. It should be fine
-> > unless the users inspect the page content without acquiring page lock.
->
-> The current patch from David has replaced "insert hpage into holes" with
-> "insert RETRY entries into holes", so IMHO the hpage is not visible at all
-> when releasing page cache lock here.
+> This series adds support for audio using the QMC controller available in
+> some Freescale PowerQUICC SoCs.
 
-IIRC his patch (just this patch, don't include patch #1) conceptually does:
+Who's going to take this series?
 
-acquire xa lock
+By lines of code it's mostly in drivers/soc/fsl, so I was expecting it
+would go via that tree.
 
-fill the holes with retry entry
-if (nr_none == nr_none_check && uffd missing pass) /* no hole is
-filled since holding xa_lock and no uffd missing */
-    install huge page in page cache <-- huge page is visible here
-else {
-    set error code
-    replace retry entry back to NULL
-}
+Or is it a sound series that should go via one of the sound trees?
 
-release xa_lock
+cheers
 
-if (succeed) {
-    copy content to huge page
-    unlock huge page
-} else
-    restore the small pages
-
-
-Am I missing something?
-
->
-> All the accessors (including RCU protected ones to access page cache; those
-> may not need to take the page lock) should be spinning on the RETRY entry,
-> which it seems fine to me.  But my question was whether it's legal to keep
-> them spinning even after releasing the page cache lock.
-
-After releasing the page cache lock, they should see NULL entry or
-huge page IIUC.
-
->
-> Thanks,
->
-> >
-> > >
-> > > xa_locked:
-> > >         xas_unlock_irq(&xas);  <-------------------------------- here
-> > > xa_unlocked:
-> > >
-> > >         /*
-> > >          * If collapse is successful, flush must be done now before copying.
-> > >          * If collapse is unsuccessful, does flush actually need to be done?
-> > >          * Do it anyway, to clear the state.
-> > >          */
-> > >         try_to_unmap_flush();
-> > >
-> > > Before insertion of the multi-index:
-> > >
-> > >         /* Join all the small entries into a single multi-index entry. */
-> > >         xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> > >         xas_store(&xas, hpage);
-> > >
-> > > Thanks,
-> > >
-> > > --
-> > > Peter Xu
-> > >
-> >
->
-> --
-> Peter Xu
->
+...
+>  .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      |  172 ++
+>  .../bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml |  234 +++
+>  .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
+>  MAINTAINERS                                   |   25 +
+>  arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+>  drivers/soc/fsl/qe/Kconfig                    |   23 +
+>  drivers/soc/fsl/qe/Makefile                   |    2 +
+>  drivers/soc/fsl/qe/qmc.c                      | 1533 +++++++++++++++++
+>  drivers/soc/fsl/qe/tsa.c                      |  869 ++++++++++
+>  drivers/soc/fsl/qe/tsa.h                      |   42 +
+>  include/dt-bindings/soc/fsl,tsa.h             |   13 +
+>  include/soc/fsl/qe/qmc.h                      |   71 +
+>  sound/soc/fsl/Kconfig                         |    9 +
+>  sound/soc/fsl/Makefile                        |    2 +
+>  sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
+>  15 files changed, 3848 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml
+>  create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+>  create mode 100644 drivers/soc/fsl/qe/qmc.c
+>  create mode 100644 drivers/soc/fsl/qe/tsa.c
+>  create mode 100644 drivers/soc/fsl/qe/tsa.h
+>  create mode 100644 include/dt-bindings/soc/fsl,tsa.h
+>  create mode 100644 include/soc/fsl/qe/qmc.h
+>  create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
