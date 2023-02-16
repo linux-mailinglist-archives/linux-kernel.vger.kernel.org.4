@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EA4699782
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9277B699784
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBPOeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S229804AbjBPOfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBPOeM (ORCPT
+        with ESMTP id S229517AbjBPOe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:34:12 -0500
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7319122A2E;
-        Thu, 16 Feb 2023 06:34:11 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso1813378wmo.3;
-        Thu, 16 Feb 2023 06:34:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eymPrMLpgAwR4cJyhDjtY285FZDJTVhOz4JmcIpGIe0=;
-        b=CGyMqs7bw8cIcUK1hJ0xGfNPaGvNi/0cl0PV912CxrTEcEwFMpMBj6Xxz6V5qr4Cte
-         YKmLuznzjptAzfW8i9l8s9Lpuj81j+wXq8bCYCPjDA4U+Zd8mfum2OtV4IR3gh1zx6rM
-         4+zHNsmJLeV3InbaXlsJe25rdj85mHaEE440CoeEZhPqbC908O/SfU313kPN/MVgQ0pD
-         Uab7OZW9W55M7Ofs2MUbOjavHrq9yCYla7gc8Otn/bFRsArw51IpZ21pr9HP6DJBykwD
-         Bh99ReWH2iE7LJggcvYxkt2I7yAmAvSXRaESdTgoDi7+/pAzios4Ra0hSI0ZVYcy24xn
-         2tUQ==
-X-Gm-Message-State: AO0yUKWpb6NfCM5B5PX7KgBQxdxnEszvOuIJIkdD+fbC27dq7dB6uzLS
-        yJ7b55nZJ7hGlbAhZr3aRNY=
-X-Google-Smtp-Source: AK7set/9yHZjeWmxrGosUEPoz/oCjrW3jFBVGNwIzFxEi/G4skaHdoSXPPNhaqhk+B2W4ptu1OxInw==
-X-Received: by 2002:a05:600c:44d3:b0:3e0:47:66cc with SMTP id f19-20020a05600c44d300b003e0004766ccmr4988769wmo.23.1676558049947;
-        Thu, 16 Feb 2023 06:34:09 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id s13-20020a5d69cd000000b002c3e1e1dcd7sm1663024wrw.104.2023.02.16.06.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 06:34:09 -0800 (PST)
-Date:   Thu, 16 Feb 2023 14:33:49 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     Jinank Jain <jinankjain@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        mikelley@microsoft.com, kys@microsoft.com,
-        Tianyu.Lan@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
-Subject: Re: [PATCH] x86/hyperv: Fix hv_get/set_register for nested bringup
-Message-ID: <Y+4+zT3vJoh5XVli@liuwe-devbox-debian-v2>
-References: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
- <Y+pJDbMu8WEPFnEm@liuwe-devbox-debian-v2>
- <45ca8d38-34f4-2d17-bcd6-f62c1b7f0c3a@linux.microsoft.com>
- <26f3cf0e-a95f-0a94-5179-ad7ae7cf47f1@linux.microsoft.com>
+        Thu, 16 Feb 2023 09:34:59 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC2822A2E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676558098; x=1708094098;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aKKyce9a/yh1UTJ7iZWXMOgAYVhma3+YBZifpiHyfnA=;
+  b=Rtj95y+D05bLjSPYBkskd0GL1ZB2I2gcKQodDwAUelNKmsfOJrywpsoV
+   oqPO4s3ijW9FT7IhysLEm1lYRUURMM9S1y9BUEHRb8VCutQSHP1iFNPff
+   cMgED1s3UMNLYRcpdrkWegPn+6KxXTsjS3980coR2VYKDPjX6FrjvMGmC
+   SbzY43Soe1N3/ImkXMbHbX94kzJN54G3u8iRjLKTuhJ+vtqM0YyBBhPcZ
+   3wDqxj9oMwmsd35QKfQxCNKdAfM3Eoo5/ESlIQMT8umUTAZLfznSUpLnt
+   aq6KxrWtKtcZcGh0XNX++iNF6Vp4fSDpYXIEpvniDR6k6i2z32tNmWqqu
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,302,1669071600"; 
+   d="scan'208";a="29134872"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 16 Feb 2023 15:34:56 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 16 Feb 2023 15:34:56 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 16 Feb 2023 15:34:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676558096; x=1708094096;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aKKyce9a/yh1UTJ7iZWXMOgAYVhma3+YBZifpiHyfnA=;
+  b=Ah6d29FVUDv7jQvKX1pmouv6mB8BN2epmA5NDa5u3ZuMMw+Yvur97XRu
+   cMfMs1k8gW2Thvi35qeQjTFx2hWIKGgYyuOeXRJ/BVjZDorLzNVlqfvt+
+   TsMIPPY81EikTJUI5gqwwCc5f1Ce2qREmS3qyKT0iUfHECN2GUB11ubMO
+   FK9WaCp4gJe7C2/HfR+E3KaNw+aGWTjAoH3Cg9r0CP3XZEDjvv4/STRQT
+   HZ5Lpee0Xiy7Kf61n57W1wzil1CnLvlzLh3n6K/W8L58CjKG+aifmtZVO
+   5CbGHTw7LpvnFrleip8nCzyko3goJ0ZGoRAFhU0yqXBEYnr+cHnRSB/1Y
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,302,1669071600"; 
+   d="scan'208";a="29134871"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Feb 2023 15:34:56 +0100
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 46EBF280056;
+        Thu, 16 Feb 2023 15:34:56 +0100 (CET)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
+        linux@ew.tq-group.com,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH 1/3] mfd: tqmx86: do not access I2C_DETECT register through io_base
+Date:   Thu, 16 Feb 2023 15:34:22 +0100
+Message-Id: <59041b6d888c886edef5a97fc6e3319d235e101a.1676557968.git.matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26f3cf0e-a95f-0a94-5179-ad7ae7cf47f1@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 02:07:13PM -0800, Nuno Das Neves wrote:
-> On 2/15/2023 8:35 AM, Jinank Jain wrote:
-> > The patch looks good to me, apart from the comments from Wei regarding styling.
-> > 
-> [..]
-> > On 2/13/2023 7:58 PM, Wei Liu wrote:
-> >>
-> >> I can fix these issues too if you don't end up sending a new version due
-> >> to other issues.
-> >>
-> 
-> Wei, feel free to fix the issues when you commit the patch.
-> 
+The I2C_DETECT register is at IO port 0x1a7, which is outside the range
+passed to devm_ioport_map() for io_base, and was only working because
+there aren't actually any bounds checks for IO port accesses.
 
-Fixed and applied.
+Extending the range does not seem like a good solution here, as it would
+then conflict with the IO resource assigned to the I2C controller. As
+this is just a one-off access during probe, use a simple inb() instead.
 
-Thanks,
-Wei.
+While we're at it, drop the unused define TQMX86_REG_I2C_INT_EN.
+
+Fixes: 2f17dd34ffed ("mfd: tqmx86: IO controller with I2C, Wachdog and GPIO")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/mfd/tqmx86.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/mfd/tqmx86.c b/drivers/mfd/tqmx86.c
+index 7ae906ff8e353..8dcbdafa88f4f 100644
+--- a/drivers/mfd/tqmx86.c
++++ b/drivers/mfd/tqmx86.c
+@@ -49,9 +49,8 @@
+ #define TQMX86_REG_IO_EXT_INT_MASK		0x3
+ #define TQMX86_REG_IO_EXT_INT_GPIO_SHIFT	4
+ 
+-#define TQMX86_REG_I2C_DETECT	0x47
++#define TQMX86_REG_I2C_DETECT	0x1a7
+ #define TQMX86_REG_I2C_DETECT_SOFT		0xa5
+-#define TQMX86_REG_I2C_INT_EN	0x49
+ 
+ static uint gpio_irq;
+ module_param(gpio_irq, uint, 0);
+@@ -213,7 +212,7 @@ static int tqmx86_probe(struct platform_device *pdev)
+ 		 "Found %s - Board ID %d, PCB Revision %d, PLD Revision %d\n",
+ 		 board_name, board_id, rev >> 4, rev & 0xf);
+ 
+-	i2c_det = ioread8(io_base + TQMX86_REG_I2C_DETECT);
++	i2c_det = inb(TQMX86_REG_I2C_DETECT);
+ 
+ 	if (gpio_irq_cfg) {
+ 		io_ext_int_val =
+-- 
+2.34.1
+
