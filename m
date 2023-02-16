@@ -2,103 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C28698EBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3488B698EBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjBPIbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S229490AbjBPIbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjBPIbD (ORCPT
+        with ESMTP id S229946AbjBPIbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:31:03 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDC63CE3F;
-        Thu, 16 Feb 2023 00:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=mYuxXbKrCpODagUarDc7PxmUEvuI0X547SLX/QpTaVQ=; b=AGTzlp4NRGGIDPNAkeLXM+4iLa
-        x2w5/D9ESlYC9CEC1O3RuVTCIVD7rxxuV1hTf6gIGMWBs8G4SdQSNUVjLX68+sPjc72yec82VX0HR
-        M3D6HdQzQgZj60jTf4HJTZg2pWY7v35TL1jCM+Vb9ZINIBBGUUag5uVrWJFG850UgLTNkQ5pNyv1Z
-        DcibvagxBU1/Vd7ksKLbFVrtEer0fJn/Dtz6ANP74WfVyyD2Iput8OHfxWalzd3D0KTgxgZlFkmP0
-        474fHdTptHfNy7ltaxGzh9a0/rTmmRQYoUwuw4GmwL+0NNBOSENljLLZbCLNb3j7vYZQWNS0JVGkv
-        Vn1enLcw==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSZf1-0091r7-6M; Thu, 16 Feb 2023 08:30:35 +0000
-Message-ID: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
-Date:   Thu, 16 Feb 2023 00:30:33 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH bpf-next] Fix typos in selftest/bpf files
-Content-Language: en-US
-To:     Taichi Nishimura <awkrail01@gmail.com>, andrii@kernel.org,
-        mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        iii@linux.ibm.com, ytcoode@gmail.com, deso@posteo.net,
-        memxor@gmail.com, joannelkoong@gmail.com
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230216080423.513746-1-awkrail01@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230216080423.513746-1-awkrail01@gmail.com>
+        Thu, 16 Feb 2023 03:31:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818434A1FC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:31:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D22061ED1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 08:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B04C433D2;
+        Thu, 16 Feb 2023 08:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676536268;
+        bh=E/M1ELV4fyFhnwIoVdGYsz6UrhilMsJN7X3A2snOokU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YmVDOUddLM+S8+9NYj7sGXUdZuEmtJzl0CgbU/byLdEVlok5oRYEW1MTxHC29C2J2
+         bFd6WXbEHAz+zxHoS4Yj8J96YxYtqYYO4pIwUdpOiv/AXN+7St8dwcbiwiCHxhsvnL
+         1jz3Z5boU/nJPhc6JRwYpN/ySryHZ53ZITALLeIE9jjW4NAvAaUovCp1+dzp97JfPc
+         koa+rRem3NM9Wn8W8QoNGl5UCZLjBovRmV+Jgy3dXdeQVEl0gForq2aEGhWw3Nkj/A
+         YaAdcR5U+t3ok5x0yPGx5/TSWZhQ4AZkkEv0DGapRKx1SO1jbBH852/JdEsfMpuKO8
+         M+9FOPqxFg29A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pSZfW-00Aowv-9h;
+        Thu, 16 Feb 2023 08:31:06 +0000
+Date:   Thu, 16 Feb 2023 08:31:06 +0000
+Message-ID: <86r0uqxb91.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Subject: Re: [PATCH 3/3] irqchip/gic-v3: Save and restore distributor and re-distributor
+In-Reply-To: <20230215151048.xxmpvfre2xdngowr@bogus>
+References: <20230214233426.2994501-1-f.fainelli@gmail.com>
+        <20230214233426.2994501-4-f.fainelli@gmail.com>
+        <87o7pvz78z.wl-maz@kernel.org>
+        <20230215121050.d57tnfh7wzpyqzti@bogus>
+        <86ttznxa9n.wl-maz@kernel.org>
+        <20230215151048.xxmpvfre2xdngowr@bogus>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sudeep.holla@arm.com, f.fainelli@gmail.com, linux-arm-kernel@lists.infradead.org, tglx@linutronix.de, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 15 Feb 2023 15:10:48 +0000,
+Sudeep Holla <sudeep.holla@arm.com> wrote:
+>=20
+> On Wed, Feb 15, 2023 at 02:40:04PM +0000, Marc Zyngier wrote:
+> > On Wed, 15 Feb 2023 12:10:50 +0000,
+> > Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > >=20
+> > > On Wed, Feb 15, 2023 at 08:02:20AM +0000, Marc Zyngier wrote:
+> > > > On Tue, 14 Feb 2023 23:34:26 +0000,
+> > > > Florian Fainelli <f.fainelli@gmail.com> wrote:
+> > > > >
+> > > > > On platforms implementing Suspend to RAM where the GIC loses powe=
+r, we
+> > > > > are not properly saving and restoring the GIC distributor and
+> > > > > re-distributor registers thus leading to the system resuming with=
+out any
+> > > > > functional interrupts.
+> > > >
+> > > > The real question is *why* we need any of this. On any decent syste=
+m,
+> > > > this is the firmware's job.  It was *never* the OS GIC driver's job
+> > > > the first place.
+> > > >
+> > >=20
+> > > Completely agreed on the points you have made here, no disagreement.
+> > > However I would like to iterate some of the arguments/concerns the
+> > > firmware teams I have interacted in the past have made around this.
+> > > And this is while ago(couple of years) and they may have different
+> > > views. I am repeating them as I think it may be still valid on some
+> > > systems so that we can make some suggestions if we have here.
+> > >=20
+> > > > Importantly, the OS cannot save the full state: a large part of it =
+is
+> > > > only accessible via secure, and Linux doesn't run in secure mode. H=
+ow
+> > > > do you restore the group configuration, for example? Oh wait, you
+> > > > don't even save it.
+> > > >
+> > >=20
+> > > Agreed, we can't manage secure side configurations. But one of the co=
+ncern
+> > > was about the large memory footprint to save the larger non-secure GIC
+> > > context in the smaller secure memory.
+> > >=20
+> > > One of the suggestion at the time was to carve out a chunk of non-sec=
+ure
+> > > memory and let the secure side use the same for context save and rest=
+ore.
+> > > Not sure if this was tried out especially for the GIC. I may need to
+> > > chase that with the concerned teams.
+> >=20
+> > The main issue is that you still need secure memory to save the secure
+> > state, as leaving it in NS memory would be an interesting attack
+> > vector! Other than that, I see no issue with FW carving out the memory
+> > it needs to save/restore the NS state of the GIC.
+> >
+>=20
+> Yes I meant NS memory for only NS state of GIC.
+>=20
+> > Note that this isn't only the (re-)distributor(s) PPI/SPI registers.
+> > The LPI setup must also be saved, and that includes all the ITS
+> > registers. I'm surprised the FW folks are, all of a sudden,
+> > discovering this requirements. It isn't like the GIC architecture is a
+> > novelty, and they have had ample time to review the spec...
+> >
+>=20
+> I understand your concern about late realisation =F0=9F=98=84.
+>=20
+> Another issue in general I see with reference firmware stack(like
+> Trusted Firmware in this case) is that the requirements are driven from
+> the reference platforms which may not have this GIC save/restore
+> requirement as they are in always on domain and it is then made platform
+> specific problem in that project which may not be ideal and may result
+> in somewhat misleading indirectly other firmware developers using
+> it.
 
+Yeah, that's the usual state of affair. Unrealistic platforms, no
+insight (and more generally no interest) in the actual usage model.
 
-On 2/16/23 00:04, Taichi Nishimura wrote:
-> This patch is a re-submitting patch.
-> I cloned bpf-next repo, run spell checker, and fixed typos.
-> Included v1 and v2 patches to this one.
-> 
-> Could you review it again? 
-> Let me know if I have any mistakes.
-> 
-> Best regards,
-> Taichi Nishimura
-> 
-> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+Still, most people got it right, so I guess they must be reading the
+spec. How comes this was never picked from contributions to TF-A?
+Surely duplication of platform code should be a massive hint to the
+firmware maintainers?
 
-Hi,
-The corrections all look good.
-Of course, you need to fix what Greg mentioned, then you can resubmit
-the patch with this added:
+Thanks,
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+	M.
 
-Thanks.
-
-> ---
->  tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
->  tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
->  .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
->  tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
->  tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
->  tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
->  tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
->  tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
->  tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
->  tools/testing/selftests/bpf/veristat.c                      | 4 ++--
->  10 files changed, 13 insertions(+), 13 deletions(-)
-> 
-
-
--- 
-~Randy
+--=20
+Without deviation from the norm, progress is not possible.
