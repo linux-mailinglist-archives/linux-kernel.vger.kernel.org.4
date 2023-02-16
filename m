@@ -2,177 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382EC699038
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D389699047
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjBPJl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S229681AbjBPJnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjBPJlG (ORCPT
+        with ESMTP id S229743AbjBPJmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:41:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1BD5354D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:39:35 -0800 (PST)
+        Thu, 16 Feb 2023 04:42:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC04C6E5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:41:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676540320;
+        s=mimecast20190719; t=1676540480;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=36IspvOq5C8RXOS38qc3JuiH0YGViv6osI/6F1CJ7uY=;
-        b=dgLA9gGLZpXD3ULdP7TzkUsSH2Ic+/nUdmCCplYdXr6lWUfUsloOU7YOfDP9qGiq4p22u6
-        dQ/3imsRswfsWpchA4XJhSyGx1cMZuMoLojwALX9ajGh/J7bPNawblORViNy8xYWpsjGfp
-        uKxwP6HzHBKR7zHDMKBVtxH8trQxcQ4=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Gmwi3nEDJwaAff3Fc8Gdw19GfxhLDRlC4Hp/kbYrQqc=;
+        b=QUm924d1eQ4/YeSGNU+9zftH1vyBIPQ3uswRg69oerBJHX2NQCCPiVlHOfWfktArNep4JC
+        0IkDs6vNmWi5TeWt0o4YQsXQDJbBg/wwQJ8kw+ka8d3rmi39nhEH7DyaOkfT5TorvXMV3W
+        BSsz6vzYEBygMTXdI5RX8BpQOwGD6gw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-341-iL0Hjr3ENRau7YwPVNzU7g-1; Thu, 16 Feb 2023 04:38:38 -0500
-X-MC-Unique: iL0Hjr3ENRau7YwPVNzU7g-1
-Received: by mail-qv1-f69.google.com with SMTP id f1-20020ad442c1000000b0056c228fa15cso791330qvr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:38:38 -0800 (PST)
+ us-mta-656-8PwqFA9pP4OkLSLlwt56oA-1; Thu, 16 Feb 2023 04:41:19 -0500
+X-MC-Unique: 8PwqFA9pP4OkLSLlwt56oA-1
+Received: by mail-wm1-f69.google.com with SMTP id h9-20020a05600c350900b003e000facbb1so2832342wmq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:41:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=36IspvOq5C8RXOS38qc3JuiH0YGViv6osI/6F1CJ7uY=;
-        b=CmMgigfVvrqcuf3FOmcWsnIq42dk39GgeAJpJ6/nqeluEKYHjlqzbBTcjcyFYMZ5UY
-         gq4KEWyZFWHoU0fQ+TwWlBbSexDQD36ki2RA9ci1oH27+9b3zeIWgcas4U0Lqd0mtB74
-         3tpXVNvd8082HkAsEAsfCKKnJQMRyZY37U+nQ38AGvXpZBO9ly9AvB29QXDLay00a7KL
-         wAlZcapa1PxPo4FL4ABHP5osxw63ssHRE0nwaDCPYGEtQkNz+ayl0wp8C0vSJBlMmI8o
-         NulyDdx1qUV+1n3OEYmq1OPpkPUYVvLJ6J2w6AxnMCzVaIykSij762x5HTO7Vo7tX6uV
-         Vmeg==
-X-Gm-Message-State: AO0yUKXI86FUrpjhHgPLpuuZ26gCF7WWGbJeinzz6tX6LrpCJ2t7yGyk
-        TMFHV2cxfzMKbe3y/5Xl/TYWHKztI6y+u7JU2i5xiCD9NtH1cKs5SiobObx9ZtexDWxv8q70hZn
-        rXkt7vA0F6IPvB5qOEgywoxWV
-X-Received: by 2002:ac8:5c0a:0:b0:3b8:ea00:7020 with SMTP id i10-20020ac85c0a000000b003b8ea007020mr10583393qti.3.1676540317957;
-        Thu, 16 Feb 2023 01:38:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set9fkk6LQl+h44sHpB9zu9O6TvieRws0v5eZvlj0OQpL13QYqihAYz9B4yVTgv7qHTKAEf5AcA==
-X-Received: by 2002:ac8:5c0a:0:b0:3b8:ea00:7020 with SMTP id i10-20020ac85c0a000000b003b8ea007020mr10583375qti.3.1676540317589;
-        Thu, 16 Feb 2023 01:38:37 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac80247000000b0039cc0fbdb61sm919873qtg.53.2023.02.16.01.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 01:38:36 -0800 (PST)
-Message-ID: <1a5c9e46457a2c515a5d28895844b523ea8315bc.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 06/10] net: microchip: sparx5: Add ES0 VCAP
- model and updated KUNIT VCAP model
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     UNGLinuxDriver@microchip.com, Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Michael Walle <michael@walle.cc>
-Date:   Thu, 16 Feb 2023 10:38:32 +0100
-In-Reply-To: <e3ab2825bcb0ae93fd26a35dcaee91224ecadc0b.camel@microchip.com>
-References: <20230214104049.1553059-1-steen.hegelund@microchip.com>
-         <20230214104049.1553059-7-steen.hegelund@microchip.com>
-         <0b639b4294ffa61776756d33fc345e60a576d0ec.camel@redhat.com>
-         <e3ab2825bcb0ae93fd26a35dcaee91224ecadc0b.camel@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gmwi3nEDJwaAff3Fc8Gdw19GfxhLDRlC4Hp/kbYrQqc=;
+        b=bPaMCLSi0GLc2EZIbEojT8xpn5i3IKvBM2NQTEqsrQ8ri0M92T5xXoj9OjNAy7241+
+         HCwOa3pczMIbXAR+trBc/+jta5PSz0NfSl+plCZrK8WCxx1YBOwa5WEGYyR+RuXxJuH1
+         0Ntxr36gRDWB38smIWJkS3WcLGlStJX/0jgo8KfkNiMPlyVY7yQwAqGbuJn4uMUCtx+r
+         X6tmjsT3NyIRR3vmSembj5i0oIEb6RZlj9imRO2BQE5ncpWbx4kLcWAxuGRjFA1IGxrM
+         V3s0udIutgMXtNpZd3LYzVa7y1FVXdPs6yMrPYlIAt4mvdEOuKSNFKlHxPWdbo90FKuw
+         PDNw==
+X-Gm-Message-State: AO0yUKX4mrR3sRt2SPWhFOitgsegNXKTMz1ei/xWnNcD3MOhCB6Q1ath
+        uSZJnxyT5OTf/CxA/BuK279ab8a7USLxzJFztVKpkN49zaH2pAKBtRCJjN69UpWCT4MNi6DTEJB
+        rwJ+lzk50Gx2SFUuxKhYMYGpk
+X-Received: by 2002:a05:600c:43d2:b0:3e1:f8af:7942 with SMTP id f18-20020a05600c43d200b003e1f8af7942mr4417092wmn.22.1676540477729;
+        Thu, 16 Feb 2023 01:41:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set/oggqqqV4UfbebLA50a7kFC2t5aIQUzgDU4Y/+rLroQMqzr7b1jBFCFplQuftcMkUVk4L02g==
+X-Received: by 2002:a05:600c:43d2:b0:3e1:f8af:7942 with SMTP id f18-20020a05600c43d200b003e1f8af7942mr4417078wmn.22.1676540477379;
+        Thu, 16 Feb 2023 01:41:17 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
+        by smtp.gmail.com with ESMTPSA id j26-20020a05600c1c1a00b003df245cd853sm1211974wms.44.2023.02.16.01.41.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 01:41:16 -0800 (PST)
+Message-ID: <62c84fa8-d7c4-5163-fe1e-f2c7e5a2c7aa@redhat.com>
+Date:   Thu, 16 Feb 2023 10:41:14 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        mhocko@suse.com, wei.w.wang@intel.com
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y+27kRxJoXlMcbtH@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y+27kRxJoXlMcbtH@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-16 at 10:07 +0100, Steen Hegelund wrote:
-> On Thu, 2023-02-16 at 09:09 +0100, Paolo Abeni wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the
-> > content is safe
-> >=20
-> > On Tue, 2023-02-14 at 11:40 +0100, Steen Hegelund wrote:
-> > > This provides the VCAP model for the Sparx5 ES0 (Egress Stage 0) VCAP=
-.
-> > >=20
-> > > This VCAP provides rewriting functionality in the egress path.
-> > >=20
-> > > Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
-> > > ---
-> > > =C2=A0.../microchip/sparx5/sparx5_vcap_ag_api.c=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 385 +++++++++++++++++-
-> > > =C2=A0.../net/ethernet/microchip/vcap/vcap_ag_api.h | 174 +++++++-
-> > > =C2=A0.../microchip/vcap/vcap_api_debugfs_kunit.c=C2=A0=C2=A0 |=C2=A0=
-=C2=A0 4 +-
-> > > =C2=A0.../microchip/vcap/vcap_model_kunit.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 | 270 +++++++-----
-> > > =C2=A0.../microchip/vcap/vcap_model_kunit.h=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 10 +-
-> > > =C2=A05 files changed, 721 insertions(+), 122 deletions(-)
-> > >=20
-> > > diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_vcap_ag_api=
-.c
-> > > b/drivers/net/ethernet/microchip/sparx5/sparx5_vcap_ag_api.c
-> > > index 561001ee0516..556d6ea0acd1 100644
-> > > --- a/drivers/net/ethernet/microchip/sparx5/sparx5_vcap_ag_api.c
-> > > +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_vcap_ag_api.c
-> > > @@ -3,8 +3,8 @@
-> > > =C2=A0 * Microchip VCAP API
-> > > =C2=A0 */
-> > >=20
-> > > -/* This file is autogenerated by cml-utils 2023-01-17 16:55:38 +0100=
-.
-> > > - * Commit ID: cc027a9bd71002aebf074df5ad8584fe1545e05e
-> > > +/* This file is autogenerated by cml-utils 2023-02-10 11:15:56 +0100=
-.
-> > > + * Commit ID: c30fb4bf0281cd4a7133bdab6682f9e43c872ada
-> > > =C2=A0 */
-> >=20
-> > If the following has been already discussed, I'm sorry for the
-> > duplicates, I missed the relevant thread.
-> >=20
-> > Since this drivers contains quite a bit of auto-generated code, I'm
-> > wondering if you could share the tool and/or the source file, too. That
-> > would make reviews more accurate.
->=20
-> So far we have not made the tool (CML-Utils) available online, but it is
-> included as zip archive in our quarterly BSP releases which are available=
- on
-> AWS.
->=20
-> The BSP uses it (via Buildroot) to generate register access header files =
-and
-> VCAP models as well as compiling various test tools that are added to the
-> rootfs.
->=20
-> It is not because we want CML-Utils to be secret that it is not online, b=
-ut
-> rather that we want to be free to update/change/remove features as needed
-> without breaking any build processes that might have been relying on thes=
-e
-> features with our customers.
+On 16.02.23 06:13, Mike Rapoport wrote:
+> Hi,
+> 
+> On Fri, Dec 02, 2022 at 02:13:38PM +0800, Chao Peng wrote:
+>> This patch series implements KVM guest private memory for confidential
+>> computing scenarios like Intel TDX[1]. If a TDX host accesses
+>> TDX-protected guest memory, machine check can happen which can further
+>> crash the running host system, this is terrible for multi-tenant
+>> configurations. The host accesses include those from KVM userspace like
+>> QEMU. This series addresses KVM userspace induced crash by introducing
+>> new mm and KVM interfaces so KVM userspace can still manage guest memory
+>> via a fd-based approach, but it can never access the guest memory
+>> content.
+> 
+> Sorry for jumping late.
+> 
+> Unless I'm missing something, hibernation will also cause an machine check
+> when there is TDX-protected memory in the system. When the hibernation
+> creates memory snapshot it essentially walks all physical pages and saves
+> their contents, so for TDX memory this will trigger machine check, right?
 
-I guess the above could be addresses with proper releases (and possibly
-packetization from main distros)
+I recall bringing that up in the past (also memory access due to kdump, 
+/prov/kcore) and was told that the main focus for now is preventing 
+unprivileged users from crashing the system, that is, not mapping such 
+memory into user space (e.g., QEMU). In the long run, we'll want to 
+handle such pages also properly in the other events where the kernel 
+might access them.
 
-> I would expect that CML-Utils will eventually have its own public repo, b=
-ut it
-> is probably a little too early yet.=20
+-- 
+Thanks,
 
-Understood. Looking forward the tool maturity ;)
-
-Cheers,
-
-Paolo
+David / dhildenb
 
