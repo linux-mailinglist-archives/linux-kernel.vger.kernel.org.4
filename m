@@ -2,134 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D06699FAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B10C699FAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 23:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjBPWWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 17:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S229961AbjBPWYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 17:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjBPWWs (ORCPT
+        with ESMTP id S229571AbjBPWYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:22:48 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6D24C3F4;
-        Thu, 16 Feb 2023 14:22:47 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id r25so205362wrr.5;
-        Thu, 16 Feb 2023 14:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e+TRGyUkANFG/SzjJ0lbiLz+Z2ORFm0iM0jvwJBSduI=;
-        b=dswPiC+U9PBL72bD2C+u0izfDhYpogqVWUTWAOam4Ha00rv9pGCv3vj+fBk0uEiozR
-         Y5Q/E6rJ6Dz/xcnG5S1U6HDQ2+SQ70dRfPyXFszsI8VZl4Sva6/7jEwhi7ZXXAeWV3Yb
-         3UDM8OVCsM0dU4ckgPX0IBBzWACr4SgLH6UmqtCGbQleIq2kII5SHxIHgsB/KPbkBIlV
-         mRuXf25PJQWdU4ZEBlLn78Hk8D7BmZD6ACg9rjW0HsCCn3MN2oz83xiQ1Lclhv3+1ado
-         9Zma7EsDtd3wq6LW59Oj8X48zG0VMFC14oqTOx/p4Wc4e/pnGO8EFNa1Td1th7f8HOku
-         sNJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e+TRGyUkANFG/SzjJ0lbiLz+Z2ORFm0iM0jvwJBSduI=;
-        b=OKFE1/H1pXvbpg07ljSWCpIylFKVotcNLyn9vIM2XppQABFzZDq4NYtb1FFPKQsKpL
-         0z3Tpt1EP+0k9mbHNFJOiJqKfnGfIdtvvXaChNt59OGggDeHRalcXlXxrO9Do8YQ0gbW
-         KH6lPquCR6LHspcB7sizSLIWR1yZxIGZNOlcoTU9BDZY8NZ/N623ljnyETrC3GFuGAmZ
-         fj3AoEBn4Sk1tLO8kxSiz9OlutuvThAsQ4qK2mjGIqIbOStz1CY5P00udGpEtdgY25EJ
-         tMsclL8k2l4WOpL9BLJn14ZEfLQeKCek27zdT/BzlEesRLkBJGvs4KN1czgODpSNDRWG
-         A1Pg==
-X-Gm-Message-State: AO0yUKUMh9f5qRabTXGlHmgxqkalIHUhtLvMMrDkwA4n0pNFogB3D1jj
-        2caMVN6TQg4E46PvB601i44=
-X-Google-Smtp-Source: AK7set8CayRU/sR7tImdGcDOqjGJXPlySxe3xD4vFX4LrUmeT+RN+68CZxwjDh7xuW2SwJxLVsKOYw==
-X-Received: by 2002:a5d:43d1:0:b0:2c5:3d1c:efd8 with SMTP id v17-20020a5d43d1000000b002c53d1cefd8mr6008378wrr.63.1676586165505;
-        Thu, 16 Feb 2023 14:22:45 -0800 (PST)
-Received: from localhost (94.197.187.145.threembb.co.uk. [94.197.187.145])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003e00c453447sm5935410wmc.48.2023.02.16.14.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 14:22:45 -0800 (PST)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     agross@kernel.org, andersson@kernel.org, lee@kernel.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] mfd: qcom-pm8008: Remove workaround for a regmap-irq quirk
-Date:   Thu, 16 Feb 2023 22:22:14 +0000
-Message-Id: <20230216222214.138671-5-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230216222214.138671-1-aidanmacdonald.0x0@gmail.com>
-References: <20230216222214.138671-1-aidanmacdonald.0x0@gmail.com>
+        Thu, 16 Feb 2023 17:24:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BE8FC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 14:24:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBBFEB829D3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 22:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE29C433EF;
+        Thu, 16 Feb 2023 22:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676586287;
+        bh=AkZM/C98uZwsgM85uiCRPO8EwcX7/vGb5dRzoigiFTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h4twjsHpYg1ZsRqwRiklnPfq4ZL4PLdfXIOwL4h/BMGngn3raqEE+AFRX1+MzO+rI
+         9kdpAw/cISlY2uNSKIhFBvBn+9/Vg0MXjApHlpFLECWOBFDKeAKjoZP01mgOBwqt0x
+         FuOnjxyytzEFmLvfvBcf5v/oEbAjvwWy1RhdiMo1WPmzZXMJUwmkAzUFYYIbSGd5UW
+         3obfXS5e3o6e91XRY//h/6oZEjzpS80cQzgtzbmxQAund+ojjNesgnCP2pi3Nyjc8v
+         +j362C3E0UB1uIZH/wFy21eps9zuTshDeDXbsn/7ySECxAmJc2lHMzXJhVSG6CTi/F
+         CwijcSlo/c7eg==
+Date:   Thu, 16 Feb 2023 22:24:43 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/7] MPFS system controller/mailbox fixes
+Message-ID: <Y+6tK/OS13THpQo4@spud>
+References: <20230111134513.2495510-1-conor.dooley@microchip.com>
+ <CABb+yY3+83AP0B4RUGTabqjR=7rXJFMgAvXsM5Go3sz2RMJA1g@mail.gmail.com>
+ <Y8w5NO9E/j/6eT5d@spud>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cHIZQMqJK0RslrQL"
+Content-Disposition: inline
+In-Reply-To: <Y8w5NO9E/j/6eT5d@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove pm8008_init(), which according to the comments exists only
-as a workaround for regmap-irq's odd treatment of type registers.
-This workaround shouldn't be needed anymore because this driver
-uses config registers, which are always programmed by regmap-irq
-no matter what the initial register state is.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/mfd/qcom-pm8008.c | 30 ------------------------------
- 1 file changed, 30 deletions(-)
+--cHIZQMqJK0RslrQL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index 4bcdf0e50c40..a33fbc42ac8e 100644
---- a/drivers/mfd/qcom-pm8008.c
-+++ b/drivers/mfd/qcom-pm8008.c
-@@ -142,30 +142,6 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
- 	.max_register	= 0xFFFF,
- };
- 
--static int pm8008_init(struct regmap *regmap)
--{
--	int rc;
--
--	/*
--	 * Set TEMP_ALARM peripheral's TYPE so that the regmap-irq framework
--	 * reads this as the default value instead of zero, the HW default.
--	 * This is required to enable the writing of TYPE registers in
--	 * regmap_irq_sync_unlock().
--	 */
--	rc = regmap_write(regmap, (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
--	if (rc)
--		return rc;
--
--	/* Do the same for GPIO1 and GPIO2 peripherals */
--	rc = regmap_write(regmap, (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
--	if (rc)
--		return rc;
--
--	rc = regmap_write(regmap, (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
--
--	return rc;
--}
--
- static int pm8008_probe_irq_peripherals(struct device *dev,
- 					struct regmap *regmap,
- 					int client_irq)
-@@ -174,12 +150,6 @@ static int pm8008_probe_irq_peripherals(struct device *dev,
- 	struct regmap_irq_type *type;
- 	struct regmap_irq_chip_data *irq_data;
- 
--	rc = pm8008_init(regmap);
--	if (rc) {
--		dev_err(dev, "Init failed: %d\n", rc);
--		return rc;
--	}
--
- 	for (i = 0; i < ARRAY_SIZE(pm8008_irqs); i++) {
- 		type = &pm8008_irqs[i].type;
- 
--- 
-2.39.2
+Hey Jassi,
 
+On Sat, Jan 21, 2023 at 07:12:52PM +0000, Conor Dooley wrote:
+> On Sat, Jan 21, 2023 at 10:01:41AM -0600, Jassi Brar wrote:
+> > On Wed, Jan 11, 2023 at 7:45 AM Conor Dooley <conor.dooley@microchip.co=
+m> wrote:
+> > >
+> > > In order to differentiate between the service succeeding & the system
+> > > controller being inoperative or otherwise unable to function, I had to
+> > > switch the controller to poll a busy bit in the system controller's
+> > > registers to see if it has completed a service.
+> > > This makes sense anyway, as the interrupt corresponds to "data ready"
+> > > rather than "tx done", so I have changed the mailbox controller driver
+> > > to do that & left the interrupt solely for signalling data ready.
+> > > It just so happened that all of the services that I had worked with a=
+nd
+> > > tested up to this point were "infallible" & did not set a status, so =
+the
+> > > particular code paths were never tested.
+> > >
+> > > Jassi, the mailbox and soc patches depend on each other, as the change
+> > > in what the interrupt is used for requires changing the client driver=
+'s
+> > > behaviour too, as mbox_send_message() will now return when the system
+> > > controller is no longer busy rather than when the data is ready.
+> > > I'm happy to send the lot via the soc tree with your Ack and/or reive=
+w,
+> > > if that also works you?
+> > >
+> > Ok, let me review them and get back to you.
+>=20
+> FYI, I did sent a v2 on Friday:
+> https://lore.kernel.org/all/20230120143734.3438755-1-conor.dooley@microch=
+ip.com/
+>=20
+> The change is just a timeout duration though.
+>=20
+> > > Secondly, I have a question about what to do if a service does fail, =
+but
+> > > not due to a timeout - eg the above example where the "new" image for
+> > > the FPGA is actually older than the one that currently exists.
+> > > Ideally, if a service fails due to something other than the transacti=
+on
+> > > timing out, I would go and read the status registers to see what the
+> > > cause of failure was.
+> > > I could not find a function in the mailbox framework that allows the
+> > > client to request that sort of information from the client. Trying to
+> > > do something with the auxiliary bus, or exporting some function to a
+> > > device specific header seemed like a circumvention of the mailbox
+> > > framework.
+> > > Do you think it would be a good idea to implement something like
+> > > mbox_client_peek_status(struct mbox_chan *chan, void *data) to allow
+> > > clients to request this type of information?
+> > >
+> > .last_tx_done() is supposed to make sure everything is ok.
+>=20
+> Hm, might've explained badly as I think you've misunderstood. Or (see
+> below) I might have mistakenly thought that last_tx_done() was only meant
+> to signify that tx was done.
+>=20
+> Anyways, I'll try to clarify.
+> Some services don't set a status, but whether a status is, or isn't,
+> set has nothing to do with whether the service has completed.
+> One service that sets a status is "Authenticate Bitstream". This
+> service sets a status of 0x0 if the bitstream in question is okay _and_
+> something that the FPGA can be upgraded to. It returns a failure of 0x18
+> if the bitstream is valid _but_ is the same as that currently programmed.
+> (and of course a whole host of other possible errors in-between)
+>=20
+> These statuses, and whether they are a bad outcome or not, is dependant
+> on the service and I don't think should be handled in the mailbox
+> controller driver.
+>=20
+> > If the expected status bit is "sometimes not set", that means that bit
+> > is not the complete status.
+>=20
+> If the "busy" bit goes low, then the transmission must be complete,
+> there should be no need to check other bits for *completion*, but...
+>=20
+> > You have to check multiple registers to
+> > detect if and what caused the failure.
+>=20
+> ...maybe I have just misunderstood the role of .last_tx_done(). The
+> comment in mailbox-controller.h lead me to believe that it was used just
+> to check if it had been completed.
+>=20
+> Am I allowed to use .last_tx_done() to pass information back to the
+> mailbox client? If I could, that'd certainly be a nice way to get the
+> information on whether the service failed etc.
+>=20
+> Hopefully that, plus when you have a chance to look at the code, will
+> make what I am asking about a little clearer!
+
+Just wondering if you've had a chance to look at this again! I know it's
+missed the merge window this time around but I would like to get this
+behaviour fixed as other work depends on it.
+
+Thanks,
+Conor.
+
+
+--cHIZQMqJK0RslrQL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+6tKwAKCRB4tDGHoIJi
+0l6cAQCsWrIH+pqBwAf69uZLhrJvtlpPqSCTYxGM7EMsGHBwnQD+OgimOQeWf7mr
+9KgBmT+TJwYcmQ2Rk1rSxiDu3y+fhgo=
+=AfHa
+-----END PGP SIGNATURE-----
+
+--cHIZQMqJK0RslrQL--
