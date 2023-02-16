@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4EE699457
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52754699455
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 13:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjBPM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 07:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S230142AbjBPM3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 07:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBPM3n (ORCPT
+        with ESMTP id S229501AbjBPM3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:29:43 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8416A2202E;
-        Thu, 16 Feb 2023 04:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676550580; x=1708086580;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZnC8Lw8j7ydHwV6zv8nsmB+fLdFDL3MJ3B1RYeFSeuw=;
-  b=ge45uuMdfsn0lvSh7EvnLg0ZTHWlyH6SEpYUIoAkJUUpxlDv2Q/iGQ8a
-   Tg2m3OjP7Ox4ZJg25vxCc1nJpUuaOitOVdG0i4Pt/RgjkBEdlyFl6Zdmu
-   ntBWm62bn1mSwZSD57o/sp+X5AeVuNYeG2D3xcxMpp0ZgMw5geX9Md8/z
-   5kmb4p3MKJC1vHUf0q+NQeQnYAZshXyuBumb1hRZZbw+3KxU48190nWAH
-   ZAjQ60aai6pXV1HzqqnW6hpvCfkYBmdXAim/Bs+g0UFvpt82DwALBI2/l
-   KffjdmtxbXY8ZbRnHqFQl87AZVgizSSHjU61mMO9wLSxpmLIX7I5fAOv+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,302,1669100400"; 
-   d="scan'208";a="200971009"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Feb 2023 05:29:39 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 16 Feb 2023 05:29:39 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 16 Feb 2023 05:29:38 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2] net: lan966x: Use automatic selection of VCAP rule actionset
-Date:   Thu, 16 Feb 2023 13:29:07 +0100
-Message-ID: <20230216122907.2207291-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 16 Feb 2023 07:29:30 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AB62202E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 04:29:29 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 26AE81EC0910;
+        Thu, 16 Feb 2023 13:29:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676550568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OmK0LFQF2H88m7lKl33/05bbgVtwEAo1+3ic2R12ZJQ=;
+        b=GesKoEatdeJwml187Wk3rupOghLkelFQ6ZseSwF5sUA762TPHlebJVUZQx17LQv5Qm+yAw
+        NimBXVkIUQbq2FUcxg9Mxri7h/9vWjp9zlbguxI5/mBNPgkP+65ewXBp8hH6Sn9AnpZEKM
+        eWGbje3c/6Z7OVysPY95zarCcfsYXNA=
+Date:   Thu, 16 Feb 2023 13:29:24 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+Message-ID: <Y+4hpAdn+JQEBqoG@zn.tnic>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com>
+ <Y+ohfE/wICFKO/93@zn.tnic>
+ <cc6c58a8-b162-a6eb-37d4-40786f532837@suse.com>
+ <Y+4SqDN2Hssau4fq@zn.tnic>
+ <e5138aad-175e-d9bb-93f2-2fc563e09a41@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e5138aad-175e-d9bb-93f2-2fc563e09a41@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 81e164c4aec5 ("net: microchip: sparx5: Add automatic
-selection of VCAP rule actionset") the VCAP API has the capability to
-select automatically the actionset based on the actions that are attached
-to the rule. So it is not needed anymore to hardcore the actionset in the
-driver, therefore it is OK to remove this.
+On Thu, Feb 16, 2023 at 01:19:22PM +0100, Juergen Gross wrote:
+> Hmm, I must be blind. I can't spot it.
+> 
+> I'm seeing only the feature bit #define and a call of
+> setup_clear_cpu_cap(X86_FEATURE_SEV_SNP) in this patch.
+> 
+> Or is it done by hardware or the hypervisor?
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-v1->v2:
-- improve the commit message by mentioning the commit which allows
-  to make this change
----
- drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c | 2 --
- 1 file changed, 2 deletions(-)
+Correction - I meant CC_ATTR_GUEST_SEV_SNP not the CPUID feature flag.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-index bd10a71897418..f960727ecaeec 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-@@ -261,8 +261,6 @@ static int lan966x_tc_flower_add(struct lan966x_port *port,
- 							0);
- 			err |= vcap_rule_add_action_u32(vrule, VCAP_AF_MASK_MODE,
- 							LAN966X_PMM_REPLACE);
--			err |= vcap_set_rule_set_actionset(vrule,
--							   VCAP_AFS_BASE_TYPE);
- 			if (err)
- 				goto out;
- 
+Sorry for the confusion folks.
+
 -- 
-2.38.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
