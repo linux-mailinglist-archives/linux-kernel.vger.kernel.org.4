@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F02C698BBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922B1698BBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjBPFUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 00:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S229688AbjBPFUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBPFTu (ORCPT
+        with ESMTP id S229734AbjBPFT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:19:50 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE7457D4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:57 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4cddba76f55so8311157b3.23
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:18:57 -0800 (PST)
+        Thu, 16 Feb 2023 00:19:57 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFAA474D1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:01 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id q127-20020a25d985000000b009362f0368aeso883604ybg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 21:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=76w8C0WtscQXhYR05yNYHvPFGtZWYYoigmdRBKNsAGs=;
-        b=FCDmrKExzLuCArz312mMsT1GG2XBAJpY0IRk4Dudkq8tacxOtpStMHAB4mCqF7cHzr
-         HxmYKbJzh0e/OlcI5tze/pJirqiUzOseaOUlDEtDH80qm7FP3CxiVmnvUlVVgBXp61ej
-         ykGRdx137mYbxOiW4ntwVshjUhNYXqvxbpsd7tR4+U5K8xmf3z6sAC5BmIr5igjBFbE2
-         Lhh7YXKnyKDhial8w7C+wSOyLz2qDj3wAEjKVPIMU3N4BzLNr3q2F7Jzk8qKKMPeJp0i
-         mhDW6Px8X9de0wrc9+taZBLP7xnnbG62Qe2RXE2u3O0X+3PidgLM2eknvp7ECPYQAyqI
-         26OQ==
+        bh=g+2R9wHJik/ujG7pbEIR7UB7BFuMmi7T4GQjwfs+Slo=;
+        b=GJ5BxW0Q1u88snEvipBftLmc3+Jf1QItAPirJyrJgB8Mp9ylRIIALZlXmJQ4wNiSwP
+         o865zgbeTpwGE0/miDmLSBWepWhJN06egqwo+YGBO2p834t1tPcrBoNtCdfrXD1jQzaN
+         e7lrVFe77phFTZAotKwLYsW/LOb59LyIPFjYvDx4mPrMSRvD2iWSSQr/TeKwF3SManJP
+         7zOmcrgCnGJ5t0wPXfGvFFU5Wepw7LHd2B3wtwv+KMRgdeCQNTeRgpwm3UNl2CvWi/nE
+         3FOidEUJKnpNbe60Or5Um47yum4t5Cm2ARYxCb7pet6vv6oqpLv+fwdHpYVdfug+gwv9
+         oixA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=76w8C0WtscQXhYR05yNYHvPFGtZWYYoigmdRBKNsAGs=;
-        b=Cl/2dg7px0VteYTm0pbQw/GnSDeS3R4D6VtyflogegSEOZoWEluwyTU/AlNNcDyfU1
-         qzLngBSYK2fAbFY7MXdonFLKX2iihrOywsQkp196b31AmMQs66bVyZjcqwYGiEKdV2As
-         kI6qNDJKI8hp+4BFj3SHyy9J/bi+BrIIZ9YBAS9ro/c2Kn0CdOlRUj7QBrC+zMpwoepW
-         76GuwSpmusAEGjcieAX6cJENr51VyktlWN2Kk0V/VCrAJNEYfm/oIBNF4XKDI419JXZD
-         W22h+sTVVExRJ1n9d8uR/y4l9KsxqbH8pwNyrijbcFQizA2cJnhWwpRO3sBcQRoTx6ef
-         9ENQ==
-X-Gm-Message-State: AO0yUKVaIfCPc3sKSXOFm2HkN/387vQOxApK9NEv/Wj7DBhMXSgdKfwr
-        xckfzea6zM4CUEz9ld2zPHhxxJQYL8s=
-X-Google-Smtp-Source: AK7set/7Y/K8KWVB4K6J3b/XMgTvXO7u2Z/Kc+o++p3RcwHAcWZWf0oYrOVDXbq6GKc7ezqD+HuFayT02ok=
+        bh=g+2R9wHJik/ujG7pbEIR7UB7BFuMmi7T4GQjwfs+Slo=;
+        b=Qi3tRaGOFoNfAfZOXYc5BFe0C7UUqBaV5lquw1ZJ5toVViOcgpfIVIkTr+7eGAzQKM
+         MiP476TRD9/Gi/YCUSfYwC5297Yn0h5OJDxPp9Uu6Sa2gAyo595Fkw6l4ZY2v9WpYUtw
+         BzfrK1e+xzxgFiCKBufoFG82ZcyF2zKF9SS4h6ocgzSmE1I9TdB7AzqJGyKuwTus04/7
+         sh00bqtKsu/xqYKnQhvg2M7+LxogCzjf7wPFcyblIK0UGh1rDKwZC0ApTfxehir00NJn
+         5hefN49CeTJLtsRz0zpSedzMfHjoXkFxJMlJW9NAnAaieKokpa0HtDRzd0zjTgq2M3AS
+         +rXg==
+X-Gm-Message-State: AO0yUKUfxcUdXcQOCiH92eidQJURQsAkgLjGfjpIVT/UmZ63e+T8j9J8
+        xkTTs7ZOjRQSnz5SvGXFY5aAjXV5YG8=
+X-Google-Smtp-Source: AK7set/8zrN2bEgVNx1m2BtSP2crHaoN6LxODGu2trr1UY0Ec3uUEJoRM+mde4AC+sE3ZWg+Wi9w81iJ8kk=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f781:d5ed:1806:6ebb])
- (user=surenb job=sendgmr) by 2002:a81:9e0a:0:b0:532:a8a0:8d76 with SMTP id
- m10-20020a819e0a000000b00532a8a08d76mr235300ywj.85.1676524737340; Wed, 15 Feb
- 2023 21:18:57 -0800 (PST)
-Date:   Wed, 15 Feb 2023 21:17:41 -0800
+ (user=surenb job=sendgmr) by 2002:a5b:144:0:b0:8ec:cc9b:7333 with SMTP id
+ c4-20020a5b0144000000b008eccc9b7333mr463396ybp.205.1676524739514; Wed, 15 Feb
+ 2023 21:18:59 -0800 (PST)
+Date:   Wed, 15 Feb 2023 21:17:42 -0800
 In-Reply-To: <20230216051750.3125598-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230216051750.3125598-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230216051750.3125598-27-surenb@google.com>
-Subject: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is not
- yet set
+Message-ID: <20230216051750.3125598-28-surenb@google.com>
+Subject: [PATCH v3 27/35] mm: add FAULT_FLAG_VMA_LOCK flag
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -74,7 +73,8 @@ Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Suren Baghdasaryan <surenb@google.com>
+        Suren Baghdasaryan <surenb@google.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -86,36 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When vma->anon_vma is not set, page fault handler will set it by either
-reusing anon_vma of an adjacent VMA if VMAs are compatible or by
-allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
-a compatible adjacent VMA and that requires not only the faulting VMA
-to be stable but also the tree structure and other VMAs inside that tree.
-Therefore locking just the faulting VMA is not enough for this search.
-Fall back to taking mmap_lock when vma->anon_vma is not set. This
-situation happens only on the first page fault and should not affect
-overall performance.
+Add a new flag to distinguish page faults handled under protection of
+per-vma lock.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>
 ---
- mm/memory.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/mm.h       | 3 ++-
+ include/linux/mm_types.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 5e1c124552a1..13369ff15ec1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5242,6 +5242,10 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
- 	if (!vma_is_anonymous(vma))
- 		goto inval;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 36172bb38e6b..3c9167529417 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -478,7 +478,8 @@ static inline bool fault_flag_allow_retry_first(enum fault_flag flags)
+ 	{ FAULT_FLAG_USER,		"USER" }, \
+ 	{ FAULT_FLAG_REMOTE,		"REMOTE" }, \
+ 	{ FAULT_FLAG_INSTRUCTION,	"INSTRUCTION" }, \
+-	{ FAULT_FLAG_INTERRUPTIBLE,	"INTERRUPTIBLE" }
++	{ FAULT_FLAG_INTERRUPTIBLE,	"INTERRUPTIBLE" }, \
++	{ FAULT_FLAG_VMA_LOCK,		"VMA_LOCK" }
  
-+	/* find_mergeable_anon_vma uses adjacent vmas which are not locked */
-+	if (!vma->anon_vma)
-+		goto inval;
-+
- 	if (!vma_start_read(vma))
- 		goto inval;
+ /*
+  * vm_fault is filled by the pagefault handler and passed to the vma's
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 939f4f5a1115..212e7f923a69 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1056,6 +1056,7 @@ enum fault_flag {
+ 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
+ 	FAULT_FLAG_UNSHARE =		1 << 10,
+ 	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
++	FAULT_FLAG_VMA_LOCK =		1 << 12,
+ };
  
+ typedef unsigned int __bitwise zap_flags_t;
 -- 
 2.39.1
 
