@@ -2,139 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891B2699B78
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7EC699B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 18:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjBPRp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 12:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S229882AbjBPRqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 12:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBPRpz (ORCPT
+        with ESMTP id S229547AbjBPRqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:45:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A584C3D2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 09:45:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676569515;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mzxNVMuq5jEQnFVLSN30BEqatt4b1C2xfEjhCs+OpU=;
-        b=VipjDgL5MOc8Yx2YLr6KwwiYL0IvN9vaUax5FtU94eiyzR5PvEjIKHkOsZoFkuk5Pas48k
-        r1XYtyil1ShK2sYAVEBFOgTXxXk1bXjaMoQRMHBfCllALlTR1wWqSEB1I9DcSYQxA8ZDJw
-        e9+aI4FH2e7BCzSrf3wwRjDbE8kapLQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-_BdyFXuUNbSriE5uz1rNgA-1; Thu, 16 Feb 2023 12:45:13 -0500
-X-MC-Unique: _BdyFXuUNbSriE5uz1rNgA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D27138041D7;
-        Thu, 16 Feb 2023 17:45:12 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 02756492B15;
-        Thu, 16 Feb 2023 17:45:12 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 31GHjBfP024047;
-        Thu, 16 Feb 2023 12:45:11 -0500
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 31GHjBZ0024043;
-        Thu, 16 Feb 2023 12:45:11 -0500
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Thu, 16 Feb 2023 12:45:11 -0500 (EST)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Yang Shi <shy828301@gmail.com>
-cc:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, akpm@linux-foundation.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [dm-devel] [v2 PATCH 0/5] Introduce mempool pages bulk allocator
- and use it in dm-crypt
-In-Reply-To: <CAHbLzkr4RrKpR1pGZxs7JdB=R539SiNgO2+Fr7X-rVKcBh5tQQ@mail.gmail.com>
-Message-ID: <alpine.LRH.2.21.2302161204300.18393@file01.intranet.prod.int.rdu2.redhat.com>
-References: <20230214190221.1156876-1-shy828301@gmail.com> <alpine.LRH.2.21.2302150716120.5940@file01.intranet.prod.int.rdu2.redhat.com> <CAHbLzkr4RrKpR1pGZxs7JdB=R539SiNgO2+Fr7X-rVKcBh5tQQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Thu, 16 Feb 2023 12:46:35 -0500
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EFB4C3F8;
+        Thu, 16 Feb 2023 09:46:35 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id b5so2819438plz.5;
+        Thu, 16 Feb 2023 09:46:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=inCt4UfQhzrVjZJORWD7A+ueESnX9lWn7iD06uQFXoM=;
+        b=IE+EoZMmzfDVugt0d4diovC0wMM0fMfSct9N5G8B+qNbw2vxxtUhmWRybd1I8mT08d
+         RvNg6CO2YfCzmqlPRu5QKHv0cQdp3D7fgtOwVv1TJX+QwsBXREQvYOJ99JHgPTXFRJh1
+         SCQm5nYFy8OvEE2Glfh8NM2bFsxejO/K9vurZ0DcE/QY5K3QG21ghkoUKMN96IlWg/j5
+         JnI83+CCQaqQtdUEunvisCovnanB5Vk4RT0QRLgT3tzvtLUP4iCtySmB4qYWlzwB7jMa
+         TCqKrHFr+eJlbKzuzX2ZhhRL7WWVYJw/7WR369y/GEklLJW+rnMGX6tsu58A8ciCY/J4
+         WKmg==
+X-Gm-Message-State: AO0yUKWCmzLyztsfisIoUSRQDYSVwoPK4V3EJHL5amdpr7GEko8cf0qg
+        SoecVJsbtbDvDhiI0ZWWOxc=
+X-Google-Smtp-Source: AK7set8o00RWThdYLu0u33RJUiEVqiKbQpyOVtOl5d15NkjxmqwolNpHng2o2sZrhqoSsuSnDehZGw==
+X-Received: by 2002:a05:6a21:6d88:b0:c7:20d8:dc1e with SMTP id wl8-20020a056a216d8800b000c720d8dc1emr3359795pzb.27.1676569594357;
+        Thu, 16 Feb 2023 09:46:34 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:3a83:c047:6e5d:a776? ([2620:15c:211:201:3a83:c047:6e5d:a776])
+        by smtp.gmail.com with ESMTPSA id d7-20020a656207000000b004fadb547d0csm1434401pgv.61.2023.02.16.09.46.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 09:46:33 -0800 (PST)
+Message-ID: <0799ff2a-4775-46f0-38b9-ef28146fd6e1@acm.org>
+Date:   Thu, 16 Feb 2023 09:46:31 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/1] ufs: mcq: fix incorrectly set queue depth
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        avri.altman@wdc.com, mani@kernel.org, beanhuo@micron.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <8840cea4a57b46dabce18acc39afc50ab826330f.1676567593.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <8840cea4a57b46dabce18acc39afc50ab826330f.1676567593.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 15 Feb 2023, Yang Shi wrote:
-
-> On Wed, Feb 15, 2023 at 4:23 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
-> >
-> >
-> >
-> > On Tue, 14 Feb 2023, Yang Shi wrote:
-> >
-> > >
-> > > Changelog:
-> > > RFC -> v2:
-> > >   * Added callback variant for page bulk allocator and mempool bulk allocator
-> > >     per Mel Gorman.
-> > >   * Used the callback version in dm-crypt driver.
-> > >   * Some code cleanup and refactor to reduce duplicate code.
-> > >
-> > > rfc: https://lore.kernel.org/linux-mm/20221005180341.1738796-1-shy828301@gmail.com/
-> >
-> > Hi
-> >
-> > This seems like unneeded complication to me. We have alloc_pages(), it can
-> > allocate multiple pages efficiently, so why not use it?
+On 2/16/23 09:13, Asutosh Das wrote:
+> ufshcd_config_mcq() may change the can_queue value.
+> The current code invokes scsi_add_host() before ufshcd_config_mcq().
+> So the tags are limited to the old can_queue value.
 > 
-> The alloc_pages() allocates *contiguous* pages, but dm-crypt doesn't
-> need contiguous pages at all. This may incur unnecessary compaction
+> Fix this by invoking scsi_add_host() after ufshcd_config_mcq().
 
-It doesn't hurt that the pages are contiguous - and allocating and freeing 
-a few compound pages is even faster than allocating and freeing many 
-0-order pages.
-
-> overhead to the dm-crypt layer when memory is fragmented.
-
-The compaction overhead may be suppressed by the GFP flags (i.e. don't use 
-__GFP_DIRECT_RECLAIM).
-
-> The bulk allocator is a good fit to this usecase, which allocates 
-> multiple order-0 pages.
-> 
-> In addition, filesystem writeback doesn't guarantee power-of-2 pages
-> every time IIUC. But alloc_pages() just can allocate power-of-2 pages.
-
-So, we can allocate more compound pages for the non-power-of-2 case - see 
-the next patch that I'm sending.
-
-> >
-> > I suggest to modify crypt_alloc_buffer() to use alloc_pages() and if
-> > alloc_pages() fails (either because the system is low on memory or because
-> > memory is too fragmented), fall back to the existing code that does
-> > mempool_alloc().
-> 
-> My PoC patches just did this way, but called bulk allocator. There may
-> be other potential mepool users as I listed in this cover letter,
-> which may get benefits from bulk allocator. So introducing a new bulk
-> mempool API seems better for long run although we just have one user
-> for now. And it makes other uses easier to gain the benefit by just
-> calling the new API.
-
-This mempool bulk refactoring just makes the code bigger. And it is not 
-needed - dm-crypt can fall-back to non-bulk mempool allocations.
-
-In the next email, I'm sending a patch that is noticeably smaller and that 
-uses alloc_pages()/__free_pages().
-
-Mikulas
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
