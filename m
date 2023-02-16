@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F92969914C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45404699152
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjBPKc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S230029AbjBPKc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjBPKc0 (ORCPT
+        with ESMTP id S229490AbjBPKcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:32:26 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3AB460A3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:32:14 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id t24so4052152eji.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:32:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KWFSUdCVRyVw6x7wcHcTM6IEabG8cCTacN0P9Cw7hss=;
-        b=DMVup6OQE69edQyn0ggk5ICi+662UFL0/JfpbZ1h8e+u4l5Oh2B34koVVN9Qc4yX5j
-         82JMa3fgus74jDHnOE9BaoHTn9ePGcRv7Ty1bwSf083Q51CQ5VaYILa/ndl4Jsko2xL5
-         afpHBT1CUVQQRKDb3biN/mAlsG4yKM0gRtzoZutL4nX6oZAD9IUuWSeeqXso66mnSBCc
-         f5nMcP8DKEEtolK5H8fM4y5rr+PqN89HVv9UeilaFAXPExCHYy2vaO2lxMZDMqPemx91
-         t0iDcsvGZcbj0aWJxg4kaOC7DjGJObegwF+7x4NAg9Iz1EQt6uvTsFbZbZIY1jf3QcMI
-         OHAA==
+        Thu, 16 Feb 2023 05:32:55 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E92CC3D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:32:53 -0800 (PST)
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E54F13F215
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 10:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676543569;
+        bh=Dx3MYilqW2r7Vu1W8An/euV6qfs89+qFW9d0ePW+LXE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=PI6M1wz6bCf+rKms8XLGAeyPWnWO82gCDXLt1oGzgst4RZQKx5/TCMTdnOHfugsxf
+         JLo27N+7uurBnQXBSCZ79F3qgI2GB+AgbJYq8QBy6jNiX2T+d3qs9HDolXnkpvVieZ
+         HXZKOxgJ+76ap3JiyIdXuGYw5OMnEkPWf55F9j0+EvD7k00X76xSswHW/WBgQ2hKgg
+         xEB0VgBSJoZMcB9mgsaOrjDlgWbsrdgJTR/ab1zk924Shy16JZc9puFujsBkM6LI0p
+         r5cetXAEtn5SkKgD1dzK9v/yT3ETXB9J9rwx5avHW2dGnNU0itj9iP9QsRuMgdHU5x
+         DV9IY3Tfl+Hyg==
+Received: by mail-qk1-f197.google.com with SMTP id s7-20020ae9f707000000b007294677a6e8so903809qkg.17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:32:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KWFSUdCVRyVw6x7wcHcTM6IEabG8cCTacN0P9Cw7hss=;
-        b=3D322w9xVSb3fbhkjkCD9va+zZVpc/v7rqzfZ4gBlsrF1iH+88ktLM2Ns6H1xm9Ph+
-         3dmWmI/yyM+SJddGBY0ptVlDAzGCjooBdEhquHd3H5hmjlVpHKRgQkbwYJ9qSDdeO6Xh
-         8LarImRskHPi56OGPQCjdyv/OrphJ+bNsn/onZYi2EFkQr+qRkuEL/+kqoiEhytbM85f
-         Fqkl3vhnS2AdGHS7GGJMGSBnEjjFLsJEJ5FMRIE8ZlHzvTLX0V5p+1gsvPjQ/SSu0BUL
-         qerOnU1hb1hG6G6tvzEqyA8Ix5dBoJm9aPmN4eiQvgDrnSsfWWNhm65Wk/qPVnegWjK6
-         +IQg==
-X-Gm-Message-State: AO0yUKU2YBt6QnY3FCq1x5ae/FgMUGw4PuXTTteKWeWvk2bRujMtRrA3
-        JeNQRvr6+kJFml1YzPDdIQpH4w==
-X-Google-Smtp-Source: AK7set/sKPk5xv7sgFMMvWdIVPPdD/XK4wPmGnvEGYQZMLg0YJX52U9MQnYr5e9CYPFb4GHTbmdmSg==
-X-Received: by 2002:a17:906:ca4e:b0:89c:d072:e33e with SMTP id jx14-20020a170906ca4e00b0089cd072e33emr6792084ejb.49.1676543531221;
-        Thu, 16 Feb 2023 02:32:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id my10-20020a1709065a4a00b0084d35ffbc20sm635832ejc.68.2023.02.16.02.32.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:32:10 -0800 (PST)
-Message-ID: <07ce0eaa-d468-2425-be2a-f1868cd45419@linaro.org>
-Date:   Thu, 16 Feb 2023 11:32:09 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dx3MYilqW2r7Vu1W8An/euV6qfs89+qFW9d0ePW+LXE=;
+        b=k624Z3K41o3kq2NpGRJDZV6i2JQ7yz1kojW/KdQKRI9nHowogRkgzXfXWjXP5N5wQ6
+         TNSSZGCzKC4hDrMU5MxbTmXxE2FpLOfuj/br8uBTSybMiIR4jhkTqQPIvHOCM042FI8V
+         D3xuvGk1P1OHf27ZotoCl+Y44rYWuRE2dgiTB34lcEG6jNceins5LqV2kSoxEubI8cuR
+         3IEl9bieaIXdqo+i1SrBSOvuQh3X4nOu16CwmjiYHwdj/5hKAiQmhEwL/QWSRlxCI1Wn
+         tEN8uUmc0/9vJkuvBlAPmc9Qvy1pfizgUqUX1sYDl+SezUrSz7lzw5zvviV1ArdTPMre
+         XiUA==
+X-Gm-Message-State: AO0yUKXbAlpPB2kn4vSRxLNVjwKQHNs3IY6Qoidu5PfFceA4d4KOwdmr
+        NUgUR6rb6sApEKKVfpFEByjvtMUkSxdw1c7AT5Wpr1us+jSsgna7T9nHl8BfRvlRqjgtNrYnOFB
+        AE2wTLSPrIiGfwtdTutuTuiCRmf2B4sliwgABpQK9cZ5B1X9PFC9cTIkFVw==
+X-Received: by 2002:a05:622a:164f:b0:3bc:e3a8:d1d6 with SMTP id y15-20020a05622a164f00b003bce3a8d1d6mr542987qtj.229.1676543568967;
+        Thu, 16 Feb 2023 02:32:48 -0800 (PST)
+X-Google-Smtp-Source: AK7set+4xsIEJbTGPazez50zbEJszx4ibDQjWznUyLD8XYEgf0cX5nDZgAvCvsKEVYODY8nBGxetreYQTo+KIdL+fjs=
+X-Received: by 2002:a05:622a:164f:b0:3bc:e3a8:d1d6 with SMTP id
+ y15-20020a05622a164f00b003bce3a8d1d6mr542972qtj.229.1676543568686; Thu, 16
+ Feb 2023 02:32:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 4/4] dt-bindings: syscon: Add StarFive syscon doc
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-8-hal.feng@starfivetech.com> <CAJM55Z9Y_fF+4Dtu++C_jVS0+ohXp5U0GyuJCBpUh-SpTMGrVA@mail.gmail.com>
+ <af42ed91-95aa-014a-1efb-6f70ee5a0433@starfivetech.com> <CAJM55Z-+Cz8d=YySRaFJSAffDfoZ4Madx322qCX100-nAcx+5Q@mail.gmail.com>
+ <Y+38bT8cnahu19bw@wendy> <Y+4AxDSDLyL1WAqh@wendy>
+In-Reply-To: <Y+4AxDSDLyL1WAqh@wendy>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 16 Feb 2023 11:32:31 +0100
+Message-ID: <CAJM55Z9M2xgNBRxG8cNefGt5hn4fbZmgHWzC2e8AfmKUq9Gw7A@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
+ VisionFive 2 board device tree
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
         linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org
-References: <20230215113249.47727-1-william.qiu@starfivetech.com>
- <20230215113249.47727-5-william.qiu@starfivetech.com>
- <41bcc545-6eda-6c30-c600-d97ef009abf2@linaro.org>
- <4b9edac8-20bf-be1c-6b32-69b7f7616ad5@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4b9edac8-20bf-be1c-6b32-69b7f7616ad5@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,35 +94,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 11:30, William Qiu wrote:
-> 
-> 
-> On 2023/2/16 18:23, Krzysztof Kozlowski wrote:
->> On 15/02/2023 12:32, William Qiu wrote:
->>> Add documentation to describe StarFive System Controller Registers.
->>>
->>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->>> ---
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - starfive,jh7110-stg-syscon
->>> +          - starfive,jh7110-sys-syscon
->>> +          - starfive,jh7110-aon-syscon
->>
->> Maybe keep them ordered alphabetically?
->>
-> 
-> I'm sorting by register address, or I can keep them ordered
-> alphabetically，which is better?
+On Thu, 16 Feb 2023 at 11:09, Conor Dooley <conor.dooley@microchip.com> wrote:
+>
+> On Thu, Feb 16, 2023 at 09:50:37AM +0000, Conor Dooley wrote:
+> > On Thu, Feb 16, 2023 at 10:27:17AM +0100, Emil Renner Berthing wrote:
+> > > On Wed, 15 Feb 2023 at 15:04, Hal Feng <hal.feng@starfivetech.com> wrote:
+> > > > On 2/14/2023 5:53 PM, Emil Renner Berthing wrote:
+> > > > > On Tue, 20 Dec 2022 at 02:12, Hal Feng <hal.feng@starfivetech.com> wrote:
+> >
+> > > > >> +       model = "StarFive VisionFive 2 VB";
+> > > > >> +       compatible = "starfive,visionfive-2-vb", "starfive,jh7110";
+> > > > >
+> > > > > Hi Hal,
+> > > > >
+> > > > > I just want to double check, is "VisionFive 2 VA" / "visoinfive-2-va"
+> > > > > and "VisionFive 2 VB" / "visionfive-2-vb" really what you want? I
+> > > > > still think having these names match what is printed on the silkscreen
+> > > > > makes it a lot easier for everybody. Even your own releases calls the
+> > > > > boards "v1.2A" and "v1.3B":
+> > > > > https://github.com/starfive-tech/VisionFive2/releases/
+> > > > >
+> > > > > So I'd suggest
+> > > > > model = "StarFive VisionFive 2 v1.3B";
+> > > > > compatible = "starfive,visionfive-2-v1.3b", "starfive,jh7110";
+> > > > >
+> > > > > I haven't seen these "VA" and "VB" anywhere else, so if you don't want
+> > > > > the version numbers and can promise that there will be no incompatible
+> > > > > future revisions of the boards then maybe just drop the "V". Eg.
+> > > > > model = "StarFive VisionFive 2 B";
+> > > > > compatible = "starfive,visionfive-2-b", "starfive,jh7110";
+> > > >
+> > > > The version A board has reached the end of life. As far as I know, the
+> > > > version B board will not update also unless there are some important
+> > > > requirements and StarFive decides to update. Furthermore, it's too late
+> > > > to change the compatible as patch 1 was already accepted. Will it be
+> > > > easier to read if I modify it as below?
+> > > >
+> > > >         model = "StarFive VisionFive 2 vB";
+> > > >         compatible = "starfive,visionfive-2-vb", "starfive,jh7110";
+> > >
+> > > Oh, that's sad that the kernel will now end up calling the boards
+> > > something that's used nowhere else, even by StarFive :/
+> > > But yeah, I guess vA and vB are a little easier to read.
+> >
+> > Nothing has been released with that name so AFAIU we can change it
+> > still. If you sort it out today/tomorrow I'll try get it to Arnd before
+> > the merge window opens...
+> >
+> > I might've jumped the gun a bit here, I thought that it'd been changed
+> > to what you (Emil) had suggested.
 
-We don't know register address here, so I propose alphabetically.
+No, I'm sorry for being late here. The below definitely looks better to me.
 
+Hal, would you be fine with this change?
 
-Best regards,
-Krzysztof
+/Emil
 
+>
+> -- >8 --
+> From 4d44e8a83716d1caa314f25a95bd21ac8904909e Mon Sep 17 00:00:00 2001
+> From: Conor Dooley <conor.dooley@microchip.com>
+> Date: Thu, 16 Feb 2023 09:58:22 +0000
+> Subject: [PATCH] dt-bindings: riscv: correct starfive visionfive 2 compatibles
+>
+> Using "va" and "vb" doesn't match what's written on the board, or the
+> communications from StarFive.
+> Switching to using the silkscreened version number will ease confusion &
+> the risk of another spin of the board containing a "conflicting" version
+> identifier.
+>
+> Suggested-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> Fixes: 97b7ed072784 ("dt-bindings: riscv: Add StarFive JH7110 SoC and VisionFive 2 board")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> index 60c7c03fcdce..cc4d92f0a1bf 100644
+> --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> @@ -26,8 +26,8 @@ properties:
+>
+>        - items:
+>            - enum:
+> -              - starfive,visionfive-2-va
+> -              - starfive,visionfive-2-vb
+> +              - starfive,visionfive-2-v1.2a
+> +              - starfive,visionfive-2-v1.3b
+>            - const: starfive,jh7110
+>
+>  additionalProperties: true
+> --
+> 2.39.0
+>
+>
