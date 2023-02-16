@@ -2,170 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31FA69929D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2FD6992A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjBPLCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:02:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S229818AbjBPLCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjBPLCh (ORCPT
+        with ESMTP id S230053AbjBPLCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:02:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BBE22A29
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676545307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RT3I0H8bP1HeewuPOTi34AMMwE+sGnWigdoFWwsEuUo=;
-        b=FVn8S7/2Wj28Zj0Ty1m6tPXTbIeBn3wHG7D2mh1enYTMRiwyJi2XjzoySHrRVm1Nhpry4l
-        GdNVwPDiRlv8FgHi+4sMWpow1yIzs+KVMgUR/1emLCZUbmmBUsempa9hnN7aut/o+D+YmR
-        PLayxokyW78umRIko8Gc1ISqeAY8drk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-251-hNmcP5wLPeaGvNJ5JgajiQ-1; Thu, 16 Feb 2023 06:01:46 -0500
-X-MC-Unique: hNmcP5wLPeaGvNJ5JgajiQ-1
-Received: by mail-wr1-f71.google.com with SMTP id l25-20020adfb119000000b002c557db0e0fso195049wra.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:01:46 -0800 (PST)
+        Thu, 16 Feb 2023 06:02:42 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0450B199
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:02:41 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id c1so2250038edt.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ea7TLkXH9nH4DA//1th+Z+4aboDPChuuD0jgIfj0RCw=;
+        b=H1baVUnJRcg8cDc1YjHMX5yBmKVB2yuz7kOfaFXzi2M87JnaU3ZH7ZFmSYmqmioNiY
+         L5NydmwgfDVfi1bon2+jot0meHsl3BYpV0o2/eQzfEdy63bOv+s7f/422AoDnb9kyF9Q
+         GEMIr23IMOsksGGdtc9KoJqd/GvjHE8QZhQmWg8Txwh7mw/mSa2IGdir2zCRa5Yt69Nk
+         Y05jarUZjiTC7KJNHqNBgyFRB+u4B5v9oPTPb+tYqojbfLU2fiJ09sgyhDe8CS/TMem8
+         3Apo17N1y0wFe10mh038/JL0BG9nlzeD9e9OWHtVG+Q0INccnlCJgj83B6fsBqGjpvOd
+         H3fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RT3I0H8bP1HeewuPOTi34AMMwE+sGnWigdoFWwsEuUo=;
-        b=syVRIWscMCelOoV6bZSRn9PmCSjRfc0MsxSPG4QjGjRYWaNGrFEeS9fuF06U2gGB1/
-         AKZxZStr+BQtpfGQwW3APaFRrPSI67YiBCn1B1z1uMXljy/vmxE7o+cjsudH3xuaDXqJ
-         GZq6Bx2xQfQ25bmn0m/NZ+Y81dvrtNJJpC209tSluXgVpKCIi/ynrOCjwJI9Glh6/aFQ
-         MedITFo9DfDei/MePkqrciZ///DlJK/5zOJnQ9lem0Qc0HCMQapQcEMCMj8MC72ASdXT
-         FfNRZPPBdOLH5iikAORyY7PkZL80M1Y1UA8nBaeZY/u0AK4GOUBrtiQST9ttQ9OiJnnP
-         opgw==
-X-Gm-Message-State: AO0yUKWr+IiVDa+qqS48oPnDTT1oWAk9Dak9/MoPX2kI16B0aIQKUGZg
-        AmL75KONgd/A1hUZoavdj0069ONm0OnG9j4IGbQGJ3oB+D/8xeik9TlBscPW99DQxZEZmWUcePL
-        Uec+HuOmiDpr6rfcurxdUkfZN
-X-Received: by 2002:a05:600c:91d:b0:3e2:668:3ed7 with SMTP id m29-20020a05600c091d00b003e206683ed7mr3338189wmp.1.1676545305250;
-        Thu, 16 Feb 2023 03:01:45 -0800 (PST)
-X-Google-Smtp-Source: AK7set+OFHhrzLoDINOIw5SqQtAninJ8ylAaeCFlYtZeD42IvN4cWNCvjf+X25DXWAkpUabrQ87eYw==
-X-Received: by 2002:a05:600c:91d:b0:3e2:668:3ed7 with SMTP id m29-20020a05600c091d00b003e206683ed7mr3338154wmp.1.1676545304870;
-        Thu, 16 Feb 2023 03:01:44 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dc4aae4739sm4815014wmc.27.2023.02.16.03.01.43
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ea7TLkXH9nH4DA//1th+Z+4aboDPChuuD0jgIfj0RCw=;
+        b=YuSXOnTeumH0cLxEBL7l617lN0901GyuT8YENs6zis8mcN5J3gNoUTS3uq2YLp1qgU
+         vcXsqvMLszkqxybdSPDhxZIc56Yk7gZ7jYjSyjTBHFqan/VmmUrzj4vqlFnNMqtc7fC2
+         6Xs/dwLM5y7o7Kuvr5UH2Iiw8XPz5jhbE4QwgSGjaVDAqgeTtI2Rn2yd6VZk9aNBRk/C
+         rllbpXYtt7R2thPU0t5B+6dg2hRfyu9xI6nZCH379BLmtIWxnmyFZtNYk1vm5RrrLR14
+         yPRMDK5osDHTOwF0cC63jBqh9VrxCwxHAxYT4P0GtvvFrtmEwFZSCpnw30yMzNScaZ8e
+         DxQQ==
+X-Gm-Message-State: AO0yUKXfSOIepJ/xviY6+6A5ZeY/FwHniQaj9OLgRI5P8B6wpUgAyixg
+        eqx6RLmC8tyG5VQbJDUQHnQucg==
+X-Google-Smtp-Source: AK7set+G0Y1PwG7+QRividE03emGpRaIuD1Nl9H0Z7JGdPW6YUb7ULVXwZn1OpLNIQkPqQB9Ggh7Pg==
+X-Received: by 2002:aa7:d846:0:b0:4ab:4c2f:a449 with SMTP id f6-20020aa7d846000000b004ab4c2fa449mr5010022eds.20.1676545359538;
+        Thu, 16 Feb 2023 03:02:39 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y23-20020a50ce17000000b004acc1374849sm669369edi.82.2023.02.16.03.02.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 03:01:44 -0800 (PST)
-Message-ID: <fdd3bd7d-526d-d441-00f1-e8321441174e@redhat.com>
-Date:   Thu, 16 Feb 2023 12:01:43 +0100
+        Thu, 16 Feb 2023 03:02:39 -0800 (PST)
+Message-ID: <649a8d88-0504-5aa9-d167-d25d394f3f26@linaro.org>
+Date:   Thu, 16 Feb 2023 12:02:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 00/19] mm: Introduce a cgroup to limit the amount of
- locked and pinned memory
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 04/16] PCI: samsung: Use clock bulk API to get clocks
 Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
+        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
+        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
+        m.szyprowski@samsung.com, jh80.chung@samsung.co,
+        pankaj.dubey@samsung.com
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214121333.1837-1-shradha.t@samsung.com>
+ <CGME20230214121420epcas5p3a4419059969adfb45b379f7e7741968c@epcas5p3.samsung.com>
+ <20230214121333.1837-5-shradha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214121333.1837-5-shradha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.02.23 08:47, Alistair Popple wrote:
-> Having large amounts of unmovable or unreclaimable memory in a system
-> can lead to system instability due to increasing the likelihood of
-> encountering out-of-memory conditions. Therefore it is desirable to
-> limit the amount of memory users can lock or pin.
+On 14/02/2023 13:13, Shradha Todi wrote:
+> Adopt to clock bulk API to handle clocks.
 > 
->  From userspace such limits can be enforced by setting
-> RLIMIT_MEMLOCK. However there is no standard method that drivers and
-> other in-kernel users can use to check and enforce this limit.
+> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> ---
+>  drivers/pci/controller/dwc/pci-samsung.c | 46 ++++++------------------
+>  1 file changed, 11 insertions(+), 35 deletions(-)
 > 
-> This has lead to a large number of inconsistencies in how limits are
-> enforced. For example some drivers will use mm->locked_mm while others
-> will use mm->pinned_mm or user->locked_mm. It is therefore possible to
-> have up to three times RLIMIT_MEMLOCKED pinned.
-> 
-> Having pinned memory limited per-task also makes it easy for users to
-> exceed the limit. For example drivers that pin memory with
-> pin_user_pages() it tends to remain pinned after fork. To deal with
-> this and other issues this series introduces a cgroup for tracking and
-> limiting the number of pages pinned or locked by tasks in the group.
-> 
-> However the existing behaviour with regards to the rlimit needs to be
-> maintained. Therefore the lesser of the two limits is
-> enforced. Furthermore having CAP_IPC_LOCK usually bypasses the rlimit,
-> but this bypass is not allowed for the cgroup.
-> 
-> The first part of this series converts existing drivers which
-> open-code the use of locked_mm/pinned_mm over to a common interface
-> which manages the refcounts of the associated task/mm/user
-> structs. This ensures accounting of pages is consistent and makes it
-> easier to add charging of the cgroup.
-> 
-> The second part of the series adds the cgroup controller and converts
-> core mm code such as mlock over to charging the cgroup before finally
-> introducing some selftests.
-> 
-> Rather than adding onto an exisiting cgroup controller such as memcg
-> we introduce a new controller. This is primarily because we wish to
-> limit the total number of pages tasks within a cgroup may pin/lock.
-> 
-> As I don't have access to systems with all the various devices I
-> haven't been able to test all driver changes. Any help there would be
-> appreciated.
-> 
-> Note that this series is based on v6.2-rc5 and
-> https://lore.kernel.org/linux-rdma/20230201115540.360353-1-bmt@zurich.ibm.com/
-> which makes updating the siw driver easier (thanks Bernard).
-> 
-> Changes from initial RFC:
-> 
->   - Fixes to some driver error handling.
-> 
->   - Pages charged with vm_account will always increment mm->pinned_vm
->     and enforce the limit against user->locked_vm or mm->pinned_vm
->     depending on initialisation flags.
-> 
->   - Moved vm_account prototypes and struct definitions into a separate header.
-> 
->   - Minor updates to commit messages and kernel docs (thanks to Jason,
->     Christoph, Yosry and T.J.).
-> 
-> Outstanding issues:
-> 
->   - David H pointed out that the vm_account naming is potentially
->     confusing and I agree. However I have yet to come up with something
->     better so will rename this in a subsequent version of this series
->     (suggestions welcome).
+> diff --git a/drivers/pci/controller/dwc/pci-samsung.c b/drivers/pci/controller/dwc/pci-samsung.c
+> index cfe384aee754..6c07d3f151be 100644
+> --- a/drivers/pci/controller/dwc/pci-samsung.c
+> +++ b/drivers/pci/controller/dwc/pci-samsung.c
+> @@ -54,8 +54,8 @@
+>  struct exynos_pcie {
+>  	struct dw_pcie			pci;
+>  	void __iomem			*elbi_base;
+> -	struct clk			*clk;
+> -	struct clk			*bus_clk;
+> +	struct clk_bulk_data		*clks;
+> +	int				clk_cnt;
+>  	struct phy			*phy;
+>  	struct regulator_bulk_data	supplies[2];
+>  };
+> @@ -65,30 +65,18 @@ static int exynos_pcie_init_clk_resources(struct exynos_pcie *ep)
+>  	struct device *dev = ep->pci.dev;
+>  	int ret;
+>  
+> -	ret = clk_prepare_enable(ep->clk);
+> -	if (ret) {
+> -		dev_err(dev, "cannot enable pcie rc clock");
+> +	ret = devm_clk_bulk_get_all(dev, &ep->clks);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+> -	ret = clk_prepare_enable(ep->bus_clk);
+> -	if (ret) {
+> -		dev_err(dev, "cannot enable pcie bus clock");
+> -		goto err_bus_clk;
+> -	}
+> +	ep->clk_cnt = ret;
+
+I think this misses check if you got two clocks.
 
 
-vm_lockaccount ? vm_pinaccount ?
-
-Less confusing than reusing VM_ACCOUNT which translates to "commit 
-accounting".
-
-Might also make sense to rename VM_ACCOUNT to VM_COMMIT or sth like that.
-
--- 
-Thanks,
-
-David / dhildenb
+Best regards,
+Krzysztof
 
