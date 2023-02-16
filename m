@@ -2,192 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B99698AB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BEB698AB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 03:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjBPC4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 21:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S229602AbjBPC5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 21:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBPC4j (ORCPT
+        with ESMTP id S229461AbjBPC5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:56:39 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982274609A;
-        Wed, 15 Feb 2023 18:56:38 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PHKKz62wFzJsSq;
-        Thu, 16 Feb 2023 10:54:47 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Feb 2023 10:56:35 +0800
-Subject: Re: [PATCH 3/3] x86/kprobes: Fix arch_check_optimized_kprobe check
- within optimized_kprobe range
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
-        <davem@davemloft.net>, <ast@kernel.org>, <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-References: <20230215115430.236046-1-yangjihong1@huawei.com>
- <20230215115430.236046-4-yangjihong1@huawei.com>
- <20230216004859.ab66b42e2e0029cf042fe194@kernel.org>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <885eb39e-bf49-fdb2-5404-5ddd08561bbe@huawei.com>
-Date:   Thu, 16 Feb 2023 10:56:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <20230216004859.ab66b42e2e0029cf042fe194@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+        Wed, 15 Feb 2023 21:57:52 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6FDF4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 18:57:48 -0800 (PST)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230216025745epoutp04c3521f878868160756186d6dcf9a2ef9~ELqksWoSQ1578415784epoutp04f
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:57:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230216025745epoutp04c3521f878868160756186d6dcf9a2ef9~ELqksWoSQ1578415784epoutp04f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1676516265;
+        bh=/s/DDvoDqvkI0R3gCjxwHuxsXwGnIrRYiSsKEv400/g=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=W2q1n7vZLO/mbYv4g3UpVezQkggl/3F2/vZo/HI5ICNQ/YeigJCiqrbPcNTzNHTwo
+         AvvmCafZJIesovoBrtsCwIwK5qQ1pkh6OAWhn1LIUDN4syVzwAxaHvRdDfF9eGXcBK
+         gEOAGYa1NPF5ZfRz9St0Acuv57bR4DP40OzQrEbc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230216025745epcas2p33d13ec8159efa85b6bf194c6f3d6a379~ELqkatBD21025710257epcas2p3e;
+        Thu, 16 Feb 2023 02:57:45 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PHKPN5kszz4x9Pw; Thu, 16 Feb
+        2023 02:57:44 +0000 (GMT)
+X-AuditID: b6c32a46-4e1ff70000007a4b-23-63ed9ba80101
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B6.2C.31307.8AB9DE36; Thu, 16 Feb 2023 11:57:44 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     Chao Yu <chao@kernel.org>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230216025743epcms2p31d1bde5cfb315d13231010b0a46fbec4@epcms2p3>
+Date:   Thu, 16 Feb 2023 11:57:43 +0900
+X-CMS-MailID: 20230216025743epcms2p31d1bde5cfb315d13231010b0a46fbec4
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmme6K2W+TDf6161ucnnqWyWLVg3CL
+        J+tnMVtcWuRucXnXHDaLVR1zGR3YPDat6mTz2L3gM5NH35ZVjB6fN8kFsERl22SkJqakFimk
+        5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYArVZSKEvMKQUKBSQWFyvp
+        29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGcc2zKVteACW8XE
+        TZkNjAdYuxg5OSQETCRWzdzD2MXIxSEksINR4sCchSxdjBwcvAKCEn93CIOYwgI2En9v2IGU
+        CwkoSVw70MsCYgsL6EtsXryMHcRmE9CV+LthOTvIGBGBB4wSU27sZQNJMAsESdyf8gBqF6/E
+        jPanLBC2tMT25VsZIWwNiR/LepkhbFGJm6vfssPY74/Nh6oRkWi9dxaqRlDiwc/dUHFJiUWH
+        zjNB2PkSf1dcZ4OwayS2NrRBxfUlrnVshHrLV+JokztImEVAVaL15VyoMS4Sf/c3MUOcLC+x
+        /e0cZpByZgFNifW79EFMCQFliSO3WCAq+CQ6Dv9lh3lqx7wnUIvUJDZv2gz1rIzEhcdtUNM9
+        JCZtvccMCcFAiUf9b9knMCrMQgTzLCR7ZyHsXcDIvIpRLLWgODc9tdiowAgescn5uZsYwSlQ
+        y20H45S3H/QOMTJxMB5ilOBgVhLh3XTzTbIQb0piZVVqUX58UWlOavEhRlOgjycyS4km5wOT
+        cF5JvKGJpYGJmZmhuZGpgbmSOK+07clkIYH0xJLU7NTUgtQimD4mDk6pBqYijvuHb/GtcF/1
+        p+7fZve5DbVr2ff+3My+aB/TtvdLNL90fzTSu1HEF3rbp2Dq/CTp6Zf/rCw02Xp5mvCkCI2M
+        3IrPrfq8a5WlGh9Vcxz/vNXrYvXP3K3ndti+1zgh/+bf+zePK/7PV17lftvJJuzEt9NPqk5M
+        NltgWX1m3fF/jwVnRFlyV0S7xW66pD3h7pPFbhUrmLnmWNbxJPEwrnq3snuVZezUqNCZr8x3
+        rT2wTXQFK89jPuNAc9Z8hlUPfyR5OF3S/rDTR9wuXGWjaVF9/OtmQbFNvW7P2F9WZxRbpZmJ
+        aZ5t4X/gcMfeVVzsUfjSH1s8VbdG3vObXHtcVnZb+lNDwS93DpvdPF3hJjNFiaU4I9FQi7mo
+        OBEAxwCkCgoEAAA=
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMS-RootMailID: 20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6
+References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Masami,
+When f2fs skipped a gc round during victim migration, there was a bug which
+would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
+was not initialized. It fixes the bug by correctly initializing the
+skipped_gc_rwsem inside the gc loop.
 
-On 2023/2/15 23:48, Masami Hiramatsu (Google) wrote:
-> On Wed, 15 Feb 2023 19:54:30 +0800
-> Yang Jihong <yangjihong1@huawei.com> wrote:
-> 
->> When arch_prepare_optimized_kprobe calculating jump destination address,
->> it copies original instructions from jmp-optimized kprobe (see
->> __recover_optprobed_insn), and calculated based on length of original
->> instruction.
->>
->> arch_check_optimized_kprobe does not check KPROBE_FLAG_OPTIMATED when
->> checking whether jmp-optimized kprobe exists.
->> As a result, setup_detour_execution may jump to a range that has been
->> overwritten by jump destination address, resulting in an inval opcode error.
-> 
-> OK, good catch !! I missed "delayed unoptimization" case here too.
-> 
->>
->> For example, assume that register two kprobes whose addresses are
->> <func+9> and <func+11> in "func" function.
->> The original code of "func" function is as follows:
->>
->>     0xffffffff816cb5e9 <+9>:     push   %r12
->>     0xffffffff816cb5eb <+11>:    xor    %r12d,%r12d
->>     0xffffffff816cb5ee <+14>:    test   %rdi,%rdi
->>     0xffffffff816cb5f1 <+17>:    setne  %r12b
->>     0xffffffff816cb5f5 <+21>:    push   %rbp
->>
->> 1.Register the kprobe for <func+11>, assume that is kp1, corresponding optimized_kprobe is op1.
->>    After the optimization, "func" code changes to:
->>
->>     0xffffffff816cc079 <+9>:     push   %r12
->>     0xffffffff816cc07b <+11>:    jmp    0xffffffffa0210000
->>     0xffffffff816cc080 <+16>:    incl   0xf(%rcx)
->>     0xffffffff816cc083 <+19>:    xchg   %eax,%ebp
->>     0xffffffff816cc084 <+20>:    (bad)
->>     0xffffffff816cc085 <+21>:    push   %rbp
->>
->> Now op1->flags == KPROBE_FLAG_OPTIMATED;
->>
->> 2. Register the kprobe for <func+9>, assume that is kp2, corresponding optimized_kprobe is op2.
->>
->> register_kprobe(kp2)
->>    register_aggr_kprobe
->>      alloc_aggr_kprobe
->>        __prepare_optimized_kprobe
->>          arch_prepare_optimized_kprobe
->>            __recover_optprobed_insn    // copy original bytes from kp1->optinsn.copied_insn,
->>                                        // jump address = <func+14>
->>
->> 3. disable kp1:
->>
->> disable_kprobe(kp1)
->>    __disable_kprobe
->>      ...
->>      if (p == orig_p || aggr_kprobe_disabled(orig_p)) {
->>        ret = disarm_kprobe(orig_p, true)       // add op1 in unoptimizing_list, not unoptimized
->>        orig_p->flags |= KPROBE_FLAG_DISABLED;  // op1->flags ==  KPROBE_FLAG_OPTIMATED | KPROBE_FLAG_DISABLED
->>      ...
->>
->> 4. unregister kp2
->> __unregister_kprobe_top
->>    ...
->>    if (!kprobe_disabled(ap) && !kprobes_all_disarmed) {
->>      optimize_kprobe(op)
->>        ...
->>        if (arch_check_optimized_kprobe(op) < 0) // because op1 has KPROBE_FLAG_DISABLED, here not return
->>          return;
->>        p->kp.flags |= KPROBE_FLAG_OPTIMIZED;   //  now op2 has KPROBE_FLAG_OPTIMIZED
->>    }
->>
->> "func" code now is:
->>
->>     0xffffffff816cc079 <+9>:     int3
->>     0xffffffff816cc07a <+10>:    push   %rsp
->>     0xffffffff816cc07b <+11>:    jmp    0xffffffffa0210000
->>     0xffffffff816cc080 <+16>:    incl   0xf(%rcx)
->>     0xffffffff816cc083 <+19>:    xchg   %eax,%ebp
->>     0xffffffff816cc084 <+20>:    (bad)
->>     0xffffffff816cc085 <+21>:    push   %rbp
->>
->> 5. if call "func", int3 handler call setup_detour_execution:
->>
->>    if (p->flags & KPROBE_FLAG_OPTIMIZED) {
->>      ...
->>      regs->ip = (unsigned long)op->optinsn.insn + TMPL_END_IDX;
->>      ...
->>    }
->>
->> The code for the destination address is
->>
->>     0xffffffffa021072c:  push   %r12
->>     0xffffffffa021072e:  xor    %r12d,%r12d
->>     0xffffffffa0210731:  jmp    0xffffffff816cb5ee <func+14>
->>
->> However, <func+14> is not a valid start instruction address. As a result, an error occurs.
-> 
-> OK, it has been introduced by the same commit as previous one. (delayed unoptimization)
-> 
+Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 
-OK, will add "Fixes: f66c0447cca1 ("kprobes: Set unoptimized flag after 
-unoptimizing code")" in next version
-
-In addition, "
-Cc: stable@vger.kernel.org" is required, same as the previous patch.
-
->>
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>   arch/x86/kernel/kprobes/opt.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
->> index 3718d6863555..e6d9bd038401 100644
->> --- a/arch/x86/kernel/kprobes/opt.c
->> +++ b/arch/x86/kernel/kprobes/opt.c
->> @@ -353,7 +353,7 @@ int arch_check_optimized_kprobe(struct optimized_kprobe *op)
->>   
->>   	for (i = 1; i < op->optinsn.size; i++) {
->>   		p = get_kprobe(op->kp.addr + i);
->> -		if (p && !kprobe_disabled(p))
->> +		if (p && (!kprobe_disabled(p) || kprobe_optimized(p)))
-> 
-> Hmm, can you rewrite this with kprobe_disarmed() instead of kprobe_disabled()?
-> Since this is checking there are any other kprobes are "armed" on the address
-> where it will be replaced by jump. So it is natural to use "disarmed" check.
-> 
-
-Yes, It is better to change it to use "kprobe_disarmed", will modify in 
-next version.
-
-Thanks,
-Yang
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index b22f49a6f128..81d326abaac1 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 				prefree_segments(sbi));
+ 
+ 	cpc.reason = __get_cp_reason(sbi);
+-	sbi->skipped_gc_rwsem = 0;
+ gc_more:
++	sbi->skipped_gc_rwsem = 0;
+ 	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
+ 		ret = -EINVAL;
+ 		goto stop;
+-- 
+2.34.1
