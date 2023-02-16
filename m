@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F36698E9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74B7698EA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjBPIW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S229881AbjBPI0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjBPIWv (ORCPT
+        with ESMTP id S229732AbjBPI0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:22:51 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A123C25
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:22:49 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id p14so1197540vsn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:22:49 -0800 (PST)
+        Thu, 16 Feb 2023 03:26:20 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F5E728F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:26:19 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id 10so2525615ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 00:26:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4Hmavd74pc9hNKbMy0OT4KjV0TBYqpmbiZ39L4sh4g=;
-        b=U6ZdpCafQotK8qbTTSdk+96qUzTw9xQpMg+ZhUkq4h9bs64Ym3JcCYJK3QPFAo9RZs
-         1Qrg104hDRL/7TryGDwRy+efxYYuXEjALAxLKnNFCtIrMIOYRKrYh4YmBiL4DCtLh0sT
-         p8Vod9IfZzH9eiSRRtG0yWXXbWm3zWi39Ugf4=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1y/DnoDY4cr2inx1d0abfCvpq1Au8g3KdiOb6gVRGSQ=;
+        b=CyM4dCoyshPvP3LOw00Xa4BGVZWnr+NUtMvw5cLRyATZ/fRXs0P5/2jwITogiDGzM5
+         NeI3Y1q6sYe57oCVGKp1QB0LFAWAaQYkYffh5ProcDWN/mk2J3Mq751a0DF2PFtvJwlD
+         uij3HTYmSsaivZFc5uX4D6Q15uSDL9iyp8ZzX+8lCt6DEqj6TyKVTHvdQOtPPKYWNMkR
+         epXtJLDaNKBtHJAYP3aFliVa3ICoCSOrmTV+2Ykuyk2XNpQgXZRXJ3NGF6owZ2y2UGpD
+         2CulBf7sxzRXUhzi8T3Tffu02H6Pu/CaoxZ3TFmIXXgi1lEDoPeucdhC5bbWJK+loEC3
+         eyHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t4Hmavd74pc9hNKbMy0OT4KjV0TBYqpmbiZ39L4sh4g=;
-        b=BCdvBgDEdUekHC9bfbeUV8ZxB4t+4Wg8ekdbHtPkpuMud/qISRJXBn8xXKhbdqyHBC
-         l9GLMSJruNXP0LST9GSCR3mvr1tqJcq/6S/a2iw2WWLUFxu8WkkN7gwNQXr187FpbgdO
-         3cBdfwrl6bfSAaG+Mije5OaCdc27TWvI2N0t3n4d4Hwxcqos8MmGkRJwwPssIdEmg3rq
-         hu9rFZ6ckap/oX3wYPRgIeHMFxSPRRi/aKlOhE9Ro+vMpTIaMLSJjjP4MoVxBv/gkiUG
-         +qPPPP3Rcv6iKAigSzaVYvV6cnaraw3PTIwgqq6h64m0sFiaPe01rg2Q+mWPLS8hJ8sS
-         iM3A==
-X-Gm-Message-State: AO0yUKXMpBDO+lyB7VEubOl7Lf1eR5l5635YwtDCofT5qVayK3HMV56s
-        oIIe3R8xpKsibVj3pToefnVihTkNU3I2pCJ85KrcRw==
-X-Google-Smtp-Source: AK7set/NiPdqGO4lax1hRZGi4C5xRM7rX75lwKlIcLeNUE7rasZWoOGb5+OT1/zHR5BKwnytbaZ5kCNjsC8Vf+ml7tM=
-X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr953233vso.60.1676535768772; Thu, 16 Feb
- 2023 00:22:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1y/DnoDY4cr2inx1d0abfCvpq1Au8g3KdiOb6gVRGSQ=;
+        b=zxkveLmHfYtBXW7FiYahxkNekDfPuDCfjVEJnsD7yebBcTkgWEfQycGWbm+ccYPlHx
+         rxYx/qIidRfw+JzD7nQo4+7itijvGEMWrvk4uXrfmab+eQVwCn36ep2tJd96BjTPc8bF
+         s+U8rSkvl5mCm9RBXtPeIKY8tNMfSb4tPuIy2HZGshkfSWfaybMBAeCPweAJYG5DhFJX
+         Y9zaaqlaqHWVkqk7Pg0nSpQd4l+0/QRgXXh52ip55OsmrTKxvE16oQgcsWe6kokvjQMc
+         l5fLAvOZI0hxw5iCgOvzqIeVByDgNzrbBKGzwV9xeQS9VS2jD+r4SKvJiMy4ggevpllr
+         ekaQ==
+X-Gm-Message-State: AO0yUKVzQZhwyfn0kscH8EhjGGkM8nMVP8f97t8E00LFNvf8qd2C7t3E
+        ZsDWS+Doty0uC5g5Ysem6c4R6Q==
+X-Google-Smtp-Source: AK7set/Bsd/yL07K9LlnPqeF1yzA0J6rARMafhYQk/XahfBz22ROq0FZQJFbJxehhd0xJWCffI4Exg==
+X-Received: by 2002:a17:906:1d07:b0:8b1:3a8d:6fc5 with SMTP id n7-20020a1709061d0700b008b13a8d6fc5mr5878631ejh.25.1676535978458;
+        Thu, 16 Feb 2023 00:26:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ce25-20020a170906b25900b008b05b21e8aesm492276ejb.172.2023.02.16.00.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 00:26:17 -0800 (PST)
+Message-ID: <425f637c-34a3-4203-2b1b-c4e459da72c2@linaro.org>
+Date:   Thu, 16 Feb 2023 09:26:16 +0100
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-20-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-20-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 16 Feb 2023 16:22:37 +0800
-Message-ID: <CAGXv+5Ft-dmvedRvyjXJwv7Cx+j=GPH6_j1s2oJFwPKYc_Qz_A@mail.gmail.com>
-Subject: Re: [PATCH v2 19/47] clk: mediatek: mt8183: Compress clocks arrays
- entries where possible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/2] arm64: dts: imx8dxl-evk: Fix eqos phy reset gpio
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>, devicetree@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, alexandre.torgue@foss.st.com,
+        peppe.cavallaro@st.com, joabreu@synopsys.com, mripard@kernel.org,
+        shenwei.wang@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230214171505.224602-1-ahalaney@redhat.com>
+ <20230214171505.224602-2-ahalaney@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214171505.224602-2-ahalaney@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,14 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Increase human readability and decrease number of lines by compressing
-> the clock array entries where possible, to a maximum of ~95 columns.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 14/02/2023 18:15, Andrew Halaney wrote:
+> The deprecated property is named snps,reset-gpio, but this devicetree
+> used snps,reset-gpios instead which results in the reset not being used
+> and the following make dtbs_check error:
+> 
+>     ./arch/arm64/boot/dts/freescale/imx8dxl-evk.dtb: ethernet@5b050000: 'snps,reset-gpio' is a dependency of 'snps,reset-delays-us'
+>         From schema: ./Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> 
+> Use the preferred method of defining the reset gpio in the phy node
+> itself. Note that this drops the 10 us pre-delay, but prior this wasn't
+> used at all and a pre-delay doesn't make much sense in this context so
+> it should be fine.
+> 
+> Fixes: 8dd495d12374 ("arm64: dts: freescale: add support for i.MX8DXL EVK board")
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> ---
 
-Looks better. Thanks!
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Best regards,
+Krzysztof
+
