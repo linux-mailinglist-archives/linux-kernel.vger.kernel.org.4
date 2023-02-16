@@ -2,202 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5B2698C6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD92698C6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 06:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjBPFwD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Feb 2023 00:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S229933AbjBPFwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 00:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjBPFwB (ORCPT
+        with ESMTP id S229460AbjBPFwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 00:52:01 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB4127D6E;
-        Wed, 15 Feb 2023 21:51:58 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A1C3824E1EC;
-        Thu, 16 Feb 2023 13:51:51 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
- 2023 13:51:51 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Feb
- 2023 13:51:50 +0800
-Message-ID: <79b6cc69-5f34-9983-58e3-64da9fac5ef3@starfivetech.com>
-Date:   Thu, 16 Feb 2023 13:51:50 +0800
+        Thu, 16 Feb 2023 00:52:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5A927D6E;
+        Wed, 15 Feb 2023 21:52:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BAF4B825CB;
+        Thu, 16 Feb 2023 05:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F198BC433D2;
+        Thu, 16 Feb 2023 05:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676526732;
+        bh=V7lq2YbItpQ261vpNd6FWmAFniaH4EnR1rLWQm+2gAg=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=ArQVpaKaHJG+OccAswoxQokfdEueTYHB5KN8xTDJwRZQ3wBNzcYWDpenFJoygijZe
+         HYoHZ0riNt7bDyY74XeuIL4UQCP2ZV2wZwhz3CrXPzlSr7hYcTt56mooWldQdDQjwb
+         JKeg6qE72/3cuvj4zaStgp5TpnSbcL7tttX3p2J7WroPDriaDkQvGKC6BoEHvUpgbK
+         NYPzsRE1h5Tvqg4oFEqdZK++al9xbi9cpOElC9e6lTchGQryr5lt86ceSap32rz1Th
+         EsvG4H+efZEeePrCHebXRNRXkzExV09djvSnRofDTcG/J5cMG1mHYVG5+UGVXQt0CW
+         cND41x+LUZR7g==
+Message-ID: <9f83dac5-ab13-e0eb-3ce0-688e95703517@kernel.org>
+Date:   Wed, 15 Feb 2023 22:52:11 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 1/4] dt-bindings: mmc: Add StarFive MMC module
-To:     Shengyu Qu <wiagn233@outlook.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230215113249.47727-1-william.qiu@starfivetech.com>
- <20230215113249.47727-2-william.qiu@starfivetech.com>
- <TY3P286MB26111053410F3F96C9C71D2798A39@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
- <9ef960ae-7b61-9ed3-5bab-822e6d7d5a76@starfivetech.com>
- <202302160545.31G5jiuf087662@SH1-CSMTP-DB111.sundns.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH net,v2,2/2] selftests: fib_tests: Add test cases for
+ IPv4/IPv6 in route notify
 Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <202302160545.31G5jiuf087662@SH1-CSMTP-DB111.sundns.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Lu Wei <luwei32@huawei.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230216042624.4069910-1-luwei32@huawei.com>
+ <20230216042624.4069910-3-luwei32@huawei.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230216042624.4069910-3-luwei32@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/15/23 9:26 PM, Lu Wei wrote:
+> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> index 5637b5dadabd..4e48154bd195 100755
+> --- a/tools/testing/selftests/net/fib_tests.sh
+> +++ b/tools/testing/selftests/net/fib_tests.sh
+> @@ -9,7 +9,7 @@ ret=0
+>  ksft_skip=4
+>  
+>  # all tests in this script. Can be overridden with -t option
+> -TESTS="unregister down carrier nexthop suppress ipv6_rt ipv4_rt ipv6_addr_metric ipv4_addr_metric ipv6_route_metrics ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh"
+> +TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify ipv6_rt ipv4_rt ipv6_addr_metric ipv4_addr_metric ipv6_route_metrics ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh"
+>  
+>  VERBOSE=0
+>  PAUSE_ON_FAIL=no
+> @@ -655,6 +655,94 @@ fib_nexthop_test()
+>  	cleanup
+>  }
+>  
+> +fib6_notify_test()
+> +{
+> +	setup
+> +
+> +	echo
+> +	echo "Fib6 info length calculation in route notify test"
+> +	set -e
+> +
+> +	for i in 10 20 30 40 50 60 70;
+> +	do
+> +		$IP link add dummy$i type dummy
+> +		$IP link set dev dummy$i up
+> +		$IP -6 addr add 2002::$i/64 dev dummy$i
+> +	done
+> +
+> +	for i in 10 20 30 40 50 60;
+> +	do
+> +		$IP -6 route append 100::/64 encap ip6 dst 2002::$i via \
+> +		2002::1 dev dummy$i metric 100
+> +	done
 
+That creates a multipath route because of a quirk with IPv6. It would be
+better to make this explicit by
 
-On 2023/2/16 0:49, Shengyu Qu wrote:
-> Hello William,
-> 
-> Thanks for your reply. So there's v5 series? Btw, please fix maintainer information:
-> 
-> https://patchwork.kernel.org/project/linux-riscv/patch/20230215080203.27445-1-lukas.bulwahn@gmail.com/
-> 
-> Best regards,
-> 
-> Shengyu
-> 
-Hi Shengyu,
+	nexthops=
+	for i in 10 20 30 40 50 60;
+	do
+		nexthops="$nexthops nexthop encap ip6 dst 2002::$i via 2002::1 dev
+dummy$i metric 100"
+	done
 
-Here is v4 series, and I fixed the maintainer information in this series which
-Uffe would merge in his next branch.
-Thanks for taking time to review this patch series.
+	$IP -6 route add 100::/64 ${nexthops}
 
-Best Regards
-William
->>
->> On 2023/2/15 19:59, Shengyu Qu wrote:
->>> Hello William,
->>>
->>> Are you sure changing driver is better than changing yaml bindings? All
->>>
->>> previous version sent was syscon and sysreg seems not consistent with
->>>
->>> other codes.
->>>
->>> Best regards,
->>>
->>> Shengyu
->>>
->> Hi Shengyu,
->>
->> After discussing with colleagues, we decided to restore the lable name to
->> sys_syscon, and sysreg was just a unique name for the functionality of MMC,
->> which will be used in all future versions.
->>
->> Thanks for taking time reviewing this patch series.
->>
->> Best Regards
->> William
->>
->>>> Add documentation to describe StarFive designware mobile storage
->>>> host controller driver.
->>>>
->>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    .../bindings/mmc/starfive,jh7110-mmc.yaml     | 77 +++++++++++++++++++
->>>>    1 file changed, 77 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->>>> new file mode 100644
->>>> index 000000000000..51e1b04e799f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
->>>> @@ -0,0 +1,77 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/mmc/starfive,jh7110-mmc.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: StarFive Designware Mobile Storage Host Controller
->>>> +
->>>> +description:
->>>> +  StarFive uses the Synopsys designware mobile storage host controller
->>>> +  to interface a SoC with storage medium such as eMMC or SD/MMC cards.
->>>> +
->>>> +allOf:
->>>> +  - $ref: synopsys-dw-mshc-common.yaml#
->>>> +
->>>> +maintainers:
->>>> +  - William Qiu <william.qiu@starfivetech.com>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: starfive,jh7110-mmc
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  clocks:
->>>> +    items:
->>>> +      - description: biu clock
->>>> +      - description: ciu clock
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: biu
->>>> +      - const: ciu
->>>> +
->>>> +  interrupts:
->>>> +    maxItems: 1
->>>> +
->>>> +  starfive,sysreg:
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>> +    items:
->>>> +      - items:
->>>> +          - description: phandle to System Register Controller syscon node
->>>> +          - description: offset of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->>>> +          - description: shift of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->>>> +          - description: mask of SYS_SYSCONSAIF__SYSCFG register for MMC controller
->>>> +    description:
->>>> +      Should be four parameters, the phandle to System Register Controller
->>>> +      syscon node and the offset/shift/mask of SYS_SYSCONSAIF__SYSCFG register
->>>> +      for MMC controller.
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - clocks
->>>> +  - clock-names
->>>> +  - interrupts
->>>> +  - starfive,sysreg
->>>> +
->>>> +unevaluatedProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    mmc@16010000 {
->>>> +        compatible = "starfive,jh7110-mmc";
->>>> +        reg = <0x16010000 0x10000>;
->>>> +        clocks = <&syscrg 91>,
->>>> +                 <&syscrg 93>;
->>>> +        clock-names = "biu","ciu";
->>>> +        resets = <&syscrg 64>;
->>>> +        reset-names = "reset";
->>>> +        interrupts = <74>;
->>>> +        fifo-depth = <32>;
->>>> +        fifo-watermark-aligned;
->>>> +        data-addr = <0>;
->>>> +        starfive,sysreg = <&sys_syscon 0x14 0x1a 0x7c000000>;
->>>> +    };
+> +
+> +fib_notify_test()
+> +{
+> +	setup
+> +
+> +	echo
+> +	echo "Fib4 info length calculation in route notify test"
+> +
+> +	set -e
+> +
+> +	for i in 10 20 30 40 50 60 70;
+> +	do
+> +		$IP link add dummy$i type dummy
+> +		$IP link set dev dummy$i up
+> +		$IP addr add 192.168.100.$i/24 dev dummy$i
+> +	done
+> +
+> +	for i in 10 20 30 40 50 60;
+> +	do
+> +		$IP route append 10.0.0.0/24 encap ip dst 192.168.100.$i via \
+> +		192.168.100.1 dev dummy$i metric 100
+> +	done
+
+With IPv4 that is not a multipath route but a series of independent
+routes. Hence, doing the loop here like I showed above makes sure this
+is a proper multipath route.
+
+Thank you for adding the tests.
+
