@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423D669A2BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718F269A2C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 00:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjBPX4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 18:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S230215AbjBPX4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 18:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjBPX4S (ORCPT
+        with ESMTP id S230232AbjBPX4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 18:56:18 -0500
+        Thu, 16 Feb 2023 18:56:22 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9470619F04
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:56:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4EB34F68
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676591774; x=1708127774;
+  t=1676591775; x=1708127775;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PQv1EIqxcbMVYjSqKFA6vmasY+4GsJ4YxNDnMlXpMJQ=;
-  b=UMZMAvO7BCgJ4hvhpPZKh5GGzUVNEX4eYA0znZWGM+x73MyEQgviJTl9
-   tnWMQsJmstxRuK8rnXnPfqld083vHORhQs2GmtOpXPzsHFPwGcAOD+Gsu
-   sJIf6esUCp2WJwlldl7Qs6qQCI9jhRGVMRpqRnzhJ7yiXY2FgfMhNc2ZR
-   Itt2TU/l6ajurG3dkjd36I2iDKQiNXjzJUVpHdh9IvlDSlRSlr/QReOw2
-   XcvRmikiw1ou9tyDqoop34FUAbSIZX0RnP51/v3im1ivEIlYoa6ALczB3
-   0StkJZ2Bsqtr14nWfpzknxOYmKQnvhUQqRfDWyV7CvFgtjbvDc8QwfQGk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="394342765"
+  bh=WTjH8sjCWG8ibJ5uW/TsS619qIGDKnMfps4jWoiMNBE=;
+  b=QyrM8nyFy8sbz4pPUAc/qSpMCTFF0giy7u4jcEERDxrAsmrsFf3I/e5t
+   uXaSZktnLfbvym3I3jGRhAbAhQjJRR9qh0W9k4INoY7amykoD6HhYBgUR
+   XqBtfZLmOJPwbyVCT7dPSwqVUd2qiLgOifHzHGdpG6iy50H0+w3TCy9Az
+   CC4yVMs6Y9J9WCL0NTfGOhZmWGNBXzlq3WeLnVAYpegQbukqj+W/y7M6T
+   gTYhNpr/b1ulhvcksAlIEhvd51roNeQwdELkDtrtro5ik4RxP0E3o73GW
+   aAiSUJJetWeH+UJ3ffdfjaqwPYgT4LvzMxGNhWsv/k8vGVOjadr9J31jz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="394342788"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="394342765"
+   d="scan'208";a="394342788"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 15:56:12 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 15:56:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="779584622"
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="779584632"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="779584622"
+   d="scan'208";a="779584632"
 Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
   by fmsmga002.fm.intel.com with ESMTP; 16 Feb 2023 15:56:12 -0800
 From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
@@ -55,9 +55,9 @@ Cc:     "Robin Murphy" <robin.murphy@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         X86 Kernel <x86@kernel.org>, Dave Jiang <dave.jiang@intel.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v3 1/5] iommu/vt-d: Remove virtual command interface
-Date:   Thu, 16 Feb 2023 15:59:47 -0800
-Message-Id: <20230216235951.3573059-2-jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v3 2/5] iommu/sva: Move PASID helpers to sva code
+Date:   Thu, 16 Feb 2023 15:59:48 -0800
+Message-Id: <20230216235951.3573059-3-jacob.jun.pan@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
 References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
@@ -72,213 +72,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtual command interface was introduced to allow using host PASIDs
-inside VMs. It is unused and abandoned due to architectural change.
+Preparing to remove IOASID infrastructure, PASID management will be
+under SVA code.
 
-With this patch, we can safely remove this feature and the related helpers.
-
-Link: https://lore.kernel.org/r/20230210230206.3160144-2-jacob.jun.pan@linux.intel.com
 Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/cap_audit.c |  2 -
- drivers/iommu/intel/dmar.c      |  2 -
- drivers/iommu/intel/iommu.c     | 85 ---------------------------------
- drivers/iommu/intel/iommu.h     |  8 ----
- 4 files changed, 97 deletions(-)
+ drivers/iommu/iommu-sva.c | 19 +++++++++++++++++++
+ include/linux/sched/mm.h  | 22 +++-------------------
+ 2 files changed, 22 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/iommu/intel/cap_audit.c b/drivers/iommu/intel/cap_audit.c
-index 806986696841..9862dc20b35e 100644
---- a/drivers/iommu/intel/cap_audit.c
-+++ b/drivers/iommu/intel/cap_audit.c
-@@ -54,7 +54,6 @@ static inline void check_dmar_capabilities(struct intel_iommu *a,
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, slts, ECAP_SLTS_MASK);
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, nwfs, ECAP_NWFS_MASK);
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, slads, ECAP_SLADS_MASK);
--	CHECK_FEATURE_MISMATCH(a, b, ecap, vcs, ECAP_VCS_MASK);
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, smts, ECAP_SMTS_MASK);
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, pds, ECAP_PDS_MASK);
- 	CHECK_FEATURE_MISMATCH(a, b, ecap, dit, ECAP_DIT_MASK);
-@@ -101,7 +100,6 @@ static int cap_audit_hotplug(struct intel_iommu *iommu, enum cap_audit_type type
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, slts, ECAP_SLTS_MASK);
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, nwfs, ECAP_NWFS_MASK);
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, slads, ECAP_SLADS_MASK);
--	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, vcs, ECAP_VCS_MASK);
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, smts, ECAP_SMTS_MASK);
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, pds, ECAP_PDS_MASK);
- 	CHECK_FEATURE_MISMATCH_HOTPLUG(iommu, ecap, dit, ECAP_DIT_MASK);
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index b00a0ceb2d13..bf0bfe5ba7a7 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -989,8 +989,6 @@ static int map_iommu(struct intel_iommu *iommu, u64 phys_addr)
- 		warn_invalid_dmar(phys_addr, " returns all ones");
- 		goto unmap;
- 	}
--	if (ecap_vcs(iommu->ecap))
--		iommu->vccap = dmar_readq(iommu->reg + DMAR_VCCAP_REG);
- 
- 	/* the registers might be more than one page */
- 	map_size = max_t(int, ecap_max_iotlb_offset(iommu->ecap),
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 59df7e42fd53..a295e80fdfe8 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1721,9 +1721,6 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
- 		if (ecap_prs(iommu->ecap))
- 			intel_svm_finish_prq(iommu);
- 	}
--	if (vccap_pasid(iommu->vccap))
--		ioasid_unregister_allocator(&iommu->pasid_allocator);
--
- #endif
+diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+index 24bf9b2b58aa..a3ee258936f0 100644
+--- a/drivers/iommu/iommu-sva.c
++++ b/drivers/iommu/iommu-sva.c
+@@ -71,6 +71,25 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
  }
+ EXPORT_SYMBOL_GPL(iommu_sva_find);
  
-@@ -2793,85 +2790,6 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 	return ret;
- }
++void mm_pasid_init(struct mm_struct *mm)
++{
++	mm->pasid = INVALID_IOASID;
++}
++
++/* Associate a PASID with an mm_struct: */
++void mm_pasid_set(struct mm_struct *mm, u32 pasid)
++{
++	mm->pasid = pasid;
++}
++
++void mm_pasid_drop(struct mm_struct *mm)
++{
++	if (pasid_valid(mm->pasid)) {
++		ioasid_free(mm->pasid);
++		mm->pasid = INVALID_IOASID;
++	}
++}
++
+ /**
+  * iommu_sva_bind_device() - Bind a process address space to a device
+  * @dev: the device
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 2a243616f222..c488c7241102 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -8,7 +8,6 @@
+ #include <linux/mm_types.h>
+ #include <linux/gfp.h>
+ #include <linux/sync_core.h>
+-#include <linux/ioasid.h>
  
--#ifdef CONFIG_INTEL_IOMMU_SVM
--static ioasid_t intel_vcmd_ioasid_alloc(ioasid_t min, ioasid_t max, void *data)
--{
--	struct intel_iommu *iommu = data;
--	ioasid_t ioasid;
--
--	if (!iommu)
--		return INVALID_IOASID;
--	/*
--	 * VT-d virtual command interface always uses the full 20 bit
--	 * PASID range. Host can partition guest PASID range based on
--	 * policies but it is out of guest's control.
--	 */
--	if (min < PASID_MIN || max > intel_pasid_max_id)
--		return INVALID_IOASID;
--
--	if (vcmd_alloc_pasid(iommu, &ioasid))
--		return INVALID_IOASID;
--
--	return ioasid;
--}
--
--static void intel_vcmd_ioasid_free(ioasid_t ioasid, void *data)
--{
--	struct intel_iommu *iommu = data;
--
--	if (!iommu)
--		return;
--	/*
--	 * Sanity check the ioasid owner is done at upper layer, e.g. VFIO
--	 * We can only free the PASID when all the devices are unbound.
--	 */
--	if (ioasid_find(NULL, ioasid, NULL)) {
--		pr_alert("Cannot free active IOASID %d\n", ioasid);
--		return;
--	}
--	vcmd_free_pasid(iommu, ioasid);
--}
--
--static void register_pasid_allocator(struct intel_iommu *iommu)
--{
--	/*
--	 * If we are running in the host, no need for custom allocator
--	 * in that PASIDs are allocated from the host system-wide.
--	 */
--	if (!cap_caching_mode(iommu->cap))
--		return;
--
--	if (!sm_supported(iommu)) {
--		pr_warn("VT-d Scalable Mode not enabled, no PASID allocation\n");
--		return;
--	}
--
--	/*
--	 * Register a custom PASID allocator if we are running in a guest,
--	 * guest PASID must be obtained via virtual command interface.
--	 * There can be multiple vIOMMUs in each guest but only one allocator
--	 * is active. All vIOMMU allocators will eventually be calling the same
--	 * host allocator.
--	 */
--	if (!vccap_pasid(iommu->vccap))
--		return;
--
--	pr_info("Register custom PASID allocator\n");
--	iommu->pasid_allocator.alloc = intel_vcmd_ioasid_alloc;
--	iommu->pasid_allocator.free = intel_vcmd_ioasid_free;
--	iommu->pasid_allocator.pdata = (void *)iommu;
--	if (ioasid_register_allocator(&iommu->pasid_allocator)) {
--		pr_warn("Custom PASID allocator failed, scalable mode disabled\n");
--		/*
--		 * Disable scalable mode on this IOMMU if there
--		 * is no custom allocator. Mixing SM capable vIOMMU
--		 * and non-SM vIOMMU are not supported.
--		 */
--		intel_iommu_sm = 0;
--	}
--}
--#endif
--
- static int __init init_dmars(void)
- {
- 	struct dmar_drhd_unit *drhd;
-@@ -2960,9 +2878,6 @@ static int __init init_dmars(void)
- 	 */
- 	for_each_active_iommu(iommu, drhd) {
- 		iommu_flush_write_buffer(iommu);
--#ifdef CONFIG_INTEL_IOMMU_SVM
--		register_pasid_allocator(iommu);
--#endif
- 		iommu_set_root_entry(iommu);
- 	}
- 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 06e61e474856..6bdfbead82c4 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -184,7 +184,6 @@
- #define ecap_flts(e)		(((e) >> 47) & 0x1)
- #define ecap_slts(e)		(((e) >> 46) & 0x1)
- #define ecap_slads(e)		(((e) >> 45) & 0x1)
--#define ecap_vcs(e)		(((e) >> 44) & 0x1)
- #define ecap_smts(e)		(((e) >> 43) & 0x1)
- #define ecap_dit(e)		(((e) >> 41) & 0x1)
- #define ecap_pds(e)		(((e) >> 42) & 0x1)
-@@ -210,9 +209,6 @@
- #define ecap_max_handle_mask(e) (((e) >> 20) & 0xf)
- #define ecap_sc_support(e)	(((e) >> 7) & 0x1) /* Snooping Control */
- 
--/* Virtual command interface capability */
--#define vccap_pasid(v)		(((v) & DMA_VCS_PAS)) /* PASID allocation */
--
- /* IOTLB_REG */
- #define DMA_TLB_FLUSH_GRANU_OFFSET  60
- #define DMA_TLB_GLOBAL_FLUSH (((u64)1) << 60)
-@@ -307,8 +303,6 @@
- #define DMA_PRS_PPR	((u32)1)
- #define DMA_PRS_PRO	((u32)2)
- 
--#define DMA_VCS_PAS	((u64)1)
--
- #define IOMMU_WAIT_OP(iommu, offset, op, cond, sts)			\
- do {									\
- 	cycles_t start_time = get_cycles();				\
-@@ -560,7 +554,6 @@ struct intel_iommu {
- 	u64		reg_size; /* size of hw register set */
- 	u64		cap;
- 	u64		ecap;
--	u64		vccap;
- 	u32		gcmd; /* Holds TE, EAFL. Don't need SRTP, SFL, WBF */
- 	raw_spinlock_t	register_lock; /* protect register handling */
- 	int		seq_id;	/* sequence id of the iommu */
-@@ -583,7 +576,6 @@ struct intel_iommu {
- 	unsigned char prq_name[16];    /* Name for PRQ interrupt */
- 	unsigned long prq_seq_number;
- 	struct completion prq_complete;
--	struct ioasid_allocator_ops pasid_allocator; /* Custom allocator for PASIDs */
+ /*
+  * Routines for handling mm_structs
+@@ -452,24 +451,9 @@ static inline void membarrier_update_current_mm(struct mm_struct *next_mm)
  #endif
- 	struct iopf_queue *iopf_queue;
- 	unsigned char iopfq_name[16];
+ 
+ #ifdef CONFIG_IOMMU_SVA
+-static inline void mm_pasid_init(struct mm_struct *mm)
+-{
+-	mm->pasid = INVALID_IOASID;
+-}
+-
+-/* Associate a PASID with an mm_struct: */
+-static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
+-{
+-	mm->pasid = pasid;
+-}
+-
+-static inline void mm_pasid_drop(struct mm_struct *mm)
+-{
+-	if (pasid_valid(mm->pasid)) {
+-		ioasid_free(mm->pasid);
+-		mm->pasid = INVALID_IOASID;
+-	}
+-}
++void mm_pasid_init(struct mm_struct *mm);
++void mm_pasid_set(struct mm_struct *mm, u32 pasid);
++void mm_pasid_drop(struct mm_struct *mm);
+ #else
+ static inline void mm_pasid_init(struct mm_struct *mm) {}
+ static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
 -- 
 2.25.1
 
