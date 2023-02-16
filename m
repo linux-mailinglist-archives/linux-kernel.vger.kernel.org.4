@@ -2,167 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32890698E3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB27698E45
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 09:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBPIEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 03:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S229796AbjBPIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 03:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBPIEH (ORCPT
+        with ESMTP id S229478AbjBPIFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 03:04:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1C71DB90;
-        Thu, 16 Feb 2023 00:04:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 650EF21D48;
-        Thu, 16 Feb 2023 08:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676534644; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wWVDnYphOY4/7fmH3HtlQ3zoNYKaqCMgj+iYz5wiHqU=;
-        b=TOnrT1930l8Lkgcu/NBbAhRjWZKg7qA7CFIiJ9f3jgXUEgDo5jvDmei89J+mww7boTXZ30
-        7QV8xIJb/uirR4slpBrNXVEEZU8UdA0D1kKGj/L4LbcKjRzRhgLsw9eU+Pj6PDqovzgV1d
-        1u/+saHPl+mKURI1P8vdfypAvyKOduw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41D18139B5;
-        Thu, 16 Feb 2023 08:04:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o2zbDXTj7WNXAwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 16 Feb 2023 08:04:04 +0000
-Date:   Thu, 16 Feb 2023 09:04:03 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Tejun Heo <tj@kernel.org>, Yosry Ahmed <yosryahmed@google.com>,
-        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
-        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y+3jcw9vo4ml5p0M@dhcp22.suse.cz>
-References: <c7b5e502d1a3b9b8f6e96cbf9ca553b143c327e0.1675669136.git-series.apopple@nvidia.com>
- <Y+Fttp1ozejoSQzl@slm.duckdns.org>
- <CAJD7tkb_Cr7rTTpKc1VBpS8h=n3Hu+nGiV8dkLH-NdC1bSG9mg@mail.gmail.com>
- <Y+GA6Y7SVhAW5Xm9@slm.duckdns.org>
- <CAJD7tka6SC1ho-dffV0bK_acoZd-5DQzBOy0xg3TkOFG1zAPMg@mail.gmail.com>
- <Y+GMbWWP/YhtJQqe@slm.duckdns.org>
- <Y+GQB9I6MFN6BOFw@nvidia.com>
- <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
- <Y+0rxoM4w9nilUMZ@dhcp22.suse.cz>
- <Y+0tWZxMUx/NZ3Ne@nvidia.com>
+        Thu, 16 Feb 2023 03:05:25 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0FD193F0;
+        Thu, 16 Feb 2023 00:05:24 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id o8so1228408pls.11;
+        Thu, 16 Feb 2023 00:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XEQzmnVecLTob0AWJCV+IJlL7tCqU6c5uGFQJ2KJd/U=;
+        b=MZnMEao1Zfl9Y5XPKCJEpUVzIhjZL3PhctsE8M4xoNl5IiB3jB1BLxuXF+W2aGvxhL
+         RMpqOzRBJx50hcxxUY3KVAPxIeA4Auq40z0xNzwh8ENhWtMaaQ/a+e5m+qgODussSE5i
+         dKd02XfsKf5nA5KFkyoFeMQAIXKRlHTRZ7tQmMA71lMJ6ZELGrpO6t+dPjgc/aYhAi66
+         qLR64StZCZXCbJSDf3qq7TV62vYjKBQsfRI4JBHrtBZJS7g9QVMI7EJQGOknbeThJVr9
+         lYY9FkMq7M3lOKzYkVy4dj72Pv+LTKxAcDB4qFFOjkcXTJx1V0FEeHvtRMw15hET8mJ8
+         +85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XEQzmnVecLTob0AWJCV+IJlL7tCqU6c5uGFQJ2KJd/U=;
+        b=u5UwNXRPIMXzjDe2AswQM+I1Di3EvQkK+BxpTCLRE/nKzhZuxcXma91V/sOwWWtbY8
+         fwifh7qq4mzgZ7mlc9peJN3I8w7KsxtjG0Zo7TmvFJJnnV8UROQmirdNqFwQAKtWxnle
+         fJX3Exu2LkPmM9coDyme3vHF/La3or0yiICFbPXc8Rcvs9tovQz8nNEgCXwU7+Qw9LTy
+         /1cPdKcGRAOPM9zPIxsa2JjuC0PvmoN5R+OYETXh0oHdIyMCmujbAIQlhnJIOF+Ehusa
+         0V6xL3r/I4rMxqW1kNoqBqHh1uq4gKSQSwboTjvBN4Dk2O6W/ZarvTX91dCHWRj72jNX
+         3kng==
+X-Gm-Message-State: AO0yUKX4MtFboWJ1AsyU8ECpal04UD9s+llbvGXNQKERmzhthZYSXGuQ
+        CKvPX7TaO3bdv5d/uYMNfO0=
+X-Google-Smtp-Source: AK7set9QjAWo6ZsPoG5UsOoD0zM7kanys0r0aqw196lzVZxzI5TtWYVwnvBvEPPdqwwBpDYKNz0Z4g==
+X-Received: by 2002:a05:6a20:7fa2:b0:c7:166d:686 with SMTP id d34-20020a056a207fa200b000c7166d0686mr2138453pzj.26.1676534723882;
+        Thu, 16 Feb 2023 00:05:23 -0800 (PST)
+Received: from localhost.localdomain (arc.lsta.media.kyoto-u.ac.jp. [130.54.10.65])
+        by smtp.gmail.com with ESMTPSA id ij21-20020a170902ab5500b00174f61a7d09sm626742plb.247.2023.02.16.00.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 00:05:23 -0800 (PST)
+From:   Taichi Nishimura <awkrail01@gmail.com>
+To:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, awkrail01@gmail.com, iii@linux.ibm.com,
+        ytcoode@gmail.com, deso@posteo.net, memxor@gmail.com,
+        joannelkoong@gmail.com, rdunlap@infradead.org
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH bpf-next] Fix typos in selftest/bpf files
+Date:   Thu, 16 Feb 2023 17:04:23 +0900
+Message-Id: <20230216080423.513746-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+0tWZxMUx/NZ3Ne@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-02-23 15:07:05, Jason Gunthorpe wrote:
-> On Wed, Feb 15, 2023 at 08:00:22PM +0100, Michal Hocko wrote:
-> > On Mon 06-02-23 14:32:37, Tejun Heo wrote:
-> > > Hello,
-> > > 
-> > > On Mon, Feb 06, 2023 at 07:40:55PM -0400, Jason Gunthorpe wrote:
-> > > > (a) kind of destroys the point of this as a sandboxing tool
-> > > > 
-> > > > It is not so harmful to use memory that someone else has been charged
-> > > > with allocating.
-> > > > 
-> > > > But it is harmful to pin memory if someone else is charged for the
-> > > > pin. It means it is unpredictable how much memory a sandbox can
-> > > > actually lock down.
-> > > > 
-> > > > Plus we have the double accounting problem, if 1000 processes in
-> > > > different cgroups open the tmpfs and all pin the memory then cgroup A
-> > > > will be charged 1000x for the memory and hit its limit, possibly
-> > > > creating a DOS from less priv to more priv
-> > > 
-> > > Let's hear what memcg people think about it. I'm not a fan of disassociating
-> > > the ownership and locker of the same page but it is true that actively
-> > > increasing locked consumption on a remote cgroup is awkward too.
-> > 
-> > One thing that is not really clear to me is whether those pins do
-> > actually have any "ownership".
-> 
-> In most cases the ownship traces back to a file descriptor. When the
-> file is closed the pin goes away.
+This patch is a re-submitting patch.
+I cloned bpf-next repo, run spell checker, and fixed typos.
+Included v1 and v2 patches to this one.
 
-This assumes a specific use of {un}pin_user_page*, right? IIUC the
-cgroup charging is meant to be used from vm_account but that doesn't
-really tell anything about the lifetime nor the ownership. Maybe this is
-just a matter of documentation update...
+Could you review it again? 
+Let me know if I have any mistakes.
 
-> > The interface itself doesn't talk about
-> > anything like that and so it seems perfectly fine to unpin from a
-> > completely different context then pinning. 
-> 
-> Yes, concievably the close of the FD can be in a totally different
-> process with a different cgroup.
+Best regards,
+Taichi Nishimura
 
-Wouldn't you get an unbalanced charges then? How can admin recover that
-situation?
+Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
+ .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
+ tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
+ tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
+ tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
+ tools/testing/selftests/bpf/veristat.c                      | 4 ++--
+ 10 files changed, 13 insertions(+), 13 deletions(-)
 
-> > If there is no enforcement then Tejun is right and relying on memcg
-> > ownership is likely the only reliable way to use for tracking. The
-> > downside is sharing obviously but this is the same problem we
-> > already do deal with with shared pages.
-> 
-> I think this does not work well because the owner in a memcg sense is
-> unrelated to the file descriptor which is the true owner.
-> 
-> So we can get cases where the pin is charged to the wrong cgroup which
-> is effectively fatal for sandboxing, IMHO.
-
-OK, I see. This makes it really much more complicated then.
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index eb2feaac81fe..653b0a20fab9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -488,7 +488,7 @@ static void run_test(struct migrate_reuseport_test_case *test_case,
+ 			goto close_servers;
+ 	}
  
-> > Another thing that is not really clear to me is how the limit is
-> > actually going to be used in practice. As there is no concept of a
-> > reclaim for pins then I can imagine that it would be quite easy to
-> > reach the hard limit and essentially DoS any further use of pins. 
-> 
-> Yes, that is the purpose. It is to sandbox pin users to put some limit
-> on the effect they have on the full machine.
-> 
-> It replaces the rlimit mess that was doing the same thing.
-
-arguably rlimit has a concept of the owner at least AFAICS. I do realize
-this is not really great wrt a high level resource control though.
-
-> > Cross cgroup pinning would make it even worse because it could
-> > become a DoS vector very easily. Practically speaking what tends to
-> > be a corner case in the memcg limit world would be norm for pin
-> > based limit.
-> 
-> This is why the cgroup charged for the pin must be tightly linked to
-> some cgroup that is obviously connected to the creator of the FD
-> owning the pin.
-
-The problem I can see is that the fd is just too fluid for tracking. You
-can pass fd over to a different cgroup context and then all the tracking
-just loses any trail to an owner.
-
-I can see how the underlying memcg tracking information is not really
-feasible for your usecases but I am really worried that it is just too
-easy to misaccount without any other proper ownership tracking.
+-	/* Tie requests to the first four listners */
++	/* Tie requests to the first four listeners */
+ 	err = start_clients(test_case);
+ 	if (!ASSERT_OK(err, "start_clients"))
+ 		goto close_clients;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 8fd4c0d78089..e91d0d1769f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -79,7 +79,7 @@ void serial_test_trampoline_count(void)
+ 	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
+ 		goto cleanup;
+ 
+-	/* and finaly execute the probe */
++	/* and finally execute the probe */
+ 	prog_fd = bpf_program__fd(prog);
+ 	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
+ 		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 26fffb02ed10..ad21ee8c7e23 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -84,7 +84,7 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *	typedef int (*fn_t)(int);
+  *	typedef char * const * (*fn_ptr2_t)(s_t, fn_t);
+  *
+- * - `fn_complext_t`: pointer to a function returning struct and accepting
++ * - `fn_complex_t`: pointer to a function returning struct and accepting
+  *   union and struct. All structs and enum are anonymous and defined inline.
+  *
+  * - `signal_t: pointer to a function accepting a pointer to a function as an
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 5950ad6ec2e6..aa5b69354b91 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -630,7 +630,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
+ }
+ 
+ /* Test that releasing a dynptr twice, where one of the releases happens
+- * within a calback function, fails
++ * within a callback function, fails
+  */
+ SEC("?raw_tp")
+ __failure __msg("arg 1 is an unacquired reference")
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 753718595c26..e562be6356f3 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -135,7 +135,7 @@ struct strobe_value_loc {
+ 	 * tpidr_el0 for aarch64).
+ 	 * TLS_IMM_EXEC: absolute address of GOT entry containing offset
+ 	 * from thread pointer;
+-	 * TLS_GENERAL_DYN: absolute addres of double GOT entry
++	 * TLS_GENERAL_DYN: absolute address of double GOT entry
+ 	 * containing tls_index_t struct;
+ 	 */
+ 	int64_t offset;
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 2833ad722cb7..66b304982245 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -600,7 +600,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+-	/* Skip the remainig next hops (may be zero). */
++	/* Skip the remaining next hops (may be zero). */
+ 	return skip_next_hops(pkt, encap->unigue.hop_count -
+ 					   encap->unigue.next_hop - 1);
+ }
+@@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+  *
+  *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+  *
+- * clang will substitue a costant for sizeof, which allows the verifier
+- * to track it's value. Based on this, it can figure out the constant
++ * clang will substitute a constant for sizeof, which allows the verifier
++ * to track its value. Based on this, it can figure out the constant
+  * return value, and calling code works while still being "generic" to
+  * IPv4 and IPv6.
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index f8e9256cf18d..a8d602d7c88a 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -47,7 +47,7 @@ static __noinline int sub5(int v)
+ 	return sub1(v) - 1; /* compensates sub1()'s + 1 */
+ }
+ 
+-/* unfortunately verifier rejects `struct task_struct *t` as an unkown pointer
++/* unfortunately verifier rejects `struct task_struct *t` as an unknown pointer
+  * type, so we need to accept pointer as integer and then cast it inside the
+  * function
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+index cdf3c48d6cbb..4ddcb6dfe500 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+@@ -98,7 +98,7 @@ bool parse_eth_frame(struct ethhdr *eth, void *data_end, struct parse_pkt *pkt)
+ 	return true;
+ }
+ 
+-/* Hint, VLANs are choosen to hit network-byte-order issues */
++/* Hint, VLANs are chosen to hit network-byte-order issues */
+ #define TESTVLAN 4011 /* 0xFAB */
+ // #define TO_VLAN  4000 /* 0xFA0 (hint 0xOA0 = 160) */
+ 
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index 0bd9990e83fa..f4936834f76f 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -91,7 +91,7 @@ static void try_skeleton_template()
+ 
+ 	skel.detach();
+ 
+-	/* destructor will destory underlying skeleton */
++	/* destructor will destroy underlying skeleton */
+ }
+ 
+ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index f961b49b8ef4..83231456d3c5 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -144,7 +144,7 @@ static struct env {
+ 	struct verif_stats *prog_stats;
+ 	int prog_stat_cnt;
+ 
+-	/* baseline_stats is allocated and used only in comparsion mode */
++	/* baseline_stats is allocated and used only in comparison mode */
+ 	struct verif_stats *baseline_stats;
+ 	int baseline_stat_cnt;
+ 
+@@ -882,7 +882,7 @@ static int process_obj(const char *filename)
+ 		 * that BPF object file is incomplete and has to be statically
+ 		 * linked into a final BPF object file; instead of bailing
+ 		 * out, report it into stderr, mark it as skipped, and
+-		 * proceeed
++		 * proceed
+ 		 */
+ 		fprintf(stderr, "Failed to open '%s': %d\n", filename, -errno);
+ 		env.files_skipped++;
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+
