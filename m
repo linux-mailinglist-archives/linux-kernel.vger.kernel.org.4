@@ -2,172 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B206992C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3336992C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjBPLIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S230370AbjBPLJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjBPLIb (ORCPT
+        with ESMTP id S229827AbjBPLJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:08:31 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F111206A6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:08:09 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id a9so1511152ljr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:08:09 -0800 (PST)
+        Thu, 16 Feb 2023 06:09:32 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFF5526D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:09:30 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id eq11so2253461edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:09:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fFNh/v5PyRba+b9OKuV/fo4Fg+XrIWLYeu/MIaQD8HI=;
-        b=nRZdpd2TJ5NmFJKugptl9/m9MnrT7wgZMwQkXPOvJQDdKoJvd6euQdl6Z9V195G0QO
-         o9cRNbYokee/fxzuLNr52eb1c0y5avjQPG9RsMaF1XvsNmhJcnSOTAS3jKSS93N04Uud
-         cDurXwMwWopkyqpAGLFhzwvB8DDeS04SUi84MFLu1VPWEBcvww4EAqVJ6n8+aXKsBtOU
-         yaD7UjkpaaXOuBfAGZZwmPO4wCYJWOPa2IQMqrNDIsiuFe9hC3R452fFXwgSf/zJmOOf
-         QNKVeZr6YMDPtTpJWjeLXPO8oHB8cRWa1ImVq7SiKQFrcj169Fcr65cb/o48K30DkyX9
-         yK8Q==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R3iiqH06nUTpPWYilgK2IFHj13BbO9uCZQ5Bymri4gs=;
+        b=cmzSs1x1uugc4EQOj+4Gw22iLIlzjJkEO/Pz7kDoPraCLYFaLp7LK7gxHRSb4Rhrxj
+         PXPCvcsjd1LOKa5sC/+YFMAol7I6Gi6WcmqSSNf3J8Vb8dpJEyEwlHJHLJ7Rkd6wgDV1
+         I4GfUatKxHSck7cIL7jhaQAUuxr2hJ6WECjfITXdl9UGxvQwsnHEjiQiah0j4Pa4Fw4P
+         WbfM/yLLq093PHgwbM5x+UMEqFPhoXiRlvfneB3BP9THB7DmxbDR0suzmIs8kqazRPBT
+         muSRLpK2kvpJWKUtlL5RZ5HSh71t8OJsdD+mOrGnGxaIhAvp598jeJ010eAQwXbzGuMZ
+         B4Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fFNh/v5PyRba+b9OKuV/fo4Fg+XrIWLYeu/MIaQD8HI=;
-        b=dilw5B7rTF38cFdNjPChk2mhxUKNN7WI8rMaXO3JdYApApXK90ant5xXWBiy80qgZ6
-         u8931weUPuKtf0ZBxuCCyrMsQwiVZXDBnQbiOT+KkICHPA+2HNYzR7XcoiUCa8lEFueY
-         Afy//E1w6ZEpni7EPWbfZM85zqhj5nrtkaNesKP7hXILE2OKfpV+9ZtyGwiSDVopOcew
-         TUvhiu67iyZ3sm0gmoBd7TJwAWIGm3gXBGEZMZdkY1XUY9u/t3o2o+FfVLreDZvKiijd
-         U1yrj6EkCkR8CBKkUavzaQwRyPvIlbpfmsioP2nuRkpdQQKHm7f4ZuyYuuu2EFHlna3K
-         D5+Q==
-X-Gm-Message-State: AO0yUKWkHSIS9MrtBvsFe6ZNRPwPcwPtTwJLVaPmbNvpte9MzOsBZr6L
-        A2J//l20r5AGyhZePHilEz3+/g==
-X-Google-Smtp-Source: AK7set9psRJZOenjDBzWRsX8u1qwYgjPnrP9p1UNfWJAEa18c2fgh6dKrd6v7bpMUmutB4Ypho19LA==
-X-Received: by 2002:a2e:b88b:0:b0:293:4ebc:98e0 with SMTP id r11-20020a2eb88b000000b002934ebc98e0mr1980800ljp.17.1676545688047;
-        Thu, 16 Feb 2023 03:08:08 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id d19-20020ac25453000000b004db20d07decsm255993lfn.209.2023.02.16.03.08.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 03:08:07 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8550: Use correct CPU compatibles
-Date:   Thu, 16 Feb 2023 12:08:03 +0100
-Message-Id: <20230216110803.3945747-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230216110803.3945747-1-konrad.dybcio@linaro.org>
-References: <20230216110803.3945747-1-konrad.dybcio@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R3iiqH06nUTpPWYilgK2IFHj13BbO9uCZQ5Bymri4gs=;
+        b=vuTo2t/YJTJV0LVwHCtARYVq2X18hIy/m9G7yszDKJdp9aRyqfXH7wy/ry3eMdm4Z0
+         xh8kFxfEKAYShsXZCdxSAeibqN2wR8OFUnzR0tf4AmSVdpaH+F8O8AgxKC8ra0AyuI+i
+         /VOuBC32vN9w933eOIgBGsnp9unJJSnBy+VtCE076VMx8gB1PQ6B0A/XpVwXLW/XFpv1
+         PFRCgbCYOKUx4E8z+aDtqoBVCyKwaMzyiiasOjl/y3tYCr5UeTsWc3RzhgvKRG2zxCUR
+         YTGgGf33TBjd44iBKxKxOgURbxN+ST2TyjLA0JiRMXA64cTM1/rW4XNf1+0GC6CuNopc
+         hHFg==
+X-Gm-Message-State: AO0yUKWr+IR/wVLa/dc6ikHQkKWjFbRGX/RkWcqCS/9CFq5wZcA/hMAO
+        qc5HvVINj4TCIipk+VijZUStSQ==
+X-Google-Smtp-Source: AK7set+atTYUvsw9Bi58sXSveqCbuDXNoORblsEZyFSBSAF12mVmwb9zx0f0LjR4QO0iZYzNQH+X0w==
+X-Received: by 2002:aa7:d4c1:0:b0:4ad:6fc6:ae9c with SMTP id t1-20020aa7d4c1000000b004ad6fc6ae9cmr466265edr.17.1676545769139;
+        Thu, 16 Feb 2023 03:09:29 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b12-20020a50cccc000000b004acc123cd94sm693183edj.30.2023.02.16.03.09.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 03:09:28 -0800 (PST)
+Message-ID: <a8f0cd74-6094-d24a-b126-ea7737e39a01@linaro.org>
+Date:   Thu, 16 Feb 2023 12:09:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 13/16] PCI: samsung: Rename common functions to samsung
+Content-Language: en-US
+To:     Shradha Todi <shradha.t@samsung.com>, lpieralisi@kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
+        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
+        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
+        m.szyprowski@samsung.com, jh80.chung@samsung.co,
+        pankaj.dubey@samsung.com
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214121333.1837-1-shradha.t@samsung.com>
+ <CGME20230214121456epcas5p36603c8d717588699d1b5575229d19114@epcas5p3.samsung.com>
+ <20230214121333.1837-14-shradha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214121333.1837-14-shradha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the correct compatibles for the four kinds of CPU cores used on
-SM8550, based on the value of their MIDR_EL1 registers:
+On 14/02/2023 13:13, Shradha Todi wrote:
+> Use samsung instead of exynos for all common functions
+> like probe/remove/suspend/resume.
+> 
+> Suggested-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> ---
+>  drivers/pci/controller/dwc/pci-samsung.c | 42 ++++++++++++------------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-samsung.c b/drivers/pci/controller/dwc/pci-samsung.c
+> index 719d284e1552..dc8ec0b546fd 100644
+> --- a/drivers/pci/controller/dwc/pci-samsung.c
+> +++ b/drivers/pci/controller/dwc/pci-samsung.c
+> @@ -60,7 +60,7 @@ struct samsung_pcie {
+>  	struct regulator_bulk_data	supplies[2];
+>  };
+>  
+> -static int exynos_pcie_init_clk_resources(struct samsung_pcie *sp)
+> +static int samsung_pcie_init_clk_resources(struct samsung_pcie *sp)
 
-CPU7: 0x411fd4e0 - CX3 r1p1
-CPU5-6: 0x412fd470 - CA710 r?p?
-CPU3-4: 0x411fd4d0 - CA715 r?p?
-CPU0-2: 0x411fd461 - CA510 r?p?
+Same as before - I don't see here benefit.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+>  {
+>  	struct device *dev = sp->pci.dev;
+>  	int ret;
+> @@ -74,7 +74,7 @@ static int exynos_pcie_init_clk_resources(struct samsung_pcie *sp)
+>  	return clk_bulk_prepare_enable(sp->clk_cnt, sp->clks);
+>  }
+>  
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index ff4d342c0725..a65c3151baf3 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -66,7 +66,7 @@ cpus {
- 
- 		CPU0: cpu@0 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a510";
- 			reg = <0 0>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
-@@ -89,7 +89,7 @@ L3_0: l3-cache {
- 
- 		CPU1: cpu@100 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a510";
- 			reg = <0 0x100>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_100>;
-@@ -108,7 +108,7 @@ L2_100: l2-cache {
- 
- 		CPU2: cpu@200 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a510";
- 			reg = <0 0x200>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_200>;
-@@ -127,7 +127,7 @@ L2_200: l2-cache {
- 
- 		CPU3: cpu@300 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a715";
- 			reg = <0 0x300>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_300>;
-@@ -146,7 +146,7 @@ L2_300: l2-cache {
- 
- 		CPU4: cpu@400 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a715";
- 			reg = <0 0x400>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_400>;
-@@ -165,7 +165,7 @@ L2_400: l2-cache {
- 
- 		CPU5: cpu@500 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a710";
- 			reg = <0 0x500>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_500>;
-@@ -184,7 +184,7 @@ L2_500: l2-cache {
- 
- 		CPU6: cpu@600 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-a710";
- 			reg = <0 0x600>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_600>;
-@@ -203,7 +203,7 @@ L2_600: l2-cache {
- 
- 		CPU7: cpu@700 {
- 			device_type = "cpu";
--			compatible = "qcom,kryo";
-+			compatible = "arm,cortex-x3";
- 			reg = <0 0x700>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_700>;
--- 
-2.39.1
+(...)
+
+>  
+> -static struct platform_driver exynos_pcie_driver = {
+> -	.probe		= exynos_pcie_probe,
+> -	.remove		= __exit_p(exynos_pcie_remove),
+> +static struct platform_driver samsung_pcie_driver = {
+> +	.probe		= samsung_pcie_probe,
+> +	.remove		= __exit_p(samsung_pcie_remove),
+>  	.driver = {
+> -		.name	= "exynos-pcie",
+> -		.of_match_table = exynos_pcie_of_match,
+> -		.pm		= &exynos_pcie_pm_ops,
+> +		.name	= "samsung-pcie",
+
+This "name" has some point... but I think it would break now all module
+users.
+
+> +		.of_match_table = samsung_pcie_of_match,
+> +		.pm		= &samsung_pcie_pm_ops,
+>  	},
+>  };
+> -module_platform_driver(exynos_pcie_driver);
+> +module_platform_driver(samsung_pcie_driver);
+>  MODULE_LICENSE("GPL v2");
+> -MODULE_DEVICE_TABLE(of, exynos_pcie_of_match);
+> +MODULE_DEVICE_TABLE(of, samsung_pcie_of_match);
+
+Best regards,
+Krzysztof
 
