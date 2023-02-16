@@ -2,119 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D15698F81
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3073698F86
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjBPJQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S229709AbjBPJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjBPJQp (ORCPT
+        with ESMTP id S229625AbjBPJRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:16:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA931C32A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:16:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id f21so3537010ejq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:16:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d9FNglQcCxQyOSfgnClzbl2z0FIefkJaddL/GbB5I2c=;
-        b=apzS31Voo3MgYzPmwbJiZkFUGxtflTAPDcXAbwJ0mp1CtQbZZJ2H1e80+rf4Z9ysnM
-         pDh5Ycv7nwP+Bqxbk4TSRr8/yiylu8DH8Dvie0/+AoGuEj+AzfjWLvTYCHUSiDaFANBu
-         PtiXZ3iKKrAaxqLSyuZdrzqBhBHmORz6Mba6N0i6FM+BR5Sz5CT6GiYh8o7HQ9wPn7vd
-         qYQqUr+q+cPsgA1CgVogBJwRyG9JvuE2z0rwVqzQhnY/Krr2x1yoZt0Wpc7bxL6rYoNH
-         xWMG/QLtj5e7nzdufjcSgEehgPyAnN7yDnC20VsumJw/j4zcF+fSbelE3VCqJdm13Hx7
-         7b/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9FNglQcCxQyOSfgnClzbl2z0FIefkJaddL/GbB5I2c=;
-        b=iZ16EGOhrH31VUMA2lAxliqqMf4fSciqPHyqQmyIuDHWav9o2YTESPwNZSYoQI5VH0
-         s8ye4SIhqd4c0Mp/DUStlkhL5rGpXZN/zbc5b+7kJ4F+aC9yefGBO1kINrGaiRSrrpT4
-         qMy8Pm+t0lrNb/oyd1WGdWFUwf1ZHVjucd8B7OQNAFxgyrVZ+xDFaA2rwz64rAo/2wVN
-         I8dV1AYbO36YrndnuC6sKAbJQwvmMq3ESd5aCBmQBnmaO+MfIm0p7O/hdWVdFQWrkSN/
-         Y8osy+TbsU0CfJ/X/h24HRK4SrPQy1EvbXvX8fjKuXlhUZfvSkoxZH/6glnWEG+554w7
-         tEIg==
-X-Gm-Message-State: AO0yUKVvcR5kLuPrA0EW8bubSHieI9umSjtxivGkMgyBfUGXYNvxC91a
-        s1KLiKDrHfN/Wq4aOlyVUDoQSw==
-X-Google-Smtp-Source: AK7set+kDJLUJSKzlsLyJSrK6+rqxZAGJG3YyEt+vkobl86x6eiiVQc1B5fHb46oVN3xWoQIa18+Qg==
-X-Received: by 2002:a17:906:38f:b0:87b:e105:5d9a with SMTP id b15-20020a170906038f00b0087be1055d9amr5228518eja.67.1676539002792;
-        Thu, 16 Feb 2023 01:16:42 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e26-20020a50a69a000000b00499703df898sm531436edc.69.2023.02.16.01.16.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 01:16:42 -0800 (PST)
-Message-ID: <fb380316-c8c5-104b-3054-a504f0fed6c0@linaro.org>
-Date:   Thu, 16 Feb 2023 10:16:38 +0100
+        Thu, 16 Feb 2023 04:17:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36911C7E7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:17:18 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD7F1660219B;
+        Thu, 16 Feb 2023 09:17:14 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676539037;
+        bh=p4O0JNqalB3DAfjfajI/CREv4U82nvTHiokxTLoKpk8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XU1WgQCRSsJY1e29r6FI2zJEyv/jAz6OCElh7uJFm7MQQsehZiLzQxp4UOkuiD890
+         t0/pMZ7ivUSue7NYar66RJl2AkCmiY1rfDSLlRR2WHg+lZRipo9nfTsQY6bjMZqDGM
+         h92lTZ6S/8Cyk9YRp0P4d1HL0Jr50gxW6KRtYmIrtTCzJgnh6BbsuN7FqF4cb9m9kE
+         bdV2t1q+2TErvBlTpjw72dJy2pHXHJkOS74depQNWhQtvjQIguNxgmsoYLSjy5+7jP
+         r7WqQZbiKXbLrLnyRodnotGJCmUA68KBF348rmo5u8rktY+0/LYzVEzsCzSgzOJsug
+         ajRGcznHfbDHg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     peterx@redhat.com, david@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, Paul Gofman <pgofman@codeweavers.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] mm/userfaultfd: Support WP on multiple VMAs
+Date:   Thu, 16 Feb 2023 14:16:55 +0500
+Message-Id: <20230216091656.2045471-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 0/7] add support for CDX bus
-Content-Language: en-US
-To:     "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230131084049.23698-1-nipun.gupta@amd.com>
- <BL1PR12MB533354263F0C9A8D5234272E9DA39@BL1PR12MB5333.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BL1PR12MB533354263F0C9A8D5234272E9DA39@BL1PR12MB5333.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2023 13:52, Agarwal, Nikhil wrote:
-> [AMD Official Use Only - General]
+mwriteprotect_range() errors out if [start, end) doesn't fall in one
+VMA. We are facing a use case where multiple VMAs are present in one
+range of interest. For example, the following pseudocode reproduces the
+error which we are trying to fix:
+- Allocate memory of size 16 pages with PROT_NONE with mmap
+- Register userfaultfd
+- Change protection of the first half (1 to 8 pages) of memory to
+  PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+- Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+  out.
 
-We keep seeing this in our mailboxes, so I wonder - what does it mean?
-That following email is an official statement from AMD and you represent
-the company?
+This is a simple use case where user may or may not know if the memory
+area has been divided into multiple VMAs.
 
-Best regards,
-Krzysztof
+We need an implementation which doesn't disrupt the already present
+users. So keeping things simple, stop going over all the VMAs if any one
+of the VMA hasn't been registered in WP mode. While at it, remove the
+un-needed error check as well.
+
+Reported-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v3:
+- Rebase on top of next-20230616
+
+Changes since v2:
+- Correct the return error code and cleanup a bit
+
+Changes since v1:
+- Correct the start and ending values passed to uffd_wp_range()
+---
+ mm/userfaultfd.c | 39 ++++++++++++++++++++++-----------------
+ 1 file changed, 22 insertions(+), 17 deletions(-)
+
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 53c3d916ff66..77c5839e591c 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -741,9 +741,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 			unsigned long len, bool enable_wp,
+ 			atomic_t *mmap_changing)
+ {
++	unsigned long end = start + len;
++	unsigned long _start, _end;
+ 	struct vm_area_struct *dst_vma;
+ 	unsigned long page_mask;
+ 	long err;
++	VMA_ITERATOR(vmi, dst_mm, start);
+ 
+ 	/*
+ 	 * Sanitize the command parameters:
+@@ -766,28 +769,30 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 		goto out_unlock;
+ 
+ 	err = -ENOENT;
+-	dst_vma = find_dst_vma(dst_mm, start, len);
++	for_each_vma_range(vmi, dst_vma, end) {
+ 
+-	if (!dst_vma)
+-		goto out_unlock;
+-	if (!userfaultfd_wp(dst_vma))
+-		goto out_unlock;
+-	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+-		goto out_unlock;
++		if (!userfaultfd_wp(dst_vma)) {
++			err = -ENOENT;
++			break;
++		}
+ 
+-	if (is_vm_hugetlb_page(dst_vma)) {
+-		err = -EINVAL;
+-		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+-		if ((start & page_mask) || (len & page_mask))
+-			goto out_unlock;
+-	}
++		if (is_vm_hugetlb_page(dst_vma)) {
++			err = -EINVAL;
++			page_mask = vma_kernel_pagesize(dst_vma) - 1;
++			if ((start & page_mask) || (len & page_mask))
++				break;
++		}
+ 
+-	err = uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
++		_start = max(dst_vma->vm_start, start);
++		_end = min(dst_vma->vm_end, end);
+ 
+-	/* Return 0 on success, <0 on failures */
+-	if (err > 0)
+-		err = 0;
++		err = uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
+ 
++		/* Return 0 on success, <0 on failures */
++		if (err < 0)
++			break;
++		err = 0;
++	}
+ out_unlock:
+ 	mmap_read_unlock(dst_mm);
+ 	return err;
+-- 
+2.39.1
 
