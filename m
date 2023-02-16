@@ -2,134 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B280698DF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35994698DF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 08:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjBPHm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 02:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S229756AbjBPHn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 02:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBPHm4 (ORCPT
+        with ESMTP id S229767AbjBPHnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 02:42:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A3D25285;
-        Wed, 15 Feb 2023 23:42:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A41FBB825DF;
-        Thu, 16 Feb 2023 07:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1F9C433D2;
-        Thu, 16 Feb 2023 07:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676533372;
-        bh=MOa0xJmnMkeXlEHM9s4CPRRpe1xjLgxBt3dpclKQX5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfDNRhIc0/qbZMXtg5hF6K/EjZv8HzC9qZoSEtDu3XXxsT8GGVTpjEVV4ADQGcI+b
-         +n43X5NUq1AzksTktI+STfxuXuPIiemh0VecOBMvl/JfYVq71DggjY0tZHmA5WPFpT
-         1Zm2+lBDJ2V6/UEwYKruoHBnto/IgvsXfYijug6usrz9pj5Mx02Zj8UfTuRfjIvpxg
-         gvdazPcEsK+jPhaLhReN3AbQdjSAQ9lNH25MZF/3aeWFC0ecVPcc40ch02TqekF+6w
-         FQ5mvkb/J7rCsKRUNsohbnS7zAFiciBkP0zzjrJWHNl1X9NsyeQsAdGyi8O0kLGLt/
-         AxlK0dTuVt6+g==
-Date:   Wed, 15 Feb 2023 23:42:50 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH 1/5] soc: qcom: Make the Qualcomm UFS/SDCC ICE a
- dedicated driver
-Message-ID: <Y+3eenOERCVGW+go@sol.localdomain>
-References: <20230214120253.1098426-1-abel.vesa@linaro.org>
- <20230214120253.1098426-2-abel.vesa@linaro.org>
- <7442b4f8-0560-35ea-4b0e-1f249fc5c902@linaro.org>
+        Thu, 16 Feb 2023 02:43:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70BE3B65F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:43:23 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id t16so1517211edd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 23:43:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QEv4RdIHEpDaWeBFegn1AIUItJy/VoOsMaUUrqvBXCU=;
+        b=k7aWom532xJ/30+zDgsqJJX76SQkXkZtbxr8YNDZmbHS+YnaT42ZbsOOIC7vVQBnv5
+         DMsra1lUcGPO8yrKJfyZDicLqz+lJ9lFUMRnbKvzLbHFz0EHAu2nHhoz8EFt9OlDQLCD
+         PQB460/2BpGHjycMyD8gUtHlaaiEm5xgRYl26uYcKW3pdfEuZ1VabVXxbYQu4dQRH3hk
+         mZPN9JNFpMpIfmLLaoMbQnzvND9pKi0zbFoLHKZsLFTUygC7tPJajCk1n/IJkj0yah+R
+         OqRv9JWCaI66jx+TXSP4OTzLlBREUGMV1jFU+eUfC0LAzK6pOVDEQrEi4QYYBTxwiMDn
+         kYFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QEv4RdIHEpDaWeBFegn1AIUItJy/VoOsMaUUrqvBXCU=;
+        b=uwCc+lNNtFQO0HxYLxyg1hl8kr+j8bB/94qG19Bx91g53FNdt93DEvXT5Ffl971Zsv
+         lORQl7dAIzuHxP9Zh4sQol1S0zpD0zQmCQJyT/NHmbZ062PorH8an+fXK9sbT/EgwNLi
+         c8+Xr217+Ej+k/7NW5OSArYDyl29m5P5EkJGiBre6YSjqzutvqywt0Su7p2C5Y3VEFVO
+         L5Og5HkWLErikzK+t3LjQ9sB64Psorz4CBdTV/l72vqZpmPT4TDPtXxowd7Z+xOsASt4
+         VvxMgINk33o5HgBw9hLgfiayk5PwFzm6lz6XVGzIKR1WovIq0YUwOvj6ecwo8khIPjqJ
+         QlBA==
+X-Gm-Message-State: AO0yUKU1dOmwW9bXK2eXy9nDhPu6t+67mRNbzHFnC+dxPyT8LGwSWcJQ
+        eI4hLOIaDUNEHNkd25jIprbfAg==
+X-Google-Smtp-Source: AK7set8/RcSVp1Ks4xKsgRqCz0Cn6Io0l8WY0JgK7Ri1oa6rCnWQ76Zx+p6/KdCczrxk8uzSbkIcNA==
+X-Received: by 2002:aa7:ca51:0:b0:4ab:2423:e310 with SMTP id j17-20020aa7ca51000000b004ab2423e310mr4864653edt.28.1676533402212;
+        Wed, 15 Feb 2023 23:43:22 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y42-20020a50bb2d000000b004ab1f97ca2csm423318ede.60.2023.02.15.23.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 23:43:21 -0800 (PST)
+Message-ID: <d811956d-fcef-c196-3953-7ef7bd4dc372@linaro.org>
+Date:   Thu, 16 Feb 2023 08:43:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7442b4f8-0560-35ea-4b0e-1f249fc5c902@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 5/7] media: dt-bindings: samsung,exynos4212-is: convert
+ to dtschema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214104508.51955-1-krzysztof.kozlowski@linaro.org>
+ <20230214104508.51955-6-krzysztof.kozlowski@linaro.org>
+ <20230215205317.GA529822-robh@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230215205317.GA529822-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:34:47PM +0100, Konrad Dybcio wrote:
-> > +#define QCOM_ICE_BIST_STATUS_MASK		0xF0000000
-> GENMASK(31, 28)?
-
-I personally think the plain number is much easier to read...
-
-> btw, most of these defines seem unused?
-
-Yes, the unused definitions can be dropped if people prefer.  I only included
-them in the original version because this hardware has no public documentation,
-so maybe it's helpful to see what registers and fields are available.
-
-I suppose that downstream code could always be dug up if needed, though.  Or
-maybe someday there will actually be documentation?
-
-> > +static struct qcom_ice *engine;
-> > +
-> > +static bool qcom_ice_check_supported(struct qcom_ice *ice)
-> > +{
-> > +	u32 regval = qcom_ice_readl(ice, QCOM_ICE_REG_VERSION);
-> > +	struct device *dev = ice->dev;
-> > +	int major = regval >> 24;
-> > +	int minor = (regval >> 16) & 0xFF;
-> > +	int step = regval & 0xFFFF;
-> FIELD_GET?
-
-Similarly, plain bit operations are much more universally understood...
-
-> > +	regval = qcom_ice_readl(ice, QCOM_ICE_REG_ADVANCED_CONTROL);
-> > +	/*
-> > +	 * Enable low power mode sequence
-> > +	 * [0]-0, [1]-0, [2]-0, [3]-E, [4]-0, [5]-0, [6]-0, [7]-0
-> Pardon my ignorance, but I have no idea how this comment corresponds
-> to the value OR'd..
+On 15/02/2023 21:53, Rob Herring wrote:
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  ranges: true
+>> +
+>> +  '#size-cells':
+>> +    const: 1
 > 
-> > +	 */
-> > +	regval |= 0x7000;
-> > +	qcom_ice_writel(ice, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
+> Normally this is next to #address-cells.
 
-I'm not sure either!  I've never had access to any documentation for this
-hardware, so the above logic is just taken from downstream code.  I kept that
-comment because it was the only available explanation for the value OR'd.
+I kept alphabetical sorting, but I can move this with ranges close to
+the reg/address-cells.
 
-Since it doesn't seem to be useful, I'm fine with just removing it.  (But please
-keep the "Enable low power mode sequence" part, as that's useful.)
+> 
+>> +
+>> +patternProperties:
+>> +  "^pmu@[0-9a-f]+$":
+>> +    type: object
+>> +    additionalProperties: false
+>> +    description:
+>> +      Node representing the SoC's Power Management Unit (duplicated with the
+>> +      correct PMU node in the SoC).
+>> +
+>> +    properties:
+>> +      reg:
+>> +        maxItems: 1
+>> +
+>> +    required:
+>> +      - reg
+>> +
+>> +  "^i2c-isp@[0-9a-f]+$":
+>> +    type: object
+>> +    $ref: /schemas/i2c/i2c-controller.yaml#
+>> +    unevaluatedProperties: false
+>> +      #additionalProperties: false
+> 
+> ??
 
-My guess is that it is actually just describing the bits backwards, so [3]-E
-corresponds to the three bits that are set.
+Indeed, some debug code...
 
-> > +static void qcom_ice_optimization_enable(struct qcom_ice *ice)
-> > +{
-> > +	u32 regval;
-> > +
-> > +	if (!ice)
-> > +		return;
-> > +
-> > +	/* ICE Optimizations Enable Sequence */
-> > +	regval = qcom_ice_readl(ice, QCOM_ICE_REG_ADVANCED_CONTROL);
-> > +	regval |= 0xD807100;
-> Please use lowercase hex, or de-magic-ify this if you have the means to.
+Best regards,
+Krzysztof
 
-I don't know what the 0xD807100 value means, sorry :-(  This is just the value
-that works to enable the "optimizations", and which the downstream code was
-using.  If anyone has access to the ICE hardware documentation (if there even
-*is* documentation), they might be able to say.
-
-- Eric
