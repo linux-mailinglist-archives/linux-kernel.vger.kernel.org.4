@@ -2,256 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BC86992F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F436992F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 12:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjBPLSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 06:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S230380AbjBPLTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 06:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjBPLR6 (ORCPT
+        with ESMTP id S229740AbjBPLTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 06:17:58 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EF82528A;
-        Thu, 16 Feb 2023 03:17:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=c3W/OHTUSIK1upohG2aWJfs7KtAZo7Enbm4Kuliw+kw=; b=ieZsLaCw8lRD+19/eiwDK5f0E3
-        Jp/NRXrB/W8uGw9zuydF8wcqJY/SOSuRCPJTrtagWxVOTi1axuH+JEMZuUglxUkH+AMqyWmevdxn/
-        6SBU/q9Q+8lnXju+k0Cr9FLG9YgzzF2AB97siXsvNydJvbBUU9iYJyJvXktGDn7eNVv7qnZaCZE/+
-        k4LP3Gk7oZHE0fCgVN1udZJTmlRcKuAMqEUTaudXmkBLJAQffrTP3cu3ysZKH0XQrysmPtVsQPoi/
-        TfaDqv9uE4dzTRrfyvuZdWGbnd7ClDA5EYhahbOf9hGzfzh9SgrmvorrNqI9fC3+4F5O54u5Bummu
-        5n5P8/qg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55348)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pScGu-0007xe-6H; Thu, 16 Feb 2023 11:17:52 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pScGq-0005na-3K; Thu, 16 Feb 2023 11:17:48 +0000
-Date:   Thu, 16 Feb 2023 11:17:48 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [RFC v1 net-next 7/7] net: dsa: ocelot_ext: add support for
- external phys
-Message-ID: <Y+4Q3PDlj+lVQAPx@shell.armlinux.org.uk>
-References: <20230216075321.2898003-1-colin.foster@in-advantage.com>
- <20230216075321.2898003-8-colin.foster@in-advantage.com>
+        Thu, 16 Feb 2023 06:19:03 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F8403346F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 03:19:02 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8BxNNgkEe5jxU4BAA--.2231S3;
+        Thu, 16 Feb 2023 19:19:00 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axvr4hEe5j3ow0AA--.37035S3;
+        Thu, 16 Feb 2023 19:18:57 +0800 (CST)
+Subject: Re: [PATCH v4 2/5] LoongArch: Use la.pcrel instead of la.abs for
+ exception handlers
+To:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
+ <1676018856-26520-3-git-send-email-tangyouling@loongson.cn>
+ <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
+ <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn>
+ <848e2985-9ba3-c14d-23ac-a7f1c218215f@loongson.cn>
+ <5adf0fc4-b75c-f7f2-311c-0f5d8f14311b@loongson.cn>
+ <48c4b1f81c21950e9fd46d4acb5196d979b147cb.camel@xry111.site>
+ <295efdc0-388e-cda4-120c-5f9c4740b208@loongson.cn>
+Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin lv <lvjianmin@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <33b173e4-d61d-5f43-b2f2-d96ec2897361@loongson.cn>
+Date:   Thu, 16 Feb 2023 19:18:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216075321.2898003-8-colin.foster@in-advantage.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <295efdc0-388e-cda4-120c-5f9c4740b208@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Axvr4hEe5j3ow0AA--.37035S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxuryfCF1fZFWDXr1ftr15twb_yoWrGw4DpF
+        W29a4vqF45Grn3Aa1DJ3ykZry5tanrWw4agF9rKFy8Zay29r1rtFykC3srZ3WDGa10ka1S
+        qFyYqasFvF45AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bO8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+        0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE
+        44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26rWlOx8S6xCaFVCjc4
+        AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vI
+        r41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
+        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7xRE6wZ7
+        UUUUU==
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
 
-On Wed, Feb 15, 2023 at 11:53:21PM -0800, Colin Foster wrote:
-> +static const struct phylink_mac_ops ocelot_ext_phylink_ops = {
-> +	.validate		= phylink_generic_validate,
+On 02/16/2023 04:03 PM, Youling Tang wrote:
+>
+>
+> On 02/16/2023 03:10 PM, Xi Ruoyao wrote:
+>> On Thu, 2023-02-16 at 14:59 +0800, Jinyang He wrote:
+>>> +.macro la.abs reg, sym
+>>> +766:
+>>> +    nop
+>>> +    nop
+>>> +    nop
+>>> +    nop
+>>
+>> In the "formal" version we can code
+>>
+>> lu12i.w        reg, 0
+>> ori        reg, reg, 0
+>> lu32i.d        reg, 0
+>> lu52i.d        reg, reg, 0
+>>
+>> here.  Then we only need to fixup the immediate slot so we can avoid
+>> using parse_r.
+>>
+>>
+>>> +    .pushsection ".laabs", "aw", %progbits
+>>> +768:
+>>> +    .word 768b-766b
+>>> +    parse_r regno, \reg
+>>> +    .word regno
+>>> +    .dword \sym
+>>> +    .popsection
+>>> +.endm
+>
+> I will try to modify a version for testing, using the following
+> definition, when the RELOCATABLE is turned on, the "la.abs macro" is
+> used, otherwise the "la.abs pseudo instruction" is still used as before.
+>
+> #ifdef CONFIG_RELOCATABLE
+> .macro la.abs reg, sym
+> lu12i.w        reg, 0
+> ori        reg, reg, 0
+> lu32i.d        reg, 0
+> lu52i.d        reg, reg, 0
+> .endm
+> #endif
 
-There is no need to set this anymore.
+On the basis of the v4 patch set, remove patch2, and then add the 
+following patches, and the test is successful on qemu.
 
-> +	.mac_config		= ocelot_ext_phylink_mac_config,
-> +	.mac_link_down		= ocelot_ext_phylink_mac_link_down,
-> +	.mac_link_up		= ocelot_ext_phylink_mac_link_up,
-> +};
-> +
-> +static void ocelot_ext_pcs_get_state(struct phylink_pcs *pcs,
-> +				     struct phylink_link_state *state)
-> +{
-> +	struct ocelot_ext_port_priv *port_priv =
-> +		phylink_pcs_to_ocelot_port(pcs);
-> +
-> +	/* TODO: Determine state from hardware? */
-> +}
-> +
-> +static int ocelot_ext_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
-> +				 phy_interface_t interface,
-> +				 const unsigned long *advertising,
-> +				 bool permit_pause_to_mac)
-> +{
-> +	struct ocelot_ext_port_priv *port_priv =
-> +		phylink_pcs_to_ocelot_port(pcs);
-> +
-> +	switch (interface) {
-> +	case PHY_INTERFACE_MODE_QSGMII:
-> +		ocelot_ext_phylink_mac_config(&port_priv->phylink_config, mode,
-> +					      NULL);
+If this method is more acceptable to everyone, I will send v5.
 
-Why are you calling a "mac" operation from a "pcs" operation? If this
-PCS is attached to the same phylink instance as the MAC, you'll get
-the .mac_config method called along with the .pcs_config, so calling
-one from the other really isn't necessary.
+diff --git a/arch/loongarch/include/asm/asmmacro.h 
+b/arch/loongarch/include/asm/asmmacro.h
+index 328bb956f241..adb04ae6b208 100644
+--- a/arch/loongarch/include/asm/asmmacro.h
++++ b/arch/loongarch/include/asm/asmmacro.h
+@@ -667,4 +667,19 @@
+         nor     \dst, \src, zero
+  .endm
 
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void ocelot_ext_pcs_an_restart(struct phylink_pcs *pcs)
-> +{
-> +	/* TODO: Restart autonegotiaion process */
-> +}
-> +
-> +static void ocelot_ext_pcs_link_up(struct phylink_pcs *pcs, unsigned int mode,
-> +				   phy_interface_t interface, int speed,
-> +				   int duplex)
-> +{
-> +	struct ocelot_ext_port_priv *port_priv =
-> +		phylink_pcs_to_ocelot_port(pcs);
-> +
-> +	ocelot_ext_phylink_mac_link_up(&port_priv->phylink_config, NULL, mode,
-> +				       interface, speed, duplex, false, false);
++#ifdef CONFIG_RELOCATABLE
++.macro la.abs reg, sym
++766:
++       lu12i.w \reg, 0
++       ori     \reg, \reg, 0
++       lu32i.d \reg, 0
++       lu52i.d \reg, \reg, 0
++       .pushsection ".laabs", "aw", %progbits
++768:
++       .dword 768b-766b
++       .dword \sym
++       .popsection
++.endm
++#endif
++
+  #endif /* _ASM_ASMMACRO_H */
+diff --git a/arch/loongarch/kernel/relocate.c 
+b/arch/loongarch/kernel/relocate.c
+index 7d19cc0d2185..7ad327a554f9 100644
+--- a/arch/loongarch/kernel/relocate.c
++++ b/arch/loongarch/kernel/relocate.c
+@@ -12,6 +12,7 @@
+  #include <linux/start_kernel.h>
+  #include <asm/bootinfo.h>
+  #include <asm/early_ioremap.h>
++#include <asm/inst.h>
+  #include <asm/sections.h>
 
-Same here... and I fail to see why any of these need to be implemented
-or what the purpose of providing this pcs code is.
+  #define RELOCATED(x) ((void *)((long)x + reloc_offset))
+@@ -45,6 +46,32 @@ static inline __init void relocate_relative(void)
+         }
+  }
 
-> +}
-> +
-> +static const struct phylink_pcs_ops ocelot_ext_pcs_ops = {
-> +	.pcs_get_state = ocelot_ext_pcs_get_state,
-> +	.pcs_config = ocelot_ext_pcs_config,
-> +	.pcs_an_restart = ocelot_ext_pcs_an_restart,
-> +	.pcs_link_up = ocelot_ext_pcs_link_up,
->  };
->  
-> +static int ocelot_ext_parse_port_node(struct ocelot *ocelot,
-> +				      struct device_node *ports_node,
-> +				      phy_interface_t phy_mode, int port)
-> +{
-> +	struct ocelot_ext_port_priv *ocelot_ext_port_priv;
-> +	struct felix *felix = ocelot_to_felix(ocelot);
-> +	struct ocelot_ext_priv *ocelot_ext_priv;
-> +
-> +	ocelot_ext_priv = felix_to_ocelot_ext_priv(felix);
-> +
-> +	ocelot_ext_port_priv = devm_kzalloc(ocelot->dev,
-> +					    sizeof(*ocelot_ext_port_priv),
-> +					    GFP_KERNEL);
-> +	if (!ocelot_ext_port_priv)
-> +		return -ENOMEM;
-> +
-> +	ocelot_ext_port_priv->ocelot = ocelot;
-> +	ocelot_ext_port_priv->chip_port = port;
-> +	ocelot_ext_port_priv->pcs.ops = &ocelot_ext_pcs_ops;
-> +
-> +	if (!felix->pcs)
-> +		felix->pcs = devm_kcalloc(ocelot->dev, felix->info->num_ports,
-> +					  sizeof(struct phylink_pcs *),
-> +					  GFP_KERNEL);
-> +
-> +	if (!felix->pcs)
-> +		return -ENOMEM;
-> +
-> +	felix->pcs[port] = &ocelot_ext_port_priv->pcs;
-> +
-> +	ocelot_ext_priv->port_priv[port] = ocelot_ext_port_priv;
-> +
-> +	ocelot_ext_port_priv->node = of_node_get(ports_node);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ocelot_ext_phylink_create(struct ocelot *ocelot, int port)
-> +{
-> +	struct ocelot_ext_port_priv *ocelot_ext_port_priv;
-> +	struct felix *felix = ocelot_to_felix(ocelot);
-> +	struct ocelot_ext_priv *ocelot_ext_priv;
-> +	struct device *dev = ocelot->dev;
-> +	struct ocelot_port *ocelot_port;
-> +	struct device_node *portnp;
-> +	phy_interface_t phy_mode;
-> +	struct phylink *phylink;
-> +	int err;
-> +
-> +	ocelot_ext_priv = felix_to_ocelot_ext_priv(felix);
-> +	ocelot_port = ocelot->ports[port];
-> +	ocelot_ext_port_priv = ocelot_ext_priv->port_priv[port];
-> +
-> +	if (!ocelot_ext_port_priv)
-> +		return 0;
-> +
-> +	portnp = ocelot_ext_port_priv->node;
-> +	phy_mode = ocelot_port->phy_mode;
-> +
-> +	/* Break out early if we're internal...? */
-> +	if (phy_mode == PHY_INTERFACE_MODE_INTERNAL)
-> +		return 0;
-> +
-> +	if (phy_mode == PHY_INTERFACE_MODE_QSGMII)
-> +		ocelot_port_rmwl(ocelot_port, 0,
-> +				 DEV_CLOCK_CFG_MAC_TX_RST |
-> +				 DEV_CLOCK_CFG_MAC_RX_RST,
-> +				 DEV_CLOCK_CFG);
-> +
-> +	if (phy_mode != PHY_INTERFACE_MODE_INTERNAL) {
-> +		struct phy *serdes = of_phy_get(portnp, NULL);
-> +
-> +		if (IS_ERR(serdes)) {
-> +			err = PTR_ERR(serdes);
-> +			dev_err_probe(dev, err,
-> +				      "missing SerDes phys for port %d\n",
-> +				      port);
-> +			return err;
-> +		}
-> +
-> +		err = phy_set_mode_ext(serdes, PHY_MODE_ETHERNET, phy_mode);
-> +		of_phy_put(serdes);
-> +		if (err) {
-> +			dev_err(dev,
-> +				"Could not set SerDes mode on port %d: %pe\n",
-> +				port, ERR_PTR(err));
-> +			return err;
-> +		}
-> +	}
-> +
-> +	ocelot_ext_port_priv->phylink_config.dev = dev;
-> +	ocelot_ext_port_priv->phylink_config.type = PHYLINK_DEV;
-> +	ocelot_ext_port_priv->phylink_config.mac_capabilities = MAC_ASYM_PAUSE |
-> +		MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD | MAC_2500FD;
-> +
-> +	__set_bit(ocelot_port->phy_mode,
-> +		  ocelot_ext_port_priv->phylink_config.supported_interfaces);
-> +
-> +	phylink = phylink_create(&ocelot_ext_port_priv->phylink_config,
-> +				 of_fwnode_handle(portnp),
-> +				 phy_mode, &ocelot_ext_phylink_ops);
++static inline void __init relocate_laabs(long offset)
++{
++       extern void *__laabs_begin;
++       extern void *__laabs_end;
++       struct laabs {
++               long offset;
++               long symvalue;
++       } *p;
++
++       for (p = (void *)&__laabs_begin; (void *)p < (void 
+*)&__laabs_end; p++) {
++               long v = p->symvalue + reloc_offset;
++               union loongarch_instruction *insn = (void *)p - 
+p->offset + offset;
++               u32 lu12iw, ori, lu32id, lu52id;
++
++               lu12iw = (v >> 12) & 0xfffff;
++               ori = v & 0xfff;
++               lu32id = (v >> 32) & 0xfffff;
++               lu52id = v >> 52;
++
++               insn[0].reg1i20_format.immediate = lu12iw;
++               insn[1].reg2i12_format.immediate = ori;
++               insn[2].reg1i20_format.immediate = lu32id;
++               insn[3].reg2i12_format.immediate = lu52id;
++    }
++}
++
+  #ifdef CONFIG_RANDOMIZE_BASE
+  static inline __init unsigned long rotate_xor(unsigned long hash,
+                                               const void *area, size_t 
+size)
+@@ -168,8 +195,10 @@ void *__init do_kaslr(void)
+                 update_reloc_offset(&reloc_offset, offset);
+         }
 
-I'm confused. DSA already sets up a phylink instance per port, so why
-do you need another one?
+-       if (reloc_offset)
++       if (reloc_offset) {
+                 relocate_relative();
++               relocate_laabs(offset);
++       }
 
-Thanks.
+         return kernel_entry;
+  }
+@@ -181,6 +210,8 @@ void __init relocate_kernel(void)
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+         if (reloc_offset)
+                 relocate_relative();
++
++       relocate_laabs(0);
+  }
+
+  /*
+diff --git a/arch/loongarch/kernel/vmlinux.lds.S 
+b/arch/loongarch/kernel/vmlinux.lds.S
+index aec0b6567d24..0e58c68bf427 100644
+--- a/arch/loongarch/kernel/vmlinux.lds.S
++++ b/arch/loongarch/kernel/vmlinux.lds.S
+@@ -66,6 +66,13 @@ SECTIONS
+                 __alt_instructions_end = .;
+         }
+
++       . = ALIGN(8);
++       .laabs : AT(ADDR(.laabs) - LOAD_OFFSET) {
++               __laabs_begin = .;
++               *(.laabs)
++               __laabs_end = .;
++       }
++
+         .got : ALIGN(16) { *(.got) }
+
+
+Youling.
+
