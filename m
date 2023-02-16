@@ -2,144 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC24F699E57
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 21:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA200699CC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjBPUyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 15:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S229948AbjBPTEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBPUy3 (ORCPT
+        with ESMTP id S229507AbjBPTEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 15:54:29 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C64505D7;
-        Thu, 16 Feb 2023 12:54:28 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id m10so3058499wrn.4;
-        Thu, 16 Feb 2023 12:54:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxHXAnEzcfwmzL57yBeDEI2OXJgv4sM92NV8AEEiDjk=;
-        b=IyXielZJHYrNZdwUKZ/VHSjiRRKC/fjAWKB6XxREQUlMeGCRBy5MFzAGkBPKtYuX4z
-         msWn2erMVQDpu8k7efDx+nvXtSeWNs31J9hz/wEg2PaPxLq7OR55qY/q/YrNJOwefAZS
-         dSYlPVT7UlhosbScdEHNsDbT/vgPIxzsYh3RHF9qb0wZEOoMwe4jEGldfVHfsXzlipXB
-         pHKvx/izp8RyWFctgV4zplDi9ggX4ajBM3dpn2fUPYBbCJcl4kiOEAjtyS6blk1CWixb
-         voq8WTudsJtj8Wpif+Z8gjXgdM7gnXwodJ57wPcwEt1MP5VtwLyMDcUwDV0VR7RVEoE5
-         rxrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XxHXAnEzcfwmzL57yBeDEI2OXJgv4sM92NV8AEEiDjk=;
-        b=F4pOc7lBRkKpfcBSQQfjt+lBPSTLGR/5RQW8DzBRiPwd4K0IxJKrbj/qeTpjLxJvbM
-         /e8MsTZDANNOv4I8qNWEnlrH2UMwC8g6uLWXc7zh+jg/Y0e6T1la5gSd/hvivMJEt/Pr
-         JIaofMGc9R1qGDIXVKgCZmAAbrAgkMktG69/41ncNbrC6PVc9Wnd2sEj8DLfjJboOVwN
-         8HSyD9RRIx4y8LTuVspJd/Z3kBdsGKJk1JwcwxpxyFlNHOjui2rlIPyFXud+w0VjS0ew
-         sGOuxSV4tNEx36z9Pk/YMjNjJM0Pxn25tDN5uYEb5FB2FxcVHozSX1bTY8rpHSJSPtKD
-         FCrA==
-X-Gm-Message-State: AO0yUKV4g/82pYyIPAD1LKd2BAc9tlgH06umCkYavKxDvD0E+qxj9QnR
-        KxQM/8jLQudamiod7fHAgGzMMMjYIN8=
-X-Google-Smtp-Source: AK7set/m5y8QLJ2rVEPQuLfvuJfCZb7LXLMd5x6BkDXzGrf7EnTAlb0ezjgXsvVzFHXmWfzhzcXAjA==
-X-Received: by 2002:adf:f3cf:0:b0:2c5:8575:c37 with SMTP id g15-20020adff3cf000000b002c585750c37mr2323400wrp.66.1676580866381;
-        Thu, 16 Feb 2023 12:54:26 -0800 (PST)
-Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
-        by smtp.gmail.com with ESMTPSA id w13-20020adfcd0d000000b002c54f39d34csm2368271wrm.111.2023.02.16.12.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 12:54:25 -0800 (PST)
-Message-ID: <63ee9801.df0a0220.a106.72a3@mx.google.com>
-X-Google-Original-Message-ID: <Y+3+0e1fVOF0m329@Ansuel-xps.>
-Date:   Thu, 16 Feb 2023 11:00:49 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com
-Subject: Re: [PATCH v8 12/13] dt-bindings: net: phy: Document support for
- leds node
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <20230216013230.22978-13-ansuelsmth@gmail.com>
- <167651373836.1183034.17900591036429665419.robh@kernel.org>
+        Thu, 16 Feb 2023 14:04:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF825036C;
+        Thu, 16 Feb 2023 11:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Yawla20fuhgFU+ZM3/0+0yPtywAw64xLIG63jDmyTgk=; b=WJ5DhKnMSiKnsiY5Co43FPaRqa
+        rM3DttQzJiela82Afuc+NxA9x76rhFPUEDEvauyhgRZVOYh/36ZefNavqhAMXeEJLnC8w1LsV9ZJz
+        wnuQpdz3Ox4d6nWawtAb/YGlYdRYrZeLtv8SHw3odjH0WXM1SqTfnXyVx8+ZdAXMB69xSJxE/hWCq
+        tosiooAHynOPpDiriNLCJ32QnxlOF6cYpYT22+DYUMaMjtlJUn4hoLKkn/Q+urGyU18zVThHpN2l7
+        EJxmwN3IPgEtPxeyhuCmNjVaOTtU9EseAv3bdUV0KMtWtDcgrBRm5IhK8PGsq6o1l/8WhSy41dWt5
+        pQmdTPsA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pSjYO-008e70-Gb; Thu, 16 Feb 2023 19:04:24 +0000
+Date:   Thu, 16 Feb 2023 19:04:24 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     snitzer@kernel.org, Yang Shi <shy828301@gmail.com>,
+        mgorman@techsingularity.net, agk@redhat.com, dm-devel@redhat.com,
+        akpm@linux-foundation.org, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dm-crypt: allocate compound pages if possible
+Message-ID: <Y+5+OKbeTO2d9TsH@casper.infradead.org>
+References: <alpine.LRH.2.21.2302161245210.18393@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <167651373836.1183034.17900591036429665419.robh@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.LRH.2.21.2302161245210.18393@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 08:32:11PM -0600, Rob Herring wrote:
-> 
-> On Thu, 16 Feb 2023 02:32:29 +0100, Christian Marangi wrote:
-> > Document support for leds node in phy and add an example for it.
-> > Phy led will have to match led-phy pattern and should be treated as a
-> > generic led.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.example.dtb: ethernet-phy@0: leds:led-phy@0:linux,default-trigger: 'oneOf' conditional failed, one must be fixed:
-> 	'netdev' is not one of ['backlight', 'default-on', 'heartbeat', 'disk-activity', 'ide-disk', 'timer', 'pattern']
-> 	'netdev' does not match '^mmc[0-9]+$'
-> 	'netdev' does not match '^cpu[0-9]*$'
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-> 
+On Thu, Feb 16, 2023 at 12:47:08PM -0500, Mikulas Patocka wrote:
+> +		while (order > 0) {
+> +			page = alloc_pages(gfp_mask
+> +				| __GFP_NOMEMALLOC | __GFP_NORETRY | __GFP_NOWARN, order);
 
-Hi, I could be wrong but this should be fixed by the previous patch that
-adds netdev to the trigger list.
+... | __GFP_COMP
 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230216013230.22978-13-ansuelsmth@gmail.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+>  		page = mempool_alloc(&cc->page_pool, gfp_mask);
+>  		if (!page) {
+>  			crypt_free_buffer_pages(cc, clone);
+>  			bio_put(clone);
+>  			gfp_mask |= __GFP_DIRECT_RECLAIM;
+> +			order = 0;
+>  			goto retry;
+>  		}
+>  
+> -		len = (remaining_size > PAGE_SIZE) ? PAGE_SIZE : remaining_size;
+> -
+> -		bio_add_page(clone, page, len, 0);
+> +have_pages:
+> +		page->compound_order = order;
 
--- 
-	Ansuel
+No.  You'll corrupt the next page if page is order-0, which it is if it
+came from the mempool.  Also we've deleted page->compound_order in -next
+so you can't make this mistake.  Using __GFP_COMP will set this field
+for you, so you can just drop this line.
+
+> -		remaining_size -= len;
+> +		for (o = 0; o < 1U << order; o++) {
+> +			unsigned len = min((unsigned)PAGE_SIZE, remaining_size);
+> +			bio_add_page(clone, page, len, 0);
+> +			remaining_size -= len;
+> +			page++;
+
+You can add multiple pages at once, whether they're compound or not.  So
+replace this entire loop with:
+
+		bio_add_page(clone, page, remaining_size, 0);
+
+> @@ -1711,10 +1732,23 @@ static void crypt_free_buffer_pages(stru
+>  {
+>  	struct bio_vec *bv;
+>  	struct bvec_iter_all iter_all;
+> +	unsigned skip_entries = 0;
+>  
+>  	bio_for_each_segment_all(bv, clone, iter_all) {
+> -		BUG_ON(!bv->bv_page);
+> -		mempool_free(bv->bv_page, &cc->page_pool);
+> +		unsigned order;
+> +		struct page *page = bv->bv_page;
+> +		BUG_ON(!page);
+> +		if (skip_entries) {
+> +			skip_entries--;
+> +			continue;
+> +		}
+> +		order = page->compound_order;
+> +		if (order) {
+> +			__free_pages(page, order);
+> +			skip_entries = (1U << order) - 1;
+> +		} else {
+> +			mempool_free(page, &cc->page_pool);
+> +		}
+
+You can simplify this by using the folio code.
+
+	struct folio_iter fi;
+
+	bio_for_each_folio_all(fi, bio) {
+		if (folio_test_large(folio))
+			folio_put(folio);
+		else
+			mempool_free(&folio->page, &cc->page_pool);
+	}
+
+(further work would actually convert this driver to use folios instead
+of pages)
