@@ -2,154 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0A36989C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7E76989CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 02:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBPBRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 20:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S229720AbjBPBSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 20:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjBPBRT (ORCPT
+        with ESMTP id S229462AbjBPBSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 20:17:19 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC7C3C784;
-        Wed, 15 Feb 2023 17:17:18 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id k24so391083pji.2;
-        Wed, 15 Feb 2023 17:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wg8TeDWkPF48KtftvDSL6IEhuDjKb+MEbGQmIe+Hmag=;
-        b=Vwqo4dw3E5kLCRVqNv2Xi7yQIV0/M4fnwU0EV0TrBJWkOFSU0yR45EwnAsNoJp0mt+
-         S2wI4Gg7CFOSBqXC/G2E0wckoW4MbVrjwHXWnV/Y7GFpiMorWge0h7jFVIvgTMucVkQw
-         V4zTE4G9EXEKhEwjyim+wHWGvQRM0b/3KrEr20mUXvDuXdxs70PL7ZGoqsXSZWJ0XOYr
-         u1TzBieNBw/bzLJ3a4eBAXgH41uaudk3oGw4tw3y4UWPjNudZqNYiBkskDSB/OqTNxST
-         cz5m+RGs6DQNiqxS3EaZeW6ySXDEMhBTHKANSdJlWS5ABA3SppevdiJeDAyviNmnVoKh
-         9rhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wg8TeDWkPF48KtftvDSL6IEhuDjKb+MEbGQmIe+Hmag=;
-        b=GpjJoVz9GFGYX3Z151ovyR6xLXLVzLeYObC0xkiZ0m2xF6fLtI7QguLlR5gkxmj9jF
-         6gqsChhx87vsjTWLaiWFec1OkxOfgC2KpB64/8qouhqQob1jAcf9Qk3xtNUMJ4jbAJNE
-         yxd/42SfOv4ZGX0oZIRjdDUrJ0WoEK26LQP91V+8bkEhhM64OxX6Rcgd/JiyO6NaKAKj
-         m+6lQoYfcHodz6vlOC+3Ju/YtNBCejtkXN7kvIZm7eLKzI5h9SGmDy1b6/ol7XC5Scvp
-         T1kT5vz4FC298NNIPE1A4W9MMmAt0Sdw/ydgmJ7lfxhuCaXbosZ2ZIuqR1qj+hSyQ64w
-         L09A==
-X-Gm-Message-State: AO0yUKVwfXu3nSDdoxwWR0g7fsO536jFdYq2WU+9HrZyOk/ivHDngrh7
-        Wk2gLA9B/GIM541Ddr1B+Q0=
-X-Google-Smtp-Source: AK7set8b0IYWS1H7+D9dUU5DUlzDDEMVujA2jGO25CpyonJFJr7RCWYYydafqIVXFo9sMvkxY9BD9Q==
-X-Received: by 2002:a17:90a:5c:b0:231:20a8:6fe1 with SMTP id 28-20020a17090a005c00b0023120a86fe1mr4972482pjb.8.1676510237450;
-        Wed, 15 Feb 2023 17:17:17 -0800 (PST)
-Received: from redecorated-mbp ([202.53.32.211])
-        by smtp.gmail.com with ESMTPSA id k5-20020a17090a3e8500b00233ccd04a15sm2043799pjc.24.2023.02.15.17.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 17:17:17 -0800 (PST)
-Date:   Thu, 16 Feb 2023 12:17:09 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Andy Shevchenko <andy@infradead.org>
-Cc:     Aditya Garg <gargaditya08@live.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "kekrby@gmail.com" <kekrby@gmail.com>
-Subject: Re: [PATCH 3/3] HID: apple-magic-backlight: Add driver for keyboard
- backlight on internal Magic Keyboards
-Message-ID: <20230216121709.04c76b9d@redecorated-mbp>
-In-Reply-To: <Y+jLCebet+aekGRv@smile.fi.intel.com>
-References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
-        <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
-        <868AA58D-2399-4E4A-A6C6-73F88DB13992@live.com>
-        <7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com>
-        <Y+jLCebet+aekGRv@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Wed, 15 Feb 2023 20:18:18 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DCE1F5D0;
+        Wed, 15 Feb 2023 17:18:17 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PHHBW2tHdz4f3l7l;
+        Thu, 16 Feb 2023 09:18:11 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP4 (Coremail) with SMTP id gCh0CgDHd6tUhO1jysPPDg--.59609S2;
+        Thu, 16 Feb 2023 09:18:13 +0800 (CST)
+Message-ID: <8ca81321-8842-eb0a-35f1-46a2616d5fba@huaweicloud.com>
+Date:   Thu, 16 Feb 2023 09:18:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH bpf-next v1 1/4] riscv: Extend patch_text for multiple
+ instructions
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>
+References: <20230215135205.1411105-1-pulehui@huaweicloud.com>
+ <20230215135205.1411105-2-pulehui@huaweicloud.com> <Y+1evzv1PkuETdVm@spud>
+From:   Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <Y+1evzv1PkuETdVm@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgDHd6tUhO1jysPPDg--.59609S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW5JVWrJwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Feb 2023 13:18:33 +0200
-Andy Shevchenko <andy@infradead.org> wrote:
 
-> On Fri, Feb 10, 2023 at 03:45:15AM +0000, Aditya Garg wrote:
-> > From: Orlando Chamberlain <orlandoch.dev@gmail.com>
-> > 
-> > This driver adds support for the keyboard backlight on Intel T2 Macs
-> > with internal Magic Keyboards (MacBookPro16,x and MacBookAir9,1)  
+
+On 2023/2/16 6:37, Conor Dooley wrote:
+> On Wed, Feb 15, 2023 at 09:52:02PM +0800, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Extend patch_text for multiple instructions. This
+>> is the preparaiton for multiple instructions text
+>> patching in riscv bpf trampoline, and may be useful
+>> for other scenario.
 > 
-> ...
-> 
-> > +#include <linux/hid.h>
-> > +#include <linux/usb.h>  
-> 
-> Seems lack of some header inclusions, e.g. where struct led_classdev
-> is defined or -ERRNO codes.
-> 
-> > +#include "hid-ids.h"  
-> 
-> ...
-> 
-> > +static void apple_magic_backlight_power_set(struct
-> > apple_magic_backlight *backlight,
-> > +					   char power, char rate)  
-> 
-> char is a beast, can we use u8 here and in similar cases?
-> 
-> ...
-> 
-> > +	/* Ensure this usb endpoint is for the keyboard backlight,
-> > not touchbar
-> > +	 * backlight.
-> > +	 */  
-> 
-> /*
->  * Multi-line comment style
->  * goes like this.
->  */
-> 
-> ...
-> 
-> > +	backlight = devm_kzalloc(&hdev->dev, sizeof(*backlight),
-> > GFP_KERNEL);  
-> 
-> > +  
-> 
-> Redundant blank line.
-> 
-> > +	if (!backlight)
-> > +		return -ENOMEM;  
-> 
-> ...
-> 
-> > +static struct hid_driver apple_magic_backlight_hid_driver = {
-> > +	.name = "apple-magic-backlight",
-> > +	.id_table = apple_magic_backlight_hid_ids,
-> > +	.probe = apple_magic_backlight_probe,
-> > +	.remove = apple_magic_backlight_remove,
-> > +};  
-> 
-> > +  
-> 
-> Redundant blank line.
-> 
-> > +module_hid_driver(apple_magic_backlight_hid_driver);  
+> In the future, please use the full width for your commit message (or
+> fix your editor if it thinks fifty-something chars is the full width).
 > 
 
-Thanks for pointing out all these, I'll make those changes in v2.
+Thanks Conor, will try to fix it.
+
+> Otherwise, looks grand...
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Thanks,
+> Conor.
+> 
 
