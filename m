@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C19C69991F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617C6699924
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 16:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjBPPlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 10:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S230362AbjBPPnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 10:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjBPPlU (ORCPT
+        with ESMTP id S230201AbjBPPnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:41:20 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4A59B4C;
-        Thu, 16 Feb 2023 07:40:53 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d8so2389808plr.10;
-        Thu, 16 Feb 2023 07:40:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dIz1dd81kBqa+9U0EZQc5mAaI8eBbOT1aGkH7E8Ns+A=;
-        b=LeQ0PkaPg1S/RJKzvxMWzRoPm2TilEGhUb05Y8tNiKntvJqcRwrzdR8FlLw6lnR6NS
-         iBJ+q5ebLXCp05ZbA6P76F7cMmKbyOh26BV/SPcQJSrwMO7W4XwGNWRjBrGK/zMO6amC
-         Z0B48T7TIV3tpYbLBOnTSGCn6oremsRZiuN8zSkvKNXconJfooJPHn0hiwljxuTyIj4x
-         AoTcRhB7xn0mvK1Wg1/qKk7C8eoqCeWOnBzlo5C8DlW22frTOQkgsVIgyV78bV50WRvG
-         G1ex2WWFEoyUhJ6Qov6tA7wK8DV93OBHodz/w1Z59rahiilgQW3QxpjiFH1AZfBMC1rW
-         MWrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dIz1dd81kBqa+9U0EZQc5mAaI8eBbOT1aGkH7E8Ns+A=;
-        b=s6g67vgLt6/Y3/1gpUGuuxxoqNP3ydsDFUqoegenT7eMJRN2fKsjTPCujWKVhWyG+B
-         GPrv7NZdq0EcV0HbuCK7kR24BXelH3IxOulZvbpXPIkWCTl8RfqOFL4rvSxgShggjXpJ
-         TD5j+06H4M4zAyyvvcJLEiLxyT0DoPYemHZjWw2sWD7W24gCPotVs3kb3FuCVq2ynqIz
-         YK6kMZlAFr5oLR4ypzMRkn+vpmkLz8l6YMVeuGMLHpQm/xUjwdEywnKhbQmQVZeiJslb
-         sp5p9KCY+qa50klnZbHjPRLaMrhIo2oV/aDyxVN3kKzVp5uX9p9etlkIoTBrD2hOfvkP
-         qWFA==
-X-Gm-Message-State: AO0yUKWQa7low5YXFGP4MOD0DLuNdVMzbEa6BQA3er03Mu2IuSXIObMN
-        QyI2t3TcvbJpvZWviyLVt5IlsrEVsP4=
-X-Google-Smtp-Source: AK7set9Yw38AXdWKTGvpIOUs7nGALUrb4vZ+A2fpL7v79d0+g9bCMtCyTOhPZFO4GpefUq+xG2KCUw==
-X-Received: by 2002:a17:902:cacd:b0:196:68ee:f363 with SMTP id y13-20020a170902cacd00b0019668eef363mr5087318pld.69.1676562051903;
-        Thu, 16 Feb 2023 07:40:51 -0800 (PST)
-Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b00198e346c35dsm1491649plj.9.2023.02.16.07.40.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Feb 2023 07:40:51 -0800 (PST)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
-Subject: [PATCH V3 09/14] kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in kvm_mmu_invpcid_gva()
-Date:   Thu, 16 Feb 2023 23:41:15 +0800
-Message-Id: <20230216154115.710033-10-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230216154115.710033-1-jiangshanlai@gmail.com>
-References: <20230216154115.710033-1-jiangshanlai@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 16 Feb 2023 10:43:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9DC4CCAB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 07:42:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBE70618C5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 15:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA81C4339C;
+        Thu, 16 Feb 2023 15:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676562158;
+        bh=JYk/endDShTG37Jctnr/vqjuecsJ99nFH6xFQSWOsd4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QKuMBwREDFYGGNUtf00KirkTJKGRbSR7nMlJQlXT1aKUc63KXV4bBaMnRWZZpxPBY
+         qExZlooQVCHZoSC3PSyFq9xnygWq1uPmredFQvWjqG/YAQbWaTfhMCSPlOhubo5xd8
+         uxAszFOwsteA/YFHBIQIV/LE2o5yDK7uD3kHBNuboK9h2ok+U3pVvYTXqPlZgo8qKA
+         AmlKUhp7Ni/DUo2lNcreUfOXmaSDH8NLmML9aD54eUqvDsb1+C0YoFFo4AaUFyKycr
+         2UTR2aiGwC7RzvisovXeZOfJQYSWE6KWdIlQ5U9k3y21PQcj4yV7GGoAywl+tTMmGA
+         UBxxgeePD85nw==
+Date:   Fri, 17 Feb 2023 00:42:34 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     guoren@kernel.org
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
+Message-Id: <20230217004234.dbf3159e821e6581a62374b1@kernel.org>
+In-Reply-To: <20230126161559.1467374-1-guoren@kernel.org>
+References: <20230126161559.1467374-1-guoren@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,56 +57,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Thu, 26 Jan 2023 11:15:59 -0500
+guoren@kernel.org wrote:
 
-Use kvm_mmu_invalidate_addr() instead open calls to mmu->invlpg().
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The previous implementation was based on the stop_matchine mechanism,
+> which reduced the speed of arm/disarm_kprobe. Using minimum ebreak
+> instruction would get accurate atomicity.
+> 
+> This patch removes the patch_text of riscv, which is based on
+> stop_machine. Then riscv only reserved patch_text_nosync, and developers
+> need to be more careful in dealing with patch_text atomicity.
+> 
+> When CONFIG_RISCV_ISA_C=n, the ebreak could replace the whole
+> instruction. When CONFIG_RISCV_ISA_C=y, the patch uses 16-bit length
+> c.ebreak instruction, which may occupy the first part of the 32-bit
+> instruction and leave half the rest of the broken instruction. Because
+> ebreak could detour the flow to skip it, leaving it in the kernel text
+> memory is okay.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 
-No functional change intended.
+I'm not sure how the RISCV specification ensures this type of self
+code modification. But if you think calling the stop_machine() for
+*each* probe arm/disarm is slow, there may be another way to avoid
+ot by introducing a batch arming interface too. (reserve-commit way)
 
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- arch/x86/kvm/mmu/mmu.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+BTW, for the BPF usecase which is usually only for function
+entry/exit, we will use Fprobes. Since that will use ftrace batch
+text patching, I think we already avoid such slowdown.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 9f261e444a32..c48f98fbd6ae 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5814,27 +5814,20 @@ EXPORT_SYMBOL_GPL(kvm_mmu_invlpg);
- void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid)
- {
- 	struct kvm_mmu *mmu = vcpu->arch.mmu;
--	bool tlb_flush = false;
-+	unsigned long roots = 0;
- 	uint i;
- 
--	if (pcid == kvm_get_active_pcid(vcpu)) {
--		if (mmu->invlpg)
--			mmu->invlpg(vcpu, gva, mmu->root.hpa);
--		tlb_flush = true;
--	}
-+	if (pcid == kvm_get_active_pcid(vcpu))
-+		roots |= KVM_MMU_ROOT_CURRENT;
- 
- 	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
- 		if (VALID_PAGE(mmu->prev_roots[i].hpa) &&
--		    pcid == kvm_get_pcid(vcpu, mmu->prev_roots[i].pgd)) {
--			if (mmu->invlpg)
--				mmu->invlpg(vcpu, gva, mmu->prev_roots[i].hpa);
--			tlb_flush = true;
--		}
-+		    pcid == kvm_get_pcid(vcpu, mmu->prev_roots[i].pgd))
-+			roots |= KVM_MMU_ROOT_PREVIOUS(i);
- 	}
- 
--	if (tlb_flush)
--		static_call(kvm_x86_flush_tlb_gva)(vcpu, gva);
--
-+	if (roots)
-+		kvm_mmu_invalidate_addr(vcpu, mmu, gva, roots);
- 	++vcpu->stat.invlpg;
- 
- 	/*
+FYI, for ftrace dynamic event usecase, there is another reason to slow
+down the enable/disable dynamic event itself (to sync up the event
+enabled status to ensure all event handler has been done, it waits
+for rcu-sync for each operation.)
+
+Thank you,
+
+> ---
+>  arch/riscv/include/asm/patch.h     |  1 -
+>  arch/riscv/kernel/patch.c          | 33 ------------------------------
+>  arch/riscv/kernel/probes/kprobes.c | 29 ++++++++++++++++++--------
+>  3 files changed, 21 insertions(+), 42 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/patch.h b/arch/riscv/include/asm/patch.h
+> index 9a7d7346001e..2500782e6f5b 100644
+> --- a/arch/riscv/include/asm/patch.h
+> +++ b/arch/riscv/include/asm/patch.h
+> @@ -7,6 +7,5 @@
+>  #define _ASM_RISCV_PATCH_H
+>  
+>  int patch_text_nosync(void *addr, const void *insns, size_t len);
+> -int patch_text(void *addr, u32 insn);
+>  
+>  #endif /* _ASM_RISCV_PATCH_H */
+> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+> index 765004b60513..8bd51ed8b806 100644
+> --- a/arch/riscv/kernel/patch.c
+> +++ b/arch/riscv/kernel/patch.c
+> @@ -98,36 +98,3 @@ int patch_text_nosync(void *addr, const void *insns, size_t len)
+>  	return ret;
+>  }
+>  NOKPROBE_SYMBOL(patch_text_nosync);
+> -
+> -static int patch_text_cb(void *data)
+> -{
+> -	struct patch_insn *patch = data;
+> -	int ret = 0;
+> -
+> -	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+> -		ret =
+> -		    patch_text_nosync(patch->addr, &patch->insn,
+> -					    GET_INSN_LENGTH(patch->insn));
+> -		atomic_inc(&patch->cpu_count);
+> -	} else {
+> -		while (atomic_read(&patch->cpu_count) <= num_online_cpus())
+> -			cpu_relax();
+> -		smp_mb();
+> -	}
+> -
+> -	return ret;
+> -}
+> -NOKPROBE_SYMBOL(patch_text_cb);
+> -
+> -int patch_text(void *addr, u32 insn)
+> -{
+> -	struct patch_insn patch = {
+> -		.addr = addr,
+> -		.insn = insn,
+> -		.cpu_count = ATOMIC_INIT(0),
+> -	};
+> -
+> -	return stop_machine_cpuslocked(patch_text_cb,
+> -				       &patch, cpu_online_mask);
+> -}
+> -NOKPROBE_SYMBOL(patch_text);
+> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> index 475989f06d6d..27f8960c321c 100644
+> --- a/arch/riscv/kernel/probes/kprobes.c
+> +++ b/arch/riscv/kernel/probes/kprobes.c
+> @@ -24,12 +24,18 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
+>  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
+>  {
+>  	unsigned long offset = GET_INSN_LENGTH(p->opcode);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+>  
+>  	p->ainsn.api.restore = (unsigned long)p->addr + offset;
+>  
+> -	patch_text(p->ainsn.api.insn, p->opcode);
+> -	patch_text((void *)((unsigned long)(p->ainsn.api.insn) + offset),
+> -		   __BUG_INSN_32);
+> +	patch_text_nosync(p->ainsn.api.insn, &p->opcode, offset);
+> +	patch_text_nosync((void *)((unsigned long)(p->ainsn.api.insn) + offset),
+> +			  &opcode, GET_INSN_LENGTH(opcode));
+> +
+>  }
+>  
+>  static void __kprobes arch_prepare_simulate(struct kprobe *p)
+> @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
+>  /* install breakpoint in text */
+>  void __kprobes arch_arm_kprobe(struct kprobe *p)
+>  {
+> -	if ((p->opcode & __INSN_LENGTH_MASK) == __INSN_LENGTH_32)
+> -		patch_text(p->addr, __BUG_INSN_32);
+> -	else
+> -		patch_text(p->addr, __BUG_INSN_16);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+> +	patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode));
+>  }
+>  
+>  /* remove breakpoint from text */
+>  void __kprobes arch_disarm_kprobe(struct kprobe *p)
+>  {
+> -	patch_text(p->addr, p->opcode);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+> +	patch_text_nosync(p->addr, &p->opcode, GET_INSN_LENGTH(opcode));
+>  }
+>  
+>  void __kprobes arch_remove_kprobe(struct kprobe *p)
+> -- 
+> 2.36.1
+> 
+
+
 -- 
-2.19.1.6.gb485710b
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
