@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4C1698FCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057CE698FCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBPJ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S230037AbjBPJ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjBPJ2x (ORCPT
+        with ESMTP id S230009AbjBPJ3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:28:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907033C1D;
-        Thu, 16 Feb 2023 01:28:52 -0800 (PST)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676539731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VB6nLOQjdg9HrxrnzxjWOc/eLn5DzxQGj/xPNSZpMgE=;
-        b=LuJ4vWvn0L5QjkGWfmWcQvmpdhZL9+IwYAlr2WD1Z4vcZtDbkicfj/Hw34zf4F5MlhMHUn
-        bYsjzLQjUbehyD5H9fPoPMyaLLVD09FaFSXicER1Z2tvvxDqTgKxt+ehZnX5GnENKWA+Hi
-        L54buqdr2tB/6zLESLf6s8GAIG3hkedPRxQq14GbZRKOs5K7FHQvTCRqiCaD+Lfp5OOHFd
-        ULpgzol2bnppUhUQqVY9mdhX4n50y6K729fRYbVZ1TdpkFf3esmpbjd3sqN17IfjVpAd9j
-        RZd/vFPFaOGeRbgdjv93MrH24EtXcYQ/S2xzcIjY8yuFWv4elLZ0AsmFIl6/aA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676539731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VB6nLOQjdg9HrxrnzxjWOc/eLn5DzxQGj/xPNSZpMgE=;
-        b=BqaNTSAbysoKzPhPnrml4LyMwLS3W1VUJv0VvGKmSni+dCR5KXDnwFS1HnTgF7DqaRppKZ
-        x5Tbz4XDqnGRsMCw==
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] net/sched: taprio: dynamic max_sdu larger
- than the max_mtu is unlimited
-In-Reply-To: <20230215224632.2532685-4-vladimir.oltean@nxp.com>
-References: <20230215224632.2532685-1-vladimir.oltean@nxp.com>
- <20230215224632.2532685-4-vladimir.oltean@nxp.com>
-Date:   Thu, 16 Feb 2023 10:28:48 +0100
-Message-ID: <87cz6aot67.fsf@kurt>
+        Thu, 16 Feb 2023 04:29:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5616BBDE3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:29:01 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSaZU-0000eh-1H; Thu, 16 Feb 2023 10:28:56 +0100
+Message-ID: <52f9afe2-f621-77d8-9d10-449d539e901d@leemhuis.info>
+Date:   Thu, 16 Feb 2023 10:28:55 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        michallinuxstuff@gmail.com
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217037 - cmb attributes missing from the nvme class
+ under sysfs
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676539741;0120c9ad;
+X-HE-SMSGID: 1pSaZU-0000eh-1H
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+Hi, this is your Linux kernel regression tracker.
 
-On Thu Feb 16 2023, Vladimir Oltean wrote:
-> It makes no sense to keep randomly large max_sdu values, especially if
-> larger than the device's max_mtu. These are visible in "tc qdisc show".
-> Such a max_sdu is practically unlimited and will cause no packets for
-> that traffic class to be dropped on enqueue.
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217037 :
+
+>  michallinuxstuff@gmail.com 2023-02-14 14:16:26 UTC
+> 
+> For the CMB-capable nvme ctrls, kernel was exposing couple of related attributes under the sysfs. E.g.
+> 
+> 
+> # grep . /sys/class/nvme/nvme0/cmb*
+> /sys/class/nvme/nvme0/cmb:cmbloc : x00000062
+> /sys/class/nvme/nvme0/cmb:cmbsz  : x0008021d
+> /sys/class/nvme/nvme0/cmbloc:98
+> /sys/class/nvme/nvme0/cmbsz:524829
+> #
+> 
+
+> The above was taken from fedora37 running under 6.1.8 kernel build.
+> In 6.1.{9,10} all these attributes are gone.
+> 
+> I am running fedora37 under QEMU 7.{0,2}.0, all nvmes are emulated.
+> 
+> I've tried to understand what change in 6.1.9 might have caused it
+> (suspected that maybe fedora's src is applying some weird patches on
+> top but that's not it), but I could not pinpoint anything specific.
+> 
+> The latest commit that indirectly touches these attributes is
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=86adbf0cdb9ec
+> but my C-fu is to weak to understand if this really could somehow
+> hide|remove these attrs.
+> 
+> Also from the look of nvme_pci_attrs_are_visible() nothing has
+> recently changed. I use same QEMU params for setting up the nvmes
+> across all the VMs - is it possible that the way QEMU exposes CMB is
+> not valid anymore?
+> 
+> If I check proper BARs with setpci + /proc/iomem it seems like CMB is
+> there. SPDK also tells me that given nvme comes with CMB.
+> 
+> Any hints would be appreciated. I have couple of scripts which depend
+> on these so I am a bit biased if it comes to prio on this. :)>
+> [...]
 >
-> Just set max_sdu_dynamic to U32_MAX, which in the logic below causes
-> taprio to save a max_frm_len of U32_MAX and a max_sdu presented to user
-> space of 0 (unlimited).
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> So I did install the latest available build,
+> 6.2.0-0.rc8.20230215gte1c04510.258.vanilla.fc37.x86_64 to be exact,
+> but there's no change - /cmb* stuff is still missing (remaining
+> parts, lspci output, etc. look exactly the same as in the case of
+> previously mentioned versions).
 
-Doesn't this deserve a Fixes tag as well?
+See the ticket for more details.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
 
-iQJGBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmPt91ATHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgiI0D/dS0l99RBHC9jg05/dIdHm+gH9cIsE2
-qJd41XPAx+wuONVvCgzbu6Sm/Bu0d98+A61uYLdWxAyli29MPGN6pF77u/GlRw+e
-Q5IPyUsutIMjGXnAxMg1YPJhLKCzLMPyDMc6lCm2riIF3SWxFMTeCjdh2imod/3e
-X4+JYOF24ctrMFW3trA50jqQDK5VYosEq3ym9yET5gXWvnb2iSbX4hRkN2ucyuTm
-zB/2eMpTSdv7+Nnj0NDFgPjrYDqaM30oGRvhr0qum+wd3Fyg/9jwqJY6iwt38m3A
-KqYYCLrRdndkDuST2u2O12uSsM/e6kfyWdPJrxqqSc8UQD7Oa74jH4PQSlSOcmcr
-+RsMcRLlKBg5KCMre5n9W6zkRtxxY0y4fiziy7b8KwnKRlU1eoD7rTweMXfRJaAA
-WflWA/Hwj/0ZEStKPPFdETy/R9l2GDr1/UUXDvOTMiddfUUYrnzB+uwLxoQkVAVa
-N8XAM09pkzIYIXmFuZKocyUA73I4WMBVi0A4civyR0aNBZ+Xzuv+TpIQad8zGu0u
-8fYWi1ENj3KuiMwB1Bcve9b6ErZTpejBvr+i1O8UryXrou4HZtbJFlzz8YaQi3ER
-wQpVEe+Dh1lWu/WU60Cuty0za7z2z7IK9qfTX00qS0N4xG6ccjCBSRcRYfP75LjB
-biXpPf1rLbso
-=AmxS
------END PGP SIGNATURE-----
---=-=-=--
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.1..v6.2-rc8
+https://bugzilla.kernel.org/show_bug.cgi?id=217037
+#regzbot title: nvme: cmb attributes vanished after v6.1.8
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
