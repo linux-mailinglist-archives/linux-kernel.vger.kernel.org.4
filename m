@@ -2,121 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB7C699027
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72465698FF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjBPJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S230098AbjBPJhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjBPJhy (ORCPT
+        with ESMTP id S230054AbjBPJhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:37:54 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B54DBE4;
-        Thu, 16 Feb 2023 01:37:25 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 1F53832001BB;
-        Thu, 16 Feb 2023 04:37:24 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 16 Feb 2023 04:37:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1676540243; x=
-        1676626643; bh=3qtMvMYknHGfh40A4UZz8DLaQZp4jnMbRhe8LWR0t+w=; b=Z
-        a29HGkgXDBwGZutqlRmhhXBtrfdhm+RQSPaXkaZfv7g2H8BUD+XGxD9Z3gOZL3VD
-        hDST43RArWz6FqW2ciSohYdggFEBr7DrSMh3JtSwgJ1U27jjoGAx1KN6HLKKTFe5
-        8Vu0GYbQom02qG9k8k9ZjKF1USmDBVvEP+kwJdziu5kj8hIj7DCTKa4NCcq6hVn0
-        CFwK0kG5AOMhSCGb/5uENc44bB/706/cvPX3lnHZDDA9a8hoOZpHjN9xez9FIIfM
-        4QwXZ7nntvAnzJHNq32+GlRbcZ4PHfAYbbNQApR/vDj/WD2MckYLxIr1R4aKmifH
-        tqy3VHLIjgR8U4LxJ042Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676540243; x=
-        1676626643; bh=3qtMvMYknHGfh40A4UZz8DLaQZp4jnMbRhe8LWR0t+w=; b=j
-        xevGVtKl+Wj3W5n+dwZnJO7A9RahIL2woSK1vX0bN9ORfgETkXVv62w05plyBVr5
-        3j8121hBMzLwT5mrHp9ok/JKRM0RBe+MOPmPnQ5fJ30Z59Qvm0gPWBM5KHVJmtEQ
-        I+iXsn6/cZjFh3nNFqw+mCQtICfB0Nlu2CV8orbowthY6+XyE2JQUq72aGdNvIaN
-        ukaMhd+p4hKFkfj8O1GAEBt9nXeTbsEceRxj9Htx8jjt/xl6EEKc8/SB2Zu9m0L4
-        HEpxtbnLdCOV0rg/Z2t05fbpcL9BWEuDIeQQicg4NSp+ysxcubfmHw//uOCbAjO2
-        1YhfqZjcxV8CN9Inc+zlQ==
-X-ME-Sender: <xms:U_ntY25cIggzzknlxJrQ0N09Is7mpzeycTAGYsY9N2ROL0tAAlyhlA>
-    <xme:U_ntY_5KCjdyhs1C9G_UoHhs0NxHxckj-yxAUvjZyto6XlaTD6iLHinToxGqhp9DQ
-    Yf-IMa575qJVvtU9fQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:U_ntY1d6SgyMH17ULVOhD4DJptvKdByotyBYzOBQxgU29yBP28cXzA>
-    <xmx:U_ntYzKtt6TIGFh0Eoye6b0NWjCLUeHSLT5-UVxlJEr3sb1DO82PiQ>
-    <xmx:U_ntY6JuK2oheuOZhcyArJWfesQyJyQiNprbSWDuaNAddh0SwyGAvw>
-    <xmx:U_ntYy-5tyK7S_OmCci68nz7ncPUWIV2ERa62n7GEA4EKnV-BzpQ4A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 02688B60089; Thu, 16 Feb 2023 04:37:23 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <2c8d97ad-126d-4912-b4eb-37437d8c3407@app.fastmail.com>
-In-Reply-To: <4f98164406cfd6da084f9ef617a6668dc4e8d44b.camel@linux.ibm.com>
-References: <20230216073403.451455-1-bhe@redhat.com>
- <4f98164406cfd6da084f9ef617a6668dc4e8d44b.camel@linux.ibm.com>
-Date:   Thu, 16 Feb 2023 10:37:03 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH 1/2] pcmcia : make PCMCIA depend on HAS_IOMEM
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 04:37:12 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7990530B35
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:37:09 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bp15so1981856lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:37:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V/0FpUId6HClHb1SAI405Gamha8rwtpWaTK6vOeKAsI=;
+        b=V1qW6TAh7MAURs+MZCDZ8uiulmt6PpzPTJTS0BRM1nNrYuSWhjLQq6n8AnYF9NnixA
+         oSYKPab2EfDdOoL9d9E9VBFGO46VqR12pTeb4iyIDfHjEIrWZNh0DnB+aT/yr4Lx+2x+
+         m/u6em6i5LX2S0MHyIw/C5J98hnZTRwHSfE7/XTl2XlNkm9jyFPQs0YKIFDHE+Z8z4nh
+         XTXr6doIg0Q2+p4eHCEGGKLp7pGhPkCh6ghH+0nQ0OjFHozHTsGUeSiY9HKoF1IyeBx5
+         5guhYksfP9gWobJNN/9L8ni6jc3ozRd7OWgTBcdvWhmL1ht9el5QeAsrNdOswY5RFnwT
+         W/hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V/0FpUId6HClHb1SAI405Gamha8rwtpWaTK6vOeKAsI=;
+        b=HSuVJHWgmU16lVV7syBhGK689acdej5V8b51/5eCBjv8X3SkMgl9J1b0rBFsqi5/Jf
+         WrCotOt0FZn70HaFfRjKeCQZbjJ78erE0u6VkmVxk9pEZ37g0/6zoAJE87G/smZN+DtK
+         1fdfrkDr6JZSO9ytnotas1BLuwVD4DY90YslzPAzhgOvpGvW/D4KZYfnzIUdzE+yqQ1Q
+         43/k31MKaD1dB5JvbKUdU87Z5Zq1ZcZf9CvcaO3q1wrQ0x8HhkD9N3WwDmLMHlrTNQ2c
+         r8saJuE6Z2/wkih4ksm+NAwGjJhwVYn2idHSaM1bjSIztop3jHrZKQusdn5S95tpKNVL
+         OIJA==
+X-Gm-Message-State: AO0yUKVTlXbeOR8+q3RCHjr+5NvjMA4OkiEb+LQ/ZyY4q08lWTGJC5YW
+        XbIF9BPTHgxerqWGiH40zxFG5w==
+X-Google-Smtp-Source: AK7set/26jnve47VIeaaZXAa3EILsyiizsaEe4Zh5KRQayUltcbyJkCNsKMt+3Vt3rPvVH7weGuiBg==
+X-Received: by 2002:ac2:4c91:0:b0:4cc:8294:e960 with SMTP id d17-20020ac24c91000000b004cc8294e960mr2177300lfl.3.1676540227888;
+        Thu, 16 Feb 2023 01:37:07 -0800 (PST)
+Received: from [127.0.1.1] ([85.235.12.219])
+        by smtp.gmail.com with ESMTPSA id r3-20020a19ac43000000b004d8758a452asm229069lfc.288.2023.02.16.01.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 01:37:07 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 Feb 2023 10:37:04 +0100
+Subject: [PATCH 03/17] gpio: aspeed: Convert to immutable irq_chip
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230215-immutable-chips-v1-3-51a8f224a5d0@linaro.org>
+References: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
+In-Reply-To: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
+To:     Mun Yew Tham <mun.yew.tham@intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023, at 10:05, Niklas Schnelle wrote:
-> On Thu, 2023-02-16 at 15:34 +0800, Baoquan He wrote:
->> diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
->> index 1525023e49b6..7c412bbe8bbe 100644
->> --- a/drivers/pcmcia/Kconfig
->> +++ b/drivers/pcmcia/Kconfig
->> @@ -20,6 +20,7 @@ if PCCARD
->> =20
->>  config PCMCIA
->>  	tristate "16-bit PCMCIA support"
->> +	depends on HAS_IOMEM
->>  	select CRC32
->>  	default y
->>  	help
->
-> Not sure how many PCMCIA drivers only use I/O memory but not I/O ports
-> the latter of which are badly stubbed out on s390, though at leat they
-> compile. I have a series on that part that I intend to send a new
-> version for soon=E2=84=A2. That said yes this does solve the compilati=
-on issue
-> and there could be drivers which rely only on I/O memory and are not
-> broken in principle.
+Convert the driver to immutable irq-chip with a bit of
+intuition.
 
-There are no platforms that have I/O ports but don't set HAS_IOMEM, so it
-doesn't really matter.
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/gpio/gpio-aspeed.c | 44 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 6 deletions(-)
 
-> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
+index a94da80d3a95..9c4852de2733 100644
+--- a/drivers/gpio/gpio-aspeed.c
++++ b/drivers/gpio/gpio-aspeed.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
++#include <linux/seq_file.h>
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
+ 
+@@ -53,7 +54,7 @@ struct aspeed_gpio_config {
+  */
+ struct aspeed_gpio {
+ 	struct gpio_chip chip;
+-	struct irq_chip irqc;
++	struct device *dev;
+ 	raw_spinlock_t lock;
+ 	void __iomem *base;
+ 	int irq;
+@@ -566,6 +567,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+ 
+ 	addr = bank_reg(gpio, bank, reg_irq_enable);
+ 
++	/* Unmasking the IRQ */
++	if (set)
++		gpiochip_enable_irq(&gpio->chip, irqd_to_hwirq(d));
++
+ 	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+@@ -579,6 +584,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+ 	raw_spin_unlock_irqrestore(&gpio->lock, flags);
++
++	/* Masking the IRQ */
++	if (!set)
++		gpiochip_disable_irq(&gpio->chip, irqd_to_hwirq(d));
+ }
+ 
+ static void aspeed_gpio_irq_mask(struct irq_data *d)
+@@ -1080,6 +1089,30 @@ int aspeed_gpio_copro_release_gpio(struct gpio_desc *desc)
+ }
+ EXPORT_SYMBOL_GPL(aspeed_gpio_copro_release_gpio);
+ 
++static void aspeed_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
++{
++	const struct aspeed_gpio_bank *bank;
++	struct aspeed_gpio *gpio;
++	u32 bit;
++	int rc, offset;
++
++	rc = irqd_to_aspeed_gpio_data(d, &gpio, &bank, &bit, &offset);
++	if (rc)
++		return;
++
++	seq_printf(p, dev_name(gpio->dev));
++}
++
++static const struct irq_chip aspeed_gpio_irq_chip = {
++	.irq_ack = aspeed_gpio_irq_ack,
++	.irq_mask = aspeed_gpio_irq_mask,
++	.irq_unmask = aspeed_gpio_irq_unmask,
++	.irq_set_type = aspeed_gpio_set_type,
++	.irq_print_chip = aspeed_gpio_irq_print_chip,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
+ /*
+  * Any banks not specified in a struct aspeed_bank_props array are assumed to
+  * have the properties:
+@@ -1149,6 +1182,8 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
+ 	if (IS_ERR(gpio->base))
+ 		return PTR_ERR(gpio->base);
+ 
++	gpio->dev = &pdev->dev;
++
+ 	raw_spin_lock_init(&gpio->lock);
+ 
+ 	gpio_id = of_match_node(aspeed_gpio_of_table, pdev->dev.of_node);
+@@ -1208,12 +1243,9 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
+ 
+ 		gpio->irq = rc;
+ 		girq = &gpio->chip.irq;
+-		girq->chip = &gpio->irqc;
++		gpio_irq_chip_set_chip(girq, &aspeed_gpio_irq_chip);
+ 		girq->chip->name = dev_name(&pdev->dev);
+-		girq->chip->irq_ack = aspeed_gpio_irq_ack;
+-		girq->chip->irq_mask = aspeed_gpio_irq_mask;
+-		girq->chip->irq_unmask = aspeed_gpio_irq_unmask;
+-		girq->chip->irq_set_type = aspeed_gpio_set_type;
++
+ 		girq->parent_handler = aspeed_gpio_irq_handler;
+ 		girq->num_parents = 1;
+ 		girq->parents = devm_kcalloc(&pdev->dev, 1,
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+-- 
+2.34.1
+
