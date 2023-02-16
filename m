@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC93698F99
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA629698F93
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 10:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjBPJTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 04:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S229687AbjBPJTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 04:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBPJTT (ORCPT
+        with ESMTP id S229672AbjBPJTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 04:19:19 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEA01D913;
-        Thu, 16 Feb 2023 01:19:16 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pSaPz-0007OX-0D;
-        Thu, 16 Feb 2023 10:19:07 +0100
-Date:   Thu, 16 Feb 2023 09:19:01 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Mingming Su <Mingming.Su@mediatek.com>,
-        linux-crypto@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: rng: Add MediaTek MT7981 TRNG
-Message-ID: <Y+31BSUGVbiOSFxs@makrotopia.org>
-References: <89865515728cb937b6591160ad9c30b4bcc8dd41.1676467500.git.daniel@makrotopia.org>
- <c750e786ad0f529d2ae63c8f766d3c294808ff53.1676467500.git.daniel@makrotopia.org>
- <5341d0fa-1415-b711-30f0-f0a867af0bc4@linaro.org>
+        Thu, 16 Feb 2023 04:19:08 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF65F4ED3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 01:19:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 62F1B220CF;
+        Thu, 16 Feb 2023 09:19:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676539145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QdPKsuBsKRQyH26rQ/iwv7qWwXEhtn8YG/jmVX744W4=;
+        b=2L9T8LAR6X8aMZKR5yKXzuKNMT/rW5rjNw0BH8w6MSHW7NbkF1RyPLm4RcX2uC+/jIHGpM
+        WFnSxJvT46wyxmqc3A4nyUUbzlc2Bly5hDZ0gpbxCyXgFcMWGqiAF/dWKhbfoqBvtiBFx5
+        rdKplv5n+qHk+XC4XBCpqt4lCtnm60o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676539145;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QdPKsuBsKRQyH26rQ/iwv7qWwXEhtn8YG/jmVX744W4=;
+        b=sPRZ1s/1aYUt2uWrwurZ3IcLDE7cMRI617rpchfwPfWWebejyI4xXUymk5lLNj7BmCG+R5
+        XfkeA+ZmC6IhqbCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33D6A13484;
+        Thu, 16 Feb 2023 09:19:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jzVACwn17WMEJQAAMHmgww
+        (envelope-from <jroedel@suse.de>); Thu, 16 Feb 2023 09:19:05 +0000
+Date:   Thu, 16 Feb 2023 10:19:03 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, iommu@lists.linux.dev
+Subject: Re: [PATCH] iommu/of: mark an unused function as __maybe_unused
+Message-ID: <Y+31B7SN+IUgdWxC@suse.de>
+References: <20230209010359.23831-1-rdunlap@infradead.org>
+ <Y+TO0yEdUNzWUUrA@orome>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5341d0fa-1415-b711-30f0-f0a867af0bc4@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+TO0yEdUNzWUUrA@orome>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,89 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:14:33AM +0100, Krzysztof Kozlowski wrote:
-> On 15/02/2023 14:27, Daniel Golle wrote:
-> > Add documentation to describe the MediaTek true random number generator
-> > which is provided by ARM TrustedFirmware-A of the MT7981.
-> > 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >  .../bindings/rng/mediatek,mt7981-rng.yaml     | 39 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 40 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rng/mediatek,mt7981-rng.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/rng/mediatek,mt7981-rng.yaml b/Documentation/devicetree/bindings/rng/mediatek,mt7981-rng.yaml
-> > new file mode 100644
-> > index 000000000000..d577d60538d8
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rng/mediatek,mt7981-rng.yaml
-> > @@ -0,0 +1,39 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rng/mediatek,mt7981-rng.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek Random number generator (v2/SMC)
-> > +
-> > +maintainers:
-> > +  - Daniel Golle <daniel@makrotopia.org>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "^rng$"
+On Thu, Feb 09, 2023 at 11:45:39AM +0100, Thierry Reding wrote:
+> Maybe this is one of those cases where we should wrap after the return
+> type/attributes to keep this somewhat readable?
 > 
-> 1. We don't enforce it in device bindings, so drop it.
+> Either way:
+> 
+> Reviewed-by: Thierry Reding <treding@nvidia.com>
 
-Ack.
+Wrapped it around and applied the patch, thanks.
 
-> 2. It's not even correct. You have reg.
+Regards,
 
-No, there isn't any reg, as this driver does not access a MMIO mapped
-resource but rather uses Secure Monitor Call interface to access the
-TRNG via ARM TrustedFirmware-A.
+-- 
+Jörg Rödel
+jroedel@suse.de
 
-> 
-> 
-> > +
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt7981-rng
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: rng
-> 
-> Drop clock-names and rely on index.
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146
+90461 Nürnberg
+Germany
 
-Will drop, reg, clocks and clock-names, that slipped in from the
-document I used as template for this one. The driver uses neither of
-those.
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
 
-> 
-> > +
-> > +required:
-> > +  - compatible
-> 
-> and reg?
-> 
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    rng {
-> > +      compatible = "mediatek,mt7981-rng";
-> > +    };
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
