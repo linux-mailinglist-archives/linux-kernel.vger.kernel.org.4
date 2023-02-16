@@ -2,122 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811536997CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40AB6997D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 15:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjBPOsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 09:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S230236AbjBPOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 09:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjBPOsT (ORCPT
+        with ESMTP id S230176AbjBPOti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:48:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C454210D6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:47:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676558855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QFaX4cxZUJf+Ng89cRL/nlepV5PVhHHLPICLCsLRqZ4=;
-        b=Y/dFQF/CNWJs8ymV15Suwx2meqtOXA8dfCyDS8cmegmHDY8DkRHO6R9rykdWjx1Uk8JOOC
-        BxMQepm6RSgWWBhAtUGlVyvdFrakL7viwlNGXWs39EVzB8Z/X/zmRqBmYtYfct4DP9P7Qi
-        MZazBEL5PSqgFnD6TbPVbtZjuXflM/U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-_35hlDTcPQ-qNTe5ah1O_A-1; Thu, 16 Feb 2023 09:47:32 -0500
-X-MC-Unique: _35hlDTcPQ-qNTe5ah1O_A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3135085CBEA;
-        Thu, 16 Feb 2023 14:47:31 +0000 (UTC)
-Received: from localhost (ovpn-12-99.pek2.redhat.com [10.72.12.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B7534140EBF6;
-        Thu, 16 Feb 2023 14:47:29 +0000 (UTC)
-Date:   Thu, 16 Feb 2023 22:47:24 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v4 01/16] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <Y+5B/PmGinjCk/fN@MiWiFi-R3L-srv>
-References: <20230216123419.461016-1-bhe@redhat.com>
- <20230216123419.461016-2-bhe@redhat.com>
- <056cc71f-7fb9-4d38-a442-a05de6f7d437@app.fastmail.com>
+        Thu, 16 Feb 2023 09:49:38 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7265C7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 06:49:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676558976; x=1708094976;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DzfxCkLUfTFD8XJxb1li1g7wOfsHJQXhG/FPU/fVBSU=;
+  b=cHtHD2biHVHmVWnjUEFfQ1I3HhvbO7SpZcrs5j7mxqxlgG+TsX5TZV6l
+   Rpq95y/TXIgmbVUt381gc1Jlk54S3Qk04V+lDrb6CVrZUdNBX+exxEZRM
+   fnLMPrCb4gESpDzwkDZWZNRMAJAV+CkhrxR7EyeZSTZfImK1xqrbMsnHH
+   xB+5/6TxkfuhwmGk9cEs6qFmnCq3wR77wF5s3w92s3Ys1YXjrJjNkPUER
+   TquaI1Fz0Eas76V3Y+8zNQ1nrOJwhja6zxT/dll1Tt+qj9nCHnYrH+ojn
+   TmWp5X09HAsOHlmLpJztotvZEmSHqgYti9TC6cmkt2iwszaLxlvbifgll
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="396377182"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="396377182"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 06:49:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="663476638"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="663476638"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Feb 2023 06:49:34 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSfZg-000AIj-0h;
+        Thu, 16 Feb 2023 14:49:28 +0000
+Date:   Thu, 16 Feb 2023 22:48:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, gregkh@linuxfoundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: Re: [PATCH v3 2/6] sign-file: move file signing logic to its own
+ function
+Message-ID: <202302162229.XFMtVABh-lkp@intel.com>
+References: <20230213190034.57097-2-sshedi@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <056cc71f-7fb9-4d38-a442-a05de6f7d437@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230213190034.57097-2-sshedi@vmware.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/16/23 at 01:53pm, Arnd Bergmann wrote:
-> On Thu, Feb 16, 2023, at 13:34, Baoquan He wrote:
-> > diff --git a/arch/hexagon/include/asm/io.h 
-> > b/arch/hexagon/include/asm/io.h
-> > index 46a099de85b7..dcd9cbbf5934 100644
-> > --- a/arch/hexagon/include/asm/io.h
-> > +++ b/arch/hexagon/include/asm/io.h
-> > @@ -170,8 +170,13 @@ static inline void writel(u32 data, volatile void 
-> > __iomem *addr)
-> >  #define writew_relaxed __raw_writew
-> >  #define writel_relaxed __raw_writel
-> > 
-> > -void __iomem *ioremap(unsigned long phys_addr, unsigned long size);
-> > -#define ioremap_uc(X, Y) ioremap((X), (Y))
-> > +/*
-> > + * I/O memory mapping functions.
-> > + */
-> > +#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_READ | _PAGE_WRITE | \
-> > +		       (__HEXAGON_C_DEV << 6))
-> > +
+Hi Shreenidhi,
 
-Thanks for reviewing.
+Thank you for the patch! Perhaps something to improve:
 
-> > +#define ioremap_uc(addr, size) ioremap((addr), (size))
-> 
-> I think we probably want to kill off ioremap_uc() here, and use
-> the generic version that just returns NULL.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc8 next-20230216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shreenidhi-Shedi/sign-file-move-file-signing-logic-to-its-own-function/20230214-030302
+patch link:    https://lore.kernel.org/r/20230213190034.57097-2-sshedi%40vmware.com
+patch subject: [PATCH v3 2/6] sign-file: move file signing logic to its own function
+config: riscv-randconfig-r042-20230213 (https://download.01.org/0day-ci/archive/20230216/202302162229.XFMtVABh-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1dfab8ead8d3f9c0c04eeeaf7c436a2878f2158e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shreenidhi-Shedi/sign-file-move-file-signing-logic-to-its-own-function/20230214-030302
+        git checkout 1dfab8ead8d3f9c0c04eeeaf7c436a2878f2158e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302162229.XFMtVABh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> scripts/sign-file.c:318:5: warning: no previous prototype for 'sign_file' [-Wmissing-prototypes]
+     318 | int sign_file(int argc, char **argv, struct cmd_opts *opts)
+         |     ^~~~~~~~~
+   scripts/sign-file.c: In function 'sign_file':
+   scripts/sign-file.c:333:13: warning: unused variable 'i' [-Wunused-variable]
+     333 |         int i, n;
+         |             ^
+--
+>> scripts/sign-file.c:318:5: warning: no previous prototype for 'sign_file' [-Wmissing-prototypes]
+     318 | int sign_file(int argc, char **argv, struct cmd_opts *opts)
+         |     ^~~~~~~~~
+   scripts/sign-file.c: In function 'sign_file':
+   scripts/sign-file.c:333:13: warning: unused variable 'i' [-Wunused-variable]
+     333 |         int i, n;
+         |             ^
 
 
--#define ioremap_uc(X, Y) ioremap((X), (Y))
-+#define ioremap_uc(addr, size) ioremap((addr), (size))
+vim +/sign_file +318 scripts/sign-file.c
 
-Here, in fact the ioremap_uc() definition is not related. I just
-improve the old definition passingly. And similar for other
-ioremap_uc() adaptation.
+   317	
+ > 318	int sign_file(int argc, char **argv, struct cmd_opts *opts)
+   319	{
+   320		struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
+   321		unsigned char buf[4096] = {0};
+   322		unsigned long module_size, sig_size;
+   323		unsigned int use_signed_attrs;
+   324		const EVP_MD *digest_algo;
+   325		EVP_PKEY *private_key;
+   326	#ifndef USE_PKCS7
+   327		CMS_ContentInfo *cms = NULL;
+   328	#else
+   329		PKCS7 *pkcs7 = NULL;
+   330	#endif
+   331		X509 *x509;
+   332		BIO *bd, *bm;
+   333		int i, n;
+   334	
+   335		char *hash_algo = opts->hash_algo;
+   336		char *dest_name = opts->dest_name;
+   337		char *private_key_name = opts->private_key_name;
+   338		char *raw_sig_name = opts->raw_sig_name;
+   339		char *x509_name = opts->x509_name;
+   340		char *module_name = opts->module_name;
+   341		bool save_sig = opts->save_sig;
+   342		bool replace_orig = opts->replace_orig;
+   343		bool raw_sig = opts->raw_sig;
+   344		bool sign_only = opts->sign_only;
+   345	
 
-> 
-> I see that there are only two callers of {devm_,}ioremap_uc() left in the
-> tree, so maybe we can even take that final step and remove it from
-> the interface. Maybe we can revisit [1] as part of this series.
-
-I see now. Christoph Hellwig ever mentioned in v2 reviewing, I
-didn't get why. Thanks for the details. 
-https://lore.kernel.org/all/YwHX98KBEnZw9t6e@infradead.org/T/#u
-
-I am not sure if it's OK to do the change in this patchset, maybe
-another patch?
-
-Thanks
-Baoquan
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
