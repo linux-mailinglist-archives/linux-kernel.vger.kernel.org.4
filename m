@@ -2,139 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0386269926C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D300699263
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 11:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjBPK6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 05:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S230326AbjBPK5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 05:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjBPK55 (ORCPT
+        with ESMTP id S230192AbjBPK5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 05:57:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3585956485
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676544979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uTgMQWhXxbdOB1s+iJ3y+3uVjK3VfEIrdExBYMmTzrk=;
-        b=cgTA8yeBuLVrFQVUmlI+zpc+i1N1YJx/XupkVor1p/PDzbtkrCJaRFBHH5jm5w/+5d51X8
-        Bn2kkqyd8oZGSVLCtonsceAAevnNU5H26m5PiLePfMmuSxCWYBhVrrk1glN+9V+nsIJyVa
-        6qv75jzAEiTEOdI0A+bzz0LgINFEB2s=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-353-r9p6845-ODSq9UybbBZQVg-1; Thu, 16 Feb 2023 05:56:18 -0500
-X-MC-Unique: r9p6845-ODSq9UybbBZQVg-1
-Received: by mail-wr1-f72.google.com with SMTP id k17-20020adfe8d1000000b002c55ef1ec94so194314wrn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:17 -0800 (PST)
+        Thu, 16 Feb 2023 05:57:14 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE0B56EED
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:41 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id d66so1479969vsd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 02:56:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g85e4WuBLhzFev3Y5VQ9z5CZf87sSx8oeGtAD04aooo=;
+        b=dJJqSnRFBkuh+fxMQ7Aymj1b5+Ks9iTrbhwuk+QFyXo2yaEC99IvRckaEFxyO9a0Dn
+         wQVoDTnUUOOMoeyA9fgKkRDNYnnaLznTotM7iKVmW0hM9KYRDS5g2xVABUqrLSPK7gfs
+         Su4QJrhP+hC/FqicSs8Cd7LYgvn7BIk5GFTLY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uTgMQWhXxbdOB1s+iJ3y+3uVjK3VfEIrdExBYMmTzrk=;
-        b=Y1UxWZc15PQCXsYimcxF2sMZ4vW2vlJF2YJyd/3WRv2pku7ht+Bgtg38kI2lq/BZ96
-         igh4E9k0fMNH04yJnS7UUgbN9JMOG55gHO6g+rLS5615nA5LK+PghdB9Pj6A2XwP6wJp
-         aCBa7Ly0ic+4PPOJQyPw0A3g5uOIe2OKe53NB9iLF1w3DJUr0pnnFGeseZMJt66/ocqU
-         g22BEVKyTAZci4Q3TB/ohPQk2x6pj05BRuyma+Y65W48gE1y0aRHwW7rcMGa2h/q7T4y
-         lFSRDb2T9VTtp8Kykh0WBXymzTv6AGgyXt9z0C7XawmTVAGpmnHEgO1LV0yY9uD+InSE
-         Fbzw==
-X-Gm-Message-State: AO0yUKWVyeIdXFxeQ2Zd1kAa11lS8yaYlANorf2CzY3dw/Tuw/4qnJtj
-        F96qtfHcU8n/RDnmpgTsL/fxLHzXUPmQASB03dD6eSChQFsjdlORnMVw+memC167Bzi24yOCp1g
-        BqR7RWAxIeerqc+8e5fH12ccf
-X-Received: by 2002:adf:e701:0:b0:2c5:5331:5516 with SMTP id c1-20020adfe701000000b002c553315516mr4351118wrm.51.1676544976935;
-        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set9ObTYOMWdJTcJUhFYm6zKW9Smmq8ZljjToRyJseQklHttx5j+GTfa92sWHSmEG8i4fOJ6xDQ==
-X-Received: by 2002:adf:e701:0:b0:2c5:5331:5516 with SMTP id c1-20020adfe701000000b002c553315516mr4351100wrm.51.1676544976599;
-        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
-        by smtp.gmail.com with ESMTPSA id h16-20020adffa90000000b002c5621263e3sm1221457wrr.19.2023.02.16.02.56.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 02:56:16 -0800 (PST)
-Message-ID: <909d3cd5-eb64-6901-4e12-00ac5c69f4aa@redhat.com>
-Date:   Thu, 16 Feb 2023 11:56:15 +0100
+        bh=g85e4WuBLhzFev3Y5VQ9z5CZf87sSx8oeGtAD04aooo=;
+        b=uztg1DhWG0JAIYjDjmCEE2dkKEpLZhdkvT7f3ikvNXPXhzzW9xPVG+LcJPvFec55DX
+         LwfSqhYikLT72OHQMlE3BwKm4iq7D3fqCqMxDT4QwyLcBt2XjFx/YV42GsCJjqPMBEwR
+         fUQM/AtWYM4j4/TEe1nKP/gwhdb7eOMM5TzCUU8b4PHFV7ajslbkRaxHVB82/f18Ua77
+         8Y/fAmjVkocMbH8NW8ZyLMoWFJbNJWvMiCMvCr+04BRC74fl7THEbtCFgAvTTVWUdwvo
+         w3TFjSswau05rgDwVIDZy86KBvDUSa+3KgTVlqPDhi5P6Eu9iFYd/H73sHLY+EjtwKLx
+         o7cA==
+X-Gm-Message-State: AO0yUKV3aMEU+WsmnDLYUPXPnPTXxyLWG2qvvNOXJXVkzhx5l+FX19UE
+        rUpk758b5myqAPg5uAgzLhd6tgM+ZsAj3HNqAvez1g==
+X-Google-Smtp-Source: AK7set8eg+iGw7Q343cvhYjqOIuGjWhWqu7k2x10ZvJDN/cCX+EgHhhuSW/6qdzp7XcQfrvJ120GVG6FSOFE7XxB4sY=
+X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
+ w9-20020a67f749000000b003fc058df90fmr1013461vso.60.1676544999547; Thu, 16 Feb
+ 2023 02:56:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] Revert "splice: Do splice read from a buffered file
- without using ITER_PIPE"
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-mm@kvack.org
-References: <20230215-topic-next-20230214-revert-v1-2-c58cd87b9086@linaro.org>
- <20230215-topic-next-20230214-revert-v1-0-c58cd87b9086@linaro.org>
- <3055589.1676466118@warthog.procyon.org.uk>
- <71078188-1443-d84e-658c-967991f3b590@linaro.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <71078188-1443-d84e-658c-967991f3b590@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-27-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214134127.59273-27-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 16 Feb 2023 18:56:28 +0800
+Message-ID: <CAGXv+5Eq81k3hjTrM9JeP3bjnExjujDPsc-DcCVuryHrT-7KOw@mail.gmail.com>
+Subject: Re: [PATCH v2 26/47] clk: mediatek: mt8516: Move apmixedsys clock
+ driver to its own file
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.23 10:10, Konrad Dybcio wrote:
-> 
-> 
-> On 15.02.2023 14:01, David Howells wrote:
->> Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>> next-20230213 introduced commit d9722a475711 ("splice: Do splice read from
->>> a buffered file without using ITER_PIPE") which broke booting on any
->>> Qualcomm ARM64 device I grabbed, dereferencing a null pointer in
->>> generic_filesplice_read+0xf8/x598. Revert it to make the devices
->>> bootable again.
->>>
->>> This reverts commit d9722a47571104f7fa1eeb5ec59044d3607c6070.
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>
->> Commit d9722a47571104f7fa1eeb5ec59044d3607c6070 was part of v13 of my
->> patches.  This got replaced yesterday by a newer version which may or may not
->> have made it into linux-next.
->>
->> This is probably a known bug fixed in the v14 by making shmem have its own
->> splice-read function.
->>
->> Can you try this?
->>
->> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
-> next-20230216 boots fine again, thanks!
-> 
->>
->> (Also, can you include me in the cc list as I'm the author of the patch you
->> reverted?)
-> Ugh.. I thought b4 would have done that for me.. weird..
+On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> In preparation for migrating mt8516 clocks to the common simple
+> probe mechanism, convert the apmixedsys to be a separated
+> platform driver and move it to clk-mt8516-apmixedsys.c.
+> While at it, also fix some indentation issues.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/Makefile                |   2 +-
+>  drivers/clk/mediatek/clk-mt8516-apmixedsys.c | 121 +++++++++++++++++++
+>  drivers/clk/mediatek/clk-mt8516.c            |  81 -------------
+>  3 files changed, 122 insertions(+), 82 deletions(-)
+>  create mode 100644 drivers/clk/mediatek/clk-mt8516-apmixedsys.c
+>
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index 0f2cd735d9fd..3133ad8c2028 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -120,5 +120,5 @@ obj-$(CONFIG_COMMON_CLK_MT8365_MFG) += clk-mt8365-mfg.o
+>  obj-$(CONFIG_COMMON_CLK_MT8365_MMSYS) += clk-mt8365-mm.o
+>  obj-$(CONFIG_COMMON_CLK_MT8365_VDEC) += clk-mt8365-vdec.o
+>  obj-$(CONFIG_COMMON_CLK_MT8365_VENC) += clk-mt8365-venc.o
+> -obj-$(CONFIG_COMMON_CLK_MT8516) += clk-mt8516.o
+> +obj-$(CONFIG_COMMON_CLK_MT8516) += clk-mt8516.o clk-mt8516-apmixedsys.o
+>  obj-$(CONFIG_COMMON_CLK_MT8516_AUDSYS) += clk-mt8516-aud.o
+> diff --git a/drivers/clk/mediatek/clk-mt8516-apmixedsys.c b/drivers/clk/mediatek/clk-mt8516-apmixedsys.c
+> new file mode 100644
+> index 000000000000..5b87c9fb81f5
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8516-apmixedsys.c
+> @@ -0,0 +1,121 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2019 MediaTek Inc.
+> + *               James Liao <jamesjj.liao@mediatek.com>
+> + *               Fabien Parent <fparent@baylibre.com>
+> + *
+> + * Copyright (c) 2023 Collabora, Ltd.
+> + *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + */
+> +
+> +#include <dt-bindings/clock/mt8516-clk.h>
+> +#include <linux/clk.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "clk-mtk.h"
+> +#include "clk-pll.h"
+> +
+> +#define MT8516_PLL_FMAX                (1502UL * MHZ)
+> +
+> +#define CON0_MT8516_RST_BAR    BIT(27)
+> +
+> +#define PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,  \
+> +                       _pd_reg, _pd_shift, _tuner_reg, _pcw_reg,       \
+> +                       _pcw_shift, _div_table) {                       \
+> +               .id = _id,                                              \
+> +               .name = _name,                                          \
+> +               .reg = _reg,                                            \
+> +               .pwr_reg = _pwr_reg,                                    \
+> +               .en_mask = _en_mask,                                    \
+> +               .flags = _flags,                                        \
+> +               .rst_bar_mask = CON0_MT8516_RST_BAR,                    \
+> +               .fmax = MT8516_PLL_FMAX,                                \
+> +               .pcwbits = _pcwbits,                                    \
+> +               .pd_reg = _pd_reg,                                      \
+> +               .pd_shift = _pd_shift,                                  \
+> +               .tuner_reg = _tuner_reg,                                \
+> +               .pcw_reg = _pcw_reg,                                    \
+> +               .pcw_shift = _pcw_shift,                                \
+> +               .div_table = _div_table,                                \
+> +       }
+> +
+> +#define PLL(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,    \
+> +                       _pd_reg, _pd_shift, _tuner_reg, _pcw_reg,       \
+> +                       _pcw_shift)                                     \
+> +               PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits, \
+> +                       _pd_reg, _pd_shift, _tuner_reg, _pcw_reg, _pcw_shift, \
+> +                       NULL)
+> +
+> +static const struct mtk_pll_div_table mmpll_div_table[] = {
+> +       { .div = 0, .freq = MT8516_PLL_FMAX },
+> +       { .div = 1, .freq = 1000000000 },
+> +       { .div = 2, .freq = 604500000 },
+> +       { .div = 3, .freq = 253500000 },
+> +       { .div = 4, .freq = 126750000 },
+> +       { } /* sentinel */
+> +};
+> +
+> +static const struct mtk_pll_data plls[] = {
+> +       PLL(CLK_APMIXED_ARMPLL, "armpll", 0x0100, 0x0110, 0, 0,
+> +           21, 0x0104, 24, 0, 0x0104, 0),
+> +       PLL(CLK_APMIXED_MAINPLL, "mainpll", 0x0120, 0x0130, 0,
+> +           HAVE_RST_BAR, 21, 0x0124, 24, 0, 0x0124, 0),
+> +       PLL(CLK_APMIXED_UNIVPLL, "univpll", 0x0140, 0x0150, 0x30000000,
+> +           HAVE_RST_BAR, 7, 0x0144, 24, 0, 0x0144, 0),
+> +       PLL_B(CLK_APMIXED_MMPLL, "mmpll", 0x0160, 0x0170, 0, 0,
+> +             21, 0x0164, 24, 0, 0x0164, 0, mmpll_div_table),
+> +       PLL(CLK_APMIXED_APLL1, "apll1", 0x0180, 0x0190, 0, 0,
+> +           31, 0x0180, 1, 0x0194, 0x0184, 0),
+> +       PLL(CLK_APMIXED_APLL2, "apll2", 0x01A0, 0x01B0, 0, 0,
+> +           31, 0x01A0, 1, 0x01B4, 0x01A4, 0),
+> +};
+> +
+> +static int clk_mt8516_apmixed_probe(struct platform_device *pdev)
+> +{
+> +       void __iomem *base;
+> +       struct clk_hw_onecell_data *clk_data;
+> +       struct device_node *node = pdev->dev.of_node;
+> +       struct device *dev = &pdev->dev;
+> +       int ret;
+> +
+> +       base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(base))
+> +               return PTR_ERR(base);
+> +
+> +       clk_data = mtk_devm_alloc_clk_data(dev, CLK_APMIXED_NR_CLK);
+> +       if (!clk_data)
+> +               return -ENOMEM;
+> +
+> +       ret = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> +       if (ret)
+> +               goto unregister_plls;
 
-Right, and usually it's nicer to comment on the problematic patches, 
-asking for a fix or a revert, instead of sending reverts.
+Adding error handling deserves a separate commit, or at least a mention.
 
-My 2 cents.
-
--- 
-Thanks,
-
-David / dhildenb
-
+ChenYu
