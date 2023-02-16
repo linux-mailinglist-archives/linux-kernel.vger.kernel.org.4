@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EF169958B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7123C699590
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 14:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjBPNSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 08:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S230009AbjBPNTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 08:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjBPNSV (ORCPT
+        with ESMTP id S229919AbjBPNTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:18:21 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB6B6EAB
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:18:20 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so5802669pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 05:18:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BasQDVUhurl87t0hpFhoxQNL2hqiCDlndiGLEWf2YIg=;
-        b=e6GETn7l2vcxSJQ1UrJXmcgR+LftxMQ2UCF214QnLzEnMcKu4WmHh+XjuFpT7wPRdI
-         iCN7fV0o0DQIHwj2S3qBKO9pPeCTRtNFAH+AkKOSZLj3zJSUPshR9ockkYnjSQ77h8Z7
-         jK26OGe0mMXDJ7GZ4bTGOfXbwi09PtfAlVTq9KswUGStnKq6D+ezhLs3ZxjcledusDFF
-         z0xldEXzhhodYU8oEtTCl63nlpjzATBmCYNfvo9vKcBDXVC/cSEDKmEoAPI4VsNRsIXN
-         j8jCeN8kA+5SWYn//gcccLXZ0bfdCOGFDA58daksSy1l2V99BZ1J7SmpE8C9l9n73Y4k
-         vtRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BasQDVUhurl87t0hpFhoxQNL2hqiCDlndiGLEWf2YIg=;
-        b=l+44XTPxZfHGQi6fbossAzxl2tQIqYZX818vNXHMEkSoUVqFInv+dczzoljznns1UA
-         alDwWbVws9g+rRVQKvCG/3G0ZMSNq/3dOnqalk/vy4mq3P9SnZgbQQ02EnCr/edimcKL
-         LJ2zzwE+UygdWZrE6GHrZmIcKJD3915d6r5R84bRYVSxPLXuG2jEwByBvxkWW/tSGAYJ
-         YzcZmn+gE5pTHcuzThelQVXkXKt0UL03DsRCFTXd3NUtfMnCjB8xXxUMfWMQP120OWtO
-         eEnneg2ryy7P/+U+leQwlJlRr8h+ODKo402xO6uDHa/i4cvhq76swgdg3YT4qHjrlc3U
-         AAfg==
-X-Gm-Message-State: AO0yUKWT3/DLVTlG1+DgylUxhZzuCKbrhj24adCitENvQwu1KyXMTFuX
-        HPwpJl9b73mvG3O+IPV41gwBug==
-X-Google-Smtp-Source: AK7set+IxZ2YhBW4Zz/crU+HiSF+PTucxIXFjy9VXhXjSMp1xKGCq6DYBy28/DhgNw1fbQdcwxKQtg==
-X-Received: by 2002:a17:902:fa0e:b0:199:190c:3c15 with SMTP id la14-20020a170902fa0e00b00199190c3c15mr4990981plb.49.1676553499520;
-        Thu, 16 Feb 2023 05:18:19 -0800 (PST)
-Received: from [10.94.58.189] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id e10-20020a170902b78a00b001994e74c094sm1259307pls.275.2023.02.16.05.18.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 05:18:18 -0800 (PST)
-Message-ID: <757f143b-0c5d-4dd9-f7a1-5450da3b86b5@bytedance.com>
-Date:   Thu, 16 Feb 2023 21:18:08 +0800
+        Thu, 16 Feb 2023 08:19:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A82AD1B;
+        Thu, 16 Feb 2023 05:19:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DD55A21ACA;
+        Thu, 16 Feb 2023 13:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676553574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8JSQOK0REu8vNGDg2yRfylXo2+2rlKENAEHD70Ll0Vs=;
+        b=xOuNgQapuHcWiL8S8zQuVgjruAkNeNEcHhp9TZU4S7MSOUMr28Hk97taKpo6sQvS+e7AHT
+        W2wsKeXJgc5GKTx7BOXf9US6MWr0qTg784x2HdFLIU8aTVwKwDuSbGuxmhosXJRTeREHSh
+        ASTt55OYiwxDbDQhIIFxWKWinwS1+OY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676553574;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8JSQOK0REu8vNGDg2yRfylXo2+2rlKENAEHD70Ll0Vs=;
+        b=BsUwxjtbRhedud23nb3Llz4wQgoYcSMlV6wtz/7jfHXVGFMMhqv8s4aqEk+1tae7VleRNL
+        CQrX9HXhYeiew9AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CFECE13438;
+        Thu, 16 Feb 2023 13:19:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zTa8MmYt7mPvWAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 16 Feb 2023 13:19:34 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6D543A06E1; Thu, 16 Feb 2023 14:19:34 +0100 (CET)
+Date:   Thu, 16 Feb 2023 14:19:34 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, jack@suse.cz, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next RFC 3/3] block: fix scan partition for exclusively
+ open device again
+Message-ID: <20230216131934.f6swfwyqqd6xzpm6@quack3>
+References: <20230212092641.2394146-1-yukuai1@huaweicloud.com>
+ <20230212092641.2394146-4-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v6 0/4] sched/fair: Improve scan efficiency of SIS
-Content-Language: en-US
-To:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Yicong Yang <yangyicong@huawei.com>,
-        Barry Song <21cnbao@gmail.com>, linux-kernel@vger.kernel.org
-References: <20221019122859.18399-1-wuyun.abel@bytedance.com>
- <01eb35f2-4a34-7fbc-da48-c9558dca7212@amd.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <01eb35f2-4a34-7fbc-da48-c9558dca7212@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230212092641.2394146-4-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prateek, thanks very much for your solid testings!
-
-On 2/7/23 11:42 AM, K Prateek Nayak wrote:
-> Hello Abel,
+On Sun 12-02-23 17:26:41, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> I've retested the patches with on the updated tip and the results
-> are still promising.
+> As explained in commit 36369f46e917 ("block: Do not reread partition table
+> on exclusively open device"), reread partition on the device that is
+> exclusively opened by someone else is problematic.
 > 
-> tl;dr
+> This patch will make sure partition scan will only be proceed if current
+> thread open the device exclusively, or the device is not opened
+> exclusively, and in the later case, other scanners and exclusive openers
+> will be blocked temporarily until partition scan is done.
 > 
-> o Hackbench sees improvements when the machine is overloaded.
-> o tbench shows improvements when the machine is overloaded.
-> o The unixbench regression seen previously seems to be unrelated
->    to the patch as the spawn test scores are vastly different
->    after a reboot/kexec for the same kernel.
-> o Other benchmarks show slight improvements or are comparable to
->    the numbers on tip.
+> Fixes: 10c70d95c0f2 ("block: remove the bd_openers checks in blk_drop_partitions")
+> Cc: <stable@vger.kernel.org>
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Cheers! Yet I still see some minor regressions in the report
-below. As we discussed last time, reducing unnecessary updates
-on the idle cpumask when LLC is overloaded should help.
+Just one nit below.
 
-Thanks & Best regards,
-	Abel
+> diff --git a/block/genhd.c b/block/genhd.c
+> index c0d1220bd798..6ec10ffeb9cc 100644
+> --- a/block/genhd.c
+> +++ b/block/genhd.c
+> @@ -359,6 +359,7 @@ EXPORT_SYMBOL_GPL(disk_uevent);
+>  int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+>  {
+>  	struct block_device *bdev;
+> +	int ret = 0;
+>  
+>  	if (disk->flags & (GENHD_FL_NO_PART | GENHD_FL_HIDDEN))
+>  		return -EINVAL;
+> @@ -367,11 +368,29 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+>  	if (disk->open_partitions)
+>  		return -EBUSY;
+>  
+> -	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL);
+> -	if (IS_ERR(bdev))
+> -		return PTR_ERR(bdev);
+> +	/*
+> +	 * If the device is opened exclusively by current thread already, it's
+> +	 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
+> +	 * synchronize with other exclusivet openers and other partition
+				  ^^^ typo here
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
