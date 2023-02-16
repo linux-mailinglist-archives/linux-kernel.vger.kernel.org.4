@@ -2,91 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41B3699CE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0277D699CEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Feb 2023 20:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBPTQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 14:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S229608AbjBPTRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 14:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBPTQh (ORCPT
+        with ESMTP id S229593AbjBPTRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 14:16:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FE64C3F9;
-        Thu, 16 Feb 2023 11:16:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Feb 2023 14:17:51 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B56270F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 11:17:48 -0800 (PST)
+Received: from [192.168.2.109] (unknown [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F47160A54;
-        Thu, 16 Feb 2023 19:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1A6C4339C;
-        Thu, 16 Feb 2023 19:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676574995;
-        bh=5bm3NoeSiw5m5JezQB5vTpYr1RD7lH2eTbAPQpdi5d4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UT5GYH4KNmrDYU7vbtv8aOWUFu419mkcWoa0NlwNz9D+6HQqVJPIGhmR5MwTHTtIu
-         XMNRcMe1zud7i/pATJerg2IbRygANb1ME9wVcrtxYjVIXbnIamsB9XmaJDcRyiS8R2
-         DqS8iMR/AYPRtqOm3zo4SyhiTraNwCqP1YjRIFDSZqMTMqESvJHhPKonr6YJ5Yx3sG
-         dpxxfH4/EZPfyKK00g6fsbbwdiiXlihdWWrI6H7gcTIssdOgqw1zyTjMyM3BbZyI+T
-         ul2U6DRg3oXcyJXzk0M4R6WmFg1EkPIIk/Ni8m5lZzeuuCpRn1gnE65/Do7opD/6BO
-         aQ2Qa3/1IW1+A==
-Date:   Thu, 16 Feb 2023 13:16:32 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Subject: Re: [PATCH v2 0/7] MODULE_LICENSE removals, first tranche
-Message-ID: <20230216191632.GA3325180@bhelgaas>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 00E3D66020C5;
+        Thu, 16 Feb 2023 19:17:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676575067;
+        bh=KelSBIcFPOMpwc6QrwAztZm3NSF4137ddDvT1p48FBw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dM+uL5TQseZUO7mMSdY2OYwFJ3km5PZW1CGa1qU+JeYSFYJiYH/9ZgVMCXGAbm0lW
+         QfDkhY34pl5mZrAOiIWn/vBBQ09EGZaBrNeeMjHIyKSFbW0SRNKCNr8puOH+zGv0x8
+         w6CjG2Xc6tu8muZ6eaCtMfLkbLy6lP/p89HlOTfxt0NkkQ6esf+rz0S9GUAytZ2NlO
+         gQR1jAFBpz4jLaehwwpCxhUpw1woYFB2rOkAlHGElysU9y+KsA9F5a65Fy57L7w4sp
+         KV7S3bEp6s2MwKwx5xrU3ccSNfmMWBywNvhXK8w/vsxSXdcUCGrXtjNs/saoFlebSi
+         ou197pcV4eq6g==
+Message-ID: <88191cc6-e751-daa9-37f5-eda92d541098@collabora.com>
+Date:   Thu, 16 Feb 2023 22:17:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+5vczghnTF5nUut@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
+Content-Language: en-US
+To:     Yaroslav Boliukin <iam@lach.pw>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>
+References: <20220118170037.14584-1-iam@lach.pw>
+ <5d5a8183-aebc-6660-9cbc-03950f9b14b8@collabora.com>
+ <87v8k5vqg6.fsf@intel.com>
+ <831e7daf-48ae-cea8-a5d2-3786317b3b65@collabora.com>
+ <87sff9vl6j.fsf@intel.com>
+ <b5f6c63e-adf3-38a6-18fb-c92c764c23f3@collabora.com>
+ <d6f66bf7-356a-4bd9-fa21-a3197c0dff50@lach.pw>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <d6f66bf7-356a-4bd9-fa21-a3197c0dff50@lach.pw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 06:01:23PM +0000, Conor Dooley wrote:
-> On Thu, Feb 16, 2023 at 11:43:33AM -0600, Bjorn Helgaas wrote:
+On 2/16/23 21:26, Iaroslav Boliukin wrote:
+> On 2/14/23 12:50, Dmitry Osipenko wrote:
+>> On 2/13/23 14:50, Jani Nikula wrote:
+>>> On Mon, 13 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> wrote:
+>>>> On 2/13/23 12:56, Jani Nikula wrote:
+>>>>> On Sun, 12 Feb 2023, Dmitry Osipenko
+>>>>> <dmitry.osipenko@collabora.com> wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 1/18/22 20:00, Yaroslav Bolyukin wrote:
+>>>>>>
+>>>>>> Add a brief commit message, describing a user-visible effect of this
+>>>>>> patch. Tell that this change prevents exposing headset as a regular
+>>>>>> display to the system, while it will work with SteamVR.
+>>>>>>
+>>>>>>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+>>>>>>> ---
+>>>>>>>   drivers/gpu/drm/drm_edid.c | 3 ++-
+>>>>>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+>>>>>>> index 12893e7be..fdb8f0a6f 100644
+>>>>>>> --- a/drivers/gpu/drm/drm_edid.c
+>>>>>>> +++ b/drivers/gpu/drm/drm_edid.c
+>>>>>>> @@ -200,9 +200,10 @@ static const struct edid_quirk {
+>>>>>>>       EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
+>>>>>>>       EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
+>>>>>>>   -    /* HTC Vive and Vive Pro VR Headsets */
+>>>>>>> +    /* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
+>>>>>>
+>>>>>> Nit: I'd keep the original comment, or change it to a generic "HTC VR
+>>>>>> Headsets" to prevent further comment changes
+>>>>>>
+>>>>>>>       EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
+>>>>>>>       EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
+>>>>>>> +    EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
+>>>>>>>         /* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
+>>>>>>>       EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
+>>>>>>>
+>>>>>>> base-commit: 99613159ad749543621da8238acf1a122880144e
+>>>>>>
+>>>>>> Please send the v2 patch with the added EDID for Cosmos VR and the
+>>>>>> addressed comments. Thanks!
+>>>>>
+>>>>> Yeah, we'll need to EDID to check that it doesn't have the Microsoft
+>>>>> VSDB to indicate non-desktop. See 2869f599c0d8 ("drm/edid: support
+>>>>> Microsoft extension for HMDs and specialized monitors").
+>>>>
+>>>> Do you mean to skip using the EDID_QUIRK_NON_DESKTOP if MS VSDB entry
+>>>> presents in the EDID?
+>>>>
+>>>> These HTC EDIDs don't have MS VSDB, otherwise the quirk wouldn't be
+>>>> needed.
+>>>
+>>> Okay, I didn't know that. I just observed that the original patch was
+>>> sent before the the MS VSDB parsing was added.
+>>
+>> This will be good to mention in the v2 commit message.
+>>
+> 
+> This headset does support some kind of HMD signalling, however, this is
+> not a microsoft-specific extension (0xca125c) but part of the DisplayId
+> spec, "Display Product Primary Use Case" field is set to "7".
+> 
+> The problem is, I have no idea what spec I should refer to, as I can't
+> find this errata in the original spec, and the only reference to this
+> value I see is in https://git.linuxtv.org/edid-decode.git utility:
+> 
+> https://git.linuxtv.org/edid-decode.git/tree/parse-displayid-block.cpp?ref=aa956e0dd5fb85271dde900ea1ebdda795af7f8b#n1676
+> 
+> I would like to implement this feature, but I need some spec reference.
 
-> ...
-> I noticed that (as requested!) Nick dropped the change to the microchip
-> driver.
-> Would you like me to resend patch 3/11 of [1] to clear the decks of
-> "incorrect" MODULE_LICENSE usage?
+The [1] says it's "VESA DisplayID Standard v2.0", which should be okay
+to refer, IMO.
 
-Thanks for noticing that.  I removed MODULE_LICENSE from
-pcie-microchip-host.c for now.  We can easily add it back when [1] is
-merged.
+[1]
+https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors-edid-extension
 
-I haven't talked to Lorenzo about the series [1] is part of, but just
-from the mailing list traffic, it looks like there are a couple open
-questions (MSI config probing [2], "ranges" and address translation
-stuff [3,4]), so that will likely miss this merge window.
+-- 
+Best regards,
+Dmitry
 
-Bjorn
-
-> 1 - https://lore.kernel.org/linux-pci/20230111125323.1911373-4-daire.mcnamara@microchip.com/
-
-[2] https://lore.kernel.org/r/Y9uiWscjKQpD7JvE@lpieralisi
-[3] https://lore.kernel.org/r/Y9uebWEvuJYO31j1@lpieralisi
-[4] https://lore.kernel.org/r/8dfc14be-a978-d84b-52e4-d421599fc783@arm.com
