@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82D069A838
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D9569A847
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjBQJgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S230082AbjBQJiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBQJgf (ORCPT
+        with ESMTP id S229475AbjBQJiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:36:35 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFD24B507
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:36:33 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id l11so2506966edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GU0ICBhpvnQYr6wSJpl7PgiO+1zQ6Jplz+XKZNYyw0c=;
-        b=DQi0iGzW90bwPBJVFlzQmcJJhx5znA03K1p+knmQUUlEtnu+cUEONtEytRXelJfgeK
-         aSw9Hr8gCUQYmamBbTKihG6X+4GfOOcLhkQ0lFAhkUBbGa/yYlVbitwV/xbLvgMM/xZe
-         2HJa9hCNKcLI/wEr1evCCyVMndGIMb1kV9xOAXTbPKShe2sngMOq511hsusO6vPKetVd
-         xLyWtlMn+xCC+Fsv1bxl4MSSoKDRKzjVMZH/p1Wvflhc5CuLMLuvOlWeyZ/F0IUToHfG
-         0xBU9GyAtmIoj3nMdW/VouGfjiujtuzj56yzLCTOSjBS5w/A6y8FB9uHx/VWf9z4T3UD
-         zPgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GU0ICBhpvnQYr6wSJpl7PgiO+1zQ6Jplz+XKZNYyw0c=;
-        b=WQFVd0zxcl/xysd1rwfaHrFm7CX4Ecp2Y/Xx/A0wSKv2utC+mWaRaTN7KvIZuBfKrJ
-         i4S+rYcCh33MtbQD+OMDLDb28IV6bB2xJjePtT4L/80IBfiiEDsi3ko18Xo46FXcWGQT
-         uIs0NIJ0XjUq1mcXzXTZYRv6lnaiCjRgMB6NiZl+uTj1gsXevI9tfzVWeDf9LHK3pMgy
-         oFSv+Q1I9N5JxwRq2IoEeMPWr+GRcPMqo+TOjLglWmlmthZBsGLGua2AkfFpCWMWJkFI
-         /449PIxKj0Oyw/2AhZ4JPtMFGZNKr33MlrL12B/xNPHu8pW1Sb1XqJcfScQp2lrLmHzW
-         mhYQ==
-X-Gm-Message-State: AO0yUKV8b5sEXGPlty8TOShQ9ag6hRakOpGudG/JUe+lOQPMTzVzsN+E
-        cO4D75ovxSeqoncJZzX99A+e6g==
-X-Google-Smtp-Source: AK7set9WHvq2QzcES6AFBaP4hqU6AoTt2UahTFoQ9xlX2MDkwiMB/ijltt6IwZBxvOkoU7k1QYT6rw==
-X-Received: by 2002:a17:906:1cc7:b0:8af:5752:691f with SMTP id i7-20020a1709061cc700b008af5752691fmr9156715ejh.76.1676626592480;
-        Fri, 17 Feb 2023 01:36:32 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id jy2-20020a170907762200b008787134a939sm1934404ejc.18.2023.02.17.01.36.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 01:36:32 -0800 (PST)
-Message-ID: <cec5a521-bf3a-7cd3-4516-4f4a1b9e1661@linaro.org>
-Date:   Fri, 17 Feb 2023 10:36:30 +0100
+        Fri, 17 Feb 2023 04:38:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0F55383B;
+        Fri, 17 Feb 2023 01:38:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E68A8617AD;
+        Fri, 17 Feb 2023 09:38:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1614C433EF;
+        Fri, 17 Feb 2023 09:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676626683;
+        bh=bjP271qp895e32/jWrIoXXLymmDK8tbLOvVVV2RHvvw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aCWYPoeeFIBjjqZNWm1eqvZn/SnyLvhwS3AeO5TORbj+U6RHNOKObqGv90khnIGZh
+         xQnKbtrJlg/JJxTk5JQWcGQEJoNqUv9LVxE6TQdzHgJd3dMJgd//vIwWh8JEo//n+C
+         jG8htt8bReeBHoRCNC+JRzmUazNI0wWpo9Hb6sBkR6aFBdrpOHpJAr0qmXoJ0GVxwD
+         eliD3ZghpkBjMyghW0fT3HOa9rQAHokLC4Tz+RRw4XYE5nGNJaXCdxlxLqdyaj04FB
+         Qs17vcaNtWJ68PsqFp+nvbmANPakic/nByMkTsM6Z1oEJbAQ7q0JrH1Tb69nGXVqoH
+         GzCW84ebhz3Cw==
+Date:   Fri, 17 Feb 2023 11:37:42 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 1/6] userfaultfd: Add UFFD WP Async support
+Message-ID: <Y+9K5j+uWdTRKzkv@kernel.org>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-2-usama.anjum@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: Add driver for TI ADS1100 and
- ADS1000
-Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-References: <20230217093128.8344-1-mike.looijmans@topic.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230217093128.8344-1-mike.looijmans@topic.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202112915.867409-2-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,51 +77,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 10:31, Mike Looijmans wrote:
-> The ADS1100 is a 16-bit ADC (at 8 samples per second).
-> The ADS1000 is similar, but has a fixed data rate.
+Hi Muhammad,
 
-Subject: Drop "driver for"
-
+On Thu, Feb 02, 2023 at 04:29:10PM +0500, Muhammad Usama Anjum wrote:
+> Add new WP Async mode (UFFD_FEATURE_WP_ASYNC) which resolves the page
+> faults on its own. It can be used to track that which pages have been
+> written-to from the time the pages were write-protected. It is very
+> efficient way to track the changes as uffd is by nature pte/pmd based.
 > 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> UFFD synchronous WP sends the page faults to the userspace where the
+> pages which have been written-to can be tracked. But it is not efficient.
+> This is why this asynchronous version is being added. After setting the
+> WP Async, the pages which have been written to can be found in the pagemap
+> file or information can be obtained from the PAGEMAP_IOCTL.
 > 
+> Suggested-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
+> Changes in v10:
+> - Build fix
+> - Update comments and add error condition to return error from uffd
+>   register if hugetlb pages are present when wp async flag is set
 > 
->  .../bindings/iio/adc/ti,ads1100.yaml          | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
+> Changes in v9:
+> - Correct the fault resolution with code contributed by Peter
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
-> new file mode 100644
-> index 000000000000..ad30af8453a1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads1100.yaml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/ti,ads1100.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> Changes in v7:
+> - Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
+> - Handle automatic page fault resolution in better way (thanks to Peter)
+> 
+> update to wp async
+> 
+> uffd wp async
+> ---
+>  fs/userfaultfd.c                 | 20 ++++++++++++++++++--
+>  include/linux/userfaultfd_k.h    | 11 +++++++++++
+>  include/uapi/linux/userfaultfd.h | 10 +++++++++-
+>  mm/memory.c                      | 23 ++++++++++++++++++++---
+>  4 files changed, 58 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 15a5bf765d43..422f2530c63e 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1422,10 +1422,15 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  			goto out_unlock;
+>  
+>  		/*
+> -		 * Note vmas containing huge pages
+> +		 * Note vmas containing huge pages. Hugetlb isn't supported
+> +		 * with UFFD_FEATURE_WP_ASYNC.
+>  		 */
+> -		if (is_vm_hugetlb_page(cur))
+> +		if (is_vm_hugetlb_page(cur)) {
+> +			if (ctx->features & UFFD_FEATURE_WP_ASYNC)
+> +				goto out_unlock;
 > +
-> +title: TI ADS1100/ADS1000 single channel I2C analog to digital converter
+>  			basic_ioctls = true;
+> +		}
+>  
+>  		found = true;
+>  	}
+> @@ -1867,6 +1872,10 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
+>  	mode_wp = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_WP;
+>  	mode_dontwake = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_DONTWAKE;
+>  
+> +	/* The unprotection is not supported if in async WP mode */
+> +	if (!mode_wp && (ctx->features & UFFD_FEATURE_WP_ASYNC))
+> +		return -EINVAL;
 > +
-> +maintainers:
-> +  - Mike Looijmans <mike.looijmans@topic.nl>
+>  	if (mode_wp && mode_dontwake)
+>  		return -EINVAL;
+>  
+> @@ -1950,6 +1959,13 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+>  	return ret;
+>  }
+>  
+> +int userfaultfd_wp_async(struct vm_area_struct *vma)
+> +{
+> +	struct userfaultfd_ctx *ctx = vma->vm_userfaultfd_ctx.ctx;
 > +
-> +description: |
-> +  Datasheet at: https://www.ti.com/lit/gpn/ads1100
+> +	return (ctx && (ctx->features & UFFD_FEATURE_WP_ASYNC));
+> +}
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ads1100
-> +      - ti,ads1000
+>  static inline unsigned int uffd_ctx_features(__u64 user_features)
+>  {
+>  	/*
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 9df0b9a762cc..38c92c2beb16 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -179,6 +179,7 @@ extern int userfaultfd_unmap_prep(struct mm_struct *mm, unsigned long start,
+>  				  unsigned long end, struct list_head *uf);
+>  extern void userfaultfd_unmap_complete(struct mm_struct *mm,
+>  				       struct list_head *uf);
+> +extern int userfaultfd_wp_async(struct vm_area_struct *vma);
+>  
+>  #else /* CONFIG_USERFAULTFD */
+>  
+> @@ -189,6 +190,11 @@ static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+>  	return VM_FAULT_SIGBUS;
+>  }
+>  
+> +static inline void uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *vma,
+> +				 unsigned long start, unsigned long len, bool enable_wp)
+> +{
+> +}
+> +
+>  static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
+>  					struct vm_userfaultfd_ctx vm_ctx)
+>  {
+> @@ -274,6 +280,11 @@ static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
+>  	return false;
+>  }
+>  
+> +static inline int userfaultfd_wp_async(struct vm_area_struct *vma)
+> +{
+> +	return false;
+> +}
+> +
+>  #endif /* CONFIG_USERFAULTFD */
+>  
+>  static inline bool pte_marker_entry_uffd_wp(swp_entry_t entry)
+> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+> index 005e5e306266..30a6f32cf564 100644
+> --- a/include/uapi/linux/userfaultfd.h
+> +++ b/include/uapi/linux/userfaultfd.h
+> @@ -38,7 +38,8 @@
+>  			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
+>  			   UFFD_FEATURE_MINOR_SHMEM |		\
+>  			   UFFD_FEATURE_EXACT_ADDRESS |		\
+> -			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM)
+> +			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
+> +			   UFFD_FEATURE_WP_ASYNC)
+>  #define UFFD_API_IOCTLS				\
+>  	((__u64)1 << _UFFDIO_REGISTER |		\
+>  	 (__u64)1 << _UFFDIO_UNREGISTER |	\
+> @@ -203,6 +204,12 @@ struct uffdio_api {
+>  	 *
+>  	 * UFFD_FEATURE_WP_HUGETLBFS_SHMEM indicates that userfaultfd
+>  	 * write-protection mode is supported on both shmem and hugetlbfs.
+> +	 *
+> +	 * UFFD_FEATURE_WP_ASYNC indicates that userfaultfd write-protection
+> +	 * asynchronous mode is supported in which the write fault is automatically
+> +	 * resolved and write-protection is un-set. It only supports anon and shmem
+> +	 * (hugetlb isn't supported). It only takes effect when a vma is registered
+> +	 * with write-protection mode. Otherwise the flag is ignored.
+>  	 */
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Most of mm/ adheres the 80-character limits. Please make your changes to
+follow it as well. 
 
-Best regards,
-Krzysztof
+>  #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
+>  #define UFFD_FEATURE_EVENT_FORK			(1<<1)
+> @@ -217,6 +224,7 @@ struct uffdio_api {
+>  #define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
+>  #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
+>  #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
+> +#define UFFD_FEATURE_WP_ASYNC			(1<<13)
+>  	__u64 features;
+>  
+>  	__u64 ioctls;
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 4000e9f017e0..75331fbf7cb4 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3351,8 +3351,21 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  
+>  	if (likely(!unshare)) {
+>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+> -			pte_unmap_unlock(vmf->pte, vmf->ptl);
+> -			return handle_userfault(vmf, VM_UFFD_WP);
+> +			if (userfaultfd_wp_async(vma)) {
+> +				/*
+> +				 * Nothing needed (cache flush, TLB invalidations,
+> +				 * etc.) because we're only removing the uffd-wp bit,
+> +				 * which is completely invisible to the user.
+> +				 */
+> +				pte_t pte = pte_clear_uffd_wp(*vmf->pte);
+> +
+> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+> +				/* Update this to be prepared for following up CoW handling */
+> +				vmf->orig_pte = pte;
+> +			} else {
+> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> +				return handle_userfault(vmf, VM_UFFD_WP);
+> +			}
 
+You can revert the condition here and reduce the nesting:
+
+			if (!userfaultfd_wp_async(vma)) {
+				pte_unmap_unlock(vmf->pte, vmf->ptl);
+				return handle_userfault(vmf, VM_UFFD_WP);
+			}
+
+			/* handle async WP */
+
+>  		}
+>  
+>  		/*
+> @@ -4812,8 +4825,11 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>  
+>  	if (vma_is_anonymous(vmf->vma)) {
+>  		if (likely(!unshare) &&
+> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
+> +			if (userfaultfd_wp_async(vmf->vma))
+> +				goto split;
+>  			return handle_userfault(vmf, VM_UFFD_WP);
+> +		}
+>  		return do_huge_pmd_wp_page(vmf);
+>  	}
+>  
+> @@ -4825,6 +4841,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>  		}
+>  	}
+>  
+> +split:
+>  	/* COW or write-notify handled on pte level: split pmd. */
+>  	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
+>  
+> -- 
+> 2.30.2
+> 
+
+-- 
+Sincerely yours,
+Mike.
