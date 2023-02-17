@@ -2,202 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C15669A900
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DFE69A909
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBQKV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
+        id S229603AbjBQKYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBQKV4 (ORCPT
+        with ESMTP id S229534AbjBQKYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:21:56 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2113.outbound.protection.outlook.com [40.107.93.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD5E63BCA;
-        Fri, 17 Feb 2023 02:21:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MbWHVCmGofe+vptNkzKZZEfafpPP44MClTPD4APqBkkoeyw8Sn/jLRDuMTVawVHpooahhnF8IWF9UBRRCrzb9t6Qxa9/eBNzYspBuQsyW2haK11qHvTEg+9uRfZ0cUr/kPruJeAn3V2LoVZzEctqNGIUkexTblScuWtkVifBYevR/KlRfIDpQh7UVd2JgOOocj2x2WNi0kEkbx7wpUHsETd61C5rEzFoxG6NPqgKsuoW6Mus9sMbBmBblfy3cAlid/dZnj5QDBY82tJ8xVfr44iiIXczVZC8VAcvvPLLs2VZCde9nblASz792ueOf07fK1UrvXYukIaH8P2WCgprAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AKL373CjcuzR3fvZWfxjTwV33fkBzAZ3MFds40urUpw=;
- b=bIezg1dP78T1+rcudyLXEiZPihiijVWGWntjoJdoLz6XRpGaOYyIJBijtDshxmSlfxk93N4YqjdOWgHPU0D5jLUesYAP5wE8H79IPfd66qxlhY4RkygtD/cuwxiRxi+fb8/rzuWiNkBtqHwjZQMK8x7QbuSFd88IacUMiloZOBuj32Nf/bDNlRNjl0FxGaLtZAcKX4Ant9QrRNs/ognKt2KFjM5PMDwiHXyYbfOPDKZRaJGh5OJTG+AsP6pO++Wy+eONYHmy/W21op5WDa0ZI2NC6rKKRNrnahMTHmhtRzwGT1dj0MyNAVVY4MPvXBPTPMhqbGAuRTh4vv9BESNE/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Fri, 17 Feb 2023 05:24:03 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230D0627EE;
+        Fri, 17 Feb 2023 02:24:03 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id j6so1027319plh.1;
+        Fri, 17 Feb 2023 02:24:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AKL373CjcuzR3fvZWfxjTwV33fkBzAZ3MFds40urUpw=;
- b=uItoYMgG4LlJ9JdyDyl1tYc1Wm/5icVs8svuo6HWUtDwQMOl93XIFP2skGSb799ph/fQpbvBtE947wPv5nMyqTHYsFzC6iRLOCPaUHvQ+08uCFwPpiSInQyUj0fEEnZh2zFf/4O7zU0serm7d713RXqLycyCd7Bl/7Mdt1W3ou4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- BYAPR01MB5143.prod.exchangelabs.com (2603:10b6:a03:1a::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.13; Fri, 17 Feb 2023 10:21:49 +0000
-Received: from SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::a807:4f38:56ee:b079]) by SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::a807:4f38:56ee:b079%4]) with mapi id 15.20.6086.028; Fri, 17 Feb 2023
- 10:21:49 +0000
-From:   Chanh Nguyen <chanh@os.amperecomputing.com>
-To:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Chanh Nguyen <chanh@os.amperecomputing.com>
-Subject: [PATCH] ARM: dts: aspeed: mtmitchell: Enable NCSI
-Date:   Fri, 17 Feb 2023 17:21:22 +0700
-Message-Id: <20230217102122.16547-1-chanh@os.amperecomputing.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0013.apcprd06.prod.outlook.com
- (2603:1096:4:186::18) To SN6PR01MB4973.prod.exchangelabs.com
- (2603:10b6:805:c4::13)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uJsG7O5tTCs41MEzjTy+yVNOTt2BE6FSiradkkgB6LY=;
+        b=qRe/SGrZbP7S0qB9hiMc5M1htwbpekmT/G5x9ZA0EQu3n9VLPMX+5QJItPSWqtrBRX
+         rCm0ewMrretrkegnrYkYrIHzvRsNN0CPNgcQ9uCKORPISWhwlhJAaTq1xioliLffKeJy
+         0Cd/Gpq18fvdCsqtB9ZTsjxj5VWMdnYWV9VTBmrhWKDYdtzJAuVZcE0P9RsqoPIx02oS
+         Pz8BeK7GBmmDWSQZSpkusQWRH1v0s+RAKzcrHM+HHHzu7V+eutlJBCDw7f1SDruqNtTU
+         3Xz2eDC+V3UVd16CcUfpCNbOGQP74SQ6t4SFJylmcON6nnhR04ebKh/8nz2oB8x78ihO
+         UO1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uJsG7O5tTCs41MEzjTy+yVNOTt2BE6FSiradkkgB6LY=;
+        b=T14qo4+uKxG+YQeakYAJ2R+i6b+1Q0gp1wcL9PCRv1A3La+9DbYSqRjA2B5GIxxIDd
+         Phn1C3MCyhnsUS20UuJw5lJ4zRVDYz/ud1nOkHN4W03R5LmDZgIP3WEggcqiB0TIKZ17
+         yzlftdFAgpgJaAP+J7iuGxDbqHtRSM69PfmR3KviXamIOYETDCQyB+ggcrp40VZ3+tIh
+         A+2j+U5kloh4PKge5tjUXhnA/Y/ZfQvN9y4nq+yGOnYoKlIm1uomxUt/SAcC+WiNkvuy
+         MvX054d2AufOvY7/qiGEUAx1dUjTL82uKY3DJauU2LgA7+q05DjHRmQwOLQTxJTdOwq6
+         xPRQ==
+X-Gm-Message-State: AO0yUKWFlreUko8X067svxqAqKcLlSp85yPE8B/dKan4aGGADnWIOi0k
+        G14V0Pmshn2yM7UI2sN81rOsyor+xHDECA==
+X-Google-Smtp-Source: AK7set9vt5v4O8ePLcY+Cudv/NZc+8bmvEwJ6/BoQFq+EY+rOWj8nx1HEZHd92QgK/VGJWVdYgQzQg==
+X-Received: by 2002:a17:903:110e:b0:199:3683:5410 with SMTP id n14-20020a170903110e00b0019936835410mr422558plh.50.1676629442237;
+        Fri, 17 Feb 2023 02:24:02 -0800 (PST)
+Received: from localhost.localdomain ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id w4-20020a1709029a8400b0019aaba5c90bsm2832538plp.84.2023.02.17.02.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 02:24:01 -0800 (PST)
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>
+Subject: [PATCH v3 0/2] Apple Magic Keyboard Backlight
+Date:   Fri, 17 Feb 2023 21:23:18 +1100
+Message-Id: <20230217102319.3419-1-orlandoch.dev@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|BYAPR01MB5143:EE_
-X-MS-Office365-Filtering-Correlation-Id: b65e0dbe-d525-4d94-344e-08db10d0c76d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mjnJiX1MwqUR967BOMlzPEHIisfJ8d86AnJEDleH07V90MQUCqlo+Q4g7iBO8vaS+WwUs4CAVzsApX5zQxH8r7WKPyiLr2qSxfMEn5DQ799xI7fUn2TnwryUxC5hlFxUpJfuCVEO6hxaRAWKc5a0IDVNqycyzI9RF6kTVHK8WGajNyohCgomHjW4OT0wUODaF7HvsVmV7umLZ8pLjXb4rgF8tgPEEQg0qc2TaP+rBTmyrhpM54ZwLSebFVlA/SWnG8df+psTpBIuES60xkr2nSJr5BfLA0VOYMhfEt1clKs4xLoYwt1xV1tbzhPlK+i9n4/H6UTDFWgglMw98PqmldPS1MyWI0VRw3lVZUIqXjYWjSb++fiQKpU8UuJPs5UXLp6Bsb9+FT/UBx8MuH2MSFA/fcEZ7wtaUyq4/mqpyS/mfzKtVmGnDuJ9IGgAWEmReGHVHCSsGZ0sKeWzLI4/Tm2z128IL7nr0gMzGjDYAjhMxCNq0Zmf41/TrJYoTFbIKIf6NdLg00vOXfYvhOJXVMY50JbCReCYIfLsDA1/9kKsHW/Qy+ElXGyYQLCWoplLZtwSPURl2tENAiwvE//ipCrP6OIjZF7sMqnGyBRWmWg3ntR0vUBLicuxjbWvkZAgHjibEKuMQRO8o136Y76w5AKpYNAcYSBQuRLSKIxc+lUhT9gJ41kgBuQrglQJeZ4oiYoGx4JQ6Wxxdbrq/DOwsO5cVIUezzKCdfeW+gF21B8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(396003)(376002)(136003)(39850400004)(451199018)(2906002)(86362001)(83380400001)(2616005)(38100700002)(38350700002)(5660300002)(66476007)(110136005)(66946007)(8676002)(66556008)(316002)(8936002)(4326008)(41300700001)(1076003)(6506007)(6512007)(186003)(107886003)(6666004)(26005)(478600001)(52116002)(6486002)(449214003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vtp+gVxTA/yFoc4GfgSDTPqR0R/SZ+P80OXrB7YK6Fy/rtxn2lXXLoiHjPk3?=
- =?us-ascii?Q?7nyWV8FcnKfui3aivjA3EFWg88jCKqN92pUpIJ+Fe1RhNeqFJn0pq1yu9nOR?=
- =?us-ascii?Q?OCfMR6LnIsUFV/9b0DTGVTBjShFjE8ZIn+7ET6zvi7sUQBwYw2Yz8hOuqK13?=
- =?us-ascii?Q?xrSVscfhPW+EF6PoyULiDUC2kADd5Pv26Fk4kRpCnimvh2BR0koxYAOnqVYG?=
- =?us-ascii?Q?yjFAPADaZuFrYb476rCFh3KehqGxXJkWl7kdgOjx3/EzZ72feZdJQqIclZ/9?=
- =?us-ascii?Q?se7zuiHZgJuvx/GeOctt++yF/GyE+ZCMNvTfK5B3HRoDOluSWq5U6KW178rO?=
- =?us-ascii?Q?fc3wvxeioB6BbSvXLZDbOyEE6P6ChE9gsanssUHvgkhyr1zFs+2S2Yt01mP/?=
- =?us-ascii?Q?sGjGROa6RXFO77GDDlN5IR6GXLlKWNBxtLf9i7ebojZkjtAbnooZ7RNQIOhi?=
- =?us-ascii?Q?pxowAnz54QBNK9Jjv/vo8sqMx8bBMugSgNsk6DPK9GoQNn1/M9qHrXZ0Fin5?=
- =?us-ascii?Q?Wn9X1EZC0HjcAvPJhH5jE/7iq7NGv2EC6yBblcjwPv6o7DWYLDfHR5UmQkHW?=
- =?us-ascii?Q?sYqCGF3urPja2RYxJnFhot8e/3iRWAmXEQls3TM9LrHV49cOaQzw1Qr2pxVL?=
- =?us-ascii?Q?8/OHraGKAbo99htPJG6+uGMGmo0nJbn/MckZAyFOp2i25TR34wOY2M1sv7FE?=
- =?us-ascii?Q?jVaBvdIspZVJWmHBMkqgY5qKqzj4ay8hYVASOmmlQFkffeavyshay349uDho?=
- =?us-ascii?Q?u8LgbuxgriU2QVTItsuyTQVwrIL3RLOOsLL0cHq/wtWx7/x62dc27vRZk+Dn?=
- =?us-ascii?Q?nvJUZWWUxJciQEs8/cya2ZQr/8drS2x/2oWlSg4rsSAmr/DFF/WzyGrog6Sq?=
- =?us-ascii?Q?UirC8mK0rj5hfFfTaK3jWObqP5lWtS7w2l49ytJiePiWHos3RzwdWaz5IJyb?=
- =?us-ascii?Q?wJ7VYHoT2T5+2DIJ1tc6Ysc+RrpqePCbYdRv2uoWaKOYD8KBc5m7N/ggo9M9?=
- =?us-ascii?Q?fCqwS8sVQKXfhuPMeghuYW1jng6EbN4xUwol6xzHnb2xhwLnhEzpXs2dAHVk?=
- =?us-ascii?Q?l6/qsMH5sArEpysIU7ppR3Gh9QLtrsh0vDZ/ER0B2udzpISXGzI5azEv0NYD?=
- =?us-ascii?Q?0DAJqe/xQQyXsPHEbQlmE9u0Wko5i2nrUTPrNR1OmgRIygRLqLO1W25entxO?=
- =?us-ascii?Q?20EMa7+/bPZSlw5Ee7SyijryFkAo8pe52IYIE2TU9hC82KPkoKyRaf6dQpQt?=
- =?us-ascii?Q?QLS4wDu7CbDB7Qk7GOtosNFJ0Sg2+DtJVgR0fg07NfCQX3E1VkS0q5ifOHSa?=
- =?us-ascii?Q?PtPjloJ4IvKMVIzwVFFoDYRH0h1+NLcMfou35iTtY/gp65MK47JHXbW+cXVu?=
- =?us-ascii?Q?Dr+QzIDbOCtDEqPBeXX0MyKMfci0zj286NZhr3T2Nfp1A2wK7f92Ccq3+N5B?=
- =?us-ascii?Q?Rv3XYpynmuibpkgbIcT5kO9FpZACb4/Jxf1wIoxZmiubAzx1CE22qfO5npw8?=
- =?us-ascii?Q?0+g7V2TRUxq4PksYexfIiZqTBVeddotCw5S+ZuGz50jFc+4ymU2NYYzk66MA?=
- =?us-ascii?Q?rInUPwPRNNcg4y4gqC/Bk3PJRkmhfjpV1cvGlCFgzqRCiIvA5mwJacUt6MXw?=
- =?us-ascii?Q?HPtpOzq3wjW9vhygBPlEjR4=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b65e0dbe-d525-4d94-344e-08db10d0c76d
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 10:21:49.0778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ItK21EG0epD1BFj8vT/rgg1O2wQC9azQxgsXwqxoet+bm/0I0oH5GeS4nPuOxFfHs8EkM7zrU5p66SgOspWsB2N2QgyvHba2mzvGkqgT/3X/y9QZUG+cfuHOx4UJUfFS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,WEIRD_QUOTING autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support the mac3 (RGMII4) as an NC-SI stack instead of an MDIO PHY.
+This patchseries adds support for the internal keyboard backlight of
+Macs with Apple's "Magic" keyboard (MacBookPro16,* and MacBookAir9,1),
+and also documents what names should be used for keyboard backlight
+leds in Documentation/leds/well-known-leds.txt.
 
-The OCP slot #0 and OCP slot #1 use a common the BMC_NCSI signal,
-so we use only one of them at the same time. The OCP slot #0 will
-be enabled by PCA9539's setting by default.
+v2->v3:
+- remove unneeded header inclusion
+- use s32 for report value type
+- remove unneeded null check
+- don't set drvdata as its never used
+- prepend "hid-" to module name
 
-Also, enable the OCP Auxiliary Power during booting.
+v1->v2:
+- drop unneeded remove function
+- combine set functions
+- add missing header inclusions
+- avoid char as argument in favour of u8
+- handful of style/formatting fixes
+- use standard led name ":white:kbd_backlight"
+- rename USAGE_MAGIC_BL to HID_USAGE_MAGIC_BL
+- New patch documenting preferred keyboard backlight names
 
-Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
----
- .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 37 ++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+v1: https://lore.kernel.org/linux-input/7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com/
+v2: https://lore.kernel.org/linux-input/20230216041224.4731-1-orlandoch.dev@gmail.com/
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-index 4b91600eaf62..e8a6b1f08d6a 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-@@ -251,6 +251,14 @@
- 	pinctrl-0 = <&pinctrl_rgmii1_default>;
- };
- 
-+&mac3 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	clock-names = "MACCLK", "RCLK";
-+	use-ncsi;
-+};
-+
- &fmc {
- 	status = "okay";
- 	flash@0 {
-@@ -439,6 +447,26 @@
- 	status = "okay";
- };
- 
-+&i2c8 {
-+	status = "okay";
-+
-+	pca9539@77 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x77>;
-+		gpio-controller;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		#gpio-cells = <2>;
-+
-+		bmc-ocp0-en-hog {
-+			gpio-hog;
-+			gpios = <7 GPIO_ACTIVE_LOW>;
-+			output-high;
-+			line-name = "bmc-ocp0-en-n";
-+		};
-+	};
-+};
-+
- &i2c9 {
- 	status = "okay";
- };
-@@ -530,13 +558,20 @@
- 	/*V0-V7*/	"s0-hightemp-n","s0-fault-alert","s0-sys-auth-failure-n",
- 			"host0-reboot-ack-n","host0-ready","host0-shd-req-n",
- 			"host0-shd-ack-n","s0-overtemp-n",
--	/*W0-W7*/	"ocp-aux-pwren","ocp-main-pwren","ocp-pgood","",
-+	/*W0-W7*/	"","ocp-main-pwren","ocp-pgood","",
- 			"bmc-ok","bmc-ready","spi0-program-sel","spi0-backup-sel",
- 	/*X0-X7*/	"i2c-backup-sel","s1-fault-alert","s1-fw-boot-ok",
- 			"s1-hightemp-n","s0-spi-auth-fail-n","s1-sys-auth-failure-n",
- 			"s1-overtemp-n","s1-spi-auth-fail-n",
- 	/*Y0-Y7*/	"","","","","","","","host0-special-boot",
- 	/*Z0-Z7*/	"reset-button","ps0-pgood","ps1-pgood","","","","","";
-+
-+	ocp-aux-pwren-hog {
-+		gpio-hog;
-+		gpios = <ASPEED_GPIO(W, 0) GPIO_ACTIVE_HIGH>;
-+		output-high;
-+		line-name = "ocp-aux-pwren";
-+	};
- };
- 
- &gpio1 {
+Orlando Chamberlain (2):
+  Documentation: leds: standardise keyboard backlight led names
+  HID: hid-apple-magic-backlight: Add driver for keyboard backlight on
+    internal Magic Keyboards
+
+ Documentation/leds/well-known-leds.txt  |   8 ++
+ MAINTAINERS                             |   6 ++
+ drivers/hid/Kconfig                     |  13 +++
+ drivers/hid/Makefile                    |   1 +
+ drivers/hid/hid-apple-magic-backlight.c | 122 ++++++++++++++++++++++++
+ 5 files changed, 150 insertions(+)
+ create mode 100644 drivers/hid/hid-apple-magic-backlight.c
+
 -- 
-2.17.1
+2.39.1
 
