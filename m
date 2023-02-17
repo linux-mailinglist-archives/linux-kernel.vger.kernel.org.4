@@ -2,93 +2,454 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8235B69A911
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199E769A916
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjBQK0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S229764AbjBQK2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBQK0U (ORCPT
+        with ESMTP id S229508AbjBQK2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:26:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A474627F9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:25:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676629535;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YsperIyfVkY2ln7H9Mme70veH+mGxMSmpgkeJjryR1A=;
-        b=duqDrehpbvGvrne09oCKnVZuYDcOYtjI1ZK5rFjbVmQNuiHh9dNhFtIqMixC58F6n2n6Dn
-        8zeQVPaPT3wZE0o24qvtey0dB1Glnw3nbKdbxUpj4/qu27nHfz34LYBJWZUoRAulDmc42F
-        A+7Er8vu+0x5wqxX1q8Cj6YnhsmIc+8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-7rlDfPfMPDuQHljtGKgbgQ-1; Fri, 17 Feb 2023 05:25:31 -0500
-X-MC-Unique: 7rlDfPfMPDuQHljtGKgbgQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67C29802314;
-        Fri, 17 Feb 2023 10:25:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-194-117.brq.redhat.com [10.40.194.117])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 2492C43FBA;
-        Fri, 17 Feb 2023 10:25:26 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri, 17 Feb 2023 11:25:25 +0100 (CET)
-Date:   Fri, 17 Feb 2023 11:25:21 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     David Vernet <void@manifault.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, kernel-team@meta.com,
-        torvalds@linux-foundation.org, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tasks: Extract rcu_users out of union
-Message-ID: <20230217102521.GA27682@redhat.com>
-References: <20230215233033.889644-1-void@manifault.com>
- <20230216080459.GA5200@redhat.com>
- <Y+54c0YvXcMIFva4@maniforge>
+        Fri, 17 Feb 2023 05:28:02 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D7513DFE;
+        Fri, 17 Feb 2023 02:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676629680; x=1708165680;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5shIw1xquN9wr5mQeBeVCgYCb+8VNCNXF6P4pG2s3zY=;
+  b=npy4qvzuezr5mBwKgtycRbuEfatgMEH7vhVzJtv+n2pYX6gp4hKJGIqv
+   Zi8qu3inYBFVfkJCGOtT8W9UjG9FFsQMVAvXv0CjmBIZ50vNKuj5fQCJv
+   M/sl+/wycnMyM20x7rtmlcdbEVkj71FlUYAOMmCZ6+fCWvsDdJwKnBtMT
+   ApFsJL3g/m0z64pSIiBo3jfYFHiFpv+kx77ORnsPZFKAfRU7y+vJ9fFQO
+   RR9dh5SIsVao5uwlQ1ers75i/bOdo+DnqGKV82TOFRELkYy436/CZcOPH
+   RyKa9TErWEZbb8LHM8ugJOMezIw7ySc8Ki339KPhIwNt+prR86hPQEXnm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="359406509"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="359406509"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 02:27:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="739216402"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="739216402"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 02:27:56 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id BD20311FC11;
+        Fri, 17 Feb 2023 12:27:53 +0200 (EET)
+Date:   Fri, 17 Feb 2023 12:27:53 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Kaehn <kaehndan@gmail.com>
+Subject: Re: [PATCH v1 1/1] device property: Clarify description on returned
+ value in some functions
+Message-ID: <Y+9Wqbb+zzvH2Ozb@kekkonen.localdomain>
+References: <20230216205708.13453-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+54c0YvXcMIFva4@maniforge>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230216205708.13453-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/16, David Vernet wrote:
->
-> On Thu, Feb 16, 2023 at 09:04:59AM +0100, Oleg Nesterov wrote:
-> >
-> > >    a task that's successfully looked
-> > >    up in e.g. the pid_list with find_task_by_pid_ns(), can always have a
-> > >    'usage' reference acquired on them, as it's guaranteed to be >
-> > >    0 until after the next gp.
-> >
-> > Yes. So it seems you need another key-to-task_struct map with rcu-safe
-> > lookup/get and thus the add() method needs inc_not_zero(task->rcu_users) ?
->
-> Yes, exactly.
+Hi Andy,
 
-OK, in this case I agree, inc_not_zero(rcu_users) makes sense and thus we need
-this patch.
+On Thu, Feb 16, 2023 at 10:57:08PM +0200, Andy Shevchenko wrote:
+> Some of the functions do not provide a Return: section on absence of which
+> kernel-doc complains. Besides that several functions return the fwnode
+> handle with bumped reference count. Add a respective note to make sure
+> that the caller drops it when it's not needed anymore.
+> 
+> While at it, unify the style of the Return: sections.
+> 
+> Reported-by: Daniel Kaehn <kaehndan@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/base/property.c | 117 ++++++++++++++++++++++++++++------------
+>  1 file changed, 82 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 083a95791d3b..b75e63984702 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -37,6 +37,8 @@ EXPORT_SYMBOL_GPL(__dev_fwnode_const);
+>   * @propname: Name of the property
+>   *
+>   * Check if property @propname is present in the device firmware description.
+> + *
+> + * Return: true if property @propname is present. Otherwise, returns false.
+>   */
+>  bool device_property_present(struct device *dev, const char *propname)
+>  {
+> @@ -48,6 +50,8 @@ EXPORT_SYMBOL_GPL(device_property_present);
+>   * fwnode_property_present - check if a property of a firmware node is present
+>   * @fwnode: Firmware node whose property to check
+>   * @propname: Name of the property
+> + *
+> + * Return: true if property @propname is present. Otherwise, returns false.
+>   */
+>  bool fwnode_property_present(const struct fwnode_handle *fwnode,
+>  			     const char *propname)
+> @@ -511,7 +515,7 @@ EXPORT_SYMBOL_GPL(fwnode_property_match_string);
+>   * Caller is responsible to call fwnode_handle_put() on the returned
+>   * args->fwnode pointer.
+>   *
+> - * Returns: %0 on success
+> + * Return: %0 on success
+>   *	    %-ENOENT when the index is out of bounds, the index has an empty
+>   *		     reference or the property was not found
+>   *	    %-EINVAL on parse error
+> @@ -547,8 +551,10 @@ EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
+>   *
+>   * @index can be used when the named reference holds a table of references.
+>   *
+> - * Returns pointer to the reference fwnode, or ERR_PTR. Caller is responsible to
+> - * call fwnode_handle_put() on the returned fwnode pointer.
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: a pointer to the reference fwnode, or an error pointer.
+>   */
+>  struct fwnode_handle *fwnode_find_reference(const struct fwnode_handle *fwnode,
+>  					    const char *name,
+> @@ -567,7 +573,7 @@ EXPORT_SYMBOL_GPL(fwnode_find_reference);
+>   * fwnode_get_name - Return the name of a node
+>   * @fwnode: The firmware node
+>   *
+> - * Returns a pointer to the node name.
+> + * Return: a pointer to the node name, or %NULL.
+>   */
+>  const char *fwnode_get_name(const struct fwnode_handle *fwnode)
+>  {
+> @@ -579,7 +585,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_name);
+>   * fwnode_get_name_prefix - Return the prefix of node for printing purposes
+>   * @fwnode: The firmware node
+>   *
+> - * Returns the prefix of a node, intended to be printed right before the node.
+> + * Return: the prefix of a node, intended to be printed right before the node.
+>   * The prefix works also as a separator between the nodes.
+>   */
+>  const char *fwnode_get_name_prefix(const struct fwnode_handle *fwnode)
+> @@ -591,7 +597,10 @@ const char *fwnode_get_name_prefix(const struct fwnode_handle *fwnode)
+>   * fwnode_get_parent - Return parent firwmare node
+>   * @fwnode: Firmware whose parent is retrieved
+>   *
+> - * Return parent firmware node of the given node if possible or %NULL if no
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: parent firmware node of the given node if possible or %NULL if no
+>   * parent was available.
+>   */
+>  struct fwnode_handle *fwnode_get_parent(const struct fwnode_handle *fwnode)
+> @@ -608,8 +617,11 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
+>   * on the passed node, making it suitable for iterating through a
+>   * node's parents.
+>   *
+> - * Returns a node pointer with refcount incremented, use
+> - * fwnode_handle_put() on it when done.
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: parent firmware node of the given node if possible or %NULL if no
+> + * parent was available.
+>   */
+>  struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
+>  {
+> @@ -629,8 +641,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_parent);
+>   * firmware node that has a corresponding struct device and returns that struct
+>   * device.
+>   *
+> - * The caller of this function is expected to call put_device() on the returned
+> - * device when they are done.
+> + * Caller is responsible to call put_device() on the returned device pointer.
+>   */
+>  struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
+>  {
+> @@ -651,7 +662,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
+>   * fwnode_count_parents - Return the number of parents a node has
+>   * @fwnode: The node the parents of which are to be counted
+>   *
+> - * Returns the number of parents a node has.
+> + * Return: the number of parents a node has.
+>   */
+>  unsigned int fwnode_count_parents(const struct fwnode_handle *fwnode)
+>  {
+> @@ -670,12 +681,12 @@ EXPORT_SYMBOL_GPL(fwnode_count_parents);
+>   * @fwnode: The node the parent of which is requested
+>   * @depth: Distance of the parent from the node
+>   *
+> - * Returns the nth parent of a node. If there is no parent at the requested
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: the nth parent of a node. If there is no parent at the requested
+>   * @depth, %NULL is returned. If @depth is 0, the functionality is equivalent to
+>   * fwnode_handle_get(). For @depth == 1, it is fwnode_get_parent() and so on.
+> - *
+> - * The caller is responsible for calling fwnode_handle_put() for the returned
+> - * node.
+>   */
+>  struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
+>  					    unsigned int depth)
+> @@ -700,7 +711,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
+>   *
+>   * A node is considered an ancestor of itself too.
+>   *
+> - * Returns true if @ancestor is an ancestor of @child. Otherwise, returns false.
+> + * Return: true if @ancestor is an ancestor of @child. Otherwise, returns false.
+>   */
+>  bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle *child)
+>  {
+> @@ -725,6 +736,9 @@ bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle
+>   * fwnode_get_next_child_node - Return the next child node handle for a node
+>   * @fwnode: Firmware node to find the next child node for.
+>   * @child: Handle to one of the node's child nodes or a %NULL handle.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
 
-Just I was confused by the previous part of the changelog due to my bad English.
+The loop itself will also put the child node, so this is only relevant
+outside the loop.
 
-Thanks,
+>   */
+>  struct fwnode_handle *
+>  fwnode_get_next_child_node(const struct fwnode_handle *fwnode,
+> @@ -735,10 +749,12 @@ fwnode_get_next_child_node(const struct fwnode_handle *fwnode,
+>  EXPORT_SYMBOL_GPL(fwnode_get_next_child_node);
+>  
+>  /**
+> - * fwnode_get_next_available_child_node - Return the next
+> - * available child node handle for a node
+> + * fwnode_get_next_available_child_node - Return the next available child node handle for a node
+>   * @fwnode: Firmware node to find the next child node for.
+>   * @child: Handle to one of the node's child nodes or a %NULL handle.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
 
-Oleg.
+Same here. And the two loops below.
 
+>   */
+>  struct fwnode_handle *
+>  fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
+> @@ -762,7 +778,10 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_available_child_node);
+>  /**
+>   * device_get_next_child_node - Return the next child node handle for a device
+>   * @dev: Device to find the next child node for.
+> - * @child: Handle to one of the device's child nodes or a null handle.
+> + * @child: Handle to one of the device's child nodes or a %NULL handle.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *device_get_next_child_node(const struct device *dev,
+>  						 struct fwnode_handle *child)
+> @@ -787,6 +806,9 @@ EXPORT_SYMBOL_GPL(device_get_next_child_node);
+>   * fwnode_get_named_child_node - Return first matching named child node handle
+>   * @fwnode: Firmware node to find the named child node for.
+>   * @childname: String to match child node name against.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *
+>  fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
+> @@ -800,6 +822,9 @@ EXPORT_SYMBOL_GPL(fwnode_get_named_child_node);
+>   * device_get_named_child_node - Return first matching named child node handle
+>   * @dev: Device to find the named child node for.
+>   * @childname: String to match child node name against.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *device_get_named_child_node(const struct device *dev,
+>  						  const char *childname)
+> @@ -812,7 +837,10 @@ EXPORT_SYMBOL_GPL(device_get_named_child_node);
+>   * fwnode_handle_get - Obtain a reference to a device node
+>   * @fwnode: Pointer to the device node to obtain the reference to.
+>   *
+> - * Returns the fwnode handle.
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: the fwnode handle.
+>   */
+>  struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
+>  {
+> @@ -827,9 +855,9 @@ EXPORT_SYMBOL_GPL(fwnode_handle_get);
+>   * fwnode_handle_put - Drop reference to a device node
+>   * @fwnode: Pointer to the device node to drop the reference to.
+>   *
+> - * This has to be used when terminating device_for_each_child_node() iteration
+> - * with break or return to prevent stale device node references from being left
+> - * behind.
+> + * Among other cases this has to be used when terminating device_for_each_child_node()
+
+I don't think device_for_each_child_node() should be mentioned here. This
+isn't really related to that in particular.
+
+With these:
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+> + * iteration with break or return to prevent stale device node references from
+> + * being left behind.
+>   */
+>  void fwnode_handle_put(struct fwnode_handle *fwnode)
+>  {
+> @@ -841,6 +869,8 @@ EXPORT_SYMBOL_GPL(fwnode_handle_put);
+>   * fwnode_device_is_available - check if a device is available for use
+>   * @fwnode: Pointer to the fwnode of the device.
+>   *
+> + * Return: true if device is available for use. Otherwise, returns false.
+> + *
+>   * For fwnode node types that don't implement the .device_is_available()
+>   * operation, this function returns true.
+>   */
+> @@ -859,6 +889,8 @@ EXPORT_SYMBOL_GPL(fwnode_device_is_available);
+>  /**
+>   * device_get_child_node_count - return the number of child nodes for device
+>   * @dev: Device to cound the child nodes for
+> + *
+> + * Return: the number of child nodes for a given device.
+>   */
+>  unsigned int device_get_child_node_count(const struct device *dev)
+>  {
+> @@ -934,7 +966,7 @@ EXPORT_SYMBOL_GPL(device_get_phy_mode);
+>   * @fwnode:	Pointer to the firmware node
+>   * @index:	Index of the IO range
+>   *
+> - * Returns a pointer to the mapped memory.
+> + * Return: a pointer to the mapped memory.
+>   */
+>  void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
+>  {
+> @@ -947,8 +979,8 @@ EXPORT_SYMBOL(fwnode_iomap);
+>   * @fwnode:	Pointer to the firmware node
+>   * @index:	Zero-based index of the IRQ
+>   *
+> - * Returns Linux IRQ number on success. Other values are determined
+> - * accordingly to acpi_/of_ irq_get() operation.
+> + * Return: Linux IRQ number on success. Other values are determined
+> + * according to acpi_irq_get() or of_irq_get() operation.
+>   */
+>  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
+>  {
+> @@ -967,8 +999,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
+>   * number of the IRQ resource corresponding to the index of the matched
+>   * string.
+>   *
+> - * Return:
+> - * Linux IRQ number on success, or negative errno otherwise.
+> + * Return: Linux IRQ number on success, or negative errno otherwise.
+>   */
+>  int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+>  {
+> @@ -990,7 +1021,10 @@ EXPORT_SYMBOL(fwnode_irq_get_byname);
+>   * @fwnode: Pointer to the parent firmware node
+>   * @prev: Previous endpoint node or %NULL to get the first
+>   *
+> - * Returns an endpoint firmware node pointer or %NULL if no more endpoints
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: an endpoint firmware node pointer or %NULL if no more endpoints
+>   * are available.
+>   */
+>  struct fwnode_handle *
+> @@ -1030,6 +1064,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
+>   * fwnode_graph_get_port_parent - Return the device fwnode of a port endpoint
+>   * @endpoint: Endpoint firmware node of the port
+>   *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+>   * Return: the firmware node of the device the @endpoint belongs to.
+>   */
+>  struct fwnode_handle *
+> @@ -1051,6 +1088,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_port_parent);
+>   * @fwnode: Endpoint firmware node pointing to the remote endpoint
+>   *
+>   * Extracts firmware node of a remote device the @fwnode points to.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *
+>  fwnode_graph_get_remote_port_parent(const struct fwnode_handle *fwnode)
+> @@ -1071,6 +1111,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_remote_port_parent);
+>   * @fwnode: Endpoint firmware node pointing to the remote endpoint
+>   *
+>   * Extracts firmware node of a remote port the @fwnode points to.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *
+>  fwnode_graph_get_remote_port(const struct fwnode_handle *fwnode)
+> @@ -1084,6 +1127,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_remote_port);
+>   * @fwnode: Endpoint firmware node pointing to the remote endpoint
+>   *
+>   * Extracts firmware node of a remote endpoint the @fwnode points to.
+> + *
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+>   */
+>  struct fwnode_handle *
+>  fwnode_graph_get_remote_endpoint(const struct fwnode_handle *fwnode)
+> @@ -1111,8 +1157,11 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
+>   * @endpoint: identifier of the endpoint node under the port node
+>   * @flags: fwnode lookup flags
+>   *
+> - * Return the fwnode handle of the local endpoint corresponding the port and
+> - * endpoint IDs or NULL if not found.
+> + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
+> + * pointer.
+> + *
+> + * Return: the fwnode handle of the local endpoint corresponding the port and
+> + * endpoint IDs or %NULL if not found.
+>   *
+>   * If FWNODE_GRAPH_ENDPOINT_NEXT is passed in @flags and the specified endpoint
+>   * has not been found, look for the closest endpoint ID greater than the
+> @@ -1120,9 +1169,6 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
+>   *
+>   * Does not return endpoints that belong to disabled devices or endpoints that
+>   * are unconnected, unless FWNODE_GRAPH_DEVICE_DISABLED is passed in @flags.
+> - *
+> - * The returned endpoint needs to be released by calling fwnode_handle_put() on
+> - * it when it is not needed any more.
+>   */
+>  struct fwnode_handle *
+>  fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+> @@ -1328,7 +1374,8 @@ EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
+>   * @fwnode and other device nodes. @match will be used to convert the
+>   * connection description to data the caller is expecting to be returned
+>   * through the @matches array.
+> - * If @matches is NULL @matches_len is ignored and the total number of resolved
+> + *
+> + * If @matches is %NULL @matches_len is ignored and the total number of resolved
+>   * matches is returned.
+>   *
+>   * Return: Number of matches resolved, or negative errno.
+
+-- 
+Kind regards,
+
+Sakari Ailus
