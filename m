@@ -2,38 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7302B69AAFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E1669AB01
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjBQMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S229673AbjBQMG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBQMFN (ORCPT
+        with ESMTP id S229564AbjBQMGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:05:13 -0500
-Received: from mailout1n.rrzn.uni-hannover.de (mailout1n.rrzn.uni-hannover.de [130.75.2.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D64644DA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:05:10 -0800 (PST)
-Received: from beifus.sra.uni-hannover.de (lab.sra.uni-hannover.de [130.75.33.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailout1n.rrzn.uni-hannover.de (Postfix) with ESMTPSA id D48F7533;
-        Fri, 17 Feb 2023 13:05:09 +0100 (CET)
-From:   Alexander Halbuer <halbuer@sra.uni-hannover.de>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Alexander Halbuer <halbuer@sra.uni-hannover.de>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH] mm, page_alloc: batch cma update on pcp buffer refill
-Date:   Fri, 17 Feb 2023 13:05:04 +0100
-Message-Id: <20230217120504.87043-1-halbuer@sra.uni-hannover.de>
-X-Mailer: git-send-email 2.39.2
+        Fri, 17 Feb 2023 07:06:55 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F88644DD;
+        Fri, 17 Feb 2023 04:06:53 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PJ9R10kjGzDsWL;
+        Fri, 17 Feb 2023 20:02:05 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 17 Feb
+ 2023 20:06:49 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <alexander.shishkin@linux.intel.com>, <tglx@linutronix.de>,
+        <peterz@infradead.org>, <tiwai@suse.de>, <jolsa@kernel.org>,
+        <vbabka@suse.cz>, <keescook@chromium.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <namhyung@kernel.org>, <bp@alien8.de>,
+        <bhe@redhat.com>, <eric.devolder@oracle.com>, <hpa@zytor.com>,
+        <jroedel@suse.de>, <dave.hansen@linux.intel.com>
+CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liwei391@huawei.com>, <x86@kernel.org>, <xiexiuqi@huawei.com>
+Subject: [RFC PATCH v4] x86/kdump: terminate watchdog NMI interrupt to avoid kdump crashes
+Date:   Fri, 17 Feb 2023 20:06:04 +0800
+Message-ID: <20230217120604.435608-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.7 at mailout1n
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -42,161 +50,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As proposed by Vlastimil Babka [1] this is an extension to the previous patch
-"mm: reduce lock contention of pcp buffer refill". This version also moves the
-is_migrate_cma() check from the critical section to the loop below.
+If the cpu panics within the NMI interrupt context, there could be
+unhandled NMI interrupts in the background which are blocked by processor
+until next IRET instruction executes. Since that, it prevents nested
+NMI handler execution.
 
-The optimization has several advantages:
-- Less time in critical section
-- Batching update of NR_FREE_CMA_PAGES into a single call to
-  mod_zone_page_state()
-- Utilizing cache locality of the related struct page when doing the cma check
-  is_migrate_cma() and the sanity check check_pcp_refill() in the same loop
+In case of IRET execution during kdump reboot and no proper NMIs handler
+registered at that point (such as during EFI loader), we need to ensure
+watchdog no work any more, or kdump would crash later. So call
+perf_event_exit_cpu() at the very last moment in the panic shutdown.
 
-However, this change only affects performance with CONFIG_CMA=true which
-may not be the common case. Another possibly negative effect is that the
-actual update of NR_FREE_CMA_PAGES is delayed beyond the release of the
-zone lock resulting in a short time span of inaccuracy between the
-counter and the actual number of cma pages in the zone.
+!! Here I know it's not allowed to call perf_event_exit_cpu() within nmi
+context, because of mutex_lock, smp_call_function and so on.
+Is there any experts know about the similar function which allowed to call
+within atomic context (Neither x86_pmu_disable() nor x86_pmu_disable_all()
+do work after my practice)?
 
-The tables below compare this patch with the initial one using a
-parallel allocation benchmark. The used kernel config is based on the default
-debian config but with CONFIG_INIT_ON_ALLOC_DEFAULT_ON=FALSE and
-CONFIG_CMA=TRUE. The benchmarks have been performed with the default sanity
-checks enabled as the patch "mm, page_alloc: reduce page alloc/free sanity
-checks" [2] was not enabled on my test branch.
-The given times are average allocation times. The improvement is not
-significant, but the general trend is visible.
+Thank you in advance.
 
-Hopefully, without sanity checks and disabled cma, a compiler will be able
-to optimize away the second loop entirely.
+Here provide one of test case to reproduce the concerned issue:
+  1. # cat uncorrected
+     CPU 1 BANK 4
+     STATUS uncorrected 0xc0
+     MCGSTATUS  EIPV MCIP
+     ADDR 0x1234
+     RIP 0xdeadbabe
+     RAISINGCPU 0
+     MCGCAP SER CMCI TES 0x6
+  2. # modprobe mce_inject
+  3. # mce-inject uncorrected
 
-[1] https://lore.kernel.org/lkml/1d468148-936f-8816-eb71-1662f2d4945b@suse.cz/
-[2] https://lore.kernel.org/linux-mm/20230216095131.17336-1-vbabka@suse.cz/
+Mce-inject would trigger kernel panic under NMI interrupt context. In
+addition, we need another NMI interrupt raise (such as from watchdog)
+during panic process. Set proper watchdog threshold value and/or add an
+artificial delay to make sure watchdog interrupt raise during the panic
+procedure and the involved issue would occur.
 
-Normal Pages
-+-------+---------+---------+---------+
-| Cores | Patch 1 | Patch 2 | Patch 2 |
-|       |    (ns) |    (ns) |    Diff |
-+-------+---------+---------+---------+
-|     1 |     132 |     129 | (-2.3%) |
-|     2 |     147 |     145 | (-1.4%) |
-|     3 |     148 |     147 | (-0.7%) |
-|     4 |     175 |     173 | (-1.1%) |
-|     6 |     263 |     255 | (-3.0%) |
-|     8 |     347 |     337 | (-2.9%) |
-|    10 |     432 |     421 | (-2.5%) |
-|    12 |     516 |     505 | (-2.1%) |
-|    14 |     604 |     590 | (-2.3%) |
-|    16 |     695 |     680 | (-2.2%) |
-|    20 |     869 |     844 | (-2.9%) |
-|    24 |    1043 |    1015 | (-2.7%) |
-+-------+---------+---------+---------+
-
-Huge Pages
-+-------+---------+---------+---------+
-| Cores | Patch 1 | Patch 2 | Patch 2 |
-|       |    (ns) |    (ns) |    Diff |
-+-------+---------+---------+---------+
-|     1 |    3177 |    3133 | (-1.4%) |
-|     2 |    3486 |    3471 | (-0.4%) |
-|     3 |    3644 |    3634 | (-0.3%) |
-|     4 |    3669 |    3643 | (-0.7%) |
-|     6 |    3587 |    3578 | (-0.3%) |
-|     8 |    3635 |    3621 | (-0.4%) |
-|    10 |    4015 |    3960 | (-1.4%) |
-|    12 |    4681 |    4510 | (-3.7%) |
-|    14 |    5398 |    5180 | (-4.0%) |
-|    16 |    6239 |    5891 | (-5.6%) |
-|    20 |    7864 |    7435 | (-5.5%) |
-|    24 |    9011 |    8971 | (-0.4%) |
-+-------+---------+---------+---------+
-
-Reported-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Alexander Halbuer <halbuer@sra.uni-hannover.de>
+Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 ---
- mm/page_alloc.c | 48 ++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 36 insertions(+), 12 deletions(-)
+  v1: add dummy NMI interrupt handler in EFI loader
+  v2: tidy up changelog, add comments (by Ingo Molnar)
+  v3: add iret_to_self() to deal with blocked NMIs in advance
+  v4: call perf_event_exit_cpu() to terminate watchdog in panic shutdown
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 0745aedebb37..f82a59eeb4fe 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3119,17 +3119,17 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
- {
- 	unsigned long flags;
- 	int i, allocated = 0;
-+	int cma_pages = 0;
-+	struct list_head *prev_tail = list->prev;
-+	struct page *pos, *n;
- 
- 	spin_lock_irqsave(&zone->lock, flags);
- 	for (i = 0; i < count; ++i) {
--		struct page *page = __rmqueue(zone, order, migratetype,
--								alloc_flags);
-+		struct page *page =
-+			__rmqueue(zone, order, migratetype, alloc_flags);
- 		if (unlikely(page == NULL))
- 			break;
- 
--		if (unlikely(check_pcp_refill(page, order)))
--			continue;
--
- 		/*
- 		 * Split buddy pages returned by expand() are received here in
- 		 * physical page order. The page is added to the tail of
-@@ -3141,20 +3141,44 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
- 		 * pages are ordered properly.
- 		 */
- 		list_add_tail(&page->pcp_list, list);
--		allocated++;
--		if (is_migrate_cma(get_pcppage_migratetype(page)))
--			__mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
--					      -(1 << order));
- 	}
- 
- 	/*
--	 * i pages were removed from the buddy list even if some leak due
--	 * to check_pcp_refill failing so adjust NR_FREE_PAGES based
--	 * on i. Do not confuse with 'allocated' which is the number of
-+	 * i pages were removed from the buddy list so adjust NR_FREE_PAGES
-+	 * based on i. Do not confuse with 'allocated' which is the number of
- 	 * pages added to the pcp list.
- 	 */
- 	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
-+
- 	spin_unlock_irqrestore(&zone->lock, flags);
+ arch/x86/kernel/crash.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index 305514431f26..f46df94bbdad 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -25,6 +25,7 @@
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/memblock.h>
++#include <linux/perf_event.h>
+
+ #include <asm/processor.h>
+ #include <asm/hardirq.h>
+@@ -170,6 +171,15 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
+ #ifdef CONFIG_HPET_TIMER
+ 	hpet_disable();
+ #endif
 +
 +	/*
-+	 * Pages are appended to the pcp list without checking to reduce the
-+	 * time holding the zone lock. Checking the appended pages happens right
-+	 * after the critical section while still holding the pcp lock.
++	 * If the cpu panics within the NMI interrupt context,
++	 * we need to ensure no more NMI interrupts blocked by
++	 * processor. In case of IRET execution during kdump
++	 * path and no proper NMIs handler registered at that
++	 * point, here terminate watchdog in panic shutdown.
 +	 */
-+	pos = list_first_entry(prev_tail, struct page, pcp_list);
-+	list_for_each_entry_safe_from(pos, n, list, pcp_list) {
-+		/*
-+		 * Count number of cma pages to batch update of
-+		 * NR_FREE_CMA_PAGES into a single function call.
-+		 */
-+		if (is_migrate_cma(get_pcppage_migratetype(pos)))
-+			cma_pages++;
-+
-+		if (unlikely(check_pcp_refill(pos, order))) {
-+			list_del(&pos->pcp_list);
-+			continue;
-+		}
-+
-+		allocated++;
-+	}
-+
-+	if (cma_pages > 0) {
-+		mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
-+				    -(cma_pages << order));
-+	}
-+
- 	return allocated;
++	perf_event_exit_cpu(smp_processor_id());
+ 	crash_save_cpu(regs, safe_smp_processor_id());
  }
- 
--- 
-2.39.2
+
+--
+2.25.1
 
