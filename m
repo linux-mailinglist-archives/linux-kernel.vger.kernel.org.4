@@ -2,122 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDEF69AB3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C769069AB3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjBQMSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        id S229946AbjBQMSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBQMSX (ORCPT
+        with ESMTP id S229889AbjBQMSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:18:23 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F248566044;
-        Fri, 17 Feb 2023 04:18:22 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AF3965C0145;
-        Fri, 17 Feb 2023 07:18:19 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Feb 2023 07:18:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676636299; x=1676722699; bh=vPqiFFQO7x
-        8SCHhgC4aLKlPDdfJ2gCkxCnt3cyUKqqQ=; b=r/MAzjUs2/7KqiKLwhsbhH5TDc
-        pWEsepg5H1w//MrmUdOVzOiAiN4C4wxwE1h2xYkmCgH2qMpw6VC0UECP4H4E4e67
-        Bdaau1rMHvVpfKEF1Jo4/6M9CG2NvnYHIGM4ogBCUzlRx/fa0aHhepwEeZ2THiYT
-        gfxzUHhvAJ5qVLtb8FaulXHD7i51N8zgITpHwIADG8scSAgSHVbRyZ4H5ufCwxxb
-        LhnfMe1ofBcCchQY9k+pgbP3gR49FiLJIYDpCrC4KaVI6LmeKkxGnKW4IeqeVfb6
-        LOANtUfnIkqMayEbkkFwAAgw9R6DGRRdYs5IB0qqIihbRovASB5kooqRHfYg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676636299; x=1676722699; bh=vPqiFFQO7x8SCHhgC4aLKlPDdfJ2
-        gCkxCnt3cyUKqqQ=; b=sKZFe/UiRExLtypB8/KpdIxqzEj4+dg6TYKtCO4p46MI
-        TRwyrvBdyM83zGX2Sz9rnZJDMjmxAt9j8yyITJ1bVhBh5jgZw8ehUS+rQpUsTtFX
-        9y+iMXVmQ+OQzKoDR23m251ov5NRfAhMebDWVs+nCEmVBpte1Z+lTwR5lRVm33vS
-        8Fd3oBJxNQ0wxo6Lp4G4gOn/L4mEMXKcbELqYaIMqaa8/rexFGagixtqfUTgrCvm
-        78QrOcumDbiVHjNwcELJdhW3SG3bHj90eF5I+/5OBvqIcf8hU7371hPANCz1TthV
-        nAZN1oprkKyYFkRugIQ6BXMOhVpLOuU+wWoLARHqMw==
-X-ME-Sender: <xms:i3DvY7Lw5ZW76FGqoIwRvEZFt701vL-WVe446mQ7jd3i-ZXJ7G1_RA>
-    <xme:i3DvY_KDNfGBvodwNWeDWWz5Op3yvLypbz0708pLsvUd9r_cXVFD-2KRH7alvQgWQ
-    nPhZZkpcFeILfpLEyQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:i3DvYzvyzD7iW4Rjd-LKFbGb1O6CWfO__VYSilDkQdtFI2DnYmh9GA>
-    <xmx:i3DvY0aRK5xi2rSl-_taCEJgttzyTCDwLCs-Y6MbonNkuCXZRNRJ_g>
-    <xmx:i3DvYyaD3X8L9hNZobVHFgW9P8mCti9pJe5rJdtwp_k2vpF_tXhN5g>
-    <xmx:i3DvY4mP_y6r8GLQGTmQFP0tLv4Nv0SMFm7lcMHhP5zW8UWwdqygkA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 513F1B60086; Fri, 17 Feb 2023 07:18:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <a6f0f854-6ee2-4535-825a-b967e37ea221@app.fastmail.com>
-In-Reply-To: <4e88fae65e85366bfc5d728c0e4c47133c7b9523.camel@realtek.com>
-References: <20230217095910.2480356-1-arnd@kernel.org>
- <4e88fae65e85366bfc5d728c0e4c47133c7b9523.camel@realtek.com>
-Date:   Fri, 17 Feb 2023 13:17:59 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ping-Ke Shih" <pkshih@realtek.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Kalle Valo" <kvalo@kernel.org>,
-        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>,
-        "rtl8821cerfe2@gmail.com" <rtl8821cerfe2@gmail.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Eric Dumazet" <edumazet@google.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] wifi: rtl8xxxu: add LEDS_CLASS dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 07:18:53 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27226604F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:18:51 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id a2-20020a056602148200b007404263f2faso235347iow.21
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:18:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3wjKkIIUXCi57ViLebZZIDh9oWKEiXoND5Lk++abfRI=;
+        b=fCCDm6GMVRfKrxwfOgWidk6hFNK/5atCm8fwMGd1K9qDVN9PmbUCuq+sAIBfKdKbtv
+         TO9TUpuFtfJVTUqmAz4YS38O1mzITsMvOL9rEdmrYN6MrbQss8DFqDS5pZ8jHFvyH9MD
+         rUiQMAimeYxZOsZvFOvFz2kdeehgQtge8Yr7OJNACPVEpUjn3GN+4owpdfvJuNrKmAvW
+         NB6qiigyZh8OhO3zjZflFyDJkQdhHEvZLeJhOgvR8RzzN74Z8h6TZbGj9Fx0mG/zOZ/5
+         2ue7Yy3f7i2Rb7eUn7B00+inCRDxZzD9DCqBT4DGPFxMyhb9Xujm8+KCHNWoCNTWNQ8Z
+         wzUg==
+X-Gm-Message-State: AO0yUKW8enSVQJxEEfRVELO0884nSC/Jfl03Wwzsrj24z5MYPwVfg8b5
+        6YWHWGSMDDp1vflsrctY3UJ4Ew6JXkJehUFMMUy8TyGO6vry
+X-Google-Smtp-Source: AK7set9ANx5RYXxJHOuQ3jbiisOvgUrhKeK0Qz9erBBYL3PaeATLM5Z/q0eo/zHBqMV8Xn2UE+poI8d29NADuLvQuSyZH5583arj
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1304:b0:314:24e2:5189 with SMTP id
+ g4-20020a056e02130400b0031424e25189mr158674ilr.0.1676636331204; Fri, 17 Feb
+ 2023 04:18:51 -0800 (PST)
+Date:   Fri, 17 Feb 2023 04:18:51 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0674605f4e450c3@google.com>
+Subject: [syzbot] [f2fs?] possible deadlock in f2fs_get_node_info
+From:   syzbot <syzbot+ad111ebee58835908498@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023, at 12:50, Ping-Ke Shih wrote:
-> On Fri, 2023-02-17 at 10:59 +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
->> b/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
->> index 091d3ad98093..2eed20b0988c 100644
->> --- a/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
->> +++ b/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
->> @@ -5,6 +5,7 @@
->>  config RTL8XXXU
->>         tristate "Realtek 802.11n USB wireless chips support"
->>         depends on MAC80211 && USB
->> +       depends on LEDS_CLASS
->
-> With 'depends on', this item will disappear if LEDS_CLASS isn't selected.
-> Would it use 'select' instead?
+Hello,
 
-In general, 'select' is for hidden symbols, not user visible ones.
-The main problem is mixing 'select' and 'depends on', as this
-leads to circular dependencies. With LEDS_CLASS there is unfortunately
-already a mix of the two that can be hard to clean up, but
-'depends on' is usually the safer bet to avoid causing more
-problems.
+syzbot found the following issue on:
 
-For wireless drivers, you can also use MAC80211_LEDS to abstract
-some of this, but that is probably a larger rework.
+HEAD commit:    ceaa837f96ad Linux 6.2-rc8
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b3b900c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d9381ac81f4ac15
+dashboard link: https://syzkaller.appspot.com/bug?extid=ad111ebee58835908498
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ad111ebee58835908498@syzkaller.appspotmail.com
+
+WARNING: possible circular locking dependency detected
+6.2.0-rc8-syzkaller #0 Not tainted
+------------------------------------------------------
+kswapd1/111 is trying to acquire lock:
+ffff88806914b130 (&nm_i->nat_tree_lock){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2188 [inline]
+ffff88806914b130 (&nm_i->nat_tree_lock){++++}-{3:3}, at: f2fs_get_node_info+0x1ac/0x1070 fs/f2fs/node.c:564
+
+but task is already holding lock:
+ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: try_to_freeze include/linux/freezer.h:56 [inline]
+ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: try_to_freeze include/linux/freezer.h:51 [inline]
+ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0xb88/0x1530 mm/vmscan.c:7165
+
+which lock already depends on the new lock.
 
 
-    Arnd
+the existing dependency chain (in reverse order) is:
+
+-> #2 (fs_reclaim){+.+.}-{0:0}:
+       __fs_reclaim_acquire mm/page_alloc.c:4674 [inline]
+       fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4688
+       might_alloc include/linux/sched/mm.h:271 [inline]
+       prepare_alloc_pages+0x159/0x570 mm/page_alloc.c:5320
+       __alloc_pages+0x149/0x5b0 mm/page_alloc.c:5538
+       __folio_alloc+0x16/0x40 mm/page_alloc.c:5581
+       vma_alloc_folio+0x155/0x870 mm/mempolicy.c:2248
+       alloc_page_vma include/linux/gfp.h:284 [inline]
+       do_anonymous_page mm/memory.c:4074 [inline]
+       handle_pte_fault mm/memory.c:4929 [inline]
+       __handle_mm_fault+0x1822/0x3c90 mm/memory.c:5073
+       handle_mm_fault+0x1b6/0x850 mm/memory.c:5219
+       do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+       copy_user_short_string+0xd/0x40 arch/x86/lib/copy_user_64.S:232
+       copy_user_generic arch/x86/include/asm/uaccess_64.h:37 [inline]
+       raw_copy_to_user arch/x86/include/asm/uaccess_64.h:58 [inline]
+       _copy_to_user lib/usercopy.c:34 [inline]
+       _copy_to_user+0x127/0x150 lib/usercopy.c:27
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       f2fs_ioc_get_encryption_pwsalt+0x2b2/0x370 fs/f2fs/file.c:2365
+       __f2fs_ioctl+0x29f1/0xaaf0 fs/f2fs/file.c:4169
+       f2fs_compat_ioctl+0x399/0x630 fs/f2fs/file.c:4867
+       __do_compat_sys_ioctl+0x255/0x2b0 fs/ioctl.c:968
+       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+       entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+-> #1 (&sbi->sb_lock
+){++++}-{3:3}:
+       down_write+0x94/0x220 kernel/locking/rwsem.c:1562
+       f2fs_down_write fs/f2fs/f2fs.h:2213 [inline]
+       f2fs_handle_error+0x8e/0x200 fs/f2fs/super.c:3926
+       f2fs_check_nid_range.part.0+0x4d/0x60 fs/f2fs/node.c:39
+       f2fs_check_nid_range fs/f2fs/node.c:2278 [inline]
+       add_free_nid.isra.0+0x781/0x940 fs/f2fs/node.c:2285
+       scan_nat_page fs/f2fs/node.c:2387 [inline]
+       __f2fs_build_free_nids+0x5b5/0xe10 fs/f2fs/node.c:2493
+       f2fs_build_free_nids fs/f2fs/node.c:2531 [inline]
+       f2fs_build_node_manager+0x2007/0x2fb0 fs/f2fs/node.c:3316
+       f2fs_fill_super+0x3ade/0x7680 fs/f2fs/super.c:4334
+       mount_bdev+0x351/0x410 fs/super.c:1359
+       legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+       vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
+       do_new_mount fs/namespace.c:3145 [inline]
+       path_mount+0x132a/0x1e20 fs/namespace.c:3475
+       do_mount fs/namespace.c:3488 [inline]
+       __do_sys_mount fs/namespace.c:3697 [inline]
+       __se_sys_mount fs/namespace.c:3674 [inline]
+       __ia32_sys_mount+0x282/0x300 fs/namespace.c:3674
+       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+       entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+-> #0 (&nm_i->nat_tree_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       down_read+0x9c/0x450 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2188 [inline]
+       f2fs_get_node_info+0x1ac/0x1070 fs/f2fs/node.c:564
+       __write_node_page+0x89f/0x2140 fs/f2fs/node.c:1616
+       f2fs_write_node_page+0x2c/0x40 fs/f2fs/node.c:1725
+       pageout+0x38a/0xa70 mm/vmscan.c:1298
+       shrink_folio_list+0x2bf3/0x3a60 mm/vmscan.c:1947
+       shrink_inactive_list mm/vmscan.c:2526 [inline]
+       shrink_list mm/vmscan.c:2767 [inline]
+       shrink_lruvec+0xd0e/0x27a0 mm/vmscan.c:5954
+       shrink_node_memcgs mm/vmscan.c:6141 [inline]
+       shrink_node+0x8f2/0x1f40 mm/vmscan.c:6172
+       kswapd_shrink_node mm/vmscan.c:6961 [inline]
+       balance_pgdat+0x8f5/0x1530 mm/vmscan.c:7151
+       kswapd+0x70b/0xfc0 mm/vmscan.c:7411
+       kthread+0x2e8/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+other info that might help us debug this:
+
+Chain exists of:
+  &nm_i->nat_tree_lock --> &sbi->sb_lock --> fs_reclaim
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(fs_reclaim);
+                               lock(&sbi->sb_lock);
+                               lock(fs_reclaim);
+  lock(&nm_i->nat_tree_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by kswapd1/111:
+ #0: ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: try_to_freeze include/linux/freezer.h:56 [inline]
+ #0: ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: try_to_freeze include/linux/freezer.h:51 [inline]
+ #0: ffffffff8c8d7080 (fs_reclaim){+.+.}-{0:0}, at: balance_pgdat+0xb88/0x1530 mm/vmscan.c:7165
+
+stack backtrace:
+CPU: 1 PID: 111 Comm: kswapd1 Not tainted 6.2.0-rc8-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ down_read+0x9c/0x450 kernel/locking/rwsem.c:1509
+ f2fs_down_read fs/f2fs/f2fs.h:2188 [inline]
+ f2fs_get_node_info+0x1ac/0x1070 fs/f2fs/node.c:564
+ __write_node_page+0x89f/0x2140 fs/f2fs/node.c:1616
+ f2fs_write_node_page+0x2c/0x40 fs/f2fs/node.c:1725
+ pageout+0x38a/0xa70 mm/vmscan.c:1298
+ shrink_folio_list+0x2bf3/0x3a60 mm/vmscan.c:1947
+ shrink_inactive_list mm/vmscan.c:2526 [inline]
+ shrink_list mm/vmscan.c:2767 [inline]
+ shrink_lruvec+0xd0e/0x27a0 mm/vmscan.c:5954
+ shrink_node_memcgs mm/vmscan.c:6141 [inline]
+ shrink_node+0x8f2/0x1f40 mm/vmscan.c:6172
+ kswapd_shrink_node mm/vmscan.c:6961 [inline]
+ balance_pgdat+0x8f5/0x1530 mm/vmscan.c:7151
+ kswapd+0x70b/0xfc0 mm/vmscan.c:7411
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
