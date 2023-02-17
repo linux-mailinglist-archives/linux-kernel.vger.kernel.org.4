@@ -2,128 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A7569A8B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CDD69A8BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjBQJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
+        id S229936AbjBQJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBQJ6Z (ORCPT
+        with ESMTP id S229684AbjBQJ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:58:25 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303A3F766
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676627895; x=1708163895;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=p+cYQG0JeB2tj2iGZFqrQ2nipqXUkgH/8lWd3cyiDFo=;
-  b=bSWSqgYG5yQFwSTIJUV0Kani8/SHfpN+aPgb4g/ier4C1WAGKjIwjgdq
-   ZXObcRwxnHg2harPnPAPJnGgc5TWkEz/kFpwAR2k+t83LVufUypAcRbzE
-   gbN4fW8pH/MEvKXT+vSgIuLO8ai0otnzoqk4h2i5w0d0GmCMOYUrKkTuX
-   ZpcinQLmCgCVzXDhocQpbI6EQ2pr3fPTx1xx/hfxpAlyfPeclg4k3GVe3
-   ZuQyJTnY0VunFrix2agQTWRdWkOluu0Uq/TdLvPdSumTz9O/SJD99SqyG
-   eZyLqJj2P+ByhoE5EBRBqm41Fn9UyPFJcGeVVgJOOHeToawTnFW8HDUNk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="334152914"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="334152914"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 01:58:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="759307458"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="759307458"
-Received: from akocherg-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.53.1])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 01:58:10 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH] drm/i915: Make kobj_type structures constant
-In-Reply-To: <87sff5293w.fsf@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230216-kobj_type-i915-v1-1-ca65c9b93518@weissschuh.net>
- <87sff5293w.fsf@intel.com>
-Date:   Fri, 17 Feb 2023 11:58:08 +0200
-Message-ID: <877cwgzk9b.fsf@intel.com>
+        Fri, 17 Feb 2023 04:58:28 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C98A627C2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:58:20 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 8-20020a05600c230800b003ddca7a2bcbso479818wmo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:58:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sEERacWPQn5HQJtCzUxWfR99VAovvx/3XuSHotdsRHA=;
+        b=VPfE02aNCEYuXI0BCFH/J/s0URGJAw1PLavr3tDV711YPEeWPH98hBJRIwroJjxZgn
+         aG9CLxjlfVeTp4SQKm4/1lwUeJplMDe28IES8FHuuD7z1ixLRyMevmPWe3SooYBLD9pB
+         LXnanCo4IdXuRY0SewX4G9qwGCPHSH58mMiKW7bIrZa8q+9WrRST08jpP1hDUWfKvOnR
+         lv+/26UBPKPACPwtY1bhddDx5JbDSqJmCG+HWALfR0H0zMzyocffpIKB97t7BjU5zwxZ
+         PL9OcIaU2zjQblKbCPIG9r49WbIxPuqsGdY6ILhmrqi340VCv437cJjyIYuRoFzbiTUO
+         PRZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sEERacWPQn5HQJtCzUxWfR99VAovvx/3XuSHotdsRHA=;
+        b=8JtjynPaCnDpf1WwXV+bOTkEpKRCAMX6f4fJ2By0AAxWXBpaqqODgZ4Cd0M9V/Kcw2
+         En80d2NMFz6FW4d1kVzy1mebeFodfR4Wf65CrRsG0JSGYJFKxhSfYxgg97EC1RsAPg2q
+         CHdCT3H9lmziPtqBruXG9K9BGqq3iDUVutB/MPe3V+h8S6Vr+4hu+M7GfzI3mSd7ydjT
+         24wu2Yet1EbZEqRQrploVHJkFumU5toPhmzlRDchzxhd7CF0BlQEr6/PwijZ2iekHN6i
+         T4iHYAlTO9GuExedhVW1oUaPaKT5GqtXNB3j/ggbEq28f6XgPOaesMsWeGo5UfO+rPyo
+         ivUQ==
+X-Gm-Message-State: AO0yUKX4F4SQpGZMnnsgilofy3kvsI2jG/p9n5NdybOuta0IhdB3PFOK
+        wE2g/Qwm9k6uPWkXmttFrEpm0g==
+X-Google-Smtp-Source: AK7set98dRwRGA+mF2mTJNO2SDS7s1bSCUU7DPOpc9FRVOv722JlsCbRvWAIKDMtjxzMLB2DG+Hb6w==
+X-Received: by 2002:a05:600c:130e:b0:3e0:9fe:34dd with SMTP id j14-20020a05600c130e00b003e009fe34ddmr769809wmf.4.1676627899023;
+        Fri, 17 Feb 2023 01:58:19 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003dc1d668866sm1172044wms.10.2023.02.17.01.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 01:58:18 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 17 Feb 2023 10:58:15 +0100
+Subject: [PATCH] MAINTAINERS: Add myself as co-maintainer for DRM Panels
+ drivers
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230216-topic-drm-panel-upstream-maintainance-v1-1-ae1cf9268217@linaro.org>
+X-B4-Tracking: v=1; b=H4sIALZP72MC/x2NQQrDMAwEvxJ8riBx2xD6ldKDYquNwFaM7IRCy
+ N8retjD7MLs4SopU3WP7nBKO1dexWC4dC4sKB8CjsbO9/7a+2GEthYOEDVDQaEEW6lNCTNkZGk
+ WlEAwxntA8lMcppsz14yVYFbbFrPJlpKVRenN3//583WeP+ORfpeMAAAA
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> On Thu, 16 Feb 2023, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
->> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
->> the driver core allows the usage of const struct kobj_type.
->>
->> Take advantage of this to constify the structure definitions to prevent
->> modification at runtime.
->>
->> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->
-> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Add myself as co-maintainer for DRM Panel Drivers in order to help
+reviewing and getting new panels drivers merged.
 
-And pushed to drm-intel-gt-next, thanks for the patch.
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-BR,
-Jani.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index be167c695c64..18fd7548a49b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7043,6 +7043,7 @@ F:	drivers/gpu/drm/xlnx/
+ 
+ DRM PANEL DRIVERS
+ M:	Thierry Reding <thierry.reding@gmail.com>
++M:	Neil Armstrong <neil.armstrong@linaro.org>
+ R:	Sam Ravnborg <sam@ravnborg.org>
+ L:	dri-devel@lists.freedesktop.org
+ S:	Maintained
 
->
->> ---
->>  drivers/gpu/drm/i915/gt/intel_gt_sysfs.c | 2 +-
->>  drivers/gpu/drm/i915/gt/sysfs_engines.c  | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c b/drivers/gpu/drm/=
-i915/gt/intel_gt_sysfs.c
->> index 9486dd3bed99..df15b17caf89 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_gt_sysfs.c
->> @@ -71,7 +71,7 @@ static void kobj_gt_release(struct kobject *kobj)
->>  {
->>  }
->>=20=20
->> -static struct kobj_type kobj_gt_type =3D {
->> +static const struct kobj_type kobj_gt_type =3D {
->>  	.release =3D kobj_gt_release,
->>  	.sysfs_ops =3D &kobj_sysfs_ops,
->>  	.default_groups =3D id_groups,
->> diff --git a/drivers/gpu/drm/i915/gt/sysfs_engines.c b/drivers/gpu/drm/i=
-915/gt/sysfs_engines.c
->> index f2d9858d827c..b5e0fe5dbf6c 100644
->> --- a/drivers/gpu/drm/i915/gt/sysfs_engines.c
->> +++ b/drivers/gpu/drm/i915/gt/sysfs_engines.c
->> @@ -421,7 +421,7 @@ static void kobj_engine_release(struct kobject *kobj)
->>  	kfree(kobj);
->>  }
->>=20=20
->> -static struct kobj_type kobj_engine_type =3D {
->> +static const struct kobj_type kobj_engine_type =3D {
->>  	.release =3D kobj_engine_release,
->>  	.sysfs_ops =3D &kobj_sysfs_ops
->>  };
->>
->> ---
->> base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
->> change-id: 20230216-kobj_type-i915-886bebc36129
->>
->> Best regards,
+---
+base-commit: 9d9019bcea1aac7eed64a1a4966282b6b7b141c8
+change-id: 20230216-topic-drm-panel-upstream-maintainance-6d5cae28d184
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
