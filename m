@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E4A69B50D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222A069B50E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjBQVqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S229874AbjBQVrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBQVqo (ORCPT
+        with ESMTP id S229622AbjBQVrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:46:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF3965696;
-        Fri, 17 Feb 2023 13:46:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 17 Feb 2023 16:47:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47163B20F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:47:29 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9F3FB82B45;
-        Fri, 17 Feb 2023 21:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 290C0C433D2;
-        Fri, 17 Feb 2023 21:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676670384;
-        bh=RawpE5mpSU8yc2/xySzrtzYpZhoqwKb/hsTWXduMG7E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rCI5bC8B2vVqPBRSHcw4jEhqiAl8MuRKSwjXVBMXAI59BYggIz/UBeEoGg9hwyXPm
-         D948Zu1uubn6SCGCggpVTYDzy+MLOt1NtzXbO1sfLhS38bYOSQLVd9t86DB/mssjo8
-         GqClz+wWN09ca8wJGxB6oiOIVZU7SrnHbkkREJf7Kp7+OCYXQ4o3Q/Eb4YTOkKHnm2
-         MdpxeaHk9ECYbgMH4lcNcqnuIL/tkFC57pLO0ShIEBnnJEF7hQqagMUXtNlWtW5iNi
-         D454qIFZJ6rpQDrnwPhvG889xlnJzM0yZnoOQR3wz5FHkBhGUlVS6h7Zw6mdBGPU5x
-         BH2cVIvPr9lBA==
-Date:   Fri, 17 Feb 2023 22:46:21 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: xiic: Remove some dead code
-Message-ID: <Y+/1rR0wGc5E70O0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A0BC91EC01E0;
+        Fri, 17 Feb 2023 22:47:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676670446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=cjE3oxFI8ycKU8s9Z7/bplvRY1Fi3Qg1ejyG5JOZTW8=;
+        b=ixxcCM4ZjeZm/NS262zMm1hHEWcI7oPYLYDGN5v2YhrP+SpsyrRGUuU8EFLGX8pOW7eT2L
+        1otzeD6Wha2m+ClGJikmPWAPlOnO0UALd5D1TG+5o7cRhUbKNB1ZHpm0D8qgIcRb/5lBGY
+        qHFrK1kwuVJBfxeyqWk5zDccDnN7n7s=
+Date:   Fri, 17 Feb 2023 22:47:20 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] x86/mm: Fix use of uninitialized buffer in sme_enable()
+Message-ID: <Y+/16MlEBb53ficg@zn.tnic>
+References: <20230202182538.29352-1-n.zhandarovich@fintech.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T2k9SWCaMMVdEf0J"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9d36938de98dc491425a51a9c07367dd9e448e60.1676457464.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230202182538.29352-1-n.zhandarovich@fintech.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 02, 2023 at 10:25:38AM -0800, Nikita Zhandarovich wrote:
+> cmdline_find_option() may fail before doing any initialization of
+> buffer array. This may lead to unpredictable results when the same
+> buffer is used later in calls to strncmp() function.
+> Fix the issue by initializing the buffer to an empty string.
 
---T2k9SWCaMMVdEf0J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'd prefer if you test cmdline_find_option()'s return value instead and
+return early if -1.
 
-On Wed, Feb 15, 2023 at 11:38:07AM +0100, Christophe JAILLET wrote:
-> wait_for_completion_timeout() never returns negative value.
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Applied to for-next, thanks!
+SVACE is?
 
+> Fixes: 1cd9c22fee3a ("x86/mm/encrypt: Move page table helpers into separate translation unit")
 
---T2k9SWCaMMVdEf0J
-Content-Type: application/pgp-signature; name="signature.asc"
+The proper Fixes commit should be:
 
------BEGIN PGP SIGNATURE-----
+aca20d546214 ("x86/mm: Add support to make use of Secure Memory Encryption")
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv9a0ACgkQFA3kzBSg
-KbbTURAAtZEbY4eI2SEy24N++zA3qqGZIwvkgw4Ikkf1l10zUxrX6VhfdMGAcjGH
-PjlW4RwXvcBhOOsc13ZQp7jf9dOuozh99jt8MUW0irG8XfdUyF1oZCWIF4+zslzX
-NaH6Ft+4OHylNkzLj1V0GJ1kb6GOYpCmn4NWrwSc4c7c7aJQDIUM3f/M5bY2/f0x
-icx+iqsyOz6FXVhWm8F8PeaM+Y9vn9JGAiZkK4reyFylxILt0/uXgxGMnHfXjVgh
-G01oP2JoBAIPqLkJkNy5NKZkMR/PshVYHTxJ/pUB2Jam6nqao8c+wDbGPkqmyBwq
-4aRC1olkGhj1n+t5qyaW/RjXqPS5HL7FCtScLIkP39kjP3iGSBC62ZTKQEFQVyZQ
-Unj1AUuy+DNhvGDU1AHST/XM2reNrFkTvE4BsyRxrHYXdjFnf9nwXMh4tZOw8mS/
-9jFysdo6NwPx6agfFMPwttykD7QFnJnfKIq3SxDe91k2hV4xIkLwhwW5UtR5nmW+
-F9kICYnqkwmFodz755UzNIhiqHLhA1qMMZ6wjc24NP+OIEQX2FhKr7nQqvncnhVg
-9ZKsdEP8fKUcQsa8GcjEcHLGhcbs6Kq43k9lx2W5KQcbNDW7T9gL46YayLAPt5cB
-6COH4gYn+O11cAX6jGYx2MX+aeslMCWJgi+9EJhIs7iq2UPOsg4=
-=oyIq
------END PGP SIGNATURE-----
+Thx.
 
---T2k9SWCaMMVdEf0J--
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
