@@ -2,210 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AADE69A6F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD46869A6F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBQIbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S229740AbjBQIde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBQIaz (ORCPT
+        with ESMTP id S229512AbjBQIdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:30:55 -0500
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E4A5F26A;
-        Fri, 17 Feb 2023 00:30:52 -0800 (PST)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id NCW00046;
-        Fri, 17 Feb 2023 16:30:46 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server id
- 15.1.2507.16; Fri, 17 Feb 2023 16:30:47 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <rdunlap@infradead.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH v2 1/1] scsi: lpfc: Fix double word in comments
-Date:   Fri, 17 Feb 2023 03:30:46 -0500
-Message-ID: <20230217083046.4090-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Fri, 17 Feb 2023 03:33:33 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA6E5ECBF;
+        Fri, 17 Feb 2023 00:33:32 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H7sitp019948;
+        Fri, 17 Feb 2023 08:33:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/M73eNYmXrRUBA9lxigWb3ft+EYJwn1JIdPueC8kays=;
+ b=ID0qUznxOw8xbX3O6hsDJ7GuSDsz/sPI9YzIYm7CaQd6aoVul+KHQ9BG2bxCTYQUp++X
+ Y2iiSyQluCylHZyge9waPL2ShrxKVdMkPfUqDaW/XTdv6ufLAg9lGVy09xSS8iSfzp7S
+ gWkaGn36GUD/KI6bBpXsCrUYEcvpFa0y5+Mi6MZV1J8LDoKP8JMJLNgAgXJJRIvSSOrX
+ Qvry3OSOj0SNpPrwEXSDwHDdbiBffr8bm4Nbl9aNZ+WgDoLxjR5Bf4G5EJQYbYMigFLl
+ /3PfU/Jov5j8rI5iE/tLLFv1O28xeS0q/mNKWqxI8i3+e3TLuwRGW8EUHZA6ZSeuWy0C +Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nt5kur30v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:33:27 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31H8XRpr015355
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:33:27 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 17 Feb 2023 00:33:22 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V3 0/5] Add APSS clock driver support for IPQ5332
+Date:   Fri, 17 Feb 2023 14:03:03 +0530
+Message-ID: <20230217083308.12017-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   2023217163046fd2e3c0399bde243390c32bec64d62b7
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8uhotncwlFJQxc9dDqhxZl9cKZNObyh6
+X-Proofpoint-ORIG-GUID: 8uhotncwlFJQxc9dDqhxZl9cKZNObyh6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_04,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=802 mlxscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 spamscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated word "the" in comments.
+This series adds support for the APSS clock to bump the CPU frequency
+above 800MHz.
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/scsi/lpfc/lpfc_attr.c    | 10 +++++-----
- drivers/scsi/lpfc/lpfc_els.c     |  2 +-
- drivers/scsi/lpfc/lpfc_hbadisc.c |  2 +-
- drivers/scsi/lpfc/lpfc_init.c    |  4 ++--
- drivers/scsi/lpfc/lpfc_mbox.c    |  4 ++--
- drivers/scsi/lpfc/lpfc_nvmet.c   |  2 +-
- drivers/scsi/lpfc/lpfc_sli.c     |  2 +-
- 7 files changed, 13 insertions(+), 13 deletions(-)
+APSS PLL found in the IPQ5332 is of type Stromer Plus. However the
+existing IPQ targets uses the Huayra PLL. So the driver has to
+refactored to accommodate the different PLL types. The first patch in
+the series does the refactoring, which can be independenty merged.
 
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 76c3434f8976..22f2e046e8eb 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -2541,7 +2541,7 @@ lpfc_sriov_hw_max_virtfn_show(struct device *dev,
- 
- /**
-  * lpfc_enable_bbcr_set: Sets an attribute value.
-- * @phba: pointer the the adapter structure.
-+ * @phba: pointer to the adapter structure.
-  * @val: integer attribute value.
-  *
-  * Description:
-@@ -2632,7 +2632,7 @@ lpfc_##attr##_show(struct device *dev, struct device_attribute *attr, \
-  * takes a default argument, a minimum and maximum argument.
-  *
-  * lpfc_##attr##_init: Initializes an attribute.
-- * @phba: pointer the the adapter structure.
-+ * @phba: pointer to the adapter structure.
-  * @val: integer attribute value.
-  *
-  * Validates the min and max values then sets the adapter config field
-@@ -2665,7 +2665,7 @@ lpfc_##attr##_init(struct lpfc_hba *phba, uint val) \
-  * into a function with the name lpfc_hba_queue_depth_set
-  *
-  * lpfc_##attr##_set: Sets an attribute value.
-- * @phba: pointer the the adapter structure.
-+ * @phba: pointer to the adapter structure.
-  * @val: integer attribute value.
-  *
-  * Description:
-@@ -2794,7 +2794,7 @@ lpfc_##attr##_show(struct device *dev, struct device_attribute *attr, \
-  * lpfc_##attr##_init: validates the min and max values then sets the
-  * adapter config field accordingly, or uses the default if out of range
-  * and prints an error message.
-- * @phba: pointer the the adapter structure.
-+ * @phba: pointer to the adapter structure.
-  * @val: integer attribute value.
-  *
-  * Returns:
-@@ -2826,7 +2826,7 @@ lpfc_##attr##_init(struct lpfc_vport *vport, uint val) \
-  * lpfc_##attr##_set: validates the min and max values then sets the
-  * adapter config field if in the valid range. prints error message
-  * and does not set the parameter if invalid.
-- * @phba: pointer the the adapter structure.
-+ * @phba: pointer to the adapter structure.
-  * @val:	integer attribute value.
-  *
-  * Returns:
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 569639dc8b2c..cf55236a22ca 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -8886,7 +8886,7 @@ lpfc_els_rcv_rtv(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
-  * @rrq: Pointer to the rrq struct.
-  *
-  * Build a ELS RRQ command and send it to the target. If the issue_iocb is
-- * Successful the the completion handler will clear the RRQ.
-+ * Successful the completion handler will clear the RRQ.
-  *
-  * Return codes
-  *   0 - Successfully sent rrq els iocb.
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index a6df0a5b4006..32a2181c45f9 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -2459,7 +2459,7 @@ static void lpfc_sli4_fcf_pri_list_del(struct lpfc_hba *phba,
-  * @phba: pointer to lpfc hba data structure.
-  * @fcf_index: the index of the fcf record to update
-  * This routine acquires the hbalock and then set the LPFC_FCF_FLOGI_FAILED
-- * flag so the the round robin slection for the particular priority level
-+ * flag so the round robin slection for the particular priority level
-  * will try a different fcf record that does not have this bit set.
-  * If the fcf record is re-read for any reason this flag is cleared brfore
-  * adding it to the priority list.
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 6eb4085a3a22..02024f2c758f 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -5502,7 +5502,7 @@ lpfc_sli4_async_link_evt(struct lpfc_hba *phba,
- 	bf_set(lpfc_mbx_read_top_link_spd, la,
- 	       (bf_get(lpfc_acqe_link_speed, acqe_link)));
- 
--	/* Fake the the following irrelvant fields */
-+	/* Fake the following irrelvant fields */
- 	bf_set(lpfc_mbx_read_top_topology, la, LPFC_TOPOLOGY_PT_PT);
- 	bf_set(lpfc_mbx_read_top_alpa_granted, la, 0);
- 	bf_set(lpfc_mbx_read_top_il, la, 0);
-@@ -12549,7 +12549,7 @@ lpfc_cpu_affinity_check(struct lpfc_hba *phba, int vectors)
- 			/* Mark CPU as IRQ not assigned by the kernel */
- 			cpup->flag |= LPFC_CPU_MAP_UNASSIGN;
- 
--			/* If so, find a new_cpup thats on the the SAME
-+			/* If so, find a new_cpup thats on the SAME
- 			 * phys_id as cpup. start_cpu will start where we
- 			 * left off so all unassigned entries don't get assgined
- 			 * the IRQ of the first entry.
-diff --git a/drivers/scsi/lpfc/lpfc_mbox.c b/drivers/scsi/lpfc/lpfc_mbox.c
-index 9858b1743769..0dfdc0c4c08c 100644
---- a/drivers/scsi/lpfc/lpfc_mbox.c
-+++ b/drivers/scsi/lpfc/lpfc_mbox.c
-@@ -2509,7 +2509,7 @@ lpfc_sli4_dump_page_a0(struct lpfc_hba *phba, struct lpfcMboxq *mbox)
-  * information via a READ_FCF mailbox command. This mailbox command also is used
-  * to indicate where received unsolicited frames from this FCF will be sent. By
-  * default this routine will set up the FCF to forward all unsolicited frames
-- * the the RQ ID passed in the @phba. This can be overridden by the caller for
-+ * to the RQ ID passed in the @phba. This can be overridden by the caller for
-  * more complicated setups.
-  **/
- void
-@@ -2577,7 +2577,7 @@ lpfc_reg_fcfi(struct lpfc_hba *phba, struct lpfcMboxq *mbox)
-  * information via a READ_FCF mailbox command. This mailbox command also is used
-  * to indicate where received unsolicited frames from this FCF will be sent. By
-  * default this routine will set up the FCF to forward all unsolicited frames
-- * the the RQ ID passed in the @phba. This can be overridden by the caller for
-+ * to the RQ ID passed in the @phba. This can be overridden by the caller for
-  * more complicated setups.
-  **/
- void
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index f7cfac0da9b6..7517dd55fe91 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -1469,7 +1469,7 @@ lpfc_nvmet_cleanup_io_context(struct lpfc_hba *phba)
- 	if (!infop)
- 		return;
- 
--	/* Cycle the the entire CPU context list for every MRQ */
-+	/* Cycle the entire CPU context list for every MRQ */
- 	for (i = 0; i < phba->cfg_nvmet_mrq; i++) {
- 		for_each_present_cpu(j) {
- 			infop = lpfc_get_ctx_list(phba, j, i);
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index edbd81c3b643..c5b69f313af3 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -20804,7 +20804,7 @@ lpfc_log_fw_write_cmpl(struct lpfc_hba *phba, u32 shdr_status,
-  * the offset after the write object mailbox has completed. @size is used to
-  * determine the end of the object and whether the eof bit should be set.
-  *
-- * Return 0 is successful and offset will contain the the new offset to use
-+ * Return 0 is successful and offset will contain the new offset to use
-  * for the next write.
-  * Return negative value for error cases.
-  **/
+For the Stromer PLL separate function clk_stromer_pll_configure is
+introduced, so the 3rd patch in the series depends on the below patch
+https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
+
+DTS patch depends on the IPQ5332 baseport series
+https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
+
+Changes since V2:
+	- Pick up R-b tags and sort the node in DTS
+	- V2 can be found at
+	   https://lore.kernel.org/linux-arm-msm/20230208042850.1687-1-quic_kathirav@quicinc.com/
+
+Changes since V1:
+	- Dropped the patch 5/6, since the fallback mechanism for compatible
+	  is introduced to avoid bloating the of_device_id table
+	- V1 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230202145208.2328032-1-quic_kathirav@quicinc.com/
+
+
+Kathiravan T (5):
+  clk: qcom: apss-ipq-pll: refactor the driver to accommodate different
+    PLL types
+  dt-bindings: clock: qcom,a53pll: add IPQ5332 compatible
+  clk: qcom: apss-ipq-pll: add support for IPQ5332
+  dt-bindings: mailbox: qcom: add compatible for the IPQ5332 SoC
+  arm64: dts: qcom: ipq5332: enable the CPUFreq support
+
+ .../bindings/clock/qcom,a53pll.yaml           |   1 +
+ .../mailbox/qcom,apcs-kpss-global.yaml        |  18 ++-
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  37 ++++++
+ drivers/clk/qcom/apss-ipq-pll.c               | 116 +++++++++++++++---
+ 4 files changed, 147 insertions(+), 25 deletions(-)
+
 -- 
-2.27.0
+2.17.1
 
