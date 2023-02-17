@@ -2,218 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB7769ABB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A3D69ABBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjBQMm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S229605AbjBQMnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjBQMmY (ORCPT
+        with ESMTP id S229524AbjBQMnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:42:24 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDF26A051;
-        Fri, 17 Feb 2023 04:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676637740; x=1708173740;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Nd3sj2gVnzWEhmVAYlV1QIY3H4ahpeDxvqquOqfsu+c=;
-  b=WvNtnczj+5hXqNz/r6EOo5arZDckNMVeFa1B7vwGJ4NEmpUsnNlGrmLN
-   1W+SaByFY05F2mhDVX9hNiLwxibfGkZKZW1fZRCRvZYIDUCJqQidXNVla
-   TuhaEKnauK3CmtT33BFs24FvH6UHUwTuxa0UKXBVzkMNRYtgUrGnavxIR
-   MVQHK0hlPgTUoZ7GNbD6L1UOOKDdsPPOGJeF8HmxOXjtzk+Kp48q/3Z+j
-   5fM8s9Jz6KzSXXtbiKxUN4FbmpZHpIlk1vKRd6cyrvvw2wdQHOVLdtvVR
-   AAeSjoPsyD7HjVRvofljHqadflhIvlvv3JbdC7q67YX7vInPgdJCFJ7H1
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,304,1669100400"; 
-   d="scan'208";a="201115103"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 05:42:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 17 Feb 2023 05:42:18 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 17 Feb 2023 05:42:13 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 3/3] ASoC: mchp-pdmc: fix poc noise at capture startup
-Date:   Fri, 17 Feb 2023 14:41:51 +0200
-Message-ID: <20230217124151.236216-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230217124151.236216-1-claudiu.beznea@microchip.com>
-References: <20230217124151.236216-1-claudiu.beznea@microchip.com>
+        Fri, 17 Feb 2023 07:43:35 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2054.outbound.protection.outlook.com [40.107.102.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49673D0BE;
+        Fri, 17 Feb 2023 04:43:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RKVSsWMicc2WwvPxdC8OPry2/Wn5oGIab1Yf23FjcX+Ip141L/RGbsUQ2Mh6jV2os3E5xJ8go3u1xEseM5Hmlrdhr4eJzHq+Em2QqFC2Tm9+Ei5XOwF0kW0mbM3uqM2jOVvsTnbud9mxDQDMR5r4SMDCn0XdHmOR94w79vKHiTZ8/DxvKxdABKePrMvidiMvm4s7AICLGxox/QykrriWbYS9GDBup+kpa8FfAZzI2mNHuuSJ3xxlH6UkfK0OOW0YzravQ4pKOuznOQxjpNIdegLN9C6v7ocfintcq2eGgwgu+Qe8C5wZJAsfIscUskd4FS61HTronQU8zmFlEPZaqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MuG3aX3TMq2RmxOAy+VfL5J2Fb7NQmKAZG86l2joeVk=;
+ b=VPJHLIiQSiT7n9cJEo3Oo9s8vSoWO43OS8um6aMNrqOWT9upXAsg0g/dj0kQk1RKVvDe7XUoX36r65v4Dcd8TzYpQN4F0taZk8un68nJD6bGu+xROcDD9aSkS6vE32awKKuGJjPe//GydpJGSIYOZSR27rlUIJv6g8iXtHhS7wMgBaBPVJvNIo+PT3SCvIvgs2tqZoz6j63NaiGxTYj6YJi2gCGW5eMc4koF+RR6e1SHFJWtc7KzBtluBHXO9RwhX06IodchxZIO4VAq5ydmAc6sZHNLO4mEYEo9B9qMIs/dOi4oCBoHPJCL3TFvm1Kbidiaj1WYPettLQeCTfEiTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MuG3aX3TMq2RmxOAy+VfL5J2Fb7NQmKAZG86l2joeVk=;
+ b=lSl+FcULk151sgBVdJMDSXAf0KqT/9frOhdxDmNodwXKeqJOw5WOj9POL35wDuYDbbsW7Bmvz9/1tqqu2RHN5CNYfvojKqZ6KbI+uBIuo6iJKt84/T58+vy0wg48nEDMnLwY2rbzUgKIDdkDGNG8f1nHF1VmNfcHlR2ru2YzZHkFQlQb1CMeKQjAJPxIeVu9UlNomVHdjP12e23ihh1MFRmMKcvhaqdGUkF8VFxnv07UbiNob0hluos6VxVAcD37QtCTGh2NX3uZKfXddiRie3b0aTMIflHDhp3T1y5J7WFUh0l32anvCj1PklHwQ+OCDCFS8J7v3F0qPgbmkG8NUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB8366.namprd12.prod.outlook.com (2603:10b6:8:f9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Fri, 17 Feb
+ 2023 12:43:33 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.013; Fri, 17 Feb 2023
+ 12:43:32 +0000
+Date:   Fri, 17 Feb 2023 08:43:31 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Nanyong Sun <sunnanyong@huawei.com>, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, jasowang@redhat.com,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, wangrong68@huawei.com
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+Message-ID: <Y+92c9us3HVjO2Zq@nvidia.com>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+ <Y+7G+tiBCjKYnxcZ@nvidia.com>
+ <20230217051158-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217051158-mutt-send-email-mst@kernel.org>
+X-ClientProxiedBy: BLAP220CA0013.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:208:32c::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB8366:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3d88489-8cd0-47aa-c82c-08db10e49411
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1MXVxrm0Bbx125tvk0uv5aG59Z12A2TAjUB/FDmKk9pTietr/YwWJCP3Cd7NlLOMkD578NAetVgUtTTNuXU1hUFj9VdE+7lft1DBZ9/02NUN6RvCFlf4WZyT/dZ2MZV9OuOsXJxyi7A9eAqQRR6G9IgQ3wHIUX+Riguz75lGrKO6qBdXX2LcNCAHDb2hej2Pl8RoVWZ7v4YQdFD08M6yja5QtTayBArsE6AyuJx8hWGoyBH7qchlha/iMXQ2h0dqFMEx5QwlK0qELOd+rChkEUAV16KRXuof5hAdsnrYMEnVkJQfn5any4wWn1Yv0CNE1liCnSqfRHlq5rUw5yn3M2TSTKjEhWBvaAlnyqAi+1lqUP9CDYn6xSz+mn4kKccP5hiAINauJQV8SrT1pJZ5yFuekSkuk5LbiS0wo+/ZDHawnb8Z+QZr/rcyQW5MbN7qFLAvJ6K8g2qApJ6mMk4kC4YKOF1Rt8ME+nNywTvx3qt4bAiOGWwexchBRiTBrq//1afkzhWf/Bmnf22C4TnIu2Ri4+dWbWwJNol5kLCsSShor8wO9te+UwmnZ6HzBFxdoKcTmr4JCVVF57uRnYBoZ+vU2JDGjyqdKYm6TURijb7OUCVn5N2vW8s0lbXFtRIZbx7D6kiTmfvfTTc7PRCx/jRuH5YcquyTaUeX3AdO0DpRoRePRW4Hfv6giHVvW7LY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199018)(36756003)(83380400001)(66946007)(66556008)(6916009)(66476007)(8676002)(4326008)(38100700002)(6506007)(316002)(41300700001)(6512007)(6486002)(2616005)(186003)(26005)(7416002)(478600001)(86362001)(5660300002)(8936002)(2906002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPXUrjZLB4KQhBgy0hsoSdtRTWlePXaC6Kv1wShq47Xr9uIyNeIBFXoQAMPM?=
+ =?us-ascii?Q?QCP+iFQWzVm45Fo+4YltJ/WhRHPqrVzjwXuiowpG+8FH2dV9lx4Ukn4+UD4w?=
+ =?us-ascii?Q?4M9lEgX6wuohQbG4AfcsjOJRnitJCL0jK9bU0ixItPp7G6eWVcSzL5BBjzwi?=
+ =?us-ascii?Q?VI9my27xSBPeLPooCifF0qCPHoMhK395VH03x5ezC5iWRh7AsivPWjan+sS6?=
+ =?us-ascii?Q?MF6Gell5GoRsS8sisgPXbotDJOcCCEnATnO0aUkOUU+hztqJiuxe66k928ku?=
+ =?us-ascii?Q?i3vO53AfBgKMSlbGpjr/LGgYj6MtbD3Dix6MKX7d09uARcLHZ9nCehpCPT8E?=
+ =?us-ascii?Q?fkJDVGgp54vIMvBzTXi9A9d4R6dZBt77Fpp+sHBsdXQm3Bagy1HdmihlVpSh?=
+ =?us-ascii?Q?PSVip8Twd4Sn88Ss5qeK7Tz8oh00fS0+2KlAExEHs6kSCxu1FR7MubMxHd4e?=
+ =?us-ascii?Q?bgM/48WvCynKFMfyuxsF9Dwbx3BUVeLKLfwo/vMx82MyRs7MLJLNuiJxNDYf?=
+ =?us-ascii?Q?u8UAeNI9bRYu6KZx6+CsKt4MaklJANMnBRQkYsZ/tY7dIJYYWdzOh5fw8ykM?=
+ =?us-ascii?Q?mJDNRf7sSbzNFfsw8n+ZPkCo1PGF0JOUPZyh/LL9NYFVpwiNHaUqj1sy6xjx?=
+ =?us-ascii?Q?mS0b+k3D4RkrPTSPmTvK7/uZv+NMQ5HMCU7tSed4qlJ9IC9unMZDu7jOzK11?=
+ =?us-ascii?Q?fkSvoYiWpwNHtMepAlSA5Vn9D/H3mWD6iu67Qgjc2ncA+svbZQuqIyg/QlWr?=
+ =?us-ascii?Q?6UtLEL1hWITh3cdBWg4uco/dz9IUarkHq3f4bP5Hhu3NUf9w3yPONcTwKXXx?=
+ =?us-ascii?Q?NOp9Hxlw8FEuW9xchz9fIjCJR2fAGUZ2fS8grFjRzqiLXVv7mDTEGV60Ftw0?=
+ =?us-ascii?Q?yllaK1NavyItiNrAVi+R6SUZL+jI+5885dmHBg9KqxALByH+RodZ0oJsPntG?=
+ =?us-ascii?Q?E/gtDdhBDRjhLMn4Sm50RGryLFLNkD05iEOvT5aGf5m1Rv5S70KBrsXnNXP5?=
+ =?us-ascii?Q?janB13p88MVONQYXZnb5JK9q4sjNgS+HSlTYZLAKZog91r6WaDiRGovqobvO?=
+ =?us-ascii?Q?1zFsokuOH5SAb17HblatCU3DyKVjI3Eye1qko9lwaFXY+DW8M9my4bdRCaNI?=
+ =?us-ascii?Q?kpzCYs2PV721SNQMPITZkWskwVsYfbwCUMg06lzyzZA2PCGI0A2AJOElwtQF?=
+ =?us-ascii?Q?wL4lDGi+OF9SZ+nSzz9ooKBeUMJdgT+JyuGIY6xrhfybOQa4wOrUN3wNwedD?=
+ =?us-ascii?Q?Pgz19SXZ98RXVAxP3Bnz4pMdESqESdxnCvPyDagUvHxgZZB1UKNk7x9PBpXu?=
+ =?us-ascii?Q?GpfkvZAnRuRcyhv+qtMv1NDAfiaehBqJlXg4C0Wt8E0epJq5GAO26+Mqq1Xf?=
+ =?us-ascii?Q?/lCTEoth/pPBfn6no2MHeeIyEqpHXHbGzEn5moZZycx7yP1/X/QB/UZPphGr?=
+ =?us-ascii?Q?WJS5njt36tatur4L3M7xEEeQYqTuHWmqQ82LWhcOVQAft7h5CWhxr88qtwQv?=
+ =?us-ascii?Q?ByX1GKkdTxWrubjGq09U+TEsDivG/LmeM3giq5O6lIk7YLT8sraeetpf2F0i?=
+ =?us-ascii?Q?UWIP2uBJgmIDvAUgUGhZ4IJt2rStd0+wm/gbIKj9?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3d88489-8cd0-47aa-c82c-08db10e49411
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 12:43:32.7244
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 16UN5vRPfBtf521GLspuPmtwFGkIjTBtD+sinKe6vfgqYmTIsMrC9HyVH1eEe6Xa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8366
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microchip PDMC IP doesn't filter microphone noises on startup. By default,
-it captures data received from digital microphones after
-the MCHP_PDMC_MR.EN bits are set. Thus when enable is set on PDMC side the
-digital microphones might not be ready yet and PDMC captures data from then
-in this time. This data captured is poc noise. To avoid this the software
-workaround is to the following:
-1/ enable PDMC channel
-2/ wait 150ms (on SAMA7G5-EK setup)
-3/ execute 16 dummy reads from RHR
-4/ clear interrupts
-5/ enable interrupts
-6/ enable DMA channel
+On Fri, Feb 17, 2023 at 05:12:29AM -0500, Michael S. Tsirkin wrote:
+> On Thu, Feb 16, 2023 at 08:14:50PM -0400, Jason Gunthorpe wrote:
+> > On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
+> > > From: Rong Wang <wangrong68@huawei.com>
+> > > 
+> > > Once enable iommu domain for one device, the MSI
+> > > translation tables have to be there for software-managed MSI.
+> > > Otherwise, platform with software-managed MSI without an
+> > > irq bypass function, can not get a correct memory write event
+> > > from pcie, will not get irqs.
+> > > The solution is to obtain the MSI phy base address from
+> > > iommu reserved region, and set it to iommu MSI cookie,
+> > > then translation tables will be created while request irq.
+> > 
+> > Probably not what anyone wants to hear, but I would prefer we not add
+> > more uses of this stuff. It looks like we have to get rid of
+> > iommu_get_msi_cookie() :\
+> > 
+> > I'd like it if vdpa could move to iommufd not keep copying stuff from
+> > it..
+> 
+> Absolutely but when is that happening?
 
-Fixes: 50291652af52 ("ASoC: atmel: mchp-pdmc: add PDMC driver")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
+Don't know, I think it has to come from the VDPA maintainers, Nicolin
+made some drafts but wasn't able to get it beyond that.
 
-Hi, Mark,
+Please have people who need more iommu platform enablement to pick it
+up instead of merging hacks like this..
 
-If this is applied as is please add proper Depends-on tag to point to
-patch 1/3 commit id to ease the backporting on older kernels, if any.
+We are very close to having nested translation on ARM so anyone who is
+serious about VDPA on ARM is going to need iommufd anyhow.
 
-Thank you,
-Claudiu
-
- sound/soc/atmel/mchp-pdmc.c | 55 +++++++++++++++++++++++++++++++++----
- 1 file changed, 50 insertions(+), 5 deletions(-)
-
-diff --git a/sound/soc/atmel/mchp-pdmc.c b/sound/soc/atmel/mchp-pdmc.c
-index cf4084dcbd5e..6461e2741a33 100644
---- a/sound/soc/atmel/mchp-pdmc.c
-+++ b/sound/soc/atmel/mchp-pdmc.c
-@@ -114,6 +114,7 @@ struct mchp_pdmc {
- 	struct clk *gclk;
- 	u32 pdmcen;
- 	u32 suspend_irq;
-+	u32 startup_delay_us;
- 	int mic_no;
- 	int sinc_order;
- 	bool audio_filter_en;
-@@ -425,6 +426,7 @@ static const struct snd_soc_component_driver mchp_pdmc_dai_component = {
- 	.open = &mchp_pdmc_open,
- 	.close = &mchp_pdmc_close,
- 	.legacy_dai_naming = 1,
-+	.start_dma_last = 1,
- };
- 
- static const unsigned int mchp_pdmc_1mic[] = {1};
-@@ -632,6 +634,29 @@ static int mchp_pdmc_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
-+static void mchp_pdmc_noise_filter_workaround(struct mchp_pdmc *dd)
-+{
-+	u32 tmp, steps = 16;
-+
-+	/*
-+	 * PDMC doesn't wait for microphones' startup time thus the acquisition
-+	 * may start before the microphones are ready leading to poc noises at
-+	 * the beginning of capture. To avoid this, we need to wait 50ms (in
-+	 * normal startup procedure) or 150 ms (worst case after resume from sleep
-+	 * states) after microphones are enabled and then clear the FIFOs (by
-+	 * reading the RHR 16 times) and possible interrupts before continuing.
-+	 * Also, for this to work the DMA needs to be started after interrupts
-+	 * are enabled.
-+	 */
-+	usleep_range(dd->startup_delay_us, dd->startup_delay_us + 5);
-+
-+	while (steps--)
-+		regmap_read(dd->regmap, MCHP_PDMC_RHR, &tmp);
-+
-+	/* Clear interrupts. */
-+	regmap_read(dd->regmap, MCHP_PDMC_ISR, &tmp);
-+}
-+
- static int mchp_pdmc_trigger(struct snd_pcm_substream *substream,
- 			     int cmd, struct snd_soc_dai *dai)
- {
-@@ -644,15 +669,17 @@ static int mchp_pdmc_trigger(struct snd_pcm_substream *substream,
- 	switch (cmd) {
- 	case SNDRV_PCM_TRIGGER_RESUME:
- 	case SNDRV_PCM_TRIGGER_START:
--		/* Enable overrun and underrun error interrupts */
--		regmap_write(dd->regmap, MCHP_PDMC_IER, dd->suspend_irq |
--			     MCHP_PDMC_IR_RXOVR | MCHP_PDMC_IR_RXUDR);
--		dd->suspend_irq = 0;
--		fallthrough;
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 		snd_soc_component_update_bits(cpu, MCHP_PDMC_MR,
- 					      MCHP_PDMC_MR_PDMCEN_MASK,
- 					      dd->pdmcen);
-+
-+		mchp_pdmc_noise_filter_workaround(dd);
-+
-+		/* Enable interrupts. */
-+		regmap_write(dd->regmap, MCHP_PDMC_IER, dd->suspend_irq |
-+			     MCHP_PDMC_IR_RXOVR | MCHP_PDMC_IR_RXUDR);
-+		dd->suspend_irq = 0;
- 		break;
- 	case SNDRV_PCM_TRIGGER_SUSPEND:
- 		regmap_read(dd->regmap, MCHP_PDMC_IMR, &dd->suspend_irq);
-@@ -796,6 +823,7 @@ static bool mchp_pdmc_readable_reg(struct device *dev, unsigned int reg)
- 	case MCHP_PDMC_CFGR:
- 	case MCHP_PDMC_IMR:
- 	case MCHP_PDMC_ISR:
-+	case MCHP_PDMC_RHR:
- 	case MCHP_PDMC_VER:
- 		return true;
- 	default:
-@@ -817,6 +845,17 @@ static bool mchp_pdmc_writeable_reg(struct device *dev, unsigned int reg)
- 	}
- }
- 
-+static bool mchp_pdmc_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case MCHP_PDMC_ISR:
-+	case MCHP_PDMC_RHR:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static bool mchp_pdmc_precious_reg(struct device *dev, unsigned int reg)
- {
- 	switch (reg) {
-@@ -836,6 +875,7 @@ static const struct regmap_config mchp_pdmc_regmap_config = {
- 	.readable_reg	= mchp_pdmc_readable_reg,
- 	.writeable_reg	= mchp_pdmc_writeable_reg,
- 	.precious_reg	= mchp_pdmc_precious_reg,
-+	.volatile_reg	= mchp_pdmc_volatile_reg,
- 	.cache_type	= REGCACHE_FLAT,
- };
- 
-@@ -918,6 +958,11 @@ static int mchp_pdmc_dt_init(struct mchp_pdmc *dd)
- 		dd->channel_mic_map[i].clk_edge = edge;
- 	}
- 
-+	ret = of_property_read_u32(np, "microchip,startup-delay-us",
-+				   &dd->startup_delay_us);
-+	if (ret)
-+		dd->startup_delay_us = 150000;
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+Jason
