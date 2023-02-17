@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255F169B153
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8CD69B168
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBQQs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S230011AbjBQQwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjBQQsz (ORCPT
+        with ESMTP id S229689AbjBQQwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:48:55 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ADC47432;
-        Fri, 17 Feb 2023 08:48:54 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id u2so1146783wrs.0;
-        Fri, 17 Feb 2023 08:48:54 -0800 (PST)
+        Fri, 17 Feb 2023 11:52:02 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B456C012
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:52:01 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id s22so1441364qtw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:52:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CnTobjfJ9ngXJcsvpPg7My3HLghl3TXCWSpFjr9HubU=;
-        b=VXheOQKWN2RjWb0nI9tMGc+Cfw0mtSZfYK2MvuqPqgoHgmi88jV3hrSwsydygBGuJa
-         C4xbPPyPJKyebnfy8L4cD3h4PGETNxg3sFFLLJuJWkqrEpnf4uT5YP5Cyypnr7Y0OF37
-         djdobhwJx1IjvvWmQGNn8ZGNO7XNPpKnoCYHIOBmHJfgCJcmOhkwyco1vyraGAX3FuY4
-         Du/bc4LlqTGEZlBX/ZczFISeuJuGt7ujFGFZm0IFkmmO+M2gpc35ucnaq0DbO29qhXq8
-         XEd/Ap0ZRfIYJ8+afxEF5F53DJwPB1T4R67ICwKBsf7zVdYQ8BUt39ZHFVEsUJMEI2Nb
-         5B6A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+lujNOKm++OPcngOcRGWEnMWSJ9dfFfJMQ8v/5cWU2M=;
+        b=ngjtQMSncLTvKcktN401ducOT2ym3TeRYm/owld99p8jhnZImVtVzULGekSPv1UXIm
+         OYUR+6zJLcoqpQ3SK1+YGsYOZGHP7G06I+dVyn3eFXymFBlYubmrqDyWr0h5EipMf5Fb
+         8vHSWYytKku+pDEhg8TeJaA2A8Phn3t2WIoy1UR6NLgN0A8zMeAfpUlRnciC2NiGEInq
+         iTaBzZkiiiuvuAYcSUkHc8VwnUhyV9l2/uv9aQu/k7ieEX2bPdWyWqKLchl91l8rhKxg
+         FxGFGIqpdJREmO+/gXFcYffV8BBAnaQyB3xMz3/Xp7Vu1HBmgF8WO2TTADjYA8Yaeduc
+         jaUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CnTobjfJ9ngXJcsvpPg7My3HLghl3TXCWSpFjr9HubU=;
-        b=BEBW5FGoCxsKggQj053s+oI4rXjQz/8du/UF6Dgn3ECTJP1WWi7+mBEjmX1Z7ihlKx
-         qhWqi6sYRWXM4yksCgrZKY84ut/Wqn6p+O9Afbb3h8lYQTRU+obX8a+q22l+IWT6AGWJ
-         krMfC6/Mvt+OwPUJEabSDvGxTC/WgngT/NqG9B+KiV+RBpQdiFBUfeI69J2MHvNhEiM8
-         UMhnQkqmzHKdKvdg9fq06lRsRHw/GKcOe+yWrNcXsL4W0epFMLal6Tr+oupx+FfKjRoS
-         BKlIujJFFaiFYuoRcUUOWTUtLNslEGxexfG/fu6gt443EFb/h0g99TKxd8/xXfcaujtL
-         h+fw==
-X-Gm-Message-State: AO0yUKXwaWKDdEi4zAwpMeo0rXnPAWOQ5D2WFA2amhgj0peCDyMJNBsB
-        YKm+rje61B29zLKROI9787Q=
-X-Google-Smtp-Source: AK7set+h7/QTZ74TQrxH9VXmo+Z3s61a6s5kTq6X3ugp25wMKac6v1kzpNViA5W1Nm3b6JeY67uWHA==
-X-Received: by 2002:adf:eb43:0:b0:2c5:76bd:c0f3 with SMTP id u3-20020adfeb43000000b002c576bdc0f3mr6154679wrn.6.1676652532631;
-        Fri, 17 Feb 2023 08:48:52 -0800 (PST)
-Received: from skbuf ([188.25.231.176])
-        by smtp.gmail.com with ESMTPSA id o9-20020a056000010900b002c54241b4fesm4617497wrx.80.2023.02.17.08.48.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 08:48:52 -0800 (PST)
-Date:   Fri, 17 Feb 2023 18:48:50 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH v2 net-next 0/5] add ethtool categorized statistics
-Message-ID: <20230217164850.3jps62p2sfomee4r@skbuf>
-References: <20230217110211.433505-1-rakesh.sankaranarayanan@microchip.com>
- <a0898de5-5990-4198-cda2-fe22679aec90@intel.com>
+        bh=+lujNOKm++OPcngOcRGWEnMWSJ9dfFfJMQ8v/5cWU2M=;
+        b=D2U/7RhZsIV6GLvlXq+gYo7yVJO+WindP06KSdFfvmW5ouLL7QTB6eAwNqdUPK/alp
+         IZK1VfCanRZG9ox9jK1wWsOEFTMMNA/UI5djRNKTde7wKcd/rJMESh7OJMMpq2AbFAYv
+         4KpD++miOT3or8RlyhofQF8I2xPvbTjsNCp9O/uIgr/csQc05y4vMw7qdhS+4kIbPH1m
+         rC5JnDEhJYvZZN3fRKBIOl45g4827rYdPzo7Am8xJN8TRSPYFotM5N25jwr6/IKE+q9R
+         o4HKOb/F02SSuuR4vVBUlPw/FEmGbPI6vfG8yXoZikPs70408Kz9gJORuYJZwTtN+hVU
+         kDhw==
+X-Gm-Message-State: AO0yUKVse6VT3tTBTY7rZHE1f1kQEMippjt3nDjnZjqlEMUoe1bLCUhH
+        rRA7yn3Dt+qszBJ52hTpB02/ikRmhvGHjzPQquO7Uw==
+X-Google-Smtp-Source: AK7set+fHsj9+KPNXoSNbR9V4av/+GsFWw2XClP2/z4uYd0e4fwI9/unNMmK0pPDEJ42UCz43Q3TPjOpjzE9S+/9Y9E=
+X-Received: by 2002:a05:622a:1f98:b0:3ba:1506:f2 with SMTP id
+ cb24-20020a05622a1f9800b003ba150600f2mr963995qtb.2.1676652720158; Fri, 17 Feb
+ 2023 08:52:00 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 17 Feb 2023 08:51:59 -0800
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20221227081011.6426-1-nancy.lin@mediatek.com> <20221227081011.6426-5-nancy.lin@mediatek.com>
+In-Reply-To: <20221227081011.6426-5-nancy.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0898de5-5990-4198-cda2-fe22679aec90@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Date:   Fri, 17 Feb 2023 08:51:59 -0800
+Message-ID: <CABnWg9s1L2Gk5EfNW22HUJVTCnFyo+YvrjQL16XqyLYEf20Fyg@mail.gmail.com>
+Subject: Re: [PATCH v29 4/7] drm/mediatek: add dma dev get function
+To:     linux-mediatek@lists.infradead.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        clang-built-linux@googlegroups.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        singo.chang@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,33 +81,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:54:48PM +0100, Alexander Lobakin wrote:
-> From: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> Date: Fri, 17 Feb 2023 16:32:06 +0530
-> 
-> > [PATCH v2 net-next 0/5] add ethtool categorized statistics
-> 
-> I'd like to see the cover letter's subject prefixed as well, e.g.
-> 
-> [PATCH v2 net-next 0/5] net: dsa: microchip: add ethtool categorized
-> statistics
-> 
-> ...or so, depending on the usual prefix for ksz.
-> Otherwise, it looks like you're adding something generic and only
-> realize it targets a particular driver only after opening the thread itself.
+On Tue, 27 Dec 2022 09:10, "" wrote:
+>This is a preparation for adding support for the ovl_adaptor sub driver
+>Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
+>dma_dev_get function for getting representative dma dev in ovl_adaptor.
+>
+>Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+>Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
+>Reviewed-by: CK Hu <ck.hu@mediatek.com>
+>Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+>---
+> drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
+> drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
+> drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
+> 3 files changed, 24 insertions(+)
+>
+>diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+>index 112615817dcb..78e20f604158 100644
+>--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+>+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+>@@ -58,6 +58,7 @@ struct mtk_drm_crtc {
+> #endif
+>
+> 	struct device			*mmsys_dev;
+>+	struct device			*dma_dev;
+> 	struct mtk_mutex		*mutex;
+> 	unsigned int			ddp_comp_nr;
+> 	struct mtk_ddp_comp		**ddp_comp;
+>@@ -865,6 +866,13 @@ static int mtk_drm_crtc_init_comp_planes(struct drm_device *drm_dev,
+> 	return 0;
+> }
+>
+>+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
+>+{
+>+	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+>+
+>+	return mtk_crtc->dma_dev;
+>+}
 
-+1
+While testing out the HDMI patchset for i1200, I've ended up with a
+panic here with crtc being NULL.
 
-some people just look at the KSZ DSA driver all day, and so in their mind, it
-then becomes implicit in the subject. But the cover letter description gets
-turned by the netdev maintainers into a branch name for a merge commit, see:
+I've fixed the issue on my side by testing crtc prior doing anything
+in that function.
 
-fa15072b650a Merge branch 'sfc-devlink-support-for-ef100'
-e9ab2559e2c5 Merge branch 'net-sched-transition-actions-to-pcpu-stats-and-rcu'
-10d13421a6ae Merge branch 'net-core-commmon-prints-for-promisc'
-a1d83abc8f2f Merge branch 'net-sched-retire-some-tc-qdiscs-and-classifiers'
+Not sure this is the proper fix.
 
-and so, the naming of the cover letter has non-zero importance.
+HTH,
+Guillaume.
 
-I agree that the contents of this patch set is absolutely disappointing
-for someone reading the title and expecting some new ethtool counters.
+>+
+> int mtk_drm_crtc_create(struct drm_device *drm_dev,
+> 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
+> {
+>@@ -953,6 +961,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+> 			return ret;
+> 	}
+>
+>+	/*
+>+	 * Default to use the first component as the dma dev.
+>+	 * In the case of ovl_adaptor sub driver, it needs to use the
+>+	 * dma_dev_get function to get representative dma dev.
+>+	 */
+>+	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
+>+
+> 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
+> 	if (ret < 0)
+> 		return ret;
+>diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+>index cb9a36c48d4f..f5a6e80c5265 100644
+>--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+>+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+>@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
+> 			     struct mtk_plane_state *state);
+> void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
+> 			       struct drm_atomic_state *plane_state);
+>+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
+>
+> #endif /* MTK_DRM_CRTC_H */
+>diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+>index 2d0052c23dcb..364f3f7f59fa 100644
+>--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+>+++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+>@@ -71,6 +71,7 @@ struct mtk_ddp_comp_funcs {
+> 	void (*bgclr_in_off)(struct device *dev);
+> 	void (*ctm_set)(struct device *dev,
+> 			struct drm_crtc_state *state);
+>+	struct device * (*dma_dev_get)(struct device *dev);
+> };
+>
+> struct mtk_ddp_comp {
+>@@ -203,6 +204,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp *comp,
+> 		comp->funcs->ctm_set(comp->dev, state);
+> }
+>
+>+static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp *comp)
+>+{
+>+	if (comp->funcs && comp->funcs->dma_dev_get)
+>+		return comp->funcs->dma_dev_get(comp->dev);
+>+	return comp->dev;
+>+}
+>+
+> int mtk_ddp_comp_get_id(struct device_node *node,
+> 			enum mtk_ddp_comp_type comp_type);
+> unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
+>--
+>2.18.0
+>
+>
