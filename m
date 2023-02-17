@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CDD69A8BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52F569A8C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjBQJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S229821AbjBQJ7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjBQJ62 (ORCPT
+        with ESMTP id S229706AbjBQJ7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:58:28 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C98A627C2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:58:20 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id 8-20020a05600c230800b003ddca7a2bcbso479818wmo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:58:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sEERacWPQn5HQJtCzUxWfR99VAovvx/3XuSHotdsRHA=;
-        b=VPfE02aNCEYuXI0BCFH/J/s0URGJAw1PLavr3tDV711YPEeWPH98hBJRIwroJjxZgn
-         aG9CLxjlfVeTp4SQKm4/1lwUeJplMDe28IES8FHuuD7z1ixLRyMevmPWe3SooYBLD9pB
-         LXnanCo4IdXuRY0SewX4G9qwGCPHSH58mMiKW7bIrZa8q+9WrRST08jpP1hDUWfKvOnR
-         lv+/26UBPKPACPwtY1bhddDx5JbDSqJmCG+HWALfR0H0zMzyocffpIKB97t7BjU5zwxZ
-         PL9OcIaU2zjQblKbCPIG9r49WbIxPuqsGdY6ILhmrqi340VCv437cJjyIYuRoFzbiTUO
-         PRZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sEERacWPQn5HQJtCzUxWfR99VAovvx/3XuSHotdsRHA=;
-        b=8JtjynPaCnDpf1WwXV+bOTkEpKRCAMX6f4fJ2By0AAxWXBpaqqODgZ4Cd0M9V/Kcw2
-         En80d2NMFz6FW4d1kVzy1mebeFodfR4Wf65CrRsG0JSGYJFKxhSfYxgg97EC1RsAPg2q
-         CHdCT3H9lmziPtqBruXG9K9BGqq3iDUVutB/MPe3V+h8S6Vr+4hu+M7GfzI3mSd7ydjT
-         24wu2Yet1EbZEqRQrploVHJkFumU5toPhmzlRDchzxhd7CF0BlQEr6/PwijZ2iekHN6i
-         T4iHYAlTO9GuExedhVW1oUaPaKT5GqtXNB3j/ggbEq28f6XgPOaesMsWeGo5UfO+rPyo
-         ivUQ==
-X-Gm-Message-State: AO0yUKX4F4SQpGZMnnsgilofy3kvsI2jG/p9n5NdybOuta0IhdB3PFOK
-        wE2g/Qwm9k6uPWkXmttFrEpm0g==
-X-Google-Smtp-Source: AK7set98dRwRGA+mF2mTJNO2SDS7s1bSCUU7DPOpc9FRVOv722JlsCbRvWAIKDMtjxzMLB2DG+Hb6w==
-X-Received: by 2002:a05:600c:130e:b0:3e0:9fe:34dd with SMTP id j14-20020a05600c130e00b003e009fe34ddmr769809wmf.4.1676627899023;
-        Fri, 17 Feb 2023 01:58:19 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003dc1d668866sm1172044wms.10.2023.02.17.01.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 01:58:18 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 17 Feb 2023 10:58:15 +0100
-Subject: [PATCH] MAINTAINERS: Add myself as co-maintainer for DRM Panels
- drivers
+        Fri, 17 Feb 2023 04:59:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E6FF766;
+        Fri, 17 Feb 2023 01:59:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A928DB82B5C;
+        Fri, 17 Feb 2023 09:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79B0C433D2;
+        Fri, 17 Feb 2023 09:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676627953;
+        bh=gC8fzzrUSCg6UTwoBVpBiyclU6InTgw8Xj/2u293vJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oMNOFSe2pTsipWtyloa74226iH3ACac154G9g2N0S4dnIrndUg8YuXwQ8v55gIBAQ
+         Yv9eEm5Y9lb7dZVlQ+XKlu75rbTSekfMU0wCdClNrUIvNN3QMLbhtmmJXFyA2J2dw6
+         xbwdd7lTCleT9URT+tuPGOmLm2bTlhq4gacjdDq2PaJUkFhVLmDlTDw/pB1kwCt3Pi
+         hylju8/CQpr/8ZniEN30W+uHlPue4xHMPYuFhRsdG0K9ycWFdjXHA6HDJMov3LTtXH
+         2zhpuAklhlSlLSfuu+iOddHeB+24nRN1qIJkuMmGk1R9FVGii7Xq6mVl1K1yCh+euh
+         wJF4LjTDS05kw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jes Sorensen <Jes.Sorensen@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] wifi: rtl8xxxu: add LEDS_CLASS dependency
+Date:   Fri, 17 Feb 2023 10:59:04 +0100
+Message-Id: <20230217095910.2480356-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230216-topic-drm-panel-upstream-maintainance-v1-1-ae1cf9268217@linaro.org>
-X-B4-Tracking: v=1; b=H4sIALZP72MC/x2NQQrDMAwEvxJ8riBx2xD6ldKDYquNwFaM7IRCy
- N8retjD7MLs4SopU3WP7nBKO1dexWC4dC4sKB8CjsbO9/7a+2GEthYOEDVDQaEEW6lNCTNkZGk
- WlEAwxntA8lMcppsz14yVYFbbFrPJlpKVRenN3//583WeP+ORfpeMAAAA
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as co-maintainer for DRM Panel Drivers in order to help
-reviewing and getting new panels drivers merged.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+rtl8xxxu now unconditionally uses LEDS_CLASS, so a Kconfig dependency
+is required to avoid link errors:
+
+aarch64-linux-ld: drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.o: in function `rtl8xxxu_disconnect':
+rtl8xxxu_core.c:(.text+0x730): undefined reference to `led_classdev_unregister'
+
+ERROR: modpost: "led_classdev_unregister" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
+ERROR: modpost: "led_classdev_register_ext" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
+
+Fixes: 3be01622995b ("wifi: rtl8xxxu: Register the LED and make it blink")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS | 1 +
+ drivers/net/wireless/realtek/rtl8xxxu/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index be167c695c64..18fd7548a49b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7043,6 +7043,7 @@ F:	drivers/gpu/drm/xlnx/
- 
- DRM PANEL DRIVERS
- M:	Thierry Reding <thierry.reding@gmail.com>
-+M:	Neil Armstrong <neil.armstrong@linaro.org>
- R:	Sam Ravnborg <sam@ravnborg.org>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
-
----
-base-commit: 9d9019bcea1aac7eed64a1a4966282b6b7b141c8
-change-id: 20230216-topic-drm-panel-upstream-maintainance-6d5cae28d184
-
-Best regards,
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/Kconfig b/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
+index 091d3ad98093..2eed20b0988c 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
++++ b/drivers/net/wireless/realtek/rtl8xxxu/Kconfig
+@@ -5,6 +5,7 @@
+ config RTL8XXXU
+ 	tristate "Realtek 802.11n USB wireless chips support"
+ 	depends on MAC80211 && USB
++	depends on LEDS_CLASS
+ 	help
+ 	  This is an alternative driver for various Realtek RTL8XXX
+ 	  parts written to utilize the Linux mac80211 stack.
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.39.1
 
