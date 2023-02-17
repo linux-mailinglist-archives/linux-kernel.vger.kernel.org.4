@@ -2,115 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826AD69B457
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0946669B45C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjBQVBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S229595AbjBQVHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBQVBs (ORCPT
+        with ESMTP id S229463AbjBQVHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:01:48 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3053B659;
-        Fri, 17 Feb 2023 13:01:47 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 9AD4932003C0;
-        Fri, 17 Feb 2023 16:01:46 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Feb 2023 16:01:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676667706; x=1676754106; bh=DFgKMC/SX2
-        GHEv/K1zSNb50CZY81Bm7Tski0B3YhSjA=; b=c0+G8UEtbiX/7kN5amNNnRLD1K
-        0RItuR0X9mJe9yNAYgVJN0g7vzH6FFPs2IQLiX6XGuarxryDJKS8w70dLlF27iWa
-        b7ZRPFNPA309arLGH9oe5l1LClscUjDsxpfJE6FE3eZh0cqxOHlh3LZGT8eNB+56
-        IF5lEZTP8G3V58WXFjnlA9bwQQZxvjrmuQ0RKl9JFSNk81pH9jxEWbn2LpxTjz6z
-        5Of5+RXsuu/OTqDjOu0mRxUNNsXXrEr0M69HFK95ZhooEBjPeq1tUCk74Mak9A9F
-        Dhq3+TLnGU8TXyLcM2u9+cbxIR4xs78jgxsNkgs01fQ+IsbmE5l3ht4ohzPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676667706; x=1676754106; bh=DFgKMC/SX2GHEv/K1zSNb50CZY81
-        Bm7Tski0B3YhSjA=; b=lXCavbrXc/HI3IwjB9kY3IbUjA4Z7h/TAeDg13K1+3zX
-        b96nkCDQZ083YRygMuWIOHq+epFW7jXsf/tuWm1CQ9x2Fw4+Yp8IzU7DMGNncN8P
-        l6TWvMTU0fvBR1sXYzquK+Tkb1yam6Ubu22sWHYIcX78FO1ICMUqK34WsxfS260Y
-        QK8frgJeHqYjIkBVtk8etOB1ECCegOurbAl45bRLoODw/FUgwjLwP9lkeW8EJrry
-        RL0Wf/KDj3HN7lrKyYTtoyF0tYfb+psTAlOwtN1Z9q3rI4ZUtPi74Um45U+uOkrG
-        zluo/4xD2O+KE478exZWQGFFSARbs8kO8KNNnOkZ8w==
-X-ME-Sender: <xms:OevvYysHe4a7PcbWaxKUFui2xJYV6tWWX85m5_LMyGW_SqaTRbSV1Q>
-    <xme:OevvY3fLbPj0Gict8RER3N9WMvZOM6J_YcIhFuwHyoihlKpPjVgDBnxsZyC6_l8H4
-    HJ7e3cZmO8bmavPqqc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:OevvY9zjM0CbkHFmZFFuTbjuuwW_5DlDLNZVsBaEv6djmwF0Sead5Q>
-    <xmx:OevvY9MYgxD7VHqa5SDwYsTfGu24fls26o_3D5PDY55nM5PwQgTNuA>
-    <xmx:OevvYy_o5uijJTRVqFOfuVHcLc9ORPCvqvRLFpxl87z3M5piKHHfwA>
-    <xmx:OuvvY2R7U6yorCIhs7S9Tk8XgvuZMBsVHucPKBGtCOncfWHWaEF7Ww>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C3A6AB60086; Fri, 17 Feb 2023 16:01:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <f11e73fc-4698-40d1-b331-0858b0888df1@app.fastmail.com>
-In-Reply-To: <20230217202301.436895-4-thuth@redhat.com>
-References: <20230217202301.436895-1-thuth@redhat.com>
- <20230217202301.436895-4-thuth@redhat.com>
-Date:   Fri, 17 Feb 2023 22:01:28 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Huth" <thuth@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        "Chas Williams" <3chas3@gmail.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        Netdev <netdev@vger.kernel.org>,
-        "Andrew Waterman" <waterman@eecs.berkeley.edu>,
-        "Albert Ou" <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH 3/4] Move bp_type_idx to include/linux/hw_breakpoint.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 16:07:11 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DAD5DE38
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:07:08 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id r12so2395834ljg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mq8A/0rhG6AT//xrl3XDfAyTm02RPehleIptm7GikgY=;
+        b=e49GzX8HDw9zdkwM7WoCelbzMRJRz2croaMGPdRiF3e3fgJ8yxOdUHAUh4WkrHPHqI
+         sECDo+ZMmeX8JmqPbsI3+3ygR5ZEQd87mfDzvjq+3zeZN0Xcv2bXmK+os0Oqcorixtkg
+         vada4UBhqwM9qTjWoK6UFvtZTonBqrTa1TyQfUPXv9U6vpwZKgDxsNOv+Q+HDoN0wEIY
+         Ep5d7BGnccPcvoyV06++PoCNfbrTCt+Gw/cjzmnMasSIdHh1Z1b6SAD+qG64hW0UMxcj
+         /DqkGt7RlYKIvCKWXzPU6rNA0azPUBhBzVA1RP2AWzgFpD56+eLZuXlrXWvoUaGW2AaM
+         x6Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mq8A/0rhG6AT//xrl3XDfAyTm02RPehleIptm7GikgY=;
+        b=d1wzMPIcIEkrdQVmRr0b8AVnG/jD0ZDJZblWxr/RmSwvwKRRDIw43O1zXDEFDRGzij
+         zjmaeN5UJwlsaJdEIb0EuyEl/EPRkDRq+hGFxZnVvD/2PrVo3lsJWSnuoSPEEe4tJftW
+         ATXf0UgCv04xaP/xvjxirqlxLRfMZS0y+Dniv7Gi581X/Ww5CrywE/j38clGHbfirse6
+         YjGpWfLU53cotKVpV/TbTUonJNzWNq5dxLPRJKRcOuskQE24hO+bZwacbjM/fE+GRKJc
+         Vjy0dtXDwTPuhu65LyGvhU6pvsEevLpKhs+D5m7xqlQS1OBuQN/2FishRI6TkWQ6yYRz
+         eGUA==
+X-Gm-Message-State: AO0yUKV59P9jInwV0zRs3dbILWM1/foiUEO9mJyryyWyKvHsHymFIGr5
+        dd735bCbtVSjn1xdDQgVe6HJdg==
+X-Google-Smtp-Source: AK7set+1ihJI1tJPL7YWC72NTcvAKd77K2nw/x7vA7elVm22cZ0Z5abkQNG8PKyFHzCotssyjxqbgA==
+X-Received: by 2002:a2e:94c9:0:b0:290:7017:7fe3 with SMTP id r9-20020a2e94c9000000b0029070177fe3mr827984ljh.50.1676668026854;
+        Fri, 17 Feb 2023 13:07:06 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id t1-20020ac25481000000b004d16263b36bsm777310lfk.111.2023.02.17.13.07.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 13:07:06 -0800 (PST)
+Message-ID: <2e129fd6-d4e5-a955-5355-3ca71166fb33@linaro.org>
+Date:   Fri, 17 Feb 2023 23:07:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 06/14] drm/msm/gpu: Use dev_pm_opp_set_rate for non-GMU
+ GPUs
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Emma Anholt <emma@anholt.net>, Chia-I Wu <olvaffe@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
+ <20230214173145.2482651-7-konrad.dybcio@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230214173145.2482651-7-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023, at 21:23, Thomas Huth wrote:
-> From: Palmer Dabbelt <palmer@dabbelt.com>
->
-> This has a "#ifdef CONFIG_*" that used to be exposed to userspace.
->
-> The names in here are so generic that I don't think it's a good idea
-> to expose them to userspace (or even the rest of the kernel).  There are
-> multiple in-kernel users, so it's been moved to a kernel header file.
->
-> Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
-> Reviewed-by: Andrew Waterman <waterman@eecs.berkeley.edu>
-> Reviewed-by: Albert Ou <aou@eecs.berkeley.edu>
-> Message-Id: <1447119071-19392-10-git-send-email-palmer@dabbelt.com>
-> [thuth: Remove it also from tools/include/uapi/linux/hw_breakpoint.h]
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+On 14/02/2023 19:31, Konrad Dybcio wrote:
+> Currently we only utilize the OPP table connected to the GPU for
+> getting (available) frequencies. We do however need to scale the
+> voltage rail(s) accordingly to ensure that we aren't trying to
+> run the GPU at 1GHz with a VDD_LOW vote, as that would result in
+> an otherwise inexplainable hang.
+> 
+> Tell the OPP framework that we want to scale the "core" clock
+> and swap out the clk_set_rate to a dev_pm_opp_set_rate in
+> msm_devfreq_target() to enable usage of required-opps and by
+> extension proper voltage level/corner scaling.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/adreno_gpu.c | 4 ++++
+>   drivers/gpu/drm/msm/msm_gpu_devfreq.c   | 2 +-
+>   2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> index ce6b76c45b6f..15e405e4f977 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> @@ -1047,6 +1047,10 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+>   	const char *gpu_name;
+>   	u32 speedbin;
+>   
+> +	/* This can only be done here, or devm_pm_opp_set_supported_hw will WARN_ON() */
+> +	if (!IS_ERR(devm_clk_get(dev, "core")))
+> +		devm_pm_opp_set_clkname(dev, "core");
 
-It took me a while to understand this code enough to be confident this
-is the right solution. Note that CONFIG_HAVE_MIXED_BREAKPOINTS_REGS is
-purely dependent on the architecture and could be replaced with something
-that checks for x86||sh but it should be safe to assume that the
-enum should never have been part of the uapi header.
+Can we instead move a call to a6xx_set_supported_hw() / check_speed_bin 
+after the adreno_gpu_init() ? It will call msm_gpu_init, which in turn 
+sets gpu->core_clk.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Ideally you can call devm_pm_opp_set_clkname() from that function. Or 
+maybe completely drop gpu->core_clk and always use 
+devm_pm_opp_set_clk_rate().
 
-      Arnd
+> +
+>   	adreno_gpu->funcs = funcs;
+>   	adreno_gpu->info = adreno_info(config->rev);
+>   	adreno_gpu->gmem = adreno_gpu->info->gmem;
+> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> index e27dbf12b5e8..ea70c1c32d94 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> @@ -48,7 +48,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+>   		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
+>   		mutex_unlock(&df->lock);
+>   	} else {
+> -		clk_set_rate(gpu->core_clk, *freq);
+> +		dev_pm_opp_set_rate(dev, *freq);
+
+This is not enough, there are calls to clk_set_rate(gpu->core_clk) in 
+msm_gpu.c which are called from the suspend/resume path.
+
+>   	}
+>   
+>   	dev_pm_opp_put(opp);
+
+-- 
+With best wishes
+Dmitry
+
