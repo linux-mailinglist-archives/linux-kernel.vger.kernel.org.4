@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3413669B421
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 21:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B55669B42F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 21:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjBQUqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 15:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S229640AbjBQUtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 15:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBQUqJ (ORCPT
+        with ESMTP id S229522AbjBQUtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 15:46:09 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246AD56EDA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 12:46:08 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id u22so3233363lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 12:46:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HX6LMtgxWzl0HpAIUmDAdBT71Qg8jqovVsS10cR9zuw=;
-        b=S1vNlmjor4Xn+dLV7bSsOJktaKJUvBJQh69BX+xsD338LswqnshVx0NU8/CXqUseuL
-         NYG6NnTI8T9Qk+rVaKafZvahg+OsMYIdrFvS3P6BvXPB97YcNBfyZzSWp1aVHe8PRX4U
-         c8tk6TBtYPLpoSEGP370cI7HSxj5ZOFfWZAJ6bNpZKsQkKPYP9oMz7nehEr5scuL1pEI
-         q0qK9Gc8Sl2EuoDRdO/YUjsIeZY/k3cgeX+VBUxSHxNm0sMJKa+wZk5zX6BhevvMBaaA
-         1I+iQmoipwSG6REo8n0D3A38U9ZNsT9Y9wkIpKlu8n27gbSxNj1gDb+6idpr6UlMDexB
-         VfVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HX6LMtgxWzl0HpAIUmDAdBT71Qg8jqovVsS10cR9zuw=;
-        b=eoam/s86O9qK1kmLrEdBXeDfhiIpjoP1M3URBARxM1D2rXXzvD/qb2gzlJemcr+O4c
-         lYws2AqqsqY7ISdD0zZp/eqIOYG/fU/mDuNKPp8wXR6Njllcq+XptUPrhjs/udonkJwm
-         jqvrMiqvqhDB9yTvoIdU0HihADY/nN4feNTWzuf3IbU3gykaJxq8XhfaXi6grCq8YIL1
-         Ub+EWxh3ka14UzbR7PR2qV6nAPEoNqUL+OupkB8ip83YJY68xDrjGISeCieY0hKPyVc/
-         3jx7dR6IfXqSANAci5UQezYZraHZLB4oS1eZ5K8C8PKG9noI/FbuXMo1zothdTSeNxIL
-         TCzw==
-X-Gm-Message-State: AO0yUKUmpd7JBWvPUq2QaBoq33635eL5IGx7saD2sT3xEGecm+BW87Xx
-        HVe/3fq0wZ+GEosOyIE/Vu0azg==
-X-Google-Smtp-Source: AK7set9iyqQ5WpL/zj7V3zXr3EoAobKRExN+vepIj9AkhXimGD7sLoQA1IodISpECWZ0p93RwZYpeQ==
-X-Received: by 2002:ac2:5494:0:b0:4cc:53e3:771d with SMTP id t20-20020ac25494000000b004cc53e3771dmr167438lfk.64.1676666766372;
-        Fri, 17 Feb 2023 12:46:06 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac24c23000000b004dc4c5149cfsm782687lfq.134.2023.02.17.12.46.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 12:46:05 -0800 (PST)
-Message-ID: <a611e63b-034d-afbd-f194-c789a9071878@linaro.org>
-Date:   Fri, 17 Feb 2023 22:46:05 +0200
+        Fri, 17 Feb 2023 15:49:13 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69815CF34;
+        Fri, 17 Feb 2023 12:49:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=woFSv3R0qx1mhW59+7gl0uUf67xuCRJwLoN/Zfd9ruk=; b=RcESBVvpUrfUvxdrwJrM7G3WHb
+        QhseaDc1FDtaaEXuFc2umZwc+VWmT5kelH75/Yyj4swAybyWgd1nSHfiXmygWCf+RiLzXfqn0r+Z8
+        4eJGJvO2ui4ndQD2Nzme0V+yKx+ZgrfXIDKmDCkm+y+JTyE4ZdiJOWgjSSByWhtQuP2lJHrKj1gf3
+        U6bZXohE27FAXgq32fKAoO2319QnPEbug8DE1+Epb4TpiUYGJC0hW8HvWhB5Ytk9p044qSJ0kfG1o
+        pe7TvPviflGVxt+gvpE5u7yzGlOJWHYuaDfsh1I60HAQSXMKIzYbMpZ6IfSc0EFMSjzuGaPcG4qP8
+        PImKh4xw==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pT7fB-000Eb5-SU; Fri, 17 Feb 2023 21:49:01 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pT7fB-000QjW-3a; Fri, 17 Feb 2023 21:49:01 +0100
+Subject: Re: [PATCH bpf-next v1 0/4] Support bpf trampoline for RV64
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>
+References: <20230215135205.1411105-1-pulehui@huaweicloud.com>
+ <8735763pcu.fsf@all.your.base.are.belong.to.us>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <091287c6-5121-58e5-b1b2-76277d2f1b1a@iogearbox.net>
+Date:   Fri, 17 Feb 2023 21:49:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 02/14] drm/msm/a6xx: Extend UBWC config
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
- <20230214173145.2482651-3-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230214173145.2482651-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <8735763pcu.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26815/Fri Feb 17 09:41:01 2023)
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 19:31, Konrad Dybcio wrote:
-> Port setting min_access_length, ubwc_mode and upper_bit from downstream.
-> Values were validated using downstream device trees for SM8[123]50 and
-> left default (as per downstream) elsewhere.
+On 2/16/23 10:56 AM, Björn Töpel wrote:
+> Pu Lehui <pulehui@huaweicloud.com> writes:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 29 +++++++++++++++++++--------
->   1 file changed, 21 insertions(+), 8 deletions(-)
+>> BPF trampoline is the critical infrastructure of the bpf
+>> subsystem, acting as a mediator between kernel functions
+>> and BPF programs. Numerous important features, such as
+>> using ebpf program for zero overhead kernel introspection,
+>> rely on this key component. We can't wait to support bpf
+>> trampoline on RV64. Since RV64 does not support ftrace
+>> direct call yet, the current RV64 bpf trampoline is only
+>> used in bpf context.
+>>
+>> As most of riscv cpu support unaligned memory accesses,
+>> we temporarily use patch [1] to facilitate testing. The
+>> test results are as follow, and test_verifier with no
+>> new failure ceses.
+>>
+>> - fexit_bpf2bpf:OK
+>> - dummy_st_ops:OK
+>> - xdp_bpf2bpf:OK
+>>
+>> [1] https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuang5@huawei.com/
+>>
+>> v1:
+>> - Remove the logic of bpf_arch_text_poke supported for
+>>    kernel functions. (Kuohai and Björn)
+>> - Extend patch_text for multiple instructions. (Björn)
+>> - Fix OOB issue when image too big. (Björn)
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index c5f5d0bb3fdc..8855d798bbb3 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -786,17 +786,25 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
->   static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->   {
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-> -	u32 lower_bit = 2;
-> +	u32 lower_bit = 1;
+> This series is ready to go in as is.
 
-Any reason to change the default value here?
-If it is to match chipsets you are adding, it might be worth splitting 
-this change to that patch.
+Ok.
 
-> +	u32 upper_bit = 0;
->   	u32 amsbc = 0;
->   	u32 rgb565_predicator = 0;
->   	u32 uavflagprd_inv = 0;
-> +	u32 min_acc_len = 0;
-> +	u32 ubwc_mode = 0;
->   
->   	/* a618 is using the hw default values */
->   	if (adreno_is_a618(adreno_gpu))
->   		return;
->   
-> -	if (adreno_is_a640_family(adreno_gpu))
-> +	if (adreno_is_a630(adreno_gpu))
-> +		lower_bit = 2;
-> +
-> +	if (adreno_is_a640_family(adreno_gpu)) {
->   		amsbc = 1;
-> +		lower_bit = 2;
-> +	}
->   
->   	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
->   		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
-> @@ -807,18 +815,23 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->   	}
->   
->   	if (adreno_is_7c3(adreno_gpu)) {
-> -		lower_bit = 1;
->   		amsbc = 1;
->   		rgb565_predicator = 1;
->   		uavflagprd_inv = 2;
->   	}
->   
->   	gpu_write(gpu, REG_A6XX_RB_NC_MODE_CNTL,
-> -		rgb565_predicator << 11 | amsbc << 4 | lower_bit << 1);
-> -	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, lower_bit << 1);
-> -	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL,
-> -		uavflagprd_inv << 4 | lower_bit << 1);
-> -	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, lower_bit << 21);
-> +		  rgb565_predicator << 11 | upper_bit << 10 | amsbc << 4 |
-> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
-> +
-> +	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, upper_bit << 4 |
-> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
-> +
-> +	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL, upper_bit << 10 |
-> +		  uavflagprd_inv << 4 | min_acc_len << 3 |
-> +		  lower_bit << 1 | ubwc_mode);
-> +
-> +	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, min_acc_len << 23 | lower_bit << 21);
->   }
->   
->   static int a6xx_cp_init(struct msm_gpu *gpu)
+> @Palmer I'd like to take this series via the bpf-next tree (as usual),
+> but note that there are some non-BPF changes as well, related to text
+> poking.
+> 
+> @Lehui I'd like to see two follow-up patches:
+> 
+> 1. Enable kfunc for RV64, by adding:
+>   | bool bpf_jit_supports_kfunc_call(void)
+>   | {
+>   |         return true;
+>   | }
+> 
+> 2. Remove the checkpatch warning on patch 4:
+>   | WARNING: kfree(NULL) is safe and this check is probably not required
+>   | #313: FILE: arch/riscv/net/bpf_jit_comp64.c:984:
+>   | +	if (branches_off)
+>   | +		kfree(branches_off);
+> 
+> 
+> For the series:
+> 
+> Tested-by: Björn Töpel <bjorn@rivosinc.com>
+> Acked-by: Björn Töpel <bjorn@rivosinc.com>
 
--- 
-With best wishes
-Dmitry
-
+Thanks, I fixed up issue 2 and cleaned up the commit msgs while applying.
+For issue 1, pls send a follow-up.
