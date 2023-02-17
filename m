@@ -2,150 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318D469B653
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484F369B65C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjBQXNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S229978AbjBQXPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjBQXNc (ORCPT
+        with ESMTP id S229667AbjBQXPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:13:32 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162D759726
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:13:00 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id h3so2690637ybi.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:13:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fwwj1bF3gwXWIenxKT0bdfIOktYXG/UwGuLof/OlNNU=;
-        b=WE2FKK6V9oIJaQ9lReqLrjWArqEJZcFx1vIwA1KQ8nlF8OTWIPcSrf3bcEn72ZjWfl
-         /hBldIMaCHcoqpL6h4cP8LkqVJHSGJlWko21fGpEjaIEKJ0CmQgVlnkwRAxpx7YtJTJ2
-         Ogv++7qqGH0B5VjUzIY0EIzFLKUzN5qspMsPWcuIvg6wcHEfqSa9IzQa3aN6glBQREd7
-         AR7vQvvF1W1AWfBcs3p/zJLkyzW3mdKgZT8khYIFtFqhNboZkx1/9NMppIUBYMZiXs5l
-         DJq5tsh+hDxBvdogYDBenrwP/ShFW5O6R72Q2QJFErclszwwpWKKwlkedBCMth/fDHi8
-         LX2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fwwj1bF3gwXWIenxKT0bdfIOktYXG/UwGuLof/OlNNU=;
-        b=tcEck8QS5bQ3YWC5yKBorEIOpvoGJ2ouGHXfNYLw61cEHJrAw3cCQjvwi3VddUhGgX
-         +xPI0TTmWpELt4cJn5j8+LseIzzFGt/uWAv4sCPX/hsjirdKAp/yuWxtP2RYqpFWwz3K
-         EoaCWgE+6Kd2ZAUHETTtp4FS81IaBYMsMPJrQFy8Dbxdygas1+rkRc51ivGudSELapSR
-         J9gx+XqnL1RFq++xbbPA1HHrjQd0+xex8oGL3DVC9i5B6snzkat1RNWpODHl8GOiDlFs
-         yd5458BytbfbWIPU4gfHgi8ZlWcRuU+7S0W74cB5G92rjxKLhf2ixToIPE0gsK8iaVdl
-         VGSw==
-X-Gm-Message-State: AO0yUKV7yCarLuNji4+Rpcz/qppApDli5PolkAHuCrH5jAU6GTW6Gcr0
-        Q3uCLFKAWnKP9xPE2hU95dr6yxfMPOmxzakuqM6h
-X-Google-Smtp-Source: AK7set8RjKogH7WXBDvBJZd6sp0xcr4+HOszKalXQDjkyWay2WkQFXIxr9DYbNAA66HY70HXMIkCYb8ja3QwN2YD6Oo=
-X-Received: by 2002:a5b:18e:0:b0:96c:c73d:5f73 with SMTP id
- r14-20020a5b018e000000b0096cc73d5f73mr545911ybl.49.1676675518686; Fri, 17 Feb
- 2023 15:11:58 -0800 (PST)
+        Fri, 17 Feb 2023 18:15:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7156A06F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:14:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8521B82EB0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 23:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF79C433AE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 23:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676675608;
+        bh=007Ju5hmo469I+GLbhKmQyFOblRRKqP7+IKJhGVg3Bc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FVQuLHu9su+8MtuqreGX0M6eUP2draqAXJj4M0+8pCp7wP3cq/lR7ACHIf24dTWkq
+         b+prnybkvEZUYcirmWUlld+/8oqr6Nlbu01GGr+WwVByKApBo1afHnsziIFQI2erWf
+         EGwGBTF+S6LSfMq241TKKmHuZRPX6qF35zA6vNp9ovpCBLGLSuQb95HK4Pn/rKOk+N
+         Q29erYenPL3+a3yt35AFu9AbVpoMWykSXPezSdlvTG0r5dcYRXTe3mPJC9QqOkNZ6+
+         ArzBr6bVo48aEYAhQoN4OGqbh5dK+dGwwlaEtAELclY4hqR6CWmZhFUEuGC2Xr7W+S
+         OAFm4QbGrDmsw==
+Received: by mail-ed1-f50.google.com with SMTP id cz7so6574280edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:13:28 -0800 (PST)
+X-Gm-Message-State: AO0yUKUMwzMRnbz1ojbUVYtHiVJ8FF3JjwzErPXF/s18lcYbEDSUtQBj
+        Hl+/xm3r2vw5+bDtMs43/ljwyJ9NP0SWK9IoJJzEwg==
+X-Google-Smtp-Source: AK7set8/bNsrYafbYm0zAE3nFVOlai7VLZ8imlSdGrFod1cdz9z2k4ibd74H3rjwb0A7aOD2eNsBGzV5MLYpkJRFYLE=
+X-Received: by 2002:a17:907:6c14:b0:8ae:cb48:3c80 with SMTP id
+ rl20-20020a1709076c1400b008aecb483c80mr5175474ejc.7.1676675606807; Fri, 17
+ Feb 2023 15:13:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com> <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
- <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com> <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
- <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com> <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
- <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com> <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com>
-In-Reply-To: <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 17 Feb 2023 15:11:47 -0800
-Message-ID: <CANDhNCrooGXFvW6DDuRJHtM2K8wCbqajSP0KDVn+wkEcTNHJZA@mail.gmail.com>
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
-        adrian.hunter@intel.com
+References: <20230210061953.GC2825702@dread.disaster.area> <Y+oCBnz2nLtXrz7O@gondor.apana.org.au>
+ <CALCETrXKkZw3ojpmTftur1_-dEi6BOo9Q0cems_jgabntNFYig@mail.gmail.com> <Y+riPviz0em9L9BQ@gondor.apana.org.au>
+In-Reply-To: <Y+riPviz0em9L9BQ@gondor.apana.org.au>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 17 Feb 2023 15:13:14 -0800
+X-Gmail-Original-Message-ID: <CALCETrXr8vRPqEjhSg7=adQcM7OfWs_+fn2xP5OQeLXAaLzHHQ@mail.gmail.com>
+Message-ID: <CALCETrXr8vRPqEjhSg7=adQcM7OfWs_+fn2xP5OQeLXAaLzHHQ@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        torvalds@linux-foundation.org, metze@samba.org, axboe@kernel.dk,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, samba-technical@lists.samba.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 12:38 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> On 2023-02-14 3:11 p.m., John Stultz wrote:
-> > On Tue, Feb 14, 2023 at 9:00 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> >> On 2023-02-14 9:51 a.m., Liang, Kan wrote:
-> >>> If I understand correctly, the idea is to let the user space tool run
-> >>> the above interpoloation algorithm several times to 'guess' the atomic
-> >>> mapping. Using the mapping information to covert the TSC from the PEBS
-> >>> record. Is my understanding correct?
-> >>>
-> >>> If so, to be honest, I doubt we can get the accuracy we want.
-> >>>
-> >>
-> >> I implemented a simple test to evaluate the error.
-> >
-> > Very cool!
-> >
-> >> I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
-> >> at the start and end of perf cmd.
-> >>         MONO_RAW        TSC
-> >> start   89553516545645  223619715214239
-> >> end     89562251233830  223641517000376
-> >>
-> >> Here is what I get via mult/shift conversion from this patch.
-> >>         MONO_RAW        TSC
-> >> PEBS    89555942691466  223625770878571
-> >>
-> >> Then I use the time information from start and end to create a linear
-> >> function and 'guess' the MONO_RAW of PEBS from the TSC. I get
-> >> 89555942692721.
-> >> There is a 1255 ns difference.
-> >> I tried several different PEBS records. The error is ~1000ns.
-> >> I think it should be an observable error.
-> >
-> > Interesting. That's a good bit higher than I'd expect as I'd expect a
-> > clock_gettime() call to take ~ double digit nanoseconds range on
-> > average, so the error should be within that.
-> >
-> > Can you share your logic?
-> >
+> On Feb 13, 2023, at 5:22 PM, Herbert Xu <herbert@gondor.apana.org.au> wro=
+te:
 >
-> I run the algorithm right before and after the perf command as below.
-> (The source code of time is attached.)
+> =EF=BB=BFOn Mon, Feb 13, 2023 at 10:01:27AM -0800, Andy Lutomirski wrote:
+>>
+>> There's a difference between "kernel speaks TCP (or whatever)
+>> correctly" and "kernel does what the application needs it to do".
 >
-> $./time
-> $perf record -e cycles:upp --clockid monotonic_raw $some_workaround
-> $./time
->
-> The time will dump both MONO_RAW and TSC. That's where "start" and "end"
-> from.
-> The perf command print out both TSC and converted MONO_RAW (using the
-> mul/shift from this patch series). That's where "PEBS" value from.
->
-> Than I use the below formula to calculate the guessed MONO_RAW of PEBS TSC.
-> Guessed_MONO_RAW = (PEBS_TSC - start_TSC) / (end_TSC - start_TSC) *
-> (end_MONO_RAW - start_MONO_RAW) + start_MONO_RAW.
->
-> The guessed_MONO_RAW is 89555942692721.
-> The PEBS_MONO_RAW is 89555942691466.
-> The difference is 1255.
->
-> Is the calculation correct?
+> Sure I get where you are coming from.  It's just that the other
+> participants in the discussion were thinking of stability for the
+> sake of TCP (or TLS or some other protocol the kernel implements)
+> and that simply is a non-issue.
 
-Thanks for sharing it. The equation you have there looks ok at a high
-level for the values you captured (there's small tweaks like doing the
-mult before the div to make sure you don't hit integer precision
-issues, but I didn't see that with your results).
+I can certainly imagine TLS or similar protocols breaking if data
+changes if the implementation is too clever and retransmission
+happens.  Suppose 2000 bytes are sent via splice using in-kernel TLS,
+and it goes out on the wire as two TCP segments.  The first segment is
+dropped but the second is received.  The kernel resends the first
+segment using different data.  This really ought to cause an integrity
+check at the far end to fail.
 
-I've got a todo to try to see how the calculation changes if we do
-provide atomic TSC/RAW stamps, here but I got a little busy with other
-work and haven't gotten to it.
-So my apologies, but I'll try to get back to this soon.
+I don't know if any existing kTLS is clever enough to regenerate
+outgoing data when it needs to retransmit a segment, but it would be
+an interesting optimization for serving static content over TLS.
 
-thanks
--john
+
+
+>
+> Having a better way to communicate completion to the user would be
+> nice.  The only way to do it right now seems to be polling with
+> SIOCOUTQ.
+>
+>
