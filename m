@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316CD69B0B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F93F69B089
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBQQVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S231126AbjBQQTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjBQQUi (ORCPT
+        with ESMTP id S229923AbjBQQSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:20:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7F3711AD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676650746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVsOUldtjpJvVyw0Csw/egkP/31uwH/LRh0j7R/R6EY=;
-        b=GyC5jLwPrURwAS6beN5gHLpxFYlKerNABydxcJsLbxzkhEFC3KR0+rZ6BsP1LXqAm0UAyQ
-        uinRksjaUzTojIcQxUUrHr+DAtLvxwAOttT76hI8JU+vEa3mEONcZO9ti3XHCA1JXbBgh7
-        jAKCpN6tKtSwBqIQxcBPNA2AXQJrimM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-qDSt2WXuOr6KDHyTqBu6FQ-1; Fri, 17 Feb 2023 11:19:03 -0500
-X-MC-Unique: qDSt2WXuOr6KDHyTqBu6FQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F0793C025C4;
-        Fri, 17 Feb 2023 16:19:02 +0000 (UTC)
-Received: from xps-13.local (unknown [10.39.193.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ECDADC15BA0;
-        Fri, 17 Feb 2023 16:19:00 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 17 Feb 2023 17:18:04 +0100
-Subject: [PATCH 10/11] selftests: hid: import hid-tools hid-sony and
- hid-playstation tests
+        Fri, 17 Feb 2023 11:18:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EE36F3F8;
+        Fri, 17 Feb 2023 08:18:33 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HEVOVX030038;
+        Fri, 17 Feb 2023 16:18:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=pPQmZ+MnXMziJ3QxiE21sR7a/wt+oWELJc1+OmZPBD0=;
+ b=cfrLwgVM7WK6yglDQsIEv6YjkBwJFjMzzWSR/CGgwGcJHFs98SUZmGiw4XEYEYfhvGU+
+ 1q1wKW/3af0i5yXb5C0MGWpXQqJGDczVH8iNpu8YDmfExvgbB+XcPxcPQXctWjzvkxk3
+ zxIzQoTsaYuIg4g08a9Y0q/ZDAEck4v9ftkFSfMDmgz5KZ8ku0bjdgtYNWs7YM4BcRJ/
+ rgaMBRVZdU11j1Eu1WBqUcaW79L+3GD+DvZq8rI9CmbuRJRmq2U9FGcuJvjvhPmI5m5a
+ uRpPNwCjmMhPUI2purEgbcN6lTM2K2m+rEImzjxjtd1h8ig7rPTR00v5p3RTwVP8S7mE Fg== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nt49smnn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 16:18:22 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HG7VuR006980;
+        Fri, 17 Feb 2023 16:18:21 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3np2n7rmf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 16:18:21 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HGIKj98716836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 16:18:20 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09C7B5805D;
+        Fri, 17 Feb 2023 16:18:20 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6DAA15805E;
+        Fri, 17 Feb 2023 16:18:19 +0000 (GMT)
+Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Feb 2023 16:18:19 +0000 (GMT)
+From:   Danny Tsen <dtsen@linux.ibm.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
+Subject: [PATCH v3 5/6] Supporting functions for ghash.
+Date:   Fri, 17 Feb 2023 11:18:04 -0500
+Message-Id: <20230217161805.236319-6-dtsen@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230217161805.236319-1-dtsen@linux.ibm.com>
+References: <20230217161805.236319-1-dtsen@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ha1mVHMRo5KwXIxNy2fxn838g4h7Fx6b
+X-Proofpoint-GUID: Ha1mVHMRo5KwXIxNy2fxn838g4h7Fx6b
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230217-import-hid-tools-tests-v1-10-d1c48590d0ee@redhat.com>
-References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
-In-Reply-To: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
-To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Jose Torreguitar <jtguitar@google.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676650715; l=13986;
- i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
- bh=tFgoHCJsykqT5eoFuiHk5bbXNKEXLpiSTqTgdIQzyV4=;
- b=izyDrJ6JP9r/c463+7YgXbEpicHNskk+j3rxG5oqOfOajMSSLXPLcSacwx/CM9uj7BLMVyJ0A
- gYGA1TCbrXcCVY2crK7SGzaINTZfX/yBva+vkdJZizs62Knc5KE6g4u
-X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,356 +87,392 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These tests have been developed in the hid-tools[0] tree for a while.
-Now that we have  a proper selftests/hid kernel entry and that the tests
-are more reliable, it is time to directly include those in the kernel
-tree.
+This perl code is taken from the OpenSSL project and added gcm_init_htable function
+used in the p10-aes-gcm-glue.c code to initialize hash table.  gcm_hash_p8 is used
+to hash encrypted data blocks.
 
-[0] https://gitlab.freedesktop.org/libevdev/hid-tools
-
-Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
-Cc: Jose Torreguitar <jtguitar@google.com>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
 ---
- tools/testing/selftests/hid/Makefile           |   1 +
- tools/testing/selftests/hid/config             |   5 +
- tools/testing/selftests/hid/hid-sony.sh        |   7 +
- tools/testing/selftests/hid/tests/test_sony.py | 282 +++++++++++++++++++++++++
- 4 files changed, 295 insertions(+)
+ arch/powerpc/crypto/ghashp8-ppc.pl | 370 +++++++++++++++++++++++++++++
+ 1 file changed, 370 insertions(+)
+ create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
 
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 3ca696c44aab..dcea4f1e9369 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -12,6 +12,7 @@ TEST_PROGS += hid-ite.sh
- TEST_PROGS += hid-keyboard.sh
- TEST_PROGS += hid-mouse.sh
- TEST_PROGS += hid-multitouch.sh
-+TEST_PROGS += hid-sony.sh
- TEST_PROGS += hid-tablet.sh
- TEST_PROGS += hid-wacom.sh
- 
-diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
-index f400b8d94e3c..442a5ea16325 100644
---- a/tools/testing/selftests/hid/config
-+++ b/tools/testing/selftests/hid/config
-@@ -19,9 +19,14 @@ CONFIG_HIDRAW=y
- CONFIG_HID=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_UHID=y
-+CONFIG_LEDS_CLASS_MULTICOLOR=y
- CONFIG_USB=y
- CONFIG_USB_HID=y
- CONFIG_HID_APPLE=y
- CONFIG_HID_ITE=y
- CONFIG_HID_MULTITOUCH=y
-+CONFIG_HID_PLAYSTATION=y
-+CONFIG_PLAYSTATION_FF=y
-+CONFIG_HID_SONY=y
-+CONFIG_SONY_FF=y
- CONFIG_HID_WACOM=y
-diff --git a/tools/testing/selftests/hid/hid-sony.sh b/tools/testing/selftests/hid/hid-sony.sh
-new file mode 100755
-index 000000000000..c863c442686e
---- /dev/null
-+++ b/tools/testing/selftests/hid/hid-sony.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the HID subsystem
-+
-+export TARGET=test_sony.py
-+
-+bash ./run-hid-tools-tests.sh
-diff --git a/tools/testing/selftests/hid/tests/test_sony.py b/tools/testing/selftests/hid/tests/test_sony.py
+diff --git a/arch/powerpc/crypto/ghashp8-ppc.pl b/arch/powerpc/crypto/ghashp8-ppc.pl
 new file mode 100644
-index 000000000000..c80f50ed29d3
+index 000000000000..b56603b4a893
 --- /dev/null
-+++ b/tools/testing/selftests/hid/tests/test_sony.py
-@@ -0,0 +1,282 @@
-+#!/bin/env python3
++++ b/arch/powerpc/crypto/ghashp8-ppc.pl
+@@ -0,0 +1,370 @@
++#!/usr/bin/env perl
 +# SPDX-License-Identifier: GPL-2.0
-+# -*- coding: utf-8 -*-
++
++# This code is taken from the OpenSSL project but the author (Andy Polyakov)
++# has relicensed it under the GPLv2. Therefore this program is free software;
++# you can redistribute it and/or modify it under the terms of the GNU General
++# Public License version 2 as published by the Free Software Foundation.
 +#
-+# Copyright (c) 2020 Benjamin Tissoires <benjamin.tissoires@gmail.com>
-+# Copyright (c) 2020 Red Hat, Inc.
++# The original headers, including the original license headers, are
++# included below for completeness.
++
++# ====================================================================
++# Written by Andy Polyakov <appro@openssl.org> for the OpenSSL
++# project. The module is, however, dual licensed under OpenSSL and
++# CRYPTOGAMS licenses depending on where you obtain it. For further
++# details see https://www.openssl.org/~appro/cryptogams/.
++# ====================================================================
 +#
++# GHASH for PowerISA v2.07.
++#
++# July 2014
++#
++# Accurate performance measurements are problematic, because it's
++# always virtualized setup with possibly throttled processor.
++# Relative comparison is therefore more informative. This initial
++# version is ~2.1x slower than hardware-assisted AES-128-CTR, ~12x
++# faster than "4-bit" integer-only compiler-generated 64-bit code.
++# "Initial version" means that there is room for futher improvement.
 +
-+from .base import application_matches
-+from .test_gamepad import BaseTest
-+from hidtools.device.sony_gamepad import (
-+    PS3Controller,
-+    PS4ControllerBluetooth,
-+    PS4ControllerUSB,
-+    PS5ControllerBluetooth,
-+    PS5ControllerUSB,
-+    PSTouchPoint,
-+)
-+from hidtools.util import BusType
++$flavour=shift;
++$output =shift;
 +
-+import libevdev
-+import logging
-+import pytest
++if ($flavour =~ /64/) {
++	$SIZE_T=8;
++	$LRSAVE=2*$SIZE_T;
++	$STU="stdu";
++	$POP="ld";
++	$PUSH="std";
++} elsif ($flavour =~ /32/) {
++	$SIZE_T=4;
++	$LRSAVE=$SIZE_T;
++	$STU="stwu";
++	$POP="lwz";
++	$PUSH="stw";
++} else { die "nonsense $flavour"; }
 +
-+logger = logging.getLogger("hidtools.test.sony")
++$0 =~ m/(.*[\/\\])[^\/\\]+$/; $dir=$1;
++( $xlate="${dir}ppc-xlate.pl" and -f $xlate ) or
++( $xlate="${dir}../../perlasm/ppc-xlate.pl" and -f $xlate) or
++die "can't locate ppc-xlate.pl";
 +
-+PS3_MODULE = ("sony", "hid_sony")
-+PS4_MODULE = ("playstation", "hid_playstation")
-+PS5_MODULE = ("playstation", "hid_playstation")
++open STDOUT,"| $^X $xlate $flavour $output" || die "can't call $xlate: $!";
 +
++my ($Xip,$Htbl,$inp,$len)=map("r$_",(3..6));	# argument block
 +
-+class SonyBaseTest:
-+    class SonyTest(BaseTest.TestGamepad):
-+        pass
++my ($Xl,$Xm,$Xh,$IN)=map("v$_",(0..3));
++my ($zero,$t0,$t1,$t2,$xC2,$H,$Hh,$Hl,$lemask)=map("v$_",(4..12));
++my ($Xl1,$Xm1,$Xh1,$IN1,$H2,$H2h,$H2l)=map("v$_",(13..19));
++my $vrsave="r12";
++my ($t4,$t5,$t6) = ($Hl,$H,$Hh);
 +
-+    class SonyPS4ControllerTest(SonyTest):
-+        kernel_modules = [PS4_MODULE]
++$code=<<___;
++.machine	"any"
 +
-+        def test_accelerometer(self):
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev("Accelerometer")
++.text
 +
-+            for x in range(-32000, 32000, 4000):
-+                r = uhdev.event(accel=(x, None, None))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++.globl	.gcm_init_p8
++	lis		r0,0xfff0
++	li		r8,0x10
++	mfspr		$vrsave,256
++	li		r9,0x20
++	mtspr		256,r0
++	li		r10,0x30
++	lvx_u		$H,0,r4			# load H
++	le?xor		r7,r7,r7
++	le?addi		r7,r7,0x8		# need a vperm start with 08
++	le?lvsr		5,0,r7
++	le?vspltisb	6,0x0f
++	le?vxor		5,5,6			# set a b-endian mask
++	le?vperm	$H,$H,$H,5
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_X) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_X]
-+                # Check against range due to small loss in precision due
-+                # to inverse calibration, followed by calibration by hid-sony.
-+                assert x - 1 <= value <= x + 1
++	vspltisb	$xC2,-16		# 0xf0
++	vspltisb	$t0,1			# one
++	vaddubm		$xC2,$xC2,$xC2		# 0xe0
++	vxor		$zero,$zero,$zero
++	vor		$xC2,$xC2,$t0		# 0xe1
++	vsldoi		$xC2,$xC2,$zero,15	# 0xe1...
++	vsldoi		$t1,$zero,$t0,1		# ...1
++	vaddubm		$xC2,$xC2,$xC2		# 0xc2...
++	vspltisb	$t2,7
++	vor		$xC2,$xC2,$t1		# 0xc2....01
++	vspltb		$t1,$H,0		# most significant byte
++	vsl		$H,$H,$t0		# H<<=1
++	vsrab		$t1,$t1,$t2		# broadcast carry bit
++	vand		$t1,$t1,$xC2
++	vxor		$H,$H,$t1		# twisted H
 +
-+            for y in range(-32000, 32000, 4000):
-+                r = uhdev.event(accel=(None, y, None))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++	vsldoi		$H,$H,$H,8		# twist even more ...
++	vsldoi		$xC2,$zero,$xC2,8	# 0xc2.0
++	vsldoi		$Hl,$zero,$H,8		# ... and split
++	vsldoi		$Hh,$H,$zero,8
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_Y) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_Y]
-+                assert y - 1 <= value <= y + 1
++	stvx_u		$xC2,0,r3		# save pre-computed table
++	stvx_u		$Hl,r8,r3
++	stvx_u		$H, r9,r3
++	stvx_u		$Hh,r10,r3
 +
-+            for z in range(-32000, 32000, 4000):
-+                r = uhdev.event(accel=(None, None, z))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++	mtspr		256,$vrsave
++	blr
++	.long		0
++	.byte		0,12,0x14,0,0,0,2,0
++	.long		0
++.size	.gcm_init_p8,.-.gcm_init_p8
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_Z) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_Z]
-+                assert z - 1 <= value <= z + 1
++.globl	.gcm_init_htable
++	lis		r0,0xfff0
++	li		r8,0x10
++	mfspr		$vrsave,256
++	li		r9,0x20
++	mtspr		256,r0
++	li		r10,0x30
++	lvx_u		$H,0,r4			# load H
 +
-+        def test_gyroscope(self):
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev("Accelerometer")
++	vspltisb	$xC2,-16		# 0xf0
++	vspltisb	$t0,1			# one
++	vaddubm		$xC2,$xC2,$xC2		# 0xe0
++	vxor		$zero,$zero,$zero
++	vor		$xC2,$xC2,$t0		# 0xe1
++	vsldoi		$xC2,$xC2,$zero,15	# 0xe1...
++	vsldoi		$t1,$zero,$t0,1		# ...1
++	vaddubm		$xC2,$xC2,$xC2		# 0xc2...
++	vspltisb	$t2,7
++	vor		$xC2,$xC2,$t1		# 0xc2....01
++	vspltb		$t1,$H,0		# most significant byte
++	vsl		$H,$H,$t0		# H<<=1
++	vsrab		$t1,$t1,$t2		# broadcast carry bit
++	vand		$t1,$t1,$xC2
++	vxor		$IN,$H,$t1		# twisted H
 +
-+            for rx in range(-2000000, 2000000, 200000):
-+                r = uhdev.event(gyro=(rx, None, None))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++	vsldoi		$H,$IN,$IN,8		# twist even more ...
++	vsldoi		$xC2,$zero,$xC2,8	# 0xc2.0
++	vsldoi		$Hl,$zero,$H,8		# ... and split
++	vsldoi		$Hh,$H,$zero,8
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_RX) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_RX]
-+                # Sensor internal value is 16-bit, but calibrated is 22-bit, so
-+                # 6-bit (64) difference, so allow a range of +/- 64.
-+                assert rx - 64 <= value <= rx + 64
++	stvx_u		$xC2,0,r3		# save pre-computed table
++	stvx_u		$Hl,r8,r3
++	li		r8,0x40
++	stvx_u		$H, r9,r3
++	li		r9,0x50
++	stvx_u		$Hh,r10,r3
++	li		r10,0x60
 +
-+            for ry in range(-2000000, 2000000, 200000):
-+                r = uhdev.event(gyro=(None, ry, None))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++	vpmsumd		$Xl,$IN,$Hl		# H.lo·H.lo
++	vpmsumd		$Xm,$IN,$H		# H.hi·H.lo+H.lo·H.hi
++	vpmsumd		$Xh,$IN,$Hh		# H.hi·H.hi
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_RY) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_RY]
-+                assert ry - 64 <= value <= ry + 64
++	vpmsumd		$t2,$Xl,$xC2		# 1st reduction phase
 +
-+            for rz in range(-2000000, 2000000, 200000):
-+                r = uhdev.event(gyro=(None, None, rz))
-+                events = uhdev.next_sync_events("Accelerometer")
-+                self.debug_reports(r, uhdev, events)
++	vsldoi		$t0,$Xm,$zero,8
++	vsldoi		$t1,$zero,$Xm,8
++	vxor		$Xl,$Xl,$t0
++	vxor		$Xh,$Xh,$t1
 +
-+                assert libevdev.InputEvent(libevdev.EV_ABS.ABS_RZ) in events
-+                value = evdev.value[libevdev.EV_ABS.ABS_RZ]
-+                assert rz - 64 <= value <= rz + 64
++	vsldoi		$Xl,$Xl,$Xl,8
++	vxor		$Xl,$Xl,$t2
 +
-+        def test_battery(self):
-+            uhdev = self.uhdev
++	vsldoi		$t1,$Xl,$Xl,8		# 2nd reduction phase
++	vpmsumd		$Xl,$Xl,$xC2
++	vxor		$t1,$t1,$Xh
++	vxor		$IN1,$Xl,$t1
 +
-+            assert uhdev.power_supply_class is not None
++	vsldoi		$H2,$IN1,$IN1,8
++	vsldoi		$H2l,$zero,$H2,8
++	vsldoi		$H2h,$H2,$zero,8
 +
-+            # DS4 capacity levels are in increments of 10.
-+            # Battery is never below 5%.
-+            for i in range(5, 105, 10):
-+                uhdev.battery.capacity = i
-+                uhdev.event()
-+                assert uhdev.power_supply_class.capacity == i
++	stvx_u		$H2l,r8,r3		# save H^2
++	li		r8,0x70
++	stvx_u		$H2,r9,r3
++	li		r9,0x80
++	stvx_u		$H2h,r10,r3
++	li		r10,0x90
 +
-+            # Discharging tests only make sense for BlueTooth.
-+            if uhdev.bus == BusType.BLUETOOTH:
-+                uhdev.battery.cable_connected = False
-+                uhdev.battery.capacity = 45
-+                uhdev.event()
-+                assert uhdev.power_supply_class.status == "Discharging"
++	vpmsumd		$Xl,$IN,$H2l		# H.lo·H^2.lo
++	 vpmsumd	$Xl1,$IN1,$H2l		# H^2.lo·H^2.lo
++	vpmsumd		$Xm,$IN,$H2		# H.hi·H^2.lo+H.lo·H^2.hi
++	 vpmsumd	$Xm1,$IN1,$H2		# H^2.hi·H^2.lo+H^2.lo·H^2.hi
++	vpmsumd		$Xh,$IN,$H2h		# H.hi·H^2.hi
++	 vpmsumd	$Xh1,$IN1,$H2h		# H^2.hi·H^2.hi
 +
-+            uhdev.battery.cable_connected = True
-+            uhdev.battery.capacity = 5
-+            uhdev.event()
-+            assert uhdev.power_supply_class.status == "Charging"
++	vpmsumd		$t2,$Xl,$xC2		# 1st reduction phase
++	 vpmsumd	$t6,$Xl1,$xC2		# 1st reduction phase
 +
-+            uhdev.battery.capacity = 100
-+            uhdev.event()
-+            assert uhdev.power_supply_class.status == "Charging"
++	vsldoi		$t0,$Xm,$zero,8
++	vsldoi		$t1,$zero,$Xm,8
++	 vsldoi		$t4,$Xm1,$zero,8
++	 vsldoi		$t5,$zero,$Xm1,8
++	vxor		$Xl,$Xl,$t0
++	vxor		$Xh,$Xh,$t1
++	 vxor		$Xl1,$Xl1,$t4
++	 vxor		$Xh1,$Xh1,$t5
 +
-+            uhdev.battery.full = True
-+            uhdev.event()
-+            assert uhdev.power_supply_class.status == "Full"
++	vsldoi		$Xl,$Xl,$Xl,8
++	 vsldoi		$Xl1,$Xl1,$Xl1,8
++	vxor		$Xl,$Xl,$t2
++	 vxor		$Xl1,$Xl1,$t6
 +
-+        def test_mt_single_touch(self):
-+            """send a single touch in the first slot of the device,
-+            and release it."""
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev("Touch Pad")
++	vsldoi		$t1,$Xl,$Xl,8		# 2nd reduction phase
++	 vsldoi		$t5,$Xl1,$Xl1,8		# 2nd reduction phase
++	vpmsumd		$Xl,$Xl,$xC2
++	 vpmsumd	$Xl1,$Xl1,$xC2
++	vxor		$t1,$t1,$Xh
++	 vxor		$t5,$t5,$Xh1
++	vxor		$Xl,$Xl,$t1
++	 vxor		$Xl1,$Xl1,$t5
 +
-+            t0 = PSTouchPoint(1, 50, 100)
-+            r = uhdev.event(touch=[t0])
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
++	vsldoi		$H,$Xl,$Xl,8
++	 vsldoi		$H2,$Xl1,$Xl1,8
++	vsldoi		$Hl,$zero,$H,8
++	vsldoi		$Hh,$H,$zero,8
++	 vsldoi		$H2l,$zero,$H2,8
++	 vsldoi		$H2h,$H2,$zero,8
 +
-+            assert libevdev.InputEvent(libevdev.EV_KEY.BTN_TOUCH, 1) in events
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == 0
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_X] == 50
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_Y] == 100
++	stvx_u		$Hl,r8,r3		# save H^3
++	li		r8,0xa0
++	stvx_u		$H,r9,r3
++	li		r9,0xb0
++	stvx_u		$Hh,r10,r3
++	li		r10,0xc0
++	 stvx_u		$H2l,r8,r3		# save H^4
++	 stvx_u		$H2,r9,r3
++	 stvx_u		$H2h,r10,r3
 +
-+            t0.tipswitch = False
-+            r = uhdev.event(touch=[t0])
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
-+            assert libevdev.InputEvent(libevdev.EV_KEY.BTN_TOUCH, 0) in events
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++	mtspr		256,$vrsave
++	blr
++	.long		0
++	.byte		0,12,0x14,0,0,0,2,0
++	.long		0
++.size	.gcm_init_htable,.-.gcm_init_htable
 +
-+        def test_mt_dual_touch(self):
-+            """Send 2 touches in the first 2 slots.
-+            Make sure the kernel sees this as a dual touch.
-+            Release and check
++.globl	.gcm_gmult_p8
++	lis		r0,0xfff8
++	li		r8,0x10
++	mfspr		$vrsave,256
++	li		r9,0x20
++	mtspr		256,r0
++	li		r10,0x30
++	lvx_u		$IN,0,$Xip		# load Xi
 +
-+            Note: PTP will send here BTN_DOUBLETAP emulation"""
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev("Touch Pad")
++	lvx_u		$Hl,r8,$Htbl		# load pre-computed table
++	 le?lvsl	$lemask,r0,r0
++	lvx_u		$H, r9,$Htbl
++	 le?vspltisb	$t0,0x07
++	lvx_u		$Hh,r10,$Htbl
++	 le?vxor	$lemask,$lemask,$t0
++	lvx_u		$xC2,0,$Htbl
++	 le?vperm	$IN,$IN,$IN,$lemask
++	vxor		$zero,$zero,$zero
 +
-+            t0 = PSTouchPoint(1, 50, 100)
-+            t1 = PSTouchPoint(2, 150, 200)
++	vpmsumd		$Xl,$IN,$Hl		# H.lo·Xi.lo
++	vpmsumd		$Xm,$IN,$H		# H.hi·Xi.lo+H.lo·Xi.hi
++	vpmsumd		$Xh,$IN,$Hh		# H.hi·Xi.hi
 +
-+            r = uhdev.event(touch=[t0])
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
++	vpmsumd		$t2,$Xl,$xC2		# 1st phase
 +
-+            assert libevdev.InputEvent(libevdev.EV_KEY.BTN_TOUCH, 1) in events
-+            assert evdev.value[libevdev.EV_KEY.BTN_TOUCH] == 1
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == 0
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_X] == 50
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_Y] == 100
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++	vsldoi		$t0,$Xm,$zero,8
++	vsldoi		$t1,$zero,$Xm,8
++	vxor		$Xl,$Xl,$t0
++	vxor		$Xh,$Xh,$t1
 +
-+            r = uhdev.event(touch=[t0, t1])
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
-+            assert libevdev.InputEvent(libevdev.EV_KEY.BTN_TOUCH) not in events
-+            assert evdev.value[libevdev.EV_KEY.BTN_TOUCH] == 1
-+            assert (
-+                libevdev.InputEvent(libevdev.EV_ABS.ABS_MT_POSITION_X, 5) not in events
-+            )
-+            assert (
-+                libevdev.InputEvent(libevdev.EV_ABS.ABS_MT_POSITION_Y, 10) not in events
-+            )
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == 0
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_X] == 50
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_POSITION_Y] == 100
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == 1
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_POSITION_X] == 150
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_POSITION_Y] == 200
++	vsldoi		$Xl,$Xl,$Xl,8
++	vxor		$Xl,$Xl,$t2
 +
-+            t0.tipswitch = False
-+            r = uhdev.event(touch=[t0, t1])
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == 1
-+            assert libevdev.InputEvent(libevdev.EV_ABS.ABS_MT_POSITION_X) not in events
-+            assert libevdev.InputEvent(libevdev.EV_ABS.ABS_MT_POSITION_Y) not in events
++	vsldoi		$t1,$Xl,$Xl,8		# 2nd phase
++	vpmsumd		$Xl,$Xl,$xC2
++	vxor		$t1,$t1,$Xh
++	vxor		$Xl,$Xl,$t1
 +
-+            t1.tipswitch = False
-+            r = uhdev.event(touch=[t1])
++	le?vperm	$Xl,$Xl,$Xl,$lemask
++	stvx_u		$Xl,0,$Xip		# write out Xi
 +
-+            events = uhdev.next_sync_events("Touch Pad")
-+            self.debug_reports(r, uhdev, events)
-+            assert evdev.slots[0][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
-+            assert evdev.slots[1][libevdev.EV_ABS.ABS_MT_TRACKING_ID] == -1
++	mtspr		256,$vrsave
++	blr
++	.long		0
++	.byte		0,12,0x14,0,0,0,2,0
++	.long		0
++.size	.gcm_gmult_p8,.-.gcm_gmult_p8
 +
++.globl	.gcm_ghash_p8
++	lis		r0,0xfff8
++	li		r8,0x10
++	mfspr		$vrsave,256
++	li		r9,0x20
++	mtspr		256,r0
++	li		r10,0x30
++	lvx_u		$Xl,0,$Xip		# load Xi
 +
-+class TestPS3Controller(SonyBaseTest.SonyTest):
-+    kernel_modules = [PS3_MODULE]
++	lvx_u		$Hl,r8,$Htbl		# load pre-computed table
++	 le?lvsl	$lemask,r0,r0
++	lvx_u		$H, r9,$Htbl
++	 le?vspltisb	$t0,0x07
++	lvx_u		$Hh,r10,$Htbl
++	 le?vxor	$lemask,$lemask,$t0
++	lvx_u		$xC2,0,$Htbl
++	 le?vperm	$Xl,$Xl,$Xl,$lemask
++	vxor		$zero,$zero,$zero
 +
-+    def create_device(self):
-+        controller = PS3Controller()
-+        controller.application_matches = application_matches
-+        return controller
++	lvx_u		$IN,0,$inp
++	addi		$inp,$inp,16
++	subi		$len,$len,16
++	 le?vperm	$IN,$IN,$IN,$lemask
++	vxor		$IN,$IN,$Xl
++	b		Loop
 +
-+    @pytest.fixture(autouse=True)
-+    def start_controller(self):
-+        # emulate a 'PS' button press to tell the kernel we are ready to accept events
-+        self.assert_button(17)
++.align	5
++Loop:
++	 subic		$len,$len,16
++	vpmsumd		$Xl,$IN,$Hl		# H.lo·Xi.lo
++	 subfe.		r0,r0,r0		# borrow?-1:0
++	vpmsumd		$Xm,$IN,$H		# H.hi·Xi.lo+H.lo·Xi.hi
++	 and		r0,r0,$len
++	vpmsumd		$Xh,$IN,$Hh		# H.hi·Xi.hi
++	 add		$inp,$inp,r0
 +
-+        # drain any remaining udev events
-+        while self.uhdev.dispatch(10):
-+            pass
++	vpmsumd		$t2,$Xl,$xC2		# 1st phase
 +
-+        def test_led(self):
-+            for k, v in self.uhdev.led_classes.items():
-+                # the kernel might have set a LED for us
-+                logger.info(f"{k}: {v.brightness}")
++	vsldoi		$t0,$Xm,$zero,8
++	vsldoi		$t1,$zero,$Xm,8
++	vxor		$Xl,$Xl,$t0
++	vxor		$Xh,$Xh,$t1
 +
-+                idx = int(k[-1]) - 1
-+                assert self.uhdev.hw_leds.get_led(idx)[0] == bool(v.brightness)
++	vsldoi		$Xl,$Xl,$Xl,8
++	vxor		$Xl,$Xl,$t2
++	 lvx_u		$IN,0,$inp
++	 addi		$inp,$inp,16
 +
-+                v.brightness = 0
-+                self.uhdev.dispatch(10)
-+                assert self.uhdev.hw_leds.get_led(idx)[0] is False
++	vsldoi		$t1,$Xl,$Xl,8		# 2nd phase
++	vpmsumd		$Xl,$Xl,$xC2
++	 le?vperm	$IN,$IN,$IN,$lemask
++	vxor		$t1,$t1,$Xh
++	vxor		$IN,$IN,$t1
++	vxor		$IN,$IN,$Xl
++	beq		Loop			# did $len-=16 borrow?
 +
-+                v.brightness = v.max_brightness
-+                self.uhdev.dispatch(10)
-+                assert self.uhdev.hw_leds.get_led(idx)[0]
++	vxor		$Xl,$Xl,$t1
++	le?vperm	$Xl,$Xl,$Xl,$lemask
++	stvx_u		$Xl,0,$Xip		# write out Xi
 +
++	mtspr		256,$vrsave
++	blr
++	.long		0
++	.byte		0,12,0x14,0,0,0,4,0
++	.long		0
++.size	.gcm_ghash_p8,.-.gcm_ghash_p8
 +
-+class TestPS4ControllerBluetooth(SonyBaseTest.SonyPS4ControllerTest):
-+    def create_device(self):
-+        controller = PS4ControllerBluetooth()
-+        controller.application_matches = application_matches
-+        return controller
++.asciz  "GHASH for PowerISA 2.07, CRYPTOGAMS by <appro\@openssl.org>"
++.align  2
++___
 +
++foreach (split("\n",$code)) {
++	if ($flavour =~ /le$/o) {	# little-endian
++	    s/le\?//o		or
++	    s/be\?/#be#/o;
++	} else {
++	    s/le\?/#le#/o	or
++	    s/be\?//o;
++	}
++	print $_,"\n";
++}
 +
-+class TestPS4ControllerUSB(SonyBaseTest.SonyPS4ControllerTest):
-+    def create_device(self):
-+        controller = PS4ControllerUSB()
-+        controller.application_matches = application_matches
-+        return controller
-+
-+
-+class TestPS5ControllerBluetooth(SonyBaseTest.SonyPS4ControllerTest):
-+    kernel_modules = [PS5_MODULE]
-+
-+    def create_device(self):
-+        controller = PS5ControllerBluetooth()
-+        controller.application_matches = application_matches
-+        return controller
-+
-+
-+class TestPS5ControllerUSB(SonyBaseTest.SonyPS4ControllerTest):
-+    kernel_modules = [PS5_MODULE]
-+
-+    def create_device(self):
-+        controller = PS5ControllerUSB()
-+        controller.application_matches = application_matches
-+        return controller
-
++close STDOUT; # enforce flush
 -- 
-2.39.1
+2.31.1
 
