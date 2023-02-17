@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C7F69B543
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA5869B531
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBQWHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 17:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S229709AbjBQWBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 17:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjBQWHF (ORCPT
+        with ESMTP id S229555AbjBQWBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:07:05 -0500
-X-Greylist: delayed 574 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Feb 2023 14:07:03 PST
-Received: from mx.ewheeler.net (mx.ewheeler.net [173.205.220.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAED85F252;
-        Fri, 17 Feb 2023 14:07:03 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mx.ewheeler.net (Postfix) with ESMTP id 6DBAB85;
-        Fri, 17 Feb 2023 13:57:29 -0800 (PST)
-X-Virus-Scanned: amavisd-new at ewheeler.net
-Received: from mx.ewheeler.net ([127.0.0.1])
-        by localhost (mx.ewheeler.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id A70dd8PC0tM6; Fri, 17 Feb 2023 13:57:28 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.ewheeler.net (Postfix) with ESMTPSA id 655B346;
-        Fri, 17 Feb 2023 13:57:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx.ewheeler.net 655B346
-Date:   Fri, 17 Feb 2023 13:57:28 -0800 (PST)
-From:   Eric Wheeler <bcache@lists.ewheeler.net>
-To:     Zheng Wang <zyytlz.wz@163.com>
-cc:     colyli@suse.de, hackerzheng666@gmail.com,
-        kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        stable@vger.kernel.org
-Subject: Re: [RESEBD PATCH v3] bcache: Remove some unnecessary NULL point
- check for the return value of __bch_btree_node_alloc-related pointer
-In-Reply-To: <20230217100901.707245-1-zyytlz.wz@163.com>
-Message-ID: <62507028-c27d-82b8-2db2-5642e2388e3e@ewheeler.net>
-References: <20230217100901.707245-1-zyytlz.wz@163.com>
+        Fri, 17 Feb 2023 17:01:43 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0342D59726
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:01:41 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id a12so2451855wro.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S+RWIU7oYjEmeKhN1BRM+dPgJ9kaVMQBvH0lTKx4gCo=;
+        b=P7KlUd8vpj+WjFNp4aWlFlmB/DX+kLVPD3QP7QX7aLNUWsHdPIdNFpbudIqZ+cvY3W
+         HE0ybe5TzouaO117yLXbatR1gY8rf1h/o+Bbbu3X5MDM0ZuWico3g9t9+bxjoOmydgzx
+         /ZSgmlxE3ZAvzI1Fz/TVDDEHgO5h2G13bQcwPcyDdQd9nb86jlNZWruMtK/sN29vC8EN
+         qKYcgdkk5hp4jtKsLRINg8vRhzyDDSkhTbmlmWZWtBZVzH3kKZEN3c8jPfDaXOCTZ1+/
+         m7EmHx5R0xdNkHUBsI3nYaZWB6exavhe51sDW3KSusJYEPjUMh4WO7GAZe3VRKgtC57A
+         DXXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S+RWIU7oYjEmeKhN1BRM+dPgJ9kaVMQBvH0lTKx4gCo=;
+        b=i9fj0qLAs9cFgnls7UrbXkyPcDmwzUWGiQVJn1mfwPN567nX7u6TQYESA7mUSuL+db
+         FY+wF+pi7fmIL1L7d6loslskTYdE7lp2Un+yqlU6ITnIbWMoxwTMh57ppvt1aVTm4a2Z
+         5roGvhLV3qSBUqCWB8KBqUMUSjdcQtK9oXNX3FeJy61PBcJqPY3HNJCCU/g/zRuV2B1/
+         bdDAlHNLrqfDTz1ht/omWXhu1Tu8ruMfe/CAykso5kpZ/A0UfNj4MZOFKhdkAJ+8rH3t
+         MMOOuIK8/Al7aBvoudyqUPYMHGyyJJopI7lLvzMD2lrjeZFbTGDSk6SwO8qi9wXu5GUK
+         xG5w==
+X-Gm-Message-State: AO0yUKVVNS+PLQFcqZQOyWt//X9K7FEJ4MZ/YdKx5xatKWIwhu0PnU0+
+        LoYrfaBTlXLy4XA04gXanaXEcBwaWaaJIRThIWPtEA==
+X-Google-Smtp-Source: AK7set8Y5jxAp9swg/itPrwFcKyXyojx4iwM90gLmILXSZ0Xoyfrwexebu9w/TfSPp/vznOWaghs7HSgvJ2FQTvEhzU=
+X-Received: by 2002:a5d:640e:0:b0:2c4:dbc:8e34 with SMTP id
+ z14-20020a5d640e000000b002c40dbc8e34mr229772wru.123.1676671299303; Fri, 17
+ Feb 2023 14:01:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214184606.510551-1-mizhang@google.com> <20230214184606.510551-4-mizhang@google.com>
+In-Reply-To: <20230214184606.510551-4-mizhang@google.com>
+From:   Aaron Lewis <aaronlewis@google.com>
+Date:   Fri, 17 Feb 2023 22:01:27 +0000
+Message-ID: <CAAAPnDFG+9x5A24cDs8344k9W6zddpJ7cKBFOXmzaLhMhvmR=g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] KVM: selftests: x86: Add check of CR0.TS in the
+ #NM handler in amx_test
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023, Zheng Wang wrote:
-
-> Due to the previously fix of __bch_btree_node_alloc, the return value will
-> never be a NULL pointer. So IS_ERR is enough to handle the failure
->  situation. Fix it by replacing IS_ERR_OR_NULL check to IS_ERR check.
-> 
-> Fixes: cafe56359144 ("bcache: A block layer cache")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+On Tue, Feb 14, 2023 at 6:46 PM Mingwei Zhang <mizhang@google.com> wrote:
+>
+> Add check of CR0.TS[bit 3] before the check of IA32_XFD_ERR in the #NM
+> handler in amx_test. This is because XFD may not be the only reason of
+> the IA32_XFD MSR and the bitmap corresponding to the state components
+> required by the faulting instruction." (Intel SDM vol 1. Section 13.14)
+>
+> Add the missing check of CR0.TS.
+>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
 > ---
-> v3:
-> - Add Cc: stable@vger.kernel.org suggested by Eric
-
-Make sure that the commit
-	bcache: Fix __bch_btree_node_alloc to make the failure behavior consistent
-is committed _before_ this "Remove some unnecessary NULL point check..." 
-patch.
-
-It would be a good idea to add "this patch depends on `bcache: Fix 
-__bch_btree_node_alloc to make the failure behavior consistent`" to the 
-commit message so the stable maintainers know.
-
--Eric
-
-> v2:
-> - Replace more checks
-> ---
->  drivers/md/bcache/btree.c | 10 +++++-----
->  drivers/md/bcache/super.c |  4 ++--
->  2 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index 147c493a989a..7c21e54468bf 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -1138,7 +1138,7 @@ static struct btree *btree_node_alloc_replacement(struct btree *b,
+>  tools/testing/selftests/kvm/x86_64/amx_test.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> index aac727ff7cf8..847752998660 100644
+> --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> @@ -215,6 +215,7 @@ void guest_nm_handler(struct ex_regs *regs)
 >  {
->  	struct btree *n = bch_btree_node_alloc(b->c, op, b->level, b->parent);
->  
-> -	if (!IS_ERR_OR_NULL(n)) {
-> +	if (!IS_ERR(n)) {
->  		mutex_lock(&n->write_lock);
->  		bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
->  		bkey_copy_key(&n->key, &b->key);
-> @@ -1340,7 +1340,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
->  	memset(new_nodes, 0, sizeof(new_nodes));
->  	closure_init_stack(&cl);
->  
-> -	while (nodes < GC_MERGE_NODES && !IS_ERR_OR_NULL(r[nodes].b))
-> +	while (nodes < GC_MERGE_NODES && !IS_ERR(r[nodes].b))
->  		keys += r[nodes++].keys;
->  
->  	blocks = btree_default_blocks(b->c) * 2 / 3;
-> @@ -1352,7 +1352,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
->  
->  	for (i = 0; i < nodes; i++) {
->  		new_nodes[i] = btree_node_alloc_replacement(r[i].b, NULL);
-> -		if (IS_ERR_OR_NULL(new_nodes[i]))
-> +		if (IS_ERR(new_nodes[i]))
->  			goto out_nocoalesce;
->  	}
->  
-> @@ -1487,7 +1487,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
->  	bch_keylist_free(&keylist);
->  
->  	for (i = 0; i < nodes; i++)
-> -		if (!IS_ERR_OR_NULL(new_nodes[i])) {
-> +		if (!IS_ERR(new_nodes[i])) {
->  			btree_node_free(new_nodes[i]);
->  			rw_unlock(true, new_nodes[i]);
->  		}
-> @@ -1669,7 +1669,7 @@ static int bch_btree_gc_root(struct btree *b, struct btree_op *op,
->  	if (should_rewrite) {
->  		n = btree_node_alloc_replacement(b, NULL);
->  
-> -		if (!IS_ERR_OR_NULL(n)) {
-> +		if (!IS_ERR(n)) {
->  			bch_btree_node_write_sync(n);
->  
->  			bch_btree_set_root(n);
-> diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-> index ba3909bb6bea..7660962e7b8b 100644
-> --- a/drivers/md/bcache/super.c
-> +++ b/drivers/md/bcache/super.c
-> @@ -1724,7 +1724,7 @@ static void cache_set_flush(struct closure *cl)
->  	if (!IS_ERR_OR_NULL(c->gc_thread))
->  		kthread_stop(c->gc_thread);
->  
-> -	if (!IS_ERR_OR_NULL(c->root))
-> +	if (!IS_ERR(c->root))
->  		list_add(&c->root->list, &c->btree_cache);
->  
->  	/*
-> @@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
->  
->  		err = "cannot allocate new btree root";
->  		c->root = __bch_btree_node_alloc(c, NULL, 0, true, NULL);
-> -		if (IS_ERR_OR_NULL(c->root))
-> +		if (IS_ERR(c->root))
->  			goto err;
->  
->  		mutex_lock(&c->root->write_lock);
-> -- 
-> 2.25.1
-> 
-> 
+>         /* Check if #NM is triggered by XFEATURE_MASK_XTILEDATA */
+>         GUEST_SYNC(7);
+> +       GUEST_ASSERT((get_cr0() & X86_CR0_TS) == 0);
+
+Can't we infer that the #NM is the result of an XFD error due to the fact
+that IA32_XFD_ERR is set?  Is this check needed?
+SDM vol 1, 13.14, EXTENDED FEATURE DISABLE (XFD)
+ - Device-not-available exceptions that are not due to XFD - those
+   resulting from setting CR0.TS to 1 - do not modify the IA32_XFD_ERR
+   MSR.
+
+>         GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
+>         GUEST_SYNC(8);
+>         GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
