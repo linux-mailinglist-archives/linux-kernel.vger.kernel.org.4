@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9CA69AB9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F33F69ABA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjBQMfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S229806AbjBQMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBQMfN (ORCPT
+        with ESMTP id S229746AbjBQMgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:35:13 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4AF52CFD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:35:12 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r11so858942wru.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:35:12 -0800 (PST)
+        Fri, 17 Feb 2023 07:36:47 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAD1635AE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:36:45 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id r11so863343wru.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:36:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ulodh2s1JoWOl+tuXSPL0lutsfuMxf0JZzlK5FzFZjo=;
-        b=OtpGArm1ZFpOZIJ8J3qFJ+1snmCnrz1HAO9FCrzl1YNQ0/Dwlcl8WOs46Y4vYR4YxR
-         H26kqUWew6cpCf7WyOeIsVsEuQcv8vTdSnfjWjc0cmAdGOqMJp/nHN8jDDA8GUI3WcWu
-         YA77JD1A0WaNt9YVLz4EwBftIfTZJIrHnUcdclQhmFIdC4VI1PE6A9oEZK4FA25ps7MY
-         YI7XWMtQuHxomMEdx99DHOuRLH8DXkQfh+DZTRZ7WPgih02jwqpb8Cc0NhbJwxyT27xz
-         025vYoiR8UYJmFik8pmQoOrumnNcRAV36LtCZL9jmXYzekm9TpED+MhXtkSb+lKAYeyD
-         YIZQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5JwFyvTKPrBTTWWlAH9q8tj837s8qKAd0NcHWFWLflQ=;
+        b=Ts7Ft9TYg7/N10qTzOnQfhX32Cb15Gk7X195lbTdKeXA5ijaht7DqwExgnVXZfeOxT
+         fjHywgFPvdse57dd6FHLpJjF2zVtkVfZ4yuFOY6+znlgZ/YkggGyR40Pjol4I5Syka6A
+         4XkfFiXLtUBQaoGAmQZqYmqL3w2dsKnJL3wn2hgDCQE6lsZKJ2AFbBc+enl5vFSBAUfQ
+         DDU8HHnjNJLP6HyO/dspDAK4TMDn6YcLftJ3wJTt8evutsYLUnj7A+9S6nlfwQbe49KS
+         ngvwjxQtrHy1s3PoRbPOZGBXxPSDzXuuwgaQ0vcGLzDwWI7rG+aG69IES+nCDDWWPFko
+         2GfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ulodh2s1JoWOl+tuXSPL0lutsfuMxf0JZzlK5FzFZjo=;
-        b=4ftTOAEbDDL8icj9OqXXabwwe+aeUrDfvAYGKZNsyFhysYJCHS0Jbc05XrDRzNWwIx
-         dK9QC6owEpIa2TYssF5/LHhfR9aW/oZt+rObEuMZWliWX4VmopzjPAvCicrWGjLCSA9n
-         LJj0yjcWCT+GNdtVai/8khvggTd97pexYEw5v5LLlfkZ1kDb2zz5r8PJJMabDvGTPxRT
-         PoNk/sKtE+hY1lBG/sEJhRXJmNlxXWjm7KdqAe8Km/3b/njyCL6LAWdo59q25r9Doqb1
-         8ZCW2cueeVRsxDPSLnsP1lDMumYOvHzdsq3fTs2Ql01s0ZGsGquz3EDPyTp1thDoMxvm
-         KYeg==
-X-Gm-Message-State: AO0yUKVDbv4ID69NwTm4jzUgCtXvIaCx4zv0XDMDxqDEinRImDZ9hNuq
-        zE5tNdG+5UrlgNTMEf1DSaifymJErwGV0U0H
-X-Google-Smtp-Source: AK7set+UTJc+bQ8j4x9nFLzmFQMKhMUdty9MeSaF9k7F0Kwe7y+KqIEPGfXmVGFigvbkO7JwtDBXlQ==
-X-Received: by 2002:adf:e241:0:b0:2c5:54a7:363e with SMTP id bl1-20020adfe241000000b002c554a7363emr610075wrb.3.1676637311390;
-        Fri, 17 Feb 2023 04:35:11 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id v5-20020adff685000000b002c559def236sm3352450wrp.57.2023.02.17.04.35.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 04:35:10 -0800 (PST)
-Message-ID: <1dac9eee-f0b9-a6f0-9fed-359242ccb02e@linaro.org>
-Date:   Fri, 17 Feb 2023 13:35:09 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5JwFyvTKPrBTTWWlAH9q8tj837s8qKAd0NcHWFWLflQ=;
+        b=F9ajV+9iWYsVFZAH7tfLVnNqHz9Qs9jK+r9VRhoQh63nSZCY1N+PV2HTZ7UXygiscb
+         QcOkudkA3ZmaVQIOEgtfp6QsmICaiHrjn+AmioxsGJEWckjxuA1sGWzXg4kg+FZQDDc6
+         mVOcIMHaTfD+yksq15OnQ+VJarKcWxKFYC5b6dwokW9EWVKqTrIsftWMlr0OG9Le0E9Q
+         5UBnjNWXs7A4t9qS3GgYb0x/jRmp9J0DumW0wPLu0dP1TqaeofpczjWIeC1XdIz8wjKJ
+         dEKVI7qJxk67L694OvSqQJgm4nv9lhnealgv8ssim4ztiRR5SjVEhwDQYuVTjSk84bGB
+         W8gA==
+X-Gm-Message-State: AO0yUKWRNOXTAbppJExHerf5BU5o8AZBjDw4oZAuUZ8E8xh6hcGVapU5
+        Kh3z3EHWzbVbImWAKQtq9lfJ2JyAFPYzrRQT
+X-Google-Smtp-Source: AK7set+rZXG1C9KBOtQYHtGWYCMTVD67lUyPhrhHKtpnDArqoiWJshuBdF+sicSnsX14gLm+NteB6g==
+X-Received: by 2002:a05:6000:1685:b0:2c5:3fce:423b with SMTP id y5-20020a056000168500b002c53fce423bmr5566920wrd.4.1676637403718;
+        Fri, 17 Feb 2023 04:36:43 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1191:9464:3947:1946])
+        by smtp.gmail.com with ESMTPSA id x16-20020a5d60d0000000b002c5640f9bf9sm4077228wrt.85.2023.02.17.04.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 04:36:43 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [GIT PULL] gpio: fixes for v6.2 - part 2
+Date:   Fri, 17 Feb 2023 13:36:42 +0100
+Message-Id: <20230217123642.115329-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] module: fix MIPS module_layout -> module_memory
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-mips@vger.kernel.org
-References: <20230214005400.17137-1-rdunlap@infradead.org>
- <59c0ba61-c5d6-b74f-0fbd-844b08d13e5d@linaro.org>
- <2e17b8f6-0c2d-e705-63b9-47077b442d68@infradead.org>
- <20230217115812.GB7701@alpha.franken.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230217115812.GB7701@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/2/23 12:58, Thomas Bogendoerfer wrote:
-> On Tue, Feb 14, 2023 at 08:52:04AM -0800, Randy Dunlap wrote:
->>
->>
->> On 2/13/23 23:22, Philippe Mathieu-Daudé wrote:
->>> Hi Randy,
->>>
->>> On 14/2/23 01:54, Randy Dunlap wrote:
->>>> Correct the struct's field/member name from mod_mem to mem.
->>>>
->>>> Fixes this build error:
->>>> ../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
->>>> ../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
->>>>     643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
->>>>
->>>> Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
->>>
->>> On which tree is your patch based?
->>
->> linux-next-20230213.
-> 
-> so I can't apply, because this is not in mips-next tree. It should be
-> applied to the tree, where this commit is coming from.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Or squashed...
+Linus,
 
+This missed the last PR as I only applied it today but it's a one-liner that
+fixes a memory leak in the GPIO simulator that's triggered every time libgpiod
+tests are run in user-space. Please pull for v6.2.
+
+Bartosz
+
+The following changes since commit b8b3b0bfb742f0cbb006c66b10216b724ce42e25:
+
+  Merge tag 'intel-gpio-v6.2-2' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current (2023-02-16 13:31:42 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-fixes-for-v6.2-part2
+
+for you to fetch changes up to 79eeab1d85e0fee4c0bc36f3b6ddf3920f39f74b:
+
+  gpio: sim: fix a memory leak (2023-02-17 12:02:26 +0100)
+
+----------------------------------------------------------------
+gpio fixes for v6.2
+
+- fix a memory leak in gpio-sim
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      gpio: sim: fix a memory leak
+
+ drivers/gpio/gpio-sim.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
