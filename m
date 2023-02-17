@@ -2,120 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087CB69B277
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015469B294
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjBQSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 13:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S229679AbjBQSuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 13:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBQSmp (ORCPT
+        with ESMTP id S229642AbjBQSuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:42:45 -0500
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E999183D4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:42:43 -0800 (PST)
-Received: by mail-il1-f205.google.com with SMTP id p3-20020a92d683000000b003006328df7bso650243iln.17
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:42:43 -0800 (PST)
+        Fri, 17 Feb 2023 13:50:12 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DCE3C2C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:50:10 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id p33so1116963pfh.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=txCbIcxMcKNWF/8/Xv4WaLkszxM0EFbIb80kOwi9Rfc=;
+        b=DoyZ0IuvT9n0MkYehst+WgppOwJf4TBkUptMWVrr+72g5BBNmp9R+Jd5HsD22vWeow
+         +ry/TEXLMU/Ft/r1cC7WjqyybGO9b9I9SRDu2Eq7ratNg6JQgVlYkMw6wJWEO9M4yxGC
+         FlzWFl6/rPQGxhqhVz0td9KNMibW9jb1iUL1loJleWrTIIi+sLaondd3j77EpBuY3HTt
+         rNPjllusoF93h15OUC9ZM9HYWozAcsDcVY1LFhQMJYIlN+FIB9F6p+fT47ZdADXSKrAM
+         AljoCIDQwQSc2Kh+R9yG0ImV7hvIvtbUWa8dB7ey2t4jTnSqPy6BE+l4VD980Ae/4VO1
+         /hng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZE+gpMYJhPMgEpdX9RH7zRNo5DDM3YYvYQepiSP81UA=;
-        b=QD9nglBlOtTeBog6xm81Au7WWRFCXOgHoYQsrKehVIG91b52nLOnMaJSYAVtfk5u7r
-         KusuHwzB9DxkUx6kqiHIpfr3mOFLqOqV2Shgzr5f3Fj86DwrJ91aSz7oDr0VvrFEaJIY
-         IIoxutUhvhv8zs86ZREtZ825P/UaBHOnLhnhFyHAKbyVC4jgB68dw8nzIsvjYKgcL4m2
-         CDsMYHPNpcyYudl/Ned42l3zFXKj3xpjMuYF7wIgk+iLTpYIYvTcy2LmWelvKGDCwrkd
-         /pxb+dm84UXLEAG8YqWztgALRt/SOKOZOJFc3wYmDH63d8J5NvwqAMWBz8/oBoIpTgGY
-         PX2Q==
-X-Gm-Message-State: AO0yUKXpCZe5BGiuecRH1ri5pXRiYMwMR8j50kJPArwMGp5EdKt4XXFc
-        uMx2hOL2IdkK25uCqH0ZNBvU6Z3CbBE24irZMhXHLo07cM+9
-X-Google-Smtp-Source: AK7set/9yU6iGE5VXd4Hoo3temo43RPlBdpCQ6fYX7aXpdIW/kOY7DnL4zBF+unurE/PhlvegqQJy5nvOixBjUFS0uti3zqOWSGd
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=txCbIcxMcKNWF/8/Xv4WaLkszxM0EFbIb80kOwi9Rfc=;
+        b=2vIaAke44p45Pxb8C5aDzZCFghJkjBAOZp8jYhrJWhyovxXKs8OKmen5uboZJQ02f7
+         VMdtdOjQmzSI08WWm3hkuq2jfLl53y88zTe7OkHvNMbIFmuzHuQL7OSdW0LM+jBb4VmJ
+         JsfRDMXFTwOlPG+r+gTvsFQYmLxYb5zfejC1N7e1vIdy7pYVtL8cFhl7uafNhLS5ezFS
+         Lt53UvZ8aKGfjn4GmQxcVdHbZ1GjWzAA00MCVI1SWuA9fvJtin+1gvC7XlR+gBxyaBro
+         yO7Iq1uf2fGpo2bcAOfvpzqK8nMjQ5g3cdx4qpQkVZkiOhxlwH9ZXh7ibhyZw262jdde
+         qnuw==
+X-Gm-Message-State: AO0yUKX4TSkO6EnItNqz8lNAIWDMMER/V3Yub4BUylphzViiLMuIfbh/
+        xgfzq8BinkbbkYXQaZdaFlc=
+X-Google-Smtp-Source: AK7set9KYoFRQrG2DJscVGs0pH8tAGSBxCGsCiCA+9GB+lMylmI+TFq2V2i+aqg9/Vw1XgM3dp91jQ==
+X-Received: by 2002:aa7:9608:0:b0:5a8:cbcc:4b58 with SMTP id q8-20020aa79608000000b005a8cbcc4b58mr1454308pfg.12.1676659810012;
+        Fri, 17 Feb 2023 10:50:10 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id u21-20020a62ed15000000b00581ad007a9fsm3385410pfh.153.2023.02.17.10.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 10:50:08 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:49:53 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        aarcange@redhat.com
+Subject: Re: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is
+ not yet set
+Message-ID: <Y+/MUXZ8Mm0DKWSV@localhost>
+References: <20230216051750.3125598-1-surenb@google.com>
+ <20230216051750.3125598-27-surenb@google.com>
+ <Y+5Pb4hGmV1YtNQp@casper.infradead.org>
+ <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
+ <CAJuCfpHODBAV=riSPyvcmLbZVtXSdxrw2GMy8VOjvDV9yCyX8A@mail.gmail.com>
+ <CAB=+i9ToNQ-se1XWGOGbiM_0QRBYjuhCF5A8Cdvius89t8r7Ag@mail.gmail.com>
+ <CAJuCfpHeeRymNmAZ+FAFgdVMDFOHNeZB+7d6PHHL8uFVbshu8g@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d1e:b0:314:b2cd:b265 with SMTP id
- i30-20020a056e021d1e00b00314b2cdb265mr3198323ila.1.1676659362885; Fri, 17 Feb
- 2023 10:42:42 -0800 (PST)
-Date:   Fri, 17 Feb 2023 10:42:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bbf72c05f4e9ad5d@google.com>
-Subject: [syzbot] [nfc?] memory leak in nfc_genl_se_io
-From:   syzbot <syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHeeRymNmAZ+FAFgdVMDFOHNeZB+7d6PHHL8uFVbshu8g@mail.gmail.com>
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Feb 17, 2023 at 08:13:01AM -0800, Suren Baghdasaryan wrote:
+> On Fri, Feb 17, 2023 at 2:21 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+> >
+> > On Fri, Feb 17, 2023 at 11:15 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Thu, Feb 16, 2023 at 11:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > On Thu, Feb 16, 2023 at 7:44 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > > > >
+> > > > > On Wed, Feb 15, 2023 at 09:17:41PM -0800, Suren Baghdasaryan wrote:
+> > > > > > When vma->anon_vma is not set, page fault handler will set it by either
+> > > > > > reusing anon_vma of an adjacent VMA if VMAs are compatible or by
+> > > > > > allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
+> > > > > > a compatible adjacent VMA and that requires not only the faulting VMA
+> > > > > > to be stable but also the tree structure and other VMAs inside that tree.
+> > > > > > Therefore locking just the faulting VMA is not enough for this search.
+> > > > > > Fall back to taking mmap_lock when vma->anon_vma is not set. This
+> > > > > > situation happens only on the first page fault and should not affect
+> > > > > > overall performance.
+> > > > >
+> > > > > I think I asked this before, but don't remember getting an aswer.
+> > > > > Why do we defer setting anon_vma to the first fault?  Why don't we
+> > > > > set it up at mmap time?
+> > > >
+> > > > Yeah, I remember that conversation Matthew and I could not find the
+> > > > definitive answer at the time. I'll look into that again or maybe
+> > > > someone can answer it here.
+> > >
+> > > After looking into it again I'm still under the impression that
+> > > vma->anon_vma is populated lazily (during the first page fault rather
+> > > than at mmap time) to avoid doing extra work for areas which are never
+> > > faulted. Though I might be missing some important detail here.
+> >
+> > I think this is because the kernel cannot merge VMAs that have
+> > different anon_vmas?
+> >
+> > Enabling lazy population of anon_vma could potentially increase the
+> > chances of merging VMAs.
+> 
+> Hmm. Do you have a clear explanation why merging chances increase this
+> way? A couple of possibilities I can think of would be:
+> 1. If after mmap'ing a VMA and before faulting the first page into it
+> we often change something that affects anon_vma_compatible() decision,
+> like vm_policy;
+> 2. When mmap'ing VMAs we do not map them consecutively but the final
+> arrangement is actually contiguous.
+> 
+> Don't think either of those cases would be very representative of a
+> usual case but maybe I'm wrong or there is another reason?
 
-syzbot found the following issue on:
+Ok. I agree it does not represent common cases.
 
-HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12998820c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=74b547d21d6e842b
-dashboard link: https://syzkaller.appspot.com/bug?extid=df64c0a2e8d68e78a4fa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1273b13f480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1223934f480000
+Hmm then I wonder how it went from the initial approach of "allocate anon_vma
+objects only via fork()" [1] to "populate anon_vma at page faults". [2] [3]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/611c72309dbd/disk-ceaa837f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/182986ae7897/vmlinux-ceaa837f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c198e9ad17fc/bzImage-ceaa837f.xz
+Maybe Hugh, Andrea or Andrew have opinions?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com
+[1] anon_vma RFC2, lore.kernel.org
+https://lore.kernel.org/lkml/20040311065254.GT30940@dualathlon.random
 
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810e03ca60 (size 32):
-  comm "syz-executor354", pid 5068, jiffies 4294945666 (age 13.810s)
-  hex dump (first 32 bytes):
-    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff815090d4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
-    [<ffffffff846a8104>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff846a8104>] kzalloc include/linux/slab.h:720 [inline]
-    [<ffffffff846a8104>] nfc_genl_se_io+0xf4/0x260 net/nfc/netlink.c:1531
-    [<ffffffff83d2cede>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
-    [<ffffffff83d2d217>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
-    [<ffffffff83d2d217>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
-    [<ffffffff83d2b5a1>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2574
-    [<ffffffff83d2c5a8>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
-    [<ffffffff83d2a4fb>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-    [<ffffffff83d2a4fb>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
-    [<ffffffff83d2a9ca>] netlink_sendmsg+0x39a/0x710 net/netlink/af_netlink.c:1942
-    [<ffffffff83b74b3a>] sock_sendmsg_nosec net/socket.c:714 [inline]
-    [<ffffffff83b74b3a>] sock_sendmsg+0x5a/0x80 net/socket.c:734
-    [<ffffffff83b750bd>] ____sys_sendmsg+0x38d/0x410 net/socket.c:2476
-    [<ffffffff83b79c68>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2530
-    [<ffffffff83b79e0c>] __sys_sendmsg+0x8c/0x100 net/socket.c:2559
-    [<ffffffff8498d8a9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8498d8a9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[2] The status of object-based reverse mapping, LWN.net
+https://lwn.net/Articles/85908
 
+[3] rmap 39 add anon_vma rmap
+https://gitlab.com/hyeyoo/linux-historical/-/commit/8aa3448cabdfca146aa3fd36e852d0209fb2276a
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> >
+> > > > In the end rather than changing that logic I decided to skip
+> > > > vma->anon_vma==NULL cases because I measured them being less than
+> > > > 0.01% of all page faults, so ROI from changing that would be quite
+> > > > low. But I agree that the logic is weird and maybe we can improve
+> > > > that. I will have to review that again when I'm working on eliminating
+> > > > all these special cases we skip, like swap/userfaults/etc.
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> >
