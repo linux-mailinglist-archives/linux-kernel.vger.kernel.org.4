@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ECD69AFEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6341669AFCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjBQPzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 10:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S229988AbjBQPxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 10:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjBQPzS (ORCPT
+        with ESMTP id S229540AbjBQPxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:55:18 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3BC64B2C;
-        Fri, 17 Feb 2023 07:55:17 -0800 (PST)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HEOven005206;
-        Fri, 17 Feb 2023 15:54:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=z2ZjrINj/Q1T10z726hJcbWPMqSFuqr2P2E5Vdq2cr0=;
- b=d/N2W34junQo+uElWj9HMHE7X06A4sP2ErjXhoJ49/pZ78oidwhcJDkKr0JGRRW++hVe
- 91Zzav2AykOQ+qk0731Nd+yx5pEAumxnKqOsDvKlcFCGouMKQe0MFrJKMv+VeR6Cj5Ne
- Q7VgD2TjDhohOtAsU7DpMtUr6BgcdNbBR9ywCPyYYTzxiFPtA72UfVr+9jV6L/mda+5y
- guH11MvwA07Jru6KFRwoc28YzIOCGGDWlYAj3uBZrXMB1+hmpTFbGsis09gokVbnuihk
- aCQyIPNmsi3XFuJbX949HGnC72tyUJDkSw9jizxE9rLXIL4ze06OIT4khkXZYM/TP9Hx 7Q== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ntbak8xkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 15:54:59 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 07EEF132D3;
-        Fri, 17 Feb 2023 15:54:58 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 3B04E8071C3;
-        Fri, 17 Feb 2023 15:54:58 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        wsa@kernel.org
-Subject: [PATCH v5 5/5] MAINTAINERS: Add HPE GXP I2C Support
-Date:   Fri, 17 Feb 2023 09:50:54 -0600
-Message-Id: <20230217155054.99757-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230217155054.99757-1-nick.hawkins@hpe.com>
-References: <20230217155054.99757-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: kVppx3nHJuCwlecbvZFn4wXtA7nEvU9s
-X-Proofpoint-GUID: kVppx3nHJuCwlecbvZFn4wXtA7nEvU9s
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- mlxscore=0 impostorscore=0 priorityscore=1501 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302170140
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        Fri, 17 Feb 2023 10:53:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81375642E6;
+        Fri, 17 Feb 2023 07:53:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=ZKpEo6XyxNjGrbygeRi6rclueyeWPltBMlN3l7iEVYk=; b=vl4JGVHCOgh2loTZrAlDXOv3Xy
+        Jv+kSDKIA1EXRAfD3b9Bexg2RmX82z13CjDTT4oSdFt1AXhNIrYNNE4ju/RmQ/p8pAUJg7/2QaeN2
+        fUh4EE93ZlISLXsldx1pETPy7ueFiRFUBIu6Ctr3o51wThc+Am3ul+mjOupMxDOUwYGAHy48r7hZa
+        lk9Dsr2g+AcpFw/+ublCfjUvXqIq4IyTueLwpi9fuLFQvTzP7zJWwkVrZ3h6qG61LaxFeQHZkmwMo
+        MP2rw1PINQsn5upkaJEFttWi1wSIvRYsZ9q3WwyFHpSs53Tk8e+Tj40sBYvJBhlZbQ/6hM2EU4Drz
+        vm47ickw==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pT332-00EvNy-2W; Fri, 17 Feb 2023 15:53:20 +0000
+Message-ID: <e68c3825-fc8a-d607-1afe-543a4537a81c@infradead.org>
+Date:   Fri, 17 Feb 2023 07:53:17 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] module: fix MIPS module_layout -> module_memory
+Content-Language: en-US
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-mips@vger.kernel.org
+References: <20230214005400.17137-1-rdunlap@infradead.org>
+ <59c0ba61-c5d6-b74f-0fbd-844b08d13e5d@linaro.org>
+ <2e17b8f6-0c2d-e705-63b9-47077b442d68@infradead.org>
+ <20230217115812.GB7701@alpha.franken.de>
+ <1dac9eee-f0b9-a6f0-9fed-359242ccb02e@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <1dac9eee-f0b9-a6f0-9fed-359242ccb02e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Add the I2C controller source and bindings.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+On 2/17/23 04:35, Philippe Mathieu-Daudé wrote:
+> On 17/2/23 12:58, Thomas Bogendoerfer wrote:
+>> On Tue, Feb 14, 2023 at 08:52:04AM -0800, Randy Dunlap wrote:
+>>>
+>>>
+>>> On 2/13/23 23:22, Philippe Mathieu-Daudé wrote:
+>>>> Hi Randy,
+>>>>
+>>>> On 14/2/23 01:54, Randy Dunlap wrote:
+>>>>> Correct the struct's field/member name from mod_mem to mem.
+>>>>>
+>>>>> Fixes this build error:
+>>>>> ../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
+>>>>> ../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
+>>>>>     643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
+>>>>>
+>>>>> Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
+>>>>
+>>>> On which tree is your patch based?
+>>>
+>>> linux-next-20230213.
+>>
+>> so I can't apply, because this is not in mips-next tree. It should be
+>> applied to the tree, where this commit is coming from.
+> 
+> Or squashed...
+> 
 
----
+Sure, either one of those. I copied Song and Luis on the patch
+and it begins with "module:".
 
-v5:
- *No change
-v4:
- *No change
-v3:
- *No change
-v2:
- *No change
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+@Song !??
+@Luis !??
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1daadaa4d48b..d671a8b6968e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2217,12 +2217,14 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
+thanks.
 -- 
-2.17.1
-
+~Randy
