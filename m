@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BD069A439
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252C569A43D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjBQDR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 22:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S229880AbjBQDUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 22:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjBQDR4 (ORCPT
+        with ESMTP id S229505AbjBQDUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:17:56 -0500
+        Thu, 16 Feb 2023 22:20:15 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA77974B;
-        Thu, 16 Feb 2023 19:17:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF14523C65;
+        Thu, 16 Feb 2023 19:20:14 -0800 (PST)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676603871;
-        bh=ztr+IdxQRuyl8zlbtckleV8yYV26Hon5GkrvjeCXFEU=;
+        s=mail; t=1676604013;
+        bh=/5qX+O9A1tp723FkL8bmd+mqzvEraJrhq1RUbF5f4Zk=;
         h=From:Date:Subject:To:Cc:From;
-        b=afOOM1iVH7yC0qYEmdHyCXYUxJOZ/wI+wgcqpyIqPgrzmzdDG+7z3/4Gk9xtcr3+F
-         XAIEMo5LLctMy1WLrofmrzfjXWws9p22wof8whxfSrWbUnSE1QjzxeDmoCqEUk8XJB
-         PDdXmHWGWu0z5dUFFDJ+Ds7LYvX+tswrchBg4SMI=
-Date:   Fri, 17 Feb 2023 03:17:49 +0000
-Subject: [PATCH] padata: Make kobj_type structure constant
+        b=RT5/sTKKIPKFzsLMDpwoYW3/Q0uYuFW4C8jx1s7Z/7TwBlfnn+TTYwj79V4fqH4lO
+         xLzIPJZ6lt7IuXQL1nkbxx7vRAiUQRkNUl/Up3kWZvUJgV7Ew0K1Gl5j6u0jA15tL3
+         UypcFI9i9xasdky7UPAMi0qWDsdvXmVM+eL+zg24=
+Date:   Fri, 17 Feb 2023 03:20:05 +0000
+Subject: [PATCH] x86/MCE/AMD: Make kobj_type structure constant
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230217-kobj_type-padata-v1-1-e70b6cab4875@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIANzx7mMC/x2N0QqDMAwAf0XybECzB4u/MoakbabZpJbWjQ3x3
- xf2eAfHHVClqFQYmwOKvLXqlgz6toGwcJoFNRoDdXTpqB/wufnHtH+zYObIOyM5JzFI4IEcWOa
- 5CvrCKSwWpte6msxF7vr5f6638/wBMCwCNXcAAAA=
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-Id: <20230217-kobj_type-mce-amd-v1-1-40ef94816444@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAGTy7mMC/x2N0QrCMAwAf2Xk2UDXOaX+ioikbeaiWzdaFWXs3
+ xf2eAfHLVA4Cxe4VAtk/kqRKSnUhwpCT+nBKFEZrLGNsfUZX5N/3t//mXEMjDRGbKi1/hSPzhk
+ H2nkqjD5TCr2W6TMMKufMnfz20fW2rhv/aW0ReAAAAA==
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676603869; l=1008;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676604011; l=1099;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ztr+IdxQRuyl8zlbtckleV8yYV26Hon5GkrvjeCXFEU=;
- b=XJNUk7Qrt62DXTVLIUYJKJzbykvAPZXCRfLiYSOkMlPlRs3CloLD4TRX2qiNyKKyN1fqwCYFX
- smwVNT1vvP9CX2qV7igv+fUPCmWOAwzOA74C5E8O1iU9MepET3AC2cY
+ bh=/5qX+O9A1tp723FkL8bmd+mqzvEraJrhq1RUbF5f4Zk=;
+ b=ePhLtMxHENtY23qr3U+8I6Vtbur9rOSzaQzSpvNcMm5jY9GJfl7xp7VeJA6caJxKhzjwcDvPV
+ 2N4cst2ug48AyBcBZ5XifzYIOic2gF49rVGEk8Lrgf6rX41A4ifwcIg
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,26 +64,26 @@ modification at runtime.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/padata.c | 2 +-
+ arch/x86/kernel/cpu/mce/amd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/padata.c b/kernel/padata.c
-index e007b8a4b738..106d08ee9ce2 100644
---- a/kernel/padata.c
-+++ b/kernel/padata.c
-@@ -967,7 +967,7 @@ static const struct sysfs_ops padata_sysfs_ops = {
- 	.store = padata_sysfs_store,
- };
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 10fb5b5c9efa..1eb2905ac211 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1035,7 +1035,7 @@ static const struct sysfs_ops threshold_ops = {
  
--static struct kobj_type padata_attr_type = {
-+static const struct kobj_type padata_attr_type = {
- 	.sysfs_ops = &padata_sysfs_ops,
- 	.default_groups = padata_default_groups,
- 	.release = padata_sysfs_release,
+ static void threshold_block_release(struct kobject *kobj);
+ 
+-static struct kobj_type threshold_ktype = {
++static const struct kobj_type threshold_ktype = {
+ 	.sysfs_ops		= &threshold_ops,
+ 	.default_groups		= default_groups,
+ 	.release		= threshold_block_release,
 
 ---
 base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
-change-id: 20230217-kobj_type-padata-288edceca728
+change-id: 20230217-kobj_type-mce-amd-3a52b6d49909
 
 Best regards,
 -- 
