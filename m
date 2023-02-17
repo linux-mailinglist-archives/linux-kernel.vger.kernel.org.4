@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674C169A778
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2F169A768
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjBQIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S229943AbjBQItp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjBQIvi (ORCPT
+        with ESMTP id S229551AbjBQItl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:51:38 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CC560FA6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:51:19 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PJ55M377mzDsTG;
-        Fri, 17 Feb 2023 16:46:31 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 17 Feb
- 2023 16:51:17 +0800
-From:   Longfang Liu <liulongfang@huawei.com>
-To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>
-CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <liulongfang@huawei.com>
-Subject: [PATCH v8 5/5] vfio: update live migration device status
-Date:   Fri, 17 Feb 2023 16:48:31 +0800
-Message-ID: <20230217084831.35783-6-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20230217084831.35783-1-liulongfang@huawei.com>
-References: <20230217084831.35783-1-liulongfang@huawei.com>
+        Fri, 17 Feb 2023 03:49:41 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB215FBFE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:49:12 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vbs74z2_1676623749;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vbs74z2_1676623749)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Feb 2023 16:49:10 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     andrzej.hajda@intel.com
+Cc:     neil.armstrong@linaro.org, rfoss@kernel.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] drm/bridge: analogix_dp: Use devm_platform_ioremap_resource()
+Date:   Fri, 17 Feb 2023 16:49:08 +0800
+Message-Id: <20230217084908.53524-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-migration debugfs needs to perform debug operations based on the
-status of the current device. If the device is not loaded or has
-stopped, debugfs does not allow operations.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to Use devm_platform_ioremap_resource(), as this is exactly
+what this function does.
 
-so, after the live migration function is executed and the device is
-turned off, the device no longer needs to be accessed. At this time,
-the status of the device needs to be set to stop.
-
-Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c | 3 +++
- drivers/vfio/pci/mlx5/main.c                   | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-index a0ecb1cd5707..ec73e8b19c89 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-@@ -1607,6 +1607,9 @@ static void hisi_acc_vfio_pci_close_device(struct vfio_device *core_vdev)
- 	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(core_vdev);
- 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+index df9370e0ff23..c6b228f1ed4c 100644
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -1686,7 +1686,6 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct analogix_dp_device *dp;
+-	struct resource *res;
+ 	unsigned int irq_flags;
+ 	int ret;
  
-+	if (core_vdev->mig_ops)
-+		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_STOP;
-+
- 	iounmap(vf_qm->io_base);
- 	vfio_pci_core_close_device(core_vdev);
- }
-diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
-index e897537a9e8a..dc3564436946 100644
---- a/drivers/vfio/pci/mlx5/main.c
-+++ b/drivers/vfio/pci/mlx5/main.c
-@@ -1269,6 +1269,9 @@ static void mlx5vf_pci_close_device(struct vfio_device *core_vdev)
- 	struct mlx5vf_pci_core_device *mvdev = container_of(
- 		core_vdev, struct mlx5vf_pci_core_device, core_device.vdev);
+@@ -1740,9 +1739,7 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
  
-+	if (mvdev->migrate_cap)
-+		mvdev->mig_state = VFIO_DEVICE_STATE_STOP;
-+
- 	mlx5vf_cmd_close_migratable(mvdev);
- 	vfio_pci_core_close_device(core_vdev);
- }
+ 	clk_prepare_enable(dp->clock);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-
+-	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
++	dp->reg_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(dp->reg_base)) {
+ 		ret = PTR_ERR(dp->reg_base);
+ 		goto err_disable_clk;
 -- 
-2.24.0
+2.20.1.7.g153144c
 
