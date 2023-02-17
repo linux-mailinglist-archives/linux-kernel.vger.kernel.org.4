@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB1569AB44
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5B569AB5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjBQMUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S229983AbjBQMX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjBQMUd (ORCPT
+        with ESMTP id S229772AbjBQMXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:20:33 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9EA66046;
-        Fri, 17 Feb 2023 04:20:25 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C1BF624E07C;
-        Fri, 17 Feb 2023 20:20:17 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
- 2023 20:20:17 +0800
-Received: from [192.168.125.82] (183.27.98.67) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
- 2023 20:20:17 +0800
-Message-ID: <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
-Date:   Fri, 17 Feb 2023 20:20:14 +0800
+        Fri, 17 Feb 2023 07:23:25 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC5F66046;
+        Fri, 17 Feb 2023 04:23:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id d24so1356873lfs.8;
+        Fri, 17 Feb 2023 04:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
+        b=ntJt6vrD4KEHrdCLW4oOXb0eakY24ItcDskG4ZtZzyd5BCycQK+MGGrqixWtZbHV5h
+         o9zTLysYZuphihYmCrTSe7bNf6Bfl70IscBzCObyQ4mx4UpMzFcpZTexI4HK/mH8UYQv
+         wAXRNc6aw88eHyltyDOkMAnwD1794lXkGHc+t6jatC1neW6pWAsEOsmwzPldHTnPDklG
+         BM30m5KRzqfAVQ4drF8kq4UH6MLEKViGW+A4HAPdCtGVwEd2V19zWc+FSucc94e1ye/f
+         48yiyFNlkj9gdK45jQV5S7fM9llp6oBS0SgIeVo8aws9dxDG+DQAgQ8aE3iX1GMSq3SP
+         SU6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
+        b=Mh/xd7WmvRCChOegYS90dNuw9m/Xq0xemjPy1HgkdZuRR5zcPVJc83Fj4b3T/2l1Ew
+         5SCcwjpE8pJJZ9WUCjLXKxNS6GaT/92WVvuyBojXLgKMW1GjtmuyeerO5fLQ6uGzGHhw
+         z7Dl1es8iTOBd1fx4pHcD+RJBLSygOKdHXnaP6gAvHB60pf8FfoChb1BWiw9rkE4/eTP
+         ukuQt0p8cXuHqZIxJc4i/cMu5wclRaPKw0f8kqwSFSdTM51xApGJzKEc8e5TM6IQ5SfN
+         izV3PWvnZODhsmzhrFneyOK3l3ljLQ7+dU/ec6jOgCDYkMfJwB+ldc5acN0scxLDySb7
+         tJew==
+X-Gm-Message-State: AO0yUKXiEC0camv6+ZXd/3/JY5qLPbm83kfiqXA4HaYT6BMEo7u4n0Fd
+        YIYW4PqQYbePbz6w6U9I+8Q=
+X-Google-Smtp-Source: AK7set9CtCkbseU52YhyOb5qjscNZTQpQvMNYeTZ/BD0GuBrtzVD/KUHNMgHdxXroGe+3H1J6GPmog==
+X-Received: by 2002:ac2:41ca:0:b0:4ca:94cc:a288 with SMTP id d10-20020ac241ca000000b004ca94cca288mr2086867lfi.27.1676636602116;
+        Fri, 17 Feb 2023 04:23:22 -0800 (PST)
+Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
+        by smtp.googlemail.com with ESMTPSA id c20-20020ac25314000000b004db3e445f1fsm666961lfh.97.2023.02.17.04.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 04:23:21 -0800 (PST)
+From:   Alexander Sapozhnikov <alsp705@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on negative index in mp_config_acpi_gsi()
+Date:   Fri, 17 Feb 2023 15:23:12 +0300
+Message-Id: <20230217122314.11689-1-alsp705@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
- <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud>
- <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
- <Y6tSWB2+98a8k9Qw@spud>
- <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
- <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
- <Y+8x/KSujhgNLAd6@wendy>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y+8x/KSujhgNLAd6@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.67]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,159 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 07:51:24 +0000, Conor Dooley wrote:
-> On Fri, Feb 17, 2023 at 10:27:27AM +0800, Hal Feng wrote:
->> On Thu, 16 Feb 2023 18:20:34 +0000, Conor Dooley wrote:
->> > Hey Hal!
->> > 
->> > On Thu, Feb 16, 2023 at 10:42:20PM +0800, Hal Feng wrote:
->> >> On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
->> >> > On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
->> >> >> On Tue, 20 Dec 2022 23:14:39 +0000, Conor Dooley wrote:
->> >> >> > On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
->> >> >> > > From: Emil Renner Berthing <kernel@esmil.dk>
->> >> >> > > 
->> >> >> > > Add bindings for the system clock and reset generator (SYSCRG) on the
->> >> >> > > JH7110 RISC-V SoC by StarFive Ltd.
->> >> >> > > 
->> >> >> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> >> >> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> >> > 
->> >> >> > > +  clocks:
->> >> >> > > +    items:
->> >> >> > > +      - description: Main Oscillator (24 MHz)
->> >> >> > > +      - description: GMAC1 RMII reference
->> >> >> > > +      - description: GMAC1 RGMII RX
->> >> >> > > +      - description: External I2S TX bit clock
->> >> >> > > +      - description: External I2S TX left/right channel clock
->> >> >> > > +      - description: External I2S RX bit clock
->> >> >> > > +      - description: External I2S RX left/right channel clock
->> >> >> > > +      - description: External TDM clock
->> >> >> > > +      - description: External audio master clock
->> >> >> > 
->> >> >> > So, from peeking at the clock driver & the dt - it looks like a bunch of
->> >> >> > these are not actually required?
->> >> >> 
->> >> >> These clocks are used as root clocks or optional parent clocks in clock tree.
->> >> >> Some of them are optional, but they are required if we want to describe the
->> >> >> complete clock tree of JH7110 SoC.
->> >> > 
->> >> > Perhaps I have a misunderstand of what required means. To me, required
->> >> > means "you must provide this clock for the SoC to operate in all
->> >> > configurations".
->> >> > Optional therefore would be for things that are needed only for some
->> >> > configurations and may be omitted if not required.
->> >> > 
->> >> > From your comment below, boards with a JH7110 may choose not to populate
->> >> > both external clock inputs to a mux. In that case, "dummy" clocks should
->> >> > not have to be provided in the DT of such boards to satisfy this binding
->> >> > which seems wrong to me..
->> >> 
->> >> Please see the picture of these external clocks in clock tree.
->> >> 
->> >> # mount -t debugfs none /mnt
->> >> # cat /mnt/clk/clk_summary
->> >>                                  enable  prepare  protect                                duty  hardware
->> >>    clock                          count    count    count        rate   accuracy phase  cycle    enable
->> >> -------------------------------------------------------------------------------------------------------
->> >>  *mclk_ext*                             0        0        0    12288000          0     0  50000         Y
->> >>  *tdm_ext*                              0        0        0    49152000          0     0  50000         Y
->> >>  *i2srx_lrck_ext*                       0        0        0      192000          0     0  50000         Y
->> >>  *i2srx_bclk_ext*                       0        0        0    12288000          0     0  50000         Y
->> >>  *i2stx_lrck_ext*                       0        0        0      192000          0     0  50000         Y
->> >>  *i2stx_bclk_ext*                       0        0        0    12288000          0     0  50000         Y
->> >>  *gmac1_rgmii_rxin*                     0        0        0   125000000          0     0  50000         Y
->> >>     gmac1_rx                          0        0        0   125000000          0     0  50000         Y
->> >>        gmac1_rx_inv                   0        0        0   125000000          0   180  50000         Y
->> >>  *gmac1_rmii_refin*                     0        0        0    50000000          0     0  50000         Y
->> >>     gmac1_rmii_rtx                    0        0        0    50000000          0     0  50000         Y
->> >>        gmac1_tx                       0        0        0    50000000          0     0  50000         N
->> >>           gmac1_tx_inv                0        0        0    50000000          0   180  50000         Y
->> >>  *osc*                                  4        4        0    24000000          0     0  50000         Y
->> >>     apb_func                          0        0        0    24000000          0     0  50000         Y
->> >>  ...
->> >> 
->> >> The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" are
->> >> actually used as the parent of other clocks.
->> > 
->> >> The "dummy" clocks
->> >> you said are all internal clocks.
->> > 
->> > No, what I meant by "dummy" clocks is that if you make clocks "required"
->> > in the binding that are not needed by the hardware for operation a
->> > customer of yours might have to add "dummy" clocks to their devicetree
->> > to pass dtbs_check.
->> > 
->> >> For the audio related clocks (mclk_ext/tdm_ext/i2srx_lrck_ext/
->> >> i2srx_bclk_ext/i2stx_lrck_ext/i2stx_bclk_ext), they will be used
->> >> as the parent clocks in audio related drivers. Note that some
->> >> clocks need to select different clocks as parent according to
->> >> requirement.
->> >> So all these external clocks are required.
->> >> 
->> >> > 
->> >> > It would seem to me that you need to set minItems < maxItems here to
->> >> > account for that & you do in fact need clock-names.
->> >> > 
->> >> >> 
->> >> >> > I'd have ploughed through this, but having read Krzysztof's comments on
->> >> >> > the DTS I'm not sure that this binding is correct.
->> >> >> > https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.feng@starfivetech.com/T/#mdf67621a2344dce801aa8015d4963593a2c28bcc
->> >> >> > 
->> >> >> > I *think* the DT is correct - the fixed clocks are all inputs from clock
->> >> >> > sources on the board and as such they are empty in soc.dtsi and are
->> >> >> > populated in board.dts?
->> >> >> 
->> >> >> Yes, the fixed clocks are all clock sources on the board and input to the SoC.
->> >> >> 
->> >> >> > 
->> >> >> > However, are they all actually required? In the driver I see:
->> >> >> > 	JH71X0__MUX(JH7110_SYSCLK_GMAC1_RX, "gmac1_rx", 2,
->> >> >> > 		    JH7110_SYSCLK_GMAC1_RGMII_RXIN,
->> >> >> > 		    JH7110_SYSCLK_GMAC1_RMII_RTX),
->> >> >> > That macro is:
->> >> >> > #define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] = {			\
->> >> >> > 	.name = _name,								\
->> >> >> > 	.flags = 0,								\
->> >> >> > 	.max = ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
->> >> >> > 	.parents = { __VA_ARGS__ },						\
->> >> >> > }
->> > 
->> >> >> > AFAICT, RMII reference feeds RMII_RTX & RGMII RX *is* RGMII_RXIN?
->> >> >> > Does that mean you need to populate only one of GMAC1 RMII reference
->> >> >> > and GMAC1 RMGII RX and the other is optional?
->> > 
->> >> >> Yes, actually only one of them is chosen as the root clock
->> >> >> source of the clock "gmac1_rx".
->> > |  *gmac1_rgmii_rxin*   
->> > |     gmac1_rx          
->> > |        gmac1_rx_inv   
->> > |  *gmac1_rmii_refin*   
->> > |     gmac1_rmii_rtx    
->> > |        gmac1_tx       
->> > |           gmac1_tx_inv
->> > |
->> > | description: GMAC1 RMII reference
->> > | description: GMAC1 RGMII RX
->> > 
->> > 
->> > So you're telling me that you can either:
->> > - Provide GMAC1 RMII reference and GMAC1 RGMII RX & then use different
->> >   clocks for gmac1_rx and gmac1_tx
->> > - Provide only GMAC1 RMII reference & use it for both gmac1_tx *and*
->> >   gmac1_rx
->> > 
->> > Is that correct?
->> 
->> Yes, it is.
-> 
-> Which would then make GMAC1 RGMII RX optional, rather than required?
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-If thinking in this way, I must say yes, it is optional. But actually
-GMAC1 RGMII RX feeds gmac1_rx by default. 
-For a mux, it usually works if you populate only one input to it.
-Does it mean all the other inputs are optional? And how can we define
-which input is required?
+Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
+---
+ arch/x86/kernel/acpi/boot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Best regards,
-Hal
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 907cc98b1938..abb78822f164 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -463,8 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+ 	mp_irq.srcbus = number;
+ 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
+ 	ioapic = mp_find_ioapic(gsi);
+-	mp_irq.dstapic = mpc_ioapic_id(ioapic);
+-	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
++	if (ioapic >= 0) {
++		mp_irq.dstapic = mpc_ioapic_id(ioapic);
++		mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
++	}
+ 
+ 	mp_save_irq(&mp_irq);
+ #endif
+-- 
+2.34.1
+
