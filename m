@@ -2,94 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62A269A8E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA27669A8E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjBQKLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S229758AbjBQKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBQKLw (ORCPT
+        with ESMTP id S229534AbjBQKMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:11:52 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453176241A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:51 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j20so3855268edw.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:51 -0800 (PST)
+        Fri, 17 Feb 2023 05:12:17 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E13627E4;
+        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id ez12so2353315edb.1;
+        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XDRpdpBWdFb6EOdNes1o07LdLE88/XFjpZQhQSJTWak=;
-        b=rlVVIK+5+nFzlvkFNn8hiBNsq969o9yo4H9uLGDFrY59+XMPHc5MufC/iCqzlRE/rt
-         LxuceQ8JEYI/rzPbnx+PbNbX2O7x6AWT9xujroy7+PnBsGouBFJw1hcPrRezCGuO8TMc
-         4ZaKPyyLPJ8lgT2TIJej58n4nwaDdPRFCNqVYiPYzOWmAV5xAickd+MdutsG2xLXJD5L
-         6ID59mUtWyWiYv4COtGOKRy5vGrgCQGk0QmNxFRZ1SUfvnl1OTPrkGDGDG30RjNyHuMi
-         5GK+lQwb2oab6fFS9bii2IQIEDNrgrPl3divqjvuqHFDDSGJHcRs5+VXNYZrnNYiUkOK
-         cevA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
+        b=DkGgz7LrrshUUqf98FEQHx+4ZLsw1fmj5xlLMYyg/apRAjsxEw7p1q2hYhewpY//AC
+         JgOSPxlI58u/6CrB5nHfIey6F8vFzD+IG3h1qtADCX3oNJnQ9VuURgFNHi9tc2KKhQ3Y
+         T7cRhAo/RxwKzzcpWDvHV4kJRYaTe3ZU5R4DFUcINE8j4tEYgcDBxmVD9MAKeJayMoFL
+         s+cpWPIhjOUCWh+HZPwXIWgujNEJrGjyWRFZLc2Ph8F+9Tj2N54bsdJ4+9gbMYFO5+ME
+         ZMjzQcSSj5F3MJtyWzD6nHA/Vj/ff9wONV3GbAUHv9o3HdcwAF1IQ1JX6zFdJsQ/hGcZ
+         iU6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XDRpdpBWdFb6EOdNes1o07LdLE88/XFjpZQhQSJTWak=;
-        b=S3fDkbKA5wlIBlw50JY9w/+b7i5Kf330zm4Ou3HytxsGz0XzcQbwgv/63lcXOpHahS
-         JSZ/z87TfFNblilRgcytL/NjRDj8EryGFgtZq0LCSdWPrfUq7u4uw5RpX2Ec+9Sv68W4
-         oTCBR1MwP2VhAHVm2YjcPh6kQzAuBLkfGDA7NVLtkb3vETYhhssyPZ9JVK0FK+gUwxAV
-         fszCgpM0HrZ3HsC5dwKzrMySbkOH+VdUjHFvSw3KzvyYF1CqTSq2AkwN3BtJeIY4rAkC
-         cUOu8k8vcdxwwbAcSogzyN3hybV7bvJ30FLkAcyFLnB0wFEhiyJC+dAyjVB1hGQpGg1L
-         +nhA==
-X-Gm-Message-State: AO0yUKW3/Va/af5btfPUQ2W3SdgnGkIrBhOxGKO4MPr1tXvtEEtq1jj8
-        jUZLggRHaABvYTFUBRu2ZoyVW15CnQsZcGga
-X-Google-Smtp-Source: AK7set9IAzpQ6WhPu+U/GhhX7HihyBSQKr1YCJLTTgg/FdNj1d63I8AQqIpQUeGg33gN1FafpXuX7w==
-X-Received: by 2002:a17:906:5357:b0:884:c45f:1c04 with SMTP id j23-20020a170906535700b00884c45f1c04mr386648ejo.2.1676628709805;
-        Fri, 17 Feb 2023 02:11:49 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w18-20020a170907271200b008710789d85fsm1945128ejk.156.2023.02.17.02.11.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 02:11:49 -0800 (PST)
-Message-ID: <ec046b79-ac83-1d5c-4a77-59a8f313e52f@linaro.org>
-Date:   Fri, 17 Feb 2023 11:11:47 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
+        b=BLFx10LkRaBafgzqD6uyLL8qh0YZB8e41yxP621iZVpvHK9m8J1H61SloIK8ztQWiF
+         h8OFtYQTQlZia34h3SdT1VxLwV7I2jmo5+g17Koj0OEOdAK1iQqAXepAlS4Zo6kS9rxJ
+         PlLUrql1HMsDefAyjy7niEgQUsHFHqSulKPbhvAvsZ8MShVG7KSmUgeSGcqv233oIwwx
+         peDCRDbVxZnR2YHYmAnSTkepIK0ufJrUl1edp6fcgmhxf8NA1Kvw5ze+MhCAANHTH9ws
+         58W7bcUJ5nadH3aZ92BKlUj8gilfCTebPjr2tlj3liGR02oP7Dyzj/cMOR4BM7A+7oBn
+         Y27w==
+X-Gm-Message-State: AO0yUKXM8105Az32Bw2C0tMqgy3hp13nzK6VQjG8rScWrK4kD1HOx6hC
+        XS35pO5PzxllvzCE8/LEDmLddvVxIIU+4enbDE8=
+X-Google-Smtp-Source: AK7set+GT0Ah3I/6vPnxNmj3RSo2G/EDRSHCWkFAtQuG+sMISDYexJpAIhdh9LnTy7Wf3Mb443eJzI2NRdM6y6KK2Zo=
+X-Received: by 2002:a17:907:76ad:b0:8b1:749f:b2c6 with SMTP id
+ jw13-20020a17090776ad00b008b1749fb2c6mr1849103ejc.2.1676628734827; Fri, 17
+ Feb 2023 02:12:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] dt-bindings: power: supply: Revise Richtek RT9467
- compatible name
-To:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
-Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peterwu.pub@gmail.com
-References: <1676627755-14349-1-git-send-email-chiaen_wu@richtek.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1676627755-14349-1-git-send-email-chiaen_wu@richtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1676289084.git.zhoubinbin@loongson.cn> <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
+ <df464409-9a93-c057-5f66-923a9e24696a@linaro.org> <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
+ <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org> <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+ <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org> <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
+ <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
+In-Reply-To: <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 17 Feb 2023 18:12:01 +0800
+Message-ID: <CAMpQs4KpE7RLyxw4++4z4RhjR_ix300mtDfwh6KgJJw1B43CqA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 10:55, ChiaEn Wu wrote:
-> Revise RT9467 compatible name from "richtek,rt9467-charger" to
-> "richtek,rt9467" because it has to match the "compatible name" in
-> the source code.
-> 
-> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
+On Fri, Feb 17, 2023 at 4:40 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 17/02/2023 07:09, Binbin Zhou wrote:
+>
+> >>> Hi Krzysztof:
+> >>>
+> >>> Allow me to give a brief overview of the current status of eiointc (DT-based):
+> >>>      Loongson-3A series supports eiointc;
+> >>>      Loongson-2K1000 does not support eiointc now;
+> >>>      Loongson-2K0500 supports eiointc, with differences from
+> >>> Loongson-3, e.g. only up to 128 devices are supported;
+> >>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
+> >>>      ....
+> >>>
+> >>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
+> >>>
+> >>> The design of eiointc is probably refined step by step with the chip.
+> >>> The same version of eiointc can be used for multiple chips, and the
+> >>> same chip series may also use different versions of eiointc. Low-end
+> >>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
+> >>> depending on the time it's produced.
+> >>>
+> >>> So in the Loongson-2K series I have defined the current state as
+> >>> eiointc-1.0, using the dts property to indicate the maximum number of
+> >>> devices supported by eiointc that can be used directly in the driver.
+> >>>
+> >>> If there are new changes to the design later on, such as the
+> >>> definition of registers, we can call it eiointc-2.0, which can also
+> >>> cover more than one chip.
+> >>
+> >> Just go with SoC-based compatibles. If your version is not specific
+> >> enough, then it is not a good way to represent the hardware.
+> >>
+> >
+> > Hi Krzysztof:
+> >
+> > I have tried to write the following  SoC-based compatibles,  is it fine?
+> >
+> > compatible:
+> >     enum:
+> >       - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
+> >       - loongson,ls2k0500-eiointc
+> >       - loongson,ls2k200-eiointc
+>
+> Looks good, but didn't you state these are compatible between each
+> other? I have impression there is a common set, so maybe one compatible
+> work on other device with reduced number of devices?
+>
 
+So far, the difference between ls2k SOCs is the number of devices
+supported by eiointc.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Do you mean use unified compatible and reuse loongson,eio-num-vecs?
 
-Best regards,
-Krzysztof
+Would this be possible, e.g.
+compatible:
+     const: loongson,ls2k-eiointc
 
+  loongson,eio-num-vecs:
+    description:
+      The number of devices supported by the extended I/O interrupt vector.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1
+    maximum: 256
+
+Thanks.
+Binbin
+
+> Best regards,
+> Krzysztof
+>
