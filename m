@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A79B69B64F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BA069B636
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjBQXLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S229582AbjBQXK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBQXLK (ORCPT
+        with ESMTP id S229523AbjBQXKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:11:10 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330196C012
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:44 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id cf37-20020a056902182500b009802c10698cso3193908ybb.22
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=6T3Gs2nuLFt+Gi9I5SyZU1o7dxUXgiYSrrrG2VNSMxo=;
-        b=Wt0DYMxGoRYkGatQPo0coKl/wrq7XW9qyPmdmUcYgYWqmxuF681eSGUYynQunnMGGC
-         xzoG074xtnXxckeWUMdMuWVp2SSsVy1IiIfyNm+dk/D+Zv5n0TgI4qxGq4xHjEnajKC+
-         2FBcS7lAs0bdc3CeB1Thb5ALnwV3m3OShvahkhL79qyWZ0amtCnp98lLVxLvyyLiDNFK
-         4JOfuA8IXxUJM3RkOO+9eIgwPp3lnHjBjV184/6Ezh1U9VNqdoYwI5xPccf4SbfjHGAA
-         5reeKVcnzRZdWBLPF4eaCJI3zTWyXmGD0sq8YUOxeM6NXFHtC8VCb4PtWvcXfLbItS0t
-         9TbQ==
+        Fri, 17 Feb 2023 18:10:25 -0500
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3022A2E;
+        Fri, 17 Feb 2023 15:10:24 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1718b38d3ceso2594256fac.0;
+        Fri, 17 Feb 2023 15:10:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6T3Gs2nuLFt+Gi9I5SyZU1o7dxUXgiYSrrrG2VNSMxo=;
-        b=ysBMKroVWcHURWeD5H5AyAuJXvhgdgh/lvdqWULqYRHdpPkZtoh3VpuBEH9rnBHC6e
-         saqUgNGzFT6Et3zm06rAplJrmgs31tsdCz9AOsJDOwDUcQ6S5OBs0pYX/zVWnq7+v919
-         koIu767x593gPwqI2r6jfoZQSW0OJC66G3nhumRTxG/LfQTwjOOGTE6T+WJQ1LGnFMby
-         Kf3QkDwBqbzCoK6mhzZeSZPw03bWYXIqsbT/eQBFUgbpr9MD5PtLPRPAHD7UQwO/c/FB
-         q4PnfEwvSxwlQ2gD5YbOGNfk7fkR+Fn02eEOWt4PhJukek3Ly04p1onvYqrzdbawF+CG
-         NBdQ==
-X-Gm-Message-State: AO0yUKW5DDKn+kRwZZsBeBMzijN0imX70t6gx0TlsaPfaGmxajUKJvjm
-        HfXOcVC5IMr2I5IGAkYqtyBZ/f95MmU=
-X-Google-Smtp-Source: AK7set+BLiMCMLxrwe6aIMejKhKuKOHIkqsRRgXPHUHo62iVRzAIWpbn42fyi84tYEqZIDTg3o5M2pCNiBk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:10c:b0:997:c919:4484 with SMTP id
- o12-20020a056902010c00b00997c9194484mr16415ybh.6.1676675442720; Fri, 17 Feb
- 2023 15:10:42 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 17 Feb 2023 15:10:19 -0800
-In-Reply-To: <20230217231022.816138-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230217231022.816138-1-seanjc@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230217231022.816138-10-seanjc@google.com>
-Subject: [PATCH 09/12] KVM: nSVM: Use KVM-governed feature framework to track
- "LBRv enabled"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yKQ7HUQ19YHYNCinZiTfNw1jKPbH2w3EEubtXUOOTSQ=;
+        b=TUCLcZrHG8PJaLwuWsHXiWb68ftBX1eBlaGdI1EtGxpJdo7Svq6/SEXXKvNqTfnjwY
+         5/RgBM3L+IFAZKQEaU3CoPyZ0Nmno8gtZZAkfsAE3Ir5cm3zLP9WiCaVEXaOhh0ViP5a
+         iOGP6BMh1QwO1dexY4TPgk53rxVx/0Hjy0DiQhNFSIMeKg/mBrrjxlmI/Q5Vl+IhpKao
+         nikltINh+AE5v6V3SqiNtmTPi6IZTuwt/yxOl5QAdfLGv9+Q8dx/L8UXeFj19xSC65mk
+         J7P1t005gBdFLbL65DM3FqQdn1gtj1Hix66cT51ihAkKL65gBfbDuCq+mQWssepyS8i2
+         cCYg==
+X-Gm-Message-State: AO0yUKWRFh55Zp5jlJ34TJS/XjZogKOspuEssEwNCnjD7eYx5G1c1z16
+        JzGeg6YsD5rLVXd93Ve+6R/SnvgrRA==
+X-Google-Smtp-Source: AK7set9fLPkg0yKORr/D/XglLiElC4PsjDfJZgA+4C6EekrPMHMQtaKaiiTrXYqBkej6oKIb5JAYgA==
+X-Received: by 2002:a05:6871:8e86:b0:16d:c23a:a117 with SMTP id zq6-20020a0568718e8600b0016dc23aa117mr117105oab.1.1676675423565;
+        Fri, 17 Feb 2023 15:10:23 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n6-20020a056870e40600b00163c90c1513sm2182724oag.28.2023.02.17.15.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 15:10:23 -0800 (PST)
+Received: (nullmailer pid 2236402 invoked by uid 1000);
+        Fri, 17 Feb 2023 23:10:20 -0000
+Date:   Fri, 17 Feb 2023 17:10:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH v8 12/13] dt-bindings: net: phy: Document support for
+ leds node
+Message-ID: <20230217231020.GB2217008-robh@kernel.org>
+References: <20230216013230.22978-1-ansuelsmth@gmail.com>
+ <20230216013230.22978-13-ansuelsmth@gmail.com>
+ <167651373836.1183034.17900591036429665419.robh@kernel.org>
+ <63ee9801.df0a0220.a106.72a3@mx.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63ee9801.df0a0220.a106.72a3@mx.google.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,137 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Track "LBR virtualization exposed to L1" via a governed feature flag
-instead of using a dedicated bit/flag in vcpu_svm.
+On Thu, Feb 16, 2023 at 11:00:49AM +0100, Christian Marangi wrote:
+> On Wed, Feb 15, 2023 at 08:32:11PM -0600, Rob Herring wrote:
+> > 
+> > On Thu, 16 Feb 2023 02:32:29 +0100, Christian Marangi wrote:
+> > > Document support for leds node in phy and add an example for it.
+> > > Phy led will have to match led-phy pattern and should be treated as a
+> > > generic led.
+> > > 
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
+> > >  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
+> > >  1 file changed, 22 insertions(+)
+> > > 
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.example.dtb: ethernet-phy@0: leds:led-phy@0:linux,default-trigger: 'oneOf' conditional failed, one must be fixed:
+> > 	'netdev' is not one of ['backlight', 'default-on', 'heartbeat', 'disk-activity', 'ide-disk', 'timer', 'pattern']
+> > 	'netdev' does not match '^mmc[0-9]+$'
+> > 	'netdev' does not match '^cpu[0-9]*$'
+> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > 
+> 
+> Hi, I could be wrong but this should be fixed by the previous patch that
+> adds netdev to the trigger list.
 
-No functional change intended.
+If so, then it didn't apply for me which is what PW says. So what tree 
+does this series apply too? linux-next? That's a tree no one can apply 
+patches from.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/governed_features.h |  1 +
- arch/x86/kvm/svm/nested.c        | 23 +++++++++++++----------
- arch/x86/kvm/svm/svm.c           |  7 +++++--
- arch/x86/kvm/svm/svm.h           |  1 -
- 4 files changed, 19 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
-index b66b9d550f33..16c58d61bdf6 100644
---- a/arch/x86/kvm/governed_features.h
-+++ b/arch/x86/kvm/governed_features.h
-@@ -10,6 +10,7 @@ KVM_GOVERNED_X86_FEATURE(XSAVES)
- KVM_GOVERNED_X86_FEATURE(NRIPS)
- KVM_GOVERNED_X86_FEATURE(TSCRATEMSR)
- KVM_GOVERNED_X86_FEATURE(V_VMSAVE_VMLOAD)
-+KVM_GOVERNED_X86_FEATURE(LBRV)
- 
- #undef KVM_GOVERNED_X86_FEATURE
- #undef KVM_GOVERNED_FEATURE
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 6a96058c0e48..9e210b03e635 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -540,6 +540,7 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
- 	bool new_vmcb12 = false;
- 	struct vmcb *vmcb01 = svm->vmcb01.ptr;
- 	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
-+	struct kvm_vcpu *vcpu = &svm->vcpu;
- 
- 	nested_vmcb02_compute_g_pat(svm);
- 
-@@ -565,18 +566,18 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
- 		vmcb_mark_dirty(vmcb02, VMCB_DT);
- 	}
- 
--	kvm_set_rflags(&svm->vcpu, vmcb12->save.rflags | X86_EFLAGS_FIXED);
-+	kvm_set_rflags(vcpu, vmcb12->save.rflags | X86_EFLAGS_FIXED);
- 
--	svm_set_efer(&svm->vcpu, svm->nested.save.efer);
-+	svm_set_efer(vcpu, svm->nested.save.efer);
- 
--	svm_set_cr0(&svm->vcpu, svm->nested.save.cr0);
--	svm_set_cr4(&svm->vcpu, svm->nested.save.cr4);
-+	svm_set_cr0(vcpu, svm->nested.save.cr0);
-+	svm_set_cr4(vcpu, svm->nested.save.cr4);
- 
- 	svm->vcpu.arch.cr2 = vmcb12->save.cr2;
- 
--	kvm_rax_write(&svm->vcpu, vmcb12->save.rax);
--	kvm_rsp_write(&svm->vcpu, vmcb12->save.rsp);
--	kvm_rip_write(&svm->vcpu, vmcb12->save.rip);
-+	kvm_rax_write(vcpu, vmcb12->save.rax);
-+	kvm_rsp_write(vcpu, vmcb12->save.rsp);
-+	kvm_rip_write(vcpu, vmcb12->save.rip);
- 
- 	/* In case we don't even reach vcpu_run, the fields are not updated */
- 	vmcb02->save.rax = vmcb12->save.rax;
-@@ -590,7 +591,8 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
- 		vmcb_mark_dirty(vmcb02, VMCB_DR);
- 	}
- 
--	if (unlikely(svm->lbrv_enabled && (svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))) {
-+	if (unlikely(guest_can_use(vcpu, X86_FEATURE_LBRV) &&
-+		     (svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))) {
- 		/*
- 		 * Reserved bits of DEBUGCTL are ignored.  Be consistent with
- 		 * svm_set_msr's definition of reserved bits.
-@@ -712,7 +714,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
- 
- 	vmcb02->control.virt_ext            = vmcb01->control.virt_ext &
- 					      LBR_CTL_ENABLE_MASK;
--	if (svm->lbrv_enabled)
-+	if (guest_can_use(vcpu, X86_FEATURE_LBRV))
- 		vmcb02->control.virt_ext  |=
- 			(svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK);
- 
-@@ -1021,7 +1023,8 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 
- 	svm_switch_vmcb(svm, &svm->vmcb01);
- 
--	if (unlikely(svm->lbrv_enabled && (svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))) {
-+	if (unlikely(guest_can_use(vcpu, X86_FEATURE_LBRV) &&
-+		     (svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))) {
- 		svm_copy_lbrs(vmcb12, vmcb02);
- 		svm_update_lbrv(vcpu);
- 	} else if (unlikely(vmcb01->control.virt_ext & LBR_CTL_ENABLE_MASK)) {
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index b3f0271c73b9..42591c77f98a 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -994,9 +994,11 @@ void svm_update_lbrv(struct kvm_vcpu *vcpu)
- 	bool current_enable_lbrv = !!(svm->vmcb->control.virt_ext &
- 				      LBR_CTL_ENABLE_MASK);
- 
--	if (unlikely(is_guest_mode(vcpu) && svm->lbrv_enabled))
-+	if (unlikely(is_guest_mode(vcpu) &&
-+		     guest_can_use(vcpu, X86_FEATURE_LBRV))) {
- 		if (unlikely(svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))
- 			enable_lbrv = true;
-+	}
- 
- 	if (enable_lbrv == current_enable_lbrv)
- 		return;
-@@ -4149,7 +4151,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 	if (tsc_scaling)
- 		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_TSCRATEMSR);
- 
--	svm->lbrv_enabled = lbrv && guest_cpuid_has(vcpu, X86_FEATURE_LBRV);
-+	if (lbrv)
-+		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_LBRV);
- 
- 	if (vls && !guest_cpuid_is_intel(vcpu))
- 		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 1e3e7462b1d7..60817ff346b0 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -258,7 +258,6 @@ struct vcpu_svm {
- 	bool soft_int_injected;
- 
- 	/* optional nested SVM features that are enabled for this guest  */
--	bool lbrv_enabled                 : 1;
- 	bool pause_filter_enabled         : 1;
- 	bool pause_threshold_enabled      : 1;
- 	bool vgif_enabled                 : 1;
--- 
-2.39.2.637.g21b0678d19-goog
+Rob
 
