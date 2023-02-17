@@ -2,87 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD2169B2D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A1869B2E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjBQTHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 14:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S229622AbjBQTP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 14:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBQTHX (ORCPT
+        with ESMTP id S229445AbjBQTP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:07:23 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E2262429;
-        Fri, 17 Feb 2023 11:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676660842; x=1708196842;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GUE3tAE4Et6+TGfEegC3D71rexRa7L+1eXg/T+Edzz0=;
-  b=DdUA3c3UhMZaO9jV+6CcISfS05nxYPTBK3Q4MyU6TAdG4MDgXTPIx4BU
-   fQWUNVbMjExT1pDxS5BS2r86237Qty0n3Sv6w69DqQ8xwrApBBhPnm6W5
-   ZoM4kvEobIIIbnpjzyuDs/QyD/nQuSQbCSZepvl7M80QWUJp7ljXhnWHU
-   z6MrTfBsc2yy52wGCrxmg26vXnRD8lTIqkPooLhaBMxpWCrdfAlAPaHZF
-   ucBABQBdGuUSqjFxIefavb64SaR7ryZNIs/1v8Tv37ZT8XT5hxiSg6C/e
-   7yHF444s4IyUDfrtCVaWApPQk3fk3JkMBb6xjYFelBgpG1hvcuqK1X5oE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="359516979"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="359516979"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:07:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="739353039"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="739353039"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Feb 2023 11:07:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pT64l-008KaN-2A;
-        Fri, 17 Feb 2023 21:07:19 +0200
-Date:   Fri, 17 Feb 2023 21:07:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] gpio: pci-idio-16: Migrate to the regmap API
-Message-ID: <Y+/QZ7VX2EAxweIt@smile.fi.intel.com>
-References: <cover.1675876659.git.william.gray@linaro.org>
- <1bac3155e366fc7da7dbb48f54ab96d4a9649e57.1675876659.git.william.gray@linaro.org>
- <Y+/PwYe3pvtausbe@smile.fi.intel.com>
+        Fri, 17 Feb 2023 14:15:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F2A305DB;
+        Fri, 17 Feb 2023 11:15:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CECD61F45;
+        Fri, 17 Feb 2023 19:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 489C9C433D2;
+        Fri, 17 Feb 2023 19:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676661325;
+        bh=G/85bFWMblsbIz5H+NTur/T3kbROSsPA8F4KeWTtTxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SrtDEi1IVNLAktpZEhk1uI+ToDFVeSSVBgZ1ez9vN0+RG7D2uXX5SgnlxwL3xEegT
+         C94sbFYK/5JALtaoEkcw2FnS3IPBE51MIA3vbDJIg3dUUGrjNZwbxAPcmC/5D1AWg7
+         muCfEXNkTG36ZqSXp9JLKJhC8+0hc1Y4GTLJQ3VPu8D30oovBCHr+3QNV94QhuEXln
+         HgvqZiK1aL5KstnK1JlPXZLECJovSIJRjY0lQjHbqoqBx4sOkU+BENovq6FAiIZp3V
+         cOr4kQbfd0EB3DlvLvKAMLxOMyteV8x5AViB9AypQd+HuWclObS5sK1YGBBpMtQVG3
+         ujbn+ASxOwZsw==
+Date:   Fri, 17 Feb 2023 19:15:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Li Yang <leoyang.li@nxp.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 00/10] Add the PowerQUICC audio support using the QMC
+Message-ID: <Y+/SStm9ifszrYA1@sirena.org.uk>
+References: <20230216134226.1692107-1-herve.codina@bootlin.com>
+ <87mt5dyxph.fsf@mpe.ellerman.id.au>
+ <0606f44f-bdbb-055c-6fff-440007222ce3@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VaNrrXW2eNrXN8Fc"
 Content-Disposition: inline
-In-Reply-To: <Y+/PwYe3pvtausbe@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0606f44f-bdbb-055c-6fff-440007222ce3@csgroup.eu>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 09:04:33PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 08, 2023 at 12:18:20PM -0500, William Breathitt Gray wrote:
-> > The regmap API supports MMIO accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver. Migrate the pci-idio-16 module to the new
-> > idio-16 library interface leveraging the gpio-regmap API.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Don't you need to allow PIO accessors in the regmap configuration?
 
-If not, update a commit message accordingly.
+--VaNrrXW2eNrXN8Fc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Fri, Feb 17, 2023 at 06:32:03AM +0000, Christophe Leroy wrote:
 
+> Mark, is that ok for you or do you expect this series to go via soc tree ?
 
+Sure, that sounds good to me.  I'll give it another check and
+then assuming everything is fine apply for -rc1.
+
+--VaNrrXW2eNrXN8Fc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPv0kkACgkQJNaLcl1U
+h9A2ZAf+JT6rtuHjPfgpWsk/znSGdDmha4+vtlzEcAE1Dbq5/LFIShop84OCskiY
+0dIpfquVu0eN9u5F983mJtpr/jZfFZIvvJaN5ccwRNpduirs17rh3o8V0LoJRElD
+jv+lct+lydazjRFK/kmsuCtxrFvdoPI6edCHvAx8xIYUyG2cbNIpsU7X5hHGHzc6
+lxhGZDHR7DNveAVx91r1WaAzd8loxbpXkjGGsoqZr2/dkdSx5jlLiyIbMLlTdfrT
+PrkJ/ITqKSkmwMRCK0KH/gASwr7ChraDgaEIRhC+O0K+I3pL0BnInwSuv3XezGz9
+hdSU/02x5goYzdcJddt12woaNCqQYw==
+=SHcR
+-----END PGP SIGNATURE-----
+
+--VaNrrXW2eNrXN8Fc--
