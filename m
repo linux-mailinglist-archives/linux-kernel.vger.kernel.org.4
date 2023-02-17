@@ -2,169 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F83B69A961
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A0269A964
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjBQKtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S229525AbjBQKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjBQKt0 (ORCPT
+        with ESMTP id S229923AbjBQKt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:49:26 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AA537557
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:49:11 -0800 (PST)
+        Fri, 17 Feb 2023 05:49:57 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122475FD7;
+        Fri, 17 Feb 2023 02:49:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676630951; x=1708166951;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sey8O/cojQWNf1kMjlI1CMOo9+Y+Gn8QT+XBg8FNFEE=;
-  b=HIqjDVvoV2b4NcnWQ2Klvgjo8ytKexT8bwh8xYv9tb9LU0P5ojqJgT6u
-   DqtA9G+RT8KguXJhWEzxRcXHGxfD0JN3TWdogb323LYZSaH7aRui7W3mW
-   lyeL13IILdthjN8leWLdIAKIbO13+vTd9STehh8ofNlHVrEYzcRH7AvdR
-   qk4sNVVpGQ2rd56wqSSVeGUO3CN/LqJVRdHyYmsk+U9ma82HgegZwzoth
-   vmjzW/MQD//9+IZ/dUaLETFO+uHGhkUPV5G3rcRgD4VibHy8E342edoFQ
-   DTXAYpcRnCNiq8m4af9kDqYByxAw7P9o/00Ecwk5/YwX3+cVk1f86eHD5
+  t=1676630996; x=1708166996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O+mHzQSlbuG5WOZs3mRUmw8gyZ8jtCsCQALBsk2fkWE=;
+  b=BJ5xRDxzZcc3vsYtUaPOiw5xfqY6bKwCrSDvMlm9S5R6q9u8R++j66fT
+   hhzgxA7YL9tBpZ7e789zg466NWV1uL7MvJRgGCW19UlVB/TgaOWzsO+21
+   +dupA/lz/w/rWRvlz53kpq0DKqXKEtmtdNbF5jCQg/cyAU64QdYdoYXuf
+   N96boNDyAZMN0KrXcaDg1/1hoaLvx9R1N1Otbd0dPO3FBhvFNtDmGY+5k
+   RpiBrEnN9Plyz5RTj7bWBGEYr9gSQUyvPhgh13kdW6Jsht29uiYSB515Z
+   N+DgFwirEfQKhMu4q+9djoFh5in/LNAjQGlohkobkGvkFaI2gtDNQg1u4
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="312326998"
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="315676224"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="312326998"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 02:49:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="702938287"
+   d="scan'208";a="315676224"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 02:49:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="648038784"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="702938287"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Feb 2023 02:49:07 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSyId-000BLJ-0j;
-        Fri, 17 Feb 2023 10:49:07 +0000
-Date:   Fri, 17 Feb 2023 18:48:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202302171814.thbj6Ykw-lkp@intel.com>
+   d="scan'208";a="648038784"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 02:49:37 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id F0DEA11FC11;
+        Fri, 17 Feb 2023 12:49:34 +0200 (EET)
+Date:   Fri, 17 Feb 2023 12:49:34 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     Bingbu Cao <bingbu.cao@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "Ye, Xiang" <xiang.ye@intel.com>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
+        "Cao, Bingbu" <bingbu.cao@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
+ Visual Sensing Controller(IVSC)
+Message-ID: <Y+9bvl5SA2a1nXhe@kekkonen.localdomain>
+References: <20230213022347.2480307-1-wentong.wu@intel.com>
+ <Y+ypKYI4c6fHL4Eu@pendragon.ideasonboard.com>
+ <00c5c16e-c94e-a328-06d9-5f09ad35258d@linux.intel.com>
+ <Y+4rtSMArg5ow0Sh@kekkonen.localdomain>
+ <8022b9da-e033-b77b-914c-d35a31aac2e2@linux.intel.com>
+ <DM6PR11MB4316F7C9854B113556466BF58DA19@DM6PR11MB4316.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR11MB4316F7C9854B113556466BF58DA19@DM6PR11MB4316.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ec35307e18ba8174e2a3f701956059f6a36f22fb
-commit: 93a4fa622eb061f75f87f0cf9609ab4e69c67d01 LoongArch: Add STACKTRACE support
-date:   6 months ago
-config: loongarch-randconfig-s033-20230217 (https://download.01.org/0day-ci/archive/20230217/202302171814.thbj6Ykw-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/perf/ net/mptcp/
+Hi Wentong,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302171814.thbj6Ykw-lkp@intel.com/
+On Fri, Feb 17, 2023 at 06:28:32AM +0000, Wu, Wentong wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Bingbu Cao <bingbu.cao@linux.intel.com>
+> > Sent: Friday, February 17, 2023 9:44 AM
+> > 
+> > Hi, Sakari,
+> > 
+> > On 2/16/23 9:12 PM, Sakari Ailus wrote:
+> > > Hi Bingbu, Wentong,
+> > >
+> > > On Wed, Feb 15, 2023 at 08:09:50PM +0800, Bingbu Cao wrote:
+> > >>
+> > >> Hi, Wentong,
+> > >>
+> > >> On 2/15/23 5:43 PM, Laurent Pinchart wrote:
+> > >>> Hello Wentong,
+> > >>>
+> > >>> On Mon, Feb 13, 2023 at 10:23:44AM +0800, Wentong Wu wrote:
+> > >>>> Intel Visual Sensing Controller (IVSC), codenamed "Clover Falls",
+> > >>>> is a companion chip designed to provide secure and low power vision
+> > >>>> capability to IA platforms. IVSC is available in existing
+> > >>>> commercial platforms from multiple OEMs.
+> > >>>>
+> > >>>> The primary use case of IVSC is to bring in context awareness. IVSC
+> > >>>> interfaces directly with the platform main camera sensor via a
+> > >>>> CSI-2 link and processes the image data with the embedded AI
+> > >>>> engine. The detected events are sent over I2C to ISH (Intel Sensor
+> > >>>> Hub) for additional data fusion from multiple sensors. The fusion
+> > >>>> results are used to implement advanced use cases like:
+> > >>>>  - Face detection to unlock screen
+> > >>>>  - Detect user presence to manage backlight setting or waking up
+> > >>>> system
+> > >>>
+> > >>> Do you have plan to support these features in the ivsc driver in the
+> > >>> future ?
+> > >>>
+> > >>>> Since the Image Processing Unit(IPU) used on the host processor
+> > >>>> needs to configure the CSI-2 link in normal camera usages, the
+> > >>>> CSI-2 link and camera sensor can only be used in mutually-exclusive
+> > >>>> ways by host IPU and IVSC. By default the IVSC owns the CSI-2 link
+> > >>>> and camera sensor. The IPU driver can take ownership of the CSI-2
+> > >>>> link and camera sensor using interfaces provided by this IVSC driver.
+> > >>>>
+> > >>>> Switching ownership requires an interface with two different
+> > >>>> hardware modules inside IVSC. The software interface to these
+> > >>>> modules is via Intel MEI (The Intel Management Engine) commands.
+> > >>>> These two hardware modules have two different MEI UUIDs to enumerate.
+> > These hardware modules are:
+> > >>>>  - ACE (Algorithm Context Engine): This module is for algorithm
+> > >>>> computing when IVSC owns camera sensor. Also ACE module controls
+> > >>>> camera sensor's ownership. This hardware module is used to set ownership
+> > of camera sensor.
+> > >>>>  - CSI (Camera Serial Interface): This module is used to route
+> > >>>> camera sensor data either to IVSC or to host for IPU driver and application.
+> > >>>>
+> > >>>> IVSC also provides a privacy mode. When privacy mode is turned on,
+> > >>>> camera sensor can't be used. This means that both ACE and host IPU
+> > >>>> can't get image data. And when this mode is turned on, host IPU
+> > >>>> driver is informed via a registered callback, so that user can be notified.
+> > >>>
+> > >>> How does the privacy mode work, and how can the user trust that the
+> > >>> closed-source IVSC and IME firmwares will honour the privacy settings ?
+> > 
+> > As I know, without IVSC, once user enable the privacy mode, the Intel
+> > Converged Security Engine will configure the IPU camera mask (security register),
+> > which will mask the specific CSI2 port and produce dummy imaging data. For the
+> > case with IVSC, there is no final solution on Linux so far I think.
+> > 
+> > Wentong, is IVSC trying to cut off the stream and then notify user and IPU?
+> 
+> yes
 
-sparse warnings: (new ones prefixed by >>)
-   net/mptcp/options.c: note: in included file:
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
---
-   net/mptcp/protocol.c: note: in included file:
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
-   net/mptcp/protocol.c:3011:24: sparse: sparse: context imbalance in 'mptcp_sk_clone' - unexpected unlock
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
->> net/mptcp/protocol.h:547:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/mptcp/protocol.h:547:9: sparse:     expected void *ptr
-   net/mptcp/protocol.h:547:9: sparse:     got unsigned int [noderef] __percpu *
+Does the CSI-2 transmitter on IVCS go to some LP mode during this time, or
+does the receiver need to initialise the bus again when the stream resuems?
 
-vim +547 net/mptcp/protocol.h
+> 
+> > 
+> > >>>
+> > >>
+> > >> Continue with question from Laurent,
+> > >>
+> > >> How IVSC handle the privacy request from user? Is there some
+> > >> notification mechanism to user-space?
+> 
+> IVSC has already defined privacy callback for host IPU/camera driver.
+> 
+> > > I'd have concern if IVSC driver
+> > >> need private callback to request back-end(e.g. ISP driver) to handle stream
+> > cutting.
+> > >
+> > > How does the privacy mode work, does it just pass zeroes (or other
+> > > dummy
+> > > data) towards the host or nothing?
+> 
+> No data on CSI transmitter side
 
-b19bc2945b40b9 Paolo Abeni 2021-01-20  540  
-bcd97734318d1d Paolo Abeni 2021-11-19  541  static inline void mptcp_subflow_delegate(struct mptcp_subflow_context *subflow, int action)
-b19bc2945b40b9 Paolo Abeni 2021-01-20  542  {
-b19bc2945b40b9 Paolo Abeni 2021-01-20  543  	struct mptcp_delegated_action *delegated;
-b19bc2945b40b9 Paolo Abeni 2021-01-20  544  	bool schedule;
-b19bc2945b40b9 Paolo Abeni 2021-01-20  545  
-bcd97734318d1d Paolo Abeni 2021-11-19  546  	/* the caller held the subflow bh socket lock */
-bcd97734318d1d Paolo Abeni 2021-11-19 @547  	lockdep_assert_in_softirq();
-bcd97734318d1d Paolo Abeni 2021-11-19  548  
-b19bc2945b40b9 Paolo Abeni 2021-01-20  549  	/* The implied barrier pairs with mptcp_subflow_delegated_done(), and
-b19bc2945b40b9 Paolo Abeni 2021-01-20  550  	 * ensures the below list check sees list updates done prior to status
-b19bc2945b40b9 Paolo Abeni 2021-01-20  551  	 * bit changes
-b19bc2945b40b9 Paolo Abeni 2021-01-20  552  	 */
-bcd97734318d1d Paolo Abeni 2021-11-19  553  	if (!test_and_set_bit(action, &subflow->delegated_status)) {
-b19bc2945b40b9 Paolo Abeni 2021-01-20  554  		/* still on delegated list from previous scheduling */
-b19bc2945b40b9 Paolo Abeni 2021-01-20  555  		if (!list_empty(&subflow->delegated_node))
-b19bc2945b40b9 Paolo Abeni 2021-01-20  556  			return;
-b19bc2945b40b9 Paolo Abeni 2021-01-20  557  
-b19bc2945b40b9 Paolo Abeni 2021-01-20  558  		delegated = this_cpu_ptr(&mptcp_delegated_actions);
-b19bc2945b40b9 Paolo Abeni 2021-01-20  559  		schedule = list_empty(&delegated->head);
-b19bc2945b40b9 Paolo Abeni 2021-01-20  560  		list_add_tail(&subflow->delegated_node, &delegated->head);
-b19bc2945b40b9 Paolo Abeni 2021-01-20  561  		sock_hold(mptcp_subflow_tcp_sock(subflow));
-b19bc2945b40b9 Paolo Abeni 2021-01-20  562  		if (schedule)
-b19bc2945b40b9 Paolo Abeni 2021-01-20  563  			napi_schedule(&delegated->napi);
-b19bc2945b40b9 Paolo Abeni 2021-01-20  564  	}
-b19bc2945b40b9 Paolo Abeni 2021-01-20  565  }
-b19bc2945b40b9 Paolo Abeni 2021-01-20  566  
+Can it stop in the middle of the frame? Or is it guaranteed to produce full
+frames (assuming the sensor does)?
 
-:::::: The code at line 547 was first introduced by commit
-:::::: bcd97734318d1d87bb237dbc0a60c81237b0ac50 mptcp: use delegate action to schedule 3rd ack retrans
-
-:::::: TO: Paolo Abeni <pabeni@redhat.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+> 
+> > >
+> > > A V4L2 control can be used for the purpose of passing the information
+> > > to the user space at least.
+> 
+> I will take some time to review V4L2 sub-device and control mechanism,
+> and then update the driver.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Kind regards,
+
+Sakari Ailus
