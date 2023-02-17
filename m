@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AA169B5A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BAC69B5A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBQWkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 17:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S229725AbjBQWnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 17:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBQWka (ORCPT
+        with ESMTP id S229694AbjBQWnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:40:30 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F47425975
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:40:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 17 Feb 2023 17:43:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C822CFD1;
+        Fri, 17 Feb 2023 14:43:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PJRbW0Vsjz4x4n;
-        Sat, 18 Feb 2023 09:40:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676673623;
-        bh=xs/wXkAOF8KGVOLSwFeJYUalyiRca72VPv45G0xVNz0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YGujZgUO8L0ZMey+VkfQmooepOjbfPkOthEnitIYAImrP6B1WFLZekDB+iYGM3H2I
-         hFC1C0FjWK/i4CHAHk3pZ6TqrCh/tT0VgIVqp1tsEtLTJ18kpSLFKs3OhWvh7rFVkY
-         P+6WFKgqPw0fy3SjAwxYX6Lbpk6Pe0NQUB8aBqUdOs8qpwV57Rk/y0H9NZInJPzEaz
-         ++mRGdUzhRf0l+4IzztS8N4+zDyw9ZJxDzrk7BHavscQrFvmrqSs4lm2xqzYOjuV2x
-         tplOWprRJp8BDFrw1qQe8ehJc8fX3ih/2MJmYdzE6hK2g7D0S6KWTFh8iIQnpyAKbH
-         6u3yL/7gJJCUA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     bgray@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.2-6 tag
-Date:   Sat, 18 Feb 2023 09:40:18 +1100
-Message-ID: <87h6vjzzjh.fsf@mpe.ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7485A62085;
+        Fri, 17 Feb 2023 22:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9FF8C433D2;
+        Fri, 17 Feb 2023 22:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676673818;
+        bh=+HbER9gRaOdqJvCgoiw4p+5mwFXigj7PGX4lXXJ384A=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Rk4XhBugAiTkQspoJtCST31JGdnpEMV/5G/pgFpc7prYn7hknhEHya2H8cKDesZeJ
+         ShVYF42a7Xv9+pEFwP/CItzwNH5DbrNjehqI93K9SItPcFpPc85XR1j6qJk0XlMhMB
+         UMNVWhxXyTYiIw3gqtipuY4w/U/GW/xdi47AlxVZ7Ltc0YsH/dhvYt6XGemgTQZshv
+         30/iLWmJGDg9tHzqc7LxODLOI7Jo93rrLjXkkLevTmugVdzspEilDD9YUqx9mxeL4C
+         9RYQb38l+2STOfqugN0jo5PkkrBwip/PoDBrolQXNS4+xG0x+6A3dvS/9LoizLpTOY
+         EUb6A1F0hMqkw==
+Message-ID: <1c249c45ef3ac3c4904e0f5a3da11637.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230217141059.392471-14-nick.alcock@oracle.com>
+References: <20230217141059.392471-1-nick.alcock@oracle.com> <20230217141059.392471-14-nick.alcock@oracle.com>
+Subject: Re: [PATCH 13/24] kbuild, clk: bm1880: remove MODULE_LICENSE in non-modules
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Date:   Fri, 17 Feb 2023 14:43:36 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Quoting Nick Alcock (2023-02-17 06:10:48)
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>=20
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> ---
 
-Hi Linus,
-
-Please pull one more powerpc fix for 6.2:
-
-The following changes since commit 2ea31e2e62bbc4d11c411eeb36f1b02841dbcab1:
-
-  powerpc/64s/interrupt: Fix interrupt exit race with security mitigation switch (2023-02-07 10:13:33 +1100)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.2-6
-
-for you to fetch changes up to 4302abc628fc0dc08e5855f21bbfaed407a72bc3:
-
-  powerpc/64s: Prevent fallthrough to hash TLB flush when using radix (2023-02-17 12:30:56 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.2 #6
-
- - Prevent fallthrough to hash TLB flush when using radix.
-
-Thanks to: Benjamin Gray, "Erhard F.".
-
-- ------------------------------------------------------------------
-Benjamin Gray (1):
-      powerpc/64s: Prevent fallthrough to hash TLB flush when using radix
-
-
- arch/powerpc/include/asm/book3s/64/tlbflush.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmPwAU4ACgkQUevqPMjh
-pYDPjRAAlpjdeTzrSwV63jF3q9I5H9mgdmiNa2ZfRifKI7FLvHd9Yob8gs35D//x
-CLLhrQmtWL9LooFu5bx+UsLs2MuLevmUsWFWXhYPwDjEuLx12VP64i4obbugH89e
-QbGr6J9HwwHQLnwFacBWAPHl4NGO2KhRt/GEZZsWvw/1szikYDJfNlhh6M5vD5PW
-XNgkA5aJdyegkYWlYF+OsRVeE3GRzqU1dDagdc+9kzXzkqcMj4DsxVohviTLhhua
-cIdfUlZV8BDQc0F2I4376mh4O1+b/k4eGbnyIF14jd0Z/9ZOF9nAkgU7s3Z74n38
-O5gIBPMSz8bXoYKyVCO61SoDZHUGCWTn0xx14/cl0PAgGoU29xUH5/+S1miN1LdE
-N9gA3hDNagfRpXTDCWmbp5BREHItLrDzKUv125Ipf5hilV0Yzp/G7JAfun8E37wx
-3I0iHvH/Feq55fT9w1lggQ/Qt+9147xd5GyCbEQn7mJ/jolSFRkLzpAhsnec7Iwr
-qs00/n1JrRK5Owi6Ir2ds8vGZP4dFSGxnzhDMU/PaacavBpGDPP8xb2JsrvpoR6o
-rhReC7bnmYKIel7YJAaY+U3qwyCdYMBrQGpnfOb1eMXFYXK2LopP4TWfVO/LxHsp
-7fllB3nBWGQX/fCwKe5QMUS9QhAYWJ1Y/hgq3Gg1o9nmfn2VWNY=
-=/f1f
------END PGP SIGNATURE-----
+Acked-by: Stephen Boyd <sboyd@kernel.org>
