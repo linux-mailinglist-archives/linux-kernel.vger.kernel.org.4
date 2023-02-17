@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E5369B1BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2B169B1BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjBQR0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 12:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S229798AbjBQR0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 12:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjBQR0B (ORCPT
+        with ESMTP id S229658AbjBQR0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 12:26:01 -0500
+        Fri, 17 Feb 2023 12:26:36 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987D86EBB2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:25:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA886EB9E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:26:35 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0FCE05C00B2;
-        Fri, 17 Feb 2023 12:25:54 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id AE7F65C0075;
+        Fri, 17 Feb 2023 12:26:34 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Feb 2023 12:25:54 -0500
+  by compute6.internal (MEProxy); Fri, 17 Feb 2023 12:26:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676654754; x=1676741154; bh=k9CC30xtRn
-        IkcEmXE5iMZDNdapxCIxF6/qSMuorr+2c=; b=OYr7zGW4CyJ9/tqAqNshEkrbsb
-        xfHwwqGBFGPZ0a+OQC8J6zLdB6gpWllbAPDA3Nwz6G0DJ8/IUKriyTdp3GDjC1qj
-        t3YnpHa/RyhWJVjHhHbYxSIqNkZ4EXuS0l6XtX1CFpkZ1UO140/C5XHLmvIxZcRL
-        wjtWHfqEapY8tOQ3RzLCFseGk46rxMdjrt+9mTMiWj/IwiY3AXnQpzUDvyI9JIDm
-        3FdUwwEm0VWjJ3Kz9zapIX7RJPZ86VVEGDUOamwNOJWNuEkb+GLEeG0yXQxmqh4A
-        1IY3d0L943T7mxNN0oUZdVynnoyD2CYC7OfGvUoRT1thXtVo9H5sxc4TQAJA==
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1676654794; x=
+        1676741194; bh=EstTb2HUiYCTi+gg74KuT9lsccAHiv5Fn7sRoHN6wvE=; b=F
+        /T8IASftYYnMfohYZdoxbPqAM7RU6+NpT2s+1BtaQxyP1UUCK2a+tQMB8qswlrTq
+        knnOjpupe0hsW3NYzQCgeb4iVxYx2B2lAxX23cpoQdWTWFHG54gAh1GGryQ4FrC6
+        ImAAGEW/1/tCg6+i0dbttWd965cIuDQh4o+EN42lRfGWrXPXEox1ReEeSrp+XNkC
+        OGfUYGIKhoJKgz4BtnFKHH6aRLCm7t+FombVfzfpvl73wFugIN2MFAlfCR7arYo2
+        8PXkl7pNfBwrm8EbZbhPfSuZrwDZKfBiQAwapuHCbfCPCsI5BS/qdLnBnq45JGyh
+        pGlppxC9a9EtNBzfwmiVw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676654754; x=1676741154; bh=k9CC30xtRnIkcEmXE5iMZDNdapxC
-        IxF6/qSMuorr+2c=; b=DCdsEXKMEJdOv34F5a/Zc2RY+TtYoDbp4t3JSZfg5OeU
-        N2OigLsP7Cp48PKKI0FWKdaMbfLe/O2k9xEE+OqWIBzp2bp/jEUeqJ4HBeyIikGZ
-        qIT6c8MeeklnrJVwK4CfRdcgj3oPp3lYyc53I9k6otlLFol2lGCG4vIi5RN0Ihn+
-        LwRLOzdUKSxcksaiEqMoqx/Oq1GeTfRDYU5DoWm9za3vygDr83FoxwaaTvEaaNkx
-        UwCED+nNhEdZ95bAQ/CebZ/tG4jHO12t92IGXbv0oLL7zC4eX1tmA5oLItcZMNDL
-        1kNnUYqtzQVvjpY3okgZ8edWFL/qytJt+XIk0kTZzQ==
-X-ME-Sender: <xms:objvY5kYpsyNqAmn26HtLA2mkzx7oCwGloLbLP45bhHSYRCczJbxHw>
-    <xme:objvY00L1P-mVLurb7zBAPBw30C5N0h4n3IJBkajd5HedYPD5beF1GwmJzZOGsXTT
-    mzkESQI4X3l1AzI2_w>
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676654794; x=
+        1676741194; bh=EstTb2HUiYCTi+gg74KuT9lsccAHiv5Fn7sRoHN6wvE=; b=Z
+        smn1aQwt8JkXCg361pO0FPXkr5hX0EKmdeq1rvSlk/1S5vQFo6d5qu2zE2A5CoDs
+        tWKi5QRhfZmWlUHD6Zd+7CIUrfbFeJvHQ65vc9bn7xzB4HHtsB0WGXOjlolQRS+5
+        NIVtZIZobIROeSBKsKnceZAd97BTK84pieQxlozhe0myRM18HqwtcLU8Ev1lo947
+        nic0MDDZYfQM3zco7p6LtZkCP6bdGdoExdbDepnCGil+cPwJPD/EMEIAUmUN7oUf
+        kcBC0zSSOh0o4JG7MATKrDu3S8YCNzK1azweVvoOX0rvYtAP6zfyyQJFb52DJzyt
+        I5GiYRTlOnNzQoy4yKn+A==
+X-ME-Sender: <xms:yrjvY2g6YlUKX0pCwfJL4P12JT6BOwhgbnC-edMMVeddTi7TvS6ecQ>
+    <xme:yrjvY3BqIuu31tcVYHofjgQrP7iLNlvnlH1Y8iYMoE5LFWSA22wV3GuMROiVc-sKx
+    vOzeJVcvL95NkSkSPY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledgleejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepieeguedvkeehveduieetgedugfejheeugffhtedtvdetueetkefhheduhfet
-    gfdvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
-    rhhnuggsrdguvg
-X-ME-Proxy: <xmx:objvY_pVzJcUg-PSYzrM4Dta-7jtFInvOqyl_MEWAFu7DA_fvb_spA>
-    <xmx:objvY5mjmoolNsxgZoPJPvU6etftctWY-R7f3x-M6UL7uFNuD9nVxw>
-    <xmx:objvY33iIq5MO6YiJLFtzs8Dh3R8HpB1pDQwocIBVtpIx3O8XqwfJg>
-    <xmx:orjvYw8p_7CV3lgs62b7X87Oe2JZ1z7sSieMLX2dLFHFu8HgtDDVXQ>
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkefhheetvdethfejkeeigfehtdffieevfeefteffteejffehlefhtdeu
+    veejueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggv
+X-ME-Proxy: <xmx:yrjvY-FJ6D-u2o4z1CyJ9x3YoCFq5Jlb1i4ubytbplBqeMW_aMjLVA>
+    <xmx:yrjvY_QGl2bu7kgHchUltE-vxD1eKg45C2UgqoJhmHb68vOVHOKdHg>
+    <xmx:yrjvYzzywJt953-Ntpv0A15HBC927hcgH5e06iuPS1Lp4d9To0YF5g>
+    <xmx:yrjvY8p8ZK-yFNyhHsmQR180NhMn989lmemIFxw6tzLQvm-jeKtPmg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D1EC4B60086; Fri, 17 Feb 2023 12:25:53 -0500 (EST)
+        id 770AEB60086; Fri, 17 Feb 2023 12:26:34 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
 Mime-Version: 1.0
-Message-Id: <5298daba-9487-4c3c-8920-d8be6918b3e2@app.fastmail.com>
+Message-Id: <f2e84e19-e8ab-4b50-befa-6560512500a2@app.fastmail.com>
 In-Reply-To: <99179367-0d59-4938-b44c-ca9408ad784e@app.fastmail.com>
 References: <99179367-0d59-4938-b44c-ca9408ad784e@app.fastmail.com>
-Date:   Fri, 17 Feb 2023 18:25:35 +0100
+Date:   Fri, 17 Feb 2023 18:26:17 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Linus Torvalds" <torvalds@linux-foundation.org>
 Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/4] ARM: SoC updates for 6.3
-Content-Type: text/plain
+Subject: [GIT PULL 3/4] ARM: defconfigs for 6.3
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -84,169 +87,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c=
+262:
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-6.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
+efconfig-6.3
 
-for you to fetch changes up to 27aaad0e7c7259101568ac8763a34810e81336cd:
+for you to fetch changes up to af16544d4abe283e4a1ead6563ae883b9bb35429:
 
-  Merge tag 'zynq-soc-for-v6.3' of https://github.com/Xilinx/linux-xlnx into arm/soc (2023-02-01 17:13:27 +0100)
-
-----------------------------------------------------------------
-ARM: SoC updates for 6.3
-
-The majority of the changes are for the OMAP2 platform, mostly
-removing some dead code that got left behind from previous cleanups.
-
-Aside from that, there are very minor updates and correctness fixes for
-Zynq, i.MX, Samsung, Broadcom, AT91, ep93xx, and OMAP1.
+  Merge tag 'qcom-arm64-defconfig-for-6.3-3' of https://git.kernel.org/p=
+ub/scm/linux/kernel/git/qcom/linux into soc/defconfig (2023-02-15 15:05:=
+53 +0100)
 
 ----------------------------------------------------------------
-Angus Chen (1):
-      ARM: imx: Call ida_simple_remove() for ida_simple_get
+ARM: defconfigs for 6.3
 
-Arnd Bergmann (20):
-      ARM: remove CONFIG_UNUSED_BOARD_FILES
-      ARM: omap2: remove unused USB code
-      ARM: omap2: remove unused headers
-      ARM: omap2: remove unused omap_hwmod_reset.c
-      ARM: omap2: simplify clock2xxx header
-      ARM: omap2: remove APLL control
-      ARM: omap2: smartreflex: remove on_init control
-      ARM: omap2: remove unused functions
-      ARM: omap2: remove unused declarations
-      ARM: omap2: remove unused omap2_pm_init
-      ARM: omap2: make functions static
-      Merge branch 'omap/omap2-cleanup' of https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc into arm/soc
-      ARM: s3c: fix s3c64xx_set_timer_source prototype
-      Merge tag 'omap-for-v6.3/cleanup-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/soc
-      Merge tag 'omap-for-v6.3/omap1-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/soc
-      Merge tag 'at91-soc-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/soc
-      Merge tag 'arm-soc/for-6.3/soc' of https://github.com/Broadcom/stblinux into arm/soc
-      Merge tag 'samsung-soc-6.3' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/soc
-      Merge tag 'imx-soc-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/soc
-      Merge tag 'zynq-soc-for-v6.3' of https://github.com/Xilinx/linux-xlnx into arm/soc
+As usual, this branch contains all the patches to enable options
+for newly added device drivers in the 32-bit and 64-bit defconfig
+files.
 
-Chen Hui (1):
-      ARM: OMAP2+: Fix memory leak in realtime_counter_init()
+I have sorted the files according to the changes to Kconfig files,
+to make it easier to check what has changed compared to the 'make
+savedefconfig' output.
 
-Dario Binacchi (1):
-      ARM: BCM63xx: remove useless goto statement
+The most notable change this time is a series from Mark Brown
+to add a 'virtconfig' target for arm64, which is for the moment
+the same as the 'defconfig' target but disables all the top-level
+SoC specific options in order to have a smaller and faster
+kernel build.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: defconfig: Enable GCC, TCSRCC, pinctrl and interconnect for=
+ SM8550
+
+Alexander Stein (1):
+      ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
+
+Arnd Bergmann (9):
+      Merge tag 'renesas-arm-defconfig-for-v6.3-tag1' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/defconfig
+      Merge tag 'sunxi-config-for-6.3-1' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/sunxi/linux into soc/defconfig
+      Merge tag 'arm-soc/for-6.3/defconfig' of https://github.com/Broadc=
+om/stblinux into soc/defconfig
+      Merge tag 'imx-defconfig-6.3' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/shawnguo/linux into soc/defconfig
+      Merge tag 'v6.2-next-defconfig' of https://git.kernel.org/pub/scm/=
+linux/kernel/git/matthias.bgg/linux into soc/defconfig
+      arm64: reorder defconfig
+      ARM: reorder defconfig files
+      Merge tag 'qcom-arm64-defconfig-for-6.3-2' of https://git.kernel.o=
+rg/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.3-3' of https://git.kernel.o=
+rg/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+
+Bartosz Golaszewski (2):
+      arm64: defconfig: enable the clock driver for Qualcomm SA8775P pla=
+tforms
+      arm64: defconfig: enable drivers required by the Qualcomm SA8775P =
+platform
+
+Bhupesh Sharma (1):
+      arm64: defconfig: Enable Qualcomm EUD
+
+Biju Das (1):
+      arm64: defconfig: Enable Renesas RZ/G2L MIPI DSI driver
+
+Bjorn Andersson (2):
+      arm64: defconfig: Enable SC8280XP Display Clock Controller
+      arm64: defconfig: Enable DisplayPort on SC8280XP laptops
+
+Brian Masney (1):
+      arm64: defconfig: enable crypto userspace API
+
+Dmitry Baryshkov (3):
+      arm64: defconfig: build PINCTRL_SM8250_LPASS_LPI as module
+      arm64: defconfig: enable camera on Thundercomm RB5 platform
+      arm64: defconfig: build SDM_LPASSCC_845 as a module
 
 Geert Uytterhoeven (2):
-      ARM: OMAP2+: Remove unneeded #include <linux/pinctrl/pinmux.h>
-      ARM: OMAP2+: Remove unneeded #include <linux/pinctrl/machine.h>
+      ARM: shmobile: defconfig: Refresh for v6.1-rc5
+      arm64: defconfig: Enable RZ/G2L MIPI CSI-2 and CRU support
 
-Krzysztof Kozlowski (2):
-      arm64: drop redundant "ARMv8" from Kconfig option title
-      dt-bindings: soc: samsung: exynos-pmu: allow phys as child
+Johan Hovold (2):
+      arm64: defconfig: enable Qualcomm PCIe modem drivers
+      arm64: defconfig: enable Qualcomm SDAM nvmem driver
 
-Liang He (1):
-      ARM: OMAP2+: omap4-common: Fix refcount leak bug
+Jonathan Neusch=C3=A4fer (1):
+      ARM: Add wpcm450_defconfig for Nuvoton WPCM450
 
 Linus Walleij (1):
-      ARM: ep93xx: Convert to use descriptors for GPIO LEDs
+      ARM: defconfig: Add IOSCHED_BFQ to the default configs
 
-Mihai Sain (1):
-      ARM: at91: add support in soc driver for new SAMA7G54 SiPs
+Mark Brown (6):
+      ARM: multi_v7_defconfig: Enable wm896x audio CODECs
+      ARM: multi_v5_defconfig: Enable I2C_GPIO
+      ARM: imx_v6_v7_defconfig: Don't enable PROVE_LOCKING
+      scripts: merge_config: Add option to suppress warning on overrides
+      kbuild: Provide a version of merge_into_defconfig without override=
+ warnings
+      arm64: configs: Add virtconfig
 
-Nir Levy (1):
-      ARM: OMAP2+: Fix spelling typos in comment
+Neil Armstrong (3):
+      arm64: defconfig: enable SM8550 DISPCC clock driver
+      arm64: defconfig: enable Visionox VTDR6130 DSI Panel driver
+      arm64: defconfig: enable SM8450 DISPCC clock driver
 
-Pierluigi Passaro (1):
-      ARM: imx: mach-imx6ul: add imx6ulz support
+Nick Hawkins (1):
+      ARM: multi_v7_defconfig: Add GXP Fan and SPI support
 
-Qiheng Lin (1):
-      ARM: zynq: Fix refcount leak in zynq_early_slcr_init
+Nicolas Saenz Julienne (2):
+      kbuild: Add config fragment merge functionality
+      ARM: add multi_v7_lpae_defconfig
 
-Yang Yingliang (1):
-      ARM: OMAP1: call platform_device_put() in error case in omap1_dm_timer_init()
+N=C3=ADcolas F. R. A. Prado (2):
+      arm64: defconfig: Enable missing configs for mt8192-asurada
+      arm64: defconfig: Enable DMA_RESTRICTED_POOL
 
- .../bindings/soc/samsung/exynos-pmu.yaml           |  71 ++++-
- arch/arm/Kconfig                                   |  13 -
- arch/arm/mach-bcm/bcm63xx_smp.c                    |   3 +-
- arch/arm/mach-ep93xx/core.c                        |  13 +-
- arch/arm/mach-imx/mach-imx6ul.c                    |   1 +
- arch/arm/mach-imx/mmdc.c                           |  24 +-
- arch/arm/mach-omap1/timer.c                        |   2 +-
- arch/arm/mach-omap2/Makefile                       |   3 +-
- arch/arm/mach-omap2/board-n8x0.c                   |   2 +-
- arch/arm/mach-omap2/clkt2xxx_dpllcore.c            |   1 +
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c       |  14 +-
- arch/arm/mach-omap2/clock.c                        |   2 -
- arch/arm/mach-omap2/clock.h                        |   7 -
- arch/arm/mach-omap2/clock2xxx.h                    |  29 --
- arch/arm/mach-omap2/clock3xxx.h                    |  21 --
- arch/arm/mach-omap2/clockdomain.c                  |  44 +--
- arch/arm/mach-omap2/clockdomain.h                  |   4 -
- arch/arm/mach-omap2/cm2xxx.c                       | 101 +------
- arch/arm/mach-omap2/cm2xxx.h                       |   7 -
- arch/arm/mach-omap2/cm2xxx_3xxx.h                  |   5 -
- arch/arm/mach-omap2/common.h                       |  28 --
- arch/arm/mach-omap2/control.c                      |  73 -----
- arch/arm/mach-omap2/control.h                      |   5 -
- arch/arm/mach-omap2/devices.c                      |   1 -
- arch/arm/mach-omap2/id.c                           |   2 +-
- arch/arm/mach-omap2/id.h                           |   2 -
- arch/arm/mach-omap2/io.c                           |  21 +-
- arch/arm/mach-omap2/omap-secure.c                  |   7 +-
- arch/arm/mach-omap2/omap-secure.h                  |   3 -
- arch/arm/mach-omap2/omap4-common.c                 |   1 +
- arch/arm/mach-omap2/omap_device.c                  |  74 +----
- arch/arm/mach-omap2/omap_device.h                  |  14 -
- arch/arm/mach-omap2/omap_hwmod.c                   |  94 +------
- arch/arm/mach-omap2/omap_hwmod.h                   |  21 --
- arch/arm/mach-omap2/omap_hwmod_2420_data.c         |   1 -
- .../mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c |   2 +-
- .../mach-omap2/omap_hwmod_2xxx_interconnect_data.c |   1 -
- arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c |  12 +-
- arch/arm/mach-omap2/omap_hwmod_3xxx_data.c         |   1 -
- arch/arm/mach-omap2/omap_hwmod_common_data.h       |   6 -
- arch/arm/mach-omap2/omap_hwmod_reset.c             |  98 -------
- arch/arm/mach-omap2/omap_opp_data.h                |   5 -
- arch/arm/mach-omap2/omap_phy_internal.c            |  87 ------
- arch/arm/mach-omap2/pm.c                           |   8 +-
- arch/arm/mach-omap2/pm.h                           |  25 --
- arch/arm/mach-omap2/pm24xx.c                       | 312 ---------------------
- arch/arm/mach-omap2/pm33xx-core.c                  |   1 -
- arch/arm/mach-omap2/powerdomain.c                  | 108 +------
- arch/arm/mach-omap2/powerdomain.h                  |   8 -
- arch/arm/mach-omap2/prcm-common.h                  |   1 -
- arch/arm/mach-omap2/prcm_mpu44xx.c                 |  12 -
- arch/arm/mach-omap2/prcm_mpu_44xx_54xx.h           |   2 -
- arch/arm/mach-omap2/prm.h                          |   4 -
- arch/arm/mach-omap2/prm2xxx_3xxx.h                 |   3 -
- arch/arm/mach-omap2/prm3xxx.c                      |   5 +-
- arch/arm/mach-omap2/prm3xxx.h                      |   2 -
- arch/arm/mach-omap2/prm_common.c                   |  55 +---
- arch/arm/mach-omap2/sdrc.c                         |  51 +---
- arch/arm/mach-omap2/sdrc.h                         |   5 -
- arch/arm/mach-omap2/serial.h                       |  66 -----
- arch/arm/mach-omap2/sleep34xx.S                    |   2 +-
- arch/arm/mach-omap2/sr_device.c                    |  13 -
- arch/arm/mach-omap2/sram.h                         |   4 -
- arch/arm/mach-omap2/timer.c                        |   1 +
- arch/arm/mach-omap2/usb-tusb6010.c                 |   6 +-
- arch/arm/mach-omap2/usb.h                          |  71 -----
- arch/arm/mach-omap2/vc.c                           |  15 -
- arch/arm/mach-omap2/voltage.c                      |   2 +-
- arch/arm/mach-omap2/voltage.h                      |   2 -
- arch/arm/mach-s3c/s3c64xx.c                        |   3 +-
- arch/arm/mach-zynq/slcr.c                          |   1 +
- arch/arm64/Kconfig.platforms                       |  10 +-
- drivers/soc/atmel/soc.c                            |   9 +
- drivers/soc/atmel/soc.h                            |   3 +
- drivers/soc/ti/smartreflex.c                       |   4 -
- include/linux/platform_data/voltage-omap.h         |   1 -
- include/linux/power/smartreflex.h                  |   3 -
- include/linux/usb/musb.h                           |   2 -
- 78 files changed, 155 insertions(+), 1591 deletions(-)
- delete mode 100644 arch/arm/mach-omap2/clock3xxx.h
- delete mode 100644 arch/arm/mach-omap2/omap_hwmod_reset.c
- delete mode 100644 arch/arm/mach-omap2/pm24xx.c
- delete mode 100644 arch/arm/mach-omap2/serial.h
- delete mode 100644 arch/arm/mach-omap2/usb.h
+Patrick Delaunay (1):
+      ARM: configs: multi_v7: enable NVMEM driver for STM32
+
+Peng Fan (1):
+      arm64: defconfig: select i.MX ICC and DEVFREQ
+
+Samuel Holland (1):
+      riscv: defconfig: Enable the Allwinner D1 platform and drivers
+
+Stefan Wahren (2):
+      ARM: bcm2835_defconfig: Enable the framebuffer
+      ARM: bcm2835_defconfig: Switch to SimpleDRM
+
+ MAINTAINERS                              |   1 +
+ arch/arm/Makefile                        |   6 +
+ arch/arm/configs/at91_dt_defconfig       |   2 +-
+ arch/arm/configs/bcm2835_defconfig       |   3 +-
+ arch/arm/configs/dove_defconfig          |   6 +-
+ arch/arm/configs/exynos_defconfig        |  10 +-
+ arch/arm/configs/gemini_defconfig        |   2 +-
+ arch/arm/configs/imx_v6_v7_defconfig     |   3 +-
+ arch/arm/configs/keystone_defconfig      |   2 +-
+ arch/arm/configs/lpae.config             |   2 +
+ arch/arm/configs/milbeaut_m10v_defconfig |  22 ++--
+ arch/arm/configs/multi_v5_defconfig      |   2 +
+ arch/arm/configs/multi_v7_defconfig      |  43 +++++--
+ arch/arm/configs/mv78xx0_defconfig       |   2 +-
+ arch/arm/configs/nhk8815_defconfig       |   2 +-
+ arch/arm/configs/omap2plus_defconfig     |  14 +-
+ arch/arm/configs/pxa_defconfig           |  26 ++--
+ arch/arm/configs/qcom_defconfig          |   2 +-
+ arch/arm/configs/sama5_defconfig         |   2 +-
+ arch/arm/configs/shmobile_defconfig      |   1 +
+ arch/arm/configs/spitz_defconfig         |  10 +-
+ arch/arm/configs/wpcm450_defconfig       | 211 ++++++++++++++++++++++++=
++++++++
+ arch/arm64/Makefile                      |   6 +
+ arch/arm64/configs/defconfig             | 115 ++++++++++++-----
+ arch/arm64/configs/virt.config           |  39 ++++++
+ arch/powerpc/Makefile                    |  12 +-
+ arch/riscv/configs/defconfig             |  22 +++-
+ scripts/Makefile.defconf                 |  29 +++++
+ scripts/kconfig/merge_config.sh          |  25 ++--
+ 29 files changed, 504 insertions(+), 118 deletions(-)
+ create mode 100644 arch/arm/configs/lpae.config
+ create mode 100644 arch/arm/configs/wpcm450_defconfig
+ create mode 100644 arch/arm64/configs/virt.config
+ create mode 100644 scripts/Makefile.defconf
