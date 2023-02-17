@@ -2,139 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140AA69ACA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A430369ACAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjBQNku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S229880AbjBQNmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjBQNkt (ORCPT
+        with ESMTP id S229561AbjBQNmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:40:49 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6966052;
-        Fri, 17 Feb 2023 05:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YglKEztuX5P6i7hn5a3YsSJiYSxruITl06+cJFndveM=; b=VTlE+B3dPrr2Vmvi3i3v7pYR/6
-        H2dyDXUyXarNyTSfe9cjJQKS97/lKxZ6WINdw5R8at8nfph/wDDqSuOgzwIuda7a5QpiJvqyaiTXQ
-        5qBNZsVV/k+zq3alobAepQPV36ULsH9h6Uz7bAa5x2GYQjMQGFHHEcfSr8R7d0eNpfyc=;
-Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pT0yc-009CX6-Rd; Fri, 17 Feb 2023 14:40:38 +0100
-Message-ID: <e317d5bc-cc26-8b1b-ca4b-66b5328683c4@nbd.name>
-Date:   Fri, 17 Feb 2023 14:40:38 +0100
+        Fri, 17 Feb 2023 08:42:10 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7BD69283;
+        Fri, 17 Feb 2023 05:42:09 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HDMREM011616;
+        Fri, 17 Feb 2023 13:41:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=32hHrNwVdp3H+nkRDnFu0KDuuQaMByuR/fwbgNhhWQ8=;
+ b=ZSwzL1cItz/uhqsrOW7WVXnHnf+C7hu1HX1DSWBAUsDHZNcHHO1taRCud0goAXsFcJjf
+ HIkMax9iqmjez2NcQ32/ESYBp3SbrPgsUUUpjEvTtqcE/XnZ353u7BE6FJrXftlhAuIV
+ UgdxEaRqxBGlBJO9CCvxI5baoIYGiTB1ElZC7zLbLV25fpkMlUo74IwKAYARrgNntDNZ
+ mULDExah1M6obOoZpr45Mzv5UK+AJJDwxBvRu8Rmt+1wp2HfJ4IquugxCkek1Ob2f8N0
+ XYA22NLdyryeDrmF7DxrUCMM0fDtMRdLAWff8Af3UVZ+8rWt4Lr1pUnIGEi63XIWOsfV Ig== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nse3d4d6p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:41:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HDfUnQ002868
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:41:30 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 17 Feb 2023 05:41:22 -0800
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <rafal@milecki.pl>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+Subject: [PATCH V2 0/5] Add APSS clock controller support for IPQ9574
+Date:   Fri, 17 Feb 2023 19:11:02 +0530
+Message-ID: <20230217134107.13946-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230217100606.1234-1-nbd@nbd.name>
- <CANn89iJXjEWJcFbSMwKOXuupCVr4b-y4Gh+LwOQg+TQwJPQ=eg@mail.gmail.com>
- <acaf1607-412d-3142-1465-8d8439520228@nbd.name>
- <CANn89iLQa-FruxSUQycawQAHY=wCFP_Q3LHEQfusL1pUbNVxyg@mail.gmail.com>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC v2] net/core: add optional threading for rps backlog
- processing
-In-Reply-To: <CANn89iLQa-FruxSUQycawQAHY=wCFP_Q3LHEQfusL1pUbNVxyg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2NN81d_UwnOVUrlmIpuw929F8Y_JPtN6
+X-Proofpoint-ORIG-GUID: 2NN81d_UwnOVUrlmIpuw929F8Y_JPtN6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_08,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=874
+ mlxscore=0 impostorscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ malwarescore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302170123
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.02.23 13:57, Eric Dumazet wrote:
-> On Fri, Feb 17, 2023 at 1:35 PM Felix Fietkau <nbd@nbd.name> wrote:
->>
->> On 17.02.23 13:23, Eric Dumazet wrote:
->> > On Fri, Feb 17, 2023 at 11:06 AM Felix Fietkau <nbd@nbd.name> wrote:
->> >>
->> >> When dealing with few flows or an imbalance on CPU utilization, static RPS
->> >> CPU assignment can be too inflexible. Add support for enabling threaded NAPI
->> >> for RPS backlog processing in order to allow the scheduler to better balance
->> >> processing. This helps better spread the load across idle CPUs.
->> >>
->> >> Signed-off-by: Felix Fietkau <nbd@nbd.name>
->> >> ---
->> >>
->> >> RFC v2:
->> >>  - fix rebase error in rps locking
->> >
->> > Why only deal with RPS ?
->> >
->> > It seems you propose the sofnet_data backlog be processed by a thread,
->> > instead than from softirq ?
->> Right. I originally wanted to mainly improve RPS, but my patch does
->> cover backlog in general. I will update the description in the next
->> version. Does the approach in general make sense to you?
->>
-> 
-> I do not know, this seems to lack some (perf) numbers, and
-> descriptions of added max latencies and stuff like that :)
-I just ran some test where I used a MT7621 device (dual-core 800 MHz
-MIPS, 4 threads) as a router doing NAT without flow offloading.
+APSS PLL found in IPQ9574 platform is of type Huayra.
+This series adds support for the APSS clock to bump the CPU frequency
+above 800MHz.
 
-Using the flent RRUL test between 2 PCs connected through the router,
-I get these results:
+This series depends on the below patch set
+https://lore.kernel.org/linux-arm-msm/20230217083308.12017-1-quic_kathirav@quicinc.com/
 
-rps_threaded=0: (combined CPU idle time around 27%)
-                              avg       median       99th %          # data pts
-  Ping (ms) ICMP   :        26.08        28.70        54.74 ms              199
-  Ping (ms) UDP BE :         1.96        24.12        37.28 ms              200
-  Ping (ms) UDP BK :         1.88        15.86        27.30 ms              200
-  Ping (ms) UDP EF :         1.98        31.77        54.10 ms              200
-  Ping (ms) avg    :         1.94          N/A          N/A ms              200
-  TCP download BE  :        69.25        70.20       139.55 Mbits/s         200
-  TCP download BK  :        95.15        92.51       163.93 Mbits/s         200
-  TCP download CS5 :       133.64       129.10       292.46 Mbits/s         200
-  TCP download EF  :       129.86       127.70       254.47 Mbits/s         200
-  TCP download avg :       106.97          N/A          N/A Mbits/s         200
-  TCP download sum :       427.90          N/A          N/A Mbits/s         200
-  TCP totals       :       864.43          N/A          N/A Mbits/s         200
-  TCP upload BE    :        97.54        96.67       163.99 Mbits/s         200
-  TCP upload BK    :       139.76       143.88       190.37 Mbits/s         200
-  TCP upload CS5   :        97.52        94.70       206.60 Mbits/s         200
-  TCP upload EF    :       101.71       106.72       147.88 Mbits/s         200
-  TCP upload avg   :       109.13          N/A          N/A Mbits/s         200
-  TCP upload sum   :       436.53          N/A          N/A Mbits/s         200
+DTS patch depends on the PCIe series
+https://lore.kernel.org/linux-arm-msm/20230214164135.17039-1-quic_devipriy@quicinc.com/
 
-rps_threaded=1: (combined CPU idle time around 16%)
-                              avg       median       99th %          # data pts
-  Ping (ms) ICMP   :        13.70        16.10        27.60 ms              199
-  Ping (ms) UDP BE :         2.03        18.35        24.16 ms              200
-  Ping (ms) UDP BK :         2.03        18.36        29.13 ms              200
-  Ping (ms) UDP EF :         2.36        25.20        41.50 ms              200
-  Ping (ms) avg    :         2.14          N/A          N/A ms              200
-  TCP download BE  :       118.69       120.94       160.12 Mbits/s         200
-  TCP download BK  :       134.67       137.81       177.14 Mbits/s         200
-  TCP download CS5 :       126.15       127.81       174.84 Mbits/s         200
-  TCP download EF  :        78.36        79.41       143.31 Mbits/s         200
-  TCP download avg :       114.47          N/A          N/A Mbits/s         200
-  TCP download sum :       457.87          N/A          N/A Mbits/s         200
-  TCP totals       :       918.19          N/A          N/A Mbits/s         200
-  TCP upload BE    :       112.20       111.55       164.38 Mbits/s         200
-  TCP upload BK    :       144.99       139.24       205.12 Mbits/s         200
-  TCP upload CS5   :        93.09        95.50       132.39 Mbits/s         200
-  TCP upload EF    :       110.04       108.21       207.00 Mbits/s         200
-  TCP upload avg   :       115.08          N/A          N/A Mbits/s         200
-  TCP upload sum   :       460.32          N/A          N/A Mbits/s         200
+[V2]:
+	- Reordered the patches as suggested
+	- Dropped [PATCH 6/6] clk: qcom: Fix APSS PLL and RCG Configuration
+	  as it was unrelated
+	- Detailed Change logs are added to the respective patches
+[V1]:
+https://lore.kernel.org/linux-arm-kernel/20230113143647.14961-1-quic_devipriy@quicinc.com/
 
-As you can see, both throughput and latency improve because load can be
-better distributed across CPU cores.
+Devi Priya (5):
+  dt-bindings: clock: qcom,a53pll: add IPQ9574 compatible
+  clk: qcom: apss-ipq-pll: Enable APSS clock driver in IPQ9574
+  dt-bindings: mailbox: qcom: add compatible for IPQ9574 SoC
+  arm64: dts: qcom: ipq9574: Add support for APSS clock controller
+  arm64: defconfig: Enable ipq6018 apss clock and PLL controller
 
-- Felix
+ .../bindings/clock/qcom,a53pll.yaml           |  1 +
+ .../mailbox/qcom,apcs-kpss-global.yaml        |  1 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 18 ++++++++++++++++++
+ arch/arm64/configs/defconfig                  |  1 +
+ drivers/clk/qcom/apss-ipq-pll.c               | 19 +++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+
+
+base-commit: c068f40300a0eaa34f7105d137a5560b86951aa9
+-- 
+2.17.1
+
