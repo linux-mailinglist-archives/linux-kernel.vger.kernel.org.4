@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3375769AEE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DF069AEEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjBQPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 10:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S230106AbjBQPEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 10:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjBQPDS (ORCPT
+        with ESMTP id S230186AbjBQPEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:03:18 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBF14996;
-        Fri, 17 Feb 2023 07:02:52 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pT2F8-0005uQ-Lu; Fri, 17 Feb 2023 16:01:46 +0100
-Message-ID: <189043d8-1ea7-4264-7f86-3e28b99cc7da@leemhuis.info>
-Date:   Fri, 17 Feb 2023 16:01:46 +0100
+        Fri, 17 Feb 2023 10:04:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275E37290F;
+        Fri, 17 Feb 2023 07:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676646210; x=1708182210;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wtxl7CPmXcYLAphYYqsDsm/MtnhSA723kVbm6Vj5udE=;
+  b=UQ58f6U5fLWSfnsdbHXUVz8Z7FAy+zGLQVGz+xYKqG4pTQTsHYQ7DpJx
+   H2asM2GY8lVu89nSY0BKpIbBopW7N2IDh2lpMDhCPCBzvNY+G/p6zMlNZ
+   Py5FQQ2uON4WI7C+iTu9qvOC04qlKYz4tnK+BK51YOU4BDGZ4Mk25Wmu/
+   0eiBAlciT8U/osMK0nfPGNisszqS4VF0ZvLS731tEIEpRbJSj6xLRfCMk
+   iBbSzHs6fIhd+2GNcYnEVnY8gj5VHXFoPzDNzz9lMDTaaHOJyeiHJkbQl
+   5AZ/r79uXZ1Bnowc23s3b5tYJbqhEjqIgrhfkpV9YVU7OtJAfhw5xYiD+
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,306,1669100400"; 
+   d="scan'208";a="212525979"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 08:02:08 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 17 Feb 2023 08:02:08 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Fri, 17 Feb 2023 08:02:08 -0700
+Date:   Fri, 17 Feb 2023 16:02:07 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_PEROUT
+ for lan8841
+Message-ID: <20230217150207.6eb7fabg3t2dgh4j@soft-dev3-1>
+References: <20230217075213.2366042-1-horatiu.vultur@microchip.com>
+ <Y++BXkdXO8oysQ8M@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
- controller is down"
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <d5d8d106-acce-e20c-827d-1b37de2b2188@posteo.de>
- <0d3206be-fae8-4bbd-4b6c-a5d1f038356d@posteo.de>
- <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
-In-Reply-To: <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676646174;09ac0f8e;
-X-HE-SMSGID: 1pT2F8-0005uQ-Lu
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Y++BXkdXO8oysQ8M@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,36 +65,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.01.23 15:48, Linux kernel regression tracking (Thorsten Leemhuis)
-wrote:
-> On 11.01.23 23:11, Julian Groß wrote:
->>
->> when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
->> system seemingly randomly freezes due to the file system being set to
->> read-only due to an issue with my NVMe controller.
->> The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
->>
->> Through network logging I am able to catch the issue:
+The 02/17/2023 13:30, Russell King (Oracle) wrote:
+
+Hi Russel,
+
 > 
-> [...]
+> On Fri, Feb 17, 2023 at 08:52:13AM +0100, Horatiu Vultur wrote:
+> > +static void lan8841_ptp_perout_off(struct kszphy_ptp_priv *ptp_priv, int pin)
+> > +{
+> > +     struct phy_device *phydev = ptp_priv->phydev;
+> > +     u16 tmp;
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_EN) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp &= ~BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
 > 
-> #regzbot ^introduced v5.19..v6.0-rc7
-> #regzbot title nvme: system partially freezes with "nvme controller is down"
-> #regzbot ignore-activity
+> Problem 1: doesn't check the return value of phy_read_mmd(), so a
+> spurious error results in an error code written back to the register.
+> 
+> Issue 2: please use phy_modify_mmd() and definitions for the MMD. It
+> probably also makes sense to cache the mask. Thus, this whole thing
+> becomes:
+> 
+>         u16 mask = ~(LAN8841_PTP_GPIO_MASK | BIT(pin));
+> 
+>         phy_modify_mmd(phydev, MDIO_MMD_WIS, LAN8841_GPIO_EN, mask, 0);
+>         phy_modify_mmd(phydev, MDIO_MMD_WIS, LAN8841_GPIO_DIR, mask, 0);
+>         phy_modify_mmd(phydev, MDIO_MMD_WIS, LAN8841_GPIO_BUF, mask, 0);
 
-Stop tracking this for now:
+Thanks for the review.
+I will look at phy_modify_mmd and the other helper functions and try to
+use them in the other perout functions.
 
-#regzbot inconclusive: stalled and might be a hw issue
-#regzbot ignore-activity
+> 
+> although I'm not sure why you need to mask off bits 15:11.
 
-For details see:
+It is not necessary, only that those bits are marked as reserved.
 
-https://lore.kernel.org/all/81b5b28e-33fb-48ca-9e84-7574d5596bfb@posteo.de/
+> 
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DIR) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp &= ~BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_DIR, tmp);
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_BUF) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp &= ~BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_BUF, tmp);
+> > +}
+> > +
+> > +static void lan8841_ptp_perout_on(struct kszphy_ptp_priv *ptp_priv, int pin)
+> > +{
+> > +     struct phy_device *phydev = ptp_priv->phydev;
+> > +     u16 tmp;
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_EN) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp |= BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DIR) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp |= BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_DIR, tmp);
+> > +
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_BUF) & LAN8841_PTP_GPIO_MASK;
+> > +     tmp |= BIT(pin);
+> > +     phy_write_mmd(phydev, 2, LAN8841_GPIO_BUF, tmp);
+> 
+> Similar as above.
+> 
+> > +static void lan8841_ptp_remove_event(struct kszphy_ptp_priv *ptp_priv, int pin,
+> > +                                  u8 event)
+> > +{
+> > +     struct phy_device *phydev = ptp_priv->phydev;
+> > +     u8 offset;
+> > +     u16 tmp;
+> > +
+> > +     /* Not remove pin from the event. GPIO_DATA_SEL1 contains the GPIO
+> > +      * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
+> > +      * depending on the pin, it requires to read a different register
+> > +      */
+> > +     if (pin < 5) {
+> > +             tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1);
+> > +             offset = pin;
+> > +     } else {
+> > +             tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2);
+> > +             offset = pin - 5;
+> > +     }
+> > +     tmp &= ~(LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * offset));
+> > +     if (pin < 5)
+> > +             phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1, tmp);
+> > +     else
+> > +             phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2, tmp);
+> 
+> This could be much simpler using phy_modify_mmd().
+> 
+> > +
+> > +     /* Disable the event */
+> > +     tmp = phy_read_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG);
+> > +     if (event == LAN8841_EVENT_A) {
+> > +             tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A;
+> > +             tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
+> > +     } else {
+> > +             tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A;
+> > +             tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
+> > +     }
+> > +     phy_write_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG, tmp);
+> 
+> Ditto... and the theme seems to continue throughout the rest of this
+> patch.
+> 
+> > +static int lan8841_ptp_perout(struct ptp_clock_info *ptp,
+> > +                           struct ptp_clock_request *rq, int on)
+> > +{
+> > +     struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> > +                                                     ptp_clock_info);
+> > +     struct phy_device *phydev = ptp_priv->phydev;
+> > +     struct timespec64 ts_on, ts_period;
+> > +     s64 on_nsec, period_nsec;
+> > +     int pulse_width;
+> > +     int pin;
+> > +
+> > +     if (rq->perout.flags & ~PTP_PEROUT_DUTY_CYCLE)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     pin = ptp_find_pin(ptp_priv->ptp_clock, PTP_PF_PEROUT, rq->perout.index);
+> > +     if (pin == -1 || pin >= LAN8841_PTP_GPIO_NUM)
+> > +             return -EINVAL;
+> > +
+> > +     if (!on) {
+> > +             lan8841_ptp_perout_off(ptp_priv, pin);
+> > +             lan8841_ptp_remove_event(ptp_priv, LAN8841_EVENT_A, pin);
+> > +             return 0;
+> > +     }
+> > +
+> > +     ts_on.tv_sec = rq->perout.on.sec;
+> > +     ts_on.tv_nsec = rq->perout.on.nsec;
+> > +     on_nsec = timespec64_to_ns(&ts_on);
+> > +
+> > +     ts_period.tv_sec = rq->perout.period.sec;
+> > +     ts_period.tv_nsec = rq->perout.period.nsec;
+> > +     period_nsec = timespec64_to_ns(&ts_period);
+> > +
+> > +     if (period_nsec < 200) {
+> > +             phydev_warn(phydev,
+> > +                         "perout period too small, minimum is 200 nsec\n");
+> 
+> I'm not sure using the kernel log to print such things is a good idea,
+> especially without rate limiting.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+I think it would be nice to have these warnings as it would be nice to
+know why it fails. I will use pr_warn_ratelimited in the next version.
 
+> 
+> > @@ -3874,7 +4220,24 @@ static int lan8841_probe(struct phy_device *phydev)
+> >       priv = phydev->priv;
+> >       ptp_priv = &priv->ptp_priv;
+> >
+> > +     ptp_priv->pin_config = devm_kmalloc_array(&phydev->mdio.dev,
+> > +                                               LAN8841_PTP_GPIO_NUM,
+> > +                                               sizeof(*ptp_priv->pin_config),
+> > +                                               GFP_KERNEL);
+> 
+> devm_kcalloc() to avoid the memset() below?
 
+Good point. I will do that.
+
+> 
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+-- 
+/Horatiu
