@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCEB69A5E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 387CA69A5ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjBQHF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
+        id S229640AbjBQHH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBQHFz (ORCPT
+        with ESMTP id S229667AbjBQHHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:05:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D0900C;
-        Thu, 16 Feb 2023 23:05:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AE66B829AC;
-        Fri, 17 Feb 2023 07:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D325C433D2;
-        Fri, 17 Feb 2023 07:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676617547;
-        bh=O915DOYblEyhW+IM9kfJrC5Kx0YW+/xEUBLvVzqTRHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DJF32EQ62vBBuE/ud1MiiQ+QL7F2YGbh57J/qyJGT36uXd3jQdoZuLGs2zQDnczBZ
-         cTWwK1CzprnIwPHNvGO0yQQWkK4tJ8bSUCQvH4iUiwrdSUDGjeYf6q1/YadglkYiqg
-         ljb04zIEYmzqWt98Z3cvUnAfx7i7+BHZRFZmIukRDZDFL5SP+Nh0m1JYgaxd10g/vf
-         Vyk6xCO6ikrDID1CXoEItJC2YzTjrt7ck/B5hRXN6Um/yX9VRdd8DytdnT5LeQA33N
-         rHmmXCE34tROYWOqagmoG8+m1FM6/ZQ5Mv9hR8gtzF9V2uCL6cmD6CHfIkAED2alF3
-         Kuq1YFS/h4aIw==
-Date:   Thu, 16 Feb 2023 23:05:44 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the powerpc tree
-Message-ID: <20230217070544.uhe337i5xsgwsum4@treble>
-References: <20230216144031.45b1fc12@canb.auug.org.au>
- <20230216180607.w666rnbtm5fumziq@treble>
- <87k00hysyy.fsf@mpe.ellerman.id.au>
+        Fri, 17 Feb 2023 02:07:52 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A072822B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:07:47 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id y20so304297ljc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:07:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DSwBYjZrNmln+ctA3/m+T2GVcsFUCJyV9W5bCg8FwVk=;
+        b=WDYC5mLgBgby4IkaIx/erhiX6pHvAGJfn8AJ4Fg/PsJDfzV1FccE5bSHlt/k0neWN+
+         5qavbew9Z52SAlMUJ96LibXdf5m1sH5ZOkRocvtrbl0TH3Xrmt/+XPkVPM59vvG1r+hn
+         HbDNb/N+2xr7ig+uN972FTzu6d3SEDZyRlEFzAp6pA2US89GZjl/hBOEG/IEJWigdGPt
+         Lst25/ZCiiIBlMlLrvVQVm+sR9pDzrACptLz81ApuVfu/gf+8sw7lo47LQefw6+eHJuV
+         yD5/EGCJghbXSuVjvEL6I2t+czet84cYRS2HZBLOMylaDln80DXMzGttG3vaQR6V8971
+         PI7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DSwBYjZrNmln+ctA3/m+T2GVcsFUCJyV9W5bCg8FwVk=;
+        b=WtGGQcDUwU8qM20jNDEuPH/t2zzvOaPii/fSOzo9rreFTLeQdeiQgUTrpFVPff4pn7
+         xr0sR/YckcOudNv87XkK54Q7jNya3Beo9mHnqgTyyTu3aVDqSMbx2Ynupo3Mk9U1+Emu
+         i8VzKsELxw8x8nAFneJUHeH9I+idI7qKCAYwcYD4sN9oK4hWgA2u3cpxAlXB+QVY3q8V
+         nosSQ7VGFt1M5pxJVWXr1RCI06wnZ8xjZLySya1Ad3XltWjQHt2hFx/vYjbpARuZ9ICd
+         l9mlNctZKEI03GEFPmCYeHG4Bi7HkVjE7KiYgerySHaLL8INtjDInVBdJVpcSOHif8wV
+         BFyw==
+X-Gm-Message-State: AO0yUKWnlvH1ypoLtOUjSbFbnRAO+DslsMgSG6/cojNtLpuBNVtfc0LQ
+        gOcwVD3AUDL4d4SSrBWIJ9SW2A==
+X-Google-Smtp-Source: AK7set/tAqwu8sxy4AE7vnmKG3xqNcDOKRCF7xpzyi9Ted3sLXbDrbOLyQwAqOQnLDHo62Xv/Vt9tQ==
+X-Received: by 2002:a05:651c:b29:b0:290:7d15:464a with SMTP id b41-20020a05651c0b2900b002907d15464amr134730ljr.5.1676617665835;
+        Thu, 16 Feb 2023 23:07:45 -0800 (PST)
+Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id f2-20020a2e1f02000000b00294619d902dsm471489ljf.112.2023.02.16.23.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 23:07:44 -0800 (PST)
+Message-ID: <767e4d8d-b691-1849-71ac-5d6cefbb8d6a@linaro.org>
+Date:   Fri, 17 Feb 2023 09:07:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87k00hysyy.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v7 1/1] dma: qcom: bam_dma: Add support to initialize
+ interconnect path
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     dmaengine@vger.kernel.org, agross@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
+        devicetree@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, vkoul@kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20220921030649.1436434-1-bhupesh.sharma@linaro.org>
+ <20220921030649.1436434-2-bhupesh.sharma@linaro.org>
+ <a5b6255c-7282-32ed-8031-a4b841a78db7@linaro.org>
+ <CAH=2Ntw6XcyB2zy-cs35z3eOf8iTa28hGerhLndOgARrG05gJw@mail.gmail.com>
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <CAH=2Ntw6XcyB2zy-cs35z3eOf8iTa28hGerhLndOgARrG05gJw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,52 +82,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 12:35:17PM +1100, Michael Ellerman wrote:
-> Josh Poimboeuf <jpoimboe@kernel.org> writes:
-> > On Thu, Feb 16, 2023 at 02:40:31PM +1100, Stephen Rothwell wrote:
-> >> Hi all,
-> >> 
-> >> After merging the powerpc tree, today's linux-next build (powerpc
-> >> pseries_le_defconfig) produced this warning:
-> >> 
-> >> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x6128: unannotated intra-function call
-> >> 
-> >> I have no idea what caused this.
-> >
-> > Adding Sathvika and Christophe.
-> >
-> > The short term fix would be something like the below, but...
-> >
-> > If powerpc objtool is only doing mcount, does it even make sense to run
-> > objtool on asm files?  If so, there are probably a lot more cleanups
-> > needed for the asm code.
+On 2/17/23 06:00, Bhupesh Sharma wrote:
+> On Thu, 16 Feb 2023 at 19:49, Vladimir Zapolskiy
+> <vladimir.zapolskiy@linaro.org> wrote:
+>>
+>> On 9/21/22 06:06, Bhupesh Sharma wrote:
+>>> From: Thara Gopinath <thara.gopinath@gmail.com>
+>>>
+>>> BAM dma engine associated with certain hardware blocks could require
+>>> relevant interconnect pieces be initialized prior to the dma engine
+>>> initialization. For e.g. crypto bam dma engine on sm8250. Such requirement
+>>
+>> Apparently it's proven that the change description is incorrect, Qualcomm
+>> crypto engine is working fine on SM8250 and even more recent platforms,
+>> so far there is no obvious necessity in this change.
 > 
-> I would like to enable more of the objtool checks eventually, although I
-> don't have a timeline for that. But I'd prefer to keep checking the asm
-> code seeing as we've already enabled that.
+> Since your v9 patchset produces no entry in $ cat /proc/crypto on
+> either RB5 (qrb5165) or (with an additional patch) on sm8150-mtp or
+> sa8115p-adp with the default arm64 defconfig with linux-next, I am not
+> sure we can conclude QCE is working with these changes.
 
-Sounds good for now, though as you get more objtool features there will
-need to be more changes.
+Hopefully someone else can conclude it independently.
 
-For example a lot of the callable functions are annotated with _GLOBAL()
-rather than SYM_FUNC_{START,END}.  The latter adds the function size,
-which objtool needs in several cases.  It also has particular rules
-about when to use SYM_FUNC_* vs SYM_CODE_*, etc to make the code more
-structured.
+You may notice that v9 patchset series does not contain sm8150 specific
+changes, but sm8250 one (v9 11/14) is present, testing on RB5 is valid.
 
-> > So I'm thinking either we should cleanup all the powerpc asm code with
-> > annotations like below, or we should try to make objtool mcount-mode
-> > ignore asm files.
-> 
-> I think we have most of the code annotated already, this is a new
-> warning because that code is newly refactored by a commit I applied.
-> 
-> I'll have to fix my build scripts to error out on objtool warnings.
+> Please share more details on how you tested this.
 
-Likewise, I'll need to add some powerpc cross-compiles to my testing.
+I do compile linux-next with v9 QCE series applied on top of it and run the
+kernel on RB5 board, there is nothing really complicated about it.
 
-If we get too many of these powerpc warnings, we may be looking to
-recruit more objtool maintainers ;-)
+If you missed it, the 'cryptobench benchmark' test etc. have been already
+described, please find it here:
 
--- 
-Josh
+   https://lore.kernel.org/linux-crypto/731af3cf-6f18-caf9-ef65-ec73b0744ad9@linaro.org/
+
+--
+Best wishes,
+Vladimir
+
+>>> is passed on to the bam dma driver from dt via the "interconnects"
+>>> property. Add support in bam_dma driver to check whether the interconnect
+>>> path is accessible/enabled prior to attempting driver intializations.
+>>>
+>>> If interconnects are not yet setup, defer the BAM DMA driver probe().
+>>>
+>>> Cc: Bjorn Andersson <andersson@kernel.org>
+>>> Cc: Rob Herring <robh@kernel.org>
+>>> Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> [Bhupesh: Make header file inclusion alphabetical and use 'devm_of_icc_get()']
+>>> ---
+>>>    drivers/dma/qcom/bam_dma.c | 10 ++++++++++
+>>>    1 file changed, 10 insertions(+)
+>>>
+>>> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
+>>> index 2ff787df513e..a5b0cf28ffb7 100644
+>>> --- a/drivers/dma/qcom/bam_dma.c
+>>> +++ b/drivers/dma/qcom/bam_dma.c
+>>> @@ -26,6 +26,7 @@
+>>>    #include <linux/kernel.h>
+>>>    #include <linux/io.h>
+>>>    #include <linux/init.h>
+>>> +#include <linux/interconnect.h>
+>>>    #include <linux/slab.h>
+>>>    #include <linux/module.h>
+>>>    #include <linux/interrupt.h>
+>>> @@ -394,6 +395,7 @@ struct bam_device {
+>>>        const struct reg_offset_data *layout;
+>>>
+>>>        struct clk *bamclk;
+>>> +     struct icc_path *mem_path;
+>>>        int irq;
+>>>
+>>>        /* dma start transaction tasklet */
+>>> @@ -1294,6 +1296,14 @@ static int bam_dma_probe(struct platform_device *pdev)
+>>>        if (IS_ERR(bdev->bamclk))
+>>>                return PTR_ERR(bdev->bamclk);
+>>>
+>>> +     /* Ensure that interconnects are initialized */
+>>> +     bdev->mem_path = devm_of_icc_get(bdev->dev, "memory");
+>>> +     if (IS_ERR(bdev->mem_path)) {
+>>> +             ret = dev_err_probe(bdev->dev, PTR_ERR(bdev->mem_path),
+>>> +                                 "failed to acquire icc path\n");
+>>> +             return ret;
+>>> +     }
+>>> +
+>>>        ret = clk_prepare_enable(bdev->bamclk);
+>>>        if (ret) {
+>>>                dev_err(bdev->dev, "failed to prepare/enable clock\n");
+>>
+>> I'm resurrecting the comments on this change to emphasize the observation
+>> that the change is not needed at all to run QCE.
+>>
+>> --
+>> Best wishes,
+>> Vladimir
