@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4885D69A491
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60D969A499
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 05:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjBQDuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 22:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S229824AbjBQEBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 23:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBQDuD (ORCPT
+        with ESMTP id S229460AbjBQEBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:50:03 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B048A5A3AD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 19:50:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676605802; x=1708141802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O+c6MjNUQXeadDzpM+t8VgVjrw7GBTRFLweCYRCA8HY=;
-  b=h5qjlYo/iEqYxVqQWZORRbvtg+d4jRkZSQc1nw86U+9iQB0O/lMZB/Zv
-   Ll74fEl4dTKiGdVnEOcPl6YuuxLZO0di/zlqRL1xartDwYYfnrvzIkocA
-   QxYhxfCQIaErX0STS8F4I4jD5yACMkfhrYJrxoRoiwCe4OVP2aLoEOe3s
-   oVv83mNYasZGmKHmR+vGhmXsbHMJfKURtZHrUQbl7xlAoE43YCjy8RM5C
-   j4SAPZbRumMNrP6+DNA+iss0RtioFRChkOoTgkUbyRoqQpm7Np8PUFCYr
-   ogyNqgeARQzBQ9Nt8dZEXkr/iCLWDdYgf2ibccJY8kxwsVrV1ANqYcUDi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="331903909"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="331903909"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 19:50:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="915946649"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="915946649"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2023 19:49:59 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSrl0-000B5h-01;
-        Fri, 17 Feb 2023 03:49:58 +0000
-Date:   Fri, 17 Feb 2023 11:49:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.or,
-        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] erofs: convert hardcoded blocksize to sb->s_blocksize
-Message-ID: <202302171143.RmhVCgqe-lkp@intel.com>
-References: <20230216094745.47868-1-jefflexu@linux.alibaba.com>
+        Thu, 16 Feb 2023 23:01:11 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAA93800F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:01:09 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id y20so13740ljc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:01:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ymeKyoEPaB2TlyXtYfKO3gw6CH1MjfygMlQz73O8po=;
+        b=yCZKr8/p4yd+8jG2V8QlBXF9KW3dR7ZBJGXIWJ9S0PxxkGxs9p/hPwsoZBM80VHShR
+         4LdrM/kudaLex8OpMLiIzw1ptqK2nTs2YGhlxQ5Glrfy7FmQ05XSKl97t8Gq/iXvM6AJ
+         yDNiUDfIU66SA9X+POtTNQAOZcjVd8Ny9SomMb4vei22woi5WigkWY1cT+bEpD8fMhKg
+         PGPeDPmBCbeT1P2TLuFTcAbz0u0uh9K7qWHe4LJ7l6BLT6UdVitFsnYNK4bmfQsQXtP7
+         UHq+R9bx3po5ispQXnqo5ajbhz3Ay3UCnECMGO4K34Z6ZTdwKephGKsShTPCRA7I5cI5
+         ZhHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ymeKyoEPaB2TlyXtYfKO3gw6CH1MjfygMlQz73O8po=;
+        b=28bBJE9lnhVHrMmJhou/fMtabvMm3VeZrl3BdTCQ1Plb5m4fauQTtMoScDBYbwoJ1H
+         AiP79skeeJW32IHE7NXwdxZZNSuLYpd62yQL201770iQK1PC4uOMWTv7BvTrMkuJiN0a
+         MMCozUwOZ03JLvacYHodEBEAxc9g3R3yFXXOFzDVBkcvfPBoZ0e920E7eBVTbEnvvbFJ
+         efihxcielGkkze0RSvzmZMi1YGtbC4GZBYHYEly+7+ZgFlE3ysGOssE70Um80xGA6Len
+         s8L9oJKMvCPEVW8gtCo9ai67NXe3GDGc3c8YZMd1Dg1AWP8E29/4idAkSPZzPHR2jwpa
+         dHCQ==
+X-Gm-Message-State: AO0yUKU3NEPoCyc4dW2eDPAZlMH4DsHm7AbahfZEJpd08XJ7J6gsYZ+c
+        YfcRydbhChJh2J3sHdkklZa1jCeIfo3HKuEho2X+1Q==
+X-Google-Smtp-Source: AK7set8K5xDrSpT9L0kqCyfqBz0MMroZlR6Mbt2q07zvqdmgztRyOjO1+YmLFjBskGBUQZJF1uyB0xVoL/svv7JZWJ8=
+X-Received: by 2002:a05:651c:1719:b0:293:4e6d:f4f7 with SMTP id
+ be25-20020a05651c171900b002934e6df4f7mr2283009ljb.3.1676606467219; Thu, 16
+ Feb 2023 20:01:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216094745.47868-1-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921030649.1436434-1-bhupesh.sharma@linaro.org>
+ <20220921030649.1436434-2-bhupesh.sharma@linaro.org> <a5b6255c-7282-32ed-8031-a4b841a78db7@linaro.org>
+In-Reply-To: <a5b6255c-7282-32ed-8031-a4b841a78db7@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Fri, 17 Feb 2023 09:30:55 +0530
+Message-ID: <CAH=2Ntw6XcyB2zy-cs35z3eOf8iTa28hGerhLndOgARrG05gJw@mail.gmail.com>
+Subject: Re: [PATCH v7 1/1] dma: qcom: bam_dma: Add support to initialize
+ interconnect path
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     dmaengine@vger.kernel.org, agross@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
+        devicetree@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, vkoul@kernel.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingbo,
+On Thu, 16 Feb 2023 at 19:49, Vladimir Zapolskiy
+<vladimir.zapolskiy@linaro.org> wrote:
+>
+> On 9/21/22 06:06, Bhupesh Sharma wrote:
+> > From: Thara Gopinath <thara.gopinath@gmail.com>
+> >
+> > BAM dma engine associated with certain hardware blocks could require
+> > relevant interconnect pieces be initialized prior to the dma engine
+> > initialization. For e.g. crypto bam dma engine on sm8250. Such requirement
+>
+> Apparently it's proven that the change description is incorrect, Qualcomm
+> crypto engine is working fine on SM8250 and even more recent platforms,
+> so far there is no obvious necessity in this change.
 
-Thank you for the patch! Yet something to improve:
+Since your v9 patchset produces no entry in $ cat /proc/crypto on
+either RB5 (qrb5165) or (with an additional patch) on sm8150-mtp or
+sa8115p-adp with the default arm64 defconfig with linux-next, I am not
+sure we can conclude QCE is working with these changes.
 
-[auto build test ERROR on xiang-erofs/dev-test]
-[also build test ERROR on xiang-erofs/dev next-20230216]
-[cannot apply to xiang-erofs/fixes linus/master v6.2-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please share more details on how you tested this.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingbo-Xu/erofs-set-block-size-to-the-on-disk-block-size/20230216-175045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-patch link:    https://lore.kernel.org/r/20230216094745.47868-1-jefflexu%40linux.alibaba.com
-patch subject: [PATCH 1/2] erofs: convert hardcoded blocksize to sb->s_blocksize
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230217/202302171143.RmhVCgqe-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/30b09ec3be57f3777d22e71d2d4e5ec70d9227f8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jingbo-Xu/erofs-set-block-size-to-the-on-disk-block-size/20230216-175045
-        git checkout 30b09ec3be57f3777d22e71d2d4e5ec70d9227f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+Regards,
+Bhupesh
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302171143.RmhVCgqe-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/mips/kernel/head.o: in function `kernel_entry':
-   (.ref.text+0xac): relocation truncated to fit: R_MIPS_26 against `start_kernel'
-   init/main.o: in function `set_reset_devices':
-   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `debug_kernel':
-   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `quiet_kernel':
-   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `warn_bootconfig':
-   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `init_setup':
-   main.c:(.init.text+0x234): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x254): additional relocation overflows omitted from the output
-   mips-linux-ld: fs/erofs/data.o: in function `erofs_map_blocks_flatmode.constprop.0':
->> data.c:(.text.erofs_map_blocks_flatmode.constprop.0+0x118): undefined reference to `__divdi3'
-   mips-linux-ld: fs/erofs/namei.o: in function `erofs_find_target_block.constprop.0':
->> namei.c:(.text.erofs_find_target_block.constprop.0+0xf8): undefined reference to `__divdi3'
-   mips-linux-ld: fs/erofs/zmap.o: in function `compacted_load_cluster_from_disk':
->> zmap.c:(.text.compacted_load_cluster_from_disk+0x224): undefined reference to `__divdi3'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> > is passed on to the bam dma driver from dt via the "interconnects"
+> > property. Add support in bam_dma driver to check whether the interconnect
+> > path is accessible/enabled prior to attempting driver intializations.
+> >
+> > If interconnects are not yet setup, defer the BAM DMA driver probe().
+> >
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > [Bhupesh: Make header file inclusion alphabetical and use 'devm_of_icc_get()']
+> > ---
+> >   drivers/dma/qcom/bam_dma.c | 10 ++++++++++
+> >   1 file changed, 10 insertions(+)
+> >
+> > diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
+> > index 2ff787df513e..a5b0cf28ffb7 100644
+> > --- a/drivers/dma/qcom/bam_dma.c
+> > +++ b/drivers/dma/qcom/bam_dma.c
+> > @@ -26,6 +26,7 @@
+> >   #include <linux/kernel.h>
+> >   #include <linux/io.h>
+> >   #include <linux/init.h>
+> > +#include <linux/interconnect.h>
+> >   #include <linux/slab.h>
+> >   #include <linux/module.h>
+> >   #include <linux/interrupt.h>
+> > @@ -394,6 +395,7 @@ struct bam_device {
+> >       const struct reg_offset_data *layout;
+> >
+> >       struct clk *bamclk;
+> > +     struct icc_path *mem_path;
+> >       int irq;
+> >
+> >       /* dma start transaction tasklet */
+> > @@ -1294,6 +1296,14 @@ static int bam_dma_probe(struct platform_device *pdev)
+> >       if (IS_ERR(bdev->bamclk))
+> >               return PTR_ERR(bdev->bamclk);
+> >
+> > +     /* Ensure that interconnects are initialized */
+> > +     bdev->mem_path = devm_of_icc_get(bdev->dev, "memory");
+> > +     if (IS_ERR(bdev->mem_path)) {
+> > +             ret = dev_err_probe(bdev->dev, PTR_ERR(bdev->mem_path),
+> > +                                 "failed to acquire icc path\n");
+> > +             return ret;
+> > +     }
+> > +
+> >       ret = clk_prepare_enable(bdev->bamclk);
+> >       if (ret) {
+> >               dev_err(bdev->dev, "failed to prepare/enable clock\n");
+>
+> I'm resurrecting the comments on this change to emphasize the observation
+> that the change is not needed at all to run QCE.
+>
+> --
+> Best wishes,
+> Vladimir
