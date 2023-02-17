@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7459C69A3FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C05E69A400
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjBQClL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 21:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S230004AbjBQCoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 21:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBQClJ (ORCPT
+        with ESMTP id S229489AbjBQCoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 21:41:09 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D79EEE;
-        Thu, 16 Feb 2023 18:41:05 -0800 (PST)
+        Thu, 16 Feb 2023 21:44:05 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C013D37F15;
+        Thu, 16 Feb 2023 18:44:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PfhwHwFNdbdIqgoT5nAPzSCeW7j3KIJZKUlm/xL84G4uHehiD0l/nZXJVxrYd8O2bRsFmJdnG1XpqjVZdQ8dFs4q9x85ET7HWeTM5YWfnYYE+Qh4f6usSDbu3HH0I9u6C1aQhPB4dYh++t+NxEwn+MUf1Q4OkTeECYzMJ0dMXOV1++ZCRuMHf+3fNMJc4jiI7TfNavFNtWhO+coJqxuTvzBgqZhV04/P4rcZDi4oDy0rNoH5daPqMwTJdL4gVvwlMMHhu+ARxGNxqoWLpKGR2hn7ehe+KlX5vE+yNZZSXzStisEwZpycrl+8Bcj7YTFuvLL4y8uh7YisYxHHR2EWvA==
+ b=cGMeSA8KfFzve/NLAolr8wvd2Hw39PVHOEbtOViKXwbn7B768QyN+nNwfWJuqRQ4n1yBOtRHmXRbFmGzGxbMqYX3elvvevT1qJXzGKJef/k+Sdjjtd42aX7YMumJkWClsH/XZw9M+xjIPU1dU7kl2LadWveMQaIBzugHfz85DJSqOeC+zOM6dvFBD8wCc5MetYUnPM9dTbenrBP3LfsHg2DcRvVugJ2aXdoCh7oDnt0ncY+2JaHKJsOYKNU4FCgmsIuqmvSM7gMWxu7WXsyQwXr6AjDMApXjBtEdsmkd5KWS7Em+04o7Bsfkef63LSMs++SlJo0poG4q0P+Ca+Q+rw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fkyBAV0CYzPCfGOH8y7SDB948lMxXbDaLEExlESXGEA=;
- b=f7mjqV5j5dEOxQW+gT1hOZ64LmXOVOp8v+nkE+0MfSWUrAC5eX7MAGcrGal1WZtHIq76A+DAYqlYGKfVzkxf7tc9FZ00zVX30G/hUFPZ+IRSKGApZNTfgZ+nbOd9r70R8ICIFaJRgCvlk6oWfsKGqOnvojhAXGsuMipQG9dupG4EwDbMJ/f9JenN7RW/Cl1hIPdXw8hINtzgzqZ/m0UItaTjKlhMxJithP89TFHbIjgGHZK0hxFHFpN37kfjV/kByvl6TgrZQbO3Rd+SuHRSBCXrzbIBjpemW/H8qLxgAi2dKchNn/XDwiRFmPmnuV8U2AS+7JEXpOt5NmveqsaRcg==
+ bh=ChJhnXy1I4sHy7SvfWGQhyHcD8fGmL8S8VoUvV4QruI=;
+ b=lYUPptMJoTU6E5O415giC5xGtzgRxAhzVbYcDuZslriApj9a/2cU5tRt6TFetMihzfQSZnl8Kg8ZDOxyjXB3HC4NW+L9LzUcJyiE9pe/Nw/lmKfhQqPsizN8oJbNxG9pIqLRRAHRIEEJxzrcrsmduAAuJHSyjB9I3V6XcMjinuBalpxSm/87OoXam8V3EXYptdESsedz1Iob4rrs615nn7ZYK/+rPQHpn53398+ZLzfl0kcObO2cJKDWDA5AeQ1vm3XoHBPqFIXvxzA7NnCjEGWd/bafIjBlz5R0pS+GK/bPkOWQ4XVJjn8/uSfqs8w7qM8jR5M448uNs+8xVAjeXA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fkyBAV0CYzPCfGOH8y7SDB948lMxXbDaLEExlESXGEA=;
- b=O2CbORRHsN4IQ2qvbIJ7UdeQ0Q6BrPvPRIuHEEqWnQNQSp/FIgsZaO+hx0ujhXu0mdx0SkXa1aN6bfU6GYA5EjjEkpeUnnG1dWoVkkdeiuaqNILOyH0kRrjMz3nyUk40jZgsza5cfIqK8RoPVGoTUl+MGdwis/jc8kvUrYgKAiI=
+ bh=ChJhnXy1I4sHy7SvfWGQhyHcD8fGmL8S8VoUvV4QruI=;
+ b=VB1cQukofWF/gHkpEThXGS4d+kapdHEPoMvwcpgCpby4MxbvBC2ooM88tq3QjCvCyHQzN/SZhd3uGfIj+ipYx4T2EV6uBIzgPxjAIhaxEDe0h9veiphe/7SoiIP9VMtt9BAkGNi3lXE/BNNyyo7WKDGwY7amzI2gqsisV9PlrydL/i3FNeuVy5zeT09pbWBXa9WKn0KpsjxXZ0imO2A80iO1AvDomrTF1AH6JHpS6Cbe3Zg+9broHQ/teJXkwfv+OXI+KjH3+kybwfyySXz/rWTF+Fp6gYj+B4LQ5sB2wPOzDJILDUzndppxvabBoRzZkEMH2c2plKbol+wdsPKroQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by BY5PR03MB4936.namprd03.prod.outlook.com (2603:10b6:a03:1f1::7) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB3835.namprd12.prod.outlook.com (2603:10b6:5:1c7::12)
+ by MN2PR12MB4502.namprd12.prod.outlook.com (2603:10b6:208:263::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Fri, 17 Feb
- 2023 02:41:02 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::10e9:e275:9f10:67cc]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::10e9:e275:9f10:67cc%8]) with mapi id 15.20.6111.013; Fri, 17 Feb 2023
- 02:41:02 +0000
-Message-ID: <0d9bf4c1-2b7f-3214-df4c-d02d080fe2e9@synaptics.com>
-Date:   Fri, 17 Feb 2023 10:40:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 01/12] media: v4l2: Add NV15 pixel format
-Content-Language: en-GB
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Alex Bee <knaerzche@gmail.com>,
-        Collabora Kernel-domain <kernel@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
- <20230101-patch-series-v2-6-2-rc1-v2-1-fa1897efac14@collabora.com>
- <aa85c526-da32-d108-f85e-5dcd2cc8c846@synaptics.com>
- <c30fad90fcc48802b6f8be632789a5f034711797.camel@collabora.com>
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-In-Reply-To: <c30fad90fcc48802b6f8be632789a5f034711797.camel@collabora.com>
+ 2023 02:43:56 +0000
+Received: from DM6PR12MB3835.namprd12.prod.outlook.com
+ ([fe80::4963:ee4e:40e9:8a0b]) by DM6PR12MB3835.namprd12.prod.outlook.com
+ ([fe80::4963:ee4e:40e9:8a0b%4]) with mapi id 15.20.6086.026; Fri, 17 Feb 2023
+ 02:43:56 +0000
+Message-ID: <ca729a48-35a1-ef05-59d3-ef1539003051@nvidia.com>
+Date:   Fri, 17 Feb 2023 10:43:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next v1 3/3] net/mlx5e: TC, Add support for VxLAN GBP
+ encap/decap flows offload
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, roopa@nvidia.com,
+        eng.alaamohamedsoliman.am@gmail.com, bigeasy@linutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roi Dayan <roid@nvidia.com>, Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+References: <20230214134137.225999-1-gavinl@nvidia.com>
+ <20230214134137.225999-4-gavinl@nvidia.com>
+ <711630a2-b810-f8b0-2dcf-1eb7056ecf1d@intel.com>
+ <231a227d-dda6-fe15-e39a-68aee72a1d59@nvidia.com>
+ <92d83584-2238-f8e8-3ed6-f292223e4061@nvidia.com>
+ <dcc5578e-89d1-589f-3175-eb8bcd58f7ec@intel.com>
+ <76b74086-ea65-7bb3-1eb0-391f79d1c615@nvidia.com>
+ <aefe00f0-2a15-9a43-2451-6d01e74cc48a@intel.com>
+Content-Language: en-US
+From:   Gavin Li <gavinl@nvidia.com>
+In-Reply-To: <aefe00f0-2a15-9a43-2451-6d01e74cc48a@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0168.namprd03.prod.outlook.com
- (2603:10b6:a03:338::23) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: KL1PR0401CA0003.apcprd04.prod.outlook.com
+ (2603:1096:820:f::8) To DM6PR12MB3835.namprd12.prod.outlook.com
+ (2603:10b6:5:1c7::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|BY5PR03MB4936:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ed5393a-052b-4010-15cf-08db109068c8
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3835:EE_|MN2PR12MB4502:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e396b09-6cfe-4a1d-b171-08db1090d06a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ocXC3Y0mN9nmC8xshq6d+f8VO/olelV9OL/TAR9nBcipBWc+cY5+9Lcwsf1UdghXE25+fyeqUw+brvB+ZhUgz/76v35uOHAqcT/lp6qi3iLc5309hECUTrb8eeOpGa15lYZkCoYUcoGl5+u6OfV6XWAfSmJGPpT+qIsS5pYobZYlCfA0rpart04JNdqrgh9IiZ/NRb19rcdxfKSN/ZedJfs7XXZYnSyQomi4ngfrfnooIQAbvEbIGldhpvVB+dHU2nThdpFVzKXO0QaC+sJKT+g1zK//I9hNijzZdPUeph04h9zqNFcLiZ2xUgWfk38WZhGS2WWRdPiLuatnV61sjo/50W0Rd4d09o0GGaYXECaU6YLM6l0n5STaxoBz6pgRVcuNhlfOXMkPjk7VK479iU7XBYTHRzSm0VVNA8WbJhcux8dHafeD9DuvUFObSqPkTy74ShW1ZELtjSLyk0gAmMsPJ3UbYYnSdp7AcBiOi9C35PL8aQjRDp4BnD4HQwbUZKn4hl165GgYM/Kg1Cm06sVKOS44FvbyamRF/lKd4PcOFyV7qzRMFmj2y79O/ADI9ltKm2hdnbzI67l7rMuamAqvS8/wS6QJ5VsB1l3RgKwhqtpVcmOQn/vTYdgv8mYK8s1s5O2ZnuNfqSPlxI1wEOkk0IS11+9QMVhiztipNkS5J2Xvl99wPk9hE9mJu4Og/c0aV1UCaTTeHMdC8t/X9ckv6gZsnekgAmm9U1W+dhEzDpaJyEOkkrr9MkAr5oc+qm3QLlK4CUgtAz0GddhCsg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(376002)(366004)(39850400004)(136003)(451199018)(31686004)(2906002)(31696002)(8936002)(36756003)(86362001)(5660300002)(7416002)(38100700002)(83380400001)(38350700002)(52116002)(4326008)(6486002)(6916009)(66476007)(66556008)(66946007)(8676002)(54906003)(41300700001)(6512007)(26005)(53546011)(186003)(6506007)(478600001)(316002)(2616005)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 2sYSbIjSk7KZlAaGjvFGUsDWnOKWzlXWBYxOx87cnca9NfWUCWFt02raF9XS8aXMCXe/H+FzouJSZOsF1nbrinZtfnlNwIpkeCDmtKFkU42uWDlcNNUBltIG6zgQDUUUHchsYdYX0nRjhQcIkJjx60Fb1welmmnjw4tB25zOGSriRBUG5mNeFPlUrP4SD28QneMhAnGHCvp041ZtnzWTykKGvN6FYOa/8sPRhOWRsXOANZJ/xfqSyK69ODnFDUxUpmrfG6gPHkWNM9+nnzWZtKq1gNLyl6xNTQtOLxklw25qcS69aquZ7wIwQXD579CG5f43VcItSrBHWtDw9tqzAU70CsuVpunfxfif5Ls8hwy6eV81bvxyVY8o57YYAaZs+Sz7QT+iPuakWs6J70FGoPgiGbPxBHfhHpGqGtTM8DIE7Yb0x084TFkcKpiqG4OWWZhbvbdQE/JC3ZafP3PQVQBCiOOj7iHWm1151bGMBUYY/3cmOCMlCXoY4dcTJsJtXNDd2V9tTFiuixR0qkIKULbAJ96pohvK3/3oeZgN3hdpNPwJ8xyTEkZ6B7kfbU0/rmpYxXIBNiwV28P9UFmUlDqanrDX6UFOxLr9CUpUmFM5Lx+Sca5jE0rzNKscf+mdSxRlyTS4beAbXGPR2IguPmIRc/l6ohpHcFzL3lpPEXJW0fztj7o3dxSkQ8w/cOazq6YkrSpZDW5UdtdJ72iQ86OdfFxRi7Jh6RW2iiRWFcqxfg9X5UXQ2swnBv/UstEJzEr0x0KR+TjY7858P4JhCdw6zMdOBBqKdddd8wSGvB4xD/khTGhNhrT9wDsaOLiN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3835.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(39860400002)(396003)(376002)(451199018)(478600001)(6486002)(966005)(83380400001)(86362001)(31696002)(38100700002)(6666004)(6512007)(107886003)(36756003)(6506007)(26005)(2616005)(53546011)(186003)(316002)(66476007)(66556008)(5660300002)(4326008)(8676002)(6916009)(54906003)(31686004)(41300700001)(8936002)(2906002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGFvYzRYSzEwOXZGYUhpSk9EQXAxMFhjL1psTnFqdnVjVlVnV0JHSUhHWm1X?=
- =?utf-8?B?TFlLNGoyallrclE1MjBVMEZBRUxUZjUzRjI2anc2RStwc0hnT3ZWWTNwWlNZ?=
- =?utf-8?B?UlFjeVVjdXF0T0lrT2g4ckRjaXlhLzkxYUpmZGlsSVJ5ckxMTnVrNWNSNzVW?=
- =?utf-8?B?aUtzUGE3UzZSYUlYT1FrU1hySGI2U2JUZFVHaU1rR1pCZ3dXQmsyTmllNjlp?=
- =?utf-8?B?TVJ6ZWZNTjNWclZXOGpmWHQ0Sm9JTEduRnhFb0did0lnRFh6SURzbys3Zmh4?=
- =?utf-8?B?VXpsV2RHZkFVSFNpUkpTaUNLZlJXdVlHWnRvYTdkUDNlbGZ3bm5oZThwV3JL?=
- =?utf-8?B?Y0ZSZ0pRNnNsbURQa1EwQS8vTkFIZjhzWmpnRW1HRTFKM0dzeUJYQ3VCRStk?=
- =?utf-8?B?aFdJY2FzMzExakM3bTZzWnBXYWhCcFgzNGZxUWRLSDJDZmVVR2pLUVdCalpG?=
- =?utf-8?B?Q2pzVWFpMWU1YkhldzFaMFdPZEVEN1h6dUx6RlI5M1Byams5VEV4eVJxaUt0?=
- =?utf-8?B?b0pYUnN3c3VSUjdGZllxa0FaalNva3FxV1BsZ0dLdC91c0VhbnVwc3hROVZZ?=
- =?utf-8?B?QnF2UVlXWmgydmdMZ0xGZ1JVZXJBV0UybnJubE9PZEpDTGpQUlBIZGVZWkI0?=
- =?utf-8?B?YVh5Um91TDBNK1ZTcHYwRHJRekE0VmRHTTMwd1ZhNTI4NE1WRXdxYzRoeHU2?=
- =?utf-8?B?RXJrcW5mNjJPWnRPMFBaNTJSSTFvdVFJZ1JOT2V1UWdST3dacTk4WGRpUEhi?=
- =?utf-8?B?dkppNGxaTDV6RDdmUld0TncvUEJWQkFERWNraDMyZWF1TWJGQmdIN2dwZExa?=
- =?utf-8?B?N2pvNGtaL2lwVzgzcEFhNWhVbWV1YmZ0RjRTK05ZQ2hvcHVZN0tkVCtQd0hC?=
- =?utf-8?B?OGk2TlBXNTZRWXZ2WUpKVjhIdWtZcGdaVlpGc2JyRWhjbkQ5bHhnL21Cejcr?=
- =?utf-8?B?OGZaYmNkQkhIYVg3WkxmWlIyY1MrTjRWanBEbmRCSFRNWmljYWwwLzZYUkhR?=
- =?utf-8?B?MStRWEV3Si9hVVVYQSs3RGpkakhvOVRmRjNMV2NXc2RPWDJ5V1NkM05Oa1Ax?=
- =?utf-8?B?djB2RW5rbU11UEN3K0xQWW9VckM4azdqZXFSeDdnbU9nRzZsNGx6cXBrNjJj?=
- =?utf-8?B?ZDdiUmNpOFA0NzVnSHE2Rnk3cnM5QTEvMlB0YjVTeU1MMURMN1NUenVaQVQz?=
- =?utf-8?B?N1R3dyswQWxtOEl6TDJKL2g4cFRHNDFRT0ZFbU5vc0V5b0hieVRZWnFYd0JM?=
- =?utf-8?B?RU05NVVxZjhrNlJWM0xUOVZkcWpKUXRjOTJJeUdha1hOZ2dIemdWeDRoK2Ri?=
- =?utf-8?B?TlNyZnFqSjNkb0hyRFNPSlByMTIwZXlMUlJFQ0NPVEJadjE4T3lRZ3FydjdO?=
- =?utf-8?B?TFNvOHFhN0tFL3dBVE1mN1NBQlVFK0VhYzBTazhTT3BlWUVwcGlqQ1BWTVU0?=
- =?utf-8?B?LzRFcVo3K3BTTnJ6WUx4dFZuZkJ3TEl3clZHTE0xZWVGYVhvWkZGMTVQenNl?=
- =?utf-8?B?cDRvazR0WVVtcWpJTjE4RVVnbnFlMGpVTmwyaWtQZFZqdHZybXJNOXA4ZmVJ?=
- =?utf-8?B?WnRiWFIzQnF5S0s0K3lIL05YSzl2aFloUlhIT29vb1VxVmhmSWpPdWgxVVNW?=
- =?utf-8?B?cHowdVdOTmE1d0MzZE9VL2tJQmFVM09yazdQMGFFVVFweVhCYkk3MUorc2Vh?=
- =?utf-8?B?VFZsWEd3RXY3RURYcE00Y3FQVFNtZWtUakxDQ3VXL1dHNHJpUmlwenpPOCs4?=
- =?utf-8?B?ZjlhaDhnS1UvMUttSUJJRzFOM1FYN3ZPWnZmV1VGR3UzeGlDVzNNSktrTi9J?=
- =?utf-8?B?a1FpSTlqbURXQXI3OU9rMzJFcmdTRHg2Q2syS3U5Q1hPcmpoR2w4eFNrUGNL?=
- =?utf-8?B?Z2wyaHNqRUt1ZmpNWTcwMG5uTnRRd1NNNG0zR1p4ZWFoMGJxSWNIYmdJbEFF?=
- =?utf-8?B?bm5QR29UQWlFMVRHT2xmTE1DSE1paFExUlZTYU5XVkkvaXFiSjdRSHZTK1dO?=
- =?utf-8?B?cDFTV1JwY3BmekxTTGhmOXNQbUg2b292OXNHYlVjN01LWC8xNDBNbXRlOVBv?=
- =?utf-8?B?Vkl4cVF2UXU1VmVRalpTdHVqRENtcXVLUjBLcDdQSDlHcDhFQmczQmxFYUNS?=
- =?utf-8?Q?G8LmQNjaiaIcSDyRt2HYRvqF6?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ed5393a-052b-4010-15cf-08db109068c8
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGNYNjVRcHk3MmdPcGFoYzl1KzU1Q2xOZGpWQ2hiQUZwajU5T3NjaWF0cE5k?=
+ =?utf-8?B?NlJrM2NYcnhkU1hYR0Joa0xEbWVSUCtwbnhYVVJERHh1Nk1ma25VVWFwNjZr?=
+ =?utf-8?B?TTliSGZ1WU1tYjQyN2xzYUh5OFlBWGwwV21rVEFzUjZsMzdlWGNWWGgrajlt?=
+ =?utf-8?B?SUVOMHlqNW9kN3hOdjVQQUxNL0dxSjE5SUJUOTVydVpOWXRZRnV5SUk0cnUy?=
+ =?utf-8?B?S2cva2VsTFRlcm9RK2luMFJKSHJ1S2wvUDE1NzJJSjh3dW94YjRKZnAyN0Nx?=
+ =?utf-8?B?bklvS0RVcy9VQTJkbXRYamVvQ3JvUHU5Wi92THhSdkF4WElZTEhBbGlBOWZh?=
+ =?utf-8?B?dEZRNFpIbkN6NGJXRDNGWWpYaWtqSVM2Ni9CTzRVVXlMbk93UjJPd2x0bXlQ?=
+ =?utf-8?B?NEh0QXNFdkZ4UjJpMEpYS1Y5Y1ovM0NlL0ZKbTlxZVFvcnp2MVNFQlJVQyti?=
+ =?utf-8?B?TmN2Vkl3MTJ4RnAvSGRoQi9VZzgzNHQ2dDczZjRnVkxibDBRdUNmQlpvV1c4?=
+ =?utf-8?B?VExKc01VVjZ5UGY5UXhoZ2UwbW1hQVl5Q1pUVi9pTytyR2FDYTl5NXlzK3hJ?=
+ =?utf-8?B?eE90UUorVS8rLzJvZHNmS0d4NlJJRkExYTIyV2JMSFF1WHdoTDZXTnVzV2Zx?=
+ =?utf-8?B?eUVCVEhzVWgwRmtEV2UrOWJac2lSdDVqVVR4N25qc1FUTkxGZExQQjNBTGoy?=
+ =?utf-8?B?TkhZcnhyNnF0YnlMMDBqK2FtNDQ4TFRZWUxFUWVuQmJ6MnlPamJySVpsdHVp?=
+ =?utf-8?B?WHM4WFNMUTB0WWRtK0xtY00vWHMzNDErSklveEdFaGhpYVRvMVJXSmhIaVJ6?=
+ =?utf-8?B?VXFsL1FaUXdyVkloL1Fhb2tLZlRESjBmZFJDbUxMdUd6SnBoSkRMU2RHbGRx?=
+ =?utf-8?B?bENGbzV5Rms1S1VkYVNuNHVBZVFmdEp6bHVucXdoWkxZdmx1NHNVekdMUUly?=
+ =?utf-8?B?Y0NzYkJTOGFNRnF3cVlzeldya3ljOGZ5b3pxQ3ZLeW9VcEFaeVIxWDRHWTZ3?=
+ =?utf-8?B?ZzBqREF0UVFHbHRLWlRLUmNIN3NnZmozeG9hV3plVEJpUmNmZUhya1o1U254?=
+ =?utf-8?B?UWRYYTV3Q0l3aGhyV1pXdU0wVjV2aTIxSjBZYmFwR1lrS0M2QTUveURxNWll?=
+ =?utf-8?B?VjRRTGZEbzNUVHI4WEJFUkFSYXo1NHRaRTFPYktDa3ArSlJOZFcxdlNFL2Jm?=
+ =?utf-8?B?RmpGaEtGVmJDaXJNY1NnNGloclIwWGcwSmQreVBNZDlSR3FOYndJOUhEbUpp?=
+ =?utf-8?B?UGhYeWRSYmE2UkJrMkF3Smp5bm1tTFMrc09HOXAwZzdWVDlUb2FFWHVKM1d6?=
+ =?utf-8?B?NDdRMFJQc1FHQ0tWWnVKSW84NlQ1SThGRS9MYThHODgvbGJWQU8zNHhZTmIx?=
+ =?utf-8?B?NVVFa3d6OFhhZjFnZCtQZWNGc3hONC8wcno4WDNUUlVaT0p2aUJjblBPZHZi?=
+ =?utf-8?B?K1N4RkJORkh1VnhrcjRsaHNjZ2hLbHhQdFRvS1NKZFBaZ1FOWjUzRERmRlhY?=
+ =?utf-8?B?em1nUGxJdmEzcEgzME01d0pDanF3aS9EL3hsNnpZTHc3VE5mYXhqZlF4Y29T?=
+ =?utf-8?B?THJ1UndrRUdTT0V3ZjJ5M09zWHZMVFI3L1lGQlhFUCtpMVdKcTlnOVlUY2Q3?=
+ =?utf-8?B?THc2bzBkaTRMbERBZW01Z3VHNWpON0hzYXVrZnFYdVBNMkYvdkE5V2ZZbkRD?=
+ =?utf-8?B?MjR6a21JR3g5R2wwcEhpZjB2Qktmb0ZlMGFjUHJKTS9TN0dpZTM0Vm1IMkRL?=
+ =?utf-8?B?d0d2Um8yTUd5UTRPTUxFK0VtUFFEMStLYmR0K2dPSGhPQitySkxNazBkSkpJ?=
+ =?utf-8?B?eDIzSWhmVDhEdHFwNjNkZTl3NXRjYTNRSGlHQ3IvZ3d3bk1yN2tKeVJ6RmlI?=
+ =?utf-8?B?UDUyZGk0N0c4Uk9FQ3QvY2xUbFNpNEJ4eC9maklDb045dW5YZVQ0YjNMQS9S?=
+ =?utf-8?B?Y1JZK0Rub1g4cmFhK1FIdjA5dmhiVGo0UzY3WEhxT25uNXR6WjB1YlJxdVMz?=
+ =?utf-8?B?ZDJHbTY1VFp4c0JoaEc4WUVvQzBFamt4aURSWUdESkJCcnJYRDFYSG8zek5L?=
+ =?utf-8?B?L1hMa1ROWi9MLzFYMFJVMTZOWWlic1FmcDloTHRRaDBjUWVQLzdrMEZKakhv?=
+ =?utf-8?Q?fHTHtV1t4xMLjJtaS4QAgbeKV?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e396b09-6cfe-4a1d-b171-08db1090d06a
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3835.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 02:41:02.3908
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 02:43:56.5107
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jmiGYGjVzgqQX1yNseqI19RrPwsvUcOheCNEx/S5BUCt6+av9u9nksIWrhz3G0b9ItDew1gtA9IgnSCF4NdoOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB4936
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Os9Y96nAs3ASvxESB9wz34oUpwU66c3TKrqiZzFBgVAismLwadyL+5sVZaUVZf6MjlwWPHjFtwfEBU8dKDIMdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4502
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -139,221 +138,87 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 2/17/23 01:00, Nicolas Dufresne wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
-> 
-> 
-> Le jeudi 16 février 2023 à 16:57 +0800, Hsia-Jun Li a écrit :
+On 2/16/2023 11:19 PM, Alexander Lobakin wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> From: Gavin Li <gavinl@nvidia.com>
+> Date: Thu, 16 Feb 2023 16:40:33 +0800
+>
+>> On 2/16/2023 1:01 AM, Alexander Lobakin wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> From: Gavin Li <gavinl@nvidia.com>
+>>> Date: Wed, 15 Feb 2023 16:30:04 +0800
+>>>
+>>>> On 2/15/2023 11:36 AM, Gavin Li wrote:
+>>>>> External email: Use caution opening links or attachments
+>>>>>
+>>>>>
+>>>>> On 2/14/2023 11:26 PM, Alexander Lobakin wrote:
+>>>>>> External email: Use caution opening links or attachments
+>>>>>>
+>>>>>>
+>>>>>> From: Gavin Li <gavinl@nvidia.com>
+>>>>>> Date: Tue, 14 Feb 2023 15:41:37 +0200
+>>> [...]
+>>>
+>>>>>>> @@ -96,6 +99,70 @@ static int mlx5e_gen_ip_tunnel_header_vxlan(char
+>>>>>>> buf[],
+>>>>>>>          udp->dest = tun_key->tp_dst;
+>>>>>>>          vxh->vx_flags = VXLAN_HF_VNI;
+>>>>>>>          vxh->vx_vni = vxlan_vni_field(tun_id);
+>>>>>>> +     if (tun_key->tun_flags & TUNNEL_VXLAN_OPT) {
+>>>>>>> +             md = ip_tunnel_info_opts((struct ip_tunnel_info
+>>>>>>> *)e->tun_info);
+>>>>>>> +             vxlan_build_gbp_hdr(vxh, tun_key->tun_flags,
+>>>>>>> +                                 (struct vxlan_metadata *)md);
+>>>>>> Maybe constify both ip_tunnel_info_opts() and vxlan_build_gbp_hdr()
+>>>>>> arguments instead of working around by casting away?
+>>>>> ACK. Sorry for the confusion---I misunderstood the comment.
+>>>> This ip_tunnel_info_opts is tricky to use const to annotate the arg
+>>>> because it will have to cast from const to non-const again upon
+>>>> returning.
+>>> It's okay to cast away for the `void *` returned.
+>>> Alternatively, use can convert it to a macro and use
+>>> __builtin_choose_expr() or _Generic to return const or non-const
+>>> depending on whether the argument is constant. That's what was recently
+>>> done for container_of() IIRC.
+>> I've fixed vxlan_build_gbp_hdr in V2. For ip_tunnel_info_opts, it's
+>> confusing to me.
 >>
->> On 1/12/23 20:56, Sebastian Fricke wrote:
->>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->>>
->>>
->>> From: Jonas Karlman <jonas@kwiboo.se>
->>>
->>> Add the NV15 pixel format used by the Rockchip Video Decoder for 10-bit buffers.
->>>
->> I think this pixel format in the Rockchip platform supports multiple
->> planes buffers. It is all right not to add more variant until the ext
->> pixel format and buffer APIs are merged.
+>> It would be as below after constifying the parameter.
 >>
->> I just want to mention the need of this.
-> 
-> Can you extend, I don't see that support in rkvdec driver (nor in mpp).
-> 
->          /* config output base address */
->          dst_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
->          writel_relaxed(dst_addr, rkvdec->regs + RKVDEC_REG_DECOUT_BASE);
-> 
->          reg = RKVDEC_Y_VIRSTRIDE(y_virstride / 16);
->          writel_relaxed(reg, rkvdec->regs + RKVDEC_REG_Y_VIRSTRIDE);
-> 
->          reg = RKVDEC_YUV_VIRSTRIDE(yuv_virstride / 16);
->          writel_relaxed(reg, rkvdec->regs + RKVDEC_REG_YUV_VIRSTRIDE);
-> 
-> That looks like a base address and 2 strides only. For NV15M (multiple
-I think the rockchip drm does
-VOP_WIN_SET(vop, win, uv_vir, DIV_ROUND_UP(fb->pitches[1], 4));
-VOP_WIN_SET(vop, win, uv_mst, dma_addr);
-
-vop2_win_write(win, VOP2_WIN_UV_VIR, DIV_ROUND_UP(fb->pitches[1], 4));
-vop2_win_write(win, VOP2_WIN_UV_MST, uv_mst);
-
-> allocation) you'd need 2 addresses. It could be that RGA or newer chip have that
-> support, but as you know, we add formats only when actually using them.
- From the public info, it is not just rockchip but also NXP and xilinx 
-support this 10bits format. I am not sure whether they would support that.
-
-Besides, I think the rockchip decoder needs some spare space between its 
-Y plane and UV plane. It would be hard to present such thing with the 
-single plane format unless you want to get the wrong start address of 
-the chroma plane.
-> 
-> regards,
-> Nicolas
-> 
->>> NV15 is a packed 10-bit 4:2:0 Y/CbCr format similar to P010 and P210 but has no
->>> padding between components. Instead, luminance and chrominance samples are grouped
->>> into 4s so that each group is packed into an integer number of bytes:
+>> static inline void *ip_tunnel_info_opts(const struct ip_tunnel_info *info)
+>> {
+>>      return (void *)(info + 1);
+>> }
+>> Is there any value gained by this change?
+> You wouldn't need to W/A it each time in each driver, just do it once in
+> the inline itself.
+> I did it once in __skb_header_pointer()[0] to be able to pass data
+> pointer as const to optimize code a bit and point out explicitly that
+> the function doesn't modify the packet anyhow, don't see any reason to
+> not do the same here.
+> Or, as I said, you can use macros + __builtin_choose_expr() or _Generic.
+> container_of_const() uses the latter[1]. A __builtin_choose_expr()
+> variant could rely on the __same_type() macro to check whether the
+> pointer passed from the driver const or not.
+ACK
+>
+>>>>>>> +     }
+>>>>>>> +
+>>>>>>> +     return 0;
+>>>>>>> +}
+>>> [...]
 >>>
->>> YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
->>>
->>> The '15' suffix refers to the optimum effective bits per pixel
->>> which is achieved when the total number of luminance samples is a multiple
->>> of 8 for NV15.
->>>
->>> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
->>> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->>> ---
->>>    .../userspace-api/media/v4l/pixfmt-yuv-planar.rst  | 75 ++++++++++++++++++++++
->>>    drivers/media/v4l2-core/v4l2-common.c              |  2 +
->>>    drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
->>>    include/uapi/linux/videodev2.h                     |  1 +
->>>    4 files changed, 79 insertions(+)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
->>> index f1d5bb7b806d..7d8d228f8063 100644
->>> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
->>> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
->>> @@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
->>>          - Cr, Cb
->>>          - Yes
->>>          - Linear
->>> +    * - V4L2_PIX_FMT_NV15
->>> +      - 'NV15'
->>> +      - 15
->>> +      - 4:2:0
->>> +      - Cb, Cr
->>> +      - Yes
->>> +      - Linear
->>>        * - V4L2_PIX_FMT_NV12M
->>>          - 'NM12'
->>>          - 8
->>> @@ -183,6 +190,7 @@ horizontally.
->>>
->>>    .. _V4L2-PIX-FMT-NV12:
->>>    .. _V4L2-PIX-FMT-NV21:
->>> +.. _V4L2-PIX-FMT-NV15:
->>>    .. _V4L2-PIX-FMT-NV12M:
->>>    .. _V4L2-PIX-FMT-NV21M:
->>>    .. _V4L2-PIX-FMT-P010:
->>> @@ -586,6 +594,73 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
->>>          - Cb\ :sub:`11`
->>>          - Cr\ :sub:`11`
->>>
->>> +.. _V4L2_PIX_FMT_NV15:
->>> +
->>> +NV15
->>> +----
->>> +
->>> +Similar to P010, a semi-planar 10-bit Y/CbCr format, but all components are
->>> +packed without any padding between each other. As a side-effect, each group of
->>> +4 components are stored over 5 bytes (YYYY or UVUV = 4 * 10 bits = 40 bits = 5
->>> +bytes).
->>> +
->>> +.. flat-table:: Sample 4x4 NV15 Image
->>> +    :header-rows:  0
->>> +    :stub-columns: 0
->>> +
->>> +    * - start + 0:
->>> +      - Y'\ :sub:`00`
->>> +      - Y'\ :sub:`01`
->>> +      - Y'\ :sub:`02`
->>> +      - Y'\ :sub:`03`
->>> +    * - start + 8:
->>> +      - Y'\ :sub:`04`
->>> +      - Y'\ :sub:`10`
->>> +      - Y'\ :sub:`11`
->>> +      - Y'\ :sub:`12`
->>> +    * - start + 16:
->>> +      - Y'\ :sub:`13`
->>> +      - Y'\ :sub:`14`
->>> +      - Y'\ :sub:`20`
->>> +      - Y'\ :sub:`21`
->>> +    * - start + 24:
->>> +      - Y'\ :sub:`22`
->>> +      - Y'\ :sub:`23`
->>> +      - Y'\ :sub:`24`
->>> +      - Y'\ :sub:`30`
->>> +    * - start + 32:
->>> +      - Y'\ :sub:`31`
->>> +      - Y'\ :sub:`32`
->>> +      - Y'\ :sub:`33`
->>> +      - Y'\ :sub:`34`
->>> +
->>> +    * - start + 0:
->>> +      - Cb\ :sub:`00`
->>> +      - Cr\ :sub:`00`
->>> +      - Cb\ :sub:`01`
->>> +      - Cr\ :sub:`01`
->>> +    * - start + 8:
->>> +      - Cb\ :sub:`02`
->>> +      - Cr\ :sub:`02`
->>> +      - Cb\ :sub:`03`
->>> +      - Cr\ :sub:`03`
->>> +    * - start + 16:
->>> +      - Cb\ :sub:`04`
->>> +      - Cr\ :sub:`04`
->>> +      - Cb\ :sub:`10`
->>> +      - Cr\ :sub:`10`
->>> +    * - start + 24:
->>> +      - Cb\ :sub:`11`
->>> +      - Cr\ :sub:`11`
->>> +      - Cb\ :sub:`12`
->>> +      - Cr\ :sub:`12`
->>> +    * - start + 32:
->>> +      - Cb\ :sub:`13`
->>> +      - Cr\ :sub:`13`
->>> +      - Cb\ :sub:`14`
->>> +      - Cr\ :sub:`14`
->>> +
->>> +.. raw:: latex
->>>
->>>    Fully Planar YUV Formats
->>>    ========================
->>> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
->>> index 40f56e044640..be23e319fb3a 100644
->>> --- a/drivers/media/v4l2-core/v4l2-common.c
->>> +++ b/drivers/media/v4l2-core/v4l2-common.c
->>> @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->>>                   /* YUV planar formats */
->>>                   { .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->>>                   { .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->>> +               { .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .hdiv = 2, .vdiv = 2,
->>> +                 .block_w = { 4, 2, 0, 0 }, .block_h = { 1, 1, 0, 0 } },
->>>                   { .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->>>                   { .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->>>                   { .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->>> index 8e0a0ff62a70..1c80ad78ef00 100644
->>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->>> @@ -1343,6 +1343,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->>>           case V4L2_PIX_FMT_M420:         descr = "YUV 4:2:0 (M420)"; break;
->>>           case V4L2_PIX_FMT_NV12:         descr = "Y/UV 4:2:0"; break;
->>>           case V4L2_PIX_FMT_NV21:         descr = "Y/VU 4:2:0"; break;
->>> +       case V4L2_PIX_FMT_NV15:         descr = "10-bit Y/UV 4:2:0 (Packed)"; break;
->>>           case V4L2_PIX_FMT_NV16:         descr = "Y/UV 4:2:2"; break;
->>>           case V4L2_PIX_FMT_NV61:         descr = "Y/VU 4:2:2"; break;
->>>           case V4L2_PIX_FMT_NV24:         descr = "Y/UV 4:4:4"; break;
->>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>> index 1befd181a4cc..e9731286dc77 100644
->>> --- a/include/uapi/linux/videodev2.h
->>> +++ b/include/uapi/linux/videodev2.h
->>> @@ -621,6 +621,7 @@ struct v4l2_pix_format {
->>>    /* two planes -- one Y, one Cr + Cb interleaved  */
->>>    #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
->>>    #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
->>> +#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
->>>    #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
->>>    #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
->>>    #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
->>>
->>> --
->>> 2.25.1
->>
-> 
-
--- 
-Hsia-Jun(Randy) Li
+>>> Thanks,
+>>> Olek
+> [0]
+> https://elixir.bootlin.com/linux/v6.2-rc8/source/include/linux/skbuff.h#L3992
+> [1]
+> https://elixir.bootlin.com/linux/v6.2-rc8/source/include/linux/container_of.h#L33
+>
+> Thanks,
+> Olek
