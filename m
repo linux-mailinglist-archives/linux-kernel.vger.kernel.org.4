@@ -2,130 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC1869B3B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 21:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DA369B3CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 21:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBQUTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 15:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S229752AbjBQUXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 15:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBQUTC (ORCPT
+        with ESMTP id S229746AbjBQUXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 15:19:02 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF785FC57
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 12:18:54 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id p15-20020a17090a2d8f00b00233ceae8407so2348124pjd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 12:18:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1nBkXJHOQCjc1Cib5SQzHw5UBXu4/TG9BmbvtOn8x3o=;
-        b=CdPU3vWf9z6nfxI9eJh0VGp3/SK3CkuJbz02B2y+OR2cJk9e+ZlsLXOhzYejAPMt9Z
-         XPF8YOq4y222hIHAkjx1fN7AwI5D0dyNDVJWYdbehRgCU9T44jpPaf6b3qhEIitPZ1xo
-         5OHzy8a56F8EOfsoSqg0QM4jB0c0lJN5V9R7zXc8amDSHCzkMAxVOI+iJkl3k7eOIF58
-         S117VKy3W923uDt3dlQOBeMEaeZR+tazRpgvIDWUQKyuqAAOY4t3zK5T3Olka2v258C7
-         0Pkd6Y1BeScjtxC77I4gDxXOz70ge4eYOT5jGu9Ix2nskB14V6/hefvD2e1OuXFqGRk9
-         yh7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1nBkXJHOQCjc1Cib5SQzHw5UBXu4/TG9BmbvtOn8x3o=;
-        b=JOy9XZjqB68QTDfh5yrjyoesy1uSNfKHuvddHPxjfcxbMWhaZsP9FeeE2HhxA9a9Rt
-         wEhch1VkjeI7qm/XUq8IGjVbH3yOr2WsAHg06tyjZyWiQwcJgJSxjd/JGuOcIJH2f6sB
-         M8DxCbGSU6lWI9EXZ3IdXQesMjBlrU8zmY1Oxu4KUlQA9kftab9VuFTRBKRJd70FOGvF
-         4x1V0h43Jj7JgbdVEzxzL47YV72IUs8XFdF5jhNFDCFARTvYMz9e88isLS8sGElsi+pI
-         xPfCdldOxdMRzPVIhpNyd3bYTc8nmaW6xlWZuWo6srBHfoVFNjlCXltYsKz9HtNonIjW
-         +6ZA==
-X-Gm-Message-State: AO0yUKXKaRiF2q53jIx46806NlQcoP1jVFnMlVy0PoQEQ5z8Xo0EetXD
-        r/SlwoYaiCLiv1uXG6mbb9rcrA==
-X-Google-Smtp-Source: AK7set+Kglt9SWMTcl9U6edBMiVZdRdfyoTwtb7vT0wDVYvYQYr791Dt5GnQA1IjrjIv6xtsYuDn5w==
-X-Received: by 2002:a17:90b:1802:b0:233:ab9b:f86a with SMTP id lw2-20020a17090b180200b00233ab9bf86amr2565187pjb.8.1676665133517;
-        Fri, 17 Feb 2023 12:18:53 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a0a9000b002348bfd3799sm1956047pjw.39.2023.02.17.12.18.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 12:18:52 -0800 (PST)
-Date:   Fri, 17 Feb 2023 20:18:49 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 06/24] kbuild, binder: remove MODULE_LICENSE in
- non-modules
-Message-ID: <Y+/hKbyD6yE8vY1y@google.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-7-nick.alcock@oracle.com>
+        Fri, 17 Feb 2023 15:23:13 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A860A50;
+        Fri, 17 Feb 2023 12:23:10 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HE1FHg009572;
+        Fri, 17 Feb 2023 20:22:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=OwC1YUWD4RDPqj6ij1e+DtTL840oqoIG3+VP9IMFt2g=;
+ b=bopzOf1sOHwKpGmFctnCshxn/e3t7HACszkx8XXJmZidnK75m5QfFlWdsc1irOH1jO94
+ Rqgl99mQ1rkNYGtvlf3skcBhcG1dMhq9LsGLR/t0M8qRfiCGKvMlbj0ThTCyp83YRbUi
+ o6VLEZZrtKl7b5t6ebvoy+yccyTCgKFahXR+HSNFQhwRqLcGB8Ouihb/PPf4B4fJ5Ttm
+ XxqaIz4Xz/+6cQJJL8+GaLBWCb0aar0ihUlWah3EPZz5poqPlLp33HGfsTKlpJbkuK9/
+ LCBieBD+YiTcYs6qjt+MxfNArLy/fE/GEFSbQIkUEz3sxXLwQkmYfK2ofWLLV2bZPJzf Zg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntayfs34c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 20:22:58 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HKMuxI015818
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 20:22:56 GMT
+Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 17 Feb 2023 12:22:56 -0800
+From:   John Moon <quic_johmoo@quicinc.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>
+CC:     John Moon <quic_johmoo@quicinc.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        <kernel-team@android.com>, Jordan Crouse <jorcrous@amazon.com>
+Subject: [PATCH RESEND 0/1] Validating UAPI backwards compatibility
+Date:   Fri, 17 Feb 2023 12:22:33 -0800
+Message-ID: <20230217202234.32260-1-quic_johmoo@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230217141059.392471-7-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: gQ__dsIXddcnFwqLNS6LKYVPkVedklXQ
+X-Proofpoint-GUID: gQ__dsIXddcnFwqLNS6LKYVPkVedklXQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_14,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 mlxscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170178
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 02:10:41PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Arve Hjønnevåg" <arve@android.com>
-> Cc: Todd Kjos <tkjos@android.com>
-> Cc: Martijn Coenen <maco@android.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Carlos Llamas <cmllamas@google.com>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> ---
->  drivers/android/binder.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 880224ec6abb..e36164108da6 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -6597,4 +6597,3 @@ device_initcall(binder_init);
->  #define CREATE_TRACE_POINTS
->  #include "binder_trace.h"
->  
-> -MODULE_LICENSE("GPL v2");
-> -- 
-> 2.39.1.268.g9de2f9a303
-> 
++ linux-arm-kernel and Greg KH
 
-Acked-by: Carlos Llamas <cmllamas@google.com>
+Hi all,
 
-Thanks
+The kernel community has rigorously enforced a policy of backwards
+compatibility in its UAPI headers for a long time. This has allowed user
+applications to enjoy stability across kernel upgrades without
+recompiling.
+
+In the vendor driver community (out-of-tree modules), there's been a
+lack of discipline when it comes to maintaining UAPI backwards
+compatibility. This has been a maintenance burden and limits our options
+for long-term support of older devices.
+
+Our goal is to add tooling for vendor driver developers because the
+upstream model of expert maintainer code review can be difficult to
+replicate in-house. Tools may help developers catch simple UAPI
+incompatibilities that could be easily overlooked by in-house review.
+
+We see in the kernel documentation:
+"Kernel headers are backwards compatible, but not forwards compatible.
+This means that a program built against a C library using older kernel
+headers should run on a newer kernel (although it may not have access
+to new features), but a program built against newer kernel headers may
+not work on an older kernel."[1]
+
+How does the kernel enforce this guarantee? We would be interested to
+learn about any tools or methods used by kernel developers to make sure
+the above statement remains true.
+
+Could the documentation on UAPI maintenance (from a developer's point of
+view) be expanded? Internally, we have a set of guidelines for our kernel
+developers regarding UAPI compatibility techniques. If there's interest
+in supplying a document on this topic with the kernel, we'd be happy to
+submit a draft detailing what we have so far as a jumping off point.
+
+Additionally, I've attached a shell script we've been using internally
+to validate changes to our UAPI headers are backwards compatible. The
+script uses libabigail's[2] tool abidiff[3] to compare a modified
+header's ABI before and after a patch is applied. If an existing UAPI is
+modified, the script exits non-zero. We use this script in our CI system
+to block changes that fail the check.
+
+Currently, the script works with gcc. It generates output like this when
+a backwards-incompatible change is made to a UAPI header:
+
+ !!! ABI differences detected in include/uapi/linux/acct.h (compared to
+ file at HEAD^1) !!!
+
+     [C] 'struct acct' changed:
+       type size changed from 512 to 544 (in bits)
+       1 data member insertion:
+         '__u32 new_val', at offset 512 (in bits) at acct.h:71:1
+
+ 0/1 UAPI header file changes are backwards compatible
+ UAPI header ABI check failed
+
+However, we have not had success with clang. It seems clang is more
+aggressive in optimizing dead code away (no matter which options we
+pass). Therefore, no ABI differences are found.
+
+We wanted to share with the community to receive feedback and any advice
+when it comes to tooling/policy surrounding this issue. Our hope is that
+the script will help all kernel UAPI authors (even those that haven't
+upstreamed yet) maintain good discipline and avoid breaking userspace.
+
+[1] Documentation/kbuild/headers_install.rst
+[2] https://sourceware.org/libabigail/manual/libabigail-overview.html
+[3] https://sourceware.org/libabigail/manual/abidiff.html
+
+P.S. While at Qualcomm, Jordan Crouse <jorcrous@amazon.com> authored the
+original version of the UAPI checker script. Thanks Jordan!
+
+John Moon (1):
+  check-uapi: Introduce check-uapi.sh
+
+ scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 245 insertions(+)
+ create mode 100755 scripts/check-uapi.sh
+
+
+base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
+--
+2.17.1
+
