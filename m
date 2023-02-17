@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF9169B2CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B0469B2D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjBQTCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 14:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S229814AbjBQTEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 14:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQTCN (ORCPT
+        with ESMTP id S229803AbjBQTEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:02:13 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E1CBDE9;
-        Fri, 17 Feb 2023 11:02:12 -0800 (PST)
+        Fri, 17 Feb 2023 14:04:51 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF8A6243E;
+        Fri, 17 Feb 2023 11:04:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676660532; x=1708196532;
+  t=1676660689; x=1708196689;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UHB2UaogJsNaaqe5yBWFdaC/QeVP1YVN7vnkQx3Ae1A=;
-  b=ht5ZXxbrY7MNHwVGNKGtWLOFjslQy/dHkw1wYDu2ln54B3rKpLVZlDRp
-   qr0nks+ha19mK+UDnXBOd2+5DE1+VLiLhMOaBp/ANt2xUuiIXpN3NZU4K
-   jIbVXFzozbitl0ROkKjDa+Wo9uRNqxdTPt6bi/1MisqTtoC0vP+b3tGXu
-   GFtY4xzfs+wbBT2OjBfBn2o6tWhNXSeVRAmJo6cXjZuNB1x2N3ZHFN2gX
-   tNz2o4fHMDzrPb0/dEWDSRU57haGSGaOMxUWAH0clAdDewRiMxORYaE0/
-   6eqF9Ulzz8bfgnMR5u62RE+sLtJqdK/bQREclKiTSJUVi3wZpA7M4r2Z9
+  bh=kmeeG1T8y7jo24RxWK0OXpyrUdfwndWiiCRrTK67ryE=;
+  b=SRBmMFmpepf2braFHtQCgDpwUaEeejgdknNYNK6dLgBrx1qiLk8zT0ih
+   zrXlxfWn2sGJU4n0U/s+vTnEgu46GZQN/Btkv9W8+UAm1K8Yh1jbjWcjW
+   BBLAAYUIj8iRke+bxUgPtOsktNBbj8wLNpW5Q0aDkW2/fjZVrb4fKTu0Q
+   O/Acs/VREL5Pr0+wS726Jp5plpkwgWNYzWCxZyVWH9d+cb9Cv+hYMR38d
+   NgGkJX+iJQ0Ed8Y7GgajyESyIqTVVu5GyfQRIsraXdK7LR81wgQGIrNCL
+   ml5Ypfmi/+KBVYGITNZLwbTWsUEDS2SKKAoc+iXp883SXj6AlBWIv3TzL
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="332070996"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="396742931"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="332070996"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:01:52 -0800
+   d="scan'208";a="396742931"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:04:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="670643031"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="999546927"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="670643031"
+   d="scan'208";a="999546927"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 17 Feb 2023 11:01:49 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 17 Feb 2023 11:04:35 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pT5zQ-008KU3-1I;
-        Fri, 17 Feb 2023 21:01:48 +0200
-Date:   Fri, 17 Feb 2023 21:01:48 +0200
+        id 1pT625-008KXS-32;
+        Fri, 17 Feb 2023 21:04:33 +0200
+Date:   Fri, 17 Feb 2023 21:04:33 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     William Breathitt Gray <william.gray@linaro.org>
 Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] gpio: 104-idio-16: Migrate to the regmap API
-Message-ID: <Y+/PHNePm45TPLRC@smile.fi.intel.com>
+Subject: Re: [PATCH 5/6] gpio: pci-idio-16: Migrate to the regmap API
+Message-ID: <Y+/PwYe3pvtausbe@smile.fi.intel.com>
 References: <cover.1675876659.git.william.gray@linaro.org>
- <013141e0daf5f82dbd85310b498727b105a8523a.1675876659.git.william.gray@linaro.org>
+ <1bac3155e366fc7da7dbb48f54ab96d4a9649e57.1675876659.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <013141e0daf5f82dbd85310b498727b105a8523a.1675876659.git.william.gray@linaro.org>
+In-Reply-To: <1bac3155e366fc7da7dbb48f54ab96d4a9649e57.1675876659.git.william.gray@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -66,89 +66,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 12:18:19PM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
+On Wed, Feb 08, 2023 at 12:18:20PM -0500, William Breathitt Gray wrote:
+> The regmap API supports MMIO accessors so we can take advantage of
 > regmap abstractions rather than handling access to the device registers
-> directly in the driver. Migrate the 104-idio-16 module to the new
+> directly in the driver. Migrate the pci-idio-16 module to the new
 > idio-16 library interface leveraging the gpio-regmap API.
 
-Hmm... I'm under the impression that I have already gave some tags
-to this series.
-
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Don't you need to allow PIO accessors in the regmap configuration?
 
 > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 > ---
 >  drivers/gpio/Kconfig            |   2 +-
->  drivers/gpio/gpio-104-idio-16.c | 294 ++++++++------------------------
->  2 files changed, 72 insertions(+), 224 deletions(-)
+>  drivers/gpio/gpio-pci-idio-16.c | 295 ++++++++------------------------
+>  2 files changed, 69 insertions(+), 228 deletions(-)
 > 
 > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index b4de83a3616d..8eb1f21c019e 100644
+> index 8eb1f21c019e..e57744df2160 100644
 > --- a/drivers/gpio/Kconfig
 > +++ b/drivers/gpio/Kconfig
-> @@ -863,7 +863,7 @@ config GPIO_104_IDIO_16
->  	tristate "ACCES 104-IDIO-16 GPIO support"
->  	depends on PC104
->  	select ISA_BUS_API
+> @@ -1571,7 +1571,7 @@ config GPIO_PCH
+>  
+>  config GPIO_PCI_IDIO_16
+>  	tristate "ACCES PCI-IDIO-16 GPIO support"
 > -	select GPIOLIB_IRQCHIP
 > +	select REGMAP_MMIO
 >  	select GPIO_IDIO_16
 >  	help
->  	  Enables GPIO support for the ACCES 104-IDIO-16 family (104-IDIO-16,
-> diff --git a/drivers/gpio/gpio-104-idio-16.c b/drivers/gpio/gpio-104-idio-16.c
-> index 098fbefdbe22..79d3a089061e 100644
-> --- a/drivers/gpio/gpio-104-idio-16.c
-> +++ b/drivers/gpio/gpio-104-idio-16.c
-> @@ -6,19 +6,16 @@
->   * This driver supports the following ACCES devices: 104-IDIO-16,
->   * 104-IDIO-16E, 104-IDO-16, 104-IDIO-8, 104-IDIO-8E, and 104-IDO-8.
+>  	  Enables GPIO support for the ACCES PCI-IDIO-16. An interrupt is
+> diff --git a/drivers/gpio/gpio-pci-idio-16.c b/drivers/gpio/gpio-pci-idio-16.c
+> index a86ce748384b..8ee5787ee1ac 100644
+> --- a/drivers/gpio/gpio-pci-idio-16.c
+> +++ b/drivers/gpio/gpio-pci-idio-16.c
+> @@ -5,208 +5,81 @@
 >   */
-> -#include <linux/bitmap.h>
-> +#include <linux/bits.h>
+>  #include <linux/bits.h>
 >  #include <linux/device.h>
 > -#include <linux/errno.h>
 > -#include <linux/gpio/driver.h>
-> -#include <linux/io.h>
-> +#include <linux/err.h>
->  #include <linux/ioport.h>
 > -#include <linux/interrupt.h>
 > -#include <linux/irqdesc.h>
+> +#include <linux/err.h>
 > +#include <linux/irq.h>
->  #include <linux/isa.h>
 >  #include <linux/kernel.h>
 >  #include <linux/module.h>
->  #include <linux/moduleparam.h>
+>  #include <linux/pci.h>
 > -#include <linux/spinlock.h>
 > +#include <linux/regmap.h>
 >  #include <linux/types.h>
 >  
 >  #include "gpio-idio-16.h"
-> @@ -36,187 +33,69 @@ static unsigned int num_irq;
->  module_param_hw_array(irq, uint, irq, &num_irq, 0);
->  MODULE_PARM_DESC(irq, "ACCES 104-IDIO-16 interrupt line numbers");
 >  
 > -/**
 > - * struct idio_16_gpio - GPIO device private data structure
 > - * @chip:	instance of the gpio_chip
 > - * @lock:	synchronization lock to prevent I/O race conditions
-> - * @irq_mask:	I/O bits affected by interrupts
-> - * @reg:	I/O address offset for the device registers
+> - * @reg:	I/O address offset for the GPIO device registers
 > - * @state:	ACCES IDIO-16 device state
+> - * @irq_mask:	I/O bits affected by interrupts
 > - */
 > -struct idio_16_gpio {
 > -	struct gpio_chip chip;
 > -	raw_spinlock_t lock;
-> -	unsigned long irq_mask;
 > -	struct idio_16 __iomem *reg;
 > -	struct idio_16_state state;
+> -	unsigned long irq_mask;
 > +static const struct regmap_range idio_16_wr_ranges[] = {
-> +	regmap_reg_range(0x0, 0x2), regmap_reg_range(0x4, 0x4),
+> +	regmap_reg_range(0x0, 0x2), regmap_reg_range(0x3, 0x4),
 >  };
 > -
 > -static int idio_16_gpio_get_direction(struct gpio_chip *chip,
-> -				      unsigned int offset)
+> -	unsigned int offset)
 > -{
 > -	if (idio_16_get_direction(offset))
 > -		return GPIO_LINE_DIRECTION_IN;
@@ -157,7 +147,7 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -}
 > -
 > -static int idio_16_gpio_direction_input(struct gpio_chip *chip,
-> -					unsigned int offset)
+> -	unsigned int offset)
 > -{
 > -	return 0;
 > -}
@@ -182,12 +172,11 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
 > -
 > -	idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
-> -
 > -	return 0;
 > -}
 > -
 > -static void idio_16_gpio_set(struct gpio_chip *chip, unsigned int offset,
-> -			     int value)
+> -	int value)
 > -{
 > -	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
 > -
@@ -210,11 +199,10 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -{
 > -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
 > -	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
-> -	const unsigned long offset = irqd_to_hwirq(data);
+> -	const unsigned long mask = BIT(irqd_to_hwirq(data));
 > -	unsigned long flags;
 > -
-> -	idio16gpio->irq_mask &= ~BIT(offset);
-> -	gpiochip_disable_irq(chip, offset);
+> -	idio16gpio->irq_mask &= ~mask;
 > -
 > -	if (!idio16gpio->irq_mask) {
 > -		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
@@ -229,12 +217,11 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -{
 > -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
 > -	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
-> -	const unsigned long offset = irqd_to_hwirq(data);
+> -	const unsigned long mask = BIT(irqd_to_hwirq(data));
 > -	const unsigned long prev_irq_mask = idio16gpio->irq_mask;
 > -	unsigned long flags;
 > -
-> -	gpiochip_enable_irq(chip, offset);
-> -	idio16gpio->irq_mask |= BIT(offset);
+> -	idio16gpio->irq_mask |= mask;
 > -
 > -	if (!prev_irq_mask) {
 > -		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
@@ -255,29 +242,39 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -	return 0;
 > -}
 > -
-> -static const struct irq_chip idio_16_irqchip = {
-> -	.name = "104-idio-16",
+> -static struct irq_chip idio_16_irqchip = {
+> -	.name = "pci-idio-16",
 > -	.irq_ack = idio_16_irq_ack,
 > -	.irq_mask = idio_16_irq_mask,
 > -	.irq_unmask = idio_16_irq_unmask,
-> -	.irq_set_type = idio_16_irq_set_type,
-> -	.flags = IRQCHIP_IMMUTABLE,
-> -	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> -	.irq_set_type = idio_16_irq_set_type
 > +static const struct regmap_range idio_16_rd_ranges[] = {
-> +	regmap_reg_range(0x1, 0x2), regmap_reg_range(0x5, 0x5),
+> +	regmap_reg_range(0x1, 0x2), regmap_reg_range(0x5, 0x6),
 >  };
 > -
 > -static irqreturn_t idio_16_irq_handler(int irq, void *dev_id)
 > -{
 > -	struct idio_16_gpio *const idio16gpio = dev_id;
+> -	unsigned int irq_status;
 > -	struct gpio_chip *const chip = &idio16gpio->chip;
 > -	int gpio;
+> -
+> -	raw_spin_lock(&idio16gpio->lock);
+> -
+> -	irq_status = ioread8(&idio16gpio->reg->irq_status);
+> -
+> -	raw_spin_unlock(&idio16gpio->lock);
+> -
+> -	/* Make sure our device generated IRQ */
+> -	if (!(irq_status & 0x3) || !(irq_status & 0x4))
+> -		return IRQ_NONE;
 > -
 > -	for_each_set_bit(gpio, &idio16gpio->irq_mask, chip->ngpio)
 > -		generic_handle_domain_irq(chip->irq.domain, gpio);
 > -
 > -	raw_spin_lock(&idio16gpio->lock);
 > -
+> -	/* Clear interrupt */
 > -	iowrite8(0, &idio16gpio->reg->in0_7);
 > -
 > -	raw_spin_unlock(&idio16gpio->lock);
@@ -292,7 +289,7 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -	"IIN0", "IIN1", "IIN2", "IIN3", "IIN4", "IIN5", "IIN6", "IIN7",
 > -	"IIN8", "IIN9", "IIN10", "IIN11", "IIN12", "IIN13", "IIN14", "IIN15"
 > +static const struct regmap_range idio_16_volatile_ranges[] = {
-> +	regmap_reg_range(0x1, 0x2), regmap_reg_range(0x5, 0x5),
+> +	regmap_reg_range(0x1, 0x2), regmap_reg_range(0x5, 0x6),
 > +};
 > +static const struct regmap_range idio_16_precious_ranges[] = {
 > +	regmap_reg_range(0x2, 0x2),
@@ -317,8 +314,7 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > +	.reg_bits = 8,
 > +	.reg_stride = 1,
 > +	.val_bits = 8,
-> +	.io_port = true,
-> +	.max_register = 0x5,
+> +	.max_register = 0x6,
 > +	.wr_table = &idio_16_wr_table,
 > +	.rd_table = &idio_16_rd_table,
 > +	.volatile_table = &idio_16_volatile_table,
@@ -330,13 +326,13 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -{
 > -	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(gc);
 > -
-> -	/* Disable IRQ by default */
+> -	/* Disable IRQ by default and clear any pending interrupt */
 > -	iowrite8(0, &idio16gpio->reg->irq_ctl);
 > -	iowrite8(0, &idio16gpio->reg->in0_7);
 > +/* Only input lines (GPIO 16-31) support interrupts */
 > +#define IDIO_16_REGMAP_IRQ(_id)						\
 > +	[16 + _id] = {							\
-> +		.mask = BIT(_id),					\
+> +		.mask = BIT(2),						\
 > +		.type = { .types_supported = IRQ_TYPE_EDGE_BOTH },	\
 > +	}
 >  
@@ -351,12 +347,14 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > +	IDIO_16_REGMAP_IRQ(15), /* 15 */
 > +};
 >  
->  static int idio_16_probe(struct device *dev, unsigned int id)
+>  static int idio_16_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 >  {
+>  	struct device *const dev = &pdev->dev;
 > -	struct idio_16_gpio *idio16gpio;
->  	const char *const name = dev_name(dev);
+>  	int err;
+>  	const size_t pci_bar_index = 2;
+>  	const char *const name = pci_name(pdev);
 > -	struct gpio_irq_chip *girq;
-> -	int err;
 > -
 > -	idio16gpio = devm_kzalloc(dev, sizeof(*idio16gpio), GFP_KERNEL);
 > -	if (!idio16gpio)
@@ -365,17 +363,21 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > +	void __iomem *regs;
 > +	struct regmap *map;
 >  
->  	if (!devm_request_region(dev, base[id], IDIO_16_EXTENT, name)) {
->  		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
-> @@ -224,54 +103,23 @@ static int idio_16_probe(struct device *dev, unsigned int id)
->  		return -EBUSY;
+>  	err = pcim_enable_device(pdev);
+>  	if (err) {
+> @@ -220,53 +93,21 @@ static int idio_16_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		return err;
 >  	}
 >  
-> -	idio16gpio->reg = devm_ioport_map(dev, base[id], IDIO_16_EXTENT);
-> -	if (!idio16gpio->reg)
-> +	regs = devm_ioport_map(dev, base[id], IDIO_16_EXTENT);
-> +	if (!regs)
->  		return -ENOMEM;
+> -	idio16gpio->reg = pcim_iomap_table(pdev)[pci_bar_index];
+> +	regs = pcim_iomap_table(pdev)[pci_bar_index];
+>  
+> -	/* Deactivate input filters */
+> -	iowrite8(0, &idio16gpio->reg->filter_ctl);
+> +	map = devm_regmap_init_mmio(dev, regs, &idio_16_regmap_config);
+> +	if (IS_ERR(map))
+> +		return dev_err_probe(dev, PTR_ERR(map),
+> +				     "Unable to initialize register map\n");
 >  
 > -	idio16gpio->chip.label = name;
 > -	idio16gpio->chip.parent = dev;
@@ -392,15 +394,9 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -	idio16gpio->chip.set_multiple = idio_16_gpio_set_multiple;
 > -
 > -	idio_16_state_init(&idio16gpio->state);
-> -	/* FET off states are represented by bit values of "1" */
-> -	bitmap_fill(idio16gpio->state.out_state, IDIO_16_NOUT);
-> +	map = devm_regmap_init_mmio(dev, regs, &idio_16_regmap_config);
-> +	if (IS_ERR(map))
-> +		return dev_err_probe(dev, PTR_ERR(map),
-> +				     "Unable to initialize register map\n");
->  
+> -
 > -	girq = &idio16gpio->chip.irq;
-> -	gpio_irq_chip_set_chip(girq, &idio_16_irqchip);
+> -	girq->chip = &idio_16_irqchip;
 > -	/* This will let us handle the parent IRQ in the driver */
 > -	girq->parent_handler = NULL;
 > -	girq->num_parents = 0;
@@ -417,8 +413,8 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > -		return err;
 > -	}
 > -
-> -	err = devm_request_irq(dev, irq[id], idio_16_irq_handler, 0, name,
-> -		idio16gpio);
+> -	err = devm_request_irq(dev, pdev->irq, idio_16_irq_handler, IRQF_SHARED,
+> -		name, idio16gpio);
 > -	if (err) {
 > -		dev_err(dev, "IRQ handler registering failed (%d)\n", err);
 > -		return err;
@@ -427,14 +423,14 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > +	config.map = map;
 > +	config.regmap_irqs = idio_16_regmap_irqs;
 > +	config.num_regmap_irqs = ARRAY_SIZE(idio_16_regmap_irqs);
-> +	config.irq = irq[id];
-> +	config.no_status = true;
+> +	config.irq = pdev->irq;
+> +	config.filters = true;
 >  
 > -	return 0;
 > +	return devm_idio_16_regmap_register(dev, &config);
 >  }
 >  
->  static struct isa_driver idio_16_driver = {
+>  static const struct pci_device_id idio_16_pci_dev_id[] = {
 > -- 
 > 2.39.1
 > 
