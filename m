@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748F469B4A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013A169B4B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjBQVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S229885AbjBQVZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBQVYJ (ORCPT
+        with ESMTP id S229674AbjBQVZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:24:09 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012445FC72
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:23:52 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id m16so722919ilq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:23:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676669032;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KEMNOuO8+jl8HrgRQYisWklYternUWLl59Yj+DzOu5Y=;
-        b=Twm0LBWYpmVFprJhsa+ePCdzTFalANv8TPbn+PtACdxjR5/chuimox7tNJ9gzZPWdm
-         Ivnw5TEUlJt2G1IfHauzFT9WJbzgyioPoSSiYpcU3ku4TLBOZ3Dz111VynWhu0CYiKJS
-         Gi4aBn1EUyqAwSr1wbxAday4ZSod9vHW6qhWgGJqCXSMDvtLElwbLk0/LarfUbzjetq8
-         wBZWP64hrkQ2QLzGD0UHLyfNHk5XHAU237Li2YZhS3x68R8r7JKs91furK9iHagz3H33
-         jk83OPSNemuowSXMZDNhAbELVYtTr2pvIEMxJqUZOCvzmXc19x1Ef1URprtdlhoYhiuC
-         8btA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676669032;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KEMNOuO8+jl8HrgRQYisWklYternUWLl59Yj+DzOu5Y=;
-        b=YFo9EL9Lgrg+iIYxcdNzBItIwp91W+4ih5WySZLZ7wf8d4hIhTErKkGresk+eg8KuS
-         LmFaPtf0ilegO2qMCpmiaShZh4NMKkC/sUKuk4IIkxoS4fKuCtZUECry15CFdHE7wq1Q
-         N6N0dKrI5I2dhg1G/dGyyoFeuBGPgOeu79/ZsaJ1Hc14elwcePwpbBaOgdKcDoMtC7Kt
-         C6eSKmrs73zl3fldLnHXtXj1fwowYvjlBBWfBFxF0BFwep8z6GjN92vjLJ7/2OOoubMP
-         HDUkUO+YPT7uwxWcjyqM19VPySDG4SzQjflx9oanrQ2oj9zlkANV8ouv9gXJt7qi+rdn
-         SBvw==
-X-Gm-Message-State: AO0yUKUbLJlHKdXRjUuREgKpTCIOREALPW6Lq9pEhG++lLI5wSUgXTL5
-        8rY6yb6zy7Lx4WM4owe1g53Eog==
-X-Google-Smtp-Source: AK7set8oK+xWLmt8H/nJcfJrDmqcrK/zK5exSB3Nm35mqoz3QWa1kIcohnyQrqrkiF4nEFngviGyxw==
-X-Received: by 2002:a92:1910:0:b0:315:8bf9:53d8 with SMTP id 16-20020a921910000000b003158bf953d8mr3528045ilz.2.1676669032256;
-        Fri, 17 Feb 2023 13:23:52 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id u13-20020a92da8d000000b003154f7c11f7sm1627591iln.39.2023.02.17.13.23.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 13:23:51 -0800 (PST)
-Message-ID: <151a00d9-0ea2-eadb-72b4-fa8a2dd41bfc@kernel.dk>
-Date:   Fri, 17 Feb 2023 14:23:50 -0700
+        Fri, 17 Feb 2023 16:25:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A7C644C3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676669050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Trjzm8ZWw6cjkiLB0AQG3kmzyvYnM9q+Ge20cw7wo3o=;
+        b=NiqRcOHcpJpF9gwixQkYPChm6FXF435zNgRCWTqEFbmp3t8CQh6JdRnm4mKA0y1Q+BLbCY
+        lfTkwqCef6hAqjG8+k7hxhcQ03O8ezLIALKUi2MqYicl4RGDHPVnnieU1Dp3h+Li9Reite
+        zxLpkQ8Cshc0Y1jpJw98tPgvzVrwY+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-mfu97Z-QNhSLEguEUvwFOQ-1; Fri, 17 Feb 2023 16:24:07 -0500
+X-MC-Unique: mfu97Z-QNhSLEguEUvwFOQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDB9F802314;
+        Fri, 17 Feb 2023 21:24:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B59F40CF8EC;
+        Fri, 17 Feb 2023 21:24:03 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <877cwgknyi.fsf@oc8242746057.ibm.com>
+References: <877cwgknyi.fsf@oc8242746057.ibm.com>
+To:     egorenar@linux.ibm.com
+Cc:     dhowells@redhat.com, axboe@kernel.dk, david@redhat.com,
+        hch@infradead.org, hch@lst.de, hdanton@sina.com, jack@suse.cz,
+        jgg@nvidia.com, jhubbard@nvidia.com, jlayton@kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        logang@deltatee.com, viro@zeniv.linux.org.uk, willy@infradead.org,
+        mhartmay@linux.ibm.com
+Subject: Re: [PATCH v14 08/17] splice: Do splice read from a file without using ITER_PIPE
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: [regression] Bug 217037 - cmb attributes missing from the nvme
- class under sysfs
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, michallinuxstuff@gmail.com
-References: <52f9afe2-f621-77d8-9d10-449d539e901d@leemhuis.info>
- <Y+5JdR02tlzD/TFS@kbusch-mbp>
-Content-Language: en-US
-In-Reply-To: <Y+5JdR02tlzD/TFS@kbusch-mbp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <687039.1676669042.1@warthog.procyon.org.uk>
+Date:   Fri, 17 Feb 2023 21:24:02 +0000
+Message-ID: <687040.1676669042@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 8:19 AM Keith Busch <kbusch@kernel.org> wrote:
->
-> On Thu, Feb 16, 2023 at 10:28:55AM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > Hi, this is your Linux kernel regression tracker.
-> >
-> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> > kernel developer don't keep an eye on it, I decided to forward it by
-> > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217037 :
-> >
-> > >  michallinuxstuff@gmail.com 2023-02-14 14:16:26 UTC
-> > >
-> > > For the CMB-capable nvme ctrls, kernel was exposing couple of related attributes under the sysfs. E.g.
-> > >
-> > >
-> > > # grep . /sys/class/nvme/nvme0/cmb*
-> > > /sys/class/nvme/nvme0/cmb:cmbloc : x00000062
-> > > /sys/class/nvme/nvme0/cmb:cmbsz  : x0008021d
-> > > /sys/class/nvme/nvme0/cmbloc:98
-> > > /sys/class/nvme/nvme0/cmbsz:524829
->
-> The breakage is that the attributes are decided before we've setup the cmb
-> regions. I'll send a fix shortly.
+egorenar@linux.ibm.com wrote:
 
-Michael, have you tested this? It's queued up for inclusion, but I don't
-see any evidence that this was tested.
+>  [ 5157.233284]  [<0000000000000002>] 0x2 
+>  [ 5157.233288]  [<000000001f694e26>] filemap_get_pages+0x276/0x3b0 
 
--- 
-Jens Axboe
+Yeah.  I think this was fixed by the provision of a shmem-specific splice read
+(patch 04/17 in this series).
+
+David
 
