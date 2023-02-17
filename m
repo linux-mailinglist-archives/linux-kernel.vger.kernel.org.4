@@ -2,125 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DA269A7CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4BF69A7CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjBQJGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S229951AbjBQJGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjBQJGH (ORCPT
+        with ESMTP id S230007AbjBQJGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:06:07 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749055FBFE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:06 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id z18so1030520lfd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:06 -0800 (PST)
+        Fri, 17 Feb 2023 04:06:16 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B1560F90
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:13 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id i28so1230935eda.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R2Pe5eJ8mXG882/oIneNK2AU1N9QB7QTc3Dg4lQRToU=;
-        b=eUtfVt2QfCYzrIE+EO3zlTaxh9C/8Bu2h3xrjGEj2GmZtcoQoAjlg5fzGootcpAm1d
-         YdOR6DBQXuVCNztspRC3mV/odWaHwQ2RjfZDZnjHOsx7rnS64xduCaKp5V9MoyrLsSWi
-         V0OuMcJlNoDIV1hYXfpzETn+/2cAH23KmfRtggk5txnC2RKTWrQdWmy1HR7EjKnGZJRE
-         s1uIMl2nOYe0ASqqLIfkbMgc4B8rk8pVnEyVF8w6z9EWmANbZ6vkKzy/Q7OrioEsPlOA
-         3oPLq253dTc63r89cgrM0lO7I1sT8r2XrHeG0BvEYyJvSupgn9wUTc5kxOsJ2Q7rIRHU
-         4ZCA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JSIBIYecSAzgxxMW+baXFDwV8+JzmvL6P/jsbxXUIM8=;
+        b=Y2/kbJRo//tgiNv267ceDZHTRJQc2QnBbl/hTDbXCBcGUZvpafMthRihk5BXV3snif
+         cdDwQPfx9WkHfioUXRlfrNGz+jerIwUcJae2X+t80PPfeVGxjSz525CexDnpbEy9l3ur
+         iZ7J9Cy+uD7yYGVOug5xKR96sCVbBIZNKdA88bV2PSthIpSjZ0xpdZMovRKwrA/SGMsE
+         cwPQgX6mS4SKZn7BQTDj8FeWIRhFgtEXgtMZtRJiYvwPjW6gG4VjWYESNU0EFvEtUmDS
+         6tVhg3Yo43uOA3MxppWLtxEKPnwUEFiQuimIDdxdP8h0NKmSn867Vqe5Eqd23J9a4JiD
+         UlIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R2Pe5eJ8mXG882/oIneNK2AU1N9QB7QTc3Dg4lQRToU=;
-        b=cNmIzEPq5NDkIYjL230F9dbFOEEAqodpEF3540loxuuftoCxuRvqHx+lUvjtWZqdH6
-         CeX8asrXK8IMCI69xuWNQZII9jkZ7GodE9rLUNX5m/wzVUZWekqmWErkJ2YhrPCd+CML
-         iJ3eBxEuKc4AKs1yKCfKWuqU6bajK2SnzCEqHIcspbMnYZs2tLaKT5edFXIqGd616j4+
-         ylcLD5fZbct/XbKbuvtPUG5krgWMFrgM0xtym5EVl+uRpY1op/a08BPZ/AOKTSDP/u5k
-         UbWfkDaYWGcpGyBw4h+htmVibf8/QkMUbnJ8iUFiiQSQRjDZfgmeyqF2lXjgGC9qN7vl
-         +uLg==
-X-Gm-Message-State: AO0yUKUkiYue4MfMT28DbKgYkEMoNFr9tcp1hpEHonWH2KO/2KmLKVB2
-        I7iBpBKKab7snI2YP7AMHS8mz0Ew1enWyf/E/9pMxQ==
-X-Google-Smtp-Source: AK7set/4WgvF8R8p4Gk6f0Bg0y33W3iWubV1X3k/OUD6aHHiiBnv+LZPp0MBV37GM3sdF5lGndve4gV4wBMFgIBtIm0=
-X-Received: by 2002:ac2:55ab:0:b0:4db:3353:c891 with SMTP id
- y11-20020ac255ab000000b004db3353c891mr282115lfg.3.1676624764576; Fri, 17 Feb
- 2023 01:06:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JSIBIYecSAzgxxMW+baXFDwV8+JzmvL6P/jsbxXUIM8=;
+        b=YTONXJLpXBBUEiveu+QRXhlZLQtmETnrKrugrHzImJLhwgIZHEOXaZXZUCx3DmlS8h
+         CXwc8OZGEZqpOMP67lUemgiRdKD9YJBe3VRHgDsStHF4yUfL2iKeNxRhkn6eGV/0jLDF
+         wz8hzoeEKFJSuwj4ywnD1VgNA8VjoqNNFNRS9Ualzurcv6VEB7TUhrHZsVAxkA/WD+a8
+         BpCUcYyS2G2VYEXnHMY2GukQ/QDNeczpaRoZhlOVCsQDj2+9f0vffDtxiBYlBqe7aMxO
+         EK7wwTbpwnvMMFaKJdCerJKDjydD2Cpawxkv27y/cB+Ji0AvioijEN9nyV58vtOUr9NQ
+         RjSA==
+X-Gm-Message-State: AO0yUKVkMPIq+j8ozCODPYbtys0uKHhYwGVOP7AqI/0W0sc5+vtm0+DC
+        ffRkQWPjS6AsLNxXeN65T9wAqw==
+X-Google-Smtp-Source: AK7set9mE6QyfGJnv+24G8XcIOFFM/CXR2pndtsVwQAW5+l7mkajK1EbhdqM4iSWcJJFbpSblf6ZPQ==
+X-Received: by 2002:a17:906:e293:b0:8aa:9abe:8edd with SMTP id gg19-20020a170906e29300b008aa9abe8eddmr1718372ejb.66.1676624771844;
+        Fri, 17 Feb 2023 01:06:11 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170906288100b0084cb4d37b8csm1906045ejd.141.2023.02.17.01.06.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 01:06:11 -0800 (PST)
+Message-ID: <c50503f0-dce1-a3b0-2973-8a22b5ef8bc2@linaro.org>
+Date:   Fri, 17 Feb 2023 10:06:09 +0100
 MIME-Version: 1.0
-References: <000000000000ff304105f4d1cd36@google.com> <CACT4Y+Yq1knodAhoBnUe-Tf6QLrQCrGV5gyWC7An8poQDcfv6g@mail.gmail.com>
- <20230216185144.u5zijpev6o77xhaz@treble> <20230216202607.c2nfp6exhoomjckp@treble>
-In-Reply-To: <20230216202607.c2nfp6exhoomjckp@treble>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 17 Feb 2023 10:05:52 +0100
-Message-ID: <CACT4Y+aBV3d7kLjAZ1hHHbX=y8gTvfwrPsiohwV81PzRRjGkGQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING: can't access registers at entry_SYSCALL_64_after_hwframe
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     syzbot <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/4] dt-bindings: mfd: Add DT bindings for TI TPS6594
+ PMIC
+Content-Language: en-US
+To:     Julien Panis <jpanis@baylibre.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        corbet@lwn.net
+Cc:     hdegoede@redhat.com, eric.auger@redhat.com, jgg@ziepe.ca,
+        razor@blackwall.org, suma.hegde@amd.com,
+        stephen@networkplumber.org, arnd@arndb.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, eblanc@baylibre.com,
+        jneanne@baylibre.com
+References: <20230216114410.183489-1-jpanis@baylibre.com>
+ <20230216114410.183489-2-jpanis@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230216114410.183489-2-jpanis@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 at 21:26, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
-> > > > git tree:       linux-next
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=144edcc8c80000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a64cbb8ad0da425e
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=dac365e3ce07c3d0e496
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > >
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/70f0c6bb5351/disk-9d9019bc.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/7eed8686df34/vmlinux-9d9019bc.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/84bb6da6b00e/bzImage-9d9019bc.xz
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com
-> > > >
-> > > > WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >
-> > >
-> > > This is another splat of reports we started getting recently. Looks
-> > > like this may be ORC unwinder related as well.
-> >
-> > Yeah... Also:
-> >
-> >   https://lkml.kernel.org/lkml/202302161616.85f13863-oliver.sang@intel.com
-> >   https://lkml.kernel.org/lkml/CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com
-> >
-> > The problem seems to be commit ffb1b4a41016 ("x86/unwind/orc: Add
-> > 'signal' field to ORC metadata") but right now I don't know why.
->
-> Ah, figured it out:
->
-> $ tools/objtool/objtool --dump=orc vmlinux |grep signal:1 |wc -l
-> 0
->
-> The 'signal' bit isn't getting propagated from the unwind hints to the
-> ORC entries :-(
->
-> Will post a fix shortly.
+On 16/02/2023 12:44, Julien Panis wrote:
+> TPS6594 is a Power Management IC which provides regulators and others
 
-Thanks for the quick fix!
+Subject: drop second/last, redundant "DT bindings for". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-Let's tell syzbot:
 
-#syz fix: objtool: Fix ORC 'signal' propagation
+> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+> PFSM (Pre-configurable Finite State Machine) managing the state of the
+> device.
+> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+> 
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> ---
+>  .../devicetree/bindings/mfd/ti,tps6594.yaml   | 164 ++++++++++++++++++
+>  1 file changed, 164 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+> new file mode 100644
+> index 000000000000..37968d6c0420
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+> @@ -0,0 +1,164 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI TPS6594 Power Management Integrated Circuit
+> +
+> +maintainers:
+> +  - Julien Panis <jpanis@baylibre.com>
+> +
+> +description: |
+> +  TPS6594 is a Power Management IC which provides regulators and others
+> +  features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+> +  PFSM (Pre-configurable Finite State Machine) managing the state of the device.
+> +  TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tps6594
+> +      - ti,tps6593
+> +      - ti,lp8764x
+
+Any particular choice of ordering (different than alphabetical)?
+
+> +
+> +  reg:
+> +    description: I2C slave address or SPI chip select number.
+> +    maxItems: 1
+> +
+> +  ti,use-crc:
+> +    type: boolean
+> +    description: If true, use CRC for I2C and SPI interface protocols.
+
+Hm, why different boards would like to enable or disable it? Why this
+suits DT?
+
+> +
+> +  system-power-controller: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ti,multi-phase-id:
+> +    description: |
+> +      Describes buck multi-phase configuration, if any. For instance, XY id means
+> +      that outputs of buck converters X and Y are combined in multi-phase mode.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [12, 34, 123, 1234]
+> +
+> +patternProperties:
+> +  "^buck([1-5]|12|34|123|1234)-supply$":
+> +    description: Input supply phandle for each buck.
+> +
+> +  "^ldo[1-4]-supply$":
+> +    description: Input supply phandle for each ldo.
+> +
+> +  regulators:
+
+This should go to properties, not patternProperties.
+
+> +    type: object
+> +    description: List of regulators provided by this controller.
+> +
+> +    patternProperties:
+> +      "^buck([1-5]|12|34|123|1234)$":
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +
+> +        unevaluatedProperties: false
+> +
+> +      "^ldo[1-4]$":
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +
+> +        unevaluatedProperties: false
+> +
+
+You could add here - on this level - of indentation allOf:if for
+excluding setups
+
+if:
+  required:
+    - buck12
+then:
+  properties:
+    buck123: false
+    buck1234: false
+
+Or, if you want to require regulator then:
+oneOf:
+  - required:
+      - buck12
+  - required:
+      - buck123
+  - required:
+      - buck1234
+
+and anyway exclude buck34 with two above.
+
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+
+
+
+Best regards,
+Krzysztof
+
