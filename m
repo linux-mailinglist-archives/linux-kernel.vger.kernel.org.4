@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7916569A642
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5B469A644
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjBQHv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S229755AbjBQHwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQHvz (ORCPT
+        with ESMTP id S229482AbjBQHwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:51:55 -0500
+        Fri, 17 Feb 2023 02:52:37 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83EA5A3BC;
-        Thu, 16 Feb 2023 23:51:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5208B5A3BC;
+        Thu, 16 Feb 2023 23:52:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676620313; x=1708156313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tOejNXoNWWUPIQy9fpw83kfp7qZbCfTd5AdMHmp+szQ=;
-  b=kjOJmBSYuX2U0w6iVhgk6mHdPiiW8j2q1R71tIyZrDtgETXu6wzFPJMO
-   JgD1x8Q+3TyEBHqHm5tZCbHnuqZk74052DJmcyPlTqkVe6P3nfnB+zrf0
-   3STUQOP5NIhR1iROUDhSMXhS+ZZr5qLbUdWu/Mq69chYIaCtNEeUgYt/o
-   l8tpX3yc+DQIFnWeL7oFz1konxbv1SAp5PJrCq9OdPqhIdlY1tfSqldgS
-   mfvgol9fkNluiV8+7YrgSmJ4Qrryl9mvjlU2EgIzYqaOCSXa6U29lNnrP
-   /xn9LMvT2MrY8GO17Fw501ZEaGYWXjDip6Qeav1UhquGhVVec4jA8PINK
-   Q==;
+  t=1676620355; x=1708156355;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nj9NSCYw1/wBsANqTcBXqliAQg8xChWqdiHMDqUdokU=;
+  b=u6bGwAsMn0IR6KtmZV2+ThHSSHfIOALwlz3ySyxKa2hJQiKzwkaySroi
+   EoTWWDpHa8LWNv7MfobKv6m9HclqORyhuUKcvBqdVJtdGJYf/jMVoHn7a
+   +k4IMtRcGuY1kBU3KkOF/jvzWFPBmNhKipptTK1U574A7OvswmQrufyMc
+   7s989UcLqgckF6piz9HoNKPNBt1Nxzkwv0JatubqG1Qe74hEtFXazQjyk
+   ekTwH9mGYBRb0iGi6PLstXiSBIc4fhOC9pipjfvpwAa9LFh5bbGVgQJtG
+   ZDf7dHgzR0LALsdlnt64dhVupo4bGb02KJDknCU3RD5uE/V5oQS74NxsT
+   A==;
 X-IronPort-AV: E=Sophos;i="5.97,304,1669100400"; 
-   d="asc'?scan'208";a="212479409"
+   d="scan'208";a="212479483"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 00:51:53 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 00:52:34 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 17 Feb 2023 00:51:52 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 17 Feb 2023 00:51:50 -0700
-Date:   Fri, 17 Feb 2023 07:51:24 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Message-ID: <Y+8x/KSujhgNLAd6@wendy>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
- <20221220005054.34518-8-hal.feng@starfivetech.com>
- <Y6JB37Pd5TZoGMy4@spud>
- <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
- <Y6tSWB2+98a8k9Qw@spud>
- <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
- <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
+ 15.1.2507.16; Fri, 17 Feb 2023 00:52:34 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 17 Feb 2023 00:52:32 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_PEROUT for lan8841
+Date:   Fri, 17 Feb 2023 08:52:13 +0100
+Message-ID: <20230217075213.2366042-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JlO8Q7GKUV78Z9cu"
-Content-Disposition: inline
-In-Reply-To: <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -79,200 +62,448 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---JlO8Q7GKUV78Z9cu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Lan8841 has 10 GPIOs and it has 2 events(EVENT_A and EVENT_B). It is
+possible to assigned the 2 events to any of the GPIOs, but a GPIO can
+have only 1 event at a time.
+These events are used to generate periodic signals. It is possible to
+configure the length, the start time and the period of the signal by
+configuring the event.
+Currently the SW uses only EVENT_A to generate the perout.
 
-On Fri, Feb 17, 2023 at 10:27:27AM +0800, Hal Feng wrote:
-> On Thu, 16 Feb 2023 18:20:34 +0000, Conor Dooley wrote:
-> > Hey Hal!
-> >=20
-> > On Thu, Feb 16, 2023 at 10:42:20PM +0800, Hal Feng wrote:
-> >> On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
-> >> > On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
-> >> >> On Tue, 20 Dec 2022 23:14:39 +0000, Conor Dooley wrote:
-> >> >> > On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
-> >> >> > > From: Emil Renner Berthing <kernel@esmil.dk>
-> >> >> > >=20
-> >> >> > > Add bindings for the system clock and reset generator (SYSCRG) =
-on the
-> >> >> > > JH7110 RISC-V SoC by StarFive Ltd.
-> >> >> > >=20
-> >> >> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> >> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> >> >=20
-> >> >> > > +  clocks:
-> >> >> > > +    items:
-> >> >> > > +      - description: Main Oscillator (24 MHz)
-> >> >> > > +      - description: GMAC1 RMII reference
-> >> >> > > +      - description: GMAC1 RGMII RX
-> >> >> > > +      - description: External I2S TX bit clock
-> >> >> > > +      - description: External I2S TX left/right channel clock
-> >> >> > > +      - description: External I2S RX bit clock
-> >> >> > > +      - description: External I2S RX left/right channel clock
-> >> >> > > +      - description: External TDM clock
-> >> >> > > +      - description: External audio master clock
-> >> >> >=20
-> >> >> > So, from peeking at the clock driver & the dt - it looks like a b=
-unch of
-> >> >> > these are not actually required?
-> >> >>=20
-> >> >> These clocks are used as root clocks or optional parent clocks in c=
-lock tree.
-> >> >> Some of them are optional, but they are required if we want to desc=
-ribe the
-> >> >> complete clock tree of JH7110 SoC.
-> >> >=20
-> >> > Perhaps I have a misunderstand of what required means. To me, requir=
-ed
-> >> > means "you must provide this clock for the SoC to operate in all
-> >> > configurations".
-> >> > Optional therefore would be for things that are needed only for some
-> >> > configurations and may be omitted if not required.
-> >> >=20
-> >> > From your comment below, boards with a JH7110 may choose not to popu=
-late
-> >> > both external clock inputs to a mux. In that case, "dummy" clocks sh=
-ould
-> >> > not have to be provided in the DT of such boards to satisfy this bin=
-ding
-> >> > which seems wrong to me..
-> >>=20
-> >> Please see the picture of these external clocks in clock tree.
-> >>=20
-> >> # mount -t debugfs none /mnt
-> >> # cat /mnt/clk/clk_summary
-> >>                                  enable  prepare  protect             =
-                   duty  hardware
-> >>    clock                          count    count    count        rate =
-  accuracy phase  cycle    enable
-> >> ----------------------------------------------------------------------=
----------------------------------
-> >>  *mclk_ext*                             0        0        0    1228800=
-0          0     0  50000         Y
-> >>  *tdm_ext*                              0        0        0    4915200=
-0          0     0  50000         Y
-> >>  *i2srx_lrck_ext*                       0        0        0      19200=
-0          0     0  50000         Y
-> >>  *i2srx_bclk_ext*                       0        0        0    1228800=
-0          0     0  50000         Y
-> >>  *i2stx_lrck_ext*                       0        0        0      19200=
-0          0     0  50000         Y
-> >>  *i2stx_bclk_ext*                       0        0        0    1228800=
-0          0     0  50000         Y
-> >>  *gmac1_rgmii_rxin*                     0        0        0   12500000=
-0          0     0  50000         Y
-> >>     gmac1_rx                          0        0        0   125000000 =
-         0     0  50000         Y
-> >>        gmac1_rx_inv                   0        0        0   125000000 =
-         0   180  50000         Y
-> >>  *gmac1_rmii_refin*                     0        0        0    5000000=
-0          0     0  50000         Y
-> >>     gmac1_rmii_rtx                    0        0        0    50000000 =
-         0     0  50000         Y
-> >>        gmac1_tx                       0        0        0    50000000 =
-         0     0  50000         N
-> >>           gmac1_tx_inv                0        0        0    50000000 =
-         0   180  50000         Y
-> >>  *osc*                                  4        4        0    2400000=
-0          0     0  50000         Y
-> >>     apb_func                          0        0        0    24000000 =
-         0     0  50000         Y
-> >>  ...
-> >>=20
-> >> The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" are
-> >> actually used as the parent of other clocks.
-> >=20
-> >> The "dummy" clocks
-> >> you said are all internal clocks.
-> >=20
-> > No, what I meant by "dummy" clocks is that if you make clocks "required"
-> > in the binding that are not needed by the hardware for operation a
-> > customer of yours might have to add "dummy" clocks to their devicetree
-> > to pass dtbs_check.
-> >=20
-> >> For the audio related clocks (mclk_ext/tdm_ext/i2srx_lrck_ext/
-> >> i2srx_bclk_ext/i2stx_lrck_ext/i2stx_bclk_ext), they will be used
-> >> as the parent clocks in audio related drivers. Note that some
-> >> clocks need to select different clocks as parent according to
-> >> requirement.
-> >> So all these external clocks are required.
-> >>=20
-> >> >=20
-> >> > It would seem to me that you need to set minItems < maxItems here to
-> >> > account for that & you do in fact need clock-names.
-> >> >=20
-> >> >>=20
-> >> >> > I'd have ploughed through this, but having read Krzysztof's comme=
-nts on
-> >> >> > the DTS I'm not sure that this binding is correct.
-> >> >> > https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.fe=
-ng@starfivetech.com/T/#mdf67621a2344dce801aa8015d4963593a2c28bcc
-> >> >> >=20
-> >> >> > I *think* the DT is correct - the fixed clocks are all inputs fro=
-m clock
-> >> >> > sources on the board and as such they are empty in soc.dtsi and a=
-re
-> >> >> > populated in board.dts?
-> >> >>=20
-> >> >> Yes, the fixed clocks are all clock sources on the board and input =
-to the SoC.
-> >> >>=20
-> >> >> >=20
-> >> >> > However, are they all actually required? In the driver I see:
-> >> >> > 	JH71X0__MUX(JH7110_SYSCLK_GMAC1_RX, "gmac1_rx", 2,
-> >> >> > 		    JH7110_SYSCLK_GMAC1_RGMII_RXIN,
-> >> >> > 		    JH7110_SYSCLK_GMAC1_RMII_RTX),
-> >> >> > That macro is:
-> >> >> > #define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] =3D {			\
-> >> >> > 	.name =3D _name,								\
-> >> >> > 	.flags =3D 0,								\
-> >> >> > 	.max =3D ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
-> >> >> > 	.parents =3D { __VA_ARGS__ },						\
-> >> >> > }
-> >=20
-> >> >> > AFAICT, RMII reference feeds RMII_RTX & RGMII RX *is* RGMII_RXIN?
-> >> >> > Does that mean you need to populate only one of GMAC1 RMII refere=
-nce
-> >> >> > and GMAC1 RMGII RX and the other is optional?
-> >=20
-> >> >> Yes, actually only one of them is chosen as the root clock
-> >> >> source of the clock "gmac1_rx".
-> > |  *gmac1_rgmii_rxin*  =20
-> > |     gmac1_rx         =20
-> > |        gmac1_rx_inv  =20
-> > |  *gmac1_rmii_refin*  =20
-> > |     gmac1_rmii_rtx   =20
-> > |        gmac1_tx      =20
-> > |           gmac1_tx_inv
-> > |
-> > | description: GMAC1 RMII reference
-> > | description: GMAC1 RGMII RX
-> >=20
-> >=20
-> > So you're telling me that you can either:
-> > - Provide GMAC1 RMII reference and GMAC1 RGMII RX & then use different
-> >   clocks for gmac1_rx and gmac1_tx
-> > - Provide only GMAC1 RMII reference & use it for both gmac1_tx *and*
-> >   gmac1_rx
-> >=20
-> > Is that correct?
->=20
-> Yes, it is.
+These events are generated by comparing the target time with the PHC
+time. In case the PHC time is changed to a value bigger than the target
+time + reload time, then it would generate only 1 event and then it
+would stop because target time + reload time is small than PHC time.
+Therefore it is required to change also the target time every time when
+the PHC is changed. The same will apply also when the PHC time is
+changed to a smaller value.
 
-Which would then make GMAC1 RGMII RX optional, rather than required?
+This was tested using:
+testptp -L 6,2
+testptp -p 1000000000 -w 200000000
 
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/phy/micrel.c | 363 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 363 insertions(+)
 
---JlO8Q7GKUV78Z9cu
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 2c84fccef4f64..ac818f1381942 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -318,6 +318,7 @@ struct kszphy_ptp_priv {
+ 	struct ptp_clock_info ptp_clock_info;
+ 	/* Lock for ptp_clock */
+ 	struct mutex ptp_lock;
++	struct ptp_pin_desc *pin_config;
+ };
+ 
+ struct kszphy_priv {
+@@ -3665,6 +3666,9 @@ static int lan8841_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
+ #define LAN8841_PTP_LTC_SET_NS_LO	266
+ #define LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD	BIT(4)
+ 
++static void lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
++				      const struct timespec64 *ts);
++
+ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
+ 				 const struct timespec64 *ts)
+ {
+@@ -3683,6 +3687,7 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
+ 	/* Set the command to load the LTC */
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+ 		      LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD);
++	lan8841_ptp_update_target(ptp_priv, ts);
+ 	mutex_unlock(&ptp_priv->ptp_lock);
+ 
+ 	return 0;
+@@ -3803,6 +3808,12 @@ static int lan8841_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
+ 	}
+ 	mutex_unlock(&ptp_priv->ptp_lock);
+ 
++	/* Update the target clock */
++	ptp->gettime64(ptp, &ts);
++	mutex_lock(&ptp_priv->ptp_lock);
++	lan8841_ptp_update_target(ptp_priv, &ts);
++	mutex_unlock(&ptp_priv->ptp_lock);
++
+ 	return 0;
+ }
+ 
+@@ -3839,6 +3850,337 @@ static int lan8841_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ 	return 0;
+ }
+ 
++static int lan8841_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
++			      enum ptp_pin_function func, unsigned int chan)
++{
++	switch (func) {
++	case PTP_PF_NONE:
++	case PTP_PF_PEROUT:
++		break;
++	default:
++		return -1;
++	}
++
++	return 0;
++}
++
++#define LAN8841_PTP_GPIO_NUM	10
++#define LAN8841_PTP_GPIO_MASK   GENMASK(LAN8841_PTP_GPIO_NUM, 0)
++#define LAN8841_GPIO_EN		128
++#define LAN8841_GPIO_DIR	129
++#define LAN8841_GPIO_BUF	130
++
++static void lan8841_ptp_perout_off(struct kszphy_ptp_priv *ptp_priv, int pin)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u16 tmp;
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_EN) & LAN8841_PTP_GPIO_MASK;
++	tmp &= ~BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DIR) & LAN8841_PTP_GPIO_MASK;
++	tmp &= ~BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_DIR, tmp);
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_BUF) & LAN8841_PTP_GPIO_MASK;
++	tmp &= ~BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_BUF, tmp);
++}
++
++static void lan8841_ptp_perout_on(struct kszphy_ptp_priv *ptp_priv, int pin)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u16 tmp;
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_EN) & LAN8841_PTP_GPIO_MASK;
++	tmp |= BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DIR) & LAN8841_PTP_GPIO_MASK;
++	tmp |= BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_DIR, tmp);
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_BUF) & LAN8841_PTP_GPIO_MASK;
++	tmp |= BIT(pin);
++	phy_write_mmd(phydev, 2, LAN8841_GPIO_BUF, tmp);
++}
++
++#define LAN8841_GPIO_DATA_SEL1				131
++#define LAN8841_GPIO_DATA_SEL2				132
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK	GENMASK(2, 0)
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A	1
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B	2
++#define LAN8841_PTP_GENERAL_CONFIG			257
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A	BIT(1)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B	BIT(3)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK	GENMASK(7, 4)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK	GENMASK(11, 8)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A		4
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B		7
++
++#define LAN8841_EVENT_A		0
++#define LAN8841_EVENT_B		1
++
++static void lan8841_ptp_remove_event(struct kszphy_ptp_priv *ptp_priv, int pin,
++				     u8 event)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u8 offset;
++	u16 tmp;
++
++	/* Not remove pin from the event. GPIO_DATA_SEL1 contains the GPIO
++	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
++	 * depending on the pin, it requires to read a different register
++	 */
++	if (pin < 5) {
++		tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1);
++		offset = pin;
++	} else {
++		tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2);
++		offset = pin - 5;
++	}
++	tmp &= ~(LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * offset));
++	if (pin < 5)
++		phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1, tmp);
++	else
++		phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2, tmp);
++
++	/* Disable the event */
++	tmp = phy_read_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG);
++	if (event == LAN8841_EVENT_A) {
++		tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A;
++		tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
++	} else {
++		tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A;
++		tmp &= ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
++	}
++	phy_write_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG, tmp);
++}
++
++static void lan8841_ptp_enable_event(struct kszphy_ptp_priv *ptp_priv, int pin,
++				     u8 event, int pulse_width)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u8 offset;
++	u16 tmp;
++
++	/* Enable the event */
++	tmp = phy_read_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG);
++	tmp |= event == LAN8841_EVENT_A ? LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A :
++					  LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B;
++	tmp &= event == LAN8841_EVENT_A ? ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK :
++					  ~LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK;
++	tmp |= event == LAN8841_EVENT_A ? pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A :
++					  pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B;
++	phy_write_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG, tmp);
++
++	/* Now connect the pin to the event. GPIO_DATA_SEL1 contains the GPIO
++	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
++	 * depending on the pin, it requires to read a different register
++	 */
++	if (pin < 5) {
++		tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1);
++		offset = pin;
++	} else {
++		tmp = phy_read_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2);
++		offset = pin - 5;
++	}
++
++	if (event == LAN8841_EVENT_A)
++		tmp |= LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A << (3 * offset);
++	else
++		tmp |= LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B << (3 * offset);
++
++	if (pin < 5)
++		phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1, tmp);
++	else
++		phy_write_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2, tmp);
++}
++
++#define LAN8841_PTP_LTC_TARGET_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 278 : 288)
++#define LAN8841_PTP_LTC_TARGET_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 279 : 289)
++#define LAN8841_PTP_LTC_TARGET_NS_HI(event)	((event) == LAN8841_EVENT_A ? 280 : 290)
++#define LAN8841_PTP_LTC_TARGET_NS_LO(event)	((event) == LAN8841_EVENT_A ? 281 : 291)
++
++static void lan8841_ptp_set_target(struct kszphy_ptp_priv *ptp_priv, u8 event,
++				   s64 sec, u32 nsec)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_HI(event),
++		      upper_16_bits(sec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_LO(event),
++		      lower_16_bits(sec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_HI(event) & 0x3fff,
++		      upper_16_bits(nsec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_LO(event),
++		      lower_16_bits(nsec));
++}
++
++#define LAN8841_BUFFER_TIME	2
++
++static void lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
++				      const struct timespec64 *ts)
++{
++	lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A,
++			       ts->tv_sec + LAN8841_BUFFER_TIME, ts->tv_nsec);
++}
++
++#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 282 : 292)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 283 : 293)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event)	((event) == LAN8841_EVENT_A ? 284 : 294)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event)	((event) == LAN8841_EVENT_A ? 285 : 295)
++
++static void lan8841_ptp_set_reload(struct kszphy_ptp_priv *ptp_priv, u8 event,
++				   s64 sec, u32 nsec)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event),
++		      upper_16_bits(sec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event),
++		      lower_16_bits(sec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event) & 0x3fff,
++		      upper_16_bits(nsec));
++	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event),
++		      lower_16_bits(nsec));
++}
++
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS	13
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS	12
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS	11
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS	10
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS	9
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS	8
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US	7
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US	6
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US	5
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US	4
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US	3
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US	2
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS	1
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS	0
++
++static int lan8841_ptp_perout(struct ptp_clock_info *ptp,
++			      struct ptp_clock_request *rq, int on)
++{
++	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
++							ptp_clock_info);
++	struct phy_device *phydev = ptp_priv->phydev;
++	struct timespec64 ts_on, ts_period;
++	s64 on_nsec, period_nsec;
++	int pulse_width;
++	int pin;
++
++	if (rq->perout.flags & ~PTP_PEROUT_DUTY_CYCLE)
++		return -EOPNOTSUPP;
++
++	pin = ptp_find_pin(ptp_priv->ptp_clock, PTP_PF_PEROUT, rq->perout.index);
++	if (pin == -1 || pin >= LAN8841_PTP_GPIO_NUM)
++		return -EINVAL;
++
++	if (!on) {
++		lan8841_ptp_perout_off(ptp_priv, pin);
++		lan8841_ptp_remove_event(ptp_priv, LAN8841_EVENT_A, pin);
++		return 0;
++	}
++
++	ts_on.tv_sec = rq->perout.on.sec;
++	ts_on.tv_nsec = rq->perout.on.nsec;
++	on_nsec = timespec64_to_ns(&ts_on);
++
++	ts_period.tv_sec = rq->perout.period.sec;
++	ts_period.tv_nsec = rq->perout.period.nsec;
++	period_nsec = timespec64_to_ns(&ts_period);
++
++	if (period_nsec < 200) {
++		phydev_warn(phydev,
++			    "perout period too small, minimum is 200 nsec\n");
++		return -EOPNOTSUPP;
++	}
++
++	if (on_nsec >= period_nsec) {
++		phydev_warn(phydev,
++			    "pulse width must be smaller than period\n");
++		return -EINVAL;
++	}
++
++	switch (on_nsec) {
++	case 200000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS;
++		break;
++	case 100000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS;
++		break;
++	case 50000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS;
++		break;
++	case 10000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS;
++		break;
++	case 5000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS;
++		break;
++	case 1000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS;
++		break;
++	case 500000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US;
++		break;
++	case 100000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US;
++		break;
++	case 50000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US;
++		break;
++	case 10000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US;
++		break;
++	case 5000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US;
++		break;
++	case 1000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US;
++		break;
++	case 500:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS;
++		break;
++	case 100:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
++		break;
++	default:
++		phydev_warn(phydev, "Use default duty cycle of 100ns\n");
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
++		break;
++	}
++
++	mutex_lock(&ptp_priv->ptp_lock);
++	lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A, rq->perout.start.sec,
++			       rq->perout.start.nsec);
++	mutex_unlock(&ptp_priv->ptp_lock);
++
++	lan8841_ptp_set_reload(ptp_priv, LAN8841_EVENT_A, rq->perout.period.sec,
++			       rq->perout.period.nsec);
++	lan8841_ptp_enable_event(ptp_priv, pin, LAN8841_EVENT_A, pulse_width);
++	lan8841_ptp_perout_on(ptp_priv, pin);
++
++	return 0;
++}
++
++static int lan8841_ptp_enable(struct ptp_clock_info *ptp,
++			      struct ptp_clock_request *rq, int on)
++{
++	switch (rq->type) {
++	case PTP_CLK_REQ_PEROUT:
++		return lan8841_ptp_perout(ptp, rq, on);
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
+ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.owner		= THIS_MODULE,
+ 	.name		= "lan8841 ptp",
+@@ -3847,6 +4189,10 @@ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.settime64	= lan8841_ptp_settime64,
+ 	.adjtime	= lan8841_ptp_adjtime,
+ 	.adjfine	= lan8841_ptp_adjfine,
++	.verify         = lan8841_ptp_verify,
++	.enable         = lan8841_ptp_enable,
++	.n_per_out      = LAN8841_PTP_GPIO_NUM,
++	.n_pins         = LAN8841_PTP_GPIO_NUM,
+ };
+ 
+ #define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER 3
+@@ -3874,7 +4220,24 @@ static int lan8841_probe(struct phy_device *phydev)
+ 	priv = phydev->priv;
+ 	ptp_priv = &priv->ptp_priv;
+ 
++	ptp_priv->pin_config = devm_kmalloc_array(&phydev->mdio.dev,
++						  LAN8841_PTP_GPIO_NUM,
++						  sizeof(*ptp_priv->pin_config),
++						  GFP_KERNEL);
++	if (!ptp_priv->pin_config)
++		return -ENOMEM;
++
++	for (int i = 0; i < LAN8841_PTP_GPIO_NUM; ++i) {
++		struct ptp_pin_desc *p = &ptp_priv->pin_config[i];
++
++		memset(p, 0, sizeof(*p));
++		snprintf(p->name, sizeof(p->name), "pin%d", i);
++		p->index = i;
++		p->func = PTP_PF_NONE;
++	}
++
+ 	ptp_priv->ptp_clock_info = lan8841_ptp_clock_info;
++	ptp_priv->ptp_clock_info.pin_config = ptp_priv->pin_config;
+ 	ptp_priv->ptp_clock = ptp_clock_register(&ptp_priv->ptp_clock_info,
+ 						 &phydev->mdio.dev);
+ 	if (IS_ERR(ptp_priv->ptp_clock)) {
+-- 
+2.38.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+8x/AAKCRB4tDGHoIJi
-0ng2AP9laHdcGkQgr/k2MLWKGByViMscggcXJRE/8hKzY7gTvQEA3FgxcicBwysX
-yesQe4IpWXBVeLnEpUeFFxTdty8PvQE=
-=NKFm
------END PGP SIGNATURE-----
-
---JlO8Q7GKUV78Z9cu--
