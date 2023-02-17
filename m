@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0490C69A433
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE36469A435
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjBQDOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 22:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S229563AbjBQDQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 22:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBQDOu (ORCPT
+        with ESMTP id S229580AbjBQDQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:14:50 -0500
+        Thu, 16 Feb 2023 22:16:33 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D1D5455A;
-        Thu, 16 Feb 2023 19:14:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE1595AD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 19:16:33 -0800 (PST)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676603684;
-        bh=JhufyqbgcfAtSqTzyqs7Nu1k8rx08yOQj4V6vTeRZRg=;
+        s=mail; t=1676603791;
+        bh=xtWe/z592GjmZvp4dfN6WhDniwxGWNDEk/AoL1eYtHs=;
         h=From:Date:Subject:To:Cc:From;
-        b=D34bvA+NxbQA4ghJTPvHf3r31uIS/doBa8YDg31r4vP680wftF/2Zf4V6gCirhKTz
-         b9ehtwA7lR45jZJ/qptX84IixRd04TVTu563MsHqNzRhk+QsiFGqhCKA9sQBURpnGE
-         9TrxUSNUTSENDRCVjeZQPCol4HasSFENXcDl5crM=
-Date:   Fri, 17 Feb 2023 03:14:41 +0000
-Subject: [PATCH] livepatch: Make kobj_type structures constant
+        b=MHiTYxTu3MP2S6driL0IZBIBiF3snIJLZsvrofUaGLWmj5720jsVnaje/BMnsTb02
+         c0S1+fK/EUnM73Zf5khBBQWPTiwITaDUbPeDkTslgJgdx2hDtFa8pCBteI0ACpYddp
+         MsE337EpOsH0vzu0Tp5GKdGpS2cchuDKZD9Gj7Rg=
+Date:   Fri, 17 Feb 2023 03:16:25 +0000
+Subject: [PATCH] irq: make kobj_type structures constant
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230217-kobj_type-livepatch-v1-1-06ded292e897@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIACDx7mMC/x2NWwqDMBAAryL73QWNWqFXKUXy2DTbhhgSKy3i3
- bv4OQPD7FCpMFW4NTsU2rjykgS6SwM26PQkZCcMqlV9q7oJ34t5zesvE0beKOvVBpwG57y/umH
- sPUhpdCU0RScbpE2fGEXmQp6/5+r+OI4/qugDu3oAAAA=
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-Id: <20230217-kobj_type-irq-v1-1-fedfacaf8cdb@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAInx7mMC/x2NUQrCMBAFr1L220CTiBWvIiJJfNptS9puVFpK7
+ +7i58xjeBsVCKPQpdpI8OXCY1awh4pSG/ILhh/K5Grna2cb04+xu7/XSQeZDcK5QfLHeIIlbWI
+ oMFFCTq1W+TMMKifBk5f/yfW27z9JD865dAAAAA==
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676603682; l=1669;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676603789; l=1219;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=JhufyqbgcfAtSqTzyqs7Nu1k8rx08yOQj4V6vTeRZRg=;
- b=IHauOSf5wkVtx+kzX5lRhfCxnvQC/kMey7MbAd54Ve5ypF9z84f96TOr5rGIrgAg/zKyO48i1
- XYLr/jlxHwPAS17sbwQQ6u/xZJivb8zvjWrR28bp0nL3nHTjhHeSX3A
+ bh=xtWe/z592GjmZvp4dfN6WhDniwxGWNDEk/AoL1eYtHs=;
+ b=WZ5C3oh/EKt8NQXTUuEWEU/DJMwhHgaSQgdADdNR7aXr4/lDg0ZXVLUquyfe1toeo9Nz7Z0ad
+ SNnoI5D4fJLCV3pP0c7jVtdGRgHVppGfFFeUzNq0a87IwEpO/3CnhHj
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,44 +60,35 @@ modification at runtime.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/livepatch/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/irq/irqdesc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 201f0c0482fb..3da548755d8a 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -581,7 +581,7 @@ static void klp_kobj_release_patch(struct kobject *kobj)
- 	complete(&patch->finish);
- }
- 
--static struct kobj_type klp_ktype_patch = {
-+static const struct kobj_type klp_ktype_patch = {
- 	.release = klp_kobj_release_patch,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = klp_patch_groups,
-@@ -597,7 +597,7 @@ static void klp_kobj_release_object(struct kobject *kobj)
- 		klp_free_object_dynamic(obj);
- }
- 
--static struct kobj_type klp_ktype_object = {
-+static const struct kobj_type klp_ktype_object = {
- 	.release = klp_kobj_release_object,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = klp_object_groups,
-@@ -613,7 +613,7 @@ static void klp_kobj_release_func(struct kobject *kobj)
- 		klp_free_func_nop(func);
- }
- 
--static struct kobj_type klp_ktype_func = {
-+static const struct kobj_type klp_ktype_func = {
- 	.release = klp_kobj_release_func,
- 	.sysfs_ops = &kobj_sysfs_ops,
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index fd0996274401..240e145e969f 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -277,7 +277,7 @@ static struct attribute *irq_attrs[] = {
  };
+ ATTRIBUTE_GROUPS(irq);
+ 
+-static struct kobj_type irq_kobj_type = {
++static const struct kobj_type irq_kobj_type = {
+ 	.release	= irq_kobj_release,
+ 	.sysfs_ops	= &kobj_sysfs_ops,
+ 	.default_groups = irq_groups,
+@@ -335,7 +335,7 @@ postcore_initcall(irq_sysfs_init);
+ 
+ #else /* !CONFIG_SYSFS */
+ 
+-static struct kobj_type irq_kobj_type = {
++static const struct kobj_type irq_kobj_type = {
+ 	.release	= irq_kobj_release,
+ };
+ 
 
 ---
 base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
-change-id: 20230217-kobj_type-livepatch-74ddff6d453f
+change-id: 20230217-kobj_type-irq-ea87ec34b6e1
 
 Best regards,
 -- 
