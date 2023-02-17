@@ -2,304 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E6F69B65F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3717D69B662
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjBQXQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S230019AbjBQXRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjBQXQ1 (ORCPT
+        with ESMTP id S229808AbjBQXRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:16:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEA95CF05;
-        Fri, 17 Feb 2023 15:16:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C237E62069;
-        Fri, 17 Feb 2023 23:15:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC243C433EF;
-        Fri, 17 Feb 2023 23:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676675705;
-        bh=byNkcvjTVrhZmBQeXX4eg96uidFMAt9CRXf+/5g7jmQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=i+dyYMQfaZaIV1MSPjeoxGW7/kGQRsELGc6+eH9/pJisN5GlHWOxZZPufsniv9a+h
-         SaiV5XBOW9vK3H/4EVKj1zPWhj/6NKB/VuHcwAjN8s2sX104jq0qFaPFrMsHJQjaOn
-         fbfY6eT4mFHBMHVzLgiNg9wE31Lm/EwJ8g2+z3rmzrkoz3ekzacrtXeJPpiayEXz2e
-         bZrsU76D0onPaH2jplLx0EYxpit5zoYjBq9lbMywIoWoek6l45GLyx+c7rJLkJfWFl
-         dGMuY8AcvGZJFgtBF45/ngSv0Wbg8r3/Ic5/ihzngga605no7167hQSzqc67fDkVbL
-         HSjLs31GxqUww==
-Date:   Fri, 17 Feb 2023 17:15:03 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
- resources with s390 per-function hotplug
-Message-ID: <20230217231503.GA3425666@bhelgaas>
+        Fri, 17 Feb 2023 18:17:41 -0500
+Received: from DM5PR00CU002-vft-obe.outbound.protection.outlook.com (mail-centralusazon11021027.outbound.protection.outlook.com [52.101.62.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3C16A077;
+        Fri, 17 Feb 2023 15:17:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j10hf+M/HY93X8jJBJcOgqgyGyrVrS1cWGnj83PoLDWmYTRmC5ebywfJ19KzJn0AVq4/n5C/HMB2WsGMvFFiRI6lY5Lt7Oax5dHiiRnaEXI8ghLNgfTzeOI6H8eWqQK8i8Mwh+i63mK7Fp/5Nm4YV7gForFknbe5PtVF8zCQI6o2fvOs4FebwunzMDn8jN5RSqD/VVS1LhViynisH9y+lOWCBh4WNJn8yQxi3Gd9oVRkRzh2SQgTqS3bzCSDn1BuRjwiRPmkgivnwlf7Jkcttr6hiZwXVPcBPMglrykuSxmxdyTcXJvDyUCWY+JWmd22lpmUXE8D70iIc5krOLkM7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NXcRsk0EHt+Ji7wSQt35UxgAgJH8VoodrRTwVDHF8Wg=;
+ b=izOmO7JDbrld15j3/sY5bbk782y0UkCxalo6xQWOJvJlXFaMKmziyC1mD8psiV6FjiiZygq4URqO7jLHEMFq492e3IBH2Q4jWQjVupv0aSUI8CTWwuPaO9MbOvNazC+s/AFSaWfNVuqAgSSbIWOHHhOKlFcsKY6LVm6rHMnP6oMuWYQYZHdPlYNBorEqdlLAKB4TAYs7POv+z+WnzqUoKAHpN8HmRlaAYCD3+etwhO3K37NMRodJYe6x9yojFdereRra+IqTXu1Fh7cUIX75SibB7WD951ugduV1cG+5uDoP7GxZ2qHeZ7OZ0BxBgS2YdelANlsz7Ymm39aCQGcSOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NXcRsk0EHt+Ji7wSQt35UxgAgJH8VoodrRTwVDHF8Wg=;
+ b=Le0dG6csW+zwMOkIgs0SlZBlEm7oxLimHfKBMwtPVIUvWp8nOTM1sdSaH14AlGQw265g57hpacthbtPYxwajw5TiDN6mW2YcCDBmZ12ejS4dgG60dSav0JSafIT9tc3noUb35bu0RpU1IsMpKIiHnxxv5S31WDcZgEJowlWD7Iw=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by IA1PR21MB3427.namprd21.prod.outlook.com (2603:10b6:208:3e0::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.6; Fri, 17 Feb
+ 2023 23:17:05 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::3747:daf4:7cc9:5ba2]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::3747:daf4:7cc9:5ba2%3]) with mapi id 15.20.6134.013; Fri, 17 Feb 2023
+ 23:17:05 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Mohammed Gamal <mgamal@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "xxiong@redhat.com" <xxiong@redhat.com>
+Subject: RE: [PATCH v3] Drivers: vmbus: Check for channel allocation before
+ looking up relids
+Thread-Topic: [PATCH v3] Drivers: vmbus: Check for channel allocation before
+ looking up relids
+Thread-Index: AQHZQxCgZcxYY5wLgESwq6crulPUna7TxPqg
+Date:   Fri, 17 Feb 2023 23:17:04 +0000
+Message-ID: <SA1PR21MB1335BBA8DF84AFDDF2E1ABE6BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230217204411.212709-1-mgamal@redhat.com>
+In-Reply-To: <20230217204411.212709-1-mgamal@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d490e464-8207-4eae-bc98-822cf1744ba7;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-17T23:14:15Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|IA1PR21MB3427:EE_
+x-ms-office365-filtering-correlation-id: 600f70f5-12df-4782-add9-08db113d153b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ru6mcRCvQ3jlcrx0xPsoTPqsYcga1PoeVcpaaSrCSxxCfYMnPKcwXvdQMM3I4fYZsIAmNg9hmwkOrhEsWKpPcbyHti04rH8tvVrOIV504dDZ/LBp/mtwyRV+PHbwRG3wrPKOe4Az7WLd1PvbXcdxEkSAQSCJNR2BWachVD9k82vkHbtf6DZYFU9x4qoV66vo1/Bo1KmXdir6CEYZpBXYG7VJj+TnAakGVwinAfrDcpaRab36cNI97rD4eCpBQiyEiyxgx+FDU9XI5vLLam7nzadHdvK9Nk8YweA0MswooMGrOkWnX3eS0jQE5z7wKa/haRGcm8nXObapOJwcZmf6xK62R1W3Qp0Hre9zZxP+FUjtCi0Oyyq659vjrDMXKgEzAnknCzuoohQLAyxhXMm39p7hOEaf4C1QCcZm8YyOoRmL3rVM2YgVXQUn88Q55wWXc3ZknjRp2siqzk3oG84KaRRlMBeDGc91ts+9nXRGIhdgFFuGxMjPHMwFu6+Dz/N8mwMU82V4blrJKFvNcrRQQ4EGqWWoQG1eNuWTIyWb2eKf+DoaeB3JxA/hoP+CSq73mmyJMinMQ+04hN0aoH7sYW3Qzp/K+z3BPDqNbXHVZuEKdwRZUIBy35cMqFQk4EsqHt9BLEmGCdRaBEJFdMRU9FCwvNHTwDtHgdVlEOntdRVkH+i6fQzZDzuJC21dh4PZNxAgxaZIWSf6x5ybKL18OTeaa8PcwX5eFv7FezdzkYNb/fZMRjepNKGimh77Jeq2
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(136003)(366004)(376002)(451199018)(86362001)(110136005)(54906003)(83380400001)(9686003)(186003)(26005)(33656002)(55016003)(10290500003)(64756008)(6506007)(5660300002)(478600001)(4744005)(66946007)(2906002)(4326008)(66556008)(66476007)(8936002)(8676002)(41300700001)(66446008)(71200400001)(52536014)(7696005)(8990500004)(76116006)(82960400001)(82950400001)(316002)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Srt7j1vWtqi2yfmbRvynQ1B6Qepax80lbDv3yDwartaiB4jws0fOKS2F3tCE?=
+ =?us-ascii?Q?sTOg9JXfaNsq8esJUMhxZVxs1e7IYZyHBKiz7JcHCT8qrgIRVKMoIoCWBHcZ?=
+ =?us-ascii?Q?GDgO0aZvhMvwmZ2tEys9bhVdzSj8nrzb2Cs8ziBNS2D8+9nXHV6bLb73eDVo?=
+ =?us-ascii?Q?S6BFuvVGhSAeENhT0Uublm1+PvurJSVeXlGQTvjSmoZ9cEUrjPpKCmiv4q21?=
+ =?us-ascii?Q?QIZZj1ROykkjKrxaeHj9HXpSiGlSoMfgXmU4KovfqC2zC+Lj/l4n73CPHFit?=
+ =?us-ascii?Q?f60wjmyjIgkzlVxeK0M+Gcu71iCvAbVfPVHPJlEEfaC0W1LDXIPcC2Uzmbzn?=
+ =?us-ascii?Q?A7irGwQXdNCbFcdY1YPm4dpjZe3A9kfmhzl07rpY6j/N4JuVnXEJJ4bpI9xG?=
+ =?us-ascii?Q?b3MxA+FPCbE7aDHfuCAa087FAXdOX1u9dRLUkbqn2oHM6DPg6FrJg+fP+Gq+?=
+ =?us-ascii?Q?ur83s3rslkuTLIHGfMKV3c2Zes3ECc/KOB2vb5kc4Zfv8s63rfVQTXKcO0UF?=
+ =?us-ascii?Q?KYCuRL35YUZ128CUftERAk7+a45YAcZHav4SkOl3TatnXR530ULlCkBKs85z?=
+ =?us-ascii?Q?/zYHtmYFQYzUUu5GfX7oPfKspDrzhYzsXXbnnLEd0M0KXD8Mis+8aE8/Mz/q?=
+ =?us-ascii?Q?KYiHt7v64qcCcuIXcnwglbsRJItasRNMfMTRLJROu8nNq6ddvDMyXoa4DDAv?=
+ =?us-ascii?Q?+Sfu71gbFegOj7Ae3Xm8t+LId77eDi9ljBqAJ09ZElBIs8CFPzbHXmQZoR7P?=
+ =?us-ascii?Q?1cHE/PDeGXDa5bCy9s79N6ID93zyfsZTDEWQLJvofCyOJOXI74UYc7nHtYu7?=
+ =?us-ascii?Q?G7ry6EwLcV7SwBYvGUTVMIDuMdpOnblt4yXE8JG6KhFqvcJL+LCQ62KZMMt5?=
+ =?us-ascii?Q?4i6S25IXqo0fH3ZzoB8qiD7XXcOOlZ++b5Kl7DbWll5hVsmb3jjlTBoa9x6n?=
+ =?us-ascii?Q?GbvQ3sSfLfltOwXO3LVwhLzen1GutHvkydAnw9ApNNnUS2ViT1X9QnywNy9L?=
+ =?us-ascii?Q?VElpgTd4x2WxjGqe2hnhdSgDF30ACf9zEhUs1NruBKVXB6fmtA6y/4F/3A9+?=
+ =?us-ascii?Q?rF+UTOaNI9CQ0VVcWhvpbTMbyzvT2PRdNb++n2X2svXyA0wouwTR2SQtIqJl?=
+ =?us-ascii?Q?fnee6nuwDHQq5w1rTKAOz56UaDebuurzjuw8cGLdJW7Gp5O9YcMuB/1Mi3iF?=
+ =?us-ascii?Q?LndgW9hD1m5GmEt5yQDLwpmdK599zXqrBvQhIiXO5HsQmkvJ2I97+FRaHJFv?=
+ =?us-ascii?Q?lfEgDsqLPxTdz7kcRtPso9+7r789gZiKOEVZTSc3Q3HNXHRNgDdC1WnP7s03?=
+ =?us-ascii?Q?nWGpEdICNdF/iEyYtGsldKILUBWKA2xrgb5thdLzUAoamnukv22RyovQsmOt?=
+ =?us-ascii?Q?uVNbTXR4jUPTZBOpr6oUfpTOJ4pUakdZdU0UcwISWegSMRT2Ubo/mX7Pegdk?=
+ =?us-ascii?Q?yy0mN+InoNkpeyKToL9lCK4YbHkXhygbtUAEWa4AJQpAhTG/GDxz61ARIyWT?=
+ =?us-ascii?Q?lQ0ZkE0vDuabe/4ex0nPpa5qAfPS6an55yQPnjxsvxJFUmiQ3YeYpJiq3c7h?=
+ =?us-ascii?Q?VI+CRRgKZq+HsomhQVCPhhHZ+SXTp8Va3dqA4PW6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214094911.3776032-1-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 600f70f5-12df-4782-add9-08db113d153b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2023 23:17:04.9498
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: y/XA551oUBb6tahWkyu3/DOAf0IkizlFqwH5gG8OTWnEyTdhj8sA4pzRWhypi4Cqume3rhTRMtPGblGWfaVYyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR21MB3427
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
-> On s390 PCI functions may be hotplugged individually even when they
-> belong to a multi-function device. In particular on an SR-IOV device VFs
-> may be removed and later re-added.
-
-Is there something special about the SR-IOV/VF case that relates to
-this problem?  If not, it might be unnecessary distraction to mention
-it.
-
-> In commit a50297cf8235 ("s390/pci: separate zbus creation from
-> scanning") it was missed however that struct pci_bus and struct
-> zpci_bus's resource list retained a reference to the PCI functions MMIO
-> resources even though those resources are released and freed on
-> hot-unplug. These stale resources may subsequently be claimed when the
-> PCI function re-appears resulting in use-after-free.
-
-Lifetimes of all these resources definitely aren't obvious to me.
-
-So I guess the critical thing here is the new
-pci_bus_remove_resource() in zpci_cleanup_bus_resources(), which
-removes (and kfrees when necessary) the resource from
-pci_bus->resources.
-
-I'm not clear on where the zpci_bus resource list comes in.  I guess
-we kalloc resources in zpci_setup_bus_resources(), and the current
-code adds them to zpci_bus->resources and copies them onto the pci_bus
-list.
-
-The new code does not add them to zpci_bus->resources at all, and only
-adds them to the pci_bus resource list.  Right?  I guess maybe that's
-what the "no need to add the MMIO resources at all" below refers to?
-
-> One idea of fixing this use-after-free in s390 specific code that was
-> investigated was to simply keep resources around from the moment a PCI
-> function first appeared until the whole virtual PCI bus created for
-> a multi-function device disappears. The problem with this however is
-> that due to the requirement of artificial MMIO addreesses (address
-> cookies) we will then need extra logic and tracking in struct zpci_bus
-> to keep these compatible for re-use. At the same time the MMIO resources
-> semantically belong to the PCI function so tying their lifecycle to the
-> function seems more logical.
-> 
-> Instead a simpler approach is to remove the resources of an individually
-> hot-unplugged PCI function from the PCI bus's resource list while
-> keeping the resources of other PCI functions on the PCI bus untouched.
-
-Do we currently never kfree the pci_bus resource list until we free
-the whole pci_bus via release_pcibus_dev()?  Does a remove + add just
-allocate more resources that are probably duplicates of what the
-pci_bus already had?
-
-> This is done by introducing pci_bus_remove_resource() to remove an
-> individual resource. Similarly the resource also needs to be removed
-> from the struct zpci_bus's resource list. It turns out however, that
-> there is really no need to add the MMIO resources at all and instead we
-> can simply use the zpci_bar_struct's resource pointer directly.
-> 
-> Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-Other random questions unrelated to this patch:
-
-  - zpci_bus_create_pci_bus() calls pci_bus_add_devices().  Isn't that
-    pointless?  AFAICT, the bus->devices list is empty then.
-
-  - What about zpci_bus_scan_device()?  Why does it call both
-    pci_bus_add_device() and pci_bus_add_devices()?  The latter will
-    just call the former, so it looks redundant.  And the latter is
-    locked but not the former?
-
-  - Struct zpci_bus has a "resources" list.  I guess this contains the
-    &zbus->bus_resource put there in zpci_bus_alloc(), plus an entry
-    for every BAR of every device on the bus (I guess you'd never see
-    an actual PCI-to-PCI bridge on s390?), kalloc'ed in
-    zpci_setup_bus_resources()?
-
-    What happens when zpci_bus_release() calls
-    pci_free_resource_list() on &zbus->resources?  It looks like that
-    ultimately calls kfree(), which is OK for the
-    zpci_setup_bus_resources() stuff, but what about the
-    zbus->bus_resource that was not kalloc'ed?
-
-> ---
->  arch/s390/pci/pci.c     | 16 ++++++++++------
->  arch/s390/pci/pci_bus.c | 12 +++++-------
->  arch/s390/pci/pci_bus.h |  3 +--
->  drivers/pci/bus.c       | 23 +++++++++++++++++++++++
->  include/linux/pci.h     |  1 +
->  5 files changed, 40 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> index ef38b1514c77..e16afacc8fd1 100644
-> --- a/arch/s390/pci/pci.c
-> +++ b/arch/s390/pci/pci.c
-> @@ -544,8 +544,7 @@ static struct resource *__alloc_res(struct zpci_dev *zdev, unsigned long start,
->  	return r;
->  }
->  
-> -int zpci_setup_bus_resources(struct zpci_dev *zdev,
-> -			     struct list_head *resources)
-> +int zpci_setup_bus_resources(struct zpci_dev *zdev)
->  {
->  	unsigned long addr, size, flags;
->  	struct resource *res;
-> @@ -581,7 +580,6 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
->  			return -ENOMEM;
->  		}
->  		zdev->bars[i].res = res;
-> -		pci_add_resource(resources, res);
->  	}
->  	zdev->has_resources = 1;
->  
-> @@ -590,17 +588,23 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
->  
->  static void zpci_cleanup_bus_resources(struct zpci_dev *zdev)
->  {
-> +	struct resource *res;
->  	int i;
->  
-> +	pci_lock_rescan_remove();
-
-What exactly is this protecting?  This doesn't seem like quite the
-right place since we're not adding/removing a pci_dev here.  Is this
-to protect the bus->resources list in pci_bus_remove_resource()?
-
->  	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> -		if (!zdev->bars[i].size || !zdev->bars[i].res)
-> +		res = zdev->bars[i].res;
-> +		if (!res)
->  			continue;
->  
-> +		release_resource(res);
-> +		pci_bus_remove_resource(zdev->zbus->bus, res);
->  		zpci_free_iomap(zdev, zdev->bars[i].map_idx);
-> -		release_resource(zdev->bars[i].res);
-> -		kfree(zdev->bars[i].res);
-> +		zdev->bars[i].res = NULL;
-> +		kfree(res);
->  	}
->  	zdev->has_resources = 0;
-> +	pci_unlock_rescan_remove();
->  }
->  
->  int pcibios_device_add(struct pci_dev *pdev)
-> diff --git a/arch/s390/pci/pci_bus.c b/arch/s390/pci/pci_bus.c
-> index 6a8da1b742ae..a99926af2b69 100644
-> --- a/arch/s390/pci/pci_bus.c
-> +++ b/arch/s390/pci/pci_bus.c
-> @@ -41,9 +41,7 @@ static int zpci_nb_devices;
+> From: Mohammed Gamal <mgamal@redhat.com>
+> Sent: Friday, February 17, 2023 12:44 PM
+> ...
+> --- a/drivers/hv/connection.c
+> +++ b/drivers/hv/connection.c
+> @@ -409,6 +409,10 @@ void vmbus_disconnect(void)
 >   */
->  static int zpci_bus_prepare_device(struct zpci_dev *zdev)
+>  struct vmbus_channel *relid2channel(u32 relid)
 >  {
-> -	struct resource_entry *window, *n;
-> -	struct resource *res;
-> -	int rc;
-> +	int rc, i;
->  
->  	if (!zdev_enabled(zdev)) {
->  		rc = zpci_enable_device(zdev);
-> @@ -57,10 +55,10 @@ static int zpci_bus_prepare_device(struct zpci_dev *zdev)
->  	}
->  
->  	if (!zdev->has_resources) {
-> -		zpci_setup_bus_resources(zdev, &zdev->zbus->resources);
-> -		resource_list_for_each_entry_safe(window, n, &zdev->zbus->resources) {
-> -			res = window->res;
-> -			pci_bus_add_resource(zdev->zbus->bus, res, 0);
-> +		zpci_setup_bus_resources(zdev);
-> +		for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +			if (zdev->bars[i].res)
-> +				pci_bus_add_resource(zdev->zbus->bus, zdev->bars[i].res, 0);
->  		}
->  	}
->  
-> diff --git a/arch/s390/pci/pci_bus.h b/arch/s390/pci/pci_bus.h
-> index e96c9860e064..af9f0ac79a1b 100644
-> --- a/arch/s390/pci/pci_bus.h
-> +++ b/arch/s390/pci/pci_bus.h
-> @@ -30,8 +30,7 @@ static inline void zpci_zdev_get(struct zpci_dev *zdev)
->  
->  int zpci_alloc_domain(int domain);
->  void zpci_free_domain(int domain);
-> -int zpci_setup_bus_resources(struct zpci_dev *zdev,
-> -			     struct list_head *resources);
-> +int zpci_setup_bus_resources(struct zpci_dev *zdev);
->  
->  static inline struct zpci_dev *zdev_from_bus(struct pci_bus *bus,
->  					     unsigned int devfn)
-> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> index 83ae838ceb5f..f021f1d4af9f 100644
-> --- a/drivers/pci/bus.c
-> +++ b/drivers/pci/bus.c
-> @@ -76,6 +76,29 @@ struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n)
->  }
->  EXPORT_SYMBOL_GPL(pci_bus_resource_n);
->  
-> +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res)
-> +{
-> +	struct pci_bus_resource *bus_res, *tmp;
-> +	int i;
-> +
-> +	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> +		if (bus->resource[i] == res) {
-> +			bus->resource[i] = NULL;
-> +			return;
-> +		}
-> +	}
-> +
-> +	list_for_each_entry_safe(bus_res, tmp, &bus->resources, list) {
-> +		if (bus_res->res == res) {
-> +			list_del(&bus_res->list);
-> +			kfree(bus_res);
-> +			return;
-> +		}
-> +	}
-> +	return;
-> +
+> +	if (vmbus_connection.channels =3D=3D NULL) {
+> +		pr_warn_once("relid2channel: relid=3D%d: No channels mapped!\n",
+> relid);
 
-Superfluous "return" and blank line.
+Looks good to me except that the line exceeds 80 characters.
+Please run "scripts/checkpatch.pl" to detect that.
+For this patch, I guess Wei may be willing to help fix it.
 
-> +}
-> +
->  void pci_bus_remove_resources(struct pci_bus *bus)
->  {
->  	int i;
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index adffd65e84b4..3b1974e2ec73 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1436,6 +1436,7 @@ void pci_bus_add_resource(struct pci_bus *bus, struct resource *res,
->  			  unsigned int flags);
->  struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n);
->  void pci_bus_remove_resources(struct pci_bus *bus);
-> +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res);
->  int devm_request_pci_bus_resources(struct device *dev,
->  				   struct list_head *resources);
->  
-> -- 
-> 2.37.2
-> 
+> +		return NULL;
+> +	}
+>  	if (WARN_ON(relid >=3D MAX_CHANNEL_RELIDS))
+>  		return NULL;
+>  	return READ_ONCE(vmbus_connection.channels[relid]);
+> --
+
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
