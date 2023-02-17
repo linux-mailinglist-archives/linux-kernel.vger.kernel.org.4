@@ -2,129 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34B169AEA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D243D69AEAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjBQO5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 09:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S230241AbjBQO62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 09:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjBQO50 (ORCPT
+        with ESMTP id S230199AbjBQO6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 09:57:26 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2A36EBB3;
-        Fri, 17 Feb 2023 06:57:00 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HEgIJX027606;
-        Fri, 17 Feb 2023 14:56:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=e8xe4P5N3/xfcsU15zARpw5D2BXKecFA5uBFpgNAqII=;
- b=NPOZAI4rcgGtbPqP+Vknc0HK9sc704yKXJm9Rk/sHexqM/zyx6s/1jqUgyJDTQ88HirG
- Xpz51XXN2KcuxxHo27uqUcn5atw1OJVG/2zMh1iiN8D8VagyvHNcQgXVaPpoB04kj1nX
- +/xMsZ2AI56Xdj1CFb2eBGmbSM1grpq+pwNSo1ftgL1k2gYKAbGO0yzXWLtrPIEliQld
- umOvTQ5NqbQVWzijypxevPkyptb8nEJkuwmzctkCuMMF7eIfVM95Ti7BDK9Xudnu+ka0
- 2UD4Rno1ZhIRV9SnirQ6UBr6vHeUZ20p4f0jQL+PRpetve1nEyW0vyk4Z6xjMGx6pxNG Jw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntbjura57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 14:56:14 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HCTHc9007447;
-        Fri, 17 Feb 2023 14:56:13 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3np2n7r620-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 14:56:12 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HEuARL1245844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 14:56:11 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C826758066;
-        Fri, 17 Feb 2023 14:56:10 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C77858056;
-        Fri, 17 Feb 2023 14:56:09 +0000 (GMT)
-Received: from [9.77.136.58] (unknown [9.77.136.58])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 14:56:09 +0000 (GMT)
-Message-ID: <7dc31552-1b7a-aeaa-eb88-a60d96e28f3c@linux.ibm.com>
-Date:   Fri, 17 Feb 2023 09:56:08 -0500
+        Fri, 17 Feb 2023 09:58:04 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B034E6F7FB;
+        Fri, 17 Feb 2023 06:57:34 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 729CE1BF20E;
+        Fri, 17 Feb 2023 14:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676645813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cEnX0yXLJNMgFyPNqnorJyxP7vl2c+Yzt69qZEI0Noc=;
+        b=NzGLiSzkHc4BRsbrfVAIZsexg8eNvIKWNG5PfPzY1rkwOyEPqdJ2keLi7G0W6pPAHAZoIT
+        6N2mIV88OQOLylqCvYNat2ZrUzxCT85L+zv/9Cq1FV4BaQIAcvv6QptlcNQ/byV5n20qFb
+        av0SughLIRPX9OdYqdvP/PiRC1pz4/BaQCE/k8dNMdqDjY0AaqgvVVoo4ftfz3OpPom3qe
+        eBwS2tz6FmQGBnZrUJiMexSwSFusVt31SqzxmceznojQiwSPHV7aG0yQBzxUdM3gt7AlH5
+        itsdn6lGUDD0IF6DeCm2YWFMiqWyR8Mec4lZiE/stGamPZj1bsVT0bpJ7V2PqQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v6 00/10] Add the PowerQUICC audio support using the QMC
+Date:   Fri, 17 Feb 2023 15:56:35 +0100
+Message-Id: <20230217145645.1768659-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 4/6] s390/pci: Use dma-iommu layer
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-References: <20230215120327.947336-1-schnelle@linux.ibm.com>
- <20230215120327.947336-5-schnelle@linux.ibm.com>
- <4ad0d2b9-2465-b42d-c0f9-b48caadfd72c@linux.ibm.com>
- <59a61553a81282fed88c03af096b2a0830b94302.camel@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <59a61553a81282fed88c03af096b2a0830b94302.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BUSQb5EkyR9LCL0HNzLyWQRHkR5GSLbG
-X-Proofpoint-ORIG-GUID: BUSQb5EkyR9LCL0HNzLyWQRHkR5GSLbG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_09,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=662
- impostorscore=0 clxscore=1015 spamscore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302170132
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 3:51 AM, Niklas Schnelle wrote:
-> On Wed, 2023-02-15 at 13:00 -0500, Matthew Rosato wrote:
->> On 2/15/23 7:03 AM, Niklas Schnelle wrote:
->>> While s390 already has a standard IOMMU driver and previous changes have
->>> added I/O TLB flushing operations this driver is currently only used for
->>> user-space PCI access such as vfio-pci. For the DMA API s390 instead
->>> utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
->>> the same hardware and shares some code but requires a complex and
->>> fragile hand over between DMA API and IOMMU API use of a device and
->>> despite code sharing still leads to significant duplication and
->>> maintenance effort. Let's utilize the common code DMAP API
->>> implementation from drivers/iommu/dma-iommu.c instead allowing us to
->>> get rid of arch/s390/pci/pci_dma.c.
->>>
->>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->>> ---
->>
->> FYI, this patch doesn't fit on top of iommu-next, I'd guess at least due to baolu's 'Retire detach_dev callback' series, which removed .detach_dev and added .set_platform_dma_ops for s390-iommu.  That's relevant here, because now that this patch enables dma-iommu for s390 and removes the platform DMA ops it must now remove .set_platform_dma_ops/s390_iommu_set_platform_dma for s390-iommu.
->>
->> Matt
-> 
-> 
-> Ok, yes this series is currently against v6.2-rc8. Should I rebase
-> against iommu-next and send a v7 before further review or after?
-> 
+Hi,
 
-So, overall I'm fine with the code in this patch (and this series) at this point; however I'd like to do one more pass of testing rebased on top of iommu-next / with the set_platform_dma collision handled, so I'm going to hold off on tagging my review of this one until v7.  That really only impacts this patch so if you want to give others a chance to review the rest of the series before rolling out v7 that's OK by me.  
+This series adds support for audio using the QMC controller available in
+some Freescale PowerQUICC SoCs.
 
-Thanks,
-Matt
+This series contains three parts in order to show the different blocks
+hierarchy and their usage in this support.
+
+The first one is related to TSA (Time Slot Assigner).
+The TSA handles the data present at the pin level (TDM with up to 64
+time slots) and dispatchs them to one or more serial controller (SCC).
+
+The second is related to QMC (QUICC Multichannel Controller).
+The QMC handles the data at the serial controller (SCC) level and splits
+again the data to creates some virtual channels.
+
+The last one is related to the audio component (QMC audio).
+It is the glue between the QMC controller and the ASoC component. It
+handles one or more QMC virtual channels and creates one DAI per QMC
+virtual channels handled.
+
+Compared to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230216134226.1692107-1-herve.codina@bootlin.com/
+this v6 series mainly:
+  - fixes bindings
+
+Best regards,
+Herve Codina
+
+Changes v5 -> v6
+  - Patch 1
+    Fix blank lines and spaces
+    Remove fsl,diagnostic-mode
+    Add some maxItems values
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+
+  - Patch 2
+    Remove fsl,diagnostic-mode
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+    Add 'Acked-by: Li Yang <leoyang.li@nxp.com>'
+
+  - Patch 3
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+
+  - Patch 5
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v4 -> v5
+  - patch 1
+    Rename fsl,tsa.yaml to fsl,cpm1-tsa.yaml
+    Rename #serial-cells to #fsl,serial-cells and add a description
+    Fix typos
+    Remove examples present in description
+    Use a pattern property for fsl,[rt]x-ts-routes
+
+  - patch 2
+    Remove one left out_8() ppc specific function call
+    Remove the no more needed PPC dependency in case of COMPILE_TEST
+
+  - patch 4
+    Add 'Acked-by: Michael Ellerman <mpe@ellerman.id.au>'
+
+  - patch 5
+    Rename fsl,qmc.yaml to fsl,cpm1-scc-qmc.yaml
+    Rename #chan-cells to #fsl,chan-cells and add a description
+
+  - patch 6
+    Add the SOC_FSL dependency in case of COMPILE_TEST (issue raised by
+    the kernel test robot).
+    Fix a typo in commit log
+    Add 'Acked-by: Li Yang <leoyang.li@nxp.com>'
+
+Changes v3 -> v4
+  - patches 2, 6 and 9
+    Update code comment format.
+
+  - patch 1
+    Fix some description formats.
+    Add 'additionalProperties: false' in subnode.
+    Move fsl,mode to fsl,diagnostic-mode.
+    Change clocks and clock-names properties.
+    Add '#serial-cells' property related to the newly introduced
+    fsl,tsa-serial phandle.
+
+  - patch 2
+    Move fsl,mode to fsl,diagnostic-mode.
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and update the related API.
+    Add missing locks.
+
+  - patch 5
+    Fix some description format.
+    Replace the fsl,tsa phandle and the fsl,tsa-cell-id property by a
+    fsl,tsa-serial phandle.
+    Rename fsl,mode to fsl,operational-mode and update its description.
+
+  - patch 6
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and use the TSA updated API.
+    Rename fsl,mode to fsl,operational-mode.
+
+  - patch 8
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v2 -> v3
+  - All bindings
+    Rename fsl-tsa.h to fsl,tsa.h
+    Add missing vendor prefix
+    Various fixes (quotes, node names, upper/lower case)
+
+  - patches 1 and 2 (TSA binding specific)
+    Remove 'reserved' values in the routing tables
+    Remove fsl,grant-mode
+    Add a better description for 'fsl,common-rxtx-pins'
+    Fix clocks/clocks-name handling against fsl,common-rxtx-pins
+    Add information related to the delays unit
+    Removed FSL_CPM_TSA_NBCELL
+    Fix license in binding header file fsl,tsa.h
+
+  - patches 5 and 6 (QMC binding specific)
+    Remove fsl,cpm-command property
+    Add interrupt property constraint
+
+  - patches 8 and 9 (QMC audio binding specific)
+    Remove 'items' in compatible property definition
+    Add missing 'dai-common.yaml' reference
+    Fix the qmc_chan phandle definition
+
+  - patch 2 and 6
+    Use io{read,write}be{32,16}
+    Change commit subjects and logs
+
+  - patch 4
+    Add 'Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+Changes v1 -> v2:
+  - patch 2 and 6
+    Fix kernel test robot errors
+
+  - other patches
+    No changes
+
+Herve Codina (10):
+  dt-bindings: soc: fsl: cpm_qe: Add TSA controller
+  soc: fsl: cpm1: Add support for TSA
+  MAINTAINERS: add the Freescale TSA controller entry
+  powerpc/8xx: Use a larger CPM1 command check mask
+  dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+  soc: fsl: cpm1: Add support for QMC
+  MAINTAINERS: add the Freescale QMC controller entry
+  dt-bindings: sound: Add support for QMC audio
+  ASoC: fsl: Add support for QMC audio
+  MAINTAINERS: add the Freescale QMC audio entry
+
+ .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      |  172 ++
+ .../bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml |  215 +++
+ .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
+ MAINTAINERS                                   |   25 +
+ arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+ drivers/soc/fsl/qe/Kconfig                    |   23 +
+ drivers/soc/fsl/qe/Makefile                   |    2 +
+ drivers/soc/fsl/qe/qmc.c                      | 1533 +++++++++++++++++
+ drivers/soc/fsl/qe/tsa.c                      |  846 +++++++++
+ drivers/soc/fsl/qe/tsa.h                      |   42 +
+ include/dt-bindings/soc/cpm1-fsl,tsa.h        |   13 +
+ include/soc/fsl/qe/qmc.h                      |   71 +
+ sound/soc/fsl/Kconfig                         |    9 +
+ sound/soc/fsl/Makefile                        |    2 +
+ sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
+ 15 files changed, 3806 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ create mode 100644 drivers/soc/fsl/qe/qmc.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.h
+ create mode 100644 include/dt-bindings/soc/cpm1-fsl,tsa.h
+ create mode 100644 include/soc/fsl/qe/qmc.h
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
+
+-- 
+2.39.1
+
