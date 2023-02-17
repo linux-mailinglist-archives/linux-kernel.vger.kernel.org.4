@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936A469B53F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BE269B546
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjBQWGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 17:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
+        id S229729AbjBQWIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 17:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBQWGM (ORCPT
+        with ESMTP id S229659AbjBQWIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:06:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B04D5DE31;
-        Fri, 17 Feb 2023 14:06:11 -0800 (PST)
+        Fri, 17 Feb 2023 17:08:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E4863BDF;
+        Fri, 17 Feb 2023 14:08:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2400B82DD1;
-        Fri, 17 Feb 2023 22:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB33C433EF;
-        Fri, 17 Feb 2023 22:06:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8608461349;
+        Fri, 17 Feb 2023 22:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604C5C433EF;
+        Fri, 17 Feb 2023 22:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676671568;
-        bh=IjMYXqZfSaF0uyHmjW79JznzTpnlZIbAQMOTrHR9bm0=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=rRxsE3x6aNrX4qK9JzhvD8tFwxpsmNWeJjd8nIHRFmaAgk3D/ofYu3BbPcNqrvsJk
-         V4sHHGMUtPZ8r4DiDcyiK2kmlvpP0kj/37AmyMFyTTwIGQBNLxhiQgQ/rEsJCr2YCO
-         YpxzgLQXaYrp8I75HteqDNBTvn1UG0qQZUgp/lluXab4vmbRC7Hx8DTKi6kriIYZz0
-         d26HBBjhoXgpSX0M/Rvz/iC3effFvZ9nblZRhjukxf+s4AOz+mI8j7YXp63oCiSRM4
-         fWh8OtbdcFqnbl6HH04BCzEEI81KmhxYGddemrz6LAU8q4lDgNWnphU2uW6wgJIXOC
-         S4CpvirCzWtKQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230217155802.848178-1-krzysztof.kozlowski@linaro.org>
-References: <20230217155802.848178-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-qcom-qspi: document OPP and
- power-domains
-Message-Id: <167667156624.105826.15926331460082215742.b4-ty@kernel.org>
-Date:   Fri, 17 Feb 2023 22:06:06 +0000
+        s=k20201202; t=1676671716;
+        bh=Xbda1OXgKnV+klepby0tkD+9nTNOKlwNq7a9ZioG46k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s+Zp0wvqNx0G2fwh9RRKgtEIIdu2l04WmJAkzuCbTIkCH6izplRTBSycN0T2xfzp5
+         gMcbOZynOpet0/x4NgpB1ja6Ru4KA9RT524mkIofUII6iirar/l+FBKTMqWEKDAO7F
+         8LfU9JNkXSd5gr4QS6T8165ckxoTOA6lwXIqJeg3vmua8Ehe3xEeYqED1Ya3phLLsi
+         whJbfDBVCXUV2UGsMyRzvk+HqwHB7Pk6fDtMiWEYA3A6xCb0bWLCTt5VA7ragpim4M
+         yGHqJ9HwTPV72TtNyFj57d3AOtis+iTxe0uN1HmYMzMz8ME9unXBput38pMLUc55Jv
+         a4Bhr5MnRk5lg==
+Date:   Fri, 17 Feb 2023 23:08:32 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/5] i2c: hpe: Add GXP SoC I2C Controller
+Message-ID: <Y+/64OlWnV8f0GOL@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, nick.hawkins@hpe.com,
+        verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230217155054.99757-1-nick.hawkins@hpe.com>
+ <20230217155054.99757-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kcqR8OLOiCis4cLy"
+Content-Disposition: inline
+In-Reply-To: <20230217155054.99757-2-nick.hawkins@hpe.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,41 +62,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 16:58:02 +0100, Krzysztof Kozlowski wrote:
-> QSPI on Qualcomm SDM845, SC7180 and SC7280 SoCs uses OPP table (both in
-> DTS and Linux driver) and is suuplied by CX power domain.  Document
-> missing properties to fix:
-> 
->   sc7280-idp2.dtb: spi@88dc000: Unevaluated properties are not allowed ('operating-points-v2', 'power-domains' were unexpected)
-> 
-> 
-> [...]
 
-Applied to
+--kcqR8OLOiCis4cLy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   broonie/spi.git for-next
+On Fri, Feb 17, 2023 at 09:50:50AM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>=20
+> The GXP SoC supports 10 I2C engines. Each I2C engine is completely
+> independent and can function both as an I2C master and I2C slave. The
+> I2C master can operate in a multi master environment. The engines support
+> a scalable speed from 8kHZ to 1.5 Mhz.
+>=20
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>=20
 
-Thanks!
+Thank you for adding the #defines, it makes the code much easier to
+understand. I noticed one thing to fix, but I will send an incremental
+patch for it.
 
-[1/1] spi: dt-bindings: qcom,spi-qcom-qspi: document OPP and power-domains
-      commit: 7234d746a8339066313518bfa024fa03f363a55e
+Applied to for-next, thanks!
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--kcqR8OLOiCis4cLy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPv+uAACgkQFA3kzBSg
+KbamBg/+K556Vq6DNYht3Ziw8Lm/9cOi1/Z51cMfrlyjdHj7ceKQJv2jqUvbNyfG
+QTvnp2FIf4eG1jXgYdTSHR//E0FdQdK3+85uEagGJ+lShBR09PNUh681Kk6RVHuD
+ymbXKbTsZuDCXoq7Ia7EoO3iKEQRoPdXuRkEeHNG4VrtXRTXIMM8ef03dum+u+g6
+H9YnbV+pZffA1DUp3nsXiuLLNKbjU3dQmuYvD2ir69trXfVEKXo9K1ZIdXA3nGgp
+4Y/N4hYmRz/Sw1o7tMi0ZXgVzCC/SVNSAIj64gqocSDIoQf124A35OfvjORi/XFA
++MW9M43TwS0W8fFOkp9lh4zq2XbkEMjNl489LGVOkDqyWnHtfzgdNBRhLHadYPip
+AkCaeqWNnmO7NzFQltrS2A4FkFMdFWoYbSeNe6rUwqDelS4OvljdxhZc/eJVgJRk
+Z3TWoXe4hvVBZTC/me49RG8Im3i+hz1DWGrAWAZdn5kOiSUEUqxm4sxd8ITi07bG
+22ZRneoz8JrGHfc4Lmm7pPelUqvGQKsFUo3jLC5weLVXc5pDlxb4tvqFyO32cMB3
+dHoNbSBLzBk4qjXb+ewrJQsya4DjPx63HHifi3y4rMCEjKdYLyqQmY4b9T4yt8De
+vvugqCEvqhBEg9adEJ4TQ3kaf/99/hnuhQ0e1EKV6ATxL/Dt/C8=
+=WoRI
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
+--kcqR8OLOiCis4cLy--
