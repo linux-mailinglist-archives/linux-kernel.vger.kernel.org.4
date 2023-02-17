@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056BB69ABC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CBE69ABD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBQMpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S229829AbjBQMrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBQMpd (ORCPT
+        with ESMTP id S229522AbjBQMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:45:33 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0185954D73
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:45:31 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pT07G-0007SF-KU; Fri, 17 Feb 2023 13:45:30 +0100
-Message-ID: <4c6089a3-fb56-39c5-3f5a-79c20ffa34df@leemhuis.info>
-Date:   Fri, 17 Feb 2023 13:45:30 +0100
+        Fri, 17 Feb 2023 07:47:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D323254D73
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:47:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CC6B61B19
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 12:47:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0D2C433D2;
+        Fri, 17 Feb 2023 12:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676638052;
+        bh=muiZ7Zdm8EKyUHP3hRfEoY7iYZimVLoMBdNf7RauiNY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OuNl7GNRtP2kWrnIjrnP10xasJEDvv64vRhawteuaOE56Jh4EX0+Ggq/cMuWlm6eU
+         LuErd1jchq6pg/1ggVYA2ZA1H8WqElsFRi/gUrG270CFgNYZC5EeZvT5xMfflTX9ge
+         TqHo2EtIhXyPP1Nvd7LbnXlzIkgQtg4gU4nymqZroYwyorcFAGN81OTqYttKoSCcT3
+         utcIdaw2fdb+m37CI4+bZW6sgQchu0cGHMThfTUkJNLpgZ9z7Vc+oHRet+Ol9H68p7
+         HwJBLll+/WZjGeq2nq8x0FRbRUmj948uCTdU0aENN70RLVwbR340B5fNcRrnCWAlEe
+         3+hl+zgARyDKw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Brost <matthew.brost@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/guc: avoid FIELD_PREP warning
+Date:   Fri, 17 Feb 2023 13:46:50 +0100
+Message-Id: <20230217124724.1324126-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: regression: nfs mount (even idle) eventually hangs server
- #forregzbot
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <65ed34338c69cb034295f2c9cbe0af684d65d30f.camel@gmx.de>
- <0bee316d-8b9c-055b-4fdc-0abd151799d7@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <0bee316d-8b9c-055b-4fdc-0abd151799d7@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676637932;f901104d;
-X-HE-SMSGID: 1pT07G-0007SF-KU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 22.12.22 12:19, Thorsten Leemhuis wrote:
-> [Note: this mail contains only information for Linux kernel regression
-> tracking. Mails like these contain '#forregzbot' in the subject to make
-> then easy to spot and filter out. The author also tried to remove most
-> or all individuals from the list of recipients to spare them the hassle.]
-> 
-> On 21.12.22 09:59, Mike Galbraith wrote:
->> scenario: /home/mikeg of desktop box mounted by lappy, lappy sitting
->> idle with user mikeg not even logged in.  Reclaim inducing activity on
->> desktop box eventually leads to spew below.  I've hung the box three
->> times in two days, twice with light client side activity, and below
->> with none, ie with the mount point allegedly merely existing. Sans nfs
->> mount, box seems perfectly fine. 6.1 didn't reproduce either, so it
->> would appear to be a merge window bug.
-> 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced v5.19..v6.0
-> #regzbot title nfs: mount (even idle) eventually hangs server
-> #regzbot ignore-activity
+With gcc-7 and earlier, there are lots of warnings like
 
-#regzbot fix: f385f7d244134246f984975ed34cd75f77de4
-#regzbot ignore-activity
+In file included from <command-line>:0:0:
+In function '__guc_context_policy_add_priority.isra.66',
+    inlined from '__guc_context_set_prio.isra.67' at drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3292:3,
+    inlined from 'guc_context_set_prio' at drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3320:2:
+include/linux/compiler_types.h:399:38: error: call to '__compiletime_assert_631' declared with attribute error: FIELD_PREP: mask is not constant
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                      ^
+...
+drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:2422:3: note: in expansion of macro 'FIELD_PREP'
+   FIELD_PREP(GUC_KLV_0_KEY, GUC_CONTEXT_POLICIES_KLV_ID_##id) | \
+   ^~~~~~~~~~
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Make sure that GUC_KLV_0_KEY is an unsigned value to avoid the warning.
 
+Fixes: 77b6f79df66e ("drm/i915/guc: Update to GuC version 69.0.3")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
+index 58012edd4eb0..4f4f53c42a9c 100644
+--- a/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
++++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
+@@ -29,9 +29,9 @@
+  */
+ 
+ #define GUC_KLV_LEN_MIN				1u
+-#define GUC_KLV_0_KEY				(0xffff << 16)
+-#define GUC_KLV_0_LEN				(0xffff << 0)
+-#define GUC_KLV_n_VALUE				(0xffffffff << 0)
++#define GUC_KLV_0_KEY				(0xffffu << 16)
++#define GUC_KLV_0_LEN				(0xffffu << 0)
++#define GUC_KLV_n_VALUE				(0xffffffffu << 0)
+ 
+ /**
+  * DOC: GuC Self Config KLVs
+-- 
+2.39.1
 
