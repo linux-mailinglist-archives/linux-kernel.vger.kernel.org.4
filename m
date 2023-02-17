@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D1969A3C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4BE69A3C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjBQCHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 21:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S230298AbjBQCHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 21:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQCHO (ORCPT
+        with ESMTP id S229793AbjBQCHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Feb 2023 21:07:14 -0500
 Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD65E4BEB5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD50F498B9;
         Thu, 16 Feb 2023 18:07:11 -0800 (PST)
 X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
         LIVER,40,3)
@@ -33,10 +33,12 @@ To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
 CC:     <lgirdwood@gmail.com>, <cy_huang@richtek.com>,
         <u0084500@gmail.com>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>
-Subject: [PATCH v2 0/2] Add Richtek RT5739 switching voltage regulator support
-Date:   Fri, 17 Feb 2023 10:06:56 +0800
-Message-ID: <1676599618-24819-1-git-send-email-cy_huang@richtek.com>
+Subject: [PATCH v2 1/2] dt-bindings: regulator: Add Richtek RT5739
+Date:   Fri, 17 Feb 2023 10:06:57 +0800
+Message-ID: <1676599618-24819-2-git-send-email-cy_huang@richtek.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1676599618-24819-1-git-send-email-cy_huang@richtek.com>
+References: <1676599618-24819-1-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -49,12 +51,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiYuan Huang <cy_huang@richtek.com>
 
-This patch set is to add Richtek RT5739 regulator support.
+Add the binding document for Richtek RT5739.
 
-The RT5739 is a step-down switching voltage regulator that delivers a digitally
-programmable output from an input voltage supply from 2.5V to 5.5V. The output
-voltage is programmed through an I2C interface.
-
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
 Since v2:
 - Refine dt-binding patch subject
 - Shorten and refine title and description without too much marketing text.
@@ -63,19 +63,90 @@ Since v2:
 - Remove maxItems in property 'regulator-allowed-modes'
 - Fix the wrong min/max microvolt in binding example. Must be '300000' and
   '1300000', respectively.
- 
-ChiYuan Huang (2):
-  dt-bindings: regulator: Add Richtek RT5739
-  regulator: Add support for Richtek RT5739 voltage regulator
 
- .../bindings/regulator/richtek,rt5739.yaml         |  72 +++++
- drivers/regulator/Kconfig                          |  13 +
- drivers/regulator/Makefile                         |   1 +
- drivers/regulator/rt5739.c                         | 290 +++++++++++++++++++++
- 4 files changed, 376 insertions(+)
+---
+ .../bindings/regulator/richtek,rt5739.yaml         | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
- create mode 100644 drivers/regulator/rt5739.c
 
+diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
+new file mode 100644
+index 00000000..358297d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/richtek,rt5739.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Richtek RT5739 Step-Down Buck Converter
++
++maintainers:
++  - ChiYuan Huang <cy_huang@richtek.com>
++
++description: |
++  The RT5739 is a step-down switching buck converter that can deliver the
++  programmable output voltage from 300mV to 1300mV with wide input voltage
++  supply of 2.5V to 5.5V. It can provide up to 3.5A continuous current
++  capability at over 80% high efficiency.
++
++allOf:
++  - $ref: regulator.yaml#
++
++properties:
++  compatible:
++    enum:
++      - richtek,rt5739
++
++  reg:
++    maxItems: 1
++
++  enable-gpios:
++    maxItems: 1
++
++  richtek,vsel-active-high:
++    description: |
++      If property is present, use the 'VSEL1' register group for buck control.
++      Else, use the 'VSEL0' register group. This depends on external hardware
++      'VSEL' pin connection.
++    type: boolean
++
++  regulator-allowed-modes:
++    description: |
++      buck allowed operating mode
++        0: Auto PFM/PWM mode
++        1: Forced PWM mode
++    items:
++      enum: [0, 1]
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      regulator@50 {
++        compatible = "richtek,rt5739";
++        reg = <0x50>;
++        enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
++        richtek,vsel-active-high;
++        regulator-name = "richtek,rt5739-buck";
++        regulator-min-microvolt = <300000>;
++        regulator-max-microvolt = <1300000>;
++        regulator-allowed-modes = <0 1>;
++        regulator-boot-on;
++      };
++    };
 -- 
 2.7.4
 
