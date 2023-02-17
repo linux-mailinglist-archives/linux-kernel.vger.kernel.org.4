@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C19569A9EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B130D69A9ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjBQLLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        id S230179AbjBQLLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjBQLKi (ORCPT
+        with ESMTP id S230134AbjBQLKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Feb 2023 06:10:38 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17D05B75B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:09:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349D06746B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:09:59 -0800 (PST)
 Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54E9466021CE;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9DF1E66021D1;
         Fri, 17 Feb 2023 11:09:36 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1676632176;
-        bh=Kwd+z51GyilBatKyRaOXykYfGSgdgInb9P6BCS/XdpM=;
+        bh=gbELMwYg817UFw8p4tgNjb0vJPCHEhsb/q4OUGfCW04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lqfdgdTtxMe5XOJK3Nb4Uk62NI0c4UfJKrHh5cksS6ihBGWdEX/sv0t9PCkTu9MYe
-         W/Kx1unge/kkub0VpnCyWfWHXU/ecQ7U3q56GSc5WT7tvDOjSdoMhOfL2jUnQMdhss
-         5n9UNzv9ppea5DNZEoo5esAdIOPeqqdJ2SvR2jPxK7gJ+87KCkuEoPgZF5gUcRuAMr
-         fWFFNT1lxR/cYtyISwEcgtS8GPMbfTh7Aa7x532XANRmUc0OgslyQcG5CIFsY7Z1Gs
-         yBEXPyQ2+4f/Gns9wXZ3LD8pDnkaefsXx21kMcW54HIwTp8onyYh1veX15T4nJrdZG
-         WzUYrp7c6M2CA==
+        b=FyXNbKhAN9r8zmjYArexKlKD/sL/zm9FLMU077oMf3dyp+R8wK+zT91Oc46vl+KiY
+         hlbPYpApmne/scmjHyIwsIni7n6RYRFS2HP7r+Ct8OlpJiw3ZQtWBVMw+h+GYdZ3Zj
+         DWXQih9MJ5S6EJjyjyAlqR5ZKSM1i3wpqwiOmiS+o+Oc5pztwONs2ba8HB5rqCaFFH
+         9/o/ufBwHO+FofaHUTL1y3lHtzKaYf70mu/kD89uRHUBS2BKVhm4d5b3zLTNzlMiAQ
+         W741CtTUXSmDNOsfftyow3Qs1wrCzUoWTO4u+Mo8ZUrvbeB0k1h6mjKXujryG+tB+o
+         UCq/bhLZf5jmA==
 From:   Lucas Tanure <lucas.tanure@collabora.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -40,9 +40,9 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         Lucas Tanure <lucas.tanure@collabora.com>, kernel@collabora.com
-Subject: [PATCH v2 8/9] ASoC: amd: vangogh: Centralize strings definition
-Date:   Fri, 17 Feb 2023 11:08:49 +0000
-Message-Id: <20230217110850.1045250-9-lucas.tanure@collabora.com>
+Subject: [PATCH v2 9/9] ASoC: amd: vangogh: Add components prefix in structs and function names
+Date:   Fri, 17 Feb 2023 11:08:50 +0000
+Message-Id: <20230217110850.1045250-10-lucas.tanure@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230217110850.1045250-1-lucas.tanure@collabora.com>
 References: <20230217110850.1045250-1-lucas.tanure@collabora.com>
@@ -57,109 +57,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace occurrences of strings by their definition, avoiding
-bugs where the string changed, but not all places have been modified.
-While at it rename defines to use NAU8821 codec name instead of NUVOTON
-and align with the other defines.
+Add prefixes 8821/35l41 in structs and function names so future platforms
+can be added and reference the correct sound card.
+Also include acp5x prefix to cs35l41_conf.
 
 Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
 ---
- sound/soc/amd/vangogh/acp5x-mach.c | 31 ++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ sound/soc/amd/vangogh/acp5x-mach.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/sound/soc/amd/vangogh/acp5x-mach.c b/sound/soc/amd/vangogh/acp5x-mach.c
-index 153ce9e84a23..367570e5c60f 100644
+index 367570e5c60f..e5bcd1e6eb73 100644
 --- a/sound/soc/amd/vangogh/acp5x-mach.c
 +++ b/sound/soc/amd/vangogh/acp5x-mach.c
-@@ -22,10 +22,14 @@
- 
- #define DRV_NAME			"acp5x_mach"
- #define DUAL_CHANNEL			2
--#define ACP5X_NUVOTON_CODEC_DAI		"nau8821-hifi"
- #define VG_JUPITER			1
--#define ACP5X_NUVOTON_BCLK		3072000
-+#define ACP5X_NAU8821_BCLK		3072000
- #define ACP5X_NAU8821_FREQ_OUT		12288000
-+#define ACP5X_NAU8821_COMP_NAME 	"i2c-NVTN2020:00"
-+#define ACP5X_NAU8821_DAI_NAME		"nau8821-hifi"
-+#define ACP5X_CS35L41_COMP_LNAME	"spi-VLV1776:00"
-+#define ACP5X_CS35L41_COMP_RNAME	"spi-VLV1776:01"
-+#define ACP5X_CS35L41_DAI_NAME		"cs35l41-pcm"
- 
- static unsigned long acp5x_machine_id;
- static struct snd_soc_jack vg_headset;
-@@ -33,7 +37,8 @@ static struct snd_soc_jack vg_headset;
- SND_SOC_DAILINK_DEF(platform,  DAILINK_COMP_ARRAY(COMP_PLATFORM("acp5x_i2s_dma.0")));
- SND_SOC_DAILINK_DEF(acp5x_i2s, DAILINK_COMP_ARRAY(COMP_CPU("acp5x_i2s_playcap.0")));
- SND_SOC_DAILINK_DEF(acp5x_bt,  DAILINK_COMP_ARRAY(COMP_CPU("acp5x_i2s_playcap.1")));
--SND_SOC_DAILINK_DEF(nau8821,   DAILINK_COMP_ARRAY(COMP_CODEC("i2c-NVTN2020:00", "nau8821-hifi")));
-+SND_SOC_DAILINK_DEF(nau8821,   DAILINK_COMP_ARRAY(COMP_CODEC(ACP5X_NAU8821_COMP_NAME,
-+							     ACP5X_NAU8821_DAI_NAME)));
- 
- static struct snd_soc_jack_pin acp5x_nau8821_jack_pins[] = {
- 	{
-@@ -60,7 +65,7 @@ static int platform_clock_control(struct snd_soc_dapm_widget *w,
- 	struct snd_soc_dai *dai;
- 	int ret = 0;
- 
--	dai = snd_soc_card_get_codec_dai(card, ACP5X_NUVOTON_CODEC_DAI);
-+	dai = snd_soc_card_get_codec_dai(card, ACP5X_NAU8821_DAI_NAME);
- 	if (!dai) {
- 		dev_err(card->dev, "Codec dai not found\n");
- 		return -EIO;
-@@ -76,7 +81,7 @@ static int platform_clock_control(struct snd_soc_dapm_widget *w,
- 		ret = snd_soc_dai_set_sysclk(dai, NAU8821_CLK_FLL_BLK, 0, SND_SOC_CLOCK_IN);
- 		if (ret < 0)
- 			dev_err(dai->dev, "can't set BLK clock %d\n", ret);
--		ret = snd_soc_dai_set_pll(dai, 0, 0, ACP5X_NUVOTON_BCLK, ACP5X_NAU8821_FREQ_OUT);
-+		ret = snd_soc_dai_set_pll(dai, 0, 0, ACP5X_NAU8821_BCLK, ACP5X_NAU8821_FREQ_OUT);
- 		if (ret < 0)
- 			dev_err(dai->dev, "can't set FLL: %d\n", ret);
- 	}
-@@ -161,7 +166,7 @@ static int acp5x_nau8821_hw_params(struct snd_pcm_substream *substream,
- {
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
- 	struct snd_soc_card *card = rtd->card;
--	struct snd_soc_dai *dai = snd_soc_card_get_codec_dai(card, ACP5X_NUVOTON_CODEC_DAI);
-+	struct snd_soc_dai *dai = snd_soc_card_get_codec_dai(card, ACP5X_NAU8821_DAI_NAME);
- 	int ret, bclk;
- 
- 	ret = snd_soc_dai_set_sysclk(dai, NAU8821_CLK_FLL_BLK, 0, SND_SOC_CLOCK_IN);
-@@ -221,8 +226,8 @@ static int acp5x_cs35l41_hw_params(struct snd_pcm_substream *substream,
- 	}
- 
- 	for_each_rtd_components(rtd, i, comp) {
--		if (!(strcmp(comp->name, "spi-VLV1776:00")) ||
--		    !(strcmp(comp->name, "spi-VLV1776:01"))) {
-+		if (!(strcmp(comp->name, ACP5X_CS35L41_COMP_LNAME)) ||
-+		    !(strcmp(comp->name, ACP5X_CS35L41_COMP_RNAME))) {
- 			if (!bclk) {
- 				dev_err(comp->dev, "Invalid sample rate: 0x%x\n", rate);
- 				return -EINVAL;
-@@ -247,17 +252,19 @@ static const struct snd_soc_ops acp5x_cs35l41_play_ops = {
- 
- static struct snd_soc_codec_conf cs35l41_conf[] = {
- 	{
--		.dlc = COMP_CODEC_CONF("spi-VLV1776:00"),
-+		.dlc = COMP_CODEC_CONF(ACP5X_CS35L41_COMP_LNAME),
- 		.name_prefix = "Left",
- 	},
- 	{
--		.dlc = COMP_CODEC_CONF("spi-VLV1776:01"),
-+		.dlc = COMP_CODEC_CONF(ACP5X_CS35L41_COMP_RNAME),
- 		.name_prefix = "Right",
- 	},
+@@ -250,7 +250,7 @@ static const struct snd_soc_ops acp5x_cs35l41_play_ops = {
+ 	.hw_params = acp5x_cs35l41_hw_params,
  };
  
--SND_SOC_DAILINK_DEF(cs35l41, DAILINK_COMP_ARRAY(COMP_CODEC("spi-VLV1776:00", "cs35l41-pcm"),
--						COMP_CODEC("spi-VLV1776:01", "cs35l41-pcm")));
-+SND_SOC_DAILINK_DEF(cs35l41, DAILINK_COMP_ARRAY(COMP_CODEC(ACP5X_CS35L41_COMP_LNAME,
-+							   ACP5X_CS35L41_DAI_NAME),
-+						COMP_CODEC(ACP5X_CS35L41_COMP_RNAME,
-+							   ACP5X_CS35L41_DAI_NAME)));
- 
- static struct snd_soc_dai_link acp5x_dai[] = {
+-static struct snd_soc_codec_conf cs35l41_conf[] = {
++static struct snd_soc_codec_conf acp5x_cs35l41_conf[] = {
  	{
+ 		.dlc = COMP_CODEC_CONF(ACP5X_CS35L41_COMP_LNAME),
+ 		.name_prefix = "Left",
+@@ -266,7 +266,7 @@ SND_SOC_DAILINK_DEF(cs35l41, DAILINK_COMP_ARRAY(COMP_CODEC(ACP5X_CS35L41_COMP_LN
+ 						COMP_CODEC(ACP5X_CS35L41_COMP_RNAME,
+ 							   ACP5X_CS35L41_DAI_NAME)));
+ 
+-static struct snd_soc_dai_link acp5x_dai[] = {
++static struct snd_soc_dai_link acp5x_8821_35l41_dai[] = {
+ 	{
+ 		.name = "acp5x-8821-play",
+ 		.stream_name = "Playback/Capture",
+@@ -294,7 +294,7 @@ static struct snd_soc_dai_link acp5x_dai[] = {
+ 
+ 
+ 
+-static const struct snd_soc_dapm_widget acp5x_8821_widgets[] = {
++static const struct snd_soc_dapm_widget acp5x_8821_35l41_widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+ 	SND_SOC_DAPM_MIC("Int Mic", NULL),
+@@ -303,7 +303,7 @@ static const struct snd_soc_dapm_widget acp5x_8821_widgets[] = {
+ 			    SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
+ };
+ 
+-static const struct snd_soc_dapm_route acp5x_8821_audio_route[] = {
++static const struct snd_soc_dapm_route acp5x_8821_35l41_audio_route[] = {
+ 	/* HP jack connectors - unknown if we have jack detection */
+ 	{ "Headphone", NULL, "HPOL" },
+ 	{ "Headphone", NULL, "HPOR" },
+@@ -316,17 +316,17 @@ static const struct snd_soc_dapm_route acp5x_8821_audio_route[] = {
+ 	{ "Int Mic", NULL, "Platform Clock" },
+ };
+ 
+-static struct snd_soc_card acp5x_card = {
++static struct snd_soc_card acp5x_8821_35l41_card = {
+ 	.name = "acp5x",
+ 	.owner = THIS_MODULE,
+-	.dai_link = acp5x_dai,
+-	.num_links = ARRAY_SIZE(acp5x_dai),
+-	.dapm_widgets = acp5x_8821_widgets,
+-	.num_dapm_widgets = ARRAY_SIZE(acp5x_8821_widgets),
+-	.dapm_routes = acp5x_8821_audio_route,
+-	.num_dapm_routes = ARRAY_SIZE(acp5x_8821_audio_route),
+-	.codec_conf = cs35l41_conf,
+-	.num_configs = ARRAY_SIZE(cs35l41_conf),
++	.dai_link = acp5x_8821_35l41_dai,
++	.num_links = ARRAY_SIZE(acp5x_8821_35l41_dai),
++	.dapm_widgets = acp5x_8821_35l41_widgets,
++	.num_dapm_widgets = ARRAY_SIZE(acp5x_8821_35l41_widgets),
++	.dapm_routes = acp5x_8821_35l41_audio_route,
++	.num_dapm_routes = ARRAY_SIZE(acp5x_8821_35l41_audio_route),
++	.codec_conf = acp5x_cs35l41_conf,
++	.num_configs = ARRAY_SIZE(acp5x_cs35l41_conf),
+ 	.controls = acp5x_8821_controls,
+ 	.num_controls = ARRAY_SIZE(acp5x_8821_controls),
+ };
+@@ -363,7 +363,7 @@ static int acp5x_probe(struct platform_device *pdev)
+ 	dmi_check_system(acp5x_vg_quirk_table);
+ 	switch (acp5x_machine_id) {
+ 	case VG_JUPITER:
+-		card = &acp5x_card;
++		card = &acp5x_8821_35l41_card;
+ 		break;
+ 	default:
+ 		return -ENODEV;
 -- 
 2.39.2
 
