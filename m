@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607DC69B26C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087CB69B277
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBQSjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 13:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S229644AbjBQSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 13:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQSjl (ORCPT
+        with ESMTP id S229512AbjBQSmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:39:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DC73C2F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:39:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B89C561F22
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 18:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C40C433A0;
-        Fri, 17 Feb 2023 18:39:39 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pT5dy-000soD-0H;
-        Fri, 17 Feb 2023 13:39:38 -0500
-Message-ID: <20230217183937.902030316@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Fri, 17 Feb 2023 13:39:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>
-Subject: [for-next][PATCH 3/3] tracing: Remove unnecessary NULL assignment
-References: <20230217183911.775065402@goodmis.org>
+        Fri, 17 Feb 2023 13:42:45 -0500
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E999183D4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:42:43 -0800 (PST)
+Received: by mail-il1-f205.google.com with SMTP id p3-20020a92d683000000b003006328df7bso650243iln.17
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:42:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZE+gpMYJhPMgEpdX9RH7zRNo5DDM3YYvYQepiSP81UA=;
+        b=QD9nglBlOtTeBog6xm81Au7WWRFCXOgHoYQsrKehVIG91b52nLOnMaJSYAVtfk5u7r
+         KusuHwzB9DxkUx6kqiHIpfr3mOFLqOqV2Shgzr5f3Fj86DwrJ91aSz7oDr0VvrFEaJIY
+         IIoxutUhvhv8zs86ZREtZ825P/UaBHOnLhnhFyHAKbyVC4jgB68dw8nzIsvjYKgcL4m2
+         CDsMYHPNpcyYudl/Ned42l3zFXKj3xpjMuYF7wIgk+iLTpYIYvTcy2LmWelvKGDCwrkd
+         /pxb+dm84UXLEAG8YqWztgALRt/SOKOZOJFc3wYmDH63d8J5NvwqAMWBz8/oBoIpTgGY
+         PX2Q==
+X-Gm-Message-State: AO0yUKXpCZe5BGiuecRH1ri5pXRiYMwMR8j50kJPArwMGp5EdKt4XXFc
+        uMx2hOL2IdkK25uCqH0ZNBvU6Z3CbBE24irZMhXHLo07cM+9
+X-Google-Smtp-Source: AK7set/9yU6iGE5VXd4Hoo3temo43RPlBdpCQ6fYX7aXpdIW/kOY7DnL4zBF+unurE/PhlvegqQJy5nvOixBjUFS0uti3zqOWSGd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1d1e:b0:314:b2cd:b265 with SMTP id
+ i30-20020a056e021d1e00b00314b2cdb265mr3198323ila.1.1676659362885; Fri, 17 Feb
+ 2023 10:42:42 -0800 (PST)
+Date:   Fri, 17 Feb 2023 10:42:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bbf72c05f4e9ad5d@google.com>
+Subject: [syzbot] [nfc?] memory leak in nfc_genl_se_io
+From:   syzbot <syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Hello,
 
-Remove unnecessary NULL assignment int create_new_subsystem().
+syzbot found the following issue on:
 
-Link: https://lkml.kernel.org/r/20221123065124.3982439-1-bobo.shaobowang@huawei.com
+HEAD commit:    ceaa837f96ad Linux 6.2-rc8
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12998820c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=74b547d21d6e842b
+dashboard link: https://syzkaller.appspot.com/bug?extid=df64c0a2e8d68e78a4fa
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1273b13f480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1223934f480000
 
-Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/611c72309dbd/disk-ceaa837f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/182986ae7897/vmlinux-ceaa837f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c198e9ad17fc/bzImage-ceaa837f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+df64c0a2e8d68e78a4fa@syzkaller.appspotmail.com
+
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810e03ca60 (size 32):
+  comm "syz-executor354", pid 5068, jiffies 4294945666 (age 13.810s)
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff815090d4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
+    [<ffffffff846a8104>] kmalloc include/linux/slab.h:580 [inline]
+    [<ffffffff846a8104>] kzalloc include/linux/slab.h:720 [inline]
+    [<ffffffff846a8104>] nfc_genl_se_io+0xf4/0x260 net/nfc/netlink.c:1531
+    [<ffffffff83d2cede>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
+    [<ffffffff83d2d217>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+    [<ffffffff83d2d217>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
+    [<ffffffff83d2b5a1>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2574
+    [<ffffffff83d2c5a8>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+    [<ffffffff83d2a4fb>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+    [<ffffffff83d2a4fb>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
+    [<ffffffff83d2a9ca>] netlink_sendmsg+0x39a/0x710 net/netlink/af_netlink.c:1942
+    [<ffffffff83b74b3a>] sock_sendmsg_nosec net/socket.c:714 [inline]
+    [<ffffffff83b74b3a>] sock_sendmsg+0x5a/0x80 net/socket.c:734
+    [<ffffffff83b750bd>] ____sys_sendmsg+0x38d/0x410 net/socket.c:2476
+    [<ffffffff83b79c68>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2530
+    [<ffffffff83b79e0c>] __sys_sendmsg+0x8c/0x100 net/socket.c:2559
+    [<ffffffff8498d8a9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8498d8a9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+
+
 ---
- kernel/trace/trace_events.c | 2 --
- 1 file changed, 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index cf3fd74fa675..b52c4d79eb78 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2261,8 +2261,6 @@ create_new_subsystem(const char *name)
- 	if (!system->name)
- 		goto out_free;
- 
--	system->filter = NULL;
--
- 	system->filter = kzalloc(sizeof(struct event_filter), GFP_KERNEL);
- 	if (!system->filter)
- 		goto out_free;
--- 
-2.39.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
