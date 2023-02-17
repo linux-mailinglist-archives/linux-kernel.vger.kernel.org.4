@@ -2,113 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5821E69A363
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA8469A367
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBQB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 20:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S229970AbjBQBaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 20:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBQB15 (ORCPT
+        with ESMTP id S229506AbjBQBa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 20:27:57 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73FCA1ADE6;
-        Thu, 16 Feb 2023 17:27:55 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.120])
-        by gateway (Coremail) with SMTP id _____8DxXNoa2O5jfJUBAA--.3848S3;
-        Fri, 17 Feb 2023 09:27:54 +0800 (CST)
-Received: from [10.20.42.120] (unknown [10.20.42.120])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr4W2O5jl+80AA--.43407S3;
-        Fri, 17 Feb 2023 09:27:51 +0800 (CST)
-Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
- interface
-To:     Oliver Upton <oliver.upton@linux.dev>
-References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
- <20230214025648.1898508-2-zhaotianrui@loongson.cn>
- <Y+ssT+W27GxDRAAZ@kroah.com>
- <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
- <Y+tbMwXjA0hkiUJA@kroah.com>
- <a44fc722-e3e2-7f8a-0454-f27a8a10d52b@loongson.cn>
- <Y+6FTC1vBeZoZx8V@linux.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <9b7f86e9-d7a9-a197-03f8-c46af46c2b7a@loongson.cn>
-Date:   Fri, 17 Feb 2023 09:27:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <Y+6FTC1vBeZoZx8V@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxzr4W2O5jl+80AA--.43407S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tr4rZr18CrWUJF45WF4kZwb_yoW8WFWfpF
-        WjkFW8KFsYqr4fGrZ2yw1Ig3ZxCw4xJFsxua4Fqw4rZFW5GryxGF1xKF4qkFZYvw4kC3W0
-        va4jvF9xC34qya7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Feb 2023 20:30:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908192DE51;
+        Thu, 16 Feb 2023 17:30:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33C90B8285C;
+        Fri, 17 Feb 2023 01:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04815C433EF;
+        Fri, 17 Feb 2023 01:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676597423;
+        bh=mjauMyOdatAJHhqWE568zlBnBZ7b0HvIVlGXrGxfNWU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kqJSULRaZNwPOTQUlCWiFi2yZo/AXgD4eJpz9LQCKO54jnPRZzRiMskV/QoeFmowM
+         96jvll5p+6rKif6wRtlmY87Hsc397qQFL8jvfHz9z3pQ7d0eh8nHA0sdXEFSIOhXzr
+         18+gRYvcrD2N3TGO4OKn660w/YlBwdmado12sy3I7Xma5qiilTRBSf8PJLm7+UOZxa
+         L9I5CLXCsFdlWA6qfNKfbPybS3djxLdy8DJv/ddPUx3NP0PDmgcd/7UOjKYoFWOYTt
+         imRcawAJLAEYpGwF1B8xaWDY6Ihgrw0zhhTqAl7W4yWpXiQKCyIdYUO+kjnThotLaX
+         YCenB7y7QUPxA==
+Date:   Fri, 17 Feb 2023 10:30:19 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing/probe: trace_probe_primary_from_call(): checked
+ list_first_entry
+Message-Id: <20230217103019.c182a1f6aa0f55f6a8ab5896@kernel.org>
+In-Reply-To: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
+References: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 28 Jan 2023 16:23:41 +0000
+Pietro Borrello <borrello@diag.uniroma1.it> wrote:
+
+> All callers of trace_probe_primary_from_call() check the return
+> value to be non NULL. However, the function returns
+> list_first_entry(&tpe->probes, ...) which can never be NULL.
+> Additionally, it does not check for the list being possibly empty,
+> possibly causing a type confusion on empty lists.
+> Use list_first_entry_or_null() which solves both problems.
+> 
+> Fixes: 60d53e2c3b75 ("tracing/probe: Split trace_event related data from trace_probe")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+
+Looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+And
+
+Fixes: 60d53e2c3b75 ("tracing/probe: Split trace_event related data from trace_probe")
+Cc: stable@vger.kernel.org
+
+Thank you!
+
+> ---
+>  kernel/trace/trace_probe.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 23acfd1c3812..f6b565dced56 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -307,7 +307,7 @@ trace_probe_primary_from_call(struct trace_event_call *call)
+>  {
+>  	struct trace_probe_event *tpe = trace_probe_event_from_call(call);
+>  
+> -	return list_first_entry(&tpe->probes, struct trace_probe, list);
+> +	return list_first_entry_or_null(&tpe->probes, struct trace_probe, list);
+>  }
+>  
+>  static inline struct list_head *trace_probe_probe_list(struct trace_probe *tp)
+> 
+> ---
+> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+> change-id: 20230128-list-entry-null-check-37778efda18c
+> 
+> Best regards,
+> -- 
+> Pietro Borrello <borrello@diag.uniroma1.it>
 
 
-在 2023年02月17日 03:34, Oliver Upton 写道:
-> On Tue, Feb 14, 2023 at 09:00:50PM +0800, Tianrui Zhao wrote:
->> 在 2023年02月14日 17:58, Greg Kroah-Hartman 写道:
->>> On Tue, Feb 14, 2023 at 05:00:56PM +0800, Tianrui Zhao wrote:
->>>>>> +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
->>>>>> +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
->>>>> Why does this arch need new ioctls?
->>>> We want to use this ioctl to access multiple csrs at one time. If without
->>>> this, we only access one csr.
->>> What is wrong with accessing only one csr at a time?  Isn't this what
->>> other architectures do?
->> Generally, using KVM_GET_ONE_GET ioctl to get one reg, but we want a
->> more convenient interface to get serial regs at one time, so we add this
->> ioctl.
-> Have you found register accesses through the KVM_{GET,SET}_ONE_REG
-> ioctls to actually be a bounding issue? I'd be surprised if that were
-> actually the case.
->
-> An architecture-neutral implementation was entertained a few years ago
-> [*], but even then it saved an inconsequential amount of time relative
-> to the rest of VM serialization (at least for arm64). The one thing that
-> series got right was to share the plumbing across all architectures that
-> use the ONE_REG interface (i.e. everyone but x86).
->
-> If you have data that supports the thesis that a batched ioctl is
-> useful then please do share. But in any case this should not use an ioctl
-> tied down to a single architecture.
->
-> [*] https://lore.kernel.org/kvm/20201120125616.14436-1-darkhan@amazon.com/
->
-
-Thanks for your explanation, and we have decided to remove this ioctls.
-
-thanks,
-Tianrui Zhao
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
