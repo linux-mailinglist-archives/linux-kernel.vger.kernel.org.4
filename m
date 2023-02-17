@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D205869A41F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD89169A42A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjBQDET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 22:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S229903AbjBQDNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 22:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBQDER (ORCPT
+        with ESMTP id S229460AbjBQDN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:04:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AC953816;
-        Thu, 16 Feb 2023 19:04:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B83E0B82AF2;
-        Fri, 17 Feb 2023 03:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE80C433EF;
-        Fri, 17 Feb 2023 03:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676603054;
-        bh=tnwZHUNV/A6Ohqf/7DM1M/eShouPHHc1DKhnpkFHCH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q3kP69MGqucrdNFfVA9sfK7SZKXlnLHxzCNecX4QorMGw56xDYPqlkLmfBrNM5ESi
-         fo9+TpSFCATip2io+s3YbuZfexRP3UkuB/keMdtDlQ6OYKV3UWlo+L+64+H9tJpKWM
-         86B53aphhQsaDhVD22TWo1HCVbVjNrt55jTiU4+7xpwH8uyG+KAMZbFkxDcRdEx3tH
-         YDSTQSBR3kiz87IVpJMIH0VjoFHdrL545VuTBV0mYB85SgPDGToZfluyPaPLHpyybB
-         4U4EH/pchFibuT0JFWL0oPukXI7ycYim1aE4dJAs9z3oeUIBw5qityrcPFvuOLPh6L
-         3Zh2R2tQHQaBg==
-Date:   Thu, 16 Feb 2023 19:04:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Steve French <sfrench@samba.org>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 11/17] cifs: Add a function to Hash the contents of an
- iterator
-Message-ID: <Y+7urFTFOCXOq5kp@sol.localdomain>
-References: <20230216214745.3985496-1-dhowells@redhat.com>
- <20230216214745.3985496-12-dhowells@redhat.com>
+        Thu, 16 Feb 2023 22:13:29 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8AE54D07;
+        Thu, 16 Feb 2023 19:13:27 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1676603605;
+        bh=LH/xXQeQJ9b7IeJuEOdjjtQYgBVktXb3iGO/ZdlJOBM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=KXponZxzed7GavKW502p8mcvKO0FOWeQc0gC3KGhtKnTieSpIzxOGx4RcNwtP9q2V
+         Da5TbqsKtmApQqJBCZIBKN4esnXw8ZRd0v6nH3jLrkXTze4QkoBxIvLEzwnSSAgAiO
+         O5RBqn0q9mHHXy8IPdxDXuvwncX+BNeBmifOnfwk=
+Date:   Fri, 17 Feb 2023 03:13:22 +0000
+Subject: [PATCH] dma-buf: make kobj_type structure constant
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216214745.3985496-12-dhowells@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230217-kobj_type-dma-buf-v1-1-b84a3616522c@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIANHw7mMC/x2N4QqCQBAGX0X2dwveCRW9SkTseZ+5ZafcZSjiu
+ 7f0cwaG2aggKwpdqo0yvlp0TAbuUFHbS3qANRqTr31Te3fi1xie9886geNbOMwdi4cc5SwuoiH
+ rghRwyJLa3so0D4PJKaPT5T+63vb9B9H91jl4AAAA
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676603602; l=1123;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=LH/xXQeQJ9b7IeJuEOdjjtQYgBVktXb3iGO/ZdlJOBM=;
+ b=rrQjbf58nObPJhR+ovNy9W4vuE/7AyhUZbdHvb87cT7IzWpI5BE8fvDeBIg0KoH+pxoX+KbT4
+ AUKjKj2iHEEA1TlXGTuWeExpnYQ4BbfzgcccPlk4wjhwdMr80F2E6uM
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 09:47:39PM +0000, David Howells wrote:
-> Add a function to push the contents of a BVEC-, KVEC- or XARRAY-type
-> iterator into a symmetric hash algorithm.
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
-I think you mean a "synchronous hash algorithm".
+Take advantage of this to constify the structure definition to prevent
+modification at runtime.
 
-- Eric
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/dma-buf/dma-buf-sysfs-stats.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+index fbf725fae7c1..6cfbbf0720bd 100644
+--- a/drivers/dma-buf/dma-buf-sysfs-stats.c
++++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+@@ -112,7 +112,7 @@ static void dma_buf_sysfs_release(struct kobject *kobj)
+ 	kfree(sysfs_entry);
+ }
+ 
+-static struct kobj_type dma_buf_ktype = {
++static const struct kobj_type dma_buf_ktype = {
+ 	.sysfs_ops = &dma_buf_stats_sysfs_ops,
+ 	.release = dma_buf_sysfs_release,
+ 	.default_groups = dma_buf_stats_default_groups,
+
+---
+base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
+change-id: 20230217-kobj_type-dma-buf-a2ea6a8a1de3
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
