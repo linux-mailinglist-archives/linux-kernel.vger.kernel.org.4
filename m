@@ -2,123 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7298969B47D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E25169B481
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjBQVQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S229678AbjBQVRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBQVQ5 (ORCPT
+        with ESMTP id S229461AbjBQVRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:16:57 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48F15BDB2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:16:56 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id f3so2157656ljn.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:16:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ak+8LJfZoxeGXvU223WgSUa5zrwLYuaf0G4KExhaBo=;
-        b=WzEOsJAM51nZI+PuUQMFYxrbKH7Kjm8RcRectrj+YJYrBMe+/jr5G9W5GGLK273tAj
-         gyjiRxoptN1RuyRNovdVWFp+ptTyoDHm529ypMikm1AiVSB5GDRWTDsMSOPt9EFaDz2E
-         pQFdM4oRJUIWegWmV0VxOKzhP9sc5f8lirdFKrWE21JUKlh/tWSsWIrK5mqV4YmP0iry
-         jOdqCvOeVogJ3hFYfAIi8tNUZOL0RqszwRCt3aaK0ZJCB0kRRZY0DgfyHNycj3SAnZyB
-         LJUHYJK4iBf+vmfocarwLgTs7Logeygdg3qTkX5+At0uvcMB8dBYFrjcgD+dhuM0EmAF
-         mSDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ak+8LJfZoxeGXvU223WgSUa5zrwLYuaf0G4KExhaBo=;
-        b=DXs6pfgvF8HUrvfs7NuNJl2epvOaIbdpytvoQWkDdk4ZKDj5aRLx0+wDiwtibk82LV
-         eKtw0dZU65A6FA8Ty2eS4KreltdJzh2okskONPJx1wQK4DszlXVDj0wqSx0VYOoZ0HTU
-         SI+p99SAMFxzuhpw5TQVNBU3aKWpIycDGmMZcsn0e4aG1Mwe8PF1NlrqO4eqxP49BHTK
-         6CpUq1KIzyP125WyqMgvETvhBGQjfJKOd//Ac6+HORNUPfVokTF/61HbwTSLiLFjJCZZ
-         06fA5q6qIFRkrBemOyyIYXXtgFk2T3x2yAAs+7Tw7nKIqmo1v9jYSLD+FpmXAq/j1DM7
-         W5YQ==
-X-Gm-Message-State: AO0yUKVwPZ6BijqeW7y2lQ1xkL75cG5cziacVmBKG06t1nU//xuDfDTn
-        0JhUzbHuIR0qu0Ao9s+JVuNr9w==
-X-Google-Smtp-Source: AK7set8VSoLlRuQGJZe18IhRYONY61gU+0TX2DkgH0lkoDkSvTfwelptN1tew4Wv5aXvT6asmBteAw==
-X-Received: by 2002:a2e:7112:0:b0:293:4fff:9f0b with SMTP id m18-20020a2e7112000000b002934fff9f0bmr333071ljc.19.1676668615011;
-        Fri, 17 Feb 2023 13:16:55 -0800 (PST)
-Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05651c204d00b0029571d505a1sm31133ljo.80.2023.02.17.13.16.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 13:16:54 -0800 (PST)
-Message-ID: <76de00dc-f128-e609-7f0c-b53161036b97@linaro.org>
-Date:   Fri, 17 Feb 2023 22:16:52 +0100
+        Fri, 17 Feb 2023 16:17:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4F964B17
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676668621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U58nb+DEF8GEy813UGwea6K+4QQ4/Qwsx/KnDbNVFig=;
+        b=Lz56krSXrg/brGm6oXNssibFJ7XBl+G02Y+OU+spoFg50XSvv1uP+RwzkIfNPCHUTFTRGR
+        DnJvOj5avnLmovQXQh4fZm/3ZwoVigd2dV6VTi+2a18EMC8eFyKTmZJn8NTj86GbbzY2k3
+        7+rle/E81QhYy9Jd53C1QrPF4icDzIk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-640-CF_ujmaLOvCX2kcLbvELXg-1; Fri, 17 Feb 2023 16:16:57 -0500
+X-MC-Unique: CF_ujmaLOvCX2kcLbvELXg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 577CF1871D94;
+        Fri, 17 Feb 2023 21:16:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E2CA71121314;
+        Fri, 17 Feb 2023 21:16:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87a61ckowk.fsf@oc8242746057.ibm.com>
+References: <87a61ckowk.fsf@oc8242746057.ibm.com>
+To:     Alexander Egorenkov <egorenar@linux.ibm.com>
+Cc:     dhowells@redhat.com, axboe@kernel.dk, david@redhat.com,
+        hch@infradead.org, hch@lst.de, hdanton@sina.com, jack@suse.cz,
+        jgg@nvidia.com, jhubbard@nvidia.com, jlayton@kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        logang@deltatee.com, viro@zeniv.linux.org.uk, willy@infradead.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>
+Subject: Re: [PATCH v14 08/17] splice: Do splice read from a file without using ITER_PIPE
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
- deprecated QCM2290 compatible
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
- <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
- <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
- <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
- <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
- <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
- <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <654864.1676668613.1@warthog.procyon.org.uk>
+Date:   Fri, 17 Feb 2023 21:16:53 +0000
+Message-ID: <654865.1676668613@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
 
+> Subject: Re: [PATCH v14 08/17] splice: Do splice read from a file without
+>  using ITER_PIPE
 
-On 17.02.2023 22:13, Bryan O'Donoghue wrote:
-> On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
->> First, it would be nice to know what was the intention of Bryan's commit?
-> 
-> Sorry I've been grazing this thread but, not responding.
-> 
-> - qcom,dsi-ctrl-6g-qcm2290
-> 
-> is non-compliant with qcom,socid-dsi-ctrl which is our desired naming convention, so that's what the deprecation is about i.e. moving this compat to "qcom,qcm2290-dsi-ctrl"
-> 
-> Actually I have the question why we are deciding to go with "sm6115" instead of "qcm2290" ?
-> 
-> The stamp on the package you receive from Thundercomm says "qcm2290" not "sm6115"
-Correct, but QCM2290 is not supported upstream yet.
+Well, I can reproduce it.  Putting a printks in generic_file_splice_read(),
+direct_splice_read() and filemap_splice_read(), however, seems to show that it
+isn't using any of those functions; nor can I see any sign of a splice syscall
+in a strace:-/
 
-SM6115 (a different SoC) however is, but it used the qcm2290 compatible
-as it was a convenient hack to get the DSI host ID recognized based on
-the (identical-to-qcm2290) base register without additional driver changes.
-We're now trying to untangle that mess..
+David
 
-Konrad
-> 
-> ?
-> 
-> ---
-> bod
-> 
-> 
