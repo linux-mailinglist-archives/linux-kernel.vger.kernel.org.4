@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F0C69B515
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B6369B510
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBQVsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        id S229922AbjBQVsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjBQVso (ORCPT
+        with ESMTP id S229640AbjBQVsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:48:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3BA260
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676670471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=if/tW06TDxxLKgUq7/Etw5p2PggjEQkfj1fwjUBcfbU=;
-        b=gaUVGgmRCGeKph1anuoLJyKyYO4SzEaVK/86ry8g1wal5IUzdlD5AkJ5+Z7O/0QCmds3Dt
-        D23kPDYEcu6eP2s0jGtB6A1QV+YMYjpOTrgD+3Qp4uFfirEiRbEZV934EMrXgFr0UniaDb
-        4b8FuIsQ30XOgK0SHHFcrKKZloJ0jAU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-80wKAcFcPWuJ9_HZUpt2Bw-1; Fri, 17 Feb 2023 16:47:47 -0500
-X-MC-Unique: 80wKAcFcPWuJ9_HZUpt2Bw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 631B23815F7B;
-        Fri, 17 Feb 2023 21:47:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1328F492C3E;
-        Fri, 17 Feb 2023 21:47:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <87a61ckowk.fsf@oc8242746057.ibm.com>
-References: <87a61ckowk.fsf@oc8242746057.ibm.com>
-To:     Alexander Egorenkov <egorenar@linux.ibm.com>
-Cc:     dhowells@redhat.com, axboe@kernel.dk, david@redhat.com,
-        hch@infradead.org, hch@lst.de, hdanton@sina.com, jack@suse.cz,
-        jgg@nvidia.com, jhubbard@nvidia.com, jlayton@kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        logang@deltatee.com, viro@zeniv.linux.org.uk, willy@infradead.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>
-Subject: Re: [PATCH v14 08/17] splice: Do splice read from a file without using ITER_PIPE
+        Fri, 17 Feb 2023 16:48:02 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FC01554E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:48:00 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id a8so2067225qtj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:48:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=enluXHsm7DkEc3hL0ajHrApyhPOHqK5EyqrxYkxs80U=;
+        b=pBdWthIls+n16dmQx+0uCIxs88coY3ueOgBTPDqIo2ZjUKm5rXzl00XbA1LHggch4+
+         ayNT9pjqN2zGamMiXfsmYn8z9L10SLkOCrgRny0a8xPqIoiBYBQqrGproEXVqOE1d9RV
+         ho+OSX9aonEFUfurMbwRw0J/ZfFgVXSlvyF71o7ns9lcX+ik9UwUGtr5IKlIZsEEnUTm
+         QfjHZ67OaoNgPkhWnl6YBDrpY7norkpNkC5xGIpTQZbbL5sOG2VY58eUAau8CPXizi6O
+         1QjV34ZZkHhhTxRks41EDe3dJZ0oLoq8uJBgSZIcJERPN+NMKWKeCc6dYkXnKHtw8jus
+         bSCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=enluXHsm7DkEc3hL0ajHrApyhPOHqK5EyqrxYkxs80U=;
+        b=OmwfYZxFC8od3uEf1iyMS4fRgiI9s93JCQUqRUgXiOzy8BKohXDLZs2zNDqhVz5lfp
+         PNKkZjhgMNYJEx4bMagT9QlcMneu+Hf8bCepUTARB/ZFZZPaHUJ7wBj7p03zst8sHaxL
+         AwDE/k8ehiWci5HlGljkLJf9nNRvYPbmNtLPaLanLMCMe41ekqfi7yCpmXv506YfYjla
+         j397TZFQa0vjltkfaDcxXMJI/kiryOv4BZSsWwB+Ufhkkfxpv+dF1X/CEAGneUVYCDxO
+         SxGVYhsasgf88N7vQiMRqwu7ZHX+CzFDgOBuKfxCY/XVCyearQ0LhuvgOAZHXRmMbfI0
+         E0Bw==
+X-Gm-Message-State: AO0yUKXkHq9mYR1QFXpZ3TrRy734npmCBkdhqpHO18lR+uq3qV3mzfLH
+        06e+kFZ2BcfmTPJk3WIirEdF5stVbhs2FbpXFYs=
+X-Google-Smtp-Source: AK7set9s13MPA7KIevE05yTqu6MkLcqJ1s2/ei6hCs9yDNe/IGqHKwYXxV+NibSXi7jOLMm0ZposlQ==
+X-Received: by 2002:a05:622a:389:b0:3ba:138f:7b46 with SMTP id j9-20020a05622a038900b003ba138f7b46mr3732914qtx.42.1676670479446;
+        Fri, 17 Feb 2023 13:47:59 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id r9-20020ac85c89000000b003b869f71eedsm4013713qta.66.2023.02.17.13.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 13:47:58 -0800 (PST)
+Date:   Fri, 17 Feb 2023 13:47:48 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Huang Ying <ying.huang@intel.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH -v5 0/9] migrate_pages(): batch TLB flushing
+In-Reply-To: <20230213123444.155149-1-ying.huang@intel.com>
+Message-ID: <87a6c8c-c5c1-67dc-1e32-eb30831d6e3d@google.com>
+References: <20230213123444.155149-1-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <732890.1676670463.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 17 Feb 2023 21:47:43 +0000
-Message-ID: <732891.1676670463@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +82,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Does the attached fix the problem for you?  The data being written into th=
-e
-pipe needs to be limited to the size of the file.
+On Mon, 13 Feb 2023, Huang Ying wrote:
 
-David
+> From: "Huang, Ying" <ying.huang@intel.com>
+> 
+> Now, migrate_pages() migrate folios one by one, like the fake code as
+> follows,
+> 
+>   for each folio
+>     unmap
+>     flush TLB
+>     copy
+>     restore map
+> 
+> If multiple folios are passed to migrate_pages(), there are
+> opportunities to batch the TLB flushing and copying.  That is, we can
+> change the code to something as follows,
+> 
+>   for each folio
+>     unmap
+>   for each folio
+>     flush TLB
+>   for each folio
+>     copy
+>   for each folio
+>     restore map
+> 
+> The total number of TLB flushing IPI can be reduced considerably.  And
+> we may use some hardware accelerator such as DSA to accelerate the
+> folio copying.
+> 
+> So in this patch, we refactor the migrate_pages() implementation and
+> implement the TLB flushing batching.  Base on this, hardware
+> accelerated folio copying can be implemented.
+> 
+> If too many folios are passed to migrate_pages(), in the naive batched
+> implementation, we may unmap too many folios at the same time.  The
+> possibility for a task to wait for the migrated folios to be mapped
+> again increases.  So the latency may be hurt.  To deal with this
+> issue, the max number of folios be unmapped in batch is restricted to
+> no more than HPAGE_PMD_NR in the unit of page.  That is, the influence
+> is at the same level of THP migration.
+> 
+> We use the following test to measure the performance impact of the
+> patchset,
+> 
+> On a 2-socket Intel server,
+> 
+>  - Run pmbench memory accessing benchmark
+> 
+>  - Run `migratepages` to migrate pages of pmbench between node 0 and
+>    node 1 back and forth.
+> 
+> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+> the number of pages migrated successfully per second increases 291.7%.
+> 
+> Xin Hao helped to test the patchset on an ARM64 server with 128 cores,
+> 2 NUMA nodes.  Test results show that the page migration performance
+> increases up to 78%.
+> 
+> This patchset is based on mm-unstable 2023-02-10.
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index c01bbcb9fa92..6362ac697a70 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2948,7 +2948,8 @@ ssize_t filemap_splice_read(struct file *in, loff_t =
-*ppos,
- 			if (writably_mapped)
- 				flush_dcache_folio(folio);
- =
+And back in linux-next this week: I tried next-20230217 overnight.
 
--			n =3D splice_folio_into_pipe(pipe, folio, *ppos, len);
-+			n =3D min_t(loff_t, len, isize - *ppos);
-+			n =3D splice_folio_into_pipe(pipe, folio, *ppos, n);
- 			if (!n)
- 				goto out;
- 			len -=3D n;
+There is a deadlock in this patchset (and in previous versions: sorry
+it's taken me so long to report), but I think one that's easily solved.
 
+I've not bisected to precisely which patch (load can take several hours
+to hit the deadlock), but it doesn't really matter, and I expect that
+you can guess.
+
+My root and home filesystems are ext4 (4kB blocks with 4kB PAGE_SIZE),
+and so is the filesystem I'm testing, ext4 on /dev/loop0 on tmpfs.
+So, plenty of ext4 page cache and buffer_heads.
+
+Again and again, the deadlock is seen with buffer_migrate_folio_norefs(),
+either in kcompactd0 or in khugepaged trying to compact, or in both:
+it ends up calling __lock_buffer(), and that schedules away, waiting
+forever to get BH_lock.  I have not identified who is holding BH_lock,
+but I imagine a jbd2 journalling thread, and presume that it wants one
+of the folio locks which migrate_pages_batch() is already holding; or
+maybe it's all more convoluted than that.  Other tasks then back up
+waiting on those folio locks held in the batch.
+
+Never a problem with buffer_migrate_folio(), always with the "more
+careful" buffer_migrate_folio_norefs().  And the patch below fixes
+it for me: I've had enough hours with it now, on enough occasions,
+to be confident of that.
+
+Cc'ing Jan Kara, who knows buffer_migrate_folio_norefs() and jbd2
+very well, and I hope can assure us that there is an understandable
+deadlock here, from holding several random folio locks, then trying
+to lock buffers.  Cc'ing fsdevel, because there's a risk that mm
+folk think something is safe, when it's not sufficient to cope with
+the diversity of filesystems.  I hope nothing more than the below is
+needed (and I've had no other problems with the patchset: good job),
+but cannot be sure.
+
+[PATCH next] migrate_pages: fix deadlock on buffer heads
+
+When __buffer_migrate_folio() is called from buffer_migrate_folio_norefs(),
+force MIGRATE_ASYNC mode so that buffer_migrate_lock_buffers() will only
+trylock_buffer(), failing with -EAGAIN as usual if that does not succeed.
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
+
+--- next-20230217/mm/migrate.c
++++ fixed/mm/migrate.c
+@@ -748,7 +748,8 @@ static int __buffer_migrate_folio(struct
+ 	if (folio_ref_count(src) != expected_count)
+ 		return -EAGAIN;
+ 
+-	if (!buffer_migrate_lock_buffers(head, mode))
++	if (!buffer_migrate_lock_buffers(head,
++			check_refs ? MIGRATE_ASYNC : mode))
+ 		return -EAGAIN;
+ 
+ 	if (check_refs) {
