@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D1369B668
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5337C69B66D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBQXWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S230028AbjBQXXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:23:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBQXWt (ORCPT
+        with ESMTP id S229980AbjBQXXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:22:49 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5CE5F269
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:22:47 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id m13so1409537pgq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676676167;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vp0LGpjYzO/wQ9ZofO0IRZ1ED/HKTJwiOg1DwBrCimM=;
-        b=NdK9YgJuCiRBPef42LxjEXowdPk2FNt7IFRfxwrka182KEunsBMkBxz2q5Xx6jkUyt
-         F5bSIeHYtNDZh7wDkOMX4DPh9yCEeN44tSosIh6FDoJN2FDDkyOYHhbP4dpyBu+tEZEI
-         yNnsFXGQgQwF9HtBXm+NMXfGqCYHNokqjDwCiNkFmmX3rX6wkbZWQ8LGqxRpUwry9E2v
-         bIGr57rdbVa7GejjmMnXxUCuC2V8bqAWCe01TtCBBtvaI/C6HMyHV0vVurHHz4zEMSBq
-         A6QMl4ztxIO9wlrurOcNFBZLD+xq+I8wsx6+WDAQJml6uhGA9kKvRl4UGeXzfrGKX7Ra
-         RR3g==
+        Fri, 17 Feb 2023 18:23:30 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C2D11EA1;
+        Fri, 17 Feb 2023 15:23:29 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-171872a792fso2972583fac.3;
+        Fri, 17 Feb 2023 15:23:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676676167;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vp0LGpjYzO/wQ9ZofO0IRZ1ED/HKTJwiOg1DwBrCimM=;
-        b=jhkCLL/bGjhqPT1H2ZET+lzplcHlFNVMaA/T/0ZmDzj2E1GjtOdvC/ViU9eEon47lI
-         QJNlxTjcRHa0TAmyEWjMXNbYVbuj35o+ba/TXaQUuc28Xymzcgbg5vP5XJhb+GN4b+3D
-         OK8V56CWzE+lkQf0h6nGJ3fge0JFmhUTu9aPSmAynEji1Dqxhun22xadig6NnuAO58Dk
-         7Q6bu+gC/SdMuxd7zclh63qayZs4hQJh7CK8jqcCX+ZYKlO+fIWsv8/cULAICgBfxMYx
-         l2FhWM5xrio0ApPK+A9DGD3JHHKJpAddSAa00VHXXFeJ5VnRMkLCeIszC6wjtU2pzUW1
-         3MKw==
-X-Gm-Message-State: AO0yUKWIz7y1rsjF65XJyvq6ua3BP/dbdhCcEOAwdN/EO/sYl2PSn/C7
-        AeCljCwv9nolTT/dD+9S7abkbrKfyJgEt5rc6dsN+g==
-X-Google-Smtp-Source: AK7set/Ex/ecKPrR1luvpvNS73pruiK8LWXsXHD5h8XUEHu9Li0cAuOYgCrUqfiDSq8tL5kWg9fU4wNtM7sMcvZ4W60=
-X-Received: by 2002:aa7:980f:0:b0:5a8:4dea:7015 with SMTP id
- e15-20020aa7980f000000b005a84dea7015mr132186pfl.36.1676676167036; Fri, 17 Feb
- 2023 15:22:47 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H6Yd+sodJQYe42BYBBvb8iBAW4GssmfegnCeFVst0HU=;
+        b=WisbSKRmORIbfDrzOjBrCHCU2xsuu2nbcI+yUjuPhSGCcKv2zFXwKmFZHpG0xFOKxo
+         2qCku0hcOPhN/AMq8RfyqVEKFSffLM256RoPyZD58nwRPgrJkoqccxw3/5JIOuXY5Oix
+         VYByzhdM06JQ2CPRbc4Jxc0ijfxuA8X9ZO10UBuafuHi0zQE3oFXUEyVsDkIqvwLqOkZ
+         nyBtoULeaIgz0oHrUH7i1kUCCSB682SPyN1t5IPWAsHGJowSKMq25DY25bXSj5hc5/Ed
+         SV6YxK70CTJNj6bnB2xcy3J25Gkeb8w8Pp1V7YPIIG/2eoOTo8TMSqIGNADXs39f2yAH
+         I2NQ==
+X-Gm-Message-State: AO0yUKXJoxY72oOiF/mcm9E6NwLNuJUig2iBegvAzs78i6Fs5AkpbcUU
+        Vr+tyZssylbNg6OUjZNRLw==
+X-Google-Smtp-Source: AK7set9uI4W1g2C/4zLiiVPKiVE1XhOgTAe+PEaeY8yYLkF4qDghjty3XEUYzNeEr5fw7J5mdUp28w==
+X-Received: by 2002:a05:6870:78e:b0:16e:19a7:6241 with SMTP id en14-20020a056870078e00b0016e19a76241mr1218711oab.10.1676676208681;
+        Fri, 17 Feb 2023 15:23:28 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05687036c300b00171920ca53esm515359oak.0.2023.02.17.15.23.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 15:23:28 -0800 (PST)
+Received: (nullmailer pid 2254552 invoked by uid 1000);
+        Fri, 17 Feb 2023 23:23:27 -0000
+Date:   Fri, 17 Feb 2023 17:23:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc:     Angelo Compagnucci <angelo@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: leds: servo-pwm: Add new bindings
+ for servo-pwm
+Message-ID: <20230217232327.GA2243296-robh@kernel.org>
+References: <20230217145731.3018148-1-angelo@amarulasolutions.com>
+ <20230217145731.3018148-3-angelo@amarulasolutions.com>
 MIME-Version: 1.0
-References: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com> <20220825212842.7176-1-christian@kohlschutter.com>
-In-Reply-To: <20220825212842.7176-1-christian@kohlschutter.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 17 Feb 2023 15:22:10 -0800
-Message-ID: <CAGETcx__Ez8i9O2O30-Q1R00xOqBjkKMCwt37_AGAQjNvZqpdg@mail.gmail.com>
-Subject: Re: [PATCH v5] regulator: core: Resolve supply name earlier to
- prevent double-init
-To:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-Cc:     broonie@kernel.org, m.szyprowski@samsung.com, heiko@sntech.de,
-        lgirdwood@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, m.reichl@fivetechno.de,
-        robin.murphy@arm.com, vincent.legoll@gmail.com, wens@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217145731.3018148-3-angelo@amarulasolutions.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,133 +67,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 2:28 PM Christian Kohlsch=C3=BCtter
-<christian@kohlschutter.com> wrote:
->
-> Previously, an unresolved regulator supply reference upon calling
-> regulator_register on an always-on or boot-on regulator caused
-> set_machine_constraints to be called twice.
->
-> This in turn may initialize the regulator twice, leading to voltage
-> glitches that are timing-dependent. A simple, unrelated configuration
-> change may be enough to hide this problem, only to be surfaced by
-> chance.
-
-In your case, can you elaborate which part of the constraints/init
-twice caused the issue?
-
-I'm trying to simplify some of the supply resolving code and I'm
-trying to not break your use case.
-
--Saravana
-
->
-> One such example is the SD-Card voltage regulator in a NanoPI R4S that
-> would not initialize reliably unless the registration flow was just
-> complex enough to allow the regulator to properly reset between calls.
->
-> Fix this by re-arranging regulator_register, trying resolve the
-> regulator's supply early enough that set_machine_constraints does not
-> need to be called twice.
->
-> Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
+On Fri, Feb 17, 2023 at 03:57:30PM +0100, Angelo Compagnucci wrote:
+> This binding describes the binding for controlling servo motors through
+> pwm.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 > ---
->  drivers/regulator/core.c | 58 ++++++++++++++++++++++++----------------
->  1 file changed, 35 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-> index 77f60eef960..2ff0ab2730f 100644
-> --- a/drivers/regulator/core.c
-> +++ b/drivers/regulator/core.c
-> @@ -5391,6 +5391,7 @@ regulator_register(const struct regulator_desc *reg=
-ulator_desc,
->         bool dangling_of_gpiod =3D false;
->         struct device *dev;
->         int ret, i;
-> +       bool resolved_early =3D false;
->
->         if (cfg =3D=3D NULL)
->                 return ERR_PTR(-EINVAL);
-> @@ -5494,24 +5495,10 @@ regulator_register(const struct regulator_desc *r=
-egulator_desc,
->         BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
->         INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
->
-> -       /* preform any regulator specific init */
-> -       if (init_data && init_data->regulator_init) {
-> -               ret =3D init_data->regulator_init(rdev->reg_data);
-> -               if (ret < 0)
-> -                       goto clean;
-> -       }
-> -
-> -       if (config->ena_gpiod) {
-> -               ret =3D regulator_ena_gpio_request(rdev, config);
-> -               if (ret !=3D 0) {
-> -                       rdev_err(rdev, "Failed to request enable GPIO: %p=
-e\n",
-> -                                ERR_PTR(ret));
-> -                       goto clean;
-> -               }
-> -               /* The regulator core took over the GPIO descriptor */
-> -               dangling_cfg_gpiod =3D false;
-> -               dangling_of_gpiod =3D false;
-> -       }
-> +       if (init_data && init_data->supply_regulator)
-> +               rdev->supply_name =3D init_data->supply_regulator;
-> +       else if (regulator_desc->supply_name)
-> +               rdev->supply_name =3D regulator_desc->supply_name;
->
->         /* register with sysfs */
->         rdev->dev.class =3D &regulator_class;
-> @@ -5533,13 +5520,38 @@ regulator_register(const struct regulator_desc *r=
-egulator_desc,
->                 goto wash;
->         }
->
-> -       if (init_data && init_data->supply_regulator)
-> -               rdev->supply_name =3D init_data->supply_regulator;
-> -       else if (regulator_desc->supply_name)
-> -               rdev->supply_name =3D regulator_desc->supply_name;
-> +       if ((rdev->supply_name && !rdev->supply) &&
-> +               (rdev->constraints->always_on ||
-> +                rdev->constraints->boot_on)) {
-> +               ret =3D regulator_resolve_supply(rdev);
-> +               if (ret !=3D 0)
-> +                       rdev_dbg(rdev, "Unable to resolve supply early: %=
-pe\n",
-> +                                ERR_PTR(ret));
+>  .../devicetree/bindings/misc/servo-pwm.yaml   | 59 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/servo-pwm.yaml b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> new file mode 100644
+> index 000000000000..faa8d4734817
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/servo-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +               resolved_early =3D true;
-> +       }
+> +title: Servo motor connected to PWM
 > +
-> +       /* perform any regulator specific init */
-> +       if (init_data && init_data->regulator_init) {
-> +               ret =3D init_data->regulator_init(rdev->reg_data);
-> +               if (ret < 0)
-> +                       goto wash;
-> +       }
+> +maintainers:
+> +  - Angelo Compagnucci <angelo@amarulasolutions.com>
 > +
-> +       if (config->ena_gpiod) {
-> +               ret =3D regulator_ena_gpio_request(rdev, config);
-> +               if (ret !=3D 0) {
-> +                       rdev_err(rdev, "Failed to request enable GPIO: %p=
-e\n",
-> +                                        ERR_PTR(ret));
-> +                       goto wash;
-> +               }
-> +               /* The regulator core took over the GPIO descriptor */
-> +               dangling_cfg_gpiod =3D false;
-> +               dangling_of_gpiod =3D false;
-> +       }
->
->         ret =3D set_machine_constraints(rdev);
-> -       if (ret =3D=3D -EPROBE_DEFER) {
-> +       if (ret =3D=3D -EPROBE_DEFER && !resolved_early) {
->                 /* Regulator might be in bypass mode and so needs its sup=
-ply
->                  * to set the constraints
->                  */
-> --
-> 2.36.2
->
->
+> +description:
+> +  Each servo is represented as a servo-pwm device.
+> +  The 20ms period is the accepted standard and so most of the motors
+> +  support it, while the positioning min/max duty cycle or the motor
+> +  degrees aperture vary lot between manufacturers.
+> +  The most common type of servo (SG90) has 180 degrees of movement
+> +  and moves between 0.5ms and 2.5ms duty cycle.
+> +
+> +properties:
+> +  compatible:
+> +    const: servo-pwm
+> +
+> +patternProperties:
+> +  properties:
+> +    pwms:
+> +      maxItems: 1
+> +
+> +    pwm-names: true
+
+Drop. '-names' is for when there is more than 1.
+> +
+> +    degrees:
+
+Kind of vague: servo-degrees
+
+> +      description:
+> +        How many degrees the motor can move.
+> +      $ref: /schemas/types.yaml#/definitions/uint32
+
+0-2^32 are valid degrees?
+
+> +
+> +    duty-min:
+> +      description:
+> +        Duty cycle for position the motor at 0 degrees.
+
+Units are ms? percent? Use standard unit suffix.
+
+> +      $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +    duty-max:
+> +      description:
+> +        Duty cycle for positioning the motor at "degrees" angle.
+> +      $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    servo: servo@0 {
+> +      compatible = "servo-pwm";
+> +      pwms = <&pwm 0 20000000 0>;
+> +      degrees = <180>;
+> +      duty-min = <500000>;
+> +      duty-max = <2500000>;
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 356daea0861d..8f41daee62fc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8742,6 +8742,7 @@ M:	"Angelo Compagnucci" <angelo@amarulasolutions.com>
+>  L:	linux-pwm@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/ABI/testing/sysfs-driver-servo-pwm
+> +F:	Documentation/devicetree/bindings/misc/servo-pwm.yaml
+>  F:	drivers/misc/servo-pwm.c
+>  
+>  GENERIC RESISTIVE TOUCHSCREEN ADC DRIVER
+> -- 
+> 2.34.1
+> 
