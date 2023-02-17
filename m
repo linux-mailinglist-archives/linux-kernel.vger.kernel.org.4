@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FBC69AA11
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3338969AA18
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjBQLPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S229965AbjBQLQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBQLPg (ORCPT
+        with ESMTP id S229864AbjBQLQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:15:36 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C600B642DF;
-        Fri, 17 Feb 2023 03:15:07 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 17 Feb 2023 20:14:50 +0900
-Received: from mail.mfilter.local (mail-arc01.css.socionext.com [10.213.46.36])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id AA8AD2058B4F;
-        Fri, 17 Feb 2023 20:14:50 +0900 (JST)
-Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Fri, 17 Feb 2023 20:14:50 +0900
-Received: from [10.212.159.180] (unknown [10.212.159.180])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id C87137374;
-        Fri, 17 Feb 2023 20:14:49 +0900 (JST)
-Message-ID: <27903ae4-3a66-004e-b9f5-e0d4deebdaa6@socionext.com>
-Date:   Fri, 17 Feb 2023 20:14:49 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] dt-bindings: ata: Add UniPhier controller binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Fri, 17 Feb 2023 06:16:36 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BB365370
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:16:22 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id y14so698964ljq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+0wgn2J7sEsdXuKmA4KpznfU8V8XceUpwL6C1j73+Vk=;
+        b=RAvARnqIsPMy9f5GaK1MNvreQnSXl+M+pThsIcYiN1Q9g2t6VHJrVFo2U4+M0uOJ5Z
+         /KpjrpL+RAWFVVykX5XuvRbaB5OjhOnMJt15UEeAPh1ps25cs9UJzU0dU3dPUU1NHVAA
+         PacZGS9yXbcmZEJ+6/pgV6SmHPZWcz5VvuUZclo33OAZshSidIuzmtsRqtZjHRZIbtFX
+         bOlQu6paNxXzYEjiJ48huFwvJzkdGVy1iZLTWlHhZ8OGKp7fUm2M2j9M8r3RL45+hK9g
+         0UVkMrk68o1tqkIGy/db0388OPitMpo9JP43Hamoszy5PmRWkrqkjdNCm9HoHWVVv52h
+         n5tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+0wgn2J7sEsdXuKmA4KpznfU8V8XceUpwL6C1j73+Vk=;
+        b=5xOijdZ3vH1pJCHOWh+R+4NDP0s4HiugLXYKJIwBwtBRqBFn8RUChFpF1ro6TUJqp9
+         Bxy0YIN2wBwnxJ+eE9sDLhKQJx1QWHIoxiqMN4PcyVYa07j6sTX6CPbKOS2UUWgjZ2/B
+         2mAPAo0hafYmqj28IiPyu3hA9EZGlBi2H12NvqX6b6VxEKBr1CXpH5NP+jyoDnf/kuUQ
+         oTowMQl2X4uh/SPWYiNlz/QPXyq+6r8eYM2sucA7ZgNlFKw/hq9+YzRGmhdRRHQPvto1
+         Xv38+6plpU1eylY59NYlx5fVbF38DvruDPYcWLOFGH9H+bos480eMwusNshRdKsh2jRx
+         OIiQ==
+X-Gm-Message-State: AO0yUKVUgQvkVqPgTix3nEWM/CdZkgMTgYCd735A8JWzrgpQTm1HQCkO
+        0wkv0z3EHu02IqNYvq9I5eXgFg==
+X-Google-Smtp-Source: AK7set9lo1Ogld4ROanEoCe4HM6RFQDGXicVXFMKolFlMlzkWDQ8Q5+BY8esgFULFr2j4/EeaRuM5A==
+X-Received: by 2002:a05:651c:512:b0:28b:6d76:e9ce with SMTP id o18-20020a05651c051200b0028b6d76e9cemr198780ljp.23.1676632580456;
+        Fri, 17 Feb 2023 03:16:20 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e9b15000000b002935899fe3fsm554818lji.116.2023.02.17.03.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 03:16:19 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213045432.32614-1-hayashi.kunihiko@socionext.com>
- <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
- <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
- <0c6dc673-7e11-eec5-ec2d-e00fb2060bf3@linaro.org>
- <c6b86d56-a8a4-825d-ac34-7a9f00e43b42@socionext.com>
- <2e5a17c2-f0fa-e82e-65ed-fea3637b7e62@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <2e5a17c2-f0fa-e82e-65ed-fea3637b7e62@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/6] dt-bindings: arm-smmu: Use qcom,smmu compatible for MMU500 adreno SMMUs
+Date:   Fri, 17 Feb 2023 12:16:08 +0100
+Message-Id: <20230217111613.306978-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,74 +76,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/17 17:42, Krzysztof Kozlowski wrote:
-> On 16/02/2023 18:23, Kunihiko Hayashi wrote:
->> On 2023/02/14 18:42, Krzysztof Kozlowski wrote:
->>> On 14/02/2023 10:33, Kunihiko Hayashi wrote:
->>>> Hi Krzysztof,
->>>>
->>>> On 2023/02/13 18:10, Krzysztof Kozlowski wrote:
->>>>> On 13/02/2023 05:54, Kunihiko Hayashi wrote:
->>>>>> Add UniPhier SATA controller compatible string to the platform
->>>>>> binding.
->>>>>> This controller needs maximum three reset controls.
->>>>>>
->>>>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>>>>> ---
->>>>>>     .../devicetree/bindings/ata/ahci-platform.yaml  | 17
->>>>>> +++++++++++++++++
->>>>>>     1 file changed, 17 insertions(+)
->>>>>>
->>>>>> Changes since v1:
->>>>>> - Restrict resets property changes with compatible strings
->>>>>> - Fix maxItems from two to three
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>>> b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>>> index 7dc2a2e8f598..25dd5ffaa517 100644
->>>>>> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>>> @@ -45,6 +45,9 @@ properties:
->>>>>>                   - marvell,armada-8k-ahci
->>>>>>                   - marvell,berlin2-ahci
->>>>>>                   - marvell,berlin2q-ahci
->>>>>> +              - socionext,uniphier-pro4-ahci
->>>>>> +              - socionext,uniphier-pxs2-ahci
->>>>>> +              - socionext,uniphier-pxs3-ahci
->>>>>>               - const: generic-ahci
->>>>>>           - enum:
->>>>>
->>>>> Top level is saying reset=1, so did you test your bindings?
->>>>
->>>> Umm, I didn't see any errors on dt_binding_check, anyway I'll add
->>>> initial minItems:1 and maxItems:3 on top level first.
->>>
->>> You need to test also all DTS using these bindings. Yours and others.
->>> If you tested the DTS (with proper binding, not one which is basically
->>> noop):
->>>
->>> uniphier-pro4-ace.dtb: sata@65600000: resets: [[27, 12], [27, 28], [37,
->>> 3]] is too long
->>
->> I've tried updating tools and doing dtbs_check, but I couldn't find this
->> error. It seems that this error can't be detected unless there is the
->> specified compatible in "select:".
->>
->>> BTW, the patch has other errors - just look at the beginning of the
->>> file. I cannot see it here in the diff, but when you open the file you
->>> should notice it.
->>
->> Sorry, but I cannot see anything wrong.
->> I'll check the header or something...
-> 
-> If you open the file, you will notice the same compatibles in two
-> places. In select and in properties. You added your compatibles only to
-> one place, so not symmetrically.
+qcom,smmu-500 was introduced to prevent people from adding new
+compatibles for what seems to roughly be the same hardware. Use it for
+qcom,adreno-smmu-compatible targets as well.
 
-OK, I understand. I'll add them in both.
-
-Thank you,
-
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Best Regards
-Kunihiko Hayashi
+v1 -> v2:
+- Add this patch, omitted previously (big oops)
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml        | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+index 807cb511fe18..4d7f61700cae 100644
+--- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
++++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+@@ -75,9 +75,19 @@ properties:
+               - qcom,sm8350-smmu-500
+               - qcom,sm8450-smmu-500
+           - const: arm,mmu-500
+-
+-      - description: Qcom Adreno GPUs implementing "arm,smmu-500"
++      - description: Qcom Adreno GPUs implementing "qcom,smmu-500" and "arm,smmu-500"
++        items:
++          - enum:
++              - qcom,sc7280-smmu-500
++              - qcom,sm8150-smmu-500
++              - qcom,sm8250-smmu-500
++          - const: qcom,adreno-smmu
++          - const: qcom,smmu-500
++          - const: arm,mmu-500
++      - description: Qcom Adreno GPUs implementing "arm,smmu-500" (legacy binding)
++        deprecated: true
+         items:
++          # Do not add additional SoC to this list. Instead use previous list.
+           - enum:
+               - qcom,sc7280-smmu-500
+               - qcom,sm8150-smmu-500
+-- 
+2.39.1
+
