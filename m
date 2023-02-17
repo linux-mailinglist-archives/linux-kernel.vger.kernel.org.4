@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A576D69A5A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B47B69A5AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBQGhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 01:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S229734AbjBQGjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 01:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBQGhV (ORCPT
+        with ESMTP id S229477AbjBQGjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 01:37:21 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4454E5C0;
-        Thu, 16 Feb 2023 22:37:20 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id j6so534779plh.1;
-        Thu, 16 Feb 2023 22:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6C1SIQQP1gyo68CYQuiNgQYo/e8nc5EHGL0dfbTivTQ=;
-        b=LA56g0wuQUdF6eil5NRihahKyK2ou8kA9rsjjxzuhBSiN0NF2JHkV9kTZFYvEswNpb
-         495F4hs8s5RxowyqGbwXuwouiZBCC3lh4udBI/Xt09ykoIFxAr9RAvDgLtz9O3CmQcTD
-         UucUfCBmqVdTSCQTozV510PmKXmpmWz7c2tPeItRACCqkZJ9vmuFuoP/3kL6IcMqMdKH
-         PQXPTQHltFYRIoiY0p+5FyarpUfJnOYwWMSk34Cqx24wH/FToGfh9DDtwEDJ/3MDdGn6
-         mgvTiB1/thRQHLuAWaq14CGZYV/EZSaCWFIUr6DXnZxYpQseYWQXG+nLfJkDVuRMckBJ
-         fZAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:subject:cc:to:from:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6C1SIQQP1gyo68CYQuiNgQYo/e8nc5EHGL0dfbTivTQ=;
-        b=3hSQZNV2O6KbPChz2kA6+B0MjYcSOZbGkj6OUhdbpEkxNFAah63VGL7cSLmLJQKP7G
-         Kr5Hc9z+6ysnmSR1sExTyMh4xlFwRxrlxid8j1p5y0Oj48I3ZFQd16veS10En4ch1EEX
-         mu+bOwI/jGehkCnsPnnshj+BGRyqb4dgu0QfStugNcuZBPAwwG2WUe1we4tDsLIz1FyI
-         naeoXbZgrXVX7T4UnxbUgtvUaJiabQbVEuPX/5t2eVd08EZ0i55KEbOozSTXxoIHpJ1o
-         nUIBSJq1LyGCanSSzixTb1txYdrt3Q2pcIzCzDn5AlzTCET9qi5DO3cUsyGlnVblQwph
-         3PqQ==
-X-Gm-Message-State: AO0yUKVCoPASb8TGMUa4Qdv+ix4yzR41OLAkGtyh1uRmFlxirSZErCC6
-        poJfc2a9LKvnko0wY4RfaXMeiYZeFsLogw==
-X-Google-Smtp-Source: AK7set9saCwePeX6dQunOSjWUhjVF7TL2nEScuv/WW6p0j++ESfSLRkclVb4aqD/tF6wrAdDd/zlpg==
-X-Received: by 2002:a17:902:f690:b0:19a:81c1:e743 with SMTP id l16-20020a170902f69000b0019a81c1e743mr10417610plg.2.1676615839569;
-        Thu, 16 Feb 2023 22:37:19 -0800 (PST)
-Received: from rh-tp ([2406:7400:63:5056:148f:873b:4bc8:1e77])
-        by smtp.gmail.com with ESMTPSA id ix11-20020a170902f80b00b0019615a0d083sm2335646plb.210.2023.02.16.22.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 22:37:19 -0800 (PST)
-Date:   Fri, 17 Feb 2023 12:06:54 +0530
-Message-Id: <87wn4giyrd.fsf@doe.com>
-From:   Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 18/21] ext4: remove unnecessary goto in ext4_mb_mark_diskspace_used
-In-Reply-To: <20230209194825.511043-19-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 01:39:02 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC83A093;
+        Thu, 16 Feb 2023 22:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=CzxUXmaoKaTawDsDS62APQKN1CPdfaYIP+YvlMfEd5Y=; b=p4jz++3oZNOf6OwuXb4XnNQw9N
+        EXbztLL9VyfBsGK6U2rT948ui+yy3vLUZSO44gMQtdA25nUIEBtQR+40rlnA8HZ34BroSVQcH78og
+        p/UGPaVdk1IxmXxVYIoMrd1HZzZTnSQwTI8ogR+GiPGHLycp23ZC0p8JjVn7CjGsRqhrGmHOXC6fj
+        EyaiuzGc9d49DOvDvYnajuC9Nsxs5FXMAVbBx7Qlc7/5NOWnPBd92QrBsAmmzJ0VPzUt1EhPxwJKC
+        vWpYeWr639i6z54nfiNIDdM8GWNbhK6OnZE5OMVWFhvz6+SeaVr5DFEoeDYMIHE7zWblBfcXBCI7J
+        j7at1odg==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pSuOZ-00Cxjx-48; Fri, 17 Feb 2023 06:38:59 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [RFC PATCH] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not set
+Date:   Thu, 16 Feb 2023 22:38:58 -0800
+Message-Id: <20230217063858.28311-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kemeng Shi <shikemeng@huaweicloud.com> writes:
+When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
+KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
+which is not built when MIPS_CPS_PM is not set.
+Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
+to remove the build error.
+This build failure is from a randconfig file.
 
-> When ext4_read_block_bitmap fails, we can return PTR_ERR(bitmap_bh) to
-> remove unnecessary NULL check of bitmap_bh.
+mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
+smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
 
-bitmap_bh is a local pointer variable. So not setting it to NULL is not
-a problem. I guess for consistency in return error code paths the author
-would have kept it this way, but since this is the first return from the
-function in case of an error, hence it looks ok if we simply call
-return PTR_ERR(bitmap_bh), rather than a goto out_err.
+Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+---
+ arch/mips/kernel/smp-cps.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Hence this looks good to me. Feel free to add - 
-
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
-
->
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index f9fc461b633f..7d6991af50d8 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -3739,9 +3739,7 @@ ext4_mb_mark_diskspace_used(struct ext4_allocation_context *ac,
->  
->  	bitmap_bh = ext4_read_block_bitmap(sb, ac->ac_b_ex.fe_group);
->  	if (IS_ERR(bitmap_bh)) {
-> -		err = PTR_ERR(bitmap_bh);
-> -		bitmap_bh = NULL;
-> -		goto out_err;
-> +		return PTR_ERR(bitmap_bh);
->  	}
->  
->  	BUFFER_TRACE(bitmap_bh, "getting write access");
-> -- 
-> 2.30.0
+diff -- a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+--- a/arch/mips/kernel/smp-cps.c
++++ b/arch/mips/kernel/smp-cps.c
+@@ -424,9 +424,11 @@ static void cps_shutdown_this_cpu(enum c
+ 			wmb();
+ 		}
+ 	} else {
++#ifdef CONFIG_HOTPLUG_CPU
+ 		pr_debug("Gating power to core %d\n", core);
+ 		/* Power down the core */
+ 		cps_pm_enter_state(CPS_PM_POWER_GATED);
++#endif /* CONFIG_HOTPLUG_CPU */
+ 	}
+ }
+ 
