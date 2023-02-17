@@ -2,73 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EC169A8F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C923069A8FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjBQKRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229744AbjBQKTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBQKRS (ORCPT
+        with ESMTP id S229573AbjBQKTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:17:18 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C906241A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:17:17 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id x3so323628iov.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:17:17 -0800 (PST)
+        Fri, 17 Feb 2023 05:19:19 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A417660A57;
+        Fri, 17 Feb 2023 02:19:18 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id g16so1123446lfv.4;
+        Fri, 17 Feb 2023 02:19:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2XHISwwrYptru9JJUybZluXGFlVbeF2fOe6BiDI/QUI=;
-        b=mBGopXLmCuUvn5ywjYARHgIrH3Vs5/8fi24S7z+YJ1cq2a6mg8K/L7HJfJ14mWtyU9
-         NzjMsu+kEPqqScnha+85Ip75tCHt7ZE5mP13HSUTDJAjA88AakPrcrmtQgPOUROkDVHu
-         ThMzH163B6nkvUtbZuKhIX7sO2y/WwCcKEsVCaJEpjjnMpwMj2qhpG0EoXDT27bDIsNM
-         7ueHkUKdi9oeyDU/XrNDXcKtWe2sQE67A6azORB8XnXaKR2Wq2qUUpV/l8EcTDo4qhNK
-         GT8dMB6ExDAwZwJCyvDvDy3ojOlfWjiM2mj9SdP1uuv/7CUl9rwhWVoKfflch+6w3DpD
-         kZ0A==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vCndEDoUtknwHJxWtOqquHmn6BtbW8GdekGsNECVWdg=;
+        b=e+/CjwXji5eHjM7/meT9aSSjK0hOM9rnqj+8V8sDd5od3GlQSIZ/7z/7QktdAhdxjF
+         VI0Ll5TNsvoFnNSGE5lFMvRT/QVfrQ1aN9CXUY4H99sWK/VrjNfABIfEfhkc6/lJvzXE
+         jV+e6OtWkSTDLL4vh77hh747QwFMlkGN+Apx/FoYSwNkb6tB8GDPCaa5gm2UDHG8z/MD
+         1cI67UjAvjZk01XComsdqloJR8qFlENfINxuq7lBIp0X/wdAHTIIdoMd07g1i6SHj1Fu
+         N1qdM9VuoaPyK/5BHuiyBKZztRa0jtt+mgjQSEiW/NGRn71bWj/ELfZsQeojXW6nV4TR
+         /pgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2XHISwwrYptru9JJUybZluXGFlVbeF2fOe6BiDI/QUI=;
-        b=WI9skINXFyjTMbIFxVIhuted6KOFaGgCnI549NIkOdWihSFYSdHgwWbma7O5Hn9ZAe
-         l8PQsPnr5sMy1uO7xumSL1ugfOgwwEsi84EaFXJH8fuuRFpTCQlep4AAYgRDnoXjDK26
-         /I5nE8YM5usjiw5GdHazaUW1B9ghj2R+05DZTDtVoTA3oXAYYJQX6hI/CTrfX2HA0Khb
-         nfJG14KAoD02vUnE5uspVGidfGwJtxe2Mp8YKAKZo27whrNKY7ebkGWjk6zSdxdhECJM
-         izxUGG4RuWLRZa6avcZPb/cDxF76zVgvoGdPx+xoQbLWbMICmhQMEB1dC+xhulNVjTDx
-         /Sqg==
-X-Gm-Message-State: AO0yUKWhL/RSOpsU4OheHVvGKFc7OsSWTSNqSrwTwk8PoRabullphLzO
-        vsr0u0R1f5lKHuVzhAWkrmjuY/8hKakB2HXmbi8=
-X-Google-Smtp-Source: AK7set8N+EyZGFpnwa417080x+RlVPy0ciXkhyEs3bi7csMPOmuUEb0Mdppe5ikqtOFi2auDulsFVg1dAVANXeTkwM0=
-X-Received: by 2002:a5e:9419:0:b0:730:1:27f3 with SMTP id q25-20020a5e9419000000b00730000127f3mr320741ioj.23.1676629037373;
- Fri, 17 Feb 2023 02:17:17 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vCndEDoUtknwHJxWtOqquHmn6BtbW8GdekGsNECVWdg=;
+        b=nc8KWvOJEY2Iypy7CN2YnGpiimXE+EXVsL3DU1MCqspi+3nTSr4ZlQ/+NtV7MD6J3B
+         ZrEyxZ62IXlYI+hjhmS+DJs5tUTGlSkQzPaS9GLQbdwJJz29BZiOd+JZyco3uq5LS6Mz
+         Y6JP3IdBn1lGLxRDJE1y539eHvH9/oafz/zDiNbPAza0CP/qIt/sjxiTxWHLl0HH9WOj
+         tAEIS7Bej2lM42pZvd++WLqYw0bcNPvckKBb/MU/qfS5X4v8zOmNhB5M9R8BNPv/R0Wd
+         WY6luLfv9/wmwUsfdwx5iy5OQP1nlk3f35F9VjfwwvM+JWY2qQoRI7NCrc2yCpw6CkS7
+         Dt9Q==
+X-Gm-Message-State: AO0yUKWa/yRwDSUHRfzsqRNO8kPKhtNgjwiH5IybAZYaaVHUExeV5huf
+        at8qHtgyR7HIqwL1Z19LGT4=
+X-Google-Smtp-Source: AK7set/KoPJ9iPu3vao4Dqv+7Ti4VzcdsvVWT9rrj+iUyGdqbOCgEq2dY6aOQQ9TccDkUjqrysyK/w==
+X-Received: by 2002:ac2:5544:0:b0:4d7:2e11:d075 with SMTP id l4-20020ac25544000000b004d72e11d075mr2655581lfk.45.1676629156788;
+        Fri, 17 Feb 2023 02:19:16 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id g21-20020ac25395000000b004dc4d26c324sm633413lfh.143.2023.02.17.02.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 02:19:16 -0800 (PST)
+Date:   Fri, 17 Feb 2023 13:19:13 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/11] PCI: dwc: Fix port link CSR improper init if CDM
+ check enabled
+Message-ID: <20230217101913.vomgrcwj7mv5apjq@mobilestation>
+References: <20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru>
+ <20230217093956.27126-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Received: by 2002:a02:6f41:0:0:0:0:0 with HTTP; Fri, 17 Feb 2023 02:17:16
- -0800 (PST)
-From:   Daniel Affum <danielaffum05@gmail.com>
-Date:   Fri, 17 Feb 2023 02:17:16 -0800
-Message-ID: <CAPkju_MDjmLNqCpyjyPP+dq6sEH8GHJityUM0_N1ZmVUiry_TQ@mail.gmail.com>
-Subject: Confirm Receipt
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217093956.27126-2-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+On Fri, Feb 17, 2023 at 12:39:46PM +0300, Serge Semin wrote:
+> If CDM_CHECK capability is set then the local variable 'val' will be
+> overwritten in the dw_pcie_setup() method in the PL_CHK register
+> initialization procedure. Thus further variable usage in the framework of
+> the PCIE_PORT_LINK_CONTROL register initialization must imply the variable
+> re-initialization. Alas it hasn't been taken into account in the
+> commit ec7b952f453c ("PCI: dwc: Always enable CDM check if
+> "snps,enable-cdm-check" exists"). Due to that the PCIE_PORT_LINK_CONTROL
+> register will be written with improper value in case if the CDM-check is
+> enabled. Let's fix this by re-initializing the 'val' variable with the
+> PCIE_PORT_LINK_CONTROL CSR content before link-mode initialization.
+> 
+> Fixes: ec7b952f453c ("PCI: dwc: Always enable CDM check if "snps,enable-cdm-check" exists")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Good day, and how are you doing? kindly get back to me for update
-concerning very important  issue in a business circle.
+The same fix was submitted by Yoshihiro a bit earlier:
+https://lore.kernel.org/linux-pci/20230216092012.3256440-1-yoshihiro.shimoda.uh@renesas.com/
+I've preserved my version of the patch in the series to ease the merge
+procedure since the later patch in this patchset may cause conflicts.
 
-Thanks and remain blessed.
-Daniel Affum.
-Reply to: barrtonyduke01@gmail.com
+-Serge(y)
+
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 6d5d619ab2e9..3bb9ca14fb9c 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -824,6 +824,7 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>  	}
+>  
+>  	/* Set the number of lanes */
+> +	val = dw_pcie_readl_dbi(pci, PCIE_PORT_LINK_CONTROL);
+>  	val &= ~PORT_LINK_FAST_LINK_MODE;
+>  	val &= ~PORT_LINK_MODE_MASK;
+>  	switch (pci->num_lanes) {
+> -- 
+> 2.39.0
+> 
+> 
