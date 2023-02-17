@@ -2,399 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F8369A6E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB0D69A6E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjBQI16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S229793AbjBQI1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBQI1y (ORCPT
+        with ESMTP id S229522AbjBQI1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Feb 2023 03:27:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF93C59F8;
-        Fri, 17 Feb 2023 00:27:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 881CCB82B42;
-        Fri, 17 Feb 2023 08:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18663C4339B;
-        Fri, 17 Feb 2023 08:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676622468;
-        bh=WS/gWhAn/WNDmPQUKNU/yPbMM9qwmm4oMXb1J5YXeP4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hRWQzkVMPUnmt0KzILE0w4yYCGyH+cU9XmXuR+WLCTRhsC0SwkV/oOs0CRj817t+I
-         pBRBh9n8qKAlp6jhdc5+lRsz9ZfY4HoG75JTY0KE06EM97AMQJi2gVsTv+Dt0OOOm4
-         a0TwwA6gSH2/p0P/qk1VHalJD6NiDUB3+xYpi3/vtTzOFG3+SiyHijEA05+RbjpFw0
-         Pc5tl1B0H2ZkC9ezl/HxJxIHvWkUS/xBWNPdtPyADSZqsZQkNcAiTTzCheYZwdKlNX
-         FFXdK7B+Kqop4TLtwoWr9XvAdM838J1K6MXX57WuvS0BLSedAhkOGHMAaJwtcjGSzG
-         6/P5MGMvoSYaw==
-Received: by mail-lj1-f178.google.com with SMTP id y20so464720ljc.0;
-        Fri, 17 Feb 2023 00:27:47 -0800 (PST)
-X-Gm-Message-State: AO0yUKVRAX0vMjeGPWgW4F58YdqkoxDtdMOcQwJy5T4hlURSmBP9G72M
-        p34U+EacqLAXkwKZj1+0A1GjSK0vNAPZXKmZQoI=
-X-Google-Smtp-Source: AK7set8ZCCXWXz3kvR0yFKwhqX9pPna9/Cvymyo20x61Mh5If2BA4Leh0+lHnB9+fMezLgDOEtXyKVJ2aV9TZEFRLbk=
-X-Received: by 2002:a05:651c:1a2c:b0:293:4da7:669a with SMTP id
- by44-20020a05651c1a2c00b002934da7669amr2136399ljb.2.1676622466025; Fri, 17
- Feb 2023 00:27:46 -0800 (PST)
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6E25FD8;
+        Fri, 17 Feb 2023 00:27:51 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r12so405662ljg.4;
+        Fri, 17 Feb 2023 00:27:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QAoMJKlMJ+XFbSX67OuVv50PwIJOWkP1+4AQHzhPSBI=;
+        b=k0dek0QEJcdjG5iRaaOlqBTL+r2HXB/4pVxjTCu9cbunK/oZ0rvaSr4IOQcEJPjMZu
+         YzC80oegiQZH7KiywkxXnqXGAWvY6/cByeGn7r6iTe3a4r2P4/zLydmnHEjp99q1f+qw
+         pWgX3Pnzm4VpffdSOI8hG5Kb9Q6mfMElGsMkCBqwpUcbEJ4zfFaq2JUkO8YseP9+3x9+
+         WHCo/P09LrRBaKiRG1A7iGvhWOak94yRYJCSzvpQE4rZYZcuHw6QjvFykXHjQ/07GxG4
+         LFD246YzUD6SIGN0/f6/CDvU4SLciJYuleJ4SjD8x7yHS7lM4qiEPchc2V5ZadzcGit0
+         gcRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QAoMJKlMJ+XFbSX67OuVv50PwIJOWkP1+4AQHzhPSBI=;
+        b=4ulgmKWx+1QdDwGazFgEUxQSV13frt2VwLlN2VtMm5ESU4C4c1ki9r7edM+oJzKQVu
+         2Zz5lKMZhpaxZ9+llmfgXJYOlUmqHd9nh1sx7cq5Y8es77HT7OAy/JTChJGd6g8/qA5a
+         QfKnG7pTKsv8uE319vis2s1Hsz8eD++tBwowB6hGAoB8rMrC/qoLD7MqkdcsK+8eHf0G
+         vyfL+P0fbluo4EdPoKdQYXt10frIAKa94MD7IcRerKJCGxx/aBhi7lTvUewhi6gQgJ8z
+         Yf5zJ39aJfTb472vbJ0qqarjNKfk9xeqVf3K/Eg/NfMFn4yESR+Y4irx/O0Tu+IPzMCS
+         1guA==
+X-Gm-Message-State: AO0yUKV9yrw6LdJ3jNGCoeRxj7O8sEV1KzgZQJL7PSXfv4949KEwWPn7
+        30I9YyCkYxE6zLA4kETc1SroPBHauys=
+X-Google-Smtp-Source: AK7set8D9uBbw+3iBbBQ1xyqHMFFSTvgKsBKUsJ9d7KylbJFqPupp8qm2cdGiGQnKxIGZF3xFFOpaw==
+X-Received: by 2002:a2e:bea8:0:b0:294:710a:fe6c with SMTP id a40-20020a2ebea8000000b00294710afe6cmr659798ljr.0.1676622469585;
+        Fri, 17 Feb 2023 00:27:49 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id j20-20020a2e8014000000b002934ba451b1sm505580ljg.131.2023.02.17.00.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 00:27:49 -0800 (PST)
+Date:   Fri, 17 Feb 2023 10:27:47 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 050/113] KVM: x86/tdp_mmu: Ignore unsupported mmu
+ operation on private GFNs
+Message-ID: <20230217102747.00001d7f@gmail.com>
+In-Reply-To: <7a0fb2a0dddc87fb8d34d5af8fc73b288dbcc63c.1673539699.git.isaku.yamahata@intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+        <7a0fb2a0dddc87fb8d34d5af8fc73b288dbcc63c.1673539699.git.isaku.yamahata@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230215161047.94803-1-pierre.gondois@arm.com>
- <19209817-6451-76de-70a4-1f89808bc82a@arm.com> <CAMj1kXGspdwT95LX2-2aBFSe_LfDGcWNZQfsiMVRKREkBS+W_Q@mail.gmail.com>
- <1db35c72-c925-f33e-1cf3-2068658893b9@arm.com>
-In-Reply-To: <1db35c72-c925-f33e-1cf3-2068658893b9@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 17 Feb 2023 09:27:34 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH+RfFV1JEnH6obKG65TFRtjx4u2bc9jFvP1=XafoZgtg@mail.gmail.com>
-Message-ID: <CAMj1kXH+RfFV1JEnH6obKG65TFRtjx4u2bc9jFvP1=XafoZgtg@mail.gmail.com>
-Subject: Re: [PATCH v1] arm64: efi: Make efi_rt_lock a raw_spinlock
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-efi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 at 09:23, Pierre Gondois <pierre.gondois@arm.com> wrote:
->
-> Hello Ard,
->
-> On 2/16/23 18:23, Ard Biesheuvel wrote:
-> > On Thu, 16 Feb 2023 at 17:43, Pierre Gondois <pierre.gondois@arm.com> wrote:
-> >>
-> >> Hello,
-> >> Please ignore this patch for now. While running a kernel with this patch,
-> >> the following was triggered once (among multiple reboots). IRQ flags might
-> >> need to be saved, along with this present patch.
-> >>
-> >
-> > Hello Pierre,
-> >
-> > This is probably related to the Altra firmware bug that we are trying
-> > to narrow down and work around.
-> >
-> > So when the firmware crashes, it is not entirely unexpected that it
-> > might do so with the IRQ flags left in a different state, so this we
-> > should be able to ignore. (Perhaps we should silence that diagnostic
-> > in this case)
-> >
-> > Could you share the output of dmidecode on this platform?
->
-> I forgot to mention, this was tested on an Ampere eMAG. I saw that
-> commit 550b33cfd445 ("arm64: efi: Force the use of SetVirtualAddressMap()
-> on Altra machines") was solving a similar issue, but this should not impact
-> this machine.
+On Thu, 12 Jan 2023 08:31:58 -0800
+isaku.yamahata@intel.com wrote:
 
-That shouldn't but this one should:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=190233164cd77115f8dea718cbac561f557092c6
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> Some KVM MMU operations (dirty page logging, page migration, aging page)
+> aren't supported for private GFNs (yet) with the first generation of TDX.
+> Silently return on unsupported TDX KVM MMU operations.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c     |  3 +++
+>  arch/x86/kvm/mmu/tdp_mmu.c | 50 ++++++++++++++++++++++++++++++++++----
+>  arch/x86/kvm/x86.c         |  3 +++
+>  3 files changed, 51 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 484e615196aa..ad0482a101a3 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -6635,6 +6635,9 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+>  	for_each_rmap_spte(rmap_head, &iter, sptep) {
+>  		sp = sptep_to_sp(sptep);
+>  
+> +		/* Private page dirty logging is not supported yet. */
+> +		KVM_BUG_ON(is_private_sptep(sptep), kvm);
+> +
+>  		/*
+>  		 * We cannot do huge page mapping for indirect shadow pages,
+>  		 * which are found on the last rmap (level = 1) when not using
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 5ce0328c71df..69e202bd1897 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1478,7 +1478,8 @@ typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
+>  
+>  static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+>  						   struct kvm_gfn_range *range,
+> -						   tdp_handler_t handler)
+> +						   tdp_handler_t handler,
+> +						   bool only_shared)
 
-> I ll try to reproduce it and get more information.
+What's the purpose of having only_shared while all the callers will set it as
+true?
+
+>  {
+>  	struct kvm_mmu_page *root;
+>  	struct tdp_iter iter;
+> @@ -1489,9 +1490,23 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+>  	 * into this helper allow blocking; it'd be dead, wasteful code.
+>  	 */
+>  	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
+> +		gfn_t start;
+> +		gfn_t end;
+> +
+> +		if (only_shared && is_private_sp(root))
+> +			continue;
+> +
+>  		rcu_read_lock();
+>  
+> -		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+> +		/*
+> +		 * For TDX shared mapping, set GFN shared bit to the range,
+> +		 * so the handler() doesn't need to set it, to avoid duplicated
+> +		 * code in multiple handler()s.
+> +		 */
+> +		start = kvm_gfn_for_root(kvm, root, range->start);
+> +		end = kvm_gfn_for_root(kvm, root, range->end);
+> +
+
+The coco implementation tends to treat the SHARED bit / C bit as a page_prot,
+an attribute, not a part of the GFN. From that prospective, the caller needs to
+be aware if it is operating on the private memory or shared memory, so does
+the handler. The page table walker should know the SHARED bit as a attribute.
+
+I don't think it is a good idea to have two different understandings, which
+will cause conversion and confusion.
+
+> +		tdp_root_for_each_leaf_pte(iter, root, start, end)
+>  			ret |= handler(kvm, &iter, range);
+>  
+>  		rcu_read_unlock();
+> @@ -1535,7 +1550,12 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
+>  
+>  bool kvm_tdp_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+>  {
+> -	return kvm_tdp_mmu_handle_gfn(kvm, range, age_gfn_range);
+> +	/*
+> +	 * First TDX generation doesn't support clearing A bit for private
+> +	 * mapping, since there's no secure EPT API to support it.  However
+> +	 * it's a legitimate request for TDX guest.
+> +	 */
+> +	return kvm_tdp_mmu_handle_gfn(kvm, range, age_gfn_range, true);
+>  }
+>  
+>  static bool test_age_gfn(struct kvm *kvm, struct tdp_iter *iter,
+> @@ -1546,7 +1566,8 @@ static bool test_age_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>  
+>  bool kvm_tdp_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>  {
+> -	return kvm_tdp_mmu_handle_gfn(kvm, range, test_age_gfn);
+> +	/* The first TDX generation doesn't support A bit. */
+> +	return kvm_tdp_mmu_handle_gfn(kvm, range, test_age_gfn, true);
+>  }
+>  
+>  static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+> @@ -1591,8 +1612,11 @@ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>  	 * No need to handle the remote TLB flush under RCU protection, the
+>  	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
+>  	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
+> +	 *
+> +	 * .change_pte() callback should not happen for private page, because
+> +	 * for now TDX private pages are pinned during VM's life time.
+>  	 */
+> -	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
+> +	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn, true);
+>  }
 >
-> # dmidecode 3.2
-> Getting SMBIOS data from sysfs.
-> SMBIOS 3.1.1 present.
-> Table at 0x8FFCAC0000.
->
-> Handle 0x0000, DMI type 0, 26 bytes
-> BIOS Information
->          Vendor: Ampere(TM)
->          Version: 1.0
->          Release Date: 06/28/2019
->          Address: 0xF0000
->          Runtime Size: 64 kB
->          ROM Size: 8192 kB
->          Characteristics:
->                  PCI is supported
->                  BIOS is upgradeable
->                  Boot from CD is supported
->                  Selectable boot is supported
->                  ACPI is supported
->                  UEFI is supported
->          BIOS Revision: 5.13
->          Firmware Revision: 1.0
->
-> Handle 0x0001, DMI type 1, 27 bytes
-> System Information
->          Manufacturer: MiTAC
->          Product Name: RAPTOR EV-883832-X3-0001
->          Version: PR010
->          Serial Number: 2AC2-B91602C
->          UUID: dfa0f1d6-835d-11e8-adb0-0cc47ad8d1fc
->          Wake-up Type: Power Switch
->          SKU Number: EV-883832-X3-OBX-1
->          Family: eMAG
->
-> Handle 0x0002, DMI type 2, 15 bytes
-> Base Board Information
->          Manufacturer: MiTAC
->          Product Name: RAPTOR
->          Version: EV-883832-X3-ED0-1
->          Serial Number: 2AC2-B91602C
->          Asset Tag: AMPX3A1-A000-0000000000022
->          Features:
->                  Board is a hosting board
->          Location In Chassis: Part Component
->          Chassis Handle: 0x0003
->          Type: Motherboard
->          Contained Object Handles: 0
->
-> Handle 0x0003, DMI type 3, 22 bytes
-> Chassis Information
->          Manufacturer: MiTAC
->          Type: Rack Mount Chassis
->          Lock: Not Present
->          Version: RAPTOR-00000000
->          Serial Number: A1A1-A000-0000000000022
->          Asset Tag: AMPX3A1-A000-0000000000022
->          Boot-up State: Safe
->          Power Supply State: Safe
->          Thermal State: Safe
->          Security Status: None
->          OEM Information: 0x00000000
->          Height: Unspecified
->          Number Of Power Cords: 1
->          Contained Elements: 0
->          SKU Number: EV-883832-X3-OBX-1
->
-> Handle 0x0004, DMI type 4, 48 bytes
-> Processor Information
->          Socket Designation: CPU 1
->          Type: Central Processor
->          Family: ARMv8
->          Manufacturer: Ampere(TM)
->          ID: 00 00 00 00 02 00 3F 50
->          Version: eMAG
->          Voltage: 0.9 V
->          External Clock: 3000 MHz
->          Max Speed: 3300 MHz
->          Current Speed: 3000 MHz
->          Status: Populated, Enabled
->          Upgrade: None
->          L1 Cache Handle: 0x0005
->          L2 Cache Handle: 0x0006
->          L3 Cache Handle: 0x0007
->          Serial Number: 00000000000000005011060302FB0988
->          Asset Tag: 00000000
->          Part Number: 00000000
->          Core Count: 32
->          Core Enabled: 32
->          Thread Count: 32
->          Characteristics:
->                  64-bit capable
->                  Multi-Core
->                  Hardware Thread
->                  Execute Protection
->                  Enhanced Virtualization
->
-> [...]
->
->
->
->
-> >
-> > Obviously, there is a related issue where some process keeps hitting
-> > on the RTC. Mind testing the below to see if the system is usable
-> > beyond the EFI problems, and perhaps have a stab at figuring out which
-> > process keeps hitting on the RTC like that?
-> >
-> > diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-> > index 1e8bc6cc1e12d855..cc4edb85841e8f67 100644
-> > --- a/drivers/rtc/rtc-efi.c
-> > +++ b/drivers/rtc/rtc-efi.c
-> > @@ -164,7 +164,7 @@ static int efi_read_time(struct device *dev,
-> > struct rtc_time *tm)
-> >
-> >          if (status != EFI_SUCCESS) {
-> >                  /* should never happen */
-> > -               dev_err(dev, "can't read time\n");
-> > +               dev_err_ratelimited(dev, "can't read time\n");
-> >                  return -EINVAL;
-> >          }
-> >
-> >
-> >
-> >>
-> >> random: crng init done
-> >> [Firmware Bug]: Unable to handle write to read-only memory in EFI runtime service
-> >> ------------[ cut here ]------------
-> >> WARNING: CPU: 7 PID: 325 at drivers/firmware/efi/runtime-wrappers.c:113 efi_call_virt_check_flags+0x48/0xb0
-> >> Modules linked in: btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq crct10dif_ce
-> >> CPU: 7 PID: 325 Comm: kworker/u64:1 Tainted: G        W I        6.2.0-rc8-rt1-[...]
-> >> Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.0 06/28/2019
-> >> Workqueue: efi_rts_wq efi_call_rts
-> >> pstate: 00000085 (nzcv daIf -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >> pc : efi_call_virt_check_flags+0x48/0xb0
-> >> lr : efi_call_rts+0x240/0x4b0
-> >> sp : ffff80000def3cf0
-> >> x29: ffff80000def3cf0 x28: ffff000801d10b05 x27: ffff80000b16d000
-> >> x26: 0000000000000000 x25: ffff80000b17e4a0 x24: ffff80000c84bd48
-> >> x23: ffff80000c84bd00 x22: ffff80000c84bd0c x21: 0000000000000080
-> >> x20: ffff80000a41d0e0 x19: 0000000000000000 x18: ffff80000a22b3a8
-> >> x17: 0000000000000000 x16: ffff80000d2dc000 x15: 0000000000000000
-> >> x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> >> x11: 0000000000000000 x10: 0000000000000000 x9 : ffff80000927cd60
-> >> x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-> >> x5 : ffff80000a7d1008 x4 : 0000008ffd1d0018 x3 : 0000000000000000
-> >> x2 : 0000000000000001 x1 : ffff80000a41d0e0 x0 : 0000000000000080
-> >> Call trace:
-> >>    efi_call_virt_check_flags+0x48/0xb0
-> >>    efi_call_rts+0x240/0x4b0
-> >>    process_one_work+0x2c8/0x7a0
-> >>    worker_thread+0x54/0x410
-> >>    kthread+0x130/0x140
-> >>    ret_from_fork+0x10/0x20
-> >> irq event stamp: 540538
-> >> hardirqs last  enabled at (540537): [<ffff80000927d97c>] efi_virtmap_load+0x28c/0x328
-> >> hardirqs last disabled at (540538): [<ffff8000095c8590>] el1_abort+0x28/0x100
-> >> softirqs last  enabled at (534078): [<ffff80000819cec8>] __local_bh_enable_ip+0xa8/0x2a8
-> >> softirqs last disabled at (534066): [<ffff80000934b408>] neigh_managed_work+0x8/0x100
-> >> ---[ end trace 0000000000000000 ]---
-> >> Disabling lock debugging due to kernel taint
-> >> efi: [Firmware Bug]: IRQ flags corrupted (0x00000000=>0x00000080) by EFI set_variable
-> >> ------------[ cut here ]------------
-> >> WARNING: CPU: 0 PID: 14 at drivers/firmware/efi/runtime-wrappers.c:341 virt_efi_set_variable+0x164/0x1c0
-> >> Modules linked in: btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq crct10dif_ce
-> >> CPU: 0 PID: 14 Comm: kworker/0:1 Tainted: G        W I        6.2.0-rc8-rt1-custom-[...]
-> >> Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.0 06/28/2019
-> >> Workqueue: events refresh_nv_rng_seed
-> >> pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >> pc : virt_efi_set_variable+0x164/0x1c0
-> >> lr : virt_efi_set_variable+0x150/0x1c0
-> >> sp : ffff80000c84bcc0
-> >> x29: ffff80000c84bcc0 x28: ffff008f35feb905 x27: ffff80000b16d000
-> >> x26: ffff80000b16ced0 x25: 0000000000000000 x24: ffff80000c344000
-> >> x23: ffff80000a41b2b0 x22: ffff80000c84bd38 x21: 8000000000000015
-> >> x20: ffff80000b63ecf8 x19: ffff80000c344480 x18: ffff80000a22b3a8
-> >> x17: 000000005a8ae2d0 x16: 0000000000000000 x15: ffff80000b16cfb8
-> >> x14: 0000000000000001 x13: 0000000000000030 x12: 0101010101010101
-> >> x11: 0000000571f160b9 x10: 0000000000002460 x9 : ffff8000095e2064
-> >> x8 : ffff80000a7d1008 x7 : 0000000000000004 x6 : ffff80000c84bb28
-> >> x5 : ffff80000c84c000 x4 : ffff80000c848000 x3 : ffff80000c84bc40
-> >> x2 : 0000000000000001 x1 : 0000000000000000 x0 : 8000000000000015
-> >> Call trace:
-> >>    virt_efi_set_variable+0x164/0x1c0
-> >>    refresh_nv_rng_seed+0x84/0xb8
-> >>    process_one_work+0x2c8/0x7a0
-> >>    worker_thread+0x54/0x410
-> >>    kthread+0x130/0x140
-> >>    ret_from_fork+0x10/0x20
-> >> irq event stamp: 35886
-> >> hardirqs last  enabled at (35885): [<ffff8000095e2050>] _raw_spin_unlock_irq+0x40/0xb8
-> >> hardirqs last disabled at (35886): [<ffff8000095e215c>] _raw_spin_lock_irq+0x94/0x98
-> >> softirqs last  enabled at (10754): [<ffff80000819cec8>] __local_bh_enable_ip+0xa8/0x2a8
-> >> softirqs last disabled at (10746): [<ffff800008256de0>] srcu_invoke_callbacks+0x100/0x1a8
-> >> ---[ end trace 0000000000000000 ]---
-> >> [...]
-> >> In-situ OAM (IOAM) with IPv6
-> >> efi: EFI Runtime Services are disabled!
-> >> efivars: get_next_variable: status=8000000000000007
-> >> [...]
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> rtc-efi rtc-efi.0: can't read time
-> >> [...]
-> >>
-> >>
-> >> On 2/15/23 17:10, Pierre Gondois wrote:
-> >>> Running a rt-kernel base on 6.2.0-rc3-rt1 on an Ampere Altra outputs
-> >>> the following:
-> >>>     BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> >>>     in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 9, name: kworker/u320:0
-> >>>     preempt_count: 2, expected: 0
-> >>>     RCU nest depth: 0, expected: 0
-> >>>     3 locks held by kworker/u320:0/9:
-> >>>     #0: ffff3fff8c27d128 ((wq_completion)efi_rts_wq){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
-> >>>     #1: ffff80000861bdd0 ((work_completion)(&efi_rts_work.work)){+.+.}-{0:0}, at: process_one_work (./include/linux/atomic/atomic-long.h:41)
-> >>>     #2: ffffdf7e1ed3e460 (efi_rt_lock){+.+.}-{3:3}, at: efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
-> >>>     Preemption disabled at:
-> >>>     efi_virtmap_load (./arch/arm64/include/asm/mmu_context.h:248)
-> >>>     CPU: 0 PID: 9 Comm: kworker/u320:0 Tainted: G        W          6.2.0-rc3-rt1
-> >>>     Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-> >>>     Workqueue: efi_rts_wq efi_call_rts
-> >>>     Call trace:
-> >>>     dump_backtrace (arch/arm64/kernel/stacktrace.c:158)
-> >>>     show_stack (arch/arm64/kernel/stacktrace.c:165)
-> >>>     dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-> >>>     dump_stack (lib/dump_stack.c:114)
-> >>>     __might_resched (kernel/sched/core.c:10134)
-> >>>     rt_spin_lock (kernel/locking/rtmutex.c:1769 (discriminator 4))
-> >>>     efi_call_rts (drivers/firmware/efi/runtime-wrappers.c:101)
-> >>>     [...]
-> >>>
-> >>> This seems to come from commit ff7a167961d1 ("arm64: efi: Execute
-> >>> runtime services from a dedicated stack") which adds a spinlock. This
-> >>> spinlock is taken through:
-> >>> efi_call_rts()
-> >>> \-efi_call_virt()
-> >>>     \-efi_call_virt_pointer()
-> >>>       \-arch_efi_call_virt_setup()
-> >>>
-> >>> Make 'efi_rt_lock' a raw_spinlock to avoid being preempted.
-> >>>
-> >>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> >>> ---
-> >>>    arch/arm64/include/asm/efi.h | 6 +++---
-> >>>    arch/arm64/kernel/efi.c      | 2 +-
-> >>>    2 files changed, 4 insertions(+), 4 deletions(-)
-> >>>
-> >>> diff --git a/arch/arm64/include/asm/efi.h b/arch/arm64/include/asm/efi.h
-> >>> index 31d13a6001df..37dc2e8c3500 100644
-> >>> --- a/arch/arm64/include/asm/efi.h
-> >>> +++ b/arch/arm64/include/asm/efi.h
-> >>> @@ -33,7 +33,7 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
-> >>>    ({                                                                  \
-> >>>        efi_virtmap_load();                                             \
-> >>>        __efi_fpsimd_begin();                                           \
-> >>> -     spin_lock(&efi_rt_lock);                                        \
-> >>> +     raw_spin_lock(&efi_rt_lock);                                    \
-> >>>    })
-> >>>
-> >>>    #undef arch_efi_call_virt
-> >>> @@ -42,12 +42,12 @@ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
-> >>>
-> >>>    #define arch_efi_call_virt_teardown()                                       \
-> >>>    ({                                                                  \
-> >>> -     spin_unlock(&efi_rt_lock);                                      \
-> >>> +     raw_spin_unlock(&efi_rt_lock);                                  \
-> >>>        __efi_fpsimd_end();                                             \
-> >>>        efi_virtmap_unload();                                           \
-> >>>    })
-> >>>
-> >>> -extern spinlock_t efi_rt_lock;
-> >>> +extern raw_spinlock_t efi_rt_lock;
-> >>>    efi_status_t __efi_rt_asm_wrapper(void *, const char *, ...);
-> >>>
-> >>>    #define ARCH_EFI_IRQ_FLAGS_MASK (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT)
-> >>> diff --git a/arch/arm64/kernel/efi.c b/arch/arm64/kernel/efi.c
-> >>> index fab05de2e12d..216933cf47ee 100644
-> >>> --- a/arch/arm64/kernel/efi.c
-> >>> +++ b/arch/arm64/kernel/efi.c
-> >>> @@ -145,7 +145,7 @@ asmlinkage efi_status_t efi_handle_corrupted_x18(efi_status_t s, const char *f)
-> >>>        return s;
-> >>>    }
-> >>>
-> >>> -DEFINE_SPINLOCK(efi_rt_lock);
-> >>> +DEFINE_RAW_SPINLOCK(efi_rt_lock);
-> >>>
-> >>>    asmlinkage u64 *efi_rt_stack_top __ro_after_init;
-> >>>
+If the mmu notifier callbacks will never operate on a private page, having a
+WARN_ON() is better than silently letting it fade away.  
+
+>  /*
+> @@ -1974,6 +1998,13 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
+>  	struct kvm_mmu_page *root;
+>  
+>  	lockdep_assert_held_write(&kvm->mmu_lock);
+> +	/*
+> +	 * First TDX generation doesn't support clearing dirty bit,
+> +	 * since there's no secure EPT API to support it.  For now silently
+> +	 * ignore KVM_CLEAR_DIRTY_LOG.
+> +	 */
+> +	if (!kvm_arch_dirty_log_supported(kvm))
+> +		return;
+>  	for_each_tdp_mmu_root(kvm, root, slot->as_id)
+>  		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
+>  }
+> @@ -2093,6 +2124,15 @@ bool kvm_tdp_mmu_write_protect_gfn(struct kvm *kvm,
+>  	bool spte_set = false;
+>  
+>  	lockdep_assert_held_write(&kvm->mmu_lock);
+> +
+> +	/*
+> +	 * First TDX generation doesn't support write protecting private
+> +	 * mappings, silently ignore the request.  KVM_GET_DIRTY_LOG etc
+> +	 * can reach here, no warning.
+> +	 */
+> +	if (!kvm_arch_dirty_log_supported(kvm))
+> +		return false;
+> +
+>  	for_each_tdp_mmu_root(kvm, root, slot->as_id)
+>  		spte_set |= write_protect_gfn(kvm, root, gfn, min_level);
+> 
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5b4d5f8128a5..c4579e696d39 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12526,6 +12526,9 @@ static void kvm_mmu_slot_apply_flags(struct kvm *kvm,
+>  	u32 new_flags = new ? new->flags : 0;
+>  	bool log_dirty_pages = new_flags & KVM_MEM_LOG_DIRTY_PAGES;
+>  
+> +	if (!kvm_arch_dirty_log_supported(kvm) && log_dirty_pages)
+> +		return;
+> +
+>  	/*
+>  	 * Update CPU dirty logging if dirty logging is being toggled.  This
+>  	 * applies to all operations.
+
