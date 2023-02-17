@@ -2,89 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244AB69A39B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB7F69A3A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjBQByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 20:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S230167AbjBQB4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 20:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjBQByW (ORCPT
+        with ESMTP id S229866AbjBQB4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 20:54:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB16C54D4E;
-        Thu, 16 Feb 2023 17:54:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67629611FC;
-        Fri, 17 Feb 2023 01:54:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAEF1C433EF;
-        Fri, 17 Feb 2023 01:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676598859;
-        bh=agbXHVVQrZH9Lxa2v7q69ZxZbnrrIgw3R/B4Tf3ExQM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=JOuHZJPY75iPidkI/ME8/EyH+M1k1S+rfzcHTdjEwlrrvUz4vrKQF9VjMKIHqkEZ8
-         klwJDSdO6B8+HYXvmO79KXsVSjj+3mUog9NwfXsq74IjmTZX8LEj4JYBarqDOkqAlC
-         oWXZhLT6/J2SMsiHzwwWLFCsrmSJ04iKD0FMlXrp9An7nbhFM4ii+xcJmJDkn9lpZs
-         MECGw3V0iFCXd+obMw7VwXWoAS8WkecAEYnme9JivChnjshfudwOEyIXtnwG2zJW01
-         rfGHueLZbg9VD3OUsqEAwLZoMCgzSRjmKP0pUq5gqKJmBZtY3sqW+UpUnPSAo8xBRq
-         SBKfIzoQ1tKVA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-In-Reply-To: <20230216123014.110541-1-brgl@bgdev.pl>
-References: <20230216123014.110541-1-brgl@bgdev.pl>
-Subject: Re: [PATCH] spi: spidev: drop the incorrect notice from Kconfig
-Message-Id: <167659885855.51558.18015897607199701976.b4-ty@kernel.org>
-Date:   Fri, 17 Feb 2023 01:54:18 +0000
+        Thu, 16 Feb 2023 20:56:54 -0500
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935A958291
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 17:56:52 -0800 (PST)
+Received: by mail-io1-f78.google.com with SMTP id y23-20020a6bc417000000b00743cace901bso2015167ioa.17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 17:56:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISU7/1DjKHh9fexdII7McIn/QS4zcm5Oor+4ZtCR53I=;
+        b=GODCDy80g/RlqUVP3C0mlseZgVxyEVp/Um67ZSL4KvfnmsxmSiqwVsBPcbshPiHy35
+         SlJw3kK51cd/ng6Lep/eafKJXLzmu3J4qQRaxXpR9cU1NwSBXxu1385gnsjvIIZekmzF
+         w2dLRJiyry7j5LWjUEDHjf1SzV/qEi7aXWa20MycYl40QhQu0opUmBSn54x62dEipTgC
+         nPaDmbt/SR555HfuhzbPBSkEEWsvWqmcJ+tT1M9q5cstjiLcMicnZnZdanc9avRvcK01
+         +Bt005t+ST0BvBbMT2O5IzLhnffzgR1O5AfmKFvkNCvpaFM3ysSCz7mcYoSGCkwlaNg0
+         uioA==
+X-Gm-Message-State: AO0yUKW4R1R7ODxE0OAq2O/k4SdVhw1w/JoNWS9lFF/WGQS/l7sd7mpI
+        SuCtk7lRvG7S9oN1SeDJeu5+/T2Z6T9t3AOCMmxc5y539uqj
+X-Google-Smtp-Source: AK7set8axkVHs4GrDeozxnytwgK4QumRQj4cbEg1tcE5vpxCqqzDm02l4wVnbBziW92X8gPIXqzenaQIiTAcZx1hfybN3o5OIxo6
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:bf3:b0:313:f6fa:bc50 with SMTP id
+ d19-20020a056e020bf300b00313f6fabc50mr2189182ilu.5.1676599011921; Thu, 16 Feb
+ 2023 17:56:51 -0800 (PST)
+Date:   Thu, 16 Feb 2023 17:56:51 -0800
+In-Reply-To: <00000000000000040a05e714f000@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008955d005f4dba008@google.com>
+Subject: Re: [syzbot] [reiserfs?] WARNING in reiserfs_readdir_inode
+From:   syzbot <syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 13:30:14 +0100, Bartosz Golaszewski wrote:
-> The spidev interface has been de-facto stable for many years. This notice
-> has been unchanged since 2007 and is incorrect so remove it.
-> 
-> 
+syzbot has found a reproducer for the following issue on:
 
-Applied to
+HEAD commit:    2d3827b3f393 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=14eb7f2b480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606ed7eeab569393
+dashboard link: https://syzkaller.appspot.com/bug?extid=798ffe5fe3e88235db59
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150829d7480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff04ab480000
 
-   broonie/spi.git for-next
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fd94d68ff17d/disk-2d3827b3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f304fbef0773/vmlinux-2d3827b3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/74eb318f51b0/Image-2d3827b3.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/37f569d9f961/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/0cd68cef0305/mount_1.gz
 
-Thanks!
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com
 
-[1/1] spi: spidev: drop the incorrect notice from Kconfig
-      commit: a46ce4f884817c66d0dc303b663b53b37d2baa24
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 4421 at kernel/locking/mutex.c:582 __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+Modules linked in:
+CPU: 0 PID: 4421 Comm: syz-executor270 Not tainted 6.2.0-rc7-syzkaller-17907-g2d3827b3f393 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+lr : __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+sp : ffff80000ff739e0
+x29: ffff80000ff73a50 x28: ffff80000eeb4000 x27: 0000000000000000
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+x26: 0000000000000000 x25: ffff800008748194 x24: 0000000000000002
+x23: ffff800008771cc4 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff0000c7bf7828 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: ffff0000c3a31a00
+x11: ff808000081bbb4c x10: 0000000000000000 x9 : f02dd3de9c24e500
+x8 : f02dd3de9c24e500 x7 : 4e5241575f534b43 x6 : ffff80000bf650d4
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
+Call trace:
+ __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_readdir_inode+0x9c/0x660 fs/reiserfs/dir.c:79
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x64/0x178 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0xbc/0x180 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x110 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x14c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+irq event stamp: 24433
+hardirqs last  enabled at (24433): [<ffff800008039178>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
+hardirqs last  enabled at (24433): [<ffff800008039178>] el0_svc_common+0x40/0x180 arch/arm64/kernel/syscall.c:107
+hardirqs last disabled at (24432): [<ffff80000bf55074>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+softirqs last  enabled at (24376): [<ffff80000801c878>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (24374): [<ffff80000801c844>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
