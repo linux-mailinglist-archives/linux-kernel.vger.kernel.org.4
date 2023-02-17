@@ -2,262 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083B669AAF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF8269AAF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjBQMCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S229789AbjBQMCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjBQMCJ (ORCPT
+        with ESMTP id S229722AbjBQMCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:02:09 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C91A644D2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:02:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B68851FED9;
-        Fri, 17 Feb 2023 12:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676635326; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mACMKGkLVmKwIhmiDATfkCj3naoi5sDdPp3jNtiu0xk=;
-        b=LUT4lxNqEsBXOTmxZ0r0+wIBOi2SFEFLYmIMr82dOXCd86PrSQL9UKJfhtjaZXPzk5u02L
-        FQp6xAQthq/Rp3KDNY1vsK704sIOGnmH1IHPqQmMpbjitXZhBH4J53oEXChM6PvVlUsHtV
-        ry+UyvqnjhiXujNlFih7KG9k9VwPeqE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676635326;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mACMKGkLVmKwIhmiDATfkCj3naoi5sDdPp3jNtiu0xk=;
-        b=kVCqF0xbW5oEImKQPZOMVnp0q7ESbx6zmAyUXmSeFKrj28IaIYux5CMmvWGZGPnI7+dGEB
-        YomSGMt59GjBOwDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 40AE213274;
-        Fri, 17 Feb 2023 12:02:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id POrZDr5s72OIWgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 12:02:06 +0000
-Message-ID: <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
-Date:   Fri, 17 Feb 2023 13:02:05 +0100
+        Fri, 17 Feb 2023 07:02:14 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83CD66CF7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:02:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676635332; x=1708171332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S0yxM7bf9cJzdbOvbAH/GUfz3h0ybmzQtUpTFVcp8h0=;
+  b=Gm9kds3DwSU631xCrQaysAeQpcedAIvOT/d4hdSfOEC3ggmynbWXfdsv
+   hn/A9EpTQutXR5mqYiGXAe6rOU5RsfYnB5tXrFGwmN6nNzJqkmg2YPyyk
+   V6iB5J96DkAJVk3vfleFrJw2C5LHfQ4c5Td3GzlOIEYHrXSOUR+QnEBCu
+   +lX6YJbHJBE67Vr9rBbY22XE6guupiV2t0IhHBrS3ya/62uXjekpFb1wA
+   EIk9KRbApAoGjYAu8ZSZ76AzRVJTx1ehKa8b+fYF0gH3NMhWF8luUR84t
+   efb6zwRvFXqA1TrYcqWLUtMOTWdx6cXBJAVyZ2MDffASXKTxv4MK8uohX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="396646589"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="396646589"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 04:02:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="739240904"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="739240904"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Feb 2023 04:02:11 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSzRK-000BQd-1m;
+        Fri, 17 Feb 2023 12:02:10 +0000
+Date:   Fri, 17 Feb 2023 20:02:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202302171904.ATesGXtj-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 01/11] drm/msm/gem: Prevent blocking within shrinker
- loop
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------60HqKSDbPSUan7IgnM30CTcf"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------60HqKSDbPSUan7IgnM30CTcf
-Content-Type: multipart/mixed; boundary="------------tqyCR4qpxrZiJIdETyfv5uk0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, virtualization@lists.linux-foundation.org
-Message-ID: <d1c560f1-0201-7b41-bb27-d6bcb332b8d4@suse.de>
-Subject: Re: [PATCH v10 01/11] drm/msm/gem: Prevent blocking within shrinker
- loop
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230108210445.3948344-2-dmitry.osipenko@collabora.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ec35307e18ba8174e2a3f701956059f6a36f22fb
+commit: f3c0eba287049237b23d1300376768293eb89e69 perf: Add a few assertions
+date:   5 months ago
+config: loongarch-randconfig-s033-20230217 (https://download.01.org/0day-ci/archive/20230217/202302171904.ATesGXtj-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f3c0eba287049237b23d1300376768293eb89e69
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f3c0eba287049237b23d1300376768293eb89e69
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/perf/
 
---------------tqyCR4qpxrZiJIdETyfv5uk0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302171904.ATesGXtj-lkp@intel.com/
 
-SGkNCg0KQW0gMDguMDEuMjMgdW0gMjI6MDQgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
-IENvbnNpZGVyIHRoaXMgc2NlbmFyaW86DQo+IA0KPiAxLiBBUFAxIGNvbnRpbnVvdXNseSBj
-cmVhdGVzIGxvdHMgb2Ygc21hbGwgR0VNcw0KPiAyLiBBUFAyIHRyaWdnZXJzIGBkcm9wX2Nh
-Y2hlc2ANCj4gMy4gU2hyaW5rZXIgc3RhcnRzIHRvIGV2aWN0IEFQUDEgR0VNcywgd2hpbGUg
-QVBQMSBwcm9kdWNlcyBuZXcgcHVyZ2VhYmxlDQo+ICAgICBHRU1zDQo+IDQuIG1zbV9nZW1f
-c2hyaW5rZXJfc2NhbigpIHJldHVybnMgbm9uLXplcm8gbnVtYmVyIG9mIGZyZWVkIHBhZ2Vz
-DQo+ICAgICBhbmQgY2F1c2VzIHNocmlua2VyIHRvIHRyeSBzaHJpbmsgbW9yZQ0KPiA1LiBt
-c21fZ2VtX3Nocmlua2VyX3NjYW4oKSByZXR1cm5zIG5vbi16ZXJvIG51bWJlciBvZiBmcmVl
-ZCBwYWdlcyBhZ2FpbiwNCj4gICAgIGdvdG8gNA0KPiA2LiBUaGUgQVBQMiBpcyBibG9ja2Vk
-IGluIGBkcm9wX2NhY2hlc2AgdW50aWwgQVBQMSBzdG9wcyBwcm9kdWNpbmcNCj4gICAgIHB1
-cmdlYWJsZSBHRU1zDQo+IA0KPiBUbyBwcmV2ZW50IHRoaXMgYmxvY2tpbmcgc2NlbmFyaW8s
-IGNoZWNrIG51bWJlciBvZiByZW1haW5pbmcgcGFnZXMNCj4gdGhhdCBHUFUgc2hyaW5rZXIg
-Y291bGRuJ3QgcmVsZWFzZSBkdWUgdG8gYSBHRU0gbG9ja2luZyBjb250ZW50aW9uDQo+IG9y
-IHNocmlua2luZyByZWplY3Rpb24uIElmIHRoZXJlIGFyZSBubyByZW1haW5pbmcgcGFnZXMg
-bGVmdCB0byBzaHJpbmssDQo+IHRoZW4gdGhlcmUgaXMgbm8gbmVlZCB0byBmcmVlIHVwIG1v
-cmUgcGFnZXMgYW5kIHNocmlua2VyIG1heSBicmVhayBvdXQNCj4gZnJvbSB0aGUgbG9vcC4N
-Cj4gDQo+IFRoaXMgcHJvYmxlbSB3YXMgZm91bmQgZHVyaW5nIHNocmlua2VyL21hZHZpc2Ug
-SU9DVEwgdGVzdGluZyBvZg0KPiB2aXJ0aW8tZ3B1IGRyaXZlci4gVGhlIE1TTSBkcml2ZXIg
-aXMgYWZmZWN0ZWQgaW4gdGhlIHNhbWUgd2F5Lg0KPiANCj4gUmV2aWV3ZWQtYnk6IFJvYiBD
-bGFyayA8cm9iZGNsYXJrQGdtYWlsLmNvbT4NCj4gRml4ZXM6IGIzNTJiYTU0YTgyMCAoImRy
-bS9tc20vZ2VtOiBDb252ZXJ0IHRvIHVzaW5nIGRybV9nZW1fbHJ1IikNCj4gU2lnbmVkLW9m
-Zi1ieTogRG1pdHJ5IE9zaXBlbmtvIDxkbWl0cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4N
-Cj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW0uYyAgICAgICAgICAgICAgfCA5
-ICsrKysrKystLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9tc20vbXNtX2dlbV9zaHJpbmtlci5j
-IHwgOCArKysrKystLQ0KPiAgIGluY2x1ZGUvZHJtL2RybV9nZW0uaCAgICAgICAgICAgICAg
-ICAgIHwgNCArKystDQo+ICAgMyBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCA1
-IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1f
-Z2VtLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+IGluZGV4IDU5YTBiYjVlYmQ4
-NS4uYzZiY2E1YWM2ZTBmIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dl
-bS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMNCj4gQEAgLTEzODgsMTAg
-KzEzODgsMTMgQEAgRVhQT1JUX1NZTUJPTChkcm1fZ2VtX2xydV9tb3ZlX3RhaWwpOw0KPiAg
-ICAqDQo+ICAgICogQGxydTogVGhlIExSVSB0byBzY2FuDQo+ICAgICogQG5yX3RvX3NjYW46
-IFRoZSBudW1iZXIgb2YgcGFnZXMgdG8gdHJ5IHRvIHJlY2xhaW0NCj4gKyAqIEByZW1haW5p
-bmc6IFRoZSBudW1iZXIgb2YgcGFnZXMgbGVmdCB0byByZWNsYWltDQo+ICAgICogQHNocmlu
-azogQ2FsbGJhY2sgdG8gdHJ5IHRvIHNocmluay9yZWNsYWltIHRoZSBvYmplY3QuDQo+ICAg
-ICovDQo+ICAgdW5zaWduZWQgbG9uZw0KPiAtZHJtX2dlbV9scnVfc2NhbihzdHJ1Y3QgZHJt
-X2dlbV9scnUgKmxydSwgdW5zaWduZWQgbnJfdG9fc2NhbiwNCj4gK2RybV9nZW1fbHJ1X3Nj
-YW4oc3RydWN0IGRybV9nZW1fbHJ1ICpscnUsDQo+ICsJCSB1bnNpZ25lZCBpbnQgbnJfdG9f
-c2NhbiwNCj4gKwkJIHVuc2lnbmVkIGxvbmcgKnJlbWFpbmluZywNCj4gICAJCSBib29sICgq
-c2hyaW5rKShzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaikpDQo+ICAgew0KPiAgIAlzdHJ1
-Y3QgZHJtX2dlbV9scnUgc3RpbGxfaW5fbHJ1Ow0KPiBAQCAtMTQzMCw4ICsxNDMzLDEwIEBA
-IGRybV9nZW1fbHJ1X3NjYW4oc3RydWN0IGRybV9nZW1fbHJ1ICpscnUsIHVuc2lnbmVkIG5y
-X3RvX3NjYW4sDQo+ICAgCQkgKiBoaXQgc2hyaW5rZXIgaW4gcmVzcG9uc2UgdG8gdHJ5aW5n
-IHRvIGdldCBiYWNraW5nIHBhZ2VzDQo+ICAgCQkgKiBmb3IgdGhpcyBvYmogKGllLiB3aGls
-ZSBpdCdzIGxvY2sgaXMgYWxyZWFkeSBoZWxkKQ0KPiAgIAkJICovDQo+IC0JCWlmICghZG1h
-X3Jlc3ZfdHJ5bG9jayhvYmotPnJlc3YpKQ0KPiArCQlpZiAoIWRtYV9yZXN2X3RyeWxvY2so
-b2JqLT5yZXN2KSkgew0KPiArCQkJKnJlbWFpbmluZyArPSBvYmotPnNpemUgPj4gUEFHRV9T
-SElGVDsNCj4gICAJCQlnb3RvIHRhaWw7DQo+ICsJCX0NCj4gICANCj4gICAJCWlmIChzaHJp
-bmsob2JqKSkgew0KPiAgIAkJCWZyZWVkICs9IG9iai0+c2l6ZSA+PiBQQUdFX1NISUZUOw0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL21zbS9tc21fZ2VtX3Nocmlua2VyLmMg
-Yi9kcml2ZXJzL2dwdS9kcm0vbXNtL21zbV9nZW1fc2hyaW5rZXIuYw0KPiBpbmRleCAwNTFi
-ZGJjMDkzY2YuLmI3YzEyNDIwMTRlYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L21zbS9tc21fZ2VtX3Nocmlua2VyLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL21zbS9t
-c21fZ2VtX3Nocmlua2VyLmMNCj4gQEAgLTExNiwxMiArMTE2LDE0IEBAIG1zbV9nZW1fc2hy
-aW5rZXJfc2NhbihzdHJ1Y3Qgc2hyaW5rZXIgKnNocmlua2VyLCBzdHJ1Y3Qgc2hyaW5rX2Nv
-bnRyb2wgKnNjKQ0KPiAgIAl9Ow0KPiAgIAlsb25nIG5yID0gc2MtPm5yX3RvX3NjYW47DQo+
-ICAgCXVuc2lnbmVkIGxvbmcgZnJlZWQgPSAwOw0KPiArCXVuc2lnbmVkIGxvbmcgcmVtYWlu
-aW5nID0gMDsNCj4gICANCj4gICAJZm9yICh1bnNpZ25lZCBpID0gMDsgKG5yID4gMCkgJiYg
-KGkgPCBBUlJBWV9TSVpFKHN0YWdlcykpOyBpKyspIHsNCj4gICAJCWlmICghc3RhZ2VzW2ld
-LmNvbmQpDQo+ICAgCQkJY29udGludWU7DQo+ICAgCQlzdGFnZXNbaV0uZnJlZWQgPQ0KPiAt
-CQkJZHJtX2dlbV9scnVfc2NhbihzdGFnZXNbaV0ubHJ1LCBuciwgc3RhZ2VzW2ldLnNocmlu
-ayk7DQo+ICsJCQlkcm1fZ2VtX2xydV9zY2FuKHN0YWdlc1tpXS5scnUsIG5yLCAmcmVtYWlu
-aW5nLA0KDQpUaGlzIGZ1bmN0aW9uIHJlbGllcyBpbiByZW1haW5pbmcgYmVpbmcgcHJlLWlu
-aXRpYWxpemVkLiBUaGF0J3Mgbm90IA0Kb2J2aW91cyBhbmQgZXJyb3IgcHJvbmUuIEF0IGxl
-YXN0LCBwYXNzLWluIHNvbWV0aGluZyBsaWtlIA0KJnN0YWdlc1tpXS5yZW1haW5pbmcgdGhh
-dCBpcyB0aGVuIGluaXRpYWxpemVkIGludGVybmFsbHkgYnkgDQpkcm1fZ2VtX2xydV9zY2Fu
-KCkgdG8gemVyby4gQW5kIHNpbWlsYXIgdG8gZnJlZWQsIHN1bSB1cCB0aGUgaW5kaXZpZHVh
-bCANCnN0YWdlcycgcmVtYWluaW5nIGhlcmUuDQoNClRCSCBJIHNvbWVob3cgZG9uJ3QgbGlr
-ZSB0aGUgb3ZlcmFsbCBkZXNpZ24gb2YgaG93IGFsbCB0aGVzZSBmdW5jdGlvbnMgDQppbnRl
-cmFjdCB3aXRoIGVhY2ggb3RoZXIuIEJ1dCBJIGFsc28gY2FuJ3QgcmVhbGx5IHBvaW50IHRv
-IHRoZSBhY3R1YWwgDQpwcm9ibGVtLiBTbyBpdCdzIGJlc3QgdG8gdGFrZSB3aGF0IHlvdSBo
-YXZlIGhlcmU7IG1heWJlIHdpdGggdGhlIGNoYW5nZSANCkkgcHJvcG9zZWQuDQoNClJldmll
-d2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KQmVz
-dCByZWdhcmRzDQpUaG9tYXMNCg0KPiArCQkJCQkgc3RhZ2VzW2ldLnNocmluayk7DQo+ICAg
-CQluciAtPSBzdGFnZXNbaV0uZnJlZWQ7DQo+ICAgCQlmcmVlZCArPSBzdGFnZXNbaV0uZnJl
-ZWQ7DQo+ICAgCX0NCj4gQEAgLTEzMiw3ICsxMzQsNyBAQCBtc21fZ2VtX3Nocmlua2VyX3Nj
-YW4oc3RydWN0IHNocmlua2VyICpzaHJpbmtlciwgc3RydWN0IHNocmlua19jb250cm9sICpz
-YykNCj4gICAJCQkJICAgICBzdGFnZXNbM10uZnJlZWQpOw0KPiAgIAl9DQo+ICAgDQo+IC0J
-cmV0dXJuIChmcmVlZCA+IDApID8gZnJlZWQgOiBTSFJJTktfU1RPUDsNCj4gKwlyZXR1cm4g
-KGZyZWVkID4gMCAmJiByZW1haW5pbmcgPiAwKSA/IGZyZWVkIDogU0hSSU5LX1NUT1A7DQo+
-ICAgfQ0KPiAgIA0KPiAgICNpZmRlZiBDT05GSUdfREVCVUdfRlMNCj4gQEAgLTE4MiwxMCAr
-MTg0LDEyIEBAIG1zbV9nZW1fc2hyaW5rZXJfdm1hcChzdHJ1Y3Qgbm90aWZpZXJfYmxvY2sg
-Km5iLCB1bnNpZ25lZCBsb25nIGV2ZW50LCB2b2lkICpwdHIpDQo+ICAgCQlOVUxMLA0KPiAg
-IAl9Ow0KPiAgIAl1bnNpZ25lZCBpZHgsIHVubWFwcGVkID0gMDsNCj4gKwl1bnNpZ25lZCBs
-b25nIHJlbWFpbmluZyA9IDA7DQo+ICAgDQo+ICAgCWZvciAoaWR4ID0gMDsgbHJ1c1tpZHhd
-ICYmIHVubWFwcGVkIDwgdm1hcF9zaHJpbmtfbGltaXQ7IGlkeCsrKSB7DQo+ICAgCQl1bm1h
-cHBlZCArPSBkcm1fZ2VtX2xydV9zY2FuKGxydXNbaWR4XSwNCj4gICAJCQkJCSAgICAgdm1h
-cF9zaHJpbmtfbGltaXQgLSB1bm1hcHBlZCwNCj4gKwkJCQkJICAgICAmcmVtYWluaW5nLA0K
-PiAgIAkJCQkJICAgICB2bWFwX3Nocmluayk7DQo+ICAgCX0NCj4gICANCj4gZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvZHJtL2RybV9nZW0uaCBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPiBp
-bmRleCA3NzJhNGFkZjUyODcuLmYxZjAwZmMyZGJhNiAxMDA2NDQNCj4gLS0tIGEvaW5jbHVk
-ZS9kcm0vZHJtX2dlbS5oDQo+ICsrKyBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPiBAQCAt
-NDc2LDcgKzQ3Niw5IEBAIGludCBkcm1fZ2VtX2R1bWJfbWFwX29mZnNldChzdHJ1Y3QgZHJt
-X2ZpbGUgKmZpbGUsIHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+ICAgdm9pZCBkcm1fZ2Vt
-X2xydV9pbml0KHN0cnVjdCBkcm1fZ2VtX2xydSAqbHJ1LCBzdHJ1Y3QgbXV0ZXggKmxvY2sp
-Ow0KPiAgIHZvaWQgZHJtX2dlbV9scnVfcmVtb3ZlKHN0cnVjdCBkcm1fZ2VtX29iamVjdCAq
-b2JqKTsNCj4gICB2b2lkIGRybV9nZW1fbHJ1X21vdmVfdGFpbChzdHJ1Y3QgZHJtX2dlbV9s
-cnUgKmxydSwgc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KPiAtdW5zaWduZWQgbG9u
-ZyBkcm1fZ2VtX2xydV9zY2FuKHN0cnVjdCBkcm1fZ2VtX2xydSAqbHJ1LCB1bnNpZ25lZCBu
-cl90b19zY2FuLA0KPiArdW5zaWduZWQgbG9uZyBkcm1fZ2VtX2xydV9zY2FuKHN0cnVjdCBk
-cm1fZ2VtX2xydSAqbHJ1LA0KPiArCQkJICAgICAgIHVuc2lnbmVkIGludCBucl90b19zY2Fu
-LA0KPiArCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgKnJlbWFpbmluZywNCj4gICAJCQkgICAg
-ICAgYm9vbCAoKnNocmluaykoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopKTsNCj4gICAN
-Cj4gICAjZW5kaWYgLyogX19EUk1fR0VNX0hfXyAqLw0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
-eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
-b3Rldg0K
+sparse warnings: (new ones prefixed by >>)
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got unsigned int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got unsigned int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got unsigned int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got unsigned int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got int [noderef] __percpu *
+>> drivers/perf/thunderx2_pmu.c:556:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     expected void *ptr
+   drivers/perf/thunderx2_pmu.c:556:9: sparse:     got int [noderef] __percpu *
 
---------------tqyCR4qpxrZiJIdETyfv5uk0--
+vim +556 drivers/perf/thunderx2_pmu.c
 
---------------60HqKSDbPSUan7IgnM30CTcf
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  539  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  540  /*
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  541   * Make sure the group of events can be scheduled at once
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  542   * on the PMU.
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  543   */
+5e2c27e833bb92 Ganapatrao Prabhakerrao Kulkarni 2019-10-16  544  static bool tx2_uncore_validate_event_group(struct perf_event *event,
+5e2c27e833bb92 Ganapatrao Prabhakerrao Kulkarni 2019-10-16  545  		int max_counters)
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  546  {
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  547  	struct perf_event *sibling, *leader = event->group_leader;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  548  	int counters = 0;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  549  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  550  	if (event->group_leader == event)
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  551  		return true;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  552  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  553  	if (!tx2_uncore_validate_event(event->pmu, leader, &counters))
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  554  		return false;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  555  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06 @556  	for_each_sibling_event(sibling, leader) {
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  557  		if (!tx2_uncore_validate_event(event->pmu, sibling, &counters))
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  558  			return false;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  559  	}
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  560  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  561  	if (!tx2_uncore_validate_event(event->pmu, event, &counters))
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  562  		return false;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  563  
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  564  	/*
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  565  	 * If the group requires more counters than the HW has,
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  566  	 * it cannot ever be scheduled.
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  567  	 */
+5e2c27e833bb92 Ganapatrao Prabhakerrao Kulkarni 2019-10-16  568  	return counters <= max_counters;
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  569  }
+69c32972d59388 Kulkarni, Ganapatrao             2018-12-06  570  
 
------BEGIN PGP SIGNATURE-----
+:::::: The code at line 556 was first introduced by commit
+:::::: 69c32972d59388c041268e8206e8eb1acff29b9a drivers/perf: Add Cavium ThunderX2 SoC UNCORE PMU driver
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvbL0FAwAAAAAACgkQlh/E3EQov+CM
-2A//Uo45QtEGjAxG+/XhSjINQQnVlwRSOUKHHWkC+fzXekjz3UiViw8+XFoq7MOVtC8k+1jWbizy
-oHTo5XQLVDIWeQsjeKOhjZbBtkHGJmuIeulByY1CiRDdyFN/zdbnUWFph6Rbe9gg77PhV5XfzcHy
-CWIJro5s7hifW4pLWo0lSzKzoRHzNeAQdBlxCkhUn+zp6arIG3WTkkTiy3Mv7L1VReqed5g2asnT
-YQ5tt/giKFTCVH7hgnELDKHhvXGukbOfa6qielkpC+B4TSpjIsV0VV1vvmcNp1bIzo/qSIChOAnq
-RKx8HprQX4dxIvdFJyHQqBe3keP9B3eZn0G3YtmfrNHHZXAqHFkbezRP4a7W0MkppwesYWkILbB6
-wSJrFjkakiiNpmfJ5Y86eXeop6i47rW+GLZos24DtViz9x971athhdb7p2Y/agEIcZ/5+nLBrdAG
-nUe6K5Qjj8Ht1HGfOq19YNvZhtBbUdWa8G1HYAz1HgdrnKPEZ7ZuIQPgDfIec+nlc0nz8j2RDXL/
-y2e/fOHpaesTqtL9c6uGEbiZoVQVy1VSTrkQMDVoLy8Cs7ZABuXazJYb41I4LA9+hder099va3Og
-wrB/Cr/IXvwnwcUaA6kf5ReY2yfTr/0qqRhZ1g2yidByDIz1biJReuZnj5mkRdiIWOq0GPvqkYV9
-uSY=
-=w/RX
------END PGP SIGNATURE-----
+:::::: TO: Kulkarni, Ganapatrao <Ganapatrao.Kulkarni@cavium.com>
+:::::: CC: Will Deacon <will.deacon@arm.com>
 
---------------60HqKSDbPSUan7IgnM30CTcf--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
