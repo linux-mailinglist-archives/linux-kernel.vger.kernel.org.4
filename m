@@ -2,183 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B51669A369
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B1B69A36F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBQBbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 20:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S229930AbjBQBdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 20:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBQBba (ORCPT
+        with ESMTP id S229505AbjBQBdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 20:31:30 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2117.outbound.protection.outlook.com [40.107.243.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE142A14E;
-        Thu, 16 Feb 2023 17:31:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RnRyuLykRRN2JFHSCqZVdDpCfq9I0Blsex1g//mLuFd3PIaTNGl4QGTG2aJ4mwYN24hwLnN/zmhKbYmSJExy4SJgSlPoFfSnDT4SsYikVMtmTA2S+j0eBKUgUV/0r6D8jt6IepATg9DySxvtvCwX7KfeAqmP+5lDWhCaZfP5Qk/vnkbvnbSFQ3mjx+zrW2ag71Z9EorNuGeWGO4RtPXJcMmY2KrLHbAak0yaDQ02caNgaxvY/R7lQ8xzuqrsUtLsoOFe/mhfstSj+fv2jm0rsGsyZmQsRqDpguJomnqCLmIhG31zFzPaH36sJ1aiuUxMiYCk4QVsznh30zBQMdOuyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jAklMvPAGipU84IKn0S3QZqsERClNKEOhPtalJk+Irk=;
- b=hZ0CUfA3GvrUl2vDmASF6VoLjfTi8M+788kkg4gM3mre0+uCA0yeKc3xVhsbVtRhpLUJjRvnvnmSPGfuY425GKSWNUGg5iLBSjEyz6oIG4o3N9ZtUvP7TtfgnTmQNfECZ222/7iK3b1H84lobJ7H31iMtigVa+yIGJUli3GWtfiTbLTNdLUxDJfecOAQnDSR0Bne53BANAgwSgK0Kx+g0IKde1OjbgFQMEVLFM9qgdJQmSQxHvLIGkDWfgSg2QY0y+uzDU+Q5+VSVSwIC23Qoa+CtPoPmB9E+X0oslW8nLv3in8y9su9kXo36LR+sgLHXZTDInqjDLi553juAZPkpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jAklMvPAGipU84IKn0S3QZqsERClNKEOhPtalJk+Irk=;
- b=ZdOUXV265yOO23DNUOon/7gi/htZVgGc5xIvnATa7sNm9ck/L5DdrrXU127ZBMmRpI2h7gnrdXajLqcAw6s/pY2Qel7ONuV6H1K5VR6j5AGbo0zebks7yv9s/JCRPP1NaC+r3J1icmOqirKgOvSBj8gZuh86QJp8ovSkQyXlnLQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DS7PR10MB5949.namprd10.prod.outlook.com
- (2603:10b6:8:86::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.6; Fri, 17 Feb
- 2023 01:31:27 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6111.010; Fri, 17 Feb 2023
- 01:31:27 +0000
-Date:   Thu, 16 Feb 2023 17:31:24 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [RFC v1 net-next 7/7] net: dsa: ocelot_ext: add support for
- external phys
-Message-ID: <Y+7Y7Ei7PXYXipLP@colin-ia-desktop>
-References: <20230216075321.2898003-1-colin.foster@in-advantage.com>
- <20230216075321.2898003-8-colin.foster@in-advantage.com>
- <Y+4Q3PDlj+lVQAPx@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+4Q3PDlj+lVQAPx@shell.armlinux.org.uk>
-X-ClientProxiedBy: MW4PR04CA0346.namprd04.prod.outlook.com
- (2603:10b6:303:8a::21) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Thu, 16 Feb 2023 20:33:22 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73EB938E8D;
+        Thu, 16 Feb 2023 17:33:20 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Cx75df2e5j5ZUBAA--.2743S3;
+        Fri, 17 Feb 2023 09:33:19 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxQuVb2e5j2PA0AA--.63274S3;
+        Fri, 17 Feb 2023 09:33:15 +0800 (CST)
+Message-ID: <57be9198-5b8c-d0d2-2d6e-d1d4855bf38b@loongson.cn>
+Date:   Fri, 17 Feb 2023 09:33:15 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|DS7PR10MB5949:EE_
-X-MS-Office365-Filtering-Correlation-Id: 987e2578-bc28-4df2-d1b4-08db1086b053
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e+cl+XYsX8VTGKpasaqOnm0Hdh5h4AEZRcD+lZ9wS/aJUhLEbh5P14u43J+uGFVP686Cd/fe8HT6hjF25WbmymVefGgPAZ2MhOWWoFTxVEpm0kdR96K5Fn5jQ81IMFE7nGxNZCKbtxjQVWIUdmmUIUH7hU3MJ6LzVNazDrNT9pO+eUV6j+AHdPjH1fYGiqP4TF3VAQmWXHIlXgb8TAeoaY1JtudOcZ0ux/+6yYxU7M7bSi+E29omsgrhxtXlSqB7qiqOUijmZvjBGROcuqLxGjotyLnLvoe1wU7cMpd3zq6oKG9WQZQzcxTon3+7zmvWN++NeDixpAig+eyZQPH4DCkZBM5tA34EaSzY2var0sohPNn3irZ2eWK/GcWvdKJjqM9MCzTZKQH7miPi+pgEmsPLS+zPCi7Ihgdks86pvP/zIzjCuDEVEfjX/P4H6UCcEXOxYa0/32HB45XNUXgd6BWukyoOo2WL2oVHFdDBQeDKS+KpXOk01BVnFEHYO5rYzzl1cY7r2+iBP4Jebr+5qNgodKn6YCOSSG0ZWe4MiLLdfIh+DM37ke3/YhZs/akpwO2iVrGD6JIiAgEBPAuLql8Vcnr6xYXgQ0y3LhhsOdZLpQYS2gj1tyiMVN+h4sbmg6G7dpOCTRZnUbVcaL7Bl5RzZgPplVgoeYyqGZCV0vOzLHq4BgcOa5z3CSGix2Do
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(376002)(346002)(39840400004)(366004)(396003)(451199018)(5660300002)(7416002)(41300700001)(8936002)(54906003)(44832011)(2906002)(8676002)(66476007)(316002)(66556008)(66946007)(6916009)(4326008)(966005)(6486002)(478600001)(9686003)(6506007)(6512007)(26005)(186003)(6666004)(83380400001)(38100700002)(33716001)(86362001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DCBKdnuAt6RGH/T89NSDmQi4OEyBwl+Q5qxTZDBFT0SxKVy1PKRUke2GfcCZ?=
- =?us-ascii?Q?htWBcVfz4OFrbdamTp6y8hz2tHwOzACiHUQ/l0aeDHbJA9giRXqz1rUQIRO6?=
- =?us-ascii?Q?6oiRjPtgCRcJLFaWy25FkrlXUIdcpjlpI5DFn03uowmUyUiR4Jzfc0uuICzi?=
- =?us-ascii?Q?HlJuQiRNXyU8BYlgCbS9KOBl51nk5GEIig+83+uW8FyiJc6FmZTF/ulQN3sq?=
- =?us-ascii?Q?nCSy3t63Oc6UqDLIKanJEPRzNzcftyWEeJ0DOJh180KE3ke9EbjFBNRU8E0h?=
- =?us-ascii?Q?zMkJDcqwQmA7/3kX9Gd/kQqj2W2RtrsZhd7/iQ3/iMwddxbHNszW132YSa69?=
- =?us-ascii?Q?rd+t/sf5nICVTxPqU63z//pwyADWlrFPwiXr1tSRBIwtWwl4Ys51WbU1em1Z?=
- =?us-ascii?Q?9KzHzf/F94YugKguUJySEe5GiegWkwocUB6xJU6OKLuelY/2/AYI9Va8l2MK?=
- =?us-ascii?Q?6LI7ZImjhn6H10kEk0zzAXqOp2YZX7mgLOZxnbWNwFDWiZO7yy/dnQSqMcQG?=
- =?us-ascii?Q?FmVBC9JA/JZEi7wNmdlXoO6TNU1il5FjtJQlcCZ6wub5eKPYLj7OlRTC9hxz?=
- =?us-ascii?Q?JiHK4zVjctxkGJ846urTczexMqbnnu1t0CAMmm7tu6Osr9bNAbm1Ko8pMS8O?=
- =?us-ascii?Q?bZ2JoK0FZO1qFGDyf3ePOv99UuKsC0uukV2wR5NNe+kMT8Hxs/RdB9yNg7Aj?=
- =?us-ascii?Q?p1RDycZ59FmPmKpIaUR6K3sq53O3rNtCagcpNId4TN44anBMSqC43GhBNazK?=
- =?us-ascii?Q?RRPU9AWSbZS5amqx/IATPK71wxCD56MbE6DFhFo3Px9PNUxtjc8TubI0Zh/D?=
- =?us-ascii?Q?No4+0mEuDx/Lf21WKCJpNxO9kTv+seH+tVa3tEvBPYg/wmzwpWlPuBbphig1?=
- =?us-ascii?Q?TL31sxcSR2rlB5z6v8TAG71yd8NDc6/JyQh7aOzOVGg0rvGGbwnmg2L66r0c?=
- =?us-ascii?Q?1ydvVhSyO+/sDIyb/n9GTkCh0gBNVpzpL4oZwVvwC5VX3IEWni1pr+2Cu5UH?=
- =?us-ascii?Q?s2how/KqXN3l60LbaIKungDmGF0w4bF0Zt3DPlnqrny1sizP6e+P4Pm/BcVN?=
- =?us-ascii?Q?8/AEM8cDuWNAhBzaBJW9HhFE1uxMORZhi701G1OZ/9RHTc5Q0G5wV3OWq1DU?=
- =?us-ascii?Q?5QbQIFKTsO5RRAjufWkDNqvDo8I8x65M9o2cDb2U+WsNgB0n8KnQl9BFcZYX?=
- =?us-ascii?Q?Z1jx6r5DHcEPyJWDwjEYHeMP76Ily654+UxE9yeEcA/KBK2iDBlnj00vxFze?=
- =?us-ascii?Q?vzPXWhmNbA1o0TPMD6iYPwWzIADEonR4WKx6ddRicJukvnNeVgXOdKGLuA/j?=
- =?us-ascii?Q?6K79+Ff3mqGKlsgtjPwo1tjukJhPJx/Op1Ce0RySv4KA56n2O+NwXkUr0kLW?=
- =?us-ascii?Q?7fgYVkWThCO1LAZ/eJI3xEsNlyBUUim3ffW0ZlN7WS7WSM7S4dnafZyIw+i9?=
- =?us-ascii?Q?u2B9+4nr2EBq7qQkv4n9rQQf2zjMbFYDiLrbjBqRHBqcgjPFlvejG3ehORkz?=
- =?us-ascii?Q?v0OKwaD+JMdZwhU31vQUBfdnFoAq5dJae/SsxmoKa/8ZIm/MbCxmFCU3OGNi?=
- =?us-ascii?Q?gPzkhjRXKr+J7bHq6wW264RbR0dhyzaIpWkr47s1i7hjcYrV4qiIknqUiYV1?=
- =?us-ascii?Q?DcTLtBXiQEl5KKPpt9FZioM=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 987e2578-bc28-4df2-d1b4-08db1086b053
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 01:31:27.4564
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ekpfUoZLPoR2VRAwGkRlQK9hW+1LDCiqh09Du4gJDFvZQRJeeYVadRUpx1vUCGpOP7IHHlKpOF5c3Lmo0uhQP/CNtdlgpxuUzVajZ9J2WZU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5949
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
+ interface
+To:     Oliver Upton <oliver.upton@linux.dev>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
+ <20230214025648.1898508-2-zhaotianrui@loongson.cn>
+ <Y+ssT+W27GxDRAAZ@kroah.com>
+ <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
+ <Y+tbMwXjA0hkiUJA@kroah.com>
+ <a44fc722-e3e2-7f8a-0454-f27a8a10d52b@loongson.cn>
+ <Y+6FTC1vBeZoZx8V@linux.dev>
+Content-Language: en-US
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <Y+6FTC1vBeZoZx8V@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxQuVb2e5j2PA0AA--.63274S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tr4rZr18CF4DJryrGr47XFb_yoW8uw4fpa
+        yjkF4UKF4qqr1Ig392yrnFg3Z8Cw4UJFsxZF1Fqw45AFWDJr1xCF4xKF4YkF9Fvr4kCF10
+        vFyjq3s3urWqyrDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:17:48AM +0000, Russell King (Oracle) wrote:
-> Hi Colin,
+
+
+在 2023/2/17 03:34, Oliver Upton 写道:
+> On Tue, Feb 14, 2023 at 09:00:50PM +0800, Tianrui Zhao wrote:
+>> 在 2023年02月14日 17:58, Greg Kroah-Hartman 写道:
+>>> On Tue, Feb 14, 2023 at 05:00:56PM +0800, Tianrui Zhao wrote:
+>>>>>> +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
+>>>>>> +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
+>>>>> Why does this arch need new ioctls?
+>>>> We want to use this ioctl to access multiple csrs at one time. If without
+>>>> this, we only access one csr.
+>>> What is wrong with accessing only one csr at a time?  Isn't this what
+>>> other architectures do?
+>>
+>> Generally, using KVM_GET_ONE ioctl to get one reg, but we want a
+>> more convenient interface to get serial regs at one time, so we add this
+>> ioctl.
 > 
-> On Wed, Feb 15, 2023 at 11:53:21PM -0800, Colin Foster wrote:
-> > +static const struct phylink_mac_ops ocelot_ext_phylink_ops = {
-> > +	.validate		= phylink_generic_validate,
+> Have you found register accesses through the KVM_{GET,SET}_ONE_REG
+> ioctls to actually be a bounding issue? I'd be surprised if that were
+> actually the case.
 > 
-> There is no need to set this anymore.
-
-I'll remove. Thanks.
-
-> > +static int ocelot_ext_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
-> > +				 phy_interface_t interface,
-> > +				 const unsigned long *advertising,
-> > +				 bool permit_pause_to_mac)
-> > +{
-> > +	struct ocelot_ext_port_priv *port_priv =
-> > +		phylink_pcs_to_ocelot_port(pcs);
-> > +
-> > +	switch (interface) {
-> > +	case PHY_INTERFACE_MODE_QSGMII:
-> > +		ocelot_ext_phylink_mac_config(&port_priv->phylink_config, mode,
-> > +					      NULL);
+> An architecture-neutral implementation was entertained a few years ago
+> [*], but even then it saved an inconsequential amount of time relative
+> to the rest of VM serialization (at least for arm64). The one thing that
+> series got right was to share the plumbing across all architectures that
+> use the ONE_REG interface (i.e. everyone but x86).
 > 
-> Why are you calling a "mac" operation from a "pcs" operation? If this
-> PCS is attached to the same phylink instance as the MAC, you'll get
-> the .mac_config method called along with the .pcs_config, so calling
-> one from the other really isn't necessary.
+> If you have data that supports the thesis that a batched ioctl is
+> useful then please do share. But in any case this should not use an ioctl
+> tied down to a single architecture.
+we found this issue during migration downtime stage, all vcpus will get
+vcpu hw registers by KVM_GET_ONE_REG interface. If the virtual machine
+has many vcpus, it will increase downtime time and reduce migration success
+ratio; however it is just in theory and there is no actual data supporting
+the point.
 
-Per the other email, it was my misunderstanding - probably from the
-unnecessary phylink_create(). V2 will be cleaned up.
+I am newbie for kvm:), and we will use KVM_GET_ONE_REG interface for loongarch
+kvm for updated patches, which is common for all architectures. I just think
+that it is normal to get many registers just like ptrace function, ptrace
+regset API can be used to get many registers at one time.
 
-...
-
-> > +
-> > +	phylink = phylink_create(&ocelot_ext_port_priv->phylink_config,
-> > +				 of_fwnode_handle(portnp),
-> > +				 phy_mode, &ocelot_ext_phylink_ops);
-> 
-> I'm confused. DSA already sets up a phylink instance per port, so why
-> do you need another one?
-
-Also in the other email, it is definitely my confusion. I'll get things
-straighened out for V2, as these patches seem more complicated than they
-need to be.
+Regards
+Bibo, Mao
 
 
-Thanks again!
 
 > 
-> Thanks.
+> [*] https://lore.kernel.org/kvm/20201120125616.14436-1-darkhan@amazon.com/
 > 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
