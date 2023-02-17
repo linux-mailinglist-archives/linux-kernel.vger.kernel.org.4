@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2036869A4D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 05:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF0769A4DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 05:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjBQEXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 23:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S229555AbjBQEYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 23:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBQEXC (ORCPT
+        with ESMTP id S229505AbjBQEYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 23:23:02 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D70298F5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:23:00 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id k4so4337856vsc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:23:00 -0800 (PST)
+        Thu, 16 Feb 2023 23:24:47 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87AF3A0B4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:24:46 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id k6so4352750vsk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:24:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qMJrW3rbhiV2WpI8udS44p8yxQXPp4OR7zwWUWrBLQY=;
-        b=cb+NU7/hOrbeIcSAvzvU+tZuwXMCxS0dDxTkUfSdzU72XQQPcT8u+iahlUuOdzU6G+
-         untKhF7BuSkJYwsQTHm2q81nQF5w/Vk7P/NK54b2hAojRwwkWbK/gDWpIWeVE6Wxlhyx
-         yTIo8iQGaV/K4usRg+HpQ1zTWM40TWLc9vt3E=
+        bh=PJu4vps/ydzm+bD68RapcHOeOMmzQwBmAiW7NmBj0zU=;
+        b=N9QazQscN5/bMrTwGxOfAtM8xQD0zg2C7V00UxsuXtYfAz5LVfV9yZkceaMx30llQS
+         MbtMbGZSrDyQ8f+5wFmT5KPHG7yoVHYuRGjV/K+K1/YBzfts3DWsIWEL2wK13NHsBONL
+         3WSw5YTZ0a5gR+5SW3CY0ht9ZWgZiEHmWxeYTUfbfTwp27jM0ayQIQmuMeH32n16zCMS
+         LlHALD1+pwPBgt3KwWvli37N4+ulQIAdwqaKEMOyIYnaNF0PxJI5iNKryPEMJ1JxgseD
+         cL+jVcKxymHBK7RZixjBM3EahjNXB2uD4wOmYf/cmuvuGiqT2+UiebhqO4obZD3C2vfh
+         jyHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qMJrW3rbhiV2WpI8udS44p8yxQXPp4OR7zwWUWrBLQY=;
-        b=26aMBBoKgKNGCs8Jaop+6K+i6ItHzwxlj/v0MklPgj/VOS0CnGbTQyQre1sncTf4X8
-         FqNeZktuJcfBe34tskN/YTAAYYqsa2xbZrXsLv8PfwHtLlwIJKMOVk6Vm4g8gniEgFZ4
-         kmt03h6z+mHx8r9k4QeYhVH2N465gR+4YHSC+rTVuIHca1o+LyRnD8wWmoWfRIsppa6I
-         ADsS9CFKR+vOBbF5k/GPp9jhoEHMunkK/ENUJOL7R4OJMVRRSaUEggmapGxI5LxqRRq/
-         Np16TQsWv92OnaXVYPtS+a50IJ3jv+BNtACxGXbIhlAq/SAjWMpSD5FXoDC7dKw/bBqm
-         ukDw==
-X-Gm-Message-State: AO0yUKXp7/2Gkf0C2iem2FzJl/wi1RslGaowAkk9IuUF+r9hkkoQQS01
-        JkxJbLcDinXLfi9ichcC5pPAF0O+lcQ1TkJqS4RGXw==
-X-Google-Smtp-Source: AK7set9vsLwX+gthcvL2Wxef+YafrTV4xzfWZkMbI8ss4V/DiE2fTut21H1Wtq3OHhxIlP71d2IMxXbDSdVrl7GcBi0=
-X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr1529005vso.60.1676607779821; Thu, 16 Feb
- 2023 20:22:59 -0800 (PST)
+        bh=PJu4vps/ydzm+bD68RapcHOeOMmzQwBmAiW7NmBj0zU=;
+        b=cUkJRhoi69OTOZcYwnttJM5gDX/jbKclfuj+XGGOWUiEaS9f+RZRxqDZR6MR9lm4S3
+         70TSIxikToJQcGwg9HkUGLjmvEG9nY9TArhlp6C39FiJvHN6YS0zMPBBA9wG1SH4ybZQ
+         eP5oIaXmnzMlStquD0D+3sZzTp7mHNCKBNfZWXpSZO3qTc2FDtUBDCZ9Fg4f1wa9OEpr
+         kUWq5j1wBl4KeExREP6QTfLXuksEY8SeN4wU1pqSlaF+ICfSLJhM9OYuQ7c3yA2du6IE
+         2QMAeHNNEj9gZVtXMWI/n3kBbnc47ahRaXi4iA6SAIMJIIAJNE41WfQLTPX6jxICk3oo
+         Gmdg==
+X-Gm-Message-State: AO0yUKXrhwhLvDcgIsDRYxtzlnrcbkTxdqITZbLqLXIsbq0kNvJ1oTlT
+        NGmbHF4sNOWIKsoC4Wl6M+XOYkTu/1jZS1bmjVuVcw==
+X-Google-Smtp-Source: AK7set+Yem2rWelUagYff1NdlU4Jg460e39X+mAJEfXHa9zcbTd/sITo7f0UTvcIS0NfZcWWeb2tTMWiIhTxmfPdL/A=
+X-Received: by 2002:a67:cf47:0:b0:411:c1a0:c787 with SMTP id
+ f7-20020a67cf47000000b00411c1a0c787mr1603908vsm.26.1676607885989; Thu, 16 Feb
+ 2023 20:24:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-36-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-36-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Feb 2023 12:22:48 +0800
-Message-ID: <CAGXv+5HHQ+ZQt6CVOKKvef5CQVWe1AW6N07GSUCBuFZc5P=59Q@mail.gmail.com>
-Subject: Re: [PATCH v2 35/47] clk: mediatek: Add MODULE_LICENSE() where missing
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-5-yuzhao@google.com>
+In-Reply-To: <20230217041230.2417228-5-yuzhao@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 16 Feb 2023 21:24:09 -0700
+Message-ID: <CAOUHufbjbaBtNQX-uSOUQEDoH9nAE0nC7L+ssoPF3WHpQuiwuw@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 4/5] kvm/powerpc: add kvm_arch_test_clear_young()
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Thu, Feb 16, 2023 at 9:12 PM Yu Zhao <yuzhao@google.com> wrote:
 >
-> In order to successfully build clock drivers as modules it is required
-> to declare a module license: add it where missing.
-> While at it, also change the MODULE_LICENSE text from "GPL v2" to
-> "GPL" (which means the same) on clk-mt7981-eth.c.
+> This patch adds kvm_arch_test_clear_young() for the vast majority of
+> VMs that are not nested and run on hardware with Radix MMU enabled.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> It relies on two techniques, RCU and cmpxchg, to safely test and clear
+> the accessed bit without taking the MMU lock. The former protects KVM
+> page tables from being freed while the latter clears the accessed bit
+> atomically against both the hardware and other software page table
+> walkers.
+>
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> ---
+>  arch/powerpc/include/asm/kvm_host.h    | 18 ++++++
+>  arch/powerpc/include/asm/kvm_ppc.h     | 14 +----
+>  arch/powerpc/kvm/book3s.c              |  7 +++
+>  arch/powerpc/kvm/book3s.h              |  2 +
+>  arch/powerpc/kvm/book3s_64_mmu_radix.c | 78 +++++++++++++++++++++++++-
+>  arch/powerpc/kvm/book3s_hv.c           | 10 ++--
+>  6 files changed, 110 insertions(+), 19 deletions(-)
 
-Looks like all files have it now.
+Adding Michael, Nicholas and Christophe.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+I'm not sure who I should add for this patch. Can you please add any
+interested parties that I've missed?
+
+Thank you.
