@@ -2,200 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E43469AC49
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7576F69AC57
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjBQNUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S229823AbjBQNY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBQNUB (ORCPT
+        with ESMTP id S229436AbjBQNY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:20:01 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D410067452;
-        Fri, 17 Feb 2023 05:19:58 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id CC70D3200916;
-        Fri, 17 Feb 2023 08:19:53 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 17 Feb 2023 08:19:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1676639993; x=1676726393; bh=my
-        TFn4KmrWimVKjCPObg5mC8iDNbWDR3kBMFSM8XDnQ=; b=jIl4Nkl5jkqu+kJgn0
-        wN3uIEIM7zCYq38PGioTcFq7vXepwAOt0Yrlh2RIluYl39TyOPQOdpDut3RpbIOA
-        Vohcmg5M2B1sl1ySUYJhLnyd0Ubk2RT8YqMB+Hg+t9xKnzhoUG15qhsMHOtvFth1
-        dkh0X2N2KBk90VztU/Qvb3JkyFaJ1fYP57Bw+ogBoh24Lx/r4tRINJVR7O16jsBN
-        LVTjws1NZMWCQ2CrJ9GPQoCmwy11gT3yZ6XoropRxbCy43JuISPzshzPyKOp7ebh
-        87Ho9RXevbBCmlDQbnlf0bQdcjjhN5e9oedv4B7524ZLorgok+/GcdlSS/DdgCmK
-        AUUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676639993; x=1676726393; bh=myTFn4KmrWimVKjCPObg5mC8iDNb
-        WDR3kBMFSM8XDnQ=; b=cUKALe8Q4obU06Q6HHbdK8SDP5dP9iGmM13t4a2n6fz2
-        911jUXRKpFCOCWCfkriiRPgaBg0d7saR/lL73FjsfjSfYR5XGaxxHt9HssZTtj3u
-        GqfHTXiQTM6Steopzl4uZRFGpZ5Su1cdzGDBC/TnjOwvN2JgJT9MfRaiqPgTr4Rw
-        n0zsLu4iE8b7yChlK8LZLBjkvnTockJ17AUa2QmW1WI1ZUruH2tWqFe87zy9mTM4
-        0QU+MMlAV5ePqjdVaLbUMrDI6CdpjoaCqLFyRV5iL0IzwvhhCLb38q2sKRCBvCcB
-        fxIY82lNSvWrOO3+rtmtJo0iAkc34ZiTciJQQMoDZQ==
-X-ME-Sender: <xms:-H7vY67baue8pdKk10h1Fi2ENbQKuNV18npNZdESxuM-nRqhEgn3VQ>
-    <xme:-H7vYz75OzpIIc7_4jz6msqs2FEI_W6uMYZM8ijM1_sfgWJLeH7EIyCXc0XPfZFHm
-    2GaXkthmoSts3lQ538>
-X-ME-Received: <xmr:-H7vY5cr_y1AcWEev1L3WIfbiYIs_6ygaKakrAtyWmDk_w1iCuaUZkns1M6fAsrYNV5qkQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:-H7vY3Kl5jyiglPmMnnV4XJtu99v-mj0IYgcUrz709wsnUcWwxOqvw>
-    <xmx:-H7vY-KhNMQUQ9kYPlmsRN81fM4iHUX18xYMiOSlGeKpdJpI9ECR6A>
-    <xmx:-H7vY4yVGI1mk796blOZkk2Jnj-bTjUmTDl-v7hnHwXlJ2p7kraQTQ>
-    <xmx:-X7vY2DMDwIvu7g2ocAODvyFBnQCMPepOEh9yiHIfyj98NRh-4sUOA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Feb 2023 08:19:51 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 13A4910BDBB; Fri, 17 Feb 2023 16:19:49 +0300 (+03)
-Date:   Fri, 17 Feb 2023 16:19:49 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
-Subject: Re: [PATCH v3 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20230217131949.oj4jz4dbvhyen5rl@box.shutemov.name>
-References: <20230206192419.24525-1-decui@microsoft.com>
- <20230206192419.24525-3-decui@microsoft.com>
+        Fri, 17 Feb 2023 08:24:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CDE64B1B;
+        Fri, 17 Feb 2023 05:24:24 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H8EIhH001822;
+        Fri, 17 Feb 2023 13:24:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=s0uOKg5aV0ejVOsToOLWLV1+gB9lbFKlo0HhvFNJLY0=;
+ b=awb1frPf56+SCjtG83gRFh9k01yiRuPvPLMuFkLshJFq3quMInXyJVdnmE+0KY7S0EFw
+ iBW04reDqBfJqvFjEjwxjgqaMybMPffzky8LGl8U1cJlQkKPYO9oSX+d/fm9Ms2UDtvS
+ gzdG1U+VYPcd6N5sVhrImRQKxFmkczkbYDDCSZOKxGu9P5nw9dkcxfI7PXgJToPmX6pC
+ 9lw3eNzowh+6ACmRZdL7fuUDy5wVOk9B2GTkMimfWrsfXh3gUREuigIsZfuo0/+F1Hrb
+ SU2byAQQWoZl0CpoqQztKW1+19Hc6V5+4q3WTuiMzX/w7Cdyo8ya6IQiR/JwImvrp2X6 PA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nsjyw3n4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:24:07 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HDO6gR020473
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:24:06 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Feb
+ 2023 05:23:59 -0800
+Date:   Fri, 17 Feb 2023 18:53:55 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v10 19/26] gunyah: vm_mgr: Add framework to add VM
+ Functions
+Message-ID: <20230217132355.GM332@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212531.3323284-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20230206192419.24525-3-decui@microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230214212531.3323284-1-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KRR_a9lcYglbWn6jsltsgy7s7niCH1GT
+X-Proofpoint-ORIG-GUID: KRR_a9lcYglbWn6jsltsgy7s7niCH1GT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_08,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 spamscore=0 clxscore=1011 mlxscore=0 bulkscore=0
+ malwarescore=0 impostorscore=0 mlxlogscore=885 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170120
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 11:24:15AM -0800, Dexuan Cui wrote:
-> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-> allocates buffers using vzalloc(), and needs to share the buffers with the
-> host OS by calling set_memory_decrypted(), which is not working for
-> vmalloc() yet. Add the support by handling the pages one by one.
-> 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> 
-> ---
-> 
-> Changes in v2:
->   Changed tdx_enc_status_changed() in place.
-> 
-> Hi, Dave, I checked the huge vmalloc mapping code, but still don't know
-> how to get the underlying huge page info (if huge page is in use) and
-> try to use PG_LEVEL_2M/1G in try_accept_page() for vmalloc: I checked
-> is_vm_area_hugepages() and  __vfree() -> __vunmap(), and I think the
-> underlying page allocation info is internal to the mm code, and there
-> is no mm API to for me get the info in tdx_enc_status_changed().
+* Elliot Berman <quic_eberman@quicinc.com> [2023-02-14 13:25:30]:
 
-I also don't obvious way to retrieve this info after vmalloc() is
-complete. split_page() makes all pages independent.
+> +static long gh_vm_add_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
+> +{
+> +	struct gh_vm_function_instance *inst;
+> +	void __user *argp;
+> +	long r = 0;
+> +
+> +	if (f->arg_size > GH_FN_MAX_ARG_SIZE)
+> +		return -EINVAL;
+> +
+> +	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
+> +	if (!inst)
+> +		return -ENOMEM;
+> +
+> +	inst->arg_size = f->arg_size;
+> +	if (inst->arg_size) {
+> +		inst->argp = kzalloc(inst->arg_size, GFP_KERNEL);
+> +		if (!inst->arg) {
 
-I think you can try to do this manually: allocate a vmalloc region,
-allocate pages manually, and put into the region. This way you always know
-page sizes and can optimize conversion to shared memory.
+if (!inst->argp) ?
 
-But it is tedious and I'm not sure if it worth the gain.
 
-> Hi, Kirill, the load_unaligned_zeropad() issue is not addressed in
-> this patch. The issue looks like a generic issue that also happens to
-> AMD SNP vTOM mode and C-bit mode. Will need to figure out how to
-> address the issue. If we decide to adjust direct mapping to have the
-> shared bit set, it lools like we need to do the below for each
-> 'start_va' vmalloc page:
->   pa = slow_virt_to_phys(start_va);
->   set_memory_decrypted(phys_to_virt(pa), 1); -- this line calls
-> tdx_enc_status_changed() the second time for the same age, which is not
-> great. It looks like we need to find a way to reuse the cpa_flush()
-> related code in __set_memory_enc_pgtable() and make sure we call
-> tdx_enc_status_changed() only once for the same page from vmalloc()?
-
-Actually, current code will change direct mapping for you. I just
-double-checked: the alias processing in __change_page_attr_set_clr() will
-change direct mapping if you call it on vmalloc()ed memory.
-
-Splitting direct mapping is still unfortunate, but well.
-
-> 
-> Changes in v3:
->   No change since v2.
-> 
->  arch/x86/coco/tdx/tdx.c | 69 ++++++++++++++++++++++++++---------------
->  1 file changed, 44 insertions(+), 25 deletions(-)
-
-I don't hate what you did here. But I think the code below is a bit
-cleaner.
-
-Any opinions?
-
-static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
-					bool enc)
-{
-	if (!tdx_map_gpa(start, end, enc))
-		return false;
-
-	/* private->shared conversion requires only MapGPA call */
-	if (!enc)
-		return true;
-
-	return try_accept_page(start, end);
-}
-
-/*
- * Inform the VMM of the guest's intent for this physical page: shared with
- * the VMM or private to the guest. The VMM is expected to change its mapping
- * of the page in response.
- */
-static bool tdx_enc_status_changed(unsigned long start, int numpages, bool enc)
-{
-	unsigned long end = start + numpages * PAGE_SIZE;
-
-	if (offset_in_page(start) != 0)
-		return false;
-
-	if (!is_vmalloc_addr((void *)start))
-		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
-
-	while (start < end) {
-		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
-		phys_addr_t end_pa = start_pa + PAGE_SIZE;
-
-		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
-			return false;
-
-		start += PAGE_SIZE;
-	}
-
-	return true;
-}
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> +			r = -ENOMEM;
+> +			goto free;
+> +		}
