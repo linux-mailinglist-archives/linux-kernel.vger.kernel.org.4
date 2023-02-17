@@ -2,153 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C3469A9AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4548669A9B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjBQLFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S230008AbjBQLGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjBQLFp (ORCPT
+        with ESMTP id S229956AbjBQLGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:05:45 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8879635246;
-        Fri, 17 Feb 2023 03:05:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676631915; x=1708167915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=NC/IvfjEf6lxLkuVSkDhmRWO3fuwPMVQ22D589XhxTE=;
-  b=dFjMsxr0uik7/2v8I+S2jJvoVKeQJ/nJwBmvVNCFVFZcO0JlajVam5eZ
-   +jQSEvXHmS76QwSy0De2FziQpIzlz/URXI5kMuRvf0Zi8gSJpgTBhidLl
-   1tNG1V9K1APhRTZ5+aFswgq/Vq1lPlfZZgRUIuRfNP5hpWbWh5CreFZEC
-   MO26SCaUu7gbCAcALQvTTiDpGmo+PVZuRs/g7AXVxBj4Qbnj8VSkvE1P8
-   kZ/b5uKsh7v6DHWGhce4Fi1sPwgOd5mRaBsr9aZD6tbzfGndnWIUMHnS1
-   4KuaCZsS3M93nouESXsgCN3zDvhj9hNaG36pX2ufXR6x0eqG3xFMiNw0R
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="331965010"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="331965010"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 03:05:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="779755603"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="779755603"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Feb 2023 03:05:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pSyY3-008AmV-2r;
-        Fri, 17 Feb 2023 13:05:03 +0200
-Date:   Fri, 17 Feb 2023 13:05:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
-        Lendacky Thomas <Thomas.Lendacky@amd.com>,
-        herbert@gondor.apana.org.au,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] i2c: designware: Use PCI PSP driver for communication
-Message-ID: <Y+9fXzby07f6mY59@smile.fi.intel.com>
-References: <20230209223811.4993-1-mario.limonciello@amd.com>
- <20230209223811.4993-7-mario.limonciello@amd.com>
- <703033aa-1293-307d-42a2-9734a51c7190@linux.intel.com>
- <ca9c0f77-c191-d88a-22a1-315ca97f17e8@amd.com>
- <Y+5EI3XGBzuwwVBV@smile.fi.intel.com>
- <9523a6ce-0220-e939-392d-2b48b2a4dc48@amd.com>
- <Y+6ZMEoQ2UoH7SxD@smile.fi.intel.com>
- <d8a11223-36d1-a3bd-bfa2-a1c67b9ef250@amd.com>
- <Y+6dFYd/0tSKriaj@smile.fi.intel.com>
- <ba2ce999-5cc2-be73-6212-a5db903b294f@amd.com>
+        Fri, 17 Feb 2023 06:06:01 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85006642C0;
+        Fri, 17 Feb 2023 03:05:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AB871FE6D;
+        Fri, 17 Feb 2023 11:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676631918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cdOtg0/SYltH36IBrBWZH6fCciTMyCPOS7VoVpQYu8k=;
+        b=uffJtjc/q6yp2J9Zfv2rYKycBOdqYvGpImgpIDcm2M0DouTE1iVLQtH2byGa7Dcmj3UHyJ
+        T8KSULHBHEs8i+5gvxzq4ejzNp7DtrSQjTPT0vCki+I4Sok+3YZ0l2vhU5UGin5sHm5ETA
+        v8/8ry6l7Jno4oOWMDkOqLHdfxw1alw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676631918;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cdOtg0/SYltH36IBrBWZH6fCciTMyCPOS7VoVpQYu8k=;
+        b=jpDFdf88HaRyhV5YkQFx+EwWCLcDCQjFnPwnOG4t/a9NTpCRrkbaXJsPff7ov5sIHeQ6ZS
+        E3klHogDJfytvTAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78413138E3;
+        Fri, 17 Feb 2023 11:05:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BrNYHW5f72NwQAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 17 Feb 2023 11:05:18 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id EAEADA06E1; Fri, 17 Feb 2023 12:05:17 +0100 (CET)
+Date:   Fri, 17 Feb 2023 12:05:17 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next 2/2] block: fix scan partition for exclusively open
+ device again
+Message-ID: <20230217110517.hagxj47e2m4xbmkd@quack3>
+References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
+ <20230217022200.3092987-3-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba2ce999-5cc2-be73-6212-a5db903b294f@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217022200.3092987-3-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 03:27:35PM -0600, Limonciello, Mario wrote:
-> On 2/16/2023 15:16, Andy Shevchenko wrote:
-> > On Thu, Feb 16, 2023 at 03:01:35PM -0600, Limonciello, Mario wrote:
-> > > On 2/16/2023 14:59, Andy Shevchenko wrote:
-> > > > On Thu, Feb 16, 2023 at 02:55:07PM -0600, Limonciello, Mario wrote:
-> > > > > On 2/16/2023 08:56, Andy Shevchenko wrote:
-> > > > > > On Thu, Feb 16, 2023 at 07:29:53AM -0600, Mario Limonciello wrote:
-> > > > > > > On 2/16/23 07:27, Jarkko Nikula wrote:
-> > > > > > > > On 2/10/23 00:38, Mario Limonciello wrote:
-
-...
-
-> > > > > > > > Would this look better if split? I.e.
-> > > > > > > > 
-> > > > > > > >        depends on CRYPTO_DEV_SP_PSP
-> > > > > > > >        depends on !(I2C_DESIGNWARE_PLATFORM=y && CRYPTO_DEV_CCP_DD=m)
-> > > > > > > Yes, thanks I'll change that for next version.
-> > > > > > 
-> > > > > > I'm wondering if this is homegrown implementation of 'imply' keyword?
-> > > > > 
-> > > > > Like this?
-> > > > > 
-> > > > > config I2C_DESIGNWARE_AMDPSP
-> > > > >      depends on CRYPTO_DEV_SP_PSP
-> > > > >      depends on CRYPTO_DEV_CCP_DD
-> > > > > 
-> > > > > config CRYPTO_DEV_CCP_DD
-> > > > >      imply I2C_DESIGNWARE_PLATFORM
-> > > > 
-> > > > Looks okay, but I'm not familiar with this code. The documentation about
-> > > > 'imply' can be found here:
-> > > > 
-> > > > https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html#menu-attributes
-> > > 
-> > > Yeah I found that, but this was my first time using imply, so I was hoping
-> > > someone who has used it could validate I interpreted it correctly.
-> > > 
-> > > Following the example CRYPTO_DEV_CCP_DD would be FOO and
-> > > I2C_DESIGNWARE_PLATFORM would be BAZ so I thought so.
-> > 
-> > 'imply' == weak 'select', it means that the target option may or may not be
-> > selected. I.o.w. "optional" dependency.
-> > 
-> > Does CRYPTO_DEV_CCP_DD use I2C DesignWare code?
-> > 
-> > If I understand correctly the "depends on !(I2C_DESIGNWARE_PLATFORM=y &&
-> > CRYPTO_DEV_CCP_DD=m)" you want to have IS_REACHABLE() in your code and actually
-> > "imply CRYPTO_DEV_CCP_DD" in the I2C_DESIGNWARE_AMDPSP.
+On Fri 17-02-23 10:22:00, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> Allowing that combination and using IS_REACHABLE means that it's going to
-> actually load earlier that expected, so I suppose it needs to be something
-> like this then in the probe code for i2c-designware-amdpsp.c:
+> As explained in commit 36369f46e917 ("block: Do not reread partition table
+> on exclusively open device"), reread partition on the device that is
+> exclusively opened by someone else is problematic.
 > 
-> if (!IS_REACHABLE()
-> 	return -EPROBE_DEFER;
+> This patch will make sure partition scan will only be proceed if current
+> thread open the device exclusively, or the device is not opened
+> exclusively, and in the later case, other scanners and exclusive openers
+> will be blocked temporarily until partition scan is done.
 > 
-> Right?
+> Fixes: 10c70d95c0f2 ("block: remove the bd_openers checks in blk_drop_partitions")
+> Cc: <stable@vger.kernel.org>
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Hmm... I'm not sure. IS_REACHABLE() should be done with a compilation
-dependencies. What you put here is functional dependency, moreover since
-you mentioned the boot / load ordering doesn't it mean that the architecture
-of all of this is not good enough and requires some redesign?
+Looks good to me, just two minor comments below:
 
-Perhaps you need to use component framework actually?
+> diff --git a/block/genhd.c b/block/genhd.c
+> index b30d5538710c..3ee5577e1586 100644
+> --- a/block/genhd.c
+> +++ b/block/genhd.c
+> @@ -359,6 +359,7 @@ EXPORT_SYMBOL_GPL(disk_uevent);
+>  int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+>  {
+>  	struct block_device *bdev;
+> +	int ret = 0;
+>  
+>  	if (disk->flags & (GENHD_FL_NO_PART | GENHD_FL_HIDDEN))
+>  		return -EINVAL;
+> @@ -368,11 +369,27 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+>  		return -EBUSY;
+>  
+>  	set_bit(GD_NEED_PART_SCAN, &disk->state);
 
+I'd move the set_bit() after we are sure we have exclusive access to the
+bdev. Otherwise we could set GD_NEED_PART_SCAN on a device exclusively open
+by someone else and if we race with open in an unfortunate way, we could
+trigger unexpected partition scan...
+
+> -	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL);
+> +	/*
+> +	 * If the device is opened exclusively by current thread already, it's
+> +	 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
+> +	 * synchronize with other exclusive openers and other partition
+> +	 * scanners.
+> +	 */
+> +	if (!(mode & FMODE_EXCL)) {
+> +		ret = bd_prepare_to_claim(disk->part0, disk_scan_partitions);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL);
+>  	if (IS_ERR(bdev))
+> -		return PTR_ERR(bdev);
+> -	blkdev_put(bdev, mode);
+> -	return 0;
+> +		ret =  PTR_ERR(bdev);
+> +	else
+> +		blkdev_put(bdev, mode);
+> +
+> +	if (!(mode & FMODE_EXCL))
+> +		bd_abort_claiming(disk->part0, disk_scan_partitions);
+> +	return ret;
+>  }
+>  
+>  /**
+> @@ -494,6 +511,11 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
+>  		if (ret)
+>  			goto out_unregister_bdi;
+>  
+> +		/* Make sure the first partition scan will be proceed */
+							   ^^^^^^ "will happen"
+probably makes more sense here.
+
+								Honza
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
