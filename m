@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7DF69A808
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082F669A80D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjBQJWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S230051AbjBQJXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBQJWS (ORCPT
+        with ESMTP id S229488AbjBQJXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:22:18 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BB360A63
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:22:17 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id ee31so3386925edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:22:16 -0800 (PST)
+        Fri, 17 Feb 2023 04:23:40 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331805CF0B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:23:39 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id dn12so9625509edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7LQsmO8BJ1on7K8O2a2MHWuCjPwW4wmR8+WhYFU/VUQ=;
-        b=XOl3+vffPd/tr8VTgKyaurW98MVfUTdskc41q1EjjW71xvLiIYgKWXQkNyYZ+Y67PO
-         2iJKSuTzoFWi85dqTZWcoFn0iPYHhaViU5+nnOIyHbnUlJJ26fo+SI+v7BjsHRbQbg/a
-         UnGkezss5oQXW41AQ/grewhxfhvc42oIKSt4Qw7jN/vNv4P4NkJLwaoHUeLB9DqHozpU
-         3aT6jRcgK7PQlaHoI8ygzg6JKEv2dbOIqaKK0YdxRHa7xXdoT4nVTiObhyOytOGpQN31
-         kaxoAXBqxOUV3hcCC+FOiXTK9AN8YxvsbF7hBkREnPd1mdzp1Zysm/v5zpiBVMHQEnzS
-         JCFw==
+        bh=1uhXWC5aUog2B3MifbzjgvTuIZZSneoOYENLVLF/lKo=;
+        b=chKsPtB2hT8iQd0O3UAtAE7NwizW0neSxB7B7EZwVa3mYLn0K1FcBNjdDKkUNi/rY7
+         6Ib1WaGIu+wGXltyhaFqmjH0cXGQsq0ZzT2buGbSUgs2IG0Dd8sUWjQT1uIIT3V2CXf4
+         Pz+eYhFnz/IU927IhztkWlsp0ucMgWhusahIc5sEyW6IbDd5i8RjUxHXElXJgdeMS5xv
+         kl6xIMSb4dILHSFFuLnMcehWArNGYohQoc6UsdNKUF03qFZaDfwpMfJXjv5A0SuVIhVu
+         ecNo5OI2lELoSVgwN870+3hoDnbZpDvLC0fBYFqGlQJ2le7qPg0lqwK83mpPu1SRCUvR
+         aZfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LQsmO8BJ1on7K8O2a2MHWuCjPwW4wmR8+WhYFU/VUQ=;
-        b=G6fa2E9tpYvVpINC9pIh5hfnvT2eXve8q51uwwc46/RxTFDK0Chl0lMrVV6huCKdEz
-         tqbM8gAcf9FcUV8zaee/vdaxwHo6qSDtm1tdJWYDFK3KfcmUbeHHN5X1uhaHdtTfNzpg
-         +bI0FEIdxqbVWzvxAzFHm37ZMqzhgIvgOJcjcNIMZWA3BaEbBbpF7MyRdHdEgI+ug47w
-         E95n+OYdAlY5fXicQ3tA6Es65RQFYHGvJB/+YrY1tit7i//OEOhubaCZUO0sDmbNOvAN
-         txAEAnSj/wVIFj46oJXUYzCfohQ8kX3GY8EZErg2ewYxNfD/K5Ca4HUhmxzfs98zYCOU
-         frtw==
-X-Gm-Message-State: AO0yUKWrQ3iIH/jTrsGg+YVUZyVFtInM/HtcmIVsg0SlaFF+Aq6IgB3D
-        uergEIOhszTXUdh9n3rDd1O+0Q==
-X-Google-Smtp-Source: AK7set/pxhKkcmJ7uQ2CkOz1aneV7sr4U6gYAbzUn9nsEPVXQhfN1+InHaCiguvDh+QE9kvztTD+7Q==
-X-Received: by 2002:a17:906:16d3:b0:8b1:23cf:13dc with SMTP id t19-20020a17090616d300b008b123cf13dcmr9984759ejd.16.1676625735479;
-        Fri, 17 Feb 2023 01:22:15 -0800 (PST)
+        bh=1uhXWC5aUog2B3MifbzjgvTuIZZSneoOYENLVLF/lKo=;
+        b=y9SsfvNQstYirpk9r7X83swo9J5qSzqe6prcZ1GKFrkHP5LUuDcBSYeqgznoX/P/Zk
+         PDKe2pnHu4CBSdnzcSyFUvBEeyOlp6x64JpDqoKXkO1r7JHSWUnNx9YLVwBp/yi/n3bX
+         +Gl0ArBzVOGI2F9ILkUYVgXlSTm0IvA3Vej1i+/nbrWT4KRbEfeS8ktQNv2xiDS4HYM3
+         Jpk2aqHjzIUKoBq4iTIcwpFwtSExaZwd9uEXFzlkDYrgHRn7UrFP2q/gD/P1uof9L8Pr
+         07BBU/mBC8F3JXmrlGwR29xa3i/qKQu/ypPRhNqJ+trqR5r20lvS9dAI9H9jLnT0b/hq
+         b9vg==
+X-Gm-Message-State: AO0yUKVPURwekzxg0Ebx3KwZ3Kd7yuK1gybnUjKZKoY4vrFcDC7QttbY
+        8CqEOCFgsKItEPEHGLDp3rU5nQ==
+X-Google-Smtp-Source: AK7set917pjRrPajgtaJkUtWkGOkMBJyKzJs5QyJgmH71D2U+yOlZOHZsD2RSv78b/Ft7In+yuB16w==
+X-Received: by 2002:aa7:cd51:0:b0:4ac:b32e:b6f with SMTP id v17-20020aa7cd51000000b004acb32e0b6fmr104366edw.23.1676625817729;
+        Fri, 17 Feb 2023 01:23:37 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id oq15-20020a170906cc8f00b008b165948da6sm1742629ejb.101.2023.02.17.01.22.13
+        by smtp.gmail.com with ESMTPSA id x29-20020a50d61d000000b0049e1f167956sm2000726edi.9.2023.02.17.01.23.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 01:22:15 -0800 (PST)
-Message-ID: <7535d488-37fc-1e67-6a14-b658beb000e3@linaro.org>
-Date:   Fri, 17 Feb 2023 10:22:13 +0100
+        Fri, 17 Feb 2023 01:23:37 -0800 (PST)
+Message-ID: <08b993f9-f998-14c8-221a-a0b80ac5d342@linaro.org>
+Date:   Fri, 17 Feb 2023 10:23:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v5 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
+Subject: Re: [PATCH v7 1/6] dt-bindings: mediatek: mt8188: Add binding for MM
+ & INFRA IOMMU
 Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230216134226.1692107-1-herve.codina@bootlin.com>
- <20230216134226.1692107-6-herve.codina@bootlin.com>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        jianjiao.zeng@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com
+References: <20230216053322.11596-1-yong.wu@mediatek.com>
+ <20230216053322.11596-2-yong.wu@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230216134226.1692107-6-herve.codina@bootlin.com>
+In-Reply-To: <20230216053322.11596-2-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 14:42, Herve Codina wrote:
-> Add support for the QMC (QUICC Multichannel Controller)
-> available in some PowerQUICC SoC such as MPC885 or MPC866.
+On 16/02/2023 06:33, Yong Wu wrote:
+> From: "Chengci.Xu" <chengci.xu@mediatek.com>
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Add descriptions for mt8188 IOMMU which also use ARM Short-Descriptor
+> translation table format.
+> 
+> In mt8188, there are two smi-common HW and IOMMU, one is for vdo(video
+> output), the other is for vpp(video processing pipe). They connects
+> with different smi-larbs, then some setting(larbid_remap) is different.
+> Differentiate them with the compatible string.
+> 
+> Something like this:
+> 
+>   IOMMU(VDO)          IOMMU(VPP)
+>       |                   |
+> SMI_COMMON_VDO      SMI_COMMON_VPP
+> 
+> ---------------     ----------------
+>   |     |    ...      |     |    ...
+> larb0 larb2  ...    larb1 larb3  ...
+> 
+> We also have an IOMMU that is for infra master like PCIe.
+> And infra master don't have the larb and ports.
+> 
+> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+> Reviewed-by: Yong Wu <yong.wu@mediatek.com>
 > ---
->  .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      | 172 ++++++++++++++++++
->  1 file changed, 172 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
-> 
+> Hi Krzysztof,
+> I added some comment about larbid index, this is for readable when
+> adding iova_region_larb_msk in the code.
+> I'm not sure if it is ok for you, thus don't keep your A-b currently.
+> Thanks.
+> ---
+>  .../bindings/iommu/mediatek,iommu.yaml        |  12 +-
+>  .../memory/mediatek,mt8188-memory-port.h      | 489 ++++++++++++++++++
+>  2 files changed, 500 insertions(+), 1 deletion(-)
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
