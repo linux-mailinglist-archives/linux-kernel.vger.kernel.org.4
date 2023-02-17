@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D130C69B648
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48E569B639
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjBQXLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S229934AbjBQXKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBQXLE (ORCPT
+        with ESMTP id S229826AbjBQXKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:11:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE87EF767
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676675413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CGZu08oXDZinWgYTxC2ziQUKz+DJaWr3MxzidFt17Ys=;
-        b=d/lpl+JLe15KDhoPA/BxZYUl/RdoxYBnWY12hgclCnsCH/ltgIGLQbi+dgdHSiBLVrQ+HQ
-        78gm+MHwvthvNq1lqk68BBCd7UtWn9MzZIwyAFlyauNF040PA1t7jMkQMTEcR8rP+Xawl8
-        5kbvaaO66l1U31bFn3gy59oHBbfe3e4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-673-mIHVrGV9NPeZmBrEd5ZZHg-1; Fri, 17 Feb 2023 18:10:12 -0500
-X-MC-Unique: mIHVrGV9NPeZmBrEd5ZZHg-1
-Received: by mail-qv1-f70.google.com with SMTP id a10-20020a0cefca000000b0053cd4737a42so1125562qvt.22
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:12 -0800 (PST)
+        Fri, 17 Feb 2023 18:10:31 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103E8582BF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:29 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5365a8dd33aso17105927b3.22
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=KioFTda0zEdQSBw0TQsNW7u7HebdEbC7ULL51zMSfbE=;
+        b=MCT5iiV4rc2yE80RyBM9o4KOTMsZUh2bAIbwptEF0tPQ9AAIaLqeXfPV1v20xeQdBJ
+         ngvY5MNXm07+nxgNuRVOw426oKdsi4ub/BMFNHHzgpk+EOmpzHjGpfwdwZBvTVIsXJ1Z
+         ixYtudyqlOIGwVMjR24PG6YIbvmFhc89VzwHoRedtJxRbKHjBrbkpRxTQeXTDHZ53RLv
+         v75nUo1kDzVi4ZVoxG0a8eb1dmu/6aE1NqaDLwhmqbHynV8Y12e7IUCx+nsNis1FHY/k
+         nW0CsLs/BM7+/PNt0iB7yoNFIxk5lLvX8E9NBgK01X2cqZqg5s3MH84roh/Ua50ptKae
+         XOmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676675412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CGZu08oXDZinWgYTxC2ziQUKz+DJaWr3MxzidFt17Ys=;
-        b=NZ/S0Dj6T/7QmLvawBgWM4x08LivBkt9faXBeQTWCYGNG+0T6XBzi6Zw48mrXkCG+G
-         ayXBxhYRi8Ua9OWJx/98lQM8XUbE39Q4dKKgD5SUG5ntskN+ALaD4Xm4ewObYQZleUmt
-         cvwF6Pey+0kz91uwANQ2Hw9gngohWgHPuajBUD5M+0OVUhRhpLrY6ni1a17/0FDOdyIT
-         dFpBBxYb8LXzCd+JPBj7AKJLziLUNl9ySIP6Y9Szfcg6HoaY6jorOXrHOcsWsQPxb6J0
-         BUImst7KZHK/GulPyb440o4R3IIng+jcEi7vJIBzqsOap73NJkGtMRAKaidfTwPMJquC
-         Rzng==
-X-Gm-Message-State: AO0yUKUfu4z2IIm8aSBOZc9N6lnkYYcLUa4eIixP9+4NXMhn2k6Ayy9K
-        L07DCHePGpeTIyu+tk3FzDzZsM/jLwOVnJab+NDoUD1LBiV6IIuP9EjHX2snVbU7d4mXsyNLjvj
-        zHWDoAL8/69bvc3bes05L2Yfy
-X-Received: by 2002:ac8:7c44:0:b0:3b8:6c6e:4949 with SMTP id o4-20020ac87c44000000b003b86c6e4949mr5624131qtv.4.1676675412183;
-        Fri, 17 Feb 2023 15:10:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set/jd0yWr5rGW+fJEsGAE+BODNIqGlr9Io2xy0/HUvUVCFax+BOqcbBuzORJHRZlS9CEMLBAAw==
-X-Received: by 2002:ac8:7c44:0:b0:3b8:6c6e:4949 with SMTP id o4-20020ac87c44000000b003b86c6e4949mr5624097qtv.4.1676675411888;
-        Fri, 17 Feb 2023 15:10:11 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id d1-20020ac84e21000000b003b82489d8acsm4022408qtw.21.2023.02.17.15.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 15:10:11 -0800 (PST)
-Date:   Fri, 17 Feb 2023 18:10:10 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
-Message-ID: <Y/AJUi4o5hOKDkgy@x1n>
-References: <20230215210257.224243-1-peterx@redhat.com>
- <7eb2bce9-d0b1-a0e3-8be3-f28d858a61a0@redhat.com>
- <Y+5Z+88Z3T2TyxUI@x1n>
- <4f64d62f-c21d-b7c8-640e-d41742bbbe7b@redhat.com>
- <Y+5uIS5E9sTLi41T@x1n>
- <456f8e2e-9554-73a3-4fdb-be21f9cc54b6@redhat.com>
- <Y+6NKPuty9V3nycI@x1n>
- <427298c4-0da9-059f-02ff-c5147d317c87@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <427298c4-0da9-059f-02ff-c5147d317c87@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KioFTda0zEdQSBw0TQsNW7u7HebdEbC7ULL51zMSfbE=;
+        b=4m6DcBcaKVUIdQ8tBovJFQ4XWykMZrU3lP4OBSq9Z5IZlW9ehPsGZuY7B9vdNMjxjr
+         UMXNr04NA8RLm9ZH+2Ups4hqsKh9nAqYpsER+Ob1h/agyU9p8k4TSr/VQ9sD9lCkzPUm
+         mDkFuxGO4/GMp+lFnZqy4G95s/nhnbWH2PriR/fflx4zp1OM/h2QtA5ZLFfWFS6HI0Fq
+         pQJGLGfNBCIXTDicUN/4M1O04IIqqES30uaggLsWEltg4TvlyGBGGXVssU+OLQnO9xHC
+         qHoGLLZsBge/XlpVpi6gcyWS3U+7cFCnZ6YnnJdOe9VaFPs1BJid97/r4Tqm+wK9U26Y
+         yaGw==
+X-Gm-Message-State: AO0yUKVoeMsY+O8sBR411CSuVpLdxRs9MG9bb7r49GTAukiYRLW4B2KX
+        IHyVhz7eFp7VCiH5ZuIt9kpQgNK0WFg=
+X-Google-Smtp-Source: AK7set9Dwo/hviHwIJnFBxeHVrNQ2bUODo/qyA0pDmZ2dx1zM98CMehXtRboa/88TVYh1yvoZFtBjxAmVxw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:9205:0:b0:8ef:90e1:b2f8 with SMTP id
+ b5-20020a259205000000b008ef90e1b2f8mr206400ybo.2.1676675428316; Fri, 17 Feb
+ 2023 15:10:28 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 17 Feb 2023 15:10:11 -0800
+In-Reply-To: <20230217231022.816138-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230217231022.816138-1-seanjc@google.com>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230217231022.816138-2-seanjc@google.com>
+Subject: [PATCH 01/12] KVM: x86: Add a framework for enabling KVM-governed x86 features
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,33 +71,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Muhammad,
+Introduce yet another X86_FEATURE flag framework to manage and cache KVM
+governed features (for lack of a better term).  "Governed" in this case
+means that KVM has some level of involvement and/or vested interest in
+whether or not an X86_FEATURE can be used by the guest.  The intent of the
+framework is twofold: to simplify caching of guest CPUID flags that KVM
+needs to frequently query, and to add clarity to such caching, e.g. it
+isn't immediately obvious that SVM's bundle of flags for "optional nested]
+SVM features" track whether or not a flag is exposed to L1.
 
-On Fri, Feb 17, 2023 at 05:31:19PM +0500, Muhammad Usama Anjum wrote:
-> I've just ran my single threaded selftest [1] over an over again to get
-> some numbers.
-> 
-> Without zeropage
-> qemu has 6 cores: 26.0355
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h  | 11 +++++++
+ arch/x86/kvm/cpuid.c             |  2 ++
+ arch/x86/kvm/cpuid.h             | 51 ++++++++++++++++++++++++++++++++
+ arch/x86/kvm/governed_features.h |  9 ++++++
+ 4 files changed, 73 insertions(+)
+ create mode 100644 arch/x86/kvm/governed_features.h
 
-Did you count in the time of read prefault?  Or did you not prefault at
-all?
-
-> With zeropage
-> qemu has 6 cores: 39.203
-> 
-> 33% worse performance with zero pages
-> 
-> Definitely, there can be better benchmark application. Please let me know
-> if I should write better benchmarks on my end.
-> 
-> [1]
-> https://lore.kernel.org/all/20230202112915.867409-7-usama.anjum@collabora.com
-
-I'll have a closer look too next week.
-
-Thanks,
-
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 792a6037047a..cd660de02f7b 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -835,6 +835,17 @@ struct kvm_vcpu_arch {
+ 	struct kvm_cpuid_entry2 *cpuid_entries;
+ 	struct kvm_hypervisor_cpuid kvm_cpuid;
+ 
++	/*
++	 * Track whether or not the guest is allowed to use features that are
++	 * governed by KVM, where "governed" means KVM needs to manage state
++	 * and/or explicitly enable the feature in hardware.  Typically, but
++	 * not always, governed features can be used by the guest if and only
++	 * if both KVM and userspace want to expose the feature to the guest.
++	 */
++	struct {
++		u32 enabled;
++	} governed_features;
++
+ 	u64 reserved_gpa_bits;
+ 	int maxphyaddr;
+ 
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 8f8edeaf8177..013fdc27fc8f 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -335,6 +335,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+ 	struct kvm_cpuid_entry2 *best;
+ 
++	vcpu->arch.governed_features.enabled = 0;
++
+ 	best = kvm_find_cpuid_entry(vcpu, 1);
+ 	if (best && apic) {
+ 		if (cpuid_entry_has(best, X86_FEATURE_TSC_DEADLINE_TIMER))
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index b1658c0de847..f61a2106ba90 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -232,4 +232,55 @@ static __always_inline bool guest_pv_has(struct kvm_vcpu *vcpu,
+ 	return vcpu->arch.pv_cpuid.features & (1u << kvm_feature);
+ }
+ 
++enum kvm_governed_features {
++#define KVM_GOVERNED_FEATURE(x) KVM_GOVERNED_##x,
++#include "governed_features.h"
++	KVM_NR_GOVERNED_FEATURES
++};
++
++static __always_inline int kvm_governed_feature_index(unsigned int x86_feature)
++{
++	switch (x86_feature) {
++#define KVM_GOVERNED_FEATURE(x) case x: return KVM_GOVERNED_##x;
++#include "governed_features.h"
++	default:
++		return -1;
++	}
++}
++
++static __always_inline int kvm_is_governed_feature(unsigned int x86_feature)
++{
++	return kvm_governed_feature_index(x86_feature) >= 0;
++}
++
++static __always_inline u32 kvm_governed_feature_bit(unsigned int x86_feature)
++{
++	int index = kvm_governed_feature_index(x86_feature);
++
++	BUILD_BUG_ON(index < 0);
++	return BIT(index);
++}
++
++static __always_inline void kvm_governed_feature_set(struct kvm_vcpu *vcpu,
++						     unsigned int x86_feature)
++{
++	BUILD_BUG_ON(KVM_NR_GOVERNED_FEATURES >
++		     sizeof(vcpu->arch.governed_features.enabled) * BITS_PER_BYTE);
++
++	vcpu->arch.governed_features.enabled |= kvm_governed_feature_bit(x86_feature);
++}
++
++static __always_inline void kvm_governed_feature_check_and_set(struct kvm_vcpu *vcpu,
++							       unsigned int x86_feature)
++{
++	if (guest_cpuid_has(vcpu, x86_feature))
++		kvm_governed_feature_set(vcpu, x86_feature);
++}
++
++static __always_inline bool guest_can_use(struct kvm_vcpu *vcpu,
++					  unsigned int x86_feature)
++{
++	return vcpu->arch.governed_features.enabled & kvm_governed_feature_bit(x86_feature);
++}
++
+ #endif
+diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
+new file mode 100644
+index 000000000000..40ce8e6608cd
+--- /dev/null
++++ b/arch/x86/kvm/governed_features.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#if !defined(KVM_GOVERNED_FEATURE) || defined(KVM_GOVERNED_X86_FEATURE)
++BUILD_BUG()
++#endif
++
++#define KVM_GOVERNED_X86_FEATURE(x) KVM_GOVERNED_FEATURE(X86_FEATURE_##x)
++
++#undef KVM_GOVERNED_X86_FEATURE
++#undef KVM_GOVERNED_FEATURE
 -- 
-Peter Xu
+2.39.2.637.g21b0678d19-goog
 
