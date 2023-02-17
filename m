@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F1869B13E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C281969B142
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjBQQmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S229708AbjBQQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjBQQmq (ORCPT
+        with ESMTP id S229508AbjBQQny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:42:46 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32AC6C007;
-        Fri, 17 Feb 2023 08:42:31 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id w13so1526600wrl.13;
-        Fri, 17 Feb 2023 08:42:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HP7P5wY5KjXWhTQfhjL/AZ7aXRO3BkcNhUznhmjsZV0=;
-        b=D8ECN446+9TLJuw0JpiFgv59YKqRptRXP6CNaG7ffpp78AWHuU3dmVtomBxvyN+TOe
-         Mvty0YFegaQQ98QJrcOmcih7o9kki6aI3YcNof7gBwqN6KVcBzAfiZ33PX1Q99yTjrg0
-         g/wY6RV3lHvq6zCPUXYwkdq9jUpqquo6UIIjsL222jMltELJvN6gCCjXDXSTPLoQBPzb
-         cJPFPzc6a8HtQkRCoeLkjlOm+tMvoMLRAglf4bNN8ZhOAlHhOgTphnFXg4DIeOlkKDC+
-         tCBqpy0E/MFYBbMC1qMqAYR1xkHqJR4CTbdyfGLJNUhpT17u3ft1wDtXpy3qBG5goqto
-         DTfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HP7P5wY5KjXWhTQfhjL/AZ7aXRO3BkcNhUznhmjsZV0=;
-        b=aVerhJBiOTEYs5haNotkRhqC0NL6VYKMHUBcm4xlOAlvxry4NsD3dLGXc+kuoiHYxm
-         Zq3hKurRQjAfPb6SJkBHLqCyC1uW8bQQPybDD5cBxcwQDLYVnsJtV11EBWsx1wY1u194
-         G3Ip/MNxVvEOm9PSd++g4IP7BlaF+bvsriHlfFcZRhMQjifbqxVgtQaLbrCtQbhIFXEi
-         I5vUOSi0ya0fGaBETcp/D9LGi90VbPHUIIH8Ow8uM8y7FE9/pi+g0oFom1SVvW/luouX
-         mNSb7ivBiKCMLik6eqPgIJHCClklOAeqQrPziiLyAt0P2l8l/8rRP79i2hxtBadZUw7b
-         QbfA==
-X-Gm-Message-State: AO0yUKW/7kV8wjjBT3d1IPBVCFRKmIxrjFFlguRiEALZUbCKXlr4wvOq
-        iK8BawwC10TXFD9jRvzKOeA=
-X-Google-Smtp-Source: AK7set89kf8Gisjvp6/g0zXoIvBpxPPdlcXPzeABXleQ7+aIb1d6SFdUCJBVwr65LQHMKotWY4st4g==
-X-Received: by 2002:a5d:60ce:0:b0:2c5:54fd:265e with SMTP id x14-20020a5d60ce000000b002c554fd265emr1038678wrt.70.1676652150181;
-        Fri, 17 Feb 2023 08:42:30 -0800 (PST)
-Received: from skbuf ([188.25.231.176])
-        by smtp.gmail.com with ESMTPSA id n17-20020adff091000000b002c558869934sm4713612wro.81.2023.02.17.08.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 08:42:29 -0800 (PST)
-Date:   Fri, 17 Feb 2023 18:42:27 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH v2 net-next 3/5] net: dsa: microchip: add eth mac
- grouping for ethtool statistics
-Message-ID: <20230217164227.mw2cyp22bsnvuh6t@skbuf>
-References: <20230217110211.433505-1-rakesh.sankaranarayanan@microchip.com>
- <20230217110211.433505-4-rakesh.sankaranarayanan@microchip.com>
- <84835bee-a074-eb46-f1e4-03e53cd7f9ec@intel.com>
+        Fri, 17 Feb 2023 11:43:54 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A832680;
+        Fri, 17 Feb 2023 08:43:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1676652183; bh=8n0Ms1VnNTk56gud+VEJPT9CfkFf8kiqgsa6gw0+rtE=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=Bkg38ebMftcm82eR9eZeBe6BhxhLijv/1ZIr7t4Pqsoiv8MNV8sodCN0hOVeV2H7J
+         uwGd76HIv49bv5OqeaeaWVxz9TwcPoq1pD1y0pE8HRQcbaE6BgBec7fbBibJhy2mJc
+         onZPbecOW2EmpEyamP6yINnS3LvfT+axKdr8HMuo=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri, 17 Feb 2023 17:43:03 +0100 (CET)
+X-EA-Auth: ZhcQgAhY3MDn0FswqxGe2X004sgsQugLQCWPlfZj4bf0PNQk7V3TyrkGBQyeqIBHOFoV8JxZOC9Qj49IoQuHdB+af3aU/MUX
+Date:   Fri, 17 Feb 2023 22:12:57 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] perf/x86/amd/core: Use sysfs_emit() in show() callback
+ function
+Message-ID: <Y++ukV1djYTd01vy@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <84835bee-a074-eb46-f1e4-03e53cd7f9ec@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 04:01:15PM +0100, Alexander Lobakin wrote:
-> > +		++mib->cnt_ptr;
-> 
-> Reason for the pre-increment? :)
+Using sprintf/snprintf functions are error prone and suggested to be
+replaced by scnprintf/vscnrptintf as outlined in this [1] LWN article.
 
-because it's kool
+A more recent recommendation is to use sysfs_emit() or sysfs_emit_at()
+as per Documentation/filesystems/sysfs.rst in show() callback function
+when formatting values to be returned to user-space. These helper
+functions are PAGE_SIZE aware and wrap a safer call to vscnprintf().
 
-Somebody not that long ago suggested that pre-increment is "less resource consuming":
-https://patchwork.kernel.org/project/netdevbpf/patch/677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org/#25197216
+[1] https://lwn.net/Articles/69419/
 
-Of course, when pressed to explain more, he stopped responding.
+Issue identified using the coccinelle device_attr_show.cocci script.
+
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ arch/x86/events/amd/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 4386b10682ce..47a3a841332a 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -1272,7 +1272,7 @@ static ssize_t branches_show(struct device *cdev,
+ 			      struct device_attribute *attr,
+ 			      char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%d\n", x86_pmu.lbr_nr);
++	return sysfs_emit(buf, "%d\n", x86_pmu.lbr_nr);
+ }
+ 
+ static DEVICE_ATTR_RO(branches);
+-- 
+2.34.1
+
+
+
