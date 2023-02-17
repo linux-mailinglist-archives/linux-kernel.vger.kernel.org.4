@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B0769A514
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1E669A520
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBQF1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 00:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S229584AbjBQFgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 00:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQF1F (ORCPT
+        with ESMTP id S229436AbjBQFf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 00:27:05 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0BC5B752
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 21:27:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676611623; x=1708147623;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y8sdwyVNjgp+rES3f9O5lbxG6cfNN//6Yvo8qu3BJC8=;
-  b=W70AzASjqdKlZuVV2O2Lk+NYcWnpej41k/HdadIccnMcRrkiqXRdcz2R
-   cN7dBLyEJRQu0klMPeAT6uiotJHlkdgUSfvNBf3wNRhNPk5jPL7967yz6
-   irwzIGLmea40DxKoaEm87/jF7Rrm/UzK7jJ+KbbMX8Ro4hv41V7MHawdm
-   wW2kZI+YdafadREp3AJVaGzX4eBS/Hql4zmRDmF1m9ix9XZ67OxNMMuFR
-   f+KEUWBW007sZSi1OTWbyHjyjQtBjRaXoA7AE13vDe32JqS+4csdNvPpq
-   apv1RTzxr851STE63E9btdVM/UfH1/rH9CFp7zVvfHwbhRBlhYb8DoGV/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="394388410"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="394388410"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 21:27:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="700789426"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="700789426"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Feb 2023 21:27:00 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pStGu-000B93-0N;
-        Fri, 17 Feb 2023 05:27:00 +0000
-Date:   Fri, 17 Feb 2023 13:26:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Sammar <muhammads@nvidia.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>
-Subject: drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c:1170:1:
- warning: stack frame size (1168) exceeds limit (1024) in
- 'dr_ste_v0_build_eth_ipv6_l3_l4_tag'
-Message-ID: <202302171359.vvB4yivq-lkp@intel.com>
+        Fri, 17 Feb 2023 00:35:58 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249D44DBC4;
+        Thu, 16 Feb 2023 21:35:56 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id d8so4218060ljq.9;
+        Thu, 16 Feb 2023 21:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWva4xxS8q1iw/3ddXyeH06mIO4Txvijo6JEiv2lAxo=;
+        b=aAesOw3ly4z1IlD112SNOICk1ygbNQoy+nDyB778JoLCHEb1igWrsTLKKVrJ3N4jGN
+         g8OUU0e/j/W13m9yPH06nLKtTeddvA563MsXr93Fpa9hYYRvkWfvycactptJ+dlWp+Ao
+         vi5bhii0oYV+nr+/8gfVVYHFw/rDU3SekpTpfLAjR59H2XPpjiNel2vbhMdwRjjhPFGd
+         YawMnN8uWCKySzOo4N6kdVOvjYDsWMDiL12VH+YrgbOIzv2+nzqkZg48hAk895ZDiVIA
+         jCh8yt1fvaVV/yEayOjX9U4aX6xiJZdAI91rnMGuV/haslldbz7LpsJnlpFTYGf+PGTP
+         s53w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rWva4xxS8q1iw/3ddXyeH06mIO4Txvijo6JEiv2lAxo=;
+        b=VmwqvPFESj5l4Ef4kzuFQZnBfFD7BQ79ogwyt2DOm40YKS2LhzrzrvLrKV7BUyFSua
+         8ZVr5h4UN/I2Tk7m/trWOVxj0PB6fNUL5xmab0z9QY2/vpDJmqwK4k/kNQWUPa4ZGk0m
+         DVsZoaK5lt3xtt97IzS868g9AYFwP1BEZnHW1xvvMFWc+NTTkfJjxd9sTgu1PYN5NnaD
+         52tc0qfM9nl63s1PmLeVs72Xz7w4NONQ9AGEDxQfB4ETC+aD3ObHf5M5Ac/2LPe4eWFM
+         T8+3vZLNwt7BijFQTQBjfyPAzF5Nny1ytlaRpX6xt5lmpczcKEI/Um2vUzezLdjWr0Mt
+         vAjg==
+X-Gm-Message-State: AO0yUKUNuIA5RvBy0/BhsFsJfsp72FRRYQN8c9yvKTx96boSQ9wRW6DL
+        NcIrDQko8sp7+kOy3633GdShl5FJmeH2hA7C1Xo=
+X-Google-Smtp-Source: AK7set9MEOglzLTI8rbidr0loBB8RX4UB4/hIsI4AUFlivFTBEybEd71GoMzu57L/GHd+tGuuPl0wk5hmT6+YQDg0g4=
+X-Received: by 2002:a2e:8e3a:0:b0:293:5169:6cc6 with SMTP id
+ r26-20020a2e8e3a000000b0029351696cc6mr74807ljk.7.1676612154091; Thu, 16 Feb
+ 2023 21:35:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230215000832.never.591-kees@kernel.org>
+In-Reply-To: <20230215000832.never.591-kees@kernel.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 16 Feb 2023 23:35:42 -0600
+Message-ID: <CAH2r5mv5uKRJtq5buaDzmW5D61gv_E5P=xn5kxjbTwdBa33nsQ@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Convert struct fealist away from 1-element array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,80 +71,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3ac88fa4605ec98e545fb3ad0154f575fda2de5f
-commit: 7766c9b922febe18b4eb124eb731dd9a1ec71373 net/mlx5: DR, Add missing reserved fields to dr_match_param
-date:   1 year, 2 months ago
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230217/202302171359.vvB4yivq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7766c9b922febe18b4eb124eb731dd9a1ec71373
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7766c9b922febe18b4eb124eb731dd9a1ec71373
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/ drivers/platform/ drivers/staging/
+merged into cifs-2.6.git for-next
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302171359.vvB4yivq-lkp@intel.com/
+On Tue, Feb 14, 2023 at 6:16 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> The kernel is globally removing the ambiguous 0-length and 1-element
+> arrays in favor of flexible arrays, so that we can gain both compile-time
+> and run-time array bounds checking[1].
+>
+> While struct fealist is defined as a "fake" flexible array (via a
+> 1-element array), it is only used for examination of the first array
+> element. Walking the list is performed separately, so there is no reason
+> to treat the "list" member of struct fealist as anything other than a
+> single entry. Adjust the struct and code to match.
+>
+> Additionally, struct fea uses the "name" member either as a dynamic
+> string, or is manually calculated from the start of the struct. Redefine
+> the member as a flexible array.
+>
+> No machine code output differences are produced after these changes.
+>
+> [1] For lots of details, see both:
+>     https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+>     https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+>
+> Cc: Steve French <sfrench@samba.org>
+> Cc: Paulo Alcantara <pc@cjr.nz>
+> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> Cc: Shyam Prasad N <sprasad@microsoft.com>
+> Cc: Tom Talpey <tom@talpey.com>
+> Cc: linux-cifs@vger.kernel.org
+> Cc: samba-technical@lists.samba.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  fs/cifs/cifspdu.h |  4 ++--
+>  fs/cifs/cifssmb.c | 16 ++++++++--------
+>  2 files changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/fs/cifs/cifspdu.h b/fs/cifs/cifspdu.h
+> index 623caece2b10..add73be4902c 100644
+> --- a/fs/cifs/cifspdu.h
+> +++ b/fs/cifs/cifspdu.h
+> @@ -2583,7 +2583,7 @@ struct fea {
+>         unsigned char EA_flags;
+>         __u8 name_len;
+>         __le16 value_len;
+> -       char name[1];
+> +       char name[];
+>         /* optionally followed by value */
+>  } __attribute__((packed));
+>  /* flags for _FEA.fEA */
+> @@ -2591,7 +2591,7 @@ struct fea {
+>
+>  struct fealist {
+>         __le32 list_len;
+> -       struct fea list[1];
+> +       struct fea list;
+>  } __attribute__((packed));
+>
+>  /* used to hold an arbitrary blob of data */
+> diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
+> index 60dd4e37030a..7c587157d030 100644
+> --- a/fs/cifs/cifssmb.c
+> +++ b/fs/cifs/cifssmb.c
+> @@ -5787,7 +5787,7 @@ CIFSSMBQAllEAs(const unsigned int xid, struct cifs_tcon *tcon,
+>
+>         /* account for ea list len */
+>         list_len -= 4;
+> -       temp_fea = ea_response_data->list;
+> +       temp_fea = &ea_response_data->list;
+>         temp_ptr = (char *)temp_fea;
+>         while (list_len > 0) {
+>                 unsigned int name_len;
+> @@ -5902,7 +5902,7 @@ CIFSSMBSetEA(const unsigned int xid, struct cifs_tcon *tcon,
+>         else
+>                 name_len = strnlen(ea_name, 255);
+>
+> -       count = sizeof(*parm_data) + ea_value_len + name_len;
+> +       count = sizeof(*parm_data) + 1 + ea_value_len + name_len;
+>         pSMB->MaxParameterCount = cpu_to_le16(2);
+>         /* BB find max SMB PDU from sess */
+>         pSMB->MaxDataCount = cpu_to_le16(1000);
+> @@ -5926,14 +5926,14 @@ CIFSSMBSetEA(const unsigned int xid, struct cifs_tcon *tcon,
+>         byte_count = 3 /* pad */  + params + count;
+>         pSMB->DataCount = cpu_to_le16(count);
+>         parm_data->list_len = cpu_to_le32(count);
+> -       parm_data->list[0].EA_flags = 0;
+> +       parm_data->list.EA_flags = 0;
+>         /* we checked above that name len is less than 255 */
+> -       parm_data->list[0].name_len = (__u8)name_len;
+> +       parm_data->list.name_len = (__u8)name_len;
+>         /* EA names are always ASCII */
+>         if (ea_name)
+> -               strncpy(parm_data->list[0].name, ea_name, name_len);
+> -       parm_data->list[0].name[name_len] = 0;
+> -       parm_data->list[0].value_len = cpu_to_le16(ea_value_len);
+> +               strncpy(parm_data->list.name, ea_name, name_len);
+> +       parm_data->list.name[name_len] = '\0';
+> +       parm_data->list.value_len = cpu_to_le16(ea_value_len);
+>         /* caller ensures that ea_value_len is less than 64K but
+>         we need to ensure that it fits within the smb */
+>
+> @@ -5941,7 +5941,7 @@ CIFSSMBSetEA(const unsigned int xid, struct cifs_tcon *tcon,
+>              negotiated SMB buffer size BB */
+>         /* if (ea_value_len > buffer_size - 512 (enough for header)) */
+>         if (ea_value_len)
+> -               memcpy(parm_data->list[0].name+name_len+1,
+> +               memcpy(parm_data->list.name + name_len + 1,
+>                        ea_value, ea_value_len);
+>
+>         pSMB->TotalDataCount = pSMB->DataCount;
+> --
+> 2.34.1
+>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c:1170:1: warning: stack frame size (1168) exceeds limit (1024) in 'dr_ste_v0_build_eth_ipv6_l3_l4_tag' [-Wframe-larger-than]
-   dr_ste_v0_build_eth_ipv6_l3_l4_tag(struct mlx5dr_match_param *value,
-   ^
-   56/1168 (4.79%) spills, 1112/1168 (95.21%) variables
-   1 warning generated.
-
-
-vim +/dr_ste_v0_build_eth_ipv6_l3_l4_tag +1170 drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c
-
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1168  
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1169  static int
-d65e841de80375 Yevgeny Kliteynik 2020-11-19 @1170  dr_ste_v0_build_eth_ipv6_l3_l4_tag(struct mlx5dr_match_param *value,
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1171  				   struct mlx5dr_ste_build *sb,
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1172  				   u8 *tag)
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1173  {
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1174  	struct mlx5dr_match_spec *spec = sb->inner ? &value->inner : &value->outer;
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1175  	struct mlx5dr_match_misc *misc = &value->misc;
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1176  
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1177  	DR_STE_SET_TAG(eth_l4, tag, dst_port, spec, tcp_dport);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1178  	DR_STE_SET_TAG(eth_l4, tag, src_port, spec, tcp_sport);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1179  	DR_STE_SET_TAG(eth_l4, tag, dst_port, spec, udp_dport);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1180  	DR_STE_SET_TAG(eth_l4, tag, src_port, spec, udp_sport);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1181  	DR_STE_SET_TAG(eth_l4, tag, protocol, spec, ip_protocol);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1182  	DR_STE_SET_TAG(eth_l4, tag, fragmented, spec, frag);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1183  	DR_STE_SET_TAG(eth_l4, tag, dscp, spec, ip_dscp);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1184  	DR_STE_SET_TAG(eth_l4, tag, ecn, spec, ip_ecn);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1185  	DR_STE_SET_TAG(eth_l4, tag, ipv6_hop_limit, spec, ttl_hoplimit);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1186  
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1187  	if (sb->inner)
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1188  		DR_STE_SET_TAG(eth_l4, tag, flow_label, misc, inner_ipv6_flow_label);
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1189  	else
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1190  		DR_STE_SET_TAG(eth_l4, tag, flow_label, misc, outer_ipv6_flow_label);
-0733535d59e154 Yevgeny Kliteynik 2021-07-04  1191  
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1192  	if (spec->tcp_flags) {
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1193  		DR_STE_SET_TCP_FLAGS(eth_l4, tag, spec);
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1194  		spec->tcp_flags = 0;
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1195  	}
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1196  
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1197  	return 0;
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1198  }
-d65e841de80375 Yevgeny Kliteynik 2020-11-19  1199  
-
-:::::: The code at line 1170 was first introduced by commit
-:::::: d65e841de80375372f9842ed71756d3b90d96dc4 net/mlx5: DR, Move HW STEv0 match logic to a separate file
-
-:::::: TO: Yevgeny Kliteynik <kliteyn@nvidia.com>
-:::::: CC: Saeed Mahameed <saeedm@nvidia.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+Steve
