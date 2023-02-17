@@ -2,197 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A8E69ACB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EF069ACC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBQNmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S229633AbjBQNnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBQNmQ (ORCPT
+        with ESMTP id S229551AbjBQNnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:42:16 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E54F68AFE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 05:42:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 154A71FF98;
-        Fri, 17 Feb 2023 13:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676641334; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjFMkHXsM8fM4NPbEA9UfxXvhT3vw/AHE68H6u3D2IY=;
-        b=UMO/PZzzG/ReRdG4iVcqfBir/QXaXVet/1Jjin4oCLOmgcSxZJR7kljnjh09gejTn5GfGp
-        CtiJWAyFxwX46SgQwWSf6OnkLwa8IAw4f5hC3T9TNlxpm4dlWwn1cf8tuI8UlB2hNgrcog
-        4HRXYkBJJixA2bGoY6koYFxAdK6MCuc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676641334;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjFMkHXsM8fM4NPbEA9UfxXvhT3vw/AHE68H6u3D2IY=;
-        b=ADGviP6IY/XJuAO5haXnc0OBWjpXmH/rHSQTbVEdS2wpwjN6/LFidBy6bD9BzlGGblI4rV
-        n6jwLYcJIqyL9RCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96CF813274;
-        Fri, 17 Feb 2023 13:42:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ryn/IjWE72OzCQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 13:42:13 +0000
-Message-ID: <d0be098d-c58f-9866-da6f-a721fa57806b@suse.de>
-Date:   Fri, 17 Feb 2023 14:42:13 +0100
+        Fri, 17 Feb 2023 08:43:41 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEABC64C;
+        Fri, 17 Feb 2023 05:43:16 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HBSBpI026152;
+        Fri, 17 Feb 2023 13:43:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=FX6OG/CBxkvvnAoWR0XG3eztHnQoT40IABl8eSUBPRc=;
+ b=X6akyBgr/c8PSlHFgaYBozmyli2oJyVvZeArt8dqlxNl/fjhYq5skrQKdJRVEvHA9K8R
+ BnNZTgui/ta2TnQEWKCddQtPi33QLXqTyNoruksiXhpG1R1GWwBybInudCLAY5Ao10T5
+ IFlV1T7GsHOW81cROCjrt2YRo1nIcdmDpq4rQP8loFyPQyy5YG+jjR3CLjGXkhXAwo/H
+ GXmGyGfs6X+NxmkQHGsRXUgwagHRPvTRs98EylX0/zkER8um4KV7DK9uL0BDrlfRoaAr
+ 7fk/a2SKB5qrHgnYIT5LSYskKKRZ17TqRrnJLjzA3z+ELVEzjFsM6EYLFlhG6nHosgGY og== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nt8qwr863-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:43:11 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HDhAtN002142
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 13:43:10 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 17 Feb 2023 05:43:07 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <borrello@diag.uniroma1.it>
+CC:     <c.giuffrida@vu.nl>, <h.j.bos@vu.nl>, <jkl820.git@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
+        <rostedt@goodmis.org>
+Subject: Re: [PATCH] tracing/probe: trace_probe_primary_from_call(): checked list_first_entry
+Date:   Fri, 17 Feb 2023 19:12:40 +0530
+Message-ID: <1676641360-22701-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
+References: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 09/11] drm/gem: Add drm_gem_pin_unlocked()
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-10-dmitry.osipenko@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230108210445.3948344-10-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------YEkqz0yA0vjAn7Bykv0GXpsJ"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZibXNj6qZo_llj3g6YNsdm6izdZhEf6y
+X-Proofpoint-ORIG-GUID: ZibXNj6qZo_llj3g6YNsdm6izdZhEf6y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_08,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ phishscore=0 mlxscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170123
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------YEkqz0yA0vjAn7Bykv0GXpsJ
-Content-Type: multipart/mixed; boundary="------------Z3KnnIy3SuREDC6znB2yaF0I";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, virtualization@lists.linux-foundation.org
-Message-ID: <d0be098d-c58f-9866-da6f-a721fa57806b@suse.de>
-Subject: Re: [PATCH v10 09/11] drm/gem: Add drm_gem_pin_unlocked()
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-10-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230108210445.3948344-10-dmitry.osipenko@collabora.com>
+>All callers of trace_probe_primary_from_call() check the return
+>value to be non NULL. However, the function returns
+>list_first_entry(&tpe->probes, ...) which can never be NULL.
+>Additionally, it does not check for the list being possibly empty,
+>possibly causing a type confusion on empty lists.
+>Use list_first_entry_or_null() which solves both problems.
+>
+>Fixes: 60d53e2c3b75 ("tracing/probe: Split trace_event related data from trace_probe")
+>Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+>---
+> kernel/trace/trace_probe.h | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+>index 23acfd1c3812..f6b565dced56 100644
+>--- a/kernel/trace/trace_probe.h
+>+++ b/kernel/trace/trace_probe.h
+>@@ -307,7 +307,7 @@ trace_probe_primary_from_call(struct trace_event_call *call)
+> {
+> 	struct trace_probe_event *tpe = trace_probe_event_from_call(call);
+> 
+>-	return list_first_entry(&tpe->probes, struct trace_probe, list);
+>+	return list_first_entry_or_null(&tpe->probes, struct trace_probe, list);
+> }
 
---------------Z3KnnIy3SuREDC6znB2yaF0I
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Nice catch !!
 
-SSBmb3Jnb3QgdGhpcyBjaGFuZ2UuDQoNCkFtIDA4LjAxLjIzIHVtIDIyOjA0IHNjaHJpZWIg
-RG1pdHJ5IE9zaXBlbmtvOg0KPiBBZGQgdW5sb2NrZWQgdmFyaWFudHMgb2YgZHJtX2dlbV91
-bi9waW4oKSBmdW5jdGlvbnMuIFRoZXNlIG5ldyBoZWxwZXJzDQo+IHdpbGwgdGFrZSBjYXJl
-IG9mIEdFTSBkbWEtcmVzZXJ2YXRpb24gbG9ja2luZyBmb3IgRFJNIGRyaXZlcnMuDQo+IA0K
-PiBWaXJ0SU8tR1BVIGRyaXZlciB3aWxsIHVzZSB0aGVzZSBoZWxwZXJzIHRvIHBpbiBzaG1l
-bSBmcmFtZWJ1ZmZlcnMsDQo+IHByZXZlbnRpbmcgdGhlbSBmcm9tIGV2aWN0aW9uIGR1cmlu
-ZyBzY2Fub3V0Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtvIDxkbWl0
-cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1t
-ZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0K
-DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMgfCAyOSArKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKw0KPiAgIGluY2x1ZGUvZHJtL2RybV9nZW0uaCAgICAgfCAg
-MyArKysNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDMyIGluc2VydGlvbnMoKykNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jIGIvZHJpdmVycy9ncHUvZHJt
-L2RybV9nZW0uYw0KPiBpbmRleCBkYmI0OGZjOWRmZjMuLjBiOGQzZGE5ODVjNyAxMDA2NDQN
-Cj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW0uYw0KPiArKysgYi9kcml2ZXJzL2dw
-dS9kcm0vZHJtX2dlbS5jDQo+IEBAIC0xMTY3LDYgKzExNjcsMzUgQEAgdm9pZCBkcm1fZ2Vt
-X3VucGluKHN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqKQ0KPiAgIAkJb2JqLT5mdW5jcy0+
-dW5waW4ob2JqKTsNCj4gICB9DQo+ICAgDQo+ICtpbnQgZHJtX2dlbV9waW5fdW5sb2NrZWQo
-c3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopDQo+ICt7DQo+ICsJaW50IHJldDsNCj4gKw0K
-PiArCWlmICghb2JqLT5mdW5jcy0+cGluKQ0KPiArCQlyZXR1cm4gMDsNCj4gKw0KPiArCXJl
-dCA9IGRtYV9yZXN2X2xvY2tfaW50ZXJydXB0aWJsZShvYmotPnJlc3YsIE5VTEwpOw0KPiAr
-CWlmIChyZXQpDQo+ICsJCXJldHVybiByZXQ7DQo+ICsNCj4gKwlyZXQgPSBvYmotPmZ1bmNz
-LT5waW4ob2JqKTsNCj4gKwlkbWFfcmVzdl91bmxvY2sob2JqLT5yZXN2KTsNCj4gKw0KPiAr
-CXJldHVybiByZXQ7DQo+ICt9DQo+ICtFWFBPUlRfU1lNQk9MKGRybV9nZW1fcGluX3VubG9j
-a2VkKTsNCj4gKw0KPiArdm9pZCBkcm1fZ2VtX3VucGluX3VubG9ja2VkKHN0cnVjdCBkcm1f
-Z2VtX29iamVjdCAqb2JqKQ0KPiArew0KPiArCWlmICghb2JqLT5mdW5jcy0+dW5waW4pDQo+
-ICsJCXJldHVybjsNCj4gKw0KPiArCWRtYV9yZXN2X2xvY2sob2JqLT5yZXN2LCBOVUxMKTsN
-Cj4gKwlvYmotPmZ1bmNzLT51bnBpbihvYmopOw0KPiArCWRtYV9yZXN2X3VubG9jayhvYmot
-PnJlc3YpOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTChkcm1fZ2VtX3VucGluX3VubG9ja2Vk
-KTsNCj4gKw0KPiAgIGludCBkcm1fZ2VtX3ZtYXAoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpv
-YmosIHN0cnVjdCBpb3N5c19tYXAgKm1hcCkNCj4gICB7DQo+ICAgCWludCByZXQ7DQo+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2RybS9kcm1fZ2VtLmggYi9pbmNsdWRlL2RybS9kcm1fZ2Vt
-LmgNCj4gaW5kZXggOGU1YzIyZjI1NjkxLi42ZjZkOTZmNzlhNjcgMTAwNjQ0DQo+IC0tLSBh
-L2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPiArKysgYi9pbmNsdWRlL2RybS9kcm1fZ2VtLmgN
-Cj4gQEAgLTQ5Myw0ICs0OTMsNyBAQCB1bnNpZ25lZCBsb25nIGRybV9nZW1fbHJ1X3NjYW4o
-c3RydWN0IGRybV9nZW1fbHJ1ICpscnUsDQo+ICAgDQo+ICAgYm9vbCBkcm1fZ2VtX29iamVj
-dF9ldmljdChzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaik7DQo+ICAgDQo+ICtpbnQgZHJt
-X2dlbV9waW5fdW5sb2NrZWQoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KPiArdm9p
-ZCBkcm1fZ2VtX3VucGluX3VubG9ja2VkKHN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqKTsN
-Cj4gKw0KPiAgICNlbmRpZiAvKiBfX0RSTV9HRU1fSF9fICovDQoNCi0tIA0KVGhvbWFzIFpp
-bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
-dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
-ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
-SXZvIFRvdGV2DQo=
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
---------------Z3KnnIy3SuREDC6znB2yaF0I--
-
---------------YEkqz0yA0vjAn7Bykv0GXpsJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvhDUFAwAAAAAACgkQlh/E3EQov+AJ
-CRAAke/NN/NQ0vWzacgOoYmIPjFXGMa/wy1lJbgC8EltQRzSKvPs05T23clW71EDeqppBrqebbAt
-gMcaVxY9J6SOAhPZkls3ZIL7wj+/+TRIYxHJj2PXy07/ymLZ9AHZd9+ScDwR+tsX2vbDJ7VPxLvk
-eJ3sEqUyd8z+YkqKZ8gDJvJEcYZ9zQkjn2CO83KCc1Nbseic2M9yT2s2qQRcl5EnnPwpwyos+fvC
-1CG/NbSH8SojY2jLLYR1J9msnD9eQ+nQNhqV7hkKzGcRG2TvKG5amXLQ/8RmR3rIgZj0TlZfyx8E
-RrYgxArzCKLKkTfGpMfn4niOusJdoFgen/uwujxRyPALBNj43Wrm67crxmgNsJ35C6vWBN8Jluh0
-7m5yNCp4illwphVjZqmHj+wgTquz3I0gtlAhRWMw/fvlsM4IfPnOKFmWjqR/+zCVQijU5/UKV/0w
-0fQfWbgmh3kcgy8cs8oXxwVxOKwaC3ljeJumJuqz3Vda2PMQ8K9QXS1r4z3MbSGNweEsvSV1e4o1
-tzQDD/fzDY3GWm3ezAXxJX5JvysjPJWUsbsOj9iyfRgoSz9TGS0Lu1erKVBOc0RPf5ZsyfpiNTjJ
-n/IGzJ4kJ05lhgQ8VQDNmY/IGkOneIJ6tdbX8kUxwmsJBDLh7+C1C+7ynueXRsZX4bVJKZZHrYe1
-1xE=
-=gTBP
------END PGP SIGNATURE-----
-
---------------YEkqz0yA0vjAn7Bykv0GXpsJ--
+-Mukesh
+> 
+> static inline struct list_head *trace_probe_probe_list(struct trace_probe *tp)
