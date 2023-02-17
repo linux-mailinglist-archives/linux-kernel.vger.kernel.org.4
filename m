@@ -2,1625 +2,573 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6C669B088
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FC369B0A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjBQQSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S231174AbjBQQUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjBQQS3 (ORCPT
+        with ESMTP id S231164AbjBQQUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:18:29 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4A61AE;
-        Fri, 17 Feb 2023 08:18:26 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HEc5Zn017764;
-        Fri, 17 Feb 2023 16:18:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Y9oiqZLUvc0JwCq4LMeea5KPjPjBvH+MCGH15cXOeos=;
- b=opwmgZHxMZwEkwMw6gMT/A0j7aQPz7/SukCS6dU4O1VHOVs3QPTUULJZo916qlkbSZX3
- SrMcoNpjsSX0HPgpIttGVCTbV2cAhnQDL5aW1jpK1PgCb030KC6d1YsYvH8R/BWJeR9R
- zWPEdD09H5KTVw4Q7IDWCKrqNd0JKXmcHCrfZYqa/FnvUDt5yAxJrcorf0Fk69z6v4V5
- hETzzN3zp3zS2crNHH5WCMPC2w+cXY7nm1E/J4tcwxe2QvmKitTnQ4VaycTTWOaLVG2s
- 3eItKBx+LxzpBGXjrb4b2zPyrDuLpDph5ANY1uA2R4yCwLVUtu9HWdZEoDkxCz0r2Bp1 zA== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nt2c5qcy8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:18 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFNk2Q010459;
-        Fri, 17 Feb 2023 16:18:18 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3np2n88mbf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:18 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HGIGfu52560300
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 16:18:16 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61F1B58067;
-        Fri, 17 Feb 2023 16:18:16 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8D905805E;
-        Fri, 17 Feb 2023 16:18:15 +0000 (GMT)
-Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 16:18:15 +0000 (GMT)
-From:   Danny Tsen <dtsen@linux.ibm.com>
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
-        dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
-Subject: [PATCH v3 3/6] An accelerated AES/GCM stitched implementation.
-Date:   Fri, 17 Feb 2023 11:18:02 -0500
-Message-Id: <20230217161805.236319-4-dtsen@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230217161805.236319-1-dtsen@linux.ibm.com>
-References: <20230217161805.236319-1-dtsen@linux.ibm.com>
+        Fri, 17 Feb 2023 11:20:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C2872916
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:19:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676650742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5rVpYXrca9+Iqt65tdSPetVuX0vl1nKf85t3g3FCKQw=;
+        b=YPryQJGwxRjIbI9hL2yxKLruTOBb4vqR5cXQpjWVMJz0zHWVTlHisaGwICnmPuhSZbTvF5
+        czM5oI3M7/waC5JXx2YcFgZ1sYzIqzBDlGNsTudd91TLcg9CaPnuFiOUmRwXnu5Nd6oOfU
+        hpFfRFt77/1dHvAPy3Iz6L+fbQWDq1Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-bcfot1hVOBCMNrA3rrj2Zw-1; Fri, 17 Feb 2023 11:18:59 -0500
+X-MC-Unique: bcfot1hVOBCMNrA3rrj2Zw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D1D201C05AD6;
+        Fri, 17 Feb 2023 16:18:58 +0000 (UTC)
+Received: from xps-13.local (unknown [10.39.193.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BE8BC15BAD;
+        Fri, 17 Feb 2023 16:18:57 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 17 Feb 2023 17:18:02 +0100
+Subject: [PATCH 08/11] selftests: hid: import hid-tools hid-apple tests
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aHD3hLOmCly7uOhuTIhsAFl1YlaI1FXm
-X-Proofpoint-GUID: aHD3hLOmCly7uOhuTIhsAFl1YlaI1FXm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxlogscore=882 mlxscore=0 priorityscore=1501
- suspectscore=0 spamscore=0 phishscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230217-import-hid-tools-tests-v1-8-d1c48590d0ee@redhat.com>
+References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+In-Reply-To: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676650715; l=22118;
+ i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
+ bh=5ZVcKqFaYfb3/FDPoi1Mg/fv8p5nkBwksf68dW3d4Ek=;
+ b=WW9mqLRSg4J6HCZkfDLHcEK+VH+QIttfqvwRTKkVYpOOBT4zb0zDr0m+hX0FN12WylcEq2hmQ
+ 3d0DtMfh3W4CmJWOjzId27WNzZ8IiarkeJLczryhdJYo8kgBb3MDZWh
+X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve overall performance of AES/GCM encrypt and decrypt operations
-for Power10+ CPU.
+These tests have been developed in the hid-tools[0] tree for a while.
+Now that we have  a proper selftests/hid kernel entry and that the tests
+are more reliable, it is time to directly include those in the kernel
+tree.
 
-Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
+[0] https://gitlab.freedesktop.org/libevdev/hid-tools
+
+Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- arch/powerpc/crypto/p10_aes_gcm.S | 1521 +++++++++++++++++++++++++++++
- 1 file changed, 1521 insertions(+)
- create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
+ tools/testing/selftests/hid/Makefile               |   1 +
+ tools/testing/selftests/hid/config                 |   1 +
+ tools/testing/selftests/hid/hid-apple.sh           |   7 +
+ .../selftests/hid/tests/test_apple_keyboard.py     | 440 +++++++++++++++++++++
+ 4 files changed, 449 insertions(+)
 
-diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
-new file mode 100644
-index 000000000000..a51f4b265308
+diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+index 4f11e865bbb3..ce03c65bfba0 100644
+--- a/tools/testing/selftests/hid/Makefile
++++ b/tools/testing/selftests/hid/Makefile
+@@ -6,6 +6,7 @@ include ../../../scripts/Makefile.arch
+ include ../../../scripts/Makefile.include
+ 
+ TEST_PROGS := hid-core.sh
++TEST_PROGS += hid-apple.sh
+ TEST_PROGS += hid-gamepad.sh
+ TEST_PROGS += hid-keyboard.sh
+ TEST_PROGS += hid-mouse.sh
+diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
+index 266fbd84ae9c..52b527cc2260 100644
+--- a/tools/testing/selftests/hid/config
++++ b/tools/testing/selftests/hid/config
+@@ -21,5 +21,6 @@ CONFIG_INPUT_EVDEV=y
+ CONFIG_UHID=y
+ CONFIG_USB=y
+ CONFIG_USB_HID=y
++CONFIG_HID_APPLE=y
+ CONFIG_HID_MULTITOUCH=y
+ CONFIG_HID_WACOM=y
+diff --git a/tools/testing/selftests/hid/hid-apple.sh b/tools/testing/selftests/hid/hid-apple.sh
+new file mode 100755
+index 000000000000..656f2d5ae5a9
 --- /dev/null
-+++ b/arch/powerpc/crypto/p10_aes_gcm.S
-@@ -0,0 +1,1521 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+ #
-+ # Accelerated AES-GCM stitched implementation for ppc64le.
-+ #
-+ # Copyright 2022- IBM Inc. All rights reserved
-+ #
-+ #===================================================================================
-+ # Written by Danny Tsen <dtsen@linux.ibm.com>
-+ #
-+ # GHASH is based on the Karatsuba multiplication method.
-+ #
-+ #    Xi xor X1
-+ #
-+ #    X1 * H^4 + X2 * H^3 + x3 * H^2 + X4 * H =
-+ #      (X1.h * H4.h + xX.l * H4.l + X1 * H4) +
-+ #      (X2.h * H3.h + X2.l * H3.l + X2 * H3) +
-+ #      (X3.h * H2.h + X3.l * H2.l + X3 * H2) +
-+ #      (X4.h * H.h + X4.l * H.l + X4 * H)
-+ #
-+ # Xi = v0
-+ # H Poly = v2
-+ # Hash keys = v3 - v14
-+ #     ( H.l, H, H.h)
-+ #     ( H^2.l, H^2, H^2.h)
-+ #     ( H^3.l, H^3, H^3.h)
-+ #     ( H^4.l, H^4, H^4.h)
-+ #
-+ # v30 is IV
-+ # v31 - counter 1
-+ #
-+ # AES used,
-+ #     vs0 - vs14 for round keys
-+ #     v15, v16, v17, v18, v19, v20, v21, v22 for 8 blocks (encrypted)
-+ #
-+ # This implementation uses stitched AES-GCM approach to improve overall performance.
-+ # AES is implemented with 8x blocks and GHASH is using 2 4x blocks.
-+ #
-+ # ===================================================================================
-+ #
-+
-+#include <asm/ppc_asm.h>
-+#include <linux/linkage.h>
-+
-+.machine        "any"
-+.text
-+
-+ # 4x loops
-+ # v15 - v18 - input states
-+ # vs1 - vs9 - round keys
-+ #
-+.macro Loop_aes_middle4x
-+	xxlor	19+32, 1, 1
-+	xxlor	20+32, 2, 2
-+	xxlor	21+32, 3, 3
-+	xxlor	22+32, 4, 4
-+
-+	vcipher	15, 15, 19
-+	vcipher	16, 16, 19
-+	vcipher	17, 17, 19
-+	vcipher	18, 18, 19
-+
-+	vcipher	15, 15, 20
-+	vcipher	16, 16, 20
-+	vcipher	17, 17, 20
-+	vcipher	18, 18, 20
-+
-+	vcipher	15, 15, 21
-+	vcipher	16, 16, 21
-+	vcipher	17, 17, 21
-+	vcipher	18, 18, 21
-+
-+	vcipher	15, 15, 22
-+	vcipher	16, 16, 22
-+	vcipher	17, 17, 22
-+	vcipher	18, 18, 22
-+
-+	xxlor	19+32, 5, 5
-+	xxlor	20+32, 6, 6
-+	xxlor	21+32, 7, 7
-+	xxlor	22+32, 8, 8
-+
-+	vcipher	15, 15, 19
-+	vcipher	16, 16, 19
-+	vcipher	17, 17, 19
-+	vcipher	18, 18, 19
-+
-+	vcipher	15, 15, 20
-+	vcipher	16, 16, 20
-+	vcipher	17, 17, 20
-+	vcipher	18, 18, 20
-+
-+	vcipher	15, 15, 21
-+	vcipher	16, 16, 21
-+	vcipher	17, 17, 21
-+	vcipher	18, 18, 21
-+
-+	vcipher	15, 15, 22
-+	vcipher	16, 16, 22
-+	vcipher	17, 17, 22
-+	vcipher	18, 18, 22
-+
-+	xxlor	23+32, 9, 9
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+.endm
-+
-+ # 8x loops
-+ # v15 - v22 - input states
-+ # vs1 - vs9 - round keys
-+ #
-+.macro Loop_aes_middle8x
-+	xxlor	23+32, 1, 1
-+	xxlor	24+32, 2, 2
-+	xxlor	25+32, 3, 3
-+	xxlor	26+32, 4, 4
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	vcipher	15, 15, 25
-+	vcipher	16, 16, 25
-+	vcipher	17, 17, 25
-+	vcipher	18, 18, 25
-+	vcipher	19, 19, 25
-+	vcipher	20, 20, 25
-+	vcipher	21, 21, 25
-+	vcipher	22, 22, 25
-+
-+	vcipher	15, 15, 26
-+	vcipher	16, 16, 26
-+	vcipher	17, 17, 26
-+	vcipher	18, 18, 26
-+	vcipher	19, 19, 26
-+	vcipher	20, 20, 26
-+	vcipher	21, 21, 26
-+	vcipher	22, 22, 26
-+
-+	xxlor	23+32, 5, 5
-+	xxlor	24+32, 6, 6
-+	xxlor	25+32, 7, 7
-+	xxlor	26+32, 8, 8
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	vcipher	15, 15, 25
-+	vcipher	16, 16, 25
-+	vcipher	17, 17, 25
-+	vcipher	18, 18, 25
-+	vcipher	19, 19, 25
-+	vcipher	20, 20, 25
-+	vcipher	21, 21, 25
-+	vcipher	22, 22, 25
-+
-+	vcipher	15, 15, 26
-+	vcipher	16, 16, 26
-+	vcipher	17, 17, 26
-+	vcipher	18, 18, 26
-+	vcipher	19, 19, 26
-+	vcipher	20, 20, 26
-+	vcipher	21, 21, 26
-+	vcipher	22, 22, 26
-+
-+	xxlor	23+32, 9, 9
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+.endm
-+
-+.macro Loop_aes_middle_1x
-+	xxlor	19+32, 1, 1
-+	xxlor	20+32, 2, 2
-+	xxlor	21+32, 3, 3
-+	xxlor	22+32, 4, 4
-+
-+	vcipher 15, 15, 19
-+	vcipher 15, 15, 20
-+	vcipher 15, 15, 21
-+	vcipher 15, 15, 22
-+
-+	xxlor	19+32, 5, 5
-+	xxlor	20+32, 6, 6
-+	xxlor	21+32, 7, 7
-+	xxlor	22+32, 8, 8
-+
-+	vcipher 15, 15, 19
-+	vcipher 15, 15, 20
-+	vcipher 15, 15, 21
-+	vcipher 15, 15, 22
-+
-+	xxlor	19+32, 9, 9
-+	vcipher 15, 15, 19
-+.endm
-+
-+ #
-+ # Compute 4x hash values based on Karatsuba method.
-+ #
-+.macro ppc_aes_gcm_ghash
-+	vxor		15, 15, 0
-+
-+	vpmsumd		23, 12, 15		# H4.L * X.L
-+	vpmsumd		24, 9, 16
-+	vpmsumd		25, 6, 17
-+	vpmsumd		26, 3, 18
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 17
-+	vpmsumd		27, 4, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# M
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 15		# H4.H * X.H
-+	vpmsumd		25, 11, 16
-+	vpmsumd		26, 8, 17
-+	vpmsumd		27, 5, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27
-+
-+	vxor		24, 24, 29
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		23, 23, 27
-+
-+	xxlor		32, 23+32, 23+32		# update hash
-+
-+.endm
-+
-+ #
-+ # Combine two 4x ghash
-+ # v15 - v22 - input blocks
-+ #
-+.macro ppc_aes_gcm_ghash2_4x
-+	# first 4x hash
-+	vxor		15, 15, 0		# Xi + X
-+
-+	vpmsumd		23, 12, 15		# H4.L * X.L
-+	vpmsumd		24, 9, 16
-+	vpmsumd		25, 6, 17
-+	vpmsumd		26, 3, 18
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 17
-+	vpmsumd		27, 4, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+
-+	vxor		24, 24, 27		# M
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 15		# H4.H * X.H
-+	vpmsumd		25, 11, 16
-+	vpmsumd		26, 8, 17
-+	vpmsumd		27, 5, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# H
-+
-+	vxor		24, 24, 29		# H + mH
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		27, 23, 27		# 1st Xi
-+
-+	# 2nd 4x hash
-+	vpmsumd		24, 9, 20
-+	vpmsumd		25, 6, 21
-+	vpmsumd		26, 3, 22
-+	vxor		19, 19, 27		# Xi + X
-+	vpmsumd		23, 12, 19		# H4.L * X.L
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 19		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 20		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 21
-+	vpmsumd		27, 4, 22
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+
-+	vxor		24, 24, 27		# M
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 19		# H4.H * X.H
-+	vpmsumd		25, 11, 20
-+	vpmsumd		26, 8, 21
-+	vpmsumd		27, 5, 22
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# H
-+
-+	vxor		24, 24, 29		# H + mH
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		23, 23, 27
-+
-+	xxlor		32, 23+32, 23+32		# update hash
-+
-+.endm
-+
-+ #
-+ # Compute update single hash
-+ #
-+.macro ppc_update_hash_1x
-+	vxor		28, 28, 0
-+
-+	vxor		19, 19, 19
-+
-+	vpmsumd		22, 3, 28		# L
-+	vpmsumd		23, 4, 28		# M
-+	vpmsumd		24, 5, 28		# H
-+
-+	vpmsumd		27, 22, 2		# reduction
-+
-+	vsldoi		25, 23, 19, 8		# mL
-+	vsldoi		26, 19, 23, 8		# mH
-+	vxor		22, 22, 25		# LL + LL
-+	vxor		24, 24, 26		# HH + HH
-+
-+	vsldoi		22, 22, 22, 8		# swap
-+	vxor		22, 22, 27
-+
-+	vsldoi		20, 22, 22, 8		# swap
-+	vpmsumd		22, 22, 2		# reduction
-+	vxor		20, 20, 24
-+	vxor		22, 22, 20
-+
-+	vmr		0, 22			# update hash
-+
-+.endm
-+
-+.macro SAVE_REGS
-+	stdu 1,-640(1)
-+	mflr 0
-+
-+	std	14,112(1)
-+	std	15,120(1)
-+	std	16,128(1)
-+	std	17,136(1)
-+	std	18,144(1)
-+	std	19,152(1)
-+	std	20,160(1)
-+	std	21,168(1)
-+	li	9, 256
-+	stvx	20, 9, 1
-+	addi	9, 9, 16
-+	stvx	21, 9, 1
-+	addi	9, 9, 16
-+	stvx	22, 9, 1
-+	addi	9, 9, 16
-+	stvx	23, 9, 1
-+	addi	9, 9, 16
-+	stvx	24, 9, 1
-+	addi	9, 9, 16
-+	stvx	25, 9, 1
-+	addi	9, 9, 16
-+	stvx	26, 9, 1
-+	addi	9, 9, 16
-+	stvx	27, 9, 1
-+	addi	9, 9, 16
-+	stvx	28, 9, 1
-+	addi	9, 9, 16
-+	stvx	29, 9, 1
-+	addi	9, 9, 16
-+	stvx	30, 9, 1
-+	addi	9, 9, 16
-+	stvx	31, 9, 1
-+	stxv	14, 464(1)
-+	stxv	15, 480(1)
-+	stxv	16, 496(1)
-+	stxv	17, 512(1)
-+	stxv	18, 528(1)
-+	stxv	19, 544(1)
-+	stxv	20, 560(1)
-+	stxv	21, 576(1)
-+	stxv	22, 592(1)
-+	std	0, 656(1)
-+.endm
-+
-+.macro RESTORE_REGS
-+	lxv	14, 464(1)
-+	lxv	15, 480(1)
-+	lxv	16, 496(1)
-+	lxv	17, 512(1)
-+	lxv	18, 528(1)
-+	lxv	19, 544(1)
-+	lxv	20, 560(1)
-+	lxv	21, 576(1)
-+	lxv	22, 592(1)
-+	li	9, 256
-+	lvx	20, 9, 1
-+	addi	9, 9, 16
-+	lvx	21, 9, 1
-+	addi	9, 9, 16
-+	lvx	22, 9, 1
-+	addi	9, 9, 16
-+	lvx	23, 9, 1
-+	addi	9, 9, 16
-+	lvx	24, 9, 1
-+	addi	9, 9, 16
-+	lvx	25, 9, 1
-+	addi	9, 9, 16
-+	lvx	26, 9, 1
-+	addi	9, 9, 16
-+	lvx	27, 9, 1
-+	addi	9, 9, 16
-+	lvx	28, 9, 1
-+	addi	9, 9, 16
-+	lvx	29, 9, 1
-+	addi	9, 9, 16
-+	lvx	30, 9, 1
-+	addi	9, 9, 16
-+	lvx	31, 9, 1
-+
-+	ld	0, 656(1)
-+	ld      14,112(1)
-+	ld      15,120(1)
-+	ld      16,128(1)
-+	ld      17,136(1)
-+	ld      18,144(1)
-+	ld      19,152(1)
-+	ld      20,160(1)
-+	ld	21,168(1)
-+
-+	mtlr	0
-+	addi	1, 1, 640
-+.endm
-+
-+.macro LOAD_HASH_TABLE
-+	# Load Xi
-+	lxvb16x	32, 0, 8	# load Xi
-+
-+	# load Hash - h^4, h^3, h^2, h
-+	li	10, 32
-+	lxvd2x	2+32, 10, 8	# H Poli
-+	li	10, 48
-+	lxvd2x	3+32, 10, 8	# Hl
-+	li	10, 64
-+	lxvd2x	4+32, 10, 8	# H
-+	li	10, 80
-+	lxvd2x	5+32, 10, 8	# Hh
-+
-+	li	10, 96
-+	lxvd2x	6+32, 10, 8	# H^2l
-+	li	10, 112
-+	lxvd2x	7+32, 10, 8	# H^2
-+	li	10, 128
-+	lxvd2x	8+32, 10, 8	# H^2h
-+
-+	li	10, 144
-+	lxvd2x	9+32, 10, 8	# H^3l
-+	li	10, 160
-+	lxvd2x	10+32, 10, 8	# H^3
-+	li	10, 176
-+	lxvd2x	11+32, 10, 8	# H^3h
-+
-+	li	10, 192
-+	lxvd2x	12+32, 10, 8	# H^4l
-+	li	10, 208
-+	lxvd2x	13+32, 10, 8	# H^4
-+	li	10, 224
-+	lxvd2x	14+32, 10, 8	# H^4h
-+.endm
-+
-+ #
-+ # aes_p10_gcm_encrypt (const void *inp, void *out, size_t len,
-+ #               const char *rk, unsigned char iv[16], void *Xip);
-+ #
-+ #    r3 - inp
-+ #    r4 - out
-+ #    r5 - len
-+ #    r6 - AES round keys
-+ #    r7 - iv and other data
-+ #    r8 - Xi, HPoli, hash keys
-+ #
-+ #    rounds is at offset 240 in rk
-+ #    Xi is at 0 in gcm_table (Xip).
-+ #
-+_GLOBAL(aes_p10_gcm_encrypt)
-+.align 5
-+
-+	SAVE_REGS
-+
-+	LOAD_HASH_TABLE
-+
-+	# initialize ICB: GHASH( IV ), IV - r7
-+	lxvb16x	30+32, 0, 7	# load IV  - v30
-+
-+	mr	12, 5		# length
-+	li	11, 0		# block index
-+
-+	# counter 1
-+	vxor	31, 31, 31
-+	vspltisb 22, 1
-+	vsldoi	31, 31, 22,1	# counter 1
-+
-+	# load round key to VSR
-+	lxv	0, 0(6)
-+	lxv	1, 0x10(6)
-+	lxv	2, 0x20(6)
-+	lxv	3, 0x30(6)
-+	lxv	4, 0x40(6)
-+	lxv	5, 0x50(6)
-+	lxv	6, 0x60(6)
-+	lxv	7, 0x70(6)
-+	lxv	8, 0x80(6)
-+	lxv	9, 0x90(6)
-+	lxv	10, 0xa0(6)
-+
-+	# load rounds - 10 (128), 12 (192), 14 (256)
-+	lwz	9,240(6)
-+
-+	#
-+	# vxor	state, state, w # addroundkey
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29	# IV + round key - add round key 0
-+
-+	cmpdi	9, 10
-+	beq	Loop_aes_gcm_8x
-+
-+	# load 2 more round keys (v11, v12)
-+	lxv	11, 0xb0(6)
-+	lxv	12, 0xc0(6)
-+
-+	cmpdi	9, 12
-+	beq	Loop_aes_gcm_8x
-+
-+	# load 2 more round keys (v11, v12, v13, v14)
-+	lxv	13, 0xd0(6)
-+	lxv	14, 0xe0(6)
-+	cmpdi	9, 14
-+	beq	Loop_aes_gcm_8x
-+
-+	b	aes_gcm_out
-+
-+.align 5
-+Loop_aes_gcm_8x:
-+	mr	14, 3
-+	mr	9, 4
-+
-+	#
-+	# check partial block
-+	#
-+Continue_partial_check:
-+	ld	15, 56(7)
-+	cmpdi	15, 0
-+	beq	Continue
-+	bgt	Final_block
-+	cmpdi	15, 16
-+	blt	Final_block
-+
-+Continue:
-+	# n blcoks
-+	li	10, 128
-+	divdu	10, 12, 10	# n 128 bytes-blocks
-+	cmpdi	10, 0
-+	beq	Loop_last_block
-+
-+	vaddudm	30, 30, 31	# IV + counter
-+	vxor	16, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	17, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	18, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	19, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	20, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	21, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	22, 30, 29
-+
-+	mtctr	10
-+
-+	li	15, 16
-+	li	16, 32
-+	li	17, 48
-+	li	18, 64
-+	li	19, 80
-+	li	20, 96
-+	li	21, 112
-+
-+	lwz	10, 240(6)
-+
-+Loop_8x_block:
-+
-+	lxvb16x		15, 0, 14	# load block
-+	lxvb16x		16, 15, 14	# load block
-+	lxvb16x		17, 16, 14	# load block
-+	lxvb16x		18, 17, 14	# load block
-+	lxvb16x		19, 18, 14	# load block
-+	lxvb16x		20, 19, 14	# load block
-+	lxvb16x		21, 20, 14	# load block
-+	lxvb16x		22, 21, 14	# load block
-+	addi		14, 14, 128
-+
-+	Loop_aes_middle8x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_ghash
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_ghash
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_ghash
-+	b	aes_gcm_out
-+
-+Do_next_ghash:
-+
-+	#
-+	# last round
-+	vcipherlast     15, 15, 23
-+	vcipherlast     16, 16, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x        47, 0, 9	# store output
-+	xxlxor		48, 48, 16
-+	stxvb16x        48, 15, 9	# store output
-+
-+	vcipherlast     17, 17, 23
-+	vcipherlast     18, 18, 23
-+
-+	xxlxor		49, 49, 17
-+	stxvb16x        49, 16, 9	# store output
-+	xxlxor		50, 50, 18
-+	stxvb16x        50, 17, 9	# store output
-+
-+	vcipherlast     19, 19, 23
-+	vcipherlast     20, 20, 23
-+
-+	xxlxor		51, 51, 19
-+	stxvb16x        51, 18, 9	# store output
-+	xxlxor		52, 52, 20
-+	stxvb16x        52, 19, 9	# store output
-+
-+	vcipherlast     21, 21, 23
-+	vcipherlast     22, 22, 23
-+
-+	xxlxor		53, 53, 21
-+	stxvb16x        53, 20, 9	# store output
-+	xxlxor		54, 54, 22
-+	stxvb16x        54, 21, 9	# store output
-+
-+	addi		9, 9, 128
-+
-+	# ghash here
-+	ppc_aes_gcm_ghash2_4x
-+
-+	xxlor	27+32, 0, 0
-+	vaddudm 30, 30, 31		# IV + counter
-+	vmr	29, 30
-+	vxor    15, 30, 27		# add round key
-+	vaddudm 30, 30, 31
-+	vxor    16, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    17, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    18, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    19, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    20, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    21, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    22, 30, 27
-+
-+	addi    12, 12, -128
-+	addi    11, 11, 128
-+
-+	bdnz	Loop_8x_block
-+
-+	vmr	30, 29
-+	stxvb16x 30+32, 0, 7		# update IV
-+
-+Loop_last_block:
-+	cmpdi   12, 0
-+	beq     aes_gcm_out
-+
-+	# loop last few blocks
-+	li      10, 16
-+	divdu   10, 12, 10
-+
-+	mtctr   10
-+
-+	lwz	10, 240(6)
-+
-+	cmpdi   12, 16
-+	blt     Final_block
-+
-+Next_rem_block:
-+	lxvb16x 15, 0, 14		# load block
-+
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_1x
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_1x
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_1x
-+
-+Do_next_1x:
-+	vcipherlast     15, 15, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x	47, 0, 9	# store output
-+	addi		14, 14, 16
-+	addi		9, 9, 16
-+
-+	vmr		28, 15
-+	ppc_update_hash_1x
-+
-+	addi		12, 12, -16
-+	addi		11, 11, 16
-+	xxlor		19+32, 0, 0
-+	vaddudm		30, 30, 31		# IV + counter
-+	vxor		15, 30, 19		# add round key
-+
-+	bdnz	Next_rem_block
-+
-+	li	15, 0
-+	std	15, 56(7)		# clear partial?
-+	stxvb16x 30+32, 0, 7		# update IV
-+	cmpdi	12, 0
-+	beq	aes_gcm_out
-+
-+Final_block:
-+	lwz	10, 240(6)
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_final_1x
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_final_1x
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_final_1x
-+
-+Do_final_1x:
-+	vcipherlast     15, 15, 23
-+
-+	# check partial block
-+	li	21, 0			# encrypt
-+	ld	15, 56(7)		# partial?
-+	cmpdi	15, 0
-+	beq	Normal_block
-+	bl	Do_partial_block
-+
-+	cmpdi	12, 0
-+	ble aes_gcm_out
-+
-+	b Continue_partial_check
-+
-+Normal_block:
-+	lxvb16x	15, 0, 14		# load last block
-+	xxlxor	47, 47, 15
-+
-+	# create partial block mask
-+	li	15, 16
-+	sub	15, 15, 12		# index to the mask
-+
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stvx	16, 10, 1
-+	addi	10, 10, 16
-+	stvx	17, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	16, 15, 10		# load partial block mask
-+	xxland	47, 47, 16
-+
-+	vmr	28, 15
-+	ppc_update_hash_1x
-+
-+	# * should store only the remaining bytes.
-+	bl	Write_partial_block
-+
-+	stxvb16x 30+32, 0, 7		# update IV
-+	std	12, 56(7)		# update partial?
-+	li	16, 16
-+
-+	stxvb16x	32, 0, 8		# write out Xi
-+	stxvb16x	32, 16, 8		# write out Xi
-+	b aes_gcm_out
-+
-+ #
-+ # Compute data mask
-+ #
-+.macro GEN_MASK _mask _start _end
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stxvb16x	17+32, 10, 1
-+	add	10, 10, \_start
-+	stxvb16x	16+32, 10, 1
-+	add	10, 10, \_end
-+	stxvb16x	17+32, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	\_mask, 0, 10		# load partial block mask
-+.endm
-+
-+ #
-+ # Handle multiple partial blocks for encrypt and decrypt
-+ #   operations.
-+ #
-+SYM_FUNC_START_LOCAL(Do_partial_block)
-+	add	17, 15, 5
-+	cmpdi	17, 16
-+	bgt	Big_block
-+	GEN_MASK 18, 15, 5
-+	b	_Partial
-+SYM_FUNC_END(Do_partial_block)
-+Big_block:
-+	li	16, 16
-+	GEN_MASK 18, 15, 16
-+
-+_Partial:
-+	lxvb16x	17+32, 0, 14		# load last block
-+	sldi	16, 15, 3
-+	mtvsrdd	32+16, 0, 16
-+	vsro	17, 17, 16
-+	xxlxor	47, 47, 17+32
-+	xxland	47, 47, 18
-+
-+	vxor	0, 0, 0			# clear Xi
-+	vmr	28, 15
-+
-+	cmpdi	21, 0			# encrypt/decrypt ops?
-+	beq	Skip_decrypt
-+	xxland	32+28, 32+17, 18
-+
-+Skip_decrypt:
-+
-+	ppc_update_hash_1x
-+
-+	li	16, 16
-+	lxvb16x 32+29, 16, 8
-+	vxor	0, 0, 29
-+	stxvb16x 32, 0, 8		# save Xi
-+	stxvb16x 32, 16, 8		# save Xi
-+
-+	# store partial block
-+	# loop the rest of the stream if any
-+	sldi	16, 15, 3
-+	mtvsrdd	32+16, 0, 16
-+	vslo	15, 15, 16
-+	#stxvb16x 15+32, 0, 9		# last block
-+
-+	li	16, 16
-+	sub	17, 16, 15		# 16 - partial
-+
-+	add	16, 15, 5
-+	cmpdi	16, 16
-+	bgt	Larger_16
-+	mr	17, 5
-+Larger_16:
-+
-+	# write partial
-+	li		10, 192
-+	stxvb16x	15+32, 10, 1	# save current block
-+
-+	addi		10, 9, -1
-+	addi		16, 1, 191
-+	mtctr		17		# move partial byte count
-+
-+Write_last_partial:
-+        lbzu		18, 1(16)
-+	stbu		18, 1(10)
-+        bdnz		Write_last_partial
-+	# Complete loop partial
-+
-+	add	14, 14, 17
-+	add	9, 9, 17
-+	sub	12, 12, 17
-+	add	11, 11, 17
-+
-+	add	15, 15, 5
-+	cmpdi	15, 16
-+	blt	Save_partial
-+
-+	vaddudm	30, 30, 31
-+	stxvb16x 30+32, 0, 7		# update IV
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29		# IV + round key - add round key 0
-+	li	15, 0
-+	std	15, 56(7)		# partial done - clear
-+	b	Partial_done
-+Save_partial:
-+	std	15, 56(7)		# partial
-+
-+Partial_done:
-+	blr
-+
-+ #
-+ # Write partial block
-+ # r9 - output
-+ # r12 - remaining bytes
-+ # v15 - partial input data
-+ #
-+SYM_FUNC_START_LOCAL(Write_partial_block)
-+	li		10, 192
-+	stxvb16x	15+32, 10, 1		# last block
-+
-+	addi		10, 9, -1
-+	addi		16, 1, 191
-+
-+        mtctr		12			# remaining bytes
-+	li		15, 0
-+
-+Write_last_byte:
-+        lbzu		14, 1(16)
-+	stbu		14, 1(10)
-+        bdnz		Write_last_byte
-+	blr
-+SYM_FUNC_END(Write_partial_block)
-+
-+aes_gcm_out:
-+	# out = state
-+	stxvb16x	32, 0, 8		# write out Xi
-+	add	3, 11, 12		# return count
-+
-+	RESTORE_REGS
-+	blr
-+
-+ #
-+ # 8x Decrypt
-+ #
-+_GLOBAL(aes_p10_gcm_decrypt)
-+.align 5
-+
-+	SAVE_REGS
-+
-+	LOAD_HASH_TABLE
-+
-+	# initialize ICB: GHASH( IV ), IV - r7
-+	lxvb16x	30+32, 0, 7	# load IV  - v30
-+
-+	mr	12, 5		# length
-+	li	11, 0		# block index
-+
-+	# counter 1
-+	vxor	31, 31, 31
-+	vspltisb 22, 1
-+	vsldoi	31, 31, 22,1	# counter 1
-+
-+	# load round key to VSR
-+	lxv	0, 0(6)
-+	lxv	1, 0x10(6)
-+	lxv	2, 0x20(6)
-+	lxv	3, 0x30(6)
-+	lxv	4, 0x40(6)
-+	lxv	5, 0x50(6)
-+	lxv	6, 0x60(6)
-+	lxv	7, 0x70(6)
-+	lxv	8, 0x80(6)
-+	lxv	9, 0x90(6)
-+	lxv	10, 0xa0(6)
-+
-+	# load rounds - 10 (128), 12 (192), 14 (256)
-+	lwz	9,240(6)
-+
-+	#
-+	# vxor	state, state, w # addroundkey
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29	# IV + round key - add round key 0
-+
-+	cmpdi	9, 10
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	# load 2 more round keys (v11, v12)
-+	lxv	11, 0xb0(6)
-+	lxv	12, 0xc0(6)
-+
-+	cmpdi	9, 12
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	# load 2 more round keys (v11, v12, v13, v14)
-+	lxv	13, 0xd0(6)
-+	lxv	14, 0xe0(6)
-+	cmpdi	9, 14
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	b	aes_gcm_out
-+
-+.align 5
-+Loop_aes_gcm_8x_dec:
-+	mr	14, 3
-+	mr	9, 4
-+
-+	#
-+	# check partial block
-+	#
-+Continue_partial_check_dec:
-+	ld	15, 56(7)
-+	cmpdi	15, 0
-+	beq	Continue_dec
-+	bgt	Final_block_dec
-+	cmpdi	15, 16
-+	blt	Final_block_dec
-+
-+Continue_dec:
-+	# n blcoks
-+	li	10, 128
-+	divdu	10, 12, 10	# n 128 bytes-blocks
-+	cmpdi	10, 0
-+	beq	Loop_last_block_dec
-+
-+	vaddudm	30, 30, 31	# IV + counter
-+	vxor	16, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	17, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	18, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	19, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	20, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	21, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	22, 30, 29
-+
-+	mtctr	10
-+
-+	li	15, 16
-+	li	16, 32
-+	li	17, 48
-+	li	18, 64
-+	li	19, 80
-+	li	20, 96
-+	li	21, 112
-+
-+	lwz	10, 240(6)
-+
-+Loop_8x_block_dec:
-+
-+	lxvb16x		15, 0, 14	# load block
-+	lxvb16x		16, 15, 14	# load block
-+	lxvb16x		17, 16, 14	# load block
-+	lxvb16x		18, 17, 14	# load block
-+	lxvb16x		19, 18, 14	# load block
-+	lxvb16x		20, 19, 14	# load block
-+	lxvb16x		21, 20, 14	# load block
-+	lxvb16x		22, 21, 14	# load block
-+	addi		14, 14, 128
-+
-+	Loop_aes_middle8x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_ghash_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_ghash_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_ghash_dec
-+	b	aes_gcm_out
-+
-+Do_next_ghash_dec:
-+
-+	#
-+	# last round
-+	vcipherlast     15, 15, 23
-+	vcipherlast     16, 16, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x        47, 0, 9	# store output
-+	xxlxor		48, 48, 16
-+	stxvb16x        48, 15, 9	# store output
-+
-+	vcipherlast     17, 17, 23
-+	vcipherlast     18, 18, 23
-+
-+	xxlxor		49, 49, 17
-+	stxvb16x        49, 16, 9	# store output
-+	xxlxor		50, 50, 18
-+	stxvb16x        50, 17, 9	# store output
-+
-+	vcipherlast     19, 19, 23
-+	vcipherlast     20, 20, 23
-+
-+	xxlxor		51, 51, 19
-+	stxvb16x        51, 18, 9	# store output
-+	xxlxor		52, 52, 20
-+	stxvb16x        52, 19, 9	# store output
-+
-+	vcipherlast     21, 21, 23
-+	vcipherlast     22, 22, 23
-+
-+	xxlxor		53, 53, 21
-+	stxvb16x        53, 20, 9	# store output
-+	xxlxor		54, 54, 22
-+	stxvb16x        54, 21, 9	# store output
-+
-+	addi		9, 9, 128
-+
-+	xxlor           15+32, 15, 15
-+	xxlor           16+32, 16, 16
-+	xxlor           17+32, 17, 17
-+	xxlor           18+32, 18, 18
-+	xxlor           19+32, 19, 19
-+	xxlor           20+32, 20, 20
-+	xxlor           21+32, 21, 21
-+	xxlor           22+32, 22, 22
-+
-+	# ghash here
-+	ppc_aes_gcm_ghash2_4x
-+
-+	xxlor	27+32, 0, 0
-+	vaddudm 30, 30, 31		# IV + counter
-+	vmr	29, 30
-+	vxor    15, 30, 27		# add round key
-+	vaddudm 30, 30, 31
-+	vxor    16, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    17, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    18, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    19, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    20, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    21, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    22, 30, 27
-+
-+	addi    12, 12, -128
-+	addi    11, 11, 128
-+
-+	bdnz	Loop_8x_block_dec
-+
-+	vmr	30, 29
-+	stxvb16x 30+32, 0, 7		# update IV
-+
-+Loop_last_block_dec:
-+	cmpdi   12, 0
-+	beq     aes_gcm_out
-+
-+	# loop last few blocks
-+	li      10, 16
-+	divdu   10, 12, 10
-+
-+	mtctr   10
-+
-+	lwz	10, 240(6)
-+
-+	cmpdi   12, 16
-+	blt     Final_block_dec
-+
-+Next_rem_block_dec:
-+	lxvb16x 15, 0, 14		# load block
-+
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_1x_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_1x_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_1x_dec
-+
-+Do_next_1x_dec:
-+	vcipherlast     15, 15, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x	47, 0, 9	# store output
-+	addi		14, 14, 16
-+	addi		9, 9, 16
-+
-+	xxlor           28+32, 15, 15
-+	#vmr		28, 15
-+	ppc_update_hash_1x
-+
-+	addi		12, 12, -16
-+	addi		11, 11, 16
-+	xxlor		19+32, 0, 0
-+	vaddudm		30, 30, 31		# IV + counter
-+	vxor		15, 30, 19		# add round key
-+
-+	bdnz	Next_rem_block_dec
-+
-+	li	15, 0
-+	std	15, 56(7)		# clear partial?
-+	stxvb16x 30+32, 0, 7		# update IV
-+	cmpdi	12, 0
-+	beq	aes_gcm_out
-+
-+Final_block_dec:
-+	lwz	10, 240(6)
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_final_1x_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_final_1x_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_final_1x_dec
-+
-+Do_final_1x_dec:
-+	vcipherlast     15, 15, 23
-+
-+	# check partial block
-+	li	21, 1			# decrypt
-+	ld	15, 56(7)		# partial?
-+	cmpdi	15, 0
-+	beq	Normal_block_dec
-+	bl	Do_partial_block
-+	cmpdi	12, 0
-+	ble aes_gcm_out
-+
-+	b Continue_partial_check_dec
-+
-+Normal_block_dec:
-+	lxvb16x	15, 0, 14		# load last block
-+	xxlxor	47, 47, 15
-+
-+	# create partial block mask
-+	li	15, 16
-+	sub	15, 15, 12		# index to the mask
-+
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stvx	16, 10, 1
-+	addi	10, 10, 16
-+	stvx	17, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	16, 15, 10		# load partial block mask
-+	xxland	47, 47, 16
-+
-+	xxland	32+28, 15, 16
-+	#vmr	28, 15
-+	ppc_update_hash_1x
-+
-+	# * should store only the remaining bytes.
-+	bl	Write_partial_block
-+
-+	stxvb16x 30+32, 0, 7		# update IV
-+	std	12, 56(7)		# update partial?
-+	li	16, 16
-+
-+	stxvb16x	32, 0, 8		# write out Xi
-+	stxvb16x	32, 16, 8		# write out Xi
-+	b aes_gcm_out
++++ b/tools/testing/selftests/hid/hid-apple.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Runs tests for the HID subsystem
++
++export TARGET=test_apple_keyboard.py
++
++bash ./run-hid-tools-tests.sh
+diff --git a/tools/testing/selftests/hid/tests/test_apple_keyboard.py b/tools/testing/selftests/hid/tests/test_apple_keyboard.py
+new file mode 100644
+index 000000000000..f81071d46166
+--- /dev/null
++++ b/tools/testing/selftests/hid/tests/test_apple_keyboard.py
+@@ -0,0 +1,440 @@
++#!/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# -*- coding: utf-8 -*-
++#
++# Copyright (c) 2019 Benjamin Tissoires <benjamin.tissoires@gmail.com>
++# Copyright (c) 2019 Red Hat, Inc.
++#
++
++from .test_keyboard import ArrayKeyboard, TestArrayKeyboard
++from hidtools.util import BusType
++
++import libevdev
++import logging
++
++logger = logging.getLogger("hidtools.test.apple-keyboard")
++
++KERNEL_MODULE = ("apple", "hid-apple")
++
++
++class KbdData(object):
++    pass
++
++
++class AppleKeyboard(ArrayKeyboard):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,         # Usage Page (Generic Desktop)
++        0x09, 0x06,         # Usage (Keyboard)
++        0xa1, 0x01,         # Collection (Application)
++        0x85, 0x01,         # .Report ID (1)
++        0x05, 0x07,         # .Usage Page (Keyboard)
++        0x19, 0xe0,         # .Usage Minimum (224)
++        0x29, 0xe7,         # .Usage Maximum (231)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x25, 0x01,         # .Logical Maximum (1)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x08,         # .Report Count (8)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x75, 0x08,         # .Report Size (8)
++        0x95, 0x01,         # .Report Count (1)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x05,         # .Report Count (5)
++        0x05, 0x08,         # .Usage Page (LEDs)
++        0x19, 0x01,         # .Usage Minimum (1)
++        0x29, 0x05,         # .Usage Maximum (5)
++        0x91, 0x02,         # .Output (Data,Var,Abs)
++        0x75, 0x03,         # .Report Size (3)
++        0x95, 0x01,         # .Report Count (1)
++        0x91, 0x01,         # .Output (Cnst,Arr,Abs)
++        0x75, 0x08,         # .Report Size (8)
++        0x95, 0x06,         # .Report Count (6)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x26, 0xff, 0x00,   # .Logical Maximum (255)
++        0x05, 0x07,         # .Usage Page (Keyboard)
++        0x19, 0x00,         # .Usage Minimum (0)
++        0x2a, 0xff, 0x00,   # .Usage Maximum (255)
++        0x81, 0x00,         # .Input (Data,Arr,Abs)
++        0xc0,               # End Collection
++        0x05, 0x0c,         # Usage Page (Consumer Devices)
++        0x09, 0x01,         # Usage (Consumer Control)
++        0xa1, 0x01,         # Collection (Application)
++        0x85, 0x47,         # .Report ID (71)
++        0x05, 0x01,         # .Usage Page (Generic Desktop)
++        0x09, 0x06,         # .Usage (Keyboard)
++        0xa1, 0x02,         # .Collection (Logical)
++        0x05, 0x06,         # ..Usage Page (Generic Device Controls)
++        0x09, 0x20,         # ..Usage (Battery Strength)
++        0x15, 0x00,         # ..Logical Minimum (0)
++        0x26, 0xff, 0x00,   # ..Logical Maximum (255)
++        0x75, 0x08,         # ..Report Size (8)
++        0x95, 0x01,         # ..Report Count (1)
++        0x81, 0x02,         # ..Input (Data,Var,Abs)
++        0xc0,               # .End Collection
++        0xc0,               # End Collection
++        0x05, 0x0c,         # Usage Page (Consumer Devices)
++        0x09, 0x01,         # Usage (Consumer Control)
++        0xa1, 0x01,         # Collection (Application)
++        0x85, 0x11,         # .Report ID (17)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x25, 0x01,         # .Logical Maximum (1)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x03,         # .Report Count (3)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x01,         # .Report Count (1)
++        0x05, 0x0c,         # .Usage Page (Consumer Devices)
++        0x09, 0xb8,         # .Usage (Eject)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x06, 0xff, 0x00,   # .Usage Page (Vendor Usage Page 0xff)
++        0x09, 0x03,         # .Usage (Vendor Usage 0x03)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x03,         # .Report Count (3)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x05, 0x0c,         # .Usage Page (Consumer Devices)
++        0x85, 0x12,         # .Report ID (18)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x25, 0x01,         # .Logical Maximum (1)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x01,         # .Report Count (1)
++        0x09, 0xcd,         # .Usage (Play/Pause)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x09, 0xb3,         # .Usage (Fast Forward)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x09, 0xb4,         # .Usage (Rewind)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x09, 0xb5,         # .Usage (Scan Next Track)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x09, 0xb6,         # .Usage (Scan Previous Track)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x85, 0x13,         # .Report ID (19)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x25, 0x01,         # .Logical Maximum (1)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x01,         # .Report Count (1)
++        0x06, 0x01, 0xff,   # .Usage Page (Vendor Usage Page 0xff01)
++        0x09, 0x0a,         # .Usage (Vendor Usage 0x0a)
++        0x81, 0x02,         # .Input (Data,Var,Abs)
++        0x06, 0x01, 0xff,   # .Usage Page (Vendor Usage Page 0xff01)
++        0x09, 0x0c,         # .Usage (Vendor Usage 0x0c)
++        0x81, 0x22,         # .Input (Data,Var,Abs,NoPref)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x06,         # .Report Count (6)
++        0x81, 0x01,         # .Input (Cnst,Arr,Abs)
++        0x85, 0x09,         # .Report ID (9)
++        0x09, 0x0b,         # .Usage (Vendor Usage 0x0b)
++        0x75, 0x08,         # .Report Size (8)
++        0x95, 0x01,         # .Report Count (1)
++        0xb1, 0x02,         # .Feature (Data,Var,Abs)
++        0x75, 0x08,         # .Report Size (8)
++        0x95, 0x02,         # .Report Count (2)
++        0xb1, 0x01,         # .Feature (Cnst,Arr,Abs)
++        0xc0,               # End Collection
++    ]
++    # fmt: on
++
++    def __init__(
++        self,
++        rdesc=report_descriptor,
++        name="Apple Wireless Keyboard",
++        input_info=(BusType.BLUETOOTH, 0x05AC, 0x0256),
++    ):
++        super().__init__(rdesc, name, input_info)
++        self.default_reportID = 1
++
++    def send_fn_state(self, state):
++        data = KbdData()
++        setattr(data, "0xff0003", state)
++        r = self.create_report(data, reportID=17)
++        self.call_input_event(r)
++        return [r]
++
++
++class TestAppleKeyboard(TestArrayKeyboard):
++    kernel_modules = [KERNEL_MODULE]
++
++    def create_device(self):
++        return AppleKeyboard()
++
++    def test_single_function_key(self):
++        """check for function key reliability."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.event(["F4"])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 0
++
++    def test_single_fn_function_key(self):
++        """check for function key reliability with the fn key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.send_fn_state(1)
++        r.extend(uhdev.event(["F4"]))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 1
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        r = uhdev.send_fn_state(0)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++
++    def test_single_fn_function_key_release_first(self):
++        """check for function key reliability with the fn key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.send_fn_state(1)
++        r.extend(uhdev.event(["F4"]))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 1
++
++        r = uhdev.send_fn_state(0)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++
++    def test_single_fn_function_key_inverted(self):
++        """check for function key reliability with the fn key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.event(["F4"])
++        r.extend(uhdev.send_fn_state(1))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        r = uhdev.send_fn_state(0)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++
++    def test_multiple_fn_function_key_release_first(self):
++        """check for function key reliability with the fn key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.send_fn_state(1)
++        r.extend(uhdev.event(["F4"]))
++        r.extend(uhdev.event(["F4", "F6"]))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F6, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        r = uhdev.event(["F6"])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F4, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        r = uhdev.send_fn_state(0)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F6, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++    def test_multiple_fn_function_key_release_between(self):
++        """check for function key reliability with the fn key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        # press F4
++        r = uhdev.event(["F4"])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_KBDILLUMUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++        # press Fn key
++        r = uhdev.send_fn_state(1)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_KBDILLUMUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        # keep F4 and press F6
++        r = uhdev.event(["F4", "F6"])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F6, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_KBDILLUMUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        # keep F4 and F6
++        r = uhdev.event(["F4", "F6"])
++        expected = []
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_KBDILLUMUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        # release Fn key and all keys
++        r = uhdev.send_fn_state(0)
++        r.extend(uhdev.event([]))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_ALL_APPLICATIONS, 0))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_F6, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_F4] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_ALL_APPLICATIONS] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_F6] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_KBDILLUMUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++    def test_single_pageup_key_release_first(self):
++        """check for function key reliability with the [page] up key."""
++        uhdev = self.uhdev
++        evdev = uhdev.get_evdev()
++        syn_event = self.syn_event
++
++        r = uhdev.send_fn_state(1)
++        r.extend(uhdev.event(["UpArrow"]))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_PAGEUP, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_PAGEUP] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_UP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 1
++
++        r = uhdev.send_fn_state(0)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_FN, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_PAGEUP] == 1
++        assert evdev.value[libevdev.EV_KEY.KEY_UP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
++
++        r = uhdev.event([])
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_PAGEUP, 0))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEventsIn(expected, events)
++        assert evdev.value[libevdev.EV_KEY.KEY_PAGEUP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_UP] == 0
++        assert evdev.value[libevdev.EV_KEY.KEY_FN] == 0
+
 -- 
-2.31.1
+2.39.1
 
