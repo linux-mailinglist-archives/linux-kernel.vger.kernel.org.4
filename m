@@ -2,610 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5717469B09B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CA269B082
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjBQQUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S230135AbjBQQSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjBQQUM (ORCPT
+        with ESMTP id S229491AbjBQQS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:20:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E3925E16
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:18:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676650731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MMnn0z4iV4PJ/axzkiucRlAm/k7ZZcvfPJCs1gXrpHQ=;
-        b=PEAHPJw7Qn713FxMzlo15ND1ylRQhtGxNIiNAqlDWBKEN6vl2uE/8FYzKXkQfEzQfdEcQU
-        j2KWngeqHRbMm2RJEmN2zCgpdrfVCX9A8n7znpK/77H4J3bldqQd8sYIdIcVwNWU5TxAph
-        Oz9MsUgwZkiUhSQtUwvsQezYRao/dJk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-SEijkpmEPBKIXmMe_8uLOQ-1; Fri, 17 Feb 2023 11:18:48 -0500
-X-MC-Unique: SEijkpmEPBKIXmMe_8uLOQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BED57101B42B;
-        Fri, 17 Feb 2023 16:18:47 +0000 (UTC)
-Received: from xps-13.local (unknown [10.39.193.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 41AE4C15BA0;
-        Fri, 17 Feb 2023 16:18:46 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 17 Feb 2023 17:17:58 +0100
-Subject: [PATCH 04/11] selftests: hid: import hid-tools hid-keyboards tests
+        Fri, 17 Feb 2023 11:18:26 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018211BD3;
+        Fri, 17 Feb 2023 08:18:23 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HETHOc014539;
+        Fri, 17 Feb 2023 16:18:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=MPQIfozxi3agzhuInh5Dfy0UCTxQiOBuqBY+xGl4A8o=;
+ b=Nvzzkk38Bks/YPT3VoN+8OPsAOnh9f5uuS8LbcXw35qm8fCbDdyaQ1DuG+7Nf1jC2zj/
+ dGmRNFOnr0nLY9VbmBvG2eDiJ2JBFwxKJGZpsu+toEtyYff7w1neTKUHEYncv2J1P+X3
+ Nmp+ifkYBDur2Z+uf5szKNk9GM865Q1jebGaftGIO6OWnPT/8pVBFdblKY8LbVRBG5uB
+ eqPh3GZwp0bmThJdowQcNuoqDjQkGEgdIbq/FSrMet2w1Voz9adPjkuDAd5SOuLedulc
+ HzjFx+00r/Z4VoGehFrT9uoNxlVbnVRTrRUi8K7Lb8v8BHHr0i8N6TEyDeaAaBXfaPZe Ig== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nt15x0q90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 16:18:13 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFtj4Y009842;
+        Fri, 17 Feb 2023 16:18:12 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7rj8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 16:18:12 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HGIBik6488722
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 16:18:11 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EDD25805C;
+        Fri, 17 Feb 2023 16:18:11 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A89ED58059;
+        Fri, 17 Feb 2023 16:18:10 +0000 (GMT)
+Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Feb 2023 16:18:10 +0000 (GMT)
+From:   Danny Tsen <dtsen@linux.ibm.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
+Subject: [PATCH v3 0/6] crypto: Accelerated AES/GCM stitched implementation
+Date:   Fri, 17 Feb 2023 11:17:59 -0500
+Message-Id: <20230217161805.236319-1-dtsen@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230217-import-hid-tools-tests-v1-4-d1c48590d0ee@redhat.com>
-References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
-In-Reply-To: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
-To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676650715; l=22934;
- i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
- bh=KK0MRAuOIROX7h7CQ9r1zTW58y1MCSjT9UIs2lXhrSA=;
- b=TVrsHjtNufCb2nH8HJ/tp2S+aor6TkZvtTks2mY7hamMf61BoYyfr+JuU17B7QIM1KoCX2pJ0
- PwfzALIs66xAatBUYjGSvzAv43wjh/l+6vujP2of5np/7LYGG40tNdl
-X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: d0932ihIO08aC2VYFCuhOZeHvueMzBsr
+X-Proofpoint-GUID: d0932ihIO08aC2VYFCuhOZeHvueMzBsr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=539 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These tests have been developed in the hid-tools[0] tree for a while.
-Now that we have  a proper selftests/hid kernel entry and that the tests
-are more reliable, it is time to directly include those in the kernel
-tree.
+This patch series enable an accelerated AES/GCM stitched implementation for
+Power10+ CPU(ppc64le).  This module supports AEAD algorithm.  The stitched
+implementation provides 3.5X+ better performance than the baseline.
 
-[0] https://gitlab.freedesktop.org/libevdev/hid-tools
+This patch has been tested with the kernel crypto module tcrypt.ko and has
+passed the selftest.  The patch is also tested with
+CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled.
 
-Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc: Peter Hutterer <peter.hutterer@who-t.net>
-Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
- tools/testing/selftests/hid/Makefile               |   1 +
- tools/testing/selftests/hid/hid-keyboard.sh        |   7 +
- tools/testing/selftests/hid/tests/test_keyboard.py | 485 +++++++++++++++++++++
- 3 files changed, 493 insertions(+)
+Danny Tsen (6):
+  Update Kconfig and Makefile.
+  Glue code for AES/GCM stitched implementation.
+  An accelerated AES/GCM stitched implementation.
+  Supporting functions for AES.
+  Supporting functions for ghash.
+  A perl script to process PowerPC assembler source.
 
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index d16a22477140..181a594ffe92 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -7,6 +7,7 @@ include ../../../scripts/Makefile.include
- 
- TEST_PROGS := hid-core.sh
- TEST_PROGS += hid-gamepad.sh
-+TEST_PROGS += hid-keyboard.sh
- 
- CXX ?= $(CROSS_COMPILE)g++
- 
-diff --git a/tools/testing/selftests/hid/hid-keyboard.sh b/tools/testing/selftests/hid/hid-keyboard.sh
-new file mode 100755
-index 000000000000..55368f17d1d5
---- /dev/null
-+++ b/tools/testing/selftests/hid/hid-keyboard.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the HID subsystem
-+
-+export TARGET=test_keyboard.py
-+
-+bash ./run-hid-tools-tests.sh
-diff --git a/tools/testing/selftests/hid/tests/test_keyboard.py b/tools/testing/selftests/hid/tests/test_keyboard.py
-new file mode 100644
-index 000000000000..b3b2bdbf63b7
---- /dev/null
-+++ b/tools/testing/selftests/hid/tests/test_keyboard.py
-@@ -0,0 +1,485 @@
-+#!/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+# -*- coding: utf-8 -*-
-+#
-+# Copyright (c) 2018 Benjamin Tissoires <benjamin.tissoires@gmail.com>
-+# Copyright (c) 2018 Red Hat, Inc.
-+#
-+
-+from . import base
-+import hidtools.hid
-+import libevdev
-+import logging
-+
-+logger = logging.getLogger("hidtools.test.keyboard")
-+
-+
-+class InvalidHIDCommunication(Exception):
-+    pass
-+
-+
-+class KeyboardData(object):
-+    pass
-+
-+
-+class BaseKeyboard(base.UHIDTestDevice):
-+    def __init__(self, rdesc, name=None, input_info=None):
-+        assert rdesc is not None
-+        super().__init__(name, "Key", input_info=input_info, rdesc=rdesc)
-+        self.keystates = {}
-+
-+    def _update_key_state(self, keys):
-+        """
-+        Update the internal state of keys with the new state given.
-+
-+        :param key: a tuple of chars for the currently pressed keys.
-+        """
-+        # First remove the already released keys
-+        unused_keys = [k for k, v in self.keystates.items() if not v]
-+        for key in unused_keys:
-+            del self.keystates[key]
-+
-+        # self.keystates contains now the list of currently pressed keys,
-+        # release them...
-+        for key in self.keystates.keys():
-+            self.keystates[key] = False
-+
-+        # ...and press those that are in parameter
-+        for key in keys:
-+            self.keystates[key] = True
-+
-+    def _create_report_data(self):
-+        keyboard = KeyboardData()
-+        for key, value in self.keystates.items():
-+            key = key.replace(" ", "").lower()
-+            setattr(keyboard, key, value)
-+        return keyboard
-+
-+    def create_array_report(self, keys, reportID=None, application=None):
-+        """
-+        Return an input report for this device.
-+
-+        :param keys: a tuple of chars for the pressed keys. The class maintains
-+            the list of currently pressed keys, so to release a key, the caller
-+            needs to call again this function without the key in this tuple.
-+        :param reportID: the numeric report ID for this report, if needed
-+        """
-+        self._update_key_state(keys)
-+        reportID = reportID or self.default_reportID
-+
-+        keyboard = self._create_report_data()
-+        return self.create_report(keyboard, reportID=reportID, application=application)
-+
-+    def event(self, keys, reportID=None, application=None):
-+        """
-+        Send an input event on the default report ID.
-+
-+        :param keys: a tuple of chars for the pressed keys. The class maintains
-+            the list of currently pressed keys, so to release a key, the caller
-+            needs to call again this function without the key in this tuple.
-+        """
-+        r = self.create_array_report(keys, reportID, application)
-+        self.call_input_event(r)
-+        return [r]
-+
-+
-+class PlainKeyboard(BaseKeyboard):
-+    # fmt: off
-+    report_descriptor = [
-+        0x05, 0x01,                    # Usage Page (Generic Desktop)
-+        0x09, 0x06,                    # Usage (Keyboard)
-+        0xa1, 0x01,                    # Collection (Application)
-+        0x85, 0x01,                    # .Report ID (1)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0xe0,                    # .Usage Minimum (224)
-+        0x29, 0xe7,                    # .Usage Maximum (231)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x25, 0x01,                    # .Logical Maximum (1)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x08,                    # .Report Count (8)
-+        0x81, 0x02,                    # .Input (Data,Var,Abs)
-+        0x19, 0x00,                    # .Usage Minimum (0)
-+        0x29, 0x97,                    # .Usage Maximum (151)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x25, 0x01,                    # .Logical Maximum (1)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x98,                    # .Report Count (152)
-+        0x81, 0x02,                    # .Input (Data,Var,Abs)
-+        0xc0,                          # End Collection
-+    ]
-+    # fmt: on
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+        self.default_reportID = 1
-+
-+
-+class ArrayKeyboard(BaseKeyboard):
-+    # fmt: off
-+    report_descriptor = [
-+        0x05, 0x01,                    # Usage Page (Generic Desktop)
-+        0x09, 0x06,                    # Usage (Keyboard)
-+        0xa1, 0x01,                    # Collection (Application)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0xe0,                    # .Usage Minimum (224)
-+        0x29, 0xe7,                    # .Usage Maximum (231)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x25, 0x01,                    # .Logical Maximum (1)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x08,                    # .Report Count (8)
-+        0x81, 0x02,                    # .Input (Data,Var,Abs)
-+        0x95, 0x06,                    # .Report Count (6)
-+        0x75, 0x08,                    # .Report Size (8)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x26, 0xa4, 0x00,              # .Logical Maximum (164)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0x00,                    # .Usage Minimum (0)
-+        0x29, 0xa4,                    # .Usage Maximum (164)
-+        0x81, 0x00,                    # .Input (Data,Arr,Abs)
-+        0xc0,                          # End Collection
-+    ]
-+    # fmt: on
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+
-+    def _create_report_data(self):
-+        data = KeyboardData()
-+        array = []
-+
-+        hut = hidtools.hut.HUT
-+
-+        # strip modifiers from the array
-+        for k, v in self.keystates.items():
-+            # we ignore depressed keys
-+            if not v:
-+                continue
-+
-+            usage = hut[0x07].from_name[k].usage
-+            if usage >= 224 and usage <= 231:
-+                # modifier
-+                setattr(data, k.lower(), 1)
-+            else:
-+                array.append(k)
-+
-+        # if array length is bigger than 6, report ErrorRollOver
-+        if len(array) > 6:
-+            array = ["ErrorRollOver"] * 6
-+
-+        data.keyboard = array
-+        return data
-+
-+
-+class LEDKeyboard(ArrayKeyboard):
-+    # fmt: off
-+    report_descriptor = [
-+        0x05, 0x01,                    # Usage Page (Generic Desktop)
-+        0x09, 0x06,                    # Usage (Keyboard)
-+        0xa1, 0x01,                    # Collection (Application)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0xe0,                    # .Usage Minimum (224)
-+        0x29, 0xe7,                    # .Usage Maximum (231)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x25, 0x01,                    # .Logical Maximum (1)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x08,                    # .Report Count (8)
-+        0x81, 0x02,                    # .Input (Data,Var,Abs)
-+        0x95, 0x01,                    # .Report Count (1)
-+        0x75, 0x08,                    # .Report Size (8)
-+        0x81, 0x01,                    # .Input (Cnst,Arr,Abs)
-+        0x95, 0x05,                    # .Report Count (5)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x05, 0x08,                    # .Usage Page (LEDs)
-+        0x19, 0x01,                    # .Usage Minimum (1)
-+        0x29, 0x05,                    # .Usage Maximum (5)
-+        0x91, 0x02,                    # .Output (Data,Var,Abs)
-+        0x95, 0x01,                    # .Report Count (1)
-+        0x75, 0x03,                    # .Report Size (3)
-+        0x91, 0x01,                    # .Output (Cnst,Arr,Abs)
-+        0x95, 0x06,                    # .Report Count (6)
-+        0x75, 0x08,                    # .Report Size (8)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x26, 0xa4, 0x00,              # .Logical Maximum (164)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0x00,                    # .Usage Minimum (0)
-+        0x29, 0xa4,                    # .Usage Maximum (164)
-+        0x81, 0x00,                    # .Input (Data,Arr,Abs)
-+        0xc0,                          # End Collection
-+    ]
-+    # fmt: on
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+
-+
-+# Some Primax manufactured keyboards set the Usage Page after having defined
-+# some local Usages. It relies on the fact that the specification states that
-+# Usages are to be concatenated with Usage Pages upon finding a Main item (see
-+# 6.2.2.8). This test covers this case.
-+class PrimaxKeyboard(ArrayKeyboard):
-+    # fmt: off
-+    report_descriptor = [
-+        0x05, 0x01,                    # Usage Page (Generic Desktop)
-+        0x09, 0x06,                    # Usage (Keyboard)
-+        0xA1, 0x01,                    # Collection (Application)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x19, 0xE0,                    # .Usage Minimum (224)
-+        0x29, 0xE7,                    # .Usage Maximum (231)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x25, 0x01,                    # .Logical Maximum (1)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x08,                    # .Report Count (8)
-+        0x81, 0x02,                    # .Input (Data,Var,Abs)
-+        0x75, 0x08,                    # .Report Size (8)
-+        0x95, 0x01,                    # .Report Count (1)
-+        0x81, 0x01,                    # .Input (Data,Var,Abs)
-+        0x05, 0x08,                    # .Usage Page (LEDs)
-+        0x19, 0x01,                    # .Usage Minimum (1)
-+        0x29, 0x03,                    # .Usage Maximum (3)
-+        0x75, 0x01,                    # .Report Size (1)
-+        0x95, 0x03,                    # .Report Count (3)
-+        0x91, 0x02,                    # .Output (Data,Var,Abs)
-+        0x95, 0x01,                    # .Report Count (1)
-+        0x75, 0x05,                    # .Report Size (5)
-+        0x91, 0x01,                    # .Output (Constant)
-+        0x15, 0x00,                    # .Logical Minimum (0)
-+        0x26, 0xFF, 0x00,              # .Logical Maximum (255)
-+        0x19, 0x00,                    # .Usage Minimum (0)
-+        0x2A, 0xFF, 0x00,              # .Usage Maximum (255)
-+        0x05, 0x07,                    # .Usage Page (Keyboard)
-+        0x75, 0x08,                    # .Report Size (8)
-+        0x95, 0x06,                    # .Report Count (6)
-+        0x81, 0x00,                    # .Input (Data,Arr,Abs)
-+        0xC0,                          # End Collection
-+    ]
-+    # fmt: on
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+
-+
-+class BaseTest:
-+    class TestKeyboard(base.BaseTestCase.TestUhid):
-+        def test_single_key(self):
-+            """check for key reliability."""
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev()
-+            syn_event = self.syn_event
-+
-+            r = uhdev.event(["a and A"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_A, 1))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_A] == 1
-+
-+            r = uhdev.event([])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_A, 0))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_A] == 0
-+
-+        def test_two_keys(self):
-+            uhdev = self.uhdev
-+            evdev = uhdev.get_evdev()
-+            syn_event = self.syn_event
-+
-+            r = uhdev.event(["a and A", "q and Q"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_A, 1))
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_Q, 1))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_A] == 1
-+
-+            r = uhdev.event([])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_A, 0))
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_Q, 0))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_A] == 0
-+            assert evdev.value[libevdev.EV_KEY.KEY_Q] == 0
-+
-+            r = uhdev.event(["c and C"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_C, 1))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_C] == 1
-+
-+            r = uhdev.event(["c and C", "Spacebar"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_SPACE, 1))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            assert libevdev.InputEvent(libevdev.EV_KEY.KEY_C) not in events
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_C] == 1
-+            assert evdev.value[libevdev.EV_KEY.KEY_SPACE] == 1
-+
-+            r = uhdev.event(["Spacebar"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_C, 0))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            assert libevdev.InputEvent(libevdev.EV_KEY.KEY_SPACE) not in events
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_C] == 0
-+            assert evdev.value[libevdev.EV_KEY.KEY_SPACE] == 1
-+
-+            r = uhdev.event([])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_SPACE, 0))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+            assert evdev.value[libevdev.EV_KEY.KEY_SPACE] == 0
-+
-+        def test_modifiers(self):
-+            # ctrl-alt-del would be very nice :)
-+            uhdev = self.uhdev
-+            syn_event = self.syn_event
-+
-+            r = uhdev.event(["LeftControl", "LeftShift", "= and +"])
-+            expected = [syn_event]
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_LEFTCTRL, 1))
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_LEFTSHIFT, 1))
-+            expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_EQUAL, 1))
-+            events = uhdev.next_sync_events()
-+            self.debug_reports(r, uhdev, events)
-+            self.assertInputEventsIn(expected, events)
-+
-+
-+class TestPlainKeyboard(BaseTest.TestKeyboard):
-+    def create_device(self):
-+        return PlainKeyboard()
-+
-+    def test_10_keys(self):
-+        uhdev = self.uhdev
-+        syn_event = self.syn_event
-+
-+        r = uhdev.event(
-+            [
-+                "1 and !",
-+                "2 and @",
-+                "3 and #",
-+                "4 and $",
-+                "5 and %",
-+                "6 and ^",
-+                "7 and &",
-+                "8 and *",
-+                "9 and (",
-+                "0 and )",
-+            ]
-+        )
-+        expected = [syn_event]
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_0, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_1, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_2, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_3, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_4, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_5, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_6, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_7, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_8, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_9, 1))
-+        events = uhdev.next_sync_events()
-+        self.debug_reports(r, uhdev, events)
-+        self.assertInputEventsIn(expected, events)
-+
-+        r = uhdev.event([])
-+        expected = [syn_event]
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_0, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_1, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_2, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_3, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_4, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_5, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_6, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_7, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_8, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_9, 0))
-+        events = uhdev.next_sync_events()
-+        self.debug_reports(r, uhdev, events)
-+        self.assertInputEventsIn(expected, events)
-+
-+
-+class TestArrayKeyboard(BaseTest.TestKeyboard):
-+    def create_device(self):
-+        return ArrayKeyboard()
-+
-+    def test_10_keys(self):
-+        uhdev = self.uhdev
-+        syn_event = self.syn_event
-+
-+        r = uhdev.event(
-+            [
-+                "1 and !",
-+                "2 and @",
-+                "3 and #",
-+                "4 and $",
-+                "5 and %",
-+                "6 and ^",
-+            ]
-+        )
-+        expected = [syn_event]
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_1, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_2, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_3, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_4, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_5, 1))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_6, 1))
-+        events = uhdev.next_sync_events()
-+
-+        self.debug_reports(r, uhdev, events)
-+        self.assertInputEventsIn(expected, events)
-+
-+        # ErrRollOver
-+        r = uhdev.event(
-+            [
-+                "1 and !",
-+                "2 and @",
-+                "3 and #",
-+                "4 and $",
-+                "5 and %",
-+                "6 and ^",
-+                "7 and &",
-+                "8 and *",
-+                "9 and (",
-+                "0 and )",
-+            ]
-+        )
-+        events = uhdev.next_sync_events()
-+
-+        self.debug_reports(r, uhdev, events)
-+
-+        assert len(events) == 0
-+
-+        r = uhdev.event([])
-+        expected = [syn_event]
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_1, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_2, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_3, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_4, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_5, 0))
-+        expected.append(libevdev.InputEvent(libevdev.EV_KEY.KEY_6, 0))
-+        events = uhdev.next_sync_events()
-+        self.debug_reports(r, uhdev, events)
-+        self.assertInputEventsIn(expected, events)
-+
-+
-+class TestLEDKeyboard(BaseTest.TestKeyboard):
-+    def create_device(self):
-+        return LEDKeyboard()
-+
-+
-+class TestPrimaxKeyboard(BaseTest.TestKeyboard):
-+    def create_device(self):
-+        return PrimaxKeyboard()
+ arch/powerpc/crypto/Kconfig            |   11 +
+ arch/powerpc/crypto/Makefile           |   13 +
+ arch/powerpc/crypto/aesp8-ppc.pl       | 3846 ++++++++++++++++++++++++
+ arch/powerpc/crypto/ghashp8-ppc.pl     |  370 +++
+ arch/powerpc/crypto/p10-aes-gcm-glue.c |  345 +++
+ arch/powerpc/crypto/p10_aes_gcm.S      | 1521 ++++++++++
+ arch/powerpc/crypto/ppc-xlate.pl       |  229 ++
+ 7 files changed, 6335 insertions(+)
+ create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
+ create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
+ create mode 100644 arch/powerpc/crypto/p10-aes-gcm-glue.c
+ create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
+ create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
 
 -- 
-2.39.1
+2.31.1
 
