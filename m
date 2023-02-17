@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DB269A609
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F33969A60B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjBQHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S229646AbjBQH0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBQHZ5 (ORCPT
+        with ESMTP id S229488AbjBQH0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:25:57 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72F954D6F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:25:56 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id d6so2271958vsv.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:25:56 -0800 (PST)
+        Fri, 17 Feb 2023 02:26:18 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA345D3DC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:26:12 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id p14so4736360vsn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHRAZTI5o+dIepaH+DVIh3O3w2k6AHu6HuSzNSZZ51M=;
-        b=Eko4ttpHVL1yeaHVnXgT9itW5hX67NJh+/jUqhymVCKYf/deffoul4apjR/ukMEVSA
-         AglCf2II8MP9RabSLDu9hJhwe8ak/89aqloZv2/aBhrHeqlSxm2BBSxtyFkQKUAydAsy
-         Ssh/dE83khtqThZqiq9waclHTVhUt3PSlf22s=
+        bh=n3U1y+OS8xHFze5wneiT44BoEGBfIqVLDOTwRPTeO1c=;
+        b=RpDZkxWnIFU+udhEWSYKG0R2/2OZcswMbc0u1muUPD8ygE4T8QIXgMwnHqHmjZwtbT
+         yrHtsBMAvp6Ahvo1ot9R/doPW91e7Cr5MLmZ6y+igi7H5sk0pJah6IH8MtEQGhIw9HY+
+         ZMNrKNUERpnlfCE5U0NvB3Q6ZxFdZbAh/4Ve8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BHRAZTI5o+dIepaH+DVIh3O3w2k6AHu6HuSzNSZZ51M=;
-        b=FWbhw3yKKH1SBx1sBJRc2THOk8zMh+Mi2Sbk1HKRjOJIQt8BIVq46DtetSMXzzsllJ
-         bmNvHI1R/x25NdAnLQfP2+0v+lQV/gqY3mJdM3N/qPb/6I0fL4gaQf0IHA7pfkglVKO4
-         8obRod9uN6xJQM41uw0qTtBCzEpm/fOnJhoY5J0v/1CUj1x1XmvtA4D9eKtcBS/a7kZi
-         p/9sWhxjgk6ppsgOmbWNrPy0gRmGfRvMHVIt7FZdbd7CMnED7HKU1MSIe9ar72zRynCm
-         8C9OtIEaqdFcwrhI83L+knXZIh5X5ZAsMyJv9BlugHruhfKHV+q/kIkI3mrlkDraaM5q
-         OMqA==
-X-Gm-Message-State: AO0yUKUZ0FVrU/WorU91mmbYQPaWRJKVsQM23q4h0SroDVmv3qylAxQw
-        fExHDxlCZfUks9hJeJsyuLLYn4DibboJDPMHr4o65Q==
-X-Google-Smtp-Source: AK7set+op5NKsZfnuTNwqTZsyjzkykGdrpEkYtkLelEWoJ7H0NvKBaaCN/fWgfRlW4RSk414IyvaAmkJ7R5mnd2mMH4=
+        bh=n3U1y+OS8xHFze5wneiT44BoEGBfIqVLDOTwRPTeO1c=;
+        b=jzZcHNSS2W+9dNmnLZ1hnx9I8GtjZJ6S+WyEhI8HD2YAOI2j986+zFf/b6HhmYNezt
+         9HRR83NJ4henqBQats9Oz3V+LToV8ioiC2p0JKG0N1kd94bf9+iAtHl40HILBRPZ3nyx
+         QafE/ay8Nj1s9K8Na8UZiyQhU/HRYnYB5VUpP53JcfSjcldMd1PVixCup3ItMmrtiV4S
+         AVXmQpbKWxaIsygrdZQbmP1EPqlEBUVhgvB3lebHMB1tt1Z6tJpdu9IksBS8nkOhfRwk
+         jdAcvFzJkTXlKiAP+FB+BlKY5B+r39piK32HfN3maUXhlTRRj7GMabe5k2pztsBXsUFW
+         WGdw==
+X-Gm-Message-State: AO0yUKUXWw1zKYo6YP+gc7H909VszhLRRL04ytQL10VCiIbhxk8B9U5X
+        wd7Xlf7UTR7wAI6OCY+dkgZbtTlf4l08NGYGE7PIQw==
+X-Google-Smtp-Source: AK7set/oYrpQGsELLVkMHCbstyKC7Vxeam0LT/Pg8NVkknGuitEFKcVtuuvscnIO+hmqQxJBaUY4SJSaIrtMIgipUcA=
 X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr1598873vso.60.1676618755906; Thu, 16 Feb
- 2023 23:25:55 -0800 (PST)
+ w9-20020a67f749000000b003fc058df90fmr1598974vso.60.1676618771782; Thu, 16 Feb
+ 2023 23:26:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-41-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-41-angelogioacchino.delregno@collabora.com>
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-42-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214134127.59273-42-angelogioacchino.delregno@collabora.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Feb 2023 15:25:44 +0800
-Message-ID: <CAGXv+5HJx37Yz-8JQscN2=6+yjhrAdUoQUCG8bHjH1=w=srC1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 40/47] clk: mediatek: Allow all MT8167 clocks to be
+Date:   Fri, 17 Feb 2023 15:26:00 +0800
+Message-ID: <CAGXv+5FUANGiDpim4_i7pnvcKokrG7E+ucbtmPQp3Pv_hfpEmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 41/47] clk: mediatek: Allow all MT8183 clocks to be
  built as modules
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
@@ -77,9 +77,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> Almost all MT8167 clocks have been converted to use the common probe
-> mechanism, moreover, now all of them are platform drivers: allow
-> building as modules.
+> All MT8183 clocks are platform drivers now! Allow module build for
+> all of them.
 >
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
