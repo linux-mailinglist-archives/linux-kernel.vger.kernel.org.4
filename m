@@ -2,218 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803B469B673
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D35869B679
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjBQXZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S230015AbjBQXdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjBQXZe (ORCPT
+        with ESMTP id S229805AbjBQXdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:25:34 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F832460BE;
-        Fri, 17 Feb 2023 15:25:33 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id j10so2313972qvc.1;
-        Fri, 17 Feb 2023 15:25:33 -0800 (PST)
+        Fri, 17 Feb 2023 18:33:37 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354CB5BD94
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:33:34 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id ez12so10115128edb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:33:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TmsNLgYThqqbDqovTsshqwVzgjPETc/j5uryPGiIUH8=;
-        b=OMmaWG9sgM1pg7ZuxWuqy9ItMvtfzxRYvR5FdtQOLlFJUBbt3rFNg4PpEboBl8G3n6
-         ReLKa+xNMUicVHSc/QdnWcUFr/H93MGVp/mpCMcCD5LmVVIg18RsQS/psOatVkcFjir7
-         qEsQ3JL2tTWCZCeP5nsxUX9a8NIr+hNpf0/WuGr2Fn2JuQ9ascIRJstzoyFL4pDq8aXD
-         k/xcIuhEghv79JGrpvDZCSF6M0FMDZf34EDFN9RzIyf0+EKVkkzW7CN6qnok7peYHZno
-         OyTkL5FZk8j91UBnex8oMU/KXyA6rR2zZWlEsGgNwfAejhV6PGteWiyd7JG3HxJBXH7K
-         IASQ==
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VyCJnKBF9xRPdrA0sJ4+bBFcoXE8pttkRG4G6fKGnFE=;
+        b=pS0niakP0qYCqC2MJLnyALz2ZjW/72UI2Q4X0R+oTZAADhujSy/JgqH0txQkKRhuLX
+         BMpivIJKHI7oAqy0pJRNq2ORgzZ07Pmdu3bbFO5GxlNvfXWJQB+G4trABc8lyzIxzxE/
+         wiZOHmBunQ+4fG3qFe9PKaMmF7bHw3xkrH6SjcyqFyQxSyt1tXHstytima8HK9jybguG
+         E4MYux0/t2MjH9dwkkqky+iaf9iksgxrHo8Stg96FM1BwbgsEkg3/EiHKNkdguxBXKZE
+         lYeu3/V0n+UUUZ8tWb6cqbQg9YddNZ0YWD5xoNcHfQw/N3+j64lo9lGVhnYeYTeFf4IF
+         ut0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TmsNLgYThqqbDqovTsshqwVzgjPETc/j5uryPGiIUH8=;
-        b=wEA82bvfdx+joTBR6iGXBmRAPeNYRjnFJVsi4lAMSMZLB405ni5YSX9ZSKeHw4uRzu
-         nx+e33Ge1+7K0irCl5xI3AFuG6g8M97VTYnLSclKiCRe5UTFdZ729P6K+8o6Jh9B8iz9
-         ME6zRmGfgqBO0oActtH+GCLnZ5bCwoZvnB22Z3F5gQLhV1sdYEwGV0RYaw1dLfpx0iBD
-         MgeuJXh+qqBtX+ODAkF5hTf4oOIkxFCKlk/EP8t/5oeXgxMLjWo20GBpTtMNynKC8jDN
-         DZ/CLZ/PGNN6PEuywxQTh+laXX7c7ARIkyfB2Rmaa7jN3x14T8MrHOg1a2OSVbh8VYqZ
-         G+ZA==
-X-Gm-Message-State: AO0yUKXkYIN1ArtZfasjN9/u3fM2IaAId+dvXtOa55sFyqi0YdD3+/Sl
-        J6vpE5S1pbffKbBGK7qYRwiiMpZkC1WfwXZSQOI=
-X-Google-Smtp-Source: AK7set+ZLr+SMph4nmqoU1TWPRyuD8umUsa4KXW3qosX1xzj+NOi5sn+P3v3yCcLMEEXbtVxwI3C2cV8txFJRzDHZQg=
-X-Received: by 2002:a05:6214:8c1:b0:56e:9ad3:ab9c with SMTP id
- da1-20020a05621408c100b0056e9ad3ab9cmr314922qvb.1.1676676332192; Fri, 17 Feb
- 2023 15:25:32 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1676042188.git.asmaa@nvidia.com> <cover.1676668853.git.asmaa@nvidia.com>
- <4cda8cfc37fb15a0c3b180ab4c34a6f6f859fe3c.1676668853.git.asmaa@nvidia.com>
-In-Reply-To: <4cda8cfc37fb15a0c3b180ab4c34a6f6f859fe3c.1676668853.git.asmaa@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 18 Feb 2023 01:24:56 +0200
-Message-ID: <CAHp75VeTbV7CyVZrXsrm8rqLnYdOunzTDhanqzceyJ3KyPjdwA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] pinctrl: pinctrl-mlxbf: Add pinctrl driver support
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        niyas.sait@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VyCJnKBF9xRPdrA0sJ4+bBFcoXE8pttkRG4G6fKGnFE=;
+        b=HogjM4mcVFwoUnKoLmR+gLaYdg+hM4ssqmL0CkgXzT/9gkp0RNIpcWe7HtJySVVyEi
+         ePsv0Wk/vCSrYG4C2IeITOnrCgroCf/keI7WktCQadl8v1is9tIWjNB4jLw8NPqPxSkg
+         x840zlVRJJOfUGbNN+HOiYxODp10VXy1N9IGntWW4mip2F9arQV+e3A82iMDfv0JliAz
+         /Vyol/srxecVEcDJs9It3jMmKMVABYRC3XB4pl3JaM2+Yp/l8qTy8hyA/E5ySj9NsIi/
+         1LsJcGjySgKNWKYbs2dDrHgx3sHYfdTtwXCpixjZjms9oQz0pJiPHtj2KrAe11q+Thqe
+         wnCQ==
+X-Gm-Message-State: AO0yUKWkRKwCMinERMXuSZQq0ugwECpVT8Se7fM0gF7UbRvw276PKxaO
+        1YdlQILmWl78UB2ciSFEjk+v/Q==
+X-Google-Smtp-Source: AK7set+ai0x5njq0qyzxAuo61bXFMSNmeHD/E8IxRrIgjbWcMCG+iNki7n/CF54Mtu1zwb8knZU28A==
+X-Received: by 2002:a05:6402:4491:b0:4a3:43c1:843e with SMTP id er17-20020a056402449100b004a343c1843emr6785727edb.18.1676676812552;
+        Fri, 17 Feb 2023 15:33:32 -0800 (PST)
+Received: from smtpclient.apple (ip5f58e70e.dynamic.kabel-deutschland.de. [95.88.231.14])
+        by smtp.gmail.com with ESMTPSA id b16-20020a50b410000000b004adc66c5193sm1437407edh.88.2023.02.17.15.33.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Feb 2023 15:33:32 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH v5] regulator: core: Resolve supply name earlier to
+ prevent double-init
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <CAGETcx__Ez8i9O2O30-Q1R00xOqBjkKMCwt37_AGAQjNvZqpdg@mail.gmail.com>
+Date:   Sat, 18 Feb 2023 00:33:20 +0100
+Cc:     Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        lgirdwood@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, m.reichl@fivetechno.de,
+        robin.murphy@arm.com, vincent.legoll@gmail.com, wens@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B6E001E2-9BCD-420A-B0F6-1495DE46955E@kohlschutter.com>
+References: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com>
+ <20220825212842.7176-1-christian@kohlschutter.com>
+ <CAGETcx__Ez8i9O2O30-Q1R00xOqBjkKMCwt37_AGAQjNvZqpdg@mail.gmail.com>
+To:     Saravana Kannan <saravanak@google.com>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 11:27 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
->
-> NVIDIA BlueField-3 SoC has a few pins that can be used as GPIOs
-> or take the default hardware functionality. Add a driver for
-> the pinmuxing.
+On 18. Feb 2023, at 00:22, Saravana Kannan <saravanak@google.com> wrote:
+>=20
+> On Thu, Aug 25, 2022 at 2:28 PM Christian Kohlsch=C3=BCtter
+> <christian@kohlschutter.com> wrote:
+>>=20
+>> Previously, an unresolved regulator supply reference upon calling
+>> regulator_register on an always-on or boot-on regulator caused
+>> set_machine_constraints to be called twice.
+>>=20
+>> This in turn may initialize the regulator twice, leading to voltage
+>> glitches that are timing-dependent. A simple, unrelated configuration
+>> change may be enough to hide this problem, only to be surfaced by
+>> chance.
+>=20
+> In your case, can you elaborate which part of the constraints/init
+> twice caused the issue?
+>=20
+> I'm trying to simplify some of the supply resolving code and I'm
+> trying to not break your use case.
+>=20
+> -Saravana
 
-pin muxing
+Here's a write-up of my use case, and how we got to the solution:
+https://kohlschuetter.github.io/blog/posts/2022/10/28/linux-nanopi-r4s/
 
-...
-
-> +++ b/drivers/pinctrl/pinctrl-mlxbf.c
-
-Wondering if it would be better to match the GPIO driver naming
-schema, i.e. by adding 3. In this case the additional explanation in
-Kconfig help won't be necessary.
-
-...
-
-> +#define MLXBF_GPIO0_FW_CONTROL_SET   0
-> +#define MLXBF_GPIO0_FW_CONTROL_CLEAR 0x14
-> +#define MLXBF_GPIO1_FW_CONTROL_SET   0x80
-> +#define MLXBF_GPIO1_FW_CONTROL_CLEAR 0x94
-
-Unclear if these are commands or register offsets. If they are of the
-same type (semantically), make them fixed width, e.g., 0x00.
-
-...
-
-> +enum {
-> +       MLXBF_GPIO_HW_MODE,
-> +       MLXBF_GPIO_SW_MODE
-
-I would leave a comma here as it might be extended in the future.
-
-> +};
-
-...
-
-> +static const char * const mlxbf_pinctrl_single_group_names[] = {
-> +       "gpio0", "gpio1",  "gpio2",  "gpio3",  "gpio4",  "gpio5",  "gpio6",
-> +       "gpio7", "gpio8",  "gpio9",  "gpio10", "gpio11", "gpio12", "gpio13",
-> +       "gpio14", "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20",
-> +       "gpio21", "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27",
-> +       "gpio28", "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34",
-> +       "gpio35", "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41",
-> +       "gpio42", "gpio43", "gpio44", "gpio45", "gpio46", "gpio47", "gpio48",
-> +       "gpio49", "gpio50", "gpio51", "gpio52", "gpio53", "gpio54", "gpio55"
-
-Ditto.
-Can you group by 8?
-
-> +};
-> +
-> +/* Set of pin numbers for single-pin groups */
-> +static const unsigned int mlxbf_pinctrl_single_group_pins[] = {
-> +       0,  1,  2,  3,  4,  5,  6,
-> +       7,  8,  9, 10, 11, 12, 13,
-> +       14, 15, 16, 17, 18, 19, 20,
-> +       21, 22, 23, 24, 25, 26, 27,
-> +       28, 29, 30, 31, 32, 33, 34,
-> +       35, 36, 37, 38, 39, 40, 41,
-> +       42, 43, 44, 45, 46, 47, 48,
-> +       49, 50, 51, 52, 53, 54, 55,
-
-Group by 8 which is the more natural length of subarray per line.
-
-Is it just 1:1 to the index? If so, why do you need this table at all?
-
-> +};
-
-...
-
-> +static const struct {
-> +       const char *name;
-> +       const char * const *group_names;
-
-Use this instead
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/tree/include/linux/pinctrl/pinctrl.h?h=devel#n215
-and this
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/tree/include/linux/pinctrl/pinctrl.h?h=devel#n222
-
-> +} mlxbf_pmx_funcs[] = {
-
-> +};
-
-...
-
-> +{
-> +       struct mlxbf_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       /* disable GPIO functionality by giving control back to hardware */
-> +       if (offset < MLXBF_NGPIOS_GPIO0)
-> +               writel(BIT(offset), priv->base + MLXBF_GPIO0_FW_CONTROL_CLEAR);
-> +       else
-> +               writel(BIT(offset % MLXBF_NGPIOS_GPIO0), priv->base + MLXBF_GPIO1_FW_CONTROL_CLEAR);
-
-> +
-
-Redundant blank line.
-
-> +}
-
-...
-
-> +static_assert(ARRAY_SIZE(mlxbf_pinctrl_single_group_names) ==
-> +             ARRAY_SIZE(mlxbf_pinctrl_single_group_pins));
-
-I would put it on a single line, but it's up to you.
-
-...
-
-> +       struct resource *res;
-
-Useless?
-
-...
-
-> +       /* This resource is shared so use devm_ioremap */
-
-Can you elaborate on who actually requests the region? And why is it
-not _this_ driver?
-
-> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       if (!res)
-> +               return -ENODEV;
-
-...
-
-> +       ret = devm_pinctrl_register_and_init(priv->dev,
-
-Is the priv->dev different from dev?
-
-> +                                            &mlxbf_pin_desc,
-> +                                            priv,
-> +                                            &priv->pctl);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "Failed to register pinctrl\n");
-
-...
-
-> +       pinctrl_add_gpio_range(priv->pctl, &mlxbf_pinctrl_gpio_ranges[0]);
-> +       pinctrl_add_gpio_range(priv->pctl, &mlxbf_pinctrl_gpio_ranges[1]);
-
-pinctrl_add_gpio_ranges() ?
-
---
-With Best Regards,
-Andy Shevchenko
