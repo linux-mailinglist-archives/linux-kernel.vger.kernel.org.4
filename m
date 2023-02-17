@@ -2,324 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291BE69B04D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9D169B051
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjBQQN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S230454AbjBQQOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjBQQN0 (ORCPT
+        with ESMTP id S229746AbjBQQOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:13:26 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D5F6EB88
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676650403; x=1708186403;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=r8bBM/yf3WwebfUqIrFu03yYfmoDNHRjZ6EzhZrG32o=;
-  b=YLag87awuxBe7vcKedewzwld4u65nL9QzLKZxeGegBcCWycyFjHKKyfy
-   8OX8GDGG9J1G5/w4yuXPWmUl29gLyhYeO3NJbRpfa9rTZPJ4on4iJJZyt
-   sgFkwXmJIdSsaBvjNoMFDYw+HPRvIgo3dgmFLjO48LlA0jlSjxJmN0s2z
-   B4dNKLhXZy9qcltkLX26AeJwQZBQlzi27rVckj6xtzw+eYuz/9qrQ7HwY
-   bVpdrUMLAPKsPbsDKFsXhoGCoDqwPqQbV4i7tBkTjjc/g4g/Cjm+oER3n
-   7ce00AjwA6pI6/9OG7Hdh1KighRb8R8gDU3unDaRZ279HYqcdm7vcf6J/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="394495429"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="394495429"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:13:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="672633081"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="672633081"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.213.187.252]) ([10.213.187.252])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:13:18 -0800
-Message-ID: <f0d3a527-6e37-0e34-5776-ed5a1ad0da3e@intel.com>
-Date:   Fri, 17 Feb 2023 09:13:17 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH v3 4/5] iommu/ioasid: Rename INVALID_IOASID
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
+        Fri, 17 Feb 2023 11:14:23 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2043.outbound.protection.outlook.com [40.107.95.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4032A6EF0A;
+        Fri, 17 Feb 2023 08:14:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Igv1IWVzi0haoqszYiL67/HcjmsiZPwywN2ByTkgr+eb2OsWJlGiNSvZeFrJTFn7KWszGyGYZ2L1TkXHahiPkToB/p7YGziiOIQCTMsL3bKRbR+aXrLpZBUY1NK6mdIg8kTwWiLp0c5oR8K3WuHc6HlSK8RrmRvtb3Hoztg+hzmwztH6c3tOGBeRwCcXlFnG0zjDC79Knma4C2aXpmMZK/iO3Y/1jG8aH65NLwEUdiw0Kf7/X66eYAc2WHuXsFFEh2wWNhR557ABU7Rr8U1VuylSJQjVWtmGEY3/Pi5Zy29wlEA9vBb4NUa3jVlRc6LeR5oBUWmhtSFdZpzY4PdREA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n4pULfmYSeRWtDzvhHtmTTzaG9ABd4iFHv8l4GAfUWk=;
+ b=V32bNOq8q6i1bTNJYxeyudc/KMGqFATjyZyCUwzBvckU1kLcciHYPxMd7U1HQ3xLt0PG70VpZaVFqb95EAdUic4sU0ul2ALkASg6HL8IVwMM7dVJWJFsOhO6WLnpDtE+MfZj5yQQyzovFlK5YoOzahyBgXcUVS1JCbX4/v3HGt/q0ra1Hx1ZE5YdVSulRIW+gko3XPHYcffZylRm60iy4WzqOt20XWHQjuzXXCpXnzHiKZJVDAX5umjZEiQzYZybbyqbq7+HsXUxIyw8NnfhYqOtt4488Tib9sn3i1tf0EBxJo1KAZAnGdANekTuQYNjFN+s7f9LYhoEjfVy0Lmjjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n4pULfmYSeRWtDzvhHtmTTzaG9ABd4iFHv8l4GAfUWk=;
+ b=rGu9NVOQqzGndOo1kl1RSe05S8mvjOYAK7dD+IDUp88kAPCuA42/hhA36ewRzIlTrM293gNbMnVJRpEomimpPe0tMHv60EbFTlOewycYPLhsUlwFc2U7DjsWS/zYaKwTSg/mTrbZsMx9Ez2V1K6tAMPBYMVm01KuOGmOYvcbmA0=
+Received: from MW4PR02CA0009.namprd02.prod.outlook.com (2603:10b6:303:16d::20)
+ by CY8PR12MB8410.namprd12.prod.outlook.com (2603:10b6:930:6d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Fri, 17 Feb
+ 2023 16:14:18 +0000
+Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
+ (2603:10b6:303:16d:cafe::d2) by MW4PR02CA0009.outlook.office365.com
+ (2603:10b6:303:16d::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
+ Transport; Fri, 17 Feb 2023 16:14:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.14 via Frontend Transport; Fri, 17 Feb 2023 16:14:17 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Feb
+ 2023 10:14:11 -0600
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>
-References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
- <20230216235951.3573059-5-jacob.jun.pan@linux.intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230216235951.3573059-5-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <hpa@zytor.com>
+CC:     <x86@kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <gautham.shenoy@amd.com>,
+        <ananth.narayan@amd.com>, Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH] perf/x86/rapl: Enable Core RAPL for AMD
+Date:   Fri, 17 Feb 2023 16:13:54 +0000
+Message-ID: <20230217161354.129442-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|CY8PR12MB8410:EE_
+X-MS-Office365-Filtering-Correlation-Id: acfa5eca-447f-4915-3c3c-08db110204ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LnkZTZJXldC4K7sj3LpFhYDjM9hjyi2nXc7jPK1QUyhNBRaHk+DfCz6svsNbYmBECDGJzh75qWnfJxU23Th4Kz4UbFF2fwIhS0PYehoWSfTi53jOKSTvMMDpthO08KwfajCC7SzNcmshUY/sq0fqnfbLdOmgUx1lRgNlD2xxDRtmfGgOjKQ8eeABnkAP6k+YTRZRMC2M6LfTnpON7skgaAMz1E+OldRNP3J2kfuKn+IinaB1BC6BUjRtA8e56pLiIvtb/cZ+NbqeGmh7qjqOhJVE9FlHoVxXw8EOvLdWQvk8cbmv0UNANaRCeGuLL5a5mL6ybesQtluAMkvhYtgTRdLwERw2XJJ95gEt8Nvd7hphZxyccLvYdImozmr602yfCo7O18Igtsn/tXy4NoWuoIYY+dBjRUgBxAPQBw5v/r3s9Dr/eOo8aOUh+3KAoa27T6ZqWXLe/Z7hv9ntHBkZtKulyhmt2ZaN2JYywHEUwdooCODr4dbXrfMbI1pLMUBVvN0J88nxL0io77x5/B/T+Hh4MASN5ZxEZsGW9fPH/oU72PN1pydmSlotuMu5xyURlwMfnd1naotGLDjT/80ikNMjvFy33F2SxeU0EzCKnjLBukrme6AnzkRPPIlFMBqjttHn6WjFkani9EpR1Nh+btDtMcA9vGrxLafphumolYYxaESGmojskPjZkR/jybrQcOuVJMMnwXpSVB6mZQef6osWRGisRdcjJTHEO+SOJRP4SIb1V7A7H6aY8xWyChJ6
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199018)(46966006)(36840700001)(40470700004)(81166007)(36860700001)(40480700001)(36756003)(1076003)(186003)(6666004)(26005)(16526019)(86362001)(356005)(82740400003)(921005)(426003)(336012)(83380400001)(47076005)(2616005)(54906003)(478600001)(70586007)(4326008)(316002)(8676002)(70206006)(7416002)(8936002)(44832011)(41300700001)(40460700003)(5660300002)(110136005)(7696005)(2906002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 16:14:17.2781
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: acfa5eca-447f-4915-3c3c-08db110204ff
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8410
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+AMD processors support per-package and per-core energy monitoring
+through RAPL counters which can be accessed by users running in
+supervisor mode.
 
+Core RAPL counters gives power consumption information per core.  For
+AMD processors the package level RAPL counter are already exposed to
+perf. Expose the core level RAPL counters also.
 
-On 2/16/23 4:59 PM, Jacob Pan wrote:
-> INVALID_IOASID and IOMMU_PASID_INVALID are duplicated. Rename
-> INVALID_IOASID and consolidate since we are moving away from IOASID
-> infrastructure.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+sudo perf stat -a --per-core -C 0-127 -e power/energy-cores/
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com> # for idxd bits
-> ---
->   Documentation/x86/sva.rst   | 2 +-
->   arch/x86/kernel/traps.c     | 5 ++++-
->   drivers/dma/idxd/device.c   | 8 ++++----
->   drivers/dma/idxd/idxd.h     | 1 +
->   drivers/dma/idxd/init.c     | 2 +-
->   drivers/dma/idxd/irq.c      | 2 +-
->   drivers/iommu/intel/dmar.c  | 4 ++--
->   drivers/iommu/intel/iommu.c | 2 +-
->   drivers/iommu/intel/svm.c   | 2 +-
->   drivers/iommu/iommu-sva.c   | 2 +-
->   include/linux/ioasid.h      | 4 ----
->   include/linux/iommu.h       | 6 +++++-
->   mm/init-mm.c                | 4 ++--
->   13 files changed, 24 insertions(+), 20 deletions(-)
-> 
-> diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
-> index 2e9b8b0f9a0f..33cb05005982 100644
-> --- a/Documentation/x86/sva.rst
-> +++ b/Documentation/x86/sva.rst
-> @@ -107,7 +107,7 @@ process share the same page tables, thus the same MSR value.
->   PASID Life Cycle Management
->   ===========================
->   
-> -PASID is initialized as INVALID_IOASID (-1) when a process is created.
-> +PASID is initialized as IOMMU_PASID_INVALID (-1) when a process is created.
->   
->   Only processes that access SVA-capable devices need to have a PASID
->   allocated. This allocation happens when a process opens/binds an SVA-capable
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index d317dc3d06a3..d6fb03ebf548 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -40,7 +40,10 @@
->   #include <linux/io.h>
->   #include <linux/hardirq.h>
->   #include <linux/atomic.h>
-> -#include <linux/ioasid.h>
-> +
-> +#ifdef CONFIG_IOMMU_SVA
-> +#include <linux/iommu.h>
-> +#endif
->   
->   #include <asm/stacktrace.h>
->   #include <asm/processor.h>
-> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-> index 29dbb0f52e18..125652a8bb29 100644
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@ -1194,7 +1194,7 @@ static void idxd_device_set_perm_entry(struct idxd_device *idxd,
->   {
->   	union msix_perm mperm;
->   
-> -	if (ie->pasid == INVALID_IOASID)
-> +	if (ie->pasid == IOMMU_PASID_INVALID)
->   		return;
->   
->   	mperm.bits = 0;
-> @@ -1224,7 +1224,7 @@ void idxd_wq_free_irq(struct idxd_wq *wq)
->   	idxd_device_clear_perm_entry(idxd, ie);
->   	ie->vector = -1;
->   	ie->int_handle = INVALID_INT_HANDLE;
-> -	ie->pasid = INVALID_IOASID;
-> +	ie->pasid = IOMMU_PASID_INVALID;
->   }
->   
->   int idxd_wq_request_irq(struct idxd_wq *wq)
-> @@ -1240,7 +1240,7 @@ int idxd_wq_request_irq(struct idxd_wq *wq)
->   
->   	ie = &wq->ie;
->   	ie->vector = pci_irq_vector(pdev, ie->id);
-> -	ie->pasid = device_pasid_enabled(idxd) ? idxd->pasid : INVALID_IOASID;
-> +	ie->pasid = device_pasid_enabled(idxd) ? idxd->pasid : IOMMU_PASID_INVALID;
->   	idxd_device_set_perm_entry(idxd, ie);
->   
->   	rc = request_threaded_irq(ie->vector, NULL, idxd_wq_thread, 0, "idxd-portal", ie);
-> @@ -1265,7 +1265,7 @@ int idxd_wq_request_irq(struct idxd_wq *wq)
->   	free_irq(ie->vector, ie);
->   err_irq:
->   	idxd_device_clear_perm_entry(idxd, ie);
-> -	ie->pasid = INVALID_IOASID;
-> +	ie->pasid = IOMMU_PASID_INVALID;
->   	return rc;
->   }
->   
-> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> index 7ced8d283d98..417e602a46b6 100644
-> --- a/drivers/dma/idxd/idxd.h
-> +++ b/drivers/dma/idxd/idxd.h
-> @@ -13,6 +13,7 @@
->   #include <linux/ioasid.h>
->   #include <linux/bitmap.h>
->   #include <linux/perf_event.h>
-> +#include <linux/iommu.h>
->   #include <uapi/linux/idxd.h>
->   #include "registers.h"
->   
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 529ea09c9094..f30eef701970 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -105,7 +105,7 @@ static int idxd_setup_interrupts(struct idxd_device *idxd)
->   		ie = idxd_get_ie(idxd, msix_idx);
->   		ie->id = msix_idx;
->   		ie->int_handle = INVALID_INT_HANDLE;
-> -		ie->pasid = INVALID_IOASID;
-> +		ie->pasid = IOMMU_PASID_INVALID;
->   
->   		spin_lock_init(&ie->list_lock);
->   		init_llist_head(&ie->pending_llist);
-> diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-> index aa314ebec587..242f1f0b9f09 100644
-> --- a/drivers/dma/idxd/irq.c
-> +++ b/drivers/dma/idxd/irq.c
-> @@ -80,7 +80,7 @@ static void idxd_int_handle_revoke_drain(struct idxd_irq_entry *ie)
->   	desc.opcode = DSA_OPCODE_DRAIN;
->   	desc.priv = 1;
->   
-> -	if (ie->pasid != INVALID_IOASID)
-> +	if (ie->pasid != IOMMU_PASID_INVALID)
->   		desc.pasid = ie->pasid;
->   	desc.int_handle = ie->int_handle;
->   	portal = idxd_wq_portal_addr(wq);
-> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-> index bf0bfe5ba7a7..c567f94b66c7 100644
-> --- a/drivers/iommu/intel/dmar.c
-> +++ b/drivers/iommu/intel/dmar.c
-> @@ -1933,7 +1933,7 @@ static int dmar_fault_do_one(struct intel_iommu *iommu, int type,
->   		return 0;
->   	}
->   
-> -	if (pasid == INVALID_IOASID)
-> +	if (pasid == IOMMU_PASID_INVALID)
->   		pr_err("[%s NO_PASID] Request device [%02x:%02x.%d] fault addr 0x%llx [fault reason 0x%02x] %s\n",
->   		       type ? "DMA Read" : "DMA Write",
->   		       source_id >> 8, PCI_SLOT(source_id & 0xFF),
-> @@ -2014,7 +2014,7 @@ irqreturn_t dmar_fault(int irq, void *dev_id)
->   		if (!ratelimited)
->   			/* Using pasid -1 if pasid is not present */
->   			dmar_fault_do_one(iommu, type, fault_reason,
-> -					  pasid_present ? pasid : INVALID_IOASID,
-> +					  pasid_present ? pasid : IOMMU_PASID_INVALID,
->   					  source_id, guest_addr);
->   
->   		fault_index++;
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index a295e80fdfe8..10f657828d3a 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -876,7 +876,7 @@ void dmar_fault_dump_ptes(struct intel_iommu *iommu, u16 source_id,
->   		return;
->   	}
->   	/* For request-without-pasid, get the pasid from context entry */
-> -	if (intel_iommu_sm && pasid == INVALID_IOASID)
-> +	if (intel_iommu_sm && pasid == IOMMU_PASID_INVALID)
->   		pasid = PASID_RID2PASID;
->   
->   	dir_index = pasid >> PASID_PDE_SHIFT;
-> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-> index c76b66263467..be98af2fce06 100644
-> --- a/drivers/iommu/intel/svm.c
-> +++ b/drivers/iommu/intel/svm.c
-> @@ -274,7 +274,7 @@ static int pasid_to_svm_sdev(struct device *dev, unsigned int pasid,
->   	if (WARN_ON(!mutex_is_locked(&pasid_mutex)))
->   		return -EINVAL;
->   
-> -	if (pasid == INVALID_IOASID || pasid >= PASID_MAX)
-> +	if (pasid == IOMMU_PASID_INVALID || pasid >= PASID_MAX)
->   		return -EINVAL;
->   
->   	svm = pasid_private_find(pasid);
-> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
-> index 17821ad5bf9b..1f1b4d680ede 100644
-> --- a/drivers/iommu/iommu-sva.c
-> +++ b/drivers/iommu/iommu-sva.c
-> @@ -41,7 +41,7 @@ static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t ma
->   
->   void mm_pasid_init(struct mm_struct *mm)
->   {
-> -	mm->pasid = INVALID_IOASID;
-> +	mm->pasid = IOMMU_PASID_INVALID;
->   }
->   
->   /* Associate a PASID with an mm_struct: */
-> diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
-> index af1c9d62e642..9ef22552376c 100644
-> --- a/include/linux/ioasid.h
-> +++ b/include/linux/ioasid.h
-> @@ -40,10 +40,6 @@ void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
->   int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
->   void ioasid_unregister_allocator(struct ioasid_allocator_ops *allocator);
->   int ioasid_set_data(ioasid_t ioasid, void *data);
-> -static inline bool pasid_valid(ioasid_t ioasid)
-> -{
-> -	return ioasid != INVALID_IOASID;
-> -}
->   
->   #else /* !CONFIG_IOASID */
->   static inline ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min,
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 46e1347bfa22..f04d3f05784a 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -193,7 +193,11 @@ enum iommu_dev_features {
->   };
->   
->   #define IOMMU_PASID_INVALID	(-1U)
-> -
-> +typedef unsigned int ioasid_t;
-> +static inline bool pasid_valid(ioasid_t ioasid)
-> +{
-> +	return ioasid != IOMMU_PASID_INVALID;
-> +}
->   #ifdef CONFIG_IOMMU_API
->   
->   /**
-> diff --git a/mm/init-mm.c b/mm/init-mm.c
-> index c9327abb771c..a084039f55d8 100644
-> --- a/mm/init-mm.c
-> +++ b/mm/init-mm.c
-> @@ -10,7 +10,7 @@
->   
->   #include <linux/atomic.h>
->   #include <linux/user_namespace.h>
-> -#include <linux/ioasid.h>
-> +#include <linux/iommu.h>
->   #include <asm/mmu.h>
->   
->   #ifndef INIT_MM_CONTEXT
-> @@ -40,7 +40,7 @@ struct mm_struct init_mm = {
->   	.user_ns	= &init_user_ns,
->   	.cpu_bitmap	= CPU_BITS_NONE,
->   #ifdef CONFIG_IOMMU_SVA
-> -	.pasid		= INVALID_IOASID,
-> +	.pasid		= IOMMU_PASID_INVALID,
->   #endif
->   	INIT_MM_CONTEXT(init_mm)
->   };
+Output:
+S0-D0-C0           2               8.73 Joules power/energy-cores/
+S0-D0-C1           2               8.73 Joules power/energy-cores/
+S0-D0-C2           2               8.73 Joules power/energy-cores/
+S0-D0-C3           2               8.73 Joules power/energy-cores/
+S0-D0-C4           2               8.73 Joules power/energy-cores/
+
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+---
+ arch/x86/events/rapl.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index 52e6e7ed4f78..d301bbbc3b93 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -537,7 +537,7 @@ static struct perf_msr intel_rapl_spr_msrs[] = {
+  * - want to use same event codes across both architectures
+  */
+ static struct perf_msr amd_rapl_msrs[] = {
+-	[PERF_RAPL_PP0]  = { 0, &rapl_events_cores_group, 0, false, 0 },
++	[PERF_RAPL_PP0]  = { MSR_AMD_CORE_ENERGY_STATUS, &rapl_events_cores_group, test_msr, false, RAPL_MSR_MASK },
+ 	[PERF_RAPL_PKG]  = { MSR_AMD_PKG_ENERGY_STATUS,  &rapl_events_pkg_group,   test_msr, false, RAPL_MSR_MASK },
+ 	[PERF_RAPL_RAM]  = { 0, &rapl_events_ram_group,   0, false, 0 },
+ 	[PERF_RAPL_PP1]  = { 0, &rapl_events_gpu_group,   0, false, 0 },
+@@ -764,7 +764,8 @@ static struct rapl_model model_spr = {
+ };
+ 
+ static struct rapl_model model_amd_hygon = {
+-	.events		= BIT(PERF_RAPL_PKG),
++	.events		= BIT(PERF_RAPL_PP0) |
++			  BIT(PERF_RAPL_PKG),
+ 	.msr_power_unit = MSR_AMD_RAPL_POWER_UNIT,
+ 	.rapl_msrs      = amd_rapl_msrs,
+ };
+-- 
+2.34.1
+
