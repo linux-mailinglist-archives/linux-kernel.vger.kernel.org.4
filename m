@@ -2,279 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6991069B363
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E164069B367
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjBQTwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 14:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S229668AbjBQTxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 14:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjBQTwE (ORCPT
+        with ESMTP id S229463AbjBQTxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:52:04 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAB85B742;
-        Fri, 17 Feb 2023 11:52:02 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HHvKPG010595;
-        Fri, 17 Feb 2023 19:51:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=NlhtsObls2REfYVu1NZKT3uXWt1Zd4z4+gtwuCeotbw=;
- b=KbQZkVTRS2ZEbv6tiF2GjLg9NmLAR6b35pqzHMsfC3GV4XG0yij8b/enNUZHlmmciXrr
- U/d4FFN3WlHsRYU4/a6A4RSsup+t96zCiHw+xsLYOETNkPZWRB1SIAsyWgixnPTx78Hh
- tQqFuKhECoAiLKaNB6O3ZphRs/VRKK9w1M+KTR/g4Ows1kcxOmvMe1ba4s8zLmy6oWL0
- +5aZchceNJoWDqBzL4Xe0LzJFlOKeMVrDmT3kAb5oKhg26BaU6oJTMj3LX8E+yR6ulfe
- gD65Ddu8jpOTSMjlDhl2z1Upv+RdcjXxMV3GpPuedgsHdkOD84fmhdsYhnrrkGvDYw0S gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nteee2ca4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:51:35 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HJSqjY002291;
-        Fri, 17 Feb 2023 19:51:34 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nteee2c9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:51:34 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HJOkNm021594;
-        Fri, 17 Feb 2023 19:51:33 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7sf2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:51:33 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HJpWeK59834670
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 19:51:32 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6521958043;
-        Fri, 17 Feb 2023 19:51:32 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9341D5805D;
-        Fri, 17 Feb 2023 19:51:29 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.25.123])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 19:51:29 +0000 (GMT)
-Message-ID: <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 17 Feb 2023 14:51:29 -0500
-In-Reply-To: <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Fri, 17 Feb 2023 14:53:22 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311925CF38
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 11:53:21 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p19so2876708lfr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 11:53:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L7sIAulZhUgPygW6MnTOAgMlvOTOg8Ujr1oDEU2lJx8=;
+        b=Wi6Cu7J4a//BgKEfeIJE17gxmy2M2bGyUHp7ZrhXTxzFYPfrDqrK8esYknWbKRXXPH
+         yB5Vz7KB74iwov1/YLACMIMNPa7zbUrVIFjNnUicSaD0t7lQx3uHIzo8PeMbDXQsPUQ5
+         4PCttj1LHQ3WUWY3SbFoupxTmyyLiu24rneOrIGg9s8wD8/ERmPF4AFg4t/1MQ6up5tP
+         kCoOJBQBZc8uwqA9DjnC+lPJ8rLCuaULG9tcHw1FDpXNjRmLzd7CVcqgV8OrsEmu9iPu
+         x6JFXDLDVhsLISPJ4hHJQD4o7A6pEWQTH68EeF02tQk6BpZMcz/UYI2rc3g2AyJhYZh0
+         Nefw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7sIAulZhUgPygW6MnTOAgMlvOTOg8Ujr1oDEU2lJx8=;
+        b=EwsrQxLFR1B/yUnCijocjsu+UfMAtN3FHl8GY7HqVIKUf0AeQ404SO/lCIjjMhdQ0j
+         EJy3T0qDrppvCZIl9AampAo5ke0ToF9r9cuoOas8swckCLOtg1O4qURgMVuSZgD3mQ4J
+         BigaLUl5aEHCc9MM714KHi2eEUANTogQcKZoLfgltg5lojOsAX3Q6B8N11xSiWwa1SfU
+         AIpzfGvvTBGYJ62xfDy+92qLtPzTHNTcuJh90Ra02ZDIaZfhOpv4Y0E8cdNWBgvcW1RW
+         rv6xfN/KMe5LnG+GnbsbDI8SqzsQu73ZxPd/bFZf3TMm6novIuEyWmLl5Ld5gyoQOZ3t
+         mj1g==
+X-Gm-Message-State: AO0yUKV5rsVjc5Wz7z9Th1wz+d7/PgEyqXBV9KuyXpJPeI/ZI05AQUso
+        uDkPqyUxp2425rS8er14b9yMpg==
+X-Google-Smtp-Source: AK7set89ZDd3alQ67YDXx9kFoGlmkpHk7qLdQ/FCvCnnXKG4zCMrjHkau5cwTHHDBPyNeDFeoKb3EA==
+X-Received: by 2002:ac2:5e9d:0:b0:4b5:b06d:4300 with SMTP id b29-20020ac25e9d000000b004b5b06d4300mr33287lfq.29.1676663599425;
+        Fri, 17 Feb 2023 11:53:19 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id d2-20020ac24c82000000b004db44dfd888sm772137lfl.30.2023.02.17.11.53.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 11:53:18 -0800 (PST)
+Message-ID: <3c205131-632a-6592-5dc0-82313b26e5f6@linaro.org>
+Date:   Fri, 17 Feb 2023 20:53:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v5 08/10] interconnect: qcom: msm8996: Specify no bus
+ clock scaling on A0NoC
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Jun Nie <jun.nie@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org>
+ <20230217-topic-icc-fixes-v5-v5-8-c9a550f9fdb9@linaro.org>
+ <8c4f1cc8-c1f8-06b6-53fe-7507d74ca958@linaro.org>
+In-Reply-To: <8c4f1cc8-c1f8-06b6-53fe-7507d74ca958@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: un21FlZ30CkAnuzOQWC5_zdy0RnIlyJA
-X-Proofpoint-ORIG-GUID: Fj6sqc3O0eS-VqUWvSHe1Y6ovWihYFvB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_14,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170171
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+
+
+On 17.02.2023 20:27, Konrad Dybcio wrote:
 > 
-> In preparation for removing security_old_inode_init_security(), switch to
-> security_inode_init_security().
 > 
-> Extend the existing ocfs2_initxattrs() to take the
-> ocfs2_security_xattr_info structure from fs_info, and populate the
-> name/value/len triple with the first xattr provided by LSMs.
+> On 17.02.2023 11:46, Konrad Dybcio wrote:
+>> A0NoC only does bus scaling through RPM votes and does not have any
+>> ICC clocks. Describe this.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+> This is bad, as devm_clk_get_bulk{"", _optional} doesn't
+> check if num_clocks makes sense and passes "-1" down the
+> devres alloc chain..
 > 
-> As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> of replicating the behavior of security_old_inode_init_security(), i.e.
-> just obtaining the xattr, in addition to setting all xattrs provided by
-> LSMs.
+> I'll rework this for the next revision by simply assigning
+> the common "bus", "bus_a" set everywhere instead of relying
+> on it being there by default..
+Or maybe I shouldn't, as that will require redefining the array
+over and over again.. Perhaps just passing <&xo_board>, <&xo_board>
+to a0noc's "bus", "bus_a", similar to what's been done on SDM630's
+GNoC would be less messy?
+
+Konrad
 > 
-> Supporting multiple xattrs is not currently supported where
-> security_old_inode_init_security() was called (mknod, symlink), as it
-> requires non-trivial changes that can be done at a later time. Like for
-> reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
-> not the first to set it, its xattr will be discarded; if it is the first,
-> it does not have xattrs to calculate the HMAC on).
-> 
-> Finally, modify the handling of the return value from
-> ocfs2_init_security_get(). As security_inode_init_security() does not
-> return -EOPNOTSUPP, remove this case and directly handle the error if the
-> return value is not zero.
-> 
-> However, the previous case of receiving -EOPNOTSUPP should be still
-> taken into account, as security_inode_init_security() could return zero
-> without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> 
-> Instead, if security_inode_init_security() returned zero, look at the xattr
-> if it was set, and behave accordingly, i.e. set si->enable to zero to
-> notify to the functions following ocfs2_init_security_get() that the xattr
-> is not available (same as if security_old_inode_init_security() returned
-> -EOPNOTSUPP).
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-
-My previous review missed a couple of concerns.
-
-> ---
->  fs/ocfs2/namei.c | 18 ++++++------------
->  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
->  2 files changed, 32 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> index 05f32989bad6..55fba81cd2d1 100644
-> --- a/fs/ocfs2/namei.c
-> +++ b/fs/ocfs2/namei.c
-> @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
->  	int want_meta = 0;
->  	int xattr_credits = 0;
->  	struct ocfs2_security_xattr_info si = {
-> +		.name = NULL,
->  		.enable = 1,
->  	};
->  	int did_quota_inode = 0;
-> @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
->  	/* get security xattr */
->  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
->  	if (status) {
-> -		if (status == -EOPNOTSUPP)
-> -			si.enable = 0;
-> -		else {
-> -			mlog_errno(status);
-> -			goto leave;
-> -		}
-
-Although security_inode_init_security() does not return -EOPNOTSUPP, 
-ocfs2_init_security_get() could.  Refer to commit 8154da3d2114 ("ocfs2:
-Add incompatible flag for extended attribute").   It was added as a
-temporary solution back in 2008, so it is highly unlikely that it is
-still needed.
-
-> +		mlog_errno(status);
-> +		goto leave;
-
-Without the -EOPNOTSUPP test, ocfs2_mknod() would not create the inode;
-and similarly ocfs2_symlink(), below, would not create the symlink.  It
-would be safer not to remove the -EOPNOTSUPP test.
-
->  	}
->  
->  	/* calculate meta data/clusters for setting security and acl xattr */
-> @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
->  	int want_clusters = 0;
->  	int xattr_credits = 0;
->  	struct ocfs2_security_xattr_info si = {
-> +		.name = NULL,
->  		.enable = 1,
->  	};
->  	int did_quota = 0, did_quota_inode = 0;
-> @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
->  	/* get security xattr */
->  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
->  	if (status) {
-> -		if (status == -EOPNOTSUPP)
-> -			si.enable = 0;
-> -		else {
-> -			mlog_errno(status);
-> -			goto bail;
-> -		}
-> +		mlog_errno(status);
-> +		goto bail;
->  	}
->  
->  	/* calculate meta data/clusters for setting security xattr */
-> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> index 95d0611c5fc7..55699c573541 100644
-> --- a/fs/ocfs2/xattr.c
-> +++ b/fs/ocfs2/xattr.c
-> @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
->  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
->  		     void *fs_info)
->  {
-> +	struct ocfs2_security_xattr_info *si = fs_info;
->  	const struct xattr *xattr;
->  	int err = 0;
->  
-> +	if (si) {
-> +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> +				    GFP_KERNEL);
-> +		if (!si->value)
-> +			return -ENOMEM;
-> +
-> +		si->name = xattr_array->name;
-> +		si->value_len = xattr_array->value_len;
-> +		return 0;
-> +	}
-> +
->  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
->  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
->  				      xattr->name, xattr->value,
-> @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
->  			    const struct qstr *qstr,
->  			    struct ocfs2_security_xattr_info *si)
->  {
-> +	int ret;
-> +
->  	/* check whether ocfs2 support feature xattr */
->  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
->  		return -EOPNOTSUPP;
-> -	if (si)
-> -		return security_old_inode_init_security(inode, dir, qstr,
-> -							&si->name, &si->value,
-> -							&si->value_len);
-> +	if (si) {
-> +		ret = security_inode_init_security(inode, dir, qstr,
-> +						   &ocfs2_initxattrs, si);
-
-The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
-security_old_inode_init_security() and security_inode_init_security(),
-but return different values.  In the former case, it returns
--EOPNOTSUPP.  In the latter case, it returns 0.  The question is
-whether or not we need to be concerned about private inodes on ocfs2.  
-If private inodes on ocfs2 are possible, then ocsf2_mknod() or
-ocfs2_symlink() would fail to create the inode or symlink.
-
-> +		/*
-> +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> +		 * we have to check the xattr ourselves.
-> +		 */
-> +		if (!ret && !si->name)
-> +			si->enable = 0;
-> +
-> +		return ret;
-> +	}
->  
->  	return security_inode_init_security(inode, dir, qstr,
->  					    &ocfs2_initxattrs, NULL);
-
--- 
-thanks,
-
-Mimi
-
+> Konrad
+>>  drivers/interconnect/qcom/msm8996.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+>> index 1a5e0ad36cc4..45eb8675fb11 100644
+>> --- a/drivers/interconnect/qcom/msm8996.c
+>> +++ b/drivers/interconnect/qcom/msm8996.c
+>> @@ -1817,6 +1817,7 @@ static const struct qcom_icc_desc msm8996_a0noc = {
+>>  	.type = QCOM_ICC_NOC,
+>>  	.nodes = a0noc_nodes,
+>>  	.num_nodes = ARRAY_SIZE(a0noc_nodes),
+>> +	.num_bus_clocks = -1, /* No bus clock scaling */
+>>  	.intf_clocks = a0noc_intf_clocks,
+>>  	.num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
+>>  	.has_bus_pd = true,
+>>
