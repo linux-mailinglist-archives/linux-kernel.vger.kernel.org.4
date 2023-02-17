@@ -2,132 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F47369B296
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 956D669B2B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjBQSwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 13:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S229755AbjBQSzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 13:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBQSwu (ORCPT
+        with ESMTP id S229642AbjBQSzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:52:50 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673312D64
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676659968; x=1708195968;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qWdXU8+AY5bvvKgSyD0R0V06MxM7iYNdZ+POrljfklg=;
-  b=Tdvmt9qhN/8ykGqX1s205FJ/IhLyGekC4WqZI20nWgsf1ax/jKk5lTlx
-   nqyCCdF85dmS42ZG8UXBgQvKSskY6eBDYZUtzuUJZOQCWOiZzbdHOVPwc
-   k6vQGj9Ipy4keimsMLf1/cmFkZN6dJ79bP0P8XhCbfwGWRsvq2O4RQxMQ
-   JjxflXwQ0D4afpALjNyUtDPT1YmuQC+2G9b73OZhBxcripY3molvLVgjQ
-   lLCZTw2Kw2gJDBr4ItvQcHJyzbb+FEETNaiNs6TqvVY2Is4lvCtbBDRyh
-   qyxpyZwBrFN8/gExmT704PtLrEzigu/2bqLFA//Bv2F4j+YxyqrJgYXjC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="330725611"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="330725611"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 10:52:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="759472538"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="759472538"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Feb 2023 10:52:46 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 769481A6; Fri, 17 Feb 2023 20:53:27 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] regmap-irq: Place kernel doc of struct regmap_irq_chip in order
-Date:   Fri, 17 Feb 2023 20:53:26 +0200
-Message-Id: <20230217185326.23490-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 13:55:06 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2715FC78
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:54:22 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id mz13-20020a17090b378d00b00233d3ac7451so888403pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
+        b=IZ3Z+JoTISDUXkmeFG7QKBn0PDd2RpeSIuii7wzSU5FWqFqD3YKNG+p6S1JpwaSlDh
+         ew0RNKAwlChjbJqhc/GPqNf1onzwQRLDT2pQHAmZ9z13N1rsH4zlD4C/iBORwtcy/7Vs
+         4LWY2bmqvD+7WPRfYO9LYJkUalQmHeupmZPVU/uJPEn2jjlzI2fHZUFBGgx89uIFNeR8
+         GQMoxJZ7eN704Skwx87dhfoA1hN1zix01/rqgIEYeAej1Xo5VgUaA7c3+8n9lORAovk5
+         e/+NnegHzJPw0GpOp+WnX4Iu6JmfT99u3ZWkFj74cIzcI7JpajVc87uUCNr9hx7bRq9F
+         xGug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
+        b=h182CAXTpJUPQvWbkd4G1FArI70Gt2Tg1t24Ue6nCA1YCbGERt6eLelPDjh/Dy9OlN
+         rjaMGdvMXfUgvMFuydhaJAxCwD2OanLHBnPW6S/DpX3af/HBoApaYKt+20AgazP2cHPy
+         KW1RAJNU3mAXGaEbaYdZ1y2jGUl2t0+IkRtcA/PFFQdegAXS17csFCUpqnV4j1nucxMm
+         5S8b8VJUrBQtUwzxg1UI9g+4d6OqTgu9sTzBhYJTn8PXxqKW5BgZsFsoBxEdVPn7H06V
+         KBC0nZC+TCZxSbfZH2N6KbombnHcgDtiff8cdBQB948p/WYZau07c9ray8dVv4/iAomi
+         MH9w==
+X-Gm-Message-State: AO0yUKWQhMqE7kzehdN22haFvL2L+zcnEM+8E6ONQ/bLcrEdESt/IPSD
+        8hNuGe9pEcI/r0rIttigGrjHwi57LyDehsWBZg==
+X-Google-Smtp-Source: AK7set+1XTTWB/DeE9M0hPnAQqoc9pw6PJXf/6VSbMIu1YTy+8tDk8uVwsQF3gP8eC2DNG7keUDHRWLwMUFcysx2TA==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a62:1d41:0:b0:5a8:dc92:109f with SMTP
+ id d62-20020a621d41000000b005a8dc92109fmr303430pfd.3.1676660059492; Fri, 17
+ Feb 2023 10:54:19 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:54:05 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com>
+Subject: [PATCH 1/1] KVM: selftests: Adjust VM's initial stack address to
+ align with SysV ABI spec
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
+        dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     erdemaktas@google.com, vannapurve@google.com, sagis@google.com,
+        mail@maciej.szmigiero.name, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems that a couple of members got lost theirorder, put them back.
-Besides that, split field descriptions into groups in the same way
-as it's done in the structure definition.
+Align stack to match calling sequence requirements in section "The
+Stack Frame" of the System V ABI AMD64 Architecture Processor
+Supplement, which requires the value (%rsp + 8) to be a multiple of 16
+when control is transferred to the function entry point.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This is required because GCC is already aligned with the SysV ABI
+spec, and compiles code resulting in (%rsp + 8) being a multiple of 16
+when control is transferred to the function entry point.
+
+This fixes guest crashes when compiled guest code contains certain SSE
+instructions, because thes SSE instructions expect memory
+references (including those on the stack) to be 16-byte-aligned.
+
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- include/linux/regmap.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index f26432dc02ef..853d98e0c74d 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1554,6 +1554,7 @@ struct regmap_irq_chip_data;
-  * @use_ack:     Use @ack register even if it is zero.
-  * @ack_invert:  Inverted ack register: cleared bits for ack.
-  * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupts.
-+ * @status_invert: Inverted status register: cleared bits are active interrupts.
-  * @wake_invert: Inverted wake register: cleared bits are wake enabled.
-  * @type_invert: Invert the type flags. Deprecated, use config registers
-  *		 instead.
-@@ -1565,18 +1566,19 @@ struct regmap_irq_chip_data;
-  * @clear_on_unmask: For chips with interrupts cleared on read: read the status
-  *                   registers before unmasking interrupts to clear any bits
-  *                   set when they were masked.
-+ * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
-  * @not_fixed_stride: Used when chip peripherals are not laid out with fixed
-  *		      stride. Must be used with sub_reg_offsets containing the
-  *		      offsets to each peripheral. Deprecated; the same thing
-  *		      can be accomplished with a @get_irq_reg callback, without
-  *		      the need for a @sub_reg_offsets table.
-- * @status_invert: Inverted status register: cleared bits are active interrupts.
-- * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
-  *
-  * @num_regs:    Number of registers in each control bank.
-+ *
-  * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
-  *               assigned based on the index in the array of the interrupt.
-  * @num_irqs:    Number of descriptors.
-+ *
-  * @num_type_reg:    Number of type registers. Deprecated, use config registers
-  *		     instead.
-  * @num_virt_regs:   Number of non-standard irq configuration registers.
-@@ -1584,6 +1586,7 @@ struct regmap_irq_chip_data;
-  *		     instead.
-  * @num_config_bases:	Number of config base registers.
-  * @num_config_regs:	Number of config registers for each config base register.
-+ *
-  * @handle_pre_irq:  Driver specific callback to handle interrupt from device
-  *		     before regmap_irq_handler process the interrupts.
-  * @handle_post_irq: Driver specific callback to handle interrupt from device
-@@ -1631,13 +1634,13 @@ struct regmap_irq_chip {
- 	unsigned int use_ack:1;
- 	unsigned int ack_invert:1;
- 	unsigned int clear_ack:1;
-+	unsigned int status_invert:1;
- 	unsigned int wake_invert:1;
--	unsigned int runtime_pm:1;
- 	unsigned int type_invert:1;
- 	unsigned int type_in_mask:1;
- 	unsigned int clear_on_unmask:1;
-+	unsigned int runtime_pm:1;
- 	unsigned int not_fixed_stride:1;
--	unsigned int status_invert:1;
- 
- 	int num_regs;
- 
--- 
-2.39.1
+This patch is a follow-up from discussions at
+https://lore.kernel.org/lkml/20230121001542.2472357-9-ackerleytng@google.com/
 
+---
+ .../selftests/kvm/include/linux/align.h        | 15 +++++++++++++++
+ .../selftests/kvm/lib/x86_64/processor.c       | 18 +++++++++++++++++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/include/linux/align.h
+
+diff --git a/tools/testing/selftests/kvm/include/linux/align.h b/tools/testing/selftests/kvm/include/linux/align.h
+new file mode 100644
+index 000000000000..2b4acec7b95a
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/linux/align.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_ALIGN_H
++#define _LINUX_ALIGN_H
++
++#include <linux/const.h>
++
++/* @a is a power of 2 value */
++#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
++#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
++#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
++#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
++#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
++#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
++
++#endif	/* _LINUX_ALIGN_H */
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index acfa1d01e7df..09b48ae96fdd 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2018, Google LLC.
+  */
+
++#include "linux/align.h"
+ #include "test_util.h"
+ #include "kvm_util.h"
+ #include "processor.h"
+@@ -569,6 +570,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+ 				       DEFAULT_GUEST_STACK_VADDR_MIN,
+ 				       MEM_REGION_DATA);
+
++	stack_vaddr += DEFAULT_STACK_PGS * getpagesize();
++
++	/*
++	 * Align stack to match calling sequence requirements in section "The
++	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
++	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
++	 * 16 when control is transferred to the function entry point.
++	 *
++	 * If this code is ever used to launch a vCPU with 32-bit entry point it
++	 * may need to subtract 4 bytes instead of 8 bytes.
++	 */
++	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
++		"stack_vaddr must be page aligned for stack adjustment of -8 to work");
++	stack_vaddr -= 8;
++
+ 	vcpu = __vm_vcpu_add(vm, vcpu_id);
+ 	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+ 	vcpu_setup(vm, vcpu);
+@@ -576,7 +592,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+ 	/* Setup guest general purpose registers */
+ 	vcpu_regs_get(vcpu, &regs);
+ 	regs.rflags = regs.rflags | 0x2;
+-	regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
++	regs.rsp = stack_vaddr;
+ 	regs.rip = (unsigned long) guest_code;
+ 	vcpu_regs_set(vcpu, &regs);
+
+--
+2.39.2.637.g21b0678d19-goog
