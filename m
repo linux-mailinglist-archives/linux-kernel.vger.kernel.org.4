@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB99A69AC3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3463F69AC3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBQNQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S229744AbjBQNRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjBQNQl (ORCPT
+        with ESMTP id S229668AbjBQNRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:16:41 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E5639B86
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 05:16:39 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jk12so1545742plb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 05:16:39 -0800 (PST)
+        Fri, 17 Feb 2023 08:17:08 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC2153ED1;
+        Fri, 17 Feb 2023 05:17:02 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id t8so1302842lft.11;
+        Fri, 17 Feb 2023 05:17:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676639799;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1K0akdtqajPllo5ScKnvujdeLBphCx9T2fsnMIt5ZP8=;
-        b=upGVA4Mp117b59Pfk2iccuQdFPLyrCvXYU228PcO3R3/TOZaiVYVlB6gVwyuM1N2+5
-         2qSpNc9k0pSgNAEQlD1yRMSClu3hmEV/0hH6BKmqGkl42G+eEI+s+knoEDSj7xZ2l03e
-         RiW0hidyLX8LABGkn/l5E2gw/cgGLyvaCHanRVkv4CfZ0a6caLDnnnx5a36UZegnuM8O
-         /fdyvt6IoOpXecGTv9BV/ABdtDOAe1JY6xaT0Au+0h71i1ANg8/wOxse9ZjqfzquIB+U
-         VNvvAdX6ZrZ5ltbbWBlwNxU7/YDLG8wtK1CBom8MPDeNYUaOUvuHfLB53e3SwgzAx1xz
-         731w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MVXpSvxD8IQLLcvTNwyEk6nPjo5geqGNCFp6pQeswJ4=;
+        b=EWCj+D/JciN173neJ/bAWbb8Wsq/dKdqGJ7JlzysVjI7T6XYobU3X+botTB7SN8ZzP
+         i/wd1GhONcUrM6D3vvxK7vCWfOBD4a1yloUyKQrd3AOIz5lYxRd+Zud+Mj2NNrQBAJ2U
+         q7qaxB0QZRe6W56+l8Z4YpXs1796EiobAWPam60eKGpRAtSFvsXr93htNbVRwCwkIlC3
+         5pxwiY3IXTZPozDxqXEkfCTiDdzEOCxjsPjek3YDsAQcPy68bvD6S16GG1a1pHk//d/1
+         fPwp8SF9gcgqwAxhurtTdOpyEnpeTuyy+FnAl+x+wBlzyUqOChVXctZd48wBI1YcegxT
+         qrHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676639799;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1K0akdtqajPllo5ScKnvujdeLBphCx9T2fsnMIt5ZP8=;
-        b=Zh//6+YeILVs/HDr9AaUPTJcSNL9NE1cTHCFAToISr6sWBg5uAKbMnphUzvzXdC54H
-         0ZAy7h2mScEf7ibWA58fN8Hb5rSpbAryDNFWgeKHKL9ieCUksUWxb3/al56NkVxPARUn
-         tZljd2VGqidhC2LtbiP3WaNpMgRHVR4pil/LxVCtyp7iBYIYkAPqloAbN0tgdm62OCYn
-         y02IDTwN1xEO919V9Fbyjih/6uHJx7hrKFZ6yisOWiP51prAzqme4epw7xDdhyGTCCoY
-         cCY7z++g7CP3td1zr54m4df3GgyT0/co6vD4yP8u57kXvO4xw6TaQ+hYNyBXvVuvzPls
-         nziA==
-X-Gm-Message-State: AO0yUKW0NM4jwQHrNHQmNLX9tRUOQbcwe+R+9CCn3PLv4F8oa7GFy/Am
-        09Ug9Y2y1lbhDbbBUpzc6qHr9w==
-X-Google-Smtp-Source: AK7set/6AZMY7K0y5hGyd8CgV6VexmHNKifzn1k+3IpHscyl7MqBukO9NyOHnlBwrCJ4X1WVFa4Gtw==
-X-Received: by 2002:a17:902:ecce:b0:196:56c8:cfab with SMTP id a14-20020a170902ecce00b0019656c8cfabmr1748808plh.1.1676639799097;
-        Fri, 17 Feb 2023 05:16:39 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jf5-20020a170903268500b001991f07f41dsm3103259plb.297.2023.02.17.05.16.38
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MVXpSvxD8IQLLcvTNwyEk6nPjo5geqGNCFp6pQeswJ4=;
+        b=nGDAlQZTTn6xvMcLZq3aIeG3/de1+sTR8WThJaTN4I/tBtmUn2jDqVCoLlfNMmNplh
+         Ag+8djlSRYihTnym8dqcq8SXxKNDX0ciAcfHqKyV2x0XraxpujO4UjKDpw1+3JvHZjkQ
+         UMUOSYZi5RgJYRnaoq8lWPBYwDvFlOznXjfabqvq+dl1n1iroxqBtJn6bwvQCw/ipSvL
+         zxPbJXU2yY71XXb/rCLA2/LGN+INXnW2xULepIJC2m/qkdw0sGpjiE9IIV0eC80O6p3Q
+         EoRn0Su3LrwOKl8iiD0Ov/dnZeqj7htrhET1dDogBY+tfoCxDNNd2RU7YtqLowqweuJO
+         hmMw==
+X-Gm-Message-State: AO0yUKVx3r6LOTb9Cx0HoVIOP/czZKkhaUtkMaTql2BtYsztVEf2YJft
+        d6zpwGx/tUFJ/bLQCtwkLuLBZxfTyqxOuMYs
+X-Google-Smtp-Source: AK7set//GZM99vxZgMQht3iXKY7qkiQhLZZSsdCP1ku2eKzAzSUDtfL8xIoEVoSpSeYEdhPIkHWJsQ==
+X-Received: by 2002:ac2:4ac1:0:b0:4d9:8773:7d6f with SMTP id m1-20020ac24ac1000000b004d987737d6fmr2820673lfp.19.1676639820640;
+        Fri, 17 Feb 2023 05:17:00 -0800 (PST)
+Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
+        by smtp.googlemail.com with ESMTPSA id b4-20020a056512024400b004cb43eb09dfsm684285lfo.123.2023.02.17.05.16.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 05:16:38 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     jack@suse.cz, hare@suse.de, hch@infradead.org,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-In-Reply-To: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
-References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively
- open device again
-Message-Id: <167663979814.50803.631094084616425348.b4-ty@kernel.dk>
-Date:   Fri, 17 Feb 2023 06:16:38 -0700
+        Fri, 17 Feb 2023 05:17:00 -0800 (PST)
+From:   Alexander Sapozhnikov <alsp705@gmail.com>
+To:     Roopa Prabhu <roopa@nvidia.com>
+Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] net-bridge: fix unsafe dereference of potential null ptr in __vlan_del() 
+Date:   Fri, 17 Feb 2023 16:16:57 +0300
+Message-Id: <20230217131657.12649-1-alsp705@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-ada30
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After having been compared to NULL value at br_vlan.c:399,
+pointer 'p' is passed as 1st parameter in call to function
+'nbp_vlan_set_vlan_dev_state' at br_vlan.c:420, 
+where it is dereferenced at br_vlan.c:1722.
 
-On Fri, 17 Feb 2023 10:21:58 +0800, Yu Kuai wrote:
-> Changes from RFC:
->  - remove the patch to factor out GD_NEED_PART_SCAN
-> 
-> Yu Kuai (2):
->   block: Revert "block: Do not reread partition table on exclusively
->     open device"
->   block: fix scan partition for exclusively open device again
-> 
-> [...]
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Applied, thanks!
+Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
+---
+ net/bridge/br_vlan.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-[1/2] block: Revert "block: Do not reread partition table on exclusively open device"
-      commit: 0f77b29ad14e34a89961f32edc87b92db623bb37
-[2/2] block: fix scan partition for exclusively open device again
-      commit: e5cfefa97bccf956ea0bb6464c1f6c84fd7a8d9f
-
-Best regards,
+diff --git a/net/bridge/br_vlan.c b/net/bridge/br_vlan.c
+index bc75fa1e4666..87091e270adf 100644
+--- a/net/bridge/br_vlan.c
++++ b/net/bridge/br_vlan.c
+@@ -417,7 +417,8 @@ static int __vlan_del(struct net_bridge_vlan *v)
+ 		rhashtable_remove_fast(&vg->vlan_hash, &v->vnode,
+ 				       br_vlan_rht_params);
+ 		__vlan_del_list(v);
+-		nbp_vlan_set_vlan_dev_state(p, v->vid);
++		if (p)
++			nbp_vlan_set_vlan_dev_state(p, v->vid);
+ 		br_multicast_toggle_one_vlan(v, false);
+ 		br_multicast_port_ctx_deinit(&v->port_mcast_ctx);
+ 		call_rcu(&v->rcu, nbp_vlan_rcu_free);
 -- 
-Jens Axboe
-
-
+2.34.1
 
