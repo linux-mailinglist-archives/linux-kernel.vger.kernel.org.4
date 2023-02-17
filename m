@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7577269A2F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B2469A2F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjBQAcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 19:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S230308AbjBQAfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 19:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBQAcx (ORCPT
+        with ESMTP id S229492AbjBQAfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 19:32:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1F365BF;
-        Thu, 16 Feb 2023 16:32:51 -0800 (PST)
-Received: from [192.168.1.90] (unknown [86.120.32.152])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2189766020BD;
-        Fri, 17 Feb 2023 00:32:48 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676593969;
-        bh=Pijk7J1JiCVDIPHd1Fu56Q59b7X2BTHU0d+zzfSw4ok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R2YHuHryIxI4sX2DHvXuf3KkHJD0wdjhm5wp/kDeuQ1BcrJNTcNmeQunFVnY4zdAs
-         uTQOGAl5b/d/h7z6f6tfbukkf5pEC+9omQGycaFq8ETbHgv9NFKIQaxQcDv3QEotNs
-         2U5oXYEiCqKvOl9eqGHT+AeXqkuKIJZHwEjpIvOB2Sa9HhzhgvFfPXT4RtlKegzlah
-         ZpcJWmvUYMyQxYyzZfdcZOUodk/yfGp5SwUOtDRVS3GQBvcxq01CQgBDOgWHPKhSkN
-         OAGvg9p1k+jg6j0+p6EWD1tkh3ghxG3KHv5Aq31mk5CpBrQ2PPIIyohNjZoTTEp114
-         2EKZugb5oSkmA==
-Message-ID: <a824a7f6-0a62-7cab-180b-f20297311a2b@collabora.com>
-Date:   Fri, 17 Feb 2023 02:32:45 +0200
+        Thu, 16 Feb 2023 19:35:32 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4995318140
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:35:31 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id 5so4026185qtp.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 16:35:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Dr7sPxdekubOGhXaC/Mdi8p1h+2sGJHvj1t8ebnC0dY=;
+        b=nddzUPxIGeqLTtrhu9EVKCFxOtCsgdttfQBKL8jlSo3Boywb3FvOBviYqH6YNd6Ovy
+         nQK4JagLMpujbYsfMkxHM74+gJP2lYYj+K/0jjQZscSlxj+iXXEHXWYiGvS79FvcnePv
+         +zhjFAUjnPjnrAnPWLlQfTc12FdKwGbcs9OK3m6LgOAyyRZeVYWB75B2CpCsD5olEIXO
+         vXJKTAIrd/xkW3IuSJuklIa/SZnXhSY5QhU3d0qQL5q7l5vsC0l90zleOgr3QiQX3y1Y
+         q7z1o7gUu7Nc8jrv8JvW7dkKnvMhIf5ozpNZ4x+3JZCWV3EUaGpMXv/c4Z7vAEq5jhXV
+         3B3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dr7sPxdekubOGhXaC/Mdi8p1h+2sGJHvj1t8ebnC0dY=;
+        b=F0WdbwhNUOozmj2hFyjwdQBwCFQvt2+daKW++aXzWWJPCC0kpHSvYMrNgS4X+Odm55
+         0kyOFY56hpQc7ZZheQniJjyvKF5w4ZWLn2dAHp7gV3aNzp6i2R/Ajny8sqxsbqjj6WAS
+         4vb8Y+32uQSe8uNfkaZDEuaCjARIltR9zrzfTQEhYDjjIoh+D6VTeLOqUD6Dqde1484r
+         v/ZVaRRQZGIVYUFXm+cGJ1uK92WFa2BOw7iZYA8wzhhsCZevaDNO4jSwqysGk/IIqRjG
+         lzV3OtS4xTg4Qi4x6gQ3lp7DYlEPdR2r7+6F0gC83+CVn2mrKqBas1EbdmiHd9pJGUX+
+         ixMQ==
+X-Gm-Message-State: AO0yUKUaQY9z3VXlbsMq34Yyi/5FSmRrsZvunsJi5Ggn9og+FJHiZKzT
+        Pepu/X2pbiCUQJ0KDUTangg=
+X-Google-Smtp-Source: AK7set9fOWzgg5dxOQFFZT2Mi8yNhyEndcRW+3jKrBaDc9Gq5iZjBh665zQr4Y6uPod5NHO+ujyEzw==
+X-Received: by 2002:a05:622a:28b:b0:3b8:5ad9:3fe8 with SMTP id z11-20020a05622a028b00b003b85ad93fe8mr14198725qtw.48.1676594130283;
+        Thu, 16 Feb 2023 16:35:30 -0800 (PST)
+Received: from ?IPv6:2601:14d:4e80:336e:6940:faac:fba5:1dee? ([2601:14d:4e80:336e:6940:faac:fba5:1dee])
+        by smtp.gmail.com with ESMTPSA id x1-20020ac81201000000b003b9b41a32b7sm2188523qti.81.2023.02.16.16.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 16:35:29 -0800 (PST)
+Message-ID: <ab7432c0267ade5f5c07f69c5a3bf8ac3a8d421d.camel@gmail.com>
+Subject: Re: [PATCH] soc:amd:yp:Add OMEN by HP Gaming Laptop 16z-n000 to
+ quirks
+From:   Joseph Hunkeler <jhunkeler@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 16 Feb 2023 19:35:28 -0500
+In-Reply-To: <Y+7GEp06snoDjrH8@sirena.org.uk>
+References: <20230216155007.26143-1-jhunkeler@gmail.com>
+         <Y+5Ym5rUWLK4TOAf@sirena.org.uk>
+         <224b230c5c8d3037b650602b5743bbf217369ecb.camel@gmail.com>
+         <Y+7GEp06snoDjrH8@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 07/12] dt-bindings: net: Add StarFive JH7100 SoC
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-8-cristian.ciocaltea@collabora.com>
- <Y+e74UIV/Td91lKB@lunn.ch>
- <586971af-2d78-456d-a605-6c7b2aefda91@collabora.com>
- <Y+zXv90rGfQupjPP@lunn.ch>
- <cfa0f980-4bb6-4419-909c-3fce697cf8f9@collabora.com>
- <Y+5t4Jlb0ytw40pu@lunn.ch>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <Y+5t4Jlb0ytw40pu@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/23 19:54, Andrew Lunn wrote:
->> I gave "rgmii-id" a try and it's not usable, I get too many errors. So
->> "rgmii" should be the right choice here.
-> 
-> I would actually say it shows we don't understand what is going on
-> with delays. "rgmii" is not every often the correct value. The fact it
-> works suggests the MAC is adding delays.
-> 
-> What value are you using for starfive,gtxclk-dlychain ? 
+On Fri, 2023-02-17 at 00:10 +0000, Mark Brown wrote:
+> You'd need to resend to fix it but I'm saying there's no need for
+> you to bother, I fixed it up locally.=C2=A0 Please just bear this in
+> mind for future patches.
 
-This is set to '4' in patch 12/12.
+Ah now I get it. Will do.
+Thank you!
 
-> Try 0 and then "rgmii-id"
 
-I made some more tests and it seems the only stable configuration is 
-"rgmii" with "starfive,gtxclk-dlychain" set to 4:
-
-phy-mode | dlychain | status
----------+----------+--------------------------------------------
-rgmii    |        4 | OK (no issues observed)
-rgmii-id |        4 | BROKEN (errors reported [1])
-rgmii    |        0 | UNRELIABLE (no errors, but frequent stalls)
-rgmii-id |        0 | BROKEN (errors reported)
-
-[1] Reported errors in case of BROKEN status:
-$ grep '' /sys/class/net/eth0/statistics/* | grep -v ':0$'
-
-/sys/class/net/eth0/statistics/rx_crc_errors:6
-/sys/class/net/eth0/statistics/rx_errors:6
-/sys/class/net/eth0/statistics/tx_bytes:10836
-/sys/class/net/eth0/statistics/tx_packets:46
-
-> 	Andrew			
-> 
