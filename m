@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D351B69B109
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF2969B10C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjBQQfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S229999AbjBQQgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBQQfj (ORCPT
+        with ESMTP id S229521AbjBQQgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:35:39 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638591723
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:35:38 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id d125-20020a633683000000b004f2f2dafb21so305567pga.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:35:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2xwV8QwiJ8aWQ8hwiGkNwOehUthYfx2IQNg1I6DFbnw=;
-        b=VYlQvn5C9YWZ+nMlDfKWs9SHOaXFAcn4vRz4TrBrlccFaB2rFVlnD9yOk1ux6NVAUR
-         sRc3SCKHH+pFBJ7HXijef2ZY+GOarFuncXmW5suU5PMfO2r2/V4B6a12IVkR9k0NN2Bg
-         zVTNAmuwxIwh0qR08MP3l4QfBRimWXy3o5pFsMDpre7ljOC2p2F87paCrX/887ga+TZa
-         HVMfv4BbxbLfxfzhNuQvFyKpIPqP0jYjnvID1h6XovLWFsCZM6JBMMcIMZVJMsXg+tzp
-         6qFydczmCYvbFpYfZZZQrirb7W15bU6BBCEEVNs5xFQygkKrkXUCIa0NrNk2fNQWdJcS
-         z6Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2xwV8QwiJ8aWQ8hwiGkNwOehUthYfx2IQNg1I6DFbnw=;
-        b=05mrwlSPvyc9Y7N4Z8KaTqXVf73Pe9ZJ1VHvMBD0YHi82O/XqVTDPHWH5TdKCrRqIh
-         ThePzf72VQcxiQaqGrVu7/XgGHQ47Yd0zkNs52vNrgpwhRezqr4Beq+VsRaYBG17Hfum
-         CaJLcoKRg7d1VaACbYfARROfPZQn8x9LHxiRKpJjTUqkZmHsBNoNhD5694EHSUhFke7V
-         arrGlEfR9VnFsbLhO4rEVzPu83Ozc/VXbOafwySh36byr4wKH1PbDmHjbWjIu0f9ZmPr
-         PrbTmSM/tVZ9E3ylY/IGChf+6wlgkOkAMx0e7kp/kakSddhyT7debrjQd80D7BCRN8Nz
-         /zMQ==
-X-Gm-Message-State: AO0yUKXqMlAb2Xyvnx4Ie8uwr4u3qkU6qvB/GqrBimLt/7yzfanOoIwR
-        D3H0x0xhvn3EcCOLofhjhfvpbAxbjLM=
-X-Google-Smtp-Source: AK7set+SPIdreQ0xICBrX5EUbbO9bo4w9lh0o4BHZKmVvfdc5VCXtXgeq7oDdMKWjVlPSAxdJzvZZ6yXwbo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:3247:b0:194:6fc1:801f with SMTP id
- ji7-20020a170903324700b001946fc1801fmr270489plb.6.1676651737851; Fri, 17 Feb
- 2023 08:35:37 -0800 (PST)
-Date:   Fri, 17 Feb 2023 08:35:36 -0800
-In-Reply-To: <2c2f77a3-1d77-0d88-991a-60dcdc370ea8@grsecurity.net>
-Mime-Version: 1.0
-References: <20230213163351.30704-1-minipli@grsecurity.net>
- <Y+pt5MGR+EjLH4qQ@google.com> <13deaeb6-dfb2-224c-0aa3-5546ad426f63@grsecurity.net>
- <Y+5okhlB4rkXjKWS@google.com> <2c2f77a3-1d77-0d88-991a-60dcdc370ea8@grsecurity.net>
-Message-ID: <Y++s2LvnBxydxhVM@google.com>
-Subject: Re: [PATCH 0/5] KVM: Put struct kvm_vcpu on a diet
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 11:36:12 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0C9273E;
+        Fri, 17 Feb 2023 08:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Gdyv0sz3iT3aR1Tw+q96FRim+vKlFcBoswmtm8cac7s=; b=jI1aFWf8eQ8rZPQQ+c7kq1tee9
+        ++p9oEkPbQNBkqioh8+54XwH0116L4IWG9lIwjKcZPHLAXRWRqXxheXERKzRpjTA8CKbkdhP+R2CH
+        E7lE/0YWNBp6nOhiv+nj0JTr0mg4fDacUpAv+uzAti+6a13Fl5FGlInKBrHLSxmtgvcnk9Dbik6pA
+        0BWBW2GJXLptsweViDwtAdkOpFcdFTGavF4owIHjSORoyIa1OnqXZ/B1ueYfTqNHoh/ZaKpsLJlNH
+        DcYp8yuzCz0e2G4WZpzDjhyjzBoa9U85x84WH+oJL0xRUp2jjqKkg2vt2B+sb9rZppiWSgg+85aSb
+        PSSkALFA==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pT3iP-000IhI-0Z; Fri, 17 Feb 2023 17:36:05 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pT3iO-0007l7-O1; Fri, 17 Feb 2023 17:36:04 +0100
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove not used headers
+To:     Stanislav Fomichev <sdf@google.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        acme@kernel.org, linux-kernel@vger.kernel.org
+References: <1676533861-27508-1-git-send-email-yangtiezhu@loongson.cn>
+ <Y+52auqAlfPy/cNS@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a07641f4-5d92-94c0-9ca6-963c27869fc8@iogearbox.net>
+Date:   Fri, 17 Feb 2023 17:36:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <Y+52auqAlfPy/cNS@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26815/Fri Feb 17 09:41:01 2023)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023, Mathias Krause wrote:
-> On 16.02.23 18:32, Sean Christopherson wrote:
-> > I'm not necessarily opposed to such aggressive optimization, but the ROI is likely
-> > very, very low.  For optimized workloads, there simply aren't very many VM-Exits,
-> > e.g. the majority of exits on a modern CPU are due to timer ticks.  And even those
-> > will hopefully be eliminiated in the not-too-distant future, e.g. by having hardware
-> > virtualize the TSC deadline timer, and by moving to a vCPU scheduling scheme that
-> > allows for a tickless host.
+On 2/16/23 7:31 PM, Stanislav Fomichev wrote:
+> On 02/16, Tiezhu Yang wrote:
+>> The following three uapi headers:
 > 
-> Well, for guests running grsecurity kernels, there's also the CR0.WP
-> toggling triggering VMEXITs, which happens a lot! -- at least until
-> something along the lines of [1] gets merged *hint ;)*
+>>      tools/arch/arm64/include/uapi/asm/bpf_perf_event.h
+>>      tools/arch/s390/include/uapi/asm/bpf_perf_event.h
+>>      tools/arch/s390/include/uapi/asm/ptrace.h
+> 
+>> were introduced in commit 618e165b2a8e ("selftests/bpf: sync kernel headers
+>> and introduce arch support in Makefile"), they are not used any more after
+>> commit 720f228e8d31 ("bpf: fix broken BPF selftest build"), so remove them.
+> 
+> Let's maybe CC Arnaldo to make sure it doesn't affect perf? BPF build
+> bots are happy it seems.
+> 
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   tools/arch/arm64/include/uapi/asm/bpf_perf_event.h |   9 -
+>>   tools/arch/s390/include/uapi/asm/bpf_perf_event.h  |   9 -
+>>   tools/arch/s390/include/uapi/asm/ptrace.h          | 458 ---------------------
+>>   3 files changed, 476 deletions(-)
+>>   delete mode 100644 tools/arch/arm64/include/uapi/asm/bpf_perf_event.h
+>>   delete mode 100644 tools/arch/s390/include/uapi/asm/bpf_perf_event.h
+>>   delete mode 100644 tools/arch/s390/include/uapi/asm/ptrace.h
 
-Ha!  It's high on my todo list for 6.4, catching up on other stuff at the moment.
+Lgtm, I think test_verifier.c was the only user via ...
 
-That series is also _exactly_ why the ROI for aggressive cache line optimization
-is low.  The better long term answer is almost always to avoid the VM-Exit in the
-first place, or failing that, to handle the exit in a fastpath.  Sometimes it takes
-a few years, e.g. to get necessary hardware support, but x86 virtualization is fast
-approaching the point where anything remotely performance critical is handled entirely
-within the guest.
+   - include/uapi/linux/bpf_perf_event.h
+     -> include/uapi/asm/bpf_perf_event.h
+        -> arch/*/include/uapi/asm/bpf_perf_event.h
+
+... but we're actually pulling in the arch includes instead of the tooling
+arch include. So these look indeed unused.
