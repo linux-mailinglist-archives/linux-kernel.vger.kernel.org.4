@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C38D69AA17
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FBC69AA11
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjBQLQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
+        id S229751AbjBQLPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjBQLQQ (ORCPT
+        with ESMTP id S229635AbjBQLPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:16:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36909642C8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676632480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GwnXqRN41dS8yeNMsOJVqb/p7IdMaJcNLJqGuiCPy3I=;
-        b=L+DoRngSNsCH1xar+WU2vWkI9HS8PcVCXXMscusw3bL/DIyukzJJlWpDqzK0moRtmpMmwk
-        70qtoL6inw/MmoMQMnhPCxIpHcCgGq65qmad3dUMwrZ3f+34L5ROZ9eANzYGR2OOonvCzW
-        rVrMx9HEZ1M8D8i7LLTPoiUJY5cBXbI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-8-7NmCq82yP0qXUBCzBsWTLQ-1; Fri, 17 Feb 2023 06:14:39 -0500
-X-MC-Unique: 7NmCq82yP0qXUBCzBsWTLQ-1
-Received: by mail-qv1-f71.google.com with SMTP id o11-20020a0ceccb000000b0056ecf4b8f5cso244110qvq.19
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:14:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GwnXqRN41dS8yeNMsOJVqb/p7IdMaJcNLJqGuiCPy3I=;
-        b=X4SltO+vnEN3tyeTlNcqfqGCasdhfMwa1cwEM0uth4yOaGKOi+RlsG8sx8A5pmyglg
-         4tB+P+TUoD0jXdjZ6g+6VvoaKQomCXZpHi7REI6QXIXbqmilHnJBt/JLglz7FM9J/lMJ
-         wA796b8brgT8m6PhujFM0+kyEw5rIPwNvWRo1eCyaJGp3mW+f+zzvxFicda7yqNkoTxU
-         PcFtYPahLH80oldFen1DMlR0vDRf7nQIQRG/e0MHAk7fXoTrGiYXGjLnSjJ2lCYjKqD5
-         gzM3sUDwVnjruH+eL2/df4vzTCNDBhj7wCWfEctzHEmS3yZJluQXkMjwIu2bU1QUq04g
-         GL+Q==
-X-Gm-Message-State: AO0yUKVsr+TEDp2vRpzT8h7p8bZR0TpFIDT5skGS5HLgy8WCvKG9BBoP
-        FcgpCncZfAdEvvOZ1COTRqyEyF5oM6siNRn2qwxSl/08Wmk3AVEpmFLP1c9j9qw5+eeN67w+Zv9
-        F3qUFzTgnMyQXbW61nPHTUQGjN6i6KA==
-X-Received: by 2002:a05:622a:100d:b0:3b9:b260:1e76 with SMTP id d13-20020a05622a100d00b003b9b2601e76mr1600335qte.1.1676632478723;
-        Fri, 17 Feb 2023 03:14:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set+8uzOSpW1cpKYb+uvihRbYVIJFTUowWidMaTVzImSrBl99cLyg0x5RBoagtKPioicS78k0Xw==
-X-Received: by 2002:a05:622a:100d:b0:3b9:b260:1e76 with SMTP id d13-20020a05622a100d00b003b9b2601e76mr1600312qte.1.1676632478456;
-        Fri, 17 Feb 2023 03:14:38 -0800 (PST)
-Received: from debian (2a01cb058918ce00f383cbdd978c726b.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:f383:cbdd:978c:726b])
-        by smtp.gmail.com with ESMTPSA id x68-20020a379547000000b0073b692623c5sm3020287qkd.129.2023.02.17.03.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 03:14:37 -0800 (PST)
-Date:   Fri, 17 Feb 2023 12:14:34 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Shigeru Yoshida <syoshida@redhat.com>
-Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net v3] l2tp: Avoid possible recursive deadlock in
- l2tp_tunnel_register()
-Message-ID: <Y+9hmmAlHOo4yX9Q@debian>
-References: <20230216163710.2508327-1-syoshida@redhat.com>
+        Fri, 17 Feb 2023 06:15:36 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C600B642DF;
+        Fri, 17 Feb 2023 03:15:07 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 17 Feb 2023 20:14:50 +0900
+Received: from mail.mfilter.local (mail-arc01.css.socionext.com [10.213.46.36])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id AA8AD2058B4F;
+        Fri, 17 Feb 2023 20:14:50 +0900 (JST)
+Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Fri, 17 Feb 2023 20:14:50 +0900
+Received: from [10.212.159.180] (unknown [10.212.159.180])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id C87137374;
+        Fri, 17 Feb 2023 20:14:49 +0900 (JST)
+Message-ID: <27903ae4-3a66-004e-b9f5-e0d4deebdaa6@socionext.com>
+Date:   Fri, 17 Feb 2023 20:14:49 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216163710.2508327-1-syoshida@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] dt-bindings: ata: Add UniPhier controller binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213045432.32614-1-hayashi.kunihiko@socionext.com>
+ <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
+ <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
+ <0c6dc673-7e11-eec5-ec2d-e00fb2060bf3@linaro.org>
+ <c6b86d56-a8a4-825d-ac34-7a9f00e43b42@socionext.com>
+ <2e5a17c2-f0fa-e82e-65ed-fea3637b7e62@linaro.org>
+Content-Language: en-US
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <2e5a17c2-f0fa-e82e-65ed-fea3637b7e62@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 01:37:10AM +0900, Shigeru Yoshida wrote:
-> @@ -840,8 +850,7 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
->  	}
->  	if (drop_refcnt)
->  		l2tp_session_dec_refcount(session);
-> -	if (drop_tunnel)
-> -		l2tp_tunnel_dec_refcount(tunnel);
-> +	l2tp_tunnel_dec_refcount(tunnel);
->  	release_sock(sk);
->  
->  	return error;
+On 2023/02/17 17:42, Krzysztof Kozlowski wrote:
+> On 16/02/2023 18:23, Kunihiko Hayashi wrote:
+>> On 2023/02/14 18:42, Krzysztof Kozlowski wrote:
+>>> On 14/02/2023 10:33, Kunihiko Hayashi wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> On 2023/02/13 18:10, Krzysztof Kozlowski wrote:
+>>>>> On 13/02/2023 05:54, Kunihiko Hayashi wrote:
+>>>>>> Add UniPhier SATA controller compatible string to the platform
+>>>>>> binding.
+>>>>>> This controller needs maximum three reset controls.
+>>>>>>
+>>>>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>>>>> ---
+>>>>>>     .../devicetree/bindings/ata/ahci-platform.yaml  | 17
+>>>>>> +++++++++++++++++
+>>>>>>     1 file changed, 17 insertions(+)
+>>>>>>
+>>>>>> Changes since v1:
+>>>>>> - Restrict resets property changes with compatible strings
+>>>>>> - Fix maxItems from two to three
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>>>>>> b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>>>>>> index 7dc2a2e8f598..25dd5ffaa517 100644
+>>>>>> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>>>>>> @@ -45,6 +45,9 @@ properties:
+>>>>>>                   - marvell,armada-8k-ahci
+>>>>>>                   - marvell,berlin2-ahci
+>>>>>>                   - marvell,berlin2q-ahci
+>>>>>> +              - socionext,uniphier-pro4-ahci
+>>>>>> +              - socionext,uniphier-pxs2-ahci
+>>>>>> +              - socionext,uniphier-pxs3-ahci
+>>>>>>               - const: generic-ahci
+>>>>>>           - enum:
+>>>>>
+>>>>> Top level is saying reset=1, so did you test your bindings?
+>>>>
+>>>> Umm, I didn't see any errors on dt_binding_check, anyway I'll add
+>>>> initial minItems:1 and maxItems:3 on top level first.
+>>>
+>>> You need to test also all DTS using these bindings. Yours and others.
+>>> If you tested the DTS (with proper binding, not one which is basically
+>>> noop):
+>>>
+>>> uniphier-pro4-ace.dtb: sata@65600000: resets: [[27, 12], [27, 28], [37,
+>>> 3]] is too long
+>>
+>> I've tried updating tools and doing dtbs_check, but I couldn't find this
+>> error. It seems that this error can't be detected unless there is the
+>> specified compatible in "select:".
+>>
+>>> BTW, the patch has other errors - just look at the beginning of the
+>>> file. I cannot see it here in the diff, but when you open the file you
+>>> should notice it.
+>>
+>> Sorry, but I cannot see anything wrong.
+>> I'll check the header or something...
+> 
+> If you open the file, you will notice the same compatibles in two
+> places. In select and in properties. You added your compatibles only to
+> one place, so not symmetrically.
 
-The l2tp_tunnel_dec_refcount() call could be done after release_sock(),
-to make the code more logical (as the refcount is now taken before
-lock_sock()). Anyway, that shouldn't be a problem and I don't want to
-delay this fix any longer.
+OK, I understand. I'll add them in both.
 
-Reviewed-by: Guillaume Nault <gnault@redhat.com>
+Thank you,
 
+---
+Best Regards
+Kunihiko Hayashi
