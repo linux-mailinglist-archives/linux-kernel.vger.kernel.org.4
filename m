@@ -2,199 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2E869AA07
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953BF69AA0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBQLNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S229770AbjBQLN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjBQLNs (ORCPT
+        with ESMTP id S229756AbjBQLNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:13:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31383B642;
-        Fri, 17 Feb 2023 03:13:31 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D059D2D8;
-        Fri, 17 Feb 2023 12:12:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676632333;
-        bh=p+/XYpsyaLuSdXd8GeZdzQ1+zj1zDQa/Uq7JBwYAvHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jge4+Cjcaq2QRA6Vpx/7Fdjc4jQXg9t0rmoU7qiklZ15hZXi0OAUgI7wRQjKoGYkN
-         tboP/BOLlc2f0nLZ/bYlGEtjbHuE59tZlFial5yOmXYGczctt31ETJuRzZ919Cdxpw
-         4kh7K3FgWL5gPY4N+M+a2fbx/GSTEl3TFo383Euw=
-Date:   Fri, 17 Feb 2023 13:12:10 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "Cao, Bingbu" <bingbu.cao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
- Visual Sensing Controller(IVSC)
-Message-ID: <Y+9hCuGneJUrLrgi@pendragon.ideasonboard.com>
-References: <20230213022347.2480307-1-wentong.wu@intel.com>
- <Y+ypKYI4c6fHL4Eu@pendragon.ideasonboard.com>
- <DM6PR11MB4316E7241D6F11CC4121AFC98DA19@DM6PR11MB4316.namprd11.prod.outlook.com>
+        Fri, 17 Feb 2023 06:13:53 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7538065368
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:13:38 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id bi36so1039644lfb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:13:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=20OCfuLzA9fqgo8AT1mDWVtFNDiuNjsVIu2uoLHzxWk=;
+        b=M7B9dusj6MIYmuDnw4a2+gkHtOEil5pVYeLlsyq0LtpccdoRJkVfAhfKtNG1wbNmgT
+         Yx671npsFn+FMm+XEgqGdrr0U3yCjYo8GltBUXigdpmsl+gfVQMTefQrjVUqDP0m8akd
+         mkqBdIFYbEmBbNObAt2vFzbJKot1qX5m3/NXq7YRTypAyFv7Pwp2JxIrudmJvK0QoZV8
+         OVm3wCu1WOdeW1ja5/iLUHMZnRnDAOPp/BYu60DfwqiXnTqN8w0WC0aWvRNnUE5PaIhf
+         Dxm3z5FY4/x9+CySIcYZ8tNc0etWFFWxscTPmj3Y/WGCBEz33RRn8sQVXgUM6zEE8KfX
+         fn9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=20OCfuLzA9fqgo8AT1mDWVtFNDiuNjsVIu2uoLHzxWk=;
+        b=newctMS0VG+p3BBMoKzar6qtYvV1Li3ihFkvREGjo8FG8gf1JGpTMaVxMEGpl4LiqN
+         HkvH6osShfv+3MkOumHhqi1gs60tYq7xaMhrBLkxIE+uDHPtlidjt87HiF82vzG/B1Q5
+         U6FDicB3z1Vpw1Auyr5dNaAvJvb796ZqiycL8/srDv6Zafo0MM0k/MkAlxNWJhTwy+Zb
+         6UsDp+4xWHUI0w4m4pUFMVc+xKGxSoraeqvWYnAPKL2DySh5DUpvy7ofmQlZ11TRJXws
+         VDPPsfBUt+OWUsPRcEIMUO+kH0hZ0LDfTENevt6jf+E0V3TH1PuXi0qsaDNKTLq4Bspm
+         G7HA==
+X-Gm-Message-State: AO0yUKXC/uW1wtyLHJZ3npr9+rzOakpsKDnzXAtlbCANjw0pkmld5sI5
+        Qi/dSxaaX4sgw/MxI+pygklcPA==
+X-Google-Smtp-Source: AK7set+Epg38ByI5yc4CuXBGxCUll56QIUpvMysNvjurttYEVN/0HvhURZSTZm/R+gytz24gNeGfLA==
+X-Received: by 2002:ac2:598b:0:b0:4dc:8510:bfed with SMTP id w11-20020ac2598b000000b004dc8510bfedmr327637lfn.65.1676632399844;
+        Fri, 17 Feb 2023 03:13:19 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id h11-20020ac250cb000000b004b564e1a4e0sm642683lfm.76.2023.02.17.03.13.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 03:13:19 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix deprecated QCM2290 compatible
+Date:   Fri, 17 Feb 2023 12:13:15 +0100
+Message-Id: <20230217111316.306241-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316E7241D6F11CC4121AFC98DA19@DM6PR11MB4316.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Wentong,
+SM6115 previously erroneously added just "qcom,dsi-ctrl-6g-qcm2290",
+without the generic fallback. Fix the deprecated binding to reflect
+that.
 
-On Fri, Feb 17, 2023 at 06:20:10AM +0000, Wu, Wentong wrote:
-> On Wednesday, February 15, 2023 5:43 PM, Laurent Pinchart wrote:
-> > On Mon, Feb 13, 2023 at 10:23:44AM +0800, Wentong Wu wrote:
-> > > Intel Visual Sensing Controller (IVSC), codenamed "Clover Falls", is a
-> > > companion chip designed to provide secure and low power vision
-> > > capability to IA platforms. IVSC is available in existing commercial
-> > > platforms from multiple OEMs.
-> > >
-> > > The primary use case of IVSC is to bring in context awareness. IVSC
-> > > interfaces directly with the platform main camera sensor via a CSI-2
-> > > link and processes the image data with the embedded AI engine. The
-> > > detected events are sent over I2C to ISH (Intel Sensor Hub) for
-> > > additional data fusion from multiple sensors. The fusion results are
-> > > used to implement advanced use cases like:
-> > >  - Face detection to unlock screen
-> > >  - Detect user presence to manage backlight setting or waking up
-> > > system
-> > 
-> > Do you have plan to support these features in the ivsc driver in the future ?
-> 
-> Not sure, but the first step is to upstream this driver.
+Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Depends on (and should have been a part of):
 
-Sure, no problem.
+https://lore.kernel.org/linux-arm-msm/20230213121012.1768296-1-konrad.dybcio@linaro.org/
 
-> > > Since the Image Processing Unit(IPU) used on the host processor needs
-> > > to configure the CSI-2 link in normal camera usages, the CSI-2 link
-> > > and camera sensor can only be used in mutually-exclusive ways by host
-> > > IPU and IVSC. By default the IVSC owns the CSI-2 link and camera
-> > > sensor. The IPU driver can take ownership of the CSI-2 link and camera
-> > > sensor using interfaces provided by this IVSC driver.
-> > >
-> > > Switching ownership requires an interface with two different hardware
-> > > modules inside IVSC. The software interface to these modules is via
-> > > Intel MEI (The Intel Management Engine) commands. These two hardware
-> > > modules have two different MEI UUIDs to enumerate. These hardware
-> > > modules are:
-> > >  - ACE (Algorithm Context Engine): This module is for algorithm
-> > > computing when IVSC owns camera sensor. Also ACE module controls
-> > > camera sensor's ownership. This hardware module is used to set ownership of
-> > > camera sensor.
-> > >  - CSI (Camera Serial Interface): This module is used to route camera
-> > > sensor data either to IVSC or to host for IPU driver and application.
-> > >
-> > > IVSC also provides a privacy mode. When privacy mode is turned on,
-> > > camera sensor can't be used. This means that both ACE and host IPU
-> > > can't get image data. And when this mode is turned on, host IPU driver
-> > > is informed via a registered callback, so that user can be notified.
-> > 
-> > How does the privacy mode work, and how can the user trust that the closed-
-> > source IVSC and IME firmwares will honour the privacy settings ?
-> 
-> No camera data will be allowed to go through IVSC, and then there will
-> be no data on IVSC CSI transmitter side. 
+v1 -> v2:
+New patch
 
-But how can I be sure that the IVSC will not use the camera behind my
-back, if it's all controlled through a closed-source firmware ?
+ .../devicetree/bindings/display/msm/dsi-controller-main.yaml     | 1 -
+ 1 file changed, 1 deletion(-)
 
-> > > In summary, to acquire ownership of camera by IPU driver, first ACE
-> > > module needs to be informed of ownership and then to setup MIPI CSI-2
-> > > link for the camera sensor and IPU.
-> > >
-> > > Implementation:
-> > > There are two different drivers to handle ACE and CSI hardware modules
-> > > inside IVSC.
-> > >  - mei_csi: MEI client driver to send commands and receive notifications from CSI module.
-> > >  - mei_ace: MEI client driver to send commands and get status from ACE module.
-> > > Interface is exposed via ivsc.h to acquire and release camera sensor and
-> > > CSI-2 link.
-> > 
-> > Do I understand correctly, from your diagram below, that the communication
-> > between the IME and IVSC goes through SPI ?
-> > 
-> > > Below diagram shows connections of IVSC/ISH/IPU/Camera sensor.
-> > > -----------------------------------------------------------------------------
-> > > | Host Processor                                                            |
-> > > |                                                                           |
-> > > |       -----------------       -----------------       ---------------     |
-> > > |       |               |       |               |       |             | I2C |
-> > > |       |      IPU      |       |      ISH      |       |camera driver|--|  |
-> > > |       |               |       |               |       |             |  |  |
-> > > |       -----------------       -----------------       ---------------  |  |
-> > > |               |                       |                      |         |  |
-> > > |               |                       |               ---------------  |  |
-> > > |               |                       |               |             |  |  |
-> > > |               |                       |               | IVSC driver |  |  |
-> > > |               |                       |               |             |  |  |
-> > > |               |                       |               ---------------  |  |
-> > > |               |                       |                      |         |  |
-> > > ----------------|-----------------------|----------------------|---------|---
-> > >                 | CSI                   | I2C                  |SPI      |
-> > >                 |                       |                      |         |
-> > > ----------------|-----------------------|----------------      |         |
-> > > | IVSC          |                                       |      |         |
-> > > |               |                                       |      |         |
-> > > |       -----------------       -----------------       |      |         |
-> > > |       |               |       |               |       |      |         |
-> > > |       |      CSI      |       |      ACE      |       |------|         |
-> > > |       |               |       |               |       |                |
-> > > |       -----------------       -----------------       |                |
-> > > |               |                       | I2C           |                |
-> > > ----------------|-----------------------|----------------                |
-> > >                 | CSI                   |                                |
-> > >                 |                       |                                |
-> > >             --------------------------------                             |
-> > >             |                              | I2C                         |
-> > >             |         camera sensor        |-----------------------------|
-> > >             |                              |
-> > >             --------------------------------
-> > >
-> > > Wentong Wu (3):
-> > >   media: pci: intel: ivsc: Add CSI submodule
-> > >   media: pci: intel: ivsc: Add ACE submodule
-> > >   media: pci: intel: ivsc: Add acquire/release API for ivsc
-> > >
-> > >  drivers/media/pci/Kconfig              |   1 +
-> > >  drivers/media/pci/intel/Makefile       |   2 +
-> > >  drivers/media/pci/intel/ivsc/Kconfig   |  12 +
-> > >  drivers/media/pci/intel/ivsc/Makefile  |   7 +
-> > >  drivers/media/pci/intel/ivsc/ivsc.c    |  84 +++++
-> > >  drivers/media/pci/intel/ivsc/mei_ace.c | 472 +++++++++++++++++++++++++
-> > >  drivers/media/pci/intel/ivsc/mei_ace.h |> 36 ++
-> > >  drivers/media/pci/intel/ivsc/mei_csi.c | 342 ++++++++++++++++++
-> > >  drivers/media/pci/intel/ivsc/mei_csi.h |  60 ++++
-> > >  include/linux/ivsc.h                   |  74 ++++
-> > >  10 files changed, 1090 insertions(+)
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/Kconfig
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/Makefile
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/ivsc.c
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/mei_ace.c
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/mei_ace.h
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/mei_csi.c
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/mei_csi.h
-> > >  create mode 100644 include/linux/ivsc.h
-
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index 41cdb631d305..ee19d780dea8 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -37,7 +37,6 @@ properties:
+       - items:
+           - enum:
+               - qcom,dsi-ctrl-6g-qcm2290
+-          - const: qcom,mdss-dsi-ctrl
+         deprecated: true
+ 
+   reg:
 -- 
-Regards,
+2.39.1
 
-Laurent Pinchart
