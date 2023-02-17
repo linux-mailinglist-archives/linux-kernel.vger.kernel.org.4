@@ -2,180 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADFC69B34C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC78169B358
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjBQTsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 14:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S229595AbjBQTud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 14:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjBQTsR (ORCPT
+        with ESMTP id S229461AbjBQTub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:48:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A20A4AFEA;
-        Fri, 17 Feb 2023 11:48:16 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HHkoUF031019;
-        Fri, 17 Feb 2023 19:47:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Ovg0+EZ8YSVib5FriRwZoVL/giHj0F5GZrikLe08tak=;
- b=cfo23bYl/GTyrJozFIEWHsUWIyF0xDJ9/LKidbByToRVxAw71iyh5dQku0myFBt14jeJ
- urSYlBY63+u+uOdLKPnzGEr3ulk3DdHP+wcCt78nJuYRoRbEW8l8OuOWGnTlLJNC6wsX
- LxVGjOQ0NHLudVR49Al6pyrydzTOeD/ic+9cB5r55eR14RbDjmKHqUA2ImHXCgCwKyBe
- pbGDD+oxPnUQ3nzVn6WmF6B5JZjOYfZLhcCGvMO9jCr9u2FlPjEfzYNsDqzLDYwlKdMi
- H4zDFnMpGiKSq7udyPXI5S+lxAux5MKU7cpP6JY05OkHYgfV0LNTICDR4Xu8YT3q2PMe lQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dmeq9-1
+        Fri, 17 Feb 2023 14:50:31 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8644FCA2;
+        Fri, 17 Feb 2023 11:50:29 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HCcsIi011130;
+        Fri, 17 Feb 2023 19:50:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DDzxof5IcVzLldI7GDtr6orQv7jtauqlTg374hNf258=;
+ b=J1I9wcoWsNoCHPUw/T99krE+vM9Yl0vUe6jdsO+5fbZzNu8YBkwIrPmZxXZgLCkbxtPp
+ QmL7iLiLfClTNQPRYUvU9UJRmrdv9ECdJZXydIvCRFr1DTyNPVrFNvuXXL7E+1kigZS8
+ sJzNTmjsdfbt9495/qUlvVXFg+OwoGzF1g2sRCzEwJFTauiTGMOIX0LE0kQk40VsEu3v
+ FeZT9SC36sWmSVLS+AR1VxgYCxfI1XwFal37Krt2Q3sMwGD9iQDJ7LJ09cJqo53CXMdi
+ +4fOS2h7RJVxX85Pxq9OjAIkCe4qGHyJEHSJA8mOCw5JX5hzbNF+CvYIWGDGptLAXWVE nw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nshe5mxvf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:47:40 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HJNeh6003282;
-        Fri, 17 Feb 2023 19:47:39 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dmeq1-1
+        Fri, 17 Feb 2023 19:50:08 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31HJo7J9026503
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:47:39 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HJFR4K019914;
-        Fri, 17 Feb 2023 19:47:38 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7hfb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 19:47:38 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HJlbLo27198026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 19:47:37 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5EE2358052;
-        Fri, 17 Feb 2023 19:47:37 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D23005805E;
-        Fri, 17 Feb 2023 19:47:35 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.25.123])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 19:47:35 +0000 (GMT)
-Message-ID: <53d2f07fd19f4ab74c66d4f4f07c62d163708ecd.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 1/6] reiserfs: Switch to
- security_inode_init_security()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 17 Feb 2023 14:47:35 -0500
-In-Reply-To: <20221201104125.919483-2-roberto.sassu@huaweicloud.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: sSO0GRNkZtuszZDBY91al3KPux1HTRRp
-X-Proofpoint-ORIG-GUID: txMnew365E5IUFHnWfBiCPtN176C9Fkf
+        Fri, 17 Feb 2023 19:50:07 GMT
+Received: from [10.216.18.25] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Feb
+ 2023 11:49:57 -0800
+Message-ID: <38780d01-3e02-fd30-4c11-8cb307eeae4d@quicinc.com>
+Date:   Sat, 18 Feb 2023 01:19:54 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V5 5/5] firmware: scm: Modify only the DLOAD bit in TCSR
+ register for download mode
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <robimarko@gmail.com>,
+        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <quic_gurus@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+References: <20230216120012.28357-1-quic_poovendh@quicinc.com>
+ <20230216120012.28357-6-quic_poovendh@quicinc.com>
+ <51bd93be-f8d3-a33c-18ad-ba4a331f2bcf@quicinc.com>
+In-Reply-To: <51bd93be-f8d3-a33c-18ad-ba4a331f2bcf@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: HEPiM6rO7lmKJJLLDWAeOiU3MwhP2ynR
+X-Proofpoint-ORIG-GUID: HEPiM6rO7lmKJJLLDWAeOiU3MwhP2ynR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-17_14,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 clxscore=1011 adultscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170171
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302170173
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for removing security_old_inode_init_security(), switch to
-> security_inode_init_security().
-> 
-> Define the initxattrs callback reiserfs_initxattrs(), to populate the
-> name/value/len triple in the reiserfs_security_handle() with the first
-> xattr provided by LSMs. Make a copy of the xattr value, as
-> security_inode_init_security() frees it.
-> 
-> After the call to security_inode_init_security(), remove the check for
-> returning -EOPNOTSUPP, as security_inode_init_security() changes it to
-> zero.
-> 
-> Multiple xattrs are currently not supported, as the
-> reiserfs_security_handle structure is exported to user space. As a
-> consequence, even if EVM is invoked, it will not provide an xattr (if it
-> is not the first to set it, its xattr will be discarded; if it is the
-> first, it does not have xattrs to calculate the HMAC on).
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-
-Now that commit 572302af1258 ("reiserfs: Add missing calls to
-reiserfs_security_free()") is upstreamed, please include a dependency
-comment.
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-> ---
->  fs/reiserfs/xattr_security.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-> index 857a65b05726..0ba96757681d 100644
-> --- a/fs/reiserfs/xattr_security.c
-> +++ b/fs/reiserfs/xattr_security.c
-> @@ -39,6 +39,22 @@ static bool security_list(struct dentry *dentry)
->  	return !IS_PRIVATE(d_inode(dentry));
->  }
->  
-> +static int
-> +reiserfs_initxattrs(struct inode *inode, const struct xattr *xattr_array,
-> +		    void *fs_info)
-> +{
-> +	struct reiserfs_security_handle *sec = fs_info;
-> +
-> +	sec->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> +			     GFP_KERNEL);
-> +	if (!sec->value)
-> +		return -ENOMEM;
-> +
-> +	sec->name = xattr_array->name;
-> +	sec->length = xattr_array->value_len;
-> +	return 0;
-> +}
-> +
->  /* Initializes the security context for a new inode and returns the number
->   * of blocks needed for the transaction. If successful, reiserfs_security
->   * must be released using reiserfs_security_free when the caller is done. */
-> @@ -56,12 +72,9 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
->  	if (IS_PRIVATE(dir))
->  		return 0;
->  
-> -	error = security_old_inode_init_security(inode, dir, qstr, &sec->name,
-> -						 &sec->value, &sec->length);
-> +	error = security_inode_init_security(inode, dir, qstr,
-> +					     &reiserfs_initxattrs, sec);
->  	if (error) {
-> -		if (error == -EOPNOTSUPP)
-> -			error = 0;
-> -
->  		sec->name = NULL;
->  		sec->value = NULL;
->  		sec->length = 0;
 
 
+On 2/16/2023 7:30 PM, Mukesh Ojha wrote:
+> 
+> 
+> On 2/16/2023 5:30 PM, Poovendhan Selvaraj wrote:
+>> CrashDump collection is based on the DLOAD bit of TCSR register.
+>> To retain other bits, we read the register and modify only the DLOAD 
+>> bit as
+>> the other bits have their own significance.
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Co-developed-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+>> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>> ---
+>>   Changes in V5:
+>>     - checking the return value in qcom_scm_set_download_mode function as
+>>       suggested by Srinivas Kandagatla
+>>
+>>   Changes in V4:
+>>     - retain the orginal value of tcsr register when download mode
+>>       is not set
+>>
+>>   drivers/firmware/qcom_scm.c | 21 ++++++++++++++++-----
+>>   1 file changed, 16 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index 468d4d5ab550..d88c5f14bd54 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -407,7 +407,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_set_remote_state);
+>> -static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>> +static int __qcom_scm_set_dload_mode(struct device *dev, u32 val, 
+>> bool enable)
+>>   {
+>>       struct qcom_scm_desc desc = {
+>>           .svc = QCOM_SCM_SVC_BOOT,
+>> @@ -417,7 +417,8 @@ static int __qcom_scm_set_dload_mode(struct device 
+>> *dev, bool enable)
+>>           .owner = ARM_SMCCC_OWNER_SIP,
+>>       };
+>> -    desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+>> +    desc.args[1] = enable ? val | QCOM_SCM_BOOT_SET_DLOAD_MODE :
+>> +                val & ~(QCOM_SCM_BOOT_SET_DLOAD_MODE);
+>>       return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>>   }
+>> @@ -426,15 +427,25 @@ static void qcom_scm_set_download_mode(bool enable)
+>>   {
+>>       bool avail;
+>>       int ret = 0;
+>> +    u32 dload_addr_val;
+>>       avail = __qcom_scm_is_call_available(__scm->dev,
+>>                            QCOM_SCM_SVC_BOOT,
+>>                            QCOM_SCM_BOOT_SET_DLOAD_MODE);
+>> +    ret = qcom_scm_io_readl(__scm->dload_mode_addr, &dload_addr_val);
+>> +
+>> +    if (ret) {
+>> +        dev_err(__scm->dev,
+>> +            "failed to read dload mode address value: %d\n", ret);
+>> +        return;
+>> +    }
+>> +
+>>       if (avail) {
+>> -        ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
+>> +        ret = __qcom_scm_set_dload_mode(__scm->dev, dload_addr_val, 
+>> enable);
+> 
+> Did you test this on a target where it comes under this if statement? 
+> does it really need to know dload_mode_addr for this target ?
+
+
+Can we do something like this? I would let other review as well.
+
+--------------------------------------->0-------------------------------------------
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index cdbfe54..26b7eda 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -419,6 +419,7 @@ static void qcom_scm_set_download_mode(bool enable)
+  {
+         bool avail;
+         int ret = 0;
++       u32 dload_addr_val;
+
+         avail = __qcom_scm_is_call_available(__scm->dev,
+                                              QCOM_SCM_SVC_BOOT,
+@@ -426,8 +427,16 @@ static void qcom_scm_set_download_mode(bool enable)
+         if (avail) {
+                 ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
+         } else if (__scm->dload_mode_addr) {
+-               ret = qcom_scm_io_writel(__scm->dload_mode_addr,
+-                               enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
++               ret = qcom_scm_io_readl(__scm->dload_mode_addr, 
+&dload_addr_val);
++               if (ret) {
++                       dev_err(__scm->dev,
++                               "failed to read dload mode address 
+value: %d\n", ret);
++                       return;
++               }
++
++               ret = qcom_scm_io_writel(__scm->dload_mode_addr, enable ?
++                               dload_addr_val | 
+QCOM_SCM_BOOT_SET_DLOAD_MODE :
++                               dload_addr_val & 
+~(QCOM_SCM_BOOT_SET_DLOAD_MODE));
+         } else {
+                 dev_err(__scm->dev,
+                         "No available mechanism for setting download 
+mode\n");
+
+-Mukesh
+> 
+> -Mukesh
+>>       } else if (__scm->dload_mode_addr) {
+>> -        ret = qcom_scm_io_writel(__scm->dload_mode_addr,
+>> -                enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
+>> +        ret = qcom_scm_io_writel(__scm->dload_mode_addr, enable ?
+>> +                dload_addr_val | QCOM_SCM_BOOT_SET_DLOAD_MODE :
+>> +                dload_addr_val & ~(QCOM_SCM_BOOT_SET_DLOAD_MODE));
+>>       } else {
+>>           dev_err(__scm->dev,
+>>               "No available mechanism for setting download mode\n");
