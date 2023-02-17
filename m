@@ -2,119 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DDA69A69A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE6469A69E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjBQIJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S229702AbjBQIJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBQIJC (ORCPT
+        with ESMTP id S229757AbjBQIJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:09:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B701350F;
-        Fri, 17 Feb 2023 00:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676621342; x=1708157342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TTPr7XV9B2s3mcWJ6UyTbFd7ceHV50RJq6KYArk2dkM=;
-  b=ffguOWxX8Jd/l4iTudmT2bmjpaw0xm7xT/J0ovgxKlXWrb3yn6+yzW0k
-   lFRqOeHQZsJ9cchqf3+7+ooJEQQB3WXG0wH7ntfETEZNCRqr/sN67SRnG
-   MYuzWSov2Q89Q1TF/LiPOm9EXNPTnsFd3Estsil/5ffwICYCGV8Hz7E5V
-   +KxSE8kuucw7rLzGZAuDeppO8AV3gFyeqVQplA/GZsmg/wD9X7LV0Hgjf
-   t/ZiFhHP3xyU/xFW76Uq8vKP3dABFZBKNPgygX6fOGGAQJEp578N+dc6/
-   p+tFQ1ectd6SdYltgzU3OfL6tMGqF2ci6sjoB0UrTpd5sYLFEBNWISOGP
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,304,1669100400"; 
-   d="scan'208";a="201417142"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 01:09:01 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 17 Feb 2023 01:09:00 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 17 Feb 2023 01:08:59 -0700
-Date:   Fri, 17 Feb 2023 09:08:59 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Larysa Zaremba <larysa.zaremba@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v2] net: lan966x: Use automatic selection of
- VCAP rule actionset
-Message-ID: <20230217080859.fdsxr7ytfzw4vhdp@soft-dev3-1>
-References: <20230216122907.2207291-1-horatiu.vultur@microchip.com>
- <Y+41fTUfz8Kx6ujH@lincoln>
+        Fri, 17 Feb 2023 03:09:19 -0500
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502785E5BD
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1676621350;
+        bh=vVf5VbiVyKplW7aWezPMq82Yq0t9rkQkhpF/eqcg270=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=IJ6AmcpDeD3m20zBJRDwrPZc1SwNU9tyDaj/GmC+kPOro3d7WvK04qbHNlh9wKxJU
+         wLiOyA1Gr828Yc+CLXixdK0rAbg22LlJpqFcEbreQj2BlcKQFhVaeZGTue2W8owzCU
+         on/y+YsAI6f7lDVRtnt/RvJTnA1JLuDeqQZEDRlA=
+Received: from [IPv6:240e:358:1156:5900:dc73:854d:832e:4] (unknown [IPv6:240e:358:1156:5900:dc73:854d:832e:4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id C46F365CF0;
+        Fri, 17 Feb 2023 03:09:07 -0500 (EST)
+Message-ID: <41b6c7b779c1c4d33c644c406f337e27e124adaa.camel@xry111.site>
+Subject: Re: [PATCH v4 5/5] LoongArch: Add support for kernel address space
+ layout randomization (KASLR)
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>
+Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 17 Feb 2023 16:09:04 +0800
+In-Reply-To: <1676018856-26520-6-git-send-email-tangyouling@loongson.cn>
+References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
+         <1676018856-26520-6-git-send-email-tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <Y+41fTUfz8Kx6ujH@lincoln>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 02/16/2023 14:54, Larysa Zaremba wrote:
+T24gRnJpLCAyMDIzLTAyLTEwIGF0IDE2OjQ3ICswODAwLCBZb3VsaW5nIFRhbmcgd3JvdGU6Cgo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBTeW5jIHRoZSBjYWNoZXMgcmVhZHkg
+Zm9yIGV4ZWN1dGlvbiBvZiBuZXcga2VybmVsCj4gKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgX19hc21fXyBfX3ZvbGF0aWxlX18gKAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgImliYXIgMCBcdFxuIgo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgImRiYXIgMCBcdFxuIik7CgpJIHRoaW5rIHdl
+IHNob3VsZCBhZGQgOjo6ICJtZW1vcnkiIGhlcmUgdG8gcHJldmVudCBhIGZ1dHVyZSBjb21waWxl
+cgpmcm9tIGJlaW5nIHRvbyBzbWFydC4KCk90aGVyd2lzZSBMR1RNLgoKLS0gClhpIFJ1b3lhbyA8
+eHJ5MTExQHhyeTExMS5zaXRlPgpTY2hvb2wgb2YgQWVyb3NwYWNlIFNjaWVuY2UgYW5kIFRlY2hu
+b2xvZ3ksIFhpZGlhbiBVbml2ZXJzaXR5Cg==
 
-Hi Larysa,
-
-> 
-> On Thu, Feb 16, 2023 at 01:29:07PM +0100, Horatiu Vultur wrote:
-> > Since commit 81e164c4aec5 ("net: microchip: sparx5: Add automatic
-> > selection of VCAP rule actionset") the VCAP API has the capability to
-> > select automatically the actionset based on the actions that are attached
-> > to the rule. So it is not needed anymore to hardcore the actionset in the
-> 
-> I am sure, you've meant 'hardcode'
-
-Yes, I will change this in the next version.
-
-> 
-> > driver, therefore it is OK to remove this.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> > v1->v2:
-> > - improve the commit message by mentioning the commit which allows
-> >   to make this change
-> > ---
-> >  drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-> > index bd10a71897418..f960727ecaeec 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-> > @@ -261,8 +261,6 @@ static int lan966x_tc_flower_add(struct lan966x_port *port,
-> >                                                       0);
-> >                       err |= vcap_rule_add_action_u32(vrule, VCAP_AF_MASK_MODE,
-> >                                                       LAN966X_PMM_REPLACE);
-> > -                     err |= vcap_set_rule_set_actionset(vrule,
-> > -                                                        VCAP_AFS_BASE_TYPE);
-> 
-> Is this the only location, where this can be done? I'm not very familiar with
-> this driver, would it maybe make sense to check out lan966x_ptp_add_trap() too?
-
-Good catch! Also in lan966x_ptp_add_trap, the function
-vcap_set_rule_set_actionset can be removed.
-
-> 
-> >                       if (err)
-> >                               goto out;
-> >
-> > --
-> > 2.38.0
-> >
-
--- 
-/Horatiu
