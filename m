@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362C269B05C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D36B69B057
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjBQQOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S230512AbjBQQPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjBQQOc (ORCPT
+        with ESMTP id S230472AbjBQQOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Feb 2023 11:14:32 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92863711A5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:14:29 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFgnU4014021;
-        Fri, 17 Feb 2023 10:14:12 -0600
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637C2711B6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:14:30 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFh1JO028722;
+        Fri, 17 Feb 2023 10:14:14 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=KSx4vfnoG0hKeX0+I8Xc6vC4Q61Hdoi1UYzczfNsx1Y=;
- b=oYNUPI3JkmSKKfpVnMIHi8T4mryop/uePwJerdvurSoCRETK64p29HFMtLcHNTDLoxtP
- 8xiYKpSxIp7if4q0eyQXDf5CnlejuhOKTV8vi3emF07jaPSVCU3BQ8xy6mWTSabtSvz0
- QJVwV0RZF6u++10SiK7lhcouHPk55X4k7JqoPZH+b6cJG2+rkzjTPlMtWc47iw2BSUWt
- ivbNySHJ19Ud3ULFB5fLdgxO9hLVObqqDYAoNFJZqng5Tb7EkqpyAroAs9uplSLKHNh9
- HNYqwPQs7q8F6NaBQ3dDs0nZP3TzcqrpzugzROW8v1S7xC5C1xmd98Vbt4eWGpHOQcKb CQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nrm8wm7t6-2
+ bh=89OqfVmfn1Au+gkokDwDQ8MKFgxhf0rl2z2ZybdFitE=;
+ b=i03YE08wPY3OrJ2YQYBIkNvsvPtd2sMwXp/7hG/75z2NwRc2Ey6Q3lvPm4KkwVKtkr+n
+ nm9dFQd4IABiY2mM4vV5z4K5ILurPTPtOz4xA9rvDY6ncu5q14FVmGW9v7R0nqnHI6Hw
+ +7u/7jQR42QK3MF4H6JCIoiLXnD3WyskNUh0psdbUBXsBjPHqNfqrLGYfXPFvBRt25xb
+ DU3eKVQAggERUX5BpsUYExaLGupEShUOSGKftW8ezGUm0NveC/0B/p67wNjDNbFRk7l7
+ ZATHqn3zIuuCslB5oKl+XstClizwH6wvwPx+qTrsV0aXIXKFli+FD0/1QaRXgbQdgV8n RA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3nt1btgsph-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 10:14:12 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 17 Feb 2023 10:14:14 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 17 Feb
  2023 10:14:10 -0600
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
  Transport; Fri, 17 Feb 2023 10:14:10 -0600
 Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 61B9211D3;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 741F146B;
         Fri, 17 Feb 2023 16:14:10 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <broonie@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
@@ -49,17 +49,17 @@ CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Simon Trimmer <simont@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 03/10] firmware: cs_dsp: Support DSPs that don't require firmware download
-Date:   Fri, 17 Feb 2023 16:14:03 +0000
-Message-ID: <20230217161410.915202-4-rf@opensource.cirrus.com>
+Subject: [PATCH 04/10] ASoC: wm_adsp: Support DSPs that don't require firmware download
+Date:   Fri, 17 Feb 2023 16:14:04 +0000
+Message-ID: <20230217161410.915202-5-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230217161410.915202-1-rf@opensource.cirrus.com>
 References: <20230217161410.915202-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: 7jho9u0DN5K2-kFdVLRRTrilrIEX9Xba
-X-Proofpoint-ORIG-GUID: 7jho9u0DN5K2-kFdVLRRTrilrIEX9Xba
+X-Proofpoint-ORIG-GUID: pNCSzsW1GfLqnax6WjOhuvOOtdapJCMA
+X-Proofpoint-GUID: pNCSzsW1GfLqnax6WjOhuvOOtdapJCMA
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -73,31 +73,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Simon Trimmer <simont@opensource.cirrus.com>
 
 When a DSP can self-boot from ROM it is not necessary to download
-firmware during the powering up sequence.
-
-A DSP that required firmware download would fail in a previous
-configuration step if firmware was not available.
+firmware - when the DSP has the wmfw_optional flag set not finding a
+wmfw firmware file is a successful outcome and not an error condition.
 
 Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- drivers/firmware/cirrus/cs_dsp.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/soc/codecs/wm_adsp.c | 3 +++
+ sound/soc/codecs/wm_adsp.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
-index 97b73a254380..513136a924cf 100644
---- a/drivers/firmware/cirrus/cs_dsp.c
-+++ b/drivers/firmware/cirrus/cs_dsp.c
-@@ -1301,6 +1301,9 @@ static int cs_dsp_load(struct cs_dsp *dsp, const struct firmware *firmware,
- 	int regions = 0;
- 	int ret, offset, type;
+diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
+index 854d9366a745..8176b6173de9 100644
+--- a/sound/soc/codecs/wm_adsp.c
++++ b/sound/soc/codecs/wm_adsp.c
+@@ -850,6 +850,9 @@ static int wm_adsp_request_firmware_files(struct wm_adsp *dsp,
+ 		return 0;
+ 	}
  
-+	if (!firmware)
++	if (dsp->wmfw_optional)
 +		return 0;
 +
- 	ret = -EINVAL;
+ 	adsp_err(dsp, "Failed to request firmware <%s>%s-%s-%s<-%s<%s>>.wmfw\n",
+ 		 cirrus_dir, dsp->part, dsp->fwf_name, wm_adsp_fw[dsp->fw].file,
+ 		 system_name, asoc_component_prefix);
+diff --git a/sound/soc/codecs/wm_adsp.h b/sound/soc/codecs/wm_adsp.h
+index dc2f7a096e26..173dcae2c260 100644
+--- a/sound/soc/codecs/wm_adsp.h
++++ b/sound/soc/codecs/wm_adsp.h
+@@ -34,6 +34,7 @@ struct wm_adsp {
+ 	unsigned int sys_config_size;
  
- 	pos = sizeof(*header) + sizeof(*adsp1_sizes) + sizeof(*footer);
+ 	int fw;
++	bool wmfw_optional;
+ 
+ 	struct work_struct boot_work;
+ 	int (*pre_run)(struct wm_adsp *dsp);
 -- 
 2.30.2
 
