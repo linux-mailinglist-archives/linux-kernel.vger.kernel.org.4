@@ -2,83 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D967569B0FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDBF69B0E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjBQQcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S230144AbjBQQ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjBQQcK (ORCPT
+        with ESMTP id S230247AbjBQQ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:32:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E092172936;
-        Fri, 17 Feb 2023 08:31:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=XHYGSp+R2NnQ++mczB+FUJo+gLmzgF5t6LdIKcLbrX8=; b=hHQbyIndp4HRRlRzbJcMSVU/lh
-        FDnVr+OF5SQMZrFINYjYHNcx8HQ8RFLUFmKkUrFZRLBytELib59qwQ660ZjOJV9ue80nEfowL8uK9
-        EfmZHaW5XhHWZxPbnZlBWcwS1tJoUJEcypXxiyBDQBym9ez2dq/7ZHEzei0aIeGezdGtNrQcCeFjA
-        WfpPA+SdDujDyjcV/ZSGLd/a5LBQOusqjmWyV/qB8Gi7H/yRmGXZmQHKDhVvCwl5cKtwHU4G4XmWN
-        UX+PAPyAO4vN7Ok2SfRNcWlqT24G5hzQavxQaT8Be4RN01zBD1zlGMoKP1rOgGEhO8UxDzP7kD47J
-        os9thz5A==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pT3dr-00F4KU-1u; Fri, 17 Feb 2023 16:31:23 +0000
-Message-ID: <4cd6d9cf-abf8-bf2a-9942-472c8b43d344@infradead.org>
-Date:   Fri, 17 Feb 2023 08:31:21 -0800
+        Fri, 17 Feb 2023 11:29:53 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6F87095F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676651359; x=1708187359;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WqzXDxoShDpdbm4A3JDCwL+WgDDdcPspdLN0ZTbEwDo=;
+  b=ft2SDCgw9DcBYt8mrss6q0yNgNscX7EFcWdLuTG0H3fqrQ0+gqferLmG
+   Yq44EKORhqSR+052ToCFS5pAnKqcWZW0V/ZTAoaDdwe1VHeNTKqEpXxQc
+   z4de/lMmdfSr+/Fulhzu7UYRAMCV6HlmefYTNQpTIw8BZ/K+vIl84aFg3
+   VIle24HX56O9oUtfJ6PWBoTuzPTcuUpbcl1vl7vWGT0tWkpizgZZk0j7U
+   NnBHE8e0zIL+p5f0C7bG0+OrjNxa0hiRctZyTcvhL4uaA41JzLFm4xadE
+   BF4Wai6tfFyyK3z73MAU4qt7wgteVQV/ObFzxZaDCXaA3zW95Bl5UepEt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="320129359"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="320129359"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:28:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="999493226"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="999493226"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:28:58 -0800
+Date:   Fri, 17 Feb 2023 08:32:40 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, Dave Jiang <dave.jiang@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 4/5] iommu/ioasid: Rename INVALID_IOASID
+Message-ID: <20230217083240.147d2c76@jacob-builder>
+In-Reply-To: <25fbbc7f-f137-c2c4-ddf8-d143fce1dcc5@intel.com>
+References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
+        <20230216235951.3573059-5-jacob.jun.pan@linux.intel.com>
+        <25fbbc7f-f137-c2c4-ddf8-d143fce1dcc5@intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/1] scsi: lpfc: Fix double word in comments
-Content-Language: en-US
-To:     Bo Liu <liubo03@inspur.com>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217083046.4090-1-liubo03@inspur.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230217083046.4090-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Fenghua,
 
-On 2/17/23 00:30, Bo Liu wrote:
-> Remove the repeated word "the" in comments.
+On Thu, 16 Feb 2023 17:23:15 -0800, Fenghua Yu <fenghua.yu@intel.com> wrote:
+
+> > --- a/drivers/dma/idxd/irq.c
+> > +++ b/drivers/dma/idxd/irq.c
+> > @@ -80,7 +80,7 @@ static void idxd_int_handle_revoke_drain(struct
+> > idxd_irq_entry *ie) desc.opcode = DSA_OPCODE_DRAIN;
+> >   	desc.priv = 1;
+> >   
+> > -	if (ie->pasid != INVALID_IOASID)
+> > +	if (ie->pasid != IOMMU_PASID_INVALID)  
 > 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> It's better to change to:
+> +	if (pasid_valid(ie->paid))
+> 
+> If pasid_vaild() is called, any invalid PASID value change in the future 
+> will be hidden in pasid_valid() and won't impact this code any more.
+> 
+> And checking pasid_valid() is more readable and meaninful than direct 
+> checking the invalid PASID value.
+Sounds good, here I'm just renaming. I will submit another patch to
+convert.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks,
 
-These changes all look good to me.
-
-There are quite a few typos/spellos of other words remaining,
-but they were not the target of this patch...
-
-Thanks.
-
-> ---
->  drivers/scsi/lpfc/lpfc_attr.c    | 10 +++++-----
->  drivers/scsi/lpfc/lpfc_els.c     |  2 +-
->  drivers/scsi/lpfc/lpfc_hbadisc.c |  2 +-
->  drivers/scsi/lpfc/lpfc_init.c    |  4 ++--
->  drivers/scsi/lpfc/lpfc_mbox.c    |  4 ++--
->  drivers/scsi/lpfc/lpfc_nvmet.c   |  2 +-
->  drivers/scsi/lpfc/lpfc_sli.c     |  2 +-
->  7 files changed, 13 insertions(+), 13 deletions(-)
-
-
--- 
-~Randy
+Jacob
