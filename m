@@ -2,225 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5E169AF46
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A608E69AF48
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjBQPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 10:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S229575AbjBQPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 10:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBQPPs (ORCPT
+        with ESMTP id S229770AbjBQPQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:15:48 -0500
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30266047
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:15:45 -0800 (PST)
-Received: by mail-il1-f206.google.com with SMTP id t10-20020a92ca8a000000b00310c6708243so603190ilo.23
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:15:45 -0800 (PST)
+        Fri, 17 Feb 2023 10:16:25 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2806666B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:16:22 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id p131so566650iod.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y6tSzB6GogvHu+/Sj0xL4Z/TCcT8KX/q0mTJTQsyK7Q=;
+        b=OfLZ+n93gBE6JvkCeqIGlnC8EIWeE8iaemwIwdZO4mH8UCtTnPE7WBlzR0w48SrvVA
+         lWlf7c9NRg0a4o1ixTNkNXrxTq301dM7B1noIBSe5AIIU4tqwWWtR+92s1zlFLwdkG2A
+         hRFzbk1CV2c7DL0f0FGcIgHJjv/5hBFBO8gck=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOF1NJR2C6VQIkmOaGm3OZ/hC3PZmxuYb581posA0pY=;
-        b=Nyow9uM7rJQs2HBUz1BEcvMiBkR9IG5RoBz7roL+4xuqWAR6ZaD/ftobg+RPKO2tn7
-         XL5q9ejjR7YgTEnpoJHJdwUlDpOclQ5Womc3k/fAepaNwN9MarwGzfN4Xqj3xtAruwfM
-         nq/NlW5SDIFsLTGMZ97ISXKI7OO3KdkoL6KcJmmtb+KEoBUr3mIJ2SuF7gHPyA68LuQx
-         RM4GGiKLzjSrWmMFNG8UdsjdxbqWZhVuHQqbS8IZRBwIrRIEFRKdGJtvwW+XJodKCpYI
-         Uyf/VGAXgPezJYc/T4668L0pw8+Yk3fxtL/UhENQReQFOOxz90POz7OTbllxJxIXjM3d
-         8NWw==
-X-Gm-Message-State: AO0yUKVhevWbbcOpfYW+z3ZEimuGsxX76X1CKKpxZM4hzGm+JlX3Qzwh
-        KXRBEDznki6B+DsbAPpUwZ5SdYnNJ9p6mTDB5Tk9q44d1UCu
-X-Google-Smtp-Source: AK7set8vsPE+Lbo+ybYE5fGk6chIL2Evqt2sM77c+hW8E0qS33wbuY+st4OMVHbpzwSWn8xFvemqmLAgLWD51yswvGsRCjkphFIo
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y6tSzB6GogvHu+/Sj0xL4Z/TCcT8KX/q0mTJTQsyK7Q=;
+        b=Kf9LhA4nHKG/bCpASeMZGS2RJQS6LU+xG2yfu3v+KfIYLUri6gpn0EZZP4sn6O0ypU
+         N9ZzedJ/HgBkD/CMNnrBJm8yujz9vaT4ugSl5r5Z5xwJDr23iLzFDh+TH+ik7PdK4TaA
+         R52YQzPbadv2Uz1mQfjDWMgZIlqCdJ12+u8ovHULmTEIoWyGKDRQEsEetf8DWspdfvGM
+         3TAAdVkKbhnM5duwWWrERNN3PNtCZ70X09FkOKFTz2yM18TMmNI+xH4bwR+X/kWTS6H7
+         KDISsPCKkj/8UhZv86CV/CPDDOypax4FQMDLCMv8zhCHiY8bJ5/Rz0nfoN+N/4V80JAb
+         UMfw==
+X-Gm-Message-State: AO0yUKVEB3g8vyaG0oLz5QM/skmO+akJwMl90vBCnDstOQbAQFQ56Qob
+        QhjRUVPHhm8Pqe7F/JDhflNk9M0Atd+7RgFTbxOtww==
+X-Google-Smtp-Source: AK7set8VgsRphz5Zi8p+HUY1vqyOrAxOOrq9Nf9k7JovWnJ/H3Qd2Ajyc+oIGlzTDEOE6C0axpa5HWHEqdT2NLOEaS8=
+X-Received: by 2002:a02:2907:0:b0:3a9:6e13:781b with SMTP id
+ p7-20020a022907000000b003a96e13781bmr544032jap.3.1676646982352; Fri, 17 Feb
+ 2023 07:16:22 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1050:b0:314:8c8:de65 with SMTP id
- p16-20020a056e02105000b0031408c8de65mr391899ilj.3.1676646945161; Fri, 17 Feb
- 2023 07:15:45 -0800 (PST)
-Date:   Fri, 17 Feb 2023 07:15:45 -0800
-In-Reply-To: <000000000000471f2d05f1ce8bad@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009489a105f4e6c9e6@google.com>
-Subject: Re: [syzbot] [jfs?] KASAN: invalid-free in dbUnmount
-From:   syzbot <syzbot+6a93efb725385bc4b2e9@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mudongliangabcd@gmail.com, paskripkin@gmail.com, r33s3n6@gmail.com,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com,
-        wuhoipok@gmail.com
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com>
+ <20230214134127.59273-38-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5H7=rOwVK2SapqyeKHKnRJMwXFf1OSD-qhgjkbkoR=Zmw@mail.gmail.com> <c9bd53f9-7d5a-6e2d-4062-297158661422@collabora.com>
+In-Reply-To: <c9bd53f9-7d5a-6e2d-4062-297158661422@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 17 Feb 2023 23:16:10 +0800
+Message-ID: <CAGXv+5GigndbJ2rfpRUfti-9DO1gyfOQ-difX-oOqSTF2dup_g@mail.gmail.com>
+Subject: Re: [PATCH v2 37/47] clk: mediatek: Split MT8195 clock drivers and
+ allow module build
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Feb 17, 2023 at 7:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 17/02/23 05:31, Chen-Yu Tsai ha scritto:
+> > On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
+> >> option: there's no reason to do that, as it is totally unnecessary to
+> >> build in all or none of them.
+> >>
+> >> Split them out: keep boot-critical clocks as bool and allow choosing
+> >> non critical clocks as tristate.
+> >>
+> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >> ---
+> >>   drivers/clk/mediatek/Kconfig  | 86 +++++++++++++++++++++++++++++++++++
+> >>   drivers/clk/mediatek/Makefile | 20 +++++---
+> >>   2 files changed, 99 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+> >> index 45b7aea7648d..88937d111e98 100644
+> >> --- a/drivers/clk/mediatek/Kconfig
+> >> +++ b/drivers/clk/mediatek/Kconfig
+> >> @@ -692,6 +692,92 @@ config COMMON_CLK_MT8195
+> >>           help
+> >>             This driver supports MediaTek MT8195 clocks.
+> >>
+> >> +config COMMON_CLK_MT8195_APUSYS
+> >> +       tristate "Clock driver for MediaTek MT8195 apusys"
+> >> +       depends on COMMON_CLK_MT8195
+> >
+> > Would something like
+> >
+> >            default COMMON_CLK_MT8195
+> >
+> > help with the transition?
+> >
+> > Otherwise we'd need to add a whole lot more stuff to arm64's defconfig,
+> > and anyone running `make olddefconfig` would have many of their clock
+> > drivers no longer available.
+> >
+> > Same applies to the MT8186 split.
+> >
+> > Seems like not all MediaTek SoCs apply this pattern, but at least MT7986,
+> > MT8167, MT8173, MT8183 do this.
+> >
+> > ChenYu
+>
+> Right. Since MT8195 machines have been out in the wild for a bit of time now,
+> I think it's worth following your advice and add `default COMMON_CLK_MT8195`
+> to the new configuration options.
+>
+> As for MT8186, currently, there's only one board supported upstream, which
+> is the "unobtainable" EVB so I would rather not do that for MT8186, unless
+> you have any strong opinions on that.
 
-HEAD commit:    ec35307e18ba Merge tag 'drm-fixes-2023-02-17' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=136bc2f0c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f4b0f5dd9aee9645
-dashboard link: https://syzkaller.appspot.com/bug?extid=6a93efb725385bc4b2e9
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16782d80c80000
+I'd like something that provides a reasonable working machine if possible.
+If people need to customize to shrink their kernel, they could disable the
+options later on. At least for ChromeOS we'll probably start off with them
+all built-in, and later on maybe experiment a bit with modules.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5680df3ffb85/disk-ec35307e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6bdf250f8996/vmlinux-ec35307e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5855b843bfdd/bzImage-ec35307e.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/7c16d31db3c2/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/7cb46f599e58/mount_5.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6a93efb725385bc4b2e9@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: double-free in dbUnmount+0xf8/0x110 fs/jfs/jfs_dmap.c:264
-Free of addr ffff888070065000 by task syz-executor.2/5106
-
-CPU: 0 PID: 5106 Comm: syz-executor.2 Not tainted 6.2.0-rc8-syzkaller-00098-gec35307e18ba #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x163/0x4f0 mm/kasan/report.c:417
- kasan_report_invalid_free+0x110/0x130 mm/kasan/report.c:482
- ____kasan_slab_free+0xfb/0x120
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- __kmem_cache_free+0x264/0x3c0 mm/slub.c:3800
- dbUnmount+0xf8/0x110 fs/jfs/jfs_dmap.c:264
- jfs_umount+0x238/0x3a0 fs/jfs/jfs_umount.c:87
- jfs_put_super+0x8a/0x190 fs/jfs/super.c:194
- generic_shutdown_super+0x134/0x310 fs/super.c:492
- kill_block_super+0x7e/0xe0 fs/super.c:1386
- deactivate_locked_super+0xa4/0x110 fs/super.c:332
- cleanup_mnt+0x490/0x520 fs/namespace.c:1291
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x64/0x2e0 kernel/entry/common.c:296
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2586c8d567
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcc1f3b418 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f2586c8d567
-RDX: 00007ffcc1f3b4ea RSI: 000000000000000a RDI: 00007ffcc1f3b4e0
-RBP: 00007ffcc1f3b4e0 R08: 00000000ffffffff R09: 00007ffcc1f3b2b0
-R10: 00005555571d08b3 R11: 0000000000000246 R12: 00007f2586ce6b24
-R13: 00007ffcc1f3c5a0 R14: 00005555571d0810 R15: 00007ffcc1f3c5e0
- </TASK>
-
-Allocated by task 6074:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x80 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0x9b/0xb0 mm/kasan/common.c:383
- kmalloc include/linux/slab.h:580 [inline]
- dbMount+0x58/0x9a0 fs/jfs/jfs_dmap.c:164
- jfs_mount+0x1e5/0x830 fs/jfs/jfs_mount.c:121
- jfs_fill_super+0x59c/0xc50 fs/jfs/super.c:556
- mount_bdev+0x271/0x3a0 fs/super.c:1359
- legacy_get_tree+0xef/0x190 fs/fs_context.c:610
- vfs_get_tree+0x8c/0x270 fs/super.c:1489
- do_new_mount+0x28f/0xae0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 6095:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x80 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:523
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- __kmem_cache_free+0x264/0x3c0 mm/slub.c:3800
- dbUnmount+0xf8/0x110 fs/jfs/jfs_dmap.c:264
- jfs_mount_rw+0x4ac/0x6a0 fs/jfs/jfs_mount.c:247
- jfs_remount+0x3d1/0x6b0 fs/jfs/super.c:454
- reconfigure_super+0x3c9/0x7c0 fs/super.c:935
- vfs_fsconfig_locked fs/fsopen.c:254 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig+0xa29/0xf70 fs/fsopen.c:314
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888070065000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 0 bytes inside of
- 2048-byte region [ffff888070065000, ffff888070065800)
-
-The buggy address belongs to the physical page:
-page:ffffea0001c01800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70060
-head:ffffea0001c01800 order:3 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff888012442000 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5107, tgid 5107 (syz-executor.4), ts 445079557996, free_ts 18734675106
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
- __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x1b8/0x2a0 mm/slub.c:3491
- kmalloc_trace+0x2a/0x60 mm/slab_common.c:1062
- kmalloc include/linux/slab.h:580 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- nsim_fib_create+0xa8/0xbb0 drivers/net/netdevsim/fib.c:1558
- nsim_drv_probe+0x6ed/0xb30 drivers/net/netdevsim/dev.c:1581
- really_probe+0x2ab/0xcd0 drivers/base/dd.c:639
- __driver_probe_device+0x1c3/0x3f0 drivers/base/dd.c:778
- driver_probe_device+0x50/0x420 drivers/base/dd.c:808
- __device_attach_driver+0x2d3/0x520 drivers/base/dd.c:936
- bus_for_each_drv+0x187/0x210 drivers/base/bus.c:427
- __device_attach+0x35d/0x580 drivers/base/dd.c:1008
- bus_probe_device+0xbe/0x1e0 drivers/base/bus.c:487
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare mm/page_alloc.c:1496 [inline]
- free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
- free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
- free_contig_range+0x9e/0x150 mm/page_alloc.c:9488
- destroy_args+0x102/0x9a0 mm/debug_vm_pgtable.c:998
- debug_vm_pgtable+0x40a/0x470 mm/debug_vm_pgtable.c:1318
- do_one_initcall+0x2c3/0xa60 init/main.c:1306
- do_initcall_level+0x157/0x210 init/main.c:1379
- do_initcalls+0x3f/0x80 init/main.c:1395
- kernel_init_freeable+0x477/0x630 init/main.c:1634
- kernel_init+0x1d/0x2a0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Memory state around the buggy address:
- ffff888070064f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888070064f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888070065000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff888070065080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888070065100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
+ChenYu
