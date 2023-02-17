@@ -2,141 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EB569A3A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC59969A398
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjBQBzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 20:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S230058AbjBQByN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 20:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjBQBzB (ORCPT
+        with ESMTP id S229620AbjBQByL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 20:55:01 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F9A54D55
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 17:54:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676598893; x=1708134893;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=KxsdkInmDbLs1ts10qe+vX5Ued6X/Q+YDmUjfhe22wM=;
-  b=iSe3kfH76Alv5FwkPF7LDPSIfjiOVNQmvdSgoaZDpNLqg33+SGjD0vYT
-   iwrE+pvZVZNwEhV1fEAMT3LAltWxWiigUV9ALZYx5GkzFCa1K5MtpZQmS
-   K0RS1DS4ax2b/vo3zAFWl/xnXJhQtO0adEE1ebnv/NrUuJJka63cvrzkJ
-   UxfP6pfZHuT0Ga7rPP6/pWd4gzRUSrUJreOskvzj/muLYGTSIMJ6hvPGN
-   0xTzXcqAfmfaTTi+NKPojdg30Lm/DoT/ESHXsJzTfmGCBQbq/nRledq9O
-   4tw08DeSIeFKHIkUuYltpX24YZGS9hKPcWM1VR22mp6XqzNF4BdRU2r8T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="315600538"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="asc'?scan'208";a="315600538"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 17:54:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="779620659"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="asc'?scan'208";a="779620659"
-Received: from debian-skl.sh.intel.com (HELO debian-skl) ([10.239.159.40])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Feb 2023 17:54:49 -0800
-Date:   Fri, 17 Feb 2023 09:52:47 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/i915: move a Kconfig symbol to unbreak the menu
- presentation
-Message-ID: <Y+7d7xKjjzRnV9eI@debian-scheme>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20230215044533.4847-1-rdunlap@infradead.org>
+        Thu, 16 Feb 2023 20:54:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848F354D35
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 17:54:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C745D6121C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:54:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B961FC4339B;
+        Fri, 17 Feb 2023 01:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676598849;
+        bh=Gw5LE3twoGw4eDFOyNeOTFFuzAZaxlBPT44ZcdXStuk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=pMYaEO+nM4HYKGFOGrCC2gJ8NTppz1XUFbx7S2o42CcorIXnk5RaTfbxb9X3YstTs
+         NoBC09X09lo6E8Wp1rYMY33QQ5+NjHLYMMvKHUqAhSHpntxnTerAY4yK7Xdn0VdyI5
+         lCsunmp/8USEwUfWiySLAzgkgYonRJmxMxmuzfrfmimlc0a975onIagYfxp26/Egyr
+         tDwiUZDmYYhI0nAvO+hzjacM39/rania2WmrBI2KGYMNml3l/ui3Vd6hQWw2K7yv+B
+         x90xrZX0C3jQf0IQ/DmiTSgrJ2XFTHO1Jbq+VGybP8ixpawXN11ZPnUK5Te+KOoouf
+         GbDq4v3MHcwdw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Joseph Hunkeler <jhunkeler@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230216155007.26143-1-jhunkeler@gmail.com>
+References: <20230216155007.26143-1-jhunkeler@gmail.com>
+Subject: Re: [PATCH] soc:amd:yp:Add OMEN by HP Gaming Laptop 16z-n000 to
+ quirks
+Message-Id: <167659884738.51394.3064624449308276945.b4-ty@kernel.org>
+Date:   Fri, 17 Feb 2023 01:54:07 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5hYsGdP+X0l/BA8e"
-Content-Disposition: inline
-In-Reply-To: <20230215044533.4847-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 16 Feb 2023 10:50:07 -0500, Joseph Hunkeler wrote:
+> Enables display microphone on the HP OMEN 16z-n000 (8A42) laptop
+> 
+> 
 
---5hYsGdP+X0l/BA8e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On 2023.02.14 20:45:33 -0800, Randy Dunlap wrote:
-> Inserting a Kconfig symbol that does not have a dependency (DRM_I915_GVT)
-> into a list of other symbols that do have a dependency (on DRM_I915)
-> breaks the driver menu presentation in 'make *config'.
->
+   broonie/sound.git for-next
 
-I'm not sure what's the actual failure in presentation, I'm not quite famil=
-iar
-with Kconfig, could you help to elaborate?
+Thanks!
 
-thanks!
+[1/1] soc:amd:yp:Add OMEN by HP Gaming Laptop 16z-n000 to quirks
+      commit: 22ce6843abec19270bf69b176d7ee0a4ef781da5
 
-> Relocate the DRM_I915_GVT symbol so that it does not cause this
-> problem.
->=20
-> Fixes: 8b750bf74418 ("drm/i915/gvt: move the gvt code into kvmgt.ko")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Zhi Wang <zhi.a.wang@intel.com>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: intel-gvt-dev@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> ---
->  drivers/gpu/drm/i915/Kconfig |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff -- a/drivers/gpu/drm/i915/Kconfig b/drivers/gpu/drm/i915/Kconfig
-> --- a/drivers/gpu/drm/i915/Kconfig
-> +++ b/drivers/gpu/drm/i915/Kconfig
-> @@ -118,9 +118,6 @@ config DRM_I915_USERPTR
-> =20
->  	  If in doubt, say "Y".
-> =20
-> -config DRM_I915_GVT
-> -	bool
-> -
->  config DRM_I915_GVT_KVMGT
->  	tristate "Enable KVM host support Intel GVT-g graphics virtualization"
->  	depends on DRM_I915
-> @@ -172,3 +169,6 @@ menu "drm/i915 Unstable Evolution"
->  	depends on DRM_I915
->  	source "drivers/gpu/drm/i915/Kconfig.unstable"
->  endmenu
-> +
-> +config DRM_I915_GVT
-> +	bool
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---5hYsGdP+X0l/BA8e
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCY+7d6wAKCRCxBBozTXgY
-J7p1AJ0dpqaZlCp0zdaSe3bAKO9rzkAeCACfV8FiMvxk2oTD7qWMr14oNevlGlA=
-=2r4O
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---5hYsGdP+X0l/BA8e--
+Thanks,
+Mark
+
