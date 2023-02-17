@@ -2,114 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB4569B01A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ABA69B00D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjBQQBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S230061AbjBQQAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjBQQA7 (ORCPT
+        with ESMTP id S230033AbjBQQAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:00:59 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1D6FF0A;
-        Fri, 17 Feb 2023 08:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1676649618; bh=wB3ZPtCGa5PrJ93JY1yIkav8LyCt0ajpRd6tRiIfc/I=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=ojRUod/HyzYRmrh4lI3SyTbTiA8YiLEmum4FtWfI5VAcmQit7cVOsEd7MhK+IPXoE
-         WXpbIHv3ifGjhPRV596qQGAkT/D+3fphZHhrGDvRtDtFzG01ZxMXf04ej7fhHsWq6v
-         zpcL5rR3Xydsnn7WzPmUeFuYH7cG5ih/VsTX1Hlw=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 17 Feb 2023 17:00:18 +0100 (CET)
-X-EA-Auth: BdYOlj2NrjJjrAs+Rzq1GDtXgCk6fB/Aq7d7XEgknADjOjaT57Ntx1JGFn/P1Tn43rCp7Jx3MNK6FXoZrJtpVp9h/TAYq2QS
-Date:   Fri, 17 Feb 2023 21:30:08 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH 3/3] perf/x86/intel: Use sysfs_emit() in show() callback
- function
-Message-ID: <fbd829c476c8fb953fb2e05ee6112b0a89849a75.1676649045.git.drv@mailo.com>
-References: <cover.1676649045.git.drv@mailo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1676649045.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 11:00:13 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7BC68AEE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:00:10 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id g6-20020a17090a3c8600b002368c5a30bdso303741pjc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ASrBAOfhB8V2b1UWnVkBSljvQtym3PPwSnuFL8RngU=;
+        b=sUkblHuJ9dulsxh4CZcm+FIp/qRpAAcmRtfvp6ULnSXppIvCitchjm1OUit+QXJRWj
+         fwJ7Xd7LeD3Frj7FzM+U/mMAyXTZ8R5RK0CcMGNMR8PLROcI0/4xgADL5vqH5U+/VYgG
+         dkLQqFX5fKeKJhpV5Gz8z+39KNbu/jjFTFfYD8mmFsM5kC/nK+Gp9BDhC26xn+icV0pC
+         bHQSk7Mqvc6fB6p4dz8MrdQupt1NEggpWvfcZBir6hbXow/Kay6VqXDNaQVda+8NmyZ/
+         DJpPCojT4dj2fTwoDxf+msJ00C5RYvwVAx1bbgonDLlmp6LfYVABRQ30VMxJGXDgaHEA
+         nfVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ASrBAOfhB8V2b1UWnVkBSljvQtym3PPwSnuFL8RngU=;
+        b=tWhB3KhvlGRvWQ9T+3IcrhRBUmIZjT+/PTjdkjfD0RaGySA+kxbHUhAR7KNWQjh/2F
+         3mVjVICkLf+f6NsRLlqpMZEJFcs0E29S+FXeC1cwEOsnm19ADO1e2cQjQVASC5b0nqk9
+         7wjh868WrUTPb09fshEPnVf1+/1OzukLq1X2Tm9zYRu1rXjvjFkdtBNfWA77XLQAK2IW
+         kODrhlF+byexbEbHKzt3mThTvmS8deSBLJFcykW7GAgv4eiZysx2oZia3sg5Qeij/7gb
+         w8bv9Bi96yqPgD0z4/cLSDWnwA1qMPmeuJKIfys87UsoV2g898bmDdphXKeL6ukcse6h
+         fuDQ==
+X-Gm-Message-State: AO0yUKWxxyH2KxeEpGJa+GMC0L+Ywai52+0N9JbVOwY5rG+hu/P9SFyU
+        3w26A41bBMaiwH30w6s4//OuLnYXOKI=
+X-Google-Smtp-Source: AK7set/TQ5moWaaNQcL8V8kGjN9B7zl+2zJIJ8kumCX3x4I/RGgInnGSIHRIAYNv9fJ3WTWtfSDyzLo0yfI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a02:43:b0:4fd:72f3:5859 with SMTP id
+ az3-20020a056a02004300b004fd72f35859mr296462pgb.2.1676649609963; Fri, 17 Feb
+ 2023 08:00:09 -0800 (PST)
+Date:   Fri, 17 Feb 2023 08:00:08 -0800
+In-Reply-To: <Y+9EUeUIS/ZUe2vw@linux.dev>
+Mime-Version: 1.0
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-4-yuzhao@google.com>
+ <Y+9EUeUIS/ZUe2vw@linux.dev>
+Message-ID: <Y++kiJwUIh55jkvl@google.com>
+Subject: Re: [PATCH mm-unstable v1 3/5] kvm/arm64: add kvm_arch_test_clear_young()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using sprintf/snprintf functions are error prone and suggested to be
-replaced by scnprintf/vscnrptintf as outlined in this [1] LWN article.
+On Fri, Feb 17, 2023, Oliver Upton wrote:
+> Hi Yu,
+> 
+> scripts/get_maintainers.pl is your friend for getting the right set of
+> emails for a series :) Don't know about others, but generally I would
+> prefer to be Cc'ed on an entire series (to gather context) than just an
+> individual patch.
 
-A more recent recommendation is to use sysfs_emit() or sysfs_emit_at()
-as per Documentation/filesystems/sysfs.rst in show() callback function
-when formatting values to be returned to user-space. These helper
-functions are PAGE_SIZE aware and wrap a safer call to vscnprintf().
++1
 
-[1] https://lwn.net/Articles/69419/
+> 
+> On Thu, Feb 16, 2023 at 09:12:28PM -0700, Yu Zhao wrote:
+> > This patch adds kvm_arch_test_clear_young() for the vast majority of
+> > VMs that are not pKVM and run on hardware that sets the accessed bit
+> > in KVM page tables.
 
-Issue identified using the coccinelle device_attr_show.cocci script.
+At least for the x86 changes, please read Documentation/process/maintainer-tip.rst
+and rewrite the changelogs.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- arch/x86/events/intel/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> > It relies on two techniques, RCU and cmpxchg, to safely test and clear
+> > the accessed bit without taking the MMU lock. The former protects KVM
+> > page tables from being freed while the latter clears the accessed bit
+> > atomically against both the hardware and other software page table
+> > walkers.
+> > 
+> > Signed-off-by: Yu Zhao <yuzhao@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h       |  7 +++
+> >  arch/arm64/include/asm/kvm_pgtable.h    |  8 +++
+> >  arch/arm64/include/asm/stage2_pgtable.h | 43 ++++++++++++++
+> >  arch/arm64/kvm/arm.c                    |  1 +
+> >  arch/arm64/kvm/hyp/pgtable.c            | 51 ++--------------
+> >  arch/arm64/kvm/mmu.c                    | 77 ++++++++++++++++++++++++-
+> >  6 files changed, 141 insertions(+), 46 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > index 35a159d131b5..572bcd321586 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -1031,4 +1031,11 @@ static inline void kvm_hyp_reserve(void) { }
+> >  void kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu);
+> >  bool kvm_arm_vcpu_stopped(struct kvm_vcpu *vcpu);
+> >  
+> > +/* see the comments on the generic kvm_arch_has_test_clear_young() */
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index bafdc2be479a..8fb1225123ef 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -5273,7 +5273,7 @@ static ssize_t show_sysctl_tfa(struct device *cdev,
- 			      struct device_attribute *attr,
- 			      char *buf)
- {
--	return snprintf(buf, 40, "%d\n", allow_tsx_force_abort);
-+	return sysfs_emit(buf, "%d\n", allow_tsx_force_abort);
- }
- 
- static ssize_t set_sysctl_tfa(struct device *cdev,
-@@ -5307,7 +5307,7 @@ static ssize_t branches_show(struct device *cdev,
- 			     struct device_attribute *attr,
- 			     char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%d\n", x86_pmu.lbr_nr);
-+	return sysfs_emit(buf, "%d\n", x86_pmu.lbr_nr);
- }
- 
- static DEVICE_ATTR_RO(branches);
-@@ -5323,7 +5323,7 @@ static ssize_t pmu_name_show(struct device *cdev,
- 			     struct device_attribute *attr,
- 			     char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", pmu_name_str);
-+	return sysfs_emit(buf, "%s\n", pmu_name_str);
- }
- 
- static DEVICE_ATTR_RO(pmu_name);
--- 
-2.34.1
+Please eliminate all of these "see the comments on blah", in every case they do
+nothing more than redirect the reader to something they're likely already aware of.
 
+> > +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
+> > +static inline bool kvm_arch_has_test_clear_young(void)
+> > +{
+> > +	return IS_ENABLED(CONFIG_KVM) && cpu_has_hw_af() && !is_protected_kvm_enabled();
+> > +}
 
+...
 
+> Also, I'm at a loss for why we'd need to test if CONFIG_KVM is enabled.
+> My expectation is that we should provide an implementation that returns
+> false if !CONFIG_KVM, avoiding the need to repeat that bit in every
+> single implementation of the function.
+
+mm/vmscan.c uses kvm_arch_has_test_clear_young().  I have opinions on that, but
+I'll hold off on expressing them until there's actual justification presented
+somewhere.
+
+Yu, this series and each patch needs a big pile of "why".  I get that the goal
+is to optimize memory oversubscribe, but there needs to be justification for
+why this is KVM only, why nested VMs and !A/D hardware are out of scope, why yet
+another mmu_notifier hook is being added, etc.
