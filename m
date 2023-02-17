@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C18369A329
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E76969A31D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBQAxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 19:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S229592AbjBQAu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 19:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQAxB (ORCPT
+        with ESMTP id S230004AbjBQAuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 19:53:01 -0500
-Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAA27DAB;
-        Thu, 16 Feb 2023 16:52:49 -0800 (PST)
-X-QQ-mid: bizesmtp76t1676594981tzj20bxn
+        Thu, 16 Feb 2023 19:50:24 -0500
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9116D54D6A;
+        Thu, 16 Feb 2023 16:50:10 -0800 (PST)
+X-QQ-mid: bizesmtp76t1676594986t2mmsk6j
 Received: from localhost.localdomain ( [116.30.131.224])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 17 Feb 2023 08:49:37 +0800 (CST)
+        id ; Fri, 17 Feb 2023 08:49:43 +0800 (CST)
 X-QQ-SSF: 01200000000000C0T000000A0000000
-X-QQ-FEAT: HH6/KuQOBEYape0K7eNPpGClNte1p9KwHz5G63svXw4+DTBNwFMoPpE5XUhx6
-        05cCvEABd10oan5cv3LUnUMcUAHqyNqZq4+jTSCoUmilAXTQ9duURc8/ruw7SY6oor0tBev
-        RoFEB3fWfD1W8TD67x5MtiQ+DjwwcYO78oT04ndKAyzBOChBjxfUcAYeQ4FX5k0S5OoK8Ox
-        gFEhgXjlsxlrY99cZIG/3rP3A79PqE/96cPTSu6w0R+hXn7r4u9vMv+S2yzV/ofwTvSCq12
-        zwDKb63xgVmxw+JXjn9VgOf31CWsu7Tgnd7untYTG8+Nkyy+99r1iatC9zrXPQh7OdEa1UY
-        DB2saWPTsE8kVbMerbuqMOpDMVViphDIwHBwBVQOPZPg8P/98pX6ELE5xO/vKjwq+wBju5K
-        sOzMCFPNoHQ=
+X-QQ-FEAT: 5CNn+SP0K2vhxP3ij/QWqUpDn2ZGtGF/HTyDPtXoKH89iqmX5zLubkqspz2kF
+        NtTnLYIU+0SgEHfMgM5sR432r0TwmkrBhe3kSySu0yLsgT/Mzi+EbeZyoycxW8ekbNOfRH1
+        EXwhkOKRPC/LUAyhLqRb0s1KBws0EFd+HfFVJy6b2pICKxi0PJuR8HR9PRmB9M2cvkHWsfc
+        8XLlUBY56KbU6ixoaSQW5xoQnB2/2OYtiW0RP0OwXyXI4+lqxgiNSKr/RMA0F5hV4Ns5IqG
+        cUjDHnF+OJ33xh5c0CET//3UA93C/o1KyTGve+1c/7fiRLD7ejxwfy/voNuaapE0xHPZcwr
+        pwOpy7EwBDywpDN/XTzr4UT0Y0uFav3R5GDMcnFLi7Baqd7sxf2ep2dZisXQosML7Wc74Ad
+        DQ1lmWv68Z4=
 X-QQ-GoodBg: 0
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Nicholas Mc Guire <hofrat@osadl.org>,
         Zhangjin Wu <falcon@tinylab.org>
-Subject: [RFC PATCH 2/5] MIPS: Add dead syscalls elimination support
-Date:   Fri, 17 Feb 2023 08:49:22 +0800
-Message-Id: <29e5a037ac439c40970b40692286feb6f010f8f3.1676594211.git.falcon@tinylab.org>
+Subject: [RFC PATCH 3/5] RISC-V: Enable dead code elimination
+Date:   Fri, 17 Feb 2023 08:49:23 +0800
+Message-Id: <234017be6d06ef84844583230542e31068fa3685.1676594211.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1676594211.git.falcon@tinylab.org>
 References: <cover.1676594211.git.falcon@tinylab.org>
@@ -49,7 +49,7 @@ Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr7
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,89 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By enabling CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION and setting
-CONFIG_SYSCALLS_USED, It is able to remove the left 'dead' syscalls.
+Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
+the user to enable dead code elimination. In order for this to work,
+ensure that we keep the alternative table by annotating them with KEEP.
 
-For example, if setting CONFIG_SYSCALLS_USED="write exit reboot", a
-'used' variant of the *.tbl will be generated, accordingly, the kernel
-api unistd_nr_*.h and syscall_table_*.h will be generated from the
-'used' *tbl variant. the user api version of unistd_*.h is reserved
-as-is.
+This boots well on qemu with both rv32_defconfig & rv64 defconfig, but
+it only shrinks their builds by ~1%, a smaller config is thereforce
+customized to test this feature:
 
-Here is a test result on qemu with a minimal malta config.
+          | rv32                   | rv64
+  --------|------------------------|---------------------
+   No DCE | 4460684                | 4893488
+      DCE | 3986716                | 4376400
+   Shrink |  473968 (~10.6%)       |  517088 (~10.5%)
 
-                    | mipsel malta    | config
-    ----------------|-----------------|-------------------
-            vmlinux | 5041628         | https://pastebin.com/0bE2ibLD
-      + gc-sections | 4474060 (-11.2%)| CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION=y
-    + syscalls_used | 4265280 (-4.67%)| CONFIG_SYSCALLS_USED="_newselect"
-    + syscalls_used | 4274364 (-4.46%)| CONFIG_SYSCALLS_USED="write exit reboot"
+The config used above only reserves necessary options to boot on qemu
+with serial console, more like the size-critical embedded scenes:
 
-notes:
-
-- The shrink ratios of the syscalls_used lines are based on the
-  gc-sections line.
-
-- "write exit reboot" are used by a hello.c to simply print "Hello,
-   World!", exit and shutdown qemu.
-
-- "_newselect" is used by rcutorture to do a long-time sleep.
+  - rv64 config: https://pastebin.com/crz82T0s
+  - rv32 config: rv64 config + 32-bit.config
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- arch/mips/Kconfig                  |  1 +
- arch/mips/kernel/syscalls/Makefile | 24 ++++++++++++++++++++++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ arch/riscv/Kconfig              | 1 +
+ arch/riscv/kernel/vmlinux.lds.S | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 15cb692b0a09..868d9a871b3e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -102,6 +102,7 @@ config MIPS
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select ARCH_HAS_ELFCORE_COMPAT
- 	select HAVE_ARCH_KCSAN if 64BIT
-+	select HAVE_SYSCALLS_USED
- 
- config MIPS_FIXUP_BIGPHYS_ADDR
- 	bool
-diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/syscalls/Makefile
-index e6b21de65cca..8ffba5301cf0 100644
---- a/arch/mips/kernel/syscalls/Makefile
-+++ b/arch/mips/kernel/syscalls/Makefile
-@@ -26,10 +26,30 @@ sysnr_pfx_unistd_nr_n32 := N32
- sysnr_pfx_unistd_nr_n64 := 64
- sysnr_pfx_unistd_nr_o32 := O32
- 
--$(kapi)/unistd_nr_%.h: $(src)/syscall_%.tbl $(sysnr) FORCE
-+ifdef CONFIG_SYSCALLS_USED
-+syscalls_used := $(shell echo $(CONFIG_SYSCALLS_USED) | tr -s ' ' | tr ' ' '|')
-+endif
-+
-+ifneq ($(syscalls_used),)
-+utbl := arch/$(SRCARCH)/include/generated/tbl
-+_tbl := $(src)/syscall_%.tbl
-+ tbl := $(utbl)/syscall_used_%.tbl
-+
-+$(shell mkdir -p $(utbl))
-+
-+quiet_cmd_used = USED    $@
-+      cmd_used = sed -E -e "/^[0-9]*[[:space:]]/{/(^($(syscalls_used))[[:space:]]|[[:space:]]($(syscalls_used))[[:space:]]|[[:space:]]($(syscalls_used))$$)/!{s/^/\#/g}}" $< > $@;
-+
-+$(tbl): $(_tbl) $(objtree)/.config
-+	$(call cmd,used)
-+else
-+tbl := $(src)/syscall_%.tbl
-+endif
-+
-+$(kapi)/unistd_nr_%.h: $(tbl) $(sysnr) FORCE
- 	$(call if_changed,sysnr)
- 
--$(kapi)/syscall_table_%.h: $(src)/syscall_%.tbl $(systbl) FORCE
-+$(kapi)/syscall_table_%.h: $(tbl) $(systbl) FORCE
- 	$(call if_changed,systbl)
- 
- uapisyshdr-y		+= unistd_n32.h			\
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e2b656043abf..8a73d7180cb8 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -103,6 +103,7 @@ config RISCV
+ 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+ 	select HAVE_KRETPROBES if !XIP_KERNEL
+ 	select HAVE_RETHOOK if !XIP_KERNEL
++	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	select HAVE_MOVE_PMD
+ 	select HAVE_MOVE_PUD
+ 	select HAVE_PCI
+diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+index 4e6c88aa4d87..51218cfe1ee4 100644
+--- a/arch/riscv/kernel/vmlinux.lds.S
++++ b/arch/riscv/kernel/vmlinux.lds.S
+@@ -101,7 +101,7 @@ SECTIONS
+ 	. = ALIGN(8);
+ 	.alternative : {
+ 		__alt_start = .;
+-		*(.alternative)
++		KEEP(*(.alternative))
+ 		__alt_end = .;
+ 	}
+ 	__init_end = .;
 -- 
 2.25.1
 
