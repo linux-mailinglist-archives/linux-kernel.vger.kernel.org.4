@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6721169AFBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6683A69AFBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjBQPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 10:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S230383AbjBQPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 10:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbjBQPry (ORCPT
+        with ESMTP id S230377AbjBQPr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:47:54 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49EECC17
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:47:52 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cn2so5872688edb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/ydvsRPVG061WS4UTZVStbsfcU/oL9Zx0nIHQuE4tyA=;
-        b=xHv1htd37Mqx8hvLnrTvHhIKTpFqgdOz/1uJyvsbCg+1IPuW59e2MfJdhcJtQ3aWyV
-         xUB/T+IXHjLDCvXwC9m29LDgZ+A61/SeNTAAUrd6IJpaDhZJxoEe5LF44aoAoG0mrzUu
-         0lOJcKpvLEP5h4rgVdXnUYvWRSgvSOu+eCQTNX3hkJ54KJL6CBHqpmqkLP5mr5eh1brS
-         ++TVu9WgIto2kqXvqrncZ44tK7YBoLdTHeaTJ09BtZ2wu03bTVchrrGc3ZuVFHbD6vn2
-         ESq5gYkZ6eNaSTUmCDMI6zhEA2eovgrlV9Q83ml6nk9QzoAJwaS7RdSM9QG25SKYHLfv
-         1+kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ydvsRPVG061WS4UTZVStbsfcU/oL9Zx0nIHQuE4tyA=;
-        b=odW3Gtzj4PY31s4HkoRPQQE5+cqqMWmZF0qNRsd0OzNiGQJkC1ZXSqoB0B340fNuoU
-         vOIsjRLyfEk9KLnSBwpXb4Q1EBEUJhiVB85o/lwpvqVTtk5QQTMmR3l+y1p7S3fQ07Pq
-         608vJ10X1eDqjZaFS/7z1ilT0P94yXBh6HLK+JuuK0KijkpXkr13Mmi6Mn7f9OM21xPx
-         MwkiEJrT3ClIUfzEDVoANpWhEYvvafHLal7OktxR8Il3pMs5M/aTkzVw2kaAbUPd+XzI
-         anIO6eZfqDDUdor/fV1k4wO/OQ+o7pQlrSyoguKlAMtXzjpTOE/vcZVjktcRrZUaerdl
-         1QwA==
-X-Gm-Message-State: AO0yUKV/upqVSwWfh8/HaWlAKzd4fh/80JNYt65hp93uXA0vPE1dqqTL
-        S+7sML1sRFPzn/D1oXZZMQk9fw5PqLDIib2P
-X-Google-Smtp-Source: AK7set92ggsq7QntNOjYeDE1GS2W9aHhklXHaJSFIAczwRnKnbIvvSu4L4kHtCgfE55Dgzu7wN1V/Q==
-X-Received: by 2002:a17:906:9f25:b0:8b1:2eef:154c with SMTP id fy37-20020a1709069f2500b008b12eef154cmr5350244ejc.0.1676648871136;
-        Fri, 17 Feb 2023 07:47:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ui41-20020a170907c92900b008af3930c394sm2282740ejc.60.2023.02.17.07.47.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 07:47:50 -0800 (PST)
-Message-ID: <dcba75b5-7b62-35aa-6836-5d5edd785002@linaro.org>
-Date:   Fri, 17 Feb 2023 16:47:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Hal Feng <hal.feng@starfivetech.com>
-Cc:     Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Fri, 17 Feb 2023 10:47:57 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85D8EF9A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 07:47:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NxBMVtiGfYqv5qud43oxCDkWFlGcnPtw2aY+hOStxHHMy+2nQroWIIyQMP0OlLsRPrznfSnU9UHKColwZUO08OTeK/Rbp/PwNY+hBksxoGeE6OR+ujyfevkgDArXqomJqKVjm1Y5q7YnhKqYztCJ6rqoDAJJBQe/CUiP6pi+rYwkpe/ObsKyE0mBCGHbrGdI4GBuPOActblOremxtNy7TUb0Y+JMfCdOxpPc4buPP0UgcJMzClQ9m9pVJK78G3/sdXEL243Ivoq3VEh7PlPrt4+aRZlzF1AgS5ZQ1ZRzE7AIk8FPEQagLqZeHQxPV4AidZL3gJeBlBoTZ9Hc5Jp10A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UzHPCbvH1osKi37Dqy/Jivh71ATbvZBZ6a/GdOAcHEU=;
+ b=XpsMHgqdgN44jDoRV1OuACqOtYjk8NRgTFN4JAFmb4iG0XtJdLGpLZlxIIqZF2YASdrWah/JJTHL7wGh/+yBha6opWkmVRe8KXwUX9sp8VXLD9x9d687O5VC46TlyJJng6fxy1K7MZKqymlEGZy8+wx9kEuVPs0eqhXMqK0rFwGjjy6hBlMI34EHuLz5OXmqgC0OMIlbEJYAksHRzGF8WJtokCp/CJYXms4k+OVCw8cdemz4UW9Sm4Lt1gb3FAVHmL9/tHWBywTOm8HJbYQekGQ6zdwTht6jOGozWXnq3eFwQzcz2V5jr/vc52ouxzuKFqZlmGpPGb5BxxAs7YLwCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UzHPCbvH1osKi37Dqy/Jivh71ATbvZBZ6a/GdOAcHEU=;
+ b=CuJs11mf6C4NZ1AUZAVk+TbdDzLYAozwpywaeO8mFSAAxBtcys4w6Am8QG/Wh9lGD0FnCvfwHsn6JrUWtiv3AGBlkVA1yxwJ9ytGh/4tZXltVkkEKYwB6Fgojqe/FNp4HojfogAkIaOir/aeFjhLyfwbdILnkAVmk6YOPqgwmCBUCkZJve/sLRamR+5JKxM4VUPwNfoQPXaCFF2r7gKyHIDeVeFsc21dKWhkzmub6kRrAdDSETvmOJaBZVUEpjV5NxO7H7qazi3anYnwFBZkP2O/Hp6d537KTNOLGAM0dVIPj9EiLuL/9mbfOfwrcwNpZ9EZqL8ERGqDNZT8jbjkEQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB7928.namprd12.prod.outlook.com (2603:10b6:8:14c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Fri, 17 Feb
+ 2023 15:47:54 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.013; Fri, 17 Feb 2023
+ 15:47:53 +0000
+Date:   Fri, 17 Feb 2023 11:47:52 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         linux-kernel@vger.kernel.org
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
- <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud>
- <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
- <Y6tSWB2+98a8k9Qw@spud>
- <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
- <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
- <Y+8x/KSujhgNLAd6@wendy>
- <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
- <Y++B43uCnPQlRYFi@wendy>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y++B43uCnPQlRYFi@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v2 0/6] iommu: Extend changing default domain to normal
+ group
+Message-ID: <Y++hqGY3qg7EKZLY@nvidia.com>
+References: <20230217094736.159005-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217094736.159005-1-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: BLAPR03CA0050.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::25) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB7928:EE_
+X-MS-Office365-Filtering-Correlation-Id: da1b7af2-d271-4706-305d-08db10fe54e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /t8uJAY9hRbsvKfCoUGYQ6BG6xj6gP4RWwTQUW9m6o83HwoNYoA/NPa4HeQK5fKcXwpZpfuIhPC1QD/acGNVlBv0BcwDlZ2M7D6kX2IrZ3+a43Avl8JwbfX8l4MP5I1AJw1s5v9s8gqxXGpBXNhyqXNcRy8Sm6rH8suFKFSsU8P+8bPH/hNeyPqLX934sKQ1HsgCbLAig3/t3H5ZQIwGVA1YxJQHarsrN/sDF2SBcSPA4qrGFlykvkP5z8ThtY56ZMt6LfP1drfDE5JCxdf5KMsDuaCewrRiNZcyuNpnCwbRUR2zmPL7IxLMF8c54mgxxkzc38/q6N8H5ZiYVrryk9VO0BouWd571PSp8oi0MNQ7W6h4wcN1oEvA5YZMqh61jMunf+gz+mUJKUXCzoKXA0ef+86y/sGzk76THm1Ra2l6UP+erOpJ2MdCRYBncbmkTM2Rk0XCbQpnCDK9nijLiQ/owbzRCkM9Ao7AFDHOhLMTUnz5ykxGgINXHv2qbuKK67nvcaplUwV+s2Zx23PMmFJXb2fDTcMjg0Pk7tCb/3yXln8jhObxRNwz5OERHd8dubn7/xlcckOfyOWvSJzzDgoe7B5C8aLyzu2rAimQxkuRVVsgL6B4O+HyNtmTSmWy/FQJMjmUFhJ1q1dRjjntF5BxHnNeINWVLCVw3O459WaGH56VcB9G128+m/TX8CmcbuKCEzX0ZWqpRiQhl1UqjwqQcRdp8TsGYBkywFuxO4Y=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(451199018)(478600001)(6486002)(966005)(26005)(6512007)(186003)(316002)(54906003)(83380400001)(2616005)(6506007)(8676002)(66556008)(4326008)(66476007)(66946007)(6916009)(41300700001)(5660300002)(38100700002)(8936002)(2906002)(86362001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ifysIwscIfshoqhElon2dmRP8CuWzSAIAk6OQ4QDSXsAYthncIpWej/t5Ald?=
+ =?us-ascii?Q?mO29ivVLJnvGluT12Mgj6T3sW41dONrYVmYvT8e45Q3rQVWSDw4WWVpwON3A?=
+ =?us-ascii?Q?knhqgeIFoFVcKslXMzo0gxqpynJ89gMLGDDWewgEAcfnCiZoFTCLIaU+Y0Ww?=
+ =?us-ascii?Q?ISpaIhYYHTFhF2csdjPOE38cAE1sQGYjg3jFjHLM+l9lnrTLH9HLcxPnU3gQ?=
+ =?us-ascii?Q?FUeWqtkmfLpSBfuSC9X40Bgcp/sqO56QDnX/fcQ2Oz7p79fbrHtfva2bCuit?=
+ =?us-ascii?Q?SUMXy8Iotap6mAWzB4O1hXNOCm4z1Q3uXBIqf5tu951Ica9lRv3nUdxsdPdW?=
+ =?us-ascii?Q?x7gi5JKuFOoAQGm6evH/mL64MU0y6EhhFbcn80TErieOCd/VzRjF9dBWrufj?=
+ =?us-ascii?Q?nmKNdUC75GJqMx1/9CKvjCJaNaKTJP2fFoTPAQfJ2KVJd7Mtud4/7pXK9sem?=
+ =?us-ascii?Q?4A47ypkALgZKbfcVjoUC4h9SdyqwbDKTQx74+eqSOD57nEvWlhhEXSM8FGu3?=
+ =?us-ascii?Q?aW9opQYQnvgfGXdrGHuJkviXxGoU9a84+uHwhPoakkyQnxVChYrkxW3Vz5a9?=
+ =?us-ascii?Q?KgTifVmbOfwh8NpQs5sBsg6H5LAD9Uq0QWzlwITYHnfDXSh3DhqI5jXjT/tI?=
+ =?us-ascii?Q?AqEKBrUK5Nx8SmpAwN8T3scOZW7C+cf2RkKUtsAC6gf9srcUVGGagBODr6NP?=
+ =?us-ascii?Q?eWJs1yasZE4blBz7u/v38J8lWyQsGrEtOGl1ZtoFcsAJuBxWkj5Qb5+L2wk8?=
+ =?us-ascii?Q?QdjjwmM2XsXkkwt+dE2oWKaFVJu0o7+oMGkvXk+oAkoywZUughaFe06/KfVZ?=
+ =?us-ascii?Q?7FusYFI6NmdTvrpctIjjqzy6/lJEe/IHoBPfNbhtDJib7+1pkTAn8hOrXNNd?=
+ =?us-ascii?Q?NJmKGujQ9CEMVXKKG+0o7/PKwVvm+p7WL/opIiZYxcPoCRNWAbZPLH9CI27r?=
+ =?us-ascii?Q?j4LOruMLetOutFc/nb4NXTGpv7Z2c1V/wqVqifmE1uFtirRnkkejcAng8shw?=
+ =?us-ascii?Q?+4bIR8bHSSbvUZ1fyGg3eUBRKctTtDrXe25XllzkU0ct5nqJZhh5jHL3+/uC?=
+ =?us-ascii?Q?ALEnvYeTgYs1Moj5fZ1Ir8BzImZjjUkkQt+d5wP5CPKOMebgfYKUAZemXnTZ?=
+ =?us-ascii?Q?CClAuU1hu3czz2HHBL4eVU3qg5Z3aI7FYtDx3/OUCnl//DCR9laI+z7EvNmz?=
+ =?us-ascii?Q?OZw3tgjarh6C+oKfQm57MgUknNrPx9mGpdgQZxEfosW1DLsm64MmZ3Uge8xV?=
+ =?us-ascii?Q?k9Gbp0wBoWr3ntkiSuZfSa0+O0mWcLUBScFck9Ltz//I3cC8QlCpYqgBoNM+?=
+ =?us-ascii?Q?4p//FRG1Zvn+gVQWRg2xSDq/d1aIT5/UJUyL1cQ8m48ggpfiLP+xQChCO1BF?=
+ =?us-ascii?Q?2VTw2H7PWC+ED8rfpMbe8FZFU8MLFWIxKZ0XjpkWyO7+M5JtqsiFUPjpKKP/?=
+ =?us-ascii?Q?4wgAOwSQq1zN1S6jFd1yHBYUHrvTWrPK1i2ZfmJfkxKubmXbURr4n4JUub+4?=
+ =?us-ascii?Q?vSeusdD3d9tNSSAjyQ/bSVYA+ZOaIMKa2Fv9SYnSlGj85MNBhl3xM76IMWwr?=
+ =?us-ascii?Q?SLwDLT88qkG7GKP50DLhONVWc2hzxkYAkakse34K?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da1b7af2-d271-4706-305d-08db10fe54e1
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 15:47:53.6102
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R3pk49j5qssp3m9D7PtILShpJ7XKIBvo4R5R34MfmD5EWGbVR8vBKcTI/3QA5h/i
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7928
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 14:32, Conor Dooley wrote:
->>>> Yes, it is.
->>>
->>> Which would then make GMAC1 RGMII RX optional, rather than required?
->>
->> If thinking in this way, I must say yes, it is optional. But actually
->> GMAC1 RGMII RX feeds gmac1_rx by default. 
->> For a mux, it usually works if you populate only one input to it.
->> Does it mean all the other inputs are optional? And how can we define
->> which input is required?
+On Fri, Feb 17, 2023 at 05:47:30PM +0800, Lu Baolu wrote:
+> The IOMMU group sysfs interface allows users to change the default
+> domain of a group. The current implementation uses device_lock() to make
+> sure that the devices in the group are not bound to any driver and won't
+> be bound during the process of changing the default domain. In order to
+> avoid a possible deadlock caused by lock order of device_lock and
+> group->mutex, it limits the functionality to singleton groups only.
 > 
-> I'm not sure, that is a question for Krzysztof and/or Rob.
+> The recently implemented DMA ownership framework can be applied here to
+> replace device_lock(). In addition, use group->mutex to ensure that the
+> iommu ops of the devices is always valid during the process of changing
+> default domain.
+> 
+> With above replacement and enhancement, the device_lock() could be
+> removed and the singleton-group-only limitation could be removed.
+> 
+> The whole series is also available on github:
+> https://github.com/LuBaolu/intel-iommu/commits/iommu-sysfs-default-domain-extension-v2
+> 
+> This series is on top of below series from Robin,
+> https://lore.kernel.org/linux-iommu/cover.1674753627.git.robin.murphy@arm.com/
+> 
+> Please help to review and suggest.
 
-That's a long thread, please summarize what you ask. Otherwise I have no
-clue what is the question.
+Given the overall situation, I think my suggestion to use
+arm_iommu_release_device() might be more short term practical.
 
-Does the mux works correctly if clock input is not connected? I mean,
-are you now talking about real hardware or some simplification from SW
-point of view?
-
-Best regards,
-Krzysztof
-
+Jason
