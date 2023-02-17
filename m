@@ -2,372 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D782269AAFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7302B69AAFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBQMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S229715AbjBQMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBQMF7 (ORCPT
+        with ESMTP id S229523AbjBQMFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:05:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D216A65694
+        Fri, 17 Feb 2023 07:05:13 -0500
+Received: from mailout1n.rrzn.uni-hannover.de (mailout1n.rrzn.uni-hannover.de [130.75.2.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D64644DA
         for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:05:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676635510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
-        b=Gtfbe/K7ZVLkotW8xhWOVaizXc9NzxI2jWg9UtgZwCKgIgijx4OvXCJgB0XgiGKy+Db2je
-        vzNR/6dbl/JBWLMKqaOj4AoI9NkCMTya1d/d9zyCvD5sv8rkwkN4XBPkAXydR3ZkPDusYZ
-        Zue86HL3jTJOM2vHfW5sg7Rjz3ZMDvU=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-179-QB_Tq0TCNLCtntWbJsVhWw-1; Fri, 17 Feb 2023 07:05:08 -0500
-X-MC-Unique: QB_Tq0TCNLCtntWbJsVhWw-1
-Received: by mail-qk1-f197.google.com with SMTP id j29-20020a05620a001d00b00724fd33cb3eso2937498qki.14
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:05:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
-        b=qpwwfVecsQDNqA3WH4c51chFcpN63ihlVbw/rxw1hm0DDwMP8QIRT7x6somcpwisCf
-         umweFil2oFJJh7dAMqZC3uyKG7uga93No8VCsnY+Efst5t1xidpHIG9xDQS1j5CxNBYO
-         66o/CALZu+0CIpn1xLzOPBAfbjMAtKJPg+4JSLAKj2EmBBtyJzbbzmzWuKzS/gqxNBsJ
-         8bgOA02XQJ3+s3iDipzd/zqIEaorb07Rwfr0yF+4YWYx8WVHrZK13oIAGcZoGSF8pOfB
-         9IePAwA/p4TTvwV6Hc+KPPjcTCda42XMoqvm8kGYmCeI1t3NdNlHg3GaTr3BiNZ1QOAj
-         4OvA==
-X-Gm-Message-State: AO0yUKXzBinuNF5LLRT9KH+u+1MFrgKni7DAE1XvWdZ5E+EfWJbO8RIs
-        uQUBw5g86ZNHxIE/XCTsj0j5yVYsaFjqbL4N4MWC/IyOp/FDSJid2wsLnj4LkSMSgyqSEsy57PB
-        Y2V2ni7USsK4EGtgYXWtlWBo=
-X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862474qta.26.1676635508268;
-        Fri, 17 Feb 2023 04:05:08 -0800 (PST)
-X-Google-Smtp-Source: AK7set9vu+JJtAzOiIVcSatdvoOydcZVm8RnYaOetCCeIlhUKYkTJk3f3mzKzsaA1fup3DVktpT3OA==
-X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862441qta.26.1676635507987;
-        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id s4-20020a372c04000000b006f9f3c0c63csm3179081qkh.32.2023.02.17.04.05.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
-Message-ID: <ddd17066-ce40-118b-28d8-33e14a3de876@redhat.com>
+Received: from beifus.sra.uni-hannover.de (lab.sra.uni-hannover.de [130.75.33.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailout1n.rrzn.uni-hannover.de (Postfix) with ESMTPSA id D48F7533;
+        Fri, 17 Feb 2023 13:05:09 +0100 (CET)
+From:   Alexander Halbuer <halbuer@sra.uni-hannover.de>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Alexander Halbuer <halbuer@sra.uni-hannover.de>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH] mm, page_alloc: batch cma update on pcp buffer refill
 Date:   Fri, 17 Feb 2023 13:05:04 +0100
+Message-Id: <20230217120504.87043-1-halbuer@sra.uni-hannover.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
- code
-To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "yilun.xu@intel.com" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230207095915.169146-1-nava.kishore.manne@amd.com>
- <8d34bc43-deb4-4166-83ad-34561ee5ac33@redhat.com>
- <DM6PR12MB3993232B3EB5DE00CBC9B452CDD89@DM6PR12MB3993.namprd12.prod.outlook.com>
- <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
- <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.7 at mailout1n
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As proposed by Vlastimil Babka [1] this is an extension to the previous patch
+"mm: reduce lock contention of pcp buffer refill". This version also moves the
+is_migrate_cma() check from the critical section to the loop below.
 
+The optimization has several advantages:
+- Less time in critical section
+- Batching update of NR_FREE_CMA_PAGES into a single call to
+  mod_zone_page_state()
+- Utilizing cache locality of the related struct page when doing the cma check
+  is_migrate_cma() and the sanity check check_pcp_refill() in the same loop
 
-On 2023-02-13 06:50, Manne, Nava kishore wrote:
-> Hi Marco,
-> 
-> 	Please find my response inline.
-> 
->> -----Original Message-----
->> From: Marco Pagani <marpagan@redhat.com>
->> Sent: Thursday, February 9, 2023 3:52 AM
->> To: Manne, Nava kishore <nava.kishore.manne@amd.com>
->> Cc: Nava kishore Manne <nava.manne@xilinx.com>; mdf@kernel.org;
->> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com; linux-
->> fpga@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
->> code
->>
->>
->> On 2023-02-08 12:01, Manne, Nava kishore wrote:
->>> Hi Marco,
->>>
->>> 	Thanks for providing the review comments.
->>> Please find my response inline below.
->>>
->>>> -----Original Message-----
->>>> From: Marco Pagani <marpagan@redhat.com>
->>>> Sent: Wednesday, February 8, 2023 12:04 AM
->>>> To: Nava kishore Manne <nava.manne@xilinx.com>
->>>> Cc: Manne, Nava kishore <nava.kishore.manne@amd.com>;
->> mdf@kernel.org;
->>>> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com;
->>>> linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
->>>> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact
->>>> error code
->>>>
->>>>
->>>> On 2023-02-07 10:59, Nava kishore Manne wrote:
->>>>> From: Nava kishore Manne <nava.manne@xilinx.com>
->>>>>
->>>>> Up on fpga configuration failure, the existing sysfs state interface
->>>>> is just providing the generic error message rather than providing
->>>>> the exact error code. This patch extends sysfs state interface to
->>>>> provide the exact error received from the lower layer along with the
->>>>> existing generic error message.
->>>>>
->>>>> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
->>>>> ---
->>>>>  drivers/fpga/fpga-mgr.c       | 20 +++++++++++++++++++-
->>>>>  include/linux/fpga/fpga-mgr.h |  2 ++
->>>>>  2 files changed, 21 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c index
->>>>> 8efa67620e21..b2d74705a5a2 100644
->>>>> --- a/drivers/fpga/fpga-mgr.c
->>>>> +++ b/drivers/fpga/fpga-mgr.c
->>>>> @@ -61,12 +61,14 @@ static inline int fpga_mgr_write_complete(struct
->>>>> fpga_manager *mgr,  {
->>>>>  	int ret = 0;
->>>>>
->>>>> +	mgr->err = 0;
->>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE;
->>>>>  	if (mgr->mops->write_complete)
->>>>>  		ret = mgr->mops->write_complete(mgr, info);
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error after writing image data to
->>>> FPGA\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		return ret;
->>>>>  	}
->>>>>  	mgr->state = FPGA_MGR_STATE_OPERATING; @@ -154,6 +156,7 @@
->>>> static
->>>>> int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,  {
->>>>>  	int ret;
->>>>>
->>>>> +	mgr->err = 0;
->>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
->>>>>  	ret = fpga_mgr_parse_header(mgr, info, buf, count);
->>>>>
->>>>> @@ -165,6 +168,7 @@ static int
->> fpga_mgr_parse_header_mapped(struct
->>>> fpga_manager *mgr,
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
->>>> header\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
->>>>> +		mgr->err = ret;
->>>>>  	}
->>>>>
->>>>>  	return ret;
->>>>> @@ -185,6 +189,7 @@ static int fpga_mgr_parse_header_sg_first(struct
->>>> fpga_manager *mgr,
->>>>>  	int ret;
->>>>>
->>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
->>>>> +	mgr->err = 0;
->>>>>
->>>>>  	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
->>>>>  	if (sg_miter_next(&miter) &&
->>>>> @@ -197,6 +202,7 @@ static int fpga_mgr_parse_header_sg_first(struct
->>>> fpga_manager *mgr,
->>>>>  	if (ret && ret != -EAGAIN) {
->>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
->>>> header\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
->>>>> +		mgr->err = ret;
->>>>>  	}
->>>>>
->>>>>  	return ret;
->>>>> @@ -249,6 +255,7 @@ static void *fpga_mgr_parse_header_sg(struct
->>>> fpga_manager *mgr,
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
->>>> header\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		kfree(buf);
->>>>>  		buf = ERR_PTR(ret);
->>>>>  	}
->>>>> @@ -272,6 +279,7 @@ static int fpga_mgr_write_init_buf(struct
->>>> fpga_manager *mgr,
->>>>>  	size_t header_size = info->header_size;
->>>>>  	int ret;
->>>>>
->>>>> +	mgr->err = 0;
->>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
->>>>>
->>>>>  	if (header_size > count)
->>>>> @@ -284,6 +292,7 @@ static int fpga_mgr_write_init_buf(struct
->>>> fpga_manager *mgr,
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_INIT_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		return ret;
->>>>>  	}
->>>>>
->>>>> @@ -370,6 +379,7 @@ static int fpga_mgr_buf_load_sg(struct
->>>>> fpga_manager *mgr,
->>>>>
->>>>>  	/* Write the FPGA image to the FPGA. */
->>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
->>>>> +	mgr->err = 0;
->>>>>  	if (mgr->mops->write_sg) {
->>>>>  		ret = fpga_mgr_write_sg(mgr, sgt);
->>>>>  	} else {
->>>>> @@ -405,6 +415,7 @@ static int fpga_mgr_buf_load_sg(struct
->>>> fpga_manager *mgr,
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error while writing image data to
->>>> FPGA\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		return ret;
->>>>>  	}
->>>>>
->>>>> @@ -437,10 +448,12 @@ static int fpga_mgr_buf_load_mapped(struct
->>>> fpga_manager *mgr,
->>>>>  	 * Write the FPGA image to the FPGA.
->>>>>  	 */
->>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
->>>>> +	mgr->err = 0;
->>>>>  	ret = fpga_mgr_write(mgr, buf, count);
->>>>>  	if (ret) {
->>>>>  		dev_err(&mgr->dev, "Error while writing image data to
->>>> FPGA\n");
->>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		return ret;
->>>>>  	}
->>>>>
->>>>> @@ -544,10 +557,11 @@ static int fpga_mgr_firmware_load(struct
->>>> fpga_manager *mgr,
->>>>>  	dev_info(dev, "writing %s to %s\n", image_name, mgr->name);
->>>>>
->>>>>  	mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ;
->>>>> -
->>>>> +	mgr->err = 0;
->>>>>  	ret = request_firmware(&fw, image_name, dev);
->>>>>  	if (ret) {
->>>>>  		mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ_ERR;
->>>>> +		mgr->err = ret;
->>>>>  		dev_err(dev, "Error requesting firmware %s\n",
->>>> image_name);
->>>>>  		return ret;
->>>>>  	}
->>>>> @@ -626,6 +640,10 @@ static ssize_t state_show(struct device *dev,  {
->>>>>  	struct fpga_manager *mgr = to_fpga_manager(dev);
->>>>>
->>>>> +	if (mgr->err)
->>>>> +		return sprintf(buf, "%s: 0x%x\n",
->>>>> +			       state_str[mgr->state], mgr->err);
->>>>> +
->>>>>  	return sprintf(buf, "%s\n", state_str[mgr->state]);
->>>>
->>>>
->>>> If one of the fpga manager ops fails, the low-level error code is
->>>> already returned to the caller. Wouldn't it be better to rely on this
->>>> instead of printing the low-level error code in a sysfs attribute and sending
->> it to the userspace?
->>>>
->>> Agree, the low-level error code is already returned to the caller but
->>> the user application will not have any access to read this error info.
->>> So, I feel this patch provides that flexibility to the user application to get the
->> exact error info.
->>> please let me know if you have any other thoughts will implement that.
->>>
->>> Regards,
->>> Navakishore.
->>
->>
->> Hi Nava,
->>
->> Thanks for your quick reply. I understand the need to access the low-level
->> error code from userspace if the configuration goes wrong.
->>
->> However, in my understanding, the low-level driver is supposed to export
->> reconfiguration errors by implementing the status op and returning a bit field
->> set using the macros defined in fpga-mgr.h +189.
->> The fpga manager will, in turn, make the errors visible to userspace through
->> the status attribute. If the available error bits aren't descriptive enough,
->> wouldn't it be better to add more error macros instead of "overloading" the
->> state attribute?
->>
->> Moreover, it seems to me that if the reconfiguration is done by loading a
->> device tree overlay from userspace, the error code gets propagated back
->> through the notifier in of-fpga-region. Am I correct?
->>
-> 
-> AFAIK The state and status interface use cases are different. The Status interface will provide the H/W error info.
-> whereas the state interface provides the FPGA manager driver state(including Error strings). 
-> Please Refer: Documentation/ABI/testing/sysfs-class-fpga-manager (for Error strings information).
->
+However, this change only affects performance with CONFIG_CMA=true which
+may not be the common case. Another possibly negative effect is that the
+actual update of NR_FREE_CMA_PAGES is delayed beyond the release of the
+zone lock resulting in a short time span of inaccuracy between the
+counter and the actual number of cma pages in the zone.
 
-I didn't say that state and status interfaces have the same use case. 
+The tables below compare this patch with the initial one using a
+parallel allocation benchmark. The used kernel config is based on the default
+debian config but with CONFIG_INIT_ON_ALLOC_DEFAULT_ON=FALSE and
+CONFIG_CMA=TRUE. The benchmarks have been performed with the default sanity
+checks enabled as the patch "mm, page_alloc: reduce page alloc/free sanity
+checks" [2] was not enabled on my test branch.
+The given times are average allocation times. The improvement is not
+significant, but the general trend is visible.
 
-Instead, I suggested that the state interface shouldn't be used to
-report low-lever errors since this "responsibility" belongs to the
-status interface.
+Hopefully, without sanity checks and disabled cma, a compiler will be able
+to optimize away the second loop entirely.
 
-The ABI documentation you cited states: "the intent [of the status
-interface] is to provide more detailed information for FPGA
-programming errors to userspace".
+[1] https://lore.kernel.org/lkml/1d468148-936f-8816-eb71-1662f2d4945b@suse.cz/
+[2] https://lore.kernel.org/linux-mm/20230216095131.17336-1-vbabka@suse.cz/
 
-> With the existing implementation using DT-Overlay the Configuration/Reconfiguration lower-level
-> driver errors are not propagating to userspace.
-> 
-> Please correct me if my understanding is wrong.
+Normal Pages
++-------+---------+---------+---------+
+| Cores | Patch 1 | Patch 2 | Patch 2 |
+|       |    (ns) |    (ns) |    Diff |
++-------+---------+---------+---------+
+|     1 |     132 |     129 | (-2.3%) |
+|     2 |     147 |     145 | (-1.4%) |
+|     3 |     148 |     147 | (-0.7%) |
+|     4 |     175 |     173 | (-1.1%) |
+|     6 |     263 |     255 | (-3.0%) |
+|     8 |     347 |     337 | (-2.9%) |
+|    10 |     432 |     421 | (-2.5%) |
+|    12 |     516 |     505 | (-2.1%) |
+|    14 |     604 |     590 | (-2.3%) |
+|    16 |     695 |     680 | (-2.2%) |
+|    20 |     869 |     844 | (-2.9%) |
+|    24 |    1043 |    1015 | (-2.7%) |
++-------+---------+---------+---------+
 
-Out of curiosity, I ran a couple of tests on the QEMU arm "virt"
-platform using linux-xlnx and linux-socfpga kernels and the fake
-FPGA manager from the KUnit RFC. I modified the fake manager to
-fail the write op returning a specific error code.
+Huge Pages
++-------+---------+---------+---------+
+| Cores | Patch 1 | Patch 2 | Patch 2 |
+|       |    (ns) |    (ns) |    Diff |
++-------+---------+---------+---------+
+|     1 |    3177 |    3133 | (-1.4%) |
+|     2 |    3486 |    3471 | (-0.4%) |
+|     3 |    3644 |    3634 | (-0.3%) |
+|     4 |    3669 |    3643 | (-0.7%) |
+|     6 |    3587 |    3578 | (-0.3%) |
+|     8 |    3635 |    3621 | (-0.4%) |
+|    10 |    4015 |    3960 | (-1.4%) |
+|    12 |    4681 |    4510 | (-3.7%) |
+|    14 |    5398 |    5180 | (-4.0%) |
+|    16 |    6239 |    5891 | (-5.6%) |
+|    20 |    7864 |    7435 | (-5.5%) |
+|    24 |    9011 |    8971 | (-0.4%) |
++-------+---------+---------+---------+
 
-static int op_write(struct fpga_manager ...)
-{
-	[...]
+Reported-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Alexander Halbuer <halbuer@sra.uni-hannover.de>
+---
+ mm/page_alloc.c | 48 ++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 12 deletions(-)
 
-        return -202302;
-}
-
-The op error code is visible from the message log on both kernels when
-the overlay application fails:
-
-[   23.958015] fpga_manager fpga0: writing fake.bin to Fake FPGA Manager
-[   23.959119] fpga_manager fpga0: Error while writing image data to FPGA
-[   23.959341] fpga_region region0: failed to load FPGA image
-[   23.959472] OF: overlay: overlay changeset pre-apply notifier error -202302, target: /test_region
-[   23.959622] create_overlay: Failed to create overlay (err=-202302)
-
-However, I feel this part of the discussion is more speculative since
-the DT overlay configFS interface is not mainline. 
-
-> Regards,
-> Navakishore.
-> 
-
-Thanks,
-Marco
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aedebb37..f82a59eeb4fe 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3119,17 +3119,17 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ {
+ 	unsigned long flags;
+ 	int i, allocated = 0;
++	int cma_pages = 0;
++	struct list_head *prev_tail = list->prev;
++	struct page *pos, *n;
+ 
+ 	spin_lock_irqsave(&zone->lock, flags);
+ 	for (i = 0; i < count; ++i) {
+-		struct page *page = __rmqueue(zone, order, migratetype,
+-								alloc_flags);
++		struct page *page =
++			__rmqueue(zone, order, migratetype, alloc_flags);
+ 		if (unlikely(page == NULL))
+ 			break;
+ 
+-		if (unlikely(check_pcp_refill(page, order)))
+-			continue;
+-
+ 		/*
+ 		 * Split buddy pages returned by expand() are received here in
+ 		 * physical page order. The page is added to the tail of
+@@ -3141,20 +3141,44 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 		 * pages are ordered properly.
+ 		 */
+ 		list_add_tail(&page->pcp_list, list);
+-		allocated++;
+-		if (is_migrate_cma(get_pcppage_migratetype(page)))
+-			__mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
+-					      -(1 << order));
+ 	}
+ 
+ 	/*
+-	 * i pages were removed from the buddy list even if some leak due
+-	 * to check_pcp_refill failing so adjust NR_FREE_PAGES based
+-	 * on i. Do not confuse with 'allocated' which is the number of
++	 * i pages were removed from the buddy list so adjust NR_FREE_PAGES
++	 * based on i. Do not confuse with 'allocated' which is the number of
+ 	 * pages added to the pcp list.
+ 	 */
+ 	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
++
+ 	spin_unlock_irqrestore(&zone->lock, flags);
++
++	/*
++	 * Pages are appended to the pcp list without checking to reduce the
++	 * time holding the zone lock. Checking the appended pages happens right
++	 * after the critical section while still holding the pcp lock.
++	 */
++	pos = list_first_entry(prev_tail, struct page, pcp_list);
++	list_for_each_entry_safe_from(pos, n, list, pcp_list) {
++		/*
++		 * Count number of cma pages to batch update of
++		 * NR_FREE_CMA_PAGES into a single function call.
++		 */
++		if (is_migrate_cma(get_pcppage_migratetype(pos)))
++			cma_pages++;
++
++		if (unlikely(check_pcp_refill(pos, order))) {
++			list_del(&pos->pcp_list);
++			continue;
++		}
++
++		allocated++;
++	}
++
++	if (cma_pages > 0) {
++		mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
++				    -(cma_pages << order));
++	}
++
+ 	return allocated;
+ }
+ 
+-- 
+2.39.2
 
