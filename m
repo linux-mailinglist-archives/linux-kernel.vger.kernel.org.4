@@ -2,174 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5C869A71B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2860469A71F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjBQIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S229798AbjBQIiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBQIhn (ORCPT
+        with ESMTP id S229785AbjBQIiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:37:43 -0500
+        Fri, 17 Feb 2023 03:38:02 -0500
 Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68135FBC2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:37:23 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m17so1958613edc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:37:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F9CEC47
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:37:57 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id ee31so2979629edb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:37:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rX+L+RQNvSmvl3vXjy6ejfPbMjDPoWjZZGv/1GsmR20=;
-        b=Ls1Fayg63aBxblW6mHpeLVmXVbOasWCiICroEXVqnP5iZHKcq6ElDZ3ETAR60+Ep7m
-         y33QuXhBCXzd8H1UAvoFVCb78iZpmUcHNTBgakDoCxEt9LWaSZCe+98JTYjQZ4OOlCDS
-         Qm7P6yK/5PT3CwEIDxqzlItpjBCWr0R8jn9BMAxfWNIwmx7qfO1wgXD++qhq5RbyIvXf
-         fxwXe0AzmtPBdAFjB7T4xTw9415OfcMhLuGHbX1Qad7qY5w89YUCBk7kAevg+mvcLtuw
-         8MaUGG7UsPrgGU9tKCceGKwo4q8AzYD1oXBfLGjS9Y4cY3Y4S5cp0PHC0Ob2DajkmLKS
-         qytw==
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3lArE+L1rSsu/NvVJI9KQbM3AkfK38yw5NG2dElP5Gk=;
+        b=QuIx7gIhB/ctd3yKFC/wDV24rp/7p8wGyxWdDT6EBKhWMC6XUyyetRpuxVFX5rSz1+
+         BbPj5nLgepV6wnGgXuY87zELpleBsAeX9A+qpCC3zLFXtTdzjBYUm1Xcn/3ThJyBrJhu
+         NVFNGzvzFc31XepkxF6A+ACPiGjyoUuSPO059fcI0cwaQOAABxN63HXW1o44Qn2mFK1V
+         d1zi7SG05RX0XVaXR8NJcqZ1fCXmc9fyXeHw1jKxive7BI6q5TwMq86pFH57MVThTbzG
+         LN5dsDTthbYuEFVDHqhpvrHuJsNvBYAKncopFQjic7/9F9qSuXkBbS5mwT+DzbRYCr4g
+         vXMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rX+L+RQNvSmvl3vXjy6ejfPbMjDPoWjZZGv/1GsmR20=;
-        b=OWGklfCgeyV5YqVnJ3+yMd/hwd3M+Lz52QcNd/P3wAtsXBPaZ0bz6jga5y/xHXgQ9k
-         MqQKfGmWOUvdfc5c7MlztaRY1ArFPi+6MEdGitAnIyOVoHqMIpyo+fmi57vCqZjJc6xz
-         3HFwkiFRcbh+UBcCEqG8kgPZvAx5gHCJfxh7GxMatOL7ybRzhEYXhEE/takrlZMqd6OK
-         HqmsLkrlT5HphkjM0FVugMMoLVlnG63zgwiYgmC5p/0ka0neZUoBg/wgwIBlkUyFZznu
-         1cXxsQHRd+sTEp2wPEZMP+GST3Ujz0+5mYnXFqTgjQT//E2J4dLjcVG71XVzEDzlsVte
-         4mcg==
-X-Gm-Message-State: AO0yUKW4wfgiqH9TXOBG6UCvJ4haDuHJqohh8wYi0ke2xot1KgZkXJec
-        oen+d/t6mmC5N0ZjZ7Z2gPTD2w==
-X-Google-Smtp-Source: AK7set/Y69SId1gyB/TFH7/ENtT0fJggoSlC+ReCLuRDgDfgQBRqc3eqQ+xubhnrYJ7kz3dsmzGGHw==
-X-Received: by 2002:a05:6402:18:b0:4ab:4011:ff3d with SMTP id d24-20020a056402001800b004ab4011ff3dmr61844edu.0.1676623042189;
-        Fri, 17 Feb 2023 00:37:22 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v30-20020a50d09e000000b004acdef7baaesm1921274edd.96.2023.02.17.00.37.20
+        bh=3lArE+L1rSsu/NvVJI9KQbM3AkfK38yw5NG2dElP5Gk=;
+        b=LLCmdk9x8NTTPzPSGY2LwAYLe4LXZMs5qhU7biUC2CMtfLybpveO2e1GRY0EEqfHFJ
+         fJKg/h/9STFFn867jVj0H3PTmiS1RP4qum+EZOniU4m7K8DMKqgZqK/629EKZoL4UYFI
+         dEWlA/sbiZoqnhxH97xjaChOrxBVUQ+f92xQJc5artismeZwzCZQTPbLHPlUP9b4Pxpz
+         BdQQeiXZJS/o3PYHA+iZfKhoZSW4V5dRFLDiS1ZbruGkfsWp7Tt1FQfpmo7MMrDiUo2x
+         wYKkl1uK1MqvOSdSnKv51q08Cm23MDis7oAIjX1mBi2pu3jBzAnN418osihw8rhI7RLj
+         2opw==
+X-Gm-Message-State: AO0yUKVJXhIui8qRep9prxL9HN2WxEBKBP+YOIoe4SRGjJFT6vVO5G5I
+        7t/7Wujro1EU3YlqJRv7ItB5ig==
+X-Google-Smtp-Source: AK7set9I+wkqS+/DFCT39eY1KACxmCGnfdIO3od17+BfbHrovOJPtmQw6D7qYTS1pQEZwZk/PYLUgg==
+X-Received: by 2002:aa7:db87:0:b0:4ad:1e21:9981 with SMTP id u7-20020aa7db87000000b004ad1e219981mr4654522edt.41.1676623075840;
+        Fri, 17 Feb 2023 00:37:55 -0800 (PST)
+Received: from [192.168.0.108] ([82.77.80.113])
+        by smtp.gmail.com with ESMTPSA id a65-20020a509ec7000000b004acc5077026sm1934748edf.79.2023.02.17.00.37.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 00:37:21 -0800 (PST)
-Message-ID: <bb73393c-d642-0128-9e63-1a751f090a85@linaro.org>
-Date:   Fri, 17 Feb 2023 09:37:20 +0100
+        Fri, 17 Feb 2023 00:37:55 -0800 (PST)
+Message-ID: <4b705abb-f780-1342-c1ec-9187687ef8af@linaro.org>
+Date:   Fri, 17 Feb 2023 08:37:54 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
- i2C driver
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
- <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
- <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
- <SEZPR06MB52690A1D06F3CFEAAF1FDBDEF2A39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <b58fad13-12d5-346b-9452-d345c7bf5327@linaro.org>
- <TYZPR06MB5274C8D759C5C762C12A1CE9F2A09@TYZPR06MB5274.apcprd06.prod.outlook.com>
- <c5aa358d-6fb8-9d4d-eef7-d3a8268229e8@linaro.org>
- <TYZPR06MB5274B15C35A6030CB49BFD23F2A09@TYZPR06MB5274.apcprd06.prod.outlook.com>
+Subject: Re: [PATCH] ext4: fix another off-by-one fsmap error on 1k block
+ filesystems
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <TYZPR06MB5274B15C35A6030CB49BFD23F2A09@TYZPR06MB5274.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <joneslee@google.com>
+References: <Y+58NPTH7VNGgzdd@magnolia>
+ <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
+In-Reply-To: <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 10:26, Ryan Chen wrote:
-> Hello Krzysztof
+
+
+On 2/17/23 08:10, Tudor Ambarus wrote:
+> Hi, Darrick,
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Thursday, February 16, 2023 5:22 PM
->> To: Ryan Chen <ryan_chen@aspeedtech.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andrew
->> Jeffery <andrew@aj.id.au>; Philipp Zabel <p.zabel@pengutronix.de>;
->> openbmc@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org;
->> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
->> i2C driver
+> On 2/16/23 18:55, Darrick J. Wong wrote:
+>> From: Darrick J. Wong <djwong@kernel.org>
 >>
->> On 16/02/2023 10:20, Ryan Chen wrote:
->>> Hello Krzysztof
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Thursday, February 16, 2023 4:18 AM
->>>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Rob Herring
->>>> <robh+dt@kernel.org>; Krzysztof Kozlowski
->>>> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>;
->>>> Andrew Jeffery <andrew@aj.id.au>; Philipp Zabel
->>>> <p.zabel@pengutronix.de>; openbmc@lists.ozlabs.org;
->>>> linux-arm-kernel@lists.infradead.org;
->>>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org
->>>> Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for
->>>> AST2600 i2C driver
->>>>
->>>> On 15/02/2023 06:43, Ryan Chen wrote:
->>>>>>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    enum:
->>>>>>> +      - aspeed,ast2600-i2c
->>>>>>
->>>>>> NAK. It's already there. Please do not waste our time in submitting
->>>>>> duplicated drivers.
->>>>>
->>>>> It is not duplicated, as my description in cover " This series add
->>>>> AST2600 i2c
->>>> new register set driver"
->>>>> So, this will be different driver compatible.
->>>>> The original compatible is
->>>>>       - aspeed,ast2400-i2c-bus
->>>>>       - aspeed,ast2500-i2c-bus
->>>>>       - aspeed,ast2600-i2c-bus
->>>>> So the new register set compatible is "- aspeed,ast2600-i2c", remove
->> "bus".
->>>>
->>>> Bindings are documenting hardware, so I claim - we already have this
->>>> hardware described and this is duplicated. Otherwise - what are these
->>>> two I2C controllers and what are the differences? Why they do not
->>>> have really different name? Bus looks more like a mistake than a
->> differentiating name.
->>> For misunderstanding, or mistaken.
->>> I purpose to be aspeed,ast2600-i2cv2, will it more clear way ?
+>> Apparently syzbot figured out that issuing this FSMAP call:
 >>
->> I don't know. I still did not get answers. I asked here several questions.
-> Those are different i2c controller, as I description in cover letter.
+>> struct fsmap_head cmd = {
+>>     .fmh_count    = ...;
+>>     .fmh_keys    = {
+>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
+>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
+>>     },
+>> ...
+>> };
+>> ret = ioctl(fd, FS_IOC_GETFSMAP, &cmd);
+>>
+>> Produces this crash if the underlying filesystem is a 1k-block ext4
+>> filesystem:
+>>
+>> kernel BUG at fs/ext4/ext4.h:3331!
+>> invalid opcode: 0000 [#1] PREEMPT SMP
+>> CPU: 3 PID: 3227965 Comm: xfs_io Tainted: G        W  O       
+>> 6.2.0-rc8-achx
+>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 
+>> 04/01/2014
+>> RIP: 0010:ext4_mb_load_buddy_gfp+0x47c/0x570 [ext4]
+>> RSP: 0018:ffffc90007c03998 EFLAGS: 00010246
+>> RAX: ffff888004978000 RBX: ffffc90007c03a20 RCX: ffff888041618000
+>> RDX: 0000000000000000 RSI: 00000000000005a4 RDI: ffffffffa0c99b11
+>> RBP: ffff888012330000 R08: ffffffffa0c2b7d0 R09: 0000000000000400
+>> R10: ffffc90007c03950 R11: 0000000000000000 R12: 0000000000000001
+>> R13: 00000000ffffffff R14: 0000000000000c40 R15: ffff88802678c398
+>> FS:  00007fdf2020c880(0000) GS:ffff88807e100000(0000) 
+>> knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007ffd318a5fe8 CR3: 000000007f80f001 CR4: 00000000001706e0
+>> Call Trace:
+>>   <TASK>
+>>   ext4_mballoc_query_range+0x4b/0x210 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_getfsmap_datadev+0x713/0x890 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_getfsmap+0x2b7/0x330 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_ioc_getfsmap+0x153/0x2b0 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   __ext4_ioctl+0x2a7/0x17e0 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   __x64_sys_ioctl+0x82/0xa0
+>>   do_syscall_64+0x2b/0x80
+>>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>> RIP: 0033:0x7fdf20558aff
+>> RSP: 002b:00007ffd318a9e30 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00000000000200c0 RCX: 00007fdf20558aff
+>> RDX: 00007fdf1feb2010 RSI: 00000000c0c0583b RDI: 0000000000000003
+>> RBP: 00005625c0634be0 R08: 00005625c0634c40 R09: 0000000000000001
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf1feb2010
+>> R13: 00005625be70d994 R14: 0000000000000800 R15: 0000000000000000
+>>
+>> For GETFSMAP calls, the caller selects a physical block device by
+>> writing its block number into fsmap_head.fmh_keys[01].fmr_device.
+>> To query mappings for a subrange of the device, the starting byte of the
+>> range is written to fsmap_head.fmh_keys[0].fmr_physical and the last
+>> byte of the range goes in fsmap_head.fmh_keys[1].fmr_physical.
+>>
+>> IOWs, to query what mappings overlap with bytes 3-14 of /dev/sda, you'd
+>> set the inputs as follows:
+>>
+>>     fmh_keys[0] = { .fmr_device = major(8, 0), .fmr_physical = 3},
+>>     fmh_keys[1] = { .fmr_device = major(8, 0), .fmr_physical = 14},
+>>
+>> Which would return you whatever is mapped in the 12 bytes starting at
+>> physical offset 3.
+>>
+>> The crash is due to insufficient range validation of keys[1] in
+>> ext4_getfsmap_datadev.  On 1k-block filesystems, block 0 is not part of
+>> the filesystem, which means that s_first_data_block is nonzero.
+>> ext4_get_group_no_and_offset subtracts this quantity from the blocknr
+>> argument before cracking it into a group number and a block number
+>> within a group.  IOWs, block group 0 spans blocks 1-8192 (1-based)
+>> instead of 0-8191 (0-based) like what happens with larger blocksizes.
+>>
+>> The net result of this encoding is that blocknr < s_first_data_block is
+>> not a valid input to this function.  The end_fsb variable is set from
+>> the keys that are copied from userspace, which means that in the above
+>> example, its value is zero.  That leads to an underflow here:
+>>
+>>     blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
+>>
+>> The division then operates on -1:
+>>
+>>     offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
+>>         EXT4_SB(sb)->s_cluster_bits;
+>>
+>> Leaving an impossibly large group number (2^32-1) in blocknr.
+>> ext4_getfsmap_check_keys checked that keys[0].fmr_physical and
+>> keys[1].fmr_physical are in increasing order, but
+>> ext4_getfsmap_datadev adjusts keys[0].fmr_physical to be at least
+>> s_first_data_block.  This implies that we have to check it again after
+>> the adjustment, which is the piece that I forgot.
+>>
+>> Fixes: 4a4956249dac ("ext4: fix off-by-one fsmap error on 1k block 
+>> filesystems")
+>> Link: 
+>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
+>> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+>> ---
+>>   fs/ext4/fsmap.c |    2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+>> index 4493ef0c715e..cdf9bfe10137 100644
+>> --- a/fs/ext4/fsmap.c
+>> +++ b/fs/ext4/fsmap.c
+>> @@ -486,6 +486,8 @@ static int ext4_getfsmap_datadev(struct 
+>> super_block *sb,
+>>           keys[0].fmr_physical = bofs;
+>>       if (keys[1].fmr_physical >= eofs)
+>>           keys[1].fmr_physical = eofs - 1;
+>> +    if (keys[1].fmr_physical < keys[0].fmr_physical)
+>> +        return 0;
+> 
+> This is an indirect implication, we can be more straightforward. Also we
+> should stop the execution when high_key->fmr_physical == bofs. So maybe:
+> 
+> --- a/fs/ext4/fsmap.c
+> +++ b/fs/ext4/fsmap.c
+> @@ -479,6 +479,8 @@ static int ext4_getfsmap_datadev(struct super_block 
+> *sb,
+>          int error = 0;
+> 
+>          bofs = le32_to_cpu(sbi->s_es->s_first_data_block);
+> +       if (keys[1].fmr_physical <= bofs)
+> +               return 0;
+>          eofs = ext4_blocks_count(sbi->s_es);
+>          if (keys[0].fmr_physical >= eofs)
+>                  return 0;
 
-The cover letter does not explain here anything. It barely mentions "new
-register set" and "separate register set". This is really short, so
-without proper explanations you will get all these questions. Are they
-compatible? Do they overlap? Are they completely different? If so, why
-datasheet uses same name for them? So many questions but cover letter is
-basically two sentences and here:
+oops, it was too morning for me, this is wrong, as the high key can come 
+with zero value. So if we want to keep the check in
+ext4_getfsmap_datadev we can use your patch, but slightly adapted to
+if (keys[1].fmr_physical <= keys[0].fmr_physical)
+	return 0;
 
-> The i2c new register mode, there have two separate slave/master register.
-> And different register with old register.
+However I think I prefer the version from below if it makes sense.
+Cheers,
+ta
 
-you repeat the same.
-
-> So now, avoid misunderstanding, or mistaken.
-> I purpose to be aspeed,ast2600-i2cv2.
-
-
-Best regards,
-Krzysztof
-
+> 
+> 
+> But I'm not thrilled about this. Can we stop the execution earlier?
+> How about something like:
+> 
+> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+> index 4493ef0c715e..8c4b1fb5c10a 100644
+> --- a/fs/ext4/fsmap.c
+> +++ b/fs/ext4/fsmap.c
+> @@ -586,10 +586,12 @@ static bool ext4_getfsmap_check_keys(struct 
+> ext4_fsmap *low_key,
+>   {
+>          if (low_key->fmr_device > high_key->fmr_device)
+>                  return false;
+> -       if (low_key->fmr_device < high_key->fmr_device)
+> +       if (low_key->fmr_device != 0 &&
+> +           low_key->fmr_device < high_key->fmr_device)
+>                  return true;
+> 
+> -       if (low_key->fmr_physical > high_key->fmr_physical)
+> +       if (high_key->fmr_physical == 0 ||
+> +           low_key->fmr_physical > high_key->fmr_physical)
+>                  return false;
+>          if (low_key->fmr_physical < high_key->fmr_physical)
+>                  return true;
+> 
+> You'll notice that my proposal will stop the execution with -EINVAL, as
+> the key range is invalid IMO. But we can adapt code to return zero if
+> you like, what I'm interested in is whether this key check is valid for
+> ext4_getfsmap_logdev() or not. How about the
+> if (keys[1].fmr_physical == bofs) check, is it valid for
+> ext4_getfsmap_logdev()?
+> 
+> I'd like that with your guidance to fix this bug, extend the xfs_io
+> fsmap support to query ext4 fs range and to add an xfstest for keys
+> validation, to check if stable kernels will be fixed. This would help me
+> with the fs ramp-up, as I'd like to fix some other fs bugs too. If you
+> want to handle this by yourself, it's fine too, but please let me know
+> so that we don't duplicate effort.
+> 
+> Cheers,
+> ta
