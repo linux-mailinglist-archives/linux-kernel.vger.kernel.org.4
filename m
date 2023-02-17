@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA27669A8E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594E769A8ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjBQKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S229836AbjBQKN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBQKMR (ORCPT
+        with ESMTP id S229554AbjBQKNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:12:17 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E13627E4;
-        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id ez12so2353315edb.1;
-        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
-        b=DkGgz7LrrshUUqf98FEQHx+4ZLsw1fmj5xlLMYyg/apRAjsxEw7p1q2hYhewpY//AC
-         JgOSPxlI58u/6CrB5nHfIey6F8vFzD+IG3h1qtADCX3oNJnQ9VuURgFNHi9tc2KKhQ3Y
-         T7cRhAo/RxwKzzcpWDvHV4kJRYaTe3ZU5R4DFUcINE8j4tEYgcDBxmVD9MAKeJayMoFL
-         s+cpWPIhjOUCWh+HZPwXIWgujNEJrGjyWRFZLc2Ph8F+9Tj2N54bsdJ4+9gbMYFO5+ME
-         ZMjzQcSSj5F3MJtyWzD6nHA/Vj/ff9wONV3GbAUHv9o3HdcwAF1IQ1JX6zFdJsQ/hGcZ
-         iU6g==
+        Fri, 17 Feb 2023 05:13:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197C162FD0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676628757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7Y7MkPKxQ4b4S+E2uuEcl4fSWKwkp7IBI4B2vVLi24A=;
+        b=ClxYJ0hn4Jr7aQog7ltNWg76fmRK3NOEJcdlPIUCrT/eKgm/RZhIgVxlnDvJ6LPyBg8ntL
+        ksIYg6CX1U9lbF5oc5QZMsjJ9PfeDRQkVpWQTY+LVaHOxx0b1S910LUrvuYiopCwUSLPRp
+        W2bpWxpRBZiHp8Snb9sY+6Cz35DhpcQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-574-ZIT48nMvMvKl4M9NKzLx3w-1; Fri, 17 Feb 2023 05:12:36 -0500
+X-MC-Unique: ZIT48nMvMvKl4M9NKzLx3w-1
+Received: by mail-wm1-f70.google.com with SMTP id o20-20020a05600c511400b003dd07ce79c8so403431wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:12:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
-        b=BLFx10LkRaBafgzqD6uyLL8qh0YZB8e41yxP621iZVpvHK9m8J1H61SloIK8ztQWiF
-         h8OFtYQTQlZia34h3SdT1VxLwV7I2jmo5+g17Koj0OEOdAK1iQqAXepAlS4Zo6kS9rxJ
-         PlLUrql1HMsDefAyjy7niEgQUsHFHqSulKPbhvAvsZ8MShVG7KSmUgeSGcqv233oIwwx
-         peDCRDbVxZnR2YHYmAnSTkepIK0ufJrUl1edp6fcgmhxf8NA1Kvw5ze+MhCAANHTH9ws
-         58W7bcUJ5nadH3aZ92BKlUj8gilfCTebPjr2tlj3liGR02oP7Dyzj/cMOR4BM7A+7oBn
-         Y27w==
-X-Gm-Message-State: AO0yUKXM8105Az32Bw2C0tMqgy3hp13nzK6VQjG8rScWrK4kD1HOx6hC
-        XS35pO5PzxllvzCE8/LEDmLddvVxIIU+4enbDE8=
-X-Google-Smtp-Source: AK7set+GT0Ah3I/6vPnxNmj3RSo2G/EDRSHCWkFAtQuG+sMISDYexJpAIhdh9LnTy7Wf3Mb443eJzI2NRdM6y6KK2Zo=
-X-Received: by 2002:a17:907:76ad:b0:8b1:749f:b2c6 with SMTP id
- jw13-20020a17090776ad00b008b1749fb2c6mr1849103ejc.2.1676628734827; Fri, 17
- Feb 2023 02:12:14 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Y7MkPKxQ4b4S+E2uuEcl4fSWKwkp7IBI4B2vVLi24A=;
+        b=TfIm2OZzSJjxjzvtmvtoLjl5B4WJFkZ/5NPAEAQMwVHyPEPC4+zeskr4SKxqUsWurD
+         9E3+Zu8NDPDYzi9wK2jLkSt3C1hBU/PPFnY4AYC2mWR39K9XKGA+4Xjh0LjFMA88USQO
+         q0bOTEgqk0n7g2qV6OOsWv7kt+aAQAm0RqznWhC3HRpydHUIMFVftOu+oDDWfX5p+xh9
+         62keEz8cXOgFsjDd0ZmP0c9/CiadcbvXF/Tzux2uQajeZNtP0Shbbsn6JVZS5w/3HIY2
+         6MmC1Xf11O4dskE6f9GcFBNBpNpPIgOig8++pwnmQuK1xz2CbXg1DyEcQGUp0SxXqNO5
+         mKvg==
+X-Gm-Message-State: AO0yUKU6IAAwVm7avSrRZ09HD+FeuR1ZFoVWksyaiiYAIZ86VUeRbgI0
+        +lP19ik94IL2JJmtzyZo6o/kwV+ek0nlAL0ZoPIfjI05B/JxNE1XGHcob3XrTNB4Ba0qOw1onEb
+        OSHEI2AJX88peRIl5oD+1IX2Z
+X-Received: by 2002:adf:f40b:0:b0:2c5:5ff8:93e5 with SMTP id g11-20020adff40b000000b002c55ff893e5mr6717184wro.44.1676628755108;
+        Fri, 17 Feb 2023 02:12:35 -0800 (PST)
+X-Google-Smtp-Source: AK7set9h4wA736ZeMYva3jBcgfzObA1Ee5DxMQNCqSjLJtJ9uB6fqQFZuR5r1/3OYbU7YpGJ6GX0bQ==
+X-Received: by 2002:adf:f40b:0:b0:2c5:5ff8:93e5 with SMTP id g11-20020adff40b000000b002c55ff893e5mr6717163wro.44.1676628754834;
+        Fri, 17 Feb 2023 02:12:34 -0800 (PST)
+Received: from redhat.com ([2.52.5.34])
+        by smtp.gmail.com with ESMTPSA id i3-20020a05600011c300b002c4061a687bsm3720864wrx.31.2023.02.17.02.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 02:12:34 -0800 (PST)
+Date:   Fri, 17 Feb 2023 05:12:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Nanyong Sun <sunnanyong@huawei.com>, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, jasowang@redhat.com,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, wangrong68@huawei.com
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+Message-ID: <20230217051158-mutt-send-email-mst@kernel.org>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+ <Y+7G+tiBCjKYnxcZ@nvidia.com>
 MIME-Version: 1.0
-References: <cover.1676289084.git.zhoubinbin@loongson.cn> <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org> <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
- <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org> <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
- <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org> <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
- <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
-In-Reply-To: <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Fri, 17 Feb 2023 18:12:01 +0800
-Message-ID: <CAMpQs4KpE7RLyxw4++4z4RhjR_ix300mtDfwh6KgJJw1B43CqA@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+7G+tiBCjKYnxcZ@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,75 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 4:40 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/02/2023 07:09, Binbin Zhou wrote:
->
-> >>> Hi Krzysztof:
-> >>>
-> >>> Allow me to give a brief overview of the current status of eiointc (DT-based):
-> >>>      Loongson-3A series supports eiointc;
-> >>>      Loongson-2K1000 does not support eiointc now;
-> >>>      Loongson-2K0500 supports eiointc, with differences from
-> >>> Loongson-3, e.g. only up to 128 devices are supported;
-> >>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
-> >>>      ....
-> >>>
-> >>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
-> >>>
-> >>> The design of eiointc is probably refined step by step with the chip.
-> >>> The same version of eiointc can be used for multiple chips, and the
-> >>> same chip series may also use different versions of eiointc. Low-end
-> >>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
-> >>> depending on the time it's produced.
-> >>>
-> >>> So in the Loongson-2K series I have defined the current state as
-> >>> eiointc-1.0, using the dts property to indicate the maximum number of
-> >>> devices supported by eiointc that can be used directly in the driver.
-> >>>
-> >>> If there are new changes to the design later on, such as the
-> >>> definition of registers, we can call it eiointc-2.0, which can also
-> >>> cover more than one chip.
-> >>
-> >> Just go with SoC-based compatibles. If your version is not specific
-> >> enough, then it is not a good way to represent the hardware.
-> >>
-> >
-> > Hi Krzysztof:
-> >
-> > I have tried to write the following  SoC-based compatibles,  is it fine?
-> >
-> > compatible:
-> >     enum:
-> >       - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
-> >       - loongson,ls2k0500-eiointc
-> >       - loongson,ls2k200-eiointc
->
-> Looks good, but didn't you state these are compatible between each
-> other? I have impression there is a common set, so maybe one compatible
-> work on other device with reduced number of devices?
->
+On Thu, Feb 16, 2023 at 08:14:50PM -0400, Jason Gunthorpe wrote:
+> On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
+> > From: Rong Wang <wangrong68@huawei.com>
+> > 
+> > Once enable iommu domain for one device, the MSI
+> > translation tables have to be there for software-managed MSI.
+> > Otherwise, platform with software-managed MSI without an
+> > irq bypass function, can not get a correct memory write event
+> > from pcie, will not get irqs.
+> > The solution is to obtain the MSI phy base address from
+> > iommu reserved region, and set it to iommu MSI cookie,
+> > then translation tables will be created while request irq.
+> 
+> Probably not what anyone wants to hear, but I would prefer we not add
+> more uses of this stuff. It looks like we have to get rid of
+> iommu_get_msi_cookie() :\
+> 
+> I'd like it if vdpa could move to iommufd not keep copying stuff from
+> it..
 
-So far, the difference between ls2k SOCs is the number of devices
-supported by eiointc.
+Absolutely but when is that happening?
 
-Do you mean use unified compatible and reuse loongson,eio-num-vecs?
+> Also the iommu_group_has_isolated_msi() check is missing on the vdpa
+> path, and it is missing the iommu ownership mechanism.
+> 
+> Also which in-tree VDPA driver that uses the iommu runs on ARM? Please
+> don't propose core changes for unmerged drivers. :(
+> 
+> Jason
 
-Would this be possible, e.g.
-compatible:
-     const: loongson,ls2k-eiointc
-
-  loongson,eio-num-vecs:
-    description:
-      The number of devices supported by the extended I/O interrupt vector.
-    $ref: /schemas/types.yaml#/definitions/uint32
-    minimum: 1
-    maximum: 256
-
-Thanks.
-Binbin
-
-> Best regards,
-> Krzysztof
->
