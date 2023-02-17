@@ -2,122 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BCE69B658
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E6F69B65F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjBQXOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S229999AbjBQXQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBQXOn (ORCPT
+        with ESMTP id S229889AbjBQXQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:14:43 -0500
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC65A552AA;
-        Fri, 17 Feb 2023 15:14:19 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id m6-20020a4ac686000000b0051f842ba672so226155ooq.4;
-        Fri, 17 Feb 2023 15:14:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dQHoZdZQsb0tbRh6zJhe3Ee112VgPcERiRLHL7uWCfI=;
-        b=D9qKdIxP6r+Q0e6DWoSA+zz3rjNP9CT+qlx7dfYOKVQ3vLyTQQ5iTh3vFBxbqV8b0b
-         B1qQprkwUjwjrDS1NIOgT0E4I1zJknnhaMbT+Nz/QdtwMoxUo4h5xksy9kMbDw2ba/sF
-         c7gtvzoJqAhMXpy+opNh9mR9NCIoELRqn7sETyqSNRstpV/GzsFBKOZpGyTzoOxKJhKa
-         nRqozj0Nj/EKVd9iN3trJRsvaHzOgFZSQFvxRdSfdEUDLU2w29aKLwwC7HR5WDq+m6f2
-         cz2E4equLSyJnuXmYiqMm65mf5Q4N9QXoWAVRocY2MawvqI8s6eDwuWWuxjJ8lH3GIuy
-         WJeQ==
-X-Gm-Message-State: AO0yUKWZlUVbFmnbXOzNH5YBcvTj37suyOdejlGh4Kze/KCqpCfd1gxe
-        K7KrKfZ8Z0zXYkVI3qcsGCqDB7M/Cw==
-X-Google-Smtp-Source: AK7set+CeDzb7BytS+6adQqOOA+3tgP8LOA6jxUsKLTuW/NJoi4x/MIxM1bhqcnMWLMWimw65Q9G2g==
-X-Received: by 2002:a4a:450e:0:b0:49f:8941:ffed with SMTP id y14-20020a4a450e000000b0049f8941ffedmr1571764ooa.9.1676675611946;
-        Fri, 17 Feb 2023 15:13:31 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y2-20020a4ad642000000b0051ff746e2b2sm1968972oos.8.2023.02.17.15.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 15:13:31 -0800 (PST)
-Received: (nullmailer pid 2241205 invoked by uid 1000);
-        Fri, 17 Feb 2023 23:13:30 -0000
-Date:   Fri, 17 Feb 2023 17:13:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v10 2/6] dt-bindings: opp: v2-qcom-level: Document CPR3
- open/closed loop volt adjustment
-Message-ID: <20230217231330.GA2238521-robh@kernel.org>
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-2-67aed8fdfa61@linaro.org>
+        Fri, 17 Feb 2023 18:16:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEA95CF05;
+        Fri, 17 Feb 2023 15:16:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C237E62069;
+        Fri, 17 Feb 2023 23:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC243C433EF;
+        Fri, 17 Feb 2023 23:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676675705;
+        bh=byNkcvjTVrhZmBQeXX4eg96uidFMAt9CRXf+/5g7jmQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=i+dyYMQfaZaIV1MSPjeoxGW7/kGQRsELGc6+eH9/pJisN5GlHWOxZZPufsniv9a+h
+         SaiV5XBOW9vK3H/4EVKj1zPWhj/6NKB/VuHcwAjN8s2sX104jq0qFaPFrMsHJQjaOn
+         fbfY6eT4mFHBMHVzLgiNg9wE31Lm/EwJ8g2+z3rmzrkoz3ekzacrtXeJPpiayEXz2e
+         bZrsU76D0onPaH2jplLx0EYxpit5zoYjBq9lbMywIoWoek6l45GLyx+c7rJLkJfWFl
+         dGMuY8AcvGZJFgtBF45/ngSv0Wbg8r3/Ic5/ihzngga605no7167hQSzqc67fDkVbL
+         HSjLs31GxqUww==
+Date:   Fri, 17 Feb 2023 17:15:03 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
+ resources with s390 per-function hotplug
+Message-ID: <20230217231503.GA3425666@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217-topic-cpr3h-v10-2-67aed8fdfa61@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230214094911.3776032-1-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 12:08:25PM +0100, Konrad Dybcio wrote:
-> CPR3 and newer can be fed per-OPP voltage adjustment values for both
-> open- and closed-loop paths to make better decisions about settling
-> on the final voltage offset target. Document these properties.
+On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
+> On s390 PCI functions may be hotplugged individually even when they
+> belong to a multi-function device. In particular on an SR-IOV device VFs
+> may be removed and later re-added.
+
+Is there something special about the SR-IOV/VF case that relates to
+this problem?  If not, it might be unnecessary distraction to mention
+it.
+
+> In commit a50297cf8235 ("s390/pci: separate zbus creation from
+> scanning") it was missed however that struct pci_bus and struct
+> zpci_bus's resource list retained a reference to the PCI functions MMIO
+> resources even though those resources are released and freed on
+> hot-unplug. These stale resources may subsequently be claimed when the
+> PCI function re-appears resulting in use-after-free.
+
+Lifetimes of all these resources definitely aren't obvious to me.
+
+So I guess the critical thing here is the new
+pci_bus_remove_resource() in zpci_cleanup_bus_resources(), which
+removes (and kfrees when necessary) the resource from
+pci_bus->resources.
+
+I'm not clear on where the zpci_bus resource list comes in.  I guess
+we kalloc resources in zpci_setup_bus_resources(), and the current
+code adds them to zpci_bus->resources and copies them onto the pci_bus
+list.
+
+The new code does not add them to zpci_bus->resources at all, and only
+adds them to the pci_bus resource list.  Right?  I guess maybe that's
+what the "no need to add the MMIO resources at all" below refers to?
+
+> One idea of fixing this use-after-free in s390 specific code that was
+> investigated was to simply keep resources around from the moment a PCI
+> function first appeared until the whole virtual PCI bus created for
+> a multi-function device disappears. The problem with this however is
+> that due to the requirement of artificial MMIO addreesses (address
+> cookies) we will then need extra logic and tracking in struct zpci_bus
+> to keep these compatible for re-use. At the same time the MMIO resources
+> semantically belong to the PCI function so tying their lifecycle to the
+> function seems more logical.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Instead a simpler approach is to remove the resources of an individually
+> hot-unplugged PCI function from the PCI bus's resource list while
+> keeping the resources of other PCI functions on the PCI bus untouched.
+
+Do we currently never kfree the pci_bus resource list until we free
+the whole pci_bus via release_pcibus_dev()?  Does a remove + add just
+allocate more resources that are probably duplicates of what the
+pci_bus already had?
+
+> This is done by introducing pci_bus_remove_resource() to remove an
+> individual resource. Similarly the resource also needs to be removed
+> from the struct zpci_bus's resource list. It turns out however, that
+> there is really no need to add the MMIO resources at all and instead we
+> can simply use the zpci_bar_struct's resource pointer directly.
+> 
+> Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+
+Other random questions unrelated to this patch:
+
+  - zpci_bus_create_pci_bus() calls pci_bus_add_devices().  Isn't that
+    pointless?  AFAICT, the bus->devices list is empty then.
+
+  - What about zpci_bus_scan_device()?  Why does it call both
+    pci_bus_add_device() and pci_bus_add_devices()?  The latter will
+    just call the former, so it looks redundant.  And the latter is
+    locked but not the former?
+
+  - Struct zpci_bus has a "resources" list.  I guess this contains the
+    &zbus->bus_resource put there in zpci_bus_alloc(), plus an entry
+    for every BAR of every device on the bus (I guess you'd never see
+    an actual PCI-to-PCI bridge on s390?), kalloc'ed in
+    zpci_setup_bus_resources()?
+
+    What happens when zpci_bus_release() calls
+    pci_free_resource_list() on &zbus->resources?  It looks like that
+    ultimately calls kfree(), which is OK for the
+    zpci_setup_bus_resources() stuff, but what about the
+    zbus->bus_resource that was not kalloc'ed?
+
 > ---
->  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml         | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+>  arch/s390/pci/pci.c     | 16 ++++++++++------
+>  arch/s390/pci/pci_bus.c | 12 +++++-------
+>  arch/s390/pci/pci_bus.h |  3 +--
+>  drivers/pci/bus.c       | 23 +++++++++++++++++++++++
+>  include/linux/pci.h     |  1 +
+>  5 files changed, 40 insertions(+), 15 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> index a30ef93213c0..93cc88434dfe 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> @@ -34,6 +34,20 @@ patternProperties:
->          minItems: 1
->          maxItems: 2
+> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> index ef38b1514c77..e16afacc8fd1 100644
+> --- a/arch/s390/pci/pci.c
+> +++ b/arch/s390/pci/pci.c
+> @@ -544,8 +544,7 @@ static struct resource *__alloc_res(struct zpci_dev *zdev, unsigned long start,
+>  	return r;
+>  }
 >  
-> +      qcom,opp-cloop-vadj:
-> +        description: |
-> +          A value representing the closed-loop voltage adjustment value
+> -int zpci_setup_bus_resources(struct zpci_dev *zdev,
+> -			     struct list_head *resources)
+> +int zpci_setup_bus_resources(struct zpci_dev *zdev)
+>  {
+>  	unsigned long addr, size, flags;
+>  	struct resource *res;
+> @@ -581,7 +580,6 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
+>  			return -ENOMEM;
+>  		}
+>  		zdev->bars[i].res = res;
+> -		pci_add_resource(resources, res);
+>  	}
+>  	zdev->has_resources = 1;
+>  
+> @@ -590,17 +588,23 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
+>  
+>  static void zpci_cleanup_bus_resources(struct zpci_dev *zdev)
+>  {
+> +	struct resource *res;
+>  	int i;
+>  
+> +	pci_lock_rescan_remove();
 
-A value?
+What exactly is this protecting?  This doesn't seem like quite the
+right place since we're not adding/removing a pci_dev here.  Is this
+to protect the bus->resources list in pci_bus_remove_resource()?
 
-> +          associated with this OPP node.
-> +        $ref: /schemas/types.yaml#/definitions/int32-array
-> +        maxItems: 2
-
-Or 2 values?
-
+>  	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+> -		if (!zdev->bars[i].size || !zdev->bars[i].res)
+> +		res = zdev->bars[i].res;
+> +		if (!res)
+>  			continue;
+>  
+> +		release_resource(res);
+> +		pci_bus_remove_resource(zdev->zbus->bus, res);
+>  		zpci_free_iomap(zdev, zdev->bars[i].map_idx);
+> -		release_resource(zdev->bars[i].res);
+> -		kfree(zdev->bars[i].res);
+> +		zdev->bars[i].res = NULL;
+> +		kfree(res);
+>  	}
+>  	zdev->has_resources = 0;
+> +	pci_unlock_rescan_remove();
+>  }
+>  
+>  int pcibios_device_add(struct pci_dev *pdev)
+> diff --git a/arch/s390/pci/pci_bus.c b/arch/s390/pci/pci_bus.c
+> index 6a8da1b742ae..a99926af2b69 100644
+> --- a/arch/s390/pci/pci_bus.c
+> +++ b/arch/s390/pci/pci_bus.c
+> @@ -41,9 +41,7 @@ static int zpci_nb_devices;
+>   */
+>  static int zpci_bus_prepare_device(struct zpci_dev *zdev)
+>  {
+> -	struct resource_entry *window, *n;
+> -	struct resource *res;
+> -	int rc;
+> +	int rc, i;
+>  
+>  	if (!zdev_enabled(zdev)) {
+>  		rc = zpci_enable_device(zdev);
+> @@ -57,10 +55,10 @@ static int zpci_bus_prepare_device(struct zpci_dev *zdev)
+>  	}
+>  
+>  	if (!zdev->has_resources) {
+> -		zpci_setup_bus_resources(zdev, &zdev->zbus->resources);
+> -		resource_list_for_each_entry_safe(window, n, &zdev->zbus->resources) {
+> -			res = window->res;
+> -			pci_bus_add_resource(zdev->zbus->bus, res, 0);
+> +		zpci_setup_bus_resources(zdev);
+> +		for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+> +			if (zdev->bars[i].res)
+> +				pci_bus_add_resource(zdev->zbus->bus, zdev->bars[i].res, 0);
+>  		}
+>  	}
+>  
+> diff --git a/arch/s390/pci/pci_bus.h b/arch/s390/pci/pci_bus.h
+> index e96c9860e064..af9f0ac79a1b 100644
+> --- a/arch/s390/pci/pci_bus.h
+> +++ b/arch/s390/pci/pci_bus.h
+> @@ -30,8 +30,7 @@ static inline void zpci_zdev_get(struct zpci_dev *zdev)
+>  
+>  int zpci_alloc_domain(int domain);
+>  void zpci_free_domain(int domain);
+> -int zpci_setup_bus_resources(struct zpci_dev *zdev,
+> -			     struct list_head *resources);
+> +int zpci_setup_bus_resources(struct zpci_dev *zdev);
+>  
+>  static inline struct zpci_dev *zdev_from_bus(struct pci_bus *bus,
+>  					     unsigned int devfn)
+> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+> index 83ae838ceb5f..f021f1d4af9f 100644
+> --- a/drivers/pci/bus.c
+> +++ b/drivers/pci/bus.c
+> @@ -76,6 +76,29 @@ struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_bus_resource_n);
+>  
+> +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res)
+> +{
+> +	struct pci_bus_resource *bus_res, *tmp;
+> +	int i;
 > +
-> +      qcom,opp-oloop-vadj:
-> +        description: |
-> +          A value representing the open-loop voltage adjustment value
-> +          associated with this OPP node.
-> +        $ref: /schemas/types.yaml#/definitions/int32-array
-> +        maxItems: 2
+> +	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
+> +		if (bus->resource[i] == res) {
+> +			bus->resource[i] = NULL;
+> +			return;
+> +		}
+> +	}
 > +
->      required:
->        - opp-level
->        - qcom,opp-fuse-level
-> 
+> +	list_for_each_entry_safe(bus_res, tmp, &bus->resources, list) {
+> +		if (bus_res->res == res) {
+> +			list_del(&bus_res->list);
+> +			kfree(bus_res);
+> +			return;
+> +		}
+> +	}
+> +	return;
+> +
+
+Superfluous "return" and blank line.
+
+> +}
+> +
+>  void pci_bus_remove_resources(struct pci_bus *bus)
+>  {
+>  	int i;
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index adffd65e84b4..3b1974e2ec73 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1436,6 +1436,7 @@ void pci_bus_add_resource(struct pci_bus *bus, struct resource *res,
+>  			  unsigned int flags);
+>  struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n);
+>  void pci_bus_remove_resources(struct pci_bus *bus);
+> +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res);
+>  int devm_request_pci_bus_resources(struct device *dev,
+>  				   struct list_head *resources);
+>  
 > -- 
-> 2.39.1
+> 2.37.2
 > 
