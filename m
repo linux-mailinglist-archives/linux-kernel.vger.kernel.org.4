@@ -2,63 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742D469A567
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991CB69A56B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjBQF6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 00:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S229625AbjBQF7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 00:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBQF6G (ORCPT
+        with ESMTP id S229510AbjBQF7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 00:58:06 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F2DD23659;
-        Thu, 16 Feb 2023 21:58:05 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id AAB69826D;
-        Fri, 17 Feb 2023 05:58:04 +0000 (UTC)
-Date:   Fri, 17 Feb 2023 07:58:03 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 14/17] gpio: omap: Drop irq_base
-Message-ID: <Y+8XaxwKSjM40k6e@atomide.com>
-References: <20230215-immutable-chips-v1-0-51a8f224a5d0@linaro.org>
- <20230215-immutable-chips-v1-14-51a8f224a5d0@linaro.org>
+        Fri, 17 Feb 2023 00:59:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D9F2CFD7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 21:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676613515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4AP6C42/R8qAU0hxuIDM9Qu5qLKgmQO/4/XMSMYshv0=;
+        b=S5/NiHk1z4OHIjq2ZxDvxuqEfTO2n3eVSPPZi3drWBNt5fYaTxfg8Vdkegy3/a8r3QHsKH
+        SqHGYYcMZy/jaT46wTWAyrn2JbGSSinSgz6d9XMOKyFaM3hP+WUu51iEjgFPXk6u850ih9
+        gjYXb/yG9FjYXxHTv3+FJiEF19xTxGY=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-jO_5MvwUO8OQCgYqamGkXw-1; Fri, 17 Feb 2023 00:58:33 -0500
+X-MC-Unique: jO_5MvwUO8OQCgYqamGkXw-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1713e623e00so52859fac.17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 21:58:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4AP6C42/R8qAU0hxuIDM9Qu5qLKgmQO/4/XMSMYshv0=;
+        b=AXSafxIConJekv1AoVxYRjqQ8RvaUtCWktay/tictN8didrx1vFZ3koiAIkMhyYc3K
+         clMiaX/4KGW03heKWa0D/+siFIZy0W2BzztX6CHLERToel/A0j6i6P31AsDuTJTwLX2x
+         0xhx+6S7XTPBowxvkJa4KdN86lDQ+TSUEdMDPQa8AlfSNn0eRh9dCPAcNyx27uuoi2xc
+         5Y6Aja/KkUOqGme1RSvhZM6sWZFWvlcvtDD1Qd7HMOlI62PlIKlHioekot+bk4kAa227
+         9TgOx35nLoWP5hvMQQLt5AiorYixxBHAOJKVXB/7fVRdDQbMF8iV3+vCfxV9rqJ/4PEl
+         s4/g==
+X-Gm-Message-State: AO0yUKUzTFUHXrwG1CICB0wRXfRaJqRU7NmzAAdMFSL7d/8TlgDJTAFJ
+        E6RqhOJxcI/uXtOiSw5sdAYQZONiuQvu9fINfK376otcUoEpCJq8Tgxh5g8S9DBiD56nYQ4/i3j
+        ypzgclh7jwjph6SqJooForLAmZk9nI1C8lYtZr5VS
+X-Received: by 2002:a05:6871:84ca:b0:16a:2c1a:e416 with SMTP id sw10-20020a05687184ca00b0016a2c1ae416mr306279oab.35.1676613512984;
+        Thu, 16 Feb 2023 21:58:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set/DTnvWghD6LBzagHT2oVxIZ6Em4f+Zu8NAzl7w3xSe64tyl3U9v4dN2LtkQFyqeyCmiGccmvpI6xdxSkvo8c8=
+X-Received: by 2002:a05:6871:84ca:b0:16a:2c1a:e416 with SMTP id
+ sw10-20020a05687184ca00b0016a2c1ae416mr306274oab.35.1676613512767; Thu, 16
+ Feb 2023 21:58:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230215-immutable-chips-v1-14-51a8f224a5d0@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131145310.2069-1-longpeng2@huawei.com> <db99245c-606a-2f24-52fe-836a6972437f@redhat.com>
+ <35b94992-0c6b-a190-1fce-5dda9c8dcf4b@huawei.com> <CACGkMEt0Rgkcmt9k4dWsp-qqtPvrM40mtgmSERc0A7Ve1wzKHw@mail.gmail.com>
+ <ad0ab6b8-1e1e-f686-eb5c-78cc63869c54@huawei.com> <CACGkMEsOWmVGA1RYTNZybmzkz53g5cYEkJeMK_9uuQu-ezZcqg@mail.gmail.com>
+ <af95c38d-fdca-aef0-55ae-bbb0baee6029@huawei.com>
+In-Reply-To: <af95c38d-fdca-aef0-55ae-bbb0baee6029@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 17 Feb 2023 13:58:21 +0800
+Message-ID: <CACGkMEt8TL=fc6tUfb7BTXTSsLZa=K39znJcFqpNhy7Oaw5s6A@mail.gmail.com>
+Subject: Re: [PATCH] vhost-vdpa: cleanup memory maps when closing vdpa fds
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     mst@redhat.com, arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Linus Walleij <linus.walleij@linaro.org> [230216 09:37]:
-> The OMAP1 at one point was using static irqs but that time is gone,
-> OMAP1 uses sparse irqs like all other multiplatform targets so this
-> static allocation of descriptors should just go.
+On Wed, Feb 15, 2023 at 1:16 PM Longpeng (Mike, Cloud Infrastructure
+Service Product Dept.) <longpeng2@huawei.com> wrote:
+>
+>
+>
+> =E5=9C=A8 2023/2/15 10:56, Jason Wang =E5=86=99=E9=81=93:
+> > On Wed, Feb 15, 2023 at 10:49 AM Longpeng (Mike, Cloud Infrastructure
+> > Service Product Dept.) <longpeng2@huawei.com> wrote:
+> >>
+> >>
+> >>
+> >> =E5=9C=A8 2023/2/15 10:00, Jason Wang =E5=86=99=E9=81=93:
+> >>> On Tue, Feb 14, 2023 at 2:28 PM Longpeng (Mike, Cloud Infrastructure
+> >>> Service Product Dept.) <longpeng2@huawei.com> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> =E5=9C=A8 2023/2/14 14:16, Jason Wang =E5=86=99=E9=81=93:
+> >>>>>
+> >>>>> =E5=9C=A8 2023/1/31 22:53, Longpeng(Mike) =E5=86=99=E9=81=93:
+> >>>>>> From: Longpeng <longpeng2@huawei.com>
+> >>>>>>
+> >>>>>> We must cleanup all memory maps when closing the vdpa fds, otherwi=
+se
+> >>>>>> some critical resources (e.g. memory, iommu map) will leaked if th=
+e
+> >>>>>> userspace exits unexpectedly (e.g. kill -9).
+> >>>>>
+> >>>>>
+> >>>>> Sounds like a bug of the kernel, should we fix there?
+> >>>>>
+> >>>>
+> >>>> For example, the iommu map is setup when QEMU calls VHOST_IOTLB_UPDA=
+TE
+> >>>> ioctl and it'll be freed if QEMU calls VHOST_IOTLB_INVALIDATE ioctl.
+> >>>>
+> >>>> So maybe we release these resources in vdpa framework in kernel is a
+> >>>> suitable choice?
+> >>>
+> >>> I think I need understand what does "resources" mean here:
+> >>>
+> >>> For iommu mapping, it should be freed by vhost_vdpa_free_domain() in
+> >>> vhost_vdpa_release()?
+> >>>
+> >>
+> >> Please consider the following lifecycle of the vdpa device:
+> >>
+> >> 1. vhost_vdpa_open
+> >>       vhost_vdpa_alloc_domain
+> >>
+> >> 2. vhost_vdpa_pa_map
+> >>       pin_user_pages
+> >>       vhost_vdpa_map
+> >>         iommu_map
+> >>
+> >> 3. kill QEMU
+> >>
+> >> 4. vhost_vdpa_release
+> >>       vhost_vdpa_free_domain
+> >>
+> >> In this case, we have no opportunity to invoke unpin_user_pages or
+> >> iommu_unmap to free the memory.
+> >
+> > We do:
+> >
+> > vhost_vdpa_cleanup()
+> >      vhost_vdpa_remove_as()
+> >          vhost_vdpa_iotlb_unmap()
+> >              vhost_vdpa_pa_unmap()
+> >                  unpin_user_pages()
+> >                  vhost_vdpa_general_unmap()
+> >                      iommu_unmap()
+> > ?
+> >
+> Oh, my codebase is linux-6.2-rc2 and the commit c070c1912a8 (vhost-vdpa:
+> fix an iotlb memory leak) already fixed this bug in linux-6.2-rc3.
+>
+> > Btw, it looks like we should call vhost_vdpa_free_domain() *after*
+> > vhost_vdpa_cleanup() otherwise it's a UAF?
+> >
+> I think so, the v->domain is set to NULL in vhost_vdpa_free_domain(), it
+> seems would trigger null-pointer access in my case.
 
-Reviewed-by: Tony Lindgren <tony@atomide.com>
+Patch are welcomed.
+
+Thanks
+
+>
+> > Thanks
+> >
+> >>
+> >>> static int vhost_vdpa_release(struct inode *inode, struct file *filep=
+)
+> >>> {
+> >>>           struct vhost_vdpa *v =3D filep->private_data;
+> >>>           struct vhost_dev *d =3D &v->vdev;
+> >>>
+> >>>           mutex_lock(&d->mutex);
+> >>>           filep->private_data =3D NULL;
+> >>>           vhost_vdpa_clean_irq(v);
+> >>>           vhost_vdpa_reset(v);
+> >>>           vhost_dev_stop(&v->vdev);
+> >>>           vhost_vdpa_free_domain(v);
+> >>>           vhost_vdpa_config_put(v);
+> >>>           vhost_vdpa_cleanup(v);
+> >>>           mutex_unlock(&d->mutex);
+> >>>
+> >>>           atomic_dec(&v->opened);
+> >>>           complete(&v->completion);
+> >>>
+> >>>           return 0;
+> >>> }
+> >>>
+> >>>>
+> >>>> By the way, Jason, can you reproduce the problem in your machine?
+> >>>>
+> >>>
+> >>> Haven't got time in doing this but it should be the responsibility of
+> >>> the author to validate this anyhow.
+> >>>
+> >>> Thanks
+> >>>
+> >>>>> Thanks
+> >>>>>
+> >>>>>
+> >>>>>>
+> >>>>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
+> >>>>>> ---
+> >>>>>>     drivers/vhost/vdpa.c | 13 +++++++++++++
+> >>>>>>     1 file changed, 13 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> >>>>>> index a527eeeac637..37477cffa5aa 100644
+> >>>>>> --- a/drivers/vhost/vdpa.c
+> >>>>>> +++ b/drivers/vhost/vdpa.c
+> >>>>>> @@ -823,6 +823,18 @@ static void vhost_vdpa_unmap(struct vhost_vdp=
+a *v,
+> >>>>>>             vhost_vdpa_remove_as(v, asid);
+> >>>>>>     }
+> >>>>>> +static void vhost_vdpa_clean_map(struct vhost_vdpa *v)
+> >>>>>> +{
+> >>>>>> +    struct vhost_vdpa_as *as;
+> >>>>>> +    u32 asid;
+> >>>>>> +
+> >>>>>> +    for (asid =3D 0; asid < v->vdpa->nas; asid++) {
+> >>>>>> +        as =3D asid_to_as(v, asid);
+> >>>>>> +        if (as)
+> >>>>>> +            vhost_vdpa_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+> >>>>>> +    }
+> >>>>>> +}
+> >>>>>> +
+> >>>>>>     static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+> >>>>>>                      struct vhost_iotlb *iotlb,
+> >>>>>>                      u64 iova, u64 size, u64 uaddr, u32 perm)
+> >>>>>> @@ -1247,6 +1259,7 @@ static int vhost_vdpa_release(struct inode
+> >>>>>> *inode, struct file *filep)
+> >>>>>>         vhost_vdpa_clean_irq(v);
+> >>>>>>         vhost_vdpa_reset(v);
+> >>>>>>         vhost_dev_stop(&v->vdev);
+> >>>>>> +    vhost_vdpa_clean_map(v);
+> >>>>>>         vhost_vdpa_free_domain(v);
+> >>>>>>         vhost_vdpa_config_put(v);
+> >>>>>>         vhost_vdpa_cleanup(v);
+> >>>>>
+> >>>>> .
+> >>>>
+> >>>
+> >>> .
+> >>
+> >
+> > .
+>
+
