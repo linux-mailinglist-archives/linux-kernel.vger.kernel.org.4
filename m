@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8BA69B2BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A157A69B2C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBQS5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 13:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S229769AbjBQS6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 13:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBQS5s (ORCPT
+        with ESMTP id S229760AbjBQS56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:57:48 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378ADDBD3;
-        Fri, 17 Feb 2023 10:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676660267; x=1708196267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kn7qpzTziPZG5RLjHRl38QHUkvLrNje88ohem0j/xnQ=;
-  b=eAcz26qp6VNTTQXZi9Cb4Lp+pa1LrMYsJaRpyfb8fB4hmo7ut+j8zxRK
-   +7E/0NadKHdVSk2mDrIDyee0+S+ovDuWTzyd8yR5V1xe0exvyJVpCcW1p
-   /nckp/SNxspZIP5o38YFXOLw+p79HrKgDJpJuIcVjU//oCmGv2PTXWAAQ
-   WucN44Ncd921eYt+Ft1I9xLERQrda2aemTurATVyaHCh3432tvFq8tkgg
-   95+lgJEo2KwJgQEWxendE7NI09JOdLsJ/mkdoJB7sneqbuZ9P81jo/DgD
-   1KrBU/NVzFtRCoV6FS3K8LM05QEjsRMxqJkjB5HB1/qju59jZdnUHlqV9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="359514297"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="359514297"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 10:57:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="813466845"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="813466845"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Feb 2023 10:57:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pT5vT-008KPI-37;
-        Fri, 17 Feb 2023 20:57:43 +0200
-Date:   Fri, 17 Feb 2023 20:57:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] regmap-irq: Add no_status support
-Message-ID: <Y+/OJzzdkqbd6LEC@smile.fi.intel.com>
-References: <cover.1675876659.git.william.gray@linaro.org>
- <1e14e042c84f0c0a5e7d25ae9986f88a9620965c.1675876659.git.william.gray@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e14e042c84f0c0a5e7d25ae9986f88a9620965c.1675876659.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 13:57:58 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7870FDBD3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:57:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id l14-20020a056902072e00b008fa1d22bd55so1105820ybt.21
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:57:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ysoRUQ2NmWRIM1ClHrF/cO9hSIq1YGVMNf9jCB9BrVw=;
+        b=XAPGbj1IByG6uK7uszQdQg3mPW1GPtzcnx3PltocNfok0FAlbTJlsiDAtzlIeANIPf
+         fO2PGyc+1Yrrr2iQHRJW1uG6plUGdQdUFZdCoMktOdc0lrM4jZTG1ohm/QcXXfI0hadv
+         GtSjObwkGPmR/5cmQDt3zcFhFwX/rJosVDD0EAT9ImJR7gmAI+3gxCVTZ8M0qdxRwYC3
+         mpYa/AmsasfbqcrLw0gP5GIq3H/m/nm1y44alb3SATCtSy/9O92SkQhlDKNyD8yPY2fZ
+         mzRt1yhz3anLtW7OUvVwGK6v/mqys+iSrS1zfYC1LaCUTjwjWjv1z5EvAE4H0uNtGHXv
+         1Zhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ysoRUQ2NmWRIM1ClHrF/cO9hSIq1YGVMNf9jCB9BrVw=;
+        b=TQhcfCp5rN6xbK+++eEBWlRKClgJ0V1G4R5tA1HUPZuoAtKBP1y/w54HcnqgEUR3eD
+         W7RgK8mJEDu70lALQPBkMeIOdg73yU9Ofdfeat1hCTTZpuZlvBkbVOHsXaf2LPVrW4zt
+         eYlSBEFAzK3t9clTwbN01utzdJAE7u5/KJuDBcyi0BagWk+VSHdnWDfh0TrlL+DA54B7
+         QVthZHjE7rsnGhTueZ3cjqcag39rYFIDFAEDAe5gHl/B8876zojfMTbT4erGs/aWldCG
+         icfHR/rMoaMNR1AMurhGSZUxz51Q2JyL/AryQUUuLRwpXT0nEFjgGsl+lm/XxUIwLv+Z
+         jJsw==
+X-Gm-Message-State: AO0yUKXCw9L6CYV2HIylcA/rnWJ5dYDwqwLhJf4mgEhX9gH2KDXB5QuA
+        cLRo6abL0PBFJIO+WOBVFPa2T4J0lq8D5KYyUA==
+X-Google-Smtp-Source: AK7set/7cglHBHgHgMHXJGb2yqkYii4BdyONKgmYXXDpOWww80xi2p3bOZiV1Yk3Wn70LTN5dPgXnzFYFaZNy7W5Iw==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:1443:b0:8bd:4ab5:18f4 with
+ SMTP id a3-20020a056902144300b008bd4ab518f4mr497438ybv.6.1676660275638; Fri,
+ 17 Feb 2023 10:57:55 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:57:54 +0000
+In-Reply-To: <Y+1bom6CMFeNGWmm@google.com> (message from Sean Christopherson
+ on Wed, 15 Feb 2023 14:24:34 -0800)
+Mime-Version: 1.0
+Message-ID: <diqzy1owjf0t.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
+ stacks on function entry
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     erdemaktas@google.com, mail@maciej.szmigiero.name,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
+        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
+        maz@kernel.org, bgardon@google.com, jmattson@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
+        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
+        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
+        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
+        pshier@google.com, axelrasmussen@google.com,
+        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 12:18:16PM -0500, William Breathitt Gray wrote:
-> Some devices lack status registers, yet expect to handle interrupts.
-> Introduce a no_status flag to indicate such a configuration, where
-> rather than read a status register to verify, all interrupts received
-> are assumed to be active.
 
-...
+> > I figured it out!
+> >
+> > GCC assumes that the stack is 16-byte aligned **before** the call
+> > instruction. Since call pushes rip to the stack, GCC will compile code
+> > assuming that on entrance to the function, the stack is -8 from a
+> > 16-byte aligned address.
+> >
+> > Since for TDs we do a ljmp to guest code, providing a function's
+> > address, the stack was not modified by a call instruction pushing rip to
+> > the stack, so the stack is 16-byte aligned when the guest code starts
+> > running, instead of 16-byte aligned -8 that GCC expects.
+> >
+> > For VMs, we set rip to a function pointer, and the VM starts running
+> > with a 16-byte algined stack too.
+> >
+> > To fix this, I propose that in vm_arch_vcpu_add(), we align the
+> > allocated stack address and then subtract 8 from that:
+> >
+> > @@ -573,10 +573,13 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm  
+> *vm,
+> > uint32_t vcpu_id,
+> >         vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> >         vcpu_setup(vm, vcpu);
+> >
+> > +       stack_vaddr += (DEFAULT_STACK_PGS * getpagesize());
+> > +       stack_vaddr = ALIGN_DOWN(stack_vaddr, 16) - 8;
 
-> +		/* no status register so default to all active */
-> +		memset(data->status_buf, 0xFF,
-> +		       chip->num_regs * sizeof(*data->status_buf));
+> The ALIGN_DOWN should be unnecessary, we've got larger issues if  
+> getpagesize() isn't
+> 16-byte aligned and/or if __vm_vaddr_alloc() returns anything but a  
+> page-aligned
+> address.  Maybe add a TEST_ASSERT() sanity check that stack_vaddr is  
+> page-aligned
+> at this point?
 
-memset32()? As we know the sizeof()...
+> And in addition to the comment suggested by Maciej, can you also add a  
+> comment
+> explaining the -8 adjust?  Yeah, someone can go read the changelog, but I  
+> think
+> this is worth explicitly documenting in code.
 
-...
+> Lastly, can you post it as a standalone patch?
 
-> +			/* no status register so default to all active */
-> +			d->status_buf[i] = -1;
+> Many thanks!
 
--1 for unsigned?!
-Can we simply use GENMASK() just plain value?
-
-...
-
->   * @status_invert: Inverted status register: cleared bits are active interrupts.
-> + * @no_status: No status register: all interrupts assumed generated by device.
->   * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
->   *
->   * @num_regs:    Number of registers in each control bank.
-> @@ -1630,6 +1631,7 @@ struct regmap_irq_chip {
->  	unsigned int clear_on_unmask:1;
->  	unsigned int not_fixed_stride:1;
->  	unsigned int status_invert:1;
-> +	unsigned int no_status:1;
->  
->  	int num_regs;
-
-Seems a bit unordered, I have just sent a patch to fix ordering of the couple
-of fields and their respective kernel doc.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks Maciej and Sean, I've made the changes you requested and posted
+it as a standalone patch at
+https://lore.kernel.org/lkml/32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com/
