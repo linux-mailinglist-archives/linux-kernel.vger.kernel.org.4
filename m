@@ -2,133 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58C969AAFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D782269AAFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBQMEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229520AbjBQMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBQMEa (ORCPT
+        with ESMTP id S229523AbjBQMF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:04:30 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1810C644D2;
-        Fri, 17 Feb 2023 04:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676635469; x=1708171469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cI/EMqPKZ8zG8WS5rHmQT19as03smKMEfuOMAQ1Y+oQ=;
-  b=lxa7FA7btSFwLXqe2SrhIQWJOniQSvfUTzJyjrE/8ptFnzyY2UlVtbda
-   JM2/haQALFMmeRrnhy5wpx46efV1UPJXKssGDNCwckV2xW0+FAcLK2xAB
-   hE/NMQOc52jOAq7uGmGruRTybJQs17zbnP/aS1ROEFFNZ5qL7fDxxbeHu
-   Nvor5EWH9faOSiXr5guZ6kI/q4e7xbbIA/i1pGihNVECbOs6MMgxmMKRg
-   Iz3Hu9mOzGfyAuGuCuQBleQo1inFs6hENHR+yqTeB8NiWFot00r4rxP/l
-   ZEwWwLobIY9kYWhAuwXP+/7fN6Z8B02gR9LKe3VjUYey97LHeoCuN5ebU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="315686635"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="315686635"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 04:04:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="672561304"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="672561304"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 04:04:24 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 632A811FC11;
-        Fri, 17 Feb 2023 14:04:22 +0200 (EET)
-Date:   Fri, 17 Feb 2023 14:04:22 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Kaehn <kaehndan@gmail.com>
-Subject: Re: [PATCH v1 1/1] device property: Clarify description on returned
- value in some functions
-Message-ID: <Y+9tRoXCp4+oZ45l@kekkonen.localdomain>
-References: <20230216205708.13453-1-andriy.shevchenko@linux.intel.com>
- <Y+9Wqbb+zzvH2Ozb@kekkonen.localdomain>
- <Y+9ek6I0tCMHcHRQ@smile.fi.intel.com>
- <Y+9ihz8La+JrIa/L@kekkonen.localdomain>
- <Y+9k9wkRgE1JOsr0@smile.fi.intel.com>
- <Y+9omTMIzAxWM2by@kekkonen.localdomain>
- <Y+9rPzw9orlqYkIx@smile.fi.intel.com>
+        Fri, 17 Feb 2023 07:05:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D216A65694
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:05:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676635510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
+        b=Gtfbe/K7ZVLkotW8xhWOVaizXc9NzxI2jWg9UtgZwCKgIgijx4OvXCJgB0XgiGKy+Db2je
+        vzNR/6dbl/JBWLMKqaOj4AoI9NkCMTya1d/d9zyCvD5sv8rkwkN4XBPkAXydR3ZkPDusYZ
+        Zue86HL3jTJOM2vHfW5sg7Rjz3ZMDvU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-179-QB_Tq0TCNLCtntWbJsVhWw-1; Fri, 17 Feb 2023 07:05:08 -0500
+X-MC-Unique: QB_Tq0TCNLCtntWbJsVhWw-1
+Received: by mail-qk1-f197.google.com with SMTP id j29-20020a05620a001d00b00724fd33cb3eso2937498qki.14
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:05:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MeZ8ZIY1zOjEqjndKoMlTNhFCshjmhCchSEF4RkJN3A=;
+        b=qpwwfVecsQDNqA3WH4c51chFcpN63ihlVbw/rxw1hm0DDwMP8QIRT7x6somcpwisCf
+         umweFil2oFJJh7dAMqZC3uyKG7uga93No8VCsnY+Efst5t1xidpHIG9xDQS1j5CxNBYO
+         66o/CALZu+0CIpn1xLzOPBAfbjMAtKJPg+4JSLAKj2EmBBtyJzbbzmzWuKzS/gqxNBsJ
+         8bgOA02XQJ3+s3iDipzd/zqIEaorb07Rwfr0yF+4YWYx8WVHrZK13oIAGcZoGSF8pOfB
+         9IePAwA/p4TTvwV6Hc+KPPjcTCda42XMoqvm8kGYmCeI1t3NdNlHg3GaTr3BiNZ1QOAj
+         4OvA==
+X-Gm-Message-State: AO0yUKXzBinuNF5LLRT9KH+u+1MFrgKni7DAE1XvWdZ5E+EfWJbO8RIs
+        uQUBw5g86ZNHxIE/XCTsj0j5yVYsaFjqbL4N4MWC/IyOp/FDSJid2wsLnj4LkSMSgyqSEsy57PB
+        Y2V2ni7USsK4EGtgYXWtlWBo=
+X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862474qta.26.1676635508268;
+        Fri, 17 Feb 2023 04:05:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set9vu+JJtAzOiIVcSatdvoOydcZVm8RnYaOetCCeIlhUKYkTJk3f3mzKzsaA1fup3DVktpT3OA==
+X-Received: by 2002:ac8:5a43:0:b0:3b8:3391:bde5 with SMTP id o3-20020ac85a43000000b003b83391bde5mr1862441qta.26.1676635507987;
+        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
+Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id s4-20020a372c04000000b006f9f3c0c63csm3179081qkh.32.2023.02.17.04.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 04:05:07 -0800 (PST)
+Message-ID: <ddd17066-ce40-118b-28d8-33e14a3de876@redhat.com>
+Date:   Fri, 17 Feb 2023 13:05:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+9rPzw9orlqYkIx@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
+ code
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "yilun.xu@intel.com" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230207095915.169146-1-nava.kishore.manne@amd.com>
+ <8d34bc43-deb4-4166-83ad-34561ee5ac33@redhat.com>
+ <DM6PR12MB3993232B3EB5DE00CBC9B452CDD89@DM6PR12MB3993.namprd12.prod.outlook.com>
+ <c69b76d8-fc72-b52f-4c64-b8c4cd498649@redhat.com>
+ <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <DM6PR12MB399309D9406A79D58BB7C763CDDD9@DM6PR12MB3993.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 01:55:43PM +0200, Andy Shevchenko wrote:
-> On Fri, Feb 17, 2023 at 01:44:25PM +0200, Sakari Ailus wrote:
-> > On Fri, Feb 17, 2023 at 01:28:55PM +0200, Andy Shevchenko wrote:
-> > > On Fri, Feb 17, 2023 at 01:18:31PM +0200, Sakari Ailus wrote:
-> > > > On Fri, Feb 17, 2023 at 01:01:39PM +0200, Andy Shevchenko wrote:
-> > > > > On Fri, Feb 17, 2023 at 12:27:53PM +0200, Sakari Ailus wrote:
-> > > > > > On Thu, Feb 16, 2023 at 10:57:08PM +0200, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > > > > > >   * fwnode_get_next_child_node - Return the next child node handle for a node
-> > > > > > >   * @fwnode: Firmware node to find the next child node for.
-> > > > > > >   * @child: Handle to one of the node's child nodes or a %NULL handle.
-> > > > > > > + *
-> > > > > > > + * Caller is responsible to call fwnode_handle_put() on the returned fwnode
-> > > > > > > + * pointer.
-> > > > > > 
-> > > > > > The loop itself will also put the child node, so this is only relevant
-> > > > > > outside the loop.
-> > > > > 
-> > > > > Yes and this is exactly what people stumbled over. Hence this note.
-> > > > > This call per se doesn't loop, so I didn't get how your comment can
-> > > > > be transformed to anything here. Care to elaborate a bit more on
-> > > > > what I have to add here or reword?
-> > > > 
-> > > > Ah, indeed. This is achieved by putting the previous child. Generally this
-> > > > function is used via the loop helper macro and not called directly, hence
-> > > > the documentation there matters the most. Those functions appear to be
-> > > > without any documentation though.
-> > > 
-> > > So, what should I do?
-> > 
-> > Good question.
-> > 
-> > How about this text:
-> > 
-> > The caller is responsible for calling fwnode_handle_put() put on the
-> > returned fwnode. Note that this function also puts a reference to @child
-> > unconditionally.
-> 
-> Fine. Does it mean I have to change existing wording of the first sentence
-> everywhere?
 
-Up to you.
 
+On 2023-02-13 06:50, Manne, Nava kishore wrote:
+> Hi Marco,
 > 
-> > This is actually done by the firmware specific implementation, namely on OF
-> > and at least should be done on swnode.
+> 	Please find my response inline.
 > 
-> Yes, that's. But it's not needed to be added.
+>> -----Original Message-----
+>> From: Marco Pagani <marpagan@redhat.com>
+>> Sent: Thursday, February 9, 2023 3:52 AM
+>> To: Manne, Nava kishore <nava.kishore.manne@amd.com>
+>> Cc: Nava kishore Manne <nava.manne@xilinx.com>; mdf@kernel.org;
+>> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com; linux-
+>> fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact error
+>> code
+>>
+>>
+>> On 2023-02-08 12:01, Manne, Nava kishore wrote:
+>>> Hi Marco,
+>>>
+>>> 	Thanks for providing the review comments.
+>>> Please find my response inline below.
+>>>
+>>>> -----Original Message-----
+>>>> From: Marco Pagani <marpagan@redhat.com>
+>>>> Sent: Wednesday, February 8, 2023 12:04 AM
+>>>> To: Nava kishore Manne <nava.manne@xilinx.com>
+>>>> Cc: Manne, Nava kishore <nava.kishore.manne@amd.com>;
+>> mdf@kernel.org;
+>>>> hao.wu@intel.com; trix@redhat.com; yilun.xu@intel.com;
+>>>> linux-fpga@vger.kernel.org; linux-kernel@vger.kernel.org
+>>>> Subject: Re: [PATCH] fpga: mgr: Update the state to provide the exact
+>>>> error code
+>>>>
+>>>>
+>>>> On 2023-02-07 10:59, Nava kishore Manne wrote:
+>>>>> From: Nava kishore Manne <nava.manne@xilinx.com>
+>>>>>
+>>>>> Up on fpga configuration failure, the existing sysfs state interface
+>>>>> is just providing the generic error message rather than providing
+>>>>> the exact error code. This patch extends sysfs state interface to
+>>>>> provide the exact error received from the lower layer along with the
+>>>>> existing generic error message.
+>>>>>
+>>>>> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+>>>>> ---
+>>>>>  drivers/fpga/fpga-mgr.c       | 20 +++++++++++++++++++-
+>>>>>  include/linux/fpga/fpga-mgr.h |  2 ++
+>>>>>  2 files changed, 21 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c index
+>>>>> 8efa67620e21..b2d74705a5a2 100644
+>>>>> --- a/drivers/fpga/fpga-mgr.c
+>>>>> +++ b/drivers/fpga/fpga-mgr.c
+>>>>> @@ -61,12 +61,14 @@ static inline int fpga_mgr_write_complete(struct
+>>>>> fpga_manager *mgr,  {
+>>>>>  	int ret = 0;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE;
+>>>>>  	if (mgr->mops->write_complete)
+>>>>>  		ret = mgr->mops->write_complete(mgr, info);
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error after writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_COMPLETE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>  	mgr->state = FPGA_MGR_STATE_OPERATING; @@ -154,6 +156,7 @@
+>>>> static
+>>>>> int fpga_mgr_parse_header_mapped(struct fpga_manager *mgr,  {
+>>>>>  	int ret;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+>>>>>  	ret = fpga_mgr_parse_header(mgr, info, buf, count);
+>>>>>
+>>>>> @@ -165,6 +168,7 @@ static int
+>> fpga_mgr_parse_header_mapped(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  	}
+>>>>>
+>>>>>  	return ret;
+>>>>> @@ -185,6 +189,7 @@ static int fpga_mgr_parse_header_sg_first(struct
+>>>> fpga_manager *mgr,
+>>>>>  	int ret;
+>>>>>
+>>>>>  	mgr->state = FPGA_MGR_STATE_PARSE_HEADER;
+>>>>> +	mgr->err = 0;
+>>>>>
+>>>>>  	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+>>>>>  	if (sg_miter_next(&miter) &&
+>>>>> @@ -197,6 +202,7 @@ static int fpga_mgr_parse_header_sg_first(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret && ret != -EAGAIN) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  	}
+>>>>>
+>>>>>  	return ret;
+>>>>> @@ -249,6 +255,7 @@ static void *fpga_mgr_parse_header_sg(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while parsing FPGA image
+>>>> header\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_PARSE_HEADER_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		kfree(buf);
+>>>>>  		buf = ERR_PTR(ret);
+>>>>>  	}
+>>>>> @@ -272,6 +279,7 @@ static int fpga_mgr_write_init_buf(struct
+>>>> fpga_manager *mgr,
+>>>>>  	size_t header_size = info->header_size;
+>>>>>  	int ret;
+>>>>>
+>>>>> +	mgr->err = 0;
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+>>>>>
+>>>>>  	if (header_size > count)
+>>>>> @@ -284,6 +292,7 @@ static int fpga_mgr_write_init_buf(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_INIT_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -370,6 +379,7 @@ static int fpga_mgr_buf_load_sg(struct
+>>>>> fpga_manager *mgr,
+>>>>>
+>>>>>  	/* Write the FPGA image to the FPGA. */
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
+>>>>> +	mgr->err = 0;
+>>>>>  	if (mgr->mops->write_sg) {
+>>>>>  		ret = fpga_mgr_write_sg(mgr, sgt);
+>>>>>  	} else {
+>>>>> @@ -405,6 +415,7 @@ static int fpga_mgr_buf_load_sg(struct
+>>>> fpga_manager *mgr,
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -437,10 +448,12 @@ static int fpga_mgr_buf_load_mapped(struct
+>>>> fpga_manager *mgr,
+>>>>>  	 * Write the FPGA image to the FPGA.
+>>>>>  	 */
+>>>>>  	mgr->state = FPGA_MGR_STATE_WRITE;
+>>>>> +	mgr->err = 0;
+>>>>>  	ret = fpga_mgr_write(mgr, buf, count);
+>>>>>  	if (ret) {
+>>>>>  		dev_err(&mgr->dev, "Error while writing image data to
+>>>> FPGA\n");
+>>>>>  		mgr->state = FPGA_MGR_STATE_WRITE_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>
+>>>>> @@ -544,10 +557,11 @@ static int fpga_mgr_firmware_load(struct
+>>>> fpga_manager *mgr,
+>>>>>  	dev_info(dev, "writing %s to %s\n", image_name, mgr->name);
+>>>>>
+>>>>>  	mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ;
+>>>>> -
+>>>>> +	mgr->err = 0;
+>>>>>  	ret = request_firmware(&fw, image_name, dev);
+>>>>>  	if (ret) {
+>>>>>  		mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ_ERR;
+>>>>> +		mgr->err = ret;
+>>>>>  		dev_err(dev, "Error requesting firmware %s\n",
+>>>> image_name);
+>>>>>  		return ret;
+>>>>>  	}
+>>>>> @@ -626,6 +640,10 @@ static ssize_t state_show(struct device *dev,  {
+>>>>>  	struct fpga_manager *mgr = to_fpga_manager(dev);
+>>>>>
+>>>>> +	if (mgr->err)
+>>>>> +		return sprintf(buf, "%s: 0x%x\n",
+>>>>> +			       state_str[mgr->state], mgr->err);
+>>>>> +
+>>>>>  	return sprintf(buf, "%s\n", state_str[mgr->state]);
+>>>>
+>>>>
+>>>> If one of the fpga manager ops fails, the low-level error code is
+>>>> already returned to the caller. Wouldn't it be better to rely on this
+>>>> instead of printing the low-level error code in a sysfs attribute and sending
+>> it to the userspace?
+>>>>
+>>> Agree, the low-level error code is already returned to the caller but
+>>> the user application will not have any access to read this error info.
+>>> So, I feel this patch provides that flexibility to the user application to get the
+>> exact error info.
+>>> please let me know if you have any other thoughts will implement that.
+>>>
+>>> Regards,
+>>> Navakishore.
+>>
+>>
+>> Hi Nava,
+>>
+>> Thanks for your quick reply. I understand the need to access the low-level
+>> error code from userspace if the configuration goes wrong.
+>>
+>> However, in my understanding, the low-level driver is supposed to export
+>> reconfiguration errors by implementing the status op and returning a bit field
+>> set using the macros defined in fpga-mgr.h +189.
+>> The fpga manager will, in turn, make the errors visible to userspace through
+>> the status attribute. If the available error bits aren't descriptive enough,
+>> wouldn't it be better to add more error macros instead of "overloading" the
+>> state attribute?
+>>
+>> Moreover, it seems to me that if the reconfiguration is done by loading a
+>> device tree overlay from userspace, the error code gets propagated back
+>> through the notifier in of-fpga-region. Am I correct?
+>>
 > 
-> > A second patch to document the fwnode iterator macros would be nice.
-> 
-> Not the reported problem. Maybe someone else can do the job?
+> AFAIK The state and status interface use cases are different. The Status interface will provide the H/W error info.
+> whereas the state interface provides the FPGA manager driver state(including Error strings). 
+> Please Refer: Documentation/ABI/testing/sysfs-class-fpga-manager (for Error strings information).
+>
 
-It's perhaps not the most pressing issue at the moment. Let's see.
+I didn't say that state and status interfaces have the same use case. 
 
--- 
-Sakari Ailus
+Instead, I suggested that the state interface shouldn't be used to
+report low-lever errors since this "responsibility" belongs to the
+status interface.
+
+The ABI documentation you cited states: "the intent [of the status
+interface] is to provide more detailed information for FPGA
+programming errors to userspace".
+
+> With the existing implementation using DT-Overlay the Configuration/Reconfiguration lower-level
+> driver errors are not propagating to userspace.
+> 
+> Please correct me if my understanding is wrong.
+
+Out of curiosity, I ran a couple of tests on the QEMU arm "virt"
+platform using linux-xlnx and linux-socfpga kernels and the fake
+FPGA manager from the KUnit RFC. I modified the fake manager to
+fail the write op returning a specific error code.
+
+static int op_write(struct fpga_manager ...)
+{
+	[...]
+
+        return -202302;
+}
+
+The op error code is visible from the message log on both kernels when
+the overlay application fails:
+
+[   23.958015] fpga_manager fpga0: writing fake.bin to Fake FPGA Manager
+[   23.959119] fpga_manager fpga0: Error while writing image data to FPGA
+[   23.959341] fpga_region region0: failed to load FPGA image
+[   23.959472] OF: overlay: overlay changeset pre-apply notifier error -202302, target: /test_region
+[   23.959622] create_overlay: Failed to create overlay (err=-202302)
+
+However, I feel this part of the discussion is more speculative since
+the DT overlay configFS interface is not mainline. 
+
+> Regards,
+> Navakishore.
+> 
+
+Thanks,
+Marco
+
