@@ -2,169 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0A69B0E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1A769B0EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjBQQ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S230159AbjBQQaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjBQQ3Q (ORCPT
+        with ESMTP id S230007AbjBQQaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:29:16 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2087.outbound.protection.outlook.com [40.107.9.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB4F26CC3;
-        Fri, 17 Feb 2023 08:28:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hcLioOrgOahcAakkqdrZHUUTJS78G263eeP6B6tBdsbVrbR8RF+PS6ZjUkhGvH6cAnlSLUG21hTxnpxtdE+598tMowGpIiaH3BHHz34iN83hJRbuaZuM/wda49QrLFpqLA3mbf7iXnD0yMpohMErU4TC2kr+NhNQWwrBMiB2hqKW+CNuLrF3hpYgam+4CL++OHXRsvF+F/MYHZsSo+gaxF/OYLo16ahJO8k7QI4bliw/qqEEZhSFdt7usKrOQKv8E2eW/T0GXNQXK27hXYbNtPspvadLt/DG5kQ7ApZJ6tGG+DCdOD1pDA9kbei9iKRWGNSWxpGEVJu/DeK+tlFLzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WKieBRSBJrjk5FSiZ47q4SAGQZNjv472aqoX8tqKfoA=;
- b=BXFrke5D4pIMoaqerzSimU/cjowPhme3OqgjSJJdYM04lcjFvZ2843LWBtnTGL+iHWLG0HS25iFzYvLT/pHLkCu6gZDDrRSd4rNqRtupBC5uEX1fhaQr0umMRvQoTQESNkBCyV6h4+KRryLZlv2sZ7mg+u+dqbjbeUkuGrGfcm3U4JgQZXKNykzXUToP5MJXMgA2eQe48tx0DNIp0lhYRWyAQKuyVWfgbnJYh35s4xWSU19YmrXOO35+s9nhkH7TuJ3mYzXliMQgOaLA4VNcqPfp1sNlPfLzyHrfzJnFZctQzTVE6XHcY75i2mj92nwSP2+o4DeTY7vRT0oc72zFpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WKieBRSBJrjk5FSiZ47q4SAGQZNjv472aqoX8tqKfoA=;
- b=X4v8QMDRkcsuzKbHY2D634IZOzRIHmrNjDmJhhbgdA3pNhcWmzMEYza0xyiFGHSwOO/bUZ8OstHWVWcjKFvN+uTaDXEKS6yloqpAAfwUo5+wbJ0D/QTnqcEuTqBlRcrjsXFynCDS3PRhpdVR/AIELbcYGsPL7QMn6urPU+eM26a2+NzbSlq/UUuF79gIHYtiZEZ1nZ6wd50QfjXfcLd+PgvuZAkeM0k2oFuUrY5T0G7/J2qSGWWaHAYHsVyWtFVZBJ1FAvEZijDY65Y/AkqaKIWw/3BfQyMHZm6YJgypW/lejjMCN5Yi+HkpnA6fJZFIcADiooKGgWETz4NNBoblgA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3137.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Fri, 17 Feb
- 2023 16:28:29 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%4]) with mapi id 15.20.6111.013; Fri, 17 Feb 2023
- 16:28:29 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Fri, 17 Feb 2023 11:30:06 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043795BD92;
+        Fri, 17 Feb 2023 08:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1676651344; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9WHYd6ObSJOqmsG9FQ4cLfYbvvNT5mHeWMKeCszGPnU=;
+        b=xZVJx4pZXzcxhUpv4DnRpEZ6xjsxCp6ky6cFuR0tEIUJEYPdqN2cMmylySOOAr5CKTzlpe
+        +K/0WUBmyQoN1kb9gCkqKMq1uzNrMqdwgC4ATIarFM+amArt44aIza+lAsklusmlFFBMyb
+        Mfrv6Kd4OSGyK2fJLU3+Ne1yBopp+ws=
+Message-ID: <de203bdd289124013838244cf0dd0a698d209e9b.camel@crapouillou.net>
+Subject: Re: [RFC 0/3] Make WLAN and Bluetooth basically work for CI20
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v6 07/10] MAINTAINERS: add the Freescale QMC controller
- entry
-Thread-Topic: [PATCH v6 07/10] MAINTAINERS: add the Freescale QMC controller
- entry
-Thread-Index: AQHZQuAffK6t6holaEyMZEs+dn4s1a7TU/gA
-Date:   Fri, 17 Feb 2023 16:28:29 +0000
-Message-ID: <f32e4d60-8220-3bcc-d0a4-c7c1090493c7@csgroup.eu>
-References: <20230217145645.1768659-1-herve.codina@bootlin.com>
- <20230217145645.1768659-8-herve.codina@bootlin.com>
-In-Reply-To: <20230217145645.1768659-8-herve.codina@bootlin.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB3137:EE_
-x-ms-office365-filtering-correlation-id: 1354fce0-0353-4962-0e01-08db110400d8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CgJAQ2C/PfUTHWJiW289STSeSGm5nEIE8/pcthR0X8Laf1cziGRHiCVN0QiarS7O7iJ8WR6xtGJd5yUA4qZzAeMqgpSKPLutlY8FUwOfKJYBpvrh8Ilfpg58C6fg9gAPSuaJuxExC+mFJ/l5+dOQ3EsteFkwMND96ElLXl4IPWaSyyldaeGpMOXIdIh6EwWkzjvADcVJAdZGahSQ2b+3yVa0/hhnO3nyBaKYozyKn2vUwHMXe4vJMCe75ZWGf9TfD9JfaC+ScDZapgIIZAhz1ZKCTSKIwYW9tiXgPbEAPvtxP8TF3vSMe44ILlaDyLB7PtS7XZxNfYEyJRlw3BKqmP8kJh8YBJcPNswL8OiCzJ7H55EGl4W8sY18bYU6PVAm9UGReqy5mPp5rKUt7PYVg8DXRYRS2o0BjAs8DgGtlf4K5jkcxnRTT4hdKMVBgoZ42tJN1sdwREU5u6kfpC3Kn+NjcKTDICnXvRYXwcaPapjW9tj+NGAi6AX3W5kHMcOeX99WZxx4+T4xiktim3DOCa4yQX9PU81EgF/xgsvC/Ec9q6ZaaPOAlmJtIAWjJzPCSm+Zca1vxHAGmZ8BkB/zQ9mYr1NBCHH9xUQG2k5Q+fzkpBPzVKOGOCVnUjmiIGcM4wRKuTlnIXzEYYI8qYl18/BJBoJDlRB4ltAsmLvAtha1BbPGq6i42YAaW4dRemLuAq1217LLFVgUnz/dUyqeIHGGDOrVbVOny9t+a8Vb9Jh/HhjcqdLsYBs2vh6ThCMoQliRcF6furGoZsGbyOsib8KsU2bu8A0ShGhyxsZN4h8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39850400004)(136003)(346002)(396003)(376002)(366004)(451199018)(2906002)(44832011)(31696002)(86362001)(4744005)(36756003)(2616005)(38070700005)(122000001)(921005)(66556008)(91956017)(76116006)(64756008)(66446008)(8676002)(66476007)(54906003)(316002)(110136005)(7416002)(41300700001)(8936002)(5660300002)(4326008)(66946007)(38100700002)(26005)(6512007)(186003)(71200400001)(478600001)(6506007)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bFRjZjZ6NkNWWEVqZFJiMzBsb25mamw2enZ4NTdDcjFDWk5EMjljTXB0NDdR?=
- =?utf-8?B?bXBxVERweW00eGVRRnVBekc1b2hDS1pUOE5FSHNERGRWVVd1SmFwSXgrN2RX?=
- =?utf-8?B?c2hzdFRZamtRR1pIZlc2aERxSXFsa05waGZaeTJzMEQ3NS9aQ0t3dEVvRm9Q?=
- =?utf-8?B?VHNVYzlxbEJrR1hmek8vVjJqSjdVblpJWWs3TE9TK1M2UFd5VVBmeXcxa1B1?=
- =?utf-8?B?a3RlVmVXQTUyT01QZGcrRm5CYXdDa2JHVUlTeXR3ODhqVUJUQldSeDVXR3lr?=
- =?utf-8?B?WGNEeEtOK1pPS2VRRjk1SkU2OXZmcmRBbnJZeVFOS21PdjdPdEd4NUNqUWs4?=
- =?utf-8?B?SFhpVVZwMUJJbTN1LzUxYTdpWEJiTUFTaVViVUlzbWVPU1FyM3l6NU5UbDR2?=
- =?utf-8?B?VXdTcnp5Yld1MnlIc016WkFVdHlOWEliM0RRNWJoZHU5TDhybnp6RlVUL3Qx?=
- =?utf-8?B?RitLM09WQmZ3VHFva0MveWYxZEt2UkMrVkpzODBJSEhYenhGQTBUZHFJb0ox?=
- =?utf-8?B?UzAzVmtlU1FmbWNsQ3VHTlVDanU4UnBNNXBLZWRPOU5sWWVxKy9NeFdrS3JQ?=
- =?utf-8?B?Y0Y2TWI1bWhHaFBrUklSRVFHMDN2Rnd1UHBWMCtQdVc1UW1tSFpnUmtXQW9I?=
- =?utf-8?B?YnNKeWR2SG5VdXUzZWwzcFdoMzJ1OGtod1d0V0RxWnIvTFlIMTJxWmg0N3lE?=
- =?utf-8?B?SmdCQVVhNlNCV04wZDQ5YUlDVE83bzFRQWo1aGdhUkx5akdHdlRaZWVHR2xq?=
- =?utf-8?B?OG10NjdwbG5CR05JUDdSbGtuaXlPRlErdXBKZ0xWMWxTL1pmVk9OZ2M4MStD?=
- =?utf-8?B?QnhKeTg1ZlNXb0grK1pwMDBRcXIzL1FITHl6alBEQzhTckdTQUhUVCtKWHds?=
- =?utf-8?B?RnorcDM5UVRnaHczdFZWZmIzNllhS3RtSXlTN1crV01xWkdvb3l6bVdHQ1J0?=
- =?utf-8?B?SmZzb2NCTjNEdmlRTit1N0NkSHJFK1pReUNTNHpBYzBQRXJlVm11dEw3dHJ3?=
- =?utf-8?B?Z0Y5dUEwZmN4MlpiTXRXWjF2ZFc3SmRHTGJoa0g4UHMvaUhMRlIrOUl4WVZ1?=
- =?utf-8?B?YXNndzBJNjNDQVJMV3RWOE5WWDkrbkhDZ0JHMUZTdWxPWE9iand6cUhEcnBk?=
- =?utf-8?B?M2pUNkE4Yzg0TnBtRnFnekx0clRVdUJKczFEWFVBVDh0dkhjcFlSZmp6U3RJ?=
- =?utf-8?B?UFd6QXc3dzhGamdaOXZTMjY1UEtxZWVQblJpRXljLzRpWENSNFhBZHFaN1ox?=
- =?utf-8?B?cER3VUhNTjhldGhPYUFtcXBoRVlWa1pjYjUvQTRkWlVST0xBTWNuQXg5WjVn?=
- =?utf-8?B?L1JQeHJjd0FLTTcxa2pGbWgxTnVqY2pCTkpZVXdLMHdISVF1bFp4TzBiTFlV?=
- =?utf-8?B?VmhFM0FCaWl5RmFwYmxyMUluUDk3ZEFpNVhjMVJZZTZnMHZBVU1NeGtHNDdy?=
- =?utf-8?B?T3BhRkNRdG45MXVFZGVFZkpnZTJkNTJCN3BFYStJRCt0S2hqY1k5bndPdjBJ?=
- =?utf-8?B?aWdsRUJkY1pBSDJYK2R2ankrOW1wYitvTEJPNXF4TEhKSGlyZHdTa0U3TlZs?=
- =?utf-8?B?TmNjdnZ1UUFQczRyVjkyZ1dWalNRUTh6S0dFRWtoc2RhV1pqNzVRMm1BdXFT?=
- =?utf-8?B?SERVNzc3YTkrMGxGcHIwMlFMd3hpaTB5aUxNNUNWV0VSWStGN3Z0cEN1MWpN?=
- =?utf-8?B?UDZsYUpGVCtoTEFuTGg5VjZ3WHk2ZU9FaFo0SVR6dytqdGFSV1cxUnZKeGtM?=
- =?utf-8?B?UHFsOUljMHYxL3dsemV3a1NyREpOaHZpNjIvSFZ5bzEraUx1TEExeWVsVDl4?=
- =?utf-8?B?a0gvdGtXNDBhNjlUNWZYT1FQNXA2dVJ2WTVqR2liMEMzWDZwK1k5c1R0TVVu?=
- =?utf-8?B?ZUJTTVc4cXBnRjBDZjF1RUNIMzVzdUZhbHQ2UEZnY0xPbWNtdGJkbGVyM00v?=
- =?utf-8?B?ZlBCeWErZjg2SUNDcGhqb1pTYlNyZmlnUGNpekhVZEM5a1BOSktLVXlmdWNJ?=
- =?utf-8?B?U21uTERtNjRBR3drdzVTcm55RWNPVU8rOFg4NkVBQ091cEVlLzF2NUxtUjBi?=
- =?utf-8?B?WUFBNHJVdW9iQXRzWFhpdVBEcVFHNHBneDV0U3lacElONHAzb0M0QTBUNkpZ?=
- =?utf-8?B?M3RFajRDSmJtMHFKY2FJZWdVcDY0YW41QUVDMUlBeEZxdmJnejFnSlliRHJo?=
- =?utf-8?B?Rmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AF0323CF55A35E4D87A7178BCBC71F17@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Riccardo Mottola <riccardo.mottola@libero.it>,
+        Paul Boddie <paul@boddie.org.uk>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Date:   Fri, 17 Feb 2023 16:29:01 +0000
+In-Reply-To: <809FC192-DBC6-45A7-AF91-A30179E6830C@goldelico.com>
+References: <cover.1676482318.git.hns@goldelico.com>
+         <e1f92dc94a3e3df7c4bb32b441802cb333ccb6db.camel@crapouillou.net>
+         <B1706E39-202F-417C-A7A4-B07482B787B0@goldelico.com>
+         <4485f880f7b41bdb833d1153682530cd4bc3ed94.camel@crapouillou.net>
+         <809FC192-DBC6-45A7-AF91-A30179E6830C@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1354fce0-0353-4962-0e01-08db110400d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2023 16:28:29.4289
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CoXEwm7YSM96Tf39A+OAGj92ul3fDpkhXapafaKqVx3t56f70tC/de2DKZg3e55qtJ6LegcZgTivGmtxPDPyqLhhiMUtZmUqni5IwO2kDvU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3137
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzAyLzIwMjMgw6AgMTU6NTYsIEhlcnZlIENvZGluYSBhIMOpY3JpdMKgOg0KPiBB
-ZnRlciBjb250cmlidXRpbmcgdGhlIGRyaXZlciwgYWRkIG15c2VsZiBhcyB0aGUgbWFpbnRhaW5l
-cg0KPiBmb3IgdGhlIEZyZWVzY2FsZSBRTUMgY29udHJvbGxlci4NCj4gDQo+IFNpZ25lZC1vZmYt
-Ynk6IEhlcnZlIENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPg0KDQpSZXZpZXdlZC1i
-eTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KDQo+IC0t
-LQ0KPiAgIE1BSU5UQUlORVJTIHwgOCArKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA4IGlu
-c2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJT
-DQo+IGluZGV4IDA5N2E4MGQ2NjIzYi4uNDdlY2E1YjA2Y2NlIDEwMDY0NA0KPiAtLS0gYS9NQUlO
-VEFJTkVSUw0KPiArKysgYi9NQUlOVEFJTkVSUw0KPiBAQCAtODM3Miw2ICs4MzcyLDE0IEBAIFM6
-CU1haW50YWluZWQNCj4gICBGOglkcml2ZXJzL3NvYy9mc2wvcWUvDQo+ICAgRjoJaW5jbHVkZS9z
-b2MvZnNsL3FlLw0KPiAgIA0KPiArRlJFRVNDQUxFIFFVSUNDIEVOR0lORSBRTUMgRFJJVkVSDQo+
-ICtNOglIZXJ2ZSBDb2RpbmEgPGhlcnZlLmNvZGluYUBib290bGluLmNvbT4NCj4gK0w6CWxpbnV4
-cHBjLWRldkBsaXN0cy5vemxhYnMub3JnDQo+ICtTOglNYWludGFpbmVkDQo+ICtGOglEb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc29jL2ZzbC9jcG1fcWUvZnNsLGNwbTEtc2NjLXFt
-Yy55YW1sDQo+ICtGOglkcml2ZXJzL3NvYy9mc2wvcWUvcW1jLmMNCj4gK0Y6CWluY2x1ZGUvc29j
-L2ZzbC9xZS9xbWMuaA0KPiArDQo+ICAgRlJFRVNDQUxFIFFVSUNDIEVOR0lORSBUU0EgRFJJVkVS
-DQo+ICAgTToJSGVydmUgQ29kaW5hIDxoZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+DQo+ICAgTDoJ
-bGludXhwcGMtZGV2QGxpc3RzLm96bGFicy5vcmcNCg==
+Hi Nikolaus,
+
+Le jeudi 16 f=C3=A9vrier 2023 =C3=A0 07:58 +0100, H. Nikolaus Schaller a =
+=C3=A9crit=C2=A0:
+> Hi Paul,
+>=20
+> > Am 15.02.2023 um 22:19 schrieb Paul Cercueil
+> > <paul@crapouillou.net>:
+> >=20
+> > Hi Nikolaus,
+> >=20
+> > Le mercredi 15 f=C3=A9vrier 2023 =C3=A0 21:32 +0100, H. Nikolaus Schall=
+er a
+> > =C3=A9crit :
+> > > Hi Paul,
+> > > I wasn't aware of your work and it could have saved me a lot of
+> > > time
+> > > to
+> > > experiment and try to make my patch set work.
+> > >=20
+> > > But we are still lucky, as we can merge ideas and find the really
+> > > best solution.
+> > >=20
+> > > Anyways you can take my patch 1/3 and 3/3 and we have only to
+> > > discuss
+> > > details of 2/3.
+> > >=20
+> > > Interesting is your setup of several fixed regulators using
+> > > regulator-settling-time-us
+> > > to take care of power up sequencing. What I don't understand is
+> > > the
+> > > fixedregulator-5
+> > > which has no controlling gpio but is always on. What is it needed
+> > > for? Maybe just to
+> > > be used to silence v(q)mmc-supply warnings etc.?
+> >=20
+> > It's wired to the various inputs of the ACT8600 chip. The driver
+> > will
+> > complain if they are not connected to anything. And while we're at
+> > it,
+> > it will also silence the v(q)mmc-supply warnings, yes.
+> >=20
+> > > But you do not really switch or enable/disable power of the SDIO
+> > > or
+> > > bluetooth UART
+> > > interface?
+> >=20
+> > The badly named "bt_power" regulator powers on the chip, while the
+> > "wifi_io" regulator controls the voltage on the VDDIO pins. So
+> > these
+> > are enabled/disabled when needed.
+> >=20
+> > > Is it necessary to add a compatible of "ingenic,iw8103-fmac"? If
+> > > it
+> > > works with the
+> > > standard "brcm,bcm4329-fmac" driver (note that I have
+> > > "brcm,bcm4330-
+> > > fmac" because that
+> > > is how the module identifies itself) there seems to be no need
+> > > for
+> > > another compatible
+> > > and a special bindings documentation.
+> >=20
+> > The chip has a different name so we can't guarantee that it works
+> > exactly like the BCM4330. So that was my reason behind using a new
+> > compatible string with a fallback.
+>=20
+> Ok, that would be a good reason.
+>=20
+> >=20
+> > However I sent a patch to add the new compatible string to the
+> > documentation and it got refused and I was told to just use the
+> > brcm,bcm4330-fmac, so I'll just do that.
+> >=20
+> > > For bluetooth you could add brcm,bt-pcm-int-params =3D [01 02 00 01
+> > > 01]; so that we
+> > > can eventually add some PCM stream to the sound setup.
+> >=20
+> > Sure, does that work though?
+>=20
+> Well, I don't know. We have no sound setup.
+>=20
+> > One (unrelated) note about Bluetooth, I didn't get it to work
+> > properly;
+> > it works enough to detect my keyboard and allow me to pair with it
+> > (typing the password on the BT keyboard) but it will never connect
+> > properly after that.
+>=20
+> I haven't tested it that way in my setup.
+>=20
+> >=20
+> > > Finally you have made node labels more consistent by calling them
+> > > wifi* while I made
+> > > them wlan0*... Well, just a matter of taste.
+> >=20
+> > Actually the node names should use as much as possible the generic
+> > names specified in the devicetree specification
+> > (https://www.devicetree.org/specifications/) and "wifi" is one of
+> > those.
+>=20
+> I meant the node labels, not the node names.
+>=20
+> BTW: Wi-Fi is a trademark of the Wi-Fi Alliance and means
+> certification
+> while WLAN means the function. Of course the first must be compatible
+> to 802.11 and other standards while a WLAN could use some different
+> technology.
+>=20
+> >=20
+> > > Then I tried to take your tree, add my defconfig (because it
+> > > seems as
+> > > if you have not
+> > > updated configs), but I could only see=20
+> > >=20
+> > > [=C2=A0=C2=A0=C2=A0 0.929072] Bluetooth: hci0: BCM: firmware Patch fi=
+le not
+> > > found,
+> > > tried:
+> > > [=C2=A0=C2=A0=C2=A0 0.935704] Bluetooth: hci0: BCM:
+> > > 'brcm/BCM4330B1.img,ci20.hcd'
+> > > [=C2=A0=C2=A0=C2=A0 0.941683] Bluetooth: hci0: BCM: 'brcm/BCM4330B1.h=
+cd'
+> > > [=C2=A0=C2=A0=C2=A0 0.946827] Bluetooth: hci0: BCM: 'brcm/BCM.img,ci2=
+0.hcd'
+> > > [=C2=A0=C2=A0=C2=A0 0.952278] Bluetooth: hci0: BCM: 'brcm/BCM.hcd'
+> > >=20
+> > > and then the kernel is stuck.
+> > >=20
+> > > So what is your defconfig that I can test your build?
+> >=20
+> > I test with the OpenDingux userspace so my defconfig is probably
+> > very
+> > different from yours. What are you using?
+>=20
+> upstream ci20_defconfig + my patch 3/3.
+> Otherwise I test with Debian user-space.
+>=20
+> Can you share your defconfig just for testing purposes?
+
+There are my changes to ci20_defconfig:
+https://github.com/OpenDingux/linux/commit/52278b1871e6eb7fbdba7a4bda608b37=
+b6cbc1c7
+
+Some of these changes are irrelevant for you and are only for booting
+the OpenDingux userspace.
+
+Note that all the WEXT stuff in your config can go away if you use a
+more recent userspace (and use e.g. ip/iw instead of
+ifconfig/iwconfig).
+
+Cheers,
+-Paul
+
+>=20
+> >=20
+> > About the crash: make sure you have the *very* latest WiFi firmware
+> > from
+> > https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware=
+.git/
+>=20
+> The BCM4330B1.hcd firmware is missing there. I get mine from
+>=20
+> https://github.com/armbian/firmware/raw/master/brcm
+>=20
+> And it works with my setup but not yours. So I think something
+> else is missing or wrong. Note that it is loaded from the SD card
+> but the kernel is stuck earlier.
+>=20
+> > I do remember that one particular version of the firmware will
+> > crash
+> > the kernel. You also don't need the .hcd firmware for Bluetooth to
+> > (somewhat) work.
+>=20
+> Yes, I know. There may also be some race if the drivers are compiled
+> into the kernel that the bluetooth subsystem searches for the .hcd
+> files before the mmc subsystem has found and SD card. Then we have no
+> firmware even if it is stored.
+>=20
+> BR,
+> Nikolaus
+>=20
+> > > >=20
+> > > > >=20
+> > > > > Tested on CI20 with v6.2-rc6.
+> > > > >=20
+> > > > > H. Nikolaus Schaller (3):
+> > > > > =C2=A0 MIPS: DTS: jz4780: add #clock-cells to rtc_dev
+> > > > > =C2=A0 MIPS: DTS: CI20: fixes for WiFi/Bluetooth
+> > > > > =C2=A0 MIPS: configs: ci20: enable drivers we need for
+> > > > > WiFi/Bluetooth
+> > > > >=20
+> > > > > =C2=A0arch/mips/boot/dts/ingenic/ci20.dts=C2=A0=C2=A0=C2=A0 | 77
+> > > > > ++++++++++++++++++++++--
+> > > > > --
+> > > > > =C2=A0arch/mips/boot/dts/ingenic/jz4780.dtsi |=C2=A0 2 +
+> > > > > =C2=A0arch/mips/configs/ci20_defconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 18 +++++-
+> > > > > =C2=A03 files changed, 84 insertions(+), 13 deletions(-)
+>=20
+
