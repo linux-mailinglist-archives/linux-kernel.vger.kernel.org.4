@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C923069A8FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3B369A8FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjBQKTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S229756AbjBQKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjBQKTT (ORCPT
+        with ESMTP id S229496AbjBQKUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:19:19 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A417660A57;
-        Fri, 17 Feb 2023 02:19:18 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g16so1123446lfv.4;
-        Fri, 17 Feb 2023 02:19:18 -0800 (PST)
+        Fri, 17 Feb 2023 05:20:17 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93760A57
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:20:15 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id z1-20020a1c4c01000000b003e206711347so520720wmf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:20:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vCndEDoUtknwHJxWtOqquHmn6BtbW8GdekGsNECVWdg=;
-        b=e+/CjwXji5eHjM7/meT9aSSjK0hOM9rnqj+8V8sDd5od3GlQSIZ/7z/7QktdAhdxjF
-         VI0Ll5TNsvoFnNSGE5lFMvRT/QVfrQ1aN9CXUY4H99sWK/VrjNfABIfEfhkc6/lJvzXE
-         jV+e6OtWkSTDLL4vh77hh747QwFMlkGN+Apx/FoYSwNkb6tB8GDPCaa5gm2UDHG8z/MD
-         1cI67UjAvjZk01XComsdqloJR8qFlENfINxuq7lBIp0X/wdAHTIIdoMd07g1i6SHj1Fu
-         N1qdM9VuoaPyK/5BHuiyBKZztRa0jtt+mgjQSEiW/NGRn71bWj/ELfZsQeojXW6nV4TR
-         /pgg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WBDuZ1YsthJFSmgGckbyCZ1GxJY3h4+AR0nDnSv5p9E=;
+        b=WuRKgVx/abcZcK0HucJ8OjzXyIpHTyHaEz58egQAstY1ADJVR1JsTDjiROMTeDn2Uq
+         UFIxDNUqOqEYb/Yh98Skh8i1EqZD8J5voak28hEzBJTErFxFz5IgwFpGgX2F5MQNSjFe
+         FH6yX2PU0TFCrYpUIpN+7qXCdgFPKkYVbeywTF4aZPBS6awLEgJj+eyHNp3kT3oQgWDx
+         e/+OLuHHd/o/NEBP3PkabCf0j0O2twILyrxffS5tRO4ngZqMN24Bm/svmGh5Wt7JBRj2
+         v0YU+wG5jBK66ZAAGj9BYlTjvdWp5WTmq6SMTfeUTvkr0DYn+iacsV0QtDe6Zj8pkhjP
+         8hBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vCndEDoUtknwHJxWtOqquHmn6BtbW8GdekGsNECVWdg=;
-        b=nc8KWvOJEY2Iypy7CN2YnGpiimXE+EXVsL3DU1MCqspi+3nTSr4ZlQ/+NtV7MD6J3B
-         ZrEyxZ62IXlYI+hjhmS+DJs5tUTGlSkQzPaS9GLQbdwJJz29BZiOd+JZyco3uq5LS6Mz
-         Y6JP3IdBn1lGLxRDJE1y539eHvH9/oafz/zDiNbPAza0CP/qIt/sjxiTxWHLl0HH9WOj
-         tAEIS7Bej2lM42pZvd++WLqYw0bcNPvckKBb/MU/qfS5X4v8zOmNhB5M9R8BNPv/R0Wd
-         WY6luLfv9/wmwUsfdwx5iy5OQP1nlk3f35F9VjfwwvM+JWY2qQoRI7NCrc2yCpw6CkS7
-         Dt9Q==
-X-Gm-Message-State: AO0yUKWa/yRwDSUHRfzsqRNO8kPKhtNgjwiH5IybAZYaaVHUExeV5huf
-        at8qHtgyR7HIqwL1Z19LGT4=
-X-Google-Smtp-Source: AK7set/KoPJ9iPu3vao4Dqv+7Ti4VzcdsvVWT9rrj+iUyGdqbOCgEq2dY6aOQQ9TccDkUjqrysyK/w==
-X-Received: by 2002:ac2:5544:0:b0:4d7:2e11:d075 with SMTP id l4-20020ac25544000000b004d72e11d075mr2655581lfk.45.1676629156788;
-        Fri, 17 Feb 2023 02:19:16 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id g21-20020ac25395000000b004dc4d26c324sm633413lfh.143.2023.02.17.02.19.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 02:19:16 -0800 (PST)
-Date:   Fri, 17 Feb 2023 13:19:13 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/11] PCI: dwc: Fix port link CSR improper init if CDM
- check enabled
-Message-ID: <20230217101913.vomgrcwj7mv5apjq@mobilestation>
-References: <20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru>
- <20230217093956.27126-2-Sergey.Semin@baikalelectronics.ru>
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WBDuZ1YsthJFSmgGckbyCZ1GxJY3h4+AR0nDnSv5p9E=;
+        b=t4dobjmkLmrzq2+aNvtNLlwW9sAUByP+WSdfNKnW5yPQbmDiUJl+CNQq0AXhfXDMjZ
+         Ro+v6Auf4SZPGulJG3G10Ems6e+E7JxsEk9TnD98LV4wgXR0wjT0CP84A8B+TwWYjE2m
+         KaY6JnV2gv28WEwmka5UwueQ57U58DdcCT+eYAPMgYm/p7j87Hyde/Jd+TY5FcSpUaxD
+         QWR6uCli6NUqkTffT7fNQPjcOpRpUvHpMh50uBjuXJETOt1WO0HrIdAe95fHY/+80pLo
+         q+Ots60R54BVXs3yQLKSt58UqKE8Jwme9CR258pgUdRDmbQmJDjApUYidNtoWy9MVoxB
+         voWQ==
+X-Gm-Message-State: AO0yUKV8xanbUgavP3IZXNObE5P/Y4cIEqEHsgdET6G4kTc/UPA6yCbS
+        Npa/VoLly/Y/3ggb2S5UIwFtBg==
+X-Google-Smtp-Source: AK7set/NxxmCSIJR7gO1gNoNDErjpfId+Gjra9KrBytdDA56fqSSwlfB1IfuBIhwiAKMe6dJjTWjZA==
+X-Received: by 2002:a05:600c:4d06:b0:3dc:1ad6:55fd with SMTP id u6-20020a05600c4d0600b003dc1ad655fdmr893227wmp.32.1676629214411;
+        Fri, 17 Feb 2023 02:20:14 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f65e:92aa:85d5:15c5? ([2a01:e0a:982:cbb0:f65e:92aa:85d5:15c5])
+        by smtp.gmail.com with ESMTPSA id v5-20020adff685000000b002c559def236sm3028656wrp.57.2023.02.17.02.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 02:20:13 -0800 (PST)
+Message-ID: <86b55b41-3faf-dbb8-a072-9a905d111eaa@linaro.org>
+Date:   Fri, 17 Feb 2023 11:20:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217093956.27126-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2] drm/meson/meson_venc: Relax the supported mode checks
+Content-Language: en-US
+To:     Carlo Caione <ccaione@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Da Xue <da@lessconfused.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 12:39:46PM +0300, Serge Semin wrote:
-> If CDM_CHECK capability is set then the local variable 'val' will be
-> overwritten in the dw_pcie_setup() method in the PL_CHK register
-> initialization procedure. Thus further variable usage in the framework of
-> the PCIE_PORT_LINK_CONTROL register initialization must imply the variable
-> re-initialization. Alas it hasn't been taken into account in the
-> commit ec7b952f453c ("PCI: dwc: Always enable CDM check if
-> "snps,enable-cdm-check" exists"). Due to that the PCIE_PORT_LINK_CONTROL
-> register will be written with improper value in case if the CDM-check is
-> enabled. Let's fix this by re-initializing the 'val' variable with the
-> PCIE_PORT_LINK_CONTROL CSR content before link-mode initialization.
+On 13/02/2023 10:32, Carlo Caione wrote:
+> Relax a bit the supported modes list by including also 480x1920 and
+> 400x1280. This was actually tested on real hardware and it works
+> correctly.
 > 
-> Fixes: ec7b952f453c ("PCI: dwc: Always enable CDM check if "snps,enable-cdm-check" exists")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-The same fix was submitted by Yoshihiro a bit earlier:
-https://lore.kernel.org/linux-pci/20230216092012.3256440-1-yoshihiro.shimoda.uh@renesas.com/
-I've preserved my version of the patch in the series to ease the merge
-procedure since the later patch in this patchset may cause conflicts.
-
--Serge(y)
-
+> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
 > ---
->  drivers/pci/controller/dwc/pcie-designware.c | 1 +
->  1 file changed, 1 insertion(+)
+> In particular relax the resolution checks to allow more resolutions like
+> 480x1920 and 400x1280.
+> ---
+> Changes in v2:
+> - Lower the hdisplay limit to support 400x1280 as well.
+> - Link to v1: https://lore.kernel.org/r/20230210-relax_dmt_limits-v1-0-a1474624d530@baylibre.com
+> ---
+>   drivers/gpu/drm/meson/meson_venc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 6d5d619ab2e9..3bb9ca14fb9c 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -824,6 +824,7 @@ void dw_pcie_setup(struct dw_pcie *pci)
->  	}
->  
->  	/* Set the number of lanes */
-> +	val = dw_pcie_readl_dbi(pci, PCIE_PORT_LINK_CONTROL);
->  	val &= ~PORT_LINK_FAST_LINK_MODE;
->  	val &= ~PORT_LINK_MODE_MASK;
->  	switch (pci->num_lanes) {
-> -- 
-> 2.39.0
+> diff --git a/drivers/gpu/drm/meson/meson_venc.c b/drivers/gpu/drm/meson/meson_venc.c
+> index 3c55ed003359..fcd532db19c1 100644
+> --- a/drivers/gpu/drm/meson/meson_venc.c
+> +++ b/drivers/gpu/drm/meson/meson_venc.c
+> @@ -866,10 +866,10 @@ meson_venc_hdmi_supported_mode(const struct drm_display_mode *mode)
+>   			    DRM_MODE_FLAG_PVSYNC | DRM_MODE_FLAG_NVSYNC))
+>   		return MODE_BAD;
+>   
+> -	if (mode->hdisplay < 640 || mode->hdisplay > 1920)
+> +	if (mode->hdisplay < 400 || mode->hdisplay > 1920)
+>   		return MODE_BAD_HVALUE;
+>   
+> -	if (mode->vdisplay < 480 || mode->vdisplay > 1200)
+> +	if (mode->vdisplay < 480 || mode->vdisplay > 1920)
+>   		return MODE_BAD_VVALUE;
+>   
+>   	return MODE_OK;
 > 
+> ---
+> base-commit: 38c1e0c65865426676123cc9a127526fa02bcac6
+> change-id: 20230210-relax_dmt_limits-355e2a1c7ccf
 > 
+> Best regards,
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
