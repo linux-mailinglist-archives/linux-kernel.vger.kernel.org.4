@@ -2,114 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CDC69B463
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E993D69B465
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBQVJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S229821AbjBQVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBQVJD (ORCPT
+        with ESMTP id S229482AbjBQVJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:09:03 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3705EC95
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:08:54 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id d10so2072560qtr.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s7kMhaMk0ra1bxEhmhUd3nL+weLy5X860ySTDmIfCoc=;
-        b=l2CFdhXj76hZTmNNKWKbGh/kbsp3vniCAulyPNGgLKp8K1cfTwj2DOhlqKb39UgD9L
-         1q/7m/dTIRyz6gYeYstVqeY7Ac0tIGMvj8Gw9cH4fn7ZiypA7GaGoj18Re2RHmBwsI2n
-         7992NgFDwlKbzudgcuf8iEKz/Xi51dccLVW6nvmobi1vOIFGBBTVWzY4nfYrBgD8fSaj
-         xizYOcTrrUpLrqGqFF3ooPbHfAKANmA1tUzsuV5uKjVJ5aNhx6evs1CCkcNST1kw3tD5
-         2pC1TouUV7qdYQ1YdRmiHNAqAAWFN3VPnpGDxIcbrr/s5SrC/PgK/LkumcExyqPpl5gD
-         QOJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s7kMhaMk0ra1bxEhmhUd3nL+weLy5X860ySTDmIfCoc=;
-        b=SoR9i0XdJlIGdx942gSiOJQrp3ISgKyAmeBlrDN/X07ouc7G8ajKlstJJFtYPg8ztD
-         rk9/us3iQutqQ+thxmDx409dMuXJFiPWmT3uFCwjoOdJO9v9EQTQ3K7ODaaCLPH0nLJz
-         DLEIfaziq3QVevRcl6Fdgw63RUY5kwakKETw2Y/NwdajnDYqDh7VEUYN45URExn/lIgh
-         /u3JyyhICq4Uf3Kbkb8Ynyezxm7WkH6TTW9nfCzDVgiv169g5v2LiM4KVsWv/tbcNUyS
-         vOUL7Do1wYW4v31ySmFMqEusa5HtuE8bBE34YCsT7Fwgk+UXe9aTGDNPiii4lKZAHrAy
-         iYoA==
-X-Gm-Message-State: AO0yUKVT6OjTH5XKBnAW8HcQyVp2Ed0qMy8aRnxbW4UCMFa6U7cFQulN
-        ofUq0tz55oav/94kHyCiZRHEI5hYckizsWm6
-X-Google-Smtp-Source: AK7set9EI1kBLnJWEubBwMVczc1uvj6w0FTxENlGxAlCNpRheGHxEPXpefb1HDmKjoGmgSLwA44Klw==
-X-Received: by 2002:a05:622a:1883:b0:3b8:6d92:bf62 with SMTP id v3-20020a05622a188300b003b86d92bf62mr3315105qtc.46.1676668133269;
-        Fri, 17 Feb 2023 13:08:53 -0800 (PST)
-Received: from fedora ([185.203.218.250])
-        by smtp.gmail.com with ESMTPSA id r207-20020a3744d8000000b00706bc44fda8sm3942740qka.79.2023.02.17.13.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 13:08:52 -0800 (PST)
-Date:   Fri, 17 Feb 2023 16:08:50 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] gpio: 104-idio-16: Migrate to the regmap API
-Message-ID: <Y+/s4hExXVVmFzNk@fedora>
-References: <cover.1675876659.git.william.gray@linaro.org>
- <013141e0daf5f82dbd85310b498727b105a8523a.1675876659.git.william.gray@linaro.org>
- <Y+/PHNePm45TPLRC@smile.fi.intel.com>
+        Fri, 17 Feb 2023 16:09:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BFB5E5AC;
+        Fri, 17 Feb 2023 13:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676668176; x=1708204176;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zMN3aYNfIW+JyY1QbhClboj5SXQ7zWCzbZZ1sgXCJz0=;
+  b=ArhE6/mvIwRwblnpK60s9PivBmlacijuC3SE99Wm+o4gQf+8V94fsJhw
+   2HQuOKHIESZ0dO6LSVUfpz8IXCGABuQezmOd1oSwQEcxuQVxS0Hs/mAOE
+   vze3Ef9gh6NW+7t9CjB4QK0YlTkJcD1izw31BeH4/OcRSZCx4eDZ/alSq
+   vr8bTVK+fEoqf5QUyf4HnF5M8VNXAb7ifVNHHq6PXYkxa4mS8AOP8z9Mx
+   RnoyBzPyA1YE/i3B3bkxemlVvmY/0/xf8ahfmk029t5P9jcBJquqqKUNu
+   68NCfO6FHrl+dwJaI3Jz3083igl2hstAOPBOoOEn9Xsz9CpsJny4bIa7Z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,306,1669100400"; 
+   d="scan'208";a="197578138"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2023 14:09:34 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 17 Feb 2023 14:09:33 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 17 Feb 2023 14:09:32 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net] net: lan966x: Fix possible deadlock inside PTP
+Date:   Fri, 17 Feb 2023 22:09:17 +0100
+Message-ID: <20230217210917.2649365-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bGVk67cl+MvGjJ85"
-Content-Disposition: inline
-In-Reply-To: <Y+/PHNePm45TPLRC@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When doing timestamping in lan966x and having PROVE_LOCKING
+enabled the following warning is shown.
 
---bGVk67cl+MvGjJ85
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+========================================================
+WARNING: possible irq lock inversion dependency detected
+6.2.0-rc7-01749-gc54e1f7f7e36 #2786 Tainted: G                 N
+--------------------------------------------------------
+swapper/0/0 just changed the state of lock:
+c2609f50 (_xmit_ETHER#2){+.-.}-{2:2}, at: sch_direct_xmit+0x16c/0x2e8
+but this lock took another, SOFTIRQ-unsafe lock in the past:
+ (&lan966x->ptp_ts_id_lock){+.+.}-{2:2}
 
-On Fri, Feb 17, 2023 at 09:01:48PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 08, 2023 at 12:18:19PM -0500, William Breathitt Gray wrote:
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver. Migrate the 104-idio-16 module to the new
-> > idio-16 library interface leveraging the gpio-regmap API.
->=20
-> Hmm... I'm under the impression that I have already gave some tags
-> to this series.
->=20
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+and interrupts could create inverse lock ordering between them.
 
-This series is a continuation of the regmap migration work I've been
-doing for PC104 drivers in the tree. I based this on the i8255 series
-you reviewed last year[0] so that's probably why it seems familiar.
+other info that might help us debug this:
+ Possible interrupt unsafe locking scenario:
 
-[0] https://lore.kernel.org/all/c8c7a8b1f8d49473ac219cfb40800b44dbc019ac.16=
-72149007.git.william.gray@linaro.org/
+       CPU0                    CPU1
+       ----                    ----
+  lock(&lan966x->ptp_ts_id_lock);
+                               local_irq_disable();
+                               lock(_xmit_ETHER#2);
+                               lock(&lan966x->ptp_ts_id_lock);
+  <Interrupt>
+    lock(_xmit_ETHER#2);
 
-William Breathitt Gray
+ *** DEADLOCK ***
 
---bGVk67cl+MvGjJ85
-Content-Type: application/pgp-signature; name="signature.asc"
+5 locks held by swapper/0/0:
+ #0: c1001e18 ((&ndev->rs_timer)){+.-.}-{0:0}, at: call_timer_fn+0x0/0x33c
+ #1: c105e7c4 (rcu_read_lock){....}-{1:2}, at: ndisc_send_skb+0x134/0x81c
+ #2: c105e7d8 (rcu_read_lock_bh){....}-{1:2}, at: ip6_finish_output2+0x17c/0xc64
+ #3: c105e7d8 (rcu_read_lock_bh){....}-{1:2}, at: __dev_queue_xmit+0x4c/0x1224
+ #4: c3056174 (dev->qdisc_tx_busylock ?: &qdisc_tx_busylock){+...}-{2:2}, at: __dev_queue_xmit+0x354/0x1224
 
------BEGIN PGP SIGNATURE-----
+the shortest dependencies between 2nd lock and 1st lock:
+ -> (&lan966x->ptp_ts_id_lock){+.+.}-{2:2} {
+    HARDIRQ-ON-W at:
+                      lock_acquire.part.0+0xb0/0x248
+                      _raw_spin_lock+0x38/0x48
+                      lan966x_ptp_irq_handler+0x164/0x2a8
+                      irq_thread_fn+0x1c/0x78
+                      irq_thread+0x130/0x278
+                      kthread+0xec/0x110
+                      ret_from_fork+0x14/0x28
+    SOFTIRQ-ON-W at:
+                      lock_acquire.part.0+0xb0/0x248
+                      _raw_spin_lock+0x38/0x48
+                      lan966x_ptp_irq_handler+0x164/0x2a8
+                      irq_thread_fn+0x1c/0x78
+                      irq_thread+0x130/0x278
+                      kthread+0xec/0x110
+                      ret_from_fork+0x14/0x28
+    INITIAL USE at:
+                     lock_acquire.part.0+0xb0/0x248
+                     _raw_spin_lock_irqsave+0x4c/0x68
+                     lan966x_ptp_txtstamp_request+0x128/0x1cc
+                     lan966x_port_xmit+0x224/0x43c
+                     dev_hard_start_xmit+0xa8/0x2f0
+                     sch_direct_xmit+0x108/0x2e8
+                     __dev_queue_xmit+0x41c/0x1224
+                     packet_sendmsg+0xdb4/0x134c
+                     __sys_sendto+0xd0/0x154
+                     sys_send+0x18/0x20
+                     ret_fast_syscall+0x0/0x1c
+  }
+  ... key      at: [<c174ba0c>] __key.2+0x0/0x8
+  ... acquired at:
+   _raw_spin_lock_irqsave+0x4c/0x68
+   lan966x_ptp_txtstamp_request+0x128/0x1cc
+   lan966x_port_xmit+0x224/0x43c
+   dev_hard_start_xmit+0xa8/0x2f0
+   sch_direct_xmit+0x108/0x2e8
+   __dev_queue_xmit+0x41c/0x1224
+   packet_sendmsg+0xdb4/0x134c
+   __sys_sendto+0xd0/0x154
+   sys_send+0x18/0x20
+   ret_fast_syscall+0x0/0x1c
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY+/s4gAKCRC1SFbKvhIj
-K64GAP4rE3Xo+O6BiEK6U6Sau+Bg/I4oAKJKYxfiC+t18v21+AEA0hNtMeXu4/R3
-szMq9sMB8ZSZ8qyVm0Za0wzQ1V+t1Qo=
-=ruEl
------END PGP SIGNATURE-----
+-> (_xmit_ETHER#2){+.-.}-{2:2} {
+   HARDIRQ-ON-W at:
+                    lock_acquire.part.0+0xb0/0x248
+                    _raw_spin_lock+0x38/0x48
+                    netif_freeze_queues+0x38/0x68
+                    dev_deactivate_many+0xac/0x388
+                    dev_deactivate+0x38/0x6c
+                    linkwatch_do_dev+0x70/0x8c
+                    __linkwatch_run_queue+0xd4/0x1e8
+                    linkwatch_event+0x24/0x34
+                    process_one_work+0x284/0x744
+                    worker_thread+0x28/0x4bc
+                    kthread+0xec/0x110
+                    ret_from_fork+0x14/0x28
+   IN-SOFTIRQ-W at:
+                    lock_acquire.part.0+0xb0/0x248
+                    _raw_spin_lock+0x38/0x48
+                    sch_direct_xmit+0x16c/0x2e8
+                    __dev_queue_xmit+0x41c/0x1224
+                    ip6_finish_output2+0x5f4/0xc64
+                    ndisc_send_skb+0x4cc/0x81c
+                    addrconf_rs_timer+0xb0/0x2f8
+                    call_timer_fn+0xb4/0x33c
+                    expire_timers+0xb4/0x10c
+                    run_timer_softirq+0xf8/0x2a8
+                    __do_softirq+0xd4/0x5fc
+                    __irq_exit_rcu+0x138/0x17c
+                    irq_exit+0x8/0x28
+                    __irq_svc+0x90/0xbc
+                    arch_cpu_idle+0x30/0x3c
+                    default_idle_call+0x44/0xac
+                    do_idle+0xc8/0x138
+                    cpu_startup_entry+0x18/0x1c
+                    rest_init+0xcc/0x168
+                    arch_post_acpi_subsys_init+0x0/0x8
+   INITIAL USE at:
+                   lock_acquire.part.0+0xb0/0x248
+                   _raw_spin_lock+0x38/0x48
+                   netif_freeze_queues+0x38/0x68
+                   dev_deactivate_many+0xac/0x388
+                   dev_deactivate+0x38/0x6c
+                   linkwatch_do_dev+0x70/0x8c
+                   __linkwatch_run_queue+0xd4/0x1e8
+                   linkwatch_event+0x24/0x34
+                   process_one_work+0x284/0x744
+                   worker_thread+0x28/0x4bc
+                   kthread+0xec/0x110
+                   ret_from_fork+0x14/0x28
+ }
+ ... key      at: [<c175974c>] netdev_xmit_lock_key+0x8/0x1c8
+ ... acquired at:
+   __lock_acquire+0x978/0x2978
+   lock_acquire.part.0+0xb0/0x248
+   _raw_spin_lock+0x38/0x48
+   sch_direct_xmit+0x16c/0x2e8
+   __dev_queue_xmit+0x41c/0x1224
+   ip6_finish_output2+0x5f4/0xc64
+   ndisc_send_skb+0x4cc/0x81c
+   addrconf_rs_timer+0xb0/0x2f8
+   call_timer_fn+0xb4/0x33c
+   expire_timers+0xb4/0x10c
+   run_timer_softirq+0xf8/0x2a8
+   __do_softirq+0xd4/0x5fc
+   __irq_exit_rcu+0x138/0x17c
+   irq_exit+0x8/0x28
+   __irq_svc+0x90/0xbc
+   arch_cpu_idle+0x30/0x3c
+   default_idle_call+0x44/0xac
+   do_idle+0xc8/0x138
+   cpu_startup_entry+0x18/0x1c
+   rest_init+0xcc/0x168
+   arch_post_acpi_subsys_init+0x0/0x8
 
---bGVk67cl+MvGjJ85--
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: G                 N 6.2.0-rc7-01749-gc54e1f7f7e36 #2786
+Hardware name: Generic DT based system
+ unwind_backtrace from show_stack+0x10/0x14
+ show_stack from dump_stack_lvl+0x58/0x70
+ dump_stack_lvl from mark_lock.part.0+0x59c/0x93c
+ mark_lock.part.0 from __lock_acquire+0x978/0x2978
+ __lock_acquire from lock_acquire.part.0+0xb0/0x248
+ lock_acquire.part.0 from _raw_spin_lock+0x38/0x48
+ _raw_spin_lock from sch_direct_xmit+0x16c/0x2e8
+ sch_direct_xmit from __dev_queue_xmit+0x41c/0x1224
+ __dev_queue_xmit from ip6_finish_output2+0x5f4/0xc64
+ ip6_finish_output2 from ndisc_send_skb+0x4cc/0x81c
+ ndisc_send_skb from addrconf_rs_timer+0xb0/0x2f8
+ addrconf_rs_timer from call_timer_fn+0xb4/0x33c
+ call_timer_fn from expire_timers+0xb4/0x10c
+ expire_timers from run_timer_softirq+0xf8/0x2a8
+ run_timer_softirq from __do_softirq+0xd4/0x5fc
+ __do_softirq from __irq_exit_rcu+0x138/0x17c
+ __irq_exit_rcu from irq_exit+0x8/0x28
+ irq_exit from __irq_svc+0x90/0xbc
+Exception stack(0xc1001f20 to 0xc1001f68)
+1f20: ffffffff ffffffff 00000001 c011f840 c100e000 c100e000 c1009314 c1009370
+1f40: c10f0c1a c0d5e564 c0f5da8c 00000000 00000000 c1001f70 c010f0bc c010f0c0
+1f60: 600f0013 ffffffff
+ __irq_svc from arch_cpu_idle+0x30/0x3c
+ arch_cpu_idle from default_idle_call+0x44/0xac
+ default_idle_call from do_idle+0xc8/0x138
+ do_idle from cpu_startup_entry+0x18/0x1c
+ cpu_startup_entry from rest_init+0xcc/0x168
+ rest_init from arch_post_acpi_subsys_init+0x0/0x8
+
+Fix this by using spin_lock_irqsave/spin_lock_irqrestore also
+inside lan966x_ptp_irq_handler.
+
+Fixes: e85a96e48e33 ("net: lan966x: Add support for ptp interrupts")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+index ded9ab79ccc21..931e37b9a0ada 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+@@ -523,9 +523,9 @@ irqreturn_t lan966x_ptp_irq_handler(int irq, void *args)
+ 		if (WARN_ON(!skb_match))
+ 			continue;
+ 
+-		spin_lock(&lan966x->ptp_ts_id_lock);
++		spin_lock_irqsave(&lan966x->ptp_ts_id_lock, flags);
+ 		lan966x->ptp_skbs--;
+-		spin_unlock(&lan966x->ptp_ts_id_lock);
++		spin_unlock_irqrestore(&lan966x->ptp_ts_id_lock, flags);
+ 
+ 		/* Get the h/w timestamp */
+ 		lan966x_get_hwtimestamp(lan966x, &ts, delay);
+-- 
+2.38.0
+
