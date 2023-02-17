@@ -2,104 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F33F69ABA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C4969ABA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBQMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S229725AbjBQMkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjBQMgr (ORCPT
+        with ESMTP id S229669AbjBQMkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:36:47 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAD1635AE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:36:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id r11so863343wru.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JwFyvTKPrBTTWWlAH9q8tj837s8qKAd0NcHWFWLflQ=;
-        b=Ts7Ft9TYg7/N10qTzOnQfhX32Cb15Gk7X195lbTdKeXA5ijaht7DqwExgnVXZfeOxT
-         fjHywgFPvdse57dd6FHLpJjF2zVtkVfZ4yuFOY6+znlgZ/YkggGyR40Pjol4I5Syka6A
-         4XkfFiXLtUBQaoGAmQZqYmqL3w2dsKnJL3wn2hgDCQE6lsZKJ2AFbBc+enl5vFSBAUfQ
-         DDU8HHnjNJLP6HyO/dspDAK4TMDn6YcLftJ3wJTt8evutsYLUnj7A+9S6nlfwQbe49KS
-         ngvwjxQtrHy1s3PoRbPOZGBXxPSDzXuuwgaQ0vcGLzDwWI7rG+aG69IES+nCDDWWPFko
-         2GfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5JwFyvTKPrBTTWWlAH9q8tj837s8qKAd0NcHWFWLflQ=;
-        b=F9ajV+9iWYsVFZAH7tfLVnNqHz9Qs9jK+r9VRhoQh63nSZCY1N+PV2HTZ7UXygiscb
-         QcOkudkA3ZmaVQIOEgtfp6QsmICaiHrjn+AmioxsGJEWckjxuA1sGWzXg4kg+FZQDDc6
-         mVOcIMHaTfD+yksq15OnQ+VJarKcWxKFYC5b6dwokW9EWVKqTrIsftWMlr0OG9Le0E9Q
-         5UBnjNWXs7A4t9qS3GgYb0x/jRmp9J0DumW0wPLu0dP1TqaeofpczjWIeC1XdIz8wjKJ
-         dEKVI7qJxk67L694OvSqQJgm4nv9lhnealgv8ssim4ztiRR5SjVEhwDQYuVTjSk84bGB
-         W8gA==
-X-Gm-Message-State: AO0yUKWRNOXTAbppJExHerf5BU5o8AZBjDw4oZAuUZ8E8xh6hcGVapU5
-        Kh3z3EHWzbVbImWAKQtq9lfJ2JyAFPYzrRQT
-X-Google-Smtp-Source: AK7set+rZXG1C9KBOtQYHtGWYCMTVD67lUyPhrhHKtpnDArqoiWJshuBdF+sicSnsX14gLm+NteB6g==
-X-Received: by 2002:a05:6000:1685:b0:2c5:3fce:423b with SMTP id y5-20020a056000168500b002c53fce423bmr5566920wrd.4.1676637403718;
-        Fri, 17 Feb 2023 04:36:43 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1191:9464:3947:1946])
-        by smtp.gmail.com with ESMTPSA id x16-20020a5d60d0000000b002c5640f9bf9sm4077228wrt.85.2023.02.17.04.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 04:36:43 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] gpio: fixes for v6.2 - part 2
-Date:   Fri, 17 Feb 2023 13:36:42 +0100
-Message-Id: <20230217123642.115329-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Fri, 17 Feb 2023 07:40:01 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F6F64B23;
+        Fri, 17 Feb 2023 04:40:00 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pT01p-00064O-Fl; Fri, 17 Feb 2023 13:39:53 +0100
+Message-ID: <f30eae62-c827-f743-acbe-867770714522@leemhuis.info>
+Date:   Fri, 17 Feb 2023 13:39:52 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
+ controller is down"
+Content-Language: en-US, de-DE
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        =?UTF-8?Q?Julian_Gro=c3=9f?= <julian.g@posteo.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230112164204.GA1768006@bhelgaas>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230112164204.GA1768006@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676637600;9ab0d86e;
+X-HE-SMSGID: 1pT01p-00064O-Fl
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
-Linus,
+I might be missing something, but it looks like this discussion stalled.
+I wonder why.
 
-This missed the last PR as I only applied it today but it's a one-liner that
-fixes a memory leak in the GPIO simulator that's triggered every time libgpiod
-tests are run in user-space. Please pull for v6.2.
+Julian, did you ever share the data Bjorn asked for? Or tried a a
+bisection, as suggested by Keith? Or did you stop caring for some
+reason? Does everything maybe work fine these days?
 
-Bartosz
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-The following changes since commit b8b3b0bfb742f0cbb006c66b10216b724ce42e25:
+#regzbot poke
 
-  Merge tag 'intel-gpio-v6.2-2' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current (2023-02-16 13:31:42 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-fixes-for-v6.2-part2
-
-for you to fetch changes up to 79eeab1d85e0fee4c0bc36f3b6ddf3920f39f74b:
-
-  gpio: sim: fix a memory leak (2023-02-17 12:02:26 +0100)
-
-----------------------------------------------------------------
-gpio fixes for v6.2
-
-- fix a memory leak in gpio-sim
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      gpio: sim: fix a memory leak
-
- drivers/gpio/gpio-sim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 12.01.23 17:42, Bjorn Helgaas wrote:
+> On Thu, Jan 12, 2023 at 03:48:46PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+>> ...
+>> On 11.01.23 23:11, Julian Groß wrote:
+>>> Dear Maintainer,
+>>>
+>>> when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
+>>> system seemingly randomly freezes due to the file system being set to
+>>> read-only due to an issue with my NVMe controller.
+>>> The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
+>>>
+>>> Through network logging I am able to catch the issue:
+>>> ```
+>>> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259288] nvme nvme0:
+>>> controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
+>>> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Does
+>>> your device have a faulty power saving mode enabled?
+>>> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Try
+>>> "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off" and report a bug
+>>> Jan  8 14:50:16 x299-desktop kernel: [ 1461.331360] nvme 0000:01:00.0:
+>>> enabling device (0000 -> 0002)
+>>> ...
+>>>
+>>> I have tried the suggestion in the log without luck.
+>>>
+>>> Attached is a log that includes two system freezes, as well as a list of
+>>> PCI(e) devices created by Debian reportbug.
+>>> The first freeze happens at "Jan  8 04:26:28" and the second freeze
+>>> happens at "Jan  8 14:50:16".
+>>>
+>>> Currently, I am using git bisect to narrow down the window of possible
+>>> commits, but since the issue appears seemingly random, it will take many
+>>> months to identify the offending commit this way.
+>>>
+>>> The original Debian bug report is here:
+>>> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028309
+> 
+> For some reason the log [1] has very little of the kernel dmesg log.
+> It does seem like the freeze is partial (I see messages for hundreds
+> or thousands of seconds after the nvme reset), but requires a reboot
+> to recover.
+> 
+> The lspci information [2] shows the 00:1b.0 Root Port leading to the
+> 01:00.0 NVMe device.
+> 
+> Is it possible to collect lspci output after the nvme freeze?  If so,
+> please save the output of:
+> 
+>   sudo lspci -vv -s00:1b.0
+>   sudo lspci -vv -s01:00.0
+> 
+> Make sure to run lspci as root so we can see the error logging
+> registers for these devices.
+> 
+> If you can collect more of the dmesg log after the freeze, e.g., via
+> the "dmesg" command, that might be helpful, too.
+> 
+> Bjorn
+> 
+> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1028309;filename=x299-desktop_crash.log.xz;msg=5
+> [2] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=0;bug=1028309;msg=5
+> 
+> 
