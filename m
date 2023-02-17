@@ -2,288 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4823069A7C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DA269A7CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBQJEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S229873AbjBQJGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQJEy (ORCPT
+        with ESMTP id S229637AbjBQJGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:04:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CB9604FE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:04:52 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id i28so1217735eda.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:04:52 -0800 (PST)
+        Fri, 17 Feb 2023 04:06:07 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749055FBFE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:06 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id z18so1030520lfd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:06:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dhb0aPgnPmpo07pKFTh62OPPG7TlvzL6v9Z1rC4Zkkg=;
-        b=qVqnYG2BR/uaxokjqUCtvuy9n/aZFD4BUvKqra79mx+N3fb7GKsS39RqG3yICm25Ql
-         oeZBuXDCnNDWU/dgjYwA6PwfNKFJ7AeFwn31m3mWSd5slh7ig+fa2ulMBB0LY+0OlZqi
-         ZO2Bvz6q4uvPUK1u1sw/eeeQssHB8kWVutdTpioz7cjKjt8+1bEH572cDgKeYYJLtfS8
-         QL/xY9gYKVM0+fWxVq54igCRKscUkfHEgm1Nrr73otlAyKgVfy8L5OYfe5XKWSphGx7V
-         ZY0hwksNPTpeyYwnOQ9bUu7HsjAid6jQGpoYDWhIg+fJudAlNZCvMJLQSfSiAdxuNfA1
-         Xb3A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2Pe5eJ8mXG882/oIneNK2AU1N9QB7QTc3Dg4lQRToU=;
+        b=eUtfVt2QfCYzrIE+EO3zlTaxh9C/8Bu2h3xrjGEj2GmZtcoQoAjlg5fzGootcpAm1d
+         YdOR6DBQXuVCNztspRC3mV/odWaHwQ2RjfZDZnjHOsx7rnS64xduCaKp5V9MoyrLsSWi
+         V0OuMcJlNoDIV1hYXfpzETn+/2cAH23KmfRtggk5txnC2RKTWrQdWmy1HR7EjKnGZJRE
+         s1uIMl2nOYe0ASqqLIfkbMgc4B8rk8pVnEyVF8w6z9EWmANbZ6vkKzy/Q7OrioEsPlOA
+         3oPLq253dTc63r89cgrM0lO7I1sT8r2XrHeG0BvEYyJvSupgn9wUTc5kxOsJ2Q7rIRHU
+         4ZCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dhb0aPgnPmpo07pKFTh62OPPG7TlvzL6v9Z1rC4Zkkg=;
-        b=U9bzsRQkLP69Ansu5s78omhVnrF38MV4htsfyY56J+kCyx08cojGBQvGRvNqPA20RH
-         URWw5pkHA2QCgPh82ddu0Pv7eUgjAOC9MIfI9B+xoljytmQ7FYd9/fPz9tY5R3fq+bjK
-         hTIngPFn2zctSWYeDk5nTbRdqHP8ZGQcBURip/CFqz3s3Vs+Gw9e1LHL/pQyn2GGzwrJ
-         v2bzx9VQMHHVNQ4YJ/XcFlZp0nNmPqrQKlByE9VasBdjgBDILLes4Iz6Ii3w2llOXOIk
-         yg0ysHvBXiRGo/9+joeTa2KSVRtsFZ6EVUwthBS0t1+q8GokMl1KAuwd5ou1nXKUmdNP
-         NF5A==
-X-Gm-Message-State: AO0yUKUO4bCDGi7JnVIxjYpFZ3jmr4aJS1hNI8EnXeSECcViqA/3A/NF
-        +icGCGmcH/4AueMLej8byerKDA==
-X-Google-Smtp-Source: AK7set+tAcSvpwfAAlLUptl/j567KNqu4vpCF3WTsS8yA5J8qWm0aSmzWMiPCp9ZE1TurarXy/CYwg==
-X-Received: by 2002:aa7:cd6d:0:b0:4ac:bd84:43d9 with SMTP id ca13-20020aa7cd6d000000b004acbd8443d9mr462571edb.2.1676624690805;
-        Fri, 17 Feb 2023 01:04:50 -0800 (PST)
-Received: from [192.168.0.108] ([82.77.80.113])
-        by smtp.gmail.com with ESMTPSA id u12-20020a50c04c000000b004ab4db9be14sm1988264edd.81.2023.02.17.01.04.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 01:04:50 -0800 (PST)
-Message-ID: <3e125c64-da56-2a2b-1a20-fdcc5a0d3014@linaro.org>
-Date:   Fri, 17 Feb 2023 09:04:49 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R2Pe5eJ8mXG882/oIneNK2AU1N9QB7QTc3Dg4lQRToU=;
+        b=cNmIzEPq5NDkIYjL230F9dbFOEEAqodpEF3540loxuuftoCxuRvqHx+lUvjtWZqdH6
+         CeX8asrXK8IMCI69xuWNQZII9jkZ7GodE9rLUNX5m/wzVUZWekqmWErkJ2YhrPCd+CML
+         iJ3eBxEuKc4AKs1yKCfKWuqU6bajK2SnzCEqHIcspbMnYZs2tLaKT5edFXIqGd616j4+
+         ylcLD5fZbct/XbKbuvtPUG5krgWMFrgM0xtym5EVl+uRpY1op/a08BPZ/AOKTSDP/u5k
+         UbWfkDaYWGcpGyBw4h+htmVibf8/QkMUbnJ8iUFiiQSQRjDZfgmeyqF2lXjgGC9qN7vl
+         +uLg==
+X-Gm-Message-State: AO0yUKUkiYue4MfMT28DbKgYkEMoNFr9tcp1hpEHonWH2KO/2KmLKVB2
+        I7iBpBKKab7snI2YP7AMHS8mz0Ew1enWyf/E/9pMxQ==
+X-Google-Smtp-Source: AK7set/4WgvF8R8p4Gk6f0Bg0y33W3iWubV1X3k/OUD6aHHiiBnv+LZPp0MBV37GM3sdF5lGndve4gV4wBMFgIBtIm0=
+X-Received: by 2002:ac2:55ab:0:b0:4db:3353:c891 with SMTP id
+ y11-20020ac255ab000000b004db3353c891mr282115lfg.3.1676624764576; Fri, 17 Feb
+ 2023 01:06:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ext4: fix another off-by-one fsmap error on 1k block
- filesystems
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <joneslee@google.com>
-References: <Y+58NPTH7VNGgzdd@magnolia>
- <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
- <4b705abb-f780-1342-c1ec-9187687ef8af@linaro.org>
-In-Reply-To: <4b705abb-f780-1342-c1ec-9187687ef8af@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000ff304105f4d1cd36@google.com> <CACT4Y+Yq1knodAhoBnUe-Tf6QLrQCrGV5gyWC7An8poQDcfv6g@mail.gmail.com>
+ <20230216185144.u5zijpev6o77xhaz@treble> <20230216202607.c2nfp6exhoomjckp@treble>
+In-Reply-To: <20230216202607.c2nfp6exhoomjckp@treble>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 17 Feb 2023 10:05:52 +0100
+Message-ID: <CACT4Y+aBV3d7kLjAZ1hHHbX=y8gTvfwrPsiohwV81PzRRjGkGQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: can't access registers at entry_SYSCALL_64_after_hwframe
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     syzbot <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 16 Feb 2023 at 21:26, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    9d9019bcea1a Add linux-next specific files for 20230215
+> > > > git tree:       linux-next
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=144edcc8c80000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a64cbb8ad0da425e
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=dac365e3ce07c3d0e496
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > >
+> > > > Downloadable assets:
+> > > > disk image: https://storage.googleapis.com/syzbot-assets/70f0c6bb5351/disk-9d9019bc.raw.xz
+> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/7eed8686df34/vmlinux-9d9019bc.xz
+> > > > kernel image: https://storage.googleapis.com/syzbot-assets/84bb6da6b00e/bzImage-9d9019bc.xz
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com
+> > > >
+> > > > WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > >
+> > >
+> > > This is another splat of reports we started getting recently. Looks
+> > > like this may be ORC unwinder related as well.
+> >
+> > Yeah... Also:
+> >
+> >   https://lkml.kernel.org/lkml/202302161616.85f13863-oliver.sang@intel.com
+> >   https://lkml.kernel.org/lkml/CACT4Y+YzZb2vscjBLiJ-p-ghbu77o851gbESfE=nZebXqfgE4g@mail.gmail.com
+> >
+> > The problem seems to be commit ffb1b4a41016 ("x86/unwind/orc: Add
+> > 'signal' field to ORC metadata") but right now I don't know why.
+>
+> Ah, figured it out:
+>
+> $ tools/objtool/objtool --dump=orc vmlinux |grep signal:1 |wc -l
+> 0
+>
+> The 'signal' bit isn't getting propagated from the unwind hints to the
+> ORC entries :-(
+>
+> Will post a fix shortly.
 
+Thanks for the quick fix!
 
-On 2/17/23 08:37, Tudor Ambarus wrote:
-> 
-> 
-> On 2/17/23 08:10, Tudor Ambarus wrote:
->> Hi, Darrick,
->>
->> On 2/16/23 18:55, Darrick J. Wong wrote:
->>> From: Darrick J. Wong <djwong@kernel.org>
->>>
->>> Apparently syzbot figured out that issuing this FSMAP call:
->>>
->>> struct fsmap_head cmd = {
->>>     .fmh_count    = ...;
->>>     .fmh_keys    = {
->>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
->>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
->>>     },
->>> ...
->>> };
->>> ret = ioctl(fd, FS_IOC_GETFSMAP, &cmd);
->>>
->>> Produces this crash if the underlying filesystem is a 1k-block ext4
->>> filesystem:
->>>
->>> kernel BUG at fs/ext4/ext4.h:3331!
->>> invalid opcode: 0000 [#1] PREEMPT SMP
->>> CPU: 3 PID: 3227965 Comm: xfs_io Tainted: G        W  O 6.2.0-rc8-achx
->>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 
->>> 04/01/2014
->>> RIP: 0010:ext4_mb_load_buddy_gfp+0x47c/0x570 [ext4]
->>> RSP: 0018:ffffc90007c03998 EFLAGS: 00010246
->>> RAX: ffff888004978000 RBX: ffffc90007c03a20 RCX: ffff888041618000
->>> RDX: 0000000000000000 RSI: 00000000000005a4 RDI: ffffffffa0c99b11
->>> RBP: ffff888012330000 R08: ffffffffa0c2b7d0 R09: 0000000000000400
->>> R10: ffffc90007c03950 R11: 0000000000000000 R12: 0000000000000001
->>> R13: 00000000ffffffff R14: 0000000000000c40 R15: ffff88802678c398
->>> FS:  00007fdf2020c880(0000) GS:ffff88807e100000(0000) 
->>> knlGS:0000000000000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: 00007ffd318a5fe8 CR3: 000000007f80f001 CR4: 00000000001706e0
->>> Call Trace:
->>>   <TASK>
->>>   ext4_mballoc_query_range+0x4b/0x210 [ext4 
->>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>>   ext4_getfsmap_datadev+0x713/0x890 [ext4 
->>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>>   ext4_getfsmap+0x2b7/0x330 [ext4 
->>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>>   ext4_ioc_getfsmap+0x153/0x2b0 [ext4 
->>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>>   __ext4_ioctl+0x2a7/0x17e0 [ext4 
->>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>>   __x64_sys_ioctl+0x82/0xa0
->>>   do_syscall_64+0x2b/0x80
->>>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>> RIP: 0033:0x7fdf20558aff
->>> RSP: 002b:00007ffd318a9e30 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->>> RAX: ffffffffffffffda RBX: 00000000000200c0 RCX: 00007fdf20558aff
->>> RDX: 00007fdf1feb2010 RSI: 00000000c0c0583b RDI: 0000000000000003
->>> RBP: 00005625c0634be0 R08: 00005625c0634c40 R09: 0000000000000001
->>> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf1feb2010
->>> R13: 00005625be70d994 R14: 0000000000000800 R15: 0000000000000000
->>>
->>> For GETFSMAP calls, the caller selects a physical block device by
->>> writing its block number into fsmap_head.fmh_keys[01].fmr_device.
->>> To query mappings for a subrange of the device, the starting byte of the
->>> range is written to fsmap_head.fmh_keys[0].fmr_physical and the last
->>> byte of the range goes in fsmap_head.fmh_keys[1].fmr_physical.
->>>
->>> IOWs, to query what mappings overlap with bytes 3-14 of /dev/sda, you'd
->>> set the inputs as follows:
->>>
->>>     fmh_keys[0] = { .fmr_device = major(8, 0), .fmr_physical = 3},
->>>     fmh_keys[1] = { .fmr_device = major(8, 0), .fmr_physical = 14},
->>>
->>> Which would return you whatever is mapped in the 12 bytes starting at
->>> physical offset 3.
->>>
->>> The crash is due to insufficient range validation of keys[1] in
->>> ext4_getfsmap_datadev.  On 1k-block filesystems, block 0 is not part of
->>> the filesystem, which means that s_first_data_block is nonzero.
->>> ext4_get_group_no_and_offset subtracts this quantity from the blocknr
->>> argument before cracking it into a group number and a block number
->>> within a group.  IOWs, block group 0 spans blocks 1-8192 (1-based)
->>> instead of 0-8191 (0-based) like what happens with larger blocksizes.
->>>
->>> The net result of this encoding is that blocknr < s_first_data_block is
->>> not a valid input to this function.  The end_fsb variable is set from
->>> the keys that are copied from userspace, which means that in the above
->>> example, its value is zero.  That leads to an underflow here:
->>>
->>>     blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
->>>
->>> The division then operates on -1:
->>>
->>>     offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
->>>         EXT4_SB(sb)->s_cluster_bits;
->>>
->>> Leaving an impossibly large group number (2^32-1) in blocknr.
->>> ext4_getfsmap_check_keys checked that keys[0].fmr_physical and
->>> keys[1].fmr_physical are in increasing order, but
->>> ext4_getfsmap_datadev adjusts keys[0].fmr_physical to be at least
->>> s_first_data_block.  This implies that we have to check it again after
->>> the adjustment, which is the piece that I forgot.
->>>
->>> Fixes: 4a4956249dac ("ext4: fix off-by-one fsmap error on 1k block 
->>> filesystems")
->>> Link: 
->>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
->>> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
->>> ---
->>>   fs/ext4/fsmap.c |    2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
->>> index 4493ef0c715e..cdf9bfe10137 100644
->>> --- a/fs/ext4/fsmap.c
->>> +++ b/fs/ext4/fsmap.c
->>> @@ -486,6 +486,8 @@ static int ext4_getfsmap_datadev(struct 
->>> super_block *sb,
->>>           keys[0].fmr_physical = bofs;
->>>       if (keys[1].fmr_physical >= eofs)
->>>           keys[1].fmr_physical = eofs - 1;
->>> +    if (keys[1].fmr_physical < keys[0].fmr_physical)
->>> +        return 0;
->>
->> This is an indirect implication, we can be more straightforward. Also we
->> should stop the execution when high_key->fmr_physical == bofs. So maybe:
->>
->> --- a/fs/ext4/fsmap.c
->> +++ b/fs/ext4/fsmap.c
->> @@ -479,6 +479,8 @@ static int ext4_getfsmap_datadev(struct 
->> super_block *sb,
->>          int error = 0;
->>
->>          bofs = le32_to_cpu(sbi->s_es->s_first_data_block);
->> +       if (keys[1].fmr_physical <= bofs)
->> +               return 0;
->>          eofs = ext4_blocks_count(sbi->s_es);
->>          if (keys[0].fmr_physical >= eofs)
->>                  return 0;
-> 
-> oops, it was too morning for me, this is wrong, as the high key can come 
-> with zero value. So if we want to keep the check in
+Let's tell syzbot:
 
-or maybe not? xfsprogs-dev/io/fsmap.c initializes h->fmr_physical = end;
-and end = -1 for the ext4 case.
-
- From the code I see two magic values that are accepted for fmr_device,
-zero and UINT_MAX, so maybe we should check the sanity of the keys's
-fmr_physical considering the magic values for fmr_device. I'll stop
-burbling and wait for Darrick's feedback.
-
-Cheers,
-ta
-
-> ext4_getfsmap_datadev we can use your patch, but slightly adapted to
-> if (keys[1].fmr_physical <= keys[0].fmr_physical)
->      return 0;
-> 
-> However I think I prefer the version from below if it makes sense.
-> Cheers,
-> ta
-> 
->>
->>
->> But I'm not thrilled about this. Can we stop the execution earlier?
->> How about something like:
->>
->> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
->> index 4493ef0c715e..8c4b1fb5c10a 100644
->> --- a/fs/ext4/fsmap.c
->> +++ b/fs/ext4/fsmap.c
->> @@ -586,10 +586,12 @@ static bool ext4_getfsmap_check_keys(struct 
->> ext4_fsmap *low_key,
->>   {
->>          if (low_key->fmr_device > high_key->fmr_device)
->>                  return false;
->> -       if (low_key->fmr_device < high_key->fmr_device)
->> +       if (low_key->fmr_device != 0 &&
->> +           low_key->fmr_device < high_key->fmr_device)
->>                  return true;
->>
->> -       if (low_key->fmr_physical > high_key->fmr_physical)
->> +       if (high_key->fmr_physical == 0 ||
->> +           low_key->fmr_physical > high_key->fmr_physical)
->>                  return false;
->>          if (low_key->fmr_physical < high_key->fmr_physical)
->>                  return true;
->>
->> You'll notice that my proposal will stop the execution with -EINVAL, as
->> the key range is invalid IMO. But we can adapt code to return zero if
->> you like, what I'm interested in is whether this key check is valid for
->> ext4_getfsmap_logdev() or not. How about the
->> if (keys[1].fmr_physical == bofs) check, is it valid for
->> ext4_getfsmap_logdev()?
->>
->> I'd like that with your guidance to fix this bug, extend the xfs_io
->> fsmap support to query ext4 fs range and to add an xfstest for keys
->> validation, to check if stable kernels will be fixed. This would help me
->> with the fs ramp-up, as I'd like to fix some other fs bugs too. If you
->> want to handle this by yourself, it's fine too, but please let me know
->> so that we don't duplicate effort.
->>
->> Cheers,
->> ta
+#syz fix: objtool: Fix ORC 'signal' propagation
