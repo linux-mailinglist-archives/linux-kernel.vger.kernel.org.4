@@ -2,154 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C78569A5D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB32569A5DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjBQGyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 01:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S229566AbjBQG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 01:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBQGyR (ORCPT
+        with ESMTP id S229475AbjBQG5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 01:54:17 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2041.outbound.protection.outlook.com [40.107.7.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4D05D3E7;
-        Thu, 16 Feb 2023 22:53:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NTdxHGwV5Xej6VSCQf+q6+4ibNMqSo/QQ4tPQ8DvdtLExKA4KuXgkdbHHtKieIc5AT/cg5oVZl2CuKGboc8cCzSSeIc31ZinAfQ151gM5bRBTiIb99RH9J9us0ohnMkqQpVobGF8oflkwlUwGkB58CckFwvFLJGhvKWwIMdCKumTJuJ4eNVjUJnldP3h9fIqJREJK//ltRnUqWDDrTrTXeao73uyIJY8VZodB/V6gzGgyjhNTipSdioeq939KgUZo6Q3vSePNUVGx5ETtkFb3MOUXMxOVXGqrhasnHkApDOFNtmkj2skF8Xuf5eKtNfbLbO/9ECQIsCviJSgLVD06A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LlUrH3hpx3rLt+nYA/CYaT8zoKu2SwrLq4NRHDueueg=;
- b=ZLZW4qbGP9PHD5iDvUkoHpJTf2UHG73hDbA4xMVOrtYbbkVs86TVvQqfN0xInqu9ghJJKfRdoxtlCMbhK74FgNBmAKIKv7kN2UpZUOj9SLX6YONXnvZmfVz0WEFrmSrNKErlwKr4YcpP1NNcSqdgxrNPzG2cb95PCb+qCYniaxOSgTNlkCrVPZkzyQngpPCZc9LpWX29PxwW7/BbZ/Q1/Ar3WeiL/1v8jh/ARwNPMXy0TKCEnEgSR40MkDIzAioFWVA1lVa0PBTR1RYa80PRa6eAgHG7a96QUMbkPq2G0gni86Qw9iO6ueiF3tj5jjXuaSWq0+v73uYYi6knrX6lXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LlUrH3hpx3rLt+nYA/CYaT8zoKu2SwrLq4NRHDueueg=;
- b=bxWLBjfXAOWHkqnvx1GZpQPu1m3wdDqc0yXuUeBLThIMHTKo4wjcYXnJoEnqHAhflChJYYuaGMYQh5cjzm+xKjNdSDlrHPAPLNn6q3V2UU2KZs490St51iomA/XzJ2ShzSMYnRbMmhxE4gJdLFvz6qeq0MZis+TtdMN1YxI5WZc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM7PR04MB6840.eurprd04.prod.outlook.com (2603:10a6:20b:10f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Fri, 17 Feb
- 2023 06:53:35 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc%9]) with mapi id 15.20.6111.014; Fri, 17 Feb 2023
- 06:53:35 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de,
-        alexander.stein@ew.tq-group.com
-Subject: [PATCH v4 6/6] drm: lcdif: Add i.MX93 LCDIF compatible string
-Date:   Fri, 17 Feb 2023 14:54:07 +0800
-Message-Id: <20230217065407.2259731-7-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230217065407.2259731-1-victor.liu@nxp.com>
-References: <20230217065407.2259731-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0033.apcprd02.prod.outlook.com
- (2603:1096:4:195::20) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Fri, 17 Feb 2023 01:57:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911893C5;
+        Thu, 16 Feb 2023 22:57:39 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 473252D8;
+        Fri, 17 Feb 2023 07:57:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1676617056;
+        bh=cppCOQZKoeslhFwvQz/NppDJENZu7/1sL8a90IxssXc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dYDGBY0xX5bDJ//gXOYrkwHYDjUjVRUt3JoiVtnFm7Dzl0x5y2gPtKDzrJeFkjcbe
+         dFPrDOvK42er9dXWJSHccW114Eci5Ajzf4AQxoJmuf0qYaQvvlHpBo7PYNVVIxL30w
+         Colok0VN53FrAA5iFYIfEtsCjF/8M32D6smuA4rA=
+Message-ID: <e4141652-53c0-fce1-dac7-5da5368e2240@ideasonboard.com>
+Date:   Fri, 17 Feb 2023 08:57:32 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM7PR04MB6840:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7af8050f-fbe6-4c90-4b90-08db10b3b05d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oRV7WFTzAoOfma5MzY6UO2i/a3SPJwidpKCGYg/WoqeZkUFx7Bd1CRDE9iq3titjcgovgt+Le8uXd756oKLAR3hmsHUQQBpW9Xw8zPSmWDyTcYPUJZ2v4Aj48Pac7fc0CxQ/ZLP1iiiwpG5B9EMCxhZvf+LauA3eFW5W1QeQ5IgERPsni90PjgLSdyvTJ0y3fbkqW90Oqmyou9yMaJTh9OvTonTpVO4O/RklmK09tNoEUxsw+pRGGhmYPCnIh+tNvANzhXiF+FAFVlYG4MOXQbGYjViTPhubIUUdAM8fosUDfPE7GXulSMcztIAqIpVKtwCmM5zSXqo04aKpYaUumS/QMaiTx27DxKZv3Xhk6a2+JxeJg94L7nsHdeH5JsJU0+7XArcAn3DACz6lvbSd21VkLPuWn5cgG87T/gPd0KQxdVEwEenT3vxWhjkSAtpGsDcIqABK8bslodREQz34dMQI5HVmK4PiN/RN7EXmZWZKKjF4I3onvSU1fAoCFmYtSWzA9s5A3vB/Vdq5vmrEMVW2nNeirkuXuOA2FqMyhvgavTtS+IfYwaBVOQ76VnAW/AtmvFreOD8VptmlUPfW7qqkULQuEr/ioPGglMkrPli5Jh4D/yNcnJ6tHt3tDDnnp+a47VS8Mg379963pG7/WBvSOwN7JGtVc4KkDYUvgUxiafLG4PWC02zR2m6UrAyDdh6oYcVIVkwgLPayB8ecJg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199018)(36756003)(66946007)(4326008)(8676002)(2906002)(66476007)(66556008)(7416002)(38350700002)(38100700002)(478600001)(1076003)(6486002)(41300700001)(52116002)(316002)(6506007)(6666004)(5660300002)(86362001)(8936002)(83380400001)(26005)(186003)(2616005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C62RbMy4+fbJ5whwQqtMni3bgGrqJTJYX+1KUlzcNgwAxooOKcfNiL85t2/T?=
- =?us-ascii?Q?/NoghXNCKcHLk3KEibHdpGVJRtWrSfDBYLJrwXvd41qIVGwY6URiKdcBuLmG?=
- =?us-ascii?Q?NINsJT2V36I5vJjY1U4dyjCwLwRByqg1muMmmKJQqZmXXT2rpLQA5GNloMtj?=
- =?us-ascii?Q?AuMKCGJZe14vVgZhqdfFnsg7zCfOjGmc9aw+8NO11km2V1Wha/j0+CpsPiDj?=
- =?us-ascii?Q?+TWXaRDP2rUNrvNhkgAJUpM+/FJLzWzyy1xyvuQlPOTJcg0X0RXwMcjDwMTF?=
- =?us-ascii?Q?1t1mJb/6+BoBN5S5CULPAtRkiLoNQSKHcxyzXQlrGV+ipEfJ2vSkK51YgSLB?=
- =?us-ascii?Q?yTdLBjnvNRbAkMsBwTJiLSnZLE+B4qLZuXzMS8NSKH6/yZTs9NRG789k+P99?=
- =?us-ascii?Q?70xzTixB3a4OXFP4lAeghbGsZwpvBUHt5pRteesNL+X6hEZaOBum3BN7xFFw?=
- =?us-ascii?Q?Pn5DDiBz/aXZ5Sea28uk7e3wVZ5djlRKXO+XV9Z6gqxcFOmqW4VMsDSSmTvI?=
- =?us-ascii?Q?eehUmr60tz/1/O882zkDoqAcQ1cBOSkhTCLX3oqOyDbV4jpVIoe1i56xUwKT?=
- =?us-ascii?Q?6BKTwGIZhVVc+T4A74VibH3b1QFPrGQbqbqd1i16qDnbKqfCIvUL7b0sB3LM?=
- =?us-ascii?Q?n4N8UXAsQVExYI98sfCbi9Y3qyWcXEgvdwXrvCl5s2Ek6KmWGELP3yYt+z96?=
- =?us-ascii?Q?thdUkJuBmwC2z/j5Dn579hiFRCq9wBdrRL/jDURxgELu6ULMknFInsr/j2aH?=
- =?us-ascii?Q?K76hqPxf7/HSBdb2cIOCEvZvOKjjFuQv4KBU9aZpd8FEYAXE6ihETRMwJr+Q?=
- =?us-ascii?Q?anV0aB5HwOcY7nxvMuk0k0dUxOya8xdqAQDw8vUEcxC7qdj61hO5itxaxp7H?=
- =?us-ascii?Q?Z9mHza9ZEyNtnVzPeQ6yl2H7QRBuc/K1bGc5IiIe/lrid+CRiMWoMXPD/Hzs?=
- =?us-ascii?Q?PxiRzdpXbBz7nWSL53VckeyyUcZRNkcPMBfNX37gzitxJ5Nj2PZxwhdmSi6c?=
- =?us-ascii?Q?8o3xX2fxjwC3QyTc5IZEg651OZmNabsCgMV35VUxr0IrPZFZ93VnxEqCHziv?=
- =?us-ascii?Q?8QZ5S6YdADrtdxHfESjeH93nSvXU3F2uFEgJtWpyrpQIVgpJjiInvdtPJkCA?=
- =?us-ascii?Q?JQNe2OAgISaUwlNcjqXEg9l6UaqgrPtNlVWtAfghoKL6SSrJORMyQoya757m?=
- =?us-ascii?Q?HgOkxV/tG9+t6/9Fky+sIS94ASCKeyG0sz5hdEQvVLi708dErqtLych5n2JF?=
- =?us-ascii?Q?5ZwRXJXWqn66t58QGJVd86Lp6D/88fMjpBiL3uoSZ8lQgndA1eP8uuOyYbPZ?=
- =?us-ascii?Q?vqr4EVzP6xai6SLJsmSNtmM3GMFa7hXcTZakEjpZ95BnCXesZ2CDkffi6n00?=
- =?us-ascii?Q?9LdnrnO00OBbtwRCWGPRLZJhKLV5Um7nqnMmG/goTxtVBwvfYK0orNFKawlw?=
- =?us-ascii?Q?B0WEU3GlVDC0Ef2FVs7KF55h+aTXQVv4D0smM0NIokM7CDOODbAaAgqVAva/?=
- =?us-ascii?Q?VVvEMjgUB6c7p/KTaui33WLyDJKHuNC7tuv6HALtTLIpdfHJrkKUXqSTnrVR?=
- =?us-ascii?Q?amMfY8/BD9Gfr6YZKYEEUIgtVty4TEJ7YxSAzRTV?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7af8050f-fbe6-4c90-4b90-08db10b3b05d
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 06:53:35.0727
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F0bqszIktnXmPOy0fS1P4UT0vWYqaw4DWlJpSBXmXZFhj+W4YXwW9TN4aamMVHiz3o7mr9CQ/toHdvAaoGKLcw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6840
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v9 0/8] i2c-atr and FPDLink
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
+ <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all previous preparations done to make it possible for the
-single LCDIF embedded in i.MX93 SoC to drive multiple displays
-simultaneously, add i.MX93 LCDIF compatible string as the last
-step of adding i.MX93 LCDIF support.
+Hi,
 
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v3->v4:
-* Add Alexander's R-b tag.
+On 16/02/2023 17:53, Andy Shevchenko wrote:
+> On Thu, Feb 16, 2023 at 04:07:39PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>> +	if (!c2a)
+> 
+> I would expect here dev_warn() to let user know about "shouldn't happened, but
+> have happened" situation.
 
-v2->v3:
-* Fix a trivial typo in commit message.
+Sure, I'll add.
 
-v1->v2:
-* Split from patch 2/2 in v1. (Marek, Alexander)
+>> +		return; /* This shouldn't happen */
+> 
+> ...
+> 
+>> -	static const struct v4l2_mbus_framefmt format = {
+>> +	static const struct v4l2_mbus_framefmt informat = {
+> 
+> Naming a bit confusing. Is it "information" that cut or what?
+> 
+> in_format
 
- drivers/gpu/drm/mxsfb/lcdif_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+Indeed, that's better.
 
-diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-index f1f5caef390a..0eb132cad181 100644
---- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-+++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-@@ -249,6 +249,7 @@ static const struct drm_driver lcdif_driver = {
- 
- static const struct of_device_id lcdif_dt_ids[] = {
- 	{ .compatible = "fsl,imx8mp-lcdif" },
-+	{ .compatible = "fsl,imx93-lcdif" },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lcdif_dt_ids);
--- 
-2.37.1
+>> +	static const struct v4l2_mbus_framefmt outformat = {
+> 
+> out_format
+> 
+> ...
+> 
+>> -out_unlock:
+>> +out:
+> 
+> Why?
+
+I think this was a mistake, I'll change it back.
+
+> ...
+> 
+>> +/*
+>> + * (Possible) TODOs
+> 
+> TODOs:
+
+Ok...
+
+>> + *
+>> + * - PM for serializer and remote peripherals. We need to manage:
+>> + *   - VPOC
+>> + *     - Power domain? Regulator? Somehow any remote device should be able to
+>> + *       cause the VPOC to be turned on.
+>> + *   - Link between the deserializer and the serializer
+>> + *     - Related to VPOC management. We probably always want to turn on the VPOC
+>> + *       and then enable the link.
+>> + *   - Serializer's services: i2c, gpios, power
+>> + *     - The serializer needs to resume before the remote peripherals can
+>> + *       e.g. use the i2c.
+>> + *     - How to handle gpios? Reserving a gpio essentially keeps the provider
+>> + *       (serializer) always powered on.
+>> + * - Do we need a new bus for the FPD-Link? At the moment the serializers
+>> + *   are children of the same i2c-adapter where the deserializer resides.
+>> + * - i2c-atr could be made embeddable instead of allocatable.
+>> + */
+> 
+> ...
+> 
+>>   struct atr_alias_table_entry {
+>>   	u16 alias_id;	/* Alias ID from DT */
+>>   
+>> -	bool reserved;
+>> +	bool in_use;
+>>   	u8 nport;
+>>   	u8 slave_id;	/* i2c client's local i2c address */
+>>   	u8 port_reg_idx;
+> 
+> Wouldn't be wiser to move boolean at the end so if any obscure
+> architecture/compiler makes it longer than a byte it won't increase the memory
+> footprint. (Actually wouldn't it be aligned to u16 followed by u8 as well as
+> they are different types?)
+
+Sure, I can move it.
+
+>>   };
+> 
+> ...
+> 
+>> +static int ub960_read16(struct ub960_data *priv, u8 reg, u16 *val)
+>> +{
+>> +	struct device *dev = &priv->client->dev;
+>> +	unsigned int v1, v2;
+>> +	int ret;
+>> +
+>> +	mutex_lock(&priv->reg_lock);
+>> +
+>> +	ret = regmap_read(priv->regmap, reg, &v1);
+>> +	if (ret) {
+>> +		dev_err(dev, "%s: cannot read register 0x%02x (%d)!\n",
+>> +			__func__, reg, ret);
+>> +		goto out_unlock;
+>> +	}
+>> +
+>> +	ret = regmap_read(priv->regmap, reg + 1, &v2);
+>> +	if (ret) {
+>> +		dev_err(dev, "%s: cannot read register 0x%02x (%d)!\n",
+>> +			__func__, reg + 1, ret);
+>> +		goto out_unlock;
+>> +	}
+> 
+> Wondering why bulk read can't be used against properly typed __be16 variable?
+
+I'll do that.
+
+>> +	*val = (v1 << 8) | v2;
+> 
+> + be16_to_cpu() here.
+
+Yep.
+
+>> +out_unlock:
+>> +	mutex_unlock(&priv->reg_lock);
+>> +
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +static int ub960_rxport_read16(struct ub960_data *priv, u8 nport, u8 reg,
+>> +			       u16 *val)
+>>   {
+> 
+> Ditto.
+> 
+>> +}
+> 
+> ...
+> 
+>>   	struct i2c_board_info ser_info = {
+>> -		.of_node = to_of_node(rxport->remote_fwnode),
+>> -		.fwnode = rxport->remote_fwnode,
+> 
+>> +		.of_node = to_of_node(rxport->ser.fwnode),
+>> +		.fwnode = rxport->ser.fwnode,
+> 
+> Why do you need to have both?!
+
+I didn't debug it, but having only fwnode there will break the probing 
+(no match).
+
+>>   		.platform_data = ser_pdata,
+>>   	};
+> 
+> ...
+> 
+>> +	for (nport = 0; nport < priv->hw_data->num_rxports; ++nport) {
+> 
+> Pre-increment is non-standard in the kernel.
+> 
+>> +		struct ub960_rxport *rxport = priv->rxports[nport];
+>> +		struct v4l2_mbus_frame_desc desc;
+>> +		int ret;
+>> +		u8 cur_vc;
+>> +
+>> +		if (!rxport)
+>> +			continue;
+>> +
+>> +		ret = v4l2_subdev_call(rxport->source.sd, pad, get_frame_desc,
+>> +				       rxport->source.pad, &desc);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		if (desc.type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2)
+>> +			continue;
+> 
+> 		cur_vc = desc.entry[0].bus.csi2.vc;
+> 
+>> +		for (i = 0; i < desc.num_entries; ++i) {
+>> +			u8 vc = desc.entry[i].bus.csi2.vc;
+> 
+>> +			if (i == 0) {
+>> +				cur_vc = vc;
+>> +				continue;
+>> +			}
+> 
+> This is an invariant to the loop, see above.
+
+Well, the current code handles the case of num_entries == 0. I can 
+change it as you suggest, and first check if num_entries == 0 and also 
+start the loop from 1.
+
+>> +			if (vc == cur_vc)
+>> +				continue;
+>> +
+>> +			dev_err(&priv->client->dev,
+>> +				"rx%u: source with multiple virtual-channels is not supported\n",
+>> +				nport);
+>> +			return -ENODEV;
+>> +		}
+>> +	}
+> 
+> ...
+> 
+>> +	for (i = 0; i < 6; ++i)
+>>   		ub960_read(priv, UB960_SR_FPD3_RX_ID(i), &id[i]);
+>>   	id[6] = 0;
+> 
+> Wondering if this magic can be defined.
+
+The number of ID registers? Yes, I can add a define.
+
+> ...
+> 
+>> +	priv->atr.aliases = devm_kcalloc(dev, table_size,
+>> +					 sizeof(struct atr_alias_table_entry),
+> 
+> 	sizeof(*priv->atr.aliases) ?
+
+Sure.
+
+>> +					 GFP_KERNEL);
+>> +	if (!priv->atr.aliases)
+>>   		return -ENOMEM;
+> 
+> ...
+> 
+>>   	if (ret) {
+>>   		if (ret != -EINVAL) {
+>> -			dev_err(dev,
+>> -				"rx%u: failed to read 'ti,strobe-pos': %d\n",
+>> -				nport, ret);
+>> +			dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+>> +				"ti,strobe-pos", ret);
+>>   			return ret;
+>>   		}
+>>   	} else if (strobe_pos < UB960_MIN_MANUAL_STROBE_POS ||
+>> @@ -3512,8 +3403,8 @@ ub960_parse_dt_rxport_link_properties(struct ub960_data *priv,
+>>   	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
+>>   	if (ret) {
+>>   		if (ret != -EINVAL) {
+>> -			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
+>> -				nport, ret);
+>> +			dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+>> +				"ti,eq-level", ret);
+>>   			return ret;
+>>   		}
+>>   	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
+> 
+
+Hmm, I noticed this one (and the one above) was missing return -EINVAL.
+
+> Seems like you may do (in both cases) similar to the above:
+> 
+> 	var = 0;
+> 	ret = read_u32();
+> 	if (ret && ret != -EINVAL) {
+> 		// error handling
+> 	}
+> 	if (var > limit) {
+> 		// another error handling
+> 	}
+
+That's not the same. You'd also need to do:
+
+if (!ret) {
+	// handle the retrieved value
+}
+
+which, I think, is not any clearer (perhaps more unclear).
+
+What I could do is:
+
+if (ret) {
+	if (ret != -EINVAL) {
+		dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+			"ti,eq-level", ret);
+		return ret;
+	}
+} else {
+	if (eq_level > UB960_MAX_EQ_LEVEL) {
+		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n",
+			nport, eq_level);
+		return -EINVAL;
+	}
+
+	rxport->eq.manual_eq = true;
+	rxport->eq.manual.eq_level = eq_level;
+}
+
+Maybe the above style makes it clearer, as it clearly splits the "don't 
+have value" and "have value" branches.
+
+> ...
+> 
+>> +	static const char *vpoc_names[UB960_MAX_RX_NPORTS] = { "vpoc0", "vpoc1",
+>> +							       "vpoc2", "vpoc3" };
+> 
+> Wouldn't be better to format it as
+> 
+> 	static const char *vpoc_names[UB960_MAX_RX_NPORTS] = {
+> 		"vpoc0", "vpoc1", "vpoc2", "vpoc3",
+> 	};
+> 
+> ?
+
+Clang-format disagrees, but I agree with you ;).
+
+  Tomi
 
