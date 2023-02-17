@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7119C69B1D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DF569B1DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjBQRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 12:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S229994AbjBQRgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 12:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjBQRer (ORCPT
+        with ESMTP id S229972AbjBQRgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 12:34:47 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8F6EBB6;
-        Fri, 17 Feb 2023 09:34:45 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 755E15C00E3;
-        Fri, 17 Feb 2023 12:34:44 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Feb 2023 12:34:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1676655284; x=1676741684; bh=x9il+fO3+krgqqs56NmfA2a+M5nr8m3FwwW
-        TXtFGt1o=; b=fb/JrZ9iZGQlh8+5SuYcFxULWSyo4PzYaXs1sAPRlr8/yUrl6fd
-        S4806DoEvE+b2BA/vMGjzdD98RKzsgHNm2qjDOpO8QkV6xd8QPC1hLv4LxOVa2MO
-        ZHmalVopeohqg5U5Jq6AF7VLIUzQlVyt5q2AJvtB7eocQ1yFDwMhxPUSBKDsSjib
-        jxz2bliRtFsDmLm0Dejp/ya1miYN0C1rNgBV/sk5oaxuVatXLOtHSs9fWxu5mN2O
-        TH5b6br63PqJ1fjgdVMQLNeo//63gjTcUlolFQcrD8hTEB6uab7mRnWNjPcAeIXg
-        +dGa7kFEvQjRitu1S40ulDYmIs4+gMUtc1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676655284; x=
-        1676741684; bh=x9il+fO3+krgqqs56NmfA2a+M5nr8m3FwwWTXtFGt1o=; b=S
-        IcEmW7Tj0ccfKr5Rtl4H5CZxzggmjI4PZUJo+yvgVZ15yxnWTe0DhEd7TGJfnHzE
-        KC8D32la5lfymvjf4x+swf+hzC7KXJUv8iCSr3oN/hvSnNZtkzHoe8Ld3QeIZlmA
-        Ar/yWDnRpAnzJioPcaYFPRlv3CNejWxrvvcMtWtSnB+PXaKhXaHESXWYv0latMtJ
-        FRoJbsimu8IcaMb4SeM0eq2BaWElTO2O3GdrhS/M7S8x5P2u/ncc1hTqiQI2ZDZe
-        bqj30X2RoD6frUuJqJLm+xSXdatzkfTBR3Hay7sNF3+bUgGbag1eb6WrI64t/he1
-        ADgHuJuqp1ZvbDktQQdjg==
-X-ME-Sender: <xms:tLrvY4z3I4IkvpV8jMqGjMlTpH_9nKEC4RN8IoVzoU2Ki-JSmkdvlw>
-    <xme:tLrvY8RKvp5d1fE0YgwJwu90qdrC2R90-qPRyKQ9zclqHcDsO-bsW65cPeJBnpuU9
-    zcIPbNzUSW7dKVR7HE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
-    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:tLrvY6VFQmrQnS9pMIdYJnB3cFH9mnrojZ3nELgtIoSyR-EYvGKKaw>
-    <xmx:tLrvY2hRyVdtRRXEJ4D9lDfGO-EfUds9_mDinrTknDcDvqrEVNhHpQ>
-    <xmx:tLrvY6Dd_rc0yuvU_6gnTqR02Qg8j2AdOl6Yqn9jVzxIKpH9sUCFug>
-    <xmx:tLrvY9P-ayiGtp8fobjdk5u2lUTSkj6tlhRPEbveAFAzT8jcbJhJUw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 27510B60086; Fri, 17 Feb 2023 12:34:44 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <ad5a0fc0-cad5-4730-9ddc-68285c6f13fc@app.fastmail.com>
-Date:   Fri, 17 Feb 2023 18:34:19 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Mike Rapoport" <rppt@kernel.org>, "Matt Evans" <mev@rivosinc.com>
-Subject: [GIT PULL] asm-generic: cleanups for 6.3
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 12:36:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364CA6EB84
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:35:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676655336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K5Ekvi/cgShIBq5Ias9rr0vAffoOycedxIerQd+Vy8o=;
+        b=cd8UIjXZ7DrY/daRrlKKAv3va+tQaPFRHuwriQN9IS/0iP+Uc675I5JTgNomOtBs5XGKSq
+        rukiVEH7ofTEOovqY/EPqOHixTJBQ0BPJUrhyFy4xhQvH6+Btrg7RJxC2p0dt7AKWs8rjh
+        5uPtU9Nol2EHeZ8OISl7c47mvKSvtJo=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-159-ac-6GL3vP2uAjjg3pqVHzg-1; Fri, 17 Feb 2023 12:35:35 -0500
+X-MC-Unique: ac-6GL3vP2uAjjg3pqVHzg-1
+Received: by mail-ot1-f71.google.com with SMTP id a24-20020a9d74d8000000b0068d48d4e873so687992otl.22
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:35:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K5Ekvi/cgShIBq5Ias9rr0vAffoOycedxIerQd+Vy8o=;
+        b=aIxqVanezkivDdcb57P/Z1HD9bhO0q9dnVhZ81rM4IW0MV0obH6NHaYhQ+xjq74MFo
+         ORoaYU3k3Nk4lMcYs/SVzIsTes/oTQheRgriJSvLVAGmP0/4+LpCfDRb31kXYrLFS3K+
+         fNU2x4yNRlpM4vOJ5+5E/Tj9aAxi0exWTPkHsugYls0yo29am4qBuWLzJpOKiuO1IkId
+         bhgpr/P9f7LW48rY6bysjlV61Qd6HduZah7prptgGNEyIFA/1BeOyn0rzKVGx46/XoqO
+         UASpXo9ND63NrqjChF99JAtbtJJrp8hp/H0hjZ06cpD4Cgoh3g9yVOo4aZmmGdqr37pT
+         gmUw==
+X-Gm-Message-State: AO0yUKWSK29htDI2gcReXx0UHtK6I3oJt/F+QpytF+oUw9LjqAhZnkZ7
+        ELIlggJ4CkDgGE6Grg051upTAwk/z0+SpU0QJ673SwC4A/53GFCgGJJh5LQPA3A/p/9eSPjfooM
+        qe+qJtw3xLlrcuyXLx0scUMxt
+X-Received: by 2002:a05:6870:9a23:b0:16e:9266:8f5c with SMTP id fo35-20020a0568709a2300b0016e92668f5cmr1986638oab.22.1676655334390;
+        Fri, 17 Feb 2023 09:35:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set9IbJ4Bmz/IVrHg3clMrzNSJ/87htI6K7X1K4qBgrYIPbDivrWsxpyaDMQElKtdHGx1Ge3KFg==
+X-Received: by 2002:a05:6870:9a23:b0:16e:9266:8f5c with SMTP id fo35-20020a0568709a2300b0016e92668f5cmr1986625oab.22.1676655334143;
+        Fri, 17 Feb 2023 09:35:34 -0800 (PST)
+Received: from [192.168.0.198] ([177.137.113.95])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05683011cb00b006863c59f685sm2085968otq.28.2023.02.17.09.35.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 09:35:32 -0800 (PST)
+Message-ID: <8632d9c6-7ec7-c3aa-f9e7-fa63cc82f6ae@redhat.com>
+Date:   Fri, 17 Feb 2023 14:35:22 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/4] sched/task: Add the put_task_struct_atomic_safe
+ function
+Content-Language: en-US
+To:     Wander Lairson Costa <wander@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Luca Abeni <luca.abeni@santannapisa.it>
+Cc:     Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>
+References: <20230120150246.20797-1-wander@redhat.com>
+ <20230120150246.20797-2-wander@redhat.com> <20230123163002.GB6268@redhat.com>
+ <CAAq0SUk1vfNDuzGbXNftgW4wq4PC_EzMhpq4E=RBQNkOB3f4YQ@mail.gmail.com>
+ <xhsmhbkmkdla4.mognet@vschneid.remote.csb>
+ <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+On 1/30/23 08:49, Wander Lairson Costa wrote:
+>> Another thing, if you look at release_task_stack(), it either caches the
+>> outgoing stack for later use, or frees it via RCU (regardless of
+>> PREEMPT_RT). Perhaps we could follow that and just always punt the freeing
+>> of the task struct to RCU?
+>>
+> That's a point. Do you mean doing that even for !PREEMPT_RT?
+> 
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+It seems that Luca Abeni (in Cc) is hitting the bug in the non-rt kernel
+with SCHED_DEADLINE...
 
-are available in the Git repository at:
+adding him to the thread.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.3
+-- Daniel 
 
-for you to fetch changes up to a13408c205260716e925a734ef399899d69182ba:
-
-  char/agp: introduce asm-generic/agp.h (2023-02-13 22:13:29 +0100)
-
-----------------------------------------------------------------
-asm-generic: cleanups for 6.3
-
-Only three minor changes: a cross-platform series from Mike Rapoport to
-consolidate asm/agp.h between architectures, and a correctness change
-for __generic_cmpxchg_local() from Matt Evans.
-
-----------------------------------------------------------------
-Matt Evans (1):
-      locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare against zero-extended 'old' value
-
-Mike Rapoport (2):
-      char/agp: consolidate {alloc,free}_gatt_pages()
-      char/agp: introduce asm-generic/agp.h
-
- arch/alpha/include/asm/Kbuild       |  1 +
- arch/alpha/include/asm/agp.h        | 19 -------------------
- arch/ia64/include/asm/Kbuild        |  1 +
- arch/ia64/include/asm/agp.h         | 27 ---------------------------
- arch/parisc/include/asm/Kbuild      |  1 +
- arch/parisc/include/asm/agp.h       | 21 ---------------------
- arch/powerpc/include/asm/Kbuild     |  1 +
- arch/powerpc/include/asm/agp.h      | 19 -------------------
- arch/sparc/include/asm/Kbuild       |  1 +
- arch/sparc/include/asm/agp.h        | 17 -----------------
- arch/x86/include/asm/agp.h          |  6 ------
- drivers/char/agp/agp.h              |  6 ++++++
- include/asm-generic/agp.h           | 11 +++++++++++
- include/asm-generic/cmpxchg-local.h |  6 +++---
- 14 files changed, 25 insertions(+), 112 deletions(-)
- delete mode 100644 arch/alpha/include/asm/agp.h
- delete mode 100644 arch/ia64/include/asm/agp.h
- delete mode 100644 arch/parisc/include/asm/agp.h
- delete mode 100644 arch/powerpc/include/asm/agp.h
- delete mode 100644 arch/sparc/include/asm/agp.h
- create mode 100644 include/asm-generic/agp.h
