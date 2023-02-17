@@ -2,79 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0229369A927
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003E169A92B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjBQKj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S229888AbjBQKkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjBQKj5 (ORCPT
+        with ESMTP id S229681AbjBQKkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:39:57 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D8F36447
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:39:56 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id d5-20020a6bb405000000b0073e7646594aso586770iof.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:39:56 -0800 (PST)
+        Fri, 17 Feb 2023 05:40:41 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B28F36447
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:40:13 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id j6so1064766plh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:40:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/OY6h867Uho2x4Y7A6BkSlLeS+Imv69/x5y04MvIjZA=;
+        b=7twP6FE29tHHNOOekUmGGxoSCG9xUhcjl7bGLCisIU4ZpqXnJRRvS394kK0dSwPSG4
+         YL6P7hlb+3db+3stPhIpH59m1yPduIurgcbru62ROTiVQ4qyyKLc/X2/tz1bsVq1D2gQ
+         Y3d5hR94I/cQpZgnWsgWd5TXbF3ExENhVw1XVLWjWoF81rglqUtqJG39JMYRt1kkSakL
+         56dbElQde09COs8I5+SGSOnLw8k7wPV1N5NVyxVYCRRA3LAVfM5kTQre8ffNIaQs0Jf+
+         UGoo0cZ0/vbDoDf7myFbdYE2CzkT38s5jFQm/DNWVroYsvwdCEsSLdb9haMhKNUK/Nsc
+         pBHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NFiNERqn1t2ICdgp8ipAc2rgv5W5QP1VK2q/LbWNb3Y=;
-        b=6SRAukcRkv5yidI9CSywBglG3LopagSzFE4Lf8nftVd/OdPxpHbGSGiZubFwrRuUyD
-         rzH4gXYoG5/E0S5/wHmJr0w9b3Vx+TGFu1I/vDSWgLbZs51xjmk3ll2wB8Hzqix+nDsU
-         7bq5SF9gYJ4jpq2K+8bbex6NjQGmoNaCO7hBjC0ZkndjLVFbim/QZ6r9uaKJH9hXdI+t
-         26L8onyCabZr7XfcexVLE0yjrr8TtmZvdi3h2jiqvhj8UPrEu+88SXjh0gVoChuX2GHH
-         guRoTtF7/NHbUDT3JNKzO9nwUnX5yjF3rsK5EgHY4Yr/UAQR6SSH2HzLj4/XGOPxP2DA
-         zfxw==
-X-Gm-Message-State: AO0yUKU6j8I3+FBq2KBPDaNK/mFUgLJLrlzzOwFAHp2wdlkff3fzUecz
-        qoREk7qULe9roCeuJ3lJmbp1bS3Mf68VDnfulowqnXUBCKOx
-X-Google-Smtp-Source: AK7set+dXvQk5Z2r+iKh/iqzf8XYYSeXJrzmzWMvy/4I5nkx+2MDsoLNtUqxYV50nNSjxIrw3zp/6u9HWqHQ+XYR3+YsHiIMBCLA
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/OY6h867Uho2x4Y7A6BkSlLeS+Imv69/x5y04MvIjZA=;
+        b=lTJxbZn0dW3/AkobebiKBK6jO9UANLFm5JyAdM1BLjTiC1YQd9/UfdYBIszPS5EuwQ
+         Hfou9jG65aJhVLvStTdeeZFxwGEyNbFSaQO0TF8hq/a5gchD6P3ppxnA+ykO9NJaRYbu
+         Zvqrv/dSTPb2+eiJDSOPFR8Ram4zGYZlD0HqGFmGICijuJRUM+hK96+DnHf7J1Cyj/ok
+         ua6RhLk6BeFK2JvXOmIat8wnd2eZ8nN/8wTzFgxQGnAKBB4zDaOBjWaJjE5LNu4zzcfj
+         RS/2H8ITXVZn/Q600zNU1vg89fbbKrDxUKYh6rNGUidiSa+c5Vvh+6x449ukIDEu6dth
+         eKog==
+X-Gm-Message-State: AO0yUKVVT/E9oZD0d8vueha+u+7CcJKx7L9DU+Es2Y1DdzI/WyyNmVhd
+        VjiVEO/edkmO81ppsNt9Y+yQWQ==
+X-Google-Smtp-Source: AK7set/62nTDQFm0tWcbPnYkRph/yTLjlHrjxuPfkCtYpaZzV1Y13uW1qLTkFcpT3Zv7q6BW1HdXSw==
+X-Received: by 2002:a17:902:ecc6:b0:19a:9984:5588 with SMTP id a6-20020a170902ecc600b0019a99845588mr11972185plh.26.1676630413102;
+        Fri, 17 Feb 2023 02:40:13 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902ee4d00b0019a88c1cf63sm2836753plo.180.2023.02.17.02.40.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 02:40:12 -0800 (PST)
+Message-ID: <979da62f-3103-346a-c1f0-2ea4f0ba37bd@bytedance.com>
+Date:   Fri, 17 Feb 2023 18:40:03 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1203:b0:310:d631:cd72 with SMTP id
- a3-20020a056e02120300b00310d631cd72mr174447ilq.2.1676630395773; Fri, 17 Feb
- 2023 02:39:55 -0800 (PST)
-Date:   Fri, 17 Feb 2023 02:39:55 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000028ea4105f4e2ef54@google.com>
-Subject: [syzbot] upstream-arm64 build error
-From:   syzbot <syzbot+f8ac312e31226e23302b@syzkaller.appspotmail.com>
-To:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v5 2/2] sched/fair: Introduce SIS_SHORT to wake up short
+ task on current CPU
+Content-Language: en-US
+To:     Honglei Wang <wanghonglei@didichuxing.com>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
+        linux-kernel@vger.kernel.org,
+        kernel test robot <yujie.liu@intel.com>
+References: <f88838ff-2024-ca32-069e-f7a4c0465961@didichuxing.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <f88838ff-2024-ca32-069e-f7a4c0465961@didichuxing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Honglei,
 
-syzbot found the following issue on:
+On 2/17/23 4:35 PM, Honglei Wang wrote:
+>> The following change greatly reduced the p99lat of Redis service
+>> from 150ms to 0.9ms, at exactly the same throughput (QPS).
+>>
+>> @@ -5763,6 +5787,9 @@ wake_affine_weight(struct sched_domain *sd, 
+>> struct task_struct *p,
+>>      s64 this_eff_load, prev_eff_load;
+>>      unsigned long task_load;
+>>
+>> +    if (is_short_task(p))
+>> +        return nr_cpumask_bits;
+>> +
+>>      this_eff_load = cpu_load(cpu_rq(this_cpu));
+>>
+>>      if (sync) {
+>>
+>> I know that 'short' tasks are not necessarily 'small' tasks, e.g.
+>> sleeping duration is small or have large weights, but this works
+>> really well for this case. This is partly because delivering data
+>> is memory bandwidth intensive hence prefer cache hot cpus. And I
+>> think this is also applicable to the general purposes: do NOT let
+>> the short running tasks suffering from cache misses caused by
+>> migration.
+>>
+> 
+> Redis is a bit special. It runs quick and really sensitive on schedule 
+> latency. The purpose of this 'short task' feature from Yu is to mitigate 
+> the migration and tend to place the waking task on local cpu, this is 
+> somehow on the opposite side of workload such as Redis. The changes you 
+> did remind me of the latency-prio stuff. Maybe we can do something base 
+> on both the 'short task' and 'latency-prio' to make your changes more 
+> general. thoughts?
 
-HEAD commit:    2d3827b3f393 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=160f19d7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f5c7f0c5a0c5dbdb
-dashboard link: https://syzkaller.appspot.com/bug?extid=f8ac312e31226e23302b
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+I think it is more like an enhance rather than conflict. Chen Yu's patch
+treats the cpus with only one short task as idle, to make idle cpu scan
+more efficient. So if this cpu is such 'idle' cpu, just choose it. While
+what I suggested is to ignore this cpu if it is not idle.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f8ac312e31226e23302b@syzkaller.appspotmail.com
+But as you pointed out that Redis is a bit special in the manner of
+sensitive on scheduling latency, the change in wake_affine_weight() may
+be inappropriate as 'weight' implies more on throughput than latency.
 
-failed to run ["make" "-j" "64" "ARCH=arm64" "CROSS_COMPILE=aarch64-linux-gnu-" "CC=clang" "Image.gz"]: exit status 2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Best Regards,
+	Abel
