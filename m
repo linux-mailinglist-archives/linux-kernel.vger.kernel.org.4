@@ -2,73 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C0069B615
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEE669B621
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjBQXAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S229800AbjBQXDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBQXAb (ORCPT
+        with ESMTP id S229475AbjBQXDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:00:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEE0E0;
-        Fri, 17 Feb 2023 15:00:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 633E162086;
-        Fri, 17 Feb 2023 23:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8EA3C433D2;
-        Fri, 17 Feb 2023 23:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676674829;
-        bh=SHtEUkVWvx6Pxd5m50gDrkVPdNQ2N7PHLv2MUB25rUU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=llceEM7W4jg2r1EbnuyKcY7MtqWhlgLouvBHTyEXUpWqOC4HluCKgk4vM43cm88TV
-         QxVufTsQYqK5U1lUZ/M97Jy6PdU56yfN96d4o2YthhNUrzalyXkgwtv1h0Z+go6jys
-         LOZn20oer+pc4woKDGBd/1ArfI2tg8Qdhal94YHFUozgpYb2UigyLyIh9i0fkwwXVO
-         JvxGbcC4cJsw9y/pewZE/WZJZweZe/chCz2J2ZetwsnrzT6AFzYLg5XMyZoe4SUbnY
-         pry/y8SpRD/gOkhco1+azq1v28XuuXsh1ifxfO19vhvqKVuw90u58yMRK5Usn21lnt
-         zsUAS79Fu7H3A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD2DAC1614B;
-        Fri, 17 Feb 2023 23:00:29 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull another NFS client change for 6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <c2181ba919c59ffde5c9b9fc615608f92a146413.camel@kernel.org>
-References: <c2181ba919c59ffde5c9b9fc615608f92a146413.camel@kernel.org>
-X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <c2181ba919c59ffde5c9b9fc615608f92a146413.camel@kernel.org>
-X-PR-Tracked-Remote: git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-6.2-3
-X-PR-Tracked-Commit-Id: 896e090eefedeb8a715ea19938a2791c32679cc9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 75cc9c4716a7a398139805e62ccc3e0d14d00540
-Message-Id: <167667482970.20587.6365505201861217855.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Feb 2023 23:00:29 +0000
-To:     Trond Myklebust <trondmy@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 18:03:49 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6614F42BE5;
+        Fri, 17 Feb 2023 15:03:48 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id i4so2567205oiy.4;
+        Fri, 17 Feb 2023 15:03:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLSLgiQSCVvjkCIXz0HVyuRV1cGMyEHUbSRIVO4Q6fk=;
+        b=zckX/gUD8Zwmih0E2FsM6rp+I8sBqw0TFV5vjAJCLaesA8ElwtomhKCMZQ4Kc2R7cV
+         7HxWtseWkOja2e/1XULar3ewfD37oXC6dBttntaIo3Q/OPKdTxgBT8+KaLEttXpcXdVx
+         edVkwH7P8pLjhDNWVBsJq0/s3BHBc8k8muYsaVFvwXPb3wJfPDBLFSRZf1OznDTt7V31
+         gWF/Ryl2jtPvJcEmqZZwuBeepRURqgsISJwOQTX+3HDF3lvwM2WjCBFpCOhLO3ISCfG8
+         qVEPCRyPg6v9ZxdXhzEajOHXB80JjsMREpHPjOkSe+7nK9+53P0KUts+drlrEQGbwH4k
+         vZig==
+X-Gm-Message-State: AO0yUKVS0wLiGXD5hJdsQDKN3SUH50Rei7Ko1tvo+ABZsnpe+q47rkna
+        m4KIarY009tOhfsFIW2gIX0XZguP1A==
+X-Google-Smtp-Source: AK7set/0/4JrsjWas4uVRGEoFcvaUWkmE547q5kQSBLJyFr90e8HYEdwMd78yhQfUNqXTDvnFXzuXg==
+X-Received: by 2002:a05:6808:7cd:b0:360:e1dc:8b18 with SMTP id f13-20020a05680807cd00b00360e1dc8b18mr1094554oij.20.1676675027590;
+        Fri, 17 Feb 2023 15:03:47 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m1-20020a05680806c100b0037d7c3cfac7sm2320897oih.15.2023.02.17.15.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 15:03:47 -0800 (PST)
+Received: (nullmailer pid 2227917 invoked by uid 1000);
+        Fri, 17 Feb 2023 23:03:46 -0000
+Date:   Fri, 17 Feb 2023 17:03:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH v8 11/13] dt-bindings: leds: Document netdev trigger
+Message-ID: <20230217230346.GA2217008-robh@kernel.org>
+References: <20230216013230.22978-1-ansuelsmth@gmail.com>
+ <20230216013230.22978-12-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216013230.22978-12-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 17 Feb 2023 09:16:29 -0500:
+On Thu, Feb 16, 2023 at 02:32:28AM +0100, Christian Marangi wrote:
+> Document the netdev trigger that makes the LED blink or turn on based on
+> switch/phy events or an attached network interface.
 
-> git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-6.2-3
+NAK. What is netdev?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/75cc9c4716a7a398139805e62ccc3e0d14d00540
+Don't add new linux,default-trigger entries either. We have better ways 
+to define trigger sources, namely 'trigger-sources'.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/leds/common.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+> index d34bb58c0037..6e016415a4d8 100644
+> --- a/Documentation/devicetree/bindings/leds/common.yaml
+> +++ b/Documentation/devicetree/bindings/leds/common.yaml
+> @@ -98,6 +98,8 @@ properties:
+>              # LED alters the brightness for the specified duration with one software
+>              # timer (requires "led-pattern" property)
+>            - pattern
+> +            # LED blink and turns on based on netdev events
+> +          - netdev
+>        - pattern: "^cpu[0-9]*$"
+>        - pattern: "^hci[0-9]+-power$"
+>          # LED is triggered by Bluetooth activity
+> -- 
+> 2.38.1
+> 
