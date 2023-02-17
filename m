@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6543769A88B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A397B69A88D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjBQJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S230139AbjBQJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjBQJqi (ORCPT
+        with ESMTP id S230108AbjBQJqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:46:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB03BBAB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:45:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676627151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=J7JYXyzu7HeaLauJruraDYc3KfnEEgDfWko7tD975N0=;
-        b=R4Iwk2Akap0hJ2cfBm5HezP2PqOVIbK3KEbTKfQrvduobZAk12k5NmVmhGZY7IahtyGFmD
-        laps2utwBbLI68qtTApMxZzdqd3un4DMc8xaNF7kaEgvpd2wpF0Q/GnU+bzXdH/tfijmnT
-        +am6avh2PEm9Ya6nvpLw1RsrnSDqcy4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-xTLq94TZMyaxh9fkygDAXA-1; Fri, 17 Feb 2023 04:45:46 -0500
-X-MC-Unique: xTLq94TZMyaxh9fkygDAXA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B86A886462;
-        Fri, 17 Feb 2023 09:45:45 +0000 (UTC)
-Received: from TPP1.redhat.com (ovpn-193-244.brq.redhat.com [10.40.193.244])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 75EF5492C18;
-        Fri, 17 Feb 2023 09:45:43 +0000 (UTC)
-From:   Josef Oskera <joskera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Josef Oskera <joskera@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-rdma@vger.kernel.org (open list:MELLANOX MLX4 core VPI driver),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] mlx4: supress fortify for inlined xmit
-Date:   Fri, 17 Feb 2023 10:45:41 +0100
-Message-Id: <20230217094541.2362873-1-joskera@redhat.com>
+        Fri, 17 Feb 2023 04:46:46 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3304C53EC6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:46:45 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d2-20020a17090a498200b00236679bc70cso1610613pjh.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:46:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9SH8M+iqgIr8G+65VlZ0io44yWlIQXBEHAm0eyAdZpw=;
+        b=I16dYVnVg0XOdpqW3CxmiwV9XP2BJjqTz2eYIGN2626xfNuu9PkE+LkIgDtMQa0LfP
+         EX0J7IyRqeoxA+oCdwaU/8umO+EHkSD+/UMOFzCnqR3m72uABeIs/USYQFZahCqjsyCD
+         SrEALrKndVzuWGWAqgw/iAkyMf22F9IYpuEGR+3dFx6ynj9zddqFaOQXsPbZzDC4alba
+         44B3He/oCz5v3EBmVRVcmTLUECkt9mqlV5ragF6sDnYijYzWSV2NYi1zddGFKu0dif1T
+         Fhf/8Ni93PcoNjiHfkv90rUSnuOtXxoevvbYtoJ+UALXfTkgA/IXB02L1d2jNEURtct0
+         OEEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9SH8M+iqgIr8G+65VlZ0io44yWlIQXBEHAm0eyAdZpw=;
+        b=N99mxJxX1JZxBB5238G4pBtQnBIL4Yc9+57yMyG98V+5tU1swQiFiV8aJXWkXTg9U5
+         MeW3X3zpOM92IAXn/J46Ks/mk8fxnD40KeBLa/VxBu0ZRDTBFibdOq+g0RgYkqIKsXIZ
+         Xtp1jaKI5PXIHUQ2i1NjeyaKN1bHVEEe7IvaSHKRrvoWGEJqPofug/Qpl31K0LcyKlFB
+         KQ1ucXxQ5Iyf2SH+uIBQZCzvHjO7jK8YiEhm28ISRYeicrxJ39jBrlkiPIJjzYuzgWD5
+         s0k+gvFe9HAi+ApPF8WBM0cCQOTBU4xDfyZvdyKBMFp4U51JDvLimUI5wuwqOThrINaW
+         KYcA==
+X-Gm-Message-State: AO0yUKXmxUkKyBmyIxPRAPPBiQGmaBTVDepaiMoSzJQfndh1a0KGYH81
+        y3iA1g31QE0IRsscUPTn5lDTt9NjedGCqPuUMWE=
+X-Google-Smtp-Source: AK7set8cf5yh6zy9YQwtWISzI389HBLjQA5O7nNvnjVWnB0VUlENZPzFv11FPIZEfQgmVMDgBswuUjc1fFcHpPcSSA8=
+X-Received: by 2002:a17:902:d4d2:b0:199:6e3:187a with SMTP id
+ o18-20020a170902d4d200b0019906e3187amr263451plg.6.1676627204614; Fri, 17 Feb
+ 2023 01:46:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <cover.1676063693.git.andreyknvl@google.com> <5836231b7954355e2311fc9b5870f697ea8e1f7d.1676063693.git.andreyknvl@google.com>
+ <CAG_fn=VM34NfOhir_3y86=SKxZ=PqbC3DFuFVAmLEYp8Z9Ax3A@mail.gmail.com>
+In-Reply-To: <CAG_fn=VM34NfOhir_3y86=SKxZ=PqbC3DFuFVAmLEYp8Z9Ax3A@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Fri, 17 Feb 2023 10:46:33 +0100
+Message-ID: <CA+fCnZfVy6=ZKKvUWtCzMwstBjPCp7airuG9L1DSWxkKyyAAVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 17/18] lib/stackdepot: various comments clean-ups
+To:     Alexander Potapenko <glider@google.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,58 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers FORTIFY memcpy()
-warning on ppc64 platform.
+On Mon, Feb 13, 2023 at 2:26 PM Alexander Potapenko <glider@google.com> wrote:
+>
+> On Fri, Feb 10, 2023 at 10:18 PM <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Clean up comments in include/linux/stackdepot.h and lib/stackdepot.c:
+> >
+> > 1. Rework the initialization comment in stackdepot.h.
+> > 2. Rework the header comment in stackdepot.c.
+> > 3. Various clean-ups for other comments.
+> >
+> > Also adjust whitespaces for find_stack and depot_alloc_stack call sites.
+> >
+> > No functional changes.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Reviewed-by: Alexander Potapenko <glider@google.com>
+>
+> > - * Instead, stack depot maintains a hashtable of unique stacktraces. Since alloc
+> > - * and free stacks repeat a lot, we save about 100x space.
+> > - * Stacks are never removed from depot, so we store them contiguously one after
+> > - * another in a contiguous memory allocation.
+> > + * For example, KASAN needs to save allocation and free stack traces for each
+>
+> s/free/deallocation, maybe? (Here and below)
 
-In function ‘fortify_memcpy_chk’,
-    inlined from ‘skb_copy_from_linear_data’ at ./include/linux/skbuff.h:4029:2,
-    inlined from ‘build_inline_wqe’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
-    inlined from ‘mlx4_en_xmit’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
-./include/linux/fortify-string.h:513:25: error: call to ‘__write_overflow_field’ declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-  513 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Either way looks good to me.
 
-Same behaviour on x86 you can get if you use "__always_inline" instead of
-"inline" for skb_copy_from_linear_data() in skbuff.h
+The patches are in mm-stable now though, so lets save this change for
+another potential set of clean-ups.
 
-The call here copies data into inlined tx destricptor, which has 104 bytes
-(MAX_INLINE) space for data payload. In this case "spc" is known in compile-time
-but the destination is used with hidden knowledge (real structure of destination
-is different from that the compiler can see). That cause the fortify warning
-because compiler can check bounds, but the real bounds are different.
-"spc" can't be bigger than 64 bytes (MLX4_INLINE_ALIGN), so the data can always
-fit into inlined tx descriptor.
-The fact that "inl" points into inlined tx descriptor is determined earlier
-in mlx4_en_xmit().
-
-Fixes: f68f2ff91512c1 fortify: Detect struct member overflows in memcpy() at compile-time
-Signed-off-by: Josef Oskera <joskera@redhat.com>
----
- drivers/net/ethernet/mellanox/mlx4/en_tx.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-index c5758637b7bed6..f30ca9fe90e5b4 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-@@ -719,7 +719,16 @@ static void build_inline_wqe(struct mlx4_en_tx_desc *tx_desc,
- 			inl = (void *) (inl + 1) + spc;
- 			memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
- 		} else {
--			skb_copy_from_linear_data(skb, inl + 1, spc);
-+			unsafe_memcpy(inl + 1, skb->data, spc,
-+					/* This copies data into inlined tx descriptor, which has
-+					 * 104 bytes (MAX_INLINE) space for data.
-+					 * Real structure of destination is in this case hidden for
-+					 * the compiler
-+					 * "spc" is compile-time known variable and can't be bigger
-+					 * than 64 (MLX4_INLINE_ALIGN).
-+					 * Bounds and other conditions are checked in current
-+					 * function and earlier in mlx4_en_xmit()
-+					 */);
- 			inl = (void *) (inl + 1) + spc;
- 			skb_copy_from_linear_data_offset(skb, spc, inl + 1,
- 							 hlen - spc);
--- 
-2.39.0
-
+Thank you!
