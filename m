@@ -2,109 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD9269A592
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221D969A595
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 07:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjBQGXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 01:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        id S229729AbjBQGZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 01:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBQGXI (ORCPT
+        with ESMTP id S229477AbjBQGZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 01:23:08 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BCC59B5E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 22:23:06 -0800 (PST)
+        Fri, 17 Feb 2023 01:25:32 -0500
+Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020016.outbound.protection.outlook.com [52.101.56.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C445A399;
+        Thu, 16 Feb 2023 22:25:31 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YRAqP7KWKWHaiOoW5z1Ov1prrA8WRbyoHPzkiW2WwPn4zaOnh+NcuxkeYdzYyn6cejsD9qjW1ccOYG5YRs5a2CcVQyKSl5k7+zXxUwNErG9gtUBG9gbDSFLuMLF8h2lAp7rKQF60Y6oCX7UpaSqvpklncFTOWJILk3mNgd2nrVCejNhG3DoDn4L2tlJps99GHGzhMAMw0E9mDbb5jnCJr/ZRrY6tq5Nnd1a/0wwOAIf4UteE+Ee9uGblmG+KH8IbCQ/fG2me3fMS5ZaFSA0hue6PIi8RqStTvaApemVNUuSNGh/BzCQJ6Y953/JyjrWhcqhObVsE9+hOO4mrfAcBSA==
+ b=NcDKr+R1deDtsW6OhMLr/fVVu+TsKpF8CeQD1AJ9NTlClERjwwlJTk/Anytce7Z0yzwIRZOz8ouvx16ewxP1YNrtQLIC19zutHRzE+GANJjZlp3+R2PphSulHUB6kp/ZPYib+kqlzPfMdGUoa8t4OGX8uLCsymC8+FYtVQq4U7I4HaCd8KBGypbbwcBypAyMMkvGx8LDEhmTHt0CqX6DCjhNGRg5LnJSkCd9ksWoYsgoEQLC/lC8odqWSM/oygX50GTdGywmb1OO+XLoSM7KcAhvNgwJUQNPKpMsW6Ut2L285ys4ZPUIVGSVczx4eRK+SDFKVa/bE/fgoMp/SbVHXg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lhBkYvjPE5SbejNzYX0VsOsf2+DeA6gxONrd6bcrTnU=;
- b=gUoAD3uAfzGspL/QG1ogRwxRAIyz4Ry6Yqyf0FFIxTGq2Cg+EGZ9Dwe7ru/AhZmkbHg61ezsayVC7ztWPHyJ2pZo68P1XbMxvaq0sPZVlJOmEkQYhzWz5n2KWSL1sMj1SISpjCe94fduyZahvU80ilErTg+6/jslqn27awD79eWRoc/dKJiFCxJLdzUGF37zI9iHZyEoyH443j+BCKAX8IVw1DzH7swdXUts3COnLKJ/xd4pcs+BcGkFXxGDHBTZT1R/U0EkGnZ5Kg/PwEmFMblaHsxjnZa6yH7lJEj4TY8yEYvkWCx2d1VGXjJ7a5P5VFTvSRYlPHalypWXPd1yRQ==
+ bh=CNCoMFBkUxn1t2MXrEbh3yPZ5igZPysviEAX/9VQ5eQ=;
+ b=csVa4wlZUs4K60peBPFFBep8zGhMcI5VwjB2AaNADDo3yFTF9Ct6mUBU9KS8wW+kPTCVsT5hSPYWMB8hf1Dk0T2YKJhmKuyl+PKGcRFor2Zm4t+o2l75BG5W1Z57/k6I4NrNZnLONKIIN0HrDzzPLFJuXN8oWjAkVP5hk9hFNAJstNgAocnqycL/ESEGt/ulPyGFlxULh8SzMul+6+xq4wCzJVvEze0n8hSnAEzTDKCcx+GqrLWGtNQBYfTlknqSlC4aM0GTO3nNAhYliwHB3usUjmiIfL75TssoW/2h9Lc5b1liHIC6qQ5WonMt7AZGgZLfHiF9GzTisiC6VKqtrA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lhBkYvjPE5SbejNzYX0VsOsf2+DeA6gxONrd6bcrTnU=;
- b=loYvy1VLYsSSPlkcySWXgeaxNCOz9sN6K7gyoqxMQbw1hA3xQTHHG9EqQqdtQ0CWGMhVS6ZmDaVKS1P01n2KqDvDF0CQoHsSo/CHFbFkhrXUy30SL6hP/rPXxw7IVJ/eHiav7R33KJoWOkq5h5AQe3ms2vvHKXmLPlUE2usIAYGAExm4R6RhJhi6xnO5HV9qJmTLp8/ZVPOylR14XYHLPg5ejSc8V89/1j7eBs+9RqxHftLvzNMMs7K/aD0eQ/oCjudgLgMHwaKvzNKgipIpRBerUZ7PkFEZfp5qdzq6ZEz9/Kk58D95oG5gL/aZ/RLZnz2CPmI6JBl/5WkB78/oeQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
- by TYZPR06MB4447.apcprd06.prod.outlook.com (2603:1096:400:83::12) with
+ bh=CNCoMFBkUxn1t2MXrEbh3yPZ5igZPysviEAX/9VQ5eQ=;
+ b=Snof4P3gyxA/p3OUmgq8WXDmjrjtpoF120fjoMUhdIgTKSzXJb3CDvfmfYbjxuBgE1w/y0FgM0dD3VzKQjVqCLG7T0DCgT1cvltmywl2VO00m7IwDK5jY5GTecCDd6Ajo868Zi5uD5pWzdmlX2PYOnAJG8L7187DXF3nnvxvzgk=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by CO1PR21MB1314.namprd21.prod.outlook.com (2603:10b6:303:151::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.6; Fri, 17 Feb
- 2023 06:23:02 +0000
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190%3]) with mapi id 15.20.6111.009; Fri, 17 Feb 2023
- 06:23:02 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, terrelln@fb.com,
-        Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: add sanity compress level check for compressed file
-Date:   Fri, 17 Feb 2023 14:22:42 +0800
-Message-Id: <20230217062242.60998-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: OS3P286CA0042.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:1f5::9) To TYZPR06MB5275.apcprd06.prod.outlook.com
- (2603:1096:400:1f5::6)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.11; Fri, 17 Feb
+ 2023 06:25:29 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::3747:daf4:7cc9:5ba2]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::3747:daf4:7cc9:5ba2%3]) with mapi id 15.20.6134.006; Fri, 17 Feb 2023
+ 06:25:29 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Mohammed Gamal <mgamal@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "xxiong@redhat.com" <xxiong@redhat.com>
+Subject: RE: [PATCH v2] Drivers: vmbus: Check for channel allocation before
+ looking up relids
+Thread-Topic: [PATCH v2] Drivers: vmbus: Check for channel allocation before
+ looking up relids
+Thread-Index: AQHZQGdq9M/Cyc8biEehOWpQHv+73q7SrIAg
+Date:   Fri, 17 Feb 2023 06:25:28 +0000
+Message-ID: <SA1PR21MB1335435701EBB35A9DD35892BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230214112741.133900-1-mgamal@redhat.com>
+In-Reply-To: <20230214112741.133900-1-mgamal@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2ba5c6a9-a36e-4720-83cc-a300faeee30f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-17T06:11:21Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|CO1PR21MB1314:EE_
+x-ms-office365-filtering-correlation-id: cbba8679-6e5b-4a40-bf15-08db10afc392
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: df+uRlVaWRU/Kpko6FcyYeld0M4Uk12lnEHblwx2cjoHNdbkQbJyhUroR/QhT7mhFcVY50XZXIFcoq9o7s+ViGbfsyuCOhgU3oKZeDyRPC3Ff8sHJ6wa9hR073iXc9t4M9ig8+LQgg8SxSloZKSKBkTVso4hQ/kOF32kIp/5yosAU+VLp0GldxXLNQOZkUE+7rdPxDQ3H9r89AsYCZGQcpDGUIZKClb9ZElxFyxDQG/K0sNTp2DNBFhq8DkiLCnpHys/SE7TvImOcXCY5K4YgDd7Ej4ZmyQ7ItjEoz6g75lCVFs2gtGrv2lLaj4BUyx1yf6QyGVkOuR6czRsX1vMowQqptFsNM/YZtJWl2fGNljvtH96RgvFD9BbLBL/8M6qp2uKV15ctCweHHyfaetW6BGy8ZcWK5y/n+/hf+9B0CJ3j64k/jZPZjYeSomOcDmsp/fUXG/zuvuAbXkJSbogl4DLMNcauMwx2OM54OFFIh9RP5wYw3MJSBdSeJYeatGOviBLu8Fis0khyIRA19mW3Rasx4Ret4yj9gBLQvzI1PE0zqp7Am79h+rl4JZ1CQHlUPloeum1HRQb4t2DzobGf3k6axTDxUQeMG8fzjBcM40S+ghhjXkF4AstbN6eDj788BY4/vDjtD4nqKFFcBk9pu1LUtv7rX1+ajx/YIvzqW0wNyjIOr6BYmUg2Ihtaeh8LTT5uegvLfQeM1YdOdXfYM7QGoZqYcFmzLhoXyLRYbrLdZthrIfusr1SGPyJ0GZ8
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(451199018)(4326008)(41300700001)(82960400001)(82950400001)(8990500004)(55016003)(316002)(86362001)(4744005)(6506007)(38070700005)(10290500003)(8936002)(52536014)(9686003)(26005)(186003)(66446008)(66476007)(66556008)(66946007)(76116006)(64756008)(8676002)(38100700002)(122000001)(83380400001)(33656002)(110136005)(54906003)(2906002)(5660300002)(7696005)(478600001)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?h1QN3ko7sGVhNKtqLr1VfUx21LR4Id6OgO1GfZDIdNRychwMWOeQaBGM1Igw?=
+ =?us-ascii?Q?RWJqLeoCkFLFJxegncTyeOvhXPPkZabMcoJaH1PzY039fPdmxLW3YTpimS5T?=
+ =?us-ascii?Q?5SZ13OLvKTCze+ZdFyBKjuy3TBAB0BF03QYFhBUOuGB97u2BqihIAQnbb/TK?=
+ =?us-ascii?Q?NOhjfMPcbCpubWOOnGxYbKKwYPntDe7k8rgTBumVhqBgicTsC6xq0omT4duh?=
+ =?us-ascii?Q?5a7XBpy44whfSPqg3vwWZ/+KR+cs+b/6+p1IDofPUeqj+lATec5Aanaq/zEM?=
+ =?us-ascii?Q?EKFWuP3Rm1zMclvWD9FKlpzV+sHNjAboCDATWtTnoaljiDBTTjkgUH7FUHGR?=
+ =?us-ascii?Q?nfU3B9M0rRPgEwjymQ5mokK/+lAkUWVMFxI/VVt5NSj3x9zqPfHhPVNBzgN8?=
+ =?us-ascii?Q?Ps9M8UuN8c8xY8mh4oRIhIi7MXCMVl1fzRQ0kFpT3zffpU5dtfUWT7iRbD1U?=
+ =?us-ascii?Q?xti7+Vkd/kscseTHgh7jtsHlMuIcqhasal50Zzgb40qNNYQfDt5BZ1wjkSkB?=
+ =?us-ascii?Q?SUNtiJ5uJ68hBbaWcrTzPoBSGt8yP588Te+FTbsmSrQwabZ7D6N/VaPqmJI8?=
+ =?us-ascii?Q?hy25GMEXo5SZ4mRBVCbKN3jHwb4w/dYYsWeL5rbgRezkaTPsXbaVPoeFnO9x?=
+ =?us-ascii?Q?gJ3M/aJ4cq3z9kGl+CQ+uxvBGXVD0cU3zN6UYGGc1yFzYxY/CnsymBAAtjAA?=
+ =?us-ascii?Q?8xc8ntg1iSR+znw1NkvzkknvgCqby9ViWs3UFWkw4+C4U691B9M/aiBHoRm4?=
+ =?us-ascii?Q?DMENfNrK5byf2gqAgObmYDmWuOLsKOJS0errRkTSpIu8I6kmfFQYuv1mDmc2?=
+ =?us-ascii?Q?dUla87JKDKMTANim4hyPHXQfP499MT9PpAx4tYTjNmwySh9IaXT1UjL0vAEv?=
+ =?us-ascii?Q?VulRT4hSpFbwNFHi7uUTGVYlNhwk8Lozwr2e1L3xuik6rEf4JPpuqDJY+tmL?=
+ =?us-ascii?Q?xq4in2+ESsWwbJ4JPhqJQbF8IU9PlWEWP5F27uERsJCZGBc9w+t+yE3+EHCQ?=
+ =?us-ascii?Q?4BFloRi6T0pSXx9YHhQ+kWkczib15rn/2oxMwrhB4PohnpaPItrZSWIP6x0P?=
+ =?us-ascii?Q?cGRoY/r09wVbf2JtXRUJNMUj8sbkaMyBC7Hh+BVHYZfUUMVm0LGj+Dx70iZD?=
+ =?us-ascii?Q?oZ7knVY7+sE7+dIM1uz8Asll7W2gGJwcFmBInPPr1bAoNb1ib6tyxDKUpdGu?=
+ =?us-ascii?Q?aDFUtBz3M+iK3LZbfh8l3DFGVwyMqXM4i+MGrzPPYPb/wYX63JlYAASXgvb2?=
+ =?us-ascii?Q?dLDXne4C5EnqDcV40riRxl1OILp/4nWaIwhbJmFCOdniQhfZoQwha4db3nKJ?=
+ =?us-ascii?Q?7WaFMcXpwVMLcVpdWZ2Y9FhIirsMMqw6EK2t+8WbrvND4mTAN21QD54f01xv?=
+ =?us-ascii?Q?xZx3CoRy6jYTRX0N3nnXATL0D3sp1+LTDl4BS8mo6A+uSrr/XGEhY0sIFGgY?=
+ =?us-ascii?Q?kHefzJPGjYjuq2JQavMKllrPkOTquqU4yE2wYKeQ60R7x6WY/JlkRZHKyLBV?=
+ =?us-ascii?Q?pcYRdNbF4ofVl3KK0AQd/oVqszRIL2bF7HVaEymHK+K0fd+s8Ysfk3Ri5iDU?=
+ =?us-ascii?Q?Pwk/DZo/6Z0yCC29fjqd1/3O/3Kjhdexlye7xOLo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|TYZPR06MB4447:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab29d2c2-bf48-4441-53af-08db10af6c31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LxLTYlNNXmpljNKZYpmhG+h10AIEJxLT80iW2xJ2L6wpjt6gruBqW7NdPMlMro5RatUxfsVxO+bGH+WGh0rUUVTvdtrnOCJw6CUDJcOPX4AfKtk3DPHZx/T1PsV1S4RP1Puzoq2kOpoTICZrGFBeuBpqkEmWVVVOSE2UD8mhtlbpRsnZQqKYk7NQW/gOSMncdwmwDMKEf70nPKvpROOicR1V5gv/5AARXbC69psihoplULQc5CdAeU38/KELtt5UnXN1Ch8LSJ3+ChCVtr08F5jdvtcSM9Zm7zYtx4jZ/qSXONnfMu8OJwjMkVdpJHAUkW9qfCEYsi1O2PuKBSySLO/SkKmoesDwWhcYTi89AvQdQSFcPSSKZqczpaenqzK0uV2tA2nPpTM56KPTkOp+LEtnmn8N1gREpc/6sHIe5qcaMBYjIqxM9aKwlk95nxkzabkYTW0RwkLUqajASdsnGBWedokg3ZlhkTIecbn3N4mulBjwElZg2Mh/ZWsmdZWDAqnYZ8wu/i1AUIsmeCHTXxNXyLqeJ5VhZPDJZwo7bQNYP+di8AicVk7nr0nZCN3FhMwCgOnWwDaoWMdIsXpcrB/QhbNq4g0+ADvp+SF2LCjZhdGW2yaHmgmJUOVC2P9XQ8IcVUK7aDN1xnsM54ocdvAixIym8H8k5TzeWtij4GoLulXrxEZ6M3T2imq4hAXn05W1/y6QUns3hiBjisYNjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39850400004)(396003)(376002)(136003)(346002)(451199018)(41300700001)(66476007)(66556008)(4326008)(8676002)(66946007)(316002)(86362001)(36756003)(8936002)(5660300002)(2906002)(6512007)(6506007)(6666004)(26005)(1076003)(186003)(107886003)(2616005)(6486002)(38350700002)(478600001)(38100700002)(83380400001)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CSCBpu+vqIqDt9XL7H0KDtGWD8hhnmsRk/KYyT0hmxRSU7sNtDQ9k+Tnchot?=
- =?us-ascii?Q?f7xIHeBlHaR7mKvh9DXKlzb1XSH+5z0rQji/BlIlXBOg/ehM5PDcuvHJMAlz?=
- =?us-ascii?Q?PBpEUNxNMquzx25K6QDet2bqFSW1BmL8ir1GssLlfDjY2UxqR4fxVYAD7AfI?=
- =?us-ascii?Q?mq69Vq1IYLJMy1JDPIsYwFqK3b8RaMnq4He+rOyo15YD0ZHnhTbQcFDFujPA?=
- =?us-ascii?Q?FNSHtIJRO8OTdPjGVjxL31hp3s29zrbyU8YyNruVTmRxvdwJVha1ctONdIy+?=
- =?us-ascii?Q?26i14MX+IFUchMabIhkgbp6PvupH/NwA94YuxDxxOJghcZM5Vb4zvoS6zBco?=
- =?us-ascii?Q?qTycPAjnV+nUCApIbxI7Bph1pNaTJuzJYm8nf5sDlKp4enGBWsf1bjmFsdhz?=
- =?us-ascii?Q?Jyjdbhxo6pjOMmUFsUYYGQaSBB67z6RwntzWpkNxuFPDPHCoVKejjvPWxyBO?=
- =?us-ascii?Q?g4xz+UaG1SMC3grPy399c9xZlfd/UAjPCfVnq6YWB1en0No+v0l1P4YuvdkK?=
- =?us-ascii?Q?nVAiGpvrL7insVLim2zj9zNG+gFYCn64+44VnFYS1ROAdn9v1/lAQi89b0LS?=
- =?us-ascii?Q?moq3PGxR3ojH6tRuKVYjYxmhPnJqfDxyHivmJi9LqEvyzqAAP40R95SkUQ6a?=
- =?us-ascii?Q?FovV05/oE/alTMnuKWED6fFbLRSxfCaDtm32zKJoIv/OUIEZYKBRWXAvIjLS?=
- =?us-ascii?Q?l/YC+imK6PRQumckxReQXpTqaLn9QrT7xa4HFnjJgg1JZRHBWc5FBWLe5tYb?=
- =?us-ascii?Q?8sjYjo0ZCoX/iDb4zaaPnVgBeFjjcrLbJHk7OAIpYyrN5TkW5sL7qS4jG4CF?=
- =?us-ascii?Q?unJy0EN+OuBwEQx798LsHIlQmkKTwYkbExZnsPm4ofygKq62LIOvpRRHjZJi?=
- =?us-ascii?Q?O+bM4cmJmXL0eNq1wDxw2FV9c+mLsyFxrAmsYbowJki+xmpJml3uRl4Mhdyf?=
- =?us-ascii?Q?bi7UWEkOLKkyx9/OlzWS2EFEsJIkB7Q7TtrqR5lhvAlxZL+h8d5qdjFduHm4?=
- =?us-ascii?Q?Lxh+XjvAYg/BVstRClpfFHO/MlhyMM93RXQymhvqaly6qUyf1eH7FFuVeIOM?=
- =?us-ascii?Q?GtCpMXmTELJ72zCA/gADID553ScM12Nzy6RZGtHDq/VsAtMz2k32sqiWZBWM?=
- =?us-ascii?Q?xpQwWwy2ZMnpCN6qGrD0WoUWSDbCs72r/+UU5lT3JjV8GVtIg3dBh9llLRHn?=
- =?us-ascii?Q?71yPAUDCwsRlNZJ9Fybkte3sFvD7005KRN2dTyCteHkGWXHSt//dPMwR70lm?=
- =?us-ascii?Q?wrycYi29R7MeAyJw+aBm8U4h2ZRJHEDzpDkfvRzZFmT3FEl7A0MFiGp5BLbe?=
- =?us-ascii?Q?onf3MwtwAnWQtIp3mNarzPKTn0i41F+YlMx16YYkGVQfrbRE3O6t7uP534tU?=
- =?us-ascii?Q?sBmllhmbTz+nBru/K+NcJh4VUkvaCpXrHrpIBvxZheE8rPlhxrH9Qk9bX46r?=
- =?us-ascii?Q?ZBps4LXytwhUzEIjG/mtpN9KhXbsC2SXGeZWfvp+n00BDx+qSgGc6XRTGG9U?=
- =?us-ascii?Q?wZr/LtnYNATD6Pd0srEgqXnJgDBkcPMRZODzK4e/5GBrTpUaELuDyIUyHqBl?=
- =?us-ascii?Q?Gf7dO6CuHKM9etktSXedvKyyNkk/62gBo6faGuow?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab29d2c2-bf48-4441-53af-08db10af6c31
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 06:23:02.4956
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbba8679-6e5b-4a40-bf15-08db10afc392
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2023 06:25:28.9084
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TqQ2PP2+PJJqA7hc3X58a+GUtfEpVOzakeI5zT9pYBnpha93dOvUeY8g/iKmPnLMwNlloywQpocZ2HnkgFzTgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4447
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 31atEewjt4azlWZgIp9f8CmOXDWJYmHBbYVDMWLz3Wa9GYsEe5QK+1UmS3wzarmjtrBLTEp2NzAmETN+Z8LAMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1314
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,164 +125,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3fde13f817e2 ("f2fs: compress: support compress level")
-forgot to do basic compress level check, let's add it.
+> From: Mohammed Gamal <mgamal@redhat.com>
+> Sent: Tuesday, February 14, 2023 3:28 AM
+> ...
+> So Make relid2channel() check if vmbus channels is allocated first, and i=
+f not
+> print a warning and return NULL to the caller.
+Can we change the above to:
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/inode.c             | 94 +++++++++++++++++++++++++------------
- include/linux/zstd_lib.h    |  3 ++
- lib/zstd/compress/clevels.h |  4 --
- 3 files changed, 67 insertions(+), 34 deletions(-)
+Print a warning and error out in relid2channel() for a channel id that's in=
+valid
+in the second kernel.
+=20
+> --- a/drivers/hv/connection.c
+> +++ b/drivers/hv/connection.c
+> @@ -409,6 +409,10 @@ void vmbus_disconnect(void)
+>   */
+>  struct vmbus_channel *relid2channel(u32 relid)
+>  {
+> +	if (vmbus_connection.channels =3D=3D NULL) {
+> +		WARN(1, "Requested relid=3D%u, but channel mapping not
+> allocated!\n", relid);
 
-diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-index 7d2e2c0dba65..3dc973aa40da 100644
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -10,6 +10,8 @@
- #include <linux/buffer_head.h>
- #include <linux/writeback.h>
- #include <linux/sched/mm.h>
-+#include <linux/lz4.h>
-+#include <linux/zstd.h>
- 
- #include "f2fs.h"
- #include "node.h"
-@@ -202,6 +204,66 @@ void f2fs_inode_chksum_set(struct f2fs_sb_info *sbi, struct page *page)
- 	ri->i_inode_checksum = cpu_to_le32(f2fs_inode_chksum(sbi, page));
- }
- 
-+static bool sanity_check_compress_inode(struct inode *inode,
-+			struct f2fs_inode *ri)
-+{
-+	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	unsigned char compress_level;
-+
-+	if (ri->i_compress_algorithm >= COMPRESS_MAX) {
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		f2fs_warn(sbi,
-+			"%s: inode (ino=%lx) has unsupported compress algorithm: %u, run fsck to fix",
-+			__func__, inode->i_ino, ri->i_compress_algorithm);
-+		return false;
-+	}
-+	if (le64_to_cpu(ri->i_compr_blocks) >
-+			SECTOR_TO_BLOCK(inode->i_blocks)) {
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		f2fs_warn(sbi,
-+			"%s: inode (ino=%lx) has inconsistent i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
-+			__func__, inode->i_ino, le64_to_cpu(ri->i_compr_blocks),
-+			SECTOR_TO_BLOCK(inode->i_blocks));
-+		return false;
-+	}
-+	if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
-+		ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		f2fs_warn(sbi,
-+			"%s: inode (ino=%lx) has unsupported log cluster size: %u, run fsck to fix",
-+			__func__, inode->i_ino, ri->i_log_cluster_size);
-+		return false;
-+	}
-+
-+	compress_level = le16_to_cpu(ri->i_compress_flag) >> COMPRESS_LEVEL_OFFSET;
-+	switch (ri->i_compress_algorithm) {
-+	case COMPRESS_LZO:
-+	case COMPRESS_LZORLE:
-+		if (compress_level)
-+			goto err;
-+		break;
-+	case COMPRESS_LZ4:
-+		if ((compress_level && compress_level < LZ4HC_MIN_CLEVEL) ||
-+				compress_level > LZ4HC_MAX_CLEVEL)
-+			goto err;
-+		break;
-+	case COMPRESS_ZSTD:
-+		if (!compress_level || compress_level > ZSTD_MAX_CLEVEL)
-+			goto err;
-+		break;
-+	default:
-+		goto err;
-+	}
-+
-+	return true;
-+
-+err:
-+	set_sbi_flag(sbi, SBI_NEED_FSCK);
-+	f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported compress level: %u, run fsck to fix",
-+		  __func__, inode->i_ino, compress_level);
-+	return false;
-+}
-+
- static bool sanity_check_inode(struct inode *inode, struct page *node_page)
- {
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-@@ -285,36 +347,8 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
- 
- 	if (f2fs_has_extra_attr(inode) && f2fs_sb_has_compression(sbi) &&
- 			fi->i_flags & F2FS_COMPR_FL &&
--			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
--						i_log_cluster_size)) {
--		if (ri->i_compress_algorithm >= COMPRESS_MAX) {
--			set_sbi_flag(sbi, SBI_NEED_FSCK);
--			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
--				"compress algorithm: %u, run fsck to fix",
--				  __func__, inode->i_ino,
--				  ri->i_compress_algorithm);
--			return false;
--		}
--		if (le64_to_cpu(ri->i_compr_blocks) >
--				SECTOR_TO_BLOCK(inode->i_blocks)) {
--			set_sbi_flag(sbi, SBI_NEED_FSCK);
--			f2fs_warn(sbi, "%s: inode (ino=%lx) has inconsistent "
--				"i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
--				  __func__, inode->i_ino,
--				  le64_to_cpu(ri->i_compr_blocks),
--				  SECTOR_TO_BLOCK(inode->i_blocks));
--			return false;
--		}
--		if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
--			ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
--			set_sbi_flag(sbi, SBI_NEED_FSCK);
--			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
--				"log cluster size: %u, run fsck to fix",
--				  __func__, inode->i_ino,
--				  ri->i_log_cluster_size);
--			return false;
--		}
--	}
-+			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_log_cluster_size))
-+		sanity_check_compress_inode(inode, ri);
- 
- 	return true;
- }
-diff --git a/include/linux/zstd_lib.h b/include/linux/zstd_lib.h
-index 79d55465d5c1..ff55f41c73d3 100644
---- a/include/linux/zstd_lib.h
-+++ b/include/linux/zstd_lib.h
-@@ -88,6 +88,9 @@ ZSTDLIB_API const char* ZSTD_versionString(void);
- #  define ZSTD_CLEVEL_DEFAULT 3
- #endif
- 
-+/*-=====  Pre-defined compression levels  =====-*/
-+#define ZSTD_MAX_CLEVEL     22
-+
- /* *************************************
-  *  Constants
-  ***************************************/
-diff --git a/lib/zstd/compress/clevels.h b/lib/zstd/compress/clevels.h
-index d9a76112ec3a..b040d9d29089 100644
---- a/lib/zstd/compress/clevels.h
-+++ b/lib/zstd/compress/clevels.h
-@@ -14,10 +14,6 @@
- #define ZSTD_STATIC_LINKING_ONLY  /* ZSTD_compressionParameters  */
- #include <linux/zstd.h>
- 
--/*-=====  Pre-defined compression levels  =====-*/
--
--#define ZSTD_MAX_CLEVEL     22
--
- __attribute__((__unused__))
- 
- static const ZSTD_compressionParameters ZSTD_defaultCParameters[4][ZSTD_MAX_CLEVEL+1] = {
--- 
-2.25.1
+WARN() may be too noisy. I suggest we use pr_warn() instead.
 
+Can we make the line a little shorter:
+        pr_warn("relid2channel: invalid channel id %u\n", relid);
