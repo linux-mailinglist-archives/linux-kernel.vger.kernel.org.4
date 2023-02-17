@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F176069AEEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288AC69AEED
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 16:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjBQPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 10:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S230186AbjBQPEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 10:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjBQPDs (ORCPT
+        with ESMTP id S230222AbjBQPEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:03:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1997570944;
-        Fri, 17 Feb 2023 07:03:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FCE261D58;
-        Fri, 17 Feb 2023 15:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60583C433EF;
-        Fri, 17 Feb 2023 15:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676646164;
-        bh=j6dcEhmpBZz4rvKq3tdsoEKUS2cdD7vZ0LtoKMJz2Ys=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dJx1betl5qK2udc/Bk5Kt7TCsKffHyHDMt7EzRPbIN2lP3ptxZKoD1g2QbnTeDmWL
-         fh2eq7Cnskap94xQ1aa4bcXZBV2wsPMAyjr6bIy6w8m6iCT1OC0qPf24Q+tAJiHhaE
-         Q/bzRIiljZbKRAeJo3mpcXzoSwiV/W0QBHDB+Gu4MrT4/VIzWXgsisPL4JYoDuItur
-         qv8Glq5GPOYPxIztsMTU2Qiqqih4fUhgPNpjZd2Asd4PagPjEGwFML2KT9HSJL6OTn
-         mBDAClnmW0J2bnHSXW+cd8GLEGVE7Vn64CgfthGTf2yrMuQPXXNGsVI0Kw6LK7HRNm
-         0IN0NHiErLcNA==
-Date:   Fri, 17 Feb 2023 09:02:41 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 02/24] kbuild, PCI: remove MODULE_LICENSE in non-modules
-Message-ID: <20230217150241.GA3400483@bhelgaas>
+        Fri, 17 Feb 2023 10:04:10 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B471659EC;
+        Fri, 17 Feb 2023 07:03:42 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg22-20020a05600c3c9600b003dff4480a17so896101wmb.1;
+        Fri, 17 Feb 2023 07:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vu+zHVpDWSZggbR75755cKCzNzfoKOjCPk7YtlsBHPo=;
+        b=OJsSTZzhCtNjB1MjPwCiiQCEgJL7cG4sZhSpGPCYZcn6G4p4PwHAVT7/tQ3OqC+q3O
+         G7GrnVsZpTVO4gj7VRKNIPA4v9sTYV/W53F2r2aqj5I1Rg7SF9PNDXaN33mlkXpXcsGc
+         GEUkqcPOVeTLOhuMah45dtd9LIL9asJ68AuM3TsQsaN1gUKz8cQ6Xt6HBNw2CH+srSY4
+         zTl6ClPJrh7musB+IHPCnyZukqharUm2oZDq7+wclbDSVCsBMIR2bddCC8iGclSYJ0V2
+         YtOdq0nHRQQU+uLmvxTbLlaMp2uu312f0hthMO+BGHVlgL6De+p9yzYnAjOKAsd1w283
+         wrog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vu+zHVpDWSZggbR75755cKCzNzfoKOjCPk7YtlsBHPo=;
+        b=g4DGokrcquakdOz1Ft7GJs2rZ+sVY3BZEfKdrz1qJoPvxBQshB9hUUTcBew+w62R6c
+         lCkioz+7/eHojBsZZdIE+iQ8mHr/tqqcfes6d0yYNoZ1F18L6DIzkT6L05OCZ/2+7d7E
+         v+BE2kYLzo1Bge83EyfSO1ongCdR+l0rh3tyCpODjdTPgIH1Bw2ttTwozf2wYZZd2v1S
+         nrwbF8JmfaMh4WnjeEVJMWsrIvqRF5a8KfbhHIU9nBvkwKUVYy7YJRQBaYFxuOUsJ7nW
+         +ESdqkbDhIxpsvrGDyLVg2U5p/SJo1uJzxBKkz6V/h8+8AzKoT9WefdLcEGWD2YxVYjB
+         xvqw==
+X-Gm-Message-State: AO0yUKXTiwlk3iWDV98Xvhf3K2Bu6JvhSuesaofQPS92ZTBJMRzDAfBw
+        K+ndMstfwpEibVjM+GOupVWndh6LL+4=
+X-Google-Smtp-Source: AK7set8Rrc02KvPFdCS4l4X14EmFf4AgetszjaWzRDGIAQH2zICTX1NPikw4LGlu2Pn9Ifgg6jzxPQ==
+X-Received: by 2002:a05:600c:b87:b0:3e1:e149:b67b with SMTP id fl7-20020a05600c0b8700b003e1e149b67bmr5378381wmb.18.1676646212391;
+        Fri, 17 Feb 2023 07:03:32 -0800 (PST)
+Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id hn30-20020a05600ca39e00b003db03725e86sm5287990wmb.8.2023.02.17.07.03.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 07:03:32 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 0/2] pwm: ab8500: Fix .apply() and implement .get_state()
+Date:   Fri, 17 Feb 2023 16:03:27 +0100
+Message-Id: <167664618723.3316127.12812885602209649459.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230118154817.97364-1-u.kleine-koenig@pengutronix.de>
+References: <20230118154817.97364-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217141059.392471-3-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 02:10:37PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On Wed, 18 Jan 2023 16:48:15 +0100, Uwe Kleine-König wrote:
+> during review of my previous pwm-ab8500 patch I learned that there is a
+> (somewhat) publically available reference manual. Reading in it showed
+> that .apply() is still more broken that I assumed by just reading the
+> code.
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
+> This series first fixes .apply() to not be off by a factor of ~3000 and
+> then adds a .get_state() callback.
 > 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linux-acpi@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
+> [...]
 
-I squashed this one into my pci/kbuild branch for v6.3, thanks!
+Applied, thanks!
 
-> ---
->  drivers/pci/hotplug/acpiphp_core.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/pci/hotplug/acpiphp_core.c b/drivers/pci/hotplug/acpiphp_core.c
-> index 853e04ad272c..c02257f4b61c 100644
-> --- a/drivers/pci/hotplug/acpiphp_core.c
-> +++ b/drivers/pci/hotplug/acpiphp_core.c
-> @@ -45,7 +45,6 @@ static struct acpiphp_attention_info *attention_info;
->  
->  MODULE_AUTHOR(DRIVER_AUTHOR);
->  MODULE_DESCRIPTION(DRIVER_DESC);
-> -MODULE_LICENSE("GPL");
->  MODULE_PARM_DESC(disable, "disable acpiphp driver");
->  module_param_named(disable, acpiphp_disabled, bool, 0444);
->  
-> -- 
-> 2.39.1.268.g9de2f9a303
-> 
+[1/2] pwm: ab8500: Fix calculation of duty and period
+      commit: 486dd4e846814016443abfcbfee0b8b3f3b35330
+[2/2] pwm: ab8500: Implement .get_state()
+      commit: 327437884e9a752ccbf759cbab641439ca708f5b
+
+Best regards,
+-- 
+Thierry Reding <thierry.reding@gmail.com>
