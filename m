@@ -2,241 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D58E69A693
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272BC69A696
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBQIHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S229647AbjBQIIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjBQIGq (ORCPT
+        with ESMTP id S229775AbjBQIHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:06:46 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 645EC34F77;
-        Fri, 17 Feb 2023 00:06:36 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(23462:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>); Fri, 17 Feb 2023 16:06:28 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 17 Feb
- 2023 16:06:27 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 17 Feb 2023 16:06:27 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <sre@kernel.org>
-CC:     <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <peterwu.pub@gmail.com>, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH v3 2/2][next] dt-bindings: power: supply: Rename the file name of RT9467 charger yaml
-Date:   Fri, 17 Feb 2023 16:06:06 +0800
-Message-ID: <ec1a341d5731977f3188997f3655e777becb881c.1676648773.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1676648773.git.chiaen_wu@richtek.com>
-References: <cover.1676648773.git.chiaen_wu@richtek.com>
+        Fri, 17 Feb 2023 03:07:52 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F515D3D5;
+        Fri, 17 Feb 2023 00:07:46 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H7Jg3t010504;
+        Fri, 17 Feb 2023 08:07:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=6Uo3fDd/EIub4Kcl0EYseEQ8AVFKdTntS4QZgFBZh0o=;
+ b=ev+XDbyxt9MX79LDr6TtAgiHO5njqNVBDr1mT+7MB5Xam9t9D1n0LgWS/2xf7kl0+t+q
+ Noe9Wcncri9KEV48d9Mlst3hoVbg13uSKeM/xCdiSX2WUA3JJ0w0GezHFVmOfTVuKL/l
+ aU1W9FGk46aKBF2UbX89WOMgXg3GoEYHEIh/w/9E/KhDJjtX53FQmyFuKnrOzSksKFE/
+ 99qnaaZ/+FZHLSFmUXVp7BxhNAeH3E69BCyzEmobNJy58/ghKR0LnzNtGxUKVuw6K2d9
+ MQ1DgqvUQdhA2x1X7mtWfY6IOTOO6P0sgqYu5DPo2acT1umwcD/wy18I63wig6c9hBjV WA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nt53br3qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:07:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31H87ddk028727
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:07:39 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 17 Feb 2023 00:07:36 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V3] clk: qcom: ipq5332: mark GPLL4 as critical temporarily
+Date:   Fri, 17 Feb 2023 13:37:20 +0530
+Message-ID: <20230217080720.5206-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dvIaN0t9bkSWGucrAvxmlR08jsYL6oQP
+X-Proofpoint-GUID: dvIaN0t9bkSWGucrAvxmlR08jsYL6oQP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_04,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=888 spamscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the file name from "richtek,rt9467-charger.yaml" to
-"richtek,rt9467.yaml" to match the "compatible name".
+Clock framework disables the GPLL4 source since there are no active users
+for this source currently. Some of the clocks initialized by the
+bootloaders uses the GPLL4 as the source. Due to this, when the GPLL4 is
+disabled by the clock framework, system is going for the reboot.
 
-Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+To avoid this, mark the GPLL4 as CRITICAL so that clock framework
+doesn't disable it. Once the users of this source is enabled, we can get
+rid of this flag.
+
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 ---
- .../power/supply/richtek,rt9467-charger.yaml       | 82 ----------------------
- .../bindings/power/supply/richtek,rt9467.yaml      | 82 ++++++++++++++++++++++
- 2 files changed, 82 insertions(+), 82 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+Changes in V3:
+	- Fixed the typo in the comment
+	- Used CLK_IGNORE_UNUSED instead of CLK_IS_CRITICAL
 
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
-deleted file mode 100644
-index 3723717..00000000
---- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
-+++ /dev/null
-@@ -1,82 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/power/supply/richtek,rt9467.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Richtek RT9467 Switching Battery Charger with Power Path Management
--
--maintainers:
--  - ChiYuan Huang <cy_huang@richtek.com>
--  - ChiaEn Wu <chiaen_wu@richtek.com>
--
--description: |
--  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
--  portable applications. It integrates a synchronous PWM controller, power
--  MOSFETs, input current sensing and regulation, high-accuracy voltage
--  regulation, and charge termination. The charge current is regulated through
--  integrated sensing resistors.
--
--  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
--  D+/D- pin for USB host/charging port detection.
--
--  Datasheet is available at
--  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
--
--properties:
--  compatible:
--    const: richtek,rt9467
--
--  reg:
--    maxItems: 1
--
--  wakeup-source: true
--
--  interrupts:
--    maxItems: 1
--
--  charge-enable-gpios:
--    description: GPIO is used to turn on and off charging.
--    maxItems: 1
--
--  usb-otg-vbus-regulator:
--    type: object
--    description: OTG boost regulator.
--    unevaluatedProperties: false
--    $ref: /schemas/regulator/regulator.yaml#
--
--    properties:
--      enable-gpios: true
--
--required:
--  - compatible
--  - reg
--  - wakeup-source
--  - interrupts
--
--additionalProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/interrupt-controller/irq.h>
--    #include <dt-bindings/gpio/gpio.h>
--    i2c {
--      #address-cells = <1>;
--      #size-cells = <0>;
--
--      charger@5b {
--        compatible = "richtek,rt9467";
--        reg = <0x5b>;
--        wakeup-source;
--        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
--        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
--
--        rt9467_otg_vbus: usb-otg-vbus-regulator {
--          regulator-name = "rt9467-usb-otg-vbus";
--          regulator-min-microvolt = <4425000>;
--          regulator-max-microvolt = <5825000>;
--          regulator-min-microamp = <500000>;
--          regulator-max-microamp = <3000000>;
--        };
--      };
--    };
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-new file mode 100644
-index 00000000..3723717
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/richtek,rt9467.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT9467 Switching Battery Charger with Power Path Management
-+
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
-+  - ChiaEn Wu <chiaen_wu@richtek.com>
-+
-+description: |
-+  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
-+  portable applications. It integrates a synchronous PWM controller, power
-+  MOSFETs, input current sensing and regulation, high-accuracy voltage
-+  regulation, and charge termination. The charge current is regulated through
-+  integrated sensing resistors.
-+
-+  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
-+  D+/D- pin for USB host/charging port detection.
-+
-+  Datasheet is available at
-+  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
-+
-+properties:
-+  compatible:
-+    const: richtek,rt9467
-+
-+  reg:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  charge-enable-gpios:
-+    description: GPIO is used to turn on and off charging.
-+    maxItems: 1
-+
-+  usb-otg-vbus-regulator:
-+    type: object
-+    description: OTG boost regulator.
-+    unevaluatedProperties: false
-+    $ref: /schemas/regulator/regulator.yaml#
-+
-+    properties:
-+      enable-gpios: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - wakeup-source
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      charger@5b {
-+        compatible = "richtek,rt9467";
-+        reg = <0x5b>;
-+        wakeup-source;
-+        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
-+        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
-+
-+        rt9467_otg_vbus: usb-otg-vbus-regulator {
-+          regulator-name = "rt9467-usb-otg-vbus";
-+          regulator-min-microvolt = <4425000>;
-+          regulator-max-microvolt = <5825000>;
-+          regulator-min-microamp = <500000>;
-+          regulator-max-microamp = <3000000>;
-+        };
-+      };
-+    };
+Changes in V2:
+	- Added a comment in driver explaining the need of the flag
+
+ drivers/clk/qcom/gcc-ipq5332.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+index 9e4baea33937..bea1194b666a 100644
+--- a/drivers/clk/qcom/gcc-ipq5332.c
++++ b/drivers/clk/qcom/gcc-ipq5332.c
+@@ -128,6 +128,16 @@ static struct clk_alpha_pll gpll4_main = {
+ 			.parent_data = &gcc_parent_data_xo,
+ 			.num_parents = 1,
+ 			.ops = &clk_alpha_pll_stromer_ops,
++			/*
++			 * There are no consumers for this GPLL in kernel yet,
++			 * (will be added soon), so the clock framework
++			 * disables this source. But some of the clocks
++			 * initialized by boot loaders uses this source. So we
++			 * need to keep this clock ON. Add the CRITICAL flag
++			 * so the clock will not be disabled. Once the consumer
++			 * in kernel is added, we can get rid of this flag.
++			 */
++			.flags = CLK_IGNORE_UNUSED,
+ 		},
+ 	},
+ };
 -- 
-2.7.4
+2.17.1
 
