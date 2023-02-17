@@ -2,222 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C47669B0C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321A069B0C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjBQQYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S229725AbjBQQYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBQQYo (ORCPT
+        with ESMTP id S229461AbjBQQYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:24:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669D55FC66
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:23:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676650921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FVuEhhYScOgrQqnypKq2VFgUAU8z41nhpw8bLy+N1Yw=;
-        b=Sq1ijBG+h2InL9r41VlVfBav/nez7RuRzj4LEOg1XRUIxFgIHsojOj6WHj5go9OMQArb0s
-        AdCV3RWL/eyD0hVbcZ0nHHnaHVSpH8R5TKPoGPJpRL8XkFubmMc/F3PrFUzMsv99SUWtRH
-        oX9JHdccwYa3pGV0AAviliYqKVlQ+wc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-557-Cysw7ch9Msmj8kLbW92ryw-1; Fri, 17 Feb 2023 11:21:59 -0500
-X-MC-Unique: Cysw7ch9Msmj8kLbW92ryw-1
-Received: by mail-ed1-f71.google.com with SMTP id cy15-20020a0564021c8f00b004aaa054d189so2166441edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:21:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FVuEhhYScOgrQqnypKq2VFgUAU8z41nhpw8bLy+N1Yw=;
-        b=kEw828Yl6l7/gqHDnzokvHNvuCOEPP1jVbGWESUR463mQvUXFrCtoM2b2J7D9L4yCi
-         JyPbRmzoDIDNppFbFlqsAygk1w9+fgOqaUNx4O/qzYIvACLlRJnaquz/IDaF6+XZlFkW
-         5ZD2ldqyucSvm7hJ52BNxZAFpn43MmDUkY8Ujf3GHFwv65l79CyBdFoxg+xmDl+zMX53
-         ae/Nob/JUHQXsoPZGflcUd80LZckT961Npt4XbDx19BnqVDJ0uQRKTBG1HnxwEqi0OdM
-         XDdu2i4IgjyIFcYMemP/S+yWMI4gq4Gh/vfpScBFKKXCGe+YV8H9l9ey0BBd54l5BTEv
-         xcjw==
-X-Gm-Message-State: AO0yUKV3JOgZ03XqRtUEqOg+d2wngfkw/95PxiAnng1aEZ5C8Y3Z07WG
-        I1+F1x9xfKzvBcRy4yLK+y3U16ezfvtq8Gh2w9uI/UeJo8j2OnqHmgt9FLyGM9EVaSVYfYSmvUf
-        0waS0W3R9V/MFQuBG95cj5H5I
-X-Received: by 2002:a17:907:a04f:b0:88b:23bb:e61f with SMTP id gz15-20020a170907a04f00b0088b23bbe61fmr600698ejc.25.1676650918323;
-        Fri, 17 Feb 2023 08:21:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set+2V1s8Vrcaw1IdncZUIDiJtFhF0s+J+nN3KbpRNbsOqBYYFZYQf7nMroPkCGG4qrSwQIuMIA==
-X-Received: by 2002:a17:907:a04f:b0:88b:23bb:e61f with SMTP id gz15-20020a170907a04f00b0088b23bbe61fmr600677ejc.25.1676650918056;
-        Fri, 17 Feb 2023 08:21:58 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8308:b104:2c00:2e8:ec99:5760:fb52])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170906539700b008b128106fc7sm2293812ejo.46.2023.02.17.08.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 08:21:57 -0800 (PST)
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kernel/sys.c: fix and improve control flow in __sys_setres[ug]id()
-Date:   Fri, 17 Feb 2023 17:21:54 +0100
-Message-Id: <20230217162154.837549-1-omosnace@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 17 Feb 2023 11:24:33 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74AD9C;
+        Fri, 17 Feb 2023 08:24:11 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 75625203DC;
+        Fri, 17 Feb 2023 16:22:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676650970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iydwwX98SZO8kz+kjOOLd9qxfJYz+EgvKVL6AXUh/Vs=;
+        b=RGGkWRdrRyM4wPhmeSshqEiM7eY3O0szOIeyccQJrMsvs9l/bIwVEaownQXyhU2ohKoh5S
+        0ReWFJzWgDf+oc1bUZJg5MV8L2QLaAy2FwGYPhvRyYpBHumjlzrKzq0ds2H9QEwUqixJF6
+        5QKE97eIDB6YR92pb7YpwcdKhNZluOc=
+Received: from suse.cz (unknown [10.163.25.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3F3CA2C141;
+        Fri, 17 Feb 2023 16:22:50 +0000 (UTC)
+Date:   Fri, 17 Feb 2023 17:22:44 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <Y++p1HVE8dLQT3Nl@alley>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
+ <Y2TooogxxLTIkBcj@alley>
+ <20221108013209.eqrxs3xqtat6kksm@treble>
+ <Y2od6gc5oKeTHjIE@alley>
+ <20221108184410.qhpxhtbfryzeh6eq@treble>
+ <Y2u659H1tZQfG0uQ@alley>
+ <20230204235910.4j4ame5ntqogqi7m@treble>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230204235910.4j4ame5ntqogqi7m@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux Security Modules (LSMs) that implement the "capable" hook will
-usually emit an access denial message to the audit log whenever they
-"block" the current task from using the given capability based on their
-security policy.
+On Sat 2023-02-04 15:59:10, Josh Poimboeuf wrote:
+> On Wed, Nov 09, 2022 at 03:36:23PM +0100, Petr Mladek wrote:
+> > We really want to support downgrades or upgrades that remove
+> > problematic code. Or upgrades that start fixing the problem
+> > a better way using another shadow variable.
+> 
+> So I've been thinking about this too...
+> 
+> I think it's good to support downgrades.  But even with this patch set,
+> they still aren't properly supported because of the callback design.
+> 
+> Unpatch callbacks aren't called for the replaced patch.  Any cleanup it
+> needs to do (e.g., for a downgrade) is skipped.  That can cause all
+> kinds of problems including leaks and conflicts with future patches.
+> 
+> And actually, that seems directly related to shadow variable garbage
+> collection.
+> 
+> Typically you would call 'klp_shadow_free_all(id, dtor)' in the
+> post_unpatch callback, *unless* that data is going to be used by the
+> replacement patch.
 
-The occurrence of a denial is used as an indication that the given task
-has attempted an operation that requires the given access permission, so
-the callers of functions that perform LSM permission checks must take
-care to avoid calling them too early (before it is decided if the
-permission is actually needed to perform the requested operation).
+Exactly.
 
-The __sys_setres[ug]id() functions violate this convention by first
-calling ns_capable_setid() and only then checking if the operation
-requires the capability or not. It means that any caller that has the
-capability granted by DAC (task's capability set) but not by MAC (LSMs)
-will generate a "denied" audit record, even if is doing an operation for
-which the capability is not required.
+> That "unless" is the problem.  Without that problem, garbage collection
+> of shadow variables would be trivial.
+>
+> Thing is, that "unless" exists not only for the freeing of shadow
+> variables, but also for the allocation of some shadow variables in
+> pre/post-patch callbacks, and many other types of initializations and
+> cleanups done by patch/unpatch callbacks.
 
-Fix this by reordering the checks such that ns_capable_setid() is
-checked last and -EPERM is returned immediately if it returns false.
+Yes.
 
-While there, also do two small optimizations:
-* move the capability check before prepare_creds() and
-* bail out early in case of a no-op.
+> Correct me if I'm wrong, but it seems like downgrades (and similar
+> scenarios like upgrades with partial revert) are the primary real-world
+> motivation for this patch set.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
----
+Yes.
 
-v2: improve commit message
+> These patches feel like a partial solution to a bigger problem.  If we
+> really want to support downgrade use cases, the callbacks will need to
+> be improved.
 
- kernel/sys.c | 69 ++++++++++++++++++++++++++++++----------------------
- 1 file changed, 40 insertions(+), 29 deletions(-)
+You are right. All this started when I discussed problems with writing
+livepatch callbacks with Nicolai. I tried to make it easier by
+introducing the klp_state API. But Nicolai realized that it was
+still too hard.
 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 5fd54bf0e8867..6fd88686cd06f 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -664,6 +664,7 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
- 	struct cred *new;
- 	int retval;
- 	kuid_t kruid, keuid, ksuid;
-+	bool ruid_new, euid_new, suid_new;
- 
- 	kruid = make_kuid(ns, ruid);
- 	keuid = make_kuid(ns, euid);
-@@ -678,25 +679,29 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
- 	if ((suid != (uid_t) -1) && !uid_valid(ksuid))
- 		return -EINVAL;
- 
-+	old = current_cred();
-+
-+	/* check for no-op */
-+	if ((ruid == (uid_t) -1 || uid_eq(kruid, old->uid)) &&
-+	    (euid == (uid_t) -1 || (uid_eq(keuid, old->euid) &&
-+				    uid_eq(keuid, old->fsuid))) &&
-+	    (suid == (uid_t) -1 || uid_eq(ksuid, old->suid)))
-+		return 0;
-+
-+	ruid_new = ruid != (uid_t) -1        && !uid_eq(kruid, old->uid) &&
-+		   !uid_eq(kruid, old->euid) && !uid_eq(kruid, old->suid);
-+	euid_new = euid != (uid_t) -1        && !uid_eq(keuid, old->uid) &&
-+		   !uid_eq(keuid, old->euid) && !uid_eq(keuid, old->suid);
-+	suid_new = suid != (uid_t) -1        && !uid_eq(ksuid, old->uid) &&
-+		   !uid_eq(ksuid, old->euid) && !uid_eq(ksuid, old->suid);
-+	if ((ruid_new || euid_new || suid_new) &&
-+	    !ns_capable_setid(old->user_ns, CAP_SETUID))
-+		return -EPERM;
-+
- 	new = prepare_creds();
- 	if (!new)
- 		return -ENOMEM;
- 
--	old = current_cred();
--
--	retval = -EPERM;
--	if (!ns_capable_setid(old->user_ns, CAP_SETUID)) {
--		if (ruid != (uid_t) -1        && !uid_eq(kruid, old->uid) &&
--		    !uid_eq(kruid, old->euid) && !uid_eq(kruid, old->suid))
--			goto error;
--		if (euid != (uid_t) -1        && !uid_eq(keuid, old->uid) &&
--		    !uid_eq(keuid, old->euid) && !uid_eq(keuid, old->suid))
--			goto error;
--		if (suid != (uid_t) -1        && !uid_eq(ksuid, old->uid) &&
--		    !uid_eq(ksuid, old->euid) && !uid_eq(ksuid, old->suid))
--			goto error;
--	}
--
- 	if (ruid != (uid_t) -1) {
- 		new->uid = kruid;
- 		if (!uid_eq(kruid, old->uid)) {
-@@ -761,6 +766,7 @@ long __sys_setresgid(gid_t rgid, gid_t egid, gid_t sgid)
- 	struct cred *new;
- 	int retval;
- 	kgid_t krgid, kegid, ksgid;
-+	bool rgid_new, egid_new, sgid_new;
- 
- 	krgid = make_kgid(ns, rgid);
- 	kegid = make_kgid(ns, egid);
-@@ -773,23 +779,28 @@ long __sys_setresgid(gid_t rgid, gid_t egid, gid_t sgid)
- 	if ((sgid != (gid_t) -1) && !gid_valid(ksgid))
- 		return -EINVAL;
- 
-+	old = current_cred();
-+
-+	/* check for no-op */
-+	if ((rgid == (gid_t) -1 || gid_eq(krgid, old->gid)) &&
-+	    (egid == (gid_t) -1 || (gid_eq(kegid, old->egid) &&
-+				    gid_eq(kegid, old->fsgid))) &&
-+	    (sgid == (gid_t) -1 || gid_eq(ksgid, old->sgid)))
-+		return 0;
-+
-+	rgid_new = rgid != (gid_t) -1        && !gid_eq(krgid, old->gid) &&
-+		   !gid_eq(krgid, old->egid) && !gid_eq(krgid, old->sgid);
-+	egid_new = egid != (gid_t) -1        && !gid_eq(kegid, old->gid) &&
-+		   !gid_eq(kegid, old->egid) && !gid_eq(kegid, old->sgid);
-+	sgid_new = sgid != (gid_t) -1        && !gid_eq(ksgid, old->gid) &&
-+		   !gid_eq(ksgid, old->egid) && !gid_eq(ksgid, old->sgid);
-+	if ((rgid_new || egid_new || sgid_new) &&
-+	    !ns_capable_setid(old->user_ns, CAP_SETGID))
-+		return -EPERM;
-+
- 	new = prepare_creds();
- 	if (!new)
- 		return -ENOMEM;
--	old = current_cred();
--
--	retval = -EPERM;
--	if (!ns_capable_setid(old->user_ns, CAP_SETGID)) {
--		if (rgid != (gid_t) -1        && !gid_eq(krgid, old->gid) &&
--		    !gid_eq(krgid, old->egid) && !gid_eq(krgid, old->sgid))
--			goto error;
--		if (egid != (gid_t) -1        && !gid_eq(kegid, old->gid) &&
--		    !gid_eq(kegid, old->egid) && !gid_eq(kegid, old->sgid))
--			goto error;
--		if (sgid != (gid_t) -1        && !gid_eq(ksgid, old->gid) &&
--		    !gid_eq(ksgid, old->egid) && !gid_eq(ksgid, old->sgid))
--			goto error;
--	}
- 
- 	if (rgid != (gid_t) -1)
- 		new->gid = krgid;
--- 
-2.39.2
+The garbage collection was an idea how to easily handle the most
+common case, see below.
 
+
+> The main issue is that callbacks aren't called at the right times, and
+> they're not granular enough to support different levels of
+> upgrade/downgrade so that we can arbitrarily replace any patch with any
+> other version of the patch without consequence.
+> 
+> If the callbacks were split up and called only when they're needed, it
+> would be trivial to free the shadow variables in a post_unpatch
+> callback.
+> 
+> To support this we could have some kind of callback versioning, where a
+> klp_object can have an array of klp_callbacks, and each set of callbacks
+> has a version associated with it.
+> 
+> For example, consider a sequence of patches P1-P4, each of which is an
+> upgrade from the last.
+> 
+> (Note: I'm assuming only one klp_object here to keep it simple.)
+> 
+> - P1 has [ callbacks.version=1 ]
+> - P2 has [ callbacks.version=1 ]
+> - P3 has [ callbacks.version=1, callbacks.version=2 ]
+> - P4 has [ callbacks.version=1, callbacks.version=3 ]
+>
+> Usually a patch will have the same callbacks (with same versions) as its
+> predecessor.  P1 and P2 have the same callbacks (v1).
+> 
+> If needed, a patch can then add an additional set of callbacks (with
+> bumped version) like P3.  Or it can remove its predecessor's callbacks.
+> Or it can do both, like P4.
+> 
+> When deciding which callbacks to call for a replace operation, it's
+> basically an XOR.  If a callback version exists in one patch but not the
+> other, its callbacks should be called.
+> 
+> For example, if P3 gets upgraded to P4, call P4's v3 patch callbacks and
+> P3's v2 unpatch callbacks.
+> 
+> If P4 gets downgraded to P1, call P4's v3 unpatch callbacks.
+> 
+> BTW, "version" may not be the right name, as there's no concept of newer
+> or older: any patch can be arbitrarily replaced by any other patch.  The
+> version is just a unique ID for a set of callbacks.
+
+Yes, we discussed various possibilities and it was always getting pretty
+complex.
+
+The most promising direction with the callbacks was connecting
+the callbacks with the klp_state. They are versioned as you
+suggest above. And we could have callbacks:
+
+    + state_prepare    (instead of pre_patch)
+    + state_enable     (instead of post_patch)
+    + state_disable    (instead of pre_unpatch)
+    + state_cleanup    (instead of pre_unpatch)
+
+The above callbacks would be called only when the state is new.
+We might need more callbacks if the support update/downgrade to
+another version of the state:
+
+    + state_update_prepare       (instead of pre_patch)
+    + state_update_enable        (instead of post_patch)
+    + state_downgrade_prepare    (instead of pre_unpatch)
+    + state_downgrade_cleanup    (instead of pre_unpatch)
+
+Also we might some callbacks when an action is needed to take
+over the state from the previous livepatch:
+
+    + state_take_over_prepare       (instead of pre_patch and pre_unpatch?)
+    + state_take_over_enable        (instead of post_patch and post_unpatch?)
+
+IMHO, it is better than the current state. It better describes
+the complexity of the problem. It forces/allows livepatch authors
+to handle all scenarios correctly.
+
+Anyway, it is complex. The authors have to understand when exactly
+each callback will be called. Also some callbacks might be called
+from the old-to-be-replaced and some from the new-to-be-used livepatch.
+
+We discussed various use-cases and realized that shadow variables
+were very common use case. I have just double checked it and
+it seems that we used:
+
+   + post_patch callback for two CVEs
+   + klp_shadow_free() for 14 CVEs
+
+This is where the idea of the garbage collection came from. It looked
+like an elegant solution for the most common use case. So that
+livepatch authors do not need to think about the rather complex
+ordering of the many callbacks. They would just register/define
+the shadow variable type and be done.
+
+Well, the single state_cleanup() callback would usually be
+enough for the shadow variables.
+
+
+Conclusion:
+
+You are right that the shadow variables and callbacks
+are connected. Or more precisely, the shadow variables and
+klp_states have similar life-time handling. They both
+are introduced/transfered/removed.
+
+Maybe, we could merge klp_shadow and klp_state into a single
+entity that would support versioning and various callbacks.
+
+I am just not sure how the entity would be called.
+The name is important because it should be clear what it
+means and how it can be used. The unification and bad name
+might cause more harm then good.
+
+Note that the meaning is a bit different. klp_shadow is
+for storing data. klp_state rather describes a change
+of the behavior done by a callback.
+
+IMHO, there does not exist 1:1 relation between shadow
+variables and states. Using a particular shadow variable
+type might define a system state. But a callback might
+change a system state even without using shadow variables.
+
+Another small problem is that klp_state is currently in
+struct klp_livepatch. And it would be more safe to register
+klp_shadow_type in struct klp_object.
+
+Best Regards,
+Petr
