@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E04F69B1D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7119C69B1D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 18:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjBQRbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 12:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229934AbjBQRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 12:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjBQRbu (ORCPT
+        with ESMTP id S229942AbjBQRer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 12:31:50 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED56F3F5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:31:48 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id 63so1441681ybq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 09:31:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=liSt0sRaUA8nvJvDXS4dEE1Ac3wmg+RmpsYvQkMfiQ0=;
-        b=TeM0wGNH9k+EZTL5gQ/FJK/3wse5JbI7uTKfl6apOBaocU20q9/3SMJyQCFYzpC7to
-         1nIxdf60f0qKafad55uQMOez30aW6MfSXaa7zMd/uj4bEr0kSlPYnExtHou6YLDWIszu
-         rzX4L6vj8EvlbGcF3dg9ypkwAnb1Ii5Ia2BV0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=liSt0sRaUA8nvJvDXS4dEE1Ac3wmg+RmpsYvQkMfiQ0=;
-        b=26YuhW5QbXzS3s9byly2V4EApY9OUSH02YuEZi77QI7CJnOuO4R7KeJ4lS4zNnb8Q1
-         jUzBfJCkrwOVyccrIWM48jdUmkr+PYUKhyBcCseu1N4q0zy3ZToFVs3o6QJ5jqIm8zWJ
-         LYiMYCI2hT4uHIpYaNCALn18zgOYYwu5h7O76hDBh+XU00hlrz4H1Y0n8NinGNaZXwe2
-         PBiHpB2RD7LOPbsPg2xjjtiSQ3ysfR4C+MXmbdCr5Lk9LH86/aiw3yO+wIZFUrY7Y/pw
-         JhjzEUqUY4U7pNoh7RzIEgXmnZYo6/lkyg/PmCuVX8rumP7t7bcZ+lT7EFTvVmaekCsV
-         tYIQ==
-X-Gm-Message-State: AO0yUKUo4Ubik/vuVyyYP6tgFdewyoE8vhUpXj6UaLW1xFIuyS410f3Z
-        gkmjnqtahuyIkACpiRioRw1UTG1PLMram6vNde15gQ==
-X-Google-Smtp-Source: AK7set/gaYxcX3wkjw7Be1ABmN4tHM9A4f5jRE9cqkf2axJYn4uEHkrpJph5DSJNcMu5cEoMTtdkZqwimJMEUa3TwfE=
-X-Received: by 2002:a05:6902:726:b0:855:fdcb:4464 with SMTP id
- l6-20020a056902072600b00855fdcb4464mr465357ybt.5.1676655107709; Fri, 17 Feb
- 2023 09:31:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20230208205318.131385-1-pmalani@chromium.org> <44487e67c4101db4b57090a1ece66974aeab28b9.camel@puri.sm>
-In-Reply-To: <44487e67c4101db4b57090a1ece66974aeab28b9.camel@puri.sm>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 17 Feb 2023 09:31:36 -0800
-Message-ID: <CACeCKacT2eMC_JzObCji9ZToq4oPqVcdc2CeDiS=DJdj3QdR5w@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Fix probe pin assign check
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org,
-        Diana Zigterman <dzigterman@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 17 Feb 2023 12:34:47 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8F6EBB6;
+        Fri, 17 Feb 2023 09:34:45 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 755E15C00E3;
+        Fri, 17 Feb 2023 12:34:44 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 17 Feb 2023 12:34:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1676655284; x=1676741684; bh=x9il+fO3+krgqqs56NmfA2a+M5nr8m3FwwW
+        TXtFGt1o=; b=fb/JrZ9iZGQlh8+5SuYcFxULWSyo4PzYaXs1sAPRlr8/yUrl6fd
+        S4806DoEvE+b2BA/vMGjzdD98RKzsgHNm2qjDOpO8QkV6xd8QPC1hLv4LxOVa2MO
+        ZHmalVopeohqg5U5Jq6AF7VLIUzQlVyt5q2AJvtB7eocQ1yFDwMhxPUSBKDsSjib
+        jxz2bliRtFsDmLm0Dejp/ya1miYN0C1rNgBV/sk5oaxuVatXLOtHSs9fWxu5mN2O
+        TH5b6br63PqJ1fjgdVMQLNeo//63gjTcUlolFQcrD8hTEB6uab7mRnWNjPcAeIXg
+        +dGa7kFEvQjRitu1S40ulDYmIs4+gMUtc1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676655284; x=
+        1676741684; bh=x9il+fO3+krgqqs56NmfA2a+M5nr8m3FwwWTXtFGt1o=; b=S
+        IcEmW7Tj0ccfKr5Rtl4H5CZxzggmjI4PZUJo+yvgVZ15yxnWTe0DhEd7TGJfnHzE
+        KC8D32la5lfymvjf4x+swf+hzC7KXJUv8iCSr3oN/hvSnNZtkzHoe8Ld3QeIZlmA
+        Ar/yWDnRpAnzJioPcaYFPRlv3CNejWxrvvcMtWtSnB+PXaKhXaHESXWYv0latMtJ
+        FRoJbsimu8IcaMb4SeM0eq2BaWElTO2O3GdrhS/M7S8x5P2u/ncc1hTqiQI2ZDZe
+        bqj30X2RoD6frUuJqJLm+xSXdatzkfTBR3Hay7sNF3+bUgGbag1eb6WrI64t/he1
+        ADgHuJuqp1ZvbDktQQdjg==
+X-ME-Sender: <xms:tLrvY4z3I4IkvpV8jMqGjMlTpH_9nKEC4RN8IoVzoU2Ki-JSmkdvlw>
+    <xme:tLrvY8RKvp5d1fE0YgwJwu90qdrC2R90-qPRyKQ9zclqHcDsO-bsW65cPeJBnpuU9
+    zcIPbNzUSW7dKVR7HE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
+    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:tLrvY6VFQmrQnS9pMIdYJnB3cFH9mnrojZ3nELgtIoSyR-EYvGKKaw>
+    <xmx:tLrvY2hRyVdtRRXEJ4D9lDfGO-EfUds9_mDinrTknDcDvqrEVNhHpQ>
+    <xmx:tLrvY6Dd_rc0yuvU_6gnTqR02Qg8j2AdOl6Yqn9jVzxIKpH9sUCFug>
+    <xmx:tLrvY9P-ayiGtp8fobjdk5u2lUTSkj6tlhRPEbveAFAzT8jcbJhJUw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 27510B60086; Fri, 17 Feb 2023 12:34:44 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <ad5a0fc0-cad5-4730-9ddc-68285c6f13fc@app.fastmail.com>
+Date:   Fri, 17 Feb 2023 18:34:19 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Mike Rapoport" <rppt@kernel.org>, "Matt Evans" <mev@rivosinc.com>
+Subject: [GIT PULL] asm-generic: cleanups for 6.3
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 3:39 AM Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Mittwoch, dem 08.02.2023 um 20:53 +0000 schrieb Prashant Malani:
-> > While checking Pin Assignments of the port and partner during probe,
-> > we
-> > don't take into account whether the peripheral is a plug or
-> > receptacle.
-> >
-> > This manifests itself in a mode entry failure on certain docks and
-> > dongles with captive cables. For instance, the Startech.com Type-C to
-> > DP
-> > dongle (Model #CDP2DP) advertises its DP VDO as 0x405. This would
-> > fail
-> > the Pin Assignment compatibility check, despite it supporting
-> > Pin Assignment C as a UFP.
-> >
-> > Update the check to use the correct DP Pin Assign macros that
-> > take the peripheral's receptacle bit into account.
-> >
-> > Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin
-> > assignment for UFP receptacles")
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Diana Zigterman <dzigterman@chromium.org>
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > ---
-> >
-> > I realize this is a bit late in the release cycle, but figured since
-> > it
-> > is a fix it might still be considered. Please let me know if it's too
-> > late and I can re-send this after the 6.3-rc1 is released. Thanks!
->
->
-> on the imx8mq-librem5r4.dts board, when using a typec-hub with HDMI,
-> this patch breaks image output in one case for me: For a monitor where
-> negotiation of resolution fails, a lower resolution works though, I now
-> get an oops and hence an unusable system, see the
-> dmesg_typec_hub_hdmi_new.txt logs I append. this should definitely not
-> happen.
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
-I'll let others comment here too, but more information is required here:
-- What's the DP VDO being exported by the Hub?
-- What DPConfigure VDM is being sent now (and what was being sent earlier) ?
-- Which version of the kernel are you using?
-- Can you point to where in the upstream kernel this board file is present?
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
->
-> with your patch reverted, I get no oops and a perfectly usable system
-> like before, which is the file dmesg_typec_hub_hdmi_old_ok.txt
->
-> could this patch be wrong or at least no universally good for everyone?
-> it looks like a regression to me.
+are available in the Git repository at:
 
-I don't think this patch is the cause of the regression you are seeing.
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.3
 
-I don't know about the 2nd part, but for the first part, it was
-definitely not right
-earlier; Pin compatibility checks need to take into account whether the
-UFP is a receptacle or not. The stack trace you have shared does not
-seem related to PD/Type-C or DRM.
+for you to fetch changes up to a13408c205260716e925a734ef399899d69182ba:
 
-Perhaps this change is uncovering a previously hidden bug on this board.
-I'm not sure how this patch causes the failure you see; the patch alters
-the conditions for a probe to succeed: either the HUB you are using will
-pass this check (in which case you will get DP working) or it won't (in which
-case DP should not work at all). Whatever happens after that depends
-on the display driver.
+  char/agp: introduce asm-generic/agp.h (2023-02-13 22:13:29 +0100)
 
-BR,
+----------------------------------------------------------------
+asm-generic: cleanups for 6.3
+
+Only three minor changes: a cross-platform series from Mike Rapoport to
+consolidate asm/agp.h between architectures, and a correctness change
+for __generic_cmpxchg_local() from Matt Evans.
+
+----------------------------------------------------------------
+Matt Evans (1):
+      locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare against zero-extended 'old' value
+
+Mike Rapoport (2):
+      char/agp: consolidate {alloc,free}_gatt_pages()
+      char/agp: introduce asm-generic/agp.h
+
+ arch/alpha/include/asm/Kbuild       |  1 +
+ arch/alpha/include/asm/agp.h        | 19 -------------------
+ arch/ia64/include/asm/Kbuild        |  1 +
+ arch/ia64/include/asm/agp.h         | 27 ---------------------------
+ arch/parisc/include/asm/Kbuild      |  1 +
+ arch/parisc/include/asm/agp.h       | 21 ---------------------
+ arch/powerpc/include/asm/Kbuild     |  1 +
+ arch/powerpc/include/asm/agp.h      | 19 -------------------
+ arch/sparc/include/asm/Kbuild       |  1 +
+ arch/sparc/include/asm/agp.h        | 17 -----------------
+ arch/x86/include/asm/agp.h          |  6 ------
+ drivers/char/agp/agp.h              |  6 ++++++
+ include/asm-generic/agp.h           | 11 +++++++++++
+ include/asm-generic/cmpxchg-local.h |  6 +++---
+ 14 files changed, 25 insertions(+), 112 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/agp.h
+ delete mode 100644 arch/ia64/include/asm/agp.h
+ delete mode 100644 arch/parisc/include/asm/agp.h
+ delete mode 100644 arch/powerpc/include/asm/agp.h
+ delete mode 100644 arch/sparc/include/asm/agp.h
+ create mode 100644 include/asm-generic/agp.h
