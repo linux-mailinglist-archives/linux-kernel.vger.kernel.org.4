@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97DB69A605
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EBC69A601
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjBQHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S229523AbjBQHVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQHYO (ORCPT
+        with ESMTP id S229436AbjBQHVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:24:14 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9539E5529C;
-        Thu, 16 Feb 2023 23:24:12 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PJ3GH2b9qz4f3jHn;
-        Fri, 17 Feb 2023 15:24:07 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP4 (Coremail) with SMTP id gCh0CgAX8bRsKu9jMfUfDw--.45875S2;
-        Fri, 17 Feb 2023 15:19:09 +0800 (CST)
-Subject: Re: [PATCH 04/21] ext4: get correct ext4_group_info in
- ext4_mb_prefetch_fini
-To:     "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <87ttzkiybi.fsf@doe.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <182b8237-d504-46de-8521-8508449f7b82@huaweicloud.com>
-Date:   Fri, 17 Feb 2023 15:19:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Fri, 17 Feb 2023 02:21:12 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8544D60A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:21:11 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id p8so463024plr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:21:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+rXVwNplCcLm5rUFK+S1hkGHd+teMSvP6lTidP/qhpM=;
+        b=fHBXF+YsKrkaw1pEby4rg4Z7YWlUYj1FY+tzRGgLqWY9qYa8mcSkUdWiC3ViheyDYx
+         3JqqhV+lbhtsnu5S7chOGie+swgVOsx0D75Zz3OTU2cFDDns7M8IP1BB/zXSeQoK4dDt
+         dbC/DLK+yxCtDlKWlfnX2BnCj0m5rWdCe+DgbSoSsX0n5iJ4wGMkvQK1toX/ciSJlk86
+         0CP7ITDQ2dbyacRpGLPmxq+bWsIAui3kz12C7zvTl02UZw1iQXQkU+8lpVUI6iGPdH9D
+         2prPXr/G2Xrp9ioDlfeQAvD6QgDbSxOWTC+WV173z8qpO45I5Mc49GXUTX5Yl7Kfbxne
+         KP/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+rXVwNplCcLm5rUFK+S1hkGHd+teMSvP6lTidP/qhpM=;
+        b=QH3rlejkGNudBEhFgOC5rUw95p/PS5UzwjbIu+mrfaD/20khWlIpYWj4iLDcydFs0U
+         T3L0E/9A/dKod7NtVOJLmDLOFSr8nrdw30CnFwGn9G/tG7VtigyhHoz70n1qG+aGtsvK
+         CPltakMqBe750g3LLmAqdDCP7IXnG5Lcu+ANWaePkk7ZhM2OWGEekbQVLd/y5y7ydJxk
+         BGWRe8KUvE+NpAZLBeshKT63CnX+DCxqo+58DJ0QhnmS5k5aAdCE2gHvQXr7qzI8tJTH
+         d7bkx/9x7WSESJONRD0iGzC+SPnEPJN6UN7NpLmE/EZE7A0cGCmJYZU4J6BicJgo0rXd
+         47aQ==
+X-Gm-Message-State: AO0yUKViFPVCxu/GUkzozNQ/UAWxr4PRaMezswpFnBbk5bvY+HLZbHog
+        Y9jD4SZ0ZfHR8di+ntTBzOL1y2plX4sEkdyFvi1gsA==
+X-Google-Smtp-Source: AK7set+oTu/USoT/eilY6i7pfNlEF6yLy2ul8SDGMvF0Pbh+/omy+xTG6X7YRS8FPEa12u5Jur3ZjjDS+PZell9/vhQ=
+X-Received: by 2002:a17:90b:2648:b0:236:76cb:99d7 with SMTP id
+ pa8-20020a17090b264800b0023676cb99d7mr120401pjb.44.1676618470428; Thu, 16 Feb
+ 2023 23:21:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87ttzkiybi.fsf@doe.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgAX8bRsKu9jMfUfDw--.45875S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWfZr1kGrWUWF1DGrW8tFb_yoW8Ww48pr
-        ZxJ3WUur45WrWDCr4xWay2q3W0yw4xWFyUJry3Ww1UuF9rGryxKF97KF48ZF1UCFsa9r17
-        Z3ZIvrnrCr13CaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230214035445.1250139-1-talumbau@google.com>
+In-Reply-To: <20230214035445.1250139-1-talumbau@google.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 16 Feb 2023 23:20:58 -0800
+Message-ID: <CAAPL-u_p64P+uupj-P-piRo=6d_ogadJMT5=waS0BtZ6ATFx7w@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 1/2] mm: multi-gen LRU: clean up sysfs code
+To:     "T.J. Alumbaugh" <talumbau@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,51 +68,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reviewed-by: Wei Xu <weixugc@google.com>
 
+On Mon, Feb 13, 2023 at 7:54 PM T.J. Alumbaugh <talumbau@google.com> wrote:
+>
+> This patch cleans up the sysfs code. Specifically,
 
-on 2/17/2023 2:46 PM, Ritesh Harjani (IBM) wrote:
-> Kemeng Shi <shikemeng@huaweicloud.com> writes:
-> 
->> We always get ext4_group_desc with group + 1 and ext4_group_info with
->> group to check if we need do initialize ext4_group_info for the group.
->> Just get ext4_group_desc with group for ext4_group_info initialization
->> check.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
->> ---
->>  fs/ext4/mballoc.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
->> index 352ac9139fee..f24f80ecf318 100644
->> --- a/fs/ext4/mballoc.c
->> +++ b/fs/ext4/mballoc.c
->> @@ -2570,13 +2570,13 @@ void ext4_mb_prefetch_fini(struct super_block *sb, ext4_group_t group,
->>  			   unsigned int nr)
->>  {
->>  	while (nr-- > 0) {
->> -		struct ext4_group_desc *gdp = ext4_get_group_desc(sb, group,
->> -								  NULL);
->> -		struct ext4_group_info *grp = ext4_get_group_info(sb, group);
->> +		struct ext4_group_desc *gdp;
->> +		struct ext4_group_info *grp;
-> 
-> We can even declare these variables at the begining of the function like
-> in [1]. Also I would advise to rearrange any "fixes" patches at the
-> begining of the patch series and "cleanup" patches at the end.
-> e.g. this looks like a fix to me.
-> 
-> That way it is sometimes easier for people to cherry-pick any fixes if
-> required in their older kernel trees. ;)
-> 
-Hi Ritesh, Thanks for feedback. I declare these variables at the begining
-of the function in next version.
-I agree that we should keep bugfix patches at the beginning. Actually,
-patch 1-8 are all fix patches from my view. So I think current patch sort
-is fine.
-Thanks.
+Nit: Remove "This patch" per the "submitting patches" guide.
 
--- 
-Best wishes
-Kemeng Shi
-
+>   1. use sysfs_emit(),
+>   2. use __ATTR_RW(), and
+>   3. constify multi-gen LRU struct attribute_group.
+>
+> Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
+> ---
+>  include/linux/mmzone.h |  2 +-
+>  mm/vmscan.c            | 22 +++++++++-------------
+>  2 files changed, 10 insertions(+), 14 deletions(-)
+>
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 9fb1b03b83b2..bf8786d45b31 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -1369,7 +1369,7 @@ typedef struct pglist_data {
+>
+>  #ifdef CONFIG_LRU_GEN
+>         /* kswap mm walk data */
+> -       struct lru_gen_mm_walk  mm_walk;
+> +       struct lru_gen_mm_walk mm_walk;
+>         /* lru_gen_folio list */
+>         struct lru_gen_memcg memcg_lru;
+>  #endif
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index d4b9fd1ae0ed..09c064accdb1 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -5658,14 +5658,14 @@ static void lru_gen_change_state(bool enabled)
+>   *                          sysfs interface
+>   ******************************************************************************/
+>
+> -static ssize_t show_min_ttl(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+> +static ssize_t min_ttl_ms_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+>  {
+> -       return sprintf(buf, "%u\n", jiffies_to_msecs(READ_ONCE(lru_gen_min_ttl)));
+> +       return sysfs_emit(buf, "%u\n", jiffies_to_msecs(READ_ONCE(lru_gen_min_ttl)));
+>  }
+>
+>  /* see Documentation/admin-guide/mm/multigen_lru.rst for details */
+> -static ssize_t store_min_ttl(struct kobject *kobj, struct kobj_attribute *attr,
+> -                            const char *buf, size_t len)
+> +static ssize_t min_ttl_ms_store(struct kobject *kobj, struct kobj_attribute *attr,
+> +                               const char *buf, size_t len)
+>  {
+>         unsigned int msecs;
+>
+> @@ -5677,11 +5677,9 @@ static ssize_t store_min_ttl(struct kobject *kobj, struct kobj_attribute *attr,
+>         return len;
+>  }
+>
+> -static struct kobj_attribute lru_gen_min_ttl_attr = __ATTR(
+> -       min_ttl_ms, 0644, show_min_ttl, store_min_ttl
+> -);
+> +static struct kobj_attribute lru_gen_min_ttl_attr = __ATTR_RW(min_ttl_ms);
+>
+> -static ssize_t show_enabled(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+> +static ssize_t enabled_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+>  {
+>         unsigned int caps = 0;
+>
+> @@ -5698,7 +5696,7 @@ static ssize_t show_enabled(struct kobject *kobj, struct kobj_attribute *attr, c
+>  }
+>
+>  /* see Documentation/admin-guide/mm/multigen_lru.rst for details */
+> -static ssize_t store_enabled(struct kobject *kobj, struct kobj_attribute *attr,
+> +static ssize_t enabled_store(struct kobject *kobj, struct kobj_attribute *attr,
+>                              const char *buf, size_t len)
+>  {
+>         int i;
+> @@ -5725,9 +5723,7 @@ static ssize_t store_enabled(struct kobject *kobj, struct kobj_attribute *attr,
+>         return len;
+>  }
+>
+> -static struct kobj_attribute lru_gen_enabled_attr = __ATTR(
+> -       enabled, 0644, show_enabled, store_enabled
+> -);
+> +static struct kobj_attribute lru_gen_enabled_attr = __ATTR_RW(enabled);
+>
+>  static struct attribute *lru_gen_attrs[] = {
+>         &lru_gen_min_ttl_attr.attr,
+> @@ -5735,7 +5731,7 @@ static struct attribute *lru_gen_attrs[] = {
+>         NULL
+>  };
+>
+> -static struct attribute_group lru_gen_attr_group = {
+> +static const struct attribute_group lru_gen_attr_group = {
+>         .name = "lru_gen",
+>         .attrs = lru_gen_attrs,
+>  };
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
+>
