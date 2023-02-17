@@ -2,287 +2,616 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B291B69B4D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B68169B4DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjBQVa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S229915AbjBQVhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBQVaz (ORCPT
+        with ESMTP id S229570AbjBQVhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:30:55 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773951114D;
-        Fri, 17 Feb 2023 13:30:53 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HKZR5K025011;
-        Fri, 17 Feb 2023 21:30:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=p/r/IgDm87Tg50qN8UcTg7CPY96iXbCv375Crz/M9t8=;
- b=hwsp6o0/xjemUyCbC8CTAJ7kd1mJfGycAfAEPeECkMijMai4WQNGrsyibonjkY+Re3JM
- lsaA8h2iummAqJOlzs4ESOPgy2VyHwqZBq2D1yFptWO/KErFEAexndt+tfFpLBVoB23F
- cQ2S2Wx/D9i9rfPlwt1SCer+mNf2cakL3lSz9/teqduzNAZWqL1p6a3a10P3ruE2P28c
- XNHr1V2bQUAy56K50OHTYndlDz6odQqYgrkRn7c1Yz0bwwUndfhrE62qIpGkabphWQOo
- l/KBDN1cCLyZJjNczAFz6rtYcAXcytShLc+rMx3AKHeUOgdZOV5o3ZYfcu/6arkMDIBe WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dpfq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:24 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HLQ74E016133;
-        Fri, 17 Feb 2023 21:30:23 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dpfpq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:23 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HKPon8016541;
-        Fri, 17 Feb 2023 21:30:22 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3np2n79rqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:22 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HLULZT3539568
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 21:30:21 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C70B45805B;
-        Fri, 17 Feb 2023 21:30:21 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44F1B58055;
-        Fri, 17 Feb 2023 21:30:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.25.123])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 21:30:19 +0000 (GMT)
-Message-ID: <aaeee7490cfee1b2163a3c9c894294aaf13e100c.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 17 Feb 2023 16:30:15 -0500
-In-Reply-To: <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Fri, 17 Feb 2023 16:37:18 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8061878
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:37:14 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id y29so3007099lfj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:37:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/2xXZ4e9APLByS3a7eFOZRk6xLuGSn3K1y4gsPgwKaw=;
+        b=cCbBgWJymamw7oCD2e2bMwd72SXFi55mgeeWxYL79wKYeicLptpUVLgL/TToV446Xb
+         3qhG4GSBvBcrIn5jkL39oPtUUrPCAes3t1IU69w8QZxRhEeBE4pBld7yy7SAYlNKJouy
+         MVtU5ntYwK1I+ZFy0teueVLDFDPY5+u7AonO1LjP2YQdDWUkHDZzvGa4t4Zi68/tWaB6
+         JyGtKQe/bc0u/7iY+bW35Ik2Ht07nq9LVCIHiCP4Ne6lSUdTGN4JvF6YPw+AaOZUOSN5
+         5mugkhtburegvZYL8m/eDcCIiBFcJSWnM5m55pYTgJDNO4Q4IuPCmfWoYK/d4BN11LRR
+         goiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/2xXZ4e9APLByS3a7eFOZRk6xLuGSn3K1y4gsPgwKaw=;
+        b=oEnTtLc4ve7+aZu1jngrwcBF9w92iTaHZXDiyHppxk6tdlaoDtYt6QKpGYAgIHR66L
+         zvoqV33NQDsK5nBFyRNu5VPskHg+4dKpihuwWgSkYuuv/bs6r687EeNQ9ZwfpGke5Hwt
+         vzkZczoIM/vQH3MLYe6vr7ujxKjUjnYGImDzbqpDvnBt83oMZLYC3bNJRpNjPja+j8pv
+         ZkvKXIYoZa5p8aiRxjMSmV6wb9mYNGi7+0S/bAThuam2X499Q8EWzx3CT2uJvbLyVZ1H
+         wzaSRRD0mASREYjsYAKRt3p0TKCYAZwiNvSEATaZCem6Dp/xn1RgmHk01KNH5jQSLcRD
+         ilRQ==
+X-Gm-Message-State: AO0yUKVmirWxkECEeY4LBi+kPk706EOeOv+a073NtcbB9WTq8DRMb0fS
+        hLsEML8c1aJDcpwpsceiE5eb3Q==
+X-Google-Smtp-Source: AK7set9dMCe4qQbceyZ0HJJraKaFJZaH0orilFjsuiabZ5/6SIBQMETLUDJZT5Al3p2Tn5cjzRQ89Q==
+X-Received: by 2002:ac2:5fee:0:b0:4d7:576c:18d1 with SMTP id s14-20020ac25fee000000b004d7576c18d1mr711852lfg.34.1676669832706;
+        Fri, 17 Feb 2023 13:37:12 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id z9-20020ac25de9000000b0048afb8b8e53sm786096lfq.80.2023.02.17.13.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 13:37:11 -0800 (PST)
+Message-ID: <caae5c4b-4aa6-5219-3278-92c3bed7868d@linaro.org>
+Date:   Fri, 17 Feb 2023 23:37:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 03/14] drm/msm/a6xx: Introduce GMU wrapper support
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
+ <20230214173145.2482651-4-konrad.dybcio@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230214173145.2482651-4-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GksIPGug5-2bMPWHC3PpHKYwxPW86-Ac
-X-Proofpoint-ORIG-GUID: uq2Z_zXEcPhRvQoV9G7RakzlHiyE5IFf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_14,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170185
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-17 at 14:51 -0500, Mimi Zohar wrote:
-> On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for removing security_old_inode_init_security(), switch to
-> > security_inode_init_security().
-> > 
-> > Extend the existing ocfs2_initxattrs() to take the
-> > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > name/value/len triple with the first xattr provided by LSMs.
-> > 
-> > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> > of replicating the behavior of security_old_inode_init_security(), i.e.
-> > just obtaining the xattr, in addition to setting all xattrs provided by
-> > LSMs.
-> > 
-> > Supporting multiple xattrs is not currently supported where
-> > security_old_inode_init_security() was called (mknod, symlink), as it
-> > requires non-trivial changes that can be done at a later time. Like for
-> > reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
-> > not the first to set it, its xattr will be discarded; if it is the first,
-> > it does not have xattrs to calculate the HMAC on).
-> > 
-> > Finally, modify the handling of the return value from
-> > ocfs2_init_security_get(). As security_inode_init_security() does not
-> > return -EOPNOTSUPP, remove this case and directly handle the error if the
-> > return value is not zero.
-> > 
-> > However, the previous case of receiving -EOPNOTSUPP should be still
-> > taken into account, as security_inode_init_security() could return zero
-> > without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> > 
-> > Instead, if security_inode_init_security() returned zero, look at the xattr
-> > if it was set, and behave accordingly, i.e. set si->enable to zero to
-> > notify to the functions following ocfs2_init_security_get() that the xattr
-> > is not available (same as if security_old_inode_init_security() returned
-> > -EOPNOTSUPP).
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+On 14/02/2023 19:31, Konrad Dybcio wrote:
+> Some (particularly SMD_RPM, a.k.a non-RPMh) SoCs implement A6XX GPUs
+> but don't implement the associated GMUs. This is due to the fact that
+> the GMU directly pokes at RPMh. Sadly, this means we have to take care
+> of enabling & scaling power rails, clocks and bandwidth ourselves.
 > 
-> My previous review missed a couple of concerns.
-> 
-> > ---
-> >  fs/ocfs2/namei.c | 18 ++++++------------
-> >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
-> >  2 files changed, 32 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> > index 05f32989bad6..55fba81cd2d1 100644
-> > --- a/fs/ocfs2/namei.c
-> > +++ b/fs/ocfs2/namei.c
-> > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	int want_meta = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota_inode = 0;
-> > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto leave;
-> > -		}
-> 
-> Although security_inode_init_security() does not return -EOPNOTSUPP, 
-> ocfs2_init_security_get() could.  Refer to commit 8154da3d2114 ("ocfs2:
-> Add incompatible flag for extended attribute").   It was added as a
-> temporary solution back in 2008, so it is highly unlikely that it is
-> still needed.
-> 
-> > +		mlog_errno(status);
-> > +		goto leave;
-> 
-> Without the -EOPNOTSUPP test, ocfs2_mknod() would not create the inode;
-> and similarly ocfs2_symlink(), below, would not create the symlink.  It
-> would be safer not to remove the -EOPNOTSUPP test.
-> 
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security and acl xattr */
-> > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	int want_clusters = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota = 0, did_quota_inode = 0;
-> > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto bail;
-> > -		}
-> > +		mlog_errno(status);
-> > +		goto bail;
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security xattr */
-> > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> > index 95d0611c5fc7..55699c573541 100644
-> > --- a/fs/ocfs2/xattr.c
-> > +++ b/fs/ocfs2/xattr.c
-> > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
-> >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
-> >  		     void *fs_info)
-> >  {
-> > +	struct ocfs2_security_xattr_info *si = fs_info;
-> >  	const struct xattr *xattr;
-> >  	int err = 0;
-> >  
-> > +	if (si) {
-> > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> > +				    GFP_KERNEL);
-> > +		if (!si->value)
-> > +			return -ENOMEM;
-> > +
-> > +		si->name = xattr_array->name;
-> > +		si->value_len = xattr_array->value_len;
-> > +		return 0;
-> > +	}
-> > +
-> >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
-> >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
-> >  				      xattr->name, xattr->value,
-> > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
-> >  			    const struct qstr *qstr,
-> >  			    struct ocfs2_security_xattr_info *si)
-> >  {
-> > +	int ret;
-> > +
-> >  	/* check whether ocfs2 support feature xattr */
-> >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
-> >  		return -EOPNOTSUPP;
-> > -	if (si)
-> > -		return security_old_inode_init_security(inode, dir, qstr,
-> > -							&si->name, &si->value,
-> > -							&si->value_len);
-> > +	if (si) {
-> > +		ret = security_inode_init_security(inode, dir, qstr,
-> > +						   &ocfs2_initxattrs, si);
-> 
-> The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
-> security_old_inode_init_security() and security_inode_init_security(),
-> but return different values.  In the former case, it returns
-> -EOPNOTSUPP.  In the latter case, it returns 0.  The question is
-> whether or not we need to be concerned about private inodes on ocfs2.  
-> If private inodes on ocfs2 are possible, then ocsf2_mknod() or
-> ocfs2_symlink() would fail to create the inode or symlink.
+> Reuse existing Adreno-common code and modify the deeply-GMU-infused
+> A6XX code to facilitate these GPUs. This involves if-ing out lots
+> of GMU callbacks and introducing a new type of GMU - GMU wrapper.
+> This is essentially a register region which is convenient to model
+> as a device. We'll use it for managing the GDSCs.
 
-Correction, previously when returning -EOPNOTSUPP for private inodes,
-xattrs would not be wrriten.  By returning 0 without setting si->enable 
-to 0, xattrs will be written.
- 
+Why do you call it a wrapper?
+
 > 
-> > +		/*
-> > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> > +		 * we have to check the xattr ourselves.
-> > +		 */
-> > +		if (!ret && !si->name)
-> > +			si->enable = 0;
-> > +
-> > +		return ret;
-> > +	}
-> >  
-> >  	return security_inode_init_security(inode, dir, qstr,
-> >  					    &ocfs2_initxattrs, NULL);
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gmu.c       |  51 ++++-
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c       | 198 +++++++++++++++++---
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu.h       |   1 +
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |  14 +-
+>   drivers/gpu/drm/msm/adreno/adreno_gpu.h     |   6 +
+>   5 files changed, 233 insertions(+), 37 deletions(-)
 > 
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> index 90e636dcdd5b..5aa9f3ef41c2 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> @@ -1474,6 +1474,7 @@ static int a6xx_gmu_get_irq(struct a6xx_gmu *gmu, struct platform_device *pdev,
+>   
+>   void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu)
+>   {
+> +	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+>   	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+>   	struct platform_device *pdev = to_platform_device(gmu->dev);
+>   
+> @@ -1493,10 +1494,12 @@ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu)
+>   	gmu->mmio = NULL;
+>   	gmu->rscc = NULL;
+>   
+> -	a6xx_gmu_memory_free(gmu);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		a6xx_gmu_memory_free(gmu);
+>   
+> -	free_irq(gmu->gmu_irq, gmu);
+> -	free_irq(gmu->hfi_irq, gmu);
+> +		free_irq(gmu->gmu_irq, gmu);
+> +		free_irq(gmu->hfi_irq, gmu);
+> +	}
+>   
+>   	/* Drop reference taken in of_find_device_by_node */
+>   	put_device(gmu->dev);
+> @@ -1504,6 +1507,48 @@ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu)
+>   	gmu->initialized = false;
+>   }
+>   
+> +int a6xx_gmu_wrapper_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+> +{
+> +	struct platform_device *pdev = of_find_device_by_node(node);
+> +	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+> +	int ret;
+> +
+> +	if (!pdev)
+> +		return -ENODEV;
+> +
+> +	gmu->dev = &pdev->dev;
+> +
+> +	of_dma_configure(gmu->dev, node, true);
+> +
+> +	pm_runtime_enable(gmu->dev);
+> +
+> +	/* Mark legacy for manual SPTPRAC control */
+> +	gmu->legacy = true;
+> +
+> +	/* Map the GMU registers */
+> +	gmu->mmio = a6xx_gmu_get_mmio(pdev, "gmu");
+> +	if (IS_ERR(gmu->mmio)) {
+> +		ret = PTR_ERR(gmu->mmio);
+> +		goto err_mmio;
+> +	}
+> +
+> +	/* Get a link to the GX power domain to reset the GPU */
+> +	gmu->gxpd = dev_pm_domain_attach_by_name(gmu->dev, "gx");
+> +
+> +	gmu->initialized = true;
+> +
+> +	return 0;
+> +
+> +err_mmio:
+> +	iounmap(gmu->mmio);
+> +	ret = -ENODEV;
+> +
+> +	/* Drop reference taken in of_find_device_by_node */
+> +	put_device(gmu->dev);
+> +
+> +	return ret;
+> +}
+> +
+>   int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+>   {
+>   	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 8855d798bbb3..72bf5c9f7ff1 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -20,9 +20,11 @@ static inline bool _a6xx_check_idle(struct msm_gpu *gpu)
+>   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+>   
+> -	/* Check that the GMU is idle */
+> -	if (!a6xx_gmu_isidle(&a6xx_gpu->gmu))
+> -		return false;
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		/* Check that the GMU is idle */
+> +		if (!a6xx_gmu_isidle(&a6xx_gpu->gmu))
+> +			return false;
+> +	}
+>   
+>   	/* Check tha the CX master is idle */
+>   	if (gpu_read(gpu, REG_A6XX_RBBM_STATUS) &
+> @@ -612,13 +614,15 @@ static void a6xx_set_hwcg(struct msm_gpu *gpu, bool state)
+>   		return;
+>   
+>   	/* Disable SP clock before programming HWCG registers */
+> -	gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 1, 0);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu))
+> +		gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 1, 0);
+>   
+>   	for (i = 0; (reg = &adreno_gpu->info->hwcg[i], reg->offset); i++)
+>   		gpu_write(gpu, reg->offset, state ? reg->value : 0);
+>   
+>   	/* Enable SP clock */
+> -	gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 0, 1);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu))
+> +		gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 0, 1);
+>   
+>   	gpu_write(gpu, REG_A6XX_RBBM_CLOCK_CNTL, state ? clock_cntl_on : 0);
+>   }
+> @@ -994,10 +998,13 @@ static int hw_init(struct msm_gpu *gpu)
+>   {
+>   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+> +	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+>   	int ret;
+>   
+> -	/* Make sure the GMU keeps the GPU on while we set it up */
+> -	a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		/* Make sure the GMU keeps the GPU on while we set it up */
+> +		a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
+> +	}
+>   
+>   	/* Clear GBIF halt in case GX domain was not collapsed */
+>   	if (a6xx_has_gbif(adreno_gpu))
+> @@ -1123,6 +1130,17 @@ static int hw_init(struct msm_gpu *gpu)
+>   			0x3f0243f0);
+>   	}
+>   
+> +	if (adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		/* Do it here, as GMU wrapper only inits the GMU for memory reservation etc. */
+> +
+> +		/* Set up the CX GMU counter 0 to count busy ticks */
+> +		gmu_write(gmu, REG_A6XX_GPU_GMU_AO_GPU_CX_BUSY_MASK, 0xff000000);
+> +
+> +		/* Enable power counter 0 */
+> +		gmu_rmw(gmu, REG_A6XX_GMU_CX_GMU_POWER_COUNTER_SELECT_0, 0xff, BIT(5));
+> +		gmu_write(gmu, REG_A6XX_GMU_CX_GMU_POWER_COUNTER_ENABLE, 1);
+> +	}
+> +
+>   	/* Protect registers from the CP */
+>   	a6xx_set_cp_protect(gpu);
+>   
+> @@ -1231,6 +1249,8 @@ static int hw_init(struct msm_gpu *gpu)
+>   	}
+>   
+>   out:
+> +	if (adreno_has_gmu_wrapper(adreno_gpu))
+> +		return ret;
+>   	/*
+>   	 * Tell the GMU that we are done touching the GPU and it can start power
+>   	 * management
+> @@ -1265,6 +1285,9 @@ static void a6xx_dump(struct msm_gpu *gpu)
+>   	adreno_dump(gpu);
+>   }
+>   
+> +#define GBIF_GX_HALT_MASK	BIT(0)
+> +#define GBIF_CLIENT_HALT_MASK	BIT(0)
+> +#define GBIF_ARB_HALT_MASK	BIT(1)
+>   #define VBIF_RESET_ACK_TIMEOUT	100
+>   #define VBIF_RESET_ACK_MASK	0x00f0
+>   
+> @@ -1296,7 +1319,8 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>   	 * Turn off keep alive that might have been enabled by the hang
+>   	 * interrupt
+>   	 */
+> -	gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu))
+> +		gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+>   
+>   	pm_runtime_dont_use_autosuspend(&gpu->pdev->dev);
+>   
+> @@ -1320,6 +1344,35 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>   	/* Call into gpucc driver to poll for cx gdsc collapse */
+>   	reset_control_reset(gpu->cx_collapse);
+>   
+> +	/* Software-reset the GPU */
+> +	if (adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		/* Halt the GX side of GBIF */
+> +		gpu_write(gpu, REG_A6XX_RBBM_GBIF_HALT, GBIF_GX_HALT_MASK);
+> +		spin_until(gpu_read(gpu, REG_A6XX_RBBM_GBIF_HALT_ACK) &
+> +			   GBIF_GX_HALT_MASK);
+> +
+> +		/* Halt new client requests on GBIF */
+> +		gpu_write(gpu, REG_A6XX_GBIF_HALT, GBIF_CLIENT_HALT_MASK);
+> +		spin_until((gpu_read(gpu, REG_A6XX_GBIF_HALT_ACK) &
+> +			   (GBIF_CLIENT_HALT_MASK)) == GBIF_CLIENT_HALT_MASK);
+> +
+> +		/* Halt all AXI requests on GBIF */
+> +		gpu_write(gpu, REG_A6XX_GBIF_HALT, GBIF_ARB_HALT_MASK);
+> +		spin_until((gpu_read(gpu, REG_A6XX_GBIF_HALT_ACK) &
+> +			   (GBIF_ARB_HALT_MASK)) == GBIF_ARB_HALT_MASK);
+> +
+> +		/* Clear the halts */
+> +		gpu_write(gpu, REG_A6XX_GBIF_HALT, 0);
+> +
+> +		if (adreno_is_a619_holi(adreno_gpu))
+> +			gpu_write(gpu, 0x18, 0);
+> +		else
+> +			gpu_write(gpu, REG_A6XX_RBBM_GBIF_HALT, 0);
+> +
+> +		/* This *really* needs to go through before we do anything else! */
+> +		mb();
+> +	}
+> +
+>   	pm_runtime_use_autosuspend(&gpu->pdev->dev);
+>   
+>   	if (active_submits)
+> @@ -1504,7 +1557,8 @@ static void a6xx_fault_detect_irq(struct msm_gpu *gpu)
+>   	 * Force the GPU to stay on until after we finish
+>   	 * collecting information
+>   	 */
+> -	gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 1);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu))
+> +		gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 1);
+>   
+>   	DRM_DEV_ERROR(&gpu->pdev->dev,
+>   		"gpu fault ring %d fence %x status %8.8X rb %4.4x/%4.4x ib1 %16.16llX/%4.4x ib2 %16.16llX/%4.4x\n",
+> @@ -1669,6 +1723,7 @@ static int a6xx_pm_resume(struct msm_gpu *gpu)
+>   {
+>   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+> +	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+>   	int ret;
+>   
+>   	gpu->needs_hw_init = true;
+> @@ -1676,35 +1731,81 @@ static int a6xx_pm_resume(struct msm_gpu *gpu)
+>   	trace_msm_gpu_resume(0);
+>   
+>   	mutex_lock(&a6xx_gpu->gmu.lock);
+> -	ret = a6xx_gmu_resume(a6xx_gpu);
+> -	mutex_unlock(&a6xx_gpu->gmu.lock);
+> -	if (ret)
+> -		return ret;
+>   
+> -	msm_devfreq_resume(gpu);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		ret = a6xx_gmu_resume(a6xx_gpu);
+> +		mutex_unlock(&a6xx_gpu->gmu.lock);
+> +		if (ret)
+> +			return ret;
+>   
+> -	a6xx_llc_activate(a6xx_gpu);
+> +		msm_devfreq_resume(gpu);
+>   
+> -	return 0;
+> +		a6xx_llc_activate(a6xx_gpu);
+> +	} else {
+> +		pm_runtime_get_sync(gmu->dev);
+> +		if (!IS_ERR_OR_NULL(gmu->gxpd))
+> +			pm_runtime_get_sync(gmu->gxpd);
+> +
+> +		/* Set the core clock, having VDD scaling in mind */
+> +		ret = dev_pm_opp_set_rate(gpu->dev->dev, gpu->fast_rate);
+> +		if (ret)
+> +			return ret;
+
+Both this function and the suspend one below would leave the mutex 
+enabled in the error path.
+
+I'd add a6xx_gmu_wrapper_suspend() / _resume() instead, call them 
+conditionally close to the plain a6xx_gmu_suspend() / _resume and then 
+add a !wrapper contition to the a6xx_llc_(de)activate() calls.
+
+> +
+> +		ret = clk_bulk_prepare_enable(gpu->nr_clocks, gpu->grp_clks);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = clk_prepare_enable(gpu->ebi1_clk);
+> +		if (ret)
+> +			return ret;
+> +
+> +		mutex_unlock(&a6xx_gpu->gmu.lock);
+> +
+> +		msm_devfreq_resume(gpu);
+> +	}
+> +
+> +	return ret;
+>   }
+>   
+>   static int a6xx_pm_suspend(struct msm_gpu *gpu)
+>   {
+>   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+> +	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+>   	int i, ret;
+>   
+>   	trace_msm_gpu_suspend(0);
+>   
+> -	a6xx_llc_deactivate(a6xx_gpu);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		a6xx_llc_deactivate(a6xx_gpu);
+>   
+> -	msm_devfreq_suspend(gpu);
+> +		msm_devfreq_suspend(gpu);
+>   
+> -	mutex_lock(&a6xx_gpu->gmu.lock);
+> -	ret = a6xx_gmu_stop(a6xx_gpu);
+> -	mutex_unlock(&a6xx_gpu->gmu.lock);
+> -	if (ret)
+> -		return ret;
+> +		mutex_lock(&a6xx_gpu->gmu.lock);
+> +		ret = a6xx_gmu_stop(a6xx_gpu);
+> +		mutex_unlock(&a6xx_gpu->gmu.lock);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		msm_devfreq_suspend(gpu);
+> +
+> +		mutex_lock(&a6xx_gpu->gmu.lock);
+> +
+> +		ret = clk_prepare_enable(gpu->ebi1_clk);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = clk_set_rate(gpu->core_clk, 0);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (!IS_ERR_OR_NULL(gmu->gxpd))
+> +			pm_runtime_put_sync(gmu->gxpd);
+> +
+> +		pm_runtime_put_sync(gmu->dev);
+> +
+> +		mutex_unlock(&a6xx_gpu->gmu.lock);
+> +	}
+>   
+>   	if (a6xx_gpu->shadow_bo)
+>   		for (i = 0; i < gpu->nr_rings; i++)
+> @@ -1720,6 +1821,11 @@ static int a6xx_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
+>   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+>   
+> +	if (adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		*value = gpu_read64(gpu, REG_A6XX_CP_ALWAYS_ON_COUNTER_LO);
+> +		return 0;
+> +	}
+> +
+>   	mutex_lock(&a6xx_gpu->gmu.lock);
+>   
+>   	/* Force the GPU power on so we can read this register */
+> @@ -1757,7 +1863,8 @@ static void a6xx_destroy(struct msm_gpu *gpu)
+>   		drm_gem_object_put(a6xx_gpu->shadow_bo);
+>   	}
+>   
+> -	a6xx_llc_slices_destroy(a6xx_gpu);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu))
+> +		a6xx_llc_slices_destroy(a6xx_gpu);
+>   
+>   	a6xx_gmu_remove(a6xx_gpu);
+>   
+> @@ -2020,6 +2127,34 @@ static const struct adreno_gpu_funcs funcs = {
+>   	.get_timestamp = a6xx_get_timestamp,
+>   };
+>   
+> +static const struct adreno_gpu_funcs funcs_gmuwrapper = {
+> +	.base = {
+> +		.get_param = adreno_get_param,
+> +		.set_param = adreno_set_param,
+> +		.hw_init = a6xx_hw_init,
+> +		.pm_suspend = a6xx_pm_suspend,
+> +		.pm_resume = a6xx_pm_resume,
+> +		.recover = a6xx_recover,
+> +		.submit = a6xx_submit,
+> +		.active_ring = a6xx_active_ring,
+> +		.irq = a6xx_irq,
+> +		.destroy = a6xx_destroy,
+> +#if defined(CONFIG_DRM_MSM_GPU_STATE)
+> +		.show = a6xx_show,
+> +#endif
+> +		.gpu_busy = a6xx_gpu_busy,
+> +#if defined(CONFIG_DRM_MSM_GPU_STATE)
+> +		.gpu_state_get = a6xx_gpu_state_get,
+> +		.gpu_state_put = a6xx_gpu_state_put,
+> +#endif
+> +		.create_address_space = a6xx_create_address_space,
+> +		.create_private_address_space = a6xx_create_private_address_space,
+> +		.get_rptr = a6xx_get_rptr,
+> +		.progress = a6xx_progress,
+> +	},
+> +	.get_timestamp = a6xx_get_timestamp,
+> +};
+> +
+>   struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+>   {
+>   	struct msm_drm_private *priv = dev->dev_private;
+> @@ -2052,7 +2187,9 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+>   			adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
+>   		adreno_gpu->base.hw_apriv = true;
+>   
+> -	a6xx_llc_slices_init(pdev, a6xx_gpu);
+> +	/* No LLCC on non-RPMh (and by extension, non-GMU) SoCs */
+> +	if (info && info->quirks & ~ADRENO_QUIRK_GMU_WRAPPER)
+> +		a6xx_llc_slices_init(pdev, a6xx_gpu);
+>   
+>   	ret = a6xx_set_supported_hw(&pdev->dev, config->rev);
+>   	if (ret) {
+> @@ -2060,7 +2197,10 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+>   		return ERR_PTR(ret);
+>   	}
+>   
+> -	ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs, 1);
+> +	if (info && info->quirks & ADRENO_QUIRK_GMU_WRAPPER)
+
+I think !info should be a fatal error here.
+
+Also you can set gpu->info early in this function and use the existing 
+adreno_has_gmu_wrapper() instead of hand-coding it here.
+
+> +		ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs_gmuwrapper, 1);
+> +	else
+> +		ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs, 1);
+>   	if (ret) {
+>   		a6xx_destroy(&(a6xx_gpu->base.base));
+>   		return ERR_PTR(ret);
+> @@ -2075,11 +2215,13 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+>   
+>   	/* Check if there is a GMU phandle and set it up */
+>   	node = of_parse_phandle(pdev->dev.of_node, "qcom,gmu", 0);
+> -
+>   	/* FIXME: How do we gracefully handle this? */
+>   	BUG_ON(!node);
+>   
+> -	ret = a6xx_gmu_init(a6xx_gpu, node);
+> +	if (adreno_has_gmu_wrapper(adreno_gpu))
+> +		ret = a6xx_gmu_wrapper_init(a6xx_gpu, node);
+> +	else
+> +		ret = a6xx_gmu_init(a6xx_gpu, node);
+>   	of_node_put(node);
+>   	if (ret) {
+>   		a6xx_destroy(&(a6xx_gpu->base.base));
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> index eea2e60ce3b7..51a7656072fa 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+> @@ -76,6 +76,7 @@ int a6xx_gmu_set_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
+>   void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
+>   
+>   int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
+> +int a6xx_gmu_wrapper_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
+>   void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
+>   
+>   void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+> index b7e217d00a22..e11e8a02ac22 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+> @@ -1041,16 +1041,18 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu)
+>   	/* Get the generic state from the adreno core */
+>   	adreno_gpu_state_get(gpu, &a6xx_state->base);
+>   
+> -	a6xx_get_gmu_registers(gpu, a6xx_state);
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
+> +		a6xx_get_gmu_registers(gpu, a6xx_state);
+>   
+> -	a6xx_state->gmu_log = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.log);
+> -	a6xx_state->gmu_hfi = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.hfi);
+> -	a6xx_state->gmu_debug = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.debug);
+> +		a6xx_state->gmu_log = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.log);
+> +		a6xx_state->gmu_hfi = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.hfi);
+> +		a6xx_state->gmu_debug = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.debug);
+>   
+> -	a6xx_snapshot_gmu_hfi_history(gpu, a6xx_state);
+> +		a6xx_snapshot_gmu_hfi_history(gpu, a6xx_state);
+> +	}
+>   
+>   	/* If GX isn't on the rest of the data isn't going to be accessible */
+> -	if (!a6xx_gmu_gx_is_on(&a6xx_gpu->gmu))
+> +	if (!adreno_has_gmu_wrapper(adreno_gpu) && !a6xx_gmu_gx_is_on(&a6xx_gpu->gmu))
+>   		return &a6xx_state->base;
+>   
+>   	/* Get the banks of indexed registers */
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> index b4f9b1343d63..7c5e0a90b5fb 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> @@ -32,6 +32,7 @@ enum {
+>   #define ADRENO_QUIRK_TWO_PASS_USE_WFI		BIT(0)
+>   #define ADRENO_QUIRK_FAULT_DETECT_MASK		BIT(1)
+>   #define ADRENO_QUIRK_LMLOADKILL_DISABLE		BIT(2)
+> +#define ADRENO_QUIRK_GMU_WRAPPER		BIT(3)
+>   
+>   struct adreno_rev {
+>   	uint8_t  core;
+> @@ -145,6 +146,11 @@ struct adreno_platform_config {
+>   
+>   bool adreno_cmp_rev(struct adreno_rev rev1, struct adreno_rev rev2);
+>   
+> +static inline bool adreno_has_gmu_wrapper(struct adreno_gpu *gpu)
+> +{
+> +	return !!(gpu->info->quirks & ADRENO_QUIRK_GMU_WRAPPER);
+> +}
+> +
+>   static inline bool adreno_is_a2xx(struct adreno_gpu *gpu)
+>   {
+>   	return (gpu->revn < 300);
 
 -- 
-thanks,
-
-Mimi
+With best wishes
+Dmitry
 
