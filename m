@@ -2,145 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED54669AC61
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299EB69AC63
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBQN1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S229595AbjBQN2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQN1L (ORCPT
+        with ESMTP id S229436AbjBQN2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:27:11 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F032564B1A;
-        Fri, 17 Feb 2023 05:27:10 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 5D15F20B9C3D; Fri, 17 Feb 2023 05:27:10 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5D15F20B9C3D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676640430;
-        bh=1XQPwIYtARC3Ha2D1JM0GDKjkekBcLSmNRRm5xcWlKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JIwNfwO0iE/wqX1tA1UBaC0L4E3QSIMrN8FjQEPY+U50gsyd/uT8bM90j+D1R/e8J
-         nZnLqGcTFL5E4zXZ+PW16Uc/RH9DUVmO+1V0Kjt4Ve+7V4zcThGQIEKLMXUreSkXVu
-         Cc1w2yYXuuk5lG7K4ye/nC552zkzuuFv7Mu6n1gk=
-Date:   Fri, 17 Feb 2023 05:27:10 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        dphadke@linux.microsoft.com
-Subject: Re: [PATCH v5 5/5] Driver: VMBus: Add device tree support
-Message-ID: <20230217132710.GA4165@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675944939-22631-1-git-send-email-ssengar@linux.microsoft.com>
- <1675944939-22631-6-git-send-email-ssengar@linux.microsoft.com>
- <CAL_JsqK0WgWm-mG=fYyDVAi4uhL+fM0OD7KEF+xYYOOGNX8-oQ@mail.gmail.com>
- <20230209174641.GB1346@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAL_JsqK+4ecEmGyo0jVs3B-E6Rjj4Lo8vB0En6pEUR1P4cRXpA@mail.gmail.com>
- <20230213112439.GA15305@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213112439.GA15305@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 08:28:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16FE5970E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 05:28:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B2DB1FF8B;
+        Fri, 17 Feb 2023 13:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676640480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=YekjZ3H5MCLdiYVTszYT3w/iCokZtc8k5URi/PP8Enw=;
+        b=SQjoMkB10KasDW+s+zAjMZRWqXvms6c/O5OeY6ZMU+Z/FJd5R7XYcEwTv6ZsWlosu0YcS1
+        T6eHPqpUS4EsyKbtXZhXGdp7Dh1v3KAYYxdMM/iKifVZMHXU1d36MB7CUisDQoEPJEJmCF
+        7qWUmvvqK0v3ijO+UPNa3YbVcSbHBfc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676640480;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=YekjZ3H5MCLdiYVTszYT3w/iCokZtc8k5URi/PP8Enw=;
+        b=uSYpmr2zh817jdLtvh+vMcHdoUqDOUZR4J+7Vj5B1Rm4R1f7eyBfHBY/NxFZGaa9Wx/4oG
+        cl58xFYRZEaQ5JDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 396EE138E3;
+        Fri, 17 Feb 2023 13:28:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O7dEDeCA72MtAwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 17 Feb 2023 13:28:00 +0000
+Date:   Fri, 17 Feb 2023 14:27:59 +0100
+Message-ID: <87lekwh15s.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.2
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 03:24:39AM -0800, Saurabh Singh Sengar wrote:
-> On Fri, Feb 10, 2023 at 04:37:28PM -0600, Rob Herring wrote:
-> > On Thu, Feb 9, 2023 at 11:46 AM Saurabh Singh Sengar
-> > <ssengar@linux.microsoft.com> wrote:
-> > >
-> > > On Thu, Feb 09, 2023 at 09:50:31AM -0600, Rob Herring wrote:
-> > > > On Thu, Feb 9, 2023 at 6:15 AM Saurabh Sengar
-> > > > <ssengar@linux.microsoft.com> wrote:
-> > > > >
-> > > > > Update the driver to support device tree boot as well along with ACPI.
-> > > >
-> > > > Devicetree
-> > 
-> > [...]
-> > 
-> > > > > +       for_each_of_range(&parser, &range) {
-> > > > > +               struct resource *res;
-> > > > > +
-> > > > > +               res = kzalloc(sizeof(*res), GFP_ATOMIC);
-> > > > > +               if (!res)
-> > > > > +                       return -ENOMEM;
-> > > > > +
-> > > > > +               res->name = "hyperv mmio";
-> > > > > +               res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
-> > > > > +               res->start = range.pci_addr;
-> > > >
-> > > > This is not PCI. It's a union, so use 'bus_addr' instead.
-> > > >
-> > > > But wait, resources and IORESOURCE_MEM are *CPU* addresses. You need
-> > > > cpu_addr here. Your DT happens to do 1:1 addresses so it happens to
-> > > > work either way.
-> > >
-> > > bus_addr works for us, will send V6
-> > 
-> > Sigh. bus_addr may work, but is wrong as I explained.
-> > 
-> > And you've already sent v6... Please slow down your pace with sending
-> > new versions. 4 versions in a week is too much. Give others time to
-> > comment and me to respond to discussions. Like a week...
-> 
-> I apologize if my actions may have come across as overly hasty. I will make
-> sure to allow for more time between submissions in the future, to ensure that
-> everyone has an adequate opportunity to review and provide feedback.
-> 
-> Regarding the use of bus_addr instead of cpu_addr, I found that cpu_addr was
-> populating as OF_BAD_ADDR while bus_addr was populating correctly.  I think
-> this is because I should be defining a empty ranges property in parent node
-> for indicating 1:1 mapping between parent and child.
-> 
-> But once I add empty ranges in property I get other warnings by dt_binding_check
-> tool. After fixing all I am able to come up with below device tree example, please
-> let me know if there is anything to be corrected. If this is good I will send
-> the next version (offcource after a week :)) using cpu_addr.
-> 
->     soc {
->         #address-cells = <2>;
->         #size-cells = <1>;
->         bus {
->             compatible = "simple-bus";
->             #address-cells = <2>;
->             #size-cells = <1>;
->             ranges;
-> 
->             vmbus@ff0000000 {
->                 compatible = "microsoft,vmbus";
->                 #address-cells = <2>;
->                 #size-cells = <1>;
->                 ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
->             };
->         };
->     };
-> 
-> > 
+Linus,
 
-Rob,
+please pull sound fixes for v6.2 from:
 
-If you find the above changes satisfactory, please do let me know so that
-I can send the updated version.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-fix-6.2
 
-As far as I am aware, all the pending comments and issues have been addressed
-in this series. However, if there are any remaining concerns or feedback that
-require attention, please let me know.
+The topmost commit is e97fc9cffbb9f372b53b42c36cd7b20aab44a554
 
-- Saurabh
+----------------------------------------------------------------
 
-> > Rob
+sound fixes for 6.2
+
+A few last-minute fixes.  The significant ones are two ASoC SOF
+regression fixes while the rest are trivial HD-audio quirks.
+All are small / one-liners and should be pretty safe to take.
+
+----------------------------------------------------------------
+
+Andy Chi (2):
+      ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform.
+      ALSA: hda/realtek: Enable mute/micmute LEDs and speaker support for HP Laptops
+
+Bo Liu (1):
+      ALSA: hda/conexant: add a new hda codec SN6180
+
+Cezary Rojewski (1):
+      ALSA: hda: Fix codec device field initializan
+
+Kailang Yang (1):
+      ALSA: hda/realtek - fixed wrong gpio assigned
+
+Pierre-Louis Bossart (1):
+      ASoC: SOF: Intel: hda-dai: fix possible stream_tag leak
+
+Rander Wang (1):
+      ASoC: SOF: ops: refine parameters order in function snd_sof_dsp_update8
+
+---
+ sound/pci/hda/hda_codec.c      | 2 +-
+ sound/pci/hda/patch_conexant.c | 1 +
+ sound/pci/hda/patch_realtek.c  | 9 ++++++++-
+ sound/soc/sof/intel/hda-dai.c  | 8 ++++----
+ sound/soc/sof/ops.h            | 2 +-
+ 5 files changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
+index ac1cc7c5290e..2e728aad6771 100644
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -927,7 +927,6 @@ snd_hda_codec_device_init(struct hda_bus *bus, unsigned int codec_addr,
+ 	codec->depop_delay = -1;
+ 	codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
+ 	codec->core.dev.release = snd_hda_codec_dev_release;
+-	codec->core.exec_verb = codec_exec_verb;
+ 	codec->core.type = HDA_DEV_LEGACY;
+ 
+ 	mutex_init(&codec->spdif_mutex);
+@@ -998,6 +997,7 @@ int snd_hda_codec_device_new(struct hda_bus *bus, struct snd_card *card,
+ 	if (snd_BUG_ON(codec_addr > HDA_MAX_CODEC_ADDRESS))
+ 		return -EINVAL;
+ 
++	codec->core.exec_verb = codec_exec_verb;
+ 	codec->card = card;
+ 	codec->addr = codec_addr;
+ 
+diff --git a/sound/pci/hda/patch_conexant.c b/sound/pci/hda/patch_conexant.c
+index 7b1a30a551f6..75e1d00074b9 100644
+--- a/sound/pci/hda/patch_conexant.c
++++ b/sound/pci/hda/patch_conexant.c
+@@ -1125,6 +1125,7 @@ static const struct hda_device_id snd_hda_id_conexant[] = {
+ 	HDA_CODEC_ENTRY(0x14f11f87, "SN6140", patch_conexant_auto),
+ 	HDA_CODEC_ENTRY(0x14f12008, "CX8200", patch_conexant_auto),
+ 	HDA_CODEC_ENTRY(0x14f120d0, "CX11970", patch_conexant_auto),
++	HDA_CODEC_ENTRY(0x14f120d1, "SN6180", patch_conexant_auto),
+ 	HDA_CODEC_ENTRY(0x14f15045, "CX20549 (Venice)", patch_conexant_auto),
+ 	HDA_CODEC_ENTRY(0x14f15047, "CX20551 (Waikiki)", patch_conexant_auto),
+ 	HDA_CODEC_ENTRY(0x14f15051, "CX20561 (Hermosa)", patch_conexant_auto),
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 1134a493d225..e103bb3693c0 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -832,7 +832,7 @@ static int alc_subsystem_id(struct hda_codec *codec, const hda_nid_t *ports)
+ 			alc_setup_gpio(codec, 0x02);
+ 			break;
+ 		case 7:
+-			alc_setup_gpio(codec, 0x03);
++			alc_setup_gpio(codec, 0x04);
+ 			break;
+ 		case 5:
+ 		default:
+@@ -9432,10 +9432,17 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	 SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b42, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b43, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b44, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b45, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b46, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b87, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b8a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b8b, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b8d, "HP", ALC236_FIXUP_HP_GPIO_LED),
+diff --git a/sound/soc/sof/intel/hda-dai.c b/sound/soc/sof/intel/hda-dai.c
+index 1c3d4887aa30..a642c3067ec5 100644
+--- a/sound/soc/sof/intel/hda-dai.c
++++ b/sound/soc/sof/intel/hda-dai.c
+@@ -216,6 +216,10 @@ static int hda_link_dma_hw_params(struct snd_pcm_substream *substream,
+ 	sdev = snd_soc_component_get_drvdata(cpu_dai->component);
+ 	bus = sof_to_bus(sdev);
+ 
++	hlink = snd_hdac_ext_bus_get_hlink_by_name(bus, codec_dai->component->name);
++	if (!hlink)
++		return -EINVAL;
++
+ 	hext_stream = snd_soc_dai_get_dma_data(cpu_dai, substream);
+ 	if (!hext_stream) {
+ 		hext_stream = hda_link_stream_assign(bus, substream);
+@@ -225,10 +229,6 @@ static int hda_link_dma_hw_params(struct snd_pcm_substream *substream,
+ 		snd_soc_dai_set_dma_data(cpu_dai, substream, (void *)hext_stream);
+ 	}
+ 
+-	hlink = snd_hdac_ext_bus_get_hlink_by_name(bus, codec_dai->component->name);
+-	if (!hlink)
+-		return -EINVAL;
+-
+ 	/* set the hdac_stream in the codec dai */
+ 	snd_soc_dai_set_stream(codec_dai, hdac_stream(hext_stream), substream->stream);
+ 
+diff --git a/sound/soc/sof/ops.h b/sound/soc/sof/ops.h
+index c52752250565..3b3f3cf7af38 100644
+--- a/sound/soc/sof/ops.h
++++ b/sound/soc/sof/ops.h
+@@ -357,7 +357,7 @@ static inline u64 snd_sof_dsp_read64(struct snd_sof_dev *sdev, u32 bar,
+ }
+ 
+ static inline void snd_sof_dsp_update8(struct snd_sof_dev *sdev, u32 bar,
+-				       u32 offset, u8 value, u8 mask)
++				       u32 offset, u8 mask, u8 value)
+ {
+ 	u8 reg;
+ 
