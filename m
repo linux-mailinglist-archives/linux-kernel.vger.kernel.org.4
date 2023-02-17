@@ -2,106 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B0969AB74
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DAF69AB7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjBQM1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S229824AbjBQM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjBQM1D (ORCPT
+        with ESMTP id S229615AbjBQM2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:27:03 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AD26605C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:27:00 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id t2so234042ilm.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCaWCJFu+kQ6aYpJSur8vSOLT6u8BSUnkVg9ZbTVJ1w=;
-        b=oKiWyQZ/8W1DnFy+0gahyJT7r3yJpivs80am/ky9koA2gSEUBPdG6HSNA9b15etF6i
-         KI8NqkXM6yq9S6eSLcDzdH5lz68ISZI+IMsZPRiqQA+N6OeKifHv8bd1diayEYnK2qd7
-         9iJHQjOVEjMZe0/5QS/DJR/mCU6CugrNtf6DJDMl0bqGGPmmafrnz3adQ2ssUZOovdBH
-         mqmudAsSBuTBoQniyIoeXbaajpzyiQcJqKz1NYXjFv1Cqf0Swr/pbRF0inW0buzlfEnr
-         CKS5UHMDOZdhVdT3onQV1Rf3pjuNyEZr8L5pJrrvOZqBS7ywrnDWcaHywflHaBRa6GND
-         8GlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SCaWCJFu+kQ6aYpJSur8vSOLT6u8BSUnkVg9ZbTVJ1w=;
-        b=RRKmewre/SAgc5zO4aEMcNYEgDwP9c1I4pfMEwsQI36cSPnvX02DbxrXIV8cvbpAVf
-         P2jrzhbwVi+cD7E3pinwfVgeBK2OjXJt3zKHTItKI0YwN8Mc9vV2H9FmqjCzGNytkaTD
-         iY7ueALfq083oSJSqshTHhZbg/tGYU6f1tImbMOK9mKi1Omj9qWKAXLsc9pQwkwwha5g
-         8GPdtC+SnEBTzelb8Sw/9Opx6XUrNcHy/CQQ65FLphQ+RauINKqS+EHKuOHflMalug5H
-         70eEw3LQwgKofAU7cJu6xetmMtxzO/W91sKX0DRmtQvwLGLFYlwDcFj35XVGHyA5MbIs
-         Jj3Q==
-X-Gm-Message-State: AO0yUKUpYdswn2/ZTJAK9QL9b/ZS50HCpc1Tgg4LzzM6JWLugOpKYDOH
-        2EibDdCg6h/MYaqizy1MQXHwoQPoJPFhfWs3Aqc=
-X-Google-Smtp-Source: AK7set+onVhjTE2eO+C4Sfrq9YcgvRJqoKKcwh0JHwYrlI/XWKxITJYWa091zNsxff/6kndmbv0KPvkpMr5oV23hitM=
-X-Received: by 2002:a05:6e02:be5:b0:313:babd:fa78 with SMTP id
- d5-20020a056e020be500b00313babdfa78mr208682ilu.3.1676636819754; Fri, 17 Feb
- 2023 04:26:59 -0800 (PST)
+        Fri, 17 Feb 2023 07:28:51 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACB166058
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:28:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 33E3833992;
+        Fri, 17 Feb 2023 12:28:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676636928; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W35bRMr+ZnD9v0BTJvpprTtTre4YpYiNV4Olzwh1+4s=;
+        b=eh2zgQhxy5kLFKKaL7P3SbkL7K2PIQJClAShBTqej3/R0sMQc0Tlfo6UqOckm8PUHXi7Gu
+        22RKHv0l0ZQ5YvWigMhsNF0wyLJ64ZYk8q8epcbmWkRXHw9Vj1OW8hB1B0mUBqThatljQ3
+        4AVhB0PHQ3Qk/5f2T7+95txC77NEWgI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676636928;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W35bRMr+ZnD9v0BTJvpprTtTre4YpYiNV4Olzwh1+4s=;
+        b=SlKXv8Xp7UoY+BllRVv2sBgoiZmbmbSTY+FY6TE+bLX82sn85ZEL3VVZAsef3Cr0PE8DCx
+        qYcmXhQHc6STItCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AF58713274;
+        Fri, 17 Feb 2023 12:28:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Cv/NKf9y72OrZgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 12:28:47 +0000
+Message-ID: <fe549bf7-a704-abda-ac1d-221a96de344d@suse.de>
+Date:   Fri, 17 Feb 2023 13:28:47 +0100
 MIME-Version: 1.0
-Reply-To: vera.wilfried145@gmail.com
-Sender: godsonwilliams140@gmail.com
-Received: by 2002:a02:1142:0:b0:3c5:16ea:873 with HTTP; Fri, 17 Feb 2023
- 04:26:59 -0800 (PST)
-From:   Vera Wilfried <vera.wilfried145@gmail.com>
-Date:   Fri, 17 Feb 2023 13:26:59 +0100
-X-Google-Sender-Auth: H0WjXD1eVXyKRQMNrjDP61xcyO0
-Message-ID: <CA+gcwbmeHboBRe_DkmCS6ZGOcWKCp84NgoMdd2u4gMc56_XKpg@mail.gmail.com>
-Subject: Compliment of the season
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 05/11] drm/shmem: Switch to use drm_* debug helpers
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <20230108210445.3948344-6-dmitry.osipenko@collabora.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230108210445.3948344-6-dmitry.osipenko@collabora.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------80Pt9bKHSt0abgr9F0qb2PKU"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hallo,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------80Pt9bKHSt0abgr9F0qb2PKU
+Content-Type: multipart/mixed; boundary="------------VAaKY3Kb0f9rBXPZnVL0qNvW";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Gustavo Padovan <gustavo.padovan@collabora.com>,
+ Daniel Stone <daniel@fooishbar.org>,
+ Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
+ Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+ Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ kernel@collabora.com, virtualization@lists.linux-foundation.org
+Message-ID: <fe549bf7-a704-abda-ac1d-221a96de344d@suse.de>
+Subject: Re: [PATCH v10 05/11] drm/shmem: Switch to use drm_* debug helpers
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <20230108210445.3948344-6-dmitry.osipenko@collabora.com>
+In-Reply-To: <20230108210445.3948344-6-dmitry.osipenko@collabora.com>
 
-Ich bin Miss Vera Wilfred, ich bin ein 22-j=C3=A4hriges Waisenm=C3=A4dchen,=
- das
-hei=C3=9Ft, weil ich keine Eltern habe, habe ich etwa (10.500.000,00
-US-Dollar) zehn Millionen, f=C3=BCnfhunderttausend US-Dollar.
+--------------VAaKY3Kb0f9rBXPZnVL0qNvW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Was ich von meinem verstorbenen Vater geerbt habe, hat er den Fonds
-auf ein Fest-/Streukonto bei einer der besten Banken hier im Land
-eingezahlt.
+DQoNCkFtIDA4LjAxLjIzIHVtIDIyOjA0IHNjaHJpZWIgRG1pdHJ5IE9zaXBlbmtvOg0KPiBF
+YXNlIGRlYnVnZ2luZyBvZiBhIG11bHRpLUdQVSBzeXN0ZW0gYnkgdXNpbmcgZHJtX1dBUk5f
+KigpIGFuZA0KPiBkcm1fZGJnX2ttcygpIGhlbHBlcnMgdGhhdCBwcmludCBvdXQgRFJNIGRl
+dmljZSBuYW1lIGNvcnJlc3BvbmRpbmcNCj4gdG8gc2htZW0gR0VNLg0KPiANCj4gU3VnZ2Vz
+dGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gU2ln
+bmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtvIDxkbWl0cnkub3NpcGVua29AY29sbGFib3Jh
+LmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBz
+dXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hl
+bHBlci5jIHwgMzggKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hh
+bmdlZCwgMjIgaW5zZXJ0aW9ucygrKSwgMTYgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMgYi9kcml2ZXJz
+L2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0KPiBpbmRleCBmMjFmNDc3Mzc4MTcu
+LjUwMDZmN2RhN2YyZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1f
+c2htZW1faGVscGVyLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1f
+aGVscGVyLmMNCj4gQEAgLTE0MSw3ICsxNDEsNyBAQCB2b2lkIGRybV9nZW1fc2htZW1fZnJl
+ZShzdHJ1Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtKQ0KPiAgIHsNCj4gICAJc3Ry
+dWN0IGRybV9nZW1fb2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICAgDQo+IC0JV0FS
+Tl9PTihzaG1lbS0+dm1hcF91c2VfY291bnQpOw0KPiArCWRybV9XQVJOX09OKG9iai0+ZGV2
+LCBzaG1lbS0+dm1hcF91c2VfY291bnQpOw0KPiAgIA0KPiAgIAlpZiAob2JqLT5pbXBvcnRf
+YXR0YWNoKSB7DQo+ICAgCQlkcm1fcHJpbWVfZ2VtX2Rlc3Ryb3kob2JqLCBzaG1lbS0+c2d0
+KTsNCj4gQEAgLTE1Niw3ICsxNTYsNyBAQCB2b2lkIGRybV9nZW1fc2htZW1fZnJlZShzdHJ1
+Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtKQ0KPiAgIAkJCWRybV9nZW1fc2htZW1f
+cHV0X3BhZ2VzKHNobWVtKTsNCj4gICAJfQ0KPiAgIA0KPiAtCVdBUk5fT04oc2htZW0tPnBh
+Z2VzX3VzZV9jb3VudCk7DQo+ICsJZHJtX1dBUk5fT04ob2JqLT5kZXYsIHNobWVtLT5wYWdl
+c191c2VfY291bnQpOw0KPiAgIA0KPiAgIAlkcm1fZ2VtX29iamVjdF9yZWxlYXNlKG9iaik7
+DQo+ICAgCW11dGV4X2Rlc3Ryb3koJnNobWVtLT5wYWdlc19sb2NrKTsNCj4gQEAgLTE3NSw3
+ICsxNzUsOCBAQCBzdGF0aWMgaW50IGRybV9nZW1fc2htZW1fZ2V0X3BhZ2VzX2xvY2tlZChz
+dHJ1Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtKQ0KPiAgIA0KPiAgIAlwYWdlcyA9
+IGRybV9nZW1fZ2V0X3BhZ2VzKG9iaik7DQo+ICAgCWlmIChJU19FUlIocGFnZXMpKSB7DQo+
+IC0JCURSTV9ERUJVR19LTVMoIkZhaWxlZCB0byBnZXQgcGFnZXMgKCVsZClcbiIsIFBUUl9F
+UlIocGFnZXMpKTsNCj4gKwkJZHJtX2RiZ19rbXMob2JqLT5kZXYsICJGYWlsZWQgdG8gZ2V0
+IHBhZ2VzICglbGQpXG4iLA0KPiArCQkJICAgIFBUUl9FUlIocGFnZXMpKTsNCj4gICAJCXNo
+bWVtLT5wYWdlc191c2VfY291bnQgPSAwOw0KPiAgIAkJcmV0dXJuIFBUUl9FUlIocGFnZXMp
+Ow0KPiAgIAl9DQo+IEBAIC0yMDcsOSArMjA4LDEwIEBAIHN0YXRpYyBpbnQgZHJtX2dlbV9z
+aG1lbV9nZXRfcGFnZXNfbG9ja2VkKHN0cnVjdCBkcm1fZ2VtX3NobWVtX29iamVjdCAqc2ht
+ZW0pDQo+ICAgICovDQo+ICAgaW50IGRybV9nZW1fc2htZW1fZ2V0X3BhZ2VzKHN0cnVjdCBk
+cm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0pDQo+ICAgew0KPiArCXN0cnVjdCBkcm1fZ2Vt
+X29iamVjdCAqb2JqID0gJnNobWVtLT5iYXNlOw0KPiAgIAlpbnQgcmV0Ow0KPiAgIA0KPiAt
+CVdBUk5fT04oc2htZW0tPmJhc2UuaW1wb3J0X2F0dGFjaCk7DQo+ICsJZHJtX1dBUk5fT04o
+b2JqLT5kZXYsIG9iai0+aW1wb3J0X2F0dGFjaCk7DQo+ICAgDQo+ICAgCXJldCA9IG11dGV4
+X2xvY2tfaW50ZXJydXB0aWJsZSgmc2htZW0tPnBhZ2VzX2xvY2spOw0KPiAgIAlpZiAocmV0
+KQ0KPiBAQCAtMjI1LDcgKzIyNyw3IEBAIHN0YXRpYyB2b2lkIGRybV9nZW1fc2htZW1fcHV0
+X3BhZ2VzX2xvY2tlZChzdHJ1Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtKQ0KPiAg
+IHsNCj4gICAJc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+
+ICAgDQo+IC0JaWYgKFdBUk5fT05fT05DRSghc2htZW0tPnBhZ2VzX3VzZV9jb3VudCkpDQo+
+ICsJaWYgKGRybV9XQVJOX09OX09OQ0Uob2JqLT5kZXYsICFzaG1lbS0+cGFnZXNfdXNlX2Nv
+dW50KSkNCj4gICAJCXJldHVybjsNCj4gICANCj4gICAJaWYgKC0tc2htZW0tPnBhZ2VzX3Vz
+ZV9jb3VudCA+IDApDQo+IEBAIC0yNjgsNyArMjcwLDkgQEAgRVhQT1JUX1NZTUJPTChkcm1f
+Z2VtX3NobWVtX3B1dF9wYWdlcyk7DQo+ICAgICovDQo+ICAgaW50IGRybV9nZW1fc2htZW1f
+cGluKHN0cnVjdCBkcm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0pDQo+ICAgew0KPiAtCVdB
+Uk5fT04oc2htZW0tPmJhc2UuaW1wb3J0X2F0dGFjaCk7DQo+ICsJc3RydWN0IGRybV9nZW1f
+b2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICsNCj4gKwlkcm1fV0FSTl9PTihvYmot
+PmRldiwgb2JqLT5pbXBvcnRfYXR0YWNoKTsNCj4gICANCj4gICAJcmV0dXJuIGRybV9nZW1f
+c2htZW1fZ2V0X3BhZ2VzKHNobWVtKTsNCj4gICB9DQo+IEBAIC0yODMsNyArMjg3LDkgQEAg
+RVhQT1JUX1NZTUJPTChkcm1fZ2VtX3NobWVtX3Bpbik7DQo+ICAgICovDQo+ICAgdm9pZCBk
+cm1fZ2VtX3NobWVtX3VucGluKHN0cnVjdCBkcm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0p
+DQo+ICAgew0KPiAtCVdBUk5fT04oc2htZW0tPmJhc2UuaW1wb3J0X2F0dGFjaCk7DQo+ICsJ
+c3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICsNCj4gKwlk
+cm1fV0FSTl9PTihvYmotPmRldiwgb2JqLT5pbXBvcnRfYXR0YWNoKTsNCj4gICANCj4gICAJ
+ZHJtX2dlbV9zaG1lbV9wdXRfcGFnZXMoc2htZW0pOw0KPiAgIH0NCj4gQEAgLTMwMyw3ICsz
+MDksNyBAQCBzdGF0aWMgaW50IGRybV9nZW1fc2htZW1fdm1hcF9sb2NrZWQoc3RydWN0IGRy
+bV9nZW1fc2htZW1fb2JqZWN0ICpzaG1lbSwNCj4gICAJaWYgKG9iai0+aW1wb3J0X2F0dGFj
+aCkgew0KPiAgIAkJcmV0ID0gZG1hX2J1Zl92bWFwKG9iai0+aW1wb3J0X2F0dGFjaC0+ZG1h
+YnVmLCBtYXApOw0KPiAgIAkJaWYgKCFyZXQpIHsNCj4gLQkJCWlmIChXQVJOX09OKG1hcC0+
+aXNfaW9tZW0pKSB7DQo+ICsJCQlpZiAoZHJtX1dBUk5fT04ob2JqLT5kZXYsIG1hcC0+aXNf
+aW9tZW0pKSB7DQo+ICAgCQkJCWRtYV9idWZfdnVubWFwKG9iai0+aW1wb3J0X2F0dGFjaC0+
+ZG1hYnVmLCBtYXApOw0KPiAgIAkJCQlyZXQgPSAtRUlPOw0KPiAgIAkJCQlnb3RvIGVycl9w
+dXRfcGFnZXM7DQo+IEBAIC0zMjgsNyArMzM0LDcgQEAgc3RhdGljIGludCBkcm1fZ2VtX3No
+bWVtX3ZtYXBfbG9ja2VkKHN0cnVjdCBkcm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0sDQo+
+ICAgCX0NCj4gICANCj4gICAJaWYgKHJldCkgew0KPiAtCQlEUk1fREVCVUdfS01TKCJGYWls
+ZWQgdG8gdm1hcCBwYWdlcywgZXJyb3IgJWRcbiIsIHJldCk7DQo+ICsJCWRybV9kYmdfa21z
+KG9iai0+ZGV2LCAiRmFpbGVkIHRvIHZtYXAgcGFnZXMsIGVycm9yICVkXG4iLCByZXQpOw0K
+PiAgIAkJZ290byBlcnJfcHV0X3BhZ2VzOw0KPiAgIAl9DQo+ICAgDQo+IEBAIC0zNzgsNyAr
+Mzg0LDcgQEAgc3RhdGljIHZvaWQgZHJtX2dlbV9zaG1lbV92dW5tYXBfbG9ja2VkKHN0cnVj
+dCBkcm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0sDQo+ICAgew0KPiAgIAlzdHJ1Y3QgZHJt
+X2dlbV9vYmplY3QgKm9iaiA9ICZzaG1lbS0+YmFzZTsNCj4gICANCj4gLQlpZiAoV0FSTl9P
+Tl9PTkNFKCFzaG1lbS0+dm1hcF91c2VfY291bnQpKQ0KPiArCWlmIChkcm1fV0FSTl9PTl9P
+TkNFKG9iai0+ZGV2LCAhc2htZW0tPnZtYXBfdXNlX2NvdW50KSkNCj4gICAJCXJldHVybjsN
+Cj4gICANCj4gICAJaWYgKC0tc2htZW0tPnZtYXBfdXNlX2NvdW50ID4gMCkNCj4gQEAgLTQ2
+Myw3ICs0NjksNyBAQCB2b2lkIGRybV9nZW1fc2htZW1fcHVyZ2VfbG9ja2VkKHN0cnVjdCBk
+cm1fZ2VtX3NobWVtX29iamVjdCAqc2htZW0pDQo+ICAgCXN0cnVjdCBkcm1fZ2VtX29iamVj
+dCAqb2JqID0gJnNobWVtLT5iYXNlOw0KPiAgIAlzdHJ1Y3QgZHJtX2RldmljZSAqZGV2ID0g
+b2JqLT5kZXY7DQo+ICAgDQo+IC0JV0FSTl9PTighZHJtX2dlbV9zaG1lbV9pc19wdXJnZWFi
+bGUoc2htZW0pKTsNCj4gKwlkcm1fV0FSTl9PTihvYmotPmRldiwgIWRybV9nZW1fc2htZW1f
+aXNfcHVyZ2VhYmxlKHNobWVtKSk7DQo+ICAgDQo+ICAgCWRtYV91bm1hcF9zZ3RhYmxlKGRl
+di0+ZGV2LCBzaG1lbS0+c2d0LCBETUFfQklESVJFQ1RJT05BTCwgMCk7DQo+ICAgCXNnX2Zy
+ZWVfdGFibGUoc2htZW0tPnNndCk7DQo+IEBAIC01NTUsNyArNTYxLDcgQEAgc3RhdGljIHZt
+X2ZhdWx0X3QgZHJtX2dlbV9zaG1lbV9mYXVsdChzdHJ1Y3Qgdm1fZmF1bHQgKnZtZikNCj4g
+ICAJbXV0ZXhfbG9jaygmc2htZW0tPnBhZ2VzX2xvY2spOw0KPiAgIA0KPiAgIAlpZiAocGFn
+ZV9vZmZzZXQgPj0gbnVtX3BhZ2VzIHx8DQo+IC0JICAgIFdBUk5fT05fT05DRSghc2htZW0t
+PnBhZ2VzKSB8fA0KPiArCSAgICBkcm1fV0FSTl9PTl9PTkNFKG9iai0+ZGV2LCAhc2htZW0t
+PnBhZ2VzKSB8fA0KPiAgIAkgICAgc2htZW0tPm1hZHYgPCAwKSB7DQo+ICAgCQlyZXQgPSBW
+TV9GQVVMVF9TSUdCVVM7DQo+ICAgCX0gZWxzZSB7DQo+IEBAIC01NzQsNyArNTgwLDcgQEAg
+c3RhdGljIHZvaWQgZHJtX2dlbV9zaG1lbV92bV9vcGVuKHN0cnVjdCB2bV9hcmVhX3N0cnVj
+dCAqdm1hKQ0KPiAgIAlzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaiA9IHZtYS0+dm1fcHJp
+dmF0ZV9kYXRhOw0KPiAgIAlzdHJ1Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtID0g
+dG9fZHJtX2dlbV9zaG1lbV9vYmoob2JqKTsNCj4gICANCj4gLQlXQVJOX09OKHNobWVtLT5i
+YXNlLmltcG9ydF9hdHRhY2gpOw0KPiArCWRybV9XQVJOX09OKG9iai0+ZGV2LCBvYmotPmlt
+cG9ydF9hdHRhY2gpOw0KPiAgIA0KPiAgIAltdXRleF9sb2NrKCZzaG1lbS0+cGFnZXNfbG9j
+ayk7DQo+ICAgDQo+IEBAIC01ODMsNyArNTg5LDcgQEAgc3RhdGljIHZvaWQgZHJtX2dlbV9z
+aG1lbV92bV9vcGVuKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hKQ0KPiAgIAkgKiBtbWFw
+J2QsIHZtX29wZW4oKSBqdXN0IGdyYWJzIGFuIGFkZGl0aW9uYWwgcmVmZXJlbmNlIGZvciB0
+aGUgbmV3DQo+ICAgCSAqIG1tIHRoZSB2bWEgaXMgZ2V0dGluZyBjb3BpZWQgaW50byAoaWUu
+IG9uIGZvcmsoKSkuDQo+ICAgCSAqLw0KPiAtCWlmICghV0FSTl9PTl9PTkNFKCFzaG1lbS0+
+cGFnZXNfdXNlX2NvdW50KSkNCj4gKwlpZiAoIWRybV9XQVJOX09OX09OQ0Uob2JqLT5kZXYs
+ICFzaG1lbS0+cGFnZXNfdXNlX2NvdW50KSkNCj4gICAJCXNobWVtLT5wYWdlc191c2VfY291
+bnQrKzsNCj4gICANCj4gICAJbXV0ZXhfdW5sb2NrKCZzaG1lbS0+cGFnZXNfbG9jayk7DQo+
+IEBAIC02NzcsNyArNjgzLDcgQEAgc3RydWN0IHNnX3RhYmxlICpkcm1fZ2VtX3NobWVtX2dl
+dF9zZ190YWJsZShzdHJ1Y3QgZHJtX2dlbV9zaG1lbV9vYmplY3QgKnNobWVtKQ0KPiAgIHsN
+Cj4gICAJc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICAg
+DQo+IC0JV0FSTl9PTihzaG1lbS0+YmFzZS5pbXBvcnRfYXR0YWNoKTsNCj4gKwlkcm1fV0FS
+Tl9PTihvYmotPmRldiwgb2JqLT5pbXBvcnRfYXR0YWNoKTsNCj4gICANCj4gICAJcmV0dXJu
+IGRybV9wcmltZV9wYWdlc190b19zZyhvYmotPmRldiwgc2htZW0tPnBhZ2VzLCBvYmotPnNp
+emUgPj4gUEFHRV9TSElGVCk7DQo+ICAgfQ0KPiBAQCAtNzA4LDcgKzcxNCw3IEBAIHN0cnVj
+dCBzZ190YWJsZSAqZHJtX2dlbV9zaG1lbV9nZXRfcGFnZXNfc2d0KHN0cnVjdCBkcm1fZ2Vt
+X3NobWVtX29iamVjdCAqc2htZW0pDQo+ICAgCWlmIChzaG1lbS0+c2d0KQ0KPiAgIAkJcmV0
+dXJuIHNobWVtLT5zZ3Q7DQo+ICAgDQo+IC0JV0FSTl9PTihvYmotPmltcG9ydF9hdHRhY2gp
+Ow0KPiArCWRybV9XQVJOX09OKG9iai0+ZGV2LCBvYmotPmltcG9ydF9hdHRhY2gpOw0KPiAg
+IA0KPiAgIAlyZXQgPSBkcm1fZ2VtX3NobWVtX2dldF9wYWdlcyhzaG1lbSk7DQo+ICAgCWlm
+IChyZXQpDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZl
+bG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0
+ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJl
+cmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Mein Vater benutzte meinen Namen als seine einzige Tochter und sein
-einziges Kind f=C3=BCr die n=C3=A4chsten Angeh=C3=B6rigen des Fonds.
+--------------VAaKY3Kb0f9rBXPZnVL0qNvW--
 
-Zweitens, bei Ihrer uneingeschr=C3=A4nkten Zustimmung, mit mir zu diesem
-Zweck zusammenzuarbeiten, bekunden Sie bitte freundlicherweise Ihr
-Interesse, indem Sie mir antworten, damit ich Ihnen die erforderlichen
-Informationen und Einzelheiten zum weiteren Vorgehen zukommen lassen
-kann. Ich werde Ihnen 20 % des Geldes f=C3=BCr Ihre Hilfe anbieten.
+--------------80Pt9bKHSt0abgr9F0qb2PKU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-M=C3=B6ge Gott Sie f=C3=BCr Ihre prompte Aufmerksamkeit segnen. Meine beste=
-n und
-lieben Gr=C3=BC=C3=9Fe an Sie und Ihre ganze Familie, wenn Sie mich f=C3=BC=
-r weitere
-Einzelheiten kontaktieren.
+-----BEGIN PGP SIGNATURE-----
 
-Ich brauche Ihren Assistenten, der mir hilft, diesen Fonds in Ihrem
-Land zu investieren. Kontaktieren Sie mich jetzt f=C3=BCr weitere
-Informationen.
-Vielen Dank
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvcv8FAwAAAAAACgkQlh/E3EQov+DJ
+vQ//dgmshG7YQOREMiEkjYq9+LM3I0yJfXz0YzNc3SBS8Ufjt7kL4EBrj53YxIhyLiyMNws0SKjb
+R8x7yqByD4vUbVYrr8KGboILYsuYrhzwlpM56fXvc8GPxAE/LsRmUOPtRq438KI61PWnG1FehOWG
+uRlqrrmflpVCWzrR9CqSUv8mtw0fV9sKITeGnkhjjkxpq4au4nKKMJj7WAlny9zf+89hxGkv6UHg
+32MDmgFwBO/T6ak6zNGNcCkJGGKKMV83j7cFpUpivvTOjwqwYgxoONVwd/LsaM4aha4OMo1BUWvf
+OXsnjSPCmOacB50/E3d4KGECsLzsnzpvDpzCj1+o/R/1S4o3//sdyCC/IRGZTs4K30OvdR6gDs+E
+1ejZzXYfar9ErxACtgZkTb+rJjUG+NNzbSb/Sqa1I0PJLsE9k6EB/PFdtBsiVRLk1ADiC5znGydm
+Cd0IVSAxSzrD5dhRGuNtCfhZqcvpZxGHxsnu/iEnI7tiX/c0aL1uUIpcocOIhzBARxOj8fqWDeRc
+Br5buG9K0answ0xQ5cxGZhU9CXfgFWZgAsSyQVU8yOw8r5fAe2CGRwhPiGh3D4JAlG82iNgPm/je
+ZIDkPoXs8FmE6iEC4D1aVENALvDNEVdjgJE+DXTMuzj2R+dlGWEU9GCyPVuG/6LtqMSOOktLQ1kV
+dHc=
+=K7zj
+-----END PGP SIGNATURE-----
 
-Vera Wilfred.
+--------------80Pt9bKHSt0abgr9F0qb2PKU--
