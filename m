@@ -2,170 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5337C69B66D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F2D69B66F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBQXXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S229966AbjBQXYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjBQXXa (ORCPT
+        with ESMTP id S229980AbjBQXYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:23:30 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C2D11EA1;
-        Fri, 17 Feb 2023 15:23:29 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-171872a792fso2972583fac.3;
-        Fri, 17 Feb 2023 15:23:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H6Yd+sodJQYe42BYBBvb8iBAW4GssmfegnCeFVst0HU=;
-        b=WisbSKRmORIbfDrzOjBrCHCU2xsuu2nbcI+yUjuPhSGCcKv2zFXwKmFZHpG0xFOKxo
-         2qCku0hcOPhN/AMq8RfyqVEKFSffLM256RoPyZD58nwRPgrJkoqccxw3/5JIOuXY5Oix
-         VYByzhdM06JQ2CPRbc4Jxc0ijfxuA8X9ZO10UBuafuHi0zQE3oFXUEyVsDkIqvwLqOkZ
-         nyBtoULeaIgz0oHrUH7i1kUCCSB682SPyN1t5IPWAsHGJowSKMq25DY25bXSj5hc5/Ed
-         SV6YxK70CTJNj6bnB2xcy3J25Gkeb8w8Pp1V7YPIIG/2eoOTo8TMSqIGNADXs39f2yAH
-         I2NQ==
-X-Gm-Message-State: AO0yUKXJoxY72oOiF/mcm9E6NwLNuJUig2iBegvAzs78i6Fs5AkpbcUU
-        Vr+tyZssylbNg6OUjZNRLw==
-X-Google-Smtp-Source: AK7set9uI4W1g2C/4zLiiVPKiVE1XhOgTAe+PEaeY8yYLkF4qDghjty3XEUYzNeEr5fw7J5mdUp28w==
-X-Received: by 2002:a05:6870:78e:b0:16e:19a7:6241 with SMTP id en14-20020a056870078e00b0016e19a76241mr1218711oab.10.1676676208681;
-        Fri, 17 Feb 2023 15:23:28 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05687036c300b00171920ca53esm515359oak.0.2023.02.17.15.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 15:23:28 -0800 (PST)
-Received: (nullmailer pid 2254552 invoked by uid 1000);
-        Fri, 17 Feb 2023 23:23:27 -0000
-Date:   Fri, 17 Feb 2023 17:23:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc:     Angelo Compagnucci <angelo@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: leds: servo-pwm: Add new bindings
- for servo-pwm
-Message-ID: <20230217232327.GA2243296-robh@kernel.org>
-References: <20230217145731.3018148-1-angelo@amarulasolutions.com>
- <20230217145731.3018148-3-angelo@amarulasolutions.com>
+        Fri, 17 Feb 2023 18:24:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE895457E5;
+        Fri, 17 Feb 2023 15:24:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UjS1u+gmVzuL5FxBbKJQNccOBVKsZ9PBAvdbdSMHdSM=; b=en8a4SUIl777LJK5ENO7Zv6t+Z
+        0h8bsAAXNomTqFyetZK5sebb0DAWa7o56pBxH2uDKY98XP9wDp97ZBFimdiFQALVM/vyv7WVggcnY
+        jWN144IsO5xX+o2LzUh3G9cnv4OTxsodCZtJAcYt3RxxqbNcwA9pLpfbVAkUedMZC+Opd+PYwhivp
+        utTujW8+o5YVy/Bqayc5jP23K6YIM6LK84P4/x0qIgdnJ7u0cWYWb/AhOmO6GwplfEYVef2nC8hON
+        w3x1UEa2fdKIupyAOoXPhaoivv2ELl1F0JQNtosuy4NGnNvmPuAtVWqSOBaM6dke1cuYzVyKOdwSu
+        5Q6yyoIA==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pTA5E-00Fwjw-Uu; Fri, 17 Feb 2023 23:24:05 +0000
+Message-ID: <fec9d8ca-b385-b2e4-8f20-db427c2ae964@infradead.org>
+Date:   Fri, 17 Feb 2023 15:24:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217145731.3018148-3-angelo@amarulasolutions.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
+Content-Language: en-US
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        Qais Yousef <qyousef@layalina.io>
+References: <20230214010942.25143-1-rdunlap@infradead.org>
+ <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
+ <a2a7806b-ba53-9f37-938b-d3f48ea217f2@infradead.org>
+ <20230217115713.GA7701@alpha.franken.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230217115713.GA7701@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:57:30PM +0100, Angelo Compagnucci wrote:
-> This binding describes the binding for controlling servo motors through
-> pwm.
+
+
+On 2/17/23 03:57, Thomas Bogendoerfer wrote:
+> On Wed, Feb 15, 2023 at 10:59:35PM -0800, Randy Dunlap wrote:
+>>> I agree this is where this variable has be be declared / initialized,
+>>> but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
+>>> doesn't seem right.
+>>
+>> So far I have been able to consolidate the LANTIQ code into a general
+>> patch, but not MALTA.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  .../devicetree/bindings/misc/servo-pwm.yaml   | 59 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> if I didn't miss something physical_memory is always 0 for LANTIQ 
+> and something for MALTA depending on command line/DT. Now
 > 
-> diff --git a/Documentation/devicetree/bindings/misc/servo-pwm.yaml b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
-> new file mode 100644
-> index 000000000000..faa8d4734817
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/servo-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Servo motor connected to PWM
-> +
-> +maintainers:
-> +  - Angelo Compagnucci <angelo@amarulasolutions.com>
-> +
-> +description:
-> +  Each servo is represented as a servo-pwm device.
-> +  The 20ms period is the accepted standard and so most of the motors
-> +  support it, while the positioning min/max duty cycle or the motor
-> +  degrees aperture vary lot between manufacturers.
-> +  The most common type of servo (SG90) has 180 degrees of movement
-> +  and moves between 0.5ms and 2.5ms duty cycle.
-> +
-> +properties:
-> +  compatible:
-> +    const: servo-pwm
-> +
-> +patternProperties:
-> +  properties:
-> +    pwms:
-> +      maxItems: 1
-> +
-> +    pwm-names: true
-
-Drop. '-names' is for when there is more than 1.
-> +
-> +    degrees:
-
-Kind of vague: servo-degrees
-
-> +      description:
-> +        How many degrees the motor can move.
-> +      $ref: /schemas/types.yaml#/definitions/uint32
-
-0-2^32 are valid degrees?
-
-> +
-> +    duty-min:
-> +      description:
-> +        Duty cycle for position the motor at 0 degrees.
-
-Units are ms? percent? Use standard unit suffix.
-
-> +      $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +    duty-max:
-> +      description:
-> +        Duty cycle for positioning the motor at "degrees" angle.
-> +      $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    servo: servo@0 {
-> +      compatible = "servo-pwm";
-> +      pwms = <&pwm 0 20000000 0>;
-> +      degrees = <180>;
-> +      duty-min = <500000>;
-> +      duty-max = <2500000>;
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 356daea0861d..8f41daee62fc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8742,6 +8742,7 @@ M:	"Angelo Compagnucci" <angelo@amarulasolutions.com>
->  L:	linux-pwm@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/ABI/testing/sysfs-driver-servo-pwm
-> +F:	Documentation/devicetree/bindings/misc/servo-pwm.yaml
->  F:	drivers/misc/servo-pwm.c
->  
->  GENERIC RESISTIVE TOUCHSCREEN ADC DRIVER
-> -- 
-> 2.34.1
+> arch/mips/kernel/vpe-mt.c contains
 > 
+>         /*
+>          * The sde-kit passes 'memsize' to __start in $a3, so set something
+>          * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
+>          * DFLT_HEAP_SIZE when you compile your program
+>          */
+>         mttgpr(6, v->ntcs);
+>         mttgpr(7, physical_memsize);
+> 
+> so the 0 for LANTIQ is fine with the correct VPE payload. But for
+> MALTA could cause major problems, if the VPE payload uses the top
+> of memory for it's stack. So I would guess nobody uses this "mode".
+> Therefore let's get rid of physical_memory in vpe.c completly.
+
+Hi Thomas,
+
+What is this line doing?
+          mttgpr(6, v->ntcs);
+
+Does it need to stay?
+But the comment and mttgpr(7, physical_memsize); can be deleted?
+
+thanks.
+-- 
+~Randy
