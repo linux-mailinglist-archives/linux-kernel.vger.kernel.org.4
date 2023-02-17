@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E5569A766
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC17D69A762
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjBQItj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S229686AbjBQIsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjBQIth (ORCPT
+        with ESMTP id S229913AbjBQIsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:49:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94B360FBC;
-        Fri, 17 Feb 2023 00:49:06 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676623739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Czz+UHh2RKqC0X5s5ts/z+bv6kppSAX6QrGQ9OL6ABY=;
-        b=wvuqpxkIB0VrV2LcTVU2Wi30d5sSFvifaNA+3Xd88OiaEXcI5Rt51oaNY+pvldLFFaDHQz
-        blAphOBmB3Nb2EUj9G0song9CoAoQdnSDugsBm9TVVmjy10MQvT0ZY2xYRsrtzouqr8M8R
-        htf2cwsOOIXCXEfjU9ZZoDW9iJK/t8LAPxoljBDAuR003/hchocIFLRCWMkPaNAC9Z2XCT
-        06i1j5yksQ6SWp4NAvI42/FESx/lXSYrqUxqeOFCIVOR1ruiaitfUbkxhAxrUG0xv1rHYn
-        KUqSNDWgp/bcEh6veB+3uACjTkW69kZ/3eLIebbIqv5rdHCeoHPWZbLmk7oULA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676623739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Czz+UHh2RKqC0X5s5ts/z+bv6kppSAX6QrGQ9OL6ABY=;
-        b=tEJu6DkB9Ss4EirYoTFw2klYU/t8BT4+cyusElaV0JHdVXXUKxOCsExKE/ha8/CAQkJ1YH
-        PAfRzkN736E5AcCw==
-To:     Sebastian Siewior <bigeasy@linutronix.de>
-Cc:     Clark Williams <williams@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Michael Thalmeier <michael.thalmeier@hale.at>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: [PATCH 5.10-rt] printk: ignore consoles without write() callback
-In-Reply-To: <87bkls65pf.fsf@jogness.linutronix.de>
-References: <87zg9d99mp.fsf@jogness.linutronix.de>
- <Y+5ftWNKMv9WJTXT@linutronix.de> <87bkls65pf.fsf@jogness.linutronix.de>
-Date:   Fri, 17 Feb 2023 09:53:44 +0106
-Message-ID: <878rgw65lb.fsf@jogness.linutronix.de>
+        Fri, 17 Feb 2023 03:48:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641F604F0;
+        Fri, 17 Feb 2023 00:48:26 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H63KTZ014637;
+        Fri, 17 Feb 2023 08:48:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=33eDyuvYJVBHbnCO5NSYD6X2R8vEOym0xz2B1IWSiNg=;
+ b=OIzwO8AxZ1YEu1WVQkroLorCRDoyjaojbAzbQTYgUPPpqLFaxp4ghkZ9IX/VogWDw7qH
+ yTKGdlOVi6ylU2qBDFvH7PeLyo+QW7Xc2ss0akTBlH5SVw6c8EhiuCLsDXSwfm+S5M7T
+ f5ph1fTyguTQKzyO3leW+qksSnT8+1VJubAYzrHZdRTrPcQBBcTXwUWsVP2fcGqyBdbB
+ 83qiq7ls4+U69wb4NijORuMQQCt3u2KHt3zRewnZE2DTzCYw0SK9tUqyzW+aaQsjDyzf
+ vyPvIo1Vgh15nhK5x9zYP83dh8+VEs4fDveRVNHW7kPuSiycyVJNbfcDw1jkBEbfci6K bg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nt10u0v06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:48:16 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31H8mFVp000693
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:48:15 GMT
+Received: from [10.216.47.237] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Feb
+ 2023 00:48:06 -0800
+Message-ID: <a987fc17-3924-7ece-59e2-3fa1d000afc1@quicinc.com>
+Date:   Fri, 17 Feb 2023 14:18:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/7] Add PCIe support for IPQ9574
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
+        <bhelgaas@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SkGcIu3rfLWbX5OreuJ1hWeFzovxmJIH
+X-Proofpoint-GUID: SkGcIu3rfLWbX5OreuJ1hWeFzovxmJIH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_04,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxscore=0 impostorscore=0
+ adultscore=0 mlxlogscore=693 phishscore=0 suspectscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170078
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ttynull driver does not provide an implementation for the write()
-callback. This leads to a NULL pointer dereference in the related
-printing kthread, which assumes it can call that callback.
 
-Do not create kthreads for consoles that do not implement the write()
-callback. Also, for pr_flush(), ignore consoles that do not implement
-write() or write_atomic(), since there is no way those consoles can
-flush their output.
 
-Link: https://lore.kernel.org/lkml/1831554214.546921.1676479103702.JavaMail.zimbra@hale.at
-Reported-by: Michael Thalmeier <michael.thalmeier@hale.at>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- kernel/printk/printk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On 2/14/2023 10:11 PM, Devi Priya wrote:
+> PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+> are found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane
+> Gen3 host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
+> 
+> This series adds support for enabling the same
+> 
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index d2205872304d..64747c72fbea 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2267,6 +2267,10 @@ static int printk_kthread_func(void *data)
- /* Must be called within console_lock(). */
- static void start_printk_kthread(struct console *con)
- {
-+	/* No need to start a printing thread if the console cannot print. */
-+	if (!con->write)
-+		return;
-+
- 	con->thread = kthread_run(printk_kthread_func, con,
- 				  "pr/%s%d", con->name, con->index);
- 	if (IS_ERR(con->thread)) {
-@@ -3566,6 +3570,8 @@ bool pr_flush(int timeout_ms, bool reset_on_progress)
- 		for_each_console(con) {
- 			if (!(con->flags & CON_ENABLED))
- 				continue;
-+			if (!con->write && !con->write_atomic)
-+				continue;
- 			printk_seq = atomic64_read(&con->printk_seq);
- 			if (printk_seq < seq)
- 				diff += seq - printk_seq;
--- 
-2.30.2
+
+<svarbanov@mm-sol.com>  --> This is bouncing, please remove it
+
+Regards,
+  Sricharan
