@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF66B69A99F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176FA69A9AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBQLDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S229929AbjBQLFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjBQLCi (ORCPT
+        with ESMTP id S229679AbjBQLFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:02:38 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9642A644E6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:02:29 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g16so1249207lfv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/plfQ38dzMrGO1JbheJ9rCmuE1cLMVk9gw7wSXm4Jqc=;
-        b=b1x8b/jwmA9YOIRBgoOQyok9k8pouvrhm1zW5L0FTRJgx+tIK7LO0HIF+s3C/ln4Po
-         VrmFB1cPNkVSAkWm9YVkoV5JvDum7g2l7Lq1tZEMvmXRChfaVOrbnmpg5Q3zwn0jmguJ
-         5TO652PsdgW32LksChbowDOFodL6kp9mixIVoj7WO2ErnuGYAiblfGIRTtg89BpY3VRI
-         rul5RtUiXlQ2JpEGKJ/1mcOvWcrJnkeKixOfEwlqihTR2gfPCAw8hsgOWxoG32Q852fw
-         l01JuY1BE44VUErAENa1J51SGav4GCTVkkEfuOLyPcBkTai7J4r0k9XBoR/2MSEq+9gl
-         Kp/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/plfQ38dzMrGO1JbheJ9rCmuE1cLMVk9gw7wSXm4Jqc=;
-        b=g5HyyI9yTG0Q7GJdl6fxIu2WRjUCaDVRargccufaekgGE/QNFc8M6zLgTStPwCUYc7
-         B7c2mS96O2oq2TB8Jz75VwO1wsO7xqZNFNMbsGgEgjSIM95YDcHoWBStUqWLgXVbAk1D
-         NUs9qJI9vIyIi9lY/INc5Z3uVXe5BhIJ6Lb+qkprL/sfsN9JO4I9mHKcQEzglxISFJkY
-         hGHZcIbijIX/QWWMaPAwnAEoXEDANp0LF/KNCgHVVMI6EgR/Ljfo45K0KlnUqQgBRXN0
-         fbW5bSbHJjYCVjgMuY/PVlqyWEW62cZw2f7EbRp1sCbmk+diF6pH8DHTG6RKeUnG0pKz
-         RsmQ==
-X-Gm-Message-State: AO0yUKXY0OyXy2ZiVPNW0/AD5syNY7BTCs7V6/1/DKBoO1Y7OR278Kzn
-        PgkW/bOqPV8qMLLdworNXErH6Q==
-X-Google-Smtp-Source: AK7set/2y7oM6jSdsEB9bbAcsNFt46R4u7C7/sbZGhjSO3xWVD8rkQc6w9MsM4qA6Cl9MgV3Ao8l8g==
-X-Received: by 2002:a19:f611:0:b0:4b6:d28a:2558 with SMTP id x17-20020a19f611000000b004b6d28a2558mr2958542lfe.49.1676631747693;
-        Fri, 17 Feb 2023 03:02:27 -0800 (PST)
-Received: from google.com ([2a00:79e0:18:10:d02c:4bb8:fba9:c9a7])
-        by smtp.gmail.com with ESMTPSA id w6-20020a05651203c600b004cf6c56fdb5sm643926lfp.232.2023.02.17.03.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 03:02:26 -0800 (PST)
-Date:   Fri, 17 Feb 2023 12:02:21 +0100
-From:   "Steinar H. Gunderson" <sesse@google.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] perf intel-pt: Synthesize cycle events
-Message-ID: <Y+9evQVBRLrCLQKf@google.com>
-References: <20220322082452.1429091-1-sesse@google.com>
- <YjpAYjdgHWwkid5N@kernel.org>
- <YjpFcLiCTjHZWzzA@google.com>
- <52d31321-66e1-f189-2ffc-7c93239eea74@intel.com>
- <Yj49LDY3S/ANeN0V@kernel.org>
+        Fri, 17 Feb 2023 06:05:40 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5398642FB;
+        Fri, 17 Feb 2023 03:05:10 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pSyXr-0008WE-00; Fri, 17 Feb 2023 12:04:51 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0C3AAC2860; Fri, 17 Feb 2023 12:02:48 +0100 (CET)
+Date:   Fri, 17 Feb 2023 12:02:47 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     arinc9.unal@gmail.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 1/2] mips: dts: align LED node names with dtschema
+Message-ID: <20230217110247.GA7138@alpha.franken.de>
+References: <20230211104915.116253-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yj49LDY3S/ANeN0V@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211104915.116253-1-arinc.unal@arinc9.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 07:07:40PM -0300, Arnaldo Carvalho de Melo wrote:
->>> 
->>> There are two issues in play:
->>> 
->>>  1. PT event synth doesn't support reading inline information from DWARF
->>>     yet, and my patch to add it runs into some problems. This is not
->>>     relevant for this patch at all.
->>>  2. The results from v3 don't quite match the ones from v1, and neither
->>>     of us are entirely sure why. My personal feeling is that the one
->>>     from v1 are the wrong ones, but it's up to Adrian to say whether we
->>>     want to try to investigate deeply here.
->> V3 is good.  Please take that.
-> Thanks, applied.
+On Sat, Feb 11, 2023 at 01:49:14PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> The node names should be generic and DT schema expects certain pattern:
+> 
+>   mt7621-gnubee-gb-pc1.dtb: gpio-leds: 'power', 'system' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../dts/cavium-octeon/dlink_dsr-1000n.dts     | 10 ++++-----
+>  .../boot/dts/cavium-octeon/dlink_dsr-500n.dts |  6 ++---
+>  arch/mips/boot/dts/ingenic/ci20.dts           |  8 +++----
+>  arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  6 ++---
+>  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  8 +++----
+>  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  8 +++----
+>  arch/mips/boot/dts/qca/ar9331_omega.dts       |  2 +-
+>  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 +++----
+>  .../ralink/gardena_smart_gateway_mt7688.dts   | 22 +++++++++----------
+>  .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  4 ++--
+>  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  | 12 +++++-----
+>  11 files changed, 47 insertions(+), 47 deletions(-)
 
-Hi,
+applied to mips-next.
 
-I downloaded linux-6.1.12 now and built perf from that, and this patch
-isn't included. Did it get somehow lost along the way?
+Thomas.
 
-/* Steinar */
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
