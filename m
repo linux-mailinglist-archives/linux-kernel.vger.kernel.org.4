@@ -2,36 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EAA69A5F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4037569A5FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjBQHPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S229608AbjBQHQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBQHPP (ORCPT
+        with ESMTP id S229573AbjBQHQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:15:15 -0500
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF6E4C6F5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:15:11 -0800 (PST)
+        Fri, 17 Feb 2023 02:16:17 -0500
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815834ECF3;
+        Thu, 16 Feb 2023 23:16:15 -0800 (PST)
 Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id MZG00008;
-        Fri, 17 Feb 2023 15:15:08 +0800
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id MZH00010;
+        Fri, 17 Feb 2023 15:16:10 +0800
 Received: from localhost.localdomain (10.200.104.97) by
  jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server id
- 15.1.2507.16; Fri, 17 Feb 2023 15:15:07 +0800
+ 15.1.2507.16; Fri, 17 Feb 2023 15:16:11 +0800
 From:   Bo Liu <liubo03@inspur.com>
-To:     <stuyoder@gmail.com>, <laurentiu.tudor@nxp.com>
-CC:     <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] bus: fsl-mc-msi: Fix double word in comments
-Date:   Fri, 17 Feb 2023 02:14:57 -0500
-Message-ID: <20230217071457.2696-1-liubo03@inspur.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] ethtool: pse-pd: Fix double word in comments
+Date:   Fri, 17 Feb 2023 02:16:09 -0500
+Message-ID: <20230217071609.2776-1-liubo03@inspur.com>
 X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.200.104.97]
-tUid:   202321715150882d657da46bb808ad25a524573061cd8
+tUid:   20232171516109628ccb50bf1baa7fe82d0dfedfce014
 X-Abuse-Reports-To: service@corp-email.com
 Abuse-Reports-To: service@corp-email.com
 X-Complaints-To: service@corp-email.com
@@ -49,22 +51,21 @@ Remove the repeated word "for" in comments.
 
 Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
- drivers/bus/fsl-mc/fsl-mc-msi.c | 2 +-
+ net/ethtool/pse-pd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-msi.c b/drivers/bus/fsl-mc/fsl-mc-msi.c
-index f3f8af9426c9..76049c2fd433 100644
---- a/drivers/bus/fsl-mc/fsl-mc-msi.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-msi.c
-@@ -96,7 +96,7 @@ static void __fsl_mc_msi_write_msg(struct fsl_mc_device *mc_bus_dev,
- 		}
- 	} else {
- 		/*
--		 * IRQ is for for a child device of mc_bus_dev
-+		 * IRQ is for a child device of mc_bus_dev
- 		 */
- 		error = dprc_set_obj_irq(mc_bus_dev->mc_io,
- 					 MC_CMD_FLAG_INTR_DIS | MC_CMD_FLAG_PRI,
+diff --git a/net/ethtool/pse-pd.c b/net/ethtool/pse-pd.c
+index a5b607b0a652..530b8b99e6df 100644
+--- a/net/ethtool/pse-pd.c
++++ b/net/ethtool/pse-pd.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //
+-// ethtool interface for for Ethernet PSE (Power Sourcing Equipment)
++// ethtool interface for Ethernet PSE (Power Sourcing Equipment)
+ // and PD (Powered Device)
+ //
+ // Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
 -- 
 2.27.0
 
