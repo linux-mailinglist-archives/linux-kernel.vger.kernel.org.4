@@ -2,179 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387CA69A5ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68DE69A5FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 08:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBQHH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 02:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S229623AbjBQHQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 02:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBQHHw (ORCPT
+        with ESMTP id S229520AbjBQHQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:07:52 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A072822B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:07:47 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id y20so304297ljc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DSwBYjZrNmln+ctA3/m+T2GVcsFUCJyV9W5bCg8FwVk=;
-        b=WDYC5mLgBgby4IkaIx/erhiX6pHvAGJfn8AJ4Fg/PsJDfzV1FccE5bSHlt/k0neWN+
-         5qavbew9Z52SAlMUJ96LibXdf5m1sH5ZOkRocvtrbl0TH3Xrmt/+XPkVPM59vvG1r+hn
-         HbDNb/N+2xr7ig+uN972FTzu6d3SEDZyRlEFzAp6pA2US89GZjl/hBOEG/IEJWigdGPt
-         Lst25/ZCiiIBlMlLrvVQVm+sR9pDzrACptLz81ApuVfu/gf+8sw7lo47LQefw6+eHJuV
-         yD5/EGCJghbXSuVjvEL6I2t+czet84cYRS2HZBLOMylaDln80DXMzGttG3vaQR6V8971
-         PI7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DSwBYjZrNmln+ctA3/m+T2GVcsFUCJyV9W5bCg8FwVk=;
-        b=WtGGQcDUwU8qM20jNDEuPH/t2zzvOaPii/fSOzo9rreFTLeQdeiQgUTrpFVPff4pn7
-         xr0sR/YckcOudNv87XkK54Q7jNya3Beo9mHnqgTyyTu3aVDqSMbx2Ynupo3Mk9U1+Emu
-         i8VzKsELxw8x8nAFneJUHeH9I+idI7qKCAYwcYD4sN9oK4hWgA2u3cpxAlXB+QVY3q8V
-         nosSQ7VGFt1M5pxJVWXr1RCI06wnZ8xjZLySya1Ad3XltWjQHt2hFx/vYjbpARuZ9ICd
-         l9mlNctZKEI03GEFPmCYeHG4Bi7HkVjE7KiYgerySHaLL8INtjDInVBdJVpcSOHif8wV
-         BFyw==
-X-Gm-Message-State: AO0yUKWnlvH1ypoLtOUjSbFbnRAO+DslsMgSG6/cojNtLpuBNVtfc0LQ
-        gOcwVD3AUDL4d4SSrBWIJ9SW2A==
-X-Google-Smtp-Source: AK7set/tAqwu8sxy4AE7vnmKG3xqNcDOKRCF7xpzyi9Ted3sLXbDrbOLyQwAqOQnLDHo62Xv/Vt9tQ==
-X-Received: by 2002:a05:651c:b29:b0:290:7d15:464a with SMTP id b41-20020a05651c0b2900b002907d15464amr134730ljr.5.1676617665835;
-        Thu, 16 Feb 2023 23:07:45 -0800 (PST)
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id f2-20020a2e1f02000000b00294619d902dsm471489ljf.112.2023.02.16.23.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 23:07:44 -0800 (PST)
-Message-ID: <767e4d8d-b691-1849-71ac-5d6cefbb8d6a@linaro.org>
-Date:   Fri, 17 Feb 2023 09:07:43 +0200
+        Fri, 17 Feb 2023 02:16:23 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5D04CCBA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 23:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676618182; x=1708154182;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OU/xN2FFpuZPk1yD7UcV1hhjmNqNkFrlhhwhX/s19ww=;
+  b=EtKd4a+eQW+eWovQAfkolC6/j8IDtMbfvjt++pTTHbXwGfK7XTtIXYDZ
+   b2AgByeKF7HXSNsLRMyxe5hxAEfvGNKS+lBQvHC+QDTtelafad2QTV0gv
+   bRVfG32xhy3EUY0xbkfxupr/JiDyOPQHiOrimcpOheUIPyWBtrO1kE8Zx
+   1sr1OM1uyYPxnTCS8tii1Sm2wE31caGA5+RhL2yL9v6SlP+ZD2a+xD36G
+   LNsYR5WIkOLI5CNFM9xfjiPGcTec13CMZTLKGV2uRMmJnMExNrcfLl61d
+   SO6AYJtk1nnQN5yorpf1s05Hd6rwbDN9br5nyTKP0anJket7rQop7VgEN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="312296934"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="312296934"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 23:12:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="672507035"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="672507035"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Feb 2023 23:12:02 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSuuX-000BC9-2h;
+        Fri, 17 Feb 2023 07:12:01 +0000
+Date:   Fri, 17 Feb 2023 15:11:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.02.06b] BUILD REGRESSION
+ 5632ab73470796810edb2ee9cf387ad88ffa0dcf
+Message-ID: <63ef288c.jDBPbrVL1xUx2pCP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v7 1/1] dma: qcom: bam_dma: Add support to initialize
- interconnect path
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     dmaengine@vger.kernel.org, agross@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
-        devicetree@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, vkoul@kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20220921030649.1436434-1-bhupesh.sharma@linaro.org>
- <20220921030649.1436434-2-bhupesh.sharma@linaro.org>
- <a5b6255c-7282-32ed-8031-a4b841a78db7@linaro.org>
- <CAH=2Ntw6XcyB2zy-cs35z3eOf8iTa28hGerhLndOgARrG05gJw@mail.gmail.com>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <CAH=2Ntw6XcyB2zy-cs35z3eOf8iTa28hGerhLndOgARrG05gJw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 06:00, Bhupesh Sharma wrote:
-> On Thu, 16 Feb 2023 at 19:49, Vladimir Zapolskiy
-> <vladimir.zapolskiy@linaro.org> wrote:
->>
->> On 9/21/22 06:06, Bhupesh Sharma wrote:
->>> From: Thara Gopinath <thara.gopinath@gmail.com>
->>>
->>> BAM dma engine associated with certain hardware blocks could require
->>> relevant interconnect pieces be initialized prior to the dma engine
->>> initialization. For e.g. crypto bam dma engine on sm8250. Such requirement
->>
->> Apparently it's proven that the change description is incorrect, Qualcomm
->> crypto engine is working fine on SM8250 and even more recent platforms,
->> so far there is no obvious necessity in this change.
-> 
-> Since your v9 patchset produces no entry in $ cat /proc/crypto on
-> either RB5 (qrb5165) or (with an additional patch) on sm8150-mtp or
-> sa8115p-adp with the default arm64 defconfig with linux-next, I am not
-> sure we can conclude QCE is working with these changes.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.06b
+branch HEAD: 5632ab73470796810edb2ee9cf387ad88ffa0dcf  kcsan: select CONFIG_CONSTRUCTORS
 
-Hopefully someone else can conclude it independently.
+Error/Warning reports:
 
-You may notice that v9 patchset series does not contain sm8150 specific
-changes, but sm8250 one (v9 11/14) is present, testing on RB5 is valid.
+https://lore.kernel.org/oe-kbuild-all/202302021723.ucm8d559-lkp@intel.com
 
-> Please share more details on how you tested this.
+Error/Warning: (recently discovered and may have been fixed)
 
-I do compile linux-next with v9 QCE series applied on top of it and run the
-kernel on RB5 board, there is nothing really complicated about it.
+net/netfilter/ipvs/ip_vs_est.c:552:17: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
+net/netfilter/ipvs/ip_vs_est.c:552:29: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
 
-If you missed it, the 'cryptobench benchmark' test etc. have been already
-described, please find it here:
+Error/Warning ids grouped by kconfigs:
 
-   https://lore.kernel.org/linux-crypto/731af3cf-6f18-caf9-ef65-ec73b0744ad9@linaro.org/
+gcc_recent_errors
+`-- sparc-allyesconfig
+    |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+    `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
 
---
-Best wishes,
-Vladimir
+elapsed time: 1915m
 
->>> is passed on to the bam dma driver from dt via the "interconnects"
->>> property. Add support in bam_dma driver to check whether the interconnect
->>> path is accessible/enabled prior to attempting driver intializations.
->>>
->>> If interconnects are not yet setup, defer the BAM DMA driver probe().
->>>
->>> Cc: Bjorn Andersson <andersson@kernel.org>
->>> Cc: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> [Bhupesh: Make header file inclusion alphabetical and use 'devm_of_icc_get()']
->>> ---
->>>    drivers/dma/qcom/bam_dma.c | 10 ++++++++++
->>>    1 file changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
->>> index 2ff787df513e..a5b0cf28ffb7 100644
->>> --- a/drivers/dma/qcom/bam_dma.c
->>> +++ b/drivers/dma/qcom/bam_dma.c
->>> @@ -26,6 +26,7 @@
->>>    #include <linux/kernel.h>
->>>    #include <linux/io.h>
->>>    #include <linux/init.h>
->>> +#include <linux/interconnect.h>
->>>    #include <linux/slab.h>
->>>    #include <linux/module.h>
->>>    #include <linux/interrupt.h>
->>> @@ -394,6 +395,7 @@ struct bam_device {
->>>        const struct reg_offset_data *layout;
->>>
->>>        struct clk *bamclk;
->>> +     struct icc_path *mem_path;
->>>        int irq;
->>>
->>>        /* dma start transaction tasklet */
->>> @@ -1294,6 +1296,14 @@ static int bam_dma_probe(struct platform_device *pdev)
->>>        if (IS_ERR(bdev->bamclk))
->>>                return PTR_ERR(bdev->bamclk);
->>>
->>> +     /* Ensure that interconnects are initialized */
->>> +     bdev->mem_path = devm_of_icc_get(bdev->dev, "memory");
->>> +     if (IS_ERR(bdev->mem_path)) {
->>> +             ret = dev_err_probe(bdev->dev, PTR_ERR(bdev->mem_path),
->>> +                                 "failed to acquire icc path\n");
->>> +             return ret;
->>> +     }
->>> +
->>>        ret = clk_prepare_enable(bdev->bamclk);
->>>        if (ret) {
->>>                dev_err(bdev->dev, "failed to prepare/enable clock\n");
->>
->> I'm resurrecting the comments on this change to emphasize the observation
->> that the change is not needed at all to run QCE.
->>
->> --
->> Best wishes,
->> Vladimir
+configs tested: 48
+configs skipped: 3
+
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64               randconfig-a011-20230213
+x86_64               randconfig-a012-20230213
+x86_64               randconfig-a013-20230213
+x86_64               randconfig-a014-20230213
+x86_64               randconfig-a015-20230213
+x86_64               randconfig-a016-20230213
+x86_64                               rhel-8.3
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
