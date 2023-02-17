@@ -2,113 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A2369AB6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7110F69AB6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjBQMYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        id S230113AbjBQMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBQMYx (ORCPT
+        with ESMTP id S230070AbjBQMZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:24:53 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1766058
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:24:51 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id co2so3105804edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DRkSEUhCAUqv74wpKQpFMHAHpDnDB3DUCdgSs3cTD7U=;
-        b=yrhtxWaVZlsZz8EAYHhKo7z7Qcf1xkV9vdz92vZLkg1+ezMyi9xaXJaWg/95UNi0wo
-         RnfgOOSDKqYPcyICelGJD3NSH50xT9pbF0cS5bi89GeBAyl2U3Ju/+apjBqUMRMiKkom
-         HARKsLb0z+pRqvzxeNzxDsyfRLuDWLcT7nGxjWtIhSquM9eBU6u5W3QuSJCIAwAl1AM4
-         ZHSht6gdaLYv6YFVaF20yHxTVg52ihws/Ad/snpohhc6ZqWmtaT+WXlPsIhNPsoZs9AK
-         ouTrvhYfy1IuV/5WWYkQHEhdp9mxPgkK2XtsL9q0+J65UjkmWbdQY/m9Y275kq43JDWY
-         a0nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRkSEUhCAUqv74wpKQpFMHAHpDnDB3DUCdgSs3cTD7U=;
-        b=PYYy6eayqfKMRtIcsRt5EoMhkXm8prKy5uBPF3m5KrbUPzUs20njJT+7StrJSrkyMR
-         jurgkKGJws82S0b0WtvxV0hBPA051Dh0AuEQVerf81180rrYQZnvPe23NfIhklNYLUqH
-         ASMx4KiupAe+a6gbYqME6XiW7WMOO/pYFU9TUchyX/vbc0bhOvcFTxsqjBRBbqeEjg7D
-         SDwjb54t3C3MnPUgd6OsoAsX2BKKDPYr6ogcHBO8o27ns/fBazstwHGGTTnqhjnOQJA1
-         zivSb+1cQ3dLdcTuKaeFibkzfa4EDkdZR/CQ9k7CT03Wk6Eqkl9zeJCUrHPjCB4m8ARz
-         IatA==
-X-Gm-Message-State: AO0yUKXLSd2agZP2FZm4u17BazXfa+gpeXU0WZcKFpUnetLvKzeS5PXX
-        ASwrtovtiSUpjbxonRL18R+tHg==
-X-Google-Smtp-Source: AK7set/DBCXPYASdQ2V+puV5InoxI88AENgUj/1Lry6p1oLbNzI4+03pYsQYxh01xdrYlB9uSD988g==
-X-Received: by 2002:a17:906:a451:b0:86f:fbcf:f30a with SMTP id cb17-20020a170906a45100b0086ffbcff30amr11172660ejb.58.1676636690249;
-        Fri, 17 Feb 2023 04:24:50 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170906688b00b008b13a8ec56asm2074181ejr.110.2023.02.17.04.24.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 04:24:49 -0800 (PST)
-Message-ID: <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
-Date:   Fri, 17 Feb 2023 13:24:47 +0100
+        Fri, 17 Feb 2023 07:25:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B2649898
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:25:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C8681FF52;
+        Fri, 17 Feb 2023 12:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676636702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hLMo50QHe1/PwBNhh35jJJlZiJq9HSkFtUHWmmDswvc=;
+        b=vALWS+5UaT4smrFbUIlQo3wAuzKf0G/92iwK6IOM9D14fvvvAnfzzSR+U/RUwmIaTRTK3Q
+        8CxaNTcOy2SOVoDmcS71F9vUq+EENlOOvaPTqd7Yh6EBFnZLoS9+pOnopjrFhbpgp1PnC5
+        Y5SxKtcgCBVcGC5evr/Q/qiet/CQhoE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676636702;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hLMo50QHe1/PwBNhh35jJJlZiJq9HSkFtUHWmmDswvc=;
+        b=jRDQC2Uzm9DoaxKSe49EmNjdjMl4IuluZmDmxDJnmkix0vM2IQo0kca2ED3LMjbFYiDwEq
+        VGvYDjoOHyyIdtBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D55C13274;
+        Fri, 17 Feb 2023 12:25:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id f3BfIR1y72OhZAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 12:25:01 +0000
+Message-ID: <dcff3189-8696-4988-616a-98a4fd82d417@suse.de>
+Date:   Fri, 17 Feb 2023 13:25:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
- deprecated QCM2290 compatible
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 04/11] drm/shmem: Put booleans in the end of struct
+ drm_gem_shmem_object
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
- <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
- <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
- <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
- <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------riziz0OPTF37QY0nWKvApQMA"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 12:36, Konrad Dybcio wrote:
->>>
->>> compatible = "qcom,dsi-ctrl-6g-qcm2290";
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/qcom/sm6115.dtsi?h=next-20230217#n1221
->>
->> I meant, that original commit wanted to deprecate:
->> compatible="qcom,dsi-ctrl-6g-qcm2290";
->> compatible="qcom,mdss-dsi-ctrl";
->>
-> Okay, so what would be the correct resolution?
-> Drop this patch and keep 2/2?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------riziz0OPTF37QY0nWKvApQMA
+Content-Type: multipart/mixed; boundary="------------vpCueKlwgQtbZlPhyDtpeZZ6";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Gustavo Padovan <gustavo.padovan@collabora.com>,
+ Daniel Stone <daniel@fooishbar.org>,
+ Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
+ Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+ Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ kernel@collabora.com, virtualization@lists.linux-foundation.org
+Message-ID: <dcff3189-8696-4988-616a-98a4fd82d417@suse.de>
+Subject: Re: [PATCH v10 04/11] drm/shmem: Put booleans in the end of struct
+ drm_gem_shmem_object
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
+In-Reply-To: <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
 
-First, it would be nice to know what was the intention of Bryan's commit?
+--------------vpCueKlwgQtbZlPhyDtpeZZ6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Second, if the intention was to deprecate both of these, then this
-commit could stay with changes - make it enum for both compatibles (not
-list).
+DQoNCkFtIDA4LjAxLjIzIHVtIDIyOjA0IHNjaHJpZWIgRG1pdHJ5IE9zaXBlbmtvOg0KPiBH
+cm91cCBhbGwgMS1iaXQgYm9vbGVhbiBtZW1iZXJzIG9mIHN0cnVjdCBkcm1fZ2VtX3NobWVt
+X29iamVjdCBpbiB0aGUgZW5kDQo+IG9mIHRoZSBzdHJ1Y3R1cmUsIGFsbG93aW5nIGNvbXBp
+bGVyIHRvIHBhY2sgZGF0YSBiZXR0ZXIgYW5kIG1ha2luZyBjb2RlIHRvDQo+IGxvb2sgbW9y
+ZSBjb25zaXN0ZW50Lg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8
+dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtv
+IDxkbWl0cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
+cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGluY2x1
+ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmggfCAzMCArKysrKysrKysrKysrKystLS0t
+LS0tLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMTUgaW5zZXJ0aW9ucygrKSwgMTUg
+ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX2dlbV9z
+aG1lbV9oZWxwZXIuaCBiL2luY2x1ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmgNCj4g
+aW5kZXggYTIyMDFiMjQ4OGM1Li41OTk0ZmVkNWUzMjcgMTAwNjQ0DQo+IC0tLSBhL2luY2x1
+ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmgNCj4gKysrIGIvaW5jbHVkZS9kcm0vZHJt
+X2dlbV9zaG1lbV9oZWxwZXIuaA0KPiBAQCAtNjAsMjAgKzYwLDYgQEAgc3RydWN0IGRybV9n
+ZW1fc2htZW1fb2JqZWN0IHsNCj4gICAJICovDQo+ICAgCXN0cnVjdCBsaXN0X2hlYWQgbWFk
+dl9saXN0Ow0KPiAgIA0KPiAtCS8qKg0KPiAtCSAqIEBwYWdlc19tYXJrX2RpcnR5X29uX3B1
+dDoNCj4gLQkgKg0KPiAtCSAqIE1hcmsgcGFnZXMgYXMgZGlydHkgd2hlbiB0aGV5IGFyZSBw
+dXQuDQo+IC0JICovDQo+IC0JdW5zaWduZWQgaW50IHBhZ2VzX21hcmtfZGlydHlfb25fcHV0
+ICAgIDogMTsNCj4gLQ0KPiAtCS8qKg0KPiAtCSAqIEBwYWdlc19tYXJrX2FjY2Vzc2VkX29u
+X3B1dDoNCj4gLQkgKg0KPiAtCSAqIE1hcmsgcGFnZXMgYXMgYWNjZXNzZWQgd2hlbiB0aGV5
+IGFyZSBwdXQuDQo+IC0JICovDQo+IC0JdW5zaWduZWQgaW50IHBhZ2VzX21hcmtfYWNjZXNz
+ZWRfb25fcHV0IDogMTsNCj4gLQ0KPiAgIAkvKioNCj4gICAJICogQHNndDogU2NhdHRlci9n
+YXRoZXIgdGFibGUgZm9yIGltcG9ydGVkIFBSSU1FIGJ1ZmZlcnMNCj4gICAJICovDQo+IEBA
+IC05NywxMCArODMsMjQgQEAgc3RydWN0IGRybV9nZW1fc2htZW1fb2JqZWN0IHsNCj4gICAJ
+ICovDQo+ICAgCXVuc2lnbmVkIGludCB2bWFwX3VzZV9jb3VudDsNCj4gICANCj4gKwkvKioN
+Cj4gKwkgKiBAcGFnZXNfbWFya19kaXJ0eV9vbl9wdXQ6DQo+ICsJICoNCj4gKwkgKiBNYXJr
+IHBhZ2VzIGFzIGRpcnR5IHdoZW4gdGhleSBhcmUgcHV0Lg0KPiArCSAqLw0KPiArCWJvb2wg
+cGFnZXNfbWFya19kaXJ0eV9vbl9wdXQgOiAxOw0KPiArDQo+ICsJLyoqDQo+ICsJICogQHBh
+Z2VzX21hcmtfYWNjZXNzZWRfb25fcHV0Og0KPiArCSAqDQo+ICsJICogTWFyayBwYWdlcyBh
+cyBhY2Nlc3NlZCB3aGVuIHRoZXkgYXJlIHB1dC4NCj4gKwkgKi8NCj4gKwlib29sIHBhZ2Vz
+X21hcmtfYWNjZXNzZWRfb25fcHV0IDogMTsNCj4gKw0KPiAgIAkvKioNCj4gICAJICogQG1h
+cF93YzogbWFwIG9iamVjdCB3cml0ZS1jb21iaW5lZCAoaW5zdGVhZCBvZiB1c2luZyBzaG1l
+bSBkZWZhdWx0cykuDQo+ICAgCSAqLw0KPiAtCWJvb2wgbWFwX3djOw0KPiArCWJvb2wgbWFw
+X3djIDogMTsNCj4gICB9Ow0KPiAgIA0KPiAgICNkZWZpbmUgdG9fZHJtX2dlbV9zaG1lbV9v
+Ymoob2JqKSBcDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBE
+ZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVs
+ZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xy
+bmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Best regards,
-Krzysztof
+--------------vpCueKlwgQtbZlPhyDtpeZZ6--
 
+--------------riziz0OPTF37QY0nWKvApQMA
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvchwFAwAAAAAACgkQlh/E3EQov+DD
+wRAAyr2BPnhokho5Mjgb/1SUFEYo3FSKRY6iLVJ81cZt0bTeVVJmQW7Gye+S/x4tRCkdDRGNi1xm
+ZgnpEZqw/zi+hlLWZkbKxcX/IbCPjE66T4hqiK2kHhjJK1yRX2KrQdLeu0jd3r6ZluIkWB7eeen7
+UWS89neNa4cUOjBqFPHzsPymNCT3bufIY0p7CLCYYok9q4jqRL7O7Byw1gztPQrBVU8So5dS1DS+
+0fGgbwaCkFyFrq+s+2WX3gUnFDvgs2DZ58YzTJuQtAObwLA55wZ0atiBXLLnqm7plyHG0XUAr+KI
+uDNvUAaMEBNXqgEydx+kN3rCjFmDuobwHz42MwTM4obmadukzhnQkFXRQAOjgp6HwvpFYr9tMdkc
+1IKR/IWYWCLORo6AoO8JYO/VO5lZyDZArtXXK8ailvezipn6y9kuRi6nzITLXqiCupgPpMJu9//H
+TbXKOGOg9kX6CUf8o8O1SPZuSmaW4ZhGwga/e+ZjojAk0DmuNd6kQMkH7jk4LvRKUdAjb7RYkYRj
+jKQkW3HnBx3AE/BX/JvMGcT+lXiHtO+stIYSNMRzB4+T4FItXepwVonQEe10WRXN2yPFVReKwpxT
+HRhJbO8gLh3w0cgcmjZG7wzstTAW1I4MQWbZ9Vd2KXuBjP/UkfmGAiwhV9vorUJOEwQiRAkdJQVh
+xjA=
+=vfTJ
+-----END PGP SIGNATURE-----
+
+--------------riziz0OPTF37QY0nWKvApQMA--
