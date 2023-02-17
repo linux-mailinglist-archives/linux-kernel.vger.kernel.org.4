@@ -2,103 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0244269A6A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026E369A6A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBQIKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S229685AbjBQIKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBQIKU (ORCPT
+        with ESMTP id S229740AbjBQIKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Feb 2023 03:10:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF045ECBA;
-        Fri, 17 Feb 2023 00:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E111350F;
+        Fri, 17 Feb 2023 00:10:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676621418; x=1708157418;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=U7mQIM9qB5Xewca0JuXva0yWCc1fzx4zn1VmrGgIUoU=;
+  b=KZSbrqzxHXwQm2xB5mieNKijp60vd0xRn0zBZXtkw5APQKdpbKKh0Qvy
+   piwsvYf4yqkVj6fdpCkJnuuah8/nBawQaJBWIptgc8gif5TB6cKC3VDpj
+   5QPijTuPsFar3urW9WAB1lg4/dVnoaJM06QaVm0c0iXjBUse+1LspEIjQ
+   35I/bEPk8WtbwycWiIkBDKCE1Tw9fqtxjv14WKBXQq3AMoueM8CJYtkQZ
+   socBCYqxI5BnLEmDBmvKiMho9UbWdwkTxKM31JDAnQDP9OHHpGsc1uwfo
+   +2SpCSRa/RKg72pOiGCqlUw2mazjbSqtv7k0RLl42btOPnsXeDEEieS55
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,304,1669071600"; 
+   d="scan'208";a="29147824"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 17 Feb 2023 09:10:15 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 17 Feb 2023 09:10:15 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 17 Feb 2023 09:10:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676621416; x=1708157416;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=U7mQIM9qB5Xewca0JuXva0yWCc1fzx4zn1VmrGgIUoU=;
+  b=JbTyiQPn6Ly0ZHkZSvxr3VmL9gZohzEmt83HMRznKAMlAbxYqeH0Vt0z
+   l4O+2sHdCOzH/em4pzApjnQfes/SeWmlIxHJNBOgYpqp9WesyoMF2DkTz
+   hKfvSjsg89wqpyL7n2upZiWIxKdHO47L9ii9SG3MZh/ysRiqZEcmmAdzM
+   SbC+kwrsVeFp6DFIgwlFC9yST8huCuEUzX51hW+mZFfHEVYS0g/0A5TY2
+   FybmP+uPwGEsQybnoCBSFscsVgoHvOw4g/St8zXeHWl71YbwPLNQJIMJ9
+   sbfCxbxBvCHO+VUeNaJqX0zpGamZ3BgxoGyOJO0JCKDkgbdYdC4+nw+g6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,304,1669071600"; 
+   d="scan'208";a="29147823"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 17 Feb 2023 09:10:15 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 641A4CE2C73;
-        Fri, 17 Feb 2023 08:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C52C433D2;
-        Fri, 17 Feb 2023 08:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676621414;
-        bh=NI1/kj+6SSROnQAFsZp/dzHzswdLFNUOD3A7hmPPR8o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fbZ3GveITZUXUsSii8I3KJR8XCRz4LQUFJM/yCfeueaklno1liMN0jZThWSB0/gEC
-         T/z4IUVg+0rkKfkiq5DOpNJ/C1JXV2vxG+glO7zWaOVYun8wf5Uy2FyyW8tw27DaxR
-         xmxiD9EluD7A+Gny0DnkDCQ6sJYzL59F7ZtUTevoZKzRMnDOUJZW5m/saVwmT1N/PM
-         vkG9PooM50Iz6KLgUuANxt6YUIjUmTfac+QUqv9/jK6yxrFiGuwB8RJzZ1UCw+aSWS
-         2Su9VB1XE5koO9GDr+7FW4yH4JelyB1Fey5HRvu2AN3OJpexHoT1cXqemQpC2hYOSP
-         F5UeJgynSPgAA==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] acl updates for v6.3
-Date:   Fri, 17 Feb 2023 09:10:04 +0100
-Message-Id: <20230217081004.1629199-1-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 44185280056;
+        Fri, 17 Feb 2023 09:10:15 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+Subject: Re: [PATCH v4 4/6] drm: lcdif: Check consistent bus format and flags across first bridges
+Date:   Fri, 17 Feb 2023 09:10:12 +0100
+Message-ID: <4809939.31r3eYUQgx@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230217065407.2259731-5-victor.liu@nxp.com>
+References: <20230217065407.2259731-1-victor.liu@nxp.com> <20230217065407.2259731-5-victor.liu@nxp.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1638; i=brauner@kernel.org; h=from:subject; bh=NI1/kj+6SSROnQAFsZp/dzHzswdLFNUOD3A7hmPPR8o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSS/N/0q9nhxwcMChoMRuf8fSjS3HxbYc8fpAZMdxwbLhzMC zz+o7ihlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIrbUM/wNvHdA/WGvVx9R2Rk+/rq D1+25t8fTOEB92m/WJmybUbGL4X6wZdvgLu8aP6HUv2evLtldtLXgxu6WmJE7BZnX/on/CPAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+Hi Liu,
 
-/* Summary */
-This contains a single update to the internal get acl method and
-replaces an open-coded cmpxchg() comparison with with try_cmpxchg().
-It's clearer and also beneficial on some architectures.
+thanks for this update.
 
-/* Testing */
-clang: Ubuntu clang version 15.0.2-1
-gcc: gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+Am Freitag, 17. Februar 2023, 07:54:05 CET schrieb Liu Ying:
+> The single LCDIF embedded in i.MX93 SoC may drive multiple displays
+> simultaneously.  Check bus format and flags across first bridges in
+> ->atomic_check() to ensure they are consistent.  This is a preparation
+> for adding i.MX93 LCDIF support.
+>=20
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 
-All patches are based on v6.2-rc1 and have been sitting in linux-next.
-No build failures or warnings were observed. All old and new tests in
-fstests, selftests, and LTP pass without regressions.
+Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> v3->v4:
+> * No change.
+>=20
+> v2->v3:
+> * No change.
+>=20
+> v1->v2:
+> * Split from patch 2/2 in v1. (Marek, Alexander)
+> * Drop a comment about bridge input bus format from
+> lcdif_crtc_atomic_check().
+>=20
+>  drivers/gpu/drm/mxsfb/lcdif_drv.c |  2 -
+>  drivers/gpu/drm/mxsfb/lcdif_drv.h |  1 -
+>  drivers/gpu/drm/mxsfb/lcdif_kms.c | 76 ++++++++++++++++++++++---------
+>  3 files changed, 55 insertions(+), 24 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> b/drivers/gpu/drm/mxsfb/lcdif_drv.c index cc2ceb301b96..b5b9a8e273c6 1006=
+44
+> --- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
+> @@ -52,8 +52,6 @@ static int lcdif_attach_bridge(struct lcdif_drm_private
+> *lcdif) if (ret)
+>  		return dev_err_probe(drm->dev, ret, "Failed to attach=20
+bridge\n");
+>=20
+> -	lcdif->bridge =3D bridge;
+> -
+>  	return 0;
+>  }
+>=20
+> diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> b/drivers/gpu/drm/mxsfb/lcdif_drv.h index 6cdba6e20c02..aa6d099a1897 1006=
+44
+> --- a/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.h
+> @@ -31,7 +31,6 @@ struct lcdif_drm_private {
+>  	} planes;
+>  	struct drm_crtc			crtc;
+>  	struct drm_encoder		encoder;
+> -	struct drm_bridge		*bridge;
+>  };
+>=20
+>  static inline struct lcdif_drm_private *
+> diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> b/drivers/gpu/drm/mxsfb/lcdif_kms.c index d46de433cd8e..d6009b353a16 1006=
+44
+> --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> @@ -17,6 +17,7 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_color_mgmt.h>
+> +#include <drm/drm_connector.h>
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_encoder.h>
+>  #include <drm/drm_fb_dma_helper.h>
+> @@ -424,15 +425,19 @@ static int lcdif_crtc_atomic_check(struct drm_crtc
+> *crtc, struct drm_atomic_state *state)
+>  {
+>  	struct drm_device *drm =3D crtc->dev;
+> -	struct lcdif_drm_private *lcdif =3D to_lcdif_drm_private(drm);
+>  	struct drm_crtc_state *crtc_state =3D=20
+drm_atomic_get_new_crtc_state(state,
+>  							=09
+	  crtc);
+>  	struct lcdif_crtc_state *lcdif_crtc_state =3D
+> to_lcdif_crtc_state(crtc_state); bool has_primary =3D crtc_state->plane_m=
+ask
+> &
+>  			   drm_plane_mask(crtc->primary);
+> +	struct drm_connector_state *connector_state;
+> +	struct drm_connector *connector;
+> +	struct drm_encoder *encoder;
+>  	struct drm_bridge_state *bridge_state;
+> -	struct drm_bridge *bridge =3D lcdif->bridge;
+> -	int ret;
+> +	struct drm_bridge *bridge;
+> +	u32 bus_format, bus_flags;
+> +	bool format_set =3D false, flags_set =3D false;
+> +	int ret, i;
+>=20
+>  	/* The primary plane has to be enabled when the CRTC is active. */
+>  	if (crtc_state->active && !has_primary)
+> @@ -442,26 +447,55 @@ static int lcdif_crtc_atomic_check(struct drm_crtc
+> *crtc, if (ret)
+>  		return ret;
+>=20
+> -	bridge_state =3D drm_atomic_get_new_bridge_state(state, bridge);
+> -	if (!bridge_state)
+> -		lcdif_crtc_state->bus_format =3D MEDIA_BUS_FMT_FIXED;
+> -	else
+> -		lcdif_crtc_state->bus_format =3D bridge_state-
+>input_bus_cfg.format;
+> -
+> -	if (lcdif_crtc_state->bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
+> -		dev_warn_once(drm->dev,
+> -			      "Bridge does not provide bus format,=20
+assuming
+> MEDIA_BUS_FMT_RGB888_1X24.\n" -			      "Please fix=20
+bridge driver by
+> handling atomic_get_input_bus_fmts.\n"); -		lcdif_crtc_state-
+>bus_format =3D
+> MEDIA_BUS_FMT_RGB888_1X24;
+> +	/* Try to find consistent bus format and flags across first bridges.=20
+*/
+> +	for_each_new_connector_in_state(state, connector, connector_state,=20
+i) {
+> +		if (!connector_state->crtc)
+> +			continue;
+> +
+> +		encoder =3D connector_state->best_encoder;
+> +
+> +		bridge =3D drm_bridge_chain_get_first_bridge(encoder);
+> +		if (!bridge)
+> +			continue;
+> +
+> +		bridge_state =3D drm_atomic_get_new_bridge_state(state,=20
+bridge);
+> +		if (!bridge_state)
+> +			bus_format =3D MEDIA_BUS_FMT_FIXED;
+> +		else
+> +			bus_format =3D bridge_state->input_bus_cfg.format;
+> +
+> +		if (bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
+> +			dev_warn(drm->dev,
+> +				 "[ENCODER:%d:%s]'s bridge does not=20
+provide bus format, assuming
+> MEDIA_BUS_FMT_RGB888_1X24.\n" +				=20
+"Please fix bridge driver by handling
+> atomic_get_input_bus_fmts.\n", +				=20
+encoder->base.id, encoder->name);
+> +			bus_format =3D MEDIA_BUS_FMT_RGB888_1X24;
+> +		}
+> +
+> +		if (!format_set) {
+> +			lcdif_crtc_state->bus_format =3D bus_format;
+> +			format_set =3D true;
+> +		} else if (lcdif_crtc_state->bus_format !=3D bus_format) {
+> +			DRM_DEV_DEBUG_DRIVER(drm->dev, "inconsistent bus=20
+format\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (bridge->timings)
+> +			bus_flags =3D bridge->timings->input_bus_flags;
+> +		else if (bridge_state)
+> +			bus_flags =3D bridge_state->input_bus_cfg.flags;
+> +		else
+> +			bus_flags =3D 0;
+> +
+> +		if (!flags_set) {
+> +			lcdif_crtc_state->bus_flags =3D bus_flags;
+> +			flags_set =3D true;
+> +		} else if (lcdif_crtc_state->bus_flags !=3D bus_flags) {
+> +			DRM_DEV_DEBUG_DRIVER(drm->dev, "inconsistent bus=20
+flags\n");
+> +			return -EINVAL;
+> +		}
+>  	}
+>=20
+> -	if (bridge->timings)
+> -		lcdif_crtc_state->bus_flags =3D bridge->timings-
+>input_bus_flags;
+> -	else if (bridge_state)
+> -		lcdif_crtc_state->bus_flags =3D bridge_state-
+>input_bus_cfg.flags;
+> -	else
+> -		lcdif_crtc_state->bus_flags =3D 0;
+> -
+>  	return 0;
+>  }
 
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with
-current mainline.
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.acl.v6.3
-
-for you to fetch changes up to 4e1da8fe031303599e78f88e0dad9f44272e4f99:
-
-  posix_acl: Use try_cmpxchg in get_acl (2023-01-08 12:37:49 +0100)
-
-Please consider pulling these changes from the signed fs.acl.v6.3 tag.
-
-I'm on vacation until v6.2 is released this Sunday but Amir or Seth know
-how to reach me quite easily before that in case anything goes wrong.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.acl.v6.3
-
-----------------------------------------------------------------
-Uros Bizjak (1):
-      posix_acl: Use try_cmpxchg in get_acl
-
- fs/posix_acl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
