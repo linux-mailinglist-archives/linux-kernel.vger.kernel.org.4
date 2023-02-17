@@ -2,116 +2,1100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CA269B082
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E061069B0AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBQQSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
+        id S229704AbjBQQUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjBQQS0 (ORCPT
+        with ESMTP id S231179AbjBQQUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:18:26 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018211BD3;
-        Fri, 17 Feb 2023 08:18:23 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HETHOc014539;
-        Fri, 17 Feb 2023 16:18:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=MPQIfozxi3agzhuInh5Dfy0UCTxQiOBuqBY+xGl4A8o=;
- b=Nvzzkk38Bks/YPT3VoN+8OPsAOnh9f5uuS8LbcXw35qm8fCbDdyaQ1DuG+7Nf1jC2zj/
- dGmRNFOnr0nLY9VbmBvG2eDiJ2JBFwxKJGZpsu+toEtyYff7w1neTKUHEYncv2J1P+X3
- Nmp+ifkYBDur2Z+uf5szKNk9GM865Q1jebGaftGIO6OWnPT/8pVBFdblKY8LbVRBG5uB
- eqPh3GZwp0bmThJdowQcNuoqDjQkGEgdIbq/FSrMet2w1Voz9adPjkuDAd5SOuLedulc
- HzjFx+00r/Z4VoGehFrT9uoNxlVbnVRTrRUi8K7Lb8v8BHHr0i8N6TEyDeaAaBXfaPZe Ig== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nt15x0q90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:13 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFtj4Y009842;
-        Fri, 17 Feb 2023 16:18:12 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7rj8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:12 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HGIBik6488722
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 16:18:11 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EDD25805C;
-        Fri, 17 Feb 2023 16:18:11 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A89ED58059;
-        Fri, 17 Feb 2023 16:18:10 +0000 (GMT)
-Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 16:18:10 +0000 (GMT)
-From:   Danny Tsen <dtsen@linux.ibm.com>
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
-        dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
-Subject: [PATCH v3 0/6] crypto: Accelerated AES/GCM stitched implementation
-Date:   Fri, 17 Feb 2023 11:17:59 -0500
-Message-Id: <20230217161805.236319-1-dtsen@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 17 Feb 2023 11:20:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F03714B2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676650734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ObCfTTPLygZgTmXRi7tk2ZjPD2rLJsjHwYlvpQVDQ0=;
+        b=Yww4Z9VSP6/RdyQDiM7YEudpy289TuslRuBcvZ+7vA0Gbd1UfAm64Y1AQPu4WMhjVKAdUL
+        XcWENQ4BrizOXcMjc8RAFcN+FgnoZH6jxneCH8m7EOHWmLSirzBM70NMvqQOzwybkbsrmx
+        yp4wh0H/KZKv1YeFuZUJhEwOqvNMbGg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-CdYZpVB_PS2lzrfnw7NryA-1; Fri, 17 Feb 2023 11:18:50 -0500
+X-MC-Unique: CdYZpVB_PS2lzrfnw7NryA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 390FA830F85;
+        Fri, 17 Feb 2023 16:18:50 +0000 (UTC)
+Received: from xps-13.local (unknown [10.39.193.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4273EC15BA0;
+        Fri, 17 Feb 2023 16:18:48 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 17 Feb 2023 17:17:59 +0100
+Subject: [PATCH 05/11] selftests: hid: import hid-tools hid-mouse tests
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: d0932ihIO08aC2VYFCuhOZeHvueMzBsr
-X-Proofpoint-GUID: d0932ihIO08aC2VYFCuhOZeHvueMzBsr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=539 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230217-import-hid-tools-tests-v1-5-d1c48590d0ee@redhat.com>
+References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+In-Reply-To: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676650715; l=47123;
+ i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
+ bh=oWkDvsqHrqTv8jtBoQBWA+iqtGsSkwr8ZCnsvbV0fWw=;
+ b=wiWUJPjPxQN84S+k7XcmiCAt0rnPTG5T/sC3yOBrQa5vBom+Z34fiJoxLqKydY8RZXfvqjU1w
+ 1hNbuRQfIjLDo1yqnrWcIL6vVWS7XWK180ep1oxa7c0dRrecRWwL7DR
+X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series enable an accelerated AES/GCM stitched implementation for
-Power10+ CPU(ppc64le).  This module supports AEAD algorithm.  The stitched
-implementation provides 3.5X+ better performance than the baseline.
+These tests have been developed in the hid-tools[0] tree for a while.
+Now that we have  a proper selftests/hid kernel entry and that the tests
+are more reliable, it is time to directly include those in the kernel
+tree.
 
-This patch has been tested with the kernel crypto module tcrypt.ko and has
-passed the selftest.  The patch is also tested with
-CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled.
+[0] https://gitlab.freedesktop.org/libevdev/hid-tools
 
-Danny Tsen (6):
-  Update Kconfig and Makefile.
-  Glue code for AES/GCM stitched implementation.
-  An accelerated AES/GCM stitched implementation.
-  Supporting functions for AES.
-  Supporting functions for ghash.
-  A perl script to process PowerPC assembler source.
+Cc: Peter Hutterer <peter.hutterer@who-t.net>
+Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+ tools/testing/selftests/hid/Makefile            |   1 +
+ tools/testing/selftests/hid/hid-mouse.sh        |   7 +
+ tools/testing/selftests/hid/tests/test_mouse.py | 977 ++++++++++++++++++++++++
+ 3 files changed, 985 insertions(+)
 
- arch/powerpc/crypto/Kconfig            |   11 +
- arch/powerpc/crypto/Makefile           |   13 +
- arch/powerpc/crypto/aesp8-ppc.pl       | 3846 ++++++++++++++++++++++++
- arch/powerpc/crypto/ghashp8-ppc.pl     |  370 +++
- arch/powerpc/crypto/p10-aes-gcm-glue.c |  345 +++
- arch/powerpc/crypto/p10_aes_gcm.S      | 1521 ++++++++++
- arch/powerpc/crypto/ppc-xlate.pl       |  229 ++
- 7 files changed, 6335 insertions(+)
- create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
- create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
- create mode 100644 arch/powerpc/crypto/p10-aes-gcm-glue.c
- create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
- create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
+diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+index 181a594ffe92..00b2cc25e24c 100644
+--- a/tools/testing/selftests/hid/Makefile
++++ b/tools/testing/selftests/hid/Makefile
+@@ -8,6 +8,7 @@ include ../../../scripts/Makefile.include
+ TEST_PROGS := hid-core.sh
+ TEST_PROGS += hid-gamepad.sh
+ TEST_PROGS += hid-keyboard.sh
++TEST_PROGS += hid-mouse.sh
+ 
+ CXX ?= $(CROSS_COMPILE)g++
+ 
+diff --git a/tools/testing/selftests/hid/hid-mouse.sh b/tools/testing/selftests/hid/hid-mouse.sh
+new file mode 100755
+index 000000000000..7b4ad4f646f7
+--- /dev/null
++++ b/tools/testing/selftests/hid/hid-mouse.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Runs tests for the HID subsystem
++
++export TARGET=test_mouse.py
++
++bash ./run-hid-tools-tests.sh
+diff --git a/tools/testing/selftests/hid/tests/test_mouse.py b/tools/testing/selftests/hid/tests/test_mouse.py
+new file mode 100644
+index 000000000000..fd2ba62e783a
+--- /dev/null
++++ b/tools/testing/selftests/hid/tests/test_mouse.py
+@@ -0,0 +1,977 @@
++#!/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# -*- coding: utf-8 -*-
++#
++# Copyright (c) 2017 Benjamin Tissoires <benjamin.tissoires@gmail.com>
++# Copyright (c) 2017 Red Hat, Inc.
++#
++
++from . import base
++import hidtools.hid
++from hidtools.util import BusType
++import libevdev
++import logging
++import pytest
++
++logger = logging.getLogger("hidtools.test.mouse")
++
++# workaround https://gitlab.freedesktop.org/libevdev/python-libevdev/issues/6
++try:
++    libevdev.EV_REL.REL_WHEEL_HI_RES
++except AttributeError:
++    libevdev.EV_REL.REL_WHEEL_HI_RES = libevdev.EV_REL.REL_0B
++    libevdev.EV_REL.REL_HWHEEL_HI_RES = libevdev.EV_REL.REL_0C
++
++
++class InvalidHIDCommunication(Exception):
++    pass
++
++
++class MouseData(object):
++    pass
++
++
++class BaseMouse(base.UHIDTestDevice):
++    def __init__(self, rdesc, name=None, input_info=None):
++        assert rdesc is not None
++        super().__init__(name, "Mouse", input_info=input_info, rdesc=rdesc)
++        self.left = False
++        self.right = False
++        self.middle = False
++
++    def create_report(self, x, y, buttons=None, wheels=None, reportID=None):
++        """
++        Return an input report for this device.
++
++        :param x: relative x
++        :param y: relative y
++        :param buttons: a (l, r, m) tuple of bools for the button states,
++            where ``None`` is "leave unchanged"
++        :param wheels: a single value for the vertical wheel or a (vertical, horizontal) tuple for
++            the two wheels
++        :param reportID: the numeric report ID for this report, if needed
++        """
++        if buttons is not None:
++            l, r, m = buttons
++            if l is not None:
++                self.left = l
++            if r is not None:
++                self.right = r
++            if m is not None:
++                self.middle = m
++        left = self.left
++        right = self.right
++        middle = self.middle
++        # Note: the BaseMouse doesn't actually have a wheel but the
++        # create_report magic only fills in those fields exist, so let's
++        # make this generic here.
++        wheel, acpan = 0, 0
++        if wheels is not None:
++            if isinstance(wheels, tuple):
++                wheel = wheels[0]
++                acpan = wheels[1]
++            else:
++                wheel = wheels
++
++        reportID = reportID or self.default_reportID
++
++        mouse = MouseData()
++        mouse.b1 = int(left)
++        mouse.b2 = int(right)
++        mouse.b3 = int(middle)
++        mouse.x = x
++        mouse.y = y
++        mouse.wheel = wheel
++        mouse.acpan = acpan
++        return super().create_report(mouse, reportID=reportID)
++
++    def event(self, x, y, buttons=None, wheels=None):
++        """
++        Send an input event on the default report ID.
++
++        :param x: relative x
++        :param y: relative y
++        :param buttons: a (l, r, m) tuple of bools for the button states,
++            where ``None`` is "leave unchanged"
++        :param wheels: a single value for the vertical wheel or a (vertical, horizontal) tuple for
++            the two wheels
++        """
++        r = self.create_report(x, y, buttons, wheels)
++        self.call_input_event(r)
++        return [r]
++
++
++class ButtonMouse(BaseMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,  # .Usage Page (Generic Desktop)        0
++        0x09, 0x02,  # .Usage (Mouse)                       2
++        0xa1, 0x01,  # .Collection (Application)            4
++        0x09, 0x02,  # ..Usage (Mouse)                      6
++        0xa1, 0x02,  # ..Collection (Logical)               8
++        0x09, 0x01,  # ...Usage (Pointer)                   10
++        0xa1, 0x00,  # ...Collection (Physical)             12
++        0x05, 0x09,  # ....Usage Page (Button)              14
++        0x19, 0x01,  # ....Usage Minimum (1)                16
++        0x29, 0x03,  # ....Usage Maximum (3)                18
++        0x15, 0x00,  # ....Logical Minimum (0)              20
++        0x25, 0x01,  # ....Logical Maximum (1)              22
++        0x75, 0x01,  # ....Report Size (1)                  24
++        0x95, 0x03,  # ....Report Count (3)                 26
++        0x81, 0x02,  # ....Input (Data,Var,Abs)             28
++        0x75, 0x05,  # ....Report Size (5)                  30
++        0x95, 0x01,  # ....Report Count (1)                 32
++        0x81, 0x03,  # ....Input (Cnst,Var,Abs)             34
++        0x05, 0x01,  # ....Usage Page (Generic Desktop)     36
++        0x09, 0x30,  # ....Usage (X)                        38
++        0x09, 0x31,  # ....Usage (Y)                        40
++        0x15, 0x81,  # ....Logical Minimum (-127)           42
++        0x25, 0x7f,  # ....Logical Maximum (127)            44
++        0x75, 0x08,  # ....Report Size (8)                  46
++        0x95, 0x02,  # ....Report Count (2)                 48
++        0x81, 0x06,  # ....Input (Data,Var,Rel)             50
++        0xc0,        # ...End Collection                    52
++        0xc0,        # ..End Collection                     53
++        0xc0,        # .End Collection                      54
++    ]
++    # fmt: on
++
++    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
++        super().__init__(rdesc, name, input_info)
++
++    def fake_report(self, x, y, buttons):
++        if buttons is not None:
++            left, right, middle = buttons
++            if left is None:
++                left = self.left
++            if right is None:
++                right = self.right
++            if middle is None:
++                middle = self.middle
++        else:
++            left = self.left
++            right = self.right
++            middle = self.middle
++
++        button_mask = sum(1 << i for i, b in enumerate([left, right, middle]) if b)
++        x = max(-127, min(127, x))
++        y = max(-127, min(127, y))
++        x = hidtools.util.to_twos_comp(x, 8)
++        y = hidtools.util.to_twos_comp(y, 8)
++        return [button_mask, x, y]
++
++
++class WheelMouse(ButtonMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,  # Usage Page (Generic Desktop)        0
++        0x09, 0x02,  # Usage (Mouse)                       2
++        0xa1, 0x01,  # Collection (Application)            4
++        0x05, 0x09,  # .Usage Page (Button)                6
++        0x19, 0x01,  # .Usage Minimum (1)                  8
++        0x29, 0x03,  # .Usage Maximum (3)                  10
++        0x15, 0x00,  # .Logical Minimum (0)                12
++        0x25, 0x01,  # .Logical Maximum (1)                14
++        0x95, 0x03,  # .Report Count (3)                   16
++        0x75, 0x01,  # .Report Size (1)                    18
++        0x81, 0x02,  # .Input (Data,Var,Abs)               20
++        0x95, 0x01,  # .Report Count (1)                   22
++        0x75, 0x05,  # .Report Size (5)                    24
++        0x81, 0x03,  # .Input (Cnst,Var,Abs)               26
++        0x05, 0x01,  # .Usage Page (Generic Desktop)       28
++        0x09, 0x01,  # .Usage (Pointer)                    30
++        0xa1, 0x00,  # .Collection (Physical)              32
++        0x09, 0x30,  # ..Usage (X)                         34
++        0x09, 0x31,  # ..Usage (Y)                         36
++        0x15, 0x81,  # ..Logical Minimum (-127)            38
++        0x25, 0x7f,  # ..Logical Maximum (127)             40
++        0x75, 0x08,  # ..Report Size (8)                   42
++        0x95, 0x02,  # ..Report Count (2)                  44
++        0x81, 0x06,  # ..Input (Data,Var,Rel)              46
++        0xc0,        # .End Collection                     48
++        0x09, 0x38,  # .Usage (Wheel)                      49
++        0x15, 0x81,  # .Logical Minimum (-127)             51
++        0x25, 0x7f,  # .Logical Maximum (127)              53
++        0x75, 0x08,  # .Report Size (8)                    55
++        0x95, 0x01,  # .Report Count (1)                   57
++        0x81, 0x06,  # .Input (Data,Var,Rel)               59
++        0xc0,        # End Collection                      61
++    ]
++    # fmt: on
++
++    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
++        super().__init__(rdesc, name, input_info)
++        self.wheel_multiplier = 1
++
++
++class TwoWheelMouse(WheelMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,        # Usage Page (Generic Desktop)        0
++        0x09, 0x02,        # Usage (Mouse)                       2
++        0xa1, 0x01,        # Collection (Application)            4
++        0x09, 0x01,        # .Usage (Pointer)                    6
++        0xa1, 0x00,        # .Collection (Physical)              8
++        0x05, 0x09,        # ..Usage Page (Button)               10
++        0x19, 0x01,        # ..Usage Minimum (1)                 12
++        0x29, 0x10,        # ..Usage Maximum (16)                14
++        0x15, 0x00,        # ..Logical Minimum (0)               16
++        0x25, 0x01,        # ..Logical Maximum (1)               18
++        0x95, 0x10,        # ..Report Count (16)                 20
++        0x75, 0x01,        # ..Report Size (1)                   22
++        0x81, 0x02,        # ..Input (Data,Var,Abs)              24
++        0x05, 0x01,        # ..Usage Page (Generic Desktop)      26
++        0x16, 0x01, 0x80,  # ..Logical Minimum (-32767)          28
++        0x26, 0xff, 0x7f,  # ..Logical Maximum (32767)           31
++        0x75, 0x10,        # ..Report Size (16)                  34
++        0x95, 0x02,        # ..Report Count (2)                  36
++        0x09, 0x30,        # ..Usage (X)                         38
++        0x09, 0x31,        # ..Usage (Y)                         40
++        0x81, 0x06,        # ..Input (Data,Var,Rel)              42
++        0x15, 0x81,        # ..Logical Minimum (-127)            44
++        0x25, 0x7f,        # ..Logical Maximum (127)             46
++        0x75, 0x08,        # ..Report Size (8)                   48
++        0x95, 0x01,        # ..Report Count (1)                  50
++        0x09, 0x38,        # ..Usage (Wheel)                     52
++        0x81, 0x06,        # ..Input (Data,Var,Rel)              54
++        0x05, 0x0c,        # ..Usage Page (Consumer Devices)     56
++        0x0a, 0x38, 0x02,  # ..Usage (AC Pan)                    58
++        0x95, 0x01,        # ..Report Count (1)                  61
++        0x81, 0x06,        # ..Input (Data,Var,Rel)              63
++        0xc0,              # .End Collection                     65
++        0xc0,              # End Collection                      66
++    ]
++    # fmt: on
++
++    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
++        super().__init__(rdesc, name, input_info)
++        self.hwheel_multiplier = 1
++
++
++class MIDongleMIWirelessMouse(TwoWheelMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,         # Usage Page (Generic Desktop)
++        0x09, 0x02,         # Usage (Mouse)
++        0xa1, 0x01,         # Collection (Application)
++        0x85, 0x01,         # .Report ID (1)
++        0x09, 0x01,         # .Usage (Pointer)
++        0xa1, 0x00,         # .Collection (Physical)
++        0x95, 0x05,         # ..Report Count (5)
++        0x75, 0x01,         # ..Report Size (1)
++        0x05, 0x09,         # ..Usage Page (Button)
++        0x19, 0x01,         # ..Usage Minimum (1)
++        0x29, 0x05,         # ..Usage Maximum (5)
++        0x15, 0x00,         # ..Logical Minimum (0)
++        0x25, 0x01,         # ..Logical Maximum (1)
++        0x81, 0x02,         # ..Input (Data,Var,Abs)
++        0x95, 0x01,         # ..Report Count (1)
++        0x75, 0x03,         # ..Report Size (3)
++        0x81, 0x01,         # ..Input (Cnst,Arr,Abs)
++        0x75, 0x08,         # ..Report Size (8)
++        0x95, 0x01,         # ..Report Count (1)
++        0x05, 0x01,         # ..Usage Page (Generic Desktop)
++        0x09, 0x38,         # ..Usage (Wheel)
++        0x15, 0x81,         # ..Logical Minimum (-127)
++        0x25, 0x7f,         # ..Logical Maximum (127)
++        0x81, 0x06,         # ..Input (Data,Var,Rel)
++        0x05, 0x0c,         # ..Usage Page (Consumer Devices)
++        0x0a, 0x38, 0x02,   # ..Usage (AC Pan)
++        0x95, 0x01,         # ..Report Count (1)
++        0x81, 0x06,         # ..Input (Data,Var,Rel)
++        0xc0,               # .End Collection
++        0x85, 0x02,         # .Report ID (2)
++        0x09, 0x01,         # .Usage (Consumer Control)
++        0xa1, 0x00,         # .Collection (Physical)
++        0x75, 0x0c,         # ..Report Size (12)
++        0x95, 0x02,         # ..Report Count (2)
++        0x05, 0x01,         # ..Usage Page (Generic Desktop)
++        0x09, 0x30,         # ..Usage (X)
++        0x09, 0x31,         # ..Usage (Y)
++        0x16, 0x01, 0xf8,   # ..Logical Minimum (-2047)
++        0x26, 0xff, 0x07,   # ..Logical Maximum (2047)
++        0x81, 0x06,         # ..Input (Data,Var,Rel)
++        0xc0,               # .End Collection
++        0xc0,               # End Collection
++        0x05, 0x0c,         # Usage Page (Consumer Devices)
++        0x09, 0x01,         # Usage (Consumer Control)
++        0xa1, 0x01,         # Collection (Application)
++        0x85, 0x03,         # .Report ID (3)
++        0x15, 0x00,         # .Logical Minimum (0)
++        0x25, 0x01,         # .Logical Maximum (1)
++        0x75, 0x01,         # .Report Size (1)
++        0x95, 0x01,         # .Report Count (1)
++        0x09, 0xcd,         # .Usage (Play/Pause)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x0a, 0x83, 0x01,   # .Usage (AL Consumer Control Config)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x09, 0xb5,         # .Usage (Scan Next Track)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x09, 0xb6,         # .Usage (Scan Previous Track)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x09, 0xea,         # .Usage (Volume Down)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x09, 0xe9,         # .Usage (Volume Up)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x0a, 0x25, 0x02,   # .Usage (AC Forward)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0x0a, 0x24, 0x02,   # .Usage (AC Back)
++        0x81, 0x06,         # .Input (Data,Var,Rel)
++        0xc0,               # End Collection
++    ]
++    # fmt: on
++    device_input_info = (BusType.USB, 0x2717, 0x003B)
++    device_name = "uhid test MI Dongle MI Wireless Mouse"
++
++    def __init__(
++        self, rdesc=report_descriptor, name=device_name, input_info=device_input_info
++    ):
++        super().__init__(rdesc, name, input_info)
++
++    def event(self, x, y, buttons=None, wheels=None):
++        # this mouse spreads the relative pointer and the mouse buttons
++        # onto 2 distinct reports
++        rs = []
++        r = self.create_report(x, y, buttons, wheels, reportID=1)
++        self.call_input_event(r)
++        rs.append(r)
++        r = self.create_report(x, y, buttons, reportID=2)
++        self.call_input_event(r)
++        rs.append(r)
++        return rs
++
++
++class ResolutionMultiplierMouse(TwoWheelMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,        # Usage Page (Generic Desktop)        83
++        0x09, 0x02,        # Usage (Mouse)                       85
++        0xa1, 0x01,        # Collection (Application)            87
++        0x05, 0x01,        # .Usage Page (Generic Desktop)       89
++        0x09, 0x02,        # .Usage (Mouse)                      91
++        0xa1, 0x02,        # .Collection (Logical)               93
++        0x85, 0x11,        # ..Report ID (17)                    95
++        0x09, 0x01,        # ..Usage (Pointer)                   97
++        0xa1, 0x00,        # ..Collection (Physical)             99
++        0x05, 0x09,        # ...Usage Page (Button)              101
++        0x19, 0x01,        # ...Usage Minimum (1)                103
++        0x29, 0x03,        # ...Usage Maximum (3)                105
++        0x95, 0x03,        # ...Report Count (3)                 107
++        0x75, 0x01,        # ...Report Size (1)                  109
++        0x25, 0x01,        # ...Logical Maximum (1)              111
++        0x81, 0x02,        # ...Input (Data,Var,Abs)             113
++        0x95, 0x01,        # ...Report Count (1)                 115
++        0x81, 0x01,        # ...Input (Cnst,Arr,Abs)             117
++        0x09, 0x05,        # ...Usage (Vendor Usage 0x05)        119
++        0x81, 0x02,        # ...Input (Data,Var,Abs)             121
++        0x95, 0x03,        # ...Report Count (3)                 123
++        0x81, 0x01,        # ...Input (Cnst,Arr,Abs)             125
++        0x05, 0x01,        # ...Usage Page (Generic Desktop)     127
++        0x09, 0x30,        # ...Usage (X)                        129
++        0x09, 0x31,        # ...Usage (Y)                        131
++        0x95, 0x02,        # ...Report Count (2)                 133
++        0x75, 0x08,        # ...Report Size (8)                  135
++        0x15, 0x81,        # ...Logical Minimum (-127)           137
++        0x25, 0x7f,        # ...Logical Maximum (127)            139
++        0x81, 0x06,        # ...Input (Data,Var,Rel)             141
++        0xa1, 0x02,        # ...Collection (Logical)             143
++        0x85, 0x12,        # ....Report ID (18)                  145
++        0x09, 0x48,        # ....Usage (Resolution Multiplier)   147
++        0x95, 0x01,        # ....Report Count (1)                149
++        0x75, 0x02,        # ....Report Size (2)                 151
++        0x15, 0x00,        # ....Logical Minimum (0)             153
++        0x25, 0x01,        # ....Logical Maximum (1)             155
++        0x35, 0x01,        # ....Physical Minimum (1)            157
++        0x45, 0x04,        # ....Physical Maximum (4)            159
++        0xb1, 0x02,        # ....Feature (Data,Var,Abs)          161
++        0x35, 0x00,        # ....Physical Minimum (0)            163
++        0x45, 0x00,        # ....Physical Maximum (0)            165
++        0x75, 0x06,        # ....Report Size (6)                 167
++        0xb1, 0x01,        # ....Feature (Cnst,Arr,Abs)          169
++        0x85, 0x11,        # ....Report ID (17)                  171
++        0x09, 0x38,        # ....Usage (Wheel)                   173
++        0x15, 0x81,        # ....Logical Minimum (-127)          175
++        0x25, 0x7f,        # ....Logical Maximum (127)           177
++        0x75, 0x08,        # ....Report Size (8)                 179
++        0x81, 0x06,        # ....Input (Data,Var,Rel)            181
++        0xc0,              # ...End Collection                   183
++        0x05, 0x0c,        # ...Usage Page (Consumer Devices)    184
++        0x75, 0x08,        # ...Report Size (8)                  186
++        0x0a, 0x38, 0x02,  # ...Usage (AC Pan)                   188
++        0x81, 0x06,        # ...Input (Data,Var,Rel)             191
++        0xc0,              # ..End Collection                    193
++        0xc0,              # .End Collection                     194
++        0xc0,              # End Collection                      195
++    ]
++    # fmt: on
++
++    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
++        super().__init__(rdesc, name, input_info)
++        self.default_reportID = 0x11
++
++        # Feature Report 12, multiplier Feature value must be set to 0b01,
++        # i.e. 1. We should extract that from the descriptor instead
++        # of hardcoding it here, but meanwhile this will do.
++        self.set_feature_report = [0x12, 0x1]
++
++    def set_report(self, req, rnum, rtype, data):
++        if rtype != self.UHID_FEATURE_REPORT:
++            raise InvalidHIDCommunication(f"Unexpected report type: {rtype}")
++        if rnum != 0x12:
++            raise InvalidHIDCommunication(f"Unexpected report number: {rnum}")
++
++        if data != self.set_feature_report:
++            raise InvalidHIDCommunication(
++                f"Unexpected data: {data}, expected {self.set_feature_report}"
++            )
++
++        self.wheel_multiplier = 4
++
++        return 0
++
++
++class BadResolutionMultiplierMouse(ResolutionMultiplierMouse):
++    def set_report(self, req, rnum, rtype, data):
++        super().set_report(req, rnum, rtype, data)
++
++        self.wheel_multiplier = 1
++        self.hwheel_multiplier = 1
++        return 32  # EPIPE
++
++
++class ResolutionMultiplierHWheelMouse(TwoWheelMouse):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,         # Usage Page (Generic Desktop)        0
++        0x09, 0x02,         # Usage (Mouse)                       2
++        0xa1, 0x01,         # Collection (Application)            4
++        0x05, 0x01,         # .Usage Page (Generic Desktop)       6
++        0x09, 0x02,         # .Usage (Mouse)                      8
++        0xa1, 0x02,         # .Collection (Logical)               10
++        0x85, 0x1a,         # ..Report ID (26)                    12
++        0x09, 0x01,         # ..Usage (Pointer)                   14
++        0xa1, 0x00,         # ..Collection (Physical)             16
++        0x05, 0x09,         # ...Usage Page (Button)              18
++        0x19, 0x01,         # ...Usage Minimum (1)                20
++        0x29, 0x05,         # ...Usage Maximum (5)                22
++        0x95, 0x05,         # ...Report Count (5)                 24
++        0x75, 0x01,         # ...Report Size (1)                  26
++        0x15, 0x00,         # ...Logical Minimum (0)              28
++        0x25, 0x01,         # ...Logical Maximum (1)              30
++        0x81, 0x02,         # ...Input (Data,Var,Abs)             32
++        0x75, 0x03,         # ...Report Size (3)                  34
++        0x95, 0x01,         # ...Report Count (1)                 36
++        0x81, 0x01,         # ...Input (Cnst,Arr,Abs)             38
++        0x05, 0x01,         # ...Usage Page (Generic Desktop)     40
++        0x09, 0x30,         # ...Usage (X)                        42
++        0x09, 0x31,         # ...Usage (Y)                        44
++        0x95, 0x02,         # ...Report Count (2)                 46
++        0x75, 0x10,         # ...Report Size (16)                 48
++        0x16, 0x01, 0x80,   # ...Logical Minimum (-32767)         50
++        0x26, 0xff, 0x7f,   # ...Logical Maximum (32767)          53
++        0x81, 0x06,         # ...Input (Data,Var,Rel)             56
++        0xa1, 0x02,         # ...Collection (Logical)             58
++        0x85, 0x12,         # ....Report ID (18)                  60
++        0x09, 0x48,         # ....Usage (Resolution Multiplier)   62
++        0x95, 0x01,         # ....Report Count (1)                64
++        0x75, 0x02,         # ....Report Size (2)                 66
++        0x15, 0x00,         # ....Logical Minimum (0)             68
++        0x25, 0x01,         # ....Logical Maximum (1)             70
++        0x35, 0x01,         # ....Physical Minimum (1)            72
++        0x45, 0x0c,         # ....Physical Maximum (12)           74
++        0xb1, 0x02,         # ....Feature (Data,Var,Abs)          76
++        0x85, 0x1a,         # ....Report ID (26)                  78
++        0x09, 0x38,         # ....Usage (Wheel)                   80
++        0x35, 0x00,         # ....Physical Minimum (0)            82
++        0x45, 0x00,         # ....Physical Maximum (0)            84
++        0x95, 0x01,         # ....Report Count (1)                86
++        0x75, 0x10,         # ....Report Size (16)                88
++        0x16, 0x01, 0x80,   # ....Logical Minimum (-32767)        90
++        0x26, 0xff, 0x7f,   # ....Logical Maximum (32767)         93
++        0x81, 0x06,         # ....Input (Data,Var,Rel)            96
++        0xc0,               # ...End Collection                   98
++        0xa1, 0x02,         # ...Collection (Logical)             99
++        0x85, 0x12,         # ....Report ID (18)                  101
++        0x09, 0x48,         # ....Usage (Resolution Multiplier)   103
++        0x75, 0x02,         # ....Report Size (2)                 105
++        0x15, 0x00,         # ....Logical Minimum (0)             107
++        0x25, 0x01,         # ....Logical Maximum (1)             109
++        0x35, 0x01,         # ....Physical Minimum (1)            111
++        0x45, 0x0c,         # ....Physical Maximum (12)           113
++        0xb1, 0x02,         # ....Feature (Data,Var,Abs)          115
++        0x35, 0x00,         # ....Physical Minimum (0)            117
++        0x45, 0x00,         # ....Physical Maximum (0)            119
++        0x75, 0x04,         # ....Report Size (4)                 121
++        0xb1, 0x01,         # ....Feature (Cnst,Arr,Abs)          123
++        0x85, 0x1a,         # ....Report ID (26)                  125
++        0x05, 0x0c,         # ....Usage Page (Consumer Devices)   127
++        0x95, 0x01,         # ....Report Count (1)                129
++        0x75, 0x10,         # ....Report Size (16)                131
++        0x16, 0x01, 0x80,   # ....Logical Minimum (-32767)        133
++        0x26, 0xff, 0x7f,   # ....Logical Maximum (32767)         136
++        0x0a, 0x38, 0x02,   # ....Usage (AC Pan)                  139
++        0x81, 0x06,         # ....Input (Data,Var,Rel)            142
++        0xc0,               # ...End Collection                   144
++        0xc0,               # ..End Collection                    145
++        0xc0,               # .End Collection                     146
++        0xc0,               # End Collection                      147
++    ]
++    # fmt: on
++
++    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
++        super().__init__(rdesc, name, input_info)
++        self.default_reportID = 0x1A
++
++        # Feature Report 12, multiplier Feature value must be set to 0b0101,
++        # i.e. 5. We should extract that from the descriptor instead
++        # of hardcoding it here, but meanwhile this will do.
++        self.set_feature_report = [0x12, 0x5]
++
++    def set_report(self, req, rnum, rtype, data):
++        super().set_report(req, rnum, rtype, data)
++
++        self.wheel_multiplier = 12
++        self.hwheel_multiplier = 12
++
++        return 0
++
++
++class BaseTest:
++    class TestMouse(base.BaseTestCase.TestUhid):
++        def test_buttons(self):
++            """check for button reliability."""
++            uhdev = self.uhdev
++            evdev = uhdev.get_evdev()
++            syn_event = self.syn_event
++
++            r = uhdev.event(0, 0, (None, True, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_RIGHT, 1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_RIGHT] == 1
++
++            r = uhdev.event(0, 0, (None, False, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_RIGHT, 0)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_RIGHT] == 0
++
++            r = uhdev.event(0, 0, (None, None, True))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_MIDDLE, 1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_MIDDLE] == 1
++
++            r = uhdev.event(0, 0, (None, None, False))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_MIDDLE, 0)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_MIDDLE] == 0
++
++            r = uhdev.event(0, 0, (True, None, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_LEFT, 1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 1
++
++            r = uhdev.event(0, 0, (False, None, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_LEFT, 0)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 0
++
++            r = uhdev.event(0, 0, (True, True, None))
++            expected_event0 = libevdev.InputEvent(libevdev.EV_KEY.BTN_LEFT, 1)
++            expected_event1 = libevdev.InputEvent(libevdev.EV_KEY.BTN_RIGHT, 1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn(
++                (syn_event, expected_event0, expected_event1), events
++            )
++            assert evdev.value[libevdev.EV_KEY.BTN_RIGHT] == 1
++            assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 1
++
++            r = uhdev.event(0, 0, (False, None, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_LEFT, 0)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_RIGHT] == 1
++            assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 0
++
++            r = uhdev.event(0, 0, (None, False, None))
++            expected_event = libevdev.InputEvent(libevdev.EV_KEY.BTN_RIGHT, 0)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEventsIn((syn_event, expected_event), events)
++            assert evdev.value[libevdev.EV_KEY.BTN_RIGHT] == 0
++            assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 0
++
++        def test_relative(self):
++            """Check for relative events."""
++            uhdev = self.uhdev
++
++            syn_event = self.syn_event
++
++            r = uhdev.event(0, -1)
++            expected_event = libevdev.InputEvent(libevdev.EV_REL.REL_Y, -1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEvents((syn_event, expected_event), events)
++
++            r = uhdev.event(1, 0)
++            expected_event = libevdev.InputEvent(libevdev.EV_REL.REL_X, 1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEvents((syn_event, expected_event), events)
++
++            r = uhdev.event(-1, 2)
++            expected_event0 = libevdev.InputEvent(libevdev.EV_REL.REL_X, -1)
++            expected_event1 = libevdev.InputEvent(libevdev.EV_REL.REL_Y, 2)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEvents(
++                (syn_event, expected_event0, expected_event1), events
++            )
++
++
++class TestSimpleMouse(BaseTest.TestMouse):
++    def create_device(self):
++        return ButtonMouse()
++
++    def test_rdesc(self):
++        """Check that the testsuite actually manages to format the
++        reports according to the report descriptors.
++        No kernel device is used here"""
++        uhdev = self.uhdev
++
++        event = (0, 0, (None, None, None))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (0, 0, (None, True, None))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (0, 0, (True, True, None))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (0, 0, (False, False, False))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (1, 0, (True, False, True))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (-1, 0, (True, False, True))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (-5, 5, (True, False, True))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (-127, 127, (True, False, True))
++        assert uhdev.fake_report(*event) == uhdev.create_report(*event)
++
++        event = (0, -128, (True, False, True))
++        with pytest.raises(hidtools.hid.RangeError):
++            uhdev.create_report(*event)
++
++
++class TestWheelMouse(BaseTest.TestMouse):
++    def create_device(self):
++        return WheelMouse()
++
++    def is_wheel_highres(self, uhdev):
++        evdev = uhdev.get_evdev()
++        assert evdev.has(libevdev.EV_REL.REL_WHEEL)
++        return evdev.has(libevdev.EV_REL.REL_WHEEL_HI_RES)
++
++    def test_wheel(self):
++        uhdev = self.uhdev
++
++        # check if the kernel is high res wheel compatible
++        high_res_wheel = self.is_wheel_highres(uhdev)
++
++        syn_event = self.syn_event
++        # The Resolution Multiplier is applied to the HID reports, so we
++        # need to pre-multiply too.
++        mult = uhdev.wheel_multiplier
++
++        r = uhdev.event(0, 0, wheels=1 * mult)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL, 1))
++        if high_res_wheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, 120))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(0, 0, wheels=-1 * mult)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL, -1))
++        if high_res_wheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, -120))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(-1, 2, wheels=3 * mult)
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_X, -1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_Y, 2))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL, 3))
++        if high_res_wheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, 360))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++
++class TestTwoWheelMouse(TestWheelMouse):
++    def create_device(self):
++        return TwoWheelMouse()
++
++    def is_hwheel_highres(self, uhdev):
++        evdev = uhdev.get_evdev()
++        assert evdev.has(libevdev.EV_REL.REL_HWHEEL)
++        return evdev.has(libevdev.EV_REL.REL_HWHEEL_HI_RES)
++
++    def test_ac_pan(self):
++        uhdev = self.uhdev
++
++        # check if the kernel is high res wheel compatible
++        high_res_wheel = self.is_wheel_highres(uhdev)
++        high_res_hwheel = self.is_hwheel_highres(uhdev)
++        assert high_res_wheel == high_res_hwheel
++
++        syn_event = self.syn_event
++        # The Resolution Multiplier is applied to the HID reports, so we
++        # need to pre-multiply too.
++        hmult = uhdev.hwheel_multiplier
++        vmult = uhdev.wheel_multiplier
++
++        r = uhdev.event(0, 0, wheels=(0, 1 * hmult))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL, 1))
++        if high_res_hwheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, 120))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(0, 0, wheels=(0, -1 * hmult))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL, -1))
++        if high_res_hwheel:
++            expected.append(
++                libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, -120)
++            )
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(-1, 2, wheels=(0, 3 * hmult))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_X, -1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_Y, 2))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL, 3))
++        if high_res_hwheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, 360))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(-1, 2, wheels=(-3 * vmult, 4 * hmult))
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_X, -1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_Y, 2))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL, -3))
++        if high_res_wheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, -360))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL, 4))
++        if high_res_wheel:
++            expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, 480))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++
++class TestResolutionMultiplierMouse(TestTwoWheelMouse):
++    def create_device(self):
++        return ResolutionMultiplierMouse()
++
++    def is_wheel_highres(self, uhdev):
++        high_res = super().is_wheel_highres(uhdev)
++
++        if not high_res:
++            # the kernel doesn't seem to support the high res wheel mice,
++            # make sure we haven't triggered the feature
++            assert uhdev.wheel_multiplier == 1
++
++        return high_res
++
++    def test_resolution_multiplier_wheel(self):
++        uhdev = self.uhdev
++
++        if not self.is_wheel_highres(uhdev):
++            pytest.skip("Kernel not compatible, we can not trigger the conditions")
++
++        assert uhdev.wheel_multiplier > 1
++        assert 120 % uhdev.wheel_multiplier == 0
++
++    def test_wheel_with_multiplier(self):
++        uhdev = self.uhdev
++
++        if not self.is_wheel_highres(uhdev):
++            pytest.skip("Kernel not compatible, we can not trigger the conditions")
++
++        assert uhdev.wheel_multiplier > 1
++
++        syn_event = self.syn_event
++        mult = uhdev.wheel_multiplier
++
++        r = uhdev.event(0, 0, wheels=1)
++        expected = [syn_event]
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, 120 / mult)
++        )
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(0, 0, wheels=-1)
++        expected = [syn_event]
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, -120 / mult)
++        )
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_X, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_Y, -2))
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL_HI_RES, 120 / mult)
++        )
++
++        for _ in range(mult - 1):
++            r = uhdev.event(1, -2, wheels=1)
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEvents(expected, events)
++
++        r = uhdev.event(1, -2, wheels=1)
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_WHEEL, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++
++class TestBadResolutionMultiplierMouse(TestTwoWheelMouse):
++    def create_device(self):
++        return BadResolutionMultiplierMouse()
++
++    def is_wheel_highres(self, uhdev):
++        high_res = super().is_wheel_highres(uhdev)
++
++        assert uhdev.wheel_multiplier == 1
++
++        return high_res
++
++    def test_resolution_multiplier_wheel(self):
++        uhdev = self.uhdev
++
++        assert uhdev.wheel_multiplier == 1
++
++
++class TestResolutionMultiplierHWheelMouse(TestResolutionMultiplierMouse):
++    def create_device(self):
++        return ResolutionMultiplierHWheelMouse()
++
++    def is_hwheel_highres(self, uhdev):
++        high_res = super().is_hwheel_highres(uhdev)
++
++        if not high_res:
++            # the kernel doesn't seem to support the high res wheel mice,
++            # make sure we haven't triggered the feature
++            assert uhdev.hwheel_multiplier == 1
++
++        return high_res
++
++    def test_resolution_multiplier_ac_pan(self):
++        uhdev = self.uhdev
++
++        if not self.is_hwheel_highres(uhdev):
++            pytest.skip("Kernel not compatible, we can not trigger the conditions")
++
++        assert uhdev.hwheel_multiplier > 1
++        assert 120 % uhdev.hwheel_multiplier == 0
++
++    def test_ac_pan_with_multiplier(self):
++        uhdev = self.uhdev
++
++        if not self.is_hwheel_highres(uhdev):
++            pytest.skip("Kernel not compatible, we can not trigger the conditions")
++
++        assert uhdev.hwheel_multiplier > 1
++
++        syn_event = self.syn_event
++        hmult = uhdev.hwheel_multiplier
++
++        r = uhdev.event(0, 0, wheels=(0, 1))
++        expected = [syn_event]
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, 120 / hmult)
++        )
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        r = uhdev.event(0, 0, wheels=(0, -1))
++        expected = [syn_event]
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, -120 / hmult)
++        )
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++        expected = [syn_event]
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_X, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_Y, -2))
++        expected.append(
++            libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL_HI_RES, 120 / hmult)
++        )
++
++        for _ in range(hmult - 1):
++            r = uhdev.event(1, -2, wheels=(0, 1))
++            events = uhdev.next_sync_events()
++            self.debug_reports(r, uhdev, events)
++            self.assertInputEvents(expected, events)
++
++        r = uhdev.event(1, -2, wheels=(0, 1))
++        expected.append(libevdev.InputEvent(libevdev.EV_REL.REL_HWHEEL, 1))
++        events = uhdev.next_sync_events()
++        self.debug_reports(r, uhdev, events)
++        self.assertInputEvents(expected, events)
++
++
++class TestMiMouse(TestWheelMouse):
++    def create_device(self):
++        return MIDongleMIWirelessMouse()
++
++    def assertInputEvents(self, expected_events, effective_events):
++        # Buttons and x/y are spread over two HID reports, so we can get two
++        # event frames for this device.
++        remaining = self.assertInputEventsIn(expected_events, effective_events)
++        try:
++            remaining.remove(libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0))
++        except ValueError:
++            # If there's no SYN_REPORT in the list, continue and let the
++            # assert below print out the real error
++            pass
++        assert remaining == []
 
 -- 
-2.31.1
+2.39.1
 
