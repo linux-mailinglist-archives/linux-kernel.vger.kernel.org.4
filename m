@@ -2,137 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BA569AE8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8DE69AE73
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjBQO4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 09:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S229947AbjBQOyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 09:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjBQOz7 (ORCPT
+        with ESMTP id S229660AbjBQOyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 09:55:59 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A056D6EF2A;
-        Fri, 17 Feb 2023 06:55:39 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pT29B-0005KA-2i;
-        Fri, 17 Feb 2023 15:55:37 +0100
-Date:   Fri, 17 Feb 2023 14:54:02 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH v8 05/12] net: ethernet: mtk_eth_soc: set MDIO bus clock
- frequency
-Message-ID: <5f9f2253ada60de7a4685eee243a5054fb82f3f7.1676645204.git.daniel@makrotopia.org>
-References: <cover.1676645203.git.daniel@makrotopia.org>
+        Fri, 17 Feb 2023 09:54:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D228207;
+        Fri, 17 Feb 2023 06:54:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B5BBB82A26;
+        Fri, 17 Feb 2023 14:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B500EC433EF;
+        Fri, 17 Feb 2023 14:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676645649;
+        bh=mAyxo9jzvMpBaS+OGt1uE0IiaE4JH5UGYXDEN92Phwg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UY7NL9L8gdr3kr0FZ3JHMa3CVQX8uHHUWF/IDsYGG1eMhtZajd+SvfPmk8RK11ZHP
+         iu2msEcey400TfIizRspgmRwexY75+NtyuQEG84fCoD/XmBqj5QDgDTVQlXkTuQLrY
+         PH5O1xXc+i0QhFXPCftt8uKypCHEYwzsjX3f+dS36NCG5nUmmdgQSZlo5s7Dexy8th
+         Og0RoXeH3rtE5OKqpCpEehLqtZB2llpGnLgDkCERZWGeALwgSCjU1cfBfni9uLnbEC
+         4jcCc7HSudofdaY5YlwAWHB9oofnpZ4GLt4kxWNDnY8RM+j0G9fs0VY5g8cRZQFs7v
+         uelimgXdvbLag==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH v4 2/6] riscv: Rework kasan population functions
+In-Reply-To: <20230203075232.274282-3-alexghiti@rivosinc.com>
+References: <20230203075232.274282-1-alexghiti@rivosinc.com>
+ <20230203075232.274282-3-alexghiti@rivosinc.com>
+Date:   Fri, 17 Feb 2023 15:54:06 +0100
+Message-ID: <87lekwmjg1.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1676645203.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set MDIO bus clock frequency and allow setting a custom maximum
-frequency from device tree.
+Alexandre Ghiti <alexghiti@rivosinc.com> writes:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 21 +++++++++++++++++++++
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  7 +++++++
- 2 files changed, 28 insertions(+)
+> Our previous kasan population implementation used to have the final kasan
+> shadow region mapped with kasan_early_shadow_page, because we did not cle=
+an
+> the early mapping and then we had to populate the kasan region "in-place"
+> which made the code cumbersome.
+>
+> So now we clear the early mapping, establish a temporary mapping while we
+> populate the kasan shadow region with just the kernel regions that will
+> be used.
+>
+> This new version uses the "generic" way of going through a page table
+> that may be folded at runtime (avoid the XXX_next macros).
+>
+> It was tested with outline instrumentation on an Ubuntu kernel
+> configuration successfully.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index cfb15a84b894..030d87c42bd4 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -789,8 +789,10 @@ static const struct phylink_mac_ops mtk_phylink_ops = {
- 
- static int mtk_mdio_init(struct mtk_eth *eth)
- {
-+	unsigned int max_clk = 2500000, divider;
- 	struct device_node *mii_np;
- 	int ret;
-+	u32 val;
- 
- 	mii_np = of_get_child_by_name(eth->dev->of_node, "mdio-bus");
- 	if (!mii_np) {
-@@ -818,6 +820,25 @@ static int mtk_mdio_init(struct mtk_eth *eth)
- 	eth->mii_bus->parent = eth->dev;
- 
- 	snprintf(eth->mii_bus->id, MII_BUS_ID_SIZE, "%pOFn", mii_np);
-+
-+	if (!of_property_read_u32(mii_np, "clock-frequency", &val)) {
-+		if (val > MDC_MAX_FREQ || val < MDC_MAX_FREQ / MDC_MAX_DIVIDER) {
-+			dev_err(eth->dev, "MDIO clock frequency out of range");
-+			ret = -EINVAL;
-+			goto err_put_node;
-+		}
-+		max_clk = val;
-+	}
-+	divider = min_t(unsigned int, DIV_ROUND_UP(MDC_MAX_FREQ, max_clk), 63);
-+
-+	/* Configure MDC Divider */
-+	val = mtk_r32(eth, MTK_PPSC);
-+	val &= ~PPSC_MDC_CFG;
-+	val |= FIELD_PREP(PPSC_MDC_CFG, divider) | PPSC_MDC_TURBO;
-+	mtk_w32(eth, val, MTK_PPSC);
-+
-+	dev_dbg(eth->dev, "MDC is running on %d Hz\n", MDC_MAX_FREQ / divider);
-+
- 	ret = of_mdiobus_register(eth->mii_bus, mii_np);
- 
- err_put_node:
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 7230dcb29315..7014c02ba2d4 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -363,6 +363,13 @@
- #define RX_DMA_VTAG_V2		BIT(0)
- #define RX_DMA_L4_VALID_V2	BIT(2)
- 
-+/* PHY Polling and SMI Master Control registers */
-+#define MTK_PPSC		0x10000
-+#define PPSC_MDC_CFG		GENMASK(29, 24)
-+#define PPSC_MDC_TURBO		BIT(20)
-+#define MDC_MAX_FREQ		25000000
-+#define MDC_MAX_DIVIDER		63
-+
- /* PHY Indirect Access Control registers */
- #define MTK_PHY_IAC		0x10004
- #define PHY_IAC_ACCESS		BIT(31)
--- 
-2.39.2
+(One minor nit, that can be addressed later.)
 
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+
+>  arch/riscv/mm/kasan_init.c | 361 +++++++++++++++++++------------------
+>  1 file changed, 183 insertions(+), 178 deletions(-)
+
+
+> @@ -482,7 +437,37 @@ static void __init kasan_shallow_populate(void *star=
+t, void *end)
+>  	unsigned long vend =3D PAGE_ALIGN((unsigned long)end);
+>=20=20
+>  	kasan_shallow_populate_pgd(vaddr, vend);
+> -	local_flush_tlb_all();
+> +}
+> +
+> +static void create_tmp_mapping(void)
+> +{
+> +	void *ptr;
+> +	p4d_t *base_p4d;
+> +
+> +	/*
+> +	 * We need to clean the early mapping: this is hard to achieve "in-plac=
+e",
+> +	 * so install a temporary mapping like arm64 and x86 do.
+> +	 */
+> +	memcpy(tmp_pg_dir, swapper_pg_dir, sizeof(pgd_t) * PTRS_PER_PGD);
+> +
+> +	/* Copy the last p4d since it is shared with the kernel mapping. */
+> +	if (pgtable_l5_enabled) {
+> +		ptr =3D (p4d_t *)pgd_page_vaddr(*pgd_offset_k(KASAN_SHADOW_END));
+> +		memcpy(tmp_p4d, ptr, sizeof(p4d_t) * PTRS_PER_P4D);
+> +		set_pgd(&tmp_pg_dir[pgd_index(KASAN_SHADOW_END)],
+> +			pfn_pgd(PFN_DOWN(__pa(tmp_p4d)), PAGE_TABLE));
+> +		base_p4d =3D tmp_p4d;
+> +	} else {
+> +		base_p4d =3D (p4d_t *)tmp_pg_dir;
+> +	}
+> +
+> +	/* Copy the last pud since it is shared with the kernel mapping. */
+> +	if (pgtable_l4_enabled) {
+> +		ptr =3D (pud_t *)p4d_page_vaddr(*(base_p4d + p4d_index(KASAN_SHADOW_EN=
+D)));
+> +		memcpy(tmp_pud, ptr, sizeof(pud_t) * PTRS_PER_PUD);
+> +		set_p4d(&base_p4d[p4d_index(KASAN_SHADOW_END)],
+> +			pfn_p4d(PFN_DOWN(__pa(tmp_pud)), PAGE_TABLE));
+> +	}
+>  }
+>=20=20
+>  void __init kasan_init(void)
+> @@ -490,10 +475,27 @@ void __init kasan_init(void)
+>  	phys_addr_t p_start, p_end;
+>  	u64 i;
+>=20=20
+> -	if (IS_ENABLED(CONFIG_KASAN_VMALLOC))
+> +	create_tmp_mapping();
+> +	csr_write(CSR_SATP, PFN_DOWN(__pa(tmp_pg_dir)) | satp_mode);
+
+Nit: Maybe add a comment, why the sfence.vma is *not* required here. I
+tripped over it.
+
+
+Bj=C3=B6rn
