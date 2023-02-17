@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA769B475
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7298969B47D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjBQVOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S229573AbjBQVQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjBQVOG (ORCPT
+        with ESMTP id S229461AbjBQVQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:14:06 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8265E5BA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:14:02 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg35so13044wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:14:02 -0800 (PST)
+        Fri, 17 Feb 2023 16:16:57 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48F15BDB2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:16:56 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id f3so2157656ljn.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:16:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EW4MkRsSt97nP2OjfvV/HrGYB4OX6Pt48nDkauxGyVI=;
-        b=wRikKBLe7U1qL1RunGMOmQJZb52SbsdTuBi/QKYTXpD0L7ZK1id5boXGjsYdHFf8vf
-         LJIvZGWBbdvPssG79W2NBPBD75X7A6RH3cNtPCVKPvFqCP9aLLd/PFXKwRykabDpdeon
-         pe3DsWjPFB+lDLA6LFksZBcxs6+Swd+CyVvO0XFJuKhvATe5hgC9jVAQm3gntTZ+ORAD
-         SdDTQC8/KwWbbb/fr8ZnSKCffiPh1iLNrmCxO054pkTVH1udo2qXQjw/PEEiPXm15HNI
-         HHDrLgIPXsXTUxzCcODGO1YDtlYrmsI2h3zYCsjB9yOc0J5SPItWlTZKDK8ZERv1rHiA
-         F/lQ==
+        bh=6ak+8LJfZoxeGXvU223WgSUa5zrwLYuaf0G4KExhaBo=;
+        b=WzEOsJAM51nZI+PuUQMFYxrbKH7Kjm8RcRectrj+YJYrBMe+/jr5G9W5GGLK273tAj
+         gyjiRxoptN1RuyRNovdVWFp+ptTyoDHm529ypMikm1AiVSB5GDRWTDsMSOPt9EFaDz2E
+         pQFdM4oRJUIWegWmV0VxOKzhP9sc5f8lirdFKrWE21JUKlh/tWSsWIrK5mqV4YmP0iry
+         jOdqCvOeVogJ3hFYfAIi8tNUZOL0RqszwRCt3aaK0ZJCB0kRRZY0DgfyHNycj3SAnZyB
+         LJUHYJK4iBf+vmfocarwLgTs7Logeygdg3qTkX5+At0uvcMB8dBYFrjcgD+dhuM0EmAF
+         mSDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EW4MkRsSt97nP2OjfvV/HrGYB4OX6Pt48nDkauxGyVI=;
-        b=s0Oz4Y1KzcHLhXhlhqLgeELnT58oy6wRmuaLdBcrl9CHXHbuCra+cSE7647Oew5xNq
-         /pLzdrOhk6/+CN/GtBFKnsTcWVxazRp/qcukJ6C+gYoYn90jd7m4kcUwWuLuiWCsePxS
-         hj3wwjJ0ZQqeF6Fim4Djzw6MyFSlSwhne4oKIQ4bnN3j2PRHp7VptLOzH5FBVjWhF7EN
-         bWou958bluu9AB3lJEJQiJUqQoV2n9TpdgajbWbc6ysZFBO0rJ4nU7p7hK+vwoJAve4l
-         Ez7PAREPMV3/Km2+OzvwLw09GRUZeVSvOw5nmf8gtpCbtceW2hyPAttEgTfZ5Em3ETb6
-         OYrQ==
-X-Gm-Message-State: AO0yUKUup86tI2awqLWmL718zQBvIGu+9j9Gqdr6Hbq2Qu3mfxJp0Te8
-        ittaNG0L7YrmtFWD7N/mtkIeRw==
-X-Google-Smtp-Source: AK7set9bJWwf6VPImlBjocxK7OpKYe1M5pUpgHsEVTe3rlCdpxBRrmj8mEol2u8NhQQD66+cxhN0VA==
-X-Received: by 2002:a05:600c:1895:b0:3e2:589:2512 with SMTP id x21-20020a05600c189500b003e205892512mr1723935wmp.21.1676668441188;
-        Fri, 17 Feb 2023 13:14:01 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id ip24-20020a05600ca69800b003e223fe0a3asm2771609wmb.27.2023.02.17.13.14.00
+        bh=6ak+8LJfZoxeGXvU223WgSUa5zrwLYuaf0G4KExhaBo=;
+        b=DXs6pfgvF8HUrvfs7NuNJl2epvOaIbdpytvoQWkDdk4ZKDj5aRLx0+wDiwtibk82LV
+         eKtw0dZU65A6FA8Ty2eS4KreltdJzh2okskONPJx1wQK4DszlXVDj0wqSx0VYOoZ0HTU
+         SI+p99SAMFxzuhpw5TQVNBU3aKWpIycDGmMZcsn0e4aG1Mwe8PF1NlrqO4eqxP49BHTK
+         6CpUq1KIzyP125WyqMgvETvhBGQjfJKOd//Ac6+HORNUPfVokTF/61HbwTSLiLFjJCZZ
+         06fA5q6qIFRkrBemOyyIYXXtgFk2T3x2yAAs+7Tw7nKIqmo1v9jYSLD+FpmXAq/j1DM7
+         W5YQ==
+X-Gm-Message-State: AO0yUKVwPZ6BijqeW7y2lQ1xkL75cG5cziacVmBKG06t1nU//xuDfDTn
+        0JhUzbHuIR0qu0Ao9s+JVuNr9w==
+X-Google-Smtp-Source: AK7set8VSoLlRuQGJZe18IhRYONY61gU+0TX2DkgH0lkoDkSvTfwelptN1tew4Wv5aXvT6asmBteAw==
+X-Received: by 2002:a2e:7112:0:b0:293:4fff:9f0b with SMTP id m18-20020a2e7112000000b002934fff9f0bmr333071ljc.19.1676668615011;
+        Fri, 17 Feb 2023 13:16:55 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id t13-20020a05651c204d00b0029571d505a1sm31133ljo.80.2023.02.17.13.16.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 13:14:00 -0800 (PST)
-Message-ID: <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
-Date:   Fri, 17 Feb 2023 21:13:59 +0000
+        Fri, 17 Feb 2023 13:16:54 -0800 (PST)
+Message-ID: <76de00dc-f128-e609-7f0c-b53161036b97@linaro.org>
+Date:   Fri, 17 Feb 2023 22:16:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
+ Thunderbird/102.7.2
 Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
  deprecated QCM2290 compatible
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org
 Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
@@ -78,40 +78,47 @@ References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
  <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
  <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
  <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
-> First, it would be nice to know what was the intention of Bryan's commit?
-
-Sorry I've been grazing this thread but, not responding.
-
-- qcom,dsi-ctrl-6g-qcm2290
-
-is non-compliant with qcom,socid-dsi-ctrl which is our desired naming 
-convention, so that's what the deprecation is about i.e. moving this 
-compat to "qcom,qcm2290-dsi-ctrl"
-
-Actually I have the question why we are deciding to go with "sm6115" 
-instead of "qcm2290" ?
-
-The stamp on the package you receive from Thundercomm says "qcm2290" not 
-"sm6115"
-
-?
-
----
-bod
 
 
+On 17.02.2023 22:13, Bryan O'Donoghue wrote:
+> On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
+>> First, it would be nice to know what was the intention of Bryan's commit?
+> 
+> Sorry I've been grazing this thread but, not responding.
+> 
+> - qcom,dsi-ctrl-6g-qcm2290
+> 
+> is non-compliant with qcom,socid-dsi-ctrl which is our desired naming convention, so that's what the deprecation is about i.e. moving this compat to "qcom,qcm2290-dsi-ctrl"
+> 
+> Actually I have the question why we are deciding to go with "sm6115" instead of "qcm2290" ?
+> 
+> The stamp on the package you receive from Thundercomm says "qcm2290" not "sm6115"
+Correct, but QCM2290 is not supported upstream yet.
+
+SM6115 (a different SoC) however is, but it used the qcm2290 compatible
+as it was a convenient hack to get the DSI host ID recognized based on
+the (identical-to-qcm2290) base register without additional driver changes.
+We're now trying to untangle that mess..
+
+Konrad
+> 
+> ?
+> 
+> ---
+> bod
+> 
+> 
