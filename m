@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BA069B636
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F0969B64C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 00:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjBQXK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 18:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S230038AbjBQXLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 18:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBQXKZ (ORCPT
+        with ESMTP id S230039AbjBQXLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 18:10:25 -0500
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3022A2E;
-        Fri, 17 Feb 2023 15:10:24 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1718b38d3ceso2594256fac.0;
-        Fri, 17 Feb 2023 15:10:24 -0800 (PST)
+        Fri, 17 Feb 2023 18:11:14 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0066F69290
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:45 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 127-20020a251885000000b0092aabd4fa90so1931358yby.18
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 15:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=y+vRasImpgsONkuFWEwkUJDlQ5PlpYyW5BuRWOgPo+I=;
+        b=duZP1OUSZ8GA7t5Oa5HX6hRRseF3k5EiTGYt+R3pS76fquatD1J2o/MeZx61e/YmEh
+         CawMVRWWt0V1OGElmhOpu7JQeTb9c8c8ArnCdaPGyYtsEztkDJFZMSqJW49jcfZnWuOI
+         r6zEtJTbWpCHlEi4nqmAUmyUUYVLgzsxzfB5rpRpdncAM8upT8wdTy4kY4ItoCkvmUD/
+         SNkmdMzpy9OHA8yBwwKdb4C9CnpNujIVT1dagQgfMC0QCmS9gDZUNaC5eCBX1edGb46X
+         +8fmBURigrx+J18D+rONdcH1qQDIHZgCXK4mFz9FbdVyli0FBzWBF0MVID7xgLINh+/Y
+         3FLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yKQ7HUQ19YHYNCinZiTfNw1jKPbH2w3EEubtXUOOTSQ=;
-        b=TUCLcZrHG8PJaLwuWsHXiWb68ftBX1eBlaGdI1EtGxpJdo7Svq6/SEXXKvNqTfnjwY
-         5/RgBM3L+IFAZKQEaU3CoPyZ0Nmno8gtZZAkfsAE3Ir5cm3zLP9WiCaVEXaOhh0ViP5a
-         iOGP6BMh1QwO1dexY4TPgk53rxVx/0Hjy0DiQhNFSIMeKg/mBrrjxlmI/Q5Vl+IhpKao
-         nikltINh+AE5v6V3SqiNtmTPi6IZTuwt/yxOl5QAdfLGv9+Q8dx/L8UXeFj19xSC65mk
-         J7P1t005gBdFLbL65DM3FqQdn1gtj1Hix66cT51ihAkKL65gBfbDuCq+mQWssepyS8i2
-         cCYg==
-X-Gm-Message-State: AO0yUKWRFh55Zp5jlJ34TJS/XjZogKOspuEssEwNCnjD7eYx5G1c1z16
-        JzGeg6YsD5rLVXd93Ve+6R/SnvgrRA==
-X-Google-Smtp-Source: AK7set9fLPkg0yKORr/D/XglLiElC4PsjDfJZgA+4C6EekrPMHMQtaKaiiTrXYqBkej6oKIb5JAYgA==
-X-Received: by 2002:a05:6871:8e86:b0:16d:c23a:a117 with SMTP id zq6-20020a0568718e8600b0016dc23aa117mr117105oab.1.1676675423565;
-        Fri, 17 Feb 2023 15:10:23 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n6-20020a056870e40600b00163c90c1513sm2182724oag.28.2023.02.17.15.10.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 15:10:23 -0800 (PST)
-Received: (nullmailer pid 2236402 invoked by uid 1000);
-        Fri, 17 Feb 2023 23:10:20 -0000
-Date:   Fri, 17 Feb 2023 17:10:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com
-Subject: Re: [PATCH v8 12/13] dt-bindings: net: phy: Document support for
- leds node
-Message-ID: <20230217231020.GB2217008-robh@kernel.org>
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <20230216013230.22978-13-ansuelsmth@gmail.com>
- <167651373836.1183034.17900591036429665419.robh@kernel.org>
- <63ee9801.df0a0220.a106.72a3@mx.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63ee9801.df0a0220.a106.72a3@mx.google.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y+vRasImpgsONkuFWEwkUJDlQ5PlpYyW5BuRWOgPo+I=;
+        b=lKhYEOrjL+C6IRTcJaxgR3Jr6iIE5GG7CFwcKqJcO5PPAhU4ogDsQWgGgHYLD6Hugb
+         hWKR4p98sddeOPvqcip19k2ntJbuNAAJRUOdUJqqIlvpUqyvhHYzMYqZ3OU1j/WRuDyK
+         13rRMNVUmTe8hsYKV6tHmhfyoDrwEw+B2kOTiqEefE3n2YFOwOO4xgsJmNXaULnZXFnL
+         t+juh2LgUe3mKQKs96BtcnSl8RMeE3b4abpNBBuTlz2GB1imMNffqdLGUWWA/XRA+Ntp
+         McohcM1rLv9mAmvV8unNpJOEJ/KAb3bklo+C2FSJ5iDB8E0OSdyNyulZaPimqtVseIsp
+         +L6A==
+X-Gm-Message-State: AO0yUKU0f2TjW/32gWJoZeqtBDBBSdUcSrx5xeSnPcIIaF00hkPg2I4u
+        J+wi4/VSF8BT5ZVmqpQf0TrGNsvRHIw=
+X-Google-Smtp-Source: AK7set+5RGeqQvHi2R+C6jJ1xgQJBifGa7LHdXlbRH9VtB2Jep8Ou1oYljFWFff7NqgcdMZqEY+jYtKw3x8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:eb8f:0:b0:52f:f71:31c9 with SMTP id
+ u137-20020a0deb8f000000b0052f0f7131c9mr1159924ywe.250.1676675444598; Fri, 17
+ Feb 2023 15:10:44 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 17 Feb 2023 15:10:20 -0800
+In-Reply-To: <20230217231022.816138-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230217231022.816138-1-seanjc@google.com>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230217231022.816138-11-seanjc@google.com>
+Subject: [PATCH 10/12] KVM: nSVM: Use KVM-governed feature framework to track
+ "Pause Filter enabled"
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,39 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:00:49AM +0100, Christian Marangi wrote:
-> On Wed, Feb 15, 2023 at 08:32:11PM -0600, Rob Herring wrote:
-> > 
-> > On Thu, 16 Feb 2023 02:32:29 +0100, Christian Marangi wrote:
-> > > Document support for leds node in phy and add an example for it.
-> > > Phy led will have to match led-phy pattern and should be treated as a
-> > > generic led.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../devicetree/bindings/net/ethernet-phy.yaml | 22 +++++++++++++++++++
-> > >  1 file changed, 22 insertions(+)
-> > > 
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.example.dtb: ethernet-phy@0: leds:led-phy@0:linux,default-trigger: 'oneOf' conditional failed, one must be fixed:
-> > 	'netdev' is not one of ['backlight', 'default-on', 'heartbeat', 'disk-activity', 'ide-disk', 'timer', 'pattern']
-> > 	'netdev' does not match '^mmc[0-9]+$'
-> > 	'netdev' does not match '^cpu[0-9]*$'
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-> > 
-> 
-> Hi, I could be wrong but this should be fixed by the previous patch that
-> adds netdev to the trigger list.
+Track "Pause Filtering is exposed to L1" via governed feature flags
+instead of using dedicated bits/flags in vcpu_svm.
 
-If so, then it didn't apply for me which is what PW says. So what tree 
-does this series apply too? linux-next? That's a tree no one can apply 
-patches from.
+No functional change intended.
 
-Rob
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/governed_features.h |  2 ++
+ arch/x86/kvm/svm/nested.c        | 10 ++++++++--
+ arch/x86/kvm/svm/svm.c           |  8 ++++----
+ arch/x86/kvm/svm/svm.h           |  2 --
+ 4 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
+index 16c58d61bdf6..93c7d840e546 100644
+--- a/arch/x86/kvm/governed_features.h
++++ b/arch/x86/kvm/governed_features.h
+@@ -11,6 +11,8 @@ KVM_GOVERNED_X86_FEATURE(NRIPS)
+ KVM_GOVERNED_X86_FEATURE(TSCRATEMSR)
+ KVM_GOVERNED_X86_FEATURE(V_VMSAVE_VMLOAD)
+ KVM_GOVERNED_X86_FEATURE(LBRV)
++KVM_GOVERNED_X86_FEATURE(PAUSEFILTER)
++KVM_GOVERNED_X86_FEATURE(PFTHRESHOLD)
+ 
+ #undef KVM_GOVERNED_X86_FEATURE
+ #undef KVM_GOVERNED_FEATURE
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 9e210b03e635..c38f17ba818e 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -721,8 +721,14 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+ 	if (!nested_vmcb_needs_vls_intercept(svm))
+ 		vmcb02->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
+ 
+-	pause_count12 = svm->pause_filter_enabled ? svm->nested.ctl.pause_filter_count : 0;
+-	pause_thresh12 = svm->pause_threshold_enabled ? svm->nested.ctl.pause_filter_thresh : 0;
++	if (guest_can_use(vcpu, X86_FEATURE_PAUSEFILTER))
++		pause_count12 = svm->nested.ctl.pause_filter_count;
++	else
++		pause_count12 = 0;
++	if (guest_can_use(vcpu, X86_FEATURE_PFTHRESHOLD))
++		pause_thresh12 = svm->nested.ctl.pause_filter_thresh;
++	else
++		pause_thresh12 = 0;
+ 	if (kvm_pause_in_guest(svm->vcpu.kvm)) {
+ 		/* use guest values since host doesn't intercept PAUSE */
+ 		vmcb02->control.pause_filter_count = pause_count12;
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 42591c77f98a..b18bd0b33942 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4157,11 +4157,11 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	if (vls && !guest_cpuid_is_intel(vcpu))
+ 		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
+ 
+-	svm->pause_filter_enabled = kvm_cpu_cap_has(X86_FEATURE_PAUSEFILTER) &&
+-			guest_cpuid_has(vcpu, X86_FEATURE_PAUSEFILTER);
++	if (kvm_cpu_cap_has(X86_FEATURE_PAUSEFILTER))
++		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_PAUSEFILTER);
+ 
+-	svm->pause_threshold_enabled = kvm_cpu_cap_has(X86_FEATURE_PFTHRESHOLD) &&
+-			guest_cpuid_has(vcpu, X86_FEATURE_PFTHRESHOLD);
++	if (kvm_cpu_cap_has(X86_FEATURE_PFTHRESHOLD))
++		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_PFTHRESHOLD);
+ 
+ 	svm->vgif_enabled = vgif && guest_cpuid_has(vcpu, X86_FEATURE_VGIF);
+ 
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 60817ff346b0..c05eea319d28 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -258,8 +258,6 @@ struct vcpu_svm {
+ 	bool soft_int_injected;
+ 
+ 	/* optional nested SVM features that are enabled for this guest  */
+-	bool pause_filter_enabled         : 1;
+-	bool pause_threshold_enabled      : 1;
+ 	bool vgif_enabled                 : 1;
+ 
+ 	u32 ldr_reg;
+-- 
+2.39.2.637.g21b0678d19-goog
 
