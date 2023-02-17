@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69DE69AC9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187E669AC9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjBQNfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
+        id S229799AbjBQNf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBQNfS (ORCPT
+        with ESMTP id S229478AbjBQNf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:35:18 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0865468E48;
-        Fri, 17 Feb 2023 05:34:58 -0800 (PST)
+        Fri, 17 Feb 2023 08:35:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2142AD32;
+        Fri, 17 Feb 2023 05:35:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676640898; x=1708176898;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eNb0TQ/4u8bRQzdMTZh4ZdWR1L7mHripeIw5GJNM0d0=;
-  b=KqtMNBKVCJBurCcr+Lzlu8lqixuk8AQZOLhL3DNK1//7660qOKSGGf6L
-   OhT5F2kKXNKVeyeF8Runv4JClUJXSrFsOfME5rJmtF3WggMOhOTqAP5Vj
-   cpTWKoec8zfUlmSNPCPatzbWGFUvXJBZTNH2hk1d2Qc+teM2hhSD+Hd+u
-   hgh4mggSsJaEAPh3Np1mdveOXAsAzWCv3h3XeIE4B6I5PGoMsdnHnVpsg
-   0PWWxmO4XsaZeo+ZpiFvAYOn8t4yGx82s+tPzBGFyWKnkxlbtElsdRIoP
-   OzG3tNcywGzY/O3hzecHMNQd06O64Kul6wA8gIsmDirFKA2PYFoKQogDh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="329706573"
+  t=1676640956; x=1708176956;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6/L3UtpTr16oh0QX766DOPTVsm/1w6Jvudma6EjcOSs=;
+  b=gQ4DrbXWBTzpPGREtg9gd1P2CPR9jxBHwpvpVwQWc5SqN+c8cKULjhCK
+   8qv6EWtIt6UxOBOqdXRhGw5t2GZ9BQBXbrJxg8QafPIKAYCLvY6nDykuZ
+   ErMwFCSQrPc9I0Lmk7ChZNMHO+FuBa1cOLNHlDG3Bb3XSCdW3Jk+WtD7l
+   0T/8UcUpCF1XLfTSO7BA90AabwIvLXB4+RJ66AngRZV6Th3MCgJlhOg95
+   ZpKafJCvJNEy+CtLn2nnWQIC/k0aWdURX3/NXWi1nPgRZfAp68DILUoNc
+   /hjtWGgdD/5ZrAMId5uKSmVOVMObMIzQv9HwZgh1318b8Yx9hTGPf+8ZI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="418207509"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="329706573"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 05:33:12 -0800
+   d="scan'208";a="418207509"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 05:35:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="648082093"
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="620401812"
 X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="648082093"
+   d="scan'208";a="620401812"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 17 Feb 2023 05:33:10 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3E7951C5; Fri, 17 Feb 2023 15:33:49 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Kaehn <kaehndan@gmail.com>
-Subject: [PATCH v1 1/1] device property: Clarify description of returned value in some functions
-Date:   Fri, 17 Feb 2023 15:33:44 +0200
-Message-Id: <20230217133344.79278-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2023 05:35:53 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 2C1E01C5; Fri, 17 Feb 2023 15:36:34 +0200 (EET)
+Date:   Fri, 17 Feb 2023 15:36:34 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>, Sanju.Mehta@amd.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] thunderbolt: Refactor DROM reading
+Message-ID: <Y++C4gWAfbw2rQUt@black.fi.intel.com>
+References: <20230216201910.12370-1-mario.limonciello@amd.com>
+ <20230216201910.12370-4-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230216201910.12370-4-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,374 +65,276 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the functions do not provide Return: section on absence of which
-kernel-doc complains. Besides that several functions return the fwnode
-handle with incremented reference count. Add a respective note to make sure
-that the caller decrements it when it's not needed anymore.
+Hi Mario,
 
-While at it, unify the style of the Return: sections.
+On Thu, Feb 16, 2023 at 02:19:10PM -0600, Mario Limonciello wrote:
+> The NVM reading code has a series of gotos that potentially introduce
+> unexpected behaviors with retries if something unexpected has failed
+> to parse.
+> 
+> Additionally the retry logic introduced in commit f022ff7bf377
+> ("thunderbolt: Retry DROM read once if parsing fails") was added from
+> failures in bit banging, which aren't expected to be present when the
+> DROM is fetched directly from the NVM.
 
-Reported-by: Daniel Kaehn <kaehndan@gmail.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
+Okay that's why you remove the EILSEQ returns below, right?
 
-v2: rephrased the note, added tag, removed unrelated change
-    (all requested by Sakari)
+> Refactor the code to remove the gotos and drop the retry logic.
 
- drivers/base/property.c | 124 +++++++++++++++++++++++++++++-----------
- 1 file changed, 90 insertions(+), 34 deletions(-)
+Thanks for doing this. Few minor stylistic comments below. I can also
+fix these myself when applying if you prefer.
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 083a95791d3b..3fc25e568598 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -37,6 +37,8 @@ EXPORT_SYMBOL_GPL(__dev_fwnode_const);
-  * @propname: Name of the property
-  *
-  * Check if property @propname is present in the device firmware description.
-+ *
-+ * Return: true if property @propname is present. Otherwise, returns false.
-  */
- bool device_property_present(struct device *dev, const char *propname)
- {
-@@ -48,6 +50,8 @@ EXPORT_SYMBOL_GPL(device_property_present);
-  * fwnode_property_present - check if a property of a firmware node is present
-  * @fwnode: Firmware node whose property to check
-  * @propname: Name of the property
-+ *
-+ * Return: true if property @propname is present. Otherwise, returns false.
-  */
- bool fwnode_property_present(const struct fwnode_handle *fwnode,
- 			     const char *propname)
-@@ -508,10 +512,10 @@ EXPORT_SYMBOL_GPL(fwnode_property_match_string);
-  * Obtain a reference based on a named property in an fwnode, with
-  * integer arguments.
-  *
-- * Caller is responsible to call fwnode_handle_put() on the returned
-- * args->fwnode pointer.
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * @args->fwnode pointer.
-  *
-- * Returns: %0 on success
-+ * Return: %0 on success
-  *	    %-ENOENT when the index is out of bounds, the index has an empty
-  *		     reference or the property was not found
-  *	    %-EINVAL on parse error
-@@ -547,8 +551,11 @@ EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
-  *
-  * @index can be used when the named reference holds a table of references.
-  *
-- * Returns pointer to the reference fwnode, or ERR_PTR. Caller is responsible to
-- * call fwnode_handle_put() on the returned fwnode pointer.
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-+ * Return: a pointer to the reference fwnode, when found. Otherwise,
-+ * returns an error pointer.
-  */
- struct fwnode_handle *fwnode_find_reference(const struct fwnode_handle *fwnode,
- 					    const char *name,
-@@ -567,7 +574,7 @@ EXPORT_SYMBOL_GPL(fwnode_find_reference);
-  * fwnode_get_name - Return the name of a node
-  * @fwnode: The firmware node
-  *
-- * Returns a pointer to the node name.
-+ * Return: a pointer to the node name, or %NULL.
-  */
- const char *fwnode_get_name(const struct fwnode_handle *fwnode)
- {
-@@ -579,7 +586,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_name);
-  * fwnode_get_name_prefix - Return the prefix of node for printing purposes
-  * @fwnode: The firmware node
-  *
-- * Returns the prefix of a node, intended to be printed right before the node.
-+ * Return: the prefix of a node, intended to be printed right before the node.
-  * The prefix works also as a separator between the nodes.
-  */
- const char *fwnode_get_name_prefix(const struct fwnode_handle *fwnode)
-@@ -591,7 +598,10 @@ const char *fwnode_get_name_prefix(const struct fwnode_handle *fwnode)
-  * fwnode_get_parent - Return parent firwmare node
-  * @fwnode: Firmware whose parent is retrieved
-  *
-- * Return parent firmware node of the given node if possible or %NULL if no
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-+ * Return: parent firmware node of the given node if possible or %NULL if no
-  * parent was available.
-  */
- struct fwnode_handle *fwnode_get_parent(const struct fwnode_handle *fwnode)
-@@ -608,8 +618,12 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
-  * on the passed node, making it suitable for iterating through a
-  * node's parents.
-  *
-- * Returns a node pointer with refcount incremented, use
-- * fwnode_handle_put() on it when done.
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer. Note that this function also puts a reference to @fwnode
-+ * unconditionally.
-+ *
-+ * Return: parent firmware node of the given node if possible or %NULL if no
-+ * parent was available.
-  */
- struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
- {
-@@ -629,8 +643,10 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_parent);
-  * firmware node that has a corresponding struct device and returns that struct
-  * device.
-  *
-- * The caller of this function is expected to call put_device() on the returned
-- * device when they are done.
-+ * The caller is responsible for calling put_device() on the returned device
-+ * pointer.
-+ *
-+ * Return: a pointer to the device of the @fwnode's closest ancestor.
-  */
- struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
- {
-@@ -651,7 +667,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
-  * fwnode_count_parents - Return the number of parents a node has
-  * @fwnode: The node the parents of which are to be counted
-  *
-- * Returns the number of parents a node has.
-+ * Return: the number of parents a node has.
-  */
- unsigned int fwnode_count_parents(const struct fwnode_handle *fwnode)
- {
-@@ -670,12 +686,12 @@ EXPORT_SYMBOL_GPL(fwnode_count_parents);
-  * @fwnode: The node the parent of which is requested
-  * @depth: Distance of the parent from the node
-  *
-- * Returns the nth parent of a node. If there is no parent at the requested
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-+ * Return: the nth parent of a node. If there is no parent at the requested
-  * @depth, %NULL is returned. If @depth is 0, the functionality is equivalent to
-  * fwnode_handle_get(). For @depth == 1, it is fwnode_get_parent() and so on.
-- *
-- * The caller is responsible for calling fwnode_handle_put() for the returned
-- * node.
-  */
- struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
- 					    unsigned int depth)
-@@ -700,7 +716,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
-  *
-  * A node is considered an ancestor of itself too.
-  *
-- * Returns true if @ancestor is an ancestor of @child. Otherwise, returns false.
-+ * Return: true if @ancestor is an ancestor of @child. Otherwise, returns false.
-  */
- bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle *child)
- {
-@@ -725,6 +741,10 @@ bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle
-  * fwnode_get_next_child_node - Return the next child node handle for a node
-  * @fwnode: Firmware node to find the next child node for.
-  * @child: Handle to one of the node's child nodes or a %NULL handle.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer. Note that this function also puts a reference to @child
-+ * unconditionally.
-  */
- struct fwnode_handle *
- fwnode_get_next_child_node(const struct fwnode_handle *fwnode,
-@@ -735,10 +755,13 @@ fwnode_get_next_child_node(const struct fwnode_handle *fwnode,
- EXPORT_SYMBOL_GPL(fwnode_get_next_child_node);
- 
- /**
-- * fwnode_get_next_available_child_node - Return the next
-- * available child node handle for a node
-+ * fwnode_get_next_available_child_node - Return the next available child node handle for a node
-  * @fwnode: Firmware node to find the next child node for.
-  * @child: Handle to one of the node's child nodes or a %NULL handle.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer. Note that this function also puts a reference to @child
-+ * unconditionally.
-  */
- struct fwnode_handle *
- fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
-@@ -762,7 +785,11 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_available_child_node);
- /**
-  * device_get_next_child_node - Return the next child node handle for a device
-  * @dev: Device to find the next child node for.
-- * @child: Handle to one of the device's child nodes or a null handle.
-+ * @child: Handle to one of the device's child nodes or a %NULL handle.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer. Note that this function also puts a reference to @child
-+ * unconditionally.
-  */
- struct fwnode_handle *device_get_next_child_node(const struct device *dev,
- 						 struct fwnode_handle *child)
-@@ -787,6 +814,9 @@ EXPORT_SYMBOL_GPL(device_get_next_child_node);
-  * fwnode_get_named_child_node - Return first matching named child node handle
-  * @fwnode: Firmware node to find the named child node for.
-  * @childname: String to match child node name against.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-  */
- struct fwnode_handle *
- fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
-@@ -800,6 +830,9 @@ EXPORT_SYMBOL_GPL(fwnode_get_named_child_node);
-  * device_get_named_child_node - Return first matching named child node handle
-  * @dev: Device to find the named child node for.
-  * @childname: String to match child node name against.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-  */
- struct fwnode_handle *device_get_named_child_node(const struct device *dev,
- 						  const char *childname)
-@@ -812,7 +845,10 @@ EXPORT_SYMBOL_GPL(device_get_named_child_node);
-  * fwnode_handle_get - Obtain a reference to a device node
-  * @fwnode: Pointer to the device node to obtain the reference to.
-  *
-- * Returns the fwnode handle.
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-+ * Return: the fwnode handle.
-  */
- struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
- {
-@@ -841,6 +877,8 @@ EXPORT_SYMBOL_GPL(fwnode_handle_put);
-  * fwnode_device_is_available - check if a device is available for use
-  * @fwnode: Pointer to the fwnode of the device.
-  *
-+ * Return: true if device is available for use. Otherwise, returns false.
-+ *
-  * For fwnode node types that don't implement the .device_is_available()
-  * operation, this function returns true.
-  */
-@@ -859,6 +897,8 @@ EXPORT_SYMBOL_GPL(fwnode_device_is_available);
- /**
-  * device_get_child_node_count - return the number of child nodes for device
-  * @dev: Device to cound the child nodes for
-+ *
-+ * Return: the number of child nodes for a given device.
-  */
- unsigned int device_get_child_node_count(const struct device *dev)
- {
-@@ -934,7 +974,7 @@ EXPORT_SYMBOL_GPL(device_get_phy_mode);
-  * @fwnode:	Pointer to the firmware node
-  * @index:	Index of the IO range
-  *
-- * Returns a pointer to the mapped memory.
-+ * Return: a pointer to the mapped memory.
-  */
- void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
- {
-@@ -947,8 +987,8 @@ EXPORT_SYMBOL(fwnode_iomap);
-  * @fwnode:	Pointer to the firmware node
-  * @index:	Zero-based index of the IRQ
-  *
-- * Returns Linux IRQ number on success. Other values are determined
-- * accordingly to acpi_/of_ irq_get() operation.
-+ * Return: Linux IRQ number on success. Other values are determined
-+ * according to acpi_irq_get() or of_irq_get() operation.
-  */
- int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
- {
-@@ -967,8 +1007,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
-  * number of the IRQ resource corresponding to the index of the matched
-  * string.
-  *
-- * Return:
-- * Linux IRQ number on success, or negative errno otherwise.
-+ * Return: Linux IRQ number on success, or negative errno otherwise.
-  */
- int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
- {
-@@ -990,7 +1029,11 @@ EXPORT_SYMBOL(fwnode_irq_get_byname);
-  * @fwnode: Pointer to the parent firmware node
-  * @prev: Previous endpoint node or %NULL to get the first
-  *
-- * Returns an endpoint firmware node pointer or %NULL if no more endpoints
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer. Note that this function also puts a reference to @prev
-+ * unconditionally.
-+ *
-+ * Return: an endpoint firmware node pointer or %NULL if no more endpoints
-  * are available.
-  */
- struct fwnode_handle *
-@@ -1030,6 +1073,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
-  * fwnode_graph_get_port_parent - Return the device fwnode of a port endpoint
-  * @endpoint: Endpoint firmware node of the port
-  *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-  * Return: the firmware node of the device the @endpoint belongs to.
-  */
- struct fwnode_handle *
-@@ -1051,6 +1097,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_port_parent);
-  * @fwnode: Endpoint firmware node pointing to the remote endpoint
-  *
-  * Extracts firmware node of a remote device the @fwnode points to.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-  */
- struct fwnode_handle *
- fwnode_graph_get_remote_port_parent(const struct fwnode_handle *fwnode)
-@@ -1071,6 +1120,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_remote_port_parent);
-  * @fwnode: Endpoint firmware node pointing to the remote endpoint
-  *
-  * Extracts firmware node of a remote port the @fwnode points to.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-  */
- struct fwnode_handle *
- fwnode_graph_get_remote_port(const struct fwnode_handle *fwnode)
-@@ -1084,6 +1136,9 @@ EXPORT_SYMBOL_GPL(fwnode_graph_get_remote_port);
-  * @fwnode: Endpoint firmware node pointing to the remote endpoint
-  *
-  * Extracts firmware node of a remote endpoint the @fwnode points to.
-+ *
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-  */
- struct fwnode_handle *
- fwnode_graph_get_remote_endpoint(const struct fwnode_handle *fwnode)
-@@ -1111,8 +1166,11 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
-  * @endpoint: identifier of the endpoint node under the port node
-  * @flags: fwnode lookup flags
-  *
-- * Return the fwnode handle of the local endpoint corresponding the port and
-- * endpoint IDs or NULL if not found.
-+ * The caller is responsible for calling fwnode_handle_put() on the returned
-+ * fwnode pointer.
-+ *
-+ * Return: the fwnode handle of the local endpoint corresponding the port and
-+ * endpoint IDs or %NULL if not found.
-  *
-  * If FWNODE_GRAPH_ENDPOINT_NEXT is passed in @flags and the specified endpoint
-  * has not been found, look for the closest endpoint ID greater than the
-@@ -1120,9 +1178,6 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
-  *
-  * Does not return endpoints that belong to disabled devices or endpoints that
-  * are unconnected, unless FWNODE_GRAPH_DEVICE_DISABLED is passed in @flags.
-- *
-- * The returned endpoint needs to be released by calling fwnode_handle_put() on
-- * it when it is not needed any more.
-  */
- struct fwnode_handle *
- fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
-@@ -1328,7 +1383,8 @@ EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-  * @fwnode and other device nodes. @match will be used to convert the
-  * connection description to data the caller is expecting to be returned
-  * through the @matches array.
-- * If @matches is NULL @matches_len is ignored and the total number of resolved
-+ *
-+ * If @matches is %NULL @matches_len is ignored and the total number of resolved
-  * matches is returned.
-  *
-  * Return: Number of matches resolved, or negative errno.
--- 
-2.39.1
+Note I will be on vacation next week but will be picking up patches once
+v6.3-rc1 is released.
 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2->v3:
+>     * Split out refactor
+> ---
+>  drivers/thunderbolt/eeprom.c | 147 +++++++++++++++++++----------------
+>  1 file changed, 79 insertions(+), 68 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+> index a326cf16ca3d..2a078c69f0d2 100644
+> --- a/drivers/thunderbolt/eeprom.c
+> +++ b/drivers/thunderbolt/eeprom.c
+> @@ -416,7 +416,7 @@ static int tb_drom_parse_entries(struct tb_switch *sw, size_t header_size)
+>  		if (pos + 1 == drom_size || pos + entry->len > drom_size
+>  				|| !entry->len) {
+>  			tb_sw_warn(sw, "DROM buffer overrun\n");
+> -			return -EILSEQ;
+> +			return -EIO;
+>  		}
+>  
+>  		switch (entry->type) {
+> @@ -543,7 +543,37 @@ static int tb_drom_read_n(struct tb_switch *sw, u16 offset, u8 *val,
+>  	return tb_eeprom_read_n(sw, offset, val, count);
+>  }
+>  
+> -static int tb_drom_parse(struct tb_switch *sw)
+> +static int tb_drom_bit_bang(struct tb_switch *sw, u16 *size)
+> +{
+> +	int res;
+
+ret
+
+> +
+> +	res = tb_drom_read_n(sw, 14, (u8 *) size, 2);
+> +	if (res)
+> +		return res;
+
+empty line here.
+
+> +	*size &= 0x3ff;
+> +	*size += TB_DROM_DATA_START;
+
+here too.
+
+> +	tb_sw_dbg(sw, "reading drom (length: %#x)\n", *size);
+> +	if (*size < sizeof(struct tb_drom_header)) {
+> +		tb_sw_warn(sw, "drom too small, aborting\n");
+
+DROM
+
+> +		return -EIO;
+> +	}
+> +
+> +	sw->drom = kzalloc(*size, GFP_KERNEL);
+> +	if (!sw->drom)
+> +		return -ENOMEM;
+> +
+> +	res = tb_drom_read_n(sw, 0, sw->drom, *size);
+> +	if (res)
+> +		goto err;
+> +
+> +	return 0;
+
+empty line
+
+> +err:
+> +	kfree(sw->drom);
+> +	sw->drom = NULL;
+
+empty line
+
+> +	return res;
+> +}
+> +
+> +static int tb_drom_parse_v1(struct tb_switch *sw)
+>  {
+>  	const struct tb_drom_header *header =
+>  		(const struct tb_drom_header *)sw->drom;
+> @@ -554,7 +584,7 @@ static int tb_drom_parse(struct tb_switch *sw)
+>  		tb_sw_warn(sw,
+>  			"DROM UID CRC8 mismatch (expected: %#x, got: %#x)\n",
+>  			header->uid_crc8, crc);
+> -		return -EILSEQ;
+> +		return -EIO;
+>  	}
+>  	if (!sw->uid)
+>  		sw->uid = header->uid;
+> @@ -588,6 +618,43 @@ static int usb4_drom_parse(struct tb_switch *sw)
+>  	return tb_drom_parse_entries(sw, USB4_DROM_HEADER_SIZE);
+>  }
+>  
+> +static int tb_drom_parse(struct tb_switch *sw, u16 *size)
+> +{
+> +	struct tb_drom_header *header = (void *) sw->drom;
+> +	int res;
+
+ret
+
+> +
+> +	if (header->data_len + TB_DROM_DATA_START != *size) {
+> +		tb_sw_warn(sw, "drom size mismatch\n");
+
+DROM
+
+> +		goto err;
+> +	}
+> +
+> +	tb_sw_dbg(sw, "DROM version: %d\n", header->device_rom_revision);
+> +
+> +	switch (header->device_rom_revision) {
+> +	case 3:
+> +		res = usb4_drom_parse(sw);
+> +		break;
+> +	default:
+> +		tb_sw_warn(sw, "DROM device_rom_revision %#x unknown\n",
+> +			   header->device_rom_revision);
+> +		fallthrough;
+> +	case 1:
+> +		res = tb_drom_parse_v1(sw);
+> +		break;
+> +	}
+> +
+> +	if (res) {
+> +		tb_sw_warn(sw, "parsing DROM failed\n");
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+
+empty line
+
+> +err:
+> +	kfree(sw->drom);
+> +	sw->drom = NULL;
+
+empty line
+
+> +	return -EIO;
+> +}
+> +
+>  /**
+>   * tb_drom_read() - Copy DROM to sw->drom and parse it
+>   * @sw: Router whose DROM to read and parse
+> @@ -601,8 +668,7 @@ static int usb4_drom_parse(struct tb_switch *sw)
+>  int tb_drom_read(struct tb_switch *sw)
+>  {
+>  	u16 size;
+> -	struct tb_drom_header *header;
+> -	int res, retries = 1;
+> +	int res;
+>  
+>  	if (sw->drom)
+>  		return 0;
+> @@ -613,11 +679,11 @@ int tb_drom_read(struct tb_switch *sw)
+>  		 * in a device property. Use it if available.
+>  		 */
+>  		if (tb_drom_copy_efi(sw, &size) == 0)
+> -			goto parse;
+> +			return tb_drom_parse(sw, &size);
+>  
+>  		/* Non-Apple hardware has the DROM as part of NVM */
+>  		if (tb_drom_copy_nvm(sw, &size) == 0)
+> -			goto parse;
+> +			return tb_drom_parse(sw, &size);
+>  
+>  		/*
+>  		 * USB4 hosts may support reading DROM through router
+> @@ -626,7 +692,7 @@ int tb_drom_read(struct tb_switch *sw)
+>  		if (tb_switch_is_usb4(sw)) {
+>  			usb4_switch_read_uid(sw, &sw->uid);
+>  			if (!usb4_copy_host_drom(sw, &size))
+> -				goto parse;
+> +				return tb_drom_parse(sw, &size);
+>  		} else {
+>  			/*
+>  			 * The root switch contains only a dummy drom
+> @@ -640,67 +706,12 @@ int tb_drom_read(struct tb_switch *sw)
+>  	}
+>  
+>  	/* We can use LC to get UUID later */
+> -	if (sw->cap_lc && tb_drom_copy_nvm(sw, &size) == 0)
+> -		goto parse;
+> -
+> -	res = tb_drom_read_n(sw, 14, (u8 *) &size, 2);
+> +	if (sw->cap_lc)
+> +		res = tb_drom_copy_nvm(sw, &size);
+> +	else
+> +		res = tb_drom_bit_bang(sw, &size);
+>  	if (res)
+>  		return res;
+> -	size &= 0x3ff;
+> -	size += TB_DROM_DATA_START;
+> -	tb_sw_dbg(sw, "reading drom (length: %#x)\n", size);
+> -	if (size < sizeof(*header)) {
+> -		tb_sw_warn(sw, "drom too small, aborting\n");
+> -		return -EIO;
+> -	}
+> -
+> -	sw->drom = kzalloc(size, GFP_KERNEL);
+> -	if (!sw->drom)
+> -		return -ENOMEM;
+> -read:
+> -	res = tb_drom_read_n(sw, 0, sw->drom, size);
+> -	if (res)
+> -		goto err;
+> -
+> -parse:
+> -	header = (void *) sw->drom;
+> -
+> -	if (header->data_len + TB_DROM_DATA_START != size) {
+> -		tb_sw_warn(sw, "drom size mismatch\n");
+> -		if (retries--) {
+> -			msleep(100);
+> -			goto read;
+> -		}
+> -		goto err;
+> -	}
+> -
+> -	tb_sw_dbg(sw, "DROM version: %d\n", header->device_rom_revision);
+> -
+> -	switch (header->device_rom_revision) {
+> -	case 3:
+> -		res = usb4_drom_parse(sw);
+> -		break;
+> -	default:
+> -		tb_sw_warn(sw, "DROM device_rom_revision %#x unknown\n",
+> -			   header->device_rom_revision);
+> -		fallthrough;
+> -	case 1:
+> -		res = tb_drom_parse(sw);
+> -		break;
+> -	}
+> -
+> -	/* If the DROM parsing fails, wait a moment and retry once */
+> -	if (res == -EILSEQ && retries--) {
+> -		tb_sw_warn(sw, "parsing DROM failed\n");
+> -		msleep(100);
+> -		goto read;
+> -	}
+>  
+> -	if (!res)
+> -		return 0;
+> -
+> -err:
+> -	kfree(sw->drom);
+> -	sw->drom = NULL;
+> -	return -EIO;
+> +	return tb_drom_parse(sw, &size);
+>  }
+> -- 
+> 2.34.1
