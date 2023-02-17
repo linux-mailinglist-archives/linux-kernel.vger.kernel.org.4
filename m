@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CB469B0F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D967569B0FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjBQQb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S230259AbjBQQcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjBQQbx (ORCPT
+        with ESMTP id S230249AbjBQQcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:31:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFDE25B96;
-        Fri, 17 Feb 2023 08:31:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C29EAB82C8E;
-        Fri, 17 Feb 2023 16:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6145C433D2;
-        Fri, 17 Feb 2023 16:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676651482;
-        bh=Nc43sf3KjLBKJ1grV2w2Lxnfo2n1XRCDKjHl1J+knb4=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=GXbgTYSXoJhodYMdyp0eVzaWlhyioeNHNy4WyrIB5IqtLDygDfY8l/d92Nw5PZjkj
-         Rg/6mM33G3EO3lD9sGd/8TdA8xEpKKCDRkoVzmpU2PqTaSXKjO/vrxP1MFuMS8Cs67
-         nH38Or8WLkrau1EXrWdeNkYB7UNLzZx/U6KHOudgUe78q7wldyi0v7yaZviy5syZWT
-         KmYSGakoLwMf1AnE2NKXQaqNpSEv0FxnOwACBltb2cP+ZNX/OmXSDUfW4hsNOy0FWl
-         TottfZvZuB8VmWjCp/SQRFuja91oB7JXbuT/eIYK3C8dwJsUphPJ+Whpl38NikYjaA
-         vcYeRjLd7LXOA==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Feb 2023 11:32:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E092172936;
+        Fri, 17 Feb 2023 08:31:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=XHYGSp+R2NnQ++mczB+FUJo+gLmzgF5t6LdIKcLbrX8=; b=hHQbyIndp4HRRlRzbJcMSVU/lh
+        FDnVr+OF5SQMZrFINYjYHNcx8HQ8RFLUFmKkUrFZRLBytELib59qwQ660ZjOJV9ue80nEfowL8uK9
+        EfmZHaW5XhHWZxPbnZlBWcwS1tJoUJEcypXxiyBDQBym9ez2dq/7ZHEzei0aIeGezdGtNrQcCeFjA
+        WfpPA+SdDujDyjcV/ZSGLd/a5LBQOusqjmWyV/qB8Gi7H/yRmGXZmQHKDhVvCwl5cKtwHU4G4XmWN
+        UX+PAPyAO4vN7Ok2SfRNcWlqT24G5hzQavxQaT8Be4RN01zBD1zlGMoKP1rOgGEhO8UxDzP7kD47J
+        os9thz5A==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pT3dr-00F4KU-1u; Fri, 17 Feb 2023 16:31:23 +0000
+Message-ID: <4cd6d9cf-abf8-bf2a-9942-472c8b43d344@infradead.org>
+Date:   Fri, 17 Feb 2023 08:31:21 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/1] scsi: lpfc: Fix double word in comments
+Content-Language: en-US
+To:     Bo Liu <liubo03@inspur.com>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230217083046.4090-1-liubo03@inspur.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230217083046.4090-1-liubo03@inspur.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: rtl8xxxu: add LEDS_CLASS dependency
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230217095910.2480356-1-arnd@kernel.org>
-References: <20230217095910.2480356-1-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jes Sorensen <Jes.Sorensen@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167665147529.29864.16564467091788545261.kvalo@kernel.org>
-Date:   Fri, 17 Feb 2023 16:31:19 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> wrote:
+Hi,
 
-> From: Arnd Bergmann <arnd@arndb.de>
+On 2/17/23 00:30, Bo Liu wrote:
+> Remove the repeated word "the" in comments.
 > 
-> rtl8xxxu now unconditionally uses LEDS_CLASS, so a Kconfig dependency
-> is required to avoid link errors:
-> 
-> aarch64-linux-ld: drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.o: in function `rtl8xxxu_disconnect':
-> rtl8xxxu_core.c:(.text+0x730): undefined reference to `led_classdev_unregister'
-> 
-> ERROR: modpost: "led_classdev_unregister" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
-> ERROR: modpost: "led_classdev_register_ext" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
-> 
-> Fixes: 3be01622995b ("wifi: rtl8xxxu: Register the LED and make it blink")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
 
-Patch applied to wireless-next.git, thanks.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-38ae31922969 wifi: rtl8xxxu: add LEDS_CLASS dependency
+These changes all look good to me.
+
+There are quite a few typos/spellos of other words remaining,
+but they were not the target of this patch...
+
+Thanks.
+
+> ---
+>  drivers/scsi/lpfc/lpfc_attr.c    | 10 +++++-----
+>  drivers/scsi/lpfc/lpfc_els.c     |  2 +-
+>  drivers/scsi/lpfc/lpfc_hbadisc.c |  2 +-
+>  drivers/scsi/lpfc/lpfc_init.c    |  4 ++--
+>  drivers/scsi/lpfc/lpfc_mbox.c    |  4 ++--
+>  drivers/scsi/lpfc/lpfc_nvmet.c   |  2 +-
+>  drivers/scsi/lpfc/lpfc_sli.c     |  2 +-
+>  7 files changed, 13 insertions(+), 13 deletions(-)
+
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230217095910.2480356-1-arnd@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+~Randy
