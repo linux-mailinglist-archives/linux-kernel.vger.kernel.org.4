@@ -2,3672 +2,1021 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF88269A551
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5691169A554
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 06:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBQFtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 00:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S229608AbjBQFu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 00:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBQFtS (ORCPT
+        with ESMTP id S229524AbjBQFuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 00:49:18 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FC4498B6;
-        Thu, 16 Feb 2023 21:49:12 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id r12so112809ljg.4;
-        Thu, 16 Feb 2023 21:49:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gddY6KKHUlhneH9l/P1KdZ99hGB7B6KoZ9cakP+awqc=;
-        b=FAM80B3wb45tRQUe+TWxh0Ik279RSEuFgHsyoq/IVEQbE4e8ST/8XQGdfnASSXgG7v
-         7lXw7Lv9MCgl0Sw80lHszNutyZqfRlT3IzDqaVr3rv4IFWu2Nj6RO/YdYQUQ/+WLbWcH
-         rYVLV7WPF4OXnMQycEJIICg2n7YqRFX5kiWRD/HuC8sPnAXVYV2JXn53eI84lGasMi/N
-         VJmT8TJnETMHDbHk/WJ5fUGVsu7DgJxLeKYojzqhBHL+T49U/bBi02q7hh1GdWeFSWO8
-         sSFU4prqSVX6VCEUY7yocI9tkhBJjV7Mf8AurzidL0UsC7J5hQ5NPCIxSIP32qcUyyEh
-         ZSvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gddY6KKHUlhneH9l/P1KdZ99hGB7B6KoZ9cakP+awqc=;
-        b=5KlsUKle5oSdoQVxq285D1gMnVQ9Cvy8X6pF9cx4SS2V/B5w/KvJS2+Ep/IkE8GYPX
-         CX82tqRLhNDDL97LlSrpVJ+Fu2NYktggdUm1r8uS0Bf/jlldMj8IdeWVw3YsOTDjwlCK
-         aHk/sb/68H9+HxlyuEq5QDHTGcTCThl/Hmh2TESb9mmgngGQsJiRaqE0Dy/cA94hfHa3
-         VUkG+6nkiISQNJX1nMtmcThcNmz5LP7DgK0JWxEAEit30ReIxRAfJROF7MstXdMUoVYk
-         M2vQ6rrpA9lzcwQdjYubjKzbSO9px8rv325vtzUCtYx7brsi5t8w1U9J9pZLlkCV/ZOk
-         83gw==
-X-Gm-Message-State: AO0yUKWTOb8bCTKzgenVY8Yrorj9Ezos7qjPAIIjXt1hwbCyJhHf3uTk
-        iRIxcPLAagrIyT3X9KVjmxhcEyRj/ZcTfmFmE/c=
-X-Google-Smtp-Source: AK7set/vwo84D7tZUKbvZh6PR6lBMMdOXV22t1GCRlBtw7JFgkVQVqc6P7Ayoel6ybX4xFjwdAtvkPdR/EE4OuiKNsw=
-X-Received: by 2002:a05:651c:39e:b0:294:6de5:e63b with SMTP id
- e30-20020a05651c039e00b002946de5e63bmr875535ljp.7.1676612950472; Thu, 16 Feb
- 2023 21:49:10 -0800 (PST)
+        Fri, 17 Feb 2023 00:50:25 -0500
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F82498AA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 21:50:21 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VbrCgOf_1676613016;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbrCgOf_1676613016)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Feb 2023 13:50:16 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.or, chao@kernel.org, huyue2@coolpad.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] erofs: avoid hardcoded blocksize for subpage block support
+Date:   Fri, 17 Feb 2023 13:50:15 +0800
+Message-Id: <20230217055016.71462-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-References: <20230216214745.3985496-1-dhowells@redhat.com> <20230216214745.3985496-15-dhowells@redhat.com>
-In-Reply-To: <20230216214745.3985496-15-dhowells@redhat.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 16 Feb 2023 23:48:58 -0600
-Message-ID: <CAH2r5msNJTdt7295xt=NVY7wUaWFycKMb_=7d9LySsGGwBTnjQ@mail.gmail.com>
-Subject: Re: [PATCH 14/17] cifs: Change the I/O paths to use an iterator
- rather than a page list
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This had various checkpatch warnings - some are probably worth
-cleaning up.  Do you want to spin a v2 of this patch?
+As the first step of converting hardcoded blocksize to that specified in
+on-disk superblock, convert all call sites of hardcoded blocksize to
+sb->s_blocksize except for:
 
-0014-cifs-Change-the-I-O-paths-to-use-an-iterator-rather-.patch
----------------------------------------------------------------
-WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-#465: FILE: fs/cifs/file.c:2444:
-+ rc = -ENOTSUPP;
+1) use sbi->blkszbits instead of sb->s_blocksize in
+erofs_superblock_csum_verify() since sb->s_blocksize has not been
+updated with the on-disk blocksize yet when the function is called.
 
-WARNING: Consider removing the code enclosed by this #if 0 and its #endif
-#627: FILE: fs/cifs/file.c:2609:
-+#if 0 // TODO: Remove for iov_iter support
+2) use inode->i_blkbits instead of sb->s_blocksize in erofs_bread(),
+since the inode operated on may be an anonymous inode in fscache mode.
+Currently the anonymous inode is allocated from an anonymous mount
+maintained in erofs, while in the near future we may allocate anonymous
+inodes from a generic API directly and thus have no access to the
+anonymous inode's i_sb.  Thus we keep the block size in i_blkbits for
+anonymous inodes in fscache mode.
 
-WARNING: Missing a blank line after declarations
-#657: FILE: fs/cifs/file.c:2937:
-+ XA_STATE(xas, &mapping->i_pages, index);
-+ folio_batch_init(&batch);
+Be noted that this patch only gets rid of the hardcoded blocksize, in
+preparation for actually setting the on-disk block size in the following
+patch.  The hard limit of constraining the block size to PAGE_SIZE still
+exists until the next patch.
 
-WARNING: Consider removing the code enclosed by this #if 0 and its #endif
-#1040: FILE: fs/cifs/file.c:3512:
-+#if 0 // TODO: Remove for iov_iter support
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+v2:
+- update the subject of this patch (Gao Xiang)
+- replace "inode->i_sb->s_blocksize" with "i_blocksize(inode)" (Gao
+  Xiang)
 
-WARNING: Consider removing the code enclosed by this #if 0 and its #endif
-#1067: FILE: fs/cifs/file.c:3587:
-+#if 0 // TODO: Remove for iov_iter support
+v1: https://lore.kernel.org/all/20230216094745.47868-1-jefflexu@linux.alibaba.com/
+---
+ fs/erofs/data.c              | 48 ++++++++++++++++++++----------------
+ fs/erofs/decompressor.c      |  6 ++---
+ fs/erofs/decompressor_lzma.c |  4 +--
+ fs/erofs/dir.c               | 21 ++++++++--------
+ fs/erofs/fscache.c           |  5 ++--
+ fs/erofs/inode.c             | 20 ++++++++-------
+ fs/erofs/internal.h          | 19 +++++---------
+ fs/erofs/namei.c             | 14 +++++------
+ fs/erofs/super.c             | 24 +++++++++---------
+ fs/erofs/xattr.c             | 40 ++++++++++++++----------------
+ fs/erofs/xattr.h             | 10 ++++----
+ fs/erofs/zdata.c             | 18 ++++++++------
+ fs/erofs/zmap.c              | 29 +++++++++++-----------
+ include/trace/events/erofs.h |  4 +--
+ 14 files changed, 133 insertions(+), 129 deletions(-)
 
-WARNING: Consider removing the code enclosed by this #if 0 and its #endif
-#1530: FILE: fs/cifs/file.c:4217:
-+#if 0 // TODO: Remove for iov_iter support
-
-WARNING: Consider removing the code enclosed by this #if 0 and its #endif
-#1837: FILE: fs/cifs/file.c:4903:
-+#if 0 // TODO: Remove for iov_iter support
-
-WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
-#2190: FILE: fs/cifs/misc.c:975:
-+ unsigned i;
-
-WARNING: nested (un)?likely() calls, IS_ERR already uses unlikely() internally
-#2453: FILE: fs/cifs/smb2ops.c:4409:
-+ if (unlikely(IS_ERR(creq)))
-
-total: 0 errors, 9 warnings, 3271 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-      mechanically convert to the typical style using --fix or --fix-inplace.
-
-0014-cifs-Change-the-I-O-paths-to-use-an-iterator-rather-.patch has
-style problems, please review.
-
-On Thu, Feb 16, 2023 at 3:48 PM David Howells <dhowells@redhat.com> wrote:
->
-> Currently, the cifs I/O paths hand lists of pages from the VM interface
-> routines at the top all the way through the intervening layers to the
-> socket interface at the bottom.
->
-> This is a problem, however, for interfacing with netfslib which passes an
-> iterator through to the ->issue_read() method (and will pass an iterator
-> through to the ->issue_write() method in future).  Netfslib takes over
-> bounce buffering for direct I/O, async I/O and encrypted content, so cifs
-> doesn't need to do that.  Netfslib also converts IOVEC-type iterators into
-> BVEC-type iterators if necessary.
->
-> Further, cifs needs foliating - and folios may come in a variety of sizes,
-> so a page list pointing to an array of heterogeneous pages may cause
-> problems in places such as where crypto is done.
->
-> Change the cifs I/O paths to hand iov_iter iterators all the way through
-> instead.
->
-> Notes:
->
->  (1) Some old routines are #if'd out to be removed in a follow up patch so
->      as to avoid confusing diff, thereby making the diff output easier to
->      follow.  I've removed functions that don't overlap with anything
->      added.
->
->  (2) struct smb_rqst loses rq_pages, rq_offset, rq_npages, rq_pagesz and
->      rq_tailsz which describe the pages forming the buffer; instead there's
->      an rq_iter describing the source buffer and an rq_buffer which is used
->      to hold the buffer for encryption.
->
->  (3) struct cifs_readdata and cifs_writedata are similarly modified to
->      smb_rqst.  The ->read_into_pages() and ->copy_into_pages() are then
->      replaced with passing the iterator directly to the socket.
->
->      The iterators are stored in these structs so that they are persistent
->      and don't get deallocated when the function returns (unlike if they
->      were stack variables).
->
->  (4) Buffered writeback is overhauled, borrowing the code from the afs
->      filesystem to gather up contiguous runs of folios.  The XARRAY-type
->      iterator is then used to refer directly to the pagecache and can be
->      passed to the socket to transmit data directly from there.
->
->      This includes:
->
->         cifs_extend_writeback()
->         cifs_write_back_from_locked_folio()
->         cifs_writepages_region()
->         cifs_writepages()
->
->  (5) Pages are converted to folios.
->
->  (6) Direct I/O uses netfs_extract_user_iter() to create a BVEC-type
->      iterator from an IOBUF/UBUF-type source iterator.
->
->  (7) smb2_get_aead_req() uses netfs_extract_iter_to_sg() to extract page
->      fragments from the iterator into the scatterlists that the crypto
->      layer prefers.
->
->  (8) smb2_init_transform_rq() attached pages to smb_rqst::rq_buffer, an
->      xarray, to use as a bounce buffer for encryption.  An XARRAY-type
->      iterator can then be used to pass the bounce buffer to lower layers.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Steve French <sfrench@samba.org>
-> cc: Shyam Prasad N <nspmangalore@gmail.com>
-> cc: Rohith Surabattula <rohiths.msft@gmail.com>
-> cc: Paulo Alcantara <pc@cjr.nz>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: linux-cifs@vger.kernel.org
->
-> Link: https://lore.kernel.org/r/164311907995.2806745.400147335497304099.stgit@warthog.procyon.org.uk/ # rfc
-> Link: https://lore.kernel.org/r/164928620163.457102.11602306234438271112.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/165211420279.3154751.15923591172438186144.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/165348880385.2106726.3220789453472800240.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/165364827111.3334034.934805882842932881.stgit@warthog.procyon.org.uk/ # v3
-> Link: https://lore.kernel.org/r/166126396180.708021.271013668175370826.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/166697259595.61150.5982032408321852414.stgit@warthog.procyon.org.uk/ # rfc
-> Link: https://lore.kernel.org/r/166732031756.3186319.12528413619888902872.stgit@warthog.procyon.org.uk/ # rfc
-> ---
->  fs/cifs/Kconfig       |    1 +
->  fs/cifs/cifsencrypt.c |   28 +-
->  fs/cifs/cifsglob.h    |   66 +--
->  fs/cifs/cifsproto.h   |    8 +-
->  fs/cifs/cifssmb.c     |   15 +-
->  fs/cifs/file.c        | 1197 ++++++++++++++++++++++++++---------------
->  fs/cifs/fscache.c     |   22 +-
->  fs/cifs/fscache.h     |   10 +-
->  fs/cifs/misc.c        |  128 +----
->  fs/cifs/smb2ops.c     |  362 ++++++-------
->  fs/cifs/smb2pdu.c     |   53 +-
->  fs/cifs/smbdirect.c   |  262 ++++-----
->  fs/cifs/smbdirect.h   |    4 +-
->  fs/cifs/transport.c   |   54 +-
->  14 files changed, 1122 insertions(+), 1088 deletions(-)
->
-> diff --git a/fs/cifs/Kconfig b/fs/cifs/Kconfig
-> index bbf63a9eb927..4c0d53bf931a 100644
-> --- a/fs/cifs/Kconfig
-> +++ b/fs/cifs/Kconfig
-> @@ -18,6 +18,7 @@ config CIFS
->         select DNS_RESOLVER
->         select ASN1
->         select OID_REGISTRY
-> +       select NETFS_SUPPORT
->         help
->           This is the client VFS module for the SMB3 family of network file
->           protocols (including the most recent, most secure dialect SMB3.1.1).
-> diff --git a/fs/cifs/cifsencrypt.c b/fs/cifs/cifsencrypt.c
-> index 7be589aeb520..357bd27a7fd1 100644
-> --- a/fs/cifs/cifsencrypt.c
-> +++ b/fs/cifs/cifsencrypt.c
-> @@ -169,11 +169,11 @@ static int cifs_shash_iter(const struct iov_iter *iter, size_t maxsize,
->  }
->
->  int __cifs_calc_signature(struct smb_rqst *rqst,
-> -                       struct TCP_Server_Info *server, char *signature,
-> -                       struct shash_desc *shash)
-> +                         struct TCP_Server_Info *server, char *signature,
-> +                         struct shash_desc *shash)
->  {
->         int i;
-> -       int rc;
-> +       ssize_t rc;
->         struct kvec *iov = rqst->rq_iov;
->         int n_vec = rqst->rq_nvec;
->
-> @@ -205,25 +205,9 @@ int __cifs_calc_signature(struct smb_rqst *rqst,
->                 }
->         }
->
-> -       /* now hash over the rq_pages array */
-> -       for (i = 0; i < rqst->rq_npages; i++) {
-> -               void *kaddr;
-> -               unsigned int len, offset;
-> -
-> -               rqst_page_get_length(rqst, i, &len, &offset);
-> -
-> -               kaddr = (char *) kmap(rqst->rq_pages[i]) + offset;
-> -
-> -               rc = crypto_shash_update(shash, kaddr, len);
-> -               if (rc) {
-> -                       cifs_dbg(VFS, "%s: Could not update with payload\n",
-> -                                __func__);
-> -                       kunmap(rqst->rq_pages[i]);
-> -                       return rc;
-> -               }
-> -
-> -               kunmap(rqst->rq_pages[i]);
-> -       }
-> +       rc = cifs_shash_iter(&rqst->rq_iter, iov_iter_count(&rqst->rq_iter), shash);
-> +       if (rc < 0)
-> +               return rc;
->
->         rc = crypto_shash_final(shash, signature);
->         if (rc)
-> diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-> index 1d893bea4723..893c2e21eb8e 100644
-> --- a/fs/cifs/cifsglob.h
-> +++ b/fs/cifs/cifsglob.h
-> @@ -216,11 +216,9 @@ static inline void cifs_free_open_info(struct cifs_open_info_data *data)
->  struct smb_rqst {
->         struct kvec     *rq_iov;        /* array of kvecs */
->         unsigned int    rq_nvec;        /* number of kvecs in array */
-> -       struct page     **rq_pages;     /* pointer to array of page ptrs */
-> -       unsigned int    rq_offset;      /* the offset to the 1st page */
-> -       unsigned int    rq_npages;      /* number pages in array */
-> -       unsigned int    rq_pagesz;      /* page size to use */
-> -       unsigned int    rq_tailsz;      /* length of last page */
-> +       size_t          rq_iter_size;   /* Amount of data in ->rq_iter */
-> +       struct iov_iter rq_iter;        /* Data iterator */
-> +       struct xarray   rq_buffer;      /* Page buffer for encryption */
->  };
->
->  struct mid_q_entry;
-> @@ -1428,10 +1426,11 @@ struct cifs_aio_ctx {
->         struct cifsFileInfo     *cfile;
->         struct bio_vec          *bv;
->         loff_t                  pos;
-> -       unsigned int            npages;
-> +       unsigned int            nr_pinned_pages;
->         ssize_t                 rc;
->         unsigned int            len;
->         unsigned int            total_len;
-> +       unsigned int            bv_need_unpin;  /* If ->bv[] needs unpinning */
->         bool                    should_dirty;
->         /*
->          * Indicates if this aio_ctx is for direct_io,
-> @@ -1449,28 +1448,18 @@ struct cifs_readdata {
->         struct address_space            *mapping;
->         struct cifs_aio_ctx             *ctx;
->         __u64                           offset;
-> +       ssize_t                         got_bytes;
->         unsigned int                    bytes;
-> -       unsigned int                    got_bytes;
->         pid_t                           pid;
->         int                             result;
->         struct work_struct              work;
-> -       int (*read_into_pages)(struct TCP_Server_Info *server,
-> -                               struct cifs_readdata *rdata,
-> -                               unsigned int len);
-> -       int (*copy_into_pages)(struct TCP_Server_Info *server,
-> -                               struct cifs_readdata *rdata,
-> -                               struct iov_iter *iter);
-> +       struct iov_iter                 iter;
->         struct kvec                     iov[2];
->         struct TCP_Server_Info          *server;
->  #ifdef CONFIG_CIFS_SMB_DIRECT
->         struct smbd_mr                  *mr;
->  #endif
-> -       unsigned int                    pagesz;
-> -       unsigned int                    page_offset;
-> -       unsigned int                    tailsz;
->         struct cifs_credits             credits;
-> -       unsigned int                    nr_pages;
-> -       struct page                     **pages;
->  };
->
->  /* asynchronous write support */
-> @@ -1482,6 +1471,8 @@ struct cifs_writedata {
->         struct work_struct              work;
->         struct cifsFileInfo             *cfile;
->         struct cifs_aio_ctx             *ctx;
-> +       struct iov_iter                 iter;
-> +       struct bio_vec                  *bv;
->         __u64                           offset;
->         pid_t                           pid;
->         unsigned int                    bytes;
-> @@ -1490,12 +1481,7 @@ struct cifs_writedata {
->  #ifdef CONFIG_CIFS_SMB_DIRECT
->         struct smbd_mr                  *mr;
->  #endif
-> -       unsigned int                    pagesz;
-> -       unsigned int                    page_offset;
-> -       unsigned int                    tailsz;
->         struct cifs_credits             credits;
-> -       unsigned int                    nr_pages;
-> -       struct page                     **pages;
->  };
->
->  /*
-> @@ -2155,9 +2141,9 @@ static inline void move_cifs_info_to_smb2(struct smb2_file_all_info *dst, const
->         dst->FileNameLength = src->FileNameLength;
->  }
->
-> -static inline unsigned int cifs_get_num_sgs(const struct smb_rqst *rqst,
-> -                                           int num_rqst,
-> -                                           const u8 *sig)
-> +static inline int cifs_get_num_sgs(const struct smb_rqst *rqst,
-> +                                  int num_rqst,
-> +                                  const u8 *sig)
->  {
->         unsigned int len, skip;
->         unsigned int nents = 0;
-> @@ -2177,6 +2163,19 @@ static inline unsigned int cifs_get_num_sgs(const struct smb_rqst *rqst,
->          * rqst[1+].rq_iov[0+] data to be encrypted/decrypted
->          */
->         for (i = 0; i < num_rqst; i++) {
-> +               /* We really don't want a mixture of pinned and unpinned pages
-> +                * in the sglist.  It's hard to keep track of which is what.
-> +                * Instead, we convert to a BVEC-type iterator higher up.
-> +                */
-> +               if (WARN_ON_ONCE(user_backed_iter(&rqst[i].rq_iter)))
-> +                       return -EIO;
-> +
-> +               /* We also don't want to have any extra refs or pins to clean
-> +                * up in the sglist.
-> +                */
-> +               if (WARN_ON_ONCE(iov_iter_extract_will_pin(&rqst[i].rq_iter)))
-> +                       return -EIO;
-> +
->                 for (j = 0; j < rqst[i].rq_nvec; j++) {
->                         struct kvec *iov = &rqst[i].rq_iov[j];
->
-> @@ -2190,7 +2189,7 @@ static inline unsigned int cifs_get_num_sgs(const struct smb_rqst *rqst,
->                         }
->                         skip = 0;
->                 }
-> -               nents += rqst[i].rq_npages;
-> +               nents += iov_iter_npages(&rqst[i].rq_iter, INT_MAX);
->         }
->         nents += DIV_ROUND_UP(offset_in_page(sig) + SMB2_SIGNATURE_SIZE, PAGE_SIZE);
->         return nents;
-> @@ -2199,9 +2198,9 @@ static inline unsigned int cifs_get_num_sgs(const struct smb_rqst *rqst,
->  /* We can not use the normal sg_set_buf() as we will sometimes pass a
->   * stack object as buf.
->   */
-> -static inline struct scatterlist *cifs_sg_set_buf(struct scatterlist *sg,
-> -                                                 const void *buf,
-> -                                                 unsigned int buflen)
-> +static inline void cifs_sg_set_buf(struct sg_table *sgtable,
-> +                                  const void *buf,
-> +                                  unsigned int buflen)
->  {
->         unsigned long addr = (unsigned long)buf;
->         unsigned int off = offset_in_page(addr);
-> @@ -2211,16 +2210,17 @@ static inline struct scatterlist *cifs_sg_set_buf(struct scatterlist *sg,
->                 do {
->                         unsigned int len = min_t(unsigned int, buflen, PAGE_SIZE - off);
->
-> -                       sg_set_page(sg++, vmalloc_to_page((void *)addr), len, off);
-> +                       sg_set_page(&sgtable->sgl[sgtable->nents++],
-> +                                   vmalloc_to_page((void *)addr), len, off);
->
->                         off = 0;
->                         addr += PAGE_SIZE;
->                         buflen -= len;
->                 } while (buflen);
->         } else {
-> -               sg_set_page(sg++, virt_to_page(addr), buflen, off);
-> +               sg_set_page(&sgtable->sgl[sgtable->nents++],
-> +                           virt_to_page(addr), buflen, off);
->         }
-> -       return sg;
->  }
->
->  #endif /* _CIFS_GLOB_H */
-> diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-> index cb7a3fe89278..2873f68a051c 100644
-> --- a/fs/cifs/cifsproto.h
-> +++ b/fs/cifs/cifsproto.h
-> @@ -584,10 +584,7 @@ int cifs_readv_receive(struct TCP_Server_Info *server, struct mid_q_entry *mid);
->  int cifs_async_writev(struct cifs_writedata *wdata,
->                       void (*release)(struct kref *kref));
->  void cifs_writev_complete(struct work_struct *work);
-> -struct cifs_writedata *cifs_writedata_alloc(unsigned int nr_pages,
-> -                                               work_func_t complete);
-> -struct cifs_writedata *cifs_writedata_direct_alloc(struct page **pages,
-> -                                               work_func_t complete);
-> +struct cifs_writedata *cifs_writedata_alloc(work_func_t complete);
->  void cifs_writedata_release(struct kref *refcount);
->  int cifs_query_mf_symlink(unsigned int xid, struct cifs_tcon *tcon,
->                           struct cifs_sb_info *cifs_sb,
-> @@ -604,13 +601,10 @@ enum securityEnum cifs_select_sectype(struct TCP_Server_Info *,
->                                         enum securityEnum);
->  struct cifs_aio_ctx *cifs_aio_ctx_alloc(void);
->  void cifs_aio_ctx_release(struct kref *refcount);
-> -int setup_aio_ctx_iter(struct cifs_aio_ctx *ctx, struct iov_iter *iter, int rw);
->
->  int cifs_alloc_hash(const char *name, struct shash_desc **sdesc);
->  void cifs_free_hash(struct shash_desc **sdesc);
->
-> -void rqst_page_get_length(const struct smb_rqst *rqst, unsigned int page,
-> -                         unsigned int *len, unsigned int *offset);
->  struct cifs_chan *
->  cifs_ses_find_chan(struct cifs_ses *ses, struct TCP_Server_Info *server);
->  int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses);
-> diff --git a/fs/cifs/cifssmb.c b/fs/cifs/cifssmb.c
-> index 8c014a3ff9e0..730ae3273698 100644
-> --- a/fs/cifs/cifssmb.c
-> +++ b/fs/cifs/cifssmb.c
-> @@ -24,6 +24,7 @@
->  #include <linux/task_io_accounting_ops.h>
->  #include <linux/uaccess.h>
->  #include "cifspdu.h"
-> +#include "cifsfs.h"
->  #include "cifsglob.h"
->  #include "cifsacl.h"
->  #include "cifsproto.h"
-> @@ -1294,11 +1295,8 @@ cifs_readv_callback(struct mid_q_entry *mid)
->         struct TCP_Server_Info *server = tcon->ses->server;
->         struct smb_rqst rqst = { .rq_iov = rdata->iov,
->                                  .rq_nvec = 2,
-> -                                .rq_pages = rdata->pages,
-> -                                .rq_offset = rdata->page_offset,
-> -                                .rq_npages = rdata->nr_pages,
-> -                                .rq_pagesz = rdata->pagesz,
-> -                                .rq_tailsz = rdata->tailsz };
-> +                                .rq_iter_size = iov_iter_count(&rdata->iter),
-> +                                .rq_iter = rdata->iter };
->         struct cifs_credits credits = { .value = 1, .instance = 0 };
->
->         cifs_dbg(FYI, "%s: mid=%llu state=%d result=%d bytes=%u\n",
-> @@ -1737,11 +1735,8 @@ cifs_async_writev(struct cifs_writedata *wdata,
->
->         rqst.rq_iov = iov;
->         rqst.rq_nvec = 2;
-> -       rqst.rq_pages = wdata->pages;
-> -       rqst.rq_offset = wdata->page_offset;
-> -       rqst.rq_npages = wdata->nr_pages;
-> -       rqst.rq_pagesz = wdata->pagesz;
-> -       rqst.rq_tailsz = wdata->tailsz;
-> +       rqst.rq_iter = wdata->iter;
-> +       rqst.rq_iter_size = iov_iter_count(&wdata->iter);
->
->         cifs_dbg(FYI, "async write at %llu %u bytes\n",
->                  wdata->offset, wdata->bytes);
-> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-> index 09240b8b018a..33779d184692 100644
-> --- a/fs/cifs/file.c
-> +++ b/fs/cifs/file.c
-> @@ -36,6 +36,32 @@
->  #include "cifs_ioctl.h"
->  #include "cached_dir.h"
->
-> +/*
-> + * Remove the dirty flags from a span of pages.
-> + */
-> +static void cifs_undirty_folios(struct inode *inode, loff_t start, unsigned int len)
-> +{
-> +       struct address_space *mapping = inode->i_mapping;
-> +       struct folio *folio;
-> +       pgoff_t end;
-> +
-> +       XA_STATE(xas, &mapping->i_pages, start / PAGE_SIZE);
-> +
-> +       rcu_read_lock();
-> +
-> +       end = (start + len - 1) / PAGE_SIZE;
-> +       xas_for_each_marked(&xas, folio, end, PAGECACHE_TAG_DIRTY) {
-> +               xas_pause(&xas);
-> +               rcu_read_unlock();
-> +               folio_lock(folio);
-> +               folio_clear_dirty_for_io(folio);
-> +               folio_unlock(folio);
-> +               rcu_read_lock();
-> +       }
-> +
-> +       rcu_read_unlock();
-> +}
-> +
->  /*
->   * Completion of write to server.
->   */
-> @@ -2391,7 +2417,6 @@ cifs_writedata_release(struct kref *refcount)
->         if (wdata->cfile)
->                 cifsFileInfo_put(wdata->cfile);
->
-> -       kvfree(wdata->pages);
->         kfree(wdata);
->  }
->
-> @@ -2402,51 +2427,49 @@ cifs_writedata_release(struct kref *refcount)
->  static void
->  cifs_writev_requeue(struct cifs_writedata *wdata)
->  {
-> -       int i, rc = 0;
-> +       int rc = 0;
->         struct inode *inode = d_inode(wdata->cfile->dentry);
->         struct TCP_Server_Info *server;
-> -       unsigned int rest_len;
-> +       unsigned int rest_len = wdata->bytes;
-> +       loff_t fpos = wdata->offset;
->
->         server = tlink_tcon(wdata->cfile->tlink)->ses->server;
-> -       i = 0;
-> -       rest_len = wdata->bytes;
->         do {
->                 struct cifs_writedata *wdata2;
-> -               unsigned int j, nr_pages, wsize, tailsz, cur_len;
-> +               unsigned int wsize, cur_len;
->
->                 wsize = server->ops->wp_retry_size(inode);
->                 if (wsize < rest_len) {
-> -                       nr_pages = wsize / PAGE_SIZE;
-> -                       if (!nr_pages) {
-> -                               rc = -EOPNOTSUPP;
-> +                       if (wsize < PAGE_SIZE) {
-> +                               rc = -ENOTSUPP;
->                                 break;
->                         }
-> -                       cur_len = nr_pages * PAGE_SIZE;
-> -                       tailsz = PAGE_SIZE;
-> +                       cur_len = min(round_down(wsize, PAGE_SIZE), rest_len);
->                 } else {
-> -                       nr_pages = DIV_ROUND_UP(rest_len, PAGE_SIZE);
->                         cur_len = rest_len;
-> -                       tailsz = rest_len - (nr_pages - 1) * PAGE_SIZE;
->                 }
->
-> -               wdata2 = cifs_writedata_alloc(nr_pages, cifs_writev_complete);
-> +               wdata2 = cifs_writedata_alloc(cifs_writev_complete);
->                 if (!wdata2) {
->                         rc = -ENOMEM;
->                         break;
->                 }
->
-> -               for (j = 0; j < nr_pages; j++) {
-> -                       wdata2->pages[j] = wdata->pages[i + j];
-> -                       lock_page(wdata2->pages[j]);
-> -                       clear_page_dirty_for_io(wdata2->pages[j]);
-> -               }
-> -
->                 wdata2->sync_mode = wdata->sync_mode;
-> -               wdata2->nr_pages = nr_pages;
-> -               wdata2->offset = page_offset(wdata2->pages[0]);
-> -               wdata2->pagesz = PAGE_SIZE;
-> -               wdata2->tailsz = tailsz;
-> -               wdata2->bytes = cur_len;
-> +               wdata2->offset  = fpos;
-> +               wdata2->bytes   = cur_len;
-> +               wdata2->iter    = wdata->iter;
-> +
-> +               iov_iter_advance(&wdata2->iter, fpos - wdata->offset);
-> +               iov_iter_truncate(&wdata2->iter, wdata2->bytes);
-> +
-> +               if (iov_iter_is_xarray(&wdata2->iter))
-> +                       /* Check for pages having been redirtied and clean
-> +                        * them.  We can do this by walking the xarray.  If
-> +                        * it's not an xarray, then it's a DIO and we shouldn't
-> +                        * be mucking around with the page bits.
-> +                        */
-> +                       cifs_undirty_folios(inode, fpos, cur_len);
->
->                 rc = cifs_get_writable_file(CIFS_I(inode), FIND_WR_ANY,
->                                             &wdata2->cfile);
-> @@ -2461,33 +2484,22 @@ cifs_writev_requeue(struct cifs_writedata *wdata)
->                                                        cifs_writedata_release);
->                 }
->
-> -               for (j = 0; j < nr_pages; j++) {
-> -                       unlock_page(wdata2->pages[j]);
-> -                       if (rc != 0 && !is_retryable_error(rc)) {
-> -                               SetPageError(wdata2->pages[j]);
-> -                               end_page_writeback(wdata2->pages[j]);
-> -                               put_page(wdata2->pages[j]);
-> -                       }
-> -               }
-> -
->                 kref_put(&wdata2->refcount, cifs_writedata_release);
->                 if (rc) {
->                         if (is_retryable_error(rc))
->                                 continue;
-> -                       i += nr_pages;
-> +                       fpos += cur_len;
-> +                       rest_len -= cur_len;
->                         break;
->                 }
->
-> +               fpos += cur_len;
->                 rest_len -= cur_len;
-> -               i += nr_pages;
-> -       } while (i < wdata->nr_pages);
-> +       } while (rest_len > 0);
->
-> -       /* cleanup remaining pages from the original wdata */
-> -       for (; i < wdata->nr_pages; i++) {
-> -               SetPageError(wdata->pages[i]);
-> -               end_page_writeback(wdata->pages[i]);
-> -               put_page(wdata->pages[i]);
-> -       }
-> +       /* Clean up remaining pages from the original wdata */
-> +       if (iov_iter_is_xarray(&wdata->iter))
-> +               cifs_pages_write_failed(inode, fpos, rest_len);
->
->         if (rc != 0 && !is_retryable_error(rc))
->                 mapping_set_error(inode->i_mapping, rc);
-> @@ -2500,7 +2512,6 @@ cifs_writev_complete(struct work_struct *work)
->         struct cifs_writedata *wdata = container_of(work,
->                                                 struct cifs_writedata, work);
->         struct inode *inode = d_inode(wdata->cfile->dentry);
-> -       int i = 0;
->
->         if (wdata->result == 0) {
->                 spin_lock(&inode->i_lock);
-> @@ -2511,45 +2522,24 @@ cifs_writev_complete(struct work_struct *work)
->         } else if (wdata->sync_mode == WB_SYNC_ALL && wdata->result == -EAGAIN)
->                 return cifs_writev_requeue(wdata);
->
-> -       for (i = 0; i < wdata->nr_pages; i++) {
-> -               struct page *page = wdata->pages[i];
-> +       if (wdata->result == -EAGAIN)
-> +               cifs_pages_write_redirty(inode, wdata->offset, wdata->bytes);
-> +       else if (wdata->result < 0)
-> +               cifs_pages_write_failed(inode, wdata->offset, wdata->bytes);
-> +       else
-> +               cifs_pages_written_back(inode, wdata->offset, wdata->bytes);
->
-> -               if (wdata->result == -EAGAIN)
-> -                       __set_page_dirty_nobuffers(page);
-> -               else if (wdata->result < 0)
-> -                       SetPageError(page);
-> -               end_page_writeback(page);
-> -               cifs_readpage_to_fscache(inode, page);
-> -               put_page(page);
-> -       }
->         if (wdata->result != -EAGAIN)
->                 mapping_set_error(inode->i_mapping, wdata->result);
->         kref_put(&wdata->refcount, cifs_writedata_release);
->  }
->
-> -struct cifs_writedata *
-> -cifs_writedata_alloc(unsigned int nr_pages, work_func_t complete)
-> -{
-> -       struct cifs_writedata *writedata = NULL;
-> -       struct page **pages =
-> -               kcalloc(nr_pages, sizeof(struct page *), GFP_NOFS);
-> -       if (pages) {
-> -               writedata = cifs_writedata_direct_alloc(pages, complete);
-> -               if (!writedata)
-> -                       kvfree(pages);
-> -       }
-> -
-> -       return writedata;
-> -}
-> -
-> -struct cifs_writedata *
-> -cifs_writedata_direct_alloc(struct page **pages, work_func_t complete)
-> +struct cifs_writedata *cifs_writedata_alloc(work_func_t complete)
->  {
->         struct cifs_writedata *wdata;
->
->         wdata = kzalloc(sizeof(*wdata), GFP_NOFS);
->         if (wdata != NULL) {
-> -               wdata->pages = pages;
->                 kref_init(&wdata->refcount);
->                 INIT_LIST_HEAD(&wdata->list);
->                 init_completion(&wdata->done);
-> @@ -2558,7 +2548,6 @@ cifs_writedata_direct_alloc(struct page **pages, work_func_t complete)
->         return wdata;
->  }
->
-> -
->  static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
->  {
->         struct address_space *mapping = page->mapping;
-> @@ -2617,6 +2606,7 @@ static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
->         return rc;
->  }
->
-> +#if 0 // TODO: Remove for iov_iter support
->  static struct cifs_writedata *
->  wdata_alloc_and_fillpages(pgoff_t tofind, struct address_space *mapping,
->                           pgoff_t end, pgoff_t *index,
-> @@ -2922,6 +2912,375 @@ static int cifs_writepages(struct address_space *mapping,
->         set_bit(CIFS_INO_MODIFIED_ATTR, &CIFS_I(inode)->flags);
->         return rc;
->  }
-> +#endif
-> +
-> +/*
-> + * Extend the region to be written back to include subsequent contiguously
-> + * dirty pages if possible, but don't sleep while doing so.
-> + */
-> +static void cifs_extend_writeback(struct address_space *mapping,
-> +                                 long *_count,
-> +                                 loff_t start,
-> +                                 int max_pages,
-> +                                 size_t max_len,
-> +                                 unsigned int *_len)
-> +{
-> +       struct folio_batch batch;
-> +       struct folio *folio;
-> +       unsigned int psize, nr_pages;
-> +       size_t len = *_len;
-> +       pgoff_t index = (start + len) / PAGE_SIZE;
-> +       bool stop = true;
-> +       unsigned int i;
-> +
-> +       XA_STATE(xas, &mapping->i_pages, index);
-> +       folio_batch_init(&batch);
-> +
-> +       do {
-> +               /* Firstly, we gather up a batch of contiguous dirty pages
-> +                * under the RCU read lock - but we can't clear the dirty flags
-> +                * there if any of those pages are mapped.
-> +                */
-> +               rcu_read_lock();
-> +
-> +               xas_for_each(&xas, folio, ULONG_MAX) {
-> +                       stop = true;
-> +                       if (xas_retry(&xas, folio))
-> +                               continue;
-> +                       if (xa_is_value(folio))
-> +                               break;
-> +                       if (folio_index(folio) != index)
-> +                               break;
-> +                       if (!folio_try_get_rcu(folio)) {
-> +                               xas_reset(&xas);
-> +                               continue;
-> +                       }
-> +                       nr_pages = folio_nr_pages(folio);
-> +                       if (nr_pages > max_pages)
-> +                               break;
-> +
-> +                       /* Has the page moved or been split? */
-> +                       if (unlikely(folio != xas_reload(&xas))) {
-> +                               folio_put(folio);
-> +                               break;
-> +                       }
-> +
-> +                       if (!folio_trylock(folio)) {
-> +                               folio_put(folio);
-> +                               break;
-> +                       }
-> +                       if (!folio_test_dirty(folio) || folio_test_writeback(folio)) {
-> +                               folio_unlock(folio);
-> +                               folio_put(folio);
-> +                               break;
-> +                       }
-> +
-> +                       max_pages -= nr_pages;
-> +                       psize = folio_size(folio);
-> +                       len += psize;
-> +                       stop = false;
-> +                       if (max_pages <= 0 || len >= max_len || *_count <= 0)
-> +                               stop = true;
-> +
-> +                       index += nr_pages;
-> +                       if (!folio_batch_add(&batch, folio))
-> +                               break;
-> +                       if (stop)
-> +                               break;
-> +               }
-> +
-> +               if (!stop)
-> +                       xas_pause(&xas);
-> +               rcu_read_unlock();
-> +
-> +               /* Now, if we obtained any pages, we can shift them to being
-> +                * writable and mark them for caching.
-> +                */
-> +               if (!folio_batch_count(&batch))
-> +                       break;
-> +
-> +               for (i = 0; i < folio_batch_count(&batch); i++) {
-> +                       folio = batch.folios[i];
-> +                       /* The folio should be locked, dirty and not undergoing
-> +                        * writeback from the loop above.
-> +                        */
-> +                       if (!folio_clear_dirty_for_io(folio))
-> +                               WARN_ON(1);
-> +                       if (folio_start_writeback(folio))
-> +                               WARN_ON(1);
-> +
-> +                       *_count -= folio_nr_pages(folio);
-> +                       folio_unlock(folio);
-> +               }
-> +
-> +               folio_batch_release(&batch);
-> +               cond_resched();
-> +       } while (!stop);
-> +
-> +       *_len = len;
-> +}
-> +
-> +/*
-> + * Write back the locked page and any subsequent non-locked dirty pages.
-> + */
-> +static ssize_t cifs_write_back_from_locked_folio(struct address_space *mapping,
-> +                                                struct writeback_control *wbc,
-> +                                                struct folio *folio,
-> +                                                loff_t start, loff_t end)
-> +{
-> +       struct inode *inode = mapping->host;
-> +       struct TCP_Server_Info *server;
-> +       struct cifs_writedata *wdata;
-> +       struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-> +       struct cifs_credits credits_on_stack;
-> +       struct cifs_credits *credits = &credits_on_stack;
-> +       struct cifsFileInfo *cfile = NULL;
-> +       unsigned int xid, wsize, len;
-> +       loff_t i_size = i_size_read(inode);
-> +       size_t max_len;
-> +       long count = wbc->nr_to_write;
-> +       int rc;
-> +
-> +       /* The folio should be locked, dirty and not undergoing writeback. */
-> +       if (folio_start_writeback(folio))
-> +               WARN_ON(1);
-> +
-> +       count -= folio_nr_pages(folio);
-> +       len = folio_size(folio);
-> +
-> +       xid = get_xid();
-> +       server = cifs_pick_channel(cifs_sb_master_tcon(cifs_sb)->ses);
-> +
-> +       rc = cifs_get_writable_file(CIFS_I(inode), FIND_WR_ANY, &cfile);
-> +       if (rc) {
-> +               cifs_dbg(VFS, "No writable handle in writepages rc=%d\n", rc);
-> +               goto err_xid;
-> +       }
-> +
-> +       rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
-> +                                          &wsize, credits);
-> +       if (rc != 0)
-> +               goto err_close;
-> +
-> +       wdata = cifs_writedata_alloc(cifs_writev_complete);
-> +       if (!wdata) {
-> +               rc = -ENOMEM;
-> +               goto err_uncredit;
-> +       }
-> +
-> +       wdata->sync_mode = wbc->sync_mode;
-> +       wdata->offset = folio_pos(folio);
-> +       wdata->pid = cfile->pid;
-> +       wdata->credits = credits_on_stack;
-> +       wdata->cfile = cfile;
-> +       wdata->server = server;
-> +       cfile = NULL;
-> +
-> +       /* Find all consecutive lockable dirty pages, stopping when we find a
-> +        * page that is not immediately lockable, is not dirty or is missing,
-> +        * or we reach the end of the range.
-> +        */
-> +       if (start < i_size) {
-> +               /* Trim the write to the EOF; the extra data is ignored.  Also
-> +                * put an upper limit on the size of a single storedata op.
-> +                */
-> +               max_len = wsize;
-> +               max_len = min_t(unsigned long long, max_len, end - start + 1);
-> +               max_len = min_t(unsigned long long, max_len, i_size - start);
-> +
-> +               if (len < max_len) {
-> +                       int max_pages = INT_MAX;
-> +
-> +#ifdef CONFIG_CIFS_SMB_DIRECT
-> +                       if (server->smbd_conn)
-> +                               max_pages = server->smbd_conn->max_frmr_depth;
-> +#endif
-> +                       max_pages -= folio_nr_pages(folio);
-> +
-> +                       if (max_pages > 0)
-> +                               cifs_extend_writeback(mapping, &count, start,
-> +                                                     max_pages, max_len, &len);
-> +               }
-> +               len = min_t(loff_t, len, max_len);
-> +       }
-> +
-> +       wdata->bytes = len;
-> +
-> +       /* We now have a contiguous set of dirty pages, each with writeback
-> +        * set; the first page is still locked at this point, but all the rest
-> +        * have been unlocked.
-> +        */
-> +       folio_unlock(folio);
-> +
-> +       if (start < i_size) {
-> +               iov_iter_xarray(&wdata->iter, ITER_SOURCE, &mapping->i_pages,
-> +                               start, len);
-> +
-> +               rc = adjust_credits(wdata->server, &wdata->credits, wdata->bytes);
-> +               if (rc)
-> +                       goto err_wdata;
-> +
-> +               if (wdata->cfile->invalidHandle)
-> +                       rc = -EAGAIN;
-> +               else
-> +                       rc = wdata->server->ops->async_writev(wdata,
-> +                                                             cifs_writedata_release);
-> +               if (rc >= 0) {
-> +                       kref_put(&wdata->refcount, cifs_writedata_release);
-> +                       goto err_close;
-> +               }
-> +       } else {
-> +               /* The dirty region was entirely beyond the EOF. */
-> +               cifs_pages_written_back(inode, start, len);
-> +               rc = 0;
-> +       }
-> +
-> +err_wdata:
-> +       kref_put(&wdata->refcount, cifs_writedata_release);
-> +err_uncredit:
-> +       add_credits_and_wake_if(server, credits, 0);
-> +err_close:
-> +       if (cfile)
-> +               cifsFileInfo_put(cfile);
-> +err_xid:
-> +       free_xid(xid);
-> +       if (rc == 0) {
-> +               wbc->nr_to_write = count;
-> +       } else if (is_retryable_error(rc)) {
-> +               cifs_pages_write_redirty(inode, start, len);
-> +       } else {
-> +               cifs_pages_write_failed(inode, start, len);
-> +               mapping_set_error(mapping, rc);
-> +       }
-> +       /* Indication to update ctime and mtime as close is deferred */
-> +       set_bit(CIFS_INO_MODIFIED_ATTR, &CIFS_I(inode)->flags);
-> +       return rc;
-> +}
-> +
-> +/*
-> + * write a region of pages back to the server
-> + */
-> +static int cifs_writepages_region(struct address_space *mapping,
-> +                                 struct writeback_control *wbc,
-> +                                 loff_t start, loff_t end, loff_t *_next)
-> +{
-> +       struct folio *folio;
-> +       struct page *head_page;
-> +       ssize_t ret;
-> +       int n, skips = 0;
-> +
-> +       do {
-> +               pgoff_t index = start / PAGE_SIZE;
-> +
-> +               n = find_get_pages_range_tag(mapping, &index, end / PAGE_SIZE,
-> +                                            PAGECACHE_TAG_DIRTY, 1, &head_page);
-> +               if (!n)
-> +                       break;
-> +
-> +               folio = page_folio(head_page);
-> +               start = folio_pos(folio); /* May regress with THPs */
-> +
-> +               /* At this point we hold neither the i_pages lock nor the
-> +                * page lock: the page may be truncated or invalidated
-> +                * (changing page->mapping to NULL), or even swizzled
-> +                * back from swapper_space to tmpfs file mapping
-> +                */
-> +               if (wbc->sync_mode != WB_SYNC_NONE) {
-> +                       ret = folio_lock_killable(folio);
-> +                       if (ret < 0) {
-> +                               folio_put(folio);
-> +                               return ret;
-> +                       }
-> +               } else {
-> +                       if (!folio_trylock(folio)) {
-> +                               folio_put(folio);
-> +                               return 0;
-> +                       }
-> +               }
-> +
-> +               if (folio_mapping(folio) != mapping ||
-> +                   !folio_test_dirty(folio)) {
-> +                       start += folio_size(folio);
-> +                       folio_unlock(folio);
-> +                       folio_put(folio);
-> +                       continue;
-> +               }
-> +
-> +               if (folio_test_writeback(folio) ||
-> +                   folio_test_fscache(folio)) {
-> +                       folio_unlock(folio);
-> +                       if (wbc->sync_mode != WB_SYNC_NONE) {
-> +                               folio_wait_writeback(folio);
-> +#ifdef CONFIG_CIFS_FSCACHE
-> +                               folio_wait_fscache(folio);
-> +#endif
-> +                       } else {
-> +                               start += folio_size(folio);
-> +                       }
-> +                       folio_put(folio);
-> +                       if (wbc->sync_mode == WB_SYNC_NONE) {
-> +                               if (skips >= 5 || need_resched())
-> +                                       break;
-> +                               skips++;
-> +                       }
-> +                       continue;
-> +               }
-> +
-> +               if (!folio_clear_dirty_for_io(folio))
-> +                       /* We hold the page lock - it should've been dirty. */
-> +                       WARN_ON(1);
-> +
-> +               ret = cifs_write_back_from_locked_folio(mapping, wbc, folio, start, end);
-> +               folio_put(folio);
-> +               if (ret < 0)
-> +                       return ret;
-> +
-> +               start += ret;
-> +               cond_resched();
-> +       } while (wbc->nr_to_write > 0);
-> +
-> +       *_next = start;
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Write some of the pending data back to the server
-> + */
-> +static int cifs_writepages(struct address_space *mapping,
-> +                          struct writeback_control *wbc)
-> +{
-> +       loff_t start, next;
-> +       int ret;
-> +
-> +       /* We have to be careful as we can end up racing with setattr()
-> +        * truncating the pagecache since the caller doesn't take a lock here
-> +        * to prevent it.
-> +        */
-> +
-> +       if (wbc->range_cyclic) {
-> +               start = mapping->writeback_index * PAGE_SIZE;
-> +               ret = cifs_writepages_region(mapping, wbc, start, LLONG_MAX, &next);
-> +               if (ret == 0) {
-> +                       mapping->writeback_index = next / PAGE_SIZE;
-> +                       if (start > 0 && wbc->nr_to_write > 0) {
-> +                               ret = cifs_writepages_region(mapping, wbc, 0,
-> +                                                            start, &next);
-> +                               if (ret == 0)
-> +                                       mapping->writeback_index =
-> +                                               next / PAGE_SIZE;
-> +                       }
-> +               }
-> +       } else if (wbc->range_start == 0 && wbc->range_end == LLONG_MAX) {
-> +               ret = cifs_writepages_region(mapping, wbc, 0, LLONG_MAX, &next);
-> +               if (wbc->nr_to_write > 0 && ret == 0)
-> +                       mapping->writeback_index = next / PAGE_SIZE;
-> +       } else {
-> +               ret = cifs_writepages_region(mapping, wbc,
-> +                                            wbc->range_start, wbc->range_end, &next);
-> +       }
-> +
-> +       return ret;
-> +}
->
->  static int
->  cifs_writepage_locked(struct page *page, struct writeback_control *wbc)
-> @@ -2972,6 +3331,7 @@ static int cifs_write_end(struct file *file, struct address_space *mapping,
->         struct inode *inode = mapping->host;
->         struct cifsFileInfo *cfile = file->private_data;
->         struct cifs_sb_info *cifs_sb = CIFS_SB(cfile->dentry->d_sb);
-> +       struct folio *folio = page_folio(page);
->         __u32 pid;
->
->         if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_RWPIDFORWARD)
-> @@ -2982,14 +3342,14 @@ static int cifs_write_end(struct file *file, struct address_space *mapping,
->         cifs_dbg(FYI, "write_end for page %p from pos %lld with %d bytes\n",
->                  page, pos, copied);
->
-> -       if (PageChecked(page)) {
-> +       if (folio_test_checked(folio)) {
->                 if (copied == len)
-> -                       SetPageUptodate(page);
-> -               ClearPageChecked(page);
-> -       } else if (!PageUptodate(page) && copied == PAGE_SIZE)
-> -               SetPageUptodate(page);
-> +                       folio_mark_uptodate(folio);
-> +               folio_clear_checked(folio);
-> +       } else if (!folio_test_uptodate(folio) && copied == PAGE_SIZE)
-> +               folio_mark_uptodate(folio);
->
-> -       if (!PageUptodate(page)) {
-> +       if (!folio_test_uptodate(folio)) {
->                 char *page_data;
->                 unsigned offset = pos & (PAGE_SIZE - 1);
->                 unsigned int xid;
-> @@ -3149,6 +3509,7 @@ int cifs_flush(struct file *file, fl_owner_t id)
->         return rc;
->  }
->
-> +#if 0 // TODO: Remove for iov_iter support
->  static int
->  cifs_write_allocate_pages(struct page **pages, unsigned long num_pages)
->  {
-> @@ -3189,17 +3550,15 @@ size_t get_numpages(const size_t wsize, const size_t len, size_t *cur_len)
->
->         return num_pages;
->  }
-> +#endif
->
->  static void
->  cifs_uncached_writedata_release(struct kref *refcount)
->  {
-> -       int i;
->         struct cifs_writedata *wdata = container_of(refcount,
->                                         struct cifs_writedata, refcount);
->
->         kref_put(&wdata->ctx->refcount, cifs_aio_ctx_release);
-> -       for (i = 0; i < wdata->nr_pages; i++)
-> -               put_page(wdata->pages[i]);
->         cifs_writedata_release(refcount);
->  }
->
-> @@ -3225,6 +3584,7 @@ cifs_uncached_writev_complete(struct work_struct *work)
->         kref_put(&wdata->refcount, cifs_uncached_writedata_release);
->  }
->
-> +#if 0 // TODO: Remove for iov_iter support
->  static int
->  wdata_fill_from_iovec(struct cifs_writedata *wdata, struct iov_iter *from,
->                       size_t *len, unsigned long *num_pages)
-> @@ -3266,6 +3626,7 @@ wdata_fill_from_iovec(struct cifs_writedata *wdata, struct iov_iter *from,
->         *num_pages = i + 1;
->         return 0;
->  }
-> +#endif
->
->  static int
->  cifs_resend_wdata(struct cifs_writedata *wdata, struct list_head *wdata_list,
-> @@ -3337,23 +3698,57 @@ cifs_resend_wdata(struct cifs_writedata *wdata, struct list_head *wdata_list,
->         return rc;
->  }
->
-> +/*
-> + * Select span of a bvec iterator we're going to use.  Limit it by both maximum
-> + * size and maximum number of segments.
-> + */
-> +static size_t cifs_limit_bvec_subset(const struct iov_iter *iter, size_t max_size,
-> +                                    size_t max_segs, unsigned int *_nsegs)
-> +{
-> +       const struct bio_vec *bvecs = iter->bvec;
-> +       unsigned int nbv = iter->nr_segs, ix = 0, nsegs = 0;
-> +       size_t len, span = 0, n = iter->count;
-> +       size_t skip = iter->iov_offset;
-> +
-> +       if (WARN_ON(!iov_iter_is_bvec(iter)) || n == 0)
-> +               return 0;
-> +
-> +       while (n && ix < nbv && skip) {
-> +               len = bvecs[ix].bv_len;
-> +               if (skip < len)
-> +                       break;
-> +               skip -= len;
-> +               n -= len;
-> +               ix++;
-> +       }
-> +
-> +       while (n && ix < nbv) {
-> +               len = min3(n, bvecs[ix].bv_len - skip, max_size);
-> +               span += len;
-> +               nsegs++;
-> +               ix++;
-> +               if (span >= max_size || nsegs >= max_segs)
-> +                       break;
-> +               skip = 0;
-> +               n -= len;
-> +       }
-> +
-> +       *_nsegs = nsegs;
-> +       return span;
-> +}
-> +
->  static int
-> -cifs_write_from_iter(loff_t offset, size_t len, struct iov_iter *from,
-> +cifs_write_from_iter(loff_t fpos, size_t len, struct iov_iter *from,
->                      struct cifsFileInfo *open_file,
->                      struct cifs_sb_info *cifs_sb, struct list_head *wdata_list,
->                      struct cifs_aio_ctx *ctx)
->  {
->         int rc = 0;
-> -       size_t cur_len;
-> -       unsigned long nr_pages, num_pages, i;
-> +       size_t cur_len, max_len;
->         struct cifs_writedata *wdata;
-> -       struct iov_iter saved_from = *from;
-> -       loff_t saved_offset = offset;
->         pid_t pid;
->         struct TCP_Server_Info *server;
-> -       struct page **pagevec;
-> -       size_t start;
-> -       unsigned int xid;
-> +       unsigned int xid, max_segs = INT_MAX;
->
->         if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_RWPIDFORWARD)
->                 pid = open_file->pid;
-> @@ -3363,10 +3758,20 @@ cifs_write_from_iter(loff_t offset, size_t len, struct iov_iter *from,
->         server = cifs_pick_channel(tlink_tcon(open_file->tlink)->ses);
->         xid = get_xid();
->
-> +#ifdef CONFIG_CIFS_SMB_DIRECT
-> +       if (server->smbd_conn)
-> +               max_segs = server->smbd_conn->max_frmr_depth;
-> +#endif
-> +
->         do {
-> -               unsigned int wsize;
->                 struct cifs_credits credits_on_stack;
->                 struct cifs_credits *credits = &credits_on_stack;
-> +               unsigned int wsize, nsegs = 0;
-> +
-> +               if (signal_pending(current)) {
-> +                       rc = -EINTR;
-> +                       break;
-> +               }
->
->                 if (open_file->invalidHandle) {
->                         rc = cifs_reopen_file(open_file, false);
-> @@ -3381,99 +3786,42 @@ cifs_write_from_iter(loff_t offset, size_t len, struct iov_iter *from,
->                 if (rc)
->                         break;
->
-> -               cur_len = min_t(const size_t, len, wsize);
-> -
-> -               if (ctx->direct_io) {
-> -                       ssize_t result;
-> -
-> -                       result = iov_iter_get_pages_alloc2(
-> -                               from, &pagevec, cur_len, &start);
-> -                       if (result < 0) {
-> -                               cifs_dbg(VFS,
-> -                                        "direct_writev couldn't get user pages (rc=%zd) iter type %d iov_offset %zd count %zd\n",
-> -                                        result, iov_iter_type(from),
-> -                                        from->iov_offset, from->count);
-> -                               dump_stack();
-> -
-> -                               rc = result;
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> -                       cur_len = (size_t)result;
-> -
-> -                       nr_pages =
-> -                               (cur_len + start + PAGE_SIZE - 1) / PAGE_SIZE;
-> -
-> -                       wdata = cifs_writedata_direct_alloc(pagevec,
-> -                                            cifs_uncached_writev_complete);
-> -                       if (!wdata) {
-> -                               rc = -ENOMEM;
-> -                               for (i = 0; i < nr_pages; i++)
-> -                                       put_page(pagevec[i]);
-> -                               kvfree(pagevec);
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> -
-> -
-> -                       wdata->page_offset = start;
-> -                       wdata->tailsz =
-> -                               nr_pages > 1 ?
-> -                                       cur_len - (PAGE_SIZE - start) -
-> -                                       (nr_pages - 2) * PAGE_SIZE :
-> -                                       cur_len;
-> -               } else {
-> -                       nr_pages = get_numpages(wsize, len, &cur_len);
-> -                       wdata = cifs_writedata_alloc(nr_pages,
-> -                                            cifs_uncached_writev_complete);
-> -                       if (!wdata) {
-> -                               rc = -ENOMEM;
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> -
-> -                       rc = cifs_write_allocate_pages(wdata->pages, nr_pages);
-> -                       if (rc) {
-> -                               kvfree(wdata->pages);
-> -                               kfree(wdata);
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> -
-> -                       num_pages = nr_pages;
-> -                       rc = wdata_fill_from_iovec(
-> -                               wdata, from, &cur_len, &num_pages);
-> -                       if (rc) {
-> -                               for (i = 0; i < nr_pages; i++)
-> -                                       put_page(wdata->pages[i]);
-> -                               kvfree(wdata->pages);
-> -                               kfree(wdata);
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> +               max_len = min_t(const size_t, len, wsize);
-> +               if (!max_len) {
-> +                       rc = -EAGAIN;
-> +                       add_credits_and_wake_if(server, credits, 0);
-> +                       break;
-> +               }
->
-> -                       /*
-> -                        * Bring nr_pages down to the number of pages we
-> -                        * actually used, and free any pages that we didn't use.
-> -                        */
-> -                       for ( ; nr_pages > num_pages; nr_pages--)
-> -                               put_page(wdata->pages[nr_pages - 1]);
-> +               cur_len = cifs_limit_bvec_subset(from, max_len, max_segs, &nsegs);
-> +               cifs_dbg(FYI, "write_from_iter len=%zx/%zx nsegs=%u/%lu/%u\n",
-> +                        cur_len, max_len, nsegs, from->nr_segs, max_segs);
-> +               if (cur_len == 0) {
-> +                       rc = -EIO;
-> +                       add_credits_and_wake_if(server, credits, 0);
-> +                       break;
-> +               }
->
-> -                       wdata->tailsz = cur_len - ((nr_pages - 1) * PAGE_SIZE);
-> +               wdata = cifs_writedata_alloc(cifs_uncached_writev_complete);
-> +               if (!wdata) {
-> +                       rc = -ENOMEM;
-> +                       add_credits_and_wake_if(server, credits, 0);
-> +                       break;
->                 }
->
->                 wdata->sync_mode = WB_SYNC_ALL;
-> -               wdata->nr_pages = nr_pages;
-> -               wdata->offset = (__u64)offset;
-> -               wdata->cfile = cifsFileInfo_get(open_file);
-> -               wdata->server = server;
-> -               wdata->pid = pid;
-> -               wdata->bytes = cur_len;
-> -               wdata->pagesz = PAGE_SIZE;
-> -               wdata->credits = credits_on_stack;
-> -               wdata->ctx = ctx;
-> +               wdata->offset   = (__u64)fpos;
-> +               wdata->cfile    = cifsFileInfo_get(open_file);
-> +               wdata->server   = server;
-> +               wdata->pid      = pid;
-> +               wdata->bytes    = cur_len;
-> +               wdata->credits  = credits_on_stack;
-> +               wdata->iter     = *from;
-> +               wdata->ctx      = ctx;
->                 kref_get(&ctx->refcount);
->
-> +               iov_iter_truncate(&wdata->iter, cur_len);
-> +
->                 rc = adjust_credits(server, &wdata->credits, wdata->bytes);
->
->                 if (!rc) {
-> @@ -3488,16 +3836,14 @@ cifs_write_from_iter(loff_t offset, size_t len, struct iov_iter *from,
->                         add_credits_and_wake_if(server, &wdata->credits, 0);
->                         kref_put(&wdata->refcount,
->                                  cifs_uncached_writedata_release);
-> -                       if (rc == -EAGAIN) {
-> -                               *from = saved_from;
-> -                               iov_iter_advance(from, offset - saved_offset);
-> +                       if (rc == -EAGAIN)
->                                 continue;
-> -                       }
->                         break;
->                 }
->
->                 list_add_tail(&wdata->list, wdata_list);
-> -               offset += cur_len;
-> +               iov_iter_advance(from, cur_len);
-> +               fpos += cur_len;
->                 len -= cur_len;
->         } while (len > 0);
->
-> @@ -3596,8 +3942,6 @@ static ssize_t __cifs_writev(
->         struct cifs_tcon *tcon;
->         struct cifs_sb_info *cifs_sb;
->         struct cifs_aio_ctx *ctx;
-> -       struct iov_iter saved_from = *from;
-> -       size_t len = iov_iter_count(from);
->         int rc;
->
->         /*
-> @@ -3631,23 +3975,54 @@ static ssize_t __cifs_writev(
->                 ctx->iocb = iocb;
->
->         ctx->pos = iocb->ki_pos;
-> +       ctx->direct_io = direct;
-> +       ctx->nr_pinned_pages = 0;
->
-> -       if (direct) {
-> -               ctx->direct_io = true;
-> -               ctx->iter = *from;
-> -               ctx->len = len;
-> -       } else {
-> -               rc = setup_aio_ctx_iter(ctx, from, ITER_SOURCE);
-> -               if (rc) {
-> +       if (user_backed_iter(from)) {
-> +               /*
-> +                * Extract IOVEC/UBUF-type iterators to a BVEC-type iterator as
-> +                * they contain references to the calling process's virtual
-> +                * memory layout which won't be available in an async worker
-> +                * thread.  This also takes a pin on every folio involved.
-> +                */
-> +               rc = netfs_extract_user_iter(from, iov_iter_count(from),
-> +                                            &ctx->iter, 0);
-> +               if (rc < 0) {
->                         kref_put(&ctx->refcount, cifs_aio_ctx_release);
->                         return rc;
->                 }
-> +
-> +               ctx->nr_pinned_pages = rc;
-> +               ctx->bv = (void *)ctx->iter.bvec;
-> +               ctx->bv_need_unpin = iov_iter_extract_will_pin(&ctx->iter);
-> +       } else if ((iov_iter_is_bvec(from) || iov_iter_is_kvec(from)) &&
-> +                  !is_sync_kiocb(iocb)) {
-> +               /*
-> +                * If the op is asynchronous, we need to copy the list attached
-> +                * to a BVEC/KVEC-type iterator, but we assume that the storage
-> +                * will be pinned by the caller; in any case, we may or may not
-> +                * be able to pin the pages, so we don't try.
-> +                */
-> +               ctx->bv = (void *)dup_iter(&ctx->iter, from, GFP_KERNEL);
-> +               if (!ctx->bv) {
-> +                       kref_put(&ctx->refcount, cifs_aio_ctx_release);
-> +                       return -ENOMEM;
-> +               }
-> +       } else {
-> +               /*
-> +                * Otherwise, we just pass the iterator down as-is and rely on
-> +                * the caller to make sure the pages referred to by the
-> +                * iterator don't evaporate.
-> +                */
-> +               ctx->iter = *from;
->         }
->
-> +       ctx->len = iov_iter_count(&ctx->iter);
-> +
->         /* grab a lock here due to read response handlers can access ctx */
->         mutex_lock(&ctx->aio_mutex);
->
-> -       rc = cifs_write_from_iter(iocb->ki_pos, ctx->len, &saved_from,
-> +       rc = cifs_write_from_iter(iocb->ki_pos, ctx->len, &ctx->iter,
->                                   cfile, cifs_sb, &ctx->list, ctx);
->
->         /*
-> @@ -3790,14 +4165,12 @@ cifs_strict_writev(struct kiocb *iocb, struct iov_iter *from)
->         return written;
->  }
->
-> -static struct cifs_readdata *
-> -cifs_readdata_direct_alloc(struct page **pages, work_func_t complete)
-> +static struct cifs_readdata *cifs_readdata_alloc(work_func_t complete)
->  {
->         struct cifs_readdata *rdata;
->
->         rdata = kzalloc(sizeof(*rdata), GFP_KERNEL);
-> -       if (rdata != NULL) {
-> -               rdata->pages = pages;
-> +       if (rdata) {
->                 kref_init(&rdata->refcount);
->                 INIT_LIST_HEAD(&rdata->list);
->                 init_completion(&rdata->done);
-> @@ -3807,27 +4180,14 @@ cifs_readdata_direct_alloc(struct page **pages, work_func_t complete)
->         return rdata;
->  }
->
-> -static struct cifs_readdata *
-> -cifs_readdata_alloc(unsigned int nr_pages, work_func_t complete)
-> -{
-> -       struct page **pages =
-> -               kcalloc(nr_pages, sizeof(struct page *), GFP_KERNEL);
-> -       struct cifs_readdata *ret = NULL;
-> -
-> -       if (pages) {
-> -               ret = cifs_readdata_direct_alloc(pages, complete);
-> -               if (!ret)
-> -                       kfree(pages);
-> -       }
-> -
-> -       return ret;
-> -}
-> -
->  void
->  cifs_readdata_release(struct kref *refcount)
->  {
->         struct cifs_readdata *rdata = container_of(refcount,
->                                         struct cifs_readdata, refcount);
-> +
-> +       if (rdata->ctx)
-> +               kref_put(&rdata->ctx->refcount, cifs_aio_ctx_release);
->  #ifdef CONFIG_CIFS_SMB_DIRECT
->         if (rdata->mr) {
->                 smbd_deregister_mr(rdata->mr);
-> @@ -3837,85 +4197,9 @@ cifs_readdata_release(struct kref *refcount)
->         if (rdata->cfile)
->                 cifsFileInfo_put(rdata->cfile);
->
-> -       kvfree(rdata->pages);
->         kfree(rdata);
->  }
->
-> -static int
-> -cifs_read_allocate_pages(struct cifs_readdata *rdata, unsigned int nr_pages)
-> -{
-> -       int rc = 0;
-> -       struct page *page;
-> -       unsigned int i;
-> -
-> -       for (i = 0; i < nr_pages; i++) {
-> -               page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-> -               if (!page) {
-> -                       rc = -ENOMEM;
-> -                       break;
-> -               }
-> -               rdata->pages[i] = page;
-> -       }
-> -
-> -       if (rc) {
-> -               unsigned int nr_page_failed = i;
-> -
-> -               for (i = 0; i < nr_page_failed; i++) {
-> -                       put_page(rdata->pages[i]);
-> -                       rdata->pages[i] = NULL;
-> -               }
-> -       }
-> -       return rc;
-> -}
-> -
-> -static void
-> -cifs_uncached_readdata_release(struct kref *refcount)
-> -{
-> -       struct cifs_readdata *rdata = container_of(refcount,
-> -                                       struct cifs_readdata, refcount);
-> -       unsigned int i;
-> -
-> -       kref_put(&rdata->ctx->refcount, cifs_aio_ctx_release);
-> -       for (i = 0; i < rdata->nr_pages; i++) {
-> -               put_page(rdata->pages[i]);
-> -       }
-> -       cifs_readdata_release(refcount);
-> -}
-> -
-> -/**
-> - * cifs_readdata_to_iov - copy data from pages in response to an iovec
-> - * @rdata:     the readdata response with list of pages holding data
-> - * @iter:      destination for our data
-> - *
-> - * This function copies data from a list of pages in a readdata response into
-> - * an array of iovecs. It will first calculate where the data should go
-> - * based on the info in the readdata and then copy the data into that spot.
-> - */
-> -static int
-> -cifs_readdata_to_iov(struct cifs_readdata *rdata, struct iov_iter *iter)
-> -{
-> -       size_t remaining = rdata->got_bytes;
-> -       unsigned int i;
-> -
-> -       for (i = 0; i < rdata->nr_pages; i++) {
-> -               struct page *page = rdata->pages[i];
-> -               size_t copy = min_t(size_t, remaining, PAGE_SIZE);
-> -               size_t written;
-> -
-> -               if (unlikely(iov_iter_is_pipe(iter))) {
-> -                       void *addr = kmap_atomic(page);
-> -
-> -                       written = copy_to_iter(addr, copy, iter);
-> -                       kunmap_atomic(addr);
-> -               } else
-> -                       written = copy_page_to_iter(page, 0, copy, iter);
-> -               remaining -= written;
-> -               if (written < copy && iov_iter_count(iter) > 0)
-> -                       break;
-> -       }
-> -       return remaining ? -EFAULT : 0;
-> -}
-> -
->  static void collect_uncached_read_data(struct cifs_aio_ctx *ctx);
->
->  static void
-> @@ -3927,9 +4211,11 @@ cifs_uncached_readv_complete(struct work_struct *work)
->         complete(&rdata->done);
->         collect_uncached_read_data(rdata->ctx);
->         /* the below call can possibly free the last ref to aio ctx */
-> -       kref_put(&rdata->refcount, cifs_uncached_readdata_release);
-> +       kref_put(&rdata->refcount, cifs_readdata_release);
->  }
->
-> +#if 0 // TODO: Remove for iov_iter support
-> +
->  static int
->  uncached_fill_pages(struct TCP_Server_Info *server,
->                     struct cifs_readdata *rdata, struct iov_iter *iter,
-> @@ -4003,6 +4289,7 @@ cifs_uncached_copy_into_pages(struct TCP_Server_Info *server,
->  {
->         return uncached_fill_pages(server, rdata, iter, iter->count);
->  }
-> +#endif
->
->  static int cifs_resend_rdata(struct cifs_readdata *rdata,
->                         struct list_head *rdata_list,
-> @@ -4072,37 +4359,36 @@ static int cifs_resend_rdata(struct cifs_readdata *rdata,
->         } while (rc == -EAGAIN);
->
->  fail:
-> -       kref_put(&rdata->refcount, cifs_uncached_readdata_release);
-> +       kref_put(&rdata->refcount, cifs_readdata_release);
->         return rc;
->  }
->
->  static int
-> -cifs_send_async_read(loff_t offset, size_t len, struct cifsFileInfo *open_file,
-> +cifs_send_async_read(loff_t fpos, size_t len, struct cifsFileInfo *open_file,
->                      struct cifs_sb_info *cifs_sb, struct list_head *rdata_list,
->                      struct cifs_aio_ctx *ctx)
->  {
->         struct cifs_readdata *rdata;
-> -       unsigned int npages, rsize;
-> +       unsigned int rsize, nsegs, max_segs = INT_MAX;
->         struct cifs_credits credits_on_stack;
->         struct cifs_credits *credits = &credits_on_stack;
-> -       size_t cur_len;
-> +       size_t cur_len, max_len;
->         int rc;
->         pid_t pid;
->         struct TCP_Server_Info *server;
-> -       struct page **pagevec;
-> -       size_t start;
-> -       struct iov_iter direct_iov = ctx->iter;
->
->         server = cifs_pick_channel(tlink_tcon(open_file->tlink)->ses);
->
-> +#ifdef CONFIG_CIFS_SMB_DIRECT
-> +       if (server->smbd_conn)
-> +               max_segs = server->smbd_conn->max_frmr_depth;
-> +#endif
-> +
->         if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_RWPIDFORWARD)
->                 pid = open_file->pid;
->         else
->                 pid = current->tgid;
->
-> -       if (ctx->direct_io)
-> -               iov_iter_advance(&direct_iov, offset - ctx->pos);
-> -
->         do {
->                 if (open_file->invalidHandle) {
->                         rc = cifs_reopen_file(open_file, true);
-> @@ -4122,78 +4408,37 @@ cifs_send_async_read(loff_t offset, size_t len, struct cifsFileInfo *open_file,
->                 if (rc)
->                         break;
->
-> -               cur_len = min_t(const size_t, len, rsize);
-> -
-> -               if (ctx->direct_io) {
-> -                       ssize_t result;
-> -
-> -                       result = iov_iter_get_pages_alloc2(
-> -                                       &direct_iov, &pagevec,
-> -                                       cur_len, &start);
-> -                       if (result < 0) {
-> -                               cifs_dbg(VFS,
-> -                                        "Couldn't get user pages (rc=%zd) iter type %d iov_offset %zd count %zd\n",
-> -                                        result, iov_iter_type(&direct_iov),
-> -                                        direct_iov.iov_offset,
-> -                                        direct_iov.count);
-> -                               dump_stack();
-> -
-> -                               rc = result;
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> -                       cur_len = (size_t)result;
-> -
-> -                       rdata = cifs_readdata_direct_alloc(
-> -                                       pagevec, cifs_uncached_readv_complete);
-> -                       if (!rdata) {
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               rc = -ENOMEM;
-> -                               break;
-> -                       }
-> -
-> -                       npages = (cur_len + start + PAGE_SIZE-1) / PAGE_SIZE;
-> -                       rdata->page_offset = start;
-> -                       rdata->tailsz = npages > 1 ?
-> -                               cur_len-(PAGE_SIZE-start)-(npages-2)*PAGE_SIZE :
-> -                               cur_len;
-> -
-> -               } else {
-> -
-> -                       npages = DIV_ROUND_UP(cur_len, PAGE_SIZE);
-> -                       /* allocate a readdata struct */
-> -                       rdata = cifs_readdata_alloc(npages,
-> -                                           cifs_uncached_readv_complete);
-> -                       if (!rdata) {
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               rc = -ENOMEM;
-> -                               break;
-> -                       }
-> +               max_len = min_t(size_t, len, rsize);
->
-> -                       rc = cifs_read_allocate_pages(rdata, npages);
-> -                       if (rc) {
-> -                               kvfree(rdata->pages);
-> -                               kfree(rdata);
-> -                               add_credits_and_wake_if(server, credits, 0);
-> -                               break;
-> -                       }
-> +               cur_len = cifs_limit_bvec_subset(&ctx->iter, max_len,
-> +                                                max_segs, &nsegs);
-> +               cifs_dbg(FYI, "read-to-iter len=%zx/%zx nsegs=%u/%lu/%u\n",
-> +                        cur_len, max_len, nsegs, ctx->iter.nr_segs, max_segs);
-> +               if (cur_len == 0) {
-> +                       rc = -EIO;
-> +                       add_credits_and_wake_if(server, credits, 0);
-> +                       break;
-> +               }
->
-> -                       rdata->tailsz = PAGE_SIZE;
-> +               rdata = cifs_readdata_alloc(cifs_uncached_readv_complete);
-> +               if (!rdata) {
-> +                       add_credits_and_wake_if(server, credits, 0);
-> +                       rc = -ENOMEM;
-> +                       break;
->                 }
->
-> -               rdata->server = server;
-> -               rdata->cfile = cifsFileInfo_get(open_file);
-> -               rdata->nr_pages = npages;
-> -               rdata->offset = offset;
-> -               rdata->bytes = cur_len;
-> -               rdata->pid = pid;
-> -               rdata->pagesz = PAGE_SIZE;
-> -               rdata->read_into_pages = cifs_uncached_read_into_pages;
-> -               rdata->copy_into_pages = cifs_uncached_copy_into_pages;
-> -               rdata->credits = credits_on_stack;
-> -               rdata->ctx = ctx;
-> +               rdata->server   = server;
-> +               rdata->cfile    = cifsFileInfo_get(open_file);
-> +               rdata->offset   = fpos;
-> +               rdata->bytes    = cur_len;
-> +               rdata->pid      = pid;
-> +               rdata->credits  = credits_on_stack;
-> +               rdata->ctx      = ctx;
->                 kref_get(&ctx->refcount);
->
-> +               rdata->iter     = ctx->iter;
-> +               iov_iter_truncate(&rdata->iter, cur_len);
-> +
->                 rc = adjust_credits(server, &rdata->credits, rdata->bytes);
->
->                 if (!rc) {
-> @@ -4205,17 +4450,15 @@ cifs_send_async_read(loff_t offset, size_t len, struct cifsFileInfo *open_file,
->
->                 if (rc) {
->                         add_credits_and_wake_if(server, &rdata->credits, 0);
-> -                       kref_put(&rdata->refcount,
-> -                               cifs_uncached_readdata_release);
-> -                       if (rc == -EAGAIN) {
-> -                               iov_iter_revert(&direct_iov, cur_len);
-> +                       kref_put(&rdata->refcount, cifs_readdata_release);
-> +                       if (rc == -EAGAIN)
->                                 continue;
-> -                       }
->                         break;
->                 }
->
->                 list_add_tail(&rdata->list, rdata_list);
-> -               offset += cur_len;
-> +               iov_iter_advance(&ctx->iter, cur_len);
-> +               fpos += cur_len;
->                 len -= cur_len;
->         } while (len > 0);
->
-> @@ -4257,22 +4500,6 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
->                                 list_del_init(&rdata->list);
->                                 INIT_LIST_HEAD(&tmp_list);
->
-> -                               /*
-> -                                * Got a part of data and then reconnect has
-> -                                * happened -- fill the buffer and continue
-> -                                * reading.
-> -                                */
-> -                               if (got_bytes && got_bytes < rdata->bytes) {
-> -                                       rc = 0;
-> -                                       if (!ctx->direct_io)
-> -                                               rc = cifs_readdata_to_iov(rdata, to);
-> -                                       if (rc) {
-> -                                               kref_put(&rdata->refcount,
-> -                                                       cifs_uncached_readdata_release);
-> -                                               continue;
-> -                                       }
-> -                               }
-> -
->                                 if (ctx->direct_io) {
->                                         /*
->                                          * Re-use rdata as this is a
-> @@ -4289,7 +4516,7 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
->                                                 &tmp_list, ctx);
->
->                                         kref_put(&rdata->refcount,
-> -                                               cifs_uncached_readdata_release);
-> +                                               cifs_readdata_release);
->                                 }
->
->                                 list_splice(&tmp_list, &ctx->list);
-> @@ -4297,8 +4524,6 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
->                                 goto again;
->                         } else if (rdata->result)
->                                 rc = rdata->result;
-> -                       else if (!ctx->direct_io)
-> -                               rc = cifs_readdata_to_iov(rdata, to);
->
->                         /* if there was a short read -- discard anything left */
->                         if (rdata->got_bytes && rdata->got_bytes < rdata->bytes)
-> @@ -4307,7 +4532,7 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
->                         ctx->total_len += rdata->got_bytes;
->                 }
->                 list_del_init(&rdata->list);
-> -               kref_put(&rdata->refcount, cifs_uncached_readdata_release);
-> +               kref_put(&rdata->refcount, cifs_readdata_release);
->         }
->
->         if (!ctx->direct_io)
-> @@ -4367,26 +4592,53 @@ static ssize_t __cifs_readv(
->         if (!ctx)
->                 return -ENOMEM;
->
-> -       ctx->cfile = cifsFileInfo_get(cfile);
-> +       ctx->pos        = offset;
-> +       ctx->direct_io  = direct;
-> +       ctx->len        = len;
-> +       ctx->cfile      = cifsFileInfo_get(cfile);
-> +       ctx->nr_pinned_pages = 0;
->
->         if (!is_sync_kiocb(iocb))
->                 ctx->iocb = iocb;
->
-> -       if (user_backed_iter(to))
-> -               ctx->should_dirty = true;
-> -
-> -       if (direct) {
-> -               ctx->pos = offset;
-> -               ctx->direct_io = true;
-> -               ctx->iter = *to;
-> -               ctx->len = len;
-> -       } else {
-> -               rc = setup_aio_ctx_iter(ctx, to, ITER_DEST);
-> -               if (rc) {
-> +       if (user_backed_iter(to)) {
-> +               /*
-> +                * Extract IOVEC/UBUF-type iterators to a BVEC-type iterator as
-> +                * they contain references to the calling process's virtual
-> +                * memory layout which won't be available in an async worker
-> +                * thread.  This also takes a pin on every folio involved.
-> +                */
-> +               rc = netfs_extract_user_iter(to, iov_iter_count(to),
-> +                                            &ctx->iter, 0);
-> +               if (rc < 0) {
->                         kref_put(&ctx->refcount, cifs_aio_ctx_release);
->                         return rc;
->                 }
-> -               len = ctx->len;
-> +
-> +               ctx->nr_pinned_pages = rc;
-> +               ctx->bv = (void *)ctx->iter.bvec;
-> +               ctx->bv_need_unpin = iov_iter_extract_will_pin(&ctx->iter);
-> +               ctx->should_dirty = true;
-> +       } else if ((iov_iter_is_bvec(to) || iov_iter_is_kvec(to)) &&
-> +                  !is_sync_kiocb(iocb)) {
-> +               /*
-> +                * If the op is asynchronous, we need to copy the list attached
-> +                * to a BVEC/KVEC-type iterator, but we assume that the storage
-> +                * will be retained by the caller; in any case, we may or may
-> +                * not be able to pin the pages, so we don't try.
-> +                */
-> +               ctx->bv = (void *)dup_iter(&ctx->iter, to, GFP_KERNEL);
-> +               if (!ctx->bv) {
-> +                       kref_put(&ctx->refcount, cifs_aio_ctx_release);
-> +                       return -ENOMEM;
-> +               }
-> +       } else {
-> +               /*
-> +                * Otherwise, we just pass the iterator down as-is and rely on
-> +                * the caller to make sure the pages referred to by the
-> +                * iterator don't evaporate.
-> +                */
-> +               ctx->iter = *to;
->         }
->
->         if (direct) {
-> @@ -4648,6 +4900,8 @@ int cifs_file_mmap(struct file *file, struct vm_area_struct *vma)
->         return rc;
->  }
->
-> +#if 0 // TODO: Remove for iov_iter support
-> +
->  static void
->  cifs_readv_complete(struct work_struct *work)
->  {
-> @@ -4778,19 +5032,74 @@ cifs_readpages_copy_into_pages(struct TCP_Server_Info *server,
->  {
->         return readpages_fill_pages(server, rdata, iter, iter->count);
->  }
-> +#endif
-> +
-> +/*
-> + * Unlock a bunch of folios in the pagecache.
-> + */
-> +static void cifs_unlock_folios(struct address_space *mapping, pgoff_t first, pgoff_t last)
-> +{
-> +       struct folio *folio;
-> +       XA_STATE(xas, &mapping->i_pages, first);
-> +
-> +       rcu_read_lock();
-> +       xas_for_each(&xas, folio, last) {
-> +               folio_unlock(folio);
-> +       }
-> +       rcu_read_unlock();
-> +}
-> +
-> +static void cifs_readahead_complete(struct work_struct *work)
-> +{
-> +       struct cifs_readdata *rdata = container_of(work,
-> +                                                  struct cifs_readdata, work);
-> +       struct folio *folio;
-> +       pgoff_t last;
-> +       bool good = rdata->result == 0 || (rdata->result == -EAGAIN && rdata->got_bytes);
-> +
-> +       XA_STATE(xas, &rdata->mapping->i_pages, rdata->offset / PAGE_SIZE);
-> +
-> +       if (good)
-> +               cifs_readahead_to_fscache(rdata->mapping->host,
-> +                                         rdata->offset, rdata->bytes);
-> +
-> +       if (iov_iter_count(&rdata->iter) > 0)
-> +               iov_iter_zero(iov_iter_count(&rdata->iter), &rdata->iter);
-> +
-> +       last = (rdata->offset + rdata->bytes - 1) / PAGE_SIZE;
-> +
-> +       rcu_read_lock();
-> +       xas_for_each(&xas, folio, last) {
-> +               if (good) {
-> +                       flush_dcache_folio(folio);
-> +                       folio_mark_uptodate(folio);
-> +               }
-> +               folio_unlock(folio);
-> +       }
-> +       rcu_read_unlock();
-> +
-> +       kref_put(&rdata->refcount, cifs_readdata_release);
-> +}
->
->  static void cifs_readahead(struct readahead_control *ractl)
->  {
-> -       int rc;
->         struct cifsFileInfo *open_file = ractl->file->private_data;
->         struct cifs_sb_info *cifs_sb = CIFS_FILE_SB(ractl->file);
->         struct TCP_Server_Info *server;
-> -       pid_t pid;
-> -       unsigned int xid, nr_pages, last_batch_size = 0, cache_nr_pages = 0;
-> -       pgoff_t next_cached = ULONG_MAX;
-> +       unsigned int xid, nr_pages, cache_nr_pages = 0;
-> +       unsigned int ra_pages;
-> +       pgoff_t next_cached = ULONG_MAX, ra_index;
->         bool caching = fscache_cookie_enabled(cifs_inode_cookie(ractl->mapping->host)) &&
->                 cifs_inode_cookie(ractl->mapping->host)->cache_priv;
->         bool check_cache = caching;
-> +       pid_t pid;
-> +       int rc = 0;
-> +
-> +       /* Note that readahead_count() lags behind our dequeuing of pages from
-> +        * the ractl, wo we have to keep track for ourselves.
-> +        */
-> +       ra_pages = readahead_count(ractl);
-> +       ra_index = readahead_index(ractl);
->
->         xid = get_xid();
->
-> @@ -4799,22 +5108,21 @@ static void cifs_readahead(struct readahead_control *ractl)
->         else
->                 pid = current->tgid;
->
-> -       rc = 0;
->         server = cifs_pick_channel(tlink_tcon(open_file->tlink)->ses);
->
->         cifs_dbg(FYI, "%s: file=%p mapping=%p num_pages=%u\n",
-> -                __func__, ractl->file, ractl->mapping, readahead_count(ractl));
-> +                __func__, ractl->file, ractl->mapping, ra_pages);
->
->         /*
->          * Chop the readahead request up into rsize-sized read requests.
->          */
-> -       while ((nr_pages = readahead_count(ractl) - last_batch_size)) {
-> -               unsigned int i, got, rsize;
-> -               struct page *page;
-> +       while ((nr_pages = ra_pages)) {
-> +               unsigned int i, rsize;
->                 struct cifs_readdata *rdata;
->                 struct cifs_credits credits_on_stack;
->                 struct cifs_credits *credits = &credits_on_stack;
-> -               pgoff_t index = readahead_index(ractl) + last_batch_size;
-> +               struct folio *folio;
-> +               pgoff_t fsize;
->
->                 /*
->                  * Find out if we have anything cached in the range of
-> @@ -4823,21 +5131,22 @@ static void cifs_readahead(struct readahead_control *ractl)
->                 if (caching) {
->                         if (check_cache) {
->                                 rc = cifs_fscache_query_occupancy(
-> -                                       ractl->mapping->host, index, nr_pages,
-> +                                       ractl->mapping->host, ra_index, nr_pages,
->                                         &next_cached, &cache_nr_pages);
->                                 if (rc < 0)
->                                         caching = false;
->                                 check_cache = false;
->                         }
->
-> -                       if (index == next_cached) {
-> +                       if (ra_index == next_cached) {
->                                 /*
->                                  * TODO: Send a whole batch of pages to be read
->                                  * by the cache.
->                                  */
-> -                               struct folio *folio = readahead_folio(ractl);
-> -
-> -                               last_batch_size = folio_nr_pages(folio);
-> +                               folio = readahead_folio(ractl);
-> +                               fsize = folio_nr_pages(folio);
-> +                               ra_pages -= fsize;
-> +                               ra_index += fsize;
->                                 if (cifs_readpage_from_fscache(ractl->mapping->host,
->                                                                &folio->page) < 0) {
->                                         /*
-> @@ -4848,8 +5157,8 @@ static void cifs_readahead(struct readahead_control *ractl)
->                                         caching = false;
->                                 }
->                                 folio_unlock(folio);
-> -                               next_cached++;
-> -                               cache_nr_pages--;
-> +                               next_cached += fsize;
-> +                               cache_nr_pages -= fsize;
->                                 if (cache_nr_pages == 0)
->                                         check_cache = true;
->                                 continue;
-> @@ -4874,8 +5183,9 @@ static void cifs_readahead(struct readahead_control *ractl)
->                                                    &rsize, credits);
->                 if (rc)
->                         break;
-> -               nr_pages = min_t(size_t, rsize / PAGE_SIZE, readahead_count(ractl));
-> -               nr_pages = min_t(size_t, nr_pages, next_cached - index);
-> +               nr_pages = min_t(size_t, rsize / PAGE_SIZE, ra_pages);
-> +               if (next_cached != ULONG_MAX)
-> +                       nr_pages = min_t(size_t, nr_pages, next_cached - ra_index);
->
->                 /*
->                  * Give up immediately if rsize is too small to read an entire
-> @@ -4888,33 +5198,31 @@ static void cifs_readahead(struct readahead_control *ractl)
->                         break;
->                 }
->
-> -               rdata = cifs_readdata_alloc(nr_pages, cifs_readv_complete);
-> +               rdata = cifs_readdata_alloc(cifs_readahead_complete);
->                 if (!rdata) {
->                         /* best to give up if we're out of mem */
->                         add_credits_and_wake_if(server, credits, 0);
->                         break;
->                 }
->
-> -               got = __readahead_batch(ractl, rdata->pages, nr_pages);
-> -               if (got != nr_pages) {
-> -                       pr_warn("__readahead_batch() returned %u/%u\n",
-> -                               got, nr_pages);
-> -                       nr_pages = got;
-> -               }
-> -
-> -               rdata->nr_pages = nr_pages;
-> -               rdata->bytes    = readahead_batch_length(ractl);
-> +               rdata->offset   = ra_index * PAGE_SIZE;
-> +               rdata->bytes    = nr_pages * PAGE_SIZE;
->                 rdata->cfile    = cifsFileInfo_get(open_file);
->                 rdata->server   = server;
->                 rdata->mapping  = ractl->mapping;
-> -               rdata->offset   = readahead_pos(ractl);
->                 rdata->pid      = pid;
-> -               rdata->pagesz   = PAGE_SIZE;
-> -               rdata->tailsz   = PAGE_SIZE;
-> -               rdata->read_into_pages = cifs_readpages_read_into_pages;
-> -               rdata->copy_into_pages = cifs_readpages_copy_into_pages;
->                 rdata->credits  = credits_on_stack;
->
-> +               for (i = 0; i < nr_pages; i++) {
-> +                       if (!readahead_folio(ractl))
-> +                               WARN_ON(1);
-> +               }
-> +               ra_pages -= nr_pages;
-> +               ra_index += nr_pages;
-> +
-> +               iov_iter_xarray(&rdata->iter, ITER_DEST, &rdata->mapping->i_pages,
-> +                               rdata->offset, rdata->bytes);
-> +
->                 rc = adjust_credits(server, &rdata->credits, rdata->bytes);
->                 if (!rc) {
->                         if (rdata->cfile->invalidHandle)
-> @@ -4925,18 +5233,15 @@ static void cifs_readahead(struct readahead_control *ractl)
->
->                 if (rc) {
->                         add_credits_and_wake_if(server, &rdata->credits, 0);
-> -                       for (i = 0; i < rdata->nr_pages; i++) {
-> -                               page = rdata->pages[i];
-> -                               unlock_page(page);
-> -                               put_page(page);
-> -                       }
-> +                       cifs_unlock_folios(rdata->mapping,
-> +                                          rdata->offset / PAGE_SIZE,
-> +                                          (rdata->offset + rdata->bytes - 1) / PAGE_SIZE);
->                         /* Fallback to the readpage in error/reconnect cases */
->                         kref_put(&rdata->refcount, cifs_readdata_release);
->                         break;
->                 }
->
->                 kref_put(&rdata->refcount, cifs_readdata_release);
-> -               last_batch_size = nr_pages;
->         }
->
->         free_xid(xid);
-> @@ -4978,10 +5283,6 @@ static int cifs_readpage_worker(struct file *file, struct page *page,
->
->         flush_dcache_page(page);
->         SetPageUptodate(page);
-> -
-> -       /* send this page to the cache */
-> -       cifs_readpage_to_fscache(file_inode(file), page);
-> -
->         rc = 0;
->
->  io_error:
-> diff --git a/fs/cifs/fscache.c b/fs/cifs/fscache.c
-> index f6f3a6b75601..47c9f36c11fb 100644
-> --- a/fs/cifs/fscache.c
-> +++ b/fs/cifs/fscache.c
-> @@ -165,22 +165,16 @@ static int fscache_fallback_read_page(struct inode *inode, struct page *page)
->  /*
->   * Fallback page writing interface.
->   */
-> -static int fscache_fallback_write_page(struct inode *inode, struct page *page,
-> -                                      bool no_space_allocated_yet)
-> +static int fscache_fallback_write_pages(struct inode *inode, loff_t start, size_t len,
-> +                                       bool no_space_allocated_yet)
->  {
->         struct netfs_cache_resources cres;
->         struct fscache_cookie *cookie = cifs_inode_cookie(inode);
->         struct iov_iter iter;
-> -       struct bio_vec bvec[1];
-> -       loff_t start = page_offset(page);
-> -       size_t len = PAGE_SIZE;
->         int ret;
->
->         memset(&cres, 0, sizeof(cres));
-> -       bvec[0].bv_page         = page;
-> -       bvec[0].bv_offset       = 0;
-> -       bvec[0].bv_len          = PAGE_SIZE;
-> -       iov_iter_bvec(&iter, ITER_SOURCE, bvec, ARRAY_SIZE(bvec), PAGE_SIZE);
-> +       iov_iter_xarray(&iter, ITER_SOURCE, &inode->i_mapping->i_pages, start, len);
->
->         ret = fscache_begin_write_operation(&cres, cookie);
->         if (ret < 0)
-> @@ -189,7 +183,7 @@ static int fscache_fallback_write_page(struct inode *inode, struct page *page,
->         ret = cres.ops->prepare_write(&cres, &start, &len, i_size_read(inode),
->                                       no_space_allocated_yet);
->         if (ret == 0)
-> -               ret = fscache_write(&cres, page_offset(page), &iter, NULL, NULL);
-> +               ret = fscache_write(&cres, start, &iter, NULL, NULL);
->         fscache_end_operation(&cres);
->         return ret;
->  }
-> @@ -213,12 +207,12 @@ int __cifs_readpage_from_fscache(struct inode *inode, struct page *page)
->         return 0;
->  }
->
-> -void __cifs_readpage_to_fscache(struct inode *inode, struct page *page)
-> +void __cifs_readahead_to_fscache(struct inode *inode, loff_t pos, size_t len)
->  {
-> -       cifs_dbg(FYI, "%s: (fsc: %p, p: %p, i: %p)\n",
-> -                __func__, cifs_inode_cookie(inode), page, inode);
-> +       cifs_dbg(FYI, "%s: (fsc: %p, p: %llx, l: %zx, i: %p)\n",
-> +                __func__, cifs_inode_cookie(inode), pos, len, inode);
->
-> -       fscache_fallback_write_page(inode, page, true);
-> +       fscache_fallback_write_pages(inode, pos, len, true);
->  }
->
->  /*
-> diff --git a/fs/cifs/fscache.h b/fs/cifs/fscache.h
-> index 67b601041f0a..173999610997 100644
-> --- a/fs/cifs/fscache.h
-> +++ b/fs/cifs/fscache.h
-> @@ -90,7 +90,7 @@ static inline int cifs_fscache_query_occupancy(struct inode *inode,
->  }
->
->  extern int __cifs_readpage_from_fscache(struct inode *pinode, struct page *ppage);
-> -extern void __cifs_readpage_to_fscache(struct inode *pinode, struct page *ppage);
-> +extern void __cifs_readahead_to_fscache(struct inode *pinode, loff_t pos, size_t len);
->
->
->  static inline int cifs_readpage_from_fscache(struct inode *inode,
-> @@ -101,11 +101,11 @@ static inline int cifs_readpage_from_fscache(struct inode *inode,
->         return -ENOBUFS;
->  }
->
-> -static inline void cifs_readpage_to_fscache(struct inode *inode,
-> -                                           struct page *page)
-> +static inline void cifs_readahead_to_fscache(struct inode *inode,
-> +                                            loff_t pos, size_t len)
->  {
->         if (cifs_inode_cookie(inode))
-> -               __cifs_readpage_to_fscache(inode, page);
-> +               __cifs_readahead_to_fscache(inode, pos, len);
->  }
->
->  #else /* CONFIG_CIFS_FSCACHE */
-> @@ -141,7 +141,7 @@ cifs_readpage_from_fscache(struct inode *inode, struct page *page)
->  }
->
->  static inline
-> -void cifs_readpage_to_fscache(struct inode *inode, struct page *page) {}
-> +void cifs_readahead_to_fscache(struct inode *inode, loff_t pos, size_t len) {}
->
->  #endif /* CONFIG_CIFS_FSCACHE */
->
-> diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
-> index 2a19c7987c5b..967bc3b74def 100644
-> --- a/fs/cifs/misc.c
-> +++ b/fs/cifs/misc.c
-> @@ -966,16 +966,22 @@ cifs_aio_ctx_release(struct kref *refcount)
->
->         /*
->          * ctx->bv is only set if setup_aio_ctx_iter() was call successfuly
-> -        * which means that iov_iter_get_pages() was a success and thus that
-> -        * we have taken reference on pages.
-> +        * which means that iov_iter_extract_pages() was a success and thus
-> +        * that we may have references or pins on pages that we need to
-> +        * release.
->          */
->         if (ctx->bv) {
-> -               unsigned i;
-> +               if (ctx->should_dirty || ctx->bv_need_unpin) {
-> +                       unsigned i;
->
-> -               for (i = 0; i < ctx->npages; i++) {
-> -                       if (ctx->should_dirty)
-> -                               set_page_dirty(ctx->bv[i].bv_page);
-> -                       put_page(ctx->bv[i].bv_page);
-> +                       for (i = 0; i < ctx->nr_pinned_pages; i++) {
-> +                               struct page *page = ctx->bv[i].bv_page;
-> +
-> +                               if (ctx->should_dirty)
-> +                                       set_page_dirty(page);
-> +                               if (ctx->bv_need_unpin)
-> +                                       unpin_user_page(page);
-> +                       }
->                 }
->                 kvfree(ctx->bv);
->         }
-> @@ -983,95 +989,6 @@ cifs_aio_ctx_release(struct kref *refcount)
->         kfree(ctx);
->  }
->
-> -#define CIFS_AIO_KMALLOC_LIMIT (1024 * 1024)
-> -
-> -int
-> -setup_aio_ctx_iter(struct cifs_aio_ctx *ctx, struct iov_iter *iter, int rw)
-> -{
-> -       ssize_t rc;
-> -       unsigned int cur_npages;
-> -       unsigned int npages = 0;
-> -       unsigned int i;
-> -       size_t len;
-> -       size_t count = iov_iter_count(iter);
-> -       unsigned int saved_len;
-> -       size_t start;
-> -       unsigned int max_pages = iov_iter_npages(iter, INT_MAX);
-> -       struct page **pages = NULL;
-> -       struct bio_vec *bv = NULL;
-> -
-> -       if (iov_iter_is_kvec(iter)) {
-> -               memcpy(&ctx->iter, iter, sizeof(*iter));
-> -               ctx->len = count;
-> -               iov_iter_advance(iter, count);
-> -               return 0;
-> -       }
-> -
-> -       if (array_size(max_pages, sizeof(*bv)) <= CIFS_AIO_KMALLOC_LIMIT)
-> -               bv = kmalloc_array(max_pages, sizeof(*bv), GFP_KERNEL);
-> -
-> -       if (!bv) {
-> -               bv = vmalloc(array_size(max_pages, sizeof(*bv)));
-> -               if (!bv)
-> -                       return -ENOMEM;
-> -       }
-> -
-> -       if (array_size(max_pages, sizeof(*pages)) <= CIFS_AIO_KMALLOC_LIMIT)
-> -               pages = kmalloc_array(max_pages, sizeof(*pages), GFP_KERNEL);
-> -
-> -       if (!pages) {
-> -               pages = vmalloc(array_size(max_pages, sizeof(*pages)));
-> -               if (!pages) {
-> -                       kvfree(bv);
-> -                       return -ENOMEM;
-> -               }
-> -       }
-> -
-> -       saved_len = count;
-> -
-> -       while (count && npages < max_pages) {
-> -               rc = iov_iter_get_pages2(iter, pages, count, max_pages, &start);
-> -               if (rc < 0) {
-> -                       cifs_dbg(VFS, "Couldn't get user pages (rc=%zd)\n", rc);
-> -                       break;
-> -               }
-> -
-> -               if (rc > count) {
-> -                       cifs_dbg(VFS, "get pages rc=%zd more than %zu\n", rc,
-> -                                count);
-> -                       break;
-> -               }
-> -
-> -               count -= rc;
-> -               rc += start;
-> -               cur_npages = DIV_ROUND_UP(rc, PAGE_SIZE);
-> -
-> -               if (npages + cur_npages > max_pages) {
-> -                       cifs_dbg(VFS, "out of vec array capacity (%u vs %u)\n",
-> -                                npages + cur_npages, max_pages);
-> -                       break;
-> -               }
-> -
-> -               for (i = 0; i < cur_npages; i++) {
-> -                       len = rc > PAGE_SIZE ? PAGE_SIZE : rc;
-> -                       bv[npages + i].bv_page = pages[i];
-> -                       bv[npages + i].bv_offset = start;
-> -                       bv[npages + i].bv_len = len - start;
-> -                       rc -= len;
-> -                       start = 0;
-> -               }
-> -
-> -               npages += cur_npages;
-> -       }
-> -
-> -       kvfree(pages);
-> -       ctx->bv = bv;
-> -       ctx->len = saved_len - count;
-> -       ctx->npages = npages;
-> -       iov_iter_bvec(&ctx->iter, rw, ctx->bv, npages, ctx->len);
-> -       return 0;
-> -}
-> -
->  /**
->   * cifs_alloc_hash - allocate hash and hash context together
->   * @name: The name of the crypto hash algo
-> @@ -1129,25 +1046,6 @@ cifs_free_hash(struct shash_desc **sdesc)
->         *sdesc = NULL;
->  }
->
-> -/**
-> - * rqst_page_get_length - obtain the length and offset for a page in smb_rqst
-> - * @rqst: The request descriptor
-> - * @page: The index of the page to query
-> - * @len: Where to store the length for this page:
-> - * @offset: Where to store the offset for this page
-> - */
-> -void rqst_page_get_length(const struct smb_rqst *rqst, unsigned int page,
-> -                         unsigned int *len, unsigned int *offset)
-> -{
-> -       *len = rqst->rq_pagesz;
-> -       *offset = (page == 0) ? rqst->rq_offset : 0;
-> -
-> -       if (rqst->rq_npages == 1 || page == rqst->rq_npages-1)
-> -               *len = rqst->rq_tailsz;
-> -       else if (page == 0)
-> -               *len = rqst->rq_pagesz - rqst->rq_offset;
-> -}
-> -
->  void extract_unc_hostname(const char *unc, const char **h, size_t *len)
->  {
->         const char *end;
-> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> index 665ccf8d979d..121faf3b2900 100644
-> --- a/fs/cifs/smb2ops.c
-> +++ b/fs/cifs/smb2ops.c
-> @@ -4244,7 +4244,7 @@ fill_transform_hdr(struct smb2_transform_hdr *tr_hdr, unsigned int orig_len,
->
->  static void *smb2_aead_req_alloc(struct crypto_aead *tfm, const struct smb_rqst *rqst,
->                                  int num_rqst, const u8 *sig, u8 **iv,
-> -                                struct aead_request **req, struct scatterlist **sgl,
-> +                                struct aead_request **req, struct sg_table *sgt,
->                                  unsigned int *num_sgs)
->  {
->         unsigned int req_size = sizeof(**req) + crypto_aead_reqsize(tfm);
-> @@ -4253,43 +4253,42 @@ static void *smb2_aead_req_alloc(struct crypto_aead *tfm, const struct smb_rqst
->         u8 *p;
->
->         *num_sgs = cifs_get_num_sgs(rqst, num_rqst, sig);
-> +       if (IS_ERR_VALUE((long)(int)*num_sgs))
-> +               return ERR_PTR(*num_sgs);
->
->         len = iv_size;
->         len += crypto_aead_alignmask(tfm) & ~(crypto_tfm_ctx_alignment() - 1);
->         len = ALIGN(len, crypto_tfm_ctx_alignment());
->         len += req_size;
->         len = ALIGN(len, __alignof__(struct scatterlist));
-> -       len += *num_sgs * sizeof(**sgl);
-> +       len += array_size(*num_sgs, sizeof(struct scatterlist));
->
-> -       p = kmalloc(len, GFP_ATOMIC);
-> +       p = kvzalloc(len, GFP_NOFS);
->         if (!p)
-> -               return NULL;
-> +               return ERR_PTR(-ENOMEM);
->
->         *iv = (u8 *)PTR_ALIGN(p, crypto_aead_alignmask(tfm) + 1);
->         *req = (struct aead_request *)PTR_ALIGN(*iv + iv_size,
->                                                 crypto_tfm_ctx_alignment());
-> -       *sgl = (struct scatterlist *)PTR_ALIGN((u8 *)*req + req_size,
-> -                                              __alignof__(struct scatterlist));
-> +       sgt->sgl = (struct scatterlist *)PTR_ALIGN((u8 *)*req + req_size,
-> +                                                  __alignof__(struct scatterlist));
->         return p;
->  }
->
-> -static void *smb2_get_aead_req(struct crypto_aead *tfm, const struct smb_rqst *rqst,
-> +static void *smb2_get_aead_req(struct crypto_aead *tfm, struct smb_rqst *rqst,
->                                int num_rqst, const u8 *sig, u8 **iv,
->                                struct aead_request **req, struct scatterlist **sgl)
->  {
-> -       unsigned int off, len, skip;
-> -       struct scatterlist *sg;
-> -       unsigned int num_sgs;
-> -       unsigned long addr;
-> -       int i, j;
-> +       struct sg_table sgtable = {};
-> +       unsigned int skip, num_sgs, i, j;
-> +       ssize_t rc;
->         void *p;
->
-> -       p = smb2_aead_req_alloc(tfm, rqst, num_rqst, sig, iv, req, sgl, &num_sgs);
-> -       if (!p)
-> -               return NULL;
-> +       p = smb2_aead_req_alloc(tfm, rqst, num_rqst, sig, iv, req, &sgtable, &num_sgs);
-> +       if (IS_ERR(p))
-> +               return ERR_CAST(p);
->
-> -       sg_init_table(*sgl, num_sgs);
-> -       sg = *sgl;
-> +       sg_init_marker(sgtable.sgl, num_sgs);
->
->         /*
->          * The first rqst has a transform header where the
-> @@ -4297,30 +4296,29 @@ static void *smb2_get_aead_req(struct crypto_aead *tfm, const struct smb_rqst *r
->          */
->         skip = 20;
->
-> -       /* Assumes the first rqst has a transform header as the first iov.
-> -        * I.e.
-> -        * rqst[0].rq_iov[0]  is transform header
-> -        * rqst[0].rq_iov[1+] data to be encrypted/decrypted
-> -        * rqst[1+].rq_iov[0+] data to be encrypted/decrypted
-> -        */
->         for (i = 0; i < num_rqst; i++) {
-> -               for (j = 0; j < rqst[i].rq_nvec; j++) {
-> -                       struct kvec *iov = &rqst[i].rq_iov[j];
-> +               struct iov_iter *iter = &rqst[i].rq_iter;
-> +               size_t count = iov_iter_count(iter);
->
-> -                       addr = (unsigned long)iov->iov_base + skip;
-> -                       len = iov->iov_len - skip;
-> -                       sg = cifs_sg_set_buf(sg, (void *)addr, len);
-> +               for (j = 0; j < rqst[i].rq_nvec; j++) {
-> +                       cifs_sg_set_buf(&sgtable,
-> +                                       rqst[i].rq_iov[j].iov_base + skip,
-> +                                       rqst[i].rq_iov[j].iov_len - skip);
->
->                         /* See the above comment on the 'skip' assignment */
->                         skip = 0;
->                 }
-> -               for (j = 0; j < rqst[i].rq_npages; j++) {
-> -                       rqst_page_get_length(&rqst[i], j, &len, &off);
-> -                       sg_set_page(sg++, rqst[i].rq_pages[j], len, off);
-> -               }
-> +               sgtable.orig_nents = sgtable.nents;
-> +
-> +               rc = netfs_extract_iter_to_sg(iter, count, &sgtable,
-> +                                             num_sgs - sgtable.nents, 0);
-> +               iov_iter_revert(iter, rc);
-> +               sgtable.orig_nents = sgtable.nents;
->         }
-> -       cifs_sg_set_buf(sg, sig, SMB2_SIGNATURE_SIZE);
->
-> +       cifs_sg_set_buf(&sgtable, sig, SMB2_SIGNATURE_SIZE);
-> +       sg_mark_end(&sgtable.sgl[sgtable.nents - 1]);
-> +       *sgl = sgtable.sgl;
->         return p;
->  }
->
-> @@ -4408,8 +4406,8 @@ crypt_message(struct TCP_Server_Info *server, int num_rqst,
->         }
->
->         creq = smb2_get_aead_req(tfm, rqst, num_rqst, sign, &iv, &req, &sg);
-> -       if (unlikely(!creq))
-> -               return -ENOMEM;
-> +       if (unlikely(IS_ERR(creq)))
-> +               return PTR_ERR(creq);
->
->         if (!enc) {
->                 memcpy(sign, &tr_hdr->Signature, SMB2_SIGNATURE_SIZE);
-> @@ -4441,18 +4439,31 @@ crypt_message(struct TCP_Server_Info *server, int num_rqst,
->         return rc;
->  }
->
-> +/*
-> + * Clear a read buffer, discarding the folios which have XA_MARK_0 set.
-> + */
-> +static void cifs_clear_xarray_buffer(struct xarray *buffer)
-> +{
-> +       struct folio *folio;
-> +
-> +       XA_STATE(xas, buffer, 0);
-> +
-> +       rcu_read_lock();
-> +       xas_for_each_marked(&xas, folio, ULONG_MAX, XA_MARK_0) {
-> +               folio_put(folio);
-> +       }
-> +       rcu_read_unlock();
-> +       xa_destroy(buffer);
-> +}
-> +
->  void
->  smb3_free_compound_rqst(int num_rqst, struct smb_rqst *rqst)
->  {
-> -       int i, j;
-> +       int i;
->
-> -       for (i = 0; i < num_rqst; i++) {
-> -               if (rqst[i].rq_pages) {
-> -                       for (j = rqst[i].rq_npages - 1; j >= 0; j--)
-> -                               put_page(rqst[i].rq_pages[j]);
-> -                       kfree(rqst[i].rq_pages);
-> -               }
-> -       }
-> +       for (i = 0; i < num_rqst; i++)
-> +               if (!xa_empty(&rqst[i].rq_buffer))
-> +                       cifs_clear_xarray_buffer(&rqst[i].rq_buffer);
->  }
->
->  /*
-> @@ -4472,9 +4483,8 @@ static int
->  smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
->                        struct smb_rqst *new_rq, struct smb_rqst *old_rq)
->  {
-> -       struct page **pages;
->         struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-> -       unsigned int npages;
-> +       struct page *page;
->         unsigned int orig_len = 0;
->         int i, j;
->         int rc = -ENOMEM;
-> @@ -4482,40 +4492,43 @@ smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
->         for (i = 1; i < num_rqst; i++) {
->                 struct smb_rqst *old = &old_rq[i - 1];
->                 struct smb_rqst *new = &new_rq[i];
-> +               struct xarray *buffer = &new->rq_buffer;
-> +               size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
->
->                 orig_len += smb_rqst_len(server, old);
->                 new->rq_iov = old->rq_iov;
->                 new->rq_nvec = old->rq_nvec;
->
-> -               npages = old->rq_npages;
-> -               if (!npages)
-> -                       continue;
-> -
-> -               pages = kmalloc_array(npages, sizeof(struct page *),
-> -                                     GFP_KERNEL);
-> -               if (!pages)
-> -                       goto err_free;
-> -
-> -               new->rq_pages = pages;
-> -               new->rq_npages = npages;
-> -               new->rq_offset = old->rq_offset;
-> -               new->rq_pagesz = old->rq_pagesz;
-> -               new->rq_tailsz = old->rq_tailsz;
-> -
-> -               for (j = 0; j < npages; j++) {
-> -                       pages[j] = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-> -                       if (!pages[j])
-> -                               goto err_free;
-> -               }
-> +               xa_init(buffer);
->
-> -               /* copy pages form the old */
-> -               for (j = 0; j < npages; j++) {
-> -                       unsigned int offset, len;
-> +               if (size > 0) {
-> +                       unsigned int npages = DIV_ROUND_UP(size, PAGE_SIZE);
->
-> -                       rqst_page_get_length(new, j, &len, &offset);
-> +                       for (j = 0; j < npages; j++) {
-> +                               void *o;
->
-> -                       memcpy_page(new->rq_pages[j], offset,
-> -                                   old->rq_pages[j], offset, len);
-> +                               rc = -ENOMEM;
-> +                               page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-> +                               if (!page)
-> +                                       goto err_free;
-> +                               page->index = j;
-> +                               o = xa_store(buffer, j, page, GFP_KERNEL);
-> +                               if (xa_is_err(o)) {
-> +                                       rc = xa_err(o);
-> +                                       put_page(page);
-> +                                       goto err_free;
-> +                               }
-> +
-> +                               seg = min_t(size_t, size - copied, PAGE_SIZE);
-> +                               if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-> +                                       rc = -EFAULT;
-> +                                       goto err_free;
-> +                               }
-> +                               copied += seg;
-> +                       }
-> +                       iov_iter_xarray(&new->rq_iter, ITER_SOURCE,
-> +                                       buffer, 0, size);
-> +                       new->rq_iter_size = size;
->                 }
->         }
->
-> @@ -4544,12 +4557,12 @@ smb3_is_transform_hdr(void *buf)
->
->  static int
->  decrypt_raw_data(struct TCP_Server_Info *server, char *buf,
-> -                unsigned int buf_data_size, struct page **pages,
-> -                unsigned int npages, unsigned int page_data_size,
-> +                unsigned int buf_data_size, struct iov_iter *iter,
->                  bool is_offloaded)
->  {
->         struct kvec iov[2];
->         struct smb_rqst rqst = {NULL};
-> +       size_t iter_size = 0;
->         int rc;
->
->         iov[0].iov_base = buf;
-> @@ -4559,10 +4572,11 @@ decrypt_raw_data(struct TCP_Server_Info *server, char *buf,
->
->         rqst.rq_iov = iov;
->         rqst.rq_nvec = 2;
-> -       rqst.rq_pages = pages;
-> -       rqst.rq_npages = npages;
-> -       rqst.rq_pagesz = PAGE_SIZE;
-> -       rqst.rq_tailsz = (page_data_size % PAGE_SIZE) ? : PAGE_SIZE;
-> +       if (iter) {
-> +               rqst.rq_iter = *iter;
-> +               rqst.rq_iter_size = iov_iter_count(iter);
-> +               iter_size = iov_iter_count(iter);
-> +       }
->
->         rc = crypt_message(server, 1, &rqst, 0);
->         cifs_dbg(FYI, "Decrypt message returned %d\n", rc);
-> @@ -4573,73 +4587,37 @@ decrypt_raw_data(struct TCP_Server_Info *server, char *buf,
->         memmove(buf, iov[1].iov_base, buf_data_size);
->
->         if (!is_offloaded)
-> -               server->total_read = buf_data_size + page_data_size;
-> +               server->total_read = buf_data_size + iter_size;
->
->         return rc;
->  }
->
->  static int
-> -read_data_into_pages(struct TCP_Server_Info *server, struct page **pages,
-> -                    unsigned int npages, unsigned int len)
-> +cifs_copy_pages_to_iter(struct xarray *pages, unsigned int data_size,
-> +                       unsigned int skip, struct iov_iter *iter)
->  {
-> -       int i;
-> -       int length;
-> +       struct page *page;
-> +       unsigned long index;
->
-> -       for (i = 0; i < npages; i++) {
-> -               struct page *page = pages[i];
-> -               size_t n;
-> +       xa_for_each(pages, index, page) {
-> +               size_t n, len = min_t(unsigned int, PAGE_SIZE - skip, data_size);
->
-> -               n = len;
-> -               if (len >= PAGE_SIZE) {
-> -                       /* enough data to fill the page */
-> -                       n = PAGE_SIZE;
-> -                       len -= n;
-> -               } else {
-> -                       zero_user(page, len, PAGE_SIZE - len);
-> -                       len = 0;
-> +               n = copy_page_to_iter(page, skip, len, iter);
-> +               if (n != len) {
-> +                       cifs_dbg(VFS, "%s: something went wrong\n", __func__);
-> +                       return -EIO;
->                 }
-> -               length = cifs_read_page_from_socket(server, page, 0, n);
-> -               if (length < 0)
-> -                       return length;
-> -               server->total_read += length;
-> -       }
-> -
-> -       return 0;
-> -}
-> -
-> -static int
-> -init_read_bvec(struct page **pages, unsigned int npages, unsigned int data_size,
-> -              unsigned int cur_off, struct bio_vec **page_vec)
-> -{
-> -       struct bio_vec *bvec;
-> -       int i;
-> -
-> -       bvec = kcalloc(npages, sizeof(struct bio_vec), GFP_KERNEL);
-> -       if (!bvec)
-> -               return -ENOMEM;
-> -
-> -       for (i = 0; i < npages; i++) {
-> -               bvec[i].bv_page = pages[i];
-> -               bvec[i].bv_offset = (i == 0) ? cur_off : 0;
-> -               bvec[i].bv_len = min_t(unsigned int, PAGE_SIZE, data_size);
-> -               data_size -= bvec[i].bv_len;
-> -       }
-> -
-> -       if (data_size != 0) {
-> -               cifs_dbg(VFS, "%s: something went wrong\n", __func__);
-> -               kfree(bvec);
-> -               return -EIO;
-> +               data_size -= n;
-> +               skip = 0;
->         }
->
-> -       *page_vec = bvec;
->         return 0;
->  }
->
->  static int
->  handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
-> -                char *buf, unsigned int buf_len, struct page **pages,
-> -                unsigned int npages, unsigned int page_data_size,
-> -                bool is_offloaded)
-> +                char *buf, unsigned int buf_len, struct xarray *pages,
-> +                unsigned int pages_len, bool is_offloaded)
->  {
->         unsigned int data_offset;
->         unsigned int data_len;
-> @@ -4648,9 +4626,6 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
->         unsigned int pad_len;
->         struct cifs_readdata *rdata = mid->callback_data;
->         struct smb2_hdr *shdr = (struct smb2_hdr *)buf;
-> -       struct bio_vec *bvec = NULL;
-> -       struct iov_iter iter;
-> -       struct kvec iov;
->         int length;
->         bool use_rdma_mr = false;
->
-> @@ -4739,7 +4714,7 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
->                         return 0;
->                 }
->
-> -               if (data_len > page_data_size - pad_len) {
-> +               if (data_len > pages_len - pad_len) {
->                         /* data_len is corrupt -- discard frame */
->                         rdata->result = -EIO;
->                         if (is_offloaded)
-> @@ -4749,8 +4724,9 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
->                         return 0;
->                 }
->
-> -               rdata->result = init_read_bvec(pages, npages, page_data_size,
-> -                                              cur_off, &bvec);
-> +               /* Copy the data to the output I/O iterator. */
-> +               rdata->result = cifs_copy_pages_to_iter(pages, pages_len,
-> +                                                       cur_off, &rdata->iter);
->                 if (rdata->result != 0) {
->                         if (is_offloaded)
->                                 mid->mid_state = MID_RESPONSE_MALFORMED;
-> @@ -4758,14 +4734,16 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
->                                 dequeue_mid(mid, rdata->result);
->                         return 0;
->                 }
-> +               rdata->got_bytes = pages_len;
->
-> -               iov_iter_bvec(&iter, ITER_SOURCE, bvec, npages, data_len);
->         } else if (buf_len >= data_offset + data_len) {
->                 /* read response payload is in buf */
-> -               WARN_ONCE(npages > 0, "read data can be either in buf or in pages");
-> -               iov.iov_base = buf + data_offset;
-> -               iov.iov_len = data_len;
-> -               iov_iter_kvec(&iter, ITER_SOURCE, &iov, 1, data_len);
-> +               WARN_ONCE(pages && !xa_empty(pages),
-> +                         "read data can be either in buf or in pages");
-> +               length = copy_to_iter(buf + data_offset, data_len, &rdata->iter);
-> +               if (length < 0)
-> +                       return length;
-> +               rdata->got_bytes = data_len;
->         } else {
->                 /* read response payload cannot be in both buf and pages */
->                 WARN_ONCE(1, "buf can not contain only a part of read data");
-> @@ -4777,26 +4755,18 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
->                 return 0;
->         }
->
-> -       length = rdata->copy_into_pages(server, rdata, &iter);
-> -
-> -       kfree(bvec);
-> -
-> -       if (length < 0)
-> -               return length;
-> -
->         if (is_offloaded)
->                 mid->mid_state = MID_RESPONSE_RECEIVED;
->         else
->                 dequeue_mid(mid, false);
-> -       return length;
-> +       return 0;
->  }
->
->  struct smb2_decrypt_work {
->         struct work_struct decrypt;
->         struct TCP_Server_Info *server;
-> -       struct page **ppages;
-> +       struct xarray buffer;
->         char *buf;
-> -       unsigned int npages;
->         unsigned int len;
->  };
->
-> @@ -4805,11 +4775,13 @@ static void smb2_decrypt_offload(struct work_struct *work)
->  {
->         struct smb2_decrypt_work *dw = container_of(work,
->                                 struct smb2_decrypt_work, decrypt);
-> -       int i, rc;
-> +       int rc;
->         struct mid_q_entry *mid;
-> +       struct iov_iter iter;
->
-> +       iov_iter_xarray(&iter, ITER_DEST, &dw->buffer, 0, dw->len);
->         rc = decrypt_raw_data(dw->server, dw->buf, dw->server->vals->read_rsp_size,
-> -                             dw->ppages, dw->npages, dw->len, true);
-> +                             &iter, true);
->         if (rc) {
->                 cifs_dbg(VFS, "error decrypting rc=%d\n", rc);
->                 goto free_pages;
-> @@ -4823,7 +4795,7 @@ static void smb2_decrypt_offload(struct work_struct *work)
->                 mid->decrypted = true;
->                 rc = handle_read_data(dw->server, mid, dw->buf,
->                                       dw->server->vals->read_rsp_size,
-> -                                     dw->ppages, dw->npages, dw->len,
-> +                                     &dw->buffer, dw->len,
->                                       true);
->                 if (rc >= 0) {
->  #ifdef CONFIG_CIFS_STATS2
-> @@ -4856,10 +4828,7 @@ static void smb2_decrypt_offload(struct work_struct *work)
->         }
->
->  free_pages:
-> -       for (i = dw->npages-1; i >= 0; i--)
-> -               put_page(dw->ppages[i]);
-> -
-> -       kfree(dw->ppages);
-> +       cifs_clear_xarray_buffer(&dw->buffer);
->         cifs_small_buf_release(dw->buf);
->         kfree(dw);
->  }
-> @@ -4869,47 +4838,65 @@ static int
->  receive_encrypted_read(struct TCP_Server_Info *server, struct mid_q_entry **mid,
->                        int *num_mids)
->  {
-> +       struct page *page;
->         char *buf = server->smallbuf;
->         struct smb2_transform_hdr *tr_hdr = (struct smb2_transform_hdr *)buf;
-> -       unsigned int npages;
-> -       struct page **pages;
-> -       unsigned int len;
-> +       struct iov_iter iter;
-> +       unsigned int len, npages;
->         unsigned int buflen = server->pdu_size;
->         int rc;
->         int i = 0;
->         struct smb2_decrypt_work *dw;
->
-> +       dw = kzalloc(sizeof(struct smb2_decrypt_work), GFP_KERNEL);
-> +       if (!dw)
-> +               return -ENOMEM;
-> +       xa_init(&dw->buffer);
-> +       INIT_WORK(&dw->decrypt, smb2_decrypt_offload);
-> +       dw->server = server;
-> +
->         *num_mids = 1;
->         len = min_t(unsigned int, buflen, server->vals->read_rsp_size +
->                 sizeof(struct smb2_transform_hdr)) - HEADER_SIZE(server) + 1;
->
->         rc = cifs_read_from_socket(server, buf + HEADER_SIZE(server) - 1, len);
->         if (rc < 0)
-> -               return rc;
-> +               goto free_dw;
->         server->total_read += rc;
->
->         len = le32_to_cpu(tr_hdr->OriginalMessageSize) -
->                 server->vals->read_rsp_size;
-> +       dw->len = len;
->         npages = DIV_ROUND_UP(len, PAGE_SIZE);
->
-> -       pages = kmalloc_array(npages, sizeof(struct page *), GFP_KERNEL);
-> -       if (!pages) {
-> -               rc = -ENOMEM;
-> -               goto discard_data;
-> -       }
-> -
-> +       rc = -ENOMEM;
->         for (; i < npages; i++) {
-> -               pages[i] = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-> -               if (!pages[i]) {
-> -                       rc = -ENOMEM;
-> +               void *old;
-> +
-> +               page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-> +               if (!page)
-> +                       goto discard_data;
-> +               page->index = i;
-> +               old = xa_store(&dw->buffer, i, page, GFP_KERNEL);
-> +               if (xa_is_err(old)) {
-> +                       rc = xa_err(old);
-> +                       put_page(page);
->                         goto discard_data;
->                 }
->         }
->
-> -       /* read read data into pages */
-> -       rc = read_data_into_pages(server, pages, npages, len);
-> -       if (rc)
-> -               goto free_pages;
-> +       iov_iter_xarray(&iter, ITER_DEST, &dw->buffer, 0, npages * PAGE_SIZE);
-> +
-> +       /* Read the data into the buffer and clear excess bufferage. */
-> +       rc = cifs_read_iter_from_socket(server, &iter, dw->len);
-> +       if (rc < 0)
-> +               goto discard_data;
-> +
-> +       server->total_read += rc;
-> +       if (rc < npages * PAGE_SIZE)
-> +               iov_iter_zero(npages * PAGE_SIZE - rc, &iter);
-> +       iov_iter_revert(&iter, npages * PAGE_SIZE);
-> +       iov_iter_truncate(&iter, dw->len);
->
->         rc = cifs_discard_remaining_data(server);
->         if (rc)
-> @@ -4922,39 +4909,28 @@ receive_encrypted_read(struct TCP_Server_Info *server, struct mid_q_entry **mid,
->
->         if ((server->min_offload) && (server->in_flight > 1) &&
->             (server->pdu_size >= server->min_offload)) {
-> -               dw = kmalloc(sizeof(struct smb2_decrypt_work), GFP_KERNEL);
-> -               if (dw == NULL)
-> -                       goto non_offloaded_decrypt;
-> -
->                 dw->buf = server->smallbuf;
->                 server->smallbuf = (char *)cifs_small_buf_get();
->
-> -               INIT_WORK(&dw->decrypt, smb2_decrypt_offload);
-> -
-> -               dw->npages = npages;
-> -               dw->server = server;
-> -               dw->ppages = pages;
-> -               dw->len = len;
->                 queue_work(decrypt_wq, &dw->decrypt);
->                 *num_mids = 0; /* worker thread takes care of finding mid */
->                 return -1;
->         }
->
-> -non_offloaded_decrypt:
->         rc = decrypt_raw_data(server, buf, server->vals->read_rsp_size,
-> -                             pages, npages, len, false);
-> +                             &iter, false);
->         if (rc)
->                 goto free_pages;
->
->         *mid = smb2_find_mid(server, buf);
-> -       if (*mid == NULL)
-> +       if (*mid == NULL) {
->                 cifs_dbg(FYI, "mid not found\n");
-> -       else {
-> +       } else {
->                 cifs_dbg(FYI, "mid found\n");
->                 (*mid)->decrypted = true;
->                 rc = handle_read_data(server, *mid, buf,
->                                       server->vals->read_rsp_size,
-> -                                     pages, npages, len, false);
-> +                                     &dw->buffer, dw->len, false);
->                 if (rc >= 0) {
->                         if (server->ops->is_network_name_deleted) {
->                                 server->ops->is_network_name_deleted(buf,
-> @@ -4964,9 +4940,9 @@ receive_encrypted_read(struct TCP_Server_Info *server, struct mid_q_entry **mid,
->         }
->
->  free_pages:
-> -       for (i = i - 1; i >= 0; i--)
-> -               put_page(pages[i]);
-> -       kfree(pages);
-> +       cifs_clear_xarray_buffer(&dw->buffer);
-> +free_dw:
-> +       kfree(dw);
->         return rc;
->  discard_data:
->         cifs_discard_remaining_data(server);
-> @@ -5004,7 +4980,7 @@ receive_encrypted_standard(struct TCP_Server_Info *server,
->         server->total_read += length;
->
->         buf_size = pdu_length - sizeof(struct smb2_transform_hdr);
-> -       length = decrypt_raw_data(server, buf, buf_size, NULL, 0, 0, false);
-> +       length = decrypt_raw_data(server, buf, buf_size, NULL, false);
->         if (length)
->                 return length;
->
-> @@ -5103,7 +5079,7 @@ smb3_handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid)
->         char *buf = server->large_buf ? server->bigbuf : server->smallbuf;
->
->         return handle_read_data(server, mid, buf, server->pdu_size,
-> -                               NULL, 0, 0, false);
-> +                               NULL, 0, false);
->  }
->
->  static int
-> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> index b16b41d35560..541d8174afb9 100644
-> --- a/fs/cifs/smb2pdu.c
-> +++ b/fs/cifs/smb2pdu.c
-> @@ -4140,10 +4140,8 @@ smb2_new_read_req(void **buf, unsigned int *total_len,
->                 struct smbd_buffer_descriptor_v1 *v1;
->                 bool need_invalidate = server->dialect == SMB30_PROT_ID;
->
-> -               rdata->mr = smbd_register_mr(
-> -                               server->smbd_conn, rdata->pages,
-> -                               rdata->nr_pages, rdata->page_offset,
-> -                               rdata->tailsz, true, need_invalidate);
-> +               rdata->mr = smbd_register_mr(server->smbd_conn, &rdata->iter,
-> +                                            true, need_invalidate);
->                 if (!rdata->mr)
->                         return -EAGAIN;
->
-> @@ -4200,15 +4198,9 @@ smb2_readv_callback(struct mid_q_entry *mid)
->                                 (struct smb2_hdr *)rdata->iov[0].iov_base;
->         struct cifs_credits credits = { .value = 0, .instance = 0 };
->         struct smb_rqst rqst = { .rq_iov = &rdata->iov[1],
-> -                                .rq_nvec = 1, };
-> -
-> -       if (rdata->got_bytes) {
-> -               rqst.rq_pages = rdata->pages;
-> -               rqst.rq_offset = rdata->page_offset;
-> -               rqst.rq_npages = rdata->nr_pages;
-> -               rqst.rq_pagesz = rdata->pagesz;
-> -               rqst.rq_tailsz = rdata->tailsz;
-> -       }
-> +                                .rq_nvec = 1,
-> +                                .rq_iter = rdata->iter,
-> +                                .rq_iter_size = iov_iter_count(&rdata->iter), };
->
->         WARN_ONCE(rdata->server != mid->server,
->                   "rdata server %p != mid server %p",
-> @@ -4226,6 +4218,8 @@ smb2_readv_callback(struct mid_q_entry *mid)
->                 if (server->sign && !mid->decrypted) {
->                         int rc;
->
-> +                       iov_iter_revert(&rqst.rq_iter, rdata->got_bytes);
-> +                       iov_iter_truncate(&rqst.rq_iter, rdata->got_bytes);
->                         rc = smb2_verify_signature(&rqst, server);
->                         if (rc)
->                                 cifs_tcon_dbg(VFS, "SMB signature verification returned error = %d\n",
-> @@ -4568,7 +4562,7 @@ smb2_async_writev(struct cifs_writedata *wdata,
->         req->VolatileFileId = io_parms->volatile_fid;
->         req->WriteChannelInfoOffset = 0;
->         req->WriteChannelInfoLength = 0;
-> -       req->Channel = 0;
-> +       req->Channel = SMB2_CHANNEL_NONE;
->         req->Offset = cpu_to_le64(io_parms->offset);
->         req->DataOffset = cpu_to_le16(
->                                 offsetof(struct smb2_write_req, Buffer));
-> @@ -4588,26 +4582,18 @@ smb2_async_writev(struct cifs_writedata *wdata,
->          */
->         if (smb3_use_rdma_offload(io_parms)) {
->                 struct smbd_buffer_descriptor_v1 *v1;
-> +               size_t data_size = iov_iter_count(&wdata->iter);
->                 bool need_invalidate = server->dialect == SMB30_PROT_ID;
->
-> -               wdata->mr = smbd_register_mr(
-> -                               server->smbd_conn, wdata->pages,
-> -                               wdata->nr_pages, wdata->page_offset,
-> -                               wdata->tailsz, false, need_invalidate);
-> +               wdata->mr = smbd_register_mr(server->smbd_conn, &wdata->iter,
-> +                                            false, need_invalidate);
->                 if (!wdata->mr) {
->                         rc = -EAGAIN;
->                         goto async_writev_out;
->                 }
->                 req->Length = 0;
->                 req->DataOffset = 0;
-> -               if (wdata->nr_pages > 1)
-> -                       req->RemainingBytes =
-> -                               cpu_to_le32(
-> -                                       (wdata->nr_pages - 1) * wdata->pagesz -
-> -                                       wdata->page_offset + wdata->tailsz
-> -                               );
-> -               else
-> -                       req->RemainingBytes = cpu_to_le32(wdata->tailsz);
-> +               req->RemainingBytes = cpu_to_le32(data_size);
->                 req->Channel = SMB2_CHANNEL_RDMA_V1_INVALIDATE;
->                 if (need_invalidate)
->                         req->Channel = SMB2_CHANNEL_RDMA_V1;
-> @@ -4626,19 +4612,14 @@ smb2_async_writev(struct cifs_writedata *wdata,
->
->         rqst.rq_iov = iov;
->         rqst.rq_nvec = 1;
-> -       rqst.rq_pages = wdata->pages;
-> -       rqst.rq_offset = wdata->page_offset;
-> -       rqst.rq_npages = wdata->nr_pages;
-> -       rqst.rq_pagesz = wdata->pagesz;
-> -       rqst.rq_tailsz = wdata->tailsz;
-> +       rqst.rq_iter = wdata->iter;
-> +       rqst.rq_iter_size = iov_iter_count(&rqst.rq_iter);
->  #ifdef CONFIG_CIFS_SMB_DIRECT
-> -       if (wdata->mr) {
-> +       if (wdata->mr)
->                 iov[0].iov_len += sizeof(struct smbd_buffer_descriptor_v1);
-> -               rqst.rq_npages = 0;
-> -       }
->  #endif
-> -       cifs_dbg(FYI, "async write at %llu %u bytes\n",
-> -                io_parms->offset, io_parms->length);
-> +       cifs_dbg(FYI, "async write at %llu %u bytes iter=%zx\n",
-> +                io_parms->offset, io_parms->length, iov_iter_count(&rqst.rq_iter));
->
->  #ifdef CONFIG_CIFS_SMB_DIRECT
->         /* For RDMA read, I/O size is in RemainingBytes not in Length */
-> diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
-> index 3e0aacddc291..0eb32bbfc467 100644
-> --- a/fs/cifs/smbdirect.c
-> +++ b/fs/cifs/smbdirect.c
-> @@ -34,12 +34,6 @@ static int smbd_post_recv(
->                 struct smbd_response *response);
->
->  static int smbd_post_send_empty(struct smbd_connection *info);
-> -static int smbd_post_send_data(
-> -               struct smbd_connection *info,
-> -               struct kvec *iov, int n_vec, int remaining_data_length);
-> -static int smbd_post_send_page(struct smbd_connection *info,
-> -               struct page *page, unsigned long offset,
-> -               size_t size, int remaining_data_length);
->
->  static void destroy_mr_list(struct smbd_connection *info);
->  static int allocate_mr_list(struct smbd_connection *info);
-> @@ -986,24 +980,6 @@ static int smbd_post_send_sgl(struct smbd_connection *info,
->         return rc;
->  }
->
-> -/*
-> - * Send a page
-> - * page: the page to send
-> - * offset: offset in the page to send
-> - * size: length in the page to send
-> - * remaining_data_length: remaining data to send in this payload
-> - */
-> -static int smbd_post_send_page(struct smbd_connection *info, struct page *page,
-> -               unsigned long offset, size_t size, int remaining_data_length)
-> -{
-> -       struct scatterlist sgl;
-> -
-> -       sg_init_table(&sgl, 1);
-> -       sg_set_page(&sgl, page, size, offset);
-> -
-> -       return smbd_post_send_sgl(info, &sgl, size, remaining_data_length);
-> -}
-> -
->  /*
->   * Send an empty message
->   * Empty message is used to extend credits to peer to for keep live
-> @@ -1015,35 +991,6 @@ static int smbd_post_send_empty(struct smbd_connection *info)
->         return smbd_post_send_sgl(info, NULL, 0, 0);
->  }
->
-> -/*
-> - * Send a data buffer
-> - * iov: the iov array describing the data buffers
-> - * n_vec: number of iov array
-> - * remaining_data_length: remaining data to send following this packet
-> - * in segmented SMBD packet
-> - */
-> -static int smbd_post_send_data(
-> -       struct smbd_connection *info, struct kvec *iov, int n_vec,
-> -       int remaining_data_length)
-> -{
-> -       int i;
-> -       u32 data_length = 0;
-> -       struct scatterlist sgl[SMBDIRECT_MAX_SEND_SGE - 1];
-> -
-> -       if (n_vec > SMBDIRECT_MAX_SEND_SGE - 1) {
-> -               cifs_dbg(VFS, "Can't fit data to SGL, n_vec=%d\n", n_vec);
-> -               return -EINVAL;
-> -       }
-> -
-> -       sg_init_table(sgl, n_vec);
-> -       for (i = 0; i < n_vec; i++) {
-> -               data_length += iov[i].iov_len;
-> -               sg_set_buf(&sgl[i], iov[i].iov_base, iov[i].iov_len);
-> -       }
-> -
-> -       return smbd_post_send_sgl(info, sgl, data_length, remaining_data_length);
-> -}
-> -
->  /*
->   * Post a receive request to the transport
->   * The remote peer can only send data when a receive request is posted
-> @@ -1986,6 +1933,42 @@ int smbd_recv(struct smbd_connection *info, struct msghdr *msg)
->         return rc;
->  }
->
-> +/*
-> + * Send the contents of an iterator
-> + * @iter: The iterator to send
-> + * @_remaining_data_length: remaining data to send in this payload
-> + */
-> +static int smbd_post_send_iter(struct smbd_connection *info,
-> +                              struct iov_iter *iter,
-> +                              int *_remaining_data_length)
-> +{
-> +       struct scatterlist sgl[SMBDIRECT_MAX_SEND_SGE - 1];
-> +       unsigned int max_payload = info->max_send_size - sizeof(struct smbd_data_transfer);
-> +       ssize_t rc;
-> +
-> +       /* We're not expecting a user-backed iter */
-> +       WARN_ON(iov_iter_extract_will_pin(iter));
-> +
-> +       do {
-> +               struct sg_table sgtable = { .sgl = sgl };
-> +               size_t maxlen = min_t(size_t, *_remaining_data_length, max_payload);
-> +
-> +               sg_init_table(sgtable.sgl, ARRAY_SIZE(sgl));
-> +               rc = netfs_extract_iter_to_sg(iter, maxlen,
-> +                                             &sgtable, ARRAY_SIZE(sgl), 0);
-> +               if (rc < 0)
-> +                       break;
-> +               if (WARN_ON_ONCE(sgtable.nents == 0))
-> +                       return -EIO;
-> +
-> +               sg_mark_end(&sgl[sgtable.nents - 1]);
-> +               *_remaining_data_length -= rc;
-> +               rc = smbd_post_send_sgl(info, sgl, rc, *_remaining_data_length);
-> +       } while (rc == 0 && iov_iter_count(iter) > 0);
-> +
-> +       return rc;
-> +}
-> +
->  /*
->   * Send data to transport
->   * Each rqst is transported as a SMBDirect payload
-> @@ -1996,18 +1979,10 @@ int smbd_send(struct TCP_Server_Info *server,
->         int num_rqst, struct smb_rqst *rqst_array)
->  {
->         struct smbd_connection *info = server->smbd_conn;
-> -       struct kvec vecs[SMBDIRECT_MAX_SEND_SGE - 1];
-> -       int nvecs;
-> -       int size;
-> -       unsigned int buflen, remaining_data_length;
-> -       unsigned int offset, remaining_vec_data_length;
-> -       int start, i, j;
-> -       int max_iov_size =
-> -               info->max_send_size - sizeof(struct smbd_data_transfer);
-> -       struct kvec *iov;
-> -       int rc;
->         struct smb_rqst *rqst;
-> -       int rqst_idx;
-> +       struct iov_iter iter;
-> +       unsigned int remaining_data_length, klen;
-> +       int rc, i, rqst_idx;
->
->         if (info->transport_status != SMBD_CONNECTED)
->                 return -EAGAIN;
-> @@ -2034,84 +2009,36 @@ int smbd_send(struct TCP_Server_Info *server,
->         rqst_idx = 0;
->         do {
->                 rqst = &rqst_array[rqst_idx];
-> -               iov = rqst->rq_iov;
->
->                 cifs_dbg(FYI, "Sending smb (RDMA): idx=%d smb_len=%lu\n",
-> -                       rqst_idx, smb_rqst_len(server, rqst));
-> -               remaining_vec_data_length = 0;
-> -               for (i = 0; i < rqst->rq_nvec; i++) {
-> -                       remaining_vec_data_length += iov[i].iov_len;
-> -                       dump_smb(iov[i].iov_base, iov[i].iov_len);
-> -               }
-> -
-> -               log_write(INFO, "rqst_idx=%d nvec=%d rqst->rq_npages=%d rq_pagesz=%d rq_tailsz=%d buflen=%lu\n",
-> -                         rqst_idx, rqst->rq_nvec,
-> -                         rqst->rq_npages, rqst->rq_pagesz,
-> -                         rqst->rq_tailsz, smb_rqst_len(server, rqst));
-> -
-> -               start = 0;
-> -               offset = 0;
-> -               do {
-> -                       buflen = 0;
-> -                       i = start;
-> -                       j = 0;
-> -                       while (i < rqst->rq_nvec &&
-> -                               j < SMBDIRECT_MAX_SEND_SGE - 1 &&
-> -                               buflen < max_iov_size) {
-> -
-> -                               vecs[j].iov_base = iov[i].iov_base + offset;
-> -                               if (buflen + iov[i].iov_len > max_iov_size) {
-> -                                       vecs[j].iov_len =
-> -                                               max_iov_size - iov[i].iov_len;
-> -                                       buflen = max_iov_size;
-> -                                       offset = vecs[j].iov_len;
-> -                               } else {
-> -                                       vecs[j].iov_len =
-> -                                               iov[i].iov_len - offset;
-> -                                       buflen += vecs[j].iov_len;
-> -                                       offset = 0;
-> -                                       ++i;
-> -                               }
-> -                               ++j;
-> -                       }
-> +                        rqst_idx, smb_rqst_len(server, rqst));
-> +               for (i = 0; i < rqst->rq_nvec; i++)
-> +                       dump_smb(rqst->rq_iov[i].iov_base, rqst->rq_iov[i].iov_len);
-> +
-> +               log_write(INFO, "RDMA-WR[%u] nvec=%d len=%u iter=%zu rqlen=%lu\n",
-> +                         rqst_idx, rqst->rq_nvec, remaining_data_length,
-> +                         iov_iter_count(&rqst->rq_iter), smb_rqst_len(server, rqst));
-> +
-> +               /* Send the metadata pages. */
-> +               klen = 0;
-> +               for (i = 0; i < rqst->rq_nvec; i++)
-> +                       klen += rqst->rq_iov[i].iov_len;
-> +               iov_iter_kvec(&iter, ITER_SOURCE, rqst->rq_iov, rqst->rq_nvec, klen);
-> +
-> +               rc = smbd_post_send_iter(info, &iter, &remaining_data_length);
-> +               if (rc < 0)
-> +                       break;
->
-> -                       remaining_vec_data_length -= buflen;
-> -                       remaining_data_length -= buflen;
-> -                       log_write(INFO, "sending %s iov[%d] from start=%d nvecs=%d remaining_data_length=%d\n",
-> -                                       remaining_vec_data_length > 0 ?
-> -                                               "partial" : "complete",
-> -                                       rqst->rq_nvec, start, j,
-> -                                       remaining_data_length);
-> -
-> -                       start = i;
-> -                       rc = smbd_post_send_data(info, vecs, j, remaining_data_length);
-> -                       if (rc)
-> -                               goto done;
-> -               } while (remaining_vec_data_length > 0);
-> -
-> -               /* now sending pages if there are any */
-> -               for (i = 0; i < rqst->rq_npages; i++) {
-> -                       rqst_page_get_length(rqst, i, &buflen, &offset);
-> -                       nvecs = (buflen + max_iov_size - 1) / max_iov_size;
-> -                       log_write(INFO, "sending pages buflen=%d nvecs=%d\n",
-> -                               buflen, nvecs);
-> -                       for (j = 0; j < nvecs; j++) {
-> -                               size = min_t(unsigned int, max_iov_size, remaining_data_length);
-> -                               remaining_data_length -= size;
-> -                               log_write(INFO, "sending pages i=%d offset=%d size=%d remaining_data_length=%d\n",
-> -                                         i, j * max_iov_size + offset, size,
-> -                                         remaining_data_length);
-> -                               rc = smbd_post_send_page(
-> -                                       info, rqst->rq_pages[i],
-> -                                       j*max_iov_size + offset,
-> -                                       size, remaining_data_length);
-> -                               if (rc)
-> -                                       goto done;
-> -                       }
-> +               if (iov_iter_count(&rqst->rq_iter) > 0) {
-> +                       /* And then the data pages if there are any */
-> +                       rc = smbd_post_send_iter(info, &rqst->rq_iter,
-> +                                                &remaining_data_length);
-> +                       if (rc < 0)
-> +                               break;
->                 }
-> +
->         } while (++rqst_idx < num_rqst);
->
-> -done:
->         /*
->          * As an optimization, we don't wait for individual I/O to finish
->          * before sending the next one.
-> @@ -2315,27 +2242,48 @@ static struct smbd_mr *get_mr(struct smbd_connection *info)
->         goto again;
->  }
->
-> +/*
-> + * Transcribe the pages from an iterator into an MR scatterlist.
-> + * @iter: The iterator to transcribe
-> + * @_remaining_data_length: remaining data to send in this payload
-> + */
-> +static int smbd_iter_to_mr(struct smbd_connection *info,
-> +                          struct iov_iter *iter,
-> +                          struct scatterlist *sgl,
-> +                          unsigned int num_pages)
-> +{
-> +       struct sg_table sgtable = { .sgl = sgl };
-> +       int ret;
-> +
-> +       sg_init_table(sgl, num_pages);
-> +
-> +       ret = netfs_extract_iter_to_sg(iter, iov_iter_count(iter),
-> +                                      &sgtable, num_pages, 0);
-> +       WARN_ON(ret < 0);
-> +       return ret;
-> +}
-> +
->  /*
->   * Register memory for RDMA read/write
-> - * pages[]: the list of pages to register memory with
-> - * num_pages: the number of pages to register
-> - * tailsz: if non-zero, the bytes to register in the last page
-> + * iter: the buffer to register memory with
->   * writing: true if this is a RDMA write (SMB read), false for RDMA read
->   * need_invalidate: true if this MR needs to be locally invalidated after I/O
->   * return value: the MR registered, NULL if failed.
->   */
-> -struct smbd_mr *smbd_register_mr(
-> -       struct smbd_connection *info, struct page *pages[], int num_pages,
-> -       int offset, int tailsz, bool writing, bool need_invalidate)
-> +struct smbd_mr *smbd_register_mr(struct smbd_connection *info,
-> +                                struct iov_iter *iter,
-> +                                bool writing, bool need_invalidate)
->  {
->         struct smbd_mr *smbdirect_mr;
-> -       int rc, i;
-> +       int rc, num_pages;
->         enum dma_data_direction dir;
->         struct ib_reg_wr *reg_wr;
->
-> +       num_pages = iov_iter_npages(iter, info->max_frmr_depth + 1);
->         if (num_pages > info->max_frmr_depth) {
->                 log_rdma_mr(ERR, "num_pages=%d max_frmr_depth=%d\n",
->                         num_pages, info->max_frmr_depth);
-> +               WARN_ON_ONCE(1);
->                 return NULL;
->         }
->
-> @@ -2344,32 +2292,16 @@ struct smbd_mr *smbd_register_mr(
->                 log_rdma_mr(ERR, "get_mr returning NULL\n");
->                 return NULL;
->         }
-> +
-> +       dir = writing ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-> +       smbdirect_mr->dir = dir;
->         smbdirect_mr->need_invalidate = need_invalidate;
->         smbdirect_mr->sgl_count = num_pages;
-> -       sg_init_table(smbdirect_mr->sgl, num_pages);
-> -
-> -       log_rdma_mr(INFO, "num_pages=0x%x offset=0x%x tailsz=0x%x\n",
-> -                       num_pages, offset, tailsz);
-> -
-> -       if (num_pages == 1) {
-> -               sg_set_page(&smbdirect_mr->sgl[0], pages[0], tailsz, offset);
-> -               goto skip_multiple_pages;
-> -       }
->
-> -       /* We have at least two pages to register */
-> -       sg_set_page(
-> -               &smbdirect_mr->sgl[0], pages[0], PAGE_SIZE - offset, offset);
-> -       i = 1;
-> -       while (i < num_pages - 1) {
-> -               sg_set_page(&smbdirect_mr->sgl[i], pages[i], PAGE_SIZE, 0);
-> -               i++;
-> -       }
-> -       sg_set_page(&smbdirect_mr->sgl[i], pages[i],
-> -               tailsz ? tailsz : PAGE_SIZE, 0);
-> +       log_rdma_mr(INFO, "num_pages=0x%x count=0x%zx\n",
-> +                   num_pages, iov_iter_count(iter));
-> +       smbd_iter_to_mr(info, iter, smbdirect_mr->sgl, num_pages);
->
-> -skip_multiple_pages:
-> -       dir = writing ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-> -       smbdirect_mr->dir = dir;
->         rc = ib_dma_map_sg(info->id->device, smbdirect_mr->sgl, num_pages, dir);
->         if (!rc) {
->                 log_rdma_mr(ERR, "ib_dma_map_sg num_pages=%x dir=%x rc=%x\n",
-> diff --git a/fs/cifs/smbdirect.h b/fs/cifs/smbdirect.h
-> index 207ef979cd51..be2cf18b7fec 100644
-> --- a/fs/cifs/smbdirect.h
-> +++ b/fs/cifs/smbdirect.h
-> @@ -302,8 +302,8 @@ struct smbd_mr {
->
->  /* Interfaces to register and deregister MR for RDMA read/write */
->  struct smbd_mr *smbd_register_mr(
-> -       struct smbd_connection *info, struct page *pages[], int num_pages,
-> -       int offset, int tailsz, bool writing, bool need_invalidate);
-> +       struct smbd_connection *info, struct iov_iter *iter,
-> +       bool writing, bool need_invalidate);
->  int smbd_deregister_mr(struct smbd_mr *mr);
->
->  #else
-> diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-> index 83e931824bf2..7ff67a27b361 100644
-> --- a/fs/cifs/transport.c
-> +++ b/fs/cifs/transport.c
-> @@ -270,26 +270,7 @@ smb_rqst_len(struct TCP_Server_Info *server, struct smb_rqst *rqst)
->         for (i = 0; i < nvec; i++)
->                 buflen += iov[i].iov_len;
->
-> -       /*
-> -        * Add in the page array if there is one. The caller needs to make
-> -        * sure rq_offset and rq_tailsz are set correctly. If a buffer of
-> -        * multiple pages ends at page boundary, rq_tailsz needs to be set to
-> -        * PAGE_SIZE.
-> -        */
-> -       if (rqst->rq_npages) {
-> -               if (rqst->rq_npages == 1)
-> -                       buflen += rqst->rq_tailsz;
-> -               else {
-> -                       /*
-> -                        * If there is more than one page, calculate the
-> -                        * buffer length based on rq_offset and rq_tailsz
-> -                        */
-> -                       buflen += rqst->rq_pagesz * (rqst->rq_npages - 1) -
-> -                                       rqst->rq_offset;
-> -                       buflen += rqst->rq_tailsz;
-> -               }
-> -       }
-> -
-> +       buflen += iov_iter_count(&rqst->rq_iter);
->         return buflen;
->  }
->
-> @@ -376,23 +357,15 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
->
->                 total_len += sent;
->
-> -               /* now walk the page array and send each page in it */
-> -               for (i = 0; i < rqst[j].rq_npages; i++) {
-> -                       struct bio_vec bvec;
-> -
-> -                       bvec.bv_page = rqst[j].rq_pages[i];
-> -                       rqst_page_get_length(&rqst[j], i, &bvec.bv_len,
-> -                                            &bvec.bv_offset);
-> -
-> -                       iov_iter_bvec(&smb_msg.msg_iter, ITER_SOURCE,
-> -                                     &bvec, 1, bvec.bv_len);
-> +               if (iov_iter_count(&rqst[j].rq_iter) > 0) {
-> +                       smb_msg.msg_iter = rqst[j].rq_iter;
->                         rc = smb_send_kvec(server, &smb_msg, &sent);
->                         if (rc < 0)
->                                 break;
-> -
->                         total_len += sent;
->                 }
-> -       }
-> +
-> +}
->
->  unmask:
->         sigprocmask(SIG_SETMASK, &oldmask, NULL);
-> @@ -1654,11 +1627,11 @@ int
->  cifs_discard_remaining_data(struct TCP_Server_Info *server)
->  {
->         unsigned int rfclen = server->pdu_size;
-> -       int remaining = rfclen + HEADER_PREAMBLE_SIZE(server) -
-> +       size_t remaining = rfclen + HEADER_PREAMBLE_SIZE(server) -
->                 server->total_read;
->
->         while (remaining > 0) {
-> -               int length;
-> +               ssize_t length;
->
->                 length = cifs_discard_from_socket(server,
->                                 min_t(size_t, remaining,
-> @@ -1804,10 +1777,15 @@ cifs_readv_receive(struct TCP_Server_Info *server, struct mid_q_entry *mid)
->                 return cifs_readv_discard(server, mid);
->         }
->
-> -       length = rdata->read_into_pages(server, rdata, data_len);
-> -       if (length < 0)
-> -               return length;
-> -
-> +#ifdef CONFIG_CIFS_SMB_DIRECT
-> +       if (rdata->mr)
-> +               length = data_len; /* An RDMA read is already done. */
-> +       else
-> +#endif
-> +               length = cifs_read_iter_from_socket(server, &rdata->iter,
-> +                                                   data_len);
-> +       if (length > 0)
-> +               rdata->got_bytes += length;
->         server->total_read += length;
->
->         cifs_dbg(FYI, "total_read=%u buflen=%u remaining=%u\n",
->
-
-
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index 032e12dccb84..ef382e83d800 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -27,11 +27,15 @@ void erofs_put_metabuf(struct erofs_buf *buf)
+ 	buf->page = NULL;
+ }
+ 
++/*
++ * Derive the block size from inode->i_blkbits to make compatible with
++ * anonymous inode in fscache mode.
++ */
+ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+ 		  erofs_blk_t blkaddr, enum erofs_kmap_type type)
+ {
++	erofs_off_t offset = blkaddr << inode->i_blkbits;
+ 	struct address_space *const mapping = inode->i_mapping;
+-	erofs_off_t offset = blknr_to_addr(blkaddr);
+ 	pgoff_t index = offset >> PAGE_SHIFT;
+ 	struct page *page = buf->page;
+ 	struct folio *folio;
+@@ -79,24 +83,25 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+ 	erofs_blk_t nblocks, lastblk;
+ 	u64 offset = map->m_la;
+ 	struct erofs_inode *vi = EROFS_I(inode);
++	struct super_block *sb = inode->i_sb;
+ 	bool tailendpacking = (vi->datalayout == EROFS_INODE_FLAT_INLINE);
+ 
+-	nblocks = DIV_ROUND_UP(inode->i_size, EROFS_BLKSIZ);
++	nblocks = DIV_ROUND_UP(inode->i_size, sb->s_blocksize);
+ 	lastblk = nblocks - tailendpacking;
+ 
+ 	/* there is no hole in flatmode */
+ 	map->m_flags = EROFS_MAP_MAPPED;
+-	if (offset < blknr_to_addr(lastblk)) {
+-		map->m_pa = blknr_to_addr(vi->raw_blkaddr) + map->m_la;
+-		map->m_plen = blknr_to_addr(lastblk) - offset;
++	if (offset < erofs_pos(sb, lastblk)) {
++		map->m_pa = erofs_pos(sb, vi->raw_blkaddr) + map->m_la;
++		map->m_plen = erofs_pos(sb, lastblk) - offset;
+ 	} else if (tailendpacking) {
+ 		map->m_pa = erofs_iloc(inode) + vi->inode_isize +
+-			vi->xattr_isize + erofs_blkoff(offset);
++			vi->xattr_isize + erofs_blkoff(sb, offset);
+ 		map->m_plen = inode->i_size - offset;
+ 
+ 		/* inline data should be located in the same meta block */
+-		if (erofs_blkoff(map->m_pa) + map->m_plen > EROFS_BLKSIZ) {
+-			erofs_err(inode->i_sb,
++		if (erofs_blkoff(sb, map->m_pa) + map->m_plen > sb->s_blocksize) {
++			erofs_err(sb,
+ 				  "inline data cross block boundary @ nid %llu",
+ 				  vi->nid);
+ 			DBG_BUGON(1);
+@@ -104,7 +109,7 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+ 		}
+ 		map->m_flags |= EROFS_MAP_META;
+ 	} else {
+-		erofs_err(inode->i_sb,
++		erofs_err(sb,
+ 			  "internal error @ nid: %llu (size %llu), m_la 0x%llx",
+ 			  vi->nid, inode->i_size, map->m_la);
+ 		DBG_BUGON(1);
+@@ -148,29 +153,29 @@ int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map)
+ 	pos = ALIGN(erofs_iloc(inode) + vi->inode_isize +
+ 		    vi->xattr_isize, unit) + unit * chunknr;
+ 
+-	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos), EROFS_KMAP);
++	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(sb, pos), EROFS_KMAP);
+ 	if (IS_ERR(kaddr)) {
+ 		err = PTR_ERR(kaddr);
+ 		goto out;
+ 	}
+ 	map->m_la = chunknr << vi->chunkbits;
+ 	map->m_plen = min_t(erofs_off_t, 1UL << vi->chunkbits,
+-			    roundup(inode->i_size - map->m_la, EROFS_BLKSIZ));
++			round_up(inode->i_size - map->m_la, sb->s_blocksize));
+ 
+ 	/* handle block map */
+ 	if (!(vi->chunkformat & EROFS_CHUNK_FORMAT_INDEXES)) {
+-		__le32 *blkaddr = kaddr + erofs_blkoff(pos);
++		__le32 *blkaddr = kaddr + erofs_blkoff(sb, pos);
+ 
+ 		if (le32_to_cpu(*blkaddr) == EROFS_NULL_ADDR) {
+ 			map->m_flags = 0;
+ 		} else {
+-			map->m_pa = blknr_to_addr(le32_to_cpu(*blkaddr));
++			map->m_pa = erofs_pos(sb, le32_to_cpu(*blkaddr));
+ 			map->m_flags = EROFS_MAP_MAPPED;
+ 		}
+ 		goto out_unlock;
+ 	}
+ 	/* parse chunk indexes */
+-	idx = kaddr + erofs_blkoff(pos);
++	idx = kaddr + erofs_blkoff(sb, pos);
+ 	switch (le32_to_cpu(idx->blkaddr)) {
+ 	case EROFS_NULL_ADDR:
+ 		map->m_flags = 0;
+@@ -178,7 +183,7 @@ int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map)
+ 	default:
+ 		map->m_deviceid = le16_to_cpu(idx->device_id) &
+ 			EROFS_SB(sb)->device_id_mask;
+-		map->m_pa = blknr_to_addr(le32_to_cpu(idx->blkaddr));
++		map->m_pa = erofs_pos(sb, le32_to_cpu(idx->blkaddr));
+ 		map->m_flags = EROFS_MAP_MAPPED;
+ 		break;
+ 	}
+@@ -222,8 +227,8 @@ int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *map)
+ 
+ 			if (!dif->mapped_blkaddr)
+ 				continue;
+-			startoff = blknr_to_addr(dif->mapped_blkaddr);
+-			length = blknr_to_addr(dif->blocks);
++			startoff = erofs_pos(sb, dif->mapped_blkaddr);
++			length = erofs_pos(sb, dif->blocks);
+ 
+ 			if (map->m_pa >= startoff &&
+ 			    map->m_pa < startoff + length) {
+@@ -244,6 +249,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+ 		unsigned int flags, struct iomap *iomap, struct iomap *srcmap)
+ {
+ 	int ret;
++	struct super_block *sb = inode->i_sb;
+ 	struct erofs_map_blocks map;
+ 	struct erofs_map_dev mdev;
+ 
+@@ -258,7 +264,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+ 		.m_deviceid = map.m_deviceid,
+ 		.m_pa = map.m_pa,
+ 	};
+-	ret = erofs_map_dev(inode->i_sb, &mdev);
++	ret = erofs_map_dev(sb, &mdev);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -284,11 +290,11 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+ 		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 
+ 		iomap->type = IOMAP_INLINE;
+-		ptr = erofs_read_metabuf(&buf, inode->i_sb,
+-					 erofs_blknr(mdev.m_pa), EROFS_KMAP);
++		ptr = erofs_read_metabuf(&buf, sb,
++				erofs_blknr(sb, mdev.m_pa), EROFS_KMAP);
+ 		if (IS_ERR(ptr))
+ 			return PTR_ERR(ptr);
+-		iomap->inline_data = ptr + erofs_blkoff(mdev.m_pa);
++		iomap->inline_data = ptr + erofs_blkoff(sb, mdev.m_pa);
+ 		iomap->private = buf.base;
+ 	} else {
+ 		iomap->type = IOMAP_MAPPED;
+diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+index 51b7ac7166d9..21fc6897d225 100644
+--- a/fs/erofs/decompressor.c
++++ b/fs/erofs/decompressor.c
+@@ -42,7 +42,7 @@ int z_erofs_load_lz4_config(struct super_block *sb,
+ 		if (!sbi->lz4.max_pclusterblks) {
+ 			sbi->lz4.max_pclusterblks = 1;	/* reserved case */
+ 		} else if (sbi->lz4.max_pclusterblks >
+-			   Z_EROFS_PCLUSTER_MAX_SIZE / EROFS_BLKSIZ) {
++			   Z_EROFS_PCLUSTER_MAX_SIZE >> sb->s_blocksize_bits) {
+ 			erofs_err(sb, "too large lz4 pclusterblks %u",
+ 				  sbi->lz4.max_pclusterblks);
+ 			return -EINVAL;
+@@ -221,13 +221,13 @@ static int z_erofs_lz4_decompress_mem(struct z_erofs_lz4_decompress_ctx *ctx,
+ 		support_0padding = true;
+ 		ret = z_erofs_fixup_insize(rq, headpage + rq->pageofs_in,
+ 				min_t(unsigned int, rq->inputsize,
+-				      EROFS_BLKSIZ - rq->pageofs_in));
++				      rq->sb->s_blocksize - rq->pageofs_in));
+ 		if (ret) {
+ 			kunmap_atomic(headpage);
+ 			return ret;
+ 		}
+ 		may_inplace = !((rq->pageofs_in + rq->inputsize) &
+-				(EROFS_BLKSIZ - 1));
++				(rq->sb->s_blocksize - 1));
+ 	}
+ 
+ 	inputmargin = rq->pageofs_in;
+diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+index 091fd5adf818..d44c377c5b69 100644
+--- a/fs/erofs/decompressor_lzma.c
++++ b/fs/erofs/decompressor_lzma.c
+@@ -166,8 +166,8 @@ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
+ 	/* 1. get the exact LZMA compressed size */
+ 	kin = kmap(*rq->in);
+ 	err = z_erofs_fixup_insize(rq, kin + rq->pageofs_in,
+-				   min_t(unsigned int, rq->inputsize,
+-					 EROFS_BLKSIZ - rq->pageofs_in));
++			min_t(unsigned int, rq->inputsize,
++			      rq->sb->s_blocksize - rq->pageofs_in));
+ 	if (err) {
+ 		kunmap(*rq->in);
+ 		return err;
+diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+index 6970b09b8307..849319457181 100644
+--- a/fs/erofs/dir.c
++++ b/fs/erofs/dir.c
+@@ -50,9 +50,11 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ {
+ 	struct inode *dir = file_inode(f);
+ 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
++	struct super_block *sb = dir->i_sb;
++	unsigned long bsz = sb->s_blocksize;
+ 	const size_t dirsize = i_size_read(dir);
+-	unsigned int i = ctx->pos / EROFS_BLKSIZ;
+-	unsigned int ofs = ctx->pos % EROFS_BLKSIZ;
++	unsigned int i = erofs_blknr(sb, ctx->pos);
++	unsigned int ofs = erofs_blkoff(sb, ctx->pos);
+ 	int err = 0;
+ 	bool initial = true;
+ 
+@@ -62,7 +64,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 
+ 		de = erofs_bread(&buf, dir, i, EROFS_KMAP);
+ 		if (IS_ERR(de)) {
+-			erofs_err(dir->i_sb,
++			erofs_err(sb,
+ 				  "fail to readdir of logical block %u of nid %llu",
+ 				  i, EROFS_I(dir)->nid);
+ 			err = PTR_ERR(de);
+@@ -70,24 +72,21 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 		}
+ 
+ 		nameoff = le16_to_cpu(de->nameoff);
+-		if (nameoff < sizeof(struct erofs_dirent) ||
+-		    nameoff >= EROFS_BLKSIZ) {
+-			erofs_err(dir->i_sb,
+-				  "invalid de[0].nameoff %u @ nid %llu",
++		if (nameoff < sizeof(struct erofs_dirent) || nameoff >= bsz) {
++			erofs_err(sb, "invalid de[0].nameoff %u @ nid %llu",
+ 				  nameoff, EROFS_I(dir)->nid);
+ 			err = -EFSCORRUPTED;
+ 			break;
+ 		}
+ 
+-		maxsize = min_t(unsigned int,
+-				dirsize - ctx->pos + ofs, EROFS_BLKSIZ);
++		maxsize = min_t(unsigned int, dirsize - ctx->pos + ofs, bsz);
+ 
+ 		/* search dirents at the arbitrary position */
+ 		if (initial) {
+ 			initial = false;
+ 
+ 			ofs = roundup(ofs, sizeof(struct erofs_dirent));
+-			ctx->pos = blknr_to_addr(i) + ofs;
++			ctx->pos = erofs_pos(sb, i) + ofs;
+ 			if (ofs >= nameoff)
+ 				goto skip_this;
+ 		}
+@@ -97,7 +96,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 		if (err)
+ 			break;
+ skip_this:
+-		ctx->pos = blknr_to_addr(i) + maxsize;
++		ctx->pos = erofs_pos(sb, i) + maxsize;
+ 		++i;
+ 		ofs = 0;
+ 	}
+diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+index 492c0868aa1b..53151f302b2a 100644
+--- a/fs/erofs/fscache.c
++++ b/fs/erofs/fscache.c
+@@ -214,8 +214,8 @@ static int erofs_fscache_data_read_slice(struct erofs_fscache_request *primary)
+ 		void *src;
+ 
+ 		/* For tail packing layout, the offset may be non-zero. */
+-		offset = erofs_blkoff(map.m_pa);
+-		blknr = erofs_blknr(map.m_pa);
++		offset = erofs_blkoff(sb, map.m_pa);
++		blknr = erofs_blknr(sb, map.m_pa);
+ 		size = map.m_llen;
+ 
+ 		src = erofs_read_metabuf(&buf, sb, blknr, EROFS_KMAP);
+@@ -465,6 +465,7 @@ static struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb
+ 	inode->i_size = OFFSET_MAX;
+ 	inode->i_mapping->a_ops = &erofs_fscache_meta_aops;
+ 	mapping_set_gfp_mask(inode->i_mapping, GFP_NOFS);
++	inode->i_blkbits = EROFS_SB(sb)->blkszbits;
+ 	inode->i_private = ctx;
+ 
+ 	ctx->cookie = cookie;
+diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+index d7e87d41f7bf..de26dac4e07e 100644
+--- a/fs/erofs/inode.c
++++ b/fs/erofs/inode.c
+@@ -23,8 +23,8 @@ static void *erofs_read_inode(struct erofs_buf *buf,
+ 	unsigned int ifmt;
+ 	int err;
+ 
+-	blkaddr = erofs_blknr(inode_loc);
+-	*ofs = erofs_blkoff(inode_loc);
++	blkaddr = erofs_blknr(sb, inode_loc);
++	*ofs = erofs_blkoff(sb, inode_loc);
+ 
+ 	erofs_dbg("%s, reading inode nid %llu at %u of blkaddr %u",
+ 		  __func__, vi->nid, *ofs, blkaddr);
+@@ -58,11 +58,11 @@ static void *erofs_read_inode(struct erofs_buf *buf,
+ 	case EROFS_INODE_LAYOUT_EXTENDED:
+ 		vi->inode_isize = sizeof(struct erofs_inode_extended);
+ 		/* check if the extended inode acrosses block boundary */
+-		if (*ofs + vi->inode_isize <= EROFS_BLKSIZ) {
++		if (*ofs + vi->inode_isize <= sb->s_blocksize) {
+ 			*ofs += vi->inode_isize;
+ 			die = (struct erofs_inode_extended *)dic;
+ 		} else {
+-			const unsigned int gotten = EROFS_BLKSIZ - *ofs;
++			const unsigned int gotten = sb->s_blocksize - *ofs;
+ 
+ 			copied = kmalloc(vi->inode_isize, GFP_NOFS);
+ 			if (!copied) {
+@@ -176,7 +176,7 @@ static void *erofs_read_inode(struct erofs_buf *buf,
+ 			err = -EOPNOTSUPP;
+ 			goto err_out;
+ 		}
+-		vi->chunkbits = LOG_BLOCK_SIZE +
++		vi->chunkbits = sb->s_blocksize_bits +
+ 			(vi->chunkformat & EROFS_CHUNK_FORMAT_BLKBITS_MASK);
+ 	}
+ 	inode->i_mtime.tv_sec = inode->i_ctime.tv_sec;
+@@ -188,11 +188,12 @@ static void *erofs_read_inode(struct erofs_buf *buf,
+ 	if (test_opt(&sbi->opt, DAX_ALWAYS) && S_ISREG(inode->i_mode) &&
+ 	    vi->datalayout == EROFS_INODE_FLAT_PLAIN)
+ 		inode->i_flags |= S_DAX;
++
+ 	if (!nblks)
+ 		/* measure inode.i_blocks as generic filesystems */
+-		inode->i_blocks = roundup(inode->i_size, EROFS_BLKSIZ) >> 9;
++		inode->i_blocks = round_up(inode->i_size, sb->s_blocksize) >> 9;
+ 	else
+-		inode->i_blocks = nblks << LOG_SECTORS_PER_BLOCK;
++		inode->i_blocks = nblks << (sb->s_blocksize_bits - 9);
+ 	return kaddr;
+ 
+ bogusimode:
+@@ -210,11 +211,12 @@ static int erofs_fill_symlink(struct inode *inode, void *kaddr,
+ 			      unsigned int m_pofs)
+ {
+ 	struct erofs_inode *vi = EROFS_I(inode);
++	unsigned int bsz = i_blocksize(inode);
+ 	char *lnk;
+ 
+ 	/* if it cannot be handled with fast symlink scheme */
+ 	if (vi->datalayout != EROFS_INODE_FLAT_INLINE ||
+-	    inode->i_size >= EROFS_BLKSIZ || inode->i_size < 0) {
++	    inode->i_size >= bsz || inode->i_size < 0) {
+ 		inode->i_op = &erofs_symlink_iops;
+ 		return 0;
+ 	}
+@@ -225,7 +227,7 @@ static int erofs_fill_symlink(struct inode *inode, void *kaddr,
+ 
+ 	m_pofs += vi->xattr_isize;
+ 	/* inline symlink data shouldn't cross block boundary */
+-	if (m_pofs + inode->i_size > EROFS_BLKSIZ) {
++	if (m_pofs + inode->i_size > bsz) {
+ 		kfree(lnk);
+ 		erofs_err(inode->i_sb,
+ 			  "inline data cross block boundary @ nid %llu",
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 39f259acf887..8a85e7af5c92 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -147,8 +147,8 @@ struct erofs_sb_info {
+ #endif
+ 	u16 device_id_mask;	/* valid bits of device id to be used */
+ 
+-	/* inode slot unit size in bit shift */
+-	unsigned char islotbits;
++	unsigned char islotbits;	/* inode slot unit size in bit shift */
++	unsigned char blkszbits;
+ 
+ 	u32 sb_size;			/* total superblock size */
+ 	u32 build_time_nsec;
+@@ -242,13 +242,6 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+ 
+ /* we strictly follow PAGE_SIZE and no buffer head yet */
+ #define LOG_BLOCK_SIZE		PAGE_SHIFT
+-
+-#undef LOG_SECTORS_PER_BLOCK
+-#define LOG_SECTORS_PER_BLOCK	(PAGE_SHIFT - 9)
+-
+-#undef SECTORS_PER_BLOCK
+-#define SECTORS_PER_BLOCK	(1 << SECTORS_PER_BLOCK)
+-
+ #define EROFS_BLKSIZ		(1 << LOG_BLOCK_SIZE)
+ 
+ #if (EROFS_BLKSIZ % 4096 || !EROFS_BLKSIZ)
+@@ -269,9 +262,9 @@ struct erofs_buf {
+ 
+ #define ROOT_NID(sb)		((sb)->root_nid)
+ 
+-#define erofs_blknr(addr)       ((addr) / EROFS_BLKSIZ)
+-#define erofs_blkoff(addr)      ((addr) % EROFS_BLKSIZ)
+-#define blknr_to_addr(nr)       ((erofs_off_t)(nr) * EROFS_BLKSIZ)
++#define erofs_blknr(sb, addr)	((addr) >> (sb)->s_blocksize_bits)
++#define erofs_blkoff(sb, addr)	((addr) & ((sb)->s_blocksize - 1))
++#define erofs_pos(sb, blk)	((erofs_off_t)(blk) << (sb)->s_blocksize_bits)
+ 
+ #define EROFS_FEATURE_FUNCS(name, compat, feature) \
+ static inline bool erofs_sb_has_##name(struct erofs_sb_info *sbi) \
+@@ -343,7 +336,7 @@ static inline erofs_off_t erofs_iloc(struct inode *inode)
+ {
+ 	struct erofs_sb_info *sbi = EROFS_I_SB(inode);
+ 
+-	return blknr_to_addr(sbi->meta_blkaddr) +
++	return erofs_pos(inode->i_sb, sbi->meta_blkaddr) +
+ 		(EROFS_I(inode)->nid << sbi->islotbits);
+ }
+ 
+diff --git a/fs/erofs/namei.c b/fs/erofs/namei.c
+index 966eabc61c13..1ead794a6ced 100644
+--- a/fs/erofs/namei.c
++++ b/fs/erofs/namei.c
+@@ -89,7 +89,8 @@ static struct erofs_dirent *find_target_dirent(struct erofs_qstr *name,
+ static void *erofs_find_target_block(struct erofs_buf *target,
+ 		struct inode *dir, struct erofs_qstr *name, int *_ndirents)
+ {
+-	int head = 0, back = DIV_ROUND_UP(dir->i_size, EROFS_BLKSIZ) - 1;
++	unsigned int bsz = i_blocksize(dir);
++	int head = 0, back = DIV_ROUND_UP(dir->i_size, bsz) - 1;
+ 	unsigned int startprfx = 0, endprfx = 0;
+ 	void *candidate = ERR_PTR(-ENOENT);
+ 
+@@ -100,8 +101,7 @@ static void *erofs_find_target_block(struct erofs_buf *target,
+ 
+ 		de = erofs_bread(&buf, dir, mid, EROFS_KMAP);
+ 		if (!IS_ERR(de)) {
+-			const int nameoff = nameoff_from_disk(de->nameoff,
+-							      EROFS_BLKSIZ);
++			const int nameoff = nameoff_from_disk(de->nameoff, bsz);
+ 			const int ndirents = nameoff / sizeof(*de);
+ 			int diff;
+ 			unsigned int matched;
+@@ -121,11 +121,10 @@ static void *erofs_find_target_block(struct erofs_buf *target,
+ 
+ 			dname.name = (u8 *)de + nameoff;
+ 			if (ndirents == 1)
+-				dname.end = (u8 *)de + EROFS_BLKSIZ;
++				dname.end = (u8 *)de + bsz;
+ 			else
+ 				dname.end = (u8 *)de +
+-					nameoff_from_disk(de[1].nameoff,
+-							  EROFS_BLKSIZ);
++					nameoff_from_disk(de[1].nameoff, bsz);
+ 
+ 			/* string comparison without already matched prefix */
+ 			diff = erofs_dirnamecmp(name, &dname, &matched);
+@@ -178,7 +177,8 @@ int erofs_namei(struct inode *dir, const struct qstr *name, erofs_nid_t *nid,
+ 		return PTR_ERR(de);
+ 
+ 	if (ndirents)
+-		de = find_target_dirent(&qn, (u8 *)de, EROFS_BLKSIZ, ndirents);
++		de = find_target_dirent(&qn, (u8 *)de, i_blocksize(dir),
++					ndirents);
+ 
+ 	if (!IS_ERR(de)) {
+ 		*nid = le64_to_cpu(de->nid);
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 19b1ae79cec4..c97615c96ef8 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -52,18 +52,18 @@ void _erofs_info(struct super_block *sb, const char *function,
+ 
+ static int erofs_superblock_csum_verify(struct super_block *sb, void *sbdata)
+ {
++	size_t len = (1 << EROFS_SB(sb)->blkszbits) - EROFS_SUPER_OFFSET;
+ 	struct erofs_super_block *dsb;
+ 	u32 expected_crc, crc;
+ 
+-	dsb = kmemdup(sbdata + EROFS_SUPER_OFFSET,
+-		      EROFS_BLKSIZ - EROFS_SUPER_OFFSET, GFP_KERNEL);
++	dsb = kmemdup(sbdata + EROFS_SUPER_OFFSET, len, GFP_KERNEL);
+ 	if (!dsb)
+ 		return -ENOMEM;
+ 
+ 	expected_crc = le32_to_cpu(dsb->checksum);
+ 	dsb->checksum = 0;
+ 	/* to allow for x86 boot sectors and other oddities. */
+-	crc = crc32c(~0, dsb, EROFS_BLKSIZ - EROFS_SUPER_OFFSET);
++	crc = crc32c(~0, dsb, len);
+ 	kfree(dsb);
+ 
+ 	if (crc != expected_crc) {
+@@ -132,11 +132,11 @@ static void *erofs_read_metadata(struct super_block *sb, struct erofs_buf *buf,
+ 	int len, i, cnt;
+ 
+ 	*offset = round_up(*offset, 4);
+-	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*offset), EROFS_KMAP);
++	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(sb, *offset), EROFS_KMAP);
+ 	if (IS_ERR(ptr))
+ 		return ptr;
+ 
+-	len = le16_to_cpu(*(__le16 *)&ptr[erofs_blkoff(*offset)]);
++	len = le16_to_cpu(*(__le16 *)&ptr[erofs_blkoff(sb, *offset)]);
+ 	if (!len)
+ 		len = U16_MAX + 1;
+ 	buffer = kmalloc(len, GFP_KERNEL);
+@@ -146,14 +146,15 @@ static void *erofs_read_metadata(struct super_block *sb, struct erofs_buf *buf,
+ 	*lengthp = len;
+ 
+ 	for (i = 0; i < len; i += cnt) {
+-		cnt = min(EROFS_BLKSIZ - (int)erofs_blkoff(*offset), len - i);
+-		ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*offset),
++		cnt = min_t(int, sb->s_blocksize - erofs_blkoff(sb, *offset),
++			    len - i);
++		ptr = erofs_read_metabuf(buf, sb, erofs_blknr(sb, *offset),
+ 					 EROFS_KMAP);
+ 		if (IS_ERR(ptr)) {
+ 			kfree(buffer);
+ 			return ptr;
+ 		}
+-		memcpy(buffer + i, ptr + erofs_blkoff(*offset), cnt);
++		memcpy(buffer + i, ptr + erofs_blkoff(sb, *offset), cnt);
+ 		*offset += cnt;
+ 	}
+ 	return buffer;
+@@ -228,10 +229,10 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
+ 	struct block_device *bdev;
+ 	void *ptr;
+ 
+-	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
++	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(sb, *pos), EROFS_KMAP);
+ 	if (IS_ERR(ptr))
+ 		return PTR_ERR(ptr);
+-	dis = ptr + erofs_blkoff(*pos);
++	dis = ptr + erofs_blkoff(sb, *pos);
+ 
+ 	if (!dif->path) {
+ 		if (!dis->tag[0]) {
+@@ -733,6 +734,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	sbi->domain_id = ctx->domain_id;
+ 	ctx->domain_id = NULL;
+ 
++	sbi->blkszbits = PAGE_SHIFT;
+ 	if (erofs_is_fscache_mode(sb)) {
+ 		sb->s_blocksize = EROFS_BLKSIZ;
+ 		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
+@@ -1060,7 +1062,7 @@ static int erofs_statfs(struct dentry *dentry, struct kstatfs *buf)
+ 		id = huge_encode_dev(sb->s_bdev->bd_dev);
+ 
+ 	buf->f_type = sb->s_magic;
+-	buf->f_bsize = EROFS_BLKSIZ;
++	buf->f_bsize = sb->s_blocksize;
+ 	buf->f_blocks = sbi->total_blocks;
+ 	buf->f_bfree = buf->f_bavail = 0;
+ 
+diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+index 60729b1220b6..459caa3cd65d 100644
+--- a/fs/erofs/xattr.c
++++ b/fs/erofs/xattr.c
+@@ -68,8 +68,8 @@ static int init_inode_xattrs(struct inode *inode)
+ 	}
+ 
+ 	it.buf = __EROFS_BUF_INITIALIZER;
+-	it.blkaddr = erofs_blknr(erofs_iloc(inode) + vi->inode_isize);
+-	it.ofs = erofs_blkoff(erofs_iloc(inode) + vi->inode_isize);
++	it.blkaddr = erofs_blknr(sb, erofs_iloc(inode) + vi->inode_isize);
++	it.ofs = erofs_blkoff(sb, erofs_iloc(inode) + vi->inode_isize);
+ 
+ 	/* read in shared xattr array (non-atomic, see kmalloc below) */
+ 	it.kaddr = erofs_read_metabuf(&it.buf, sb, it.blkaddr, EROFS_KMAP);
+@@ -92,9 +92,9 @@ static int init_inode_xattrs(struct inode *inode)
+ 	it.ofs += sizeof(struct erofs_xattr_ibody_header);
+ 
+ 	for (i = 0; i < vi->xattr_shared_count; ++i) {
+-		if (it.ofs >= EROFS_BLKSIZ) {
++		if (it.ofs >= sb->s_blocksize) {
+ 			/* cannot be unaligned */
+-			DBG_BUGON(it.ofs != EROFS_BLKSIZ);
++			DBG_BUGON(it.ofs != sb->s_blocksize);
+ 
+ 			it.kaddr = erofs_read_metabuf(&it.buf, sb, ++it.blkaddr,
+ 						      EROFS_KMAP);
+@@ -139,15 +139,15 @@ struct xattr_iter_handlers {
+ 
+ static inline int xattr_iter_fixup(struct xattr_iter *it)
+ {
+-	if (it->ofs < EROFS_BLKSIZ)
++	if (it->ofs < it->sb->s_blocksize)
+ 		return 0;
+ 
+-	it->blkaddr += erofs_blknr(it->ofs);
++	it->blkaddr += erofs_blknr(it->sb, it->ofs);
+ 	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+ 				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+ 		return PTR_ERR(it->kaddr);
+-	it->ofs = erofs_blkoff(it->ofs);
++	it->ofs = erofs_blkoff(it->sb, it->ofs);
+ 	return 0;
+ }
+ 
+@@ -165,8 +165,8 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+ 
+ 	inline_xattr_ofs = vi->inode_isize + xattr_header_sz;
+ 
+-	it->blkaddr = erofs_blknr(erofs_iloc(inode) + inline_xattr_ofs);
+-	it->ofs = erofs_blkoff(erofs_iloc(inode) + inline_xattr_ofs);
++	it->blkaddr = erofs_blknr(it->sb, erofs_iloc(inode) + inline_xattr_ofs);
++	it->ofs = erofs_blkoff(it->sb, erofs_iloc(inode) + inline_xattr_ofs);
+ 	it->kaddr = erofs_read_metabuf(&it->buf, inode->i_sb, it->blkaddr,
+ 				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+@@ -222,8 +222,8 @@ static int xattr_foreach(struct xattr_iter *it,
+ 	processed = 0;
+ 
+ 	while (processed < entry.e_name_len) {
+-		if (it->ofs >= EROFS_BLKSIZ) {
+-			DBG_BUGON(it->ofs > EROFS_BLKSIZ);
++		if (it->ofs >= it->sb->s_blocksize) {
++			DBG_BUGON(it->ofs > it->sb->s_blocksize);
+ 
+ 			err = xattr_iter_fixup(it);
+ 			if (err)
+@@ -231,7 +231,7 @@ static int xattr_foreach(struct xattr_iter *it,
+ 			it->ofs = 0;
+ 		}
+ 
+-		slice = min_t(unsigned int, EROFS_BLKSIZ - it->ofs,
++		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
+ 			      entry.e_name_len - processed);
+ 
+ 		/* handle name */
+@@ -257,8 +257,8 @@ static int xattr_foreach(struct xattr_iter *it,
+ 	}
+ 
+ 	while (processed < value_sz) {
+-		if (it->ofs >= EROFS_BLKSIZ) {
+-			DBG_BUGON(it->ofs > EROFS_BLKSIZ);
++		if (it->ofs >= it->sb->s_blocksize) {
++			DBG_BUGON(it->ofs > it->sb->s_blocksize);
+ 
+ 			err = xattr_iter_fixup(it);
+ 			if (err)
+@@ -266,7 +266,7 @@ static int xattr_foreach(struct xattr_iter *it,
+ 			it->ofs = 0;
+ 		}
+ 
+-		slice = min_t(unsigned int, EROFS_BLKSIZ - it->ofs,
++		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
+ 			      value_sz - processed);
+ 		op->value(it, processed, it->kaddr + it->ofs, slice);
+ 		it->ofs += slice;
+@@ -352,15 +352,14 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+ {
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+ 	struct super_block *const sb = inode->i_sb;
+-	struct erofs_sb_info *const sbi = EROFS_SB(sb);
+ 	unsigned int i;
+ 	int ret = -ENOATTR;
+ 
+ 	for (i = 0; i < vi->xattr_shared_count; ++i) {
+ 		erofs_blk_t blkaddr =
+-			xattrblock_addr(sbi, vi->xattr_shared_xattrs[i]);
++			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
+ 
+-		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
++		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+ 						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+@@ -564,15 +563,14 @@ static int shared_listxattr(struct listxattr_iter *it)
+ 	struct inode *const inode = d_inode(it->dentry);
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+ 	struct super_block *const sb = inode->i_sb;
+-	struct erofs_sb_info *const sbi = EROFS_SB(sb);
+ 	unsigned int i;
+ 	int ret = 0;
+ 
+ 	for (i = 0; i < vi->xattr_shared_count; ++i) {
+ 		erofs_blk_t blkaddr =
+-			xattrblock_addr(sbi, vi->xattr_shared_xattrs[i]);
++			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
+ 
+-		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
++		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+ 						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+diff --git a/fs/erofs/xattr.h b/fs/erofs/xattr.h
+index 0a43c9ee9f8f..f7a21aaa9755 100644
+--- a/fs/erofs/xattr.h
++++ b/fs/erofs/xattr.h
+@@ -19,21 +19,21 @@ static inline unsigned int inlinexattr_header_size(struct inode *inode)
+ 		sizeof(u32) * EROFS_I(inode)->xattr_shared_count;
+ }
+ 
+-static inline erofs_blk_t xattrblock_addr(struct erofs_sb_info *sbi,
++static inline erofs_blk_t xattrblock_addr(struct super_block *sb,
+ 					  unsigned int xattr_id)
+ {
+ #ifdef CONFIG_EROFS_FS_XATTR
+-	return sbi->xattr_blkaddr +
+-		xattr_id * sizeof(__u32) / EROFS_BLKSIZ;
++	return EROFS_SB(sb)->xattr_blkaddr +
++		xattr_id * sizeof(__u32) / sb->s_blocksize;
+ #else
+ 	return 0;
+ #endif
+ }
+ 
+-static inline unsigned int xattrblock_offset(struct erofs_sb_info *sbi,
++static inline unsigned int xattrblock_offset(struct super_block *sb,
+ 					     unsigned int xattr_id)
+ {
+-	return (xattr_id * sizeof(__u32)) % EROFS_BLKSIZ;
++	return (xattr_id * sizeof(__u32)) % sb->s_blocksize;
+ }
+ 
+ #ifdef CONFIG_EROFS_FS_XATTR
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 8ea3f5fe985e..ea31163b4294 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -805,7 +805,7 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
+ 
+ 	if (ztailpacking) {
+ 		pcl->obj.index = 0;	/* which indicates ztailpacking */
+-		pcl->pageofs_in = erofs_blkoff(map->m_pa);
++		pcl->pageofs_in = erofs_blkoff(fe->inode->i_sb, map->m_pa);
+ 		pcl->tailpacking_size = map->m_plen;
+ 	} else {
+ 		pcl->obj.index = map->m_pa >> PAGE_SHIFT;
+@@ -928,6 +928,7 @@ static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
+ 				 struct page *page, unsigned int pageofs,
+ 				 unsigned int len)
+ {
++	struct super_block *sb = inode->i_sb;
+ 	struct inode *packed_inode = EROFS_I_SB(inode)->packed_inode;
+ 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 	u8 *src, *dst;
+@@ -939,16 +940,16 @@ static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
+ 	pos += EROFS_I(inode)->z_fragmentoff;
+ 	for (i = 0; i < len; i += cnt) {
+ 		cnt = min_t(unsigned int, len - i,
+-			    EROFS_BLKSIZ - erofs_blkoff(pos));
++			    sb->s_blocksize - erofs_blkoff(sb, pos));
+ 		src = erofs_bread(&buf, packed_inode,
+-				  erofs_blknr(pos), EROFS_KMAP);
++				  erofs_blknr(sb, pos), EROFS_KMAP);
+ 		if (IS_ERR(src)) {
+ 			erofs_put_metabuf(&buf);
+ 			return PTR_ERR(src);
+ 		}
+ 
+ 		dst = kmap_local_page(page);
+-		memcpy(dst + pageofs + i, src + erofs_blkoff(pos), cnt);
++		memcpy(dst + pageofs + i, src + erofs_blkoff(sb, pos), cnt);
+ 		kunmap_local(dst);
+ 		pos += cnt;
+ 	}
+@@ -1003,7 +1004,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 		void *mp;
+ 
+ 		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
+-					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
++					erofs_blknr(inode->i_sb, map->m_pa),
++					EROFS_NO_KMAP);
+ 		if (IS_ERR(mp)) {
+ 			err = PTR_ERR(mp);
+ 			erofs_err(inode->i_sb,
+@@ -1724,11 +1726,11 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+ 
+ 		/* no device id here, thus it will always succeed */
+ 		mdev = (struct erofs_map_dev) {
+-			.m_pa = blknr_to_addr(pcl->obj.index),
++			.m_pa = erofs_pos(sb, pcl->obj.index),
+ 		};
+ 		(void)erofs_map_dev(sb, &mdev);
+ 
+-		cur = erofs_blknr(mdev.m_pa);
++		cur = erofs_blknr(sb, mdev.m_pa);
+ 		end = cur + pcl->pclusterpages;
+ 
+ 		do {
+@@ -1762,7 +1764,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+ 
+ 				last_bdev = mdev.m_bdev;
+ 				bio->bi_iter.bi_sector = (sector_t)cur <<
+-					LOG_SECTORS_PER_BLOCK;
++					(sb->s_blocksize_bits - 9);
+ 				bio->bi_private = q[JQ_SUBMIT];
+ 				if (f->readahead)
+ 					bio->bi_opf |= REQ_RAHEAD;
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 8bf6d30518b6..efa01d931914 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -18,7 +18,7 @@ int z_erofs_fill_inode(struct inode *inode)
+ 		vi->z_advise = 0;
+ 		vi->z_algorithmtype[0] = 0;
+ 		vi->z_algorithmtype[1] = 0;
+-		vi->z_logical_clusterbits = LOG_BLOCK_SIZE;
++		vi->z_logical_clusterbits = inode->i_sb->s_blocksize_bits;
+ 		set_bit(EROFS_I_Z_INITED_BIT, &vi->flags);
+ 	}
+ 	inode->i_mapping->a_ops = &z_erofs_aops;
+@@ -53,13 +53,13 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	unsigned int advise, type;
+ 
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP);
++				      erofs_blknr(inode->i_sb, pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 
+ 	m->nextpackoff = pos + sizeof(struct z_erofs_vle_decompressed_index);
+ 	m->lcn = lcn;
+-	di = m->kaddr + erofs_blkoff(pos);
++	di = m->kaddr + erofs_blkoff(inode->i_sb, pos);
+ 
+ 	advise = le16_to_cpu(di->di_advise);
+ 	type = (advise >> Z_EROFS_VLE_DI_CLUSTER_TYPE_BIT) &
+@@ -156,7 +156,7 @@ static int unpack_compacted_index(struct z_erofs_maprecorder *m,
+ 			 (vcnt << amortizedshift);
+ 	big_pcluster = vi->z_advise & Z_EROFS_ADVISE_BIG_PCLUSTER_1;
+ 	encodebits = ((vcnt << amortizedshift) - sizeof(__le32)) * 8 / vcnt;
+-	eofs = erofs_blkoff(pos);
++	eofs = erofs_blkoff(m->inode->i_sb, pos);
+ 	base = round_down(eofs, vcnt << amortizedshift);
+ 	in = m->kaddr + base;
+ 
+@@ -249,7 +249,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+ 	const erofs_off_t ebase = sizeof(struct z_erofs_map_header) +
+ 		ALIGN(erofs_iloc(inode) + vi->inode_isize + vi->xattr_isize, 8);
+-	const unsigned int totalidx = DIV_ROUND_UP(inode->i_size, EROFS_BLKSIZ);
++	unsigned int totalidx = DIV_ROUND_UP(inode->i_size, i_blocksize(inode));
+ 	unsigned int compacted_4b_initial, compacted_2b;
+ 	unsigned int amortizedshift;
+ 	erofs_off_t pos;
+@@ -290,7 +290,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ out:
+ 	pos += lcn * (1 << amortizedshift);
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP);
++				      erofs_blknr(inode->i_sb, pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
+@@ -360,6 +360,7 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 					    unsigned int initial_lcn)
+ {
++	struct super_block *sb = m->inode->i_sb;
+ 	struct erofs_inode *const vi = EROFS_I(m->inode);
+ 	struct erofs_map_blocks *const map = m->map;
+ 	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+@@ -406,7 +407,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 		 * if the 1st NONHEAD lcluster is actually PLAIN or HEAD type
+ 		 * rather than CBLKCNT, it's a 1 lcluster-sized pcluster.
+ 		 */
+-		m->compressedblks = 1 << (lclusterbits - LOG_BLOCK_SIZE);
++		m->compressedblks = 1 << (lclusterbits - sb->s_blocksize_bits);
+ 		break;
+ 	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
+ 		if (m->delta[0] != 1)
+@@ -422,7 +423,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 		return -EFSCORRUPTED;
+ 	}
+ out:
+-	map->m_plen = (u64)m->compressedblks << LOG_BLOCK_SIZE;
++	map->m_plen = (u64)m->compressedblks << sb->s_blocksize_bits;
+ 	return 0;
+ err_bonus_cblkcnt:
+ 	erofs_err(m->inode->i_sb,
+@@ -565,7 +566,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 	} else if (fragment && m.lcn == vi->z_tailextent_headlcn) {
+ 		map->m_flags |= EROFS_MAP_FRAGMENT;
+ 	} else {
+-		map->m_pa = blknr_to_addr(m.pblk);
++		map->m_pa = erofs_pos(inode->i_sb, m.pblk);
+ 		err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
+ 		if (err)
+ 			goto unmap_out;
+@@ -592,7 +593,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 	if ((flags & EROFS_GET_BLOCKS_FIEMAP) ||
+ 	    ((flags & EROFS_GET_BLOCKS_READMORE) &&
+ 	     map->m_algorithmformat == Z_EROFS_COMPRESSION_LZMA &&
+-	     map->m_llen >= EROFS_BLKSIZ)) {
++	     map->m_llen >= i_blocksize(inode))) {
+ 		err = z_erofs_get_extent_decompressedlen(&m);
+ 		if (!err)
+ 			map->m_flags |= EROFS_MAP_FULL_MAPPED;
+@@ -633,13 +634,13 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+ 		goto out_unlock;
+ 
+ 	pos = ALIGN(erofs_iloc(inode) + vi->inode_isize + vi->xattr_isize, 8);
+-	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos), EROFS_KMAP);
++	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(sb, pos), EROFS_KMAP);
+ 	if (IS_ERR(kaddr)) {
+ 		err = PTR_ERR(kaddr);
+ 		goto out_unlock;
+ 	}
+ 
+-	h = kaddr + erofs_blkoff(pos);
++	h = kaddr + erofs_blkoff(sb, pos);
+ 	/*
+ 	 * if the highest bit of the 8-byte map header is set, the whole file
+ 	 * is stored in the packed inode. The rest bits keeps z_fragmentoff.
+@@ -663,7 +664,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+ 		goto out_put_metabuf;
+ 	}
+ 
+-	vi->z_logical_clusterbits = LOG_BLOCK_SIZE + (h->h_clusterbits & 7);
++	vi->z_logical_clusterbits = sb->s_blocksize_bits + (h->h_clusterbits & 7);
+ 	if (!erofs_sb_has_big_pcluster(EROFS_SB(sb)) &&
+ 	    vi->z_advise & (Z_EROFS_ADVISE_BIG_PCLUSTER_1 |
+ 			    Z_EROFS_ADVISE_BIG_PCLUSTER_2)) {
+@@ -692,7 +693,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+ 		erofs_put_metabuf(&map.buf);
+ 
+ 		if (!map.m_plen ||
+-		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
++		    erofs_blkoff(sb, map.m_pa) + map.m_plen > sb->s_blocksize) {
+ 			erofs_err(sb, "invalid tail-packing pclustersize %llu",
+ 				  map.m_plen);
+ 			err = -EFSCORRUPTED;
+diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
+index cf4a0d28b178..71dbe8bfa7db 100644
+--- a/include/trace/events/erofs.h
++++ b/include/trace/events/erofs.h
+@@ -71,8 +71,8 @@ TRACE_EVENT(erofs_fill_inode,
+ 	TP_fast_assign(
+ 		__entry->dev		= inode->i_sb->s_dev;
+ 		__entry->nid		= EROFS_I(inode)->nid;
+-		__entry->blkaddr	= erofs_blknr(erofs_iloc(inode));
+-		__entry->ofs		= erofs_blkoff(erofs_iloc(inode));
++		__entry->blkaddr	= erofs_blknr(inode->i_sb, erofs_iloc(inode));
++		__entry->ofs		= erofs_blkoff(inode->i_sb, erofs_iloc(inode));
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), nid = %llu, blkaddr %u ofs %u",
 -- 
-Thanks,
+2.19.1.6.gb485710b
 
-Steve
