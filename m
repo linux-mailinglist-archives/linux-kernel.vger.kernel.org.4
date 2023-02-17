@@ -2,56 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ACB69AAB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9633569AA95
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 12:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjBQLrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 06:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S230220AbjBQLmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 06:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjBQLq7 (ORCPT
+        with ESMTP id S229975AbjBQLme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 06:46:59 -0500
-X-Greylist: delayed 405 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Feb 2023 03:46:51 PST
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AC566672;
-        Fri, 17 Feb 2023 03:46:51 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 34E7DECE20;
-        Fri, 17 Feb 2023 03:39:36 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M0ZuMuVVSUBf; Fri, 17 Feb 2023 03:39:33 -0800 (PST)
-Message-ID: <44487e67c4101db4b57090a1ece66974aeab28b9.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1676633973; bh=aAPvB52CfeDl1YWGWjscvQiw2iP2mrLG2uyYysejDOI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oNceROnIltgw9dOZNRJicNwACFCAxlhgCDX5sRnnyf6EiR6tsFo3B3s88LFg7mKsg
-         pAuAbzb48jH8l05yFIoF8XO4zb0ZoJD4v3SA25WChz4hNL3TU0wkPbpg1/NLNEBOZL
-         mALpvUEOPzYzRFJrD1o1+utX0gKALEpbYYuQ5bDezNFY26e6+vUnTGeYUiQT5eKiUu
-         fB7H5la+7kw8reLWU/KLQRmffbmI+4nT8nFHUeDRmC6uC9xpP7fw8z7TasX0MErvRt
-         UMPToALyasPrVkfcL8LjnH93PA1S8mTawkqYuIrW2kwnX3MgYgZFMu0oKtbEt3T/Vo
-         6QyJdcNtpr40g==
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Fix probe pin assign
- check
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, stable@vger.kernel.org,
-        Diana Zigterman <dzigterman@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Date:   Fri, 17 Feb 2023 12:39:28 +0100
-In-Reply-To: <20230208205318.131385-1-pmalani@chromium.org>
-References: <20230208205318.131385-1-pmalani@chromium.org>
-Content-Type: multipart/mixed; boundary="=-/MbO5/9l+p80XyLWvpVk"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Fri, 17 Feb 2023 06:42:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0B06537B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:41:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676634105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e12s0BrbaMKX6myWRjalX0UcB1DgMoUPY+5jlPc/G2U=;
+        b=drRZhb4TcIQWigvHdYC1TX2piR120ResUD6BjQ78EU6fYNaOQIZ8eeXpbYcp+K1q5vYUh2
+        QMFdBHckPQ2tEgwXN+sxRAhbghLidxME3KBbCsYfh3U/nVAoTuyXdf9PFKiVKTU6ZSMjsW
+        qP0GOshpPSy4Ux4NELKAR/KrBOPNstk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-331-NfWPP2A6Pf6jnVYlXPHrpQ-1; Fri, 17 Feb 2023 06:41:44 -0500
+X-MC-Unique: NfWPP2A6Pf6jnVYlXPHrpQ-1
+Received: by mail-wm1-f69.google.com with SMTP id m18-20020a05600c3b1200b003dc5dec2ac6so597847wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 03:41:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e12s0BrbaMKX6myWRjalX0UcB1DgMoUPY+5jlPc/G2U=;
+        b=OtxpA/vZnvP/mEFD6cgsp7y1N4/7jZcIwNWqif5aIe3J9C+YbMrhw46tmFTNjqXhzx
+         YBiWEgh7WuZRqo7U51XqPyIRpe4QiCaRj4MR1Aht4GXcQayM4uldHFVXczA+2gFsgRqa
+         aLUViqwplp7qqQaA3WBR1ebnVzNf8X7vFWhfHAUOy0PSZzv2CKtOGj/7bmZM4K3tTdkP
+         9DHG4VrtPJBOv2KschYHUM7ZNDruBsYIXOy2sfVzfrqYYAKLirfhP3ZM/aHB7HE+VmNF
+         8ngkxoPZF8NUctKep+PgoMSmWuDpy55nsGnm0YWVhy6bJoAnay9fu1rJNU58owMQiiZZ
+         MmBw==
+X-Gm-Message-State: AO0yUKUO1/pQzWrXVdHYagNsdxlvizFTB+HKhiT8cx2DCggLmiff9jFv
+        CEWON77HLAg0jWXEHaJb9Ob5hw0TuvqOm4UMQZaKBFTpP7eFLkMvJj1QZ7l/mtcj84+7sbT+WU7
+        DRghjeWQs1ptRMtzSJT2rx9+30u1o1Q==
+X-Received: by 2002:a5d:5611:0:b0:2c5:60e2:ed67 with SMTP id l17-20020a5d5611000000b002c560e2ed67mr7612882wrv.0.1676634102784;
+        Fri, 17 Feb 2023 03:41:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set+iAYcRwpdqWHbMpqvk/5aFtAIuCl5tL/QrGYAAVPv2fRQLk5l/QQXpJXnPg4DSoIOjUCznyQ==
+X-Received: by 2002:a5d:5611:0:b0:2c5:60e2:ed67 with SMTP id l17-20020a5d5611000000b002c560e2ed67mr7612855wrv.0.1676634102267;
+        Fri, 17 Feb 2023 03:41:42 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
+        by smtp.gmail.com with ESMTPSA id b11-20020adfe30b000000b002c573a6216fsm4114896wrj.37.2023.02.17.03.41.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 03:41:41 -0800 (PST)
+Message-ID: <4dbc9913-3483-d22d-bbd2-e4f510fff56d@redhat.com>
+Date:   Fri, 17 Feb 2023 12:41:40 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+References: <20230215210257.224243-1-peterx@redhat.com>
+ <7eb2bce9-d0b1-a0e3-8be3-f28d858a61a0@redhat.com> <Y+5Z+88Z3T2TyxUI@x1n>
+ <4f64d62f-c21d-b7c8-640e-d41742bbbe7b@redhat.com> <Y+5uIS5E9sTLi41T@x1n>
+ <456f8e2e-9554-73a3-4fdb-be21f9cc54b6@redhat.com> <Y+6NKPuty9V3nycI@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
+In-Reply-To: <Y+6NKPuty9V3nycI@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,511 +91,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-/MbO5/9l+p80XyLWvpVk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Mittwoch, dem 08.02.2023 um 20:53 +0000 schrieb Prashant Malani:
-> While checking Pin Assignments of the port and partner during probe,
-> we
-> don't take into account whether the peripheral is a plug or
-> receptacle.
+On 16.02.23 21:08, Peter Xu wrote:
+>          On Thu, Feb 16, 2023 at 07:23:17PM +0100, David Hildenbrand wrote:
+>> On 16.02.23 18:55, Peter Xu wrote:
+>>> On Thu, Feb 16, 2023 at 06:00:51PM +0100, David Hildenbrand wrote:
+>>>>>>
+>>>>>> There are various reasons why I think a UFFD_FEATURE_WP_UNPOPULATED, using
+>>>>>> PTE markers, would be more benficial:
+>>>>>>
+>>>>>> 1) It would be applicable to anon hugetlb
+>>>>>
+>>>>> Anon hugetlb should already work with non ptes with the markers?
+>>>>>
+>>>>
+>>>> ... really? I thought we'd do the whole pte marker handling only when
+>>>> dealing with hugetlb/shmem. Interesting, thanks. (we could skip population
+>>>> in QEMU in that case as well -- we always do it for now)
+>>>
+>>> Hmm, you're talking about "anon hugetlb", so it's still hugetlb, right? :)
+>>
+>> I mean especially MAP_PRIVATE|MAP_HUGETLB|MAP_ANONYMOUS, so "in theory"
+>> without any fd and thus pagecache. ... but anon hugetlb keeps confusing me
+>> with pagecache handling.
 > 
-> This manifests itself in a mode entry failure on certain docks and
-> dongles with captive cables. For instance, the Startech.com Type-C to
-> DP
-> dongle (Model #CDP2DP) advertises its DP VDO as 0x405. This would
-> fail
-> the Pin Assignment compatibility check, despite it supporting
-> Pin Assignment C as a UFP.
+> IIUC when mmap(fd==-1) it's the same as MAP_PRIVATE|MAP_HUGETLB.
+
+Let me rephrase my original statement: I thought we'd do the whole pte 
+marker handling only when dealing with MAP_SHARED hugetlb ("hugetlb 
+shared memory (shmem)"). So not on MAP_PRIVATE hugetlb where we might 
+have anon hugetlb pages.
+
+
+>> The focus of that paper is on CoW latency yes (and deduplication
+>> instantiating shared zeropages -- but building a covert channel using CoW
+>> latency might be rather tricky I think, because they will get deduplciated
+>> independently of a sender action ...).
+>>
+>> However, in theory, one could build a covert channel between two VMs simply
+>> by using cache flushes and reading from the shared zeropage. Measuring
+>> access time can reveal if the sender read the page (L3 filled) or not (L3
+>> not filled).
 > 
-> Update the check to use the correct DP Pin Assign macros that
-> take the peripheral's receptacle bit into account.
+> So the attacker will know when someone reads a zeropage, but I still don't
+> get how that can leads to data leak..
+
+Oh, a covert channel is not for leaking data, but for communicating via 
+an unofficial channel (bypassing firewalls etc). I also don't think one 
+can really leak data with the shared zeropage ... unless that data is 
+all zero :)
+
+>>
+>> Having that said, I don't think that we are going to disable the shared
+>> zeropage because of that for some workloads, I assume in most cases it will
+>> simply be way too noisy to transmit any kind of data and we have more
+>> critical covert channels to sort out if we want to.
+>>
+>> Just wanted to raise it because you asked :)
+>>
+>>>
+>>> Another note for s390: when it comes we can consider moving to pte markers
+>>> conditionally when !zeropage.  But we can leave that for later.
+>>
+>> Sure, we could always have another feature flag.
 > 
-> Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin
-> assignment for UFP receptacles")
-> Cc: stable@vger.kernel.org
-> Reported-by: Diana Zigterman <dzigterman@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
+> I think that doesn't need to be another feature flag.  If someone will port
+> uffd-wp to s390 we can implement pte markers for WP_ZEROPAGE, then we
+> either use it when zeropage not exist, or we can switch to pte markers
+> completely too without changing the interface if we want, depending on
+> whether we think replacing zeropages with pte markers will be a major issue
+> with existing apps.  I don't worry too much on that part.
+
+Then maybe the feature name/description should be more generic, such 
+that it's merely an implementation detail that could change?
+
+"
+UFFD_FEATURE_WP_UNPOPULATED: for anonymous memory, if PTEs/PMDs are 
+still unpopulated (no page mapped), uffd-wp protection to work will not 
+require a previous manual population (e.g., using MADV_POPULATE_READ). 
+The kernel might or might not populate the shared zeropage for that 
+purpose. So after a uffd-wp protection with UFFD_FEATURE_WP_UNPOPULATED 
+enabled, the PTEs/PMDs might or might not be populated.
+"
+
+For example, it has to be clear that when doing an uffd-wp protect + 
+unprotect, that there could be suddenly zeropages mapped (observable via 
+  uffd-missing later, /proc/pagemap).
+
+I'd be fine with something like that.
+
+[...]
+
+>>>> Using PTE markers would provide a real advantage IMHO for some users (IMHO
+>>>> background snapshots), where we might want to avoid populating
+>>>> zeropages/page tables as best as we can completely if the VM memory is
+>>>> mostly untouched.
+>>>>
+>>>> Naturally, I wonder if UFFD_FEATURE_WP_ZEROPAGE is really worth it. Is there
+>>>> is another good reason to combine the populate zeropage+wp that I am missing
+>>>> (e.g., atomicity by doing both in one operation)?
+>>>
+>>> It also makes the new WP_ASYNC and pagemap interface clean: we don't want
+>>> to have user pre-fault it every time too as a common tactic..  It's hard to
+>>> use, and the user doesn't need to know the internals of why it is needed,
+>>> either.
+>>
+>> I feel like we're building a lot of infrastructure on uffd-wp instead of
+>> having an alternative softdirty mode (using a world switch?) that works as
+>> expected and doesn't require that many uffd-wp extensions. ;)
 > 
-> I realize this is a bit late in the release cycle, but figured since
-> it
-> is a fix it might still be considered. Please let me know if it's too
-> late and I can re-send this after the 6.3-rc1 is released. Thanks!
+> We used to discuss this WP_ZEROPAGE before, and I thought we were all happy
+> to have that.  Obviously you changed your mind. :)
+
+As I said, I'd be sold on the PTE marker idea, or designing the feature 
+more generic that it is an implementation detail. :)
+
+The whole "let's place zeropages" is rather a hack and IMHO suboptimal.
+
+For example, when uffd-wp unprotecting again (e.g., after a VM 
+snapshot), we'd be left with zeropages mapped. Getting rid of them (for 
+example, to reclaim page tables), will require TLB flushes, mmu 
+notifiers, because we had present PTEs. In comparison, the nice thing 
+about a PTE marker is that it is !present and you can just rip it out.
+
+Similarly, with zeropages (as in your current patch), getting a THP 
+later allocated requires going through khugepaged. In comparison, a PMD 
+marker could more easily avoid that. The huge zeropage can work around 
+that, but you'd still need an MADV_DONTNEED on the hole huge zeropage 
+first to remove it, in order to replace it with a "real" THP.
+
+> 
+> I wasn't really eager on this before because the workaround of pre-read
+> works good already (I assume slightly slower but it's fine; not until
+> someone starts to worry).  But if we want to extend soft-dirty that's not
+> good at all to have any new user being requested to prefault memory and
+> figuring out why it's needed.
+> 
+>>
+>> Having that said, I have the feeling that you and Muhammad have a plan to
+>> make it work using uffd-wp and I won't interfere. It would be nicer to use
+>> softdirty infrastructure IMHO, though.
+> 
+> Thanks.  If you have any good idea on reusing soft-dirty, please shoot.
+> I'll be perfectly happy with it as long as it resolves the issue for
+> Muhammad.  Trust me - I wished the soft dirty thing worked out, but
+> unfortunately it didn't..  Because at least so far uffd-wp has two major
+> issues as I can see:
+> 
+>    (1) Memory type limitations (e.g. general fs memories stop working)
+>    (2) Tracing uffd application is, afaict, impossible
+
+I guess the nice thing is, that you can only track individual ranges, 
+you don't have to enable it for the whole process. I assume softdirty 
+tracking could be similarly extended, but with uffd-wp this comes naturally.
+
+> 
+> So if there's better way to do with soft-dirty or anything else (and I
+> assume it'll not be limited to any of above) it's time to say..
+
+I started discussing that [1] but as nobody seemed to care about my 
+input I decided to not further spend my time on that. But maybe it's a 
+more fundamental issue we'd have to solve to get this clean.
+
+The problem I had with the original approach is that it required precise 
+softdirty tracking even when nobody cared about softdirty tracking, and 
+that it made wrong assumptions about the meaning of VM_SOFTDIRTY. We 
+shouldn't have to worry about any of that if it's disabled (just like 
+with uffd-wp).
 
 
-on the imx8mq-librem5r4.dts board, when using a typec-hub with HDMI,
-this patch breaks image output in one case for me: For a monitor where
-negotiation of resolution fails, a lower resolution works though, I now
-get an oops and hence an unusable system, see the
-dmesg_typec_hub_hdmi_new.txt logs I append. this should definitely not
-happen.
-
-with your patch reverted, I get no oops and a perfectly usable system
-like before, which is the file dmesg_typec_hub_hdmi_old_ok.txt
-
-could this patch be wrong or at least no universally good for everyone?
-it looks like a regression to me.
-
-thanks a lot!
-
-                                  martin
+The semantical difference I see is that with uffd-wp, initially 
+(pte_none()) all PTEs are "dirty". With soft-dirty, initially 
+(pte_none()) all PTEs are "clean". We work around that with 
+VM_SOFTIDRTY, which sets all PTEs of a VMA effectively dirty.
 
 
---=-/MbO5/9l+p80XyLWvpVk
-Content-Disposition: attachment; filename="dmesg_typec_hub_hdmi_new.txt"
-Content-Type: text/plain; name="dmesg_typec_hub_hdmi_new.txt"; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Maybe we should rethink that approach and logically track soft-clean 
+instead. That is, everything is assumed to be soft-dirty until we set it 
+clean on a PTE/PMD/PUD level. Setting something clean is wp'ing a PTE 
+and marking it soft-clean (which is, clearing the soft-dirty bit logically).
 
-RmViIDE3IDEyOjA0OjQ3LjczNTA3NSBwdXJlb3Mga2VybmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41
-LmF1dG86IHhIQ0kgSG9zdCBDb250cm9sbGVyCkZlYiAxNyAxMjowNDo0Ny43MzYzNTQgcHVyZW9z
-IGtlcm5lbDogeGhjaS1oY2QgeGhjaS1oY2QuNS5hdXRvOiBuZXcgVVNCIGJ1cyByZWdpc3RlcmVk
-LCBhc3NpZ25lZCBidXMgbnVtYmVyIDMKRmViIDE3IDEyOjA0OjQ3LjczNzI4OSBwdXJlb3Mga2Vy
-bmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41LmF1dG86IGhjYyBwYXJhbXMgMHgwMjIwZmU2YyBoY2kg
-dmVyc2lvbiAweDExMCBxdWlya3MgMHgwMDAwMDAwMDAwMDEwMDEwCkZlYiAxNyAxMjowNDo0Ny43
-MzgxODUgcHVyZW9zIGtlcm5lbDogeGhjaS1oY2QgeGhjaS1oY2QuNS5hdXRvOiBpcnEgMjA3LCBp
-byBtZW0gMHgzODEwMDAwMApGZWIgMTcgMTI6MDQ6NDcuNzM5MTU3IHB1cmVvcyBrZXJuZWw6IHho
-Y2ktaGNkIHhoY2ktaGNkLjUuYXV0bzogeEhDSSBIb3N0IENvbnRyb2xsZXIKRmViIDE3IDEyOjA0
-OjQ3Ljc0MTI1NyBwdXJlb3Mga2VybmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41LmF1dG86IG5ldyBV
-U0IgYnVzIHJlZ2lzdGVyZWQsIGFzc2lnbmVkIGJ1cyBudW1iZXIgNApGZWIgMTcgMTI6MDQ6NDcu
-NzQyNDM2IHB1cmVvcyBrZXJuZWw6IHhoY2ktaGNkIHhoY2ktaGNkLjUuYXV0bzogSG9zdCBzdXBw
-b3J0cyBVU0IgMy4wIFN1cGVyU3BlZWQKRmViIDE3IDEyOjA0OjQ3Ljc0NjEwNiBwdXJlb3Mga2Vy
-bmVsOiB1c2IgdXNiMzogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTFkNmIsIGlkUHJv
-ZHVjdD0wMDAyLCBiY2REZXZpY2U9IDYuMDIKRmViIDE3IDEyOjA0OjQ3Ljc0NzQwNyBwdXJlb3Mg
-a2VybmVsOiB1c2IgdXNiMzogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTMsIFByb2R1Y3Q9
-MiwgU2VyaWFsTnVtYmVyPTEKRmViIDE3IDEyOjA0OjQ3Ljc0ODQ0NCBwdXJlb3Mga2VybmVsOiB1
-c2IgdXNiMzogUHJvZHVjdDogeEhDSSBIb3N0IENvbnRyb2xsZXIKRmViIDE3IDEyOjA0OjQ3Ljc0
-OTI0MSBwdXJlb3Mga2VybmVsOiB1c2IgdXNiMzogTWFudWZhY3R1cmVyOiBMaW51eCA2LjIuMC1y
-YzgtbGlicmVtNS0wMDM1Ni1nOGUxZGUxMjViOGQ4IHhoY2ktaGNkCkZlYiAxNyAxMjowNDo0Ny43
-NTAwNTQgcHVyZW9zIGtlcm5lbDogdXNiIHVzYjM6IFNlcmlhbE51bWJlcjogeGhjaS1oY2QuNS5h
-dXRvCkZlYiAxNyAxMjowNDo0Ny43NTA5MDIgcHVyZW9zIGtlcm5lbDogaHViIDMtMDoxLjA6IFVT
-QiBodWIgZm91bmQKRmViIDE3IDEyOjA0OjQ3Ljc1NTA3NiBwdXJlb3Mga2VybmVsOiBodWIgMy0w
-OjEuMDogMSBwb3J0IGRldGVjdGVkCkZlYiAxNyAxMjowNDo0Ny43NTYxMTUgcHVyZW9zIGtlcm5l
-bDogdXNiIHVzYjQ6IFdlIGRvbid0IGtub3cgdGhlIGFsZ29yaXRobXMgZm9yIExQTSBmb3IgdGhp
-cyBob3N0LCBkaXNhYmxpbmcgTFBNLgpGZWIgMTcgMTI6MDQ6NDcuNzU3MDg3IHB1cmVvcyBrZXJu
-ZWw6IHVzYiB1c2I0OiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRWZW5kb3I9MWQ2YiwgaWRQcm9k
-dWN0PTAwMDMsIGJjZERldmljZT0gNi4wMgpGZWIgMTcgMTI6MDQ6NDcuNzU4MDU0IHB1cmVvcyBr
-ZXJuZWw6IHVzYiB1c2I0OiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MywgUHJvZHVjdD0y
-LCBTZXJpYWxOdW1iZXI9MQpGZWIgMTcgMTI6MDQ6NDcuNzU5MDkzIHB1cmVvcyBrZXJuZWw6IHVz
-YiB1c2I0OiBQcm9kdWN0OiB4SENJIEhvc3QgQ29udHJvbGxlcgpGZWIgMTcgMTI6MDQ6NDcuNzYw
-MjIyIHB1cmVvcyBrZXJuZWw6IHVzYiB1c2I0OiBNYW51ZmFjdHVyZXI6IExpbnV4IDYuMi4wLXJj
-OC1saWJyZW01LTAwMzU2LWc4ZTFkZTEyNWI4ZDggeGhjaS1oY2QKRmViIDE3IDEyOjA0OjQ3Ljc2
-MTE3MyBwdXJlb3Mga2VybmVsOiB1c2IgdXNiNDogU2VyaWFsTnVtYmVyOiB4aGNpLWhjZC41LmF1
-dG8KRmViIDE3IDEyOjA0OjQ3Ljc2MjA4MSBwdXJlb3Mga2VybmVsOiBodWIgNC0wOjEuMDogVVNC
-IGh1YiBmb3VuZApGZWIgMTcgMTI6MDQ6NDcuNzYzNTM4IHB1cmVvcyBrZXJuZWw6IGh1YiA0LTA6
-MS4wOiAxIHBvcnQgZGV0ZWN0ZWQKRmViIDE3IDEyOjA0OjQ3Ljk5ODkxNCBwdXJlb3Mga2VybmVs
-OiB1c2IgMy0xOiBuZXcgaGlnaC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHhoY2kt
-aGNkCkZlYiAxNyAxMjowNDo0OC4xNTkzMTEgcHVyZW9zIGtlcm5lbDogdXNiIDMtMTogTmV3IFVT
-QiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTBiZGEsIGlkUHJvZHVjdD01NDExLCBiY2REZXZpY2U9
-IDEuMDQKRmViIDE3IDEyOjA0OjQ4LjE2MTAwNCBwdXJlb3Mga2VybmVsOiB1c2IgMy0xOiBOZXcg
-VVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MSwgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MApGZWIg
-MTcgMTI6MDQ6NDguMTYxOTgyIHB1cmVvcyBrZXJuZWw6IHVzYiAzLTE6IFByb2R1Y3Q6IDQtUG9y
-dCBVU0IgMi4wIEh1YgpGZWIgMTcgMTI6MDQ6NDguMTYzMTA5IHB1cmVvcyBrZXJuZWw6IHVzYiAz
-LTE6IE1hbnVmYWN0dXJlcjogR2VuZXJpYwpGZWIgMTcgMTI6MDQ6NDguMTY0NTA3IHB1cmVvcyBr
-ZXJuZWw6IHVzYiAzLTE6IERldmljZSBpcyBub3QgYXV0aG9yaXplZCBmb3IgdXNhZ2UKRmViIDE3
-IDEyOjA0OjQ4LjIxMDg0MiBwdXJlb3Mga2VybmVsOiBodWIgMy0xOjEuMDogVVNCIGh1YiBmb3Vu
-ZApGZWIgMTcgMTI6MDQ6NDguMjEyMzE4IHB1cmVvcyBrZXJuZWw6IGh1YiAzLTE6MS4wOiA0IHBv
-cnRzIGRldGVjdGVkCkZlYiAxNyAxMjowNDo0OC4yNzUxMTcgcHVyZW9zIGtlcm5lbDogdXNiIDMt
-MTogYXV0aG9yaXplZCB0byBjb25uZWN0CkZlYiAxNyAxMjowNDo0OC4yNzY0NzYgcHVyZW9zIGtl
-cm5lbDogdXNiIDQtMTogbmV3IFN1cGVyU3BlZWQgVVNCIGRldmljZSBudW1iZXIgMiB1c2luZyB4
-aGNpLWhjZApGZWIgMTcgMTI6MDQ6NDguMzE1MzM1IHB1cmVvcyBrZXJuZWw6IHVzYiA0LTE6IE5l
-dyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wYmRhLCBpZFByb2R1Y3Q9MDQxMSwgYmNkRGV2
-aWNlPSAxLjA0CkZlYiAxNyAxMjowNDo0OC4zMTcxODMgcHVyZW9zIGtlcm5lbDogdXNiIDQtMTog
-TmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTEsIFByb2R1Y3Q9MiwgU2VyaWFsTnVtYmVyPTAK
-RmViIDE3IDEyOjA0OjQ4LjMxODAxNyBwdXJlb3Mga2VybmVsOiB1c2IgNC0xOiBQcm9kdWN0OiA0
-LVBvcnQgVVNCIDMuMCBIdWIKRmViIDE3IDEyOjA0OjQ4LjMxODc1NyBwdXJlb3Mga2VybmVsOiB1
-c2IgNC0xOiBNYW51ZmFjdHVyZXI6IEdlbmVyaWMKRmViIDE3IDEyOjA0OjQ4LjMxOTY0MyBwdXJl
-b3Mga2VybmVsOiB1c2IgNC0xOiBEZXZpY2UgaXMgbm90IGF1dGhvcml6ZWQgZm9yIHVzYWdlCkZl
-YiAxNyAxMjowNDo0OC4zNDY4NjYgcHVyZW9zIGtlcm5lbDogaHViIDQtMToxLjA6IFVTQiBodWIg
-Zm91bmQKRmViIDE3IDEyOjA0OjQ4LjM1MTk2MiBwdXJlb3Mga2VybmVsOiBodWIgNC0xOjEuMDog
-NCBwb3J0cyBkZXRlY3RlZApGZWIgMTcgMTI6MDQ6NDguMzUyOTIxIHB1cmVvcyBrZXJuZWw6IHVz
-YiA0LTE6IGF1dGhvcml6ZWQgdG8gY29ubmVjdApGZWIgMTcgMTI6MDQ6NDguNjUwNjkxIHB1cmVv
-cyBrZXJuZWw6IHVzYiA0LTEuNDogbmV3IFN1cGVyU3BlZWQgVVNCIGRldmljZSBudW1iZXIgMyB1
-c2luZyB4aGNpLWhjZApGZWIgMTcgMTI6MDQ6NDguNjcwMDU1IHB1cmVvcyBrZXJuZWw6IHVzYiA0
-LTEuNDogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTBiZGEsIGlkUHJvZHVjdD04MTUz
-LCBiY2REZXZpY2U9MzAuMDAKRmViIDE3IDEyOjA0OjQ4LjY3MTQwNSBwdXJlb3Mga2VybmVsOiB1
-c2IgNC0xLjQ6IE5ldyBVU0IgZGV2aWNlIHN0cmluZ3M6IE1mcj0xLCBQcm9kdWN0PTIsIFNlcmlh
-bE51bWJlcj02CkZlYiAxNyAxMjowNDo0OC42NzMwMDYgcHVyZW9zIGtlcm5lbDogdXNiIDQtMS40
-OiBQcm9kdWN0OiBVU0IgMTAvMTAwLzEwMDAgTEFOCkZlYiAxNyAxMjowNDo0OC42NzQwMzYgcHVy
-ZW9zIGtlcm5lbDogdXNiIDQtMS40OiBNYW51ZmFjdHVyZXI6IFJlYWx0ZWsKRmViIDE3IDEyOjA0
-OjQ4LjY3NTQ2NSBwdXJlb3Mga2VybmVsOiB1c2IgNC0xLjQ6IFNlcmlhbE51bWJlcjogMDAwMDAx
-CkZlYiAxNyAxMjowNDo0OC42NzYzNDQgcHVyZW9zIGtlcm5lbDogdXNiIDQtMS40OiBEZXZpY2Ug
-aXMgbm90IGF1dGhvcml6ZWQgZm9yIHVzYWdlCkZlYiAxNyAxMjowNDo0OC43MDcwMTEgcHVyZW9z
-IGtlcm5lbDogdXNiIDQtMS40OiBhdXRob3JpemVkIHRvIGNvbm5lY3QKRmViIDE3IDEyOjA0OjQ4
-Ljg1MzM2OSBwdXJlb3Mga2VybmVsOiB1c2IgNC0xLjQ6IHJlc2V0IFN1cGVyU3BlZWQgVVNCIGRl
-dmljZSBudW1iZXIgMyB1c2luZyB4aGNpLWhjZApGZWIgMTcgMTI6MDQ6NDguODg3NzAxIHB1cmVv
-cyBrZXJuZWw6IHI4MTUyIDQtMS40OjEuMDogRGlyZWN0IGZpcm13YXJlIGxvYWQgZm9yIHJ0bF9u
-aWMvcnRsODE1M2EtNC5mdyBmYWlsZWQgd2l0aCBlcnJvciAtMgpGZWIgMTcgMTI6MDQ6NDguODg4
-OTMwIHB1cmVvcyBrZXJuZWw6IHI4MTUyIDQtMS40OjEuMDogdW5hYmxlIHRvIGxvYWQgZmlybXdh
-cmUgcGF0Y2ggcnRsX25pYy9ydGw4MTUzYS00LmZ3ICgtMikKRmViIDE3IDEyOjA0OjQ4LjkyMzQ3
-NiBwdXJlb3Mga2VybmVsOiByODE1MiA0LTEuNDoxLjAgZXRoMDogdjEuMTIuMTMKRmViIDE3IDEy
-OjA0OjQ5LjE0MzMwNSBwdXJlb3Mga2VybmVsOiBbZHJtXSBocGQgaXJxCkZlYiAxNyAxMjowNDo0
-OS4xNDYxOTcgcHVyZW9zIGtlcm5lbDogcjgxNTIgNC0xLjQ6MS4wIGVueDAwZTA0YzY4NGE4YTog
-cmVuYW1lZCBmcm9tIGV0aDAKRmViIDE3IDEyOjA0OjQ5LjE5MTM2NiBwdXJlb3Mga2VybmVsOiBV
-bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBwYWdpbmcgcmVxdWVzdCBhdCB2aXJ0dWFsIGFkZHJlc3Mg
-MDA1NzRmNTAwMDc5NmM3MApGZWIgMTcgMTI6MDQ6NDkuMTkyMDY1IHB1cmVvcyBrZXJuZWw6IE1l
-bSBhYm9ydCBpbmZvOgpGZWIgMTcgMTI6MDQ6NDkuMzg2NzA4IHB1cmVvcyBrZXJuZWw6ICAgRVNS
-ID0gMHgwMDAwMDAwMDk2MDAwMDA0CkZlYiAxNyAxMjowNDo0OS4zODc1NTYgcHVyZW9zIGtlcm5l
-bDogICBFQyA9IDB4MjU6IERBQlQgKGN1cnJlbnQgRUwpLCBJTCA9IDMyIGJpdHMKRmViIDE3IDEy
-OjA0OjQ5LjM4NzkyMyBwdXJlb3Mga2VybmVsOiAgIFNFVCA9IDAsIEZuViA9IDAKRmViIDE3IDEy
-OjA0OjQ5LjU3MjE3OSBwdXJlb3Mga2VybmVsOiAgIEVBID0gMCwgUzFQVFcgPSAwCkZlYiAxNyAx
-MjowNDo0OS41NzY3MTcgcHVyZW9zIGtlcm5lbDogICBGU0MgPSAweDA0OiBsZXZlbCAwIHRyYW5z
-bGF0aW9uIGZhdWx0CkZlYiAxNyAxMjowNDo0OS45NTU2NDAgcHVyZW9zIGtlcm5lbDogRGF0YSBh
-Ym9ydCBpbmZvOgpGZWIgMTcgMTI6MDQ6NDkuOTcxMDM0IHB1cmVvcyBrZXJuZWw6ICAgSVNWID0g
-MCwgSVNTID0gMHgwMDAwMDAwNApGZWIgMTcgMTI6MDQ6NDkuOTcxOTE1IHB1cmVvcyBrZXJuZWw6
-ICAgQ00gPSAwLCBXblIgPSAwCkZlYiAxNyAxMjowNDo0OS45ODI0NTggcHVyZW9zIGtlcm5lbDog
-WzAwNTc0ZjUwMDA3OTZjNzBdIGFkZHJlc3MgYmV0d2VlbiB1c2VyIGFuZCBrZXJuZWwgYWRkcmVz
-cyByYW5nZXMKRmViIDE3IDEyOjA0OjQ5Ljk5ODE0OSBwdXJlb3Mga2VybmVsOiBJbnRlcm5hbCBl
-cnJvcjogT29wczogMDAwMDAwMDA5NjAwMDAwNCBbIzFdIFBSRUVNUFQgU01QCkZlYiAxNyAxMjow
-NDo1MC4wMTgwMzkgcHVyZW9zIGtlcm5lbDogTW9kdWxlcyBsaW5rZWQgaW46IHI4MTUzX2VjbSBj
-ZGNfZXRoZXIgcjgxNTIgYWVzX2NlX2NjbSByZWRwaW5lX3NkaW8gcmVkcGluZV85MXggYmx1ZXRv
-b3RoIG1hYzgwMjExIGNmZzgwMjExIHVzYl9mX2FjbSBxbWlfd3dhbiB1X3NlcmlhbCB1c2JfZl9l
-Y20gdV9ldGhlciBjZGNfd2RtIGNhYW1fanIgbW91c2VkZXYgY2FhbWhhc2hfZGVzYyBjYWFtYWxn
-X2Rlc2MgY3J5cHRvX2VuZ2luZSB1c2JuZXQgbWlpIG9wdGlvbiB1c2Jfd3dhbiB1c2JzZXJpYWwg
-YWVzX2NlX2JsayBjcmN0MTBkaWZfY2UgZ2hhc2hfY2Ugc2hhMl9jZSBzaGExX2NlIHB3bV92aWJy
-YSBzbmRfc29jX2d0bTYwMSBoYW50cm9fdnB1IHNuZF9zb2Nfc2ltcGxlX2NhcmQgdjRsMl92cDkg
-c25kX3NvY19zaW1wbGVfY2FyZF91dGlscyB2NGwyX2gyNjQgdjRsMl9tZW0ybWVtIHM1azNsNnh4
-IGR3OTcxNCBzdF9sc202ZHN4X3NwaSBzdF9tYWduX3NwaSBzdF9zZW5zb3JzX3NwaSBpbXg3X21l
-ZGlhX2NzaSBsZWRzX2xtMzU2MCB2NGwyX2ZsYXNoX2xlZF9jbGFzcyBoaTg0NiBpbXg4bXFfbWlw
-aV9jc2kyKEMpIHZpZGVvYnVmMl9kbWFfY29udGlnIHY0bDJfZndub2RlIHY0bDJfYXN5bmMgdmlk
-ZW9idWYyX21lbW9wcyB2aWRlb2J1ZjJfdjRsMiBlZHRfZnQ1eDA2IGduc3NfbXRrIHZpZGVvZGV2
-IHN0X21hZ25faTJjIHZpZGVvYnVmMl9jb21tb24gZ25zc19zZXJpYWwgZ25zcyBzdF9sc202ZHN4
-X2kyYyBzdF9tYWduIHZjbmw0MDAwIHN0X2xzbTZkc3ggc3Rfc2Vuc29yc19pMmMgc3Rfc2Vuc29y
-cyBzbmRfc29jX3dtODk2MiBzbmRfc29jX2ZzbF9zYWkgbWMgaW5kdXN0cmlhbGlvX3RyaWdnZXJl
-ZF9idWZmZXIgc25kX3NvY19mc2xfdXRpbHMgY2FhbSBrZmlmb19idWYgaW14X3BjbV9kbWEgZXJy
-b3Igc25kX3NvY19jb3JlIHNuZF9wY21fZG1hZW5naW5lIHNuZF9wY20gc25kX3RpbWVyIHNuZCBp
-bXgyX3dkdCBzb3VuZGNvcmUgcmZraWxsX2hrcyB3YXRjaGRvZyByZmtpbGwKRmViIDE3IDEyOjA0
-OjUwLjAyMTY3MCBwdXJlb3Mga2VybmVsOiAgbGliY29tcG9zaXRlCkZlYiAxNyAxMjowNDo1MC4w
-MjE4NzcgcHVyZW9zIGtlcm5lbDogW2RybV0gQ29ubmVjdG9yIHN0YXR1czogMQpGZWIgMTcgMTI6
-MDQ6NTAuMDIyMDY2IHB1cmVvcyBrZXJuZWw6ICBsZWR0cmlnX3RpbWVyIGxlZHRyaWdfcGF0dGVy
-biBmdXNlIHpyYW0gaXBfdGFibGVzIHhfdGFibGVzIGlwdjYgdWFzIHVzYl9zdG9yYWdlIG10ZGJs
-b2NrIG10ZF9ibGtkZXZzIG92ZXJsYXkgeGhjaV9wbGF0X2hjZCB4aGNpX2hjZCBvZnBhcnQgdXNi
-Y29yZSBzcGlfbm9yIGR3YzMgbXRkIHVscGkgdHBzNjU5OHggdWRjX2NvcmUgdHlwZWMgaW14X2Rj
-c3MgYnEyNTg5MF9jaGFyZ2VyIGNkbnNfbWhkcF9pbXggY2Ruc19taGRwX2RybWNvcmUgZHJtX2Rp
-c3BsYXlfaGVscGVyIGNsa19iZDcxOHg3IHBoeV9mc2xfaW14OG1xX3VzYiB1c2JfY29tbW9uIHJv
-bGVzIHNudnNfcHdya2V5IGlteF9zZG1hIHZpcnRfZG1hCkZlYiAxNyAxMjowNDo1MC4wMjIyMTIg
-cHVyZW9zIGtlcm5lbDogQ1BVOiAxIFBJRDogMjE4MyBDb21tOiBpZnF1ZXJ5IFRhaW50ZWQ6IEcg
-ICAgICAgICBDICAgICAgICAgNi4yLjAtcmM4LWxpYnJlbTUtMDAzNTYtZzhlMWRlMTI1YjhkOCAj
-NTEKRmViIDE3IDEyOjA0OjUwLjAyMjM3NyBwdXJlb3Mga2VybmVsOiBpbXgtc2RtYSAzMGJkMDAw
-MC5kbWEtY29udHJvbGxlcjogcmVzdGFydCBjeWNsaWMgY2hhbm5lbCAzCkZlYiAxNyAxMjowNDo1
-MC4wMjMzNzYgcHVyZW9zIGtlcm5lbDogSGFyZHdhcmUgbmFtZTogUHVyaXNtIExpYnJlbSA1cjQg
-KERUKQpGZWIgMTcgMTI6MDQ6NTAuMDIzNTIwIHB1cmVvcyBrZXJuZWw6IHBzdGF0ZTogODAwMDAw
-MDUgKE56Y3YgZGFpZiAtUEFOIC1VQU8gLVRDTyAtRElUIC1TU0JTIEJUWVBFPS0tKQpGZWIgMTcg
-MTI6MDQ6NTAuMDIzNjU4IHB1cmVvcyBrZXJuZWw6IHBjIDogX19waV9zdHJsZW4rMHgxNC8weDE1
-MApGZWIgMTcgMTI6MDQ6NTAuMDIzODEyIHB1cmVvcyBrZXJuZWw6IGxyIDogcnRubF9maWxsX2lm
-aW5mbysweGYzOC8weDEyNmMKRmViIDE3IDEyOjA0OjUwLjAyMzk1MiBwdXJlb3Mga2VybmVsOiBz
-cCA6IGZmZmY4MDAwMGMwNGI1ZTAKRmViIDE3IDEyOjA0OjUwLjAyNDEwMyBwdXJlb3Mga2VybmVs
-OiB4Mjk6IGZmZmY4MDAwMGMwNGI1ZTAgeDI4OiBmZmZmMDAwMDM0NWJkMTFjIHgyNzogZmZmZjAw
-MDAzNDViYzAwMApGZWIgMTcgMTI6MDQ6NTAuMDI0Mjk5IHB1cmVvcyBrZXJuZWw6IHgyNjogZmZm
-ZjAwMDAzNDViYzAwMCB4MjU6IDAwMDAwMDAwMDAwMDE0MzQgeDI0OiAwMDAwMDAwMDAwMDAwMDAw
-CkZlYiAxNyAxMjowNDo1MC4wMjQ0NTkgcHVyZW9zIGtlcm5lbDogeDIzOiBmZmZmMDAwMDM0NWJk
-NDM0IHgyMjogZmZmZjAwMDAzNDViY2VjMCB4MjE6IDQ1NTc0ZjUwMDA3OTZjNzAKRmViIDE3IDEy
-OjA0OjUwLjAyNjM0OSBwdXJlb3Mga2VybmVsOiBbZHJtXSBIRE1JL0RQIENhYmxlIFBsdWcgSW4K
-RmViIDE3IDEyOjA0OjUwLjAyNjUyNSBwdXJlb3Mga2VybmVsOiAKRmViIDE3IDEyOjA0OjUwLjAy
-ODA2NiBwdXJlb3Mga2VybmVsOiB4MjA6IGZmZmYwMDAwMDExNWUwMDAgeDE5OiBmZmZmMDAwMDJi
-NjU3ODAwIHgxODogMDAwMDAwMDAwMDAwMDAwMApGZWIgMTcgMTI6MDQ6NTAuMDI4MjIyIHB1cmVv
-cyBrZXJuZWw6IHgxNzogMDAwMDAwMDAwMDAwMDAwMCB4MTY6IDAwMDAwMDAwMDAwMDAwMDAgeDE1
-OiAwMDAwMDAwMDAwMDAwMDAwCkZlYiAxNyAxMjowNDo1MC4wMjgzNTkgcHVyZW9zIGtlcm5lbDog
-eDE0OiAwMDAwMDAwMDAwMDAwMDAwIHgxMzogMDAwMDAwMDAwMDAwMDAwMCB4MTI6IDAwMDAwMDAw
-MDAwMDAwMDAKRmViIDE3IDEyOjA0OjUwLjAyODQ5OCBwdXJlb3Mga2VybmVsOiB4MTE6IDAwMDAw
-MDAwMDAwMDAwMDAgeDEwOiAwMDAwMDAwMDAwMDAwMDAxIHg5IDogZmZmZjgwMDAwOGFkOTViNApG
-ZWIgMTcgMTI6MDQ6NTAuMDI4NjQ3IHB1cmVvcyBrZXJuZWw6IHg4IDogMDEwMTAxMDEwMTAxMDEw
-MSB4NyA6IDAwMDAwMDAwMDAwMDAwMDAgeDYgOiAwMDAwMDAwMDAwMDAxZWMwCkZlYiAxNyAxMjow
-NDo1MC4wMjg3ODUgcHVyZW9zIGtlcm5lbDogeDUgOiBmZmZmMDAwMDM0NWJkNDM4IHg0IDogMDAw
-MDAwMDAwMDAwMGM3MCB4MyA6IGZmZmYwMDAwMzQ1YmMwMDAKRmViIDE3IDEyOjA0OjUwLjAzMDA5
-MCBwdXJlb3Mga2VybmVsOiB4MiA6IDAwMDAwMDAwMDAwMDBlYzAgeDEgOiAwMDAwMDAwMDAwMDAx
-NDM0IHgwIDogNDU1NzRmNTAwMDc5NmM3MApGZWIgMTcgMTI6MDQ6NTAuMDMwNDMzIHB1cmVvcyBr
-ZXJuZWw6IENhbGwgdHJhY2U6CkZlYiAxNyAxMjowNDo1MC4wMzA3NTYgcHVyZW9zIGtlcm5lbDog
-W2RybV0gQ29ubmVjdG9yIHN0YXR1czogMQpGZWIgMTcgMTI6MDQ6NTAuMDMwOTQwIHB1cmVvcyBr
-ZXJuZWw6IGlteC1zZG1hIDMwYmQwMDAwLmRtYS1jb250cm9sbGVyOiByZXN0YXJ0IGN5Y2xpYyBj
-aGFubmVsIDMKRmViIDE3IDEyOjA0OjUwLjAzMTkzNiBwdXJlb3Mga2VybmVsOiAgX19waV9zdHJs
-ZW4rMHgxNC8weDE1MApGZWIgMTcgMTI6MDQ6NTAuMDMyMDg3IHB1cmVvcyBrZXJuZWw6IEVESUQg
-YmxvY2sgMCAodGFnIDB4MDApIGNoZWNrc3VtIGlzIGludmFsaWQsIHJlbWFpbmRlciBpcyAyCkZl
-YiAxNyAxMjowNDo1MC4wMzIyNTYgcHVyZW9zIGtlcm5lbDogIHJ0bmxfZHVtcF9pZmluZm8rMHgy
-OWMvMHg2NzAKRmViIDE3IDEyOjA0OjUwLjAzMjM5NCBwdXJlb3Mga2VybmVsOiAgbmV0bGlua19k
-dW1wKzB4MTI0LzB4MzI0CkZlYiAxNyAxMjowNDo1MC4wMzI1MzEgcHVyZW9zIGtlcm5lbDogIG5l
-dGxpbmtfcmVjdm1zZysweDFmNC8weDNiYwpGZWIgMTcgMTI6MDQ6NTAuMDMzMTM0IHB1cmVvcyBr
-ZXJuZWw6ICAgICAgICAgWzAwXSBCQUQgIDAwIGZmIGZmIGZmIGZmIGZmIGZmIDAwIDA1IGUzIDUy
-IDIzIDBlIDAzIDAwIDAwCkZlYiAxNyAxMjowNDo1MC4wMzMzMDUgcHVyZW9zIGtlcm5lbDogIF9f
-X19zeXNfcmVjdm1zZysweDFiMC8weDI0YwpGZWIgMTcgMTI6MDQ6NTAuMDM0NDQ4IHB1cmVvcyBr
-ZXJuZWw6ICBfX19zeXNfcmVjdm1zZysweDg0LzB4ZjAKRmViIDE3IDEyOjA0OjUwLjAzNDYzNSBw
-dXJlb3Mga2VybmVsOiAgX19zeXNfcmVjdm1zZysweDZjLzB4ZDAKRmViIDE3IDEyOjA0OjUwLjAz
-NDc3MyBwdXJlb3Mga2VybmVsOiAgX19hcm02NF9zeXNfcmVjdm1zZysweDJjLzB4NDAKRmViIDE3
-IDEyOjA0OjUwLjAzNTAwOCBwdXJlb3Mga2VybmVsOiAgaW52b2tlX3N5c2NhbGwrMHg1MC8weDEy
-MApGZWIgMTcgMTI6MDQ6NTAuMDM1MTQ2IHB1cmVvcyBrZXJuZWw6ICBlbDBfc3ZjX2NvbW1vbi5j
-b25zdHByb3AuMCsweGQ0LzB4ZjQKRmViIDE3IDEyOjA0OjUwLjAzNTI4NSBwdXJlb3Mga2VybmVs
-OiAgZG9fZWwwX3N2YysweDI0LzB4MzAKRmViIDE3IDEyOjA0OjUwLjAzNTQyMSBwdXJlb3Mga2Vy
-bmVsOiAgZWwwX3N2YysweDJjLzB4ODQKRmViIDE3IDEyOjA0OjUwLjAzNTU1OSBwdXJlb3Mga2Vy
-bmVsOiAgICAgICAgIFswMF0gQkFEICAwMiAxNiAwMSAwMyA4MCAzMyAxZCA3OCAyYSBlZSBkMSBh
-NSA1NSA0OCA5YiAyNgpGZWIgMTcgMTI6MDQ6NTAuMDM1Njk1IHB1cmVvcyBrZXJuZWw6ICBlbDB0
-XzY0X3N5bmNfaGFuZGxlcisweGI4LzB4YzAKRmViIDE3IDEyOjA0OjUwLjAzNTgzNCBwdXJlb3Mg
-a2VybmVsOiAgZWwwdF82NF9zeW5jKzB4MTkwLzB4MTk0CkZlYiAxNyAxMjowNDo1MC4wMzU5NTkg
-cHVyZW9zIGtlcm5lbDogQ29kZTogOTI0MDJjMDQgYjIwMGMzZTggZjEzZmMwOWYgNTQwMDA4OGMg
-KGE5NDAwYzAyKSAKRmViIDE3IDEyOjA0OjUwLjAzNjIzOCBwdXJlb3Mga2VybmVsOiAtLS1bIGVu
-ZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAwIF0tLS0KRmViIDE3IDEyOjA0OjUwLjA1Nzg2OCBwdXJl
-b3Mga2VybmVsOiAgICAgICAgIFswMF0gQkFEICAwMCA1MCA1NCBiZiBlZiAwMCBkMSBjMCBiMyAw
-MCA5NSAwMCA4MSA4MCA4MSA0MApGZWIgMTcgMTI6MDQ6NTAuMDU4MTU1IHB1cmVvcyBrZXJuZWw6
-ICAgICAgICAgWzAwXSBCQUQgIDAwIGMwIDAxIDAxIDAxIDAxIDAyIDNhIDgwIDE4IDcxIDM4IDJk
-IDQwIDU4IDJjCkZlYiAxNyAxMjowNDo1MC4wNTgyOTIgcHVyZW9zIGtlcm5lbDogICAgICAgICBb
-MDBdIEJBRCAgNDUgMDAgZmQgMWUgMTEgMDAgMDAgMWUgMDAgMDAgMDAgZmQgMDAgMzIgNGMgMWUK
-RmViIDE3IDEyOjA0OjUwLjA1ODQyMyBwdXJlb3Mga2VybmVsOiAtLS0tLS0tLS0tLS1bIGN1dCBo
-ZXJlIF0tLS0tLS0tLS0tLS0KRmViIDE3IDEyOjA0OjUwLjA1ODU5NCBwdXJlb3Mga2VybmVsOiAg
-ICAgICAgIFswMF0gQkFEICA1MyAxMSAwMCAwYSAyMCAyMCAyMCAyMCAyMCAyMCAwMCAwMCAwMCBm
-YyAwMCAzMgpGZWIgMTcgMTI6MDQ6NTAuMDU4NzI1IHB1cmVvcyBrZXJuZWw6IFdBUk5JTkc6IENQ
-VTogMSBQSUQ6IDAgYXQgbmV0L25ldGxpbmsvYWZfbmV0bGluay5jOjQxNCBuZXRsaW5rX3NvY2tf
-ZGVzdHJ1Y3QrMHg5NC8weGMwCkZlYiAxNyAxMjowNDo1MC4wNTg5MTYgcHVyZW9zIGtlcm5lbDog
-TW9kdWxlcyBsaW5rZWQgaW46IHI4MTUzX2VjbSBjZGNfZXRoZXIgcjgxNTIgYWVzX2NlX2NjbSBy
-ZWRwaW5lX3NkaW8gcmVkcGluZV85MXggYmx1ZXRvb3RoIG1hYzgwMjExIGNmZzgwMjExIHVzYl9m
-X2FjbSBxbWlfd3dhbiB1X3NlcmlhbCB1c2JfZl9lY20gdV9ldGhlciBjZGNfd2RtCkZlYiAxNyAx
-MjowNDo1MC4wNTkwNjggcHVyZW9zIGtlcm5lbDogICAgICAgICBbMDBdIEJBRCAgMzMgMzUgMzIg
-MGEgMjAgMjAgMjAgMjAgMjAgMjAgMjAgMjAgMDAgMDAgMDAgZmYKRmViIDE3IDEyOjA0OjUwLjA1
-OTIyNyBwdXJlb3Mga2VybmVsOiAgY2FhbV9qciBtb3VzZWRldiBjYWFtaGFzaF9kZXNjIGNhYW1h
-bGdfZGVzYyBjcnlwdG9fZW5naW5lIHVzYm5ldCBtaWkgb3B0aW9uIHVzYl93d2FuIHVzYnNlcmlh
-bCBhZXNfY2VfYmxrIGNyY3QxMGRpZl9jZSBnaGFzaF9jZSBzaGEyX2NlIHNoYTFfY2UgcHdtX3Zp
-YnJhCkZlYiAxNyAxMjowNDo1MC4wNTk0MTAgcHVyZW9zIGtlcm5lbDogICAgICAgICBbMDBdIEJB
-RCAgMDAgNDQgNDEgNGEgNDMgMzEgNGEgNDEgMzAgMzAgMzAgMzcgMzggMzIgMDEgNmYKRmViIDE3
-IDEyOjA0OjUwLjA1OTU0MCBwdXJlb3Mga2VybmVsOiAgc25kX3NvY19ndG02MDEgaGFudHJvX3Zw
-dSBzbmRfc29jX3NpbXBsZV9jYXJkIHY0bDJfdnA5IHNuZF9zb2Nfc2ltcGxlX2NhcmRfdXRpbHMK
-RmViIDE3IDEyOjA0OjUwLjA1OTY3NyBwdXJlb3Mga2VybmVsOiBbZHJtOmNkbnNfZHBfY29ubmVj
-dG9yX2dldF9tb2RlcyBbY2Ruc19taGRwX2RybWNvcmVdXSAqRVJST1IqIEludmFsaWQgZWRpZApG
-ZWIgMTcgMTI6MDQ6NTAuMDU5ODQ3IHB1cmVvcyBrZXJuZWw6ICB2NGwyX2gyNjQgdjRsMl9tZW0y
-bWVtIHM1azNsNnh4IGR3OTcxNCBzdF9sc202ZHN4X3NwaSBzdF9tYWduX3NwaSBzdF9zZW5zb3Jz
-X3NwaSBpbXg3X21lZGlhX2NzaSBsZWRzX2xtMzU2MCB2NGwyX2ZsYXNoX2xlZF9jbGFzcyBoaTg0
-NiBpbXg4bXFfbWlwaV9jc2kyKEMpIHZpZGVvYnVmMl9kbWFfY29udGlnIHY0bDJfZndub2RlIHY0
-bDJfYXN5bmMgdmlkZW9idWYyX21lbW9wcyB2aWRlb2J1ZjJfdjRsMiBlZHRfZnQ1eDA2IGduc3Nf
-bXRrIHZpZGVvZGV2IHN0X21hZ25faTJjIHZpZGVvYnVmMl9jb21tb24gZ25zc19zZXJpYWwgZ25z
-cyBzdF9sc202ZHN4X2kyYyBzdF9tYWduIHZjbmw0MDAwIHN0X2xzbTZkc3ggc3Rfc2Vuc29yc19p
-MmMgc3Rfc2Vuc29ycyBzbmRfc29jX3dtODk2MiBzbmRfc29jX2ZzbF9zYWkgbWMgaW5kdXN0cmlh
-bGlvX3RyaWdnZXJlZF9idWZmZXIgc25kX3NvY19mc2xfdXRpbHMgY2FhbSBrZmlmb19idWYgaW14
-X3BjbV9kbWEgZXJyb3Igc25kX3NvY19jb3JlIHNuZF9wY21fZG1hZW5naW5lIHNuZF9wY20gc25k
-X3RpbWVyIHNuZCBpbXgyX3dkdCBzb3VuZGNvcmUgcmZraWxsX2hrcyB3YXRjaGRvZyByZmtpbGwg
-bGliY29tcG9zaXRlIGxlZHRyaWdfdGltZXIgbGVkdHJpZ19wYXR0ZXJuIGZ1c2UgenJhbSBpcF90
-YWJsZXMgeF90YWJsZXMgaXB2NiB1YXMgdXNiX3N0b3JhZ2UgbXRkYmxvY2sgbXRkX2Jsa2RldnMg
-b3ZlcmxheSB4aGNpX3BsYXRfaGNkIHhoY2lfaGNkIG9mcGFydCB1c2Jjb3JlIHNwaV9ub3IgZHdj
-MyBtdGQgdWxwaSB0cHM2NTk4eCB1ZGNfY29yZSB0eXBlYyBpbXhfZGNzcyBicTI1ODkwX2NoYXJn
-ZXIgY2Ruc19taGRwX2lteCBjZG5zX21oZHBfZHJtY29yZSBkcm1fZGlzcGxheV9oZWxwZXIgY2xr
-X2JkNzE4eDcgcGh5X2ZzbF9pbXg4bXFfdXNiIHVzYl9jb21tb24gcm9sZXMgc252c19wd3JrZXkg
-aW14X3NkbWEgdmlydF9kbWEKRmViIDE3IDEyOjA0OjUwLjA2MDA2NyBwdXJlb3Mga2VybmVsOiBD
-UFU6IDEgUElEOiAwIENvbW06IHN3YXBwZXIvMSBUYWludGVkOiBHICAgICAgRCAgQyAgICAgICAg
-IDYuMi4wLXJjOC1saWJyZW01LTAwMzU2LWc4ZTFkZTEyNWI4ZDggIzUxCkZlYiAxNyAxMjowNDo1
-MC4wNjAyMTIgcHVyZW9zIGtlcm5lbDogSGFyZHdhcmUgbmFtZTogUHVyaXNtIExpYnJlbSA1cjQg
-KERUKQpGZWIgMTcgMTI6MDQ6NTAuMDYwMzUwIHB1cmVvcyBrZXJuZWw6IHBzdGF0ZTogNjAwMDAw
-MDUgKG5aQ3YgZGFpZiAtUEFOIC1VQU8gLVRDTyAtRElUIC1TU0JTIEJUWVBFPS0tKQpGZWIgMTcg
-MTI6MDQ6NTAuMDYwNDg2IHB1cmVvcyBrZXJuZWw6IHBjIDogbmV0bGlua19zb2NrX2Rlc3RydWN0
-KzB4OTQvMHhjMApGZWIgMTcgMTI6MDQ6NTAuMDYwNjQ2IHB1cmVvcyBrZXJuZWw6IGxyIDogbmV0
-bGlua19zb2NrX2Rlc3RydWN0KzB4NTAvMHhjMApGZWIgMTcgMTI6MDQ6NTAuMDYwODIwIHB1cmVv
-cyBrZXJuZWw6IHNwIDogZmZmZjgwMDAwODAwYmRmMApGZWIgMTcgMTI6MDQ6NTAuMDYwOTY5IHB1
-cmVvcyBrZXJuZWw6IHgyOTogZmZmZjgwMDAwODAwYmRmMCB4Mjg6IDAwMDAwMDAwMDAwMDAwMDAg
-eDI3OiAwMDAwMDAwMDAwMDAwMDBhCkZlYiAxNyAxMjowNDo1MC4wNjExMDkgcHVyZW9zIGtlcm5l
-bDogeDI2OiBmZmZmMDAwMGJlNjRjMTc4IHgyNTogMDAwMDAwMDAwMDAwMDAwMSB4MjQ6IGZmZmY4
-MDAwMDgwMGJmMjAKRmViIDE3IDEyOjA0OjUwLjA2MTI2MSBwdXJlb3Mga2VybmVsOiB4MjM6IGZm
-ZmY4MDAwMDkyODgwMDggeDIyOiBmZmZmODAwMDA5NjE4OWUwIHgyMTogZmZmZjAwMDBiZTY0YzEw
-MApGZWIgMTcgMTI6MDQ6NTAuMDYxMzk4IHB1cmVvcyBrZXJuZWw6IHgyMDogZmZmZjAwMDAzNDU5
-YTJlMCB4MTk6IGZmZmYwMDAwMzQ1OWEwMDAgeDE4OiAwMDAwMDAwMDAwMDAwMDAwCkZlYiAxNyAx
-MjowNDo1MC4wNjE1MzEgcHVyZW9zIGtlcm5lbDogeDE3OiAwMDAwMDAwMDAwMDAwNTc5IHgxNjog
-MDAwMDAwMDAwMDAwMDAwMCB4MTU6IDAwMDAwMDAwMDAwMDAwMDAKRmViIDE3IDEyOjA0OjUwLjA2
-MTY4OSBwdXJlb3Mga2VybmVsOiB4MTQ6IDAwMDAwMDAwMDAwMDAwMDAgeDEzOiAwMDAwMDAwMDAw
-MDAwMDAxIHgxMjogMDAwMDAwMDAwMDAwMDAwMwpGZWIgMTcgMTI6MDQ6NTAuMDYxODUxIHB1cmVv
-cyBrZXJuZWw6IHgxMTogMDAwMDAwMDAwMDAwMDAwMiB4MTA6IDAwMDAwMDAwMDAwMDAwNzUgeDkg
-OiBmZmZmODAwMDA4YTlhMjdjCkZlYiAxNyAxMjowNDo1MC4wNjIwMjAgcHVyZW9zIGtlcm5lbDog
-eDggOiBmZmZmZmMwMDAxYWY0ZGM4IHg3IDogMDAwMDAwMDAwMDAwMDAwMCB4NiA6IGZmZmYwMDAw
-MzQ1OWExNTQKRmViIDE3IDEyOjA0OjUwLjA2MjE1NSBwdXJlb3Mga2VybmVsOiB4NSA6IDAwMDAw
-MDAwMDAwMDAwMDEgeDQgOiAwMDAwMDAwMDAwMDAwMDAwIHgzIDogZmZmZjAwMDAzNDU5YTBlYwpG
-ZWIgMTcgMTI6MDQ6NTAuMDYyMzAxIHB1cmVvcyBrZXJuZWw6IHgyIDogMDAwMDAwMDAwMDAwMDAw
-MCB4MSA6IGZmZmYwMDAwMDAzMDBlNDAgeDAgOiAwMDAwMDAwMDAwMDAyMTAwCkZlYiAxNyAxMjow
-NDo1MC4wNjI0NDggcHVyZW9zIGtlcm5lbDogQ2FsbCB0cmFjZToKRmViIDE3IDEyOjA0OjUwLjA2
-MjU4MCBwdXJlb3Mga2VybmVsOiAgbmV0bGlua19zb2NrX2Rlc3RydWN0KzB4OTQvMHhjMApGZWIg
-MTcgMTI6MDQ6NTAuMDYyNzE0IHB1cmVvcyBrZXJuZWw6ICBfX3NrX2Rlc3RydWN0KzB4MzQvMHgy
-N2MKRmViIDE3IDEyOjA0OjUwLjA2NDMwNCBwdXJlb3Mga2VybmVsOiAgX19za19mcmVlKzB4ZDAv
-MHgxNzAKRmViIDE3IDEyOjA0OjUwLjA2NDQ1MSBwdXJlb3Mga2VybmVsOiAgc2tfZnJlZSsweDZj
-LzB4OTAKRmViIDE3IDEyOjA0OjUwLjA2NDU4OCBwdXJlb3Mga2VybmVsOiAgZGVmZXJyZWRfcHV0
-X25sa19zaysweDc4LzB4MTAwCkZlYiAxNyAxMjowNDo1MC4wNjQ3NjIgcHVyZW9zIGtlcm5lbDog
-IHJjdV9jb3JlKzB4Mjc0LzB4YTYwCkZlYiAxNyAxMjowNDo1MC4wNjQ5MjQgcHVyZW9zIGtlcm5l
-bDogIHJjdV9jb3JlX3NpKzB4MTgvMHgyYwpGZWIgMTcgMTI6MDQ6NTAuMDY1MDg3IHB1cmVvcyBr
-ZXJuZWw6ICBfX2RvX3NvZnRpcnErMHgxMjAvMHgzYzAKRmViIDE3IDEyOjA0OjUwLjA2NTIyMyBw
-dXJlb3Mga2VybmVsOiAgX19fX2RvX3NvZnRpcnErMHgxOC8weDI0CkZlYiAxNyAxMjowNDo1MC4w
-NjUzNjAgcHVyZW9zIGtlcm5lbDogIGNhbGxfb25faXJxX3N0YWNrKzB4MmMvMHg1NApGZWIgMTcg
-MTI6MDQ6NTAuMDY1NDk1IHB1cmVvcyBrZXJuZWw6ICBkb19zb2Z0aXJxX293bl9zdGFjaysweDI0
-LzB4M2MKRmViIDE3IDEyOjA0OjUwLjA2NTY0OCBwdXJlb3Mga2VybmVsOiAgX19pcnFfZXhpdF9y
-Y3UrMHhiOC8weGUwCkZlYiAxNyAxMjowNDo1MC4wNjU3NzYgcHVyZW9zIGtlcm5lbDogIGlycV9l
-eGl0X3JjdSsweDE4LzB4MjQKRmViIDE3IDEyOjA0OjUwLjA2NTkwOSBwdXJlb3Mga2VybmVsOiAg
-ZWwxX2ludGVycnVwdCsweDM4LzB4NzAKRmViIDE3IDEyOjA0OjUwLjA2NjA0NCBwdXJlb3Mga2Vy
-bmVsOiAgZWwxaF82NF9pcnFfaGFuZGxlcisweDE4LzB4MmMKRmViIDE3IDEyOjA0OjUwLjA2NjE5
-NCBwdXJlb3Mga2VybmVsOiAgZWwxaF82NF9pcnErMHg2NC8weDY4CkZlYiAxNyAxMjowNDo1MC4w
-NjYzNDUgcHVyZW9zIGtlcm5lbDogIGNwdWlkbGVfZW50ZXJfc3RhdGUrMHhiYy8weDRiMApGZWIg
-MTcgMTI6MDQ6NTAuMDY2NTA2IHB1cmVvcyBrZXJuZWw6ICBjcHVpZGxlX2VudGVyKzB4NDAvMHg2
-MApGZWIgMTcgMTI6MDQ6NTAuMDY2NjMyIHB1cmVvcyBrZXJuZWw6ICBkb19pZGxlKzB4MjM0LzB4
-MmMwCkZlYiAxNyAxMjowNDo1MC4wNjY3ODMgcHVyZW9zIGtlcm5lbDogIGNwdV9zdGFydHVwX2Vu
-dHJ5KzB4MmMvMHgzYwpGZWIgMTcgMTI6MDQ6NTAuMDY4NTM4IHB1cmVvcyBrZXJuZWw6ICBzZWNv
-bmRhcnlfc3RhcnRfa2VybmVsKzB4MTI0LzB4MTRjCkZlYiAxNyAxMjowNDo1MC4wNjk0OTkgcHVy
-ZW9zIGtlcm5lbDogIF9fc2Vjb25kYXJ5X3N3aXRjaGVkKzB4YjAvMHhiNApGZWIgMTcgMTI6MDQ6
-NTAuMDY5NjQxIHB1cmVvcyBrZXJuZWw6IC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAg
-XS0tLQpGZWIgMTcgMTI6MDQ6NTAuMDY5NzU3IHB1cmVvcyBrZXJuZWw6IFtkcm1dIE1vZGU6IDY0
-MHg0ODBwMjUxNzUKRmViIDE3IDEyOjA0OjUwLjE3NDgzMiBwdXJlb3Mga2VybmVsOiBjZG5zLW1o
-ZHAtaW14IDMyYzAwMDAwLmhkbWk6IFtkcm06Y2Ruc19taGRwX3NldF9ob3N0X2NhcCBbY2Ruc19t
-aGRwX2RybWNvcmVdXSBVc2luZyAyIGxhbmVzCkZlYiAxNyAxMjowNDo1MC4yMjk0NzQgcHVyZW9z
-IGtlcm5lbDogaW14LWRjc3MgMzJlMDAwMDAuZGlzcGxheS1jb250cm9sbGVyOiBQaXhlbCBjbG9j
-ayBzZXQgdG8gMjUxNzQga0h6IGluc3RlYWQgb2YgMjUxNzUga0h6LgpGZWIgMTcgMTI6MDQ6NTAu
-MjMwNTczIHB1cmVvcyBrZXJuZWw6IGNkbnMtbWhkcC1pbXggMzJjMDAwMDAuaGRtaTogW2RybTpj
-ZG5zX21oZHBfdHJhaW5fbGluayBbY2Ruc19taGRwX2RybWNvcmVdXSBTdGFydGluZyBsaW5rIHRy
-YWluaW5nCg==
+The special case is when we don't have anything mapped yet, which is the 
+same thing we are trying to handle AFAICS for uffd-wp here. A PTE 
+(pte_none()) in which case we have to install a soft-dirty PTE/PMD 
+marker to remember that we marked it as clean -- or map the shared 
+zeropage to mark that one clean (not set the soft-dirty bit).
+
+Further, I would propose to have VM_SOFTDIRTY_ENABLED flags per VMA and 
+interfaces to (a) enable/disable it either for some VMAs or the whole MM 
+and (b) a process toggle to automatically enable softclean tracking on 
+new VMAs. So we can really only care about it when someone cares about 
+softdirty tracking. The old "VM_SOFTDIRTY" flag could go, because 
+everything (pte_none()) starts out softdirty. So VM_SOFTDIRTY -> 
+VM_SOFTDIRTY_ENABLED with changed semantics.
+
+Enabling softdirty-tracking on a VMA might have to go over PTEs, to make 
+sure we really don't have any soft-clean leftovers due to imprecise 
+soft-dirty tracking on VMA level while it was disabled (setting all PTEs 
+soft-dirty if they not already are). Might require a thought if it's 
+really required.
+
+Note that I think this resembles what we are doing with uffd-wp. Not 
+sure if we'd still have to handle some unmap handling on pagecache 
+pages. We might want to remember that they are soft-clean using a PTE 
+marker.
 
 
---=-/MbO5/9l+p80XyLWvpVk
-Content-Disposition: attachment; filename="dmesg_typec_hub_hdmi_old_ok.txt"
-Content-Type: text/plain; name="dmesg_typec_hub_hdmi_old_ok.txt"; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Requires some more thought, but I'm going to throw it out here that I 
+think there might be ways to modify softdirty tracking.
 
-RmViIDE3IDEyOjM1OjAzLjc1ODk4NSBwdXJlb3Mga2VybmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41
-LmF1dG86IHhIQ0kgSG9zdCBDb250cm9sbGVyCkZlYiAxNyAxMjozNTowMy43NjE0MTkgcHVyZW9z
-IGtlcm5lbDogeGhjaS1oY2QgeGhjaS1oY2QuNS5hdXRvOiBuZXcgVVNCIGJ1cyByZWdpc3RlcmVk
-LCBhc3NpZ25lZCBidXMgbnVtYmVyIDMKRmViIDE3IDEyOjM1OjAzLjc3MDUzNiBwdXJlb3Mga2Vy
-bmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41LmF1dG86IGhjYyBwYXJhbXMgMHgwMjIwZmU2YyBoY2kg
-dmVyc2lvbiAweDExMCBxdWlya3MgMHgwMDAwMDAwMDAwMDEwMDEwCkZlYiAxNyAxMjozNTowMy43
-NzE2NjMgcHVyZW9zIGtlcm5lbDogeGhjaS1oY2QgeGhjaS1oY2QuNS5hdXRvOiBpcnEgMjA3LCBp
-byBtZW0gMHgzODEwMDAwMApGZWIgMTcgMTI6MzU6MDMuNzcyNTcwIHB1cmVvcyBrZXJuZWw6IHho
-Y2ktaGNkIHhoY2ktaGNkLjUuYXV0bzogeEhDSSBIb3N0IENvbnRyb2xsZXIKRmViIDE3IDEyOjM1
-OjAzLjc3NDEzNSBwdXJlb3Mga2VybmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41LmF1dG86IG5ldyBV
-U0IgYnVzIHJlZ2lzdGVyZWQsIGFzc2lnbmVkIGJ1cyBudW1iZXIgNApGZWIgMTcgMTI6MzU6MDMu
-Nzc1MTAzIHB1cmVvcyBrZXJuZWw6IHhoY2ktaGNkIHhoY2ktaGNkLjUuYXV0bzogSG9zdCBzdXBw
-b3J0cyBVU0IgMy4wIFN1cGVyU3BlZWQKRmViIDE3IDEyOjM1OjAzLjc3Nzc3NCBwdXJlb3Mga2Vy
-bmVsOiB1c2IgdXNiMzogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTFkNmIsIGlkUHJv
-ZHVjdD0wMDAyLCBiY2REZXZpY2U9IDYuMDIKRmViIDE3IDEyOjM1OjAzLjc3ODY1OCBwdXJlb3Mg
-a2VybmVsOiB1c2IgdXNiMzogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTMsIFByb2R1Y3Q9
-MiwgU2VyaWFsTnVtYmVyPTEKRmViIDE3IDEyOjM1OjAzLjc3OTczNSBwdXJlb3Mga2VybmVsOiB1
-c2IgdXNiMzogUHJvZHVjdDogeEhDSSBIb3N0IENvbnRyb2xsZXIKRmViIDE3IDEyOjM1OjAzLjc4
-MDU0MiBwdXJlb3Mga2VybmVsOiB1c2IgdXNiMzogTWFudWZhY3R1cmVyOiBMaW51eCA2LjIuMC1y
-YzgtbGlicmVtNS0wMDM1NS1nY2Y1M2I2MjY0OTllIHhoY2ktaGNkCkZlYiAxNyAxMjozNTowMy43
-ODEzMTggcHVyZW9zIGtlcm5lbDogdXNiIHVzYjM6IFNlcmlhbE51bWJlcjogeGhjaS1oY2QuNS5h
-dXRvCkZlYiAxNyAxMjozNTowMy43ODIxMDggcHVyZW9zIGtlcm5lbDogaHViIDMtMDoxLjA6IFVT
-QiBodWIgZm91bmQKRmViIDE3IDEyOjM1OjAzLjc4MzI0MyBwdXJlb3Mga2VybmVsOiBodWIgMy0w
-OjEuMDogMSBwb3J0IGRldGVjdGVkCkZlYiAxNyAxMjozNTowMy43ODQxODYgcHVyZW9zIGtlcm5l
-bDogdXNiIHVzYjQ6IFdlIGRvbid0IGtub3cgdGhlIGFsZ29yaXRobXMgZm9yIExQTSBmb3IgdGhp
-cyBob3N0LCBkaXNhYmxpbmcgTFBNLgpGZWIgMTcgMTI6MzU6MDMuNzg1MzAwIHB1cmVvcyBrZXJu
-ZWw6IHVzYiB1c2I0OiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRWZW5kb3I9MWQ2YiwgaWRQcm9k
-dWN0PTAwMDMsIGJjZERldmljZT0gNi4wMgpGZWIgMTcgMTI6MzU6MDMuNzg2MzQ2IHB1cmVvcyBr
-ZXJuZWw6IHVzYiB1c2I0OiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MywgUHJvZHVjdD0y
-LCBTZXJpYWxOdW1iZXI9MQpGZWIgMTcgMTI6MzU6MDMuNzg3NDU2IHB1cmVvcyBrZXJuZWw6IHVz
-YiB1c2I0OiBQcm9kdWN0OiB4SENJIEhvc3QgQ29udHJvbGxlcgpGZWIgMTcgMTI6MzU6MDMuNzg4
-MzIyIHB1cmVvcyBrZXJuZWw6IHVzYiB1c2I0OiBNYW51ZmFjdHVyZXI6IExpbnV4IDYuMi4wLXJj
-OC1saWJyZW01LTAwMzU1LWdjZjUzYjYyNjQ5OWUgeGhjaS1oY2QKRmViIDE3IDEyOjM1OjAzLjc4
-OTIxMSBwdXJlb3Mga2VybmVsOiB1c2IgdXNiNDogU2VyaWFsTnVtYmVyOiB4aGNpLWhjZC41LmF1
-dG8KRmViIDE3IDEyOjM1OjAzLjc5MDA1OSBwdXJlb3Mga2VybmVsOiBodWIgNC0wOjEuMDogVVNC
-IGh1YiBmb3VuZApGZWIgMTcgMTI6MzU6MDMuNzkxMTgxIHB1cmVvcyBrZXJuZWw6IGh1YiA0LTA6
-MS4wOiAxIHBvcnQgZGV0ZWN0ZWQKRmViIDE3IDEyOjM1OjA0LjAxNDg2OCBwdXJlb3Mga2VybmVs
-OiB1c2IgMy0xOiBuZXcgaGlnaC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHhoY2kt
-aGNkCkZlYiAxNyAxMjozNTowNC4xNzU2MjEgcHVyZW9zIGtlcm5lbDogdXNiIDMtMTogTmV3IFVT
-QiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTBiZGEsIGlkUHJvZHVjdD01NDExLCBiY2REZXZpY2U9
-IDEuMDQKRmViIDE3IDEyOjM1OjA0LjE3NzUyNCBwdXJlb3Mga2VybmVsOiB1c2IgMy0xOiBOZXcg
-VVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MSwgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MApGZWIg
-MTcgMTI6MzU6MDQuMTc4NTIwIHB1cmVvcyBrZXJuZWw6IHVzYiAzLTE6IFByb2R1Y3Q6IDQtUG9y
-dCBVU0IgMi4wIEh1YgpGZWIgMTcgMTI6MzU6MDQuMTc5NTgxIHB1cmVvcyBrZXJuZWw6IHVzYiAz
-LTE6IE1hbnVmYWN0dXJlcjogR2VuZXJpYwpGZWIgMTcgMTI6MzU6MDQuMTgwNDkxIHB1cmVvcyBr
-ZXJuZWw6IHVzYiAzLTE6IERldmljZSBpcyBub3QgYXV0aG9yaXplZCBmb3IgdXNhZ2UKRmViIDE3
-IDEyOjM1OjA0LjI0MDAxMCBwdXJlb3Mga2VybmVsOiBodWIgMy0xOjEuMDogVVNCIGh1YiBmb3Vu
-ZApGZWIgMTcgMTI6MzU6MDQuMjQxMTk2IHB1cmVvcyBrZXJuZWw6IGh1YiAzLTE6MS4wOiA0IHBv
-cnRzIGRldGVjdGVkCkZlYiAxNyAxMjozNTowNC4zMDM2MjIgcHVyZW9zIGtlcm5lbDogdXNiIDQt
-MTogbmV3IFN1cGVyU3BlZWQgVVNCIGRldmljZSBudW1iZXIgMiB1c2luZyB4aGNpLWhjZApGZWIg
-MTcgMTI6MzU6MDQuMzAzOTMzIHB1cmVvcyBrZXJuZWw6IHVzYiAzLTE6IGF1dGhvcml6ZWQgdG8g
-Y29ubmVjdApGZWIgMTcgMTI6MzU6MDQuMzM0NjgyIHB1cmVvcyBrZXJuZWw6IHVzYiA0LTE6IE5l
-dyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wYmRhLCBpZFByb2R1Y3Q9MDQxMSwgYmNkRGV2
-aWNlPSAxLjA0CkZlYiAxNyAxMjozNTowNC4zMzY2NTIgcHVyZW9zIGtlcm5lbDogdXNiIDQtMTog
-TmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTEsIFByb2R1Y3Q9MiwgU2VyaWFsTnVtYmVyPTAK
-RmViIDE3IDEyOjM1OjA0LjMzNzk0MyBwdXJlb3Mga2VybmVsOiB1c2IgNC0xOiBQcm9kdWN0OiA0
-LVBvcnQgVVNCIDMuMCBIdWIKRmViIDE3IDEyOjM1OjA0LjMzODc4NiBwdXJlb3Mga2VybmVsOiB1
-c2IgNC0xOiBNYW51ZmFjdHVyZXI6IEdlbmVyaWMKRmViIDE3IDEyOjM1OjA0LjMzOTY1NSBwdXJl
-b3Mga2VybmVsOiB1c2IgNC0xOiBEZXZpY2UgaXMgbm90IGF1dGhvcml6ZWQgZm9yIHVzYWdlCkZl
-YiAxNyAxMjozNTowNC4zNzQ5MDIgcHVyZW9zIGtlcm5lbDogaHViIDQtMToxLjA6IFVTQiBodWIg
-Zm91bmQKRmViIDE3IDEyOjM1OjA0LjM3NjIxOSBwdXJlb3Mga2VybmVsOiBodWIgNC0xOjEuMDog
-NCBwb3J0cyBkZXRlY3RlZApGZWIgMTcgMTI6MzU6MDQuMzgyOTQxIHB1cmVvcyBrZXJuZWw6IHVz
-YiA0LTE6IGF1dGhvcml6ZWQgdG8gY29ubmVjdApGZWIgMTcgMTI6MzU6MDQuNjc1NDE0IHB1cmVv
-cyBrZXJuZWw6IHVzYiA0LTEuNDogbmV3IFN1cGVyU3BlZWQgVVNCIGRldmljZSBudW1iZXIgMyB1
-c2luZyB4aGNpLWhjZApGZWIgMTcgMTI6MzU6MDQuNzAyMTU5IHB1cmVvcyBrZXJuZWw6IHVzYiA0
-LTEuNDogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTBiZGEsIGlkUHJvZHVjdD04MTUz
-LCBiY2REZXZpY2U9MzAuMDAKRmViIDE3IDEyOjM1OjA0LjcwMzkwNCBwdXJlb3Mga2VybmVsOiB1
-c2IgNC0xLjQ6IE5ldyBVU0IgZGV2aWNlIHN0cmluZ3M6IE1mcj0xLCBQcm9kdWN0PTIsIFNlcmlh
-bE51bWJlcj02CkZlYiAxNyAxMjozNTowNC43MDQ5NzYgcHVyZW9zIGtlcm5lbDogdXNiIDQtMS40
-OiBQcm9kdWN0OiBVU0IgMTAvMTAwLzEwMDAgTEFOCkZlYiAxNyAxMjozNTowNC43MDcyNTUgcHVy
-ZW9zIGtlcm5lbDogdXNiIDQtMS40OiBNYW51ZmFjdHVyZXI6IFJlYWx0ZWsKRmViIDE3IDEyOjM1
-OjA0LjcwODQ4MyBwdXJlb3Mga2VybmVsOiB1c2IgNC0xLjQ6IFNlcmlhbE51bWJlcjogMDAwMDAx
-CkZlYiAxNyAxMjozNTowNC43MDk0NDMgcHVyZW9zIGtlcm5lbDogdXNiIDQtMS40OiBEZXZpY2Ug
-aXMgbm90IGF1dGhvcml6ZWQgZm9yIHVzYWdlCkZlYiAxNyAxMjozNTowNC43MzUwNjYgcHVyZW9z
-IGtlcm5lbDogdXNiIDQtMS40OiBhdXRob3JpemVkIHRvIGNvbm5lY3QKRmViIDE3IDEyOjM1OjA0
-LjgzMDU3MiBwdXJlb3Mga2VybmVsOiB1c2Jjb3JlOiByZWdpc3RlcmVkIG5ldyBpbnRlcmZhY2Ug
-ZHJpdmVyIHI4MTUyCkZlYiAxNyAxMjozNTowNC44MzA3ODAgcHVyZW9zIGtlcm5lbDogdXNiY29y
-ZTogcmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciBjZGNfZXRoZXIKRmViIDE3IDEyOjM1
-OjA0LjgzNzYwNCBwdXJlb3Mga2VybmVsOiB1c2Jjb3JlOiByZWdpc3RlcmVkIG5ldyBpbnRlcmZh
-Y2UgZHJpdmVyIHI4MTUzX2VjbQpGZWIgMTcgMTI6MzU6MDQuOTQyODg3IHB1cmVvcyBrZXJuZWw6
-IHVzYiA0LTEuNDogcmVzZXQgU3VwZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciAzIHVzaW5nIHho
-Y2ktaGNkCkZlYiAxNyAxMjozNTowNC45Nzg4ODMgcHVyZW9zIGtlcm5lbDogcjgxNTIgNC0xLjQ6
-MS4wOiBEaXJlY3QgZmlybXdhcmUgbG9hZCBmb3IgcnRsX25pYy9ydGw4MTUzYS00LmZ3IGZhaWxl
-ZCB3aXRoIGVycm9yIC0yCkZlYiAxNyAxMjozNTowNC45ODAxMzMgcHVyZW9zIGtlcm5lbDogcjgx
-NTIgNC0xLjQ6MS4wOiB1bmFibGUgdG8gbG9hZCBmaXJtd2FyZSBwYXRjaCBydGxfbmljL3J0bDgx
-NTNhLTQuZncgKC0yKQpGZWIgMTcgMTI6MzU6MDUuMDMyODIzIHB1cmVvcyBrZXJuZWw6IHI4MTUy
-IDQtMS40OjEuMCBldGgwOiB2MS4xMi4xMwpGZWIgMTcgMTI6MzU6MDUuMDk1MTI0IHB1cmVvcyBr
-ZXJuZWw6IFtkcm1dIGhwZCBpcnEKRmViIDE3IDEyOjM1OjA1LjA5NTUzMiBwdXJlb3Mga2VybmVs
-OiByODE1MiA0LTEuNDoxLjAgZW54MDBlMDRjNjg0YThhOiByZW5hbWVkIGZyb20gZXRoMApGZWIg
-MTcgMTI6MzU6MDUuMjg0NjU0IHB1cmVvcyBrZXJuZWw6IFtkcm1dIENvbm5lY3RvciBzdGF0dXM6
-IDEKRmViIDE3IDEyOjM1OjA1LjM2NzkzNCBwdXJlb3Mga2VybmVsOiBbZHJtXSBDb25uZWN0b3Ig
-c3RhdHVzOiAxCkZlYiAxNyAxMjozNTowNS4zNjgzNTcgcHVyZW9zIGtlcm5lbDogRURJRCBibG9j
-ayAwICh0YWcgMHgwMCkgY2hlY2tzdW0gaXMgaW52YWxpZCwgcmVtYWluZGVyIGlzIDIKRmViIDE3
-IDEyOjM1OjA1LjM2ODUxOCBwdXJlb3Mga2VybmVsOiAgICAgICAgIFswMF0gQkFEICAwMCBmZiBm
-ZiBmZiBmZiBmZiBmZiAwMCAwNSBlMyA1MiAyMyAwZSAwMyAwMCAwMApGZWIgMTcgMTI6MzU6MDUu
-MzY4NjQwIHB1cmVvcyBrZXJuZWw6ICAgICAgICAgWzAwXSBCQUQgIDAyIDE2IDAxIDAzIDgwIDMz
-IDFkIDc4IDJhIGVlIGQxIGE1IDU1IDQ4IDliIDI2CkZlYiAxNyAxMjozNTowNS4zNjg3NjEgcHVy
-ZW9zIGtlcm5lbDogICAgICAgICBbMDBdIEJBRCAgMDAgNTAgNTQgYmYgZWYgMDAgZDEgYzAgYjMg
-MDAgOTUgMDAgODEgODAgODEgNDAKRmViIDE3IDEyOjM1OjA1LjM2ODg1NiBwdXJlb3Mga2VybmVs
-OiAgICAgICAgIFswMF0gQkFEICAwMCBjMCAwMSAwMSAwMSAwMSAwMiAzYSA4MCAxOCA3MSAzOCAy
-ZCA0MCA1OCAyYwpGZWIgMTcgMTI6MzU6MDUuMzY4OTc0IHB1cmVvcyBrZXJuZWw6ICAgICAgICAg
-WzAwXSBCQUQgIDQ1IDAwIGZkIDFlIDExIDAwIDAwIDFlIDAwIDAwIDAwIGZkIDAwIDMyIDRjIDFl
-CkZlYiAxNyAxMjozNTowNS4zNjkwODIgcHVyZW9zIGtlcm5lbDogICAgICAgICBbMDBdIEJBRCAg
-NTMgMTEgMDAgMGEgMjAgMjAgMjAgMjAgMjAgMjAgMDAgMDAgMDAgZmMgMDAgMzIKRmViIDE3IDEy
-OjM1OjA1LjM2OTIxMiBwdXJlb3Mga2VybmVsOiAgICAgICAgIFswMF0gQkFEICAzMyAzNSAzMiAw
-YSAyMCAyMCAyMCAyMCAyMCAyMCAyMCAyMCAwMCAwMCAwMCBmZgpGZWIgMTcgMTI6MzU6MDUuMzY5
-MzE5IHB1cmVvcyBrZXJuZWw6ICAgICAgICAgWzAwXSBCQUQgIDAwIDQ0IDQxIDRhIDQzIDMxIDRh
-IDQxIDMwIDMwIDMwIDM3IDM4IDMyIDAxIDZmCkZlYiAxNyAxMjozNTowNS4zNjk0MTMgcHVyZW9z
-IGtlcm5lbDogW2RybTpjZG5zX2RwX2Nvbm5lY3Rvcl9nZXRfbW9kZXMgW2NkbnNfbWhkcF9kcm1j
-b3JlXV0gKkVSUk9SKiBJbnZhbGlkIGVkaWQKRmViIDE3IDEyOjM1OjA1LjM3NTA0NCBwdXJlb3Mg
-a2VybmVsOiBbZHJtXSBDb25uZWN0b3Igc3RhdHVzOiAxCkZlYiAxNyAxMjozNTowNS4zNzU0NDQg
-cHVyZW9zIGtlcm5lbDogaW14LWRjc3MgMzJlMDAwMDAuZGlzcGxheS1jb250cm9sbGVyOiBbZHJt
-XSBmYjE6IGlteC1kY3NzZHJtZmIgZnJhbWUgYnVmZmVyIGRldmljZQpGZWIgMTcgMTI6MzU6MDUu
-Mzc2NTkzIHB1cmVvcyBrZXJuZWw6IFtkcm1dIEhETUkvRFAgQ2FibGUgUGx1ZyBJbgpGZWIgMTcg
-MTI6MzU6MDUuNDU2MjQ5IHB1cmVvcyBrZXJuZWw6IEVESUQgYmxvY2sgMCAodGFnIDB4MDApIGNo
-ZWNrc3VtIGlzIGludmFsaWQsIHJlbWFpbmRlciBpcyAyCkZlYiAxNyAxMjozNTowNS40NTY0NzQg
-cHVyZW9zIGtlcm5lbDogW2RybTpjZG5zX2RwX2Nvbm5lY3Rvcl9nZXRfbW9kZXMgW2NkbnNfbWhk
-cF9kcm1jb3JlXV0gKkVSUk9SKiBJbnZhbGlkIGVkaWQKRmViIDE3IDEyOjM1OjA1LjQ3NDkxMyBw
-dXJlb3Mga2VybmVsOiBbZHJtXSBNb2RlOiA2NDB4NDgwcDI1MTc1CkZlYiAxNyAxMjozNTowNS42
-Mzg5MzEgcHVyZW9zIGtlcm5lbDogY2Rucy1taGRwLWlteCAzMmMwMDAwMC5oZG1pOiBbZHJtOmNk
-bnNfbWhkcF9zZXRfaG9zdF9jYXAgW2NkbnNfbWhkcF9kcm1jb3JlXV0gVXNpbmcgMiBsYW5lcwpG
-ZWIgMTcgMTI6MzU6MDUuNjc5Mzc4IHB1cmVvcyBrZXJuZWw6IGlteC1kY3NzIDMyZTAwMDAwLmRp
-c3BsYXktY29udHJvbGxlcjogUGl4ZWwgY2xvY2sgc2V0IHRvIDI1MTc0IGtIeiBpbnN0ZWFkIG9m
-IDI1MTc1IGtIei4KRmViIDE3IDEyOjM1OjA1LjY4MDUzNyBwdXJlb3Mga2VybmVsOiBjZG5zLW1o
-ZHAtaW14IDMyYzAwMDAwLmhkbWk6IFtkcm06Y2Ruc19taGRwX3RyYWluX2xpbmsgW2NkbnNfbWhk
-cF9kcm1jb3JlXV0gU3RhcnRpbmcgbGluayB0cmFpbmluZwpGZWIgMTcgMTI6MzU6MTcuODQwOTA2
-IHB1cmVvcyBrZXJuZWw6IFtkcm1dIGhwZCBpcnEKRmViIDE3IDEyOjM1OjE3Ljg0MTEzMiBwdXJl
-b3Mga2VybmVsOiB1c2IgNC0xOiBVU0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciAyCkZlYiAx
-NyAxMjozNToxNy44NDM1ODYgcHVyZW9zIGtlcm5lbDogdXNiIDQtMS40OiBVU0IgZGlzY29ubmVj
-dCwgZGV2aWNlIG51bWJlciAzCkZlYiAxNyAxMjozNToxNy44NTUwNzggcHVyZW9zIGtlcm5lbDog
-cjgxNTIgNC0xLjQ6MS4wIGVueDAwZTA0YzY4NGE4YTogU3RvcCBzdWJtaXR0aW5nIGludHIsIHN0
-YXR1cyAtMTA4CkZlYiAxNyAxMjozNToxNy44NTYxNTAgcHVyZW9zIGtlcm5lbDogeGhjaS1oY2Qg
-eGhjaS1oY2QuNS5hdXRvOiByZW1vdmUsIHN0YXRlIDEKRmViIDE3IDEyOjM1OjE3Ljg1NzQ1OCBw
-dXJlb3Mga2VybmVsOiB1c2IgdXNiNDogVVNCIGRpc2Nvbm5lY3QsIGRldmljZSBudW1iZXIgMQpG
-ZWIgMTcgMTI6MzU6MTcuODc0MzAwIHB1cmVvcyBrZXJuZWw6IHRwczY1OTh4IDAtMDAzZjogVGhl
-IGludGVycnVwdCBpcyBtYXNrZWQgLCBob3cgZGlkIGl0IGZpcmUgPz8gMzgwMTAwYQpGZWIgMTcg
-MTI6MzU6MTcuOTMxMzM0IHB1cmVvcyBrZXJuZWw6IHVzYiAzLTE6IFVTQiBkaXNjb25uZWN0LCBk
-ZXZpY2UgbnVtYmVyIDIKRmViIDE3IDEyOjM1OjE3LjkzNzUzNCBwdXJlb3Mga2VybmVsOiB4aGNp
-LWhjZCB4aGNpLWhjZC41LmF1dG86IFVTQiBidXMgNCBkZXJlZ2lzdGVyZWQKRmViIDE3IDEyOjM1
-OjE3LjkzNzk4NyBwdXJlb3Mga2VybmVsOiB4aGNpLWhjZCB4aGNpLWhjZC41LmF1dG86IHJlbW92
-ZSwgc3RhdGUgMQpGZWIgMTcgMTI6MzU6MTcuOTM4MTk5IHB1cmVvcyBrZXJuZWw6IHVzYiB1c2Iz
-OiBVU0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciAxCkZlYiAxNyAxMjozNToxNy45NzA5MjUg
-cHVyZW9zIGtlcm5lbDogeGhjaS1oY2QgeGhjaS1oY2QuNS5hdXRvOiBVU0IgYnVzIDMgZGVyZWdp
-c3RlcmVkCkZlYiAxNyAxMjozNToxOC4wNDI5MDYgcHVyZW9zIGtlcm5lbDogW2RybV0gQ29ubmVj
-dG9yIHN0YXR1czogMApGZWIgMTcgMTI6MzU6MTguMDQzMTk3IHB1cmVvcyBrZXJuZWw6IFtkcm1d
-IEhETUkvRFAgQ2FibGUgUGx1ZyBPdXQKRmViIDE3IDEyOjM1OjE4LjA4NjYxNSBwdXJlb3Mga2Vy
-bmVsOiBbZHJtXSBDb25uZWN0b3Igc3RhdHVzOiAwCg==
+>>>
+>>> The other thing is it provides a way to make anon and !anon behave the same
+>>> on empty ptes; it's a pity that it was not already like that.
+>>
+>> In an ideal world, we'd simply be using PTE markers unconditionally I think
+>> and avoid this zeropage feature :/
+>>
+>> Is there any particular reason to have UFFD_FEATURE_WP_ZEROPAGE and not
+>> simply always do that unconditionally? (sure, we have to indicate to user
+>> space that it now works as expected) Are we really expecting to break user
+>> space by protecting what was asked for to protect?
+> 
+> I suspect so.
+> 
+>  From high level, the major functional changes will be:
+> 
+>    (1) The user will start to receive more WP message with zero page being
+>        reported,
+> 
+>    (2) Wr-protecting a very sparse memory can be much slower
+> 
+> I would expect there're cases where the app just works as usual.
+> 
+> However in some other cases the user may really not care about zero pages
+> at all, and I had a feeling that's actually the majority.
+> 
+> Live snapshot is actually special because IIUC the old semantics should
+> work perfectly if the guest OS won't try to sanity check freed pages being
+> all zeros..  IOW that's some corner case, and if we can control that we may
+> not even need WP_ZEROPAGE too for QEMU, iiuc.  For many other apps people
+> may leverage this (ignoring mem holes) and make the app faster.
+> 
+> Normally when I'm not confident of any functional change, I'd rather use a
+> flag.  Luckily uffd is very friendly to that, so the user can have better
+> control of what to expect.  Some future app may explicitly want to always
+> ignore zero pages when on extremely sparse mem, and without the flag it
+> can't choose.
+> 
+>>
+>>>
+>>> We can always optimize this behavior in the future with either
+>>> PMD/PUD/.. pte markers as you said, but IMHO that just needs further
+>>> justification on the complexity, and also on whether that's beneficial to
+>>> the majority to become the default behavior.
+>>
+>> As I said, usually any new features require good justification. Maybe there
+>> really is a measurable performance gain (less syscalls, less pgtable walks).
+> 
+> Muhammad may have a word to say here; let's see whether he has any comment.
+> 
+> Besides that, as I replied above I'll collect some data in my next post
+> regardless, with an attempt to optimize with huge zeropages on top.
 
+If we can agree on making the shared zeropage an implementation detail, 
+that would be great and I'd see long-term value in that.
 
---=-/MbO5/9l+p80XyLWvpVk--
+[1] 
+https://lkml.kernel.org/r/d95d59d7-308d-831c-d8bd-16d06e66e8af@redhat.com
+
+-- 
+Thanks,
+
+David / dhildenb
 
