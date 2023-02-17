@@ -2,158 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE09669A37F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C6569A36A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 02:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjBQBjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 20:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S229986AbjBQBcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 20:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBQBjN (ORCPT
+        with ESMTP id S229506AbjBQBcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 20:39:13 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251165356C;
-        Thu, 16 Feb 2023 17:39:12 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id bh15so3584685oib.4;
-        Thu, 16 Feb 2023 17:39:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VXQ5NrgvHcnTZDrYMA7luKxwlYKnjw3ntxCLdrLg57U=;
-        b=gYvzaviFtqImQ3zUrVvJmoLWnxgJkoUH+uQVlf3ZPNK+gFO9Qcg//Tb5sdXRlRP/fL
-         tk1XGt/RFgKLRqV4DW5him6L2tAzFpn7HmQF6EXRwER1S1w+fBKTaMHXYzskpk/Jb2gP
-         Qp79v0eejOd0i+jXCHWxaGVZUvTs4BePZ9v13MrLZKugqdsuHsEbNKte6ygjoBcnAgEt
-         8DkibJueUqgu4kJUvn3atA7afhXE4uLvK7bIO7fBHuuCxb7/UjbuL65eGdIP/nz5Wpx+
-         mk0xPywsi3xRi5GgUdIAVbFwB+9TkiJgXCpjwybA1KTXop6mTziZ8OHyps8NdsR/m0qR
-         GZUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VXQ5NrgvHcnTZDrYMA7luKxwlYKnjw3ntxCLdrLg57U=;
-        b=Vo5sANe2nKL5RUvKYL7338f/g5bHrFN889pzQU6vopWCIS9D6siwGZvxv8/LZbNaG2
-         bNE0yCgatBCL6XvGecl4YKtS4RRylIUETEtuP+T1R+xSWgZ0kOIiAKLEK2JwvxXy/XXZ
-         CanHg2lXQUdlqV8ojuctR6fYEXY/vzlS8JhKG4t+ZtxYslxtYBzwV8usE+9nv3G6yJYg
-         eG0Mk4t4G8zGQ2QbFbtHMbuSyHi03nvZ4QC68ZB0fV7MBTFWNXxowzKPoTLCkvzamn5s
-         4jL4oaY1dDzP4EQ/Ye7Qs/xZZV5tImQMIwa19Xr2ZMkKVvZGeo/1M/NS4TDneOwIkvlj
-         3/qw==
-X-Gm-Message-State: AO0yUKU0XAzISQc6whFgYNfQ6ttngYQWsAioXNclM9gZPAK7yMC5wqoX
-        E1WYWorecXmwrnaYbFj3JGIO7G5zxxY=
-X-Google-Smtp-Source: AK7set8drcacu6OsYNi6+44bXIOT2XIdpYwoXbf6odYP67GCPakNkgeQBA5IfD5qhYUu3W78NJdfPw==
-X-Received: by 2002:aca:f11:0:b0:37f:b2dd:73a with SMTP id 17-20020aca0f11000000b0037fb2dd073amr102656oip.24.1676597950923;
-        Thu, 16 Feb 2023 17:39:10 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id r204-20020acac1d5000000b0037834b1a20bsm1235358oif.0.2023.02.16.17.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 17:39:10 -0800 (PST)
-Date:   Thu, 16 Feb 2023 17:39:08 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Bruno Goncalves <bgoncalv@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Haniel Bristot de Oliveira <bristot@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <kees@kernel.org>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Lafreniere <peter@n8pjl.ca>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
+        Thu, 16 Feb 2023 20:32:00 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765958285
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 17:31:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676597513; x=1708133513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pxboqbk3Zp/gidLmdCei4kYyZJi4o5g3C0h+ol5+2i4=;
+  b=jJaNFaBLbCGGRMEExSelb3M4CRMlb1OjSDqh0MUer3BNax2f3G17tHk+
+   4bkgSUn+WKmMmrrFT+/kLhVUyQa+V76seobdrZ+mSuN3i4UXPZCZ0WrPE
+   BRWUOE+gpcP47n/8zn7KcFxIgDnKY6tjnTdfvkO04buCoqsIUjU8z8rfl
+   hHLDQjxxuwW462jiVHzx9iaNa11T+KQDbKD40C7GCckLv99fAJPYWa/Z8
+   YY+Na+X6ViIr8A/dyFYX14Cf1wrpZVIdtqYPZ/2vuYmq/5jkyZYltqmYr
+   2XVXGKFaL8MxK8vzZbfFNG0dHtgsQCsxGOg+1x73hbLNbpwFek7QEyLTP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="311518188"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="311518188"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 17:31:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="647927379"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="647927379"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2023 17:31:52 -0800
+Date:   Thu, 16 Feb 2023 17:41:48 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 3/9] sched: add sched_numa_find_nth_cpu()
-Message-ID: <Y+7avK6V9SyAWsXi@yury-laptop>
-References: <20230121042436.2661843-1-yury.norov@gmail.com>
- <20230121042436.2661843-4-yury.norov@gmail.com>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+Message-ID: <20230217014148.GA1662@ranerica-svr.sc.intel.com>
+References: <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+ <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
+ <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
+ <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
+ <xhsmhk00pqwap.mognet@vschneid.remote.csb>
+ <20230210183155.GA11997@ranerica-svr.sc.intel.com>
+ <8300f288-7157-5e2d-3bb3-badcffd15d34@arm.com>
+ <20230214064328.GA11859@ranerica-svr.sc.intel.com>
+ <20230216052105.GA20785@ranerica-svr.sc.intel.com>
+ <Y+4eqmq22fDuFZAJ@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230121042436.2661843-4-yury.norov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+4eqmq22fDuFZAJ@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+On Thu, Feb 16, 2023 at 01:16:42PM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 15, 2023 at 09:21:05PM -0800, Ricardo Neri wrote:
+> 
+> > I tweaked the solution that Dietmar proposed:
+> > 
+> > -	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
+> > +	if (sds->busiest)
+> > +		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
+> > 
+> > This comes from the observation that the prefer_sibling setting acts on
+> > busiest group. It then depends on whether the busiest group, not the local
+> > group, has child sched sched domains. Today it works because in most cases
+> > both the local and the busiest groups have child domains with the SD_
+> > PREFER_SIBLING flag.
+> > 
+> > This would also satisfy sched domains with the SD_ASYM_CPUCAPACITY flag as
+> > prefer_sibling would not be set in that case.
+> > 
+> > It would also conserve the current behavior at the NUMA level. We would
+> > not need to implement SD_SPREAD_TASKS.
+> > 
+> > This would both fix the SMT vs non-SMT bug and be less invasive.
+> > 
+> > Thoughts?
+> 
+> That does look nice. Be sure to put in a nice comment too.
 
-Can you please fold-in the following patch? 
-
-Thanks,
-Yury
-
-From: Yury Norov <yury.norov@gmail.com>
-Date: Thu, 16 Feb 2023 17:03:30 -0800
-Subject: [PATCH] sched/topology: fix KASAN warning in hop_cmp()
-
-Despite that prev_hop is used conditionally on curr_hop is not the
-first hop, it's initialized unconditionally.
-
-Because initialization implies dereferencing, it might happen that
-the code dereferences uninitialized memory, which has been spotted by
-KASAN. Fix it by reorganizing hop_cmp() logic.
-
-Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- kernel/sched/topology.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 48838a05c008..c21b8b1f3537 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -2081,14 +2081,19 @@ struct __cmp_key {
- 
- static int hop_cmp(const void *a, const void *b)
- {
--	struct cpumask **prev_hop = *((struct cpumask ***)b - 1);
--	struct cpumask **cur_hop = *(struct cpumask ***)b;
-+	struct cpumask **prev_hop, **cur_hop = *(struct cpumask ***)b;
- 	struct __cmp_key *k = (struct __cmp_key *)a;
- 
- 	if (cpumask_weight_and(k->cpus, cur_hop[k->node]) <= k->cpu)
- 		return 1;
- 
--	k->w = (b == k->masks) ? 0 : cpumask_weight_and(k->cpus, prev_hop[k->node]);
-+	if (b == k->masks) {
-+		k->w = 0;
-+		return 0;
-+	}
-+
-+	prev_hop = *((struct cpumask ***)b - 1);
-+	k->w = cpumask_weight_and(k->cpus, prev_hop[k->node]);
- 	if (k->w <= k->cpu)
- 		return 0;
- 
--- 
-2.34.1
-
+Will do!
