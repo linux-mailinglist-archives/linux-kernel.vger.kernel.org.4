@@ -2,104 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D823B69A97E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAB669A97D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBQK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S229817AbjBQK46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjBQK45 (ORCPT
+        with ESMTP id S229523AbjBQK44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:56:57 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C5F5383B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:56:56 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id r11so275224pgu.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:56:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676631415;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=szUhwp36rcjb9tm6Fq6IRBOldXj/Qr9+MV3mTH4JZqc=;
-        b=Sl/gWwXYliiGzO1kxdx4PEwWlOhqHX2W21cS5077geTdVD28AFldoZT39SLz+XS03r
-         Si5wG9hNaGdAQtfHmMoqEcQXSXFB6qjkweOY7lGiItuM0iURGyua2F7i0iXoa6SGj6lB
-         amqHIAbEdliUgxwDFB3YipJlwWI+9JmjoQ5PZ+aCokky4Neh9fOC6lGt5NtxMfrBXktr
-         Edtt/PC2kbU9tQvdODI0fIFa7FTBDCE60kBB+sYgtGgigQYfYCFn9sn13Xm3XJZSEysA
-         MEVuw3DORANo/FGKKuWTsnx3sX3Olyzp7kb24TF9EDqA37kDWqijMmNK0VlIpBI6KsM8
-         noiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676631415;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=szUhwp36rcjb9tm6Fq6IRBOldXj/Qr9+MV3mTH4JZqc=;
-        b=LZAa9ufdTjeSbxdB8X5w4hBBXLYVvQfU7yLMpiW2UBOHw7Lmvy/zDE16nY+zgxbuRE
-         3R0CGicQD4+KwpYv1kjl9YXtemIpRNtVFiSx+jycqJtyO+Gn7aRx9WnCVIv2k/d+CTRw
-         fnTcO5vNXQ2kgSD4ubF0gp89Pkf4blHgxAsFjF1ZmwedyO6MjHchGOLeT5VV35EPQ8DQ
-         gjFKX1ZYelN5f9YDZPKVuM41BZHTnYXh0L8fn5E0x/bOR/Oe8PgaS7geQl/L6qNmaA/y
-         HAYEWML+rqwkdQhvjgiVUuFlKGj+mVYgQ+ycZJegj2CIxMBJYMTfUzxlkVXnCAu0ha/A
-         P9Gg==
-X-Gm-Message-State: AO0yUKVhCDxcQxD4gx/Rb6AQi9BuqjnWxrRk0HzDWPU9xaWPCRpsKLUU
-        hsxoe9mSXufhBo8MtTNs21dPYU2jKbRNLbllk2TwWg==
-X-Google-Smtp-Source: AK7set9nL74tFK1Sxv7hRt+wGq8ZRPEIHYTChESsds6ZxneeX3u1CkXORrg6bZkJ+nCm/EYFXia/2yuxMofU5j4BVYI=
-X-Received: by 2002:aa7:95a9:0:b0:5a8:ba5b:575 with SMTP id
- a9-20020aa795a9000000b005a8ba5b0575mr1435521pfk.40.1676631415538; Fri, 17 Feb
- 2023 02:56:55 -0800 (PST)
+        Fri, 17 Feb 2023 05:56:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F962417;
+        Fri, 17 Feb 2023 02:56:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D549338A7;
+        Fri, 17 Feb 2023 10:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676631412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0icnSjV6p2tYL/IFIMO5M+a6b0d7zKlUxCpA97UBnGg=;
+        b=Ceq+ODo0RygeP8wplXpW0L1f/uOwsnKz/QIcinNNg1QSoflovnSG9aia1X59tIDUtG3LGJ
+        67YByy/OAkLlCGA0FSl+/kuCF4gxUzrZ8eEpjEBMRQqLHpWP+KifUQtXk/e/QvEMjYab4l
+        +PwKfv8EZ0tNfm2rLV4tccEx4wjMSsI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676631412;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0icnSjV6p2tYL/IFIMO5M+a6b0d7zKlUxCpA97UBnGg=;
+        b=23Dsqnfqj+sIQVsWhmfKk1v6vrTvMwv768xHFOBkkJYJ5jI3UUdQeIbppTadz3kbpO1Fux
+        uSdvmafnzDDhExBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6AA66138E3;
+        Fri, 17 Feb 2023 10:56:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fL76GXRd72O0OwAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 17 Feb 2023 10:56:52 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 17177A06E1; Fri, 17 Feb 2023 11:56:47 +0100 (CET)
+Date:   Fri, 17 Feb 2023 11:56:47 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "yebin (H)" <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>,
+        tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
+ journal record without error
+Message-ID: <20230217105647.g6blbinkvnsyy2or@quack3>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <20230214022905.765088-2-yebin@huaweicloud.com>
+ <20230216173159.zkj4qd2nmj2yjpkr@quack3>
+ <63EEDC19.6010204@huawei.com>
 MIME-Version: 1.0
-References: <20230217083005.128668-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230217083005.128668-1-yang.lee@linux.alibaba.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 17 Feb 2023 11:56:18 +0100
-Message-ID: <CAPDyKFoUJ-j9NocWTiTVHSRBQ1YAtM2TH1SrCHByh911Jaa1UA@mail.gmail.com>
-Subject: Re: [PATCH -next] mmc: meson-gx: Use devm_platform_get_and_ioremap_resource()
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <63EEDC19.6010204@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 at 09:30, Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+On Fri 17-02-23 09:44:57, yebin (H) wrote:
+> On 2023/2/17 1:31, Jan Kara wrote:
+> > On Tue 14-02-23 10:29:04, Ye Bin wrote:
+> > > From: Ye Bin <yebin10@huawei.com>
+> > > 
+> > > Now, 'es->s_state' maybe covered by recover journal. And journal errno
+> > > maybe not recorded in journal sb as IO error. ext4_update_super() only
+> > > update error information when 'sbi->s_add_error_count' large than zero.
+> > > Then 'EXT4_ERROR_FS' flag maybe lost.
+> > > To solve above issue commit error information after recover journal.
+> > > 
+> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > > ---
+> > >   fs/ext4/super.c | 12 ++++++++++++
+> > >   1 file changed, 12 insertions(+)
+> > > 
+> > > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> > > index dc3907dff13a..b94754ba8556 100644
+> > > --- a/fs/ext4/super.c
+> > > +++ b/fs/ext4/super.c
+> > > @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct super_block *sb,
+> > >   		goto err_out;
+> > >   	}
+> > > +	if (unlikely(es->s_error_count && !jbd2_journal_errno(journal) &&
+> > > +		     !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
+> > > +		EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+> > > +		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+> > > +		err = ext4_commit_super(sb);
+> > > +		if (err) {
+> > > +			ext4_msg(sb, KERN_ERR,
+> > > +				 "Failed to commit error information, please repair fs force!");
+> > > +			goto err_out;
+> > > +		}
+> > > +	}
+> > > +
+> > Hum, I'm not sure I follow here. If journal replay has overwritten the
+> > superblock (and thus the stored error info), then I'd expect
+> > es->s_error_count got overwritten (possibly to 0) as well. And this is
+> > actually relatively realistic scenario with errors=remount-ro behavior when
+> > the first fs error happens.
+> > 
+> > What I intended in my original suggestion was to save es->s_error_count,
+> > es->s_state & EXT4_ERROR_FS, es->s_first_error_*, es->s_last_error_* before
+> > doing journal replay in ext4_load_journal() and then after journal replay
+> > merge this info back to the superblock
+> Actually，commit 1c13d5c08728 ("ext4: Save error information to the
+> superblock for analysis")
+> already merged error info back to the superblock after journal replay except
+> 'es->s_state'.
+> The problem I have now is that the error flag in the journal superblock was
+> not recorded,
+> but the error message was recorded in the superblock. So it leads to
+> ext4_clear_journal_err()
+> does not detect errors and marks the file system as an error. Because
+> ext4_update_super() is
+> only set error flag  when 'sbi->s_add_error_count  > 0'. Although
+> 'sbi->s_mount_state' is
+> written to the super block when umount, but it is also conditional.
+> So I handle the scenario "es->s_error_count && !jbd2_journal_errno(journal)
+> &&
+> !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS)". Maybe we can just store
+> 'EXT4_SB(sb)->s_mount_state & EXT4_ERROR_FS' back to the superblock. But i
+> prefer to mark fs as error if it contain detail error info without
+> EXT4_ERROR_FS.
 
-Applied for next, thanks!
+Aha, thanks for explanation! So now I finally understand what the problem
+exactly is. I'm not sure relying on es->s_error_count is too good. Probably
+it works but I'd be calmer if when saving error info we also did:
 
-Kind regards
-Uffe
+	bool error_fs = es->s_state & cpu_to_le16(EXT4_ERROR_FS);
 
+	copy other info
+	err = jbd2_journal_load(journal);
+	restore other info
+	if (error_fs)
+		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+	/* Write out restored error information to the superblock */
+	err2 = ext4_commit_super(sb);
 
-> ---
->  drivers/mmc/host/meson-gx-mmc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
-> index 079c52dbeca6..a5a9a19a9a42 100644
-> --- a/drivers/mmc/host/meson-gx-mmc.c
-> +++ b/drivers/mmc/host/meson-gx-mmc.c
-> @@ -1204,8 +1204,7 @@ static int meson_mmc_probe(struct platform_device *pdev)
->         if (ret)
->                 return dev_err_probe(&pdev->dev, ret, "device reset failed\n");
->
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       host->regs = devm_ioremap_resource(&pdev->dev, res);
-> +       host->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->         if (IS_ERR(host->regs))
->                 return PTR_ERR(host->regs);
->
-> --
-> 2.20.1.7.g153144c
->
+and be done with this. I don't think trying to optimize away the committing
+of the superblock when we had to replay the journal is really worth it.
+
+Does this solve your concerns?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
