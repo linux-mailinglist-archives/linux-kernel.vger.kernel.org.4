@@ -2,163 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3DD69B46E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CA769B475
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 22:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjBQVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 16:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S229799AbjBQVOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 16:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBQVMj (ORCPT
+        with ESMTP id S229623AbjBQVOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:12:39 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066B45DE35;
-        Fri, 17 Feb 2023 13:12:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676668358; x=1708204358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vVOC50k+elFfOk8KDTPGK7o6CIxERD5MbuPu66bNn5A=;
-  b=RkqCGWw5wpW8RlQ48Pvf2qtJkFlq4bBcuPe6Uij9MKlGOdpXIffObcX3
-   Sb0RnFA41kt/TeZmjDaCn5Ad1DAGppNSEELzncNS/rLrrWEvmYijIUalx
-   sG/BuCEjR16PzcKkUQMPgNiwPUYNJxoKbKfTH+juZJC9qW4TvV9ZjZnTk
-   l56swbo7UIXW/NOgAgM8wwjRtu2Ehq+NevqCGsHlXoZgTgaWx6GoRUqGc
-   3UylA+Ilg1mBCfSXUSmoxAnU2SkLEz/ebt/wtQu+0KbRkxn+/1Rud4JYc
-   x9vYCeSCU1jXFSVQmVmAvZEC6CMiSUyhrG4teKi/kGvfnMy8DWRgLZQ9Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="311719403"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="311719403"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 13:12:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="739382937"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="739382937"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Feb 2023 13:12:35 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pT81y-000BpH-0j;
-        Fri, 17 Feb 2023 21:12:34 +0000
-Date:   Sat, 18 Feb 2023 05:12:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Angelo Compagnucci <angelo@amarulasolutions.com>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] misc: servo-pwm: driver for controlling servo
- motors via PWM
-Message-ID: <202302180429.NvI1mwuf-lkp@intel.com>
-References: <20230217161038.3130053-1-angelo@amarulasolutions.com>
+        Fri, 17 Feb 2023 16:14:06 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8265E5BA
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:14:02 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id bg35so13044wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 13:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EW4MkRsSt97nP2OjfvV/HrGYB4OX6Pt48nDkauxGyVI=;
+        b=wRikKBLe7U1qL1RunGMOmQJZb52SbsdTuBi/QKYTXpD0L7ZK1id5boXGjsYdHFf8vf
+         LJIvZGWBbdvPssG79W2NBPBD75X7A6RH3cNtPCVKPvFqCP9aLLd/PFXKwRykabDpdeon
+         pe3DsWjPFB+lDLA6LFksZBcxs6+Swd+CyVvO0XFJuKhvATe5hgC9jVAQm3gntTZ+ORAD
+         SdDTQC8/KwWbbb/fr8ZnSKCffiPh1iLNrmCxO054pkTVH1udo2qXQjw/PEEiPXm15HNI
+         HHDrLgIPXsXTUxzCcODGO1YDtlYrmsI2h3zYCsjB9yOc0J5SPItWlTZKDK8ZERv1rHiA
+         F/lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EW4MkRsSt97nP2OjfvV/HrGYB4OX6Pt48nDkauxGyVI=;
+        b=s0Oz4Y1KzcHLhXhlhqLgeELnT58oy6wRmuaLdBcrl9CHXHbuCra+cSE7647Oew5xNq
+         /pLzdrOhk6/+CN/GtBFKnsTcWVxazRp/qcukJ6C+gYoYn90jd7m4kcUwWuLuiWCsePxS
+         hj3wwjJ0ZQqeF6Fim4Djzw6MyFSlSwhne4oKIQ4bnN3j2PRHp7VptLOzH5FBVjWhF7EN
+         bWou958bluu9AB3lJEJQiJUqQoV2n9TpdgajbWbc6ysZFBO0rJ4nU7p7hK+vwoJAve4l
+         Ez7PAREPMV3/Km2+OzvwLw09GRUZeVSvOw5nmf8gtpCbtceW2hyPAttEgTfZ5Em3ETb6
+         OYrQ==
+X-Gm-Message-State: AO0yUKUup86tI2awqLWmL718zQBvIGu+9j9Gqdr6Hbq2Qu3mfxJp0Te8
+        ittaNG0L7YrmtFWD7N/mtkIeRw==
+X-Google-Smtp-Source: AK7set9bJWwf6VPImlBjocxK7OpKYe1M5pUpgHsEVTe3rlCdpxBRrmj8mEol2u8NhQQD66+cxhN0VA==
+X-Received: by 2002:a05:600c:1895:b0:3e2:589:2512 with SMTP id x21-20020a05600c189500b003e205892512mr1723935wmp.21.1676668441188;
+        Fri, 17 Feb 2023 13:14:01 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id ip24-20020a05600ca69800b003e223fe0a3asm2771609wmb.27.2023.02.17.13.14.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 13:14:00 -0800 (PST)
+Message-ID: <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
+Date:   Fri, 17 Feb 2023 21:13:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217161038.3130053-1-angelo@amarulasolutions.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
+ deprecated QCM2290 compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
+ <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
+ <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
+ <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
+ <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
+ <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
+> First, it would be nice to know what was the intention of Bryan's commit?
 
-I love your patch! Perhaps something to improve:
+Sorry I've been grazing this thread but, not responding.
 
-[auto build test WARNING on char-misc/char-misc-linus]
-[also build test WARNING on linus/master v6.2-rc8]
-[cannot apply to char-misc/char-misc-testing char-misc/char-misc-next next-20230217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+- qcom,dsi-ctrl-6g-qcm2290
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Angelo-Compagnucci/misc-servo-pwm-Add-sysfs-entries-to-control-motor-angle/20230218-001254
-patch link:    https://lore.kernel.org/r/20230217161038.3130053-1-angelo%40amarulasolutions.com
-patch subject: [PATCH v3 1/3] misc: servo-pwm: driver for controlling servo motors via PWM
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230218/202302180429.NvI1mwuf-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0ae16e16da0aa94de0d3ae63166f50a4a6fdef8a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Angelo-Compagnucci/misc-servo-pwm-Add-sysfs-entries-to-control-motor-angle/20230218-001254
-        git checkout 0ae16e16da0aa94de0d3ae63166f50a4a6fdef8a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/misc/
+is non-compliant with qcom,socid-dsi-ctrl which is our desired naming 
+convention, so that's what the deprecation is about i.e. moving this 
+compat to "qcom,qcm2290-dsi-ctrl"
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302180429.NvI1mwuf-lkp@intel.com/
+Actually I have the question why we are deciding to go with "sm6115" 
+instead of "qcm2290" ?
 
-All warnings (new ones prefixed by >>):
+The stamp on the package you receive from Thundercomm says "qcm2290" not 
+"sm6115"
 
-   In file included from include/linux/mm_types_task.h:16,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from drivers/misc/servo-pwm.c:7:
-   drivers/misc/servo-pwm.c: In function 'angle_show':
->> arch/loongarch/include/asm/page.h:23:25: warning: passing argument 2 of 'sysfs_emit' makes pointer from integer without a cast [-Wint-conversion]
-      23 | #define PAGE_SIZE       (_AC(1, UL) << PAGE_SHIFT)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                         |
-         |                         long unsigned int
-   drivers/misc/servo-pwm.c:54:32: note: in expansion of macro 'PAGE_SIZE'
-      54 |         return sysfs_emit(buf, PAGE_SIZE, "%u\n", data->angle);
-         |                                ^~~~~~~~~
-   In file included from include/linux/kobject.h:20,
-                    from include/linux/module.h:21:
-   include/linux/sysfs.h:357:39: note: expected 'const char *' but argument is of type 'long unsigned int'
-     357 | int sysfs_emit(char *buf, const char *fmt, ...);
-         |                           ~~~~~~~~~~~~^~~
-   drivers/misc/servo-pwm.c: In function 'degrees_show':
->> arch/loongarch/include/asm/page.h:23:25: warning: passing argument 2 of 'sysfs_emit' makes pointer from integer without a cast [-Wint-conversion]
-      23 | #define PAGE_SIZE       (_AC(1, UL) << PAGE_SHIFT)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                         |
-         |                         long unsigned int
-   drivers/misc/servo-pwm.c:84:32: note: in expansion of macro 'PAGE_SIZE'
-      84 |         return sysfs_emit(buf, PAGE_SIZE, "%u\n", data->degrees);
-         |                                ^~~~~~~~~
-   include/linux/sysfs.h:357:39: note: expected 'const char *' but argument is of type 'long unsigned int'
-     357 | int sysfs_emit(char *buf, const char *fmt, ...);
-         |                           ~~~~~~~~~~~~^~~
+?
+
+---
+bod
 
 
-vim +/sysfs_emit +23 arch/loongarch/include/asm/page.h
-
-09cfefb7fa70c3 Huacai Chen 2022-05-31  10  
-09cfefb7fa70c3 Huacai Chen 2022-05-31  11  /*
-09cfefb7fa70c3 Huacai Chen 2022-05-31  12   * PAGE_SHIFT determines the page size
-09cfefb7fa70c3 Huacai Chen 2022-05-31  13   */
-09cfefb7fa70c3 Huacai Chen 2022-05-31  14  #ifdef CONFIG_PAGE_SIZE_4KB
-09cfefb7fa70c3 Huacai Chen 2022-05-31  15  #define PAGE_SHIFT	12
-09cfefb7fa70c3 Huacai Chen 2022-05-31  16  #endif
-09cfefb7fa70c3 Huacai Chen 2022-05-31  17  #ifdef CONFIG_PAGE_SIZE_16KB
-09cfefb7fa70c3 Huacai Chen 2022-05-31  18  #define PAGE_SHIFT	14
-09cfefb7fa70c3 Huacai Chen 2022-05-31  19  #endif
-09cfefb7fa70c3 Huacai Chen 2022-05-31  20  #ifdef CONFIG_PAGE_SIZE_64KB
-09cfefb7fa70c3 Huacai Chen 2022-05-31  21  #define PAGE_SHIFT	16
-09cfefb7fa70c3 Huacai Chen 2022-05-31  22  #endif
-09cfefb7fa70c3 Huacai Chen 2022-05-31 @23  #define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
-09cfefb7fa70c3 Huacai Chen 2022-05-31  24  #define PAGE_MASK	(~(PAGE_SIZE - 1))
-09cfefb7fa70c3 Huacai Chen 2022-05-31  25  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
