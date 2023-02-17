@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD7569A89A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD6B69A8A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjBQJw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S229968AbjBQJyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQJw0 (ORCPT
+        with ESMTP id S229436AbjBQJyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:52:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31492940C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:51:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676627504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o1+rta+3NkuckqAjWQM6EtNRX5v15S6OQpU67+mVbvk=;
-        b=M+nvXGiDcpWmK8vZt5KiRXO20KXejOr8ZlSiX1QzZ6vkx80NZOFAm2hVGKnUyq2N6y+oGO
-        ArN4lOP9VYsZzR6u6KNHzVn57Xya7zWLspBa/dth7ZHiRcqGCpawbOKOWGFtHxAfvPqu0x
-        aRNSPBRN8QHjtY+ESZLDpVvyqb3UHog=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-qc8DsAtxOvmGxI-tiDFGjw-1; Fri, 17 Feb 2023 04:51:42 -0500
-X-MC-Unique: qc8DsAtxOvmGxI-tiDFGjw-1
-Received: by mail-ed1-f70.google.com with SMTP id cn9-20020a0564020ca900b004a25d8d7593so499317edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:51:42 -0800 (PST)
+        Fri, 17 Feb 2023 04:54:51 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651F55F266
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:54:50 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id i14so2259466ljn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2YxWgvIJdD6AE8Ce+eEDzrC0gSnd+arQ9utE5ORXuyI=;
+        b=OQExkPUyHPSKyUz+617ZUxO1gI5rtYd5dt0RGFx9Jxy5segsRYZjal82u8ujUw7e4V
+         pudXcEsW6zLr9rOV4sIess6exchz82J4ZYZAdocIaZcvtYsIijql0uPC1mxkSQ3vLesk
+         Mza4pUGkeiXRQXoq+euSMvwBxAcXHTHLZVjn1HdhNFo92t0UtqMdYv/rK9lCqKxQASFB
+         6H2A5k1r5MMAACjJBwuqB2y4/aHeiywwCK3BuMDXxcJZMvdEhjOB521jWKaDT0gPqiTw
+         f4kpuDpQmEqrx7WCyYGryTRo6qtZJn19vPNPEHWU7EsfN4dRykfFBDRiUntnq/BhXA/x
+         ZVkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o1+rta+3NkuckqAjWQM6EtNRX5v15S6OQpU67+mVbvk=;
-        b=xv3dsTQNyF1vAsbojdEoIbvjzSZw+JLUg9Dwecs7Bt224exww+lP+dX6baaoj96Pr+
-         xWZFzev/dD8rRzebvjzobIZmgEYlMCE5qJ0nr6mTOjnKY08BYTZJJKqeHCGJA4zMBoIM
-         h8KbIvks+rmzNAc1jRcNKrjLojKsKgytZxSvqsJUUQzOtZjc3qB2ZVk2O6T3J5b2jyd8
-         Z2wSpxZPqHaNWfYOxfHray+wGGQwjA0VuhpwlOoO9jccXMdS5grBuixF53fdr4DQI0uJ
-         Y25cSdGEI8R/PbonpU34atwjuMid3IsS4UHwdw/k5qS5siU99r4n4RPH94nceKs9W358
-         /avg==
-X-Gm-Message-State: AO0yUKVvMiDtpq7DkE9/Sa/i3mTB6bOKlNHOaWep7k1TI8SgwOCpPeNK
-        YR6ygc749ErmI7oA/DUf8zukbjM9HDU0uL0Wei5JcVx1v2gGlfoYOB6ZsgFrKBayvb0dQGzvohi
-        hmV5+JRwi1/4Ju9tU39OYvNND
-X-Received: by 2002:a17:906:850e:b0:8b1:2823:cec6 with SMTP id i14-20020a170906850e00b008b12823cec6mr9378464ejx.43.1676627501180;
-        Fri, 17 Feb 2023 01:51:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set+MtciHgZrpatIIPvmpLKo9ChNsjgvQkENx4R4w5jnqNoXpHLibqg/87fSITJw9CBbEHdTJfg==
-X-Received: by 2002:a17:906:850e:b0:8b1:2823:cec6 with SMTP id i14-20020a170906850e00b008b12823cec6mr9378452ejx.43.1676627500901;
-        Fri, 17 Feb 2023 01:51:40 -0800 (PST)
-Received: from ovpn-192-159.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id bk26-20020a170906b0da00b0089d5aaf85besm1920132ejb.219.2023.02.17.01.51.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 01:51:40 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Dexuan Cui <decui@microsoft.com>,
-        Mohammed Gamal <mgamal@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "xxiong@redhat.com" <xxiong@redhat.com>
-Subject: RE: [PATCH v2] Drivers: vmbus: Check for channel allocation before
- looking up relids
-In-Reply-To: <SA1PR21MB1335435701EBB35A9DD35892BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230214112741.133900-1-mgamal@redhat.com>
- <SA1PR21MB1335435701EBB35A9DD35892BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
-Date:   Fri, 17 Feb 2023 10:51:39 +0100
-Message-ID: <87a61cpql0.fsf@ovpn-192-159.brq.redhat.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2YxWgvIJdD6AE8Ce+eEDzrC0gSnd+arQ9utE5ORXuyI=;
+        b=h0H9KMU8BVAsZtRgVuTrnNsurxoGT7Y3WdzMGrNAx1zxv2hLyMN9fi7QCZ48j5nFt4
+         Z0K12LmjrNRacBL7fyx1hxL0OTrxfLlGYvKQtSUkbiR2W675AoQpRbW6WHiddJKfeL09
+         ggWWXuvwe3ICi2FonmYp0dryQjj+CANbGvvl+GpeQNu1sc7sesI0EZIHfh0uHeOQqEsp
+         H3fjrzDqsxPULDByYktxe4CwNd8AF1xjn/5Jwcx+FEtsgQs6DbwOadYiQe9x4tZh9SsT
+         AoROTG535KNcI0so/VOfP4q6uFQ2u7I0K1oB+gTFNmbsYA9lGbP8L3N3ooQWQOf8C6dg
+         toiA==
+X-Gm-Message-State: AO0yUKW3j90hHM3OAblctLQU4de9huW2GV24urD+FIa5SebbwcdGq1hd
+        d3CisPc/HI/42j2Hux7n6jmklOA6LkXpbw3HxMQ=
+X-Google-Smtp-Source: AK7set+cgqyCJtgI3S9dERldAZ9bX/s6JgKXbYvtTyEXj2Rwuf/xO8lPkdeqpEdjsJOkzM7UzNLinYV/ikiK5SI5NAA=
+X-Received: by 2002:a2e:b558:0:b0:293:34f2:1e40 with SMTP id
+ a24-20020a2eb558000000b0029334f21e40mr183467ljn.5.1676627688696; Fri, 17 Feb
+ 2023 01:54:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Received: by 2002:a05:6022:8d:b0:38:f0e2:4d84 with HTTP; Fri, 17 Feb 2023
+ 01:54:47 -0800 (PST)
+Reply-To: elvismorgan261@gmail.com
+From:   Elvis Morgan <elvismorgan220@gmail.com>
+Date:   Fri, 17 Feb 2023 09:54:47 +0000
+Message-ID: <CABF8GFdWnh+rAL6gyoaqiVrvp2wW3Hr4ROw1saLQ59ZsdkPYEg@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:22f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [elvismorgan261[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [elvismorgan220[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [elvismorgan220[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dexuan Cui <decui@microsoft.com> writes:
-
->> From: Mohammed Gamal <mgamal@redhat.com>
->> Sent: Tuesday, February 14, 2023 3:28 AM
->> ...
->> So Make relid2channel() check if vmbus channels is allocated first, and if not
->> print a warning and return NULL to the caller.
-> Can we change the above to:
->
-> Print a warning and error out in relid2channel() for a channel id that's invalid
-> in the second kernel.
->  
->> --- a/drivers/hv/connection.c
->> +++ b/drivers/hv/connection.c
->> @@ -409,6 +409,10 @@ void vmbus_disconnect(void)
->>   */
->>  struct vmbus_channel *relid2channel(u32 relid)
->>  {
->> +	if (vmbus_connection.channels == NULL) {
->> +		WARN(1, "Requested relid=%u, but channel mapping not
->> allocated!\n", relid);
->
-> WARN() may be too noisy. I suggest we use pr_warn() instead.
->
-> Can we make the line a little shorter:
->         pr_warn("relid2channel: invalid channel id %u\n", relid);
->
-
-I'd even suggest to make it pr_warn_once() to be
-safe. In theory, vmbus_chan_sched() call site looks like it can create a
-lot of noise.
-
 -- 
-Vitaly
-
+How are you?
