@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17DB69A31B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A42869A319
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 01:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjBQAuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 19:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S229885AbjBQAuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 19:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjBQAuC (ORCPT
+        with ESMTP id S229534AbjBQAuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 19:50:02 -0500
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F20454D2B;
-        Thu, 16 Feb 2023 16:49:58 -0800 (PST)
-X-QQ-mid: bizesmtp76t1676594968txapoplj
+        Thu, 16 Feb 2023 19:50:00 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F034F3C7B7;
+        Thu, 16 Feb 2023 16:49:56 -0800 (PST)
+X-QQ-mid: bizesmtp76t1676594974t44ilj1c
 Received: from localhost.localdomain ( [116.30.131.224])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 17 Feb 2023 08:49:27 +0800 (CST)
+        id ; Fri, 17 Feb 2023 08:49:31 +0800 (CST)
 X-QQ-SSF: 01200000000000C0T000000A0000000
-X-QQ-FEAT: XBN7tc9DADICBB7k9+bU2BGS/LL6SOD01z1AvX6M7TbM1IcrrUquN8VoZSqxR
-        z7Nk+jrerltyFZKM69igDS4EKfCoEx4eH6SS0q3im5pC77mpjTus7/qkaA/0Ohf5qWxBiSC
-        4Hu8t+EjNzV8mnlaxl1RoP2a/5sdzMO7dKFr4PtGFbPx5rSV0crjKNH4ttqQ0A/7z7SWxWg
-        aMh+cL67CSCH4xi5C/PYiEmJeaIhgaE2hjsHbq5zyRgiIf199tLovOH5MfKhtGcX+ZRBUtS
-        /F5sSaWtSDT54mwaeY3AWMVidSPEJQFeZ4yEZQ1Ona/TpGryQoxiRjY8ah9acgpXRU6BL00
-        6KmZ3DS5NXoEdmkiTnOykaFz6Cu8YR/8elR/E2knszdeujRYJlXTp5UEK5Y9VGt5LfrcCrG
+X-QQ-FEAT: znfcQSa1hKbHsodWWJ7dLyJeU0dQLSJ2PPtzz1iLzMNgSELCkUn2ujNlhycbg
+        vLg03SNvb9EFMysNu9WjgjH2yYBaAi1fGVqPKaFhctNfTwt+bbxYpXQIVh9rDo/8cNrLyPt
+        ToX08gVh/Po6w/uiFpE5NpG8RVgjCEHPEAjNBEvKB228hcFV2zJd7lPvufzHTfmfzprQ+fT
+        BT5FvJHdZIQ0ZHz+hIneTfMRDTSLb6HDEunI+ke40/IGoYkdjw1kyDvwLpdYHmyCpkkWnqA
+        O1Hes08eR/3n/SlY9lwkeFrEDn7M4DXKn75YILTWaoiJycDGTzD8fi1d+13MWbJyxm4+S3n
+        g5P3PHo4ATnp0TD9593FPSzON//EjXHb6RjyzNWaKJfKxUqmS92Hopcemr0iQ8IBGReu7VW
 X-QQ-GoodBg: 0
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -37,10 +37,12 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Nicholas Mc Guire <hofrat@osadl.org>,
         Zhangjin Wu <falcon@tinylab.org>
-Subject: [RFC PATCH 0/5] Add dead syscalls elimination support
-Date:   Fri, 17 Feb 2023 08:49:20 +0800
-Message-Id: <cover.1676594211.git.falcon@tinylab.org>
+Subject: [RFC PATCH 1/5] syscall: Allow configure used system calls
+Date:   Fri, 17 Feb 2023 08:49:21 +0800
+Message-Id: <ad53ec9ec7168b6ca5a55e4c6b4583baa4dd0fc6.1676594211.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1676594211.git.falcon@tinylab.org>
+References: <cover.1676594211.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -54,93 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, all
+A new CONFIG_SYSCALLS_USED is added to configure the system calls used
+in a target system (especially for the ultra small embedded systems),
+the other system calls will be disabled.
 
-CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION allows to eliminate dead code
-and data, this patchset allows to further eliminate dead syscalls which
-are not used in target system.
+If further enabling CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION, the other
+ones (if also not used by kernel itself) will be removed automatically.
 
-It includes 5 patches:
+The used system calls should be listed one by one like this:
 
-- syscall: Allow configure used system calls
+    write exit reboot
 
-  This adds a new CONFIG_SYSCALLS_USED option to allow users or tools to
-  tell kernel what syscalls are used in target system. A list of
-  used syscalls can be passed to it.
+The architecture should implement it and then select the
+HAVE_SYSCALLS_USED option.
 
-- MIPS: Add dead syscalls elimination support
-
-  Add CONFIG_SYSCALLS_USED support for mips, it simply adds a 'used'
-  variant for the syscall*.tbl and accordingly updates the kernel apis
-  and eventually the sys_call_table. The unused ones in the table are
-  replaced by sys_ni_syscall and therefore if they are also not used by
-  kernel itself, they will be eliminated by gc-sections.
-
-  The old architectures use syscall*.tbl, so, they can use this method.
-
-- RISC-V: Enable dead code elimination
-
-  Select HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
-
-- RISC-V: Add dead syscalls elimination support
-
-  Add CONFIG_SYSCALLS_USED support for riscv, it simply adds a 'used'
-  variant for the *syscall_table.c and eventually the sys_call_table.
-
-  The new architectures use generic unistd.h, they can use this method.
-
-- nolibc: Record used syscalls in their own sections
-
-  This allows to record syscalls used by a nolibc based application. It
-  is possible to eliminate dead syscalls automatically while building
-  the monolithic kernel+nolibc software.
-
-Testing shows, on both mips and riscv, with a small config, gc-sections
-shrinks ~10% and syscalls_used shrinks another ~5%.
-
-This patchset is only a prototype implementation, welcome your feedback
-and suggestion, Thanks.
-
-Related emails:
-
-- Re: Re: Kernel-only deployments
-  https://lore.kernel.org/lkml/20230216130935.37976-1-falcon@tinylab.org/
-
-- Re: Re: RISC-V: Enable dead code elimination
-  https://lore.kernel.org/linux-riscv/Y+qSBu3YZH0JPY4I@spud/T/#t
-
-Best Regards,
-- Zhangjin Wu
-
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
+ init/Kconfig | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Zhangjin Wu (5):
-  syscall: Allow configure used system calls
-  MIPS: Add dead syscalls elimination support
-  RISC-V: Enable dead code elimination
-  RISC-V: Add dead syscalls elimination support
-  nolibc: Record used syscalls in their own sections
-
- arch/mips/Kconfig                   |  1 +
- arch/mips/kernel/syscalls/Makefile  | 24 ++++++++-
- arch/riscv/Kconfig                  |  2 +
- arch/riscv/kernel/Makefile          |  5 +-
- arch/riscv/kernel/syscalls/Makefile | 38 ++++++++++++++
- arch/riscv/kernel/vmlinux.lds.S     |  2 +-
- init/Kconfig                        | 22 +++++++++
- tools/include/nolibc/Makefile       |  2 +-
- tools/include/nolibc/arch-aarch64.h | 17 ++++---
- tools/include/nolibc/arch-arm.h     | 15 +++---
- tools/include/nolibc/arch-i386.h    | 17 ++++---
- tools/include/nolibc/arch-mips.h    | 15 +++---
- tools/include/nolibc/arch-riscv.h   | 17 ++++---
- tools/include/nolibc/arch-x86_64.h  | 17 ++++---
- tools/include/nolibc/arch.h         |  2 +
- tools/include/nolibc/record.h       | 77 +++++++++++++++++++++++++++++
- 16 files changed, 226 insertions(+), 47 deletions(-)
- create mode 100644 arch/riscv/kernel/syscalls/Makefile
- create mode 100644 tools/include/nolibc/record.h
-
+diff --git a/init/Kconfig b/init/Kconfig
+index 44e90b28a30f..2c4b8b234168 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1502,6 +1502,10 @@ config BPF
+ 	bool
+ 	select CRYPTO_LIB_SHA1
+ 
++config HAVE_SYSCALLS_USED
++	bool
++	default n
++
+ menuconfig EXPERT
+ 	bool "Configure standard kernel features (expert users)"
+ 	# Unhide debug options, to make the on-by-default options visible
+@@ -1728,6 +1732,24 @@ config MEMBARRIER
+ 
+ 	  If unsure, say Y.
+ 
++config SYSCALLS_USED
++	string "Configure used syscalls (EXPERIMENTAL)"  if EXPERT
++	depends on HAVE_SYSCALLS_USED
++	default ""
++	help
++          This option allows to configure the system calls used in a target
++          system, the other system calls will be disabled.
++
++          If further enabling CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION, the
++          other ones (if also not used by kernel itself) will be removed
++          automatically.
++
++          The used system calls should be listed one by one like this:
++
++              write exit reboot
++
++          If unsure, keep this empty.
++
+ config KALLSYMS
+ 	bool "Load all symbols for debugging/ksymoops" if EXPERT
+ 	default y
 -- 
 2.25.1
 
