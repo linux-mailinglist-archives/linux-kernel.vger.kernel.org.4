@@ -2,101 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E2569A4E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 05:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D185069A4EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 05:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBQEc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 23:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S229597AbjBQEij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 23:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBQEc5 (ORCPT
+        with ESMTP id S229524AbjBQEii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 23:32:57 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94D416AE8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:32:55 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id m1so4340925vst.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/MeUKjw33jpqilmmYXQEGFRb0OCD/4Vq8XY4qGuBOYE=;
-        b=S3awRWKrbCT7SjUcPzd0fvwXvqP30sAmcHpK21MWzkpsEU2B2urrTaswMUoqohl8ga
-         INOvkTG37BexzEthZigt9wfPn9w957TxMGKzEkEKfWRbUOA0LGE9fQ4hAEwSqECPuPkA
-         MyRSsGcuD4OR3nHWt3NkGIuU3DUpogrjTdmVo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/MeUKjw33jpqilmmYXQEGFRb0OCD/4Vq8XY4qGuBOYE=;
-        b=QNtfreJ2VHmMZ/cM0NFJLQmk3uQTjLqRu0LwJQ/lyshklDfvzF6k8gJylj/d4n861C
-         H+S7ieESXRfxzxtcEwZAVlL7wBNNxBqDzZorNu/LqE2el2Ty3pNrBBKgbQfwQZxOTVfH
-         4Lf7KCXHu4QS+y6N3aRrEIz+O7hnRn1z8+nJQrZCYFRTfEB5xynSUtUVbE8JyLq9WuKe
-         JskjfeGlL4yBECJAm/T84j7mR3ftro/JqkzMP/89LAFGFeBzallW9y16njut3w5xaywL
-         m9pYEjCua+5C9EggA6kXww3Lx3tfn4Mhjp3fGt3sIpukoSqaXoMz54A68MJHGI6ueiQA
-         0V8A==
-X-Gm-Message-State: AO0yUKU3xttsItvrcP68xvzX1hUR1icu0BkhvmLue9nBp5o/bAwmD8BP
-        QcjTlNNys2tI4z5Z3PtB599FKK/RVDQQEb8SyI/bWA==
-X-Google-Smtp-Source: AK7set/cSGuBVDTCxSmRRGsS41MgtBnX0pHCKDtmZOdivWOY+N/IZzhla6F8qP11ESwesqemFfp/tlEhHshfqZsRNsc=
-X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr1532091vso.60.1676608374852; Thu, 16 Feb
- 2023 20:32:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-40-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-40-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Feb 2023 12:32:44 +0800
-Message-ID: <CAGXv+5FtWp8BvLHJmJvXe=eXvM10-LTjQo9PkH1xKMvzY6YiHA@mail.gmail.com>
-Subject: Re: [PATCH v2 39/47] clk: mediatek: Allow MT7622 clocks to be built
- as modules
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 16 Feb 2023 23:38:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773B92CC42
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 20:38:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 115FD6100A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A529C433D2;
+        Fri, 17 Feb 2023 04:38:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676608716;
+        bh=lBD+ZV+x7RW/eX53Icvx7ILkWEuCoGjpdQs2LC4GIJE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DEvc2+ldxoY1eRm4xROZ/tl8JAOTaeExbBxAhinMVOIoBiSh5mtJGwb/K0LSQMoBr
+         OiyjoKf0Y1oViAJ77gASHQqdb6uoGsgE0T00du8EgHIH0Dx3x8ff4OgHR5as11f3K9
+         Ebp0eiUZORVwpluSX9DW6lRxq5QTPdtY1xL18F8irU95Bq6r6ixi9J4cb+9IOS95ce
+         E2URsqVMbUb4JKnzKErUaTahzl+hhyz/wz/q+xR0oL6avSHMcoBtOOGY9Syr/pH3Ko
+         eQXDvkCxi29YAe/8XXUs+l7jCxOK8WiItWgz3lhjhAz8H4Niy1Rne6sSv01cn8riIL
+         0x/EzPKnxBlCA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 651A4C1614B;
+        Fri, 17 Feb 2023 04:38:36 +0000 (UTC)
+Subject: Re: [git pull] drm fixes for 6.2 final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9tyvvUJiuADGfPznEKCNBmwGzPEKE7Oob_9BduxE6Od4TQ@mail.gmail.com>
+References: <CAPM=9tyvvUJiuADGfPznEKCNBmwGzPEKE7Oob_9BduxE6Od4TQ@mail.gmail.com>
+X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+X-PR-Tracked-Message-Id: <CAPM=9tyvvUJiuADGfPznEKCNBmwGzPEKE7Oob_9BduxE6Od4TQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-02-17
+X-PR-Tracked-Commit-Id: f7597e3c58eeb9ce534993f53c982f2e91e6dd4d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ec35307e18ba8174e2a3f701956059f6a36f22fb
+Message-Id: <167660871639.4329.3467322456999511365.pr-tracker-bot@kernel.org>
+Date:   Fri, 17 Feb 2023 04:38:36 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Now that all drivers are using the simple probe mechanism change the
-> MT7622 clock drivers to tristate in Kconfig to allow module build.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clk/mediatek/Kconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-> index b5636b3225e8..55727889ebf5 100644
-> --- a/drivers/clk/mediatek/Kconfig
-> +++ b/drivers/clk/mediatek/Kconfig
-> @@ -336,7 +336,7 @@ config COMMON_CLK_MT6797_VENCSYS
->           This driver supports MediaTek MT6797 vencsys clocks.
->
->  config COMMON_CLK_MT7622
-> -       bool "Clock driver for MediaTek MT7622"
-> +       tristate "Clock driver for MediaTek MT7622"
+The pull request you sent on Fri, 17 Feb 2023 12:16:34 +1000:
 
-Same as MT2712, mt7622-apmixedsys is builtin_platform_driver.
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-02-17
 
-ChenYu
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ec35307e18ba8174e2a3f701956059f6a36f22fb
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
