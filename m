@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF1E69A8EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62A269A8E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjBQKMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S229460AbjBQKLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjBQKMd (ORCPT
+        with ESMTP id S229508AbjBQKLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:12:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35106604F1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676628706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dvpK31b66LZjOlbG0RKceUyJP6Xe2y/6MQclDivAbW8=;
-        b=a162mr4qXZaVlzcIKbKIwdArdg9ZR32w3iHdjSPwfZDn5WRO2s4I3ANQEQHfncjmTX6rSR
-        I1WJviZxOYssxqU1zGAE91d0rdPxwnQm6FKap1pUM/cCaNV+3xVK5A/JbDXae5HrRA4Li7
-        Kg4lcWA77wlBotkB9hXxBpWQnV+lvI0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-O_J_FfTsPpSJ4q_OjrruCw-1; Fri, 17 Feb 2023 05:11:44 -0500
-X-MC-Unique: O_J_FfTsPpSJ4q_OjrruCw-1
-Received: by mail-wr1-f71.google.com with SMTP id i1-20020adfa501000000b002c54aaa28dcso538214wrb.16
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:44 -0800 (PST)
+        Fri, 17 Feb 2023 05:11:52 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453176241A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j20so3855268edw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XDRpdpBWdFb6EOdNes1o07LdLE88/XFjpZQhQSJTWak=;
+        b=rlVVIK+5+nFzlvkFNn8hiBNsq969o9yo4H9uLGDFrY59+XMPHc5MufC/iCqzlRE/rt
+         LxuceQ8JEYI/rzPbnx+PbNbX2O7x6AWT9xujroy7+PnBsGouBFJw1hcPrRezCGuO8TMc
+         4ZaKPyyLPJ8lgT2TIJej58n4nwaDdPRFCNqVYiPYzOWmAV5xAickd+MdutsG2xLXJD5L
+         6ID59mUtWyWiYv4COtGOKRy5vGrgCQGk0QmNxFRZ1SUfvnl1OTPrkGDGDG30RjNyHuMi
+         5GK+lQwb2oab6fFS9bii2IQIEDNrgrPl3divqjvuqHFDDSGJHcRs5+VXNYZrnNYiUkOK
+         cevA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dvpK31b66LZjOlbG0RKceUyJP6Xe2y/6MQclDivAbW8=;
-        b=eU42UlncIwWCVB9mBOsP/M2RXOo/4w9+sMelDTMBClEG4OjDBKmZ4tRDNj4DGXEeZ0
-         N+mZHXFmzyXVqvrKCU1VJ7jSV+Qxtqs+dT1DJm/4I7OGMCbncbD6iIQeAYwcvKAuyJqc
-         DSIQU+YqIKbiiMbz87wqwsOMmk67kynFtWjZlXnCRGrC9TIBLM8VXBoW5D1KloMvZPPq
-         HAqNzH4dAljjcp+h8gPoY31q6nEJeWMPPRUnSgkDKw0KF+tLXd0bdGPxDqXV2HeCdXnz
-         yhIgYRG08P8VrvFmXFkNEqXxs7ZoYB4n0ilZ9l+KuFbXWBfQ7g/fvjUr0SCshP9HpwoS
-         BSIg==
-X-Gm-Message-State: AO0yUKXShXbDUt7cr8Q5n+UQAMGzJqiE8xGCtGq0Py4mrnZbUFsVXh3Y
-        LqiqoWHWZcxX23mUVK4oFV4j7bVQkz0qGRm2ODjO7GLMFVbHZQCE6fBRkTFK1DDgeQpEQ4p6fXM
-        G2uZbtkJb+DvgLlRWiYLJwbvK
-X-Received: by 2002:a05:600c:4d21:b0:3d9:f769:2115 with SMTP id u33-20020a05600c4d2100b003d9f7692115mr188608wmp.26.1676628703386;
-        Fri, 17 Feb 2023 02:11:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set+Kcg4izxtCX4bYTTRixMiAEVt9Z6ixnz/KbWXmJ3fdzzSg3LAlSGK6fov0vMkMCzQhoGEOjA==
-X-Received: by 2002:a05:600c:4d21:b0:3d9:f769:2115 with SMTP id u33-20020a05600c4d2100b003d9f7692115mr188590wmp.26.1676628703126;
-        Fri, 17 Feb 2023 02:11:43 -0800 (PST)
-Received: from redhat.com ([2.52.5.34])
-        by smtp.gmail.com with ESMTPSA id az5-20020a05600c600500b003e20a6fd604sm4644634wmb.4.2023.02.17.02.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 02:11:42 -0800 (PST)
-Date:   Fri, 17 Feb 2023 05:11:38 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Nanyong Sun <sunnanyong@huawei.com>, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        wangrong68@huawei.com
-Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-Message-ID: <20230217051038-mutt-send-email-mst@kernel.org>
-References: <20230207120843.1580403-1-sunnanyong@huawei.com>
- <Y+7G+tiBCjKYnxcZ@nvidia.com>
- <CACGkMEtehykvqNUnfCi0VmHR1xpmhj4sSWdYW1-0oATY=0YhXw@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDRpdpBWdFb6EOdNes1o07LdLE88/XFjpZQhQSJTWak=;
+        b=S3fDkbKA5wlIBlw50JY9w/+b7i5Kf330zm4Ou3HytxsGz0XzcQbwgv/63lcXOpHahS
+         JSZ/z87TfFNblilRgcytL/NjRDj8EryGFgtZq0LCSdWPrfUq7u4uw5RpX2Ec+9Sv68W4
+         oTCBR1MwP2VhAHVm2YjcPh6kQzAuBLkfGDA7NVLtkb3vETYhhssyPZ9JVK0FK+gUwxAV
+         fszCgpM0HrZ3HsC5dwKzrMySbkOH+VdUjHFvSw3KzvyYF1CqTSq2AkwN3BtJeIY4rAkC
+         cUOu8k8vcdxwwbAcSogzyN3hybV7bvJ30FLkAcyFLnB0wFEhiyJC+dAyjVB1hGQpGg1L
+         +nhA==
+X-Gm-Message-State: AO0yUKW3/Va/af5btfPUQ2W3SdgnGkIrBhOxGKO4MPr1tXvtEEtq1jj8
+        jUZLggRHaABvYTFUBRu2ZoyVW15CnQsZcGga
+X-Google-Smtp-Source: AK7set9IAzpQ6WhPu+U/GhhX7HihyBSQKr1YCJLTTgg/FdNj1d63I8AQqIpQUeGg33gN1FafpXuX7w==
+X-Received: by 2002:a17:906:5357:b0:884:c45f:1c04 with SMTP id j23-20020a170906535700b00884c45f1c04mr386648ejo.2.1676628709805;
+        Fri, 17 Feb 2023 02:11:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w18-20020a170907271200b008710789d85fsm1945128ejk.156.2023.02.17.02.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 02:11:49 -0800 (PST)
+Message-ID: <ec046b79-ac83-1d5c-4a77-59a8f313e52f@linaro.org>
+Date:   Fri, 17 Feb 2023 11:11:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEtehykvqNUnfCi0VmHR1xpmhj4sSWdYW1-0oATY=0YhXw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4] dt-bindings: power: supply: Revise Richtek RT9467
+ compatible name
+To:     ChiaEn Wu <chiaen_wu@richtek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peterwu.pub@gmail.com
+References: <1676627755-14349-1-git-send-email-chiaen_wu@richtek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1676627755-14349-1-git-send-email-chiaen_wu@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 01:35:59PM +0800, Jason Wang wrote:
-> On Fri, Feb 17, 2023 at 8:15 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
-> > > From: Rong Wang <wangrong68@huawei.com>
-> > >
-> > > Once enable iommu domain for one device, the MSI
-> > > translation tables have to be there for software-managed MSI.
-> > > Otherwise, platform with software-managed MSI without an
-> > > irq bypass function, can not get a correct memory write event
-> > > from pcie, will not get irqs.
-> > > The solution is to obtain the MSI phy base address from
-> > > iommu reserved region, and set it to iommu MSI cookie,
-> > > then translation tables will be created while request irq.
-> >
-> > Probably not what anyone wants to hear, but I would prefer we not add
-> > more uses of this stuff. It looks like we have to get rid of
-> > iommu_get_msi_cookie() :\
-> >
-> > I'd like it if vdpa could move to iommufd not keep copying stuff from
-> > it..
+On 17/02/2023 10:55, ChiaEn Wu wrote:
+> Revise RT9467 compatible name from "richtek,rt9467-charger" to
+> "richtek,rt9467" because it has to match the "compatible name" in
+> the source code.
 > 
-> Yes, but we probably need a patch for -stable.
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> Reported-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
-Hmm do we? this looks like it's enabling new platforms is not a bugfix...
 
-> >
-> > Also the iommu_group_has_isolated_msi() check is missing on the vdpa
-> > path, and it is missing the iommu ownership mechanism.
-> 
-> Ok.
-> 
-> >
-> > Also which in-tree VDPA driver that uses the iommu runs on ARM? Please
-> 
-> ifcvf and vp_vpda are two drivers that use platform IOMMU.
-> 
-> Thanks
-> 
-> > don't propose core changes for unmerged drivers. :(
-> >
-> > Jason
-> >
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
