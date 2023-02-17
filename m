@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3463F69AC3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD1269AC41
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjBQNRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S229615AbjBQNRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBQNRI (ORCPT
+        with ESMTP id S229635AbjBQNRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:17:08 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC2153ED1;
-        Fri, 17 Feb 2023 05:17:02 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id t8so1302842lft.11;
-        Fri, 17 Feb 2023 05:17:02 -0800 (PST)
+        Fri, 17 Feb 2023 08:17:38 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0BF53ECB;
+        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u22so1713259lfu.5;
+        Fri, 17 Feb 2023 05:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MVXpSvxD8IQLLcvTNwyEk6nPjo5geqGNCFp6pQeswJ4=;
-        b=EWCj+D/JciN173neJ/bAWbb8Wsq/dKdqGJ7JlzysVjI7T6XYobU3X+botTB7SN8ZzP
-         i/wd1GhONcUrM6D3vvxK7vCWfOBD4a1yloUyKQrd3AOIz5lYxRd+Zud+Mj2NNrQBAJ2U
-         q7qaxB0QZRe6W56+l8Z4YpXs1796EiobAWPam60eKGpRAtSFvsXr93htNbVRwCwkIlC3
-         5pxwiY3IXTZPozDxqXEkfCTiDdzEOCxjsPjek3YDsAQcPy68bvD6S16GG1a1pHk//d/1
-         fPwp8SF9gcgqwAxhurtTdOpyEnpeTuyy+FnAl+x+wBlzyUqOChVXctZd48wBI1YcegxT
-         qrHA==
+        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
+        b=X6qY1lciga9RtfeJ9EC21Br0bqqFiuV70+Fe7la4LL95n3/Z6ZykJEvhueo1ubFUXa
+         FB098R1YjRVpfpWwxC5zQ6pbpPEEFjG5rygG+ABKj9GP1N1Qh76FizmeQDmlYYQ0yQWk
+         T7N7HhGrF3wlcvIyW2SF+ArGp2hORiwnulRFSWqQQP+bXAS3yEaDTOKC3nQ9T8ewW7h/
+         bx0YtE6+VXZhsNbqzQLc9p6vy7TDTBqzw8yfOKBEVvVgDm561o8Gdxci5dhKhI9Q1sRY
+         OHf8p9eThcVp/GsoLsBztAAP1x9RGkHLRy0m/ZPJ1FFmNuF/VxcIzTYKijDraF1XjB5/
+         nDAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MVXpSvxD8IQLLcvTNwyEk6nPjo5geqGNCFp6pQeswJ4=;
-        b=nGDAlQZTTn6xvMcLZq3aIeG3/de1+sTR8WThJaTN4I/tBtmUn2jDqVCoLlfNMmNplh
-         Ag+8djlSRYihTnym8dqcq8SXxKNDX0ciAcfHqKyV2x0XraxpujO4UjKDpw1+3JvHZjkQ
-         UMUOSYZi5RgJYRnaoq8lWPBYwDvFlOznXjfabqvq+dl1n1iroxqBtJn6bwvQCw/ipSvL
-         zxPbJXU2yY71XXb/rCLA2/LGN+INXnW2xULepIJC2m/qkdw0sGpjiE9IIV0eC80O6p3Q
-         EoRn0Su3LrwOKl8iiD0Ov/dnZeqj7htrhET1dDogBY+tfoCxDNNd2RU7YtqLowqweuJO
-         hmMw==
-X-Gm-Message-State: AO0yUKVx3r6LOTb9Cx0HoVIOP/czZKkhaUtkMaTql2BtYsztVEf2YJft
-        d6zpwGx/tUFJ/bLQCtwkLuLBZxfTyqxOuMYs
-X-Google-Smtp-Source: AK7set//GZM99vxZgMQht3iXKY7qkiQhLZZSsdCP1ku2eKzAzSUDtfL8xIoEVoSpSeYEdhPIkHWJsQ==
-X-Received: by 2002:ac2:4ac1:0:b0:4d9:8773:7d6f with SMTP id m1-20020ac24ac1000000b004d987737d6fmr2820673lfp.19.1676639820640;
-        Fri, 17 Feb 2023 05:17:00 -0800 (PST)
+        bh=67ZjQMFl9MopKMUr8Q8rD3tQTxsScrYHj6lDCLlYReQ=;
+        b=xz1LGtupUb1IID3tX0wKI/V88RG5TkXDtASsBAYvmB9hXQMAusqsJpA7xO7vKJDeYz
+         dT4pajuB1AZ8yLvhQ13LAwwaL02JWcyb1ugV7w8e9Ku4jjYQqLDBKcCSbKcPFOCefjtU
+         GKveKEI876Zr8QRKzlsCujfP0bIyY3i/nQtLRLmosoReOIEj64Fuqwt1nZn7ZPAUoAza
+         WdO5vsWrexvhgJB3w6AtFaLMbVd9nVUMQaHB6Ia/I8NYQRGCsbfo42S00iAs0M+4AQeq
+         ZXbZdlcmyoSFIQ6Whx61p9MSFL9WfWnsRIgfiYTGr4Q3NS4P+YL+Itl1Q+qJ9G6iyFRF
+         M/ig==
+X-Gm-Message-State: AO0yUKVkbJ/YPUVp9htFQ+5UWIBXpwzpnX+tjvEXxy/VotIwj0VusXMB
+        qfQcdo4I0OOAZ6xkNiKF+UU=
+X-Google-Smtp-Source: AK7set8NnpHM5q4xxy7c9GwpwdEJdJZ0GVGKa9VD8sId667fINupwk3xnWdf10GUwtrDpX47Mzfj/A==
+X-Received: by 2002:a05:6512:23a1:b0:4cb:4326:682e with SMTP id c33-20020a05651223a100b004cb4326682emr1904402lfv.21.1676639849136;
+        Fri, 17 Feb 2023 05:17:29 -0800 (PST)
 Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
-        by smtp.googlemail.com with ESMTPSA id b4-20020a056512024400b004cb43eb09dfsm684285lfo.123.2023.02.17.05.16.59
+        by smtp.googlemail.com with ESMTPSA id j11-20020a19f50b000000b004d85f2acd8esm677580lfb.295.2023.02.17.05.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 05:17:00 -0800 (PST)
+        Fri, 17 Feb 2023 05:17:28 -0800 (PST)
 From:   Alexander Sapozhnikov <alsp705@gmail.com>
-To:     Roopa Prabhu <roopa@nvidia.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] net-bridge: fix unsafe dereference of potential null ptr in __vlan_del() 
-Date:   Fri, 17 Feb 2023 16:16:57 +0300
-Message-Id: <20230217131657.12649-1-alsp705@gmail.com>
+Subject: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on negative index in mp_config_acpi_gsi()
+Date:   Fri, 17 Feb 2023 16:17:26 +0300
+Message-Id: <20230217131726.12666-1-alsp705@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,32 +74,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After having been compared to NULL value at br_vlan.c:399,
-pointer 'p' is passed as 1st parameter in call to function
-'nbp_vlan_set_vlan_dev_state' at br_vlan.c:420, 
-where it is dereferenced at br_vlan.c:1722.
+Variable 'ioapic', which may receive negative value by calling 
+function 'mp_find_ioapic' at boot.c:465, is used at
+io_apic.c:128 by passing as 1st parameter to function 'mpc_ioapic_id' 
+at boot.c:466
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
 Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
 ---
- net/bridge/br_vlan.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kernel/acpi/boot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/bridge/br_vlan.c b/net/bridge/br_vlan.c
-index bc75fa1e4666..87091e270adf 100644
---- a/net/bridge/br_vlan.c
-+++ b/net/bridge/br_vlan.c
-@@ -417,7 +417,8 @@ static int __vlan_del(struct net_bridge_vlan *v)
- 		rhashtable_remove_fast(&vg->vlan_hash, &v->vnode,
- 				       br_vlan_rht_params);
- 		__vlan_del_list(v);
--		nbp_vlan_set_vlan_dev_state(p, v->vid);
-+		if (p)
-+			nbp_vlan_set_vlan_dev_state(p, v->vid);
- 		br_multicast_toggle_one_vlan(v, false);
- 		br_multicast_port_ctx_deinit(&v->port_mcast_ctx);
- 		call_rcu(&v->rcu, nbp_vlan_rcu_free);
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 907cc98b1938..abb78822f164 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -463,8 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+ 	mp_irq.srcbus = number;
+ 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
+ 	ioapic = mp_find_ioapic(gsi);
+-	mp_irq.dstapic = mpc_ioapic_id(ioapic);
+-	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
++	if (ioapic >= 0) {
++		mp_irq.dstapic = mpc_ioapic_id(ioapic);
++		mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
++	}
+ 
+ 	mp_save_irq(&mp_irq);
+ #endif
 -- 
 2.34.1
 
