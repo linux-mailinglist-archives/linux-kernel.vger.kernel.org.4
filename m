@@ -2,232 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5297769A3F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6ACF69A3F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjBQCe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 21:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S230356AbjBQCgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 21:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjBQCe0 (ORCPT
+        with ESMTP id S229759AbjBQCgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 21:34:26 -0500
-Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020014.outbound.protection.outlook.com [52.101.56.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669774BE88;
-        Thu, 16 Feb 2023 18:34:25 -0800 (PST)
+        Thu, 16 Feb 2023 21:36:31 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2117.outbound.protection.outlook.com [40.107.92.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E5E58291
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:36:30 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oglBezXRXswFSdFBBWXv8+kKBirUF/Kgjz51nrQSwqKUP9zWeXlkryNkqgYeK8LKsjUbYin4Mnr5vq3ICH/VjoHjEITxRuzONszB4o8kY2rWW3X9JMx3fm8lTxysSbZd+vBeHJF6wwohYEXoHDCbi+tBiSY0X8TztvmPJ70WsAzTvqdydCbwgNIfD+BD7AyHX3hHT1aULsyN6dB6ztezPEi9xjnTvg/0x9COtZlZUBxUNHOfO5Gn5MbS4T1VW9KRxEzJC0fLDMwIlvflijSvo0geaxUydnOlUNHOL2TTIPpHMowWbCjsKSMTA2CQBMQVoX4rr69SwMa9ZXVqFynThQ==
+ b=eeVu8F3T6p1baoxiKXXim5aNSc0zQBiC8a2Sl4R40b+Gfld2lFrkVFuH4HzrzQWLNaUpcHOZ7ulT3j0kOXoWGiayQ5uXYCvkSCN7TH8+i4yH9hZmlZ9BPH/z2ndKFBkSMoLwJVKN3huNAI4HlnnQufbLyEhQlcCVuels3B4wQ8/A7puc2h42D93DnA1bde/eawali0Qj8JnBNyxysqgi4ciGP4ECl7m/tK1b1hrowKfK//XG9qAg90sQAJMHDDVVZaEPT/ScjsOEqPBY4L3CDGJaXNJqjWxKZvl+1rZaFO5Za0NBZCXDf/xuxZAxHEsxOk3sJchCGWGf9D/wD2FO6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GBa6JhBN+OMo61IKaHmR19bierqXhZiF/FBHt39wVx8=;
- b=VjHMMCTqinixulOY1VY1AvSlNs+7SkxHbPlKGC+sqy+6zid3HjIQ1J008PugLsVbkQWmw04rBnbZmi3fWVPD7cZ11Dz3x1x4srOJ1tvnqOuXCMiGTuKcjbFgmaicHweBUBkdEShdWh0fIjIkUMH+NZyrhcrhLI6LXb2ixsKT9ThDITbaQ2KstLZ9sdmAO1KXCHJXuCh2W82UDd58lpxAErARMuykgBcb6GLyROISdrQ6GqWhZwSHNqCixsCTmvMjrJ9/f69ritNQHo/Ju9N7JBOTe354z2ymn7EfVDtO5g4tc37JYnZ+jy1Lf4mWFjC1GkbH1EWjTo6g2JbcSXnEWA==
+ bh=HRtsdX2d1MwbCDnOm4OVooGSfGVBrl+3Voo2c6Obxuo=;
+ b=SYHJb8A/xb20tMkTrZ0kSNFekJPGHJwekefEu7rijKCTlxcT2Qan3/W4Ger0IuxG9MQ5dyQ3Mty4kz3eQg8+hH2Dk/ETxdIi+Y6rrvesALn31oZ4Njp9HBNG91SC6H2DaVBqFRY6uSpwWq2Hw5ztIq2QKQc3pPE7K0aOmAoY1yTYzXOOx5fZS2nhalvg+40cQkI+L34bqOR2jn3xj8ukyW6OzwGl8w9R5F8f9AhWZH1bDyZlhuR36EAPffAEqjKdxxcb/7C2gomzPEnsNIgGW+054Xfvp638WTVaun4YB6OMm7yNNHxHtQqDe7kr93ShcR69gfXENpoCH7OnGhW/Gg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GBa6JhBN+OMo61IKaHmR19bierqXhZiF/FBHt39wVx8=;
- b=QC62BmA7ZEDDsXMlY2hr9LRIge37U29/MlWY4so2u9UP1pAwgsz5apfgNM1bNmtd4Ixld1AIRC77OFloso/x6HScKuklJaUo39COs0qAM9PlaKYKQ2XX3M5A/z5MPyhnyrRCnCwURDI3z9DaLrFvkLPBc93R2GBdSUK1pEyyoSM=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DM4PR21MB3490.namprd21.prod.outlook.com (2603:10b6:8:a3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.11; Fri, 17 Feb
- 2023 02:34:21 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a%7]) with mapi id 15.20.6134.006; Fri, 17 Feb 2023
- 02:34:21 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-CC:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] x86/hyperv: Pass on the lpj value from host to guest
-Thread-Topic: [PATCH] x86/hyperv: Pass on the lpj value from host to guest
-Thread-Index: AQHZOmyDXwNyD+qOhEijfVFgcoX9l67OqFMggANgBoCAAG3icA==
-Date:   Fri, 17 Feb 2023 02:34:21 +0000
-Message-ID: <BYAPR21MB1688A3CB5CD51A6A6921D926D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <167571656510.2157946.174424531449774007.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <BYAPR21MB16881C783D58F2F20B7E196DD7A29@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230216194101.GA685@skinsburskii.localdomain>
-In-Reply-To: <20230216194101.GA685@skinsburskii.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=551607db-8d45-426b-b3a3-409333ce1a11;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-17T02:14:18Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DM4PR21MB3490:EE_
-x-ms-office365-filtering-correlation-id: 45247b0e-ffc0-4fb1-423d-08db108f79c2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Trltf30mxXqS++nEBqcpq8dTTVGWj+UdEyQPsZiqv0m23L60b0d1XUJ8dmBJWep7O7vz/W4ajMs3nnrKx6w7sqinIg/zv2YTR3Si9C//UJA8djKz5JIAFDIAw2OqoG9tI45yqpZkSpDcjQ7o6vZAR9RGpfczK1xhiN5H9OojD0gPUJoPD1rQtzlnOLDDLcg1aFmDxB1hNG4eSbde+7+TZI56xosmGYElvYHMSJ2WxfLIuWMlEf2f2klFDGM5VOZo0MFA4LxNPj4gabzNKYwhPFZfcvttvKvH6v6lm/a+uxkVK3fl2oGu4lbIFBfUvd20RtE8pHZotYfteZ2wxje9x4LYOoyKTdkEsj195Kew88uvLLli5zaJuWB9r1XwKwnZLqfMOvyp/D8HKpHI47PjYgp2pDNyDiJSvW4vKfkq3pTfeYfEZtueo/S09cQS+Y7kTSpsKvqdkWDvpcBTQVZJohc/BTcZMXHp2s6GzxB8+mdvqaq7cIrsu56fHsRjtTdjauGaAjzHxURzbP8Hv+PkkHXiQ0CYFwoyAPh15D3rS0Xygss5vRYlGhqzhtC3YwvtH8W8NDAHoCVkNwvoPydZbw/zzPruzh9RjmGsDfCql1NocfOvUqGkA/pwluC/J4sLCy7wcPJJeeoZQzgkT5iXuX/BceQw1VM1iBEsLM0r4obCJZDfI8Cuxzv8JhDmUSfOoEnQTLyY0y1O+MP5DcV5hqs0wqbOS9pwE7h5Y1pwXQ999WXvLEvnnPY4XJ2+eR6N
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199018)(52536014)(82950400001)(86362001)(54906003)(41300700001)(2906002)(10290500003)(33656002)(4326008)(38070700005)(66946007)(66476007)(66556008)(66446008)(83380400001)(64756008)(8676002)(316002)(478600001)(76116006)(7696005)(55016003)(71200400001)(186003)(9686003)(122000001)(5660300002)(38100700002)(6506007)(7416002)(8990500004)(6862004)(8936002)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KwYQqJNUFi2CdPEOWQR0ST13vqDLd8kbTfC3VvWfVFUYjg6bvuRsCa+PgJF3?=
- =?us-ascii?Q?b3YyW+A/TlgmrjYVfsikwr3DSGlEczMPPn3xNFzlPFBv40k34UmpJb2Gti9/?=
- =?us-ascii?Q?3KJzrSYTGt0AMVQzKBxeR5NC5/TMQozLWUOM6FIub/3c4F+eeQe+SxFF6tIj?=
- =?us-ascii?Q?DeO9Y6pkH7JpPLCjKNRKUgs61H2yO3A3GzMjhXw0ZfMft7bagRnEssIkEy/j?=
- =?us-ascii?Q?yplJ4eWbH2TNScg2EMnVE/2wp9Am2ptjNuNjvOw5UJZ0sBacAJnwyZdwfuXv?=
- =?us-ascii?Q?X0QfZd/P7Knp7q4LVjMj1JQNDSY/8kXI6iZcbmhI0Svx1jJXX0TjOCP+/OtY?=
- =?us-ascii?Q?Lururi1//Ta02XAHLkhGkFIZZEIJm7hLKz3u/b0whUWHiEK6XiFPMjPGomrE?=
- =?us-ascii?Q?IxVnCT3MMf1pESpLPgX+bgqKCvGOzzexkegihx1DUicclrE9dVGEjJS356BN?=
- =?us-ascii?Q?Hl0O2AseRJZWRm4GIldbbKDwVxYE2ttYQ0jZkvSwqCeqgBIA+fBaHueZUFEa?=
- =?us-ascii?Q?FCcG6qf5cJGoIWVwHcG+HJl8tQL5cPMgIm0iLt2/37Rf5blqLb9tmhgQ6R/b?=
- =?us-ascii?Q?SBKWThpEb8euYO+j5wu+yJYTGuu+G1xyOhQTHO8jM+KpTCAFGeXzXSD6gaXi?=
- =?us-ascii?Q?4mm2dSp/jbXyiGy/h1J6wQHsD4/5RhU61MYzrmCHtsbtFu+OKG8TuufHFBMn?=
- =?us-ascii?Q?qtZBl3J8nXefybeDMXZunZP+DujVx78t8QQ5J6dpYbh3xtfzryIBZMBlCILV?=
- =?us-ascii?Q?y48qHTsPAM8jIqgwiVH/ENUULKftQKMmgJ6B2EZR+Zy0j5WNbkqycMNxr9K9?=
- =?us-ascii?Q?QnhDLnBvek/Ck5u7u5vKRrJkDwda3Bds7Xi+Ss69xPwrzr0re+ni7IGBbvmq?=
- =?us-ascii?Q?JTTpjBxDqRpJ8syQKmyMNu3j+1hBxcsDpfwDBLegMbOIYijONkUO0QxyNkw7?=
- =?us-ascii?Q?vYHeiSarMrcpdqmzvp2bk3SEsNMl7ANrzuTWbn77oiTlfhFljLB4F9L5mlp0?=
- =?us-ascii?Q?bJGvLDyhjo6oevNLUbuXLBPE2gT1pLRllGioMUOPoqPY0LZL4HDGXGBxlCFs?=
- =?us-ascii?Q?IqzbCL1oiGFuISIBCUR33jVVZ5O3UChkBQYb+sDhK/XLaJQbwc0hA0uVgZSZ?=
- =?us-ascii?Q?i4/XmxV+QIOXDpctnTa0qElKM/QrhNN8r96+li0CiT1gMNUOVkpfxrwSdZGs?=
- =?us-ascii?Q?QkyStOXbz47qSC0ABIUKWrx7ES6Vprdh1V0U483+NviIELXWT6FXwaeW0hPH?=
- =?us-ascii?Q?MtywRq3f5Bs8IxrPm7VCPO2nlOrODUiDX/VV0NyBLgEaqthRpgbrnHndeyMT?=
- =?us-ascii?Q?hJtmWnK2xVsaZqLnVabajGgtGm5kfvUxY1Rd7tYt2i0bySq5w9muoYjitVtt?=
- =?us-ascii?Q?lXOayVWRLfEp2e9yN8665hDCiTfWcdUKJ6LxBAwlu5l2LtZmTidPLrildV2F?=
- =?us-ascii?Q?JEOcv0+FqOs3EJO1XALjqETHaylTlEwryJxkXLV1ukWyDuEefp4e3okgeR40?=
- =?us-ascii?Q?hQ+giugPsFFz59IE1ve94HL7RjbU2otNu4g+RXphoXuJteaw/pFqUBbwGD+d?=
- =?us-ascii?Q?vGMCT4amuK8StEfpNZZ+HEEpjWL9/XYPlEDKMGH7xbZHhipR2gZ0c84+NvDs?=
- =?us-ascii?Q?EKM52yBPhO81vw/27kba+IMezimBwzNzWr6qYH2cww4RH1q8P6q9culZhvhX?=
- =?us-ascii?Q?/Dyq3A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=HRtsdX2d1MwbCDnOm4OVooGSfGVBrl+3Voo2c6Obxuo=;
+ b=YbZsaHWEEZPfGJSl/5NNbWloipPDNCodbd5Pok2QIcR3egI6KFGEjPtePm1Lsv278w+PIi26dZld8apFAW/BZEf9NMlhAvnyRW6/TKjMFfOjVW2utROsrTwenrxdM7jEj57epqiawOdgLgIOhHy5Lp+tCMXUxOWAvVfbs/XxEiM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
+ BN6PR01MB2418.prod.exchangelabs.com (2603:10b6:404:59::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.13; Fri, 17 Feb 2023 02:36:26 +0000
+Received: from SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::bf6:8038:9fe8:1588]) by SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::bf6:8038:9fe8:1588%4]) with mapi id 15.20.6086.023; Fri, 17 Feb 2023
+ 02:36:25 +0000
+Message-ID: <e887e0ee-b988-cd1f-d658-0667c69af1b8@os.amperecomputing.com>
+Date:   Fri, 17 Feb 2023 09:36:10 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2] misc: smpro-errmon: Add dimm training failure
+ syndrome
+Content-Language: en-CA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, Arnd Bergmann <arnd@arndb.de>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Thang Nguyen <thang@os.amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>
+References: <20230214064509.3622044-1-quan@os.amperecomputing.com>
+ <20230214064509.3622044-3-quan@os.amperecomputing.com>
+ <866fe1b3-8044-6581-9711-452550f91198@molgen.mpg.de>
+ <98b2a8d6-c5bf-a782-7fc1-8874f94edc25@os.amperecomputing.com>
+ <Y+4h0V+LtaX8745A@kroah.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <Y+4h0V+LtaX8745A@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
+ (2603:1096:4:196::10) To SN4PR01MB7455.prod.exchangelabs.com
+ (2603:10b6:806:202::11)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|BN6PR01MB2418:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1beb10b-f43c-443c-9532-08db108fc3b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X176uCUZUdN5ZRBJFypWwCXGaP3ZEfBG6QWBXvEreWrAGJBZVBYH3fP5O4HIxEWwj9+xW+Q+lUTxviko0ZoHanwmv3IEllmGCQB6uJ5OW46DSf9oF7Yp0qpEdYF/IZx0ZRn7z/AVXLRTRN0rJFxPtIpFH6OGGY2ti374WAnnjF7sYB1Cszxx2rk1vqZSokZf4zix5nTvic4xqXGa5Ne5Yeq16yaFOZLY0Hai3k4AVuk4Qaz4Vdh5GlxaIBg7x2kJxewicMvSeFUm8r3zk8VTvVVTNrvgRPPh0V39Bgg8kUlJP29qNQXbhN4DlGRIxQJHEreLeSrMrnFQKTRlOZw5L4njTSdpGP7uDKcRTeQyps33n3rUt3Z692qVmPcv2awqjBgU2K+iP5vftynEAtZypZ7vyW41tOLfHJ9VbfbqVU+UXU7HYyJ6OO432sZqnucus6YDG0Tz6E+Fb5aEfjBa2GgbjAlLYK5Ek0L8Yl5N42xEH3jStdnoCptPOFwV24yiv9slkZyHLm0XFmTlF5iqaQPM33NdBRuVp4lRujZIaaRJjvO5T4xmH9opBZQYLDqrjqLt6LjqKwWseeQPD2qcqTouj9jJlcjtSEbsznFEL/bxbjEIv5c9dk+S8wXID4uKOTSSOI8a+8p+VqYI2UQU2fhUZ8xS8vgzUKQgfOjLw9lv32rDMBoiqfp9cL/JDvel14eeN31zw6TrSC2A/nrg7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(346002)(136003)(39850400004)(396003)(451199018)(5660300002)(316002)(86362001)(52116002)(6666004)(6486002)(478600001)(966005)(186003)(26005)(53546011)(6512007)(6506007)(2616005)(107886003)(66476007)(66556008)(6916009)(4326008)(8676002)(66946007)(31696002)(8936002)(41300700001)(54906003)(83380400001)(38100700002)(38350700002)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VUlNcEI4NC9QalFCTjFEMFNKYWxVcWVNdGpOV3lqWitkejJIQTJQR0JUbzhU?=
+ =?utf-8?B?dFVBbkRmSjQ0QjNoRXA3UDhCQ2JGcDRoUGhLdThvYmJOQll3Q05tNmxBNTVs?=
+ =?utf-8?B?OGwrcmxMVmpNUFk2bEt5SGxiSzRFd1E2K0FHMXQzbndWdTVpYnAxQ3pFV0RH?=
+ =?utf-8?B?VVFkV3ZqMjZ2OWd1ZDFrUWZHQTBqRWorYS9yL05LYlREZGhtTzJUemhKTkJ3?=
+ =?utf-8?B?YVZmYzVTY2k5MHU1c3JTUDdJcm04MC9QYnFkV2RiR29Ta2xhOXowY1YxSXVu?=
+ =?utf-8?B?a3JBTkNSRjBkWlBtd3Y5RFcxV1NCMVJoWVI4aGsrSC9McU5tdzBxaEJnWFJB?=
+ =?utf-8?B?UU5XckxpQTRjU1RZWVc1UDJMVnJTOUxyZXNQV2NXTHowZVdkamJtM3Fpd1Z3?=
+ =?utf-8?B?czI1S0RzNlNNbVBPWUZUOVdBMm1BbExiWERNZGRZRjF1SDJrVkZSbnB3Q1Qw?=
+ =?utf-8?B?anRKaUd6N09uMmxsRTNVQWhIdE1ZbllNSWpxbFlDNUpSUWVmckcwMG9XdlY0?=
+ =?utf-8?B?bUx3ckgwbDJJNnVKNW1xdE14cjhveXhEWTdVbmJtQmsrUk1EZXdOc09yNGNY?=
+ =?utf-8?B?ejU3UFpYRkszVS85c3pjbHhsRDdHSHJWajFpODFmcmlSeDZQUFBKUWp4NUxs?=
+ =?utf-8?B?VVNSWkxqUW5ialFXWE5mUlRKTGVId0wrSVFKZXcvSUFIUzhDRjVodGJlQ0FN?=
+ =?utf-8?B?SWU1cG40eWZVNEhzbHNrTGNTcXU2WkNjN0JYTE5PZGZBa2lIb1VZaVdqcDZS?=
+ =?utf-8?B?UnFLUjY0SHlIU2thZm9TekVuUEVQUjRRRlBKeVcyOHdxY3FuYmNDSTRWRjNX?=
+ =?utf-8?B?RmpiUkxyTlJXT3JIVG13SSsyVW92blcwaXdvY1haQkpOR29VWUtvOE5XZ3lI?=
+ =?utf-8?B?ajZxQ1VOUDl5TllPNkM3bkpWOG1hYmZFTS9LR0syL3hEUDhiR1NOUG5rVENr?=
+ =?utf-8?B?Y0czcEFQYUxJNFFxNGFMeFpWWEVOamhNempOd29KTTQ1YWhWVlFiajJNY2gx?=
+ =?utf-8?B?cUpxdG1BUVB4QkkvUEJoZHA5SHpITm42MUxvNnNoUzNCelIvTWF1RjlZY2FG?=
+ =?utf-8?B?Szc5UUlRWE1GOEE4WEovZHJiaUNNK3FiRXBWQzBXeThQd1dFbHRYaGV5cXhs?=
+ =?utf-8?B?bHNyT0x2cGV3WDFrVjRaZHNmbFc1UGNERFozVldVNTN2QU8zVHh4bCs2RlJ1?=
+ =?utf-8?B?YVVXdDFKeXhJbFFnY0lmcG9uNjcxNlo3L3BJUHh6NFlzRnVSTjdRS2ZJT0ZN?=
+ =?utf-8?B?Q1kvRnZxUlRBUmJrMDdMdlVMcEkxMzBsQ3U0L2pBUmhQdWNaTFJIV3orWDR6?=
+ =?utf-8?B?QmU4TDlqbzJDei9qN3FnSWNBdW1wdWJsQ1RLVUxtV3o4UmxHWWp3b0NTVUk2?=
+ =?utf-8?B?ZDNJMnpnNkVxNnMvNTVzalQ3ME9ZeTZNd1lHYTQxcE9kaWtYUzlRckFxUy9L?=
+ =?utf-8?B?bzR0bVQ1clVjY01SMzQxZWkwQnlrOWJlYkpkUmJaRFNyVUdtd3BtOEFlRENh?=
+ =?utf-8?B?S25hSGJOV0pPeDhpU0RqclFDTEY2MlkwSHhMUjkvZFV4UEU2MjFsUldZVnh3?=
+ =?utf-8?B?dzJxYzlvemFwN3RuZVVycSs2WEE5Tm9xNjY2NmxnRjFyaUhHZ2x1ME0vbWxq?=
+ =?utf-8?B?N2t5aHh2L0hkWjRSV2hBbU5BVzFqd0Y0ZnBRcGFXQVo4MTlBZWNrRGttbnpm?=
+ =?utf-8?B?Qno5WG9XZG5jc0t5dGdTUnNRTCtOQmVNa1EwK3hCd2QwL1lyazV5NWNLdVpo?=
+ =?utf-8?B?MjlKQWJETUtVYkRZWWVRUHptWWo4cnF1VHFlaXdDYlZSY2g0YTRVdnIrWGtL?=
+ =?utf-8?B?ZVVXSXVmaEdTaFEvQmV4NjJLVFJmQVpJK2hUdHFVNnRXczdyaU1lVk5JY0VW?=
+ =?utf-8?B?YkJHZHRjSmtQdy9IUWtscGRpSWlkakxtVjcvVEIvcHBscHhKcW52Zld1YUtF?=
+ =?utf-8?B?bWpDbHlyejNHckEyT3Z6R1JnejNrdVJwWGsySHNrTlpqdldTWFRiOHgrSG5P?=
+ =?utf-8?B?OTVkTUZ4UkN5RWpzQzUyWFFOZTAyVGlMekxUYkR1S2dSRWxXK2hrWjFYUHhn?=
+ =?utf-8?B?N1UzKzVENW9WWmJGcHk2N0lqOEdRc0ZZeWpoMmx4aFp1WjI1NzlEZmZKVVJC?=
+ =?utf-8?B?Smh6djNBL05OV295NGZYSndOWElENXdkcm1qMTBaRXQwVFBaMC9GM01sWUVF?=
+ =?utf-8?Q?k3x7x4mkEqAUxjKvvWRTiNY=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1beb10b-f43c-443c-9532-08db108fc3b8
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45247b0e-ffc0-4fb1-423d-08db108f79c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2023 02:34:21.1886
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 02:36:25.7141
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K9PIB43LttoczAh34nZQqWfDDvOn9XT912CtU80KwTcSeY9ksj1Yl/kkkeeE1Em25AxhOkWvPhLMOFC5lZUljOCKcVV6Tn7f0Ysd4hHq8W8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3490
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ks9towLAHmRup8un/SAp4oSlK3W+CxbxGDORov4+R6MRBTS+jlbAzYZfmnjisCliCswhHKKM5m9lp5uoYaKuvRp9Z5cZfIxlNlRSsyc6428=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2418
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com> Sent: Thursd=
-ay, February 16, 2023 11:41 AM
->=20
-> On Tue, Feb 14, 2023 at 04:19:13PM +0000, Michael Kelley (LINUX) wrote:
-> > From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> > >
-> > > And have it preset.
-> > > This change allows to significantly reduce time to bring up guest SMP
-> > > configuration as well as make sure the guest won't get inaccurate
-> > > calibration results due to "noisy neighbour" situation.
-> > >
-> > > Below are the numbers for 16 VCPU guest before the patch (~1300 msec)
-> > >
-> > > [    0.562938] x86: Booting SMP configuration:
-> > > ...
-> > > [    1.859447] smp: Brought up 1 node, 16 CPUs
-> > >
-> > > and after the patch (~130 msec):
-> > >
-> > > [    0.445079] x86: Booting SMP configuration:
-> > > ...
-> > > [    0.575035] smp: Brought up 1 node, 16 CPUs
-> > >
-> > > This change is inspired by commit 0293615f3fb9 ("x86: KVM guest: use
-> > > paravirt function to calculate cpu khz").
-> >
-> > This patch has been nagging at me a bit, and I finally did some further
-> > checking.   Looking at Linux guests on local Hyper-V and in Azure, I se=
-e
-> > a dmesg output line like this during boot:
-> >
-> > Calibrating delay loop (skipped), value calculated using timer frequenc=
-y.. 5187.81
-> BogoMIPS (lpj=3D2593905)
-> >
-> > We're already skipping the delay loop calculation because lpj_fine
-> > is set in tsc_init(), using the results of get_loops_per_jiffy().  The
-> > latter does exactly the same calculation as hv_preset_lpj() in
-> > this patch.
-> >
-> > Is this patch arising from an environment where tsc_init() is
-> > skipped for some reason?  Just trying to make sure we fully
-> > when this patch is applicable, and when not.
-> >
->=20
-> The problem here is a bit different: "lpj_fine" is considered only for
-> the boot CPU (from init/calibrate.c):
->=20
->         } else if ((!printed) && lpj_fine) {
->                 lpj =3D lpj_fine;
->                 pr_info("Calibrating delay loop (skipped), "
->                         "value calculated using timer frequency.. ");
->=20
-> while all the secondary ones use the timer to calibrate.
->=20
-> With this change lpj_preset will be used for all cores (from
-> init/calbrate.c):
->=20
->         } else if (preset_lpj) {
->                 lpj =3D preset_lpj;
->                 if (!printed)
->                         pr_info("Calibrating delay loop (skipped) "
->                                 "preset value.. ");
->=20
-> This lofic with lpj_fine comes from commit 3da757daf86e ("x86: use
-> cpu_khz for loops_per_jiffy calculation"), where the commit messages
-> states the following:
->=20
->     We do this only for the boot processor because the AP's can have
->     different base frequencies or the BIOS might boot a AP at a different
->     frequency.
->=20
-> Hope this helps.
->=20
 
-Indeed, you are right about lpj_fine being applied only to the boot
-CPU.  So I've looked a little closer because I don't see the 1300
-milliseconds you see for a 16 vCPU guest.
 
-I've been experimenting with a 32 vCPU guest, and without your
-patch, it takes only 26 milliseconds to get all 32 vCPUs started.  I
-think the trick is in the call to calibrate_delay_is_known().  This
-function copies the lpj value from a CPU in the same NUMA node
-that has already been calibrated, assuming that constant_tsc is
-set, which is the case in my test VM.  So the boot CPU sets lpj
-based on lpj_fine, and all other CPUs effectively copy the value
-from the boot CPU without doing calibration.
+On 16/02/2023 19:30, Greg Kroah-Hartman wrote:
+> On Thu, Feb 16, 2023 at 10:22:14AM +0700, Quan Nguyen wrote:
+>>
+>>
+>> On 15/02/2023 14:33, Paul Menzel wrote:
+>>> Dear Quan,
+>>>
+>>>
+>>> Thank you for your patch.
+>>>
+>>
+>> Thanks Paul for the review.
+>>
+>>> Am 14.02.23 um 07:45 schrieb Quan Nguyen:
+>>>> Adds event_dimm[0-15]_syndrome sysfs to report the failure syndrome
+>>>> to BMC when DIMM training failed.
+>>>
+>>> Where you able to verify that it works? Out of curiosity, how?
+>>>
+>>
+>> Yes, we verified it by injecting DIMM errors and confirm that errors was
+>> reported correctly via sysfs.
+>> For about how to do error injection, we may  need to refer to section 3.2
+>> Memory Error Group in Altra Family RAS Error Injection User Manual. It is
+>> shared in our Ampere Customer Connect [1]. The latest version is
+>> v1.00_20220329.
+>>
+>> [1] https://connect.amperecomputing.com
+>>
+>>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>>>> ---
+>>>>    .../sysfs-bus-platform-devices-ampere-smpro   | 10 +++
+>>>>    drivers/misc/smpro-errmon.c                   | 77 +++++++++++++++++++
+>>>>    2 files changed, 87 insertions(+)
+>>>>
+>>>> diff --git
+>>>> a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>>>> b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>>>> index d4e3f308c451..c35f1d45e656 100644
+>>>> --- a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>>>> +++ b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+>>>> @@ -265,6 +265,16 @@ Description:
+>>>>            For more details, see section `5.7 GPI Status Registers
+>>>> and 5.9 Memory Error Register Definitions,
+>>>>            Altra Family Soc BMC Interface Specification`.
+>>>> +What:
+>>>> /sys/bus/platform/devices/smpro-errmon.*/event_dimm[0-15]_syndrome
+>>>> +KernelVersion:    6.1
+>>>
+>>> Should it be 6.2, as it probably won’t make it into 6.1?
+>>>
+>>
+>> Thanks for the catch. Will fix in next version.
+> 
+> Should be 6.3, it's missed the 6.2 merge window cycle, sorry.
+> 
+> thanks,
+> 
 
-I also experimented with multiple NUMA nodes.  In that case, it
-does take a longer.  Dividing the 32 vCPUs into 4 NUMA nodes,
-it takes about 210 miliseconds to boot all 32 vCPUs.  Presumably the
-extra time is due to timer-based calibration being done once for each
-NUMA node, plus probably some misc NUMA accounting overhead.
-With preset_lpj set, that 210 milliseconds drops to 32 milliseconds,
-which is more like the case with only 1 NUMA nodes, so there's some
-modest benefit with multiple NUMA nodes.
+Thanks Greg,
+Will update to 6.3
 
-Could you check if constant_tsc is set in your test environment?  It
-really should be set in a Hyper-V VM.
 
-Michael
