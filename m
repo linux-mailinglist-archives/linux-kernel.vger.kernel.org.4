@@ -2,202 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ACF69A3F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A7769A3F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjBQCgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 21:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S230348AbjBQCg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 21:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjBQCgb (ORCPT
+        with ESMTP id S229982AbjBQCg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 21:36:31 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2117.outbound.protection.outlook.com [40.107.92.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E5E58291
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:36:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eeVu8F3T6p1baoxiKXXim5aNSc0zQBiC8a2Sl4R40b+Gfld2lFrkVFuH4HzrzQWLNaUpcHOZ7ulT3j0kOXoWGiayQ5uXYCvkSCN7TH8+i4yH9hZmlZ9BPH/z2ndKFBkSMoLwJVKN3huNAI4HlnnQufbLyEhQlcCVuels3B4wQ8/A7puc2h42D93DnA1bde/eawali0Qj8JnBNyxysqgi4ciGP4ECl7m/tK1b1hrowKfK//XG9qAg90sQAJMHDDVVZaEPT/ScjsOEqPBY4L3CDGJaXNJqjWxKZvl+1rZaFO5Za0NBZCXDf/xuxZAxHEsxOk3sJchCGWGf9D/wD2FO6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HRtsdX2d1MwbCDnOm4OVooGSfGVBrl+3Voo2c6Obxuo=;
- b=SYHJb8A/xb20tMkTrZ0kSNFekJPGHJwekefEu7rijKCTlxcT2Qan3/W4Ger0IuxG9MQ5dyQ3Mty4kz3eQg8+hH2Dk/ETxdIi+Y6rrvesALn31oZ4Njp9HBNG91SC6H2DaVBqFRY6uSpwWq2Hw5ztIq2QKQc3pPE7K0aOmAoY1yTYzXOOx5fZS2nhalvg+40cQkI+L34bqOR2jn3xj8ukyW6OzwGl8w9R5F8f9AhWZH1bDyZlhuR36EAPffAEqjKdxxcb/7C2gomzPEnsNIgGW+054Xfvp638WTVaun4YB6OMm7yNNHxHtQqDe7kr93ShcR69gfXENpoCH7OnGhW/Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HRtsdX2d1MwbCDnOm4OVooGSfGVBrl+3Voo2c6Obxuo=;
- b=YbZsaHWEEZPfGJSl/5NNbWloipPDNCodbd5Pok2QIcR3egI6KFGEjPtePm1Lsv278w+PIi26dZld8apFAW/BZEf9NMlhAvnyRW6/TKjMFfOjVW2utROsrTwenrxdM7jEj57epqiawOdgLgIOhHy5Lp+tCMXUxOWAvVfbs/XxEiM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- BN6PR01MB2418.prod.exchangelabs.com (2603:10b6:404:59::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.13; Fri, 17 Feb 2023 02:36:26 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::bf6:8038:9fe8:1588]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::bf6:8038:9fe8:1588%4]) with mapi id 15.20.6086.023; Fri, 17 Feb 2023
- 02:36:25 +0000
-Message-ID: <e887e0ee-b988-cd1f-d658-0667c69af1b8@os.amperecomputing.com>
-Date:   Fri, 17 Feb 2023 09:36:10 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] misc: smpro-errmon: Add dimm training failure
- syndrome
-Content-Language: en-CA
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, Arnd Bergmann <arnd@arndb.de>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Thang Nguyen <thang@os.amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>
-References: <20230214064509.3622044-1-quan@os.amperecomputing.com>
- <20230214064509.3622044-3-quan@os.amperecomputing.com>
- <866fe1b3-8044-6581-9711-452550f91198@molgen.mpg.de>
- <98b2a8d6-c5bf-a782-7fc1-8874f94edc25@os.amperecomputing.com>
- <Y+4h0V+LtaX8745A@kroah.com>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <Y+4h0V+LtaX8745A@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:196::10) To SN4PR01MB7455.prod.exchangelabs.com
- (2603:10b6:806:202::11)
+        Thu, 16 Feb 2023 21:36:27 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AC504B528
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:36:25 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxC9on6O5jb5oBAA--.3860S3;
+        Fri, 17 Feb 2023 10:36:23 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC74j6O5j4vg0AA--.32272S3;
+        Fri, 17 Feb 2023 10:36:19 +0800 (CST)
+Subject: Re: [PATCH v3 2/3] LoongArch: Add ptrace single step support
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230215092358.30368-1-zhangqing@loongson.cn>
+ <20230215092358.30368-3-zhangqing@loongson.cn>
+ <2b759af4-4047-4ac6-acbb-42e91c14fb48@loongson.cn>
+ <42a352da-936a-bf7e-994f-6d884a230646@loongson.cn>
+ <469f1228-dd70-a183-3135-4e3b2e9165f7@xen0n.name>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <772afe6e-cfa8-3dd9-236b-5f9e2dcbe680@loongson.cn>
+Date:   Fri, 17 Feb 2023 10:36:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|BN6PR01MB2418:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1beb10b-f43c-443c-9532-08db108fc3b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X176uCUZUdN5ZRBJFypWwCXGaP3ZEfBG6QWBXvEreWrAGJBZVBYH3fP5O4HIxEWwj9+xW+Q+lUTxviko0ZoHanwmv3IEllmGCQB6uJ5OW46DSf9oF7Yp0qpEdYF/IZx0ZRn7z/AVXLRTRN0rJFxPtIpFH6OGGY2ti374WAnnjF7sYB1Cszxx2rk1vqZSokZf4zix5nTvic4xqXGa5Ne5Yeq16yaFOZLY0Hai3k4AVuk4Qaz4Vdh5GlxaIBg7x2kJxewicMvSeFUm8r3zk8VTvVVTNrvgRPPh0V39Bgg8kUlJP29qNQXbhN4DlGRIxQJHEreLeSrMrnFQKTRlOZw5L4njTSdpGP7uDKcRTeQyps33n3rUt3Z692qVmPcv2awqjBgU2K+iP5vftynEAtZypZ7vyW41tOLfHJ9VbfbqVU+UXU7HYyJ6OO432sZqnucus6YDG0Tz6E+Fb5aEfjBa2GgbjAlLYK5Ek0L8Yl5N42xEH3jStdnoCptPOFwV24yiv9slkZyHLm0XFmTlF5iqaQPM33NdBRuVp4lRujZIaaRJjvO5T4xmH9opBZQYLDqrjqLt6LjqKwWseeQPD2qcqTouj9jJlcjtSEbsznFEL/bxbjEIv5c9dk+S8wXID4uKOTSSOI8a+8p+VqYI2UQU2fhUZ8xS8vgzUKQgfOjLw9lv32rDMBoiqfp9cL/JDvel14eeN31zw6TrSC2A/nrg7A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(346002)(136003)(39850400004)(396003)(451199018)(5660300002)(316002)(86362001)(52116002)(6666004)(6486002)(478600001)(966005)(186003)(26005)(53546011)(6512007)(6506007)(2616005)(107886003)(66476007)(66556008)(6916009)(4326008)(8676002)(66946007)(31696002)(8936002)(41300700001)(54906003)(83380400001)(38100700002)(38350700002)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VUlNcEI4NC9QalFCTjFEMFNKYWxVcWVNdGpOV3lqWitkejJIQTJQR0JUbzhU?=
- =?utf-8?B?dFVBbkRmSjQ0QjNoRXA3UDhCQ2JGcDRoUGhLdThvYmJOQll3Q05tNmxBNTVs?=
- =?utf-8?B?OGwrcmxMVmpNUFk2bEt5SGxiSzRFd1E2K0FHMXQzbndWdTVpYnAxQ3pFV0RH?=
- =?utf-8?B?VVFkV3ZqMjZ2OWd1ZDFrUWZHQTBqRWorYS9yL05LYlREZGhtTzJUemhKTkJ3?=
- =?utf-8?B?YVZmYzVTY2k5MHU1c3JTUDdJcm04MC9QYnFkV2RiR29Ta2xhOXowY1YxSXVu?=
- =?utf-8?B?a3JBTkNSRjBkWlBtd3Y5RFcxV1NCMVJoWVI4aGsrSC9McU5tdzBxaEJnWFJB?=
- =?utf-8?B?UU5XckxpQTRjU1RZWVc1UDJMVnJTOUxyZXNQV2NXTHowZVdkamJtM3Fpd1Z3?=
- =?utf-8?B?czI1S0RzNlNNbVBPWUZUOVdBMm1BbExiWERNZGRZRjF1SDJrVkZSbnB3Q1Qw?=
- =?utf-8?B?anRKaUd6N09uMmxsRTNVQWhIdE1ZbllNSWpxbFlDNUpSUWVmckcwMG9XdlY0?=
- =?utf-8?B?bUx3ckgwbDJJNnVKNW1xdE14cjhveXhEWTdVbmJtQmsrUk1EZXdOc09yNGNY?=
- =?utf-8?B?ejU3UFpYRkszVS85c3pjbHhsRDdHSHJWajFpODFmcmlSeDZQUFBKUWp4NUxs?=
- =?utf-8?B?VVNSWkxqUW5ialFXWE5mUlRKTGVId0wrSVFKZXcvSUFIUzhDRjVodGJlQ0FN?=
- =?utf-8?B?SWU1cG40eWZVNEhzbHNrTGNTcXU2WkNjN0JYTE5PZGZBa2lIb1VZaVdqcDZS?=
- =?utf-8?B?UnFLUjY0SHlIU2thZm9TekVuUEVQUjRRRlBKeVcyOHdxY3FuYmNDSTRWRjNX?=
- =?utf-8?B?RmpiUkxyTlJXT3JIVG13SSsyVW92blcwaXdvY1haQkpOR29VWUtvOE5XZ3lI?=
- =?utf-8?B?ajZxQ1VOUDl5TllPNkM3bkpWOG1hYmZFTS9LR0syL3hEUDhiR1NOUG5rVENr?=
- =?utf-8?B?Y0czcEFQYUxJNFFxNGFMeFpWWEVOamhNempOd29KTTQ1YWhWVlFiajJNY2gx?=
- =?utf-8?B?cUpxdG1BUVB4QkkvUEJoZHA5SHpITm42MUxvNnNoUzNCelIvTWF1RjlZY2FG?=
- =?utf-8?B?Szc5UUlRWE1GOEE4WEovZHJiaUNNK3FiRXBWQzBXeThQd1dFbHRYaGV5cXhs?=
- =?utf-8?B?bHNyT0x2cGV3WDFrVjRaZHNmbFc1UGNERFozVldVNTN2QU8zVHh4bCs2RlJ1?=
- =?utf-8?B?YVVXdDFKeXhJbFFnY0lmcG9uNjcxNlo3L3BJUHh6NFlzRnVSTjdRS2ZJT0ZN?=
- =?utf-8?B?Q1kvRnZxUlRBUmJrMDdMdlVMcEkxMzBsQ3U0L2pBUmhQdWNaTFJIV3orWDR6?=
- =?utf-8?B?QmU4TDlqbzJDei9qN3FnSWNBdW1wdWJsQ1RLVUxtV3o4UmxHWWp3b0NTVUk2?=
- =?utf-8?B?ZDNJMnpnNkVxNnMvNTVzalQ3ME9ZeTZNd1lHYTQxcE9kaWtYUzlRckFxUy9L?=
- =?utf-8?B?bzR0bVQ1clVjY01SMzQxZWkwQnlrOWJlYkpkUmJaRFNyVUdtd3BtOEFlRENh?=
- =?utf-8?B?S25hSGJOV0pPeDhpU0RqclFDTEY2MlkwSHhMUjkvZFV4UEU2MjFsUldZVnh3?=
- =?utf-8?B?dzJxYzlvemFwN3RuZVVycSs2WEE5Tm9xNjY2NmxnRjFyaUhHZ2x1ME0vbWxq?=
- =?utf-8?B?N2t5aHh2L0hkWjRSV2hBbU5BVzFqd0Y0ZnBRcGFXQVo4MTlBZWNrRGttbnpm?=
- =?utf-8?B?Qno5WG9XZG5jc0t5dGdTUnNRTCtOQmVNa1EwK3hCd2QwL1lyazV5NWNLdVpo?=
- =?utf-8?B?MjlKQWJETUtVYkRZWWVRUHptWWo4cnF1VHFlaXdDYlZSY2g0YTRVdnIrWGtL?=
- =?utf-8?B?ZVVXSXVmaEdTaFEvQmV4NjJLVFJmQVpJK2hUdHFVNnRXczdyaU1lVk5JY0VW?=
- =?utf-8?B?YkJHZHRjSmtQdy9IUWtscGRpSWlkakxtVjcvVEIvcHBscHhKcW52Zld1YUtF?=
- =?utf-8?B?bWpDbHlyejNHckEyT3Z6R1JnejNrdVJwWGsySHNrTlpqdldTWFRiOHgrSG5P?=
- =?utf-8?B?OTVkTUZ4UkN5RWpzQzUyWFFOZTAyVGlMekxUYkR1S2dSRWxXK2hrWjFYUHhn?=
- =?utf-8?B?N1UzKzVENW9WWmJGcHk2N0lqOEdRc0ZZeWpoMmx4aFp1WjI1NzlEZmZKVVJC?=
- =?utf-8?B?Smh6djNBL05OV295NGZYSndOWElENXdkcm1qMTBaRXQwVFBaMC9GM01sWUVF?=
- =?utf-8?Q?k3x7x4mkEqAUxjKvvWRTiNY=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1beb10b-f43c-443c-9532-08db108fc3b8
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 02:36:25.7141
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ks9towLAHmRup8un/SAp4oSlK3W+CxbxGDORov4+R6MRBTS+jlbAzYZfmnjisCliCswhHKKM5m9lp5uoYaKuvRp9Z5cZfIxlNlRSsyc6428=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2418
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <469f1228-dd70-a183-3135-4e3b2e9165f7@xen0n.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC74j6O5j4vg0AA--.32272S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3ZF4xXr4DZw47uryxAw43Wrg_yoW8Jr17Ao
+        W7KF1ftr1rXr4jgr1UA3yDJF1ayw1UGrnrtryUC3sxJF10yw17Z3yUJry5tay7WF18Wr1U
+        G34UXrW0vFW7Xr95n29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2
+        z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16/02/2023 19:30, Greg Kroah-Hartman wrote:
-> On Thu, Feb 16, 2023 at 10:22:14AM +0700, Quan Nguyen wrote:
+Hi, forks,
+On 2023/2/16 下午2:57, WANG Xuerui wrote:
+> On 2023/2/16 11:13, Youling Tang wrote:
 >>
 >>
->> On 15/02/2023 14:33, Paul Menzel wrote:
->>> Dear Quan,
+>> On 02/16/2023 10:07 AM, Jinyang He wrote:
 >>>
->>>
->>> Thank you for your patch.
->>>
->>
->> Thanks Paul for the review.
->>
->>> Am 14.02.23 um 07:45 schrieb Quan Nguyen:
->>>> Adds event_dimm[0-15]_syndrome sysfs to report the failure syndrome
->>>> to BMC when DIMM training failed.
->>>
->>> Where you able to verify that it works? Out of curiosity, how?
->>>
->>
->> Yes, we verified it by injecting DIMM errors and confirm that errors was
->> reported correctly via sysfs.
->> For about how to do error injection, we may  need to refer to section 3.2
->> Memory Error Group in Altra Family RAS Error Injection User Manual. It is
->> shared in our Ampere Customer Connect [1]. The latest version is
->> v1.00_20220329.
->>
->> [1] https://connect.amperecomputing.com
->>
->>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>>> ---
->>>>    .../sysfs-bus-platform-devices-ampere-smpro   | 10 +++
->>>>    drivers/misc/smpro-errmon.c                   | 77 +++++++++++++++++++
->>>>    2 files changed, 87 insertions(+)
+>>> On 2023-02-15 17:23, Qing Zhang wrote:
+>>>> Use the generic ptrace_resume code for PTRACE_SYSCALL, PTRACE_CONT,
+>>>> PTRACE_KILL and PTRACE_SINGLESTEP. This implies defining
+>>>> arch_has_single_step in  and implementing the
+>>>> user_enable_single_step and user_disable_single_step functions.
 >>>>
->>>> diff --git
->>>> a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
->>>> b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
->>>> index d4e3f308c451..c35f1d45e656 100644
->>>> --- a/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
->>>> +++ b/Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
->>>> @@ -265,6 +265,16 @@ Description:
->>>>            For more details, see section `5.7 GPI Status Registers
->>>> and 5.9 Memory Error Register Definitions,
->>>>            Altra Family Soc BMC Interface Specification`.
->>>> +What:
->>>> /sys/bus/platform/devices/smpro-errmon.*/event_dimm[0-15]_syndrome
->>>> +KernelVersion:    6.1
+>>>> LongArch has no hardware single-step register. the hardware single-step
+>>>> function multiplex fetch instruction watchpoint(FWPS) and specifies 
+>>>> that
+>>>> the next instruction must trigger the watch exception by setting the
+>>>> mask bit.
+>>>>
+>>>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>>>> ---
+>>>>   arch/loongarch/include/asm/processor.h |  3 ++
+>>>>   arch/loongarch/include/asm/ptrace.h    |  2 +
+>>>>   arch/loongarch/kernel/hw_breakpoint.c  | 35 +++++++++++--
+>>>>   arch/loongarch/kernel/ptrace.c         | 68 
+>>>> ++++++++++++++++++++++++++
+>>>>   arch/loongarch/kernel/traps.c          | 20 ++++++--
+>>>>   5 files changed, 120 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/arch/loongarch/include/asm/processor.h
+>>>> b/arch/loongarch/include/asm/processor.h
+>>>> index db060c5a976f..3ea0f1910c23 100644
+>>>> --- a/arch/loongarch/include/asm/processor.h
+>>>> +++ b/arch/loongarch/include/asm/processor.h
+>>>> @@ -131,6 +131,9 @@ struct thread_struct {
+>>>>       struct perf_event    *hbp_break[LOONGARCH_MAX_BRP];
+>>>>       struct perf_event    *hbp_watch[LOONGARCH_MAX_WRP];
+>>>>   +    /* Used by ptrace single_step */
+>>>> +    unsigned long single_step;
+>>>> +
+>>>>       /*
+>>>>        * FPU & vector registers, must be at last because
+>>>>        * they are conditionally copied at fork().
+>>>> diff --git a/arch/loongarch/include/asm/ptrace.h
+>>>> b/arch/loongarch/include/asm/ptrace.h
+>>>> index 58596c4f8a0f..66a0e6c480a3 100644
+>>>> --- a/arch/loongarch/include/asm/ptrace.h
+>>>> +++ b/arch/loongarch/include/asm/ptrace.h
+>>>> @@ -150,4 +150,6 @@ static inline void user_stack_pointer_set(struct
+>>>> pt_regs *regs,
+>>>>       regs->regs[3] = val;
+>>>>   }
+>>>>   +#define arch_has_single_step()        (1)
+>>>> +
+>>>>   #endif /* _ASM_PTRACE_H */
+>>>> diff --git a/arch/loongarch/kernel/hw_breakpoint.c
+>>>> b/arch/loongarch/kernel/hw_breakpoint.c
+>>>> index 6431cd319c32..94967b887d92 100644
+>>>> --- a/arch/loongarch/kernel/hw_breakpoint.c
+>>>> +++ b/arch/loongarch/kernel/hw_breakpoint.c
+>>>> @@ -153,6 +153,22 @@ static int hw_breakpoint_slot_setup(struct
+>>>> perf_event **slots, int max_slots,
+>>>>    */
+>>>>   void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
+>>>>   {
+>>>> +    int i;
+>>>> +    struct thread_struct *t = &tsk->thread;
+>>>> +
+>>>> +    for (i = 0; i < LOONGARCH_MAX_BRP; i++) {
+>>>> +        if (t->hbp_break[i]) {
+>>>> +            unregister_hw_breakpoint(t->hbp_break[i]);
+>>>> +            t->hbp_break[i] = NULL;
+>>>> +        }
+>>>> +    }
+>>>> +
+>>>> +    for (i = 0; i < LOONGARCH_MAX_WRP; i++) {
+>>>> +        if (t->hbp_watch[i]) {
+>>>> +            unregister_hw_breakpoint(t->hbp_watch[i]);
+>>>> +            t->hbp_watch[i] = NULL;
+>>>> +        }
+>>>> +    }
+>>>>   }
+>>>>     void ptrace_hw_copy_thread(struct task_struct *tsk)
+>>>> @@ -498,11 +514,20 @@ arch_initcall(arch_hw_breakpoint_init);
+>>>>   void hw_breakpoint_thread_switch(struct task_struct *next)
+>>>>   {
+>>>>       struct pt_regs *regs = task_pt_regs(next);
+>>>> -
+>>>> -    /* Update breakpoints */
+>>>> -    update_bp_registers(regs, 1, 0);
+>>>> -    /* Update watchpoints */
+>>>> -    update_bp_registers(regs, 1, 1);
+>>>> +    u64 addr, mask;
+>>>> +
+>>>> +    if (test_bit(TIF_SINGLESTEP, &task_thread_info(next)->flags)) {
+>>>> +        addr = read_wb_reg(CSR_CFG_ADDR, 0, 0);
+>>>> +        mask = read_wb_reg(CSR_CFG_MASK, 0, 0);
+>>>> +        if ((task_pt_regs(next)->csr_era & ~mask) == (addr & ~mask))
+>>>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
+>>>> +        regs->csr_prmd |= CSR_PRMD_PWE;
+>>>> +    } else {
+>>>> +        /* Update breakpoints */
+>>>> +        update_bp_registers(regs, 1, 0);
+>>>> +        /* Update watchpoints */
+>>>> +        update_bp_registers(regs, 1, 1);
+>>>> +    }
+>>>>   }
+>>>>     void hw_breakpoint_pmu_read(struct perf_event *bp)
+>>>> diff --git a/arch/loongarch/kernel/ptrace.c
+>>>> b/arch/loongarch/kernel/ptrace.c
+>>>> index bee4194177fd..52a3ee4366f4 100644
+>>>> --- a/arch/loongarch/kernel/ptrace.c
+>>>> +++ b/arch/loongarch/kernel/ptrace.c
+>>>> @@ -20,6 +20,7 @@
+>>>>   #include <linux/context_tracking.h>
+>>>>   #include <linux/elf.h>
+>>>>   #include <linux/errno.h>
+>>>> +#include <linux/hw_breakpoint.h>
+>>>>   #include <linux/mm.h>
+>>>>   #include <linux/ptrace.h>
+>>>>   #include <linux/regset.h>
+>>>> @@ -30,6 +31,7 @@
+>>>>   #include <linux/stddef.h>
+>>>>   #include <linux/seccomp.h>
+>>>>   #include <linux/uaccess.h>
+>>>> +#include <linux/thread_info.h>
+>>>>     #include <asm/byteorder.h>
+>>>>   #include <asm/cpu.h>
+>>>> @@ -39,6 +41,7 @@
+>>>>   #include <asm/page.h>
+>>>>   #include <asm/pgtable.h>
+>>>>   #include <asm/processor.h>
+>>>> +#include <asm/ptrace.h>
+>>>>   #include <asm/reg.h>
+>>>>   #include <asm/syscall.h>
+>>>>   @@ -541,3 +544,68 @@ long arch_ptrace(struct task_struct *child,
+>>>> long request,
+>>>>         return ret;
+>>>>   }
+>>>> +
+>>>> +void ptrace_triggered(struct perf_event *bp,
+>>>> +              struct perf_sample_data *data, struct pt_regs *regs)
+>>>> +{
+>>>> +    struct perf_event_attr attr;
+>>>> +
+>>>> +    attr = bp->attr;
+>>>> +    attr.disabled = true;
+>>>> +    modify_user_hw_breakpoint(bp, &attr);
+>>>> +}
+>>>> +
+>>>> +static int set_single_step(struct task_struct *tsk, unsigned long 
+>>>> addr)
+>>>> +{
+>>>> +    struct thread_struct *thread = &tsk->thread;
+>>>> +    struct perf_event *bp;
+>>>> +    struct perf_event_attr attr;
+>>>> +    struct arch_hw_breakpoint *info;
+>>>> +
+>>>> +    bp = thread->hbp_break[0];
+>>>> +    if (!bp) {
+>>>> +        ptrace_breakpoint_init(&attr);
+>>>> +
+>>>> +        attr.bp_addr = addr;
+>>>> +        attr.bp_len = HW_BREAKPOINT_LEN_8;
+>>>> +        attr.bp_type = HW_BREAKPOINT_X;
+>>>> +
+>>>> +        bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
+>>>> +                         NULL, tsk);
+>>>> +        if (IS_ERR(bp))
+>>>> +            return PTR_ERR(bp);
+>>>> +
+>>>> +        thread->hbp_break[0] = bp;
+>>>> +    } else {
+>>>> +        int err;
+>>>> +
+>>>> +        attr = bp->attr;
+>>>> +        attr.bp_addr = addr;
+>>>> +        /* reenable breakpoint */
+>>>> +        attr.disabled = false;
+>>>> +        err = modify_user_hw_breakpoint(bp, &attr);
+>>>> +        if (unlikely(err))
+>>>> +            return err;
+>>>> +
+>>>> +        csr_write64(attr.bp_addr, LOONGARCH_CSR_IB0ADDR);
+>>>> +    }
+>>>> +    info = counter_arch_bp(bp);
+>>>> +    info->mask = 0xffffffffffff;
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +/* ptrace API */
+>>>> +void user_enable_single_step(struct task_struct *task)
+>>>> +{
+>>>> +    struct thread_info *ti = task_thread_info(task);
+>>>> +
+>>>> +    set_single_step(task, task_pt_regs(task)->csr_era);
+>>>> +    task->thread.single_step = task_pt_regs(task)->csr_era;
+>>>> +    set_ti_thread_flag(ti, TIF_SINGLESTEP);
+>>>> +}
+>>>> +
+>>>> +void user_disable_single_step(struct task_struct *task)
+>>>> +{
+>>>> +    clear_tsk_thread_flag(task, TIF_SINGLESTEP);
+>>>> +}
+>>>> diff --git a/arch/loongarch/kernel/traps.c
+>>>> b/arch/loongarch/kernel/traps.c
+>>>> index 2b133079e0f3..56d7d076153c 100644
+>>>> --- a/arch/loongarch/kernel/traps.c
+>>>> +++ b/arch/loongarch/kernel/traps.c
+>>>> @@ -511,9 +511,23 @@ asmlinkage void noinstr do_watch(struct pt_regs
+>>>> *regs)
+>>>>   #ifdef CONFIG_HAVE_HW_BREAKPOINT
+>>>>       irqentry_state_t state = irqentry_enter(regs);
+>>>>   -    breakpoint_handler(regs);
+>>>> -    watchpoint_handler(regs);
+>>>> -    force_sig(SIGTRAP);
+>>>> +    if (test_tsk_thread_flag(current, TIF_SINGLESTEP)) {
+>>>> +        int llbit = (csr_read32(LOONGARCH_CSR_LLBCTL) & 0x1);
+>>>> +        unsigned long pc = regs->csr_era;
+>>>> +
+>>>> +        if (llbit) {
 >>>
->>> Should it be 6.2, as it probably won’t make it into 6.1?
+>>> Hi, Qing,
+>>>
+>>>
+>>> It should be noted here. When the ll-sc combo is encountered, it is
+>>> regarded as an single instruction. So donnot clear llbit and reset
+>>> CSR.FWPS.Skip until the llsc execution is completed.
+>>>
+>>>> +            csr_write32(0x10000, LOONGARCH_CSR_FWPS);
+>>>> +            csr_write32(0x4, LOONGARCH_CSR_LLBCTL);
+>>>> +        } else if (pc == current->thread.single_step) {
+>>> Note here as well. Because 3A5000 has a strange hardware issue that
+>>> certain insns are occasionally not skipped when CSR.FWPS.Skip is set,
+>>> such as fld.d/fst.d. Singlestep needs compare whether the csr_era is
+>>> equal to the value of singlestep which last time set, as in most case
+>>>
+>>> they should be not equal.
+>>
+>> BTW, I prefer to separate this special processing from this patch (for
+>> example, add two patchs in this series, add special processing of
+>> instructions such as LL-SC, and FLD.D/FST.D, etc.), and add
+>> corresponding test cases to describe the phenomenon and reason, this
+>> is conducive to everyone's understanding of the code.
+>>
+In order to ensure the integrity of the patch function,
+it is better to add comments without splitting.
+>>>
+>>>
+>>> And for this condition expression, some potentially strange insns may
+>>> cause bugs. For example, "b 0" or "jr rd" where rd is equal to its PC
+>>> will cause cannot stop the singlestep. These insns is so strange that
+>>> we did not consider in OW. However, I think we should consider this
+>>> case for robustness in upstream.
 >>>
 >>
->> Thanks for the catch. Will fix in next version.
+>> I don't know if there will be instructions like "b 0" or "jr rd (rd =
+>> pc)" in the executable file after linking?
+> FWIW `jirl A, A, 0` is apparently ubiquitous in the old world:
 > 
-> Should be 6.3, it's missed the 6.2 merge window cycle, sorry.
+> $ objdump -d 
+> ~/loongnix-sysroot/usr/lib/loongarch64-linux-gnu/libc_nonshared.a | grep 
+> -E 'jirl\s+\$(..), \$\1'
+>    20:   4c000021        jirl            $ra, $ra, 0
+>    24:   4c000021        jirl            $ra, $ra, 0
+>     c:   4c000021        jirl            $ra, $ra, 0
 > 
-> thanks,
+> One of the occurrences is in __stack_chk_fail_local, guess how popular 
+> it is among the whole old world...
 > 
+> But fortunately a quick check against my Gentoo sysroot yielded nothing, 
+> so perhaps the new world as a whole isn't going to be affected. I've 
+> checked some of the *older* (i.e. before 2022) new world sysroots I have 
+> at hand and they seemed not affected either.
+> 
+> As for `b 0`, they are kinda already signifying some panic/abort/halt 
+> condition, at least in a few projects that I've studied/ported.
+> 
+> But IMO the kernel shouldn't get DoS'd even if userland gets stuck in 
+> things like this, so some kind of workaround should still be necessary.
+> 
+Got it, the fix is already in v4.
 
-Thanks Greg,
-Will update to 6.3
-
+Thanks,
+-Qing
 
