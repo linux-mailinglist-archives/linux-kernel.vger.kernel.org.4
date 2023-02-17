@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3B369A8FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5947869A8FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 11:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjBQKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 05:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S229771AbjBQKVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 05:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBQKUR (ORCPT
+        with ESMTP id S229558AbjBQKVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 05:20:17 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93760A57
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:20:15 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id z1-20020a1c4c01000000b003e206711347so520720wmf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:20:15 -0800 (PST)
+        Fri, 17 Feb 2023 05:21:36 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6226860A57
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:21:35 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id 188so490717ybi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 02:21:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBDuZ1YsthJFSmgGckbyCZ1GxJY3h4+AR0nDnSv5p9E=;
-        b=WuRKgVx/abcZcK0HucJ8OjzXyIpHTyHaEz58egQAstY1ADJVR1JsTDjiROMTeDn2Uq
-         UFIxDNUqOqEYb/Yh98Skh8i1EqZD8J5voak28hEzBJTErFxFz5IgwFpGgX2F5MQNSjFe
-         FH6yX2PU0TFCrYpUIpN+7qXCdgFPKkYVbeywTF4aZPBS6awLEgJj+eyHNp3kT3oQgWDx
-         e/+OLuHHd/o/NEBP3PkabCf0j0O2twILyrxffS5tRO4ngZqMN24Bm/svmGh5Wt7JBRj2
-         v0YU+wG5jBK66ZAAGj9BYlTjvdWp5WTmq6SMTfeUTvkr0DYn+iacsV0QtDe6Zj8pkhjP
-         8hBA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9BBhPTLGGaUBxW3AOHp6ZsKFR75sYiq19lXrasIXls=;
+        b=myOxV9gamhIWyliGmdmN2/mk/L1tbECLokR9V0fsZYL+Aj/t5D9uNxFdPdzQY8b5Eb
+         thUND1gGBMTB39ipgJZf2Ql2LwujdfXsd2EzrT0IKVckNP1pDgIt9Lw3ICJtr2va/jkA
+         WiVF19oUY+8ELCnfLAH8YG5HyU9uEcJ7o4MYoepq66YAimbAXisPnHBVOsYIERKI9ViL
+         ty30kR8wtoIG+qnXXowYn0X8x22Hf3AhdUqHDULpynsgtTJmn69CgLLXR2KaH0cSsKFu
+         3jTW/4sCmj6lx99hEANBNFSMI5FxNAw7CWRBuN7NnhQp+zZF7xQg+Fa//77roL19p0Kt
+         LVlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WBDuZ1YsthJFSmgGckbyCZ1GxJY3h4+AR0nDnSv5p9E=;
-        b=t4dobjmkLmrzq2+aNvtNLlwW9sAUByP+WSdfNKnW5yPQbmDiUJl+CNQq0AXhfXDMjZ
-         Ro+v6Auf4SZPGulJG3G10Ems6e+E7JxsEk9TnD98LV4wgXR0wjT0CP84A8B+TwWYjE2m
-         KaY6JnV2gv28WEwmka5UwueQ57U58DdcCT+eYAPMgYm/p7j87Hyde/Jd+TY5FcSpUaxD
-         QWR6uCli6NUqkTffT7fNQPjcOpRpUvHpMh50uBjuXJETOt1WO0HrIdAe95fHY/+80pLo
-         q+Ots60R54BVXs3yQLKSt58UqKE8Jwme9CR258pgUdRDmbQmJDjApUYidNtoWy9MVoxB
-         voWQ==
-X-Gm-Message-State: AO0yUKV8xanbUgavP3IZXNObE5P/Y4cIEqEHsgdET6G4kTc/UPA6yCbS
-        Npa/VoLly/Y/3ggb2S5UIwFtBg==
-X-Google-Smtp-Source: AK7set/NxxmCSIJR7gO1gNoNDErjpfId+Gjra9KrBytdDA56fqSSwlfB1IfuBIhwiAKMe6dJjTWjZA==
-X-Received: by 2002:a05:600c:4d06:b0:3dc:1ad6:55fd with SMTP id u6-20020a05600c4d0600b003dc1ad655fdmr893227wmp.32.1676629214411;
-        Fri, 17 Feb 2023 02:20:14 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f65e:92aa:85d5:15c5? ([2a01:e0a:982:cbb0:f65e:92aa:85d5:15c5])
-        by smtp.gmail.com with ESMTPSA id v5-20020adff685000000b002c559def236sm3028656wrp.57.2023.02.17.02.20.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 02:20:13 -0800 (PST)
-Message-ID: <86b55b41-3faf-dbb8-a072-9a905d111eaa@linaro.org>
-Date:   Fri, 17 Feb 2023 11:20:12 +0100
+        bh=H9BBhPTLGGaUBxW3AOHp6ZsKFR75sYiq19lXrasIXls=;
+        b=T753ek2j0JJzD0yyiDT/RzfZ7PY6ZSFBbZhiV4dTud2ENCvsmfjUiSpOerlWMlKwAR
+         dkln3OV2rIgWLghVVFKmF2rojkk5i1XsVShMyMb85YBdLsTQ21wkIvfbPBDJCani9OB1
+         ZA64Hume+gg5bCTAXlDzHecpvfUH1GVN7SvO2EkpQ3uD35DO/jvVsH/eUt9uANodOX1n
+         C+uVqUoRm7lYTPbeeieoJHP5vxT95fgC9r4w+gpmpAzToS3zMcyoXfVFKesUDBxqz4SS
+         dX2bTyiD3jHxkK+XUwjXTzXIzMjhh6MFVWhWvQ6iP92Ip8Xo0B+1WgGmpUUifR7a7+V1
+         R2Hw==
+X-Gm-Message-State: AO0yUKUg9IJqdxlqLdBunfsdvYl+1N+ktkTDG6Iyl347SBf0xbd6gzaS
+        /yz7awRnC25ORCFAvwkldMP3RpybjMSBPSyg5bo=
+X-Google-Smtp-Source: AK7set9XZzct7X7WLcYp9C1YQZ54GdA3ZML/EFmNgnNLzMxsPTlkXoYn0KU+aTYkj1KX4pt6o21ZLWxWDcs5n3vh8n0=
+X-Received: by 2002:a05:6902:308:b0:969:a7c9:d7b8 with SMTP id
+ b8-20020a056902030800b00969a7c9d7b8mr386954ybs.624.1676629294516; Fri, 17 Feb
+ 2023 02:21:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] drm/meson/meson_venc: Relax the supported mode checks
-Content-Language: en-US
-To:     Carlo Caione <ccaione@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Da Xue <da@lessconfused.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230216051750.3125598-1-surenb@google.com> <20230216051750.3125598-27-surenb@google.com>
+ <Y+5Pb4hGmV1YtNQp@casper.infradead.org> <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
+ <CAJuCfpHODBAV=riSPyvcmLbZVtXSdxrw2GMy8VOjvDV9yCyX8A@mail.gmail.com>
+In-Reply-To: <CAJuCfpHODBAV=riSPyvcmLbZVtXSdxrw2GMy8VOjvDV9yCyX8A@mail.gmail.com>
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Date:   Fri, 17 Feb 2023 19:21:21 +0900
+Message-ID: <CAB=+i9ToNQ-se1XWGOGbiM_0QRBYjuhCF5A8Cdvius89t8r7Ag@mail.gmail.com>
+Subject: Re: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is
+ not yet set
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 10:32, Carlo Caione wrote:
-> Relax a bit the supported modes list by including also 480x1920 and
-> 400x1280. This was actually tested on real hardware and it works
-> correctly.
-> 
-> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
-> ---
-> In particular relax the resolution checks to allow more resolutions like
-> 480x1920 and 400x1280.
-> ---
-> Changes in v2:
-> - Lower the hdisplay limit to support 400x1280 as well.
-> - Link to v1: https://lore.kernel.org/r/20230210-relax_dmt_limits-v1-0-a1474624d530@baylibre.com
-> ---
->   drivers/gpu/drm/meson/meson_venc.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/meson/meson_venc.c b/drivers/gpu/drm/meson/meson_venc.c
-> index 3c55ed003359..fcd532db19c1 100644
-> --- a/drivers/gpu/drm/meson/meson_venc.c
-> +++ b/drivers/gpu/drm/meson/meson_venc.c
-> @@ -866,10 +866,10 @@ meson_venc_hdmi_supported_mode(const struct drm_display_mode *mode)
->   			    DRM_MODE_FLAG_PVSYNC | DRM_MODE_FLAG_NVSYNC))
->   		return MODE_BAD;
->   
-> -	if (mode->hdisplay < 640 || mode->hdisplay > 1920)
-> +	if (mode->hdisplay < 400 || mode->hdisplay > 1920)
->   		return MODE_BAD_HVALUE;
->   
-> -	if (mode->vdisplay < 480 || mode->vdisplay > 1200)
-> +	if (mode->vdisplay < 480 || mode->vdisplay > 1920)
->   		return MODE_BAD_VVALUE;
->   
->   	return MODE_OK;
-> 
-> ---
-> base-commit: 38c1e0c65865426676123cc9a127526fa02bcac6
-> change-id: 20230210-relax_dmt_limits-355e2a1c7ccf
-> 
-> Best regards,
+On Fri, Feb 17, 2023 at 11:15 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Thu, Feb 16, 2023 at 11:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Feb 16, 2023 at 7:44 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Wed, Feb 15, 2023 at 09:17:41PM -0800, Suren Baghdasaryan wrote:
+> > > > When vma->anon_vma is not set, page fault handler will set it by either
+> > > > reusing anon_vma of an adjacent VMA if VMAs are compatible or by
+> > > > allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
+> > > > a compatible adjacent VMA and that requires not only the faulting VMA
+> > > > to be stable but also the tree structure and other VMAs inside that tree.
+> > > > Therefore locking just the faulting VMA is not enough for this search.
+> > > > Fall back to taking mmap_lock when vma->anon_vma is not set. This
+> > > > situation happens only on the first page fault and should not affect
+> > > > overall performance.
+> > >
+> > > I think I asked this before, but don't remember getting an aswer.
+> > > Why do we defer setting anon_vma to the first fault?  Why don't we
+> > > set it up at mmap time?
+> >
+> > Yeah, I remember that conversation Matthew and I could not find the
+> > definitive answer at the time. I'll look into that again or maybe
+> > someone can answer it here.
+>
+> After looking into it again I'm still under the impression that
+> vma->anon_vma is populated lazily (during the first page fault rather
+> than at mmap time) to avoid doing extra work for areas which are never
+> faulted. Though I might be missing some important detail here.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+I think this is because the kernel cannot merge VMAs that have
+different anon_vmas?
+
+Enabling lazy population of anon_vma could potentially increase the
+chances of merging VMAs.
+
+> > In the end rather than changing that logic I decided to skip
+> > vma->anon_vma==NULL cases because I measured them being less than
+> > 0.01% of all page faults, so ROI from changing that would be quite
+> > low. But I agree that the logic is weird and maybe we can improve
+> > that. I will have to review that again when I'm working on eliminating
+> > all these special cases we skip, like swap/userfaults/etc.
