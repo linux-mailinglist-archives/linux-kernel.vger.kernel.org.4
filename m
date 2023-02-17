@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066FA69AEA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6F969AEC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 15:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjBQO56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 09:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S230246AbjBQO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 09:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjBQO5g (ORCPT
+        with ESMTP id S230239AbjBQO61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 09:57:36 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342C43C793;
-        Fri, 17 Feb 2023 06:57:08 -0800 (PST)
+        Fri, 17 Feb 2023 09:58:27 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E835C2C668;
+        Fri, 17 Feb 2023 06:57:59 -0800 (PST)
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 880A71BF217;
-        Fri, 17 Feb 2023 14:57:01 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 5F7341BF213;
+        Fri, 17 Feb 2023 14:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676645824;
+        t=1676645827;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G+UNtwo9Blm4QFpeMaX/6I3K3Hv55FXb27tDybz/bIc=;
-        b=AsOMPDgE3WN1LS7viGVfjZzNw8qG9B8KZFwQ2x6lEgL3scEYC5GmRjj3WpdQl56tAPVLzl
-        TWbMyGl6X0ZT/cmuDEUmxwqi1sPRol12EN0bYkf8wtSjtdKuM28Ut0GoPHjdJHHxEhNxqk
-        6ca0H4T1Ql/KO7eUHsingq9Qj13mhJJyUsHBzwZXH6zQWdKEwKhize1FikJaImjMM9SCWX
-        emt3HefjQb8raf1uFoZWAtN/tfyIcSsDiFwYdTZs1ws4ujDKKGE6OPwAmXQ2BVXAU7PtSp
-        HQcV0hGKdQFJ06yMeKZBkbwSYMz80gyg2/n9QS2b3Yo65q90doYvUReJQ4fk/A==
+        bh=oYeCNlFKCB3z/T7XzFP/EVYPzmR0xOzrZvn1IeHi7Jo=;
+        b=ZIHR1Z7ulS6OECjLOgZtuJleXPBR2wNxZp0QbB5n0VywTUMLFTUZCkMNDpzAIp6NQ/7iVF
+        C8skIsPBcfbHrQgBW01+hEeW2H+Uz5Rdj8DkxGLHOw87nK3+5KIlbwNHKa64aC5Vdl9AEE
+        tfIYi//DFDv+0I+HS/qweRVI9CerYsMwqmMOaHL5OtjgunA9rZ8bzMatltbtxVQcqgKNcu
+        kTaplLwD637M1Vdt7xSb3xkKHxPpdsULdVYzcEME7Ni94V/FA7DG8UHU7Qj02T8BmaqQTz
+        ai84pxLbl4j5dA3Ew8TtjQFENLC6oQTdZbS4XQAuPHJmisspZxcSpGCFTXf1Qw==
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
@@ -49,10 +49,11 @@ To:     Herve Codina <herve.codina@bootlin.com>,
 Cc:     linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v6 04/10] powerpc/8xx: Use a larger CPM1 command check mask
-Date:   Fri, 17 Feb 2023 15:56:39 +0100
-Message-Id: <20230217145645.1768659-5-herve.codina@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+Date:   Fri, 17 Feb 2023 15:56:40 +0100
+Message-Id: <20230217145645.1768659-6-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230217145645.1768659-1-herve.codina@bootlin.com>
 References: <20230217145645.1768659-1-herve.codina@bootlin.com>
@@ -67,40 +68,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CPM1 command mask is defined for use with the standard
-CPM1 command register as described in the user's manual:
-  0  |1        3|4    7|8   11|12      14| 15|
-  RST|    -     |OPCODE|CH_NUM|     -    |FLG|
-
-In the QMC extension the CPM1 command register is redefined
-(QMC supplement user's manuel) with the following mapping:
-  0  |1        3|4    7|8           13|14| 15|
-  RST|QMC OPCODE|  1110|CHANNEL_NUMBER| -|FLG|
-
-Extend the check command mask in order to support both the
-standard CH_NUM field and the QMC extension CHANNEL_NUMBER
-field.
+Add support for the QMC (QUICC Multichannel Controller)
+available in some PowerQUICC SoC such as MPC885 or MPC866.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/powerpc/platforms/8xx/cpm1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      | 172 ++++++++++++++++++
+ 1 file changed, 172 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
 
-diff --git a/arch/powerpc/platforms/8xx/cpm1.c b/arch/powerpc/platforms/8xx/cpm1.c
-index 8ef1f4392086..6b828b9f90d9 100644
---- a/arch/powerpc/platforms/8xx/cpm1.c
-+++ b/arch/powerpc/platforms/8xx/cpm1.c
-@@ -100,7 +100,7 @@ int cpm_command(u32 command, u8 opcode)
- 	int i, ret;
- 	unsigned long flags;
- 
--	if (command & 0xffffff0f)
-+	if (command & 0xffffff03)
- 		return -EINVAL;
- 
- 	spin_lock_irqsave(&cmd_lock, flags);
+diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+new file mode 100644
+index 000000000000..4ebbc7d52981
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+@@ -0,0 +1,172 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
++
++maintainers:
++  - Herve Codina <herve.codina@bootlin.com>
++
++description:
++  The QMC (QUICC Multichannel Controller) emulates up to 64 channels within one
++  serial controller using the same TDM physical interface routed from TSA.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - fsl,mpc885-scc-qmc
++          - fsl,mpc866-scc-qmc
++      - const: fsl,cpm1-scc-qmc
++
++  reg:
++    items:
++      - description: SCC (Serial communication controller) register base
++      - description: SCC parameter ram base
++      - description: Dual port ram base
++
++  reg-names:
++    items:
++      - const: scc_regs
++      - const: scc_pram
++      - const: dpram
++
++  interrupts:
++    maxItems: 1
++    description: SCC interrupt line in the CPM interrupt controller
++
++  fsl,tsa-serial:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: phandle to TSA node
++          - enum: [1, 2, 3]
++            description: |
++              TSA serial interface (dt-bindings/soc/cpm1-fsl,tsa.h defines these
++              values)
++               - 1: SCC2
++               - 2: SCC3
++               - 3: SCC4
++    description:
++      Should be a phandle/number pair. The phandle to TSA node and the TSA
++      serial interface to use.
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  '#fsl,chan-cells':
++    $ref: /schemas/types.yaml#/definitions/uint32
++    const: 1
++    description:
++      QMC consumers that use a phandle to QMC need to pass the channel number
++      with this phandle.
++      For instance "fsl,qmc-chan = <&qmc 16>;".
++
++patternProperties:
++  '^channel@([0-9]|[1-5][0-9]|6[0-3])$':
++    description:
++      A channel managed by this controller
++    type: object
++
++    properties:
++      reg:
++        minimum: 0
++        maximum: 63
++        description:
++          The channel number
++
++      fsl,operational-mode:
++        $ref: /schemas/types.yaml#/definitions/string
++        enum: [transparent, hdlc]
++        default: transparent
++        description: |
++          The channel operational mode
++            - hdlc: The channel handles HDLC frames
++            - transparent: The channel handles raw data without any processing
++
++      fsl,reverse-data:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The bit order as seen on the channels is reversed,
++          transmitting/receiving the MSB of each octet first.
++          This flag is used only in 'transparent' mode.
++
++      fsl,tx-ts-mask:
++        $ref: /schemas/types.yaml#/definitions/uint64
++        description:
++          Channel assigned Tx time-slots within the Tx time-slots routed by the
++          TSA to this cell.
++
++      fsl,rx-ts-mask:
++        $ref: /schemas/types.yaml#/definitions/uint64
++        description:
++          Channel assigned Rx time-slots within the Rx time-slots routed by the
++          TSA to this cell.
++
++    required:
++      - reg
++      - fsl,tx-ts-mask
++      - fsl,rx-ts-mask
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - fsl,tsa-serial
++  - '#address-cells'
++  - '#size-cells'
++  - '#fsl,chan-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/cpm1-fsl,tsa.h>
++
++    qmc@a60 {
++        compatible = "fsl,mpc885-scc-qmc", "fsl,cpm1-scc-qmc";
++        reg = <0xa60 0x20>,
++              <0x3f00 0xc0>,
++              <0x2000 0x1000>;
++        reg-names = "scc_regs", "scc_pram", "dpram";
++        interrupts = <27>;
++        interrupt-parent = <&CPM_PIC>;
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++        #fsl,chan-cells = <1>;
++
++        fsl,tsa-serial = <&tsa FSL_CPM_TSA_SCC4>;
++
++        channel@16 {
++            /* Ch16 : First 4 even TS from all routed from TSA */
++            reg = <16>;
++            fsl,mode = "transparent";
++            fsl,reverse-data;
++            fsl,tx-ts-mask = <0x00000000 0x000000aa>;
++            fsl,rx-ts-mask = <0x00000000 0x000000aa>;
++        };
++
++        channel@17 {
++            /* Ch17 : First 4 odd TS from all routed from TSA */
++            reg = <17>;
++            fsl,mode = "transparent";
++            fsl,reverse-data;
++            fsl,tx-ts-mask = <0x00000000 0x00000055>;
++            fsl,rx-ts-mask = <0x00000000 0x00000055>;
++        };
++
++        channel@19 {
++            /* Ch19 : 8 TS (TS 8..15) from all routed from TSA */
++            reg = <19>;
++            fsl,mode = "hdlc";
++            fsl,tx-ts-mask = <0x00000000 0x0000ff00>;
++            fsl,rx-ts-mask = <0x00000000 0x0000ff00>;
++        };
++    };
 -- 
 2.39.1
 
