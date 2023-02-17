@@ -2,143 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B10E69A770
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B77C169A77B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBQIud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S229746AbjBQIwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBQIub (ORCPT
+        with ESMTP id S229564AbjBQIwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:50:31 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC6E60A75;
-        Fri, 17 Feb 2023 00:50:04 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id mj16so644950pjb.3;
-        Fri, 17 Feb 2023 00:50:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+4jnTqGI73DRMgZJI4c2qvwAhYDDTU4nAsJXbLQC4qg=;
-        b=qHVJRzxX3+FniAKFwLtFv+ZcIyyQ71cT18uqlvaHn4HZVcPHBmTVhPvDXLTkPbU8eg
-         oUIjB2EQG9GdmIsSlX9IdqUTvikfZGR4RBLWsxz43Wh3RaGPgaZzwZ92/CIdh7CA9NL8
-         7dugJTmSLjgku9NauA+GaHlAzRNCPdTFnY2iDW/XIy2mxoP5y3KdeLR/qV4NB1typUSp
-         0+j3AiBmzt0yEpSHg/PGIcUot+Khc4tuI5oUVr1nlwusMOZouFgmkyqqTaJ5q+ISRkJ3
-         0jbzw5RrC7BpNYAO5wcKoJddQYdFv002kCyg68wMig+kge2o+l9SQQvZbNlU5IxX3Yf5
-         9ZZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+4jnTqGI73DRMgZJI4c2qvwAhYDDTU4nAsJXbLQC4qg=;
-        b=GJCCbamPbH3bIm2sTR3R31+AEm9DDbtosoduSEqqKKiRIsjhsp6jStMFXSlIqLObmI
-         QLbyi/0FT8RcY0+cVfDngolw1IOpNbqGSlm3XSuEbvaK/gXkBQhL0RNAt7ZLi6qyZ1g9
-         jv/6rID3KntumBOE4tzsuwi7ufaZw/xcyLpcJYsfK7jqV9u7TiT92mHpoGnNfRI1Rh4l
-         Fex6aWEYsVynrDFQVs5JIPTACgPJnUaCOHuK3bcWII0Dg8+ExJFPGJI6Kz+MrrYKu64m
-         dczVGyxhWGZF7B0xatT5Gzzi9LHn150syjFEeDz0Z7cG6WMZLzkt9isrbGovxkoqILsk
-         W5AA==
-X-Gm-Message-State: AO0yUKXF4YT3murhph/B/AjvjCP/9woDFyMuHFmTqC2mqzRQbSdn7/Km
-        74ILCpmucByp6ZSIL4q1hO0LgYlHwPo=
-X-Google-Smtp-Source: AK7set9ImvZAnZ/1M19kdSG0/nduNYs90YCLLq6YazqHc1qgadexAA0SrQwvbfDncyMZ672bgEHoPA==
-X-Received: by 2002:a17:902:dac6:b0:19c:13d2:44c1 with SMTP id q6-20020a170902dac600b0019c13d244c1mr2058697plx.15.1676623797404;
-        Fri, 17 Feb 2023 00:49:57 -0800 (PST)
-Received: from localhost (59-120-186-245.hinet-ip.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id v13-20020a63464d000000b004fb4489969bsm2362949pgk.49.2023.02.17.00.49.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 17 Feb 2023 00:49:57 -0800 (PST)
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     ilpo.jarvinen@linux.intel.com, l.sanfilippo@kunbus.com,
-        andy.shevchenko@gmail.com, peter_hong@fintek.com.tw,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH] serial: 8250_fintek: Add using BIOS IRQ default setting
-Date:   Fri, 17 Feb 2023 16:49:53 +0800
-Message-Id: <20230217084953.2580-1-hpeter+linux_kernel@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 03:52:20 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8D44233;
+        Fri, 17 Feb 2023 00:52:19 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H63Dbw015429;
+        Fri, 17 Feb 2023 08:51:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=nsaYQXNgH2rVl32gKAfvOrfr7P7WiyR42lIu9o5373E=;
+ b=b2AwyBFJV600sYEpnQwajdxXzOcv/tBy5593N3YYNMtb+feT3PdBF6EIgmAhzCe6RMO7
+ KuO88jM547LgUBzcojhiYcVIqL9Gbu0Mi3K0PyDURD+w7y2CiSYBU8q4Vv0FRLRqa+ga
+ xnXHaw/c40GnQwXKZcOnMPiwLu/oZ8aQXU2NwSZbEx5dC3n+Rf6AqosMuG9Rx0b23bwS
+ btFFSmE/SF9aFW62s0ZjfFjMircgAhNIU4zvZi84Cpr8TYTHxUourdSNS3hpW++OL5f2
+ ExMv/xObmBnNqMS0VqZ0/MO274UfHZ8iToi8giF+OaYX8axAugsnxSYM5gjgq7lBJQf4 DA== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nt15wpvmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:51:57 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31GJkaWd006567;
+        Fri, 17 Feb 2023 08:51:55 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3np2n6dqsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Feb 2023 08:51:55 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31H8ppaE23855704
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 08:51:51 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4D6120043;
+        Fri, 17 Feb 2023 08:51:51 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA90320040;
+        Fri, 17 Feb 2023 08:51:50 +0000 (GMT)
+Received: from [9.171.12.102] (unknown [9.171.12.102])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Feb 2023 08:51:50 +0000 (GMT)
+Message-ID: <59a61553a81282fed88c03af096b2a0830b94302.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 4/6] s390/pci: Use dma-iommu layer
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Date:   Fri, 17 Feb 2023 09:51:50 +0100
+In-Reply-To: <4ad0d2b9-2465-b42d-c0f9-b48caadfd72c@linux.ibm.com>
+References: <20230215120327.947336-1-schnelle@linux.ibm.com>
+         <20230215120327.947336-5-schnelle@linux.ibm.com>
+         <4ad0d2b9-2465-b42d-c0f9-b48caadfd72c@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: w3KPuegSdxg3SnnJVL_x_u3UmxgLOgZz
+X-Proofpoint-GUID: w3KPuegSdxg3SnnJVL_x_u3UmxgLOgZz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_04,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=502 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 8250_fintek.c probe_setup_port(), we'll detect the IRQ trigger mode by
-irq_get_irq_data() and pass it to fintek_8250_set_irq_mode(). If detected
-Edge mode, we'll set the UART with Edge/High mode, otherwise Level/Low.
+On Wed, 2023-02-15 at 13:00 -0500, Matthew Rosato wrote:
+> On 2/15/23 7:03 AM, Niklas Schnelle wrote:
+> > While s390 already has a standard IOMMU driver and previous changes hav=
+e
+> > added I/O TLB flushing operations this driver is currently only used fo=
+r
+> > user-space PCI access such as vfio-pci. For the DMA API s390 instead
+> > utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
+> > the same hardware and shares some code but requires a complex and
+> > fragile hand over between DMA API and IOMMU API use of a device and
+> > despite code sharing still leads to significant duplication and
+> > maintenance effort. Let's utilize the common code DMAP API
+> > implementation from drivers/iommu/dma-iommu.c instead allowing us to
+> > get rid of arch/s390/pci/pci_dma.c.
+> >=20
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+>=20
+> FYI, this patch doesn't fit on top of iommu-next, I'd guess at least due =
+to baolu's 'Retire detach_dev callback' series, which removed .detach_dev a=
+nd added .set_platform_dma_ops for s390-iommu.  That's relevant here, becau=
+se now that this patch enables dma-iommu for s390 and removes the platform =
+DMA ops it must now remove .set_platform_dma_ops/s390_iommu_set_platform_dm=
+a for s390-iommu.
+>=20
+> Matt
 
-But in some motherboard, The APIC maybe setting to Level/High. In this case
-the driver will setting wrong configuration into UART. So we add a option
-to kernel parameter to control the driver as following:
 
-	fintek_uart_irq_mode_override= [SERIAL]
-		{default, bios}
-		If the parameter is "default", the driver will using
-		former IRQ override methed(By IRQ trigger type).
-		otherwise, we'll don't change the UART IRQ setting.
+Ok, yes this series is currently against v6.2-rc8. Should I rebase
+against iommu-next and send a v7 before further review or after?
 
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
----
- drivers/tty/serial/8250/8250_fintek.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-index dba5950b8d0e..c5fea0a7c79b 100644
---- a/drivers/tty/serial/8250/8250_fintek.c
-+++ b/drivers/tty/serial/8250/8250_fintek.c
-@@ -92,6 +92,9 @@
- #define F81866_UART_CLK_18_432MHZ BIT(0)
- #define F81866_UART_CLK_24MHZ BIT(1)
-
-+#define FINTEK_IRQ_MODE_BY_DETECT	0
-+#define FINTEK_IRQ_MODE_BY_BIOS		1
-+
- struct fintek_8250 {
- 	u16 pid;
- 	u16 base_port;
-@@ -99,6 +102,24 @@ struct fintek_8250 {
- 	u8 key;
- };
-
-+static int not_override_irq_mode = FINTEK_IRQ_MODE_BY_DETECT;
-+
-+static int __init parse_uart_irq_mode_override(char *arg)
-+{
-+	if (!arg)
-+		return -EINVAL;
-+
-+	if (strcmp(arg, "bios") == 0)
-+		not_override_irq_mode = FINTEK_IRQ_MODE_BY_BIOS;
-+	else if (strcmp(arg, "default") == 0)
-+		not_override_irq_mode = FINTEK_IRQ_MODE_BY_DETECT;
-+	else
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+early_param("fintek_uart_irq_mode_override", parse_uart_irq_mode_override);
-+
- static u8 sio_read_reg(struct fintek_8250 *pdata, u8 reg)
- {
- 	outb(reg, pdata->base_port + ADDR_PORT);
-@@ -248,6 +269,12 @@ static int fintek_8250_rs485_config(struct uart_port *port,
-
- static void fintek_8250_set_irq_mode(struct fintek_8250 *pdata, bool is_level)
- {
-+	if (not_override_irq_mode == FINTEK_IRQ_MODE_BY_BIOS) {
-+		pr_info("Fintek UART(%04x) irq mode is using BIOS default",
-+				pdata->pid);
-+		return;
-+	}
-+
- 	sio_write_reg(pdata, LDN, pdata->index);
-
- 	switch (pdata->pid) {
---
-2.17.1
+Thanks,
+Niklas
