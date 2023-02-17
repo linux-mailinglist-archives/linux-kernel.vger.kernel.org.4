@@ -2,193 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7110F69AB6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B0969AB74
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjBQMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S229729AbjBQM1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBQMZE (ORCPT
+        with ESMTP id S229651AbjBQM1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:25:04 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B2649898
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:25:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C8681FF52;
-        Fri, 17 Feb 2023 12:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676636702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLMo50QHe1/PwBNhh35jJJlZiJq9HSkFtUHWmmDswvc=;
-        b=vALWS+5UaT4smrFbUIlQo3wAuzKf0G/92iwK6IOM9D14fvvvAnfzzSR+U/RUwmIaTRTK3Q
-        8CxaNTcOy2SOVoDmcS71F9vUq+EENlOOvaPTqd7Yh6EBFnZLoS9+pOnopjrFhbpgp1PnC5
-        Y5SxKtcgCBVcGC5evr/Q/qiet/CQhoE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676636702;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLMo50QHe1/PwBNhh35jJJlZiJq9HSkFtUHWmmDswvc=;
-        b=jRDQC2Uzm9DoaxKSe49EmNjdjMl4IuluZmDmxDJnmkix0vM2IQo0kca2ED3LMjbFYiDwEq
-        VGvYDjoOHyyIdtBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D55C13274;
-        Fri, 17 Feb 2023 12:25:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id f3BfIR1y72OhZAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 12:25:01 +0000
-Message-ID: <dcff3189-8696-4988-616a-98a4fd82d417@suse.de>
-Date:   Fri, 17 Feb 2023 13:25:00 +0100
+        Fri, 17 Feb 2023 07:27:03 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AD26605C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:27:00 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id t2so234042ilm.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:27:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SCaWCJFu+kQ6aYpJSur8vSOLT6u8BSUnkVg9ZbTVJ1w=;
+        b=oKiWyQZ/8W1DnFy+0gahyJT7r3yJpivs80am/ky9koA2gSEUBPdG6HSNA9b15etF6i
+         KI8NqkXM6yq9S6eSLcDzdH5lz68ISZI+IMsZPRiqQA+N6OeKifHv8bd1diayEYnK2qd7
+         9iJHQjOVEjMZe0/5QS/DJR/mCU6CugrNtf6DJDMl0bqGGPmmafrnz3adQ2ssUZOovdBH
+         mqmudAsSBuTBoQniyIoeXbaajpzyiQcJqKz1NYXjFv1Cqf0Swr/pbRF0inW0buzlfEnr
+         CKS5UHMDOZdhVdT3onQV1Rf3pjuNyEZr8L5pJrrvOZqBS7ywrnDWcaHywflHaBRa6GND
+         8GlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SCaWCJFu+kQ6aYpJSur8vSOLT6u8BSUnkVg9ZbTVJ1w=;
+        b=RRKmewre/SAgc5zO4aEMcNYEgDwP9c1I4pfMEwsQI36cSPnvX02DbxrXIV8cvbpAVf
+         P2jrzhbwVi+cD7E3pinwfVgeBK2OjXJt3zKHTItKI0YwN8Mc9vV2H9FmqjCzGNytkaTD
+         iY7ueALfq083oSJSqshTHhZbg/tGYU6f1tImbMOK9mKi1Omj9qWKAXLsc9pQwkwwha5g
+         8GPdtC+SnEBTzelb8Sw/9Opx6XUrNcHy/CQQ65FLphQ+RauINKqS+EHKuOHflMalug5H
+         70eEw3LQwgKofAU7cJu6xetmMtxzO/W91sKX0DRmtQvwLGLFYlwDcFj35XVGHyA5MbIs
+         Jj3Q==
+X-Gm-Message-State: AO0yUKUpYdswn2/ZTJAK9QL9b/ZS50HCpc1Tgg4LzzM6JWLugOpKYDOH
+        2EibDdCg6h/MYaqizy1MQXHwoQPoJPFhfWs3Aqc=
+X-Google-Smtp-Source: AK7set+onVhjTE2eO+C4Sfrq9YcgvRJqoKKcwh0JHwYrlI/XWKxITJYWa091zNsxff/6kndmbv0KPvkpMr5oV23hitM=
+X-Received: by 2002:a05:6e02:be5:b0:313:babd:fa78 with SMTP id
+ d5-20020a056e020be500b00313babdfa78mr208682ilu.3.1676636819754; Fri, 17 Feb
+ 2023 04:26:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 04/11] drm/shmem: Put booleans in the end of struct
- drm_gem_shmem_object
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------riziz0OPTF37QY0nWKvApQMA"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: vera.wilfried145@gmail.com
+Sender: godsonwilliams140@gmail.com
+Received: by 2002:a02:1142:0:b0:3c5:16ea:873 with HTTP; Fri, 17 Feb 2023
+ 04:26:59 -0800 (PST)
+From:   Vera Wilfried <vera.wilfried145@gmail.com>
+Date:   Fri, 17 Feb 2023 13:26:59 +0100
+X-Google-Sender-Auth: H0WjXD1eVXyKRQMNrjDP61xcyO0
+Message-ID: <CA+gcwbmeHboBRe_DkmCS6ZGOcWKCp84NgoMdd2u4gMc56_XKpg@mail.gmail.com>
+Subject: Compliment of the season
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------riziz0OPTF37QY0nWKvApQMA
-Content-Type: multipart/mixed; boundary="------------vpCueKlwgQtbZlPhyDtpeZZ6";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, virtualization@lists.linux-foundation.org
-Message-ID: <dcff3189-8696-4988-616a-98a4fd82d417@suse.de>
-Subject: Re: [PATCH v10 04/11] drm/shmem: Put booleans in the end of struct
- drm_gem_shmem_object
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230108210445.3948344-5-dmitry.osipenko@collabora.com>
+--=20
+Hallo,
 
---------------vpCueKlwgQtbZlPhyDtpeZZ6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Ich bin Miss Vera Wilfred, ich bin ein 22-j=C3=A4hriges Waisenm=C3=A4dchen,=
+ das
+hei=C3=9Ft, weil ich keine Eltern habe, habe ich etwa (10.500.000,00
+US-Dollar) zehn Millionen, f=C3=BCnfhunderttausend US-Dollar.
 
-DQoNCkFtIDA4LjAxLjIzIHVtIDIyOjA0IHNjaHJpZWIgRG1pdHJ5IE9zaXBlbmtvOg0KPiBH
-cm91cCBhbGwgMS1iaXQgYm9vbGVhbiBtZW1iZXJzIG9mIHN0cnVjdCBkcm1fZ2VtX3NobWVt
-X29iamVjdCBpbiB0aGUgZW5kDQo+IG9mIHRoZSBzdHJ1Y3R1cmUsIGFsbG93aW5nIGNvbXBp
-bGVyIHRvIHBhY2sgZGF0YSBiZXR0ZXIgYW5kIG1ha2luZyBjb2RlIHRvDQo+IGxvb2sgbW9y
-ZSBjb25zaXN0ZW50Lg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8
-dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtv
-IDxkbWl0cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
-cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGluY2x1
-ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmggfCAzMCArKysrKysrKysrKysrKystLS0t
-LS0tLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMTUgaW5zZXJ0aW9ucygrKSwgMTUg
-ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX2dlbV9z
-aG1lbV9oZWxwZXIuaCBiL2luY2x1ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmgNCj4g
-aW5kZXggYTIyMDFiMjQ4OGM1Li41OTk0ZmVkNWUzMjcgMTAwNjQ0DQo+IC0tLSBhL2luY2x1
-ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmgNCj4gKysrIGIvaW5jbHVkZS9kcm0vZHJt
-X2dlbV9zaG1lbV9oZWxwZXIuaA0KPiBAQCAtNjAsMjAgKzYwLDYgQEAgc3RydWN0IGRybV9n
-ZW1fc2htZW1fb2JqZWN0IHsNCj4gICAJICovDQo+ICAgCXN0cnVjdCBsaXN0X2hlYWQgbWFk
-dl9saXN0Ow0KPiAgIA0KPiAtCS8qKg0KPiAtCSAqIEBwYWdlc19tYXJrX2RpcnR5X29uX3B1
-dDoNCj4gLQkgKg0KPiAtCSAqIE1hcmsgcGFnZXMgYXMgZGlydHkgd2hlbiB0aGV5IGFyZSBw
-dXQuDQo+IC0JICovDQo+IC0JdW5zaWduZWQgaW50IHBhZ2VzX21hcmtfZGlydHlfb25fcHV0
-ICAgIDogMTsNCj4gLQ0KPiAtCS8qKg0KPiAtCSAqIEBwYWdlc19tYXJrX2FjY2Vzc2VkX29u
-X3B1dDoNCj4gLQkgKg0KPiAtCSAqIE1hcmsgcGFnZXMgYXMgYWNjZXNzZWQgd2hlbiB0aGV5
-IGFyZSBwdXQuDQo+IC0JICovDQo+IC0JdW5zaWduZWQgaW50IHBhZ2VzX21hcmtfYWNjZXNz
-ZWRfb25fcHV0IDogMTsNCj4gLQ0KPiAgIAkvKioNCj4gICAJICogQHNndDogU2NhdHRlci9n
-YXRoZXIgdGFibGUgZm9yIGltcG9ydGVkIFBSSU1FIGJ1ZmZlcnMNCj4gICAJICovDQo+IEBA
-IC05NywxMCArODMsMjQgQEAgc3RydWN0IGRybV9nZW1fc2htZW1fb2JqZWN0IHsNCj4gICAJ
-ICovDQo+ICAgCXVuc2lnbmVkIGludCB2bWFwX3VzZV9jb3VudDsNCj4gICANCj4gKwkvKioN
-Cj4gKwkgKiBAcGFnZXNfbWFya19kaXJ0eV9vbl9wdXQ6DQo+ICsJICoNCj4gKwkgKiBNYXJr
-IHBhZ2VzIGFzIGRpcnR5IHdoZW4gdGhleSBhcmUgcHV0Lg0KPiArCSAqLw0KPiArCWJvb2wg
-cGFnZXNfbWFya19kaXJ0eV9vbl9wdXQgOiAxOw0KPiArDQo+ICsJLyoqDQo+ICsJICogQHBh
-Z2VzX21hcmtfYWNjZXNzZWRfb25fcHV0Og0KPiArCSAqDQo+ICsJICogTWFyayBwYWdlcyBh
-cyBhY2Nlc3NlZCB3aGVuIHRoZXkgYXJlIHB1dC4NCj4gKwkgKi8NCj4gKwlib29sIHBhZ2Vz
-X21hcmtfYWNjZXNzZWRfb25fcHV0IDogMTsNCj4gKw0KPiAgIAkvKioNCj4gICAJICogQG1h
-cF93YzogbWFwIG9iamVjdCB3cml0ZS1jb21iaW5lZCAoaW5zdGVhZCBvZiB1c2luZyBzaG1l
-bSBkZWZhdWx0cykuDQo+ICAgCSAqLw0KPiAtCWJvb2wgbWFwX3djOw0KPiArCWJvb2wgbWFw
-X3djIDogMTsNCj4gICB9Ow0KPiAgIA0KPiAgICNkZWZpbmUgdG9fZHJtX2dlbV9zaG1lbV9v
-Ymoob2JqKSBcDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBE
-ZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVs
-ZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xy
-bmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+Was ich von meinem verstorbenen Vater geerbt habe, hat er den Fonds
+auf ein Fest-/Streukonto bei einer der besten Banken hier im Land
+eingezahlt.
 
---------------vpCueKlwgQtbZlPhyDtpeZZ6--
+Mein Vater benutzte meinen Namen als seine einzige Tochter und sein
+einziges Kind f=C3=BCr die n=C3=A4chsten Angeh=C3=B6rigen des Fonds.
 
---------------riziz0OPTF37QY0nWKvApQMA
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Zweitens, bei Ihrer uneingeschr=C3=A4nkten Zustimmung, mit mir zu diesem
+Zweck zusammenzuarbeiten, bekunden Sie bitte freundlicherweise Ihr
+Interesse, indem Sie mir antworten, damit ich Ihnen die erforderlichen
+Informationen und Einzelheiten zum weiteren Vorgehen zukommen lassen
+kann. Ich werde Ihnen 20 % des Geldes f=C3=BCr Ihre Hilfe anbieten.
 
------BEGIN PGP SIGNATURE-----
+M=C3=B6ge Gott Sie f=C3=BCr Ihre prompte Aufmerksamkeit segnen. Meine beste=
+n und
+lieben Gr=C3=BC=C3=9Fe an Sie und Ihre ganze Familie, wenn Sie mich f=C3=BC=
+r weitere
+Einzelheiten kontaktieren.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvchwFAwAAAAAACgkQlh/E3EQov+DD
-wRAAyr2BPnhokho5Mjgb/1SUFEYo3FSKRY6iLVJ81cZt0bTeVVJmQW7Gye+S/x4tRCkdDRGNi1xm
-ZgnpEZqw/zi+hlLWZkbKxcX/IbCPjE66T4hqiK2kHhjJK1yRX2KrQdLeu0jd3r6ZluIkWB7eeen7
-UWS89neNa4cUOjBqFPHzsPymNCT3bufIY0p7CLCYYok9q4jqRL7O7Byw1gztPQrBVU8So5dS1DS+
-0fGgbwaCkFyFrq+s+2WX3gUnFDvgs2DZ58YzTJuQtAObwLA55wZ0atiBXLLnqm7plyHG0XUAr+KI
-uDNvUAaMEBNXqgEydx+kN3rCjFmDuobwHz42MwTM4obmadukzhnQkFXRQAOjgp6HwvpFYr9tMdkc
-1IKR/IWYWCLORo6AoO8JYO/VO5lZyDZArtXXK8ailvezipn6y9kuRi6nzITLXqiCupgPpMJu9//H
-TbXKOGOg9kX6CUf8o8O1SPZuSmaW4ZhGwga/e+ZjojAk0DmuNd6kQMkH7jk4LvRKUdAjb7RYkYRj
-jKQkW3HnBx3AE/BX/JvMGcT+lXiHtO+stIYSNMRzB4+T4FItXepwVonQEe10WRXN2yPFVReKwpxT
-HRhJbO8gLh3w0cgcmjZG7wzstTAW1I4MQWbZ9Vd2KXuBjP/UkfmGAiwhV9vorUJOEwQiRAkdJQVh
-xjA=
-=vfTJ
------END PGP SIGNATURE-----
+Ich brauche Ihren Assistenten, der mir hilft, diesen Fonds in Ihrem
+Land zu investieren. Kontaktieren Sie mich jetzt f=C3=BCr weitere
+Informationen.
+Vielen Dank
 
---------------riziz0OPTF37QY0nWKvApQMA--
+Vera Wilfred.
