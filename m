@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5B569AB5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EF869AB61
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjBQMX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S230029AbjBQMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjBQMXZ (ORCPT
+        with ESMTP id S230024AbjBQMXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:23:25 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC5F66046;
-        Fri, 17 Feb 2023 04:23:24 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d24so1356873lfs.8;
-        Fri, 17 Feb 2023 04:23:23 -0800 (PST)
+        Fri, 17 Feb 2023 07:23:45 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18C16607D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:23:42 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id c22so2563715vsk.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:23:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
-        b=ntJt6vrD4KEHrdCLW4oOXb0eakY24ItcDskG4ZtZzyd5BCycQK+MGGrqixWtZbHV5h
-         o9zTLysYZuphihYmCrTSe7bNf6Bfl70IscBzCObyQ4mx4UpMzFcpZTexI4HK/mH8UYQv
-         wAXRNc6aw88eHyltyDOkMAnwD1794lXkGHc+t6jatC1neW6pWAsEOsmwzPldHTnPDklG
-         BM30m5KRzqfAVQ4drF8kq4UH6MLEKViGW+A4HAPdCtGVwEd2V19zWc+FSucc94e1ye/f
-         48yiyFNlkj9gdK45jQV5S7fM9llp6oBS0SgIeVo8aws9dxDG+DQAgQ8aE3iX1GMSq3SP
-         SU6Q==
+        d=google.com; s=20210112; t=1676636622;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sgY+TO8yISM6HZsPpSOg1kNbConbu1J0jamlIWfyT+A=;
+        b=dbSPFyN7puk8NhJQP+ZCyy81uhrT0RNdw9cQK026j1bDOoyHDwClWNSN252sYa3X4b
+         bGi3fJWF8wM3vNcrPQGqBfaZL+lO7LiBF+g4omqvaqh8TMKg2KdGl546aNo9lQdjudv/
+         j7OIP1NOGd4emh+zI6xOoAbFG34JPXdsX4oObg9XQLwNwApBgWrNb+2f1URnPD14od70
+         WP+YpiN7CdBYDarKkWn8KUvywMnVsnu4Rh9QVLOnyRulkyS3xvWROhbzgDZVr5yVWpid
+         7+wyjEoypoWxri9vaqYR4nFD9lOSBYhsXR4C4lvlPJdoqCVhp36tngX+Tze00/fsTSMO
+         8wyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1676636622;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IJSfyz5KF1Ot3VlsJvshITzQvDrfzFSnqAesUwer2gU=;
-        b=Mh/xd7WmvRCChOegYS90dNuw9m/Xq0xemjPy1HgkdZuRR5zcPVJc83Fj4b3T/2l1Ew
-         5SCcwjpE8pJJZ9WUCjLXKxNS6GaT/92WVvuyBojXLgKMW1GjtmuyeerO5fLQ6uGzGHhw
-         z7Dl1es8iTOBd1fx4pHcD+RJBLSygOKdHXnaP6gAvHB60pf8FfoChb1BWiw9rkE4/eTP
-         ukuQt0p8cXuHqZIxJc4i/cMu5wclRaPKw0f8kqwSFSdTM51xApGJzKEc8e5TM6IQ5SfN
-         izV3PWvnZODhsmzhrFneyOK3l3ljLQ7+dU/ec6jOgCDYkMfJwB+ldc5acN0scxLDySb7
-         tJew==
-X-Gm-Message-State: AO0yUKXiEC0camv6+ZXd/3/JY5qLPbm83kfiqXA4HaYT6BMEo7u4n0Fd
-        YIYW4PqQYbePbz6w6U9I+8Q=
-X-Google-Smtp-Source: AK7set9CtCkbseU52YhyOb5qjscNZTQpQvMNYeTZ/BD0GuBrtzVD/KUHNMgHdxXroGe+3H1J6GPmog==
-X-Received: by 2002:ac2:41ca:0:b0:4ca:94cc:a288 with SMTP id d10-20020ac241ca000000b004ca94cca288mr2086867lfi.27.1676636602116;
-        Fri, 17 Feb 2023 04:23:22 -0800 (PST)
-Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
-        by smtp.googlemail.com with ESMTPSA id c20-20020ac25314000000b004db3e445f1fsm666961lfh.97.2023.02.17.04.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 04:23:21 -0800 (PST)
-From:   Alexander Sapozhnikov <alsp705@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on negative index in mp_config_acpi_gsi()
-Date:   Fri, 17 Feb 2023 15:23:12 +0300
-Message-Id: <20230217122314.11689-1-alsp705@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=sgY+TO8yISM6HZsPpSOg1kNbConbu1J0jamlIWfyT+A=;
+        b=LzmZYrxV3D7szPa5jhdoyPYzRKALRP5yJ9RtHhCUejKjUmbh/8rd3KW3szJA/joUuk
+         hmRpIuNuvM+/7BWpD/wXP5ZoaqY/0Z/c+m7tf+fejIFTwwGltAf1/rjaBW/V3n/8gnfM
+         3rBTdRkpXT15uhLlwKPkQ7RVrpKStcMamuQiS/DKOGQsG9ACAv5OyBO+JP3v7cHiEXpB
+         z5egktcca9ZPzf71J2R99AanIMzLfpW8x4LHQrgHtTDwMMdkKV2wwvLqqmRQUDRiq7Y/
+         py4y+vg+f1km9MvKo1+HH360Cs8jLHYEg/b6uTaLw/RJz1NBlUal70JuJK8xL11HbjE7
+         Gj3g==
+X-Gm-Message-State: AO0yUKXcnngd6FTb1noPme/MXfT0AtjjtOUoiJ59uX+GmfFSqzacRWKK
+        rlheyd/SKjv+XkJgwsvwkKfo6BNajQK9H1OC6k8+cQ==
+X-Google-Smtp-Source: AK7set9D76P+BVWHdTQ2SVg87fd5PA3MbpTdrnpRN5SFDEPJEgbVJdbHakLt7Yska6pkOaVX4F4g5vtd6pPStimGPQE=
+X-Received: by 2002:a67:e046:0:b0:412:6a3:3e1d with SMTP id
+ n6-20020a67e046000000b0041206a33e1dmr1616158vsl.25.1676636621874; Fri, 17 Feb
+ 2023 04:23:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230217100606.1234-1-nbd@nbd.name>
+In-Reply-To: <20230217100606.1234-1-nbd@nbd.name>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 17 Feb 2023 13:23:30 +0100
+Message-ID: <CANn89iJXjEWJcFbSMwKOXuupCVr4b-y4Gh+LwOQg+TQwJPQ=eg@mail.gmail.com>
+Subject: Re: [RFC v2] net/core: add optional threading for rps backlog processing
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,30 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Fri, Feb 17, 2023 at 11:06 AM Felix Fietkau <nbd@nbd.name> wrote:
+>
+> When dealing with few flows or an imbalance on CPU utilization, static RPS
+> CPU assignment can be too inflexible. Add support for enabling threaded NAPI
+> for RPS backlog processing in order to allow the scheduler to better balance
+> processing. This helps better spread the load across idle CPUs.
+>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> ---
+>
+> RFC v2:
+>  - fix rebase error in rps locking
 
-Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
----
- arch/x86/kernel/acpi/boot.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Why only deal with RPS ?
 
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 907cc98b1938..abb78822f164 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -463,8 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 	mp_irq.srcbus = number;
- 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
- 	ioapic = mp_find_ioapic(gsi);
--	mp_irq.dstapic = mpc_ioapic_id(ioapic);
--	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
-+	if (ioapic >= 0) {
-+		mp_irq.dstapic = mpc_ioapic_id(ioapic);
-+		mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
-+	}
- 
- 	mp_save_irq(&mp_irq);
- #endif
--- 
-2.34.1
-
+It seems you propose the sofnet_data backlog be processed by a thread,
+instead than from softirq ?
