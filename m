@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2A969ABFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C94469AC01
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjBQM5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S229849AbjBQM5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjBQM46 (ORCPT
+        with ESMTP id S230032AbjBQM5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:56:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873601A951;
-        Fri, 17 Feb 2023 04:56:57 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B43D266003AF;
-        Fri, 17 Feb 2023 12:56:54 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676638616;
-        bh=1uMyMzusRsK9sVv25EojrYQNhsBuXP/sllRyPTR8+5w=;
+        Fri, 17 Feb 2023 07:57:11 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D11A1A951;
+        Fri, 17 Feb 2023 04:57:09 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F9E12D8;
+        Fri, 17 Feb 2023 13:57:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1676638626;
+        bh=Ir7oJf+hvbJDHRFZ81MDofW8bdJd+0sZrLJTMAgzQI4=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UXK2QT1Yzp4lGU3SFbxfXUpO2p8O3XxLF/QmuMK75o/FD41Ioh6PZ6LuZm2ZeNdFU
-         RRz8INhsaSUBa2tfqEMWSHGEg10tykwlvnE/5tmEu+mR6xCTdMxap61bkvGz5jqUwe
-         KBZiEtAVcezNL7apcOdhUnwKOAp0H7RGOMHQh4bTUzIyF/DQ9+xA5EWbGWpaHM62oN
-         pa5uwqzqwgjdQpHUCzMVEcG06uInl9MsO6j6YyEiPU8h5xOxXzTQLSSJwU1GsTbPIA
-         aoipkvC1qmP0ksT1KCwceChlMwdCR4q2t4vcjFVweg+kwvjEMTdn/HooDYswMVal5w
-         CMek6dUszn+qg==
-Message-ID: <f12eff8f-7f6f-cd93-2c3e-4390d42f98ee@collabora.com>
-Date:   Fri, 17 Feb 2023 13:56:52 +0100
+        b=L7Hgr8gpFqZHEZgveWosIO7YDT0EBNpnm8sEuO6PQHkHdiTQuUqU/1saRmupcXoiT
+         QoBuLmtzyPpZrulfeGlwlGrHahjMfbOns/RNiODEBZkls8M4sqZIFtaSfBwF43l9no
+         1bFeIjn0OjjOhcmoWZa2WGBS83ZJjvwUsaESXVNI=
+Message-ID: <9f3f0744-f771-cd2c-3b8e-5b79f7a430c7@ideasonboard.com>
+Date:   Fri, 17 Feb 2023 14:57:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 37/47] clk: mediatek: Split MT8195 clock drivers and
- allow module build
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v9 0/8] i2c-atr and FPDLink
 Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>, Arnd Bergmann <arnd@kernel.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com>
- <20230214134127.59273-38-angelogioacchino.delregno@collabora.com>
- <CAGXv+5Gf6idN3LMkei503cXnuxo7HNc8=8fG0jENVHDtxDg5jQ@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5Gf6idN3LMkei503cXnuxo7HNc8=8fG0jENVHDtxDg5jQ@mail.gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230216140747.445477-1-tomi.valkeinen@ideasonboard.com>
+ <Y+5Rb17FTG4IxcE0@smile.fi.intel.com>
+ <e4141652-53c0-fce1-dac7-5da5368e2240@ideasonboard.com>
+ <Y+9j3cYOG+Z0zmyC@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y+9j3cYOG+Z0zmyC@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,117 +70,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/02/23 08:37, Chen-Yu Tsai ha scritto:
-> On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
+On 17/02/2023 13:24, Andy Shevchenko wrote:
+> On Fri, Feb 17, 2023 at 08:57:32AM +0200, Tomi Valkeinen wrote:
+>> On 16/02/2023 17:53, Andy Shevchenko wrote:
+>>> On Thu, Feb 16, 2023 at 04:07:39PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>>>>    	struct i2c_board_info ser_info = {
+>>>> -		.of_node = to_of_node(rxport->remote_fwnode),
+>>>> -		.fwnode = rxport->remote_fwnode,
+>>>
+>>>> +		.of_node = to_of_node(rxport->ser.fwnode),
+>>>> +		.fwnode = rxport->ser.fwnode,
+>>>
+>>> Why do you need to have both?!
 >>
->> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
->> option: there's no reason to do that, as it is totally unnecessary to
->> build in all or none of them.
+>> I didn't debug it, but having only fwnode there will break the probing (no
+>> match).
+> 
+> This needs to be investigated. The whole fwnode approach, when we have both
+> fwnode and legacy of_node fields in the same data structure, is that fwnode
+> _OR_ of_node initialization is enough, when both are defined the fwnode
+> should take precedence.
+> 
+> If your testing is correct (and I have no doubts) it means we have a serious
+> bug lurking somewhere.
+
+Having both defined or only of_node defined works for me.
+
+Perhaps the issue is that these drivers only add of_match_table, and 
+thus having only .fwnode above is not enough.
+
+Looking at i2c_device_match(), i2c_of_match_device() only uses of_node, 
+so perhaps I would need CONFIG_ACPI for acpi_driver_match_device to do 
+matching with of_node? Although I don't see the acpi code using fwnode, 
+just of_node. Well, I have to say I have no idea without spending more 
+time on this.
+
+>>>>    		.platform_data = ser_pdata,
+>>>>    	};
+> 
+> ...
+> 
+>>> 		cur_vc = desc.entry[0].bus.csi2.vc;
+>>>
+>>>> +		for (i = 0; i < desc.num_entries; ++i) {
+>>>> +			u8 vc = desc.entry[i].bus.csi2.vc;
+>>>
+>>>> +			if (i == 0) {
+>>>> +				cur_vc = vc;
+>>>> +				continue;
+>>>> +			}
+>>>
+>>> This is an invariant to the loop, see above.
 >>
->> Split them out: keep boot-critical clocks as bool and allow choosing
->> non critical clocks as tristate.
+>> Well, the current code handles the case of num_entries == 0. I can change it
+>> as you suggest, and first check if num_entries == 0 and also start the loop
+>> from 1.
+> 
+> You may try to compile both variants and see which one gets lets code.
+> I believe it will be mine or they are equivalent in case compiler is clever
+> enough to recognize the invariant.
+
+But your suggestion accesses desc.entry[0] even if there are no entries, 
+accessing possibly uninitialized memory. In that case it doesn't use it 
+for anything, but at least I find that kind of code worrying.
+
+>>>> +			if (vc == cur_vc)
+>>>> +				continue;
+>>>> +
+>>>> +			dev_err(&priv->client->dev,
+>>>> +				"rx%u: source with multiple virtual-channels is not supported\n",
+>>>> +				nport);
+>>>> +			return -ENODEV;
+>>>> +		}
+> 
+> ...
+> 
+>>>> +	for (i = 0; i < 6; ++i)
+>>>>    		ub960_read(priv, UB960_SR_FPD3_RX_ID(i), &id[i]);
+>>>>    	id[6] = 0;
+>>>
+>>> Wondering if this magic can be defined.
 >>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/clk/mediatek/Kconfig  | 86 +++++++++++++++++++++++++++++++++++
->>   drivers/clk/mediatek/Makefile | 20 +++++---
->>   2 files changed, 99 insertions(+), 7 deletions(-)
+>> The number of ID registers? Yes, I can add a define.
+> 
+> Yes.
+> 
+> ...
+> 
+> ...
+> 
+>>>>    	if (ret) {
+>>>>    		if (ret != -EINVAL) {
+>>>> -			dev_err(dev,
+>>>> -				"rx%u: failed to read 'ti,strobe-pos': %d\n",
+>>>> -				nport, ret);
+>>>> +			dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+>>>> +				"ti,strobe-pos", ret);
+>>>>    			return ret;
+>>>>    		}
+>>>>    	} else if (strobe_pos < UB960_MIN_MANUAL_STROBE_POS ||
+>>>> @@ -3512,8 +3403,8 @@ ub960_parse_dt_rxport_link_properties(struct ub960_data *priv,
+>>>>    	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
+>>>>    	if (ret) {
+>>>>    		if (ret != -EINVAL) {
+>>>> -			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
+>>>> -				nport, ret);
+>>>> +			dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+>>>> +				"ti,eq-level", ret);
+>>>>    			return ret;
+>>>>    		}
+>>>>    	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
+>>>
 >>
->> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
->> index 45b7aea7648d..88937d111e98 100644
->> --- a/drivers/clk/mediatek/Kconfig
->> +++ b/drivers/clk/mediatek/Kconfig
->> @@ -692,6 +692,92 @@ config COMMON_CLK_MT8195
->>           help
->>             This driver supports MediaTek MT8195 clocks.
+>> Hmm, I noticed this one (and the one above) was missing return -EINVAL.
 >>
->> +config COMMON_CLK_MT8195_APUSYS
->> +       tristate "Clock driver for MediaTek MT8195 apusys"
->> +       depends on COMMON_CLK_MT8195
->> +       help
->> +         This driver supports MediaTek MT8195 AI Processor Unit System clocks.
->> +
->> +config COMMON_CLK_MT8195_AUDSYS
->> +       tristate "Clock driver for MediaTek MT8195 audsys"
->> +       depends on COMMON_CLK_MT8195
->> +       help
->> +         This driver supports MediaTek MT8195 audsys clocks.
->> +
->> +config COMMON_CLK_MT8195_CAMSYS
->> +       tristate "Clock driver for MediaTek MT8195 camsys"
->> +       depends on COMMON_CLK_MT8195_VPPSYS
+>>> Seems like you may do (in both cases) similar to the above:
+>>>
+>>> 	var = 0;
+>>> 	ret = read_u32();
+>>> 	if (ret && ret != -EINVAL) {
+>>> 		// error handling
+>>> 	}
+>>> 	if (var > limit) {
+>>> 		// another error handling
+>>> 	}
+>>
+>> That's not the same. You'd also need to do:
+>>
+>> if (!ret) {
+>> 	// handle the retrieved value
+>> }
+>>
+>> which, I think, is not any clearer (perhaps more unclear).
+>>
+>> What I could do is:
+>>
+>> if (ret) {
+>> 	if (ret != -EINVAL) {
+>> 		dev_err(dev, "rx%u: failed to read '%s': %d\n", nport,
+>> 			"ti,eq-level", ret);
+>> 		return ret;
+>> 	}
+>> } else {
+>> 	if (eq_level > UB960_MAX_EQ_LEVEL) {
+>> 		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n",
+>> 			nport, eq_level);
+>> 		return -EINVAL;
+>> 	}
+>>
+>> 	rxport->eq.manual_eq = true;
+>> 	rxport->eq.manual.eq_level = eq_level;
+>> }
+>>
+>> Maybe the above style makes it clearer, as it clearly splits the "don't have
+>> value" and "have value" branches.
 > 
-> One other thing. If a Kconfig option immediately follows its dependency,
-> then it gets indented nicely in menuconfig, but only if.
-> If other options are interspersed, then the indentation gets reset.
+> Up to you, but this just a good example why I do not like how optional
+> properties are handled in a "smart" way.
 > 
-> So could you reorder the options to follow the dependency graph?
+> To me
 > 
-
-Sure, I will!
-
-> Also how you chose the dependencies should be mentioned in the commit log.
-> These are pure run time dependencies, not compile time nor link/load ones.
+> 	foo = DEFAULT;
+> 	_property_read_(&foo); // no error checking
 > 
+> is clean, neat, small and good enough solution.
 
-Right.
+Yes, if you have a default. I don't. I could add a new magic number for 
+the eq_level which means not-defined and use it as a default, but I 
+don't usually like default values which are not 0. Here I have the 
+manual_eq boolean to tell if we're using manual EQ or not.
 
-> Last, I think an argument could be made against the proliferation of
-> Kconfig options, as it dramatically increases the combinations of
-> allrandconfigs. Maybe Arnd (who IIRC frequently runs allrandconfig)
-> could chime in on whether this is actually a concern or not.
-> 
+  Tomi
 
-I understand, but I don't see any way around that.
-In my opinion, we shall give flexibility, and this is the only way to achieve
-that: if you don't use IMGSYS, CAMSYS, WPESYS and IPESYS you should *not* be
-forced to add that to the mix, as this would result in a footprint increase
-for no *final* practical reason.
-
-It's true, today we have big storage capacities and fast machines, but we can
-still see a reduction in boot times (bootloader kernel load time, other than
-actual kernel boot time), even if minimal, with this added flexibility.
-
-Save a few milliseconds here, a few milliseconds there (not necessarily on
-clock drivers, expand this to others) and you start reaching a meaningful
-increase in boot performance.
-
->> +       help
->> +         This driver supports MediaTek MT8195 camsys and camsys_raw clocks.
->> +
->> +config COMMON_CLK_MT8195_IMGSYS
->> +       tristate "Clock driver for MediaTek MT8195 imgsys"
->> +       depends on COMMON_CLK_MT8195_VPPSYS
->> +       help
->> +         This driver supports MediaTek MT8195 imgsys and imgsys2 clocks.
->> +
->> +config COMMON_CLK_MT8195_IMP_IIC_WRAP
->> +       tristate "Clock driver for MediaTek MT8195 imp_iic_wrap"
->> +       depends on COMMON_CLK_MT8195
->> +       help
->> +         This driver supports MediaTek MT8195 I2C/I3C clocks.
->> +
->> +config COMMON_CLK_MT8195_IPESYS
->> +       tristate "Clock driver for MediaTek MT8195 ipesys"
->> +       depends on COMMON_CLK_MT8195_IMGSYS
->> +       help
->> +         This driver supports MediaTek MT8195 ipesys clocks.
->> +
->> +config COMMON_CLK_MT8195_MFGCFG
->> +       tristate "Clock driver for MediaTek MT8195 mfgcfg"
->> +       depends on COMMON_CLK_MT8195
->> +       help
->> +         This driver supports MediaTek MT8195 mfgcfg clocks.
->> +
->> +config COMMON_CLK_MT8195_VDOSYS
->> +       tristate "Clock driver for MediaTek MT8195 vdosys"
->> +       depends on COMMON_CLK_MT8195
-> 
-> Not sure why this option is here, out of order?
-
-My alphabet skills finally failed me, lol.
-I'll fix that for v3 :-)
-
-Thanks!
-Angelo
