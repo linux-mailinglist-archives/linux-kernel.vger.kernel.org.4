@@ -2,149 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B72C69A734
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD7A69A736
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjBQIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S229797AbjBQInK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBQIm1 (ORCPT
+        with ESMTP id S229505AbjBQInI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:42:27 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7F84217
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:42:25 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ez12so1518908edb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:42:25 -0800 (PST)
+        Fri, 17 Feb 2023 03:43:08 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A4298EC;
+        Fri, 17 Feb 2023 00:43:07 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bi36so591704lfb.6;
+        Fri, 17 Feb 2023 00:43:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VVj7LmZJZPXZ0P94gWzj9CtC5PuU3cB1LoJ/hZVcvvU=;
-        b=RXKR91kYoY8t1eAjtzSvgzHe5NTDgc1Bf0Y5VXT1fDBh4Eg5fZblRq65SsI9eg6SaM
-         acN5At2lNljA5LdpgcNUYguuwzOjoTUcEunt6LJYTqvrai3cEPDkLY9RBFaUsEkTlxbY
-         bNu7neJlEX881UtOYD0ZgcBZ0WqT81HO9Fre9/EQgBBGbpzYhYGF6P8LRof4QGDgwOjk
-         F4VysyMZg3kuwPSxuQ/6RV1biR1VOCoNiWLUXRX9hK+2iTMizNLZGOfT3hmtFoibH436
-         FkMG9A0w8ZO6Bp0jIJ/pl6E8L0VHN+ERN/q+mZ5iLmjiHSXOn9+JidKjbe97WVF3wcx8
-         OLeA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QvlfKQyT4/yiRm0UBTgKuh4h9yI1+vauMqU7ek9YADE=;
+        b=HvgtBGAcZZ+w5leSYQJ6ynfoCZIc2vrHNcyODIKLu3hBruVHyeF3zFt2P+vrk8G9dU
+         sP8IW9reAOAtnuhwSy+UY6bgW3SwX9rb2a7aCz+Ef2ZzXkgNiz3Q5nE5aWpcZ1zl55+e
+         E2fOVJtTr7zaXBhUm3IUJd24/6tGf/Xz926FT7XV1TaQJZbmMC4WaQ8dpgChfzR0T0w4
+         xHlXBq19AeUEDGrGagmuYB5BjLZe8BmyNHoMydb11cmdywvqU47VviC82lqKF2r8qVjC
+         SUL8XyQ1d8w0kLk1OQRqJ4OaIiMmdQIwPWdreGYhAfwdIQ7qy7fFXc1l2CucHXVAFImS
+         iQWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VVj7LmZJZPXZ0P94gWzj9CtC5PuU3cB1LoJ/hZVcvvU=;
-        b=TMdTbQhBEBJWb5hwyDpm63SMsPZ5ksqjgeRViGHBtLLNC/yuBBqJ4OjUCKHKti6KQd
-         ZkiXteIGDxrtg4/9pC3TcptW3BVDZQlpUV2bi0q66auL8o/4Lrfq6906cLu696OKNYWQ
-         U2tiysqZx1OERX7JwqbaKObZefctdlXsc54EPeGi2JoXl3TQ304nx0Pn/FX7ua0OXbWD
-         GQu1xorZ7eYes+2b7oGe7SMscaNm1DCSnCIFazQ1jFAKgncUSuwthVxjbpQH40k00XHB
-         8/4jofgd3wsrb+fHrryXOOtC5RALE7QL2SRYalnaKm3OtZeZwQcOBWa5ahW02voYwMUx
-         jn3Q==
-X-Gm-Message-State: AO0yUKWhTx4wE/qP06DwpagCThm9rKUsG9/EY15ycwDwNfsPRvQNk6Hf
-        c+DRykG1z+nnHQ/W6JUSdM97sg==
-X-Google-Smtp-Source: AK7set/YUe4m0PuuVvCfAJfcN7lS6uTcbvXE60HE0ghbiJQmTViJ2LLu87ewTnVqLkvJJqYaUVudsA==
-X-Received: by 2002:a17:906:ae50:b0:8b1:20f4:44a3 with SMTP id lf16-20020a170906ae5000b008b120f444a3mr8963111ejb.7.1676623343829;
-        Fri, 17 Feb 2023 00:42:23 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id qq12-20020a17090720cc00b0087f68a2681bsm1860150ejb.96.2023.02.17.00.42.22
+        bh=QvlfKQyT4/yiRm0UBTgKuh4h9yI1+vauMqU7ek9YADE=;
+        b=QzXEfXbGKpcytsDzdPaZ0vBThuTpfDzxmuQMoCkztC3ANFCUSrmPhZQld2JKVcQZCH
+         KR+dfyj3aRw+2c7rqEhHoIClIzi8cppXHVfput8+mrTrRvJ21SaPAODpGIYmfJIRlEda
+         T/LFXL4AOKWdbcBJWWaByDXyEPkNQw82K9AIcXVTjc47lCdCFYNVKDlkPCtJkkgmCmDz
+         yEfZ0BynvXFZcAt+Ych4CBhTar/YNrzwlk9dkUbUpoPlxxG5lPbUCrYP3fEO0+rZ4tQx
+         iY9EoKP8bfEUIIb90ft/eNyDG+yK9Cop5O/ByNsNdo11RZz72dsJQypBXsr1pjgjfC/P
+         S5LQ==
+X-Gm-Message-State: AO0yUKVl8F6jMcKHrDul6dFrXLeDT1Hu2XR4Jwwqtr7Nt6iKk4/o9O/3
+        ApTwXhgKAhOSxiUsTzgOsOpaloX8F7Q=
+X-Google-Smtp-Source: AK7set9eWO+FkyX4qsaCLqgPX67GJlmo64d7yQmXKdTsuncTXfsYoDvGTNhRuWR5z9ln/N/UUkUmNg==
+X-Received: by 2002:ac2:4c1b:0:b0:4d8:6540:a72c with SMTP id t27-20020ac24c1b000000b004d86540a72cmr3609950lfq.46.1676623385503;
+        Fri, 17 Feb 2023 00:43:05 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.86.21])
+        by smtp.gmail.com with ESMTPSA id y4-20020ac24464000000b004cb14fa604csm609731lfl.262.2023.02.17.00.43.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 00:42:23 -0800 (PST)
-Message-ID: <2e5a17c2-f0fa-e82e-65ed-fea3637b7e62@linaro.org>
-Date:   Fri, 17 Feb 2023 09:42:21 +0100
+        Fri, 17 Feb 2023 00:43:05 -0800 (PST)
+Subject: Re: [RFC PATCH] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not
+ set
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Dengcheng Zhu <dzhu@wavecomp.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+References: <20230217063858.28311-1-rdunlap@infradead.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <5e36b62c-9326-dc8b-3d7e-dfa79b75472b@gmail.com>
+Date:   Fri, 17 Feb 2023 11:43:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] dt-bindings: ata: Add UniPhier controller binding
+In-Reply-To: <20230217063858.28311-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213045432.32614-1-hayashi.kunihiko@socionext.com>
- <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
- <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
- <0c6dc673-7e11-eec5-ec2d-e00fb2060bf3@linaro.org>
- <c6b86d56-a8a4-825d-ac34-7a9f00e43b42@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c6b86d56-a8a4-825d-ac34-7a9f00e43b42@socionext.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 18:23, Kunihiko Hayashi wrote:
-> On 2023/02/14 18:42, Krzysztof Kozlowski wrote:
->> On 14/02/2023 10:33, Kunihiko Hayashi wrote:
->>> Hi Krzysztof,
->>>
->>> On 2023/02/13 18:10, Krzysztof Kozlowski wrote:
->>>> On 13/02/2023 05:54, Kunihiko Hayashi wrote:
->>>>> Add UniPhier SATA controller compatible string to the platform binding.
->>>>> This controller needs maximum three reset controls.
->>>>>
->>>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>>>> ---
->>>>>    .../devicetree/bindings/ata/ahci-platform.yaml  | 17 +++++++++++++++++
->>>>>    1 file changed, 17 insertions(+)
->>>>>
->>>>> Changes since v1:
->>>>> - Restrict resets property changes with compatible strings
->>>>> - Fix maxItems from two to three
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>> b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>> index 7dc2a2e8f598..25dd5ffaa517 100644
->>>>> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>>>> @@ -45,6 +45,9 @@ properties:
->>>>>                  - marvell,armada-8k-ahci
->>>>>                  - marvell,berlin2-ahci
->>>>>                  - marvell,berlin2q-ahci
->>>>> +              - socionext,uniphier-pro4-ahci
->>>>> +              - socionext,uniphier-pxs2-ahci
->>>>> +              - socionext,uniphier-pxs3-ahci
->>>>>              - const: generic-ahci
->>>>>          - enum:
->>>>
->>>> Top level is saying reset=1, so did you test your bindings?
->>>
->>> Umm, I didn't see any errors on dt_binding_check, anyway I'll add
->>> initial minItems:1 and maxItems:3 on top level first.
->>
->> You need to test also all DTS using these bindings. Yours and others.
->> If you tested the DTS (with proper binding, not one which is basically
->> noop):
->>
->> uniphier-pro4-ace.dtb: sata@65600000: resets: [[27, 12], [27, 28], [37,
->> 3]] is too long
-> 
-> I've tried updating tools and doing dtbs_check, but I couldn't find this
-> error. It seems that this error can't be detected unless there is the
-> specified compatible in "select:".
-> 
->> BTW, the patch has other errors - just look at the beginning of the
->> file. I cannot see it here in the diff, but when you open the file you
->> should notice it.
-> 
-> Sorry, but I cannot see anything wrong.
-> I'll check the header or something...
+On 2/17/23 9:38 AM, Randy Dunlap wrote:
 
-If you open the file, you will notice the same compatibles in two
-places. In select and in properties. You added your compatibles only to
-one place, so not symmetrically.
+> When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
+> KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
+> which is not built when MIPS_CPS_PM is not set.
+> Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
+> to remove the build error.
+> This build failure is from a randconfig file.
+> 
+> mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
+> smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
+> 
+> Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  arch/mips/kernel/smp-cps.c |    2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff -- a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+> --- a/arch/mips/kernel/smp-cps.c
+> +++ b/arch/mips/kernel/smp-cps.c
+> @@ -424,9 +424,11 @@ static void cps_shutdown_this_cpu(enum c
+>  			wmb();
+>  		}
+>  	} else {
+> +#ifdef CONFIG_HOTPLUG_CPU
 
-Best regards,
-Krzysztof
+   Perhaps, instead of #ifdef'ery, ude the following:
 
+	} else if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
+
+>  		pr_debug("Gating power to core %d\n", core);
+>  		/* Power down the core */
+>  		cps_pm_enter_state(CPS_PM_POWER_GATED);
+> +#endif /* CONFIG_HOTPLUG_CPU */
+>  	}
+>  }
+>  
+
+MBR, Sergey
