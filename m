@@ -2,312 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE0069A6AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A8869A6AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBQIMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:12:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S229704AbjBQINr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBQIMq (ORCPT
+        with ESMTP id S229505AbjBQINp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:12:46 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB6D55B3;
-        Fri, 17 Feb 2023 00:12:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676621564; x=1708157564;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PM5xRak9MR7lO66pidCVY/0E20TFwyicvlQ69LhWtJw=;
-  b=TotQ+Zt9G1BfcOvONB0VNiL8JYZ+gwqslla3QNMgOGhkOPYnsDpuHYlh
-   +dob00kYxpDOIcXKeaHC3Dp3RVYZBrCrdBGXS1AhZGtVNQSWhBjx5Fez7
-   joCkqF0sZjpsrLPAQTievZ65/peBCBUdFiTujkqEhNs82VgxAbXlDdHcM
-   /HlExiEpQsZqwfvpeLe+fGveA1HqJjTqvYcohqOlcIHJWplsImWbYyz63
-   6JS8DunBky+wiVO77Ik5zDp+BDTKU62T+PP4sU+GGv+uXtRfIeTIEM0VI
-   9gVMYh72eD6+0PeYJ5xVvQ5YO05q4PoLPdw/ELqlmZvh3rIpjOh80Q1U4
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,304,1669071600"; 
-   d="scan'208";a="29147991"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 17 Feb 2023 09:12:42 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 17 Feb 2023 09:12:42 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 17 Feb 2023 09:12:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676621562; x=1708157562;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PM5xRak9MR7lO66pidCVY/0E20TFwyicvlQ69LhWtJw=;
-  b=YHmXP3CsOrjeXp2b67hu04Kk9wTPg+bTT4dzmpCG6gdcTZbpts8V6fRV
-   TP2ddeHQzYVY/MmOgTR6Kp7S5/6JWoVJbJdFyZRBOeEZ1SHN4lOblMq/D
-   eBUPGoQOrj8KJeueK3Kn1WZyG0CrhIhdoO2mp+L8wKJkcIwitagnIYZTG
-   DBxERJK7uw/0Kf7owsKWPhOKrXPo68AeCfSh3y9+6hDZZEkJZPnp3QHpD
-   xWoro8z0xQygbxODdKXK+Fm7r9Z2cKtikHpIe5pk4Oxs38PsphxvgMrNQ
-   qTnpAVkWe/Au5XWBXZ6LE0g/w4xETmbZgpR++1Js6MsCHhS49rXaeU39N
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,304,1669071600"; 
-   d="scan'208";a="29147990"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 17 Feb 2023 09:12:42 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 81639280056;
-        Fri, 17 Feb 2023 09:12:41 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Liu Ying <victor.liu@nxp.com>
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
-Subject: Re: [PATCH v4 5/6] drm: lcdif: Add multiple encoders and first bridges support
-Date:   Fri, 17 Feb 2023 09:12:39 +0100
-Message-ID: <2274637.ElGaqSPkdT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230217065407.2259731-6-victor.liu@nxp.com>
-References: <20230217065407.2259731-1-victor.liu@nxp.com> <20230217065407.2259731-6-victor.liu@nxp.com>
+        Fri, 17 Feb 2023 03:13:45 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A53730B03
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:13:43 -0800 (PST)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8Cxxtg2N+9jM7IBAA--.3297S3;
+        Fri, 17 Feb 2023 16:13:42 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyr02N+9jnyo1AA--.32871S3;
+        Fri, 17 Feb 2023 16:13:42 +0800 (CST)
+Subject: Re: [PATCH v5 4/5] LoongArch: Add support for kernel relocation
+To:     Xi Ruoyao <xry111@xry111.site>
+References: <1676618789-20485-1-git-send-email-tangyouling@loongson.cn>
+ <1676618789-20485-5-git-send-email-tangyouling@loongson.cn>
+ <5ac82f53aeb6a040be90eac2be7c64055e62f0ef.camel@xry111.site>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <fc5b0403-ed2f-2dcf-11b9-e3be4642ddda@loongson.cn>
+Date:   Fri, 17 Feb 2023 16:13:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5ac82f53aeb6a040be90eac2be7c64055e62f0ef.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Bxyr02N+9jnyo1AA--.32871S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrtr1UZFW3Cr4kuF1rWFW5trb_yoWDXwb_uF
+        WFgr1qk3W5CrZ7K3Z2va13Xrs293yrJF4UWrn3X3yIva4ayanxJas8trnF9F45Xrn8Cr13
+        Zan7ur1Fkry2yjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5
+        Q7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E
+        6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VWrMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
+        I48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
+        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWl
+        kUUUUU=
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
-
-thanks for the update.
-
-Am Freitag, 17. Februar 2023, 07:54:06 CET schrieb Liu Ying:
-> The single LCDIF embedded in i.MX93 SoC may drive multiple displays
-> simultaneously.  Look at LCDIF output port's remote port parents to
-> find all enabled first bridges.  Add an encoder for each found bridge
-> and attach the bridge to the encoder.  This is a preparation for
-> adding i.MX93 LCDIF support.
->=20
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-
-Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-> ---
-> v3->v4:
-> * Improve warning message when ignoring invalid LCDIF OF endpoint ids.
->   (Alexander)
->=20
-> v2->v3:
-> * No change.
->=20
-> v1->v2:
-> * Split from patch 2/2 in v1. (Marek, Alexander)
-> * Drop '!remote ||' from lcdif_attach_bridge(). (Lothar)
-> * Drop unneeded 'bridges' member from lcdif_drm_private structure.
->=20
->  drivers/gpu/drm/mxsfb/lcdif_drv.c | 68 +++++++++++++++++++++++++++----
->  drivers/gpu/drm/mxsfb/lcdif_drv.h |  4 +-
->  drivers/gpu/drm/mxsfb/lcdif_kms.c | 21 ++--------
->  3 files changed, 66 insertions(+), 27 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> b/drivers/gpu/drm/mxsfb/lcdif_drv.c index b5b9a8e273c6..f1f5caef390a 1006=
-44
-> --- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> @@ -9,13 +9,16 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_graph.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->=20
->  #include <drm/drm_atomic_helper.h>
->  #include <drm/drm_bridge.h>
->  #include <drm/drm_drv.h>
-> +#include <drm/drm_encoder.h>
->  #include <drm/drm_fbdev_generic.h>
->  #include <drm/drm_gem_dma_helper.h>
->  #include <drm/drm_gem_framebuffer_helper.h>
-> @@ -38,19 +41,68 @@ static const struct drm_mode_config_helper_funcs
-> lcdif_mode_config_helpers =3D { .atomic_commit_tail =3D
-> drm_atomic_helper_commit_tail_rpm,
->  };
->=20
-> +static const struct drm_encoder_funcs lcdif_encoder_funcs =3D {
-> +	.destroy =3D drm_encoder_cleanup,
-> +};
-> +
->  static int lcdif_attach_bridge(struct lcdif_drm_private *lcdif)
->  {
-> -	struct drm_device *drm =3D lcdif->drm;
-> +	struct device *dev =3D lcdif->drm->dev;
-> +	struct device_node *ep;
->  	struct drm_bridge *bridge;
->  	int ret;
->=20
-> -	bridge =3D devm_drm_of_get_bridge(drm->dev, drm->dev->of_node, 0, 0);
-> -	if (IS_ERR(bridge))
-> -		return PTR_ERR(bridge);
-> -
-> -	ret =3D drm_bridge_attach(&lcdif->encoder, bridge, NULL, 0);
-> -	if (ret)
-> -		return dev_err_probe(drm->dev, ret, "Failed to attach=20
-bridge\n");
-> +	for_each_endpoint_of_node(dev->of_node, ep) {
-> +		struct device_node *remote;
-> +		struct of_endpoint of_ep;
-> +		struct drm_encoder *encoder;
-> +
-> +		remote =3D of_graph_get_remote_port_parent(ep);
-> +		if (!of_device_is_available(remote)) {
-> +			of_node_put(remote);
-> +			continue;
-> +		}
-> +		of_node_put(remote);
-> +
-> +		ret =3D of_graph_parse_endpoint(ep, &of_ep);
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to parse endpoint %pOF\n",=20
-ep);
-> +			of_node_put(ep);
-> +			return ret;
-> +		}
-> +
-> +		if (of_ep.id >=3D MAX_DISPLAYS) {
-> +			dev_warn(dev, "ingoring invalid endpoint id=20
-%u\n", of_ep.id);
-> +			continue;
-> +		}
-> +
-> +		bridge =3D devm_drm_of_get_bridge(dev, dev->of_node, 0,=20
-of_ep.id);
-> +		if (IS_ERR(bridge)) {
-> +			of_node_put(ep);
-> +			return dev_err_probe(dev, PTR_ERR(bridge),
-> +					     "Failed to get bridge=20
-for endpoint%u\n",
-> +					     of_ep.id);
-> +		}
-> +
-> +		encoder =3D &lcdif->encoders[of_ep.id];
-> +		encoder->possible_crtcs =3D drm_crtc_mask(&lcdif->crtc);
-> +		ret =3D drm_encoder_init(lcdif->drm, encoder,=20
-&lcdif_encoder_funcs,
-> +				       DRM_MODE_ENCODER_NONE, NULL);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to initialize encoder for=20
-endpoint%u: %d\n",
-> +				of_ep.id, ret);
-> +			of_node_put(ep);
-> +			return ret;
-> +		}
-> +
-> +		ret =3D drm_bridge_attach(encoder, bridge, NULL, 0);
-> +		if (ret) {
-> +			of_node_put(ep);
-> +			return dev_err_probe(dev, ret,
-> +					     "Failed to attach=20
-bridge for endpoint%u\n",
-> +					     of_ep.id);
-> +		}
-> +	}
->=20
->  	return 0;
->  }
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.h
-> b/drivers/gpu/drm/mxsfb/lcdif_drv.h index aa6d099a1897..c7400bd9bbd9 1006=
-44
-> --- a/drivers/gpu/drm/mxsfb/lcdif_drv.h
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.h
-> @@ -14,6 +14,8 @@
->  #include <drm/drm_encoder.h>
->  #include <drm/drm_plane.h>
->=20
-> +#define MAX_DISPLAYS	3
-> +
->  struct clk;
->=20
->  struct lcdif_drm_private {
-> @@ -30,7 +32,7 @@ struct lcdif_drm_private {
->  		/* i.MXRT does support overlay planes, add them here. */
->  	} planes;
->  	struct drm_crtc			crtc;
-> -	struct drm_encoder		encoder;
-> +	struct drm_encoder		encoders[MAX_DISPLAYS];
->  };
->=20
->  static inline struct lcdif_drm_private *
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> b/drivers/gpu/drm/mxsfb/lcdif_kms.c index d6009b353a16..c35d769f91dd 1006=
-44
-> --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> @@ -656,14 +656,6 @@ static const struct drm_crtc_funcs lcdif_crtc_funcs =
-=3D {
-> .disable_vblank =3D lcdif_crtc_disable_vblank,
->  };
->=20
-> -/*
-> -------------------------------------------------------------------------=
-=2D-
-> -- - * Encoder
-> - */
-> -
-> -static const struct drm_encoder_funcs lcdif_encoder_funcs =3D {
-> -	.destroy =3D drm_encoder_cleanup,
-> -};
-> -
->  /*
-> -------------------------------------------------------------------------=
-=2D-
-> -- * Planes
->   */
-> @@ -756,7 +748,6 @@ int lcdif_kms_init(struct lcdif_drm_private *lcdif)
->  					BIT(DRM_COLOR_YCBCR_BT2020);
->  	const u32 supported_ranges =3D BIT(DRM_COLOR_YCBCR_LIMITED_RANGE) |
->  				     BIT(DRM_COLOR_YCBCR_FULL_RANGE);
-> -	struct drm_encoder *encoder =3D &lcdif->encoder;
->  	struct drm_crtc *crtc =3D &lcdif->crtc;
->  	int ret;
->=20
-> @@ -780,13 +771,7 @@ int lcdif_kms_init(struct lcdif_drm_private *lcdif)
->  		return ret;
->=20
->  	drm_crtc_helper_add(crtc, &lcdif_crtc_helper_funcs);
-> -	ret =3D drm_crtc_init_with_planes(lcdif->drm, crtc,
-> -					&lcdif->planes.primary,=20
-NULL,
-> -					&lcdif_crtc_funcs, NULL);
-> -	if (ret)
-> -		return ret;
-> -
-> -	encoder->possible_crtcs =3D drm_crtc_mask(crtc);
-> -	return drm_encoder_init(lcdif->drm, encoder, &lcdif_encoder_funcs,
-> -				DRM_MODE_ENCODER_NONE, NULL);
-> +	return drm_crtc_init_with_planes(lcdif->drm, crtc,
-> +					 &lcdif->planes.primary,=20
-NULL,
-> +					 &lcdif_crtc_funcs, NULL);
->  }
 
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+On 02/17/2023 04:02 PM, Xi Ruoyao wrote:
+> On Fri, 2023-02-17 at 15:26 +0800, Youling Tang wrote:
+>
+>> This config allows to compile kernel as PIE and to relocate it at
+>> any virtual address at runtime: this paves the way to KASLR.
+>> Runtime relocation is possible since relocation metadata are embedded
+>> into the kernel.
+>>
+>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+>> Signed-off-by: Xi Ruoyao <xry111@xry111.site> # Use arch_initcall
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn> # Provide la_abs idea
+>
+> Use Suggested-by if only "idea" is provided.
+In addition to the idea, the first draft code of la_abs is also
+provided.
 
+Maybe change it to the following,
+   Signed-off-by: Jinyang He <hejinyang@loongson.cn> # Provide la_abs 
+relocation draft code
+
+>
+>> +struct rela_la_abs {
+>> +               long offset;
+>> +               long symvalue;
+>> +};
+>
+> Use one tab instead of two for the indent.
+My mistake.
+
+Also the missing do_kaslr declaration will be added.
+
+Youling.
+> Otherwise LGTM.
+>
 
