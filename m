@@ -2,120 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FF569B274
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D98C69B26D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 19:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBQSln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 13:41:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S229582AbjBQSjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 13:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBQSll (ORCPT
+        with ESMTP id S229541AbjBQSjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:41:41 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2A63C2F;
-        Fri, 17 Feb 2023 10:41:40 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d7so2368458plh.6;
-        Fri, 17 Feb 2023 10:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzlLtDg8M3UQOkK65vvzaRQLZYQsseOb8j91wy1coBQ=;
-        b=anSFtD12yeDibKm7pDZx3YLNXkB5D49n8CAs1qTayhrZ3VKhHYFQU9ipMoBmaD3Q7o
-         mhOkEh7FMPybcby9eSFFIxjihtRwUBz4a5BQMu6kSXPF6DMN1k9Em2qvnZrmGl4dmDNL
-         Dc3Uv+7GQdFlwp/QE3BvKBJvTDHUYRhtMsdj1ICcd8mEF0+x43o1WZeTcUoGqbVaAD3M
-         Bji2zl5emISFIrNM9Q81nSQFz1T3UtVufjQ1zpR2hGe6T+xYEaNnMsIoKsBDAchSlD3m
-         Nl09YW/a82CyA2ciqu3E5L49F8Zlqu6+1r1VJnxlK/Dd3BBIR2DCMnWGtIY4ANFP4wtN
-         y3JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JzlLtDg8M3UQOkK65vvzaRQLZYQsseOb8j91wy1coBQ=;
-        b=SRklPdcp0yZKCQNllXRf9I8mZkY4p40giYjJKnFFL+RlYvAugSkIjhuBq0BUySpyZX
-         utkUxppU8JK7/8im323Bh1gaEqTfxcyVIndEhX4HUQoaiDRR3SdGOmXSvUo5GDQaFGd4
-         qVNLSkQZpr2xi7G6iaMipkss70rjUttNWDZknHtoSG8HcXEc3TEUB7WJnBPeTGWin+3m
-         Emx6ygDYkVGEf8SrK1kiiVJXlQvYC6BsYDg0DpYWe4vbWhTqqim1SslfCzOLvw58yFun
-         tgM5T7kDO+3VseMZ4v7r+oIPzk+O4tBTWuZuAH4Zts9+iL7JckDA4DDp023LAfQZQp+Y
-         0tqQ==
-X-Gm-Message-State: AO0yUKWX6fm3w4ClppRrvZYLeZno+YKdQ6V2RErYQ1cfsCVySGtcdG4b
-        CiCM2rwWyP0OZWc4C9Mw0Ere7wl1a5MgsQ==
-X-Google-Smtp-Source: AK7set+TJzozdBQPiNFtEm1sQJCDDxNmrbwzgQ5oiHVLEoPrrb7CA1gikXhEs8WEINsWA6fxDJfknQ==
-X-Received: by 2002:a05:6a20:728c:b0:bf:488a:1da8 with SMTP id o12-20020a056a20728c00b000bf488a1da8mr9188939pzk.3.1676659299048;
-        Fri, 17 Feb 2023 10:41:39 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f10-20020a63de0a000000b004fc1e4751d5sm2528175pgg.35.2023.02.17.10.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 10:41:38 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next] net: bcmgenet: Support wake-up from s2idle
-Date:   Fri, 17 Feb 2023 10:34:14 -0800
-Message-Id: <20230217183415.3300158-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 13:39:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C913C2F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 10:39:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39251B82D52
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 18:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CAFC433D2;
+        Fri, 17 Feb 2023 18:39:38 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1pT5dx-000smV-1T;
+        Fri, 17 Feb 2023 13:39:37 -0500
+Message-ID: <20230217183911.775065402@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Fri, 17 Feb 2023 13:39:11 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-next][PATCH 0/3] tracing: Final updates for 6.3
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we suspend into s2idle we also need to enable the interrupt line
-that generates the MPD and HFB interrupts towards the host CPU interrupt
-controller (typically the ARM GIC or MIPS L1) to make it exit s2idle.
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+trace/for-next
 
-When we suspend into other modes such as "standby" or "mem" we engage a
-power management state machine which will gate off the CPU L1 controller
-(priv->irq0) and ungate the side band wake-up interrupt (priv->wol_irq).
-It is safe to have both enabled as wake-up sources because they are
-mutually exclusive given any suspend mode.
+Head SHA1: 2413ec4fd11248ef255f92fd12d943b49b6fbff4
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-index f55d9d9c01a8..3a4b6cb7b7b9 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-@@ -77,14 +77,18 @@ int bcmgenet_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
- 	if (wol->wolopts) {
- 		device_set_wakeup_enable(kdev, 1);
- 		/* Avoid unbalanced enable_irq_wake calls */
--		if (priv->wol_irq_disabled)
-+		if (priv->wol_irq_disabled) {
- 			enable_irq_wake(priv->wol_irq);
-+			enable_irq_wake(priv->irq0);
-+		}
- 		priv->wol_irq_disabled = false;
- 	} else {
- 		device_set_wakeup_enable(kdev, 0);
- 		/* Avoid unbalanced disable_irq_wake calls */
--		if (!priv->wol_irq_disabled)
-+		if (!priv->wol_irq_disabled) {
- 			disable_irq_wake(priv->wol_irq);
-+			disable_irq_wake(priv->irq0);
-+		}
- 		priv->wol_irq_disabled = true;
- 	}
- 
--- 
-2.34.1
+Jianlin Lv (1):
+      tracepoint: Allow livepatch module add trace event
 
+Ross Zwisler (1):
+      tracing: Always use canonical ftrace path
+
+Wang ShaoBo (1):
+      tracing: Remove unnecessary NULL assignment
+
+----
+ include/linux/kernel.h                    |  2 +-
+ include/linux/tracepoint.h                |  4 ++--
+ kernel/trace/Kconfig                      | 20 ++++++++++----------
+ kernel/trace/kprobe_event_gen_test.c      |  2 +-
+ kernel/trace/ring_buffer.c                |  2 +-
+ kernel/trace/synth_event_gen_test.c       |  2 +-
+ kernel/trace/trace.c                      |  2 +-
+ kernel/trace/trace_events.c               |  2 --
+ kernel/tracepoint.c                       |  4 ++--
+ samples/user_events/example.c             |  4 ++--
+ scripts/tracing/draw_functrace.py         |  6 +++---
+ tools/lib/api/fs/tracing_path.c           |  4 ++--
+ tools/tracing/latency/latency-collector.c |  2 +-
+ 13 files changed, 27 insertions(+), 29 deletions(-)
