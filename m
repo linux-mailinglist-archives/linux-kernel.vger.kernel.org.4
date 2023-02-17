@@ -2,39 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DAF69A81E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E4569A81B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjBQJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        id S230051AbjBQJ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 04:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjBQJ3U (ORCPT
+        with ESMTP id S229563AbjBQJ3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:29:20 -0500
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B5F5F25D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:29:17 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id Sx3Lp87Ho71C0Sx3LpPVzN; Fri, 17 Feb 2023 10:29:15 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 17 Feb 2023 10:29:15 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-block@vger.kernel.org
-Subject: [PATCH] blk-mq: Reorder fields in 'struct blk_mq_tag_set'
-Date:   Fri, 17 Feb 2023 10:29:10 +0100
-Message-Id: <6f249f9b02a3490283ef0278096556de41aa0cf0.1676626130.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Fri, 17 Feb 2023 04:29:17 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71B838E98;
+        Fri, 17 Feb 2023 01:29:15 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pSx3H-00073H-Ii; Fri, 17 Feb 2023 10:29:11 +0100
+Message-ID: <0c76e67d-5fc5-bfdc-9960-3ef308c23794@leemhuis.info>
+Date:   Fri, 17 Feb 2023 10:29:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US, de-DE
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev, Greg KH <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <8cfcf069d48c1b8d7b83aafe0132f8dad0f1d0ea.1676400947.git.linux@leemhuis.info>
+ <873575gmlb.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v2] docs: describe how to quickly build a trimmed kernel
+In-Reply-To: <873575gmlb.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1676626155;09b92619;
+X-HE-SMSGID: 1pSx3H-00073H-Ii
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,107 +48,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce hole and avoid padding.
-On x86_64, this shrinks the size of 'struct blk_mq_tag_set'
-from 304 to 296 bytes.
+On 17.02.23 01:30, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
+> 
+>> Add a text explaining how to quickly build a kernel, as that's something
+>> users will often have to do when they want to report an issue or test
+>> proposed fixes. This is a huge and frightening task for quite a few
+>> users these days, as many rely on pre-compiled kernels and have never
+>> built their own. They find help on quite a few websites explaining the
+>> process in various ways, but those howtos often omit important details
+>> or make things too hard for the 'quickly build just for testing' case
+>> that 'localmodconfig' is really useful for. Hence give users something
+>> at hand to guide them, as that makes it easier for them to help with
+>> testing, debugging, and fixing the kernel.
+>>
+>> To keep the complexity at bay, the document explicitly focuses on how to
+>> compile the kernel on commodity distributions running on commodity
+>> hardware. People that deal with less common distributions or hardware
+>> will often know their way around already anyway.
+> 
+> So this seems generally good though - as is my usual style - if it were
+> mine I'd be trying to find a way to make it significantly shorter.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+Yeah, I know, I tend to put a lot of details in the text, as I expect
+some readers will need them (I guess I put the bar what I expect from
+readers a lot lower than many others due to my time writing for a
+mainstream computer magazine); but I hope the structure helps somewhat
+to make it easy to read for people that don't need those details.
 
-Before:
-======
-struct blk_mq_tag_set {
-	struct blk_mq_queue_map    map[3];               /*     0    48 */
-	unsigned int               nr_maps;              /*    48     4 */
+And I guess I sometimes use more words than needed. Happens in my first
+language already, but I guess it's even worse when writing English. :-/
 
-	/* XXX 4 bytes hole, try to pack */
+> I could certainly bikeshed a lot of things - I'm not convinced about the
+> whole shallow-clone business, for example - but I'll try to restrain
+> myself.
 
-	const struct blk_mq_ops  * ops;                  /*    56     8 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	unsigned int               nr_hw_queues;         /*    64     4 */
-	unsigned int               queue_depth;          /*    68     4 */
-	unsigned int               reserved_tags;        /*    72     4 */
-	unsigned int               cmd_size;             /*    76     4 */
-	int                        numa_node;            /*    80     4 */
-	unsigned int               timeout;              /*    84     4 */
-	unsigned int               flags;                /*    88     4 */
+Regarding the "shallow-clone business": initially I really didn't want
+to go down that route myself. But well, in my local testing I noticed
+creating a full clone took longer than compiling the localmodconfig
+kernel on my two year old laptop -- and that felt wrong given the
+"quickly" in the headline. Disclaimer: I'm only connected to the net
+through a 100 MBit line (there was never a need to upgrade); but I guess
+100 MBit in some parts of the world where people might read this text is
+still considered a lot.
 
-	/* XXX 4 bytes hole, try to pack */
+>> The document heavily uses anchors and links to them, which makes things
+>> slightly harder to read in the source form. But the intended target
+>> audience is way more likely to read rendered versions of this text on
+>> pages like docs.kernel.org anyway -- and there those anchors and links
+>> allow easy jumps to the reference section and back, which makes the
+>> document a lot easier to work with for the intended target audience.
+> 
+> I do wonder if all that back-and-forth actually makes things easier, and
+> it definitely impedes use of the RST file.  I recognize that you're
+> trying to do something a bit different here, though, and don't want to
+> get in the way of the experiment.
 
-	void *                     driver_data;          /*    96     8 */
-	struct blk_mq_tags * *     tags;                 /*   104     8 */
-	struct blk_mq_tags *       shared_tags;          /*   112     8 */
-	struct mutex               tag_list_lock;        /*   120   160 */
-	/* --- cacheline 4 boundary (256 bytes) was 24 bytes ago --- */
-	struct list_head           tag_list;             /*   280    16 */
-	struct srcu_struct *       srcu;                 /*   296     8 */
+Be warned, if it works I might do the same for "reporting issues". ;)
+But let's first see how this goes (and if we get any feedback to be able
+to tell if this experiment worked).
 
-	/* size: 304, cachelines: 5, members: 16 */
-	/* sum members: 296, holes: 2, sum holes: 8 */
-	/* last cacheline: 48 bytes */
-};
+>  Given the purpose, though, I do have
+> a couple of little thoughts:
+> 
+> - Somewhere at the top of the RST file should be a prominent link to the
+>   rendered version, presumably on kernel.org.  It could perhaps be in an
+>   RST comment that doesn't show up in the rendered version, saying
+>   "perhaps you really want to read this ----> over there".
 
-After:
-=====
-struct blk_mq_tag_set {
-	const struct blk_mq_ops  * ops;                  /*     0     8 */
-	struct blk_mq_queue_map    map[3];               /*     8    48 */
-	unsigned int               nr_maps;              /*    56     4 */
-	unsigned int               nr_hw_queues;         /*    60     4 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	unsigned int               queue_depth;          /*    64     4 */
-	unsigned int               reserved_tags;        /*    68     4 */
-	unsigned int               cmd_size;             /*    72     4 */
-	int                        numa_node;            /*    76     4 */
-	unsigned int               timeout;              /*    80     4 */
-	unsigned int               flags;                /*    84     4 */
-	void *                     driver_data;          /*    88     8 */
-	struct blk_mq_tags * *     tags;                 /*    96     8 */
-	struct blk_mq_tags *       shared_tags;          /*   104     8 */
-	struct mutex               tag_list_lock;        /*   112   160 */
-	/* --- cacheline 4 boundary (256 bytes) was 16 bytes ago --- */
-	struct list_head           tag_list;             /*   272    16 */
-	struct srcu_struct *       srcu;                 /*   288     8 */
+Good idea. I put this in my local draft:
 
-	/* size: 296, cachelines: 5, members: 16 */
-	/* last cacheline: 40 bytes */
-};
----
- include/linux/blk-mq.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+```
+..
+    Note: if you see this note, you are reading the text's source file. You
+    might want to switch to a rendered version, as it makes it a lot
+easier to
+    quickly look something up in the reference section and jump back to
+where you
+    left of afterwards. Find a the latest rendered version here:
+    https://docs.kernel.org/admin-guide/quickly-build-trimmed-linux.html
 
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index 779fba613bd0..dd5ce1137f04 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -473,6 +473,7 @@ enum hctx_type {
- 
- /**
-  * struct blk_mq_tag_set - tag set that can be shared between request queues
-+ * @ops:	   Pointers to functions that implement block driver behavior.
-  * @map:	   One or more ctx -> hctx mappings. One map exists for each
-  *		   hardware queue type (enum hctx_type) that the driver wishes
-  *		   to support. There are no restrictions on maps being of the
-@@ -480,7 +481,6 @@ enum hctx_type {
-  *		   types.
-  * @nr_maps:	   Number of elements in the @map array. A number in the range
-  *		   [1, HCTX_MAX_TYPES].
-- * @ops:	   Pointers to functions that implement block driver behavior.
-  * @nr_hw_queues:  Number of hardware queues supported by the block driver that
-  *		   owns this data structure.
-  * @queue_depth:   Number of tags per hardware queue, reserved tags included.
-@@ -505,9 +505,9 @@ enum hctx_type {
-  *		   (BLK_MQ_F_BLOCKING).
-  */
- struct blk_mq_tag_set {
-+	const struct blk_mq_ops	*ops;
- 	struct blk_mq_queue_map	map[HCTX_MAX_TYPES];
- 	unsigned int		nr_maps;
--	const struct blk_mq_ops	*ops;
- 	unsigned int		nr_hw_queues;
- 	unsigned int		queue_depth;
- 	unsigned int		reserved_tags;
--- 
-2.34.1
+```
+
+That link obviously will be broken until the text reached mainline, but
+I guess that can be ignored.
+
+> - Eventually we should probably make the link to this document more
+>   prominent on the front page - once we've figured out what we're doing
+>   there :)
+
+Will keep this in mind.
+
+> Anyway, those quibbles aside, I think we should probably just apply this
+> after the merge window.
+
+Great. With a bit of luck some reviewers might find time to provide
+feedback; maybe there are even a few "this can be written shorter" or
+"do we really need this sentence" suggestions among it.
+
+Ciao, Thorsten
+
+P.S.: I know, it's late in the cycle, but if you want to do me a favor
+it would be great if you might consider looking at or even merging the
+"docs: recommend using Link: whenever using Reported-by:" change I
+proposed, at it might make my regression tracking effort a tiny bit easier:
+https://lore.kernel.org/linux-doc/9a07ec640d809723492f8ade4f54705914e80419.1676369564.git.linux@leemhuis.info/
 
