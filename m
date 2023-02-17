@@ -2,83 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6E169B5AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252B869B5B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBQWrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 17:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S229520AbjBQWzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 17:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjBQWrt (ORCPT
+        with ESMTP id S229477AbjBQWzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:47:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508D6665A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:47:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EAE662085
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E490C433D2;
-        Fri, 17 Feb 2023 22:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676674066;
-        bh=luqgV4kScazHV6dhXU3cC4RLXwXa7+Ar02mJRjsgCEA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=KE4kLTyWhGufl2CwY89oLtOKfvDA361LUdQ2CCCMlo3qqVVXA0usoW9asmlQm0hAo
-         9m0rm0sC1X7ajXYIG6wY65BxgrRMn67iI7lNhsyyAxQSaxdE5tSoklRpXfoQmrZygr
-         DFbO7Vz+GA/z5YfDVWkbM35jP0VDr/LsodcqLDfWD+MlfmjX/tiOb8tSliJQjE6B0q
-         Crwg6Qxc3oRy0yCroj2C00ebzgG4oCFzCKRfjA6mc9mTzEq87NnQcUiLYUZ0YZ9sAv
-         X+5SE/NpxPmwbZXkUd5rEVRAKx22DyAbJtDzu5PZOa9KjorXBAwzUxc6iUwAy+OfMj
-         reaCo/Ly6OWNA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AC53C1614B;
-        Fri, 17 Feb 2023 22:47:46 +0000 (UTC)
-Subject: Re: [GIT PULL] scheduler fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y+8v0JG8DvedQISA@gmail.com>
-References: <Y+8v0JG8DvedQISA@gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y+8v0JG8DvedQISA@gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-urgent-2023-02-17
-X-PR-Tracked-Commit-Id: c2dbe32d5db5c4ead121cf86dabd5ab691fb47fe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 64e0253df67d5e1557e82b923c78f1bad185eb9a
-Message-Id: <167667406649.13496.13984663502605448379.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Feb 2023 22:47:46 +0000
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 17:55:44 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7EC49899
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:43 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id a5-20020a170902ecc500b001990ad8de5bso1295147plh.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qX01yCG8Tyfo4OLzTgqDTzCtCYMj9HQcITl6rWSXSe8=;
+        b=KBb86AS6Bi2LtTKgGnz+8tOM0X+pAfsuaBUQ+iFcVSfi5Q5AQyb1AmPUDnw4AF4gxh
+         ILwju8KN1MrzKii0D3UKWafgBswM4wVwIez1qnpau5bJpKtEDbrorC91Aww0VLFfFi0J
+         Qrq87XIUMfz4EkYE8GoI3zWFMBA8F03vGXjTT8SygbfjKuwF92wHF5HshOdFknqHdYTZ
+         HUp73oX11zD18NsvAnQ2hELjhHDQ3hewfdnx8rCsh+2g0n8XLYPt0vqV32jOT38j7J0A
+         kNmnfUHFW96AGn3gboicXNua5odI23/BGQp+ksMx+BW4CNtXbCPHXh5rKCMJ92E5L4Ix
+         QpHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qX01yCG8Tyfo4OLzTgqDTzCtCYMj9HQcITl6rWSXSe8=;
+        b=b6FYlZIAbVW6MHtrf/tawBY+tZH9kLWQUHasXjxHOHGJAbcIDq3A604J4BCoquLgRb
+         FPA5kPzY26Pvvr0KhD+/N5OLztnytuBdfN6IHrYSltTjas5ZVq07N7aBgu6tamtVXEP2
+         EuRVDkyHy/dkMUSXulrUytcafiv4w5ZIgvRsvzrDCBVgpoLQ+TdDTGmXoicGAc6fBB4v
+         8a64Wt9jz+ojqQEU+T71pdZWEYbvFC8JEEZCSDS6/4/YmoRermeiVfVEIZ/DPi2Ril4s
+         RBDZll1OE8Mw1loYtr+EGk7IoT88LIWCZ6AirceN4FSmyXRvDSs7tUeENsbOlaqLWoHn
+         eSow==
+X-Gm-Message-State: AO0yUKWB+No+I8l13THNfHv8KefTyKjntINpgUuVkJU221iK8IEsPDKO
+        AWBHkVP8rKnfwvA1Bs/V3nZAYNyHglk=
+X-Google-Smtp-Source: AK7set/mf3kTZZHYyyxIdumXwfoCp+a614uL8v4tEP2+5jOUSq8xyzK6n8AWr3/rs0uqUdxzNytzvZFXBtI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:6b94:0:b0:4fb:398f:ef2a with SMTP id
+ d20-20020a656b94000000b004fb398fef2amr983477pgw.0.1676674543018; Fri, 17 Feb
+ 2023 14:55:43 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 17 Feb 2023 14:54:47 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230217225449.811957-1-seanjc@google.com>
+Subject: [PATCH 0/2] Documentation/process: Add a maintainer handbook for KVM x86
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 17 Feb 2023 08:42:08 +0100:
+Hi all!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-urgent-2023-02-17
+Here be the long-promised/threatened documentation for contributing to KVM
+x86.  The Cc list is quite large for two reason: partly to spread awareness,
+but mostly to get input from the target audience.  If you have something
+to say, a question to ask, or a request to make, now's the time!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/64e0253df67d5e1557e82b923c78f1bad185eb9a
+Sean Christopherson (2):
+  Documentation/process: Add a label for the tip tree handbook's coding
+    style
+  Documentation/process: Add a maintainer handbook for KVM x86
 
-Thank you!
+ .../process/maintainer-handbooks.rst          |   1 +
+ Documentation/process/maintainer-kvm-x86.rst  | 347 ++++++++++++++++++
+ Documentation/process/maintainer-tip.rst      |   2 +
+ MAINTAINERS                                   |   1 +
+ 4 files changed, 351 insertions(+)
+ create mode 100644 Documentation/process/maintainer-kvm-x86.rst
 
+
+base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.2.637.g21b0678d19-goog
+
