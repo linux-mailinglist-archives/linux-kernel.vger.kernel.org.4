@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E290869A684
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DB369A686
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 09:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjBQIEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 03:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S229670AbjBQIF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 03:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjBQIEf (ORCPT
+        with ESMTP id S229849AbjBQIFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:04:35 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D895EC8B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:04:19 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k6so4776696vsk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:04:19 -0800 (PST)
+        Fri, 17 Feb 2023 03:05:14 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC7246144
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:05:12 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id v16so3626857vss.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 00:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CpxtOTmVR2iXHq4ntS7OV0jJ3byBq2V6cwWSHKeYass=;
-        b=E/vIuU9ySLKJMhuGEau90zQBSG8SlHXkZF8yV3yS2kyxvZ4J6navODNrBOLVYMXgRs
-         Ox62VC5OKcy1I/E3Uxu67J+4p3RLdNmXa4/5RjPnQtGjv8Ji7+fkzUpbvaec1bXgGk41
-         t81KFoQ4wjoT8c4wmiBMfHEvM4VzhaNMRxm2U=
+        bh=EeRQ8wllN3fSx/sorPDxTIgU0OrrDmKry0tPIXvN7Uk=;
+        b=SnTHTOgJjuXl8DOkKBIpg88cQ+grTfSC8WmJOR4VpW4Q4UtYnR05e7F3+32Ch13Uxv
+         pw7SfZOUbscY1uo2Mq5a9ug9N+Tb0zEuKAfeENogGYaRyjKbezhY46uEGoFxvljZEL6p
+         pLaHHrTQyFU3eZPP2pA8tIceWodcSWC+0K/ns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CpxtOTmVR2iXHq4ntS7OV0jJ3byBq2V6cwWSHKeYass=;
-        b=xX6Q57h9JwFHzO/DzlJ7GcEgIHVs7zzXzSeFGwD/JKNfoW3BD3nnR9BMVsHewh6wEP
-         xUJtg5nDAE4CEzDkBIZBaSMyjslrPh+wtdFSUs0vOfb0HXl4bzB1Eo0rFY+XEustL/h2
-         MuMYzw1WiTxYHD8BIHtHHzWpyK0Lg7n3hhbUV9UdnsTALRQKal5wARriKkEEoaKBSZvi
-         40hpJ0fnPqu46e7W7G/limc9Njo54tQ+br1kdLaYwVuw9Hkt7FZtB16ZlUc+TegikJ/P
-         Q+ASMeLTgWWXLVhIMrt+8JI+mIBiUMO2oae+epR+eb9yw1Ne0zqnUnxTqEDuDZbc2twj
-         F2WA==
-X-Gm-Message-State: AO0yUKV9Q9KB3zGupToPM2gv6+/PAc3qGJIm0A0akOHFL65np9papTvA
-        mXYTyvK7cPtJHng54kydTigFJyVP9RrEvLDzobrLjw==
-X-Google-Smtp-Source: AK7set+3G1On2xvJPdWW5BJlN2FbGevzUL/1abRBSCTHO4z51cXzRqmejg/kYU+jflz2dX+3jtTcJOE5uEtw71QLDKg=
+        bh=EeRQ8wllN3fSx/sorPDxTIgU0OrrDmKry0tPIXvN7Uk=;
+        b=QEMPpczt+oCrATgRFQt+YKN5anoIACgWRvEWg58o0JWc7A+uN92ytPFYSenyHsLOJQ
+         73FuYDJY/d+hz/bSEx01vMrLD63kRmC/JJozdkIzpzrAcoVlO94BDTbuOEulLUMTxpYU
+         RRFOzj0h1hIIez0LKEeURQaQhdhics/2fMVOm280YUkuOUxbZyWn57buiEfxqGIk4q8X
+         MQ+gsY717hdE2DpBoM0WXW1g6vCvj/2E5BeS5WoqD2TqLP1cl6PkRJu2OrwaRo3xurwL
+         y/JsE4z+AUSTI5A9DB0q6KBmvq9xSG0LbqWlxNG94qNa1Rtc8o7RYgcdp4flnqHQ2cDs
+         Sc+A==
+X-Gm-Message-State: AO0yUKW/Nsmfa4Frvaz0yBlsrofizHAERGKoiEkJsRwP8MdnIHrw5Kz+
+        fxd+DyM1jWHspnG0Tt33Q8ECS/nw5tTuPJYxBFbKjA==
+X-Google-Smtp-Source: AK7set9pEGiUlwznvRLCIKFI6anMPSKgYHXbx2RNDKwGHP2jw9728TFy/wcMO/sbgddWinMcfY44dyhrBL5zpZwByuc=
 X-Received: by 2002:a67:f749:0:b0:3fc:58d:f90f with SMTP id
- w9-20020a67f749000000b003fc058df90fmr1615105vso.60.1676621059003; Fri, 17 Feb
- 2023 00:04:19 -0800 (PST)
+ w9-20020a67f749000000b003fc058df90fmr1615594vso.60.1676621111880; Fri, 17 Feb
+ 2023 00:05:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com> <20230214134127.59273-48-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214134127.59273-48-angelogioacchino.delregno@collabora.com>
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Feb 2023 16:04:08 +0800
-Message-ID: <CAGXv+5Ffsf8bO2HemdOhmEwHtYwm9B+pRKMr0URc6bkY9Btr5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 47/47] clk: mediatek: Add MODULE_DEVICE_TABLE() where appropriate
+Date:   Fri, 17 Feb 2023 16:05:00 +0800
+Message-ID: <CAGXv+5HrP2TCacuOBcF3OG-22pAuukhtTHUoA+D2zY6wNfoYAA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/47] MediaTek clocks: full module build and cleanups
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
@@ -74,14 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
+On Tue, Feb 14, 2023 at 9:41 PM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> Add a MODULE_DEVICE_TABLE() on all clocks that can be built as modules
-> to allow auto-load at boot.
+> Changes in v2:
+>  - Fixed issues on MT8183 (thanks Chen-Yu!)
+>  - Changed builtin_platform_driver() -> module_platform_driver() for
+>    MT8167 vdecsys clocks (as that was a mistake!)
+>  - Some patches were split, some others were reordered
+>  - Summarized: applied changes from Chen-Yu's review
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> This is part 2 of the "MediaTek clocks cleanups and improvements" series,
+> which was already picked.
+>
+> If reading this full cover letter is too boring for you, here's a short
+> summary of the changes of this series:
+>  - Added mtk_clk_pdev_probe() for mtk-mmsys probed clocks;
+>  - Added divider clock support to common probe mechanism;
+>  - Various cleanups here and there;
+>  - Converted most clock drivers to platform_driver;
+>  - MediaTek clocks can now be built as modules.
+>
+> NOTE: Applies on top of [1] and [2].
 
-Looks like every file applicable is covered.
+I think I covered all the patches. Was there any particular reason for
+skipping clk-mt8135.c for the conversions?
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Thanks
+ChenYu
