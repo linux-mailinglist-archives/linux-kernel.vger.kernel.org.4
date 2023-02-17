@@ -2,90 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252C569A43D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE84969A43F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 04:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjBQDUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 22:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S229848AbjBQDUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 22:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBQDUP (ORCPT
+        with ESMTP id S229721AbjBQDUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:20:15 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF14523C65;
-        Thu, 16 Feb 2023 19:20:14 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676604013;
-        bh=/5qX+O9A1tp723FkL8bmd+mqzvEraJrhq1RUbF5f4Zk=;
-        h=From:Date:Subject:To:Cc:From;
-        b=RT5/sTKKIPKFzsLMDpwoYW3/Q0uYuFW4C8jx1s7Z/7TwBlfnn+TTYwj79V4fqH4lO
-         xLzIPJZ6lt7IuXQL1nkbxx7vRAiUQRkNUl/Up3kWZvUJgV7Ew0K1Gl5j6u0jA15tL3
-         UypcFI9i9xasdky7UPAMi0qWDsdvXmVM+eL+zg24=
-Date:   Fri, 17 Feb 2023 03:20:05 +0000
-Subject: [PATCH] x86/MCE/AMD: Make kobj_type structure constant
+        Thu, 16 Feb 2023 22:20:44 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F272C29E00
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 19:20:42 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id e1so2176pgu.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 19:20:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676604042;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JCn3WFz1vTZhdGFtPUM9YxRsCxhec4/eMixGrq5LFo=;
+        b=lI5dyAtFjzX6uCtTLr3v5wztc/R26tas0FAHy2q7Rze8vTkY7FzzrrqRRKbNq805y/
+         2jN84kBCicsONOGf1y176PJyCOXJ8gnThbW84wDZm/fFTI+Rm7xXrzdjXmMVnRth8nou
+         +I+QyxYxXwKYRWAXrkiBtoGIGYBrDkBa6Ylsp3zrPlxCZZx+Fq7fIHDKsz8LdLSoldPX
+         uIrKXKqJ+W+Av62n66zlsmmIXh9e3nbPw2u2/8HUk1mKKmAbjQNcAFe9u4YdS5jj2ex4
+         D3cPY4SWEqMUv+NtsuTw+V1asJiOYkLjioTFdxg8HR2NaOILLCgmNiTE2yjNrQZj1bXC
+         iocQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676604042;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6JCn3WFz1vTZhdGFtPUM9YxRsCxhec4/eMixGrq5LFo=;
+        b=C314x0ylMdAMyMWLgXwtbrXH2ON06FEFXzxBO7A7IdGbGQQFU0s7N2TRJ2b8iDyY2n
+         DxdFOKkG9fIRBoFjPX7MyJeV9hX2+Az1We9gmWIoUg01MFBzxCplujZPwM/upM8v5IIy
+         ecOWQK+kPB6nk7AkkJGqi1y8VtFyljyB1a10lTBdKaUXRmWRXx/bkV9KOcpZ36VcPxUo
+         5h+pylcumuzwnfydGuvfg21dvdP57Z+TOgiPfzxcWZ4wCFf8UnCOZoZeT6hT3LE91CpU
+         KWdzJlQFodGb5q/qXP1n2W10nihr8BLZBBxYv+qT+lR2b9VOrNqCT+BPchdbKwwGaiAO
+         Bs+g==
+X-Gm-Message-State: AO0yUKVS2vl8TrdUNvdc7KXHsowfhW08ZcHpXrOXTMncxzh4woDE1bAc
+        9JLd2WoKDpdTV02JeOpwZKimBosuGKjDyFCz2dI=
+X-Google-Smtp-Source: AK7set+9zbiH7JTanWz6KGr+flvCK6PnBQgTFUzNotRR6+ziS+OpxOp2/Kk1OKwo7nT902uL7b4fpJyOwR4E+weEXGk=
+X-Received: by 2002:aa7:9510:0:b0:5a8:b987:b71f with SMTP id
+ b16-20020aa79510000000b005a8b987b71fmr1395398pfp.20.1676604042048; Thu, 16
+ Feb 2023 19:20:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230217-kobj_type-mce-amd-v1-1-40ef94816444@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAGTy7mMC/x2N0QrCMAwAf2Xk2UDXOaX+ioikbeaiWzdaFWXs3
- xf2eAfHLVA4Cxe4VAtk/kqRKSnUhwpCT+nBKFEZrLGNsfUZX5N/3t//mXEMjDRGbKi1/hSPzhk
- H2nkqjD5TCr2W6TMMKufMnfz20fW2rhv/aW0ReAAAAA==
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676604011; l=1099;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=/5qX+O9A1tp723FkL8bmd+mqzvEraJrhq1RUbF5f4Zk=;
- b=ePhLtMxHENtY23qr3U+8I6Vtbur9rOSzaQzSpvNcMm5jY9GJfl7xp7VeJA6caJxKhzjwcDvPV
- 2N4cst2ug48AyBcBZ5XifzYIOic2gF49rVGEk8Lrgf6rX41A4ifwcIg
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214075710.2401855-1-stevensd@google.com> <20230214075710.2401855-2-stevensd@google.com>
+ <Y+1hMsm4eQIUtag5@x1n> <CAD=HUj69L2e-Z4TB19qFt8h1cn0r1oGbWovJGMOjjyvfDcQ7NA@mail.gmail.com>
+ <Y+5Akpz4CvGywt6R@x1n> <CAD=HUj4sAA5NB0MZaH4V4BrZv7qKmJWPmovZSb+4i-2mCYevFA@mail.gmail.com>
+In-Reply-To: <CAD=HUj4sAA5NB0MZaH4V4BrZv7qKmJWPmovZSb+4i-2mCYevFA@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 16 Feb 2023 19:20:30 -0800
+Message-ID: <CAHbLzkrr1FVkpedVx9WMeStm2t68+D0xVaJJo3i3wh3Jn2ZMrA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm/khugepaged: skip shmem with userfaultfd
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On Thu, Feb 16, 2023 at 6:00 PM David Stevens <stevensd@chromium.org> wrote:
+>
+> On Thu, Feb 16, 2023 at 11:41 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Thu, Feb 16, 2023 at 10:37:47AM +0900, David Stevens wrote:
+> > > On Thu, Feb 16, 2023 at 7:48 AM Peter Xu <peterx@redhat.com> wrote:
+> > > >
+> > > > On Tue, Feb 14, 2023 at 04:57:10PM +0900, David Stevens wrote:
+> > > > > From: David Stevens <stevensd@chromium.org>
+> > > > >
+> > > > > Make sure that collapse_file respects any userfaultfds registered with
+> > > > > MODE_MISSING. If userspace has any such userfaultfds registered, then
+> > > > > for any page which it knows to be missing, it may expect a
+> > > > > UFFD_EVENT_PAGEFAULT. This means collapse_file needs to take care when
+> > > > > collapsing a shmem range would result in replacing an empty page with a
+> > > > > THP, so that it doesn't break userfaultfd.
+> > > > >
+> > > > > Synchronization when checking for userfaultfds in collapse_file is
+> > > > > tricky because the mmap locks can't be used to prevent races with the
+> > > > > registration of new userfaultfds. Instead, we provide synchronization by
+> > > > > ensuring that userspace cannot observe the fact that pages are missing
+> > > > > before we check for userfaultfds. Although this allows registration of a
+> > > > > userfaultfd to race with collapse_file, it ensures that userspace cannot
+> > > > > observe any pages transition from missing to present after such a race.
+> > > > > This makes such a race indistinguishable to the collapse occurring
+> > > > > immediately before the userfaultfd registration.
+> > > > >
+> > > > > The first step to provide this synchronization is to stop filling gaps
+> > > > > during the loop iterating over the target range, since the page cache
+> > > > > lock can be dropped during that loop. The second step is to fill the
+> > > > > gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
+> > > > > time, to avoid races with accesses to the page cache that only take the
+> > > > > RCU read lock.
+> > > > >
+> > > > > This fix is targeted at khugepaged, but the change also applies to
+> > > > > MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
+> > > > > return EBUSY if there are any missing pages (instead of succeeding on
+> > > > > shmem and returning EINVAL on anonymous memory). There is also now a
+> > > > > window during MADV_COLLAPSE where a fault on a missing page will cause
+> > > > > the syscall to fail with EAGAIN.
+> > > > >
+> > > > > The fact that intermediate page cache state can no longer be observed
+> > > > > before the rollback of a failed collapse is also technically a
+> > > > > userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
+> > > > > is exceedingly unlikely that anything relies on being able to observe
+> > > > > that transient state.
+> > > > >
+> > > > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > > > ---
+> > > > >  mm/khugepaged.c | 66 +++++++++++++++++++++++++++++++++++++++++++------
+> > > > >  1 file changed, 58 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > > > > index b648f1053d95..8c2e2349e883 100644
+> > > > > --- a/mm/khugepaged.c
+> > > > > +++ b/mm/khugepaged.c
+> > > > > @@ -55,6 +55,7 @@ enum scan_result {
+> > > > >       SCAN_CGROUP_CHARGE_FAIL,
+> > > > >       SCAN_TRUNCATED,
+> > > > >       SCAN_PAGE_HAS_PRIVATE,
+> > > > > +     SCAN_PAGE_FILLED,
+> > > >
+> > > > PS: You may want to also touch SCAN_STATUS in huge_memory.h next time.
+> > > >
+> > > > >  };
+> > > > >
+> > > > >  #define CREATE_TRACE_POINTS
+> > > > > @@ -1725,8 +1726,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+> > > > >   *  - allocate and lock a new huge page;
+> > > > >   *  - scan page cache replacing old pages with the new one
+> > > > >   *    + swap/gup in pages if necessary;
+> > > > > - *    + fill in gaps;
+> > > >
+> > > > IIUC it's not a complete removal, but just moved downwards:
+> > > >
+> > > > >   *    + keep old pages around in case rollback is required;
+> > > > > + *  - finalize updates to the page cache;
+> > > >
+> > > >          + fill in gaps with RETRY entries
+> > > >          + detect race conditions with userfaultfds
+> > > >
+> > > > >   *  - if replacing succeeds:
+> > > > >   *    + copy data over;
+> > > > >   *    + free old pages;
+> > > > > @@ -1805,13 +1806,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > > > >                                               result = SCAN_TRUNCATED;
+> > > > >                                               goto xa_locked;
+> > > > >                                       }
+> > > > > -                                     xas_set(&xas, index);
+> > > > > +                                     xas_set(&xas, index + 1);
+> > > > >                               }
+> > > > >                               if (!shmem_charge(mapping->host, 1)) {
+> > > > >                                       result = SCAN_FAIL;
+> > > > >                                       goto xa_locked;
+> > > > >                               }
+> > > > > -                             xas_store(&xas, hpage);
+> > > > >                               nr_none++;
+> > > > >                               continue;
+> > > > >                       }
+> > > > > @@ -1970,6 +1970,56 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > > > >               put_page(page);
+> > > > >               goto xa_unlocked;
+> > > > >       }
+> > > > > +
+> > > > > +     if (nr_none) {
+> > > > > +             struct vm_area_struct *vma;
+> > > > > +             int nr_none_check = 0;
+> > > > > +
+> > > > > +             xas_unlock_irq(&xas);
+> > > > > +             i_mmap_lock_read(mapping);
+> > > > > +             xas_lock_irq(&xas);
+> > > > > +
+> > > > > +             xas_set(&xas, start);
+> > > > > +             for (index = start; index < end; index++) {
+> > > > > +                     if (!xas_next(&xas)) {
+> > > > > +                             xas_store(&xas, XA_RETRY_ENTRY);
+> > > > > +                             nr_none_check++;
+> > > > > +                     }
+> > > > > +             }
+> > > > > +
+> > > > > +             if (nr_none != nr_none_check) {
+> > > > > +                     result = SCAN_PAGE_FILLED;
+> > > > > +                     goto immap_locked;
+> > > > > +             }
+> > > > > +
+> > > > > +             /*
+> > > > > +              * If userspace observed a missing page in a VMA with an armed
+> > > > > +              * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for
+> > > > > +              * that page, so we need to roll back to avoid suppressing such
+> > > > > +              * an event. Any userfaultfds armed after this point will not be
+> > > > > +              * able to observe any missing pages due to the previously
+> > > > > +              * inserted retry entries.
+> > > > > +              */
+> > > > > +             vma_interval_tree_foreach(vma, &mapping->i_mmap, start, start) {
+> > > > > +                     if (userfaultfd_missing(vma)) {
+> > > > > +                             result = SCAN_EXCEED_NONE_PTE;
+> > > > > +                             goto immap_locked;
+> > > > > +                     }
+> > > > > +             }
+> > > > > +
+> > > > > +immap_locked:
+> > > > > +             i_mmap_unlock_read(mapping);
+> > > > > +             if (result != SCAN_SUCCEED) {
+> > > > > +                     xas_set(&xas, start);
+> > > > > +                     for (index = start; index < end; index++) {
+> > > > > +                             if (xas_next(&xas) == XA_RETRY_ENTRY)
+> > > > > +                                     xas_store(&xas, NULL);
+> > > > > +                     }
+> > > > > +
+> > > > > +                     goto xa_locked;
+> > > > > +             }
+> > > > > +     }
+> > > > > +
+> > > >
+> > > > Until here, all look fine to me (ignoring patch 1 for now; assuming the
+> > > > hpage is always uptodate).
+> > > >
+> > > > My question is after here we'll release page cache lock again before
+> > > > try_to_unmap_flush(), but is it safe to keep RETRY entries after releasing
+> > > > page cache lock?  It means other threads can be spinning.  I assume page
+> > > > lock is always safe and sleepable, but not sure about the page cache lock
+> > > > here.
+> > >
+> > > We insert the multi-index entry for hpage before releasing the page
+> > > cache lock, which should replace all of the XA_RETRY_ENTRYs. So the
+> > > page cache will be fully up to date when we release the lock, at least
+> > > in terms of which pages it contains.
+> >
+> > IIUC we released it before copying the pages:
+> >
+> > xa_locked:
+> >         xas_unlock_irq(&xas);  <-------------------------------- here
+> > xa_unlocked:
+> >
+> >         /*
+> >          * If collapse is successful, flush must be done now before copying.
+> >          * If collapse is unsuccessful, does flush actually need to be done?
+> >          * Do it anyway, to clear the state.
+> >          */
+> >         try_to_unmap_flush();
+> >
+> > Before insertion of the multi-index:
+> >
+> >         /* Join all the small entries into a single multi-index entry. */
+> >         xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+> >         xas_store(&xas, hpage);
+>
+> Okay, I realize what's going on. There is a change in mm-everything
+> [1] that significantly rewrites collapse_file, and my patch is going
+> to conflict with that patch. I'll see if I can rework my patches on
+> top of that change.
+>
+> [1] https://lore.kernel.org/all/20221205234059.42971-3-jiaqiyan@google.com/T/#u
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+Aha, thanks for the heads up. I knew this patch but I didn't notice it
+had been landed in mm-unstable tree...
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- arch/x86/kernel/cpu/mce/amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 10fb5b5c9efa..1eb2905ac211 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1035,7 +1035,7 @@ static const struct sysfs_ops threshold_ops = {
- 
- static void threshold_block_release(struct kobject *kobj);
- 
--static struct kobj_type threshold_ktype = {
-+static const struct kobj_type threshold_ktype = {
- 	.sysfs_ops		= &threshold_ops,
- 	.default_groups		= default_groups,
- 	.release		= threshold_block_release,
-
----
-base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
-change-id: 20230217-kobj_type-mce-amd-3a52b6d49909
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+>
+> -David
