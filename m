@@ -2,402 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862E969A3C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2115A69A3C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 03:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjBQCHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Feb 2023 21:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S230323AbjBQCPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Feb 2023 21:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjBQCHR (ORCPT
+        with ESMTP id S229580AbjBQCPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Feb 2023 21:07:17 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 808374FC8A;
-        Thu, 16 Feb 2023 18:07:13 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(23463:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Fri, 17 Feb 2023 10:07:00 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 17 Feb
- 2023 10:06:59 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 17 Feb 2023 10:06:59 +0800
-From:   <cy_huang@richtek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lgirdwood@gmail.com>, <cy_huang@richtek.com>,
-        <u0084500@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH v2 2/2] regulator: Add support for Richtek RT5739 voltage regulator
-Date:   Fri, 17 Feb 2023 10:06:58 +0800
-Message-ID: <1676599618-24819-3-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1676599618-24819-1-git-send-email-cy_huang@richtek.com>
-References: <1676599618-24819-1-git-send-email-cy_huang@richtek.com>
+        Thu, 16 Feb 2023 21:15:12 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE174FC92
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:15:11 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5338dd2813dso43303317b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Feb 2023 18:15:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gIW9E+wxkNTINaEXAot3lldoZz6sgaV4NvNtgjJaTFE=;
+        b=HZ1MbnjL/We5C6AX8xTKc/NqTWr1JbNL6JlhMYjY4MPeRhcx4XZI09qb39bGwvRHpn
+         8cDtil8U0r6ullafxJ+QwLrNcyZB/iYRlwQxWBWKusbbvKu5LjqUSwq9Ra4ShiIiGrEv
+         AxeeaI71BN3x7atdH3dnzKmeE+EolPr5w0YLihfjx8Lqhfdtg4nJ/eIYXfAJrzuibZs7
+         cByt+UC1cn5tWYrIXSmdfIJG8w44wiSxOwaDq0TQPCM1gjyd36andjC6MWF3zwokrgru
+         63sqYZasEEiF/RtcTOEDIThAitqANjlx8nQcaAyiwezVllR+cWq9GK3mwpXFnbRC0O/W
+         bLkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gIW9E+wxkNTINaEXAot3lldoZz6sgaV4NvNtgjJaTFE=;
+        b=FFBwqV2VABDggM4ZVaNwQ1vnt9AfJC/LQLBOCnmSCaCyr6DtZGWifXpq5UbPlf5yxm
+         m8mOzbT8zgK+aAm9p91m3TgDR1wmfzPcni08sW0Yh60OHAjBI/xz1soOc7cWUY1KIoQm
+         dB5ih93Omc+lcjqJtaTAV4drMZ0mr3D/R9dMoK5VcNpyrOd6HO7T/eOR75fdSmRN23xj
+         xQ29I0PPa6EFl5KiORo9EZPIwQTd9HpyfYCHvkk+RHlEQ2ZTxqSmsFNWBXz9OYlIKFFj
+         mJGZS2Z3EgQUND2ikBt1FOrSgbPoBS0PSPTZRYI1fcK0xIy7qSmlEQoLPAhC+AS/sO09
+         cJ5w==
+X-Gm-Message-State: AO0yUKUm4Lur7X3qMaMVhfU1GQUpYKUwRzAELH1pZ9dVeqJqO01vvGwi
+        4MtF1vwNi3yWqCUPQzskSoIdjrUjkkmqUc45eINHWA==
+X-Google-Smtp-Source: AK7set9iDocdfaltT1vBZM1FfqGEUR3CgAtWXk18fjpJx7Nf/An2UuUbR7/i7tvhGQPyuOkqzQZqqs2JkP/rFvIUCdY=
+X-Received: by 2002:a81:4ed4:0:b0:506:6364:fda3 with SMTP id
+ c203-20020a814ed4000000b005066364fda3mr971621ywb.72.1676600110454; Thu, 16
+ Feb 2023 18:15:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230216051750.3125598-1-surenb@google.com> <20230216051750.3125598-27-surenb@google.com>
+ <Y+5Pb4hGmV1YtNQp@casper.infradead.org> <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
+In-Reply-To: <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 16 Feb 2023 18:14:59 -0800
+Message-ID: <CAJuCfpHODBAV=riSPyvcmLbZVtXSdxrw2GMy8VOjvDV9yCyX8A@mail.gmail.com>
+Subject: Re: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is
+ not yet set
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Thu, Feb 16, 2023 at 11:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Thu, Feb 16, 2023 at 7:44 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Wed, Feb 15, 2023 at 09:17:41PM -0800, Suren Baghdasaryan wrote:
+> > > When vma->anon_vma is not set, page fault handler will set it by either
+> > > reusing anon_vma of an adjacent VMA if VMAs are compatible or by
+> > > allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
+> > > a compatible adjacent VMA and that requires not only the faulting VMA
+> > > to be stable but also the tree structure and other VMAs inside that tree.
+> > > Therefore locking just the faulting VMA is not enough for this search.
+> > > Fall back to taking mmap_lock when vma->anon_vma is not set. This
+> > > situation happens only on the first page fault and should not affect
+> > > overall performance.
+> >
+> > I think I asked this before, but don't remember getting an aswer.
+> > Why do we defer setting anon_vma to the first fault?  Why don't we
+> > set it up at mmap time?
+>
+> Yeah, I remember that conversation Matthew and I could not find the
+> definitive answer at the time. I'll look into that again or maybe
+> someone can answer it here.
 
-The RT5739 is a step-down switching voltage regulator that supports
-output voltage ragne from 300mV to 1300mV with the wide input supply
-voltage range from 2.5V to 5.5V.
+After looking into it again I'm still under the impression that
+vma->anon_vma is populated lazily (during the first page fault rather
+than at mmap time) to avoid doing extra work for areas which are never
+faulted. Though I might be missing some important detail here.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Since v2: no change
-
----
- drivers/regulator/Kconfig  |  13 ++
- drivers/regulator/Makefile |   1 +
- drivers/regulator/rt5739.c | 290 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 304 insertions(+)
- create mode 100644 drivers/regulator/rt5739.c
-
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 820c9a0..f7f992c 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1112,6 +1112,19 @@ config REGULATOR_RT5190A
- 	  buck converters, 1 LDO, mute AC OFF depop function, with the general
- 	  I2C control interface.
- 
-+config REGULATOR_RT5739
-+	tristate "Rcihtek RT5739 Regulator"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This adds support for voltage regulator in Richtek RT5739.
-+	  It's a step-down switching voltage regulator. Using a proprietary
-+	  architecture with synchronous rectification, it is capable of
-+	  delivering 3.5A continuously at over 80% efficiency.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rt5739.
-+
- config REGULATOR_RT5759
- 	tristate "Richtek RT5759 Regulator"
- 	depends on I2C
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index b9f5eb3..30a61fc 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -133,6 +133,7 @@ obj-$(CONFIG_REGULATOR_RT4831)	+= rt4831-regulator.o
- obj-$(CONFIG_REGULATOR_RT5033)	+= rt5033-regulator.o
- obj-$(CONFIG_REGULATOR_RT5120)	+= rt5120-regulator.o
- obj-$(CONFIG_REGULATOR_RT5190A) += rt5190a-regulator.o
-+obj-$(CONFIG_REGULATOR_RT5739)	+= rt5739.o
- obj-$(CONFIG_REGULATOR_RT5759)	+= rt5759-regulator.o
- obj-$(CONFIG_REGULATOR_RT6160)	+= rt6160-regulator.o
- obj-$(CONFIG_REGULATOR_RT6190)	+= rt6190-regulator.o
-diff --git a/drivers/regulator/rt5739.c b/drivers/regulator/rt5739.c
-new file mode 100644
-index 00000000..0a9e102
---- /dev/null
-+++ b/drivers/regulator/rt5739.c
-@@ -0,0 +1,290 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Device driver for RT5739 regulator
-+ *
-+ * Copyright (C) 2023 Richtek Technology Corp.
-+ *
-+ * Author: ChiYuan Huang <cy_huang@richtek.com>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#define RT5739_AUTO_MODE	0
-+#define RT5739_FPWM_MODE	1
-+
-+#define RT5739_REG_NSEL0	0x00
-+#define RT5739_REG_NSEL1	0x01
-+#define RT5739_REG_CNTL1	0x02
-+#define RT5739_REG_ID1		0x03
-+#define RT5739_REG_CNTL2	0x06
-+#define RT5739_REG_CNTL4	0x08
-+
-+#define RT5739_VSEL_MASK	GENMASK(7, 0)
-+#define RT5739_MODEVSEL1_MASK	BIT(1)
-+#define RT5739_MODEVSEL0_MASK	BIT(0)
-+#define RT5739_VID_MASK		GENMASK(7, 5)
-+#define RT5739_ACTD_MASK	BIT(7)
-+#define RT5739_ENVSEL1_MASK	BIT(1)
-+#define RT5739_ENVSEL0_MASK	BIT(0)
-+
-+#define RT5739_VOLT_MINUV	300000
-+#define RT5739_VOLT_MAXUV	1300000
-+#define RT5739_VOLT_STPUV	5000
-+#define RT5739_N_VOLTS		201
-+#define RT5739_I2CRDY_TIMEUS	1000
-+
-+static int rt5739_set_mode(struct regulator_dev *rdev, unsigned int mode)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int mask, val;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		mask = RT5739_MODEVSEL0_MASK;
-+	else
-+		mask = RT5739_MODEVSEL1_MASK;
-+
-+	switch (mode) {
-+	case REGULATOR_MODE_FAST:
-+		val = mask;
-+		break;
-+	case REGULATOR_MODE_NORMAL:
-+		val = 0;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_update_bits(regmap, RT5739_REG_CNTL1, mask, val);
-+}
-+
-+static unsigned int rt5739_get_mode(struct regulator_dev *rdev)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int mask, val;
-+	int ret;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		mask = RT5739_MODEVSEL0_MASK;
-+	else
-+		mask = RT5739_MODEVSEL1_MASK;
-+
-+	ret = regmap_read(regmap, RT5739_REG_CNTL1, &val);
-+	if (ret)
-+		return REGULATOR_MODE_INVALID;
-+
-+	if (val & mask)
-+		return REGULATOR_MODE_FAST;
-+
-+	return REGULATOR_MODE_NORMAL;
-+}
-+
-+static int rt5739_set_suspend_voltage(struct regulator_dev *rdev, int uV)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int reg, vsel;
-+
-+	if (uV < RT5739_VOLT_MINUV || uV > RT5739_VOLT_MAXUV)
-+		return -EINVAL;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		reg = RT5739_REG_NSEL1;
-+	else
-+		reg = RT5739_REG_NSEL0;
-+
-+	vsel = (uV - RT5739_VOLT_MINUV) / RT5739_VOLT_STPUV;
-+	return regmap_write(regmap, reg, vsel);
-+}
-+
-+static int rt5739_set_suspend_enable(struct regulator_dev *rdev)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int mask;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		mask = RT5739_ENVSEL1_MASK;
-+	else
-+		mask = RT5739_ENVSEL0_MASK;
-+
-+	return regmap_update_bits(regmap, desc->enable_reg, mask, mask);
-+}
-+
-+static int rt5739_set_suspend_disable(struct regulator_dev *rdev)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int mask;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		mask = RT5739_ENVSEL1_MASK;
-+	else
-+		mask = RT5739_ENVSEL0_MASK;
-+
-+	return regmap_update_bits(regmap, desc->enable_reg, mask, 0);
-+}
-+
-+static int rt5739_set_suspend_mode(struct regulator_dev *rdev,
-+				   unsigned int mode)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	struct regmap *regmap = rdev_get_regmap(rdev);
-+	unsigned int mask, val;
-+
-+	if (desc->vsel_reg == RT5739_REG_NSEL0)
-+		mask = RT5739_MODEVSEL1_MASK;
-+	else
-+		mask = RT5739_MODEVSEL0_MASK;
-+
-+	switch (mode) {
-+	case REGULATOR_MODE_FAST:
-+		val = mask;
-+		break;
-+	case REGULATOR_MODE_NORMAL:
-+		val = 0;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_update_bits(regmap, RT5739_REG_CNTL1, mask, val);
-+}
-+
-+static const struct regulator_ops rt5739_regulator_ops = {
-+	.list_voltage = regulator_list_voltage_linear,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.enable	= regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.set_active_discharge = regulator_set_active_discharge_regmap,
-+	.set_mode = rt5739_set_mode,
-+	.get_mode = rt5739_get_mode,
-+	.set_suspend_voltage = rt5739_set_suspend_voltage,
-+	.set_suspend_enable = rt5739_set_suspend_enable,
-+	.set_suspend_disable = rt5739_set_suspend_disable,
-+	.set_suspend_mode = rt5739_set_suspend_mode,
-+};
-+
-+static unsigned int rt5739_of_map_mode(unsigned int mode)
-+{
-+	switch (mode) {
-+	case RT5739_AUTO_MODE:
-+		return REGULATOR_MODE_NORMAL;
-+	case RT5739_FPWM_MODE:
-+		return REGULATOR_MODE_FAST;
-+	default:
-+		return REGULATOR_MODE_INVALID;
-+	}
-+}
-+
-+static void rt5739_init_regulator_desc(struct regulator_desc *desc,
-+				       bool vsel_active_high)
-+{
-+	/* Fixed */
-+	desc->name = "rt5739-regulator";
-+	desc->owner = THIS_MODULE;
-+	desc->ops = &rt5739_regulator_ops;
-+	desc->n_voltages = RT5739_N_VOLTS;
-+	desc->min_uV = RT5739_VOLT_MINUV;
-+	desc->uV_step = RT5739_VOLT_STPUV;
-+	desc->vsel_mask = RT5739_VSEL_MASK;
-+	desc->enable_reg = RT5739_REG_CNTL2;
-+	desc->active_discharge_reg = RT5739_REG_CNTL1;
-+	desc->active_discharge_mask = RT5739_ACTD_MASK;
-+	desc->active_discharge_on = RT5739_ACTD_MASK;
-+	desc->of_map_mode = rt5739_of_map_mode;
-+
-+	/* Assigned by vsel level */
-+	if (vsel_active_high) {
-+		desc->vsel_reg = RT5739_REG_NSEL1;
-+		desc->enable_mask = RT5739_ENVSEL1_MASK;
-+	} else {
-+		desc->vsel_reg = RT5739_REG_NSEL0;
-+		desc->enable_mask = RT5739_ENVSEL0_MASK;
-+	}
-+}
-+
-+static const struct regmap_config rt5739_regmap_config = {
-+	.name = "rt5739",
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = RT5739_REG_CNTL4,
-+};
-+
-+static int rt5739_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct regulator_desc *desc;
-+	struct regmap *regmap;
-+	struct gpio_desc *enable_gpio;
-+	struct regulator_config cfg = {};
-+	struct regulator_dev *rdev;
-+	bool vsel_acth;
-+	unsigned int vid;
-+	int ret;
-+
-+	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
-+	if (!desc)
-+		return -ENOMEM;
-+
-+	enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
-+	if (IS_ERR(enable_gpio))
-+		return dev_err_probe(dev, PTR_ERR(enable_gpio), "Failed to get 'enable' gpio\n");
-+	else if (enable_gpio)
-+		usleep_range(RT5739_I2CRDY_TIMEUS, RT5739_I2CRDY_TIMEUS + 1000);
-+
-+	regmap = devm_regmap_init_i2c(i2c, &rt5739_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to init regmap\n");
-+
-+	ret = regmap_read(regmap, RT5739_REG_ID1, &vid);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to read VID\n");
-+
-+	/* RT5739: (VID & MASK) must be 0 */
-+	if (vid & RT5739_VID_MASK)
-+		return dev_err_probe(dev, -ENODEV, "Incorrect VID (0x%02x)\n", vid);
-+
-+	vsel_acth = device_property_read_bool(dev, "richtek,vsel-active-high");
-+
-+	rt5739_init_regulator_desc(desc, vsel_acth);
-+
-+	cfg.dev = dev;
-+	cfg.of_node = dev_of_node(dev);
-+	cfg.init_data = of_get_regulator_init_data(dev, dev_of_node(dev), desc);
-+	rdev = devm_regulator_register(dev, desc, &cfg);
-+	if (IS_ERR(rdev))
-+		return dev_err_probe(dev, PTR_ERR(rdev), "Failed to register regulator\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rt5739_device_table[] = {
-+	{ .compatible = "richtek,rt5739" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rt5739_device_table);
-+
-+static struct i2c_driver rt5739_driver = {
-+	.driver = {
-+		.name = "rt5739",
-+		.of_match_table = rt5739_device_table,
-+	},
-+	.probe_new = rt5739_probe,
-+};
-+module_i2c_driver(rt5739_driver);
-+
-+MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-+MODULE_DESCRIPTION("Richtek RT5739 regulator driver");
-+MODULE_LICENSE("GPL");
--- 
-2.7.4
-
+>
+> In the end rather than changing that logic I decided to skip
+> vma->anon_vma==NULL cases because I measured them being less than
+> 0.01% of all page faults, so ROI from changing that would be quite
+> low. But I agree that the logic is weird and maybe we can improve
+> that. I will have to review that again when I'm working on eliminating
+> all these special cases we skip, like swap/userfaults/etc.
