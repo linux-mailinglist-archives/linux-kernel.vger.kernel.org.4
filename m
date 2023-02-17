@@ -2,136 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E774569B2C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4499A69B2CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 20:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjBQTAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 14:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S229791AbjBQTAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 14:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjBQTAU (ORCPT
+        with ESMTP id S229582AbjBQTAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:00:20 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2138.outbound.protection.outlook.com [40.107.92.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472EC61870;
-        Fri, 17 Feb 2023 11:00:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5nBtwek361oQS1HdybOy+fggef3tRQ65aggn3XtNs2PnCX5LUoPevT8cYpaVDhK0flc7kDIe+Y+lfNM+FJb0whs0d3vhaRrjY9LQdX9FmPlAAkXwdalIC7ZmfkfIbiDAEI8m6jG+Egh1G015VVOAIJ0T7hc7ttkOQ+qr1egMVMOqJ9v4qyYPVpd8Iue53Z6Xx3l0cxrdVubAyGUl8WeNL7wN+IYfMaqzzeyEsNsRT3nXx2JqHihskKQpl9lFTrwepc/9zm3zJo0A8JPvio0Y1cXta+2Yx6nssJ/Ca7+W7MsPqAArSKO862sbd9F8h6FNLgbQsOf56Gp5VDCp6yUZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rTtgMvamhFSFVUK5KnHmVvoMyfs74y1dWlNhx+E10zo=;
- b=NCn4iZSlSUFqt9dvOUGhwnAF2UdR7QqZV2XrniY5DCjdBgagg4Yw0kzcB7rg94UNnAVY+AXkR3ZokdgnVKo/NOgMhcjXddI+zZT5zq1DwN7LOqpmVCjbcP5rEpMWzqU9HNH5DZRpUbr+hU/byo196dZjzjMpNQj5T5y/SN6UZ+nfnvCERyjOpQyyOVCpX3QuZ5uU+BTDV+7kp8B7J+Hbw2U4JQjTv7PrvEdlIy3rjfT1xX5/SbuWreF+lBHHD3Bx8eyTaPYaWtTqYbf+iGHmuxgGG5gICLtMYkhwyHar1YrpAitAliEQDjcWlKrH7mp9kXRJQQLDQY1otdHQuTACqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rTtgMvamhFSFVUK5KnHmVvoMyfs74y1dWlNhx+E10zo=;
- b=CEpmGdf4GrUU8NWuUwzwJR3kob82KpoiYPgDMVdnO/yNUK3FQ0hYy03IC1XRSMt+NVlT9XKcX8RMdis3HKt6KiuBpqGzvsPXpbfp1KABFvoSWgzl70pLeexIrVI3VcQ0y9iHms0/IWVU+AAUADjFD2XFvEGv/LZ5MdUUX+DGBO0=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by BL1PR21MB3379.namprd21.prod.outlook.com (2603:10b6:208:39f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.6; Fri, 17 Feb
- 2023 19:00:09 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::3747:daf4:7cc9:5ba2]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::3747:daf4:7cc9:5ba2%3]) with mapi id 15.20.6134.013; Fri, 17 Feb 2023
- 19:00:09 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Mohammed Gamal <mgamal@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "xxiong@redhat.com" <xxiong@redhat.com>
-Subject: RE: [PATCH v2] Drivers: vmbus: Check for channel allocation before
- looking up relids
-Thread-Topic: [PATCH v2] Drivers: vmbus: Check for channel allocation before
- looking up relids
-Thread-Index: AQHZQGdq9M/Cyc8biEehOWpQHv+73q7SrIAggAA9jYCAAJdIQA==
-Date:   Fri, 17 Feb 2023 19:00:08 +0000
-Message-ID: <SA1PR21MB1335D6E10CF9043EA74573F7BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230214112741.133900-1-mgamal@redhat.com>
- <SA1PR21MB1335435701EBB35A9DD35892BFA19@SA1PR21MB1335.namprd21.prod.outlook.com>
- <87a61cpql0.fsf@ovpn-192-159.brq.redhat.com>
-In-Reply-To: <87a61cpql0.fsf@ovpn-192-159.brq.redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9d0c6b3b-4698-4bc9-a34e-7163be791b5f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-17T18:53:06Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|BL1PR21MB3379:EE_
-x-ms-office365-filtering-correlation-id: 3e4ad22e-3401-4585-27b9-08db1119308e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vvQ5HKEIcgLx2aLwMPqUADXhAyTWvhEjbzDlUlYXF/SlBjL0NXbPChqTf7vCQrUv63EXRZ/5XugKwAuai3ea7ECta1MdKCdrMv1bk8OnVDYybepya3AliqrXh0OYAXedNr+uynpfVvilLYKOyqgIqObpMARTUcX4h6SBDda6pXlMTzXgrbgRVBUHJkxcCNF1RZ9p+FLYQR/7hYm14v4kSHLzBM7S5se122BxFEkfTfQR49p2p0orfYl1pMNkl66DEpnBYja3dMyUDjGyY6IL5sIKYJFqUSmroTV6lZAoMbWNQZEI1O/7xpFeZZRI45MXivOwojg0MZYCeWNctO/Xtzm+QTASNGICUMPZu6G9BXt88W2sgn6eT6bvAsT5sjOLcUl9NZ/aHyL/A16712iopi71dCn4oM8fvM2v912d1bnm8aUqhR9T6o6ldXjoL90EcxhTUX9Ee4pGp10SkG9uSH0LTMYb2oN10BtIh7pIwI6BFgS2n/YnGjBZN2C7Q9iNMmVH0vb8ZMWiI/TqrVUjCj2RmS0z0RE5JQmW9ACLcYFHQmCAHwTHE6/QQXuwyZOyCEo3h7UMr2x4S6JUgFFxcgkRbmDII3lAMRPaBvbBM1OlY3m1metRn2ItTOoTSiw59Tam2v4rZIWfRmDFIs/8MGWBNvg+kcEgmiog+Zzyvi19MIUh5Hfs276wpZ3dq4zAGD2ejf/+nMHO9s6avPfScRPgBNAfWUcJ1N5OkVxRoxhO2QU87M1ucU+uYtXPJ1+T
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(136003)(396003)(346002)(451199018)(38070700005)(82960400001)(82950400001)(55016003)(558084003)(33656002)(86362001)(7696005)(10290500003)(71200400001)(110136005)(6506007)(316002)(54906003)(186003)(26005)(9686003)(122000001)(2906002)(478600001)(8990500004)(5660300002)(38100700002)(52536014)(66946007)(76116006)(41300700001)(66446008)(66476007)(64756008)(8936002)(66556008)(8676002)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AeAig4NFx7r27I+dK681IJqetYadqQ9JkUYbygobUsmoA30c77BhHX84gu1g?=
- =?us-ascii?Q?s+cXKEnT1OZBmpsjZ+duKbQt4+EzVjmpQeq/e2/vr5KVs2mtK/ZoXHQ6FuB1?=
- =?us-ascii?Q?ag4WvYalVdm1OBOUXpMIV3VAqYCr7ucwLxNkuYHvZwWdjiVGoHZBxt1/zmAH?=
- =?us-ascii?Q?CxBW/uIWEAfo3UHx+2YEdpPjXZ86nNvDIVR558PeaM/fNqTQvFXiuEUVOL/6?=
- =?us-ascii?Q?IP9KcOBYKHFQYqbImUYjWP0godem89dRk5YNlaQr/Kn2RF9XZjqXPVJGkGJu?=
- =?us-ascii?Q?isXHx24YfriDrxdoQn+EWpMzVdzxdimwoqXK/HjZbujAredr/ONnKn2kisIU?=
- =?us-ascii?Q?Yb9yfRA0oTW53NX/nNl41JKPMpdc1eSrYg68a+0v8Y2ilZ8OKfstO/x6KVI4?=
- =?us-ascii?Q?HJ9TPAuBxPXgz5BLJRm+SIO2O8AC/c9Uiw+mCyxuDXDmzwICiUM3fp/5v8rQ?=
- =?us-ascii?Q?g4ATYyldVF0wSJ92VtCGurn2noSvv0VRyB2bKp5YCQtFHY0EBIgZQY0CDl0p?=
- =?us-ascii?Q?p9MvSSOJcGxc1YQcs7mY3NVa6C3jnPDSRz9LHhjXBvGHV0AwBcaArhBz0L+z?=
- =?us-ascii?Q?3I19GS0aOdByp79Xf8vFLurrdyFNWSxcIb+afeQznf6rdLUcCcV165yA54kZ?=
- =?us-ascii?Q?8axmzbke8ICg6zUDzFSKj3g6+zqFfx/aJDcdzm5OZFP0azha8klIXxt4C6hX?=
- =?us-ascii?Q?Tb5CzLIIgQ2DziQ8XNA9FtwxMxbTYTzGGN4vSzAKrBhClPeILSzQ9Y1otUA+?=
- =?us-ascii?Q?jUNgbVvcd9yKdsMBI9VclGshAx+AHJpgBRPAcYFwsRCvuKFiwDoNDseqTpjs?=
- =?us-ascii?Q?ikffKDIHYKJ/cUWbm13J5oCNbR0SdZ5xWKcua4VtZV0P5xLInqGQkUXDkcSx?=
- =?us-ascii?Q?95in4t9LRyMIhBSN2XGhhr6h3poxRwP4Led42J9HBGCm9p8NiMOZ0Smap+Ns?=
- =?us-ascii?Q?6o5xkgkfHTIM/T/CjgROY8RG58kRGQiPGaQhBCX4DC1rnYjIFoqd84qUXovX?=
- =?us-ascii?Q?RuqOdYIMHmWpEV7VW3tnGUdQTQnsLd+SdRH0g1t9mMtWo1giT9wuezrrYS14?=
- =?us-ascii?Q?dK5RazTTCutEl314YK1bLtrsnto0oAKztZky3btccNrAG394reJw1jXjAZQj?=
- =?us-ascii?Q?EgX09MvSQnpQ+aRkcEIUojtdClqVEdVQQhI3eopFX7mfldKhHSFpSp5zedQc?=
- =?us-ascii?Q?IzFeBCO8KBnVRF8zC9tR1oSPvi4cX7AFYUVCWYb9I3i6hxBEGv55oZ035HVo?=
- =?us-ascii?Q?+maKfKQx8B8HRsHMZdiZnugFGCRdhQMQrpJXn9Gp1zC8efARHd1kiG3SCIlj?=
- =?us-ascii?Q?zD3gmkV8wlxpRt3zUwCbgvj/N19zGvutCMIc97x1D3IuN1JXxGFA/DMeEGP3?=
- =?us-ascii?Q?6ymIDX1+cTIH9syRxwKY/tEu86jRF/slhUwr+XPJMMtFXAY6i0hcLeFYrAjT?=
- =?us-ascii?Q?k/+AUY/A4El/5IlgDxG9wbFMnGYT7lmAs970Z6gkA7Pm9BeXFFyTK2VxkqGa?=
- =?us-ascii?Q?z4BTmdxCYhOBpPSbG4Va+LZXyp7NoY9FhwGcWIjlpbc+jBXIfIUg2g7H9LtA?=
- =?us-ascii?Q?bv24+ZcLE+X9gpfB0qCpvH1uG4ti+TR0S/l3MUPh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Feb 2023 14:00:49 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85AA627FD;
+        Fri, 17 Feb 2023 11:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676660435; x=1708196435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X7FegYcUREO4OWwnNxfRv9qVHnzXtPragi3uqY2VH2k=;
+  b=ZEf6KNSREVrHz7YnOHpKxyPDJks6V3Rf18o5OBmQvaVvOWjOYOxlroPv
+   igROguNFPSPpyCDvVybXGh5AoBbKFO1WrMQMSlKk8lnQxZF4nBAvHE8/a
+   KY04JS3thcJXEA/3u9nbjL+Uw+5O0fcN34QWCPW5Kw+H+EXTESKE+ZnlL
+   VKFd7ErTgRYDIijm6UZcmPVpPfN2txyPTNcuwpwAO4njWveXCLzV645hb
+   6X6Dt4Gzmo8w3GniXqLCYoSl3z5tvFKMYCJT/mpkopJFGOMqDhmZVYC0f
+   P9Y74HZ6jBZbjrK6Inxv447Z3NuRC5oiq3cdfyshZQTlEUNdzEXRHYMay
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="332070284"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="332070284"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:00:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="844674081"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="844674081"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2023 11:00:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pT5yC-008KSx-01;
+        Fri, 17 Feb 2023 21:00:32 +0200
+Date:   Fri, 17 Feb 2023 21:00:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, broonie@kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] gpio: idio-16: Migrate to the regmap API
+Message-ID: <Y+/Oz0paZtiAr6VM@smile.fi.intel.com>
+References: <cover.1675876659.git.william.gray@linaro.org>
+ <b5e7cadadfb2234a594a6a749837e2402f22e57d.1675876659.git.william.gray@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e4ad22e-3401-4585-27b9-08db1119308e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2023 19:00:08.9378
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gRbZrq42wp5RGRYZ0BNUIeHemlgP2N7UX/eB1x2ulb0U0M8shzDAlqIbhtUutAKX2EDtyt2jB2B0SsstY18c7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3379
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b5e7cadadfb2234a594a6a749837e2402f22e57d.1675876659.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Sent: Friday, February 17, 2023 1:52 AM
->=20
-> I'd even suggest to make it pr_warn_once() to be
-> safe. In theory, vmbus_chan_sched() call site looks like it can create a
-> lot of noise.
-=20
-Good point.
+On Wed, Feb 08, 2023 at 12:18:18PM -0500, William Breathitt Gray wrote:
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
+> 
+> By leveraging the regmap API, the idio-16 library is reduced to simply a
+> devm_idio_16_regmap_register() function and a configuration structure
+> struct idio_16_regmap_config.
+> 
+> Legacy functions and code will be removed once all consumers have
+> migrated to the new idio-16 library interface.
+> 
+> For IDIO-16 devices we have the following IRQ registers:
+> 
+>     Base Address +1 (Write): Clear Interrupt
+>     Base Address +2 (Read): Enable Interrupt
+>     Base Address +2 (Write): Disable Interrupt
+> 
+> An interrupt is asserted whenever a change-of-state is detected on any
+> of the inputs. Any write to 0x2 will disable interrupts, while any read
+> will enable interrupts. Interrupts are cleared by a write to 0x1.
+> 
+> For 104-IDIO-16 devices, there is no IRQ status register, so software
+> has to assume that if an interrupt is raised then it was for the
+> 104-IDIO-16 device.
+> 
+> For PCI-IDIO-16 devices, there is an additional IRQ register:
+> 
+>     Base Address +6 (Read): Interrupt Status
+> 
+> Interrupt status can be read from 0x6 where bit 2 set indicates that an
+> IRQ has been generated.
+
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+One minor remark below.
+
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> ---
+>  drivers/gpio/Kconfig        |   3 +
+>  drivers/gpio/gpio-idio-16.c | 158 ++++++++++++++++++++++++++++++++++++
+>  drivers/gpio/gpio-idio-16.h |  28 +++++++
+>  3 files changed, 189 insertions(+)
+> 
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 406e8bda487f..b4de83a3616d 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -111,6 +111,9 @@ config GPIO_MAX730X
+>  
+>  config GPIO_IDIO_16
+>  	tristate
+> +	select REGMAP_IRQ
+> +	select GPIOLIB_IRQCHIP
+> +	select GPIO_REGMAP
+>  	help
+>  	  Enables support for the idio-16 library functions. The idio-16 library
+>  	  provides functions to facilitate communication with devices within the
+> diff --git a/drivers/gpio/gpio-idio-16.c b/drivers/gpio/gpio-idio-16.c
+> index 13315242d220..907b0f15fdb3 100644
+> --- a/drivers/gpio/gpio-idio-16.c
+> +++ b/drivers/gpio/gpio-idio-16.c
+> @@ -4,9 +4,13 @@
+>   * Copyright (C) 2022 William Breathitt Gray
+>   */
+>  #include <linux/bitmap.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+>  #include <linux/export.h>
+> +#include <linux/gpio/regmap.h>
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+> +#include <linux/regmap.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+>  
+> @@ -14,6 +18,160 @@
+>  
+>  #define DEFAULT_SYMBOL_NAMESPACE GPIO_IDIO_16
+>  
+> +#define IDIO_16_DAT_BASE 0x0
+> +#define IDIO_16_OUT_BASE IDIO_16_DAT_BASE
+> +#define IDIO_16_IN_BASE (IDIO_16_DAT_BASE + 1)
+> +#define IDIO_16_CLEAR_INTERRUPT 0x1
+> +#define IDIO_16_ENABLE_IRQ 0x2
+> +#define IDIO_16_DEACTIVATE_INPUT_FILTERS 0x3
+> +#define IDIO_16_DISABLE_IRQ IDIO_16_ENABLE_IRQ
+> +#define IDIO_16_INTERRUPT_STATUS 0x6
+> +
+> +#define IDIO_16_NGPIO 32
+> +#define IDIO_16_NGPIO_PER_REG 8
+> +#define IDIO_16_REG_STRIDE 4
+> +
+> +static int idio_16_handle_mask_sync(struct regmap *const map, const int index,
+> +				   const unsigned int mask_buf_def,
+> +				   const unsigned int mask_buf,
+> +				   void *const irq_drv_data)
+> +{
+> +	unsigned int *const irq_mask = irq_drv_data;
+> +	const unsigned int prev_mask = *irq_mask;
+> +	int err;
+> +	unsigned int val;
+> +
+> +	/* exit early if no change since the previous mask */
+> +	if (mask_buf == prev_mask)
+> +		return 0;
+> +
+> +	/* remember the current mask for the next mask sync */
+> +	*irq_mask = mask_buf;
+> +
+> +	/* if all previously masked, enable interrupts when unmasking */
+> +	if (prev_mask == mask_buf_def) {
+> +		err = regmap_write(map, IDIO_16_CLEAR_INTERRUPT, 0x00);
+> +		if (err)
+> +			return err;
+> +		return regmap_read(map, IDIO_16_ENABLE_IRQ, &val);
+> +	}
+> +
+> +	/* if all are currently masked, disable interrupts */
+> +	if (mask_buf == mask_buf_def)
+> +		return regmap_write(map, IDIO_16_DISABLE_IRQ, 0x00);
+> +
+> +	return 0;
+> +}
+> +
+> +static int idio_16_reg_mask_xlate(struct gpio_regmap *gpio, unsigned int base,
+> +				  unsigned int offset, unsigned int *reg,
+> +				  unsigned int *mask)
+> +{
+> +	unsigned int stride;
+> +
+> +	if (base != IDIO_16_DAT_BASE) {
+> +		/* Should never reach this path */
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Input lines start at GPIO 16 */
+> +	if (offset < 16) {
+> +		stride = offset / IDIO_16_NGPIO_PER_REG;
+> +		*reg = IDIO_16_OUT_BASE + stride * IDIO_16_REG_STRIDE;
+> +	} else {
+> +		stride = (offset - 16) / IDIO_16_NGPIO_PER_REG;
+> +		*reg = IDIO_16_IN_BASE + stride * IDIO_16_REG_STRIDE;
+> +	}
+> +
+> +	*mask = BIT(offset % IDIO_16_NGPIO_PER_REG);
+> +
+> +	return 0;
+> +}
+> +
+> +static const char *idio_16_names[IDIO_16_NGPIO] = {
+> +	"OUT0", "OUT1", "OUT2", "OUT3", "OUT4", "OUT5", "OUT6", "OUT7",
+> +	"OUT8", "OUT9", "OUT10", "OUT11", "OUT12", "OUT13", "OUT14", "OUT15",
+> +	"IIN0", "IIN1", "IIN2", "IIN3", "IIN4", "IIN5", "IIN6", "IIN7",
+> +	"IIN8", "IIN9", "IIN10", "IIN11", "IIN12", "IIN13", "IIN14", "IIN15"
+
+I would leave comma at the end.
+
+> +};
+> +
+> +/**
+> + * devm_idio_16_regmap_register - Register an IDIO-16 GPIO device
+> + * @dev:	device that is registering this IDIO-16 GPIO device
+> + * @config:	configuration for idio_16_regmap_config
+> + *
+> + * Registers an IDIO-16 GPIO device. Returns 0 on success and negative error
+> + * number on failure.
+> + */
+> +int devm_idio_16_regmap_register(struct device *const dev,
+> +				 const struct idio_16_regmap_config *const config)
+> +{
+> +	struct gpio_regmap_config gpio_config = {};
+> +	int err;
+> +	struct regmap_irq_chip *chip;
+> +	unsigned int irq_mask;
+> +	struct regmap_irq_chip_data *chip_data;
+> +
+> +	if (!config->parent)
+> +		return -EINVAL;
+> +
+> +	if (!config->map)
+> +		return -EINVAL;
+> +
+> +	if (!config->regmap_irqs)
+> +		return -EINVAL;
+> +
+> +	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
+> +		return -ENOMEM;
+> +
+> +	chip->irq_drv_data = devm_kzalloc(dev, sizeof(irq_mask), GFP_KERNEL);
+> +	if (!chip->irq_drv_data)
+> +		return -ENOMEM;
+> +
+> +	chip->name = dev_name(dev);
+> +	chip->status_base = IDIO_16_INTERRUPT_STATUS;
+> +	chip->mask_base = IDIO_16_ENABLE_IRQ;
+> +	chip->ack_base = IDIO_16_CLEAR_INTERRUPT;
+> +	chip->no_status = config->no_status;
+> +	chip->num_regs = 1;
+> +	chip->irqs = config->regmap_irqs;
+> +	chip->num_irqs = config->num_regmap_irqs;
+> +	chip->handle_mask_sync = idio_16_handle_mask_sync;
+> +
+> +	/* Disable IRQ to prevent spurious interrupts before we're ready */
+> +	err = regmap_write(config->map, IDIO_16_DISABLE_IRQ, 0x00);
+> +	if (err)
+> +		return err;
+> +
+> +	err = devm_regmap_add_irq_chip(dev, config->map, config->irq, 0, 0,
+> +				       chip, &chip_data);
+> +	if (err)
+> +		return dev_err_probe(dev, err, "IRQ registration failed\n");
+> +
+> +	if (config->filters) {
+> +		/* Deactivate input filters */
+> +		err = regmap_write(config->map,
+> +				   IDIO_16_DEACTIVATE_INPUT_FILTERS, 0x00);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	gpio_config.parent = config->parent;
+> +	gpio_config.regmap = config->map;
+> +	gpio_config.ngpio = IDIO_16_NGPIO;
+> +	gpio_config.names = idio_16_names;
+> +	gpio_config.reg_dat_base = GPIO_REGMAP_ADDR(IDIO_16_DAT_BASE);
+> +	gpio_config.reg_set_base = GPIO_REGMAP_ADDR(IDIO_16_DAT_BASE);
+> +	gpio_config.ngpio_per_reg = IDIO_16_NGPIO_PER_REG;
+> +	gpio_config.reg_stride = IDIO_16_REG_STRIDE;
+> +	gpio_config.irq_domain = regmap_irq_get_domain(chip_data);
+> +	gpio_config.reg_mask_xlate = idio_16_reg_mask_xlate;
+> +
+> +	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
+> +}
+> +EXPORT_SYMBOL_GPL(devm_idio_16_regmap_register);
+> +
+>  /**
+>   * idio_16_get - get signal value at signal offset
+>   * @reg:	ACCES IDIO-16 device registers
+> diff --git a/drivers/gpio/gpio-idio-16.h b/drivers/gpio/gpio-idio-16.h
+> index 928f8251a2bd..22bb591b4ec0 100644
+> --- a/drivers/gpio/gpio-idio-16.h
+> +++ b/drivers/gpio/gpio-idio-16.h
+> @@ -6,6 +6,30 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+>  
+> +struct device;
+> +struct regmap;
+> +struct regmap_irq;
+> +
+> +/**
+> + * struct idio_16_regmap_config - Configuration for the IDIO-16 register map
+> + * @parent:		parent device
+> + * @map:		regmap for the IDIO-16 device
+> + * @regmap_irqs:	descriptors for individual IRQs
+> + * @num_regmap_irqs:	number of IRQ descriptors
+> + * @irq:		IRQ number for the IDIO-16 device
+> + * @no_status:		device has no status register
+> + * @filters:		device has input filters
+> + */
+> +struct idio_16_regmap_config {
+> +	struct device *parent;
+> +	struct regmap *map;
+> +	const struct regmap_irq *regmap_irqs;
+> +	int num_regmap_irqs;
+> +	unsigned int irq;
+> +	bool no_status;
+> +	bool filters;
+> +};
+> +
+>  /**
+>   * struct idio_16 - IDIO-16 registers structure
+>   * @out0_7:	Read: FET Drive Outputs 0-7
+> @@ -39,6 +63,7 @@ struct idio_16 {
+>   * struct idio_16_state - IDIO-16 state structure
+>   * @lock:	synchronization lock for accessing device state
+>   * @out_state:	output signals state
+> + * @irq_mask:	IRQ mask state
+>   */
+>  struct idio_16_state {
+>  	spinlock_t lock;
+> @@ -68,4 +93,7 @@ void idio_16_set_multiple(struct idio_16 __iomem *reg,
+>  			  const unsigned long *mask, const unsigned long *bits);
+>  void idio_16_state_init(struct idio_16_state *state);
+>  
+> +int devm_idio_16_regmap_register(struct device *dev,
+> +				 const struct idio_16_regmap_config *config);
+> +
+>  #endif /* _IDIO_16_H_ */
+> -- 
+> 2.39.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
