@@ -2,330 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB3269B08A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1EA69B0B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjBQQS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 11:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S231237AbjBQQV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbjBQQSv (ORCPT
+        with ESMTP id S231232AbjBQQU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 11:18:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677164B22;
-        Fri, 17 Feb 2023 08:18:31 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HFuusp030567;
-        Fri, 17 Feb 2023 16:18:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=J4E37CBbGAXXSsT9zVTThxpL7c5Xv4PRkiuxD6bWjas=;
- b=aKehk4+b0KQ3+n4+lK19POFMLUpYeoW0Nluw4UOT7U0abhOKMGGHnlReyQfbgq/3Vw2n
- Pa1yIAwvudZkxrzxezalq10y66yMkdGZJYziI/K7whR9YGzzRfJ1dduJwk+T0UIbeSYm
- bagZCpMmgaHz8DZok+Y0ioH4wzgzw1ohNTse7kAZVxObBVtKDmtFfgED5kHDm4fTe0hh
- n3R4LIC7bKdbu7EjGsLN933jZ/Xx7XYwGCyI2EqfCYT6KRRZfb6hge8cvu04bVDq3bJq
- Al0hHk1DdWKQhcrjFCGxFwtAzv2cDT8qdiLoCwH57/aNu2lDFybve2H4UYsWnHYPfPib ow== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntcnyrh8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:24 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HCdT6q009690;
-        Fri, 17 Feb 2023 16:18:23 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7rj9j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 16:18:23 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HGILUi26542650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 16:18:22 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3C775805B;
-        Fri, 17 Feb 2023 16:18:21 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FCF85805D;
-        Fri, 17 Feb 2023 16:18:21 +0000 (GMT)
-Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 16:18:21 +0000 (GMT)
-From:   Danny Tsen <dtsen@linux.ibm.com>
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
-        dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
-Subject: [PATCH v3 6/6] A perl script to process PowerPC assembler source.
-Date:   Fri, 17 Feb 2023 11:18:05 -0500
-Message-Id: <20230217161805.236319-7-dtsen@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230217161805.236319-1-dtsen@linux.ibm.com>
-References: <20230217161805.236319-1-dtsen@linux.ibm.com>
+        Fri, 17 Feb 2023 11:20:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B63B6CA21
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:19:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676650750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cuB7x4yeuY8QBYR6htxKdH+Dn4QUn1FKGu0L8DYt9Fg=;
+        b=WsSDqUb2QmKTnDFcW/7g143ZfSuvWxJXG92pWCACLSWDsDEoZQsV2vupu28h9R4S5iNorz
+        HGOfaPWMPPufpIg01Nj4ieyeU8PQLK9yTH5ar9OB+AZrR0fF0lqBD0Kk1Og0/BuvJj17IA
+        hTx2TTtmQoSd9/W7Xpdn3nc/pX4j7bE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-ZhJleZk_PJagTQhi8A-apQ-1; Fri, 17 Feb 2023 11:19:05 -0500
+X-MC-Unique: ZhJleZk_PJagTQhi8A-apQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B43023814581;
+        Fri, 17 Feb 2023 16:19:03 +0000 (UTC)
+Received: from xps-13.local (unknown [10.39.193.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CC98DC15BA0;
+        Fri, 17 Feb 2023 16:19:02 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 17 Feb 2023 17:18:05 +0100
+Subject: [PATCH 11/11] selftests: hid: import hid-tools usb-crash tests
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t3YrdHD1QRBbPTmuwlwWOFjWSYGJDSJZ
-X-Proofpoint-GUID: t3YrdHD1QRBbPTmuwlwWOFjWSYGJDSJZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_10,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 spamscore=0 priorityscore=1501 phishscore=0
- mlxscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230217-import-hid-tools-tests-v1-11-d1c48590d0ee@redhat.com>
+References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+In-Reply-To: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676650715; l=6172;
+ i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
+ bh=9UDXPt2tM21JKTbYVa/JCBbuyLMC72VLNcGOr7GD/fU=;
+ b=FtnlzDnQvd1h1EqJEOMQoin+hx/F4RYlmdGncS9cJPzE7rWxQZPzoV0yj2044vaIw2S1RqA/s
+ Y2msgJf6yzYCaLSQ1mK/f+zb799px6BKJIFJ8RzoPUc15zt9ccEhiXl
+X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
----
- arch/powerpc/crypto/ppc-xlate.pl | 229 +++++++++++++++++++++++++++++++
- 1 file changed, 229 insertions(+)
- create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
+These tests have been developed in the hid-tools[0] tree for a while.
+Now that we have  a proper selftests/hid kernel entry and that the tests
+are more reliable, it is time to directly include those in the kernel
+tree.
 
-diff --git a/arch/powerpc/crypto/ppc-xlate.pl b/arch/powerpc/crypto/ppc-xlate.pl
-new file mode 100644
-index 000000000000..36db2ef09e5b
+This one gets skipped when run by vmtest.sh as we currently need to test
+against actual kernel modules (.ko), not built-in to fetch the list
+of supported devices.
+
+[0] https://gitlab.freedesktop.org/libevdev/hid-tools
+
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+ tools/testing/selftests/hid/Makefile               |   1 +
+ tools/testing/selftests/hid/hid-usb_crash.sh       |   7 ++
+ .../testing/selftests/hid/tests/test_usb_crash.py  | 103 +++++++++++++++++++++
+ 3 files changed, 111 insertions(+)
+
+diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+index dcea4f1e9369..01c0491d64da 100644
+--- a/tools/testing/selftests/hid/Makefile
++++ b/tools/testing/selftests/hid/Makefile
+@@ -14,6 +14,7 @@ TEST_PROGS += hid-mouse.sh
+ TEST_PROGS += hid-multitouch.sh
+ TEST_PROGS += hid-sony.sh
+ TEST_PROGS += hid-tablet.sh
++TEST_PROGS += hid-usb_crash.sh
+ TEST_PROGS += hid-wacom.sh
+ 
+ CXX ?= $(CROSS_COMPILE)g++
+diff --git a/tools/testing/selftests/hid/hid-usb_crash.sh b/tools/testing/selftests/hid/hid-usb_crash.sh
+new file mode 100755
+index 000000000000..3f0debe7e8fd
 --- /dev/null
-+++ b/arch/powerpc/crypto/ppc-xlate.pl
-@@ -0,0 +1,229 @@
-+#!/usr/bin/env perl
++++ b/tools/testing/selftests/hid/hid-usb_crash.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
++# Runs tests for the HID subsystem
 +
-+# PowerPC assembler distiller by <appro>.
++export TARGET=test_usb_crash.py
 +
-+my $flavour = shift;
-+my $output = shift;
-+open STDOUT,">$output" || die "can't open $output: $!";
++bash ./run-hid-tools-tests.sh
+diff --git a/tools/testing/selftests/hid/tests/test_usb_crash.py b/tools/testing/selftests/hid/tests/test_usb_crash.py
+new file mode 100644
+index 000000000000..e98bff9197c7
+--- /dev/null
++++ b/tools/testing/selftests/hid/tests/test_usb_crash.py
+@@ -0,0 +1,103 @@
++#!/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# -*- coding: utf-8 -*-
++#
++# Copyright (c) 2021 Benjamin Tissoires <benjamin.tissoires@gmail.com>
++# Copyright (c) 2021 Red Hat, Inc.
++#
 +
-+my %GLOBALS;
-+my $dotinlocallabels=($flavour=~/linux/)?1:0;
++# This is to ensure we don't crash when emulating USB devices
 +
-+################################################################
-+# directives which need special treatment on different platforms
-+################################################################
-+my $globl = sub {
-+    my $junk = shift;
-+    my $name = shift;
-+    my $global = \$GLOBALS{$name};
-+    my $ret;
++from . import base
++import pytest
++import logging
 +
-+    $name =~ s|^[\.\_]||;
-+ 
-+    SWITCH: for ($flavour) {
-+	/aix/		&& do { $name = ".$name";
-+				last;
-+			      };
-+	/osx/		&& do { $name = "_$name";
-+				last;
-+			      };
-+	/linux/
-+			&& do {	$ret = "_GLOBAL($name)";
-+				last;
-+			      };
-+    }
++logger = logging.getLogger("hidtools.test.usb")
 +
-+    $ret = ".globl	$name\nalign 5\n$name:" if (!$ret);
-+    $$global = $name;
-+    $ret;
-+};
-+my $text = sub {
-+    my $ret = ($flavour =~ /aix/) ? ".csect\t.text[PR],7" : ".text";
-+    $ret = ".abiversion	2\n".$ret	if ($flavour =~ /linux.*64le/);
-+    $ret;
-+};
-+my $machine = sub {
-+    my $junk = shift;
-+    my $arch = shift;
-+    if ($flavour =~ /osx/)
-+    {	$arch =~ s/\"//g;
-+	$arch = ($flavour=~/64/) ? "ppc970-64" : "ppc970" if ($arch eq "any");
-+    }
-+    ".machine	$arch";
-+};
-+my $size = sub {
-+    if ($flavour =~ /linux/)
-+    {	shift;
-+	my $name = shift; $name =~ s|^[\.\_]||;
-+	my $ret  = ".size	$name,.-".($flavour=~/64$/?".":"").$name;
-+	$ret .= "\n.size	.$name,.-.$name" if ($flavour=~/64$/);
-+	$ret;
-+    }
-+    else
-+    {	"";	}
-+};
-+my $asciz = sub {
-+    shift;
-+    my $line = join(",",@_);
-+    if ($line =~ /^"(.*)"$/)
-+    {	".byte	" . join(",",unpack("C*",$1),0) . "\n.align	2";	}
-+    else
-+    {	"";	}
-+};
-+my $quad = sub {
-+    shift;
-+    my @ret;
-+    my ($hi,$lo);
-+    for (@_) {
-+	if (/^0x([0-9a-f]*?)([0-9a-f]{1,8})$/io)
-+	{  $hi=$1?"0x$1":"0"; $lo="0x$2";  }
-+	elsif (/^([0-9]+)$/o)
-+	{  $hi=$1>>32; $lo=$1&0xffffffff;  } # error-prone with 32-bit perl
-+	else
-+	{  $hi=undef; $lo=$_; }
 +
-+	if (defined($hi))
-+	{  push(@ret,$flavour=~/le$/o?".long\t$lo,$hi":".long\t$hi,$lo");  }
-+	else
-+	{  push(@ret,".quad	$lo");  }
-+    }
-+    join("\n",@ret);
-+};
++class USBDev(base.UHIDTestDevice):
++    # fmt: off
++    report_descriptor = [
++        0x05, 0x01,  # .Usage Page (Generic Desktop)        0
++        0x09, 0x02,  # .Usage (Mouse)                       2
++        0xa1, 0x01,  # .Collection (Application)            4
++        0x09, 0x02,  # ..Usage (Mouse)                      6
++        0xa1, 0x02,  # ..Collection (Logical)               8
++        0x09, 0x01,  # ...Usage (Pointer)                   10
++        0xa1, 0x00,  # ...Collection (Physical)             12
++        0x05, 0x09,  # ....Usage Page (Button)              14
++        0x19, 0x01,  # ....Usage Minimum (1)                16
++        0x29, 0x03,  # ....Usage Maximum (3)                18
++        0x15, 0x00,  # ....Logical Minimum (0)              20
++        0x25, 0x01,  # ....Logical Maximum (1)              22
++        0x75, 0x01,  # ....Report Size (1)                  24
++        0x95, 0x03,  # ....Report Count (3)                 26
++        0x81, 0x02,  # ....Input (Data,Var,Abs)             28
++        0x75, 0x05,  # ....Report Size (5)                  30
++        0x95, 0x01,  # ....Report Count (1)                 32
++        0x81, 0x03,  # ....Input (Cnst,Var,Abs)             34
++        0x05, 0x01,  # ....Usage Page (Generic Desktop)     36
++        0x09, 0x30,  # ....Usage (X)                        38
++        0x09, 0x31,  # ....Usage (Y)                        40
++        0x15, 0x81,  # ....Logical Minimum (-127)           42
++        0x25, 0x7f,  # ....Logical Maximum (127)            44
++        0x75, 0x08,  # ....Report Size (8)                  46
++        0x95, 0x02,  # ....Report Count (2)                 48
++        0x81, 0x06,  # ....Input (Data,Var,Rel)             50
++        0xc0,        # ...End Collection                    52
++        0xc0,        # ..End Collection                     53
++        0xc0,        # .End Collection                      54
++    ]
++    # fmt: on
 +
-+################################################################
-+# simplified mnemonics not handled by at least one assembler
-+################################################################
-+my $cmplw = sub {
-+    my $f = shift;
-+    my $cr = 0; $cr = shift if ($#_>1);
-+    # Some out-of-date 32-bit GNU assembler just can't handle cmplw...
-+    ($flavour =~ /linux.*32/) ?
-+	"	.long	".sprintf "0x%x",31<<26|$cr<<23|$_[0]<<16|$_[1]<<11|64 :
-+	"	cmplw	".join(',',$cr,@_);
-+};
-+my $bdnz = sub {
-+    my $f = shift;
-+    my $bo = $f=~/[\+\-]/ ? 16+9 : 16;	# optional "to be taken" hint
-+    "	bc	$bo,0,".shift;
-+} if ($flavour!~/linux/);
-+my $bltlr = sub {
-+    my $f = shift;
-+    my $bo = $f=~/\-/ ? 12+2 : 12;	# optional "not to be taken" hint
-+    ($flavour =~ /linux/) ?		# GNU as doesn't allow most recent hints
-+	"	.long	".sprintf "0x%x",19<<26|$bo<<21|16<<1 :
-+	"	bclr	$bo,0";
-+};
-+my $bnelr = sub {
-+    my $f = shift;
-+    my $bo = $f=~/\-/ ? 4+2 : 4;	# optional "not to be taken" hint
-+    ($flavour =~ /linux/) ?		# GNU as doesn't allow most recent hints
-+	"	.long	".sprintf "0x%x",19<<26|$bo<<21|2<<16|16<<1 :
-+	"	bclr	$bo,2";
-+};
-+my $beqlr = sub {
-+    my $f = shift;
-+    my $bo = $f=~/-/ ? 12+2 : 12;	# optional "not to be taken" hint
-+    ($flavour =~ /linux/) ?		# GNU as doesn't allow most recent hints
-+	"	.long	".sprintf "0x%X",19<<26|$bo<<21|2<<16|16<<1 :
-+	"	bclr	$bo,2";
-+};
-+# GNU assembler can't handle extrdi rA,rS,16,48, or when sum of last two
-+# arguments is 64, with "operand out of range" error.
-+my $extrdi = sub {
-+    my ($f,$ra,$rs,$n,$b) = @_;
-+    $b = ($b+$n)&63; $n = 64-$n;
-+    "	rldicl	$ra,$rs,$b,$n";
-+};
-+my $vmr = sub {
-+    my ($f,$vx,$vy) = @_;
-+    "	vor	$vx,$vy,$vy";
-+};
++    def __init__(self, name=None, input_info=None):
++        super().__init__(
++            name, "Mouse", input_info=input_info, rdesc=USBDev.report_descriptor
++        )
 +
-+# Some ABIs specify vrsave, special-purpose register #256, as reserved
-+# for system use.
-+my $no_vrsave = ($flavour =~ /linux-ppc64le/);
-+my $mtspr = sub {
-+    my ($f,$idx,$ra) = @_;
-+    if ($idx == 256 && $no_vrsave) {
-+	"	or	$ra,$ra,$ra";
-+    } else {
-+	"	mtspr	$idx,$ra";
-+    }
-+};
-+my $mfspr = sub {
-+    my ($f,$rd,$idx) = @_;
-+    if ($idx == 256 && $no_vrsave) {
-+	"	li	$rd,-1";
-+    } else {
-+	"	mfspr	$rd,$idx";
-+    }
-+};
++    # skip witing for udev events, it's likely that the report
++    # descriptor is wrong
++    def is_ready(self):
++        return True
 +
-+# PowerISA 2.06 stuff
-+sub vsxmem_op {
-+    my ($f, $vrt, $ra, $rb, $op) = @_;
-+    "	.long	".sprintf "0x%X",(31<<26)|($vrt<<21)|($ra<<16)|($rb<<11)|($op*2+1);
-+}
-+# made-up unaligned memory reference AltiVec/VMX instructions
-+my $lvx_u	= sub {	vsxmem_op(@_, 844); };	# lxvd2x
-+my $stvx_u	= sub {	vsxmem_op(@_, 972); };	# stxvd2x
-+my $lvdx_u	= sub {	vsxmem_op(@_, 588); };	# lxsdx
-+my $stvdx_u	= sub {	vsxmem_op(@_, 716); };	# stxsdx
-+my $lvx_4w	= sub { vsxmem_op(@_, 780); };	# lxvw4x
-+my $stvx_4w	= sub { vsxmem_op(@_, 908); };	# stxvw4x
++    # we don't have an evdev node here, so paper over
++    # the checks
++    def get_evdev(self, application=None):
++        return "OK"
 +
-+# PowerISA 2.07 stuff
-+sub vcrypto_op {
-+    my ($f, $vrt, $vra, $vrb, $op) = @_;
-+    "	.long	".sprintf "0x%X",(4<<26)|($vrt<<21)|($vra<<16)|($vrb<<11)|$op;
-+}
-+my $vcipher	= sub { vcrypto_op(@_, 1288); };
-+my $vcipherlast	= sub { vcrypto_op(@_, 1289); };
-+my $vncipher	= sub { vcrypto_op(@_, 1352); };
-+my $vncipherlast= sub { vcrypto_op(@_, 1353); };
-+my $vsbox	= sub { vcrypto_op(@_, 0, 1480); };
-+my $vshasigmad	= sub { my ($st,$six)=splice(@_,-2); vcrypto_op(@_, $st<<4|$six, 1730); };
-+my $vshasigmaw	= sub { my ($st,$six)=splice(@_,-2); vcrypto_op(@_, $st<<4|$six, 1666); };
-+my $vpmsumb	= sub { vcrypto_op(@_, 1032); };
-+my $vpmsumd	= sub { vcrypto_op(@_, 1224); };
-+my $vpmsubh	= sub { vcrypto_op(@_, 1096); };
-+my $vpmsumw	= sub { vcrypto_op(@_, 1160); };
-+my $vaddudm	= sub { vcrypto_op(@_, 192);  };
-+my $vadduqm	= sub { vcrypto_op(@_, 256);  };
 +
-+my $mtsle	= sub {
-+    my ($f, $arg) = @_;
-+    "	.long	".sprintf "0x%X",(31<<26)|($arg<<21)|(147*2);
-+};
++class TestUSBDevice(base.BaseTestCase.TestUhid):
++    """
++    Test class to test if an emulated USB device crashes
++    the kernel.
++    """
 +
-+print "#include <asm/ppc_asm.h>\n" if $flavour =~ /linux/;
++    # conftest.py is generating the following fixture:
++    #
++    # @pytest.fixture(params=[('modulename', 1, 2)])
++    # def usbVidPid(self, request):
++    #     return request.param
 +
-+while($line=<>) {
++    @pytest.fixture()
++    def new_uhdev(self, usbVidPid, request):
++        self.module, self.vid, self.pid = usbVidPid
++        self._load_kernel_module(None, self.module)
++        return USBDev(input_info=(3, self.vid, self.pid))
 +
-+    $line =~ s|[#!;].*$||;	# get rid of asm-style comments...
-+    $line =~ s|/\*.*\*/||;	# ... and C-style comments...
-+    $line =~ s|^\s+||;		# ... and skip white spaces in beginning...
-+    $line =~ s|\s+$||;		# ... and at the end
++    def test_creation(self):
++        """
++        inject the USB dev through uhid and immediately see if there is a crash:
 +
-+    {
-+	$line =~ s|\b\.L(\w+)|L$1|g;	# common denominator for Locallabel
-+	$line =~ s|\bL(\w+)|\.L$1|g	if ($dotinlocallabels);
-+    }
++        uhid can create a USB device with the BUS_USB bus, and some
++        drivers assume that they can then access USB related structures
++        when they are actually provided a uhid device. This leads to
++        a crash because those access result in a segmentation fault.
 +
-+    {
-+	$line =~ s|^\s*(\.?)(\w+)([\.\+\-]?)\s*||;
-+	my $c = $1; $c = "\t" if ($c eq "");
-+	my $mnemonic = $2;
-+	my $f = $3;
-+	my $opcode = eval("\$$mnemonic");
-+	$line =~ s/\b(c?[rf]|v|vs)([0-9]+)\b/$2/g if ($c ne "." and $flavour !~ /osx/);
-+	if (ref($opcode) eq 'CODE') { $line = &$opcode($f,split(',',$line)); }
-+	elsif ($mnemonic)           { $line = $c.$mnemonic.$f."\t".$line; }
-+    }
++        The kernel should not crash on any (random) user space correct
++        use of its API. So run through all available modules and declared
++        devices to see if we can generate a uhid device without a crash.
 +
-+    print $line if ($line);
-+    print "\n";
-+}
-+
-+close STDOUT;
++        The test is empty as the fixture `check_taint` is doing the job (and
++        honestly, when the kernel crashes, the whole machine freezes).
++        """
++        assert True
+
 -- 
-2.31.1
+2.39.1
 
