@@ -2,146 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D8C69AC29
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D2A69AC2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 14:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjBQNJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 08:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
+        id S229668AbjBQNKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 08:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBQNJp (ORCPT
+        with ESMTP id S229574AbjBQNKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 08:09:45 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B409E68566;
-        Fri, 17 Feb 2023 05:09:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676639382; x=1708175382;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EipxcAyNbRifMzOG9QwPzSpk0i0NDRf5+rYrpaSO3p8=;
-  b=cLQlwnfHWyjMjGtSDWKR1BT6YtuUD8zpLxcbfTSIGnoZ02UOWTzT+x5x
-   Y93KLCl2yGvs+/zihYHLjy5/K5nw6F5nYst7ZDVkOB+RRUMYJhEgOAewS
-   AJaBVFPT5kZ0oyI4M54wO0PEFzL96qnHaj2Ta8cmrxIkuW9nCCkxyway9
-   3Ah5GpHZ7fASopqyDqirP1Zgu2zzjVQE5JT/MGnEF8B0SJuhAwh32IWkw
-   uwMG6jdafhzO+ybNcf725zNtVfiQuq85DOISbcCq/HPXl3Fjzclzs3EzX
-   AGLfdsZNP29Ss+9YKcHIVqH3a7wZjsGY15ny11kKTU6CLAsjcKWRfBzs7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="329702791"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="329702791"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 05:09:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="648077433"
-X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
-   d="scan'208";a="648077433"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 05:09:25 -0800
-Message-ID: <bd634d42-ebab-f713-365d-6936fdb5d77f@linux.intel.com>
-Date:   Fri, 17 Feb 2023 14:09:23 +0100
+        Fri, 17 Feb 2023 08:10:38 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB167443;
+        Fri, 17 Feb 2023 05:10:34 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id f22so928181lja.6;
+        Fri, 17 Feb 2023 05:10:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0dw7whMOJQJOi9uWyg8pekWteeUM3FSvncYli56xrM=;
+        b=ZJP/Vc4DNhnP7vNZoltPzVJg+xHUrwAuUU/yEcRVXm4oBmREPC3XmKBf8vBUb83fzm
+         AWhyiJU8x+YO+Bw2oDnuvHmcAWeMxRzztwdjkxXvLt4kRF2yk2zP5X60V9te/W3N8Pl/
+         FMRmsZ2euvbs4W9naCuwZvjOBVNOZuQzUEHbpP+5pQWeloi6Tpm9AeqvTDdsUaKeUl3f
+         /qO5/0s/pHAncoJI9BZARP+cBcYYlhpoQbL3WCmxgWHY6OrS2nLA0mhJjwcgigDRqQdQ
+         qpakRx68sP8LFlAhJFEGwkdUDDEOB6eqaLe15jtD7aoj9/STJdpKUxxhW1Ifp+cQrLX2
+         XOew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J0dw7whMOJQJOi9uWyg8pekWteeUM3FSvncYli56xrM=;
+        b=viZiRjvTMzs9QlR7TSPyZeC7fwd/pp2N+fxwXagy4AIXUj8MCfVkRo/yt9C4ZHQk8v
+         0OwsbY0CaY1ooN/t1+NeB9gjBPho9Mcjynb9zO9XgXGeVaAvMmOGdbmzAyNaybDw9gCE
+         Jsr0det7IanXCs6BMilDK7AIlxhgq0ib3xbQSfrJeYK4rzH95Uao7i0DwaaJtvjKFr84
+         tyxrU5qFOqavWUtUsF8dC9/ZAud333kukJIrADMhYSQ0qWkSLKwyMe5k+PclsAnuWUZ9
+         iSio46gmOZxbUnvA1G1Yg1nGgj9Er7NdcYDgx1BUVA5GBwPWTQVtJdxLZqHSOH/xu/iz
+         /OyA==
+X-Gm-Message-State: AO0yUKWFbpv4KDxb3T9BJt0woa19+pG+n08GSFdUQbyrOlaRLRPAqQ9v
+        5DMVEaNrSK4kc7R1d7/wsKk=
+X-Google-Smtp-Source: AK7set/ZVly470zOS4LxdWVFdfFfIUitrEAJ/UGeJ7KfuS0LytT5d9gw7f+6nPKAG9YYlGZPMWjbFQ==
+X-Received: by 2002:a2e:9a97:0:b0:290:5582:8c10 with SMTP id p23-20020a2e9a97000000b0029055828c10mr3083759lji.49.1676639433034;
+        Fri, 17 Feb 2023 05:10:33 -0800 (PST)
+Received: from alsp.securitycode.ru ([2a02:2168:8bff:fb00:c81a:1ac1:84a6:458f])
+        by smtp.googlemail.com with ESMTPSA id o13-20020a2e944d000000b0028b92cd1fd8sm572381ljh.109.2023.02.17.05.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 05:10:32 -0800 (PST)
+From:   Alexander Sapozhnikov <alsp705@gmail.com>
+To:     Roopa Prabhu <roopa@nvidia.com>
+Cc:     Alexander Sapozhnikov <alsp705@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] net-bridge: fix unsafe dereference of potential null ptr in __vlan_del() 
+Date:   Fri, 17 Feb 2023 16:10:28 +0300
+Message-Id: <20230217131028.12634-1-alsp705@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 1/3] ASoC: soc-pcm: add option to start DMA after DAI
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230217124151.236216-1-claudiu.beznea@microchip.com>
- <20230217124151.236216-2-claudiu.beznea@microchip.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230217124151.236216-2-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/2023 1:41 PM, Claudiu Beznea wrote:
-> Add option to start DMA component after DAI trigger. This is done
-> by filling the new struct snd_soc_component_driver::start_dma_last.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->   include/sound/soc-component.h |  2 ++
->   sound/soc/soc-pcm.c           | 27 ++++++++++++++++++++++-----
->   2 files changed, 24 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/sound/soc-component.h b/include/sound/soc-component.h
-> index 3203d35bc8c1..0814ed143864 100644
-> --- a/include/sound/soc-component.h
-> +++ b/include/sound/soc-component.h
-> @@ -190,6 +190,8 @@ struct snd_soc_component_driver {
->   	bool use_dai_pcm_id;	/* use DAI link PCM ID as PCM device number */
->   	int be_pcm_base;	/* base device ID for all BE PCMs */
->   
-> +	unsigned int start_dma_last;
-> +
->   #ifdef CONFIG_DEBUG_FS
->   	const char *debugfs_prefix;
->   #endif
-> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-> index 005b179a770a..5eb056b942ce 100644
-> --- a/sound/soc/soc-pcm.c
-> +++ b/sound/soc/soc-pcm.c
-> @@ -1088,22 +1088,39 @@ static int soc_pcm_hw_params(struct snd_pcm_substream *substream,
->   static int soc_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
->   {
->   	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-> -	int ret = -EINVAL, _ret = 0;
-> +	struct snd_soc_component *component;
-> +	int ret = -EINVAL, _ret = 0, start_dma_last = 0, i;
->   	int rollback = 0;
->   
->   	switch (cmd) {
->   	case SNDRV_PCM_TRIGGER_START:
->   	case SNDRV_PCM_TRIGGER_RESUME:
->   	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-> +		/* Do we need to start dma last? */
-> +		for_each_rtd_components(rtd, i, component) {
-> +			if (component->driver->start_dma_last) {
-> +				start_dma_last = 1;
-> +				break;
-> +			}
-> +		}
-> +
->   		ret = snd_soc_link_trigger(substream, cmd, 0);
->   		if (ret < 0)
->   			goto start_err;
->   
-> -		ret = snd_soc_pcm_component_trigger(substream, cmd, 0);
-> -		if (ret < 0)
-> -			goto start_err;
-> +		if (start_dma_last) {
-> +			ret = snd_soc_pcm_dai_trigger(substream, cmd, 0);
-> +			if (ret < 0)
-> +				goto start_err;
-> +
-> +			ret = snd_soc_pcm_component_trigger(substream, cmd, 0);
-> +		} else {
-> +			ret = snd_soc_pcm_component_trigger(substream, cmd, 0);
-> +			if (ret < 0)
-> +				goto start_err;
->   
-> -		ret = snd_soc_pcm_dai_trigger(substream, cmd, 0);
-> +			ret = snd_soc_pcm_dai_trigger(substream, cmd, 0);
-> +		}
->   start_err:
->   		if (ret < 0)
->   			rollback = 1;
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Can all of the above be implemented similarly to already present 
-stop_dma_first? It looks similar and I don't see reason to have one flag 
-in snd_soc_component_driver and other in snd_soc_dai_link.
+Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
+---
+ net/bridge/br_vlan.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/net/bridge/br_vlan.c b/net/bridge/br_vlan.c
+index bc75fa1e4666..87091e270adf 100644
+--- a/net/bridge/br_vlan.c
++++ b/net/bridge/br_vlan.c
+@@ -417,7 +417,8 @@ static int __vlan_del(struct net_bridge_vlan *v)
+ 		rhashtable_remove_fast(&vg->vlan_hash, &v->vnode,
+ 				       br_vlan_rht_params);
+ 		__vlan_del_list(v);
+-		nbp_vlan_set_vlan_dev_state(p, v->vid);
++		if (p)
++			nbp_vlan_set_vlan_dev_state(p, v->vid);
+ 		br_multicast_toggle_one_vlan(v, false);
+ 		br_multicast_port_ctx_deinit(&v->port_mcast_ctx);
+ 		call_rcu(&v->rcu, nbp_vlan_rcu_free);
+-- 
+2.34.1
 
