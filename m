@@ -2,206 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E9A69AB63
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A2369AB6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 13:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjBQMX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 07:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S230096AbjBQMYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 07:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjBQMXy (ORCPT
+        with ESMTP id S230070AbjBQMYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 07:23:54 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA366072
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:23:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AC84D33992;
-        Fri, 17 Feb 2023 12:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676636630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ddjyR8ugi+S5EIlkCa0m8Ts4ukLHdqO1La6lUfJnoI=;
-        b=wSD0+pq4c8y3/HMH8Nyb0OTN4FQ7YFTLzzgJSOLK7DgGGlnlQ3fmp1X5XPIrCLY5gpigXY
-        Xdbl4uGraYhW+fnEFyJ+8J0vx6q63aQWlH/mp10I0tyOxdXSzTF542n6N7K8LC9zYwQhuH
-        e7iIk+DEMwb6IKXMADDJ4p1xQqbRMrU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676636630;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ddjyR8ugi+S5EIlkCa0m8Ts4ukLHdqO1La6lUfJnoI=;
-        b=NstaHwo+vCdFmJTjkC3/azoenRagWe35BGJMiekBa0DMrSbQjfzNPrTIbnBQTI6HSyu8F/
-        LekfIzhJwYFYrNBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3549F13274;
-        Fri, 17 Feb 2023 12:23:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fC0KDNZx72MpZAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 17 Feb 2023 12:23:50 +0000
-Message-ID: <bd44b702-34b5-816f-9ef9-00205a4375d0@suse.de>
-Date:   Fri, 17 Feb 2023 13:23:49 +0100
+        Fri, 17 Feb 2023 07:24:53 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1766058
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:24:51 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id co2so3105804edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 04:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DRkSEUhCAUqv74wpKQpFMHAHpDnDB3DUCdgSs3cTD7U=;
+        b=yrhtxWaVZlsZz8EAYHhKo7z7Qcf1xkV9vdz92vZLkg1+ezMyi9xaXJaWg/95UNi0wo
+         RnfgOOSDKqYPcyICelGJD3NSH50xT9pbF0cS5bi89GeBAyl2U3Ju/+apjBqUMRMiKkom
+         HARKsLb0z+pRqvzxeNzxDsyfRLuDWLcT7nGxjWtIhSquM9eBU6u5W3QuSJCIAwAl1AM4
+         ZHSht6gdaLYv6YFVaF20yHxTVg52ihws/Ad/snpohhc6ZqWmtaT+WXlPsIhNPsoZs9AK
+         ouTrvhYfy1IuV/5WWYkQHEhdp9mxPgkK2XtsL9q0+J65UjkmWbdQY/m9Y275kq43JDWY
+         a0nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DRkSEUhCAUqv74wpKQpFMHAHpDnDB3DUCdgSs3cTD7U=;
+        b=PYYy6eayqfKMRtIcsRt5EoMhkXm8prKy5uBPF3m5KrbUPzUs20njJT+7StrJSrkyMR
+         jurgkKGJws82S0b0WtvxV0hBPA051Dh0AuEQVerf81180rrYQZnvPe23NfIhklNYLUqH
+         ASMx4KiupAe+a6gbYqME6XiW7WMOO/pYFU9TUchyX/vbc0bhOvcFTxsqjBRBbqeEjg7D
+         SDwjb54t3C3MnPUgd6OsoAsX2BKKDPYr6ogcHBO8o27ns/fBazstwHGGTTnqhjnOQJA1
+         zivSb+1cQ3dLdcTuKaeFibkzfa4EDkdZR/CQ9k7CT03Wk6Eqkl9zeJCUrHPjCB4m8ARz
+         IatA==
+X-Gm-Message-State: AO0yUKXLSd2agZP2FZm4u17BazXfa+gpeXU0WZcKFpUnetLvKzeS5PXX
+        ASwrtovtiSUpjbxonRL18R+tHg==
+X-Google-Smtp-Source: AK7set/DBCXPYASdQ2V+puV5InoxI88AENgUj/1Lry6p1oLbNzI4+03pYsQYxh01xdrYlB9uSD988g==
+X-Received: by 2002:a17:906:a451:b0:86f:fbcf:f30a with SMTP id cb17-20020a170906a45100b0086ffbcff30amr11172660ejb.58.1676636690249;
+        Fri, 17 Feb 2023 04:24:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170906688b00b008b13a8ec56asm2074181ejr.110.2023.02.17.04.24.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 04:24:49 -0800 (PST)
+Message-ID: <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
+Date:   Fri, 17 Feb 2023 13:24:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 03/11] drm/gem: Add evict() callback to
- drm_gem_object_funcs
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
+ deprecated QCM2290 compatible
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-4-dmitry.osipenko@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230108210445.3948344-4-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------XgxlqJUeJZ17gdNZZniu83tv"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
+ <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
+ <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
+ <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
+ <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------XgxlqJUeJZ17gdNZZniu83tv
-Content-Type: multipart/mixed; boundary="------------vYWkz1BEleRqHYNcrZkuGPM3";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@gmail.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, virtualization@lists.linux-foundation.org
-Message-ID: <bd44b702-34b5-816f-9ef9-00205a4375d0@suse.de>
-Subject: Re: [PATCH v10 03/11] drm/gem: Add evict() callback to
- drm_gem_object_funcs
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
- <20230108210445.3948344-4-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230108210445.3948344-4-dmitry.osipenko@collabora.com>
+On 17/02/2023 12:36, Konrad Dybcio wrote:
+>>>
+>>> compatible = "qcom,dsi-ctrl-6g-qcm2290";
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/qcom/sm6115.dtsi?h=next-20230217#n1221
+>>
+>> I meant, that original commit wanted to deprecate:
+>> compatible="qcom,dsi-ctrl-6g-qcm2290";
+>> compatible="qcom,mdss-dsi-ctrl";
+>>
+> Okay, so what would be the correct resolution?
+> Drop this patch and keep 2/2?
 
---------------vYWkz1BEleRqHYNcrZkuGPM3
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+First, it would be nice to know what was the intention of Bryan's commit?
 
-SGkNCg0KQW0gMDguMDEuMjMgdW0gMjI6MDQgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
-IEFkZCBuZXcgY29tbW9uIGV2aWN0KCkgY2FsbGJhY2sgdG8gZHJtX2dlbV9vYmplY3RfZnVu
-Y3MgYW5kIGNvcnJlc3BvbmRpbmcNCj4gZHJtX2dlbV9vYmplY3RfZXZpY3QoKSBoZWxwZXIu
-IFRoaXMgaXMgYSBmaXJzdCBzdGVwIG9uIGEgd2F5IHRvIHByb3ZpZGluZw0KPiBjb21tb24g
-R0VNLXNocmlua2VyIEFQSSBmb3IgRFJNIGRyaXZlcnMuDQo+IA0KPiBTdWdnZXN0ZWQtYnk6
-IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiBTaWduZWQtb2Zm
-LWJ5OiBEbWl0cnkgT3NpcGVua28gPGRtaXRyeS5vc2lwZW5rb0Bjb2xsYWJvcmEuY29tPg0K
-DQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+
-DQoNCndpdGggbXkgY29tbWVudHMgYmVsb3cgYWRkcmVzc2VkLg0KDQo+IC0tLQ0KPiAgIGRy
-aXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMgfCAxNiArKysrKysrKysrKysrKysrDQo+ICAgaW5j
-bHVkZS9kcm0vZHJtX2dlbS5oICAgICB8IDEyICsrKysrKysrKysrKw0KPiAgIDIgZmlsZXMg
-Y2hhbmdlZCwgMjggaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-Z3B1L2RybS9kcm1fZ2VtLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+IGluZGV4
-IGM2YmNhNWFjNmUwZi4uZGJiNDhmYzlkZmYzIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dw
-dS9kcm0vZHJtX2dlbS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMNCj4g
-QEAgLTE0NzEsMyArMTQ3MSwxOSBAQCBkcm1fZ2VtX2xydV9zY2FuKHN0cnVjdCBkcm1fZ2Vt
-X2xydSAqbHJ1LA0KPiAgIAlyZXR1cm4gZnJlZWQ7DQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1C
-T0woZHJtX2dlbV9scnVfc2Nhbik7DQo+ICsNCj4gKy8qKg0KPiArICogZHJtX2dlbV9vYmpl
-Y3RfZXZpY3QgLSBoZWxwZXIgdG8gZXZpY3QgYmFja2luZyBwYWdlcyBmb3IgYSBHRU0gb2Jq
-ZWN0DQo+ICsgKiBAb2JqOiBvYmogaW4gcXVlc3Rpb24NCj4gKyAqLw0KPiArYm9vbA0KDQpQ
-bGVhc2UgdXNlIGludCBhbmQgcmV0dXJuIGFuIGVycm5vIGNvZGUuDQoNCk5vIG5ld2xpbmUg
-aGVyZSwgcGxlYXNlLg0KDQo+ICtkcm1fZ2VtX29iamVjdF9ldmljdChzdHJ1Y3QgZHJtX2dl
-bV9vYmplY3QgKm9iaikNCj4gK3sNCj4gKwlkbWFfcmVzdl9hc3NlcnRfaGVsZChvYmotPnJl
-c3YpOw0KPiArDQo+ICsJaWYgKG9iai0+ZnVuY3MtPmV2aWN0KQ0KPiArCQlyZXR1cm4gb2Jq
-LT5mdW5jcy0+ZXZpY3Qob2JqKTsNCj4gKw0KPiArCXJldHVybiBmYWxzZTsNCj4gK30NCj4g
-K0VYUE9SVF9TWU1CT0woZHJtX2dlbV9vYmplY3RfZXZpY3QpOw0KPiBkaWZmIC0tZ2l0IGEv
-aW5jbHVkZS9kcm0vZHJtX2dlbS5oIGIvaW5jbHVkZS9kcm0vZHJtX2dlbS5oDQo+IGluZGV4
-IGYxZjAwZmMyZGJhNi4uOGU1YzIyZjI1NjkxIDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2Ry
-bS9kcm1fZ2VtLmgNCj4gKysrIGIvaW5jbHVkZS9kcm0vZHJtX2dlbS5oDQo+IEBAIC0xNzIs
-NiArMTcyLDE2IEBAIHN0cnVjdCBkcm1fZ2VtX29iamVjdF9mdW5jcyB7DQo+ICAgCSAqIFRo
-aXMgaXMgb3B0aW9uYWwgYnV0IG5lY2Vzc2FyeSBmb3IgbW1hcCBzdXBwb3J0Lg0KPiAgIAkg
-Ki8NCj4gICAJY29uc3Qgc3RydWN0IHZtX29wZXJhdGlvbnNfc3RydWN0ICp2bV9vcHM7DQo+
-ICsNCj4gKwkvKioNCj4gKwkgKiBAZXZpY3Q6DQo+ICsJICoNCj4gKwkgKiBFdmljdHMgZ2Vt
-IG9iamVjdCBvdXQgZnJvbSBtZW1vcnkuIFVzZWQgYnkgdGhlIGRybV9nZW1fb2JqZWN0X2V2
-aWN0KCkNCj4gKwkgKiBoZWxwZXIuIFJldHVybnMgdHJ1ZSBvbiBzdWNjZXNzLCBmYWxzZSBv
-dGhlcndpc2UuDQo+ICsJICoNCj4gKwkgKiBUaGlzIGNhbGxiYWNrIGlzIG9wdGlvbmFsLg0K
-PiArCSAqLw0KPiArCWJvb2wgKCpldmljdCkoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmop
-Ow0KDQpUaGlzIHNob3VsZCBiZSBkZWNsYXJlZCBiZXR3ZWVuIG1tYXAgYW5kIGV2aWN0Lg0K
-DQpBZ2FpbiwgcGxlYXNlIHVzZSBpbnQgYW5kIHJldHVybiBhbiBlcnJubyBjb2RlLg0KDQo+
-ICAgfTsNCj4gICANCj4gICAvKioNCj4gQEAgLTQ4MSw0ICs0OTEsNiBAQCB1bnNpZ25lZCBs
-b25nIGRybV9nZW1fbHJ1X3NjYW4oc3RydWN0IGRybV9nZW1fbHJ1ICpscnUsDQo+ICAgCQkJ
-ICAgICAgIHVuc2lnbmVkIGxvbmcgKnJlbWFpbmluZywNCj4gICAJCQkgICAgICAgYm9vbCAo
-KnNocmluaykoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopKTsNCj4gICANCj4gK2Jvb2wg
-ZHJtX2dlbV9vYmplY3RfZXZpY3Qoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KDQpk
-cm1fZ2VtX2V2aWN0KCkgc2hvdWxkIGJlIHRoZSBjb3JyZWN0IG5hbWU7IGxpa2UgZHJtX2dl
-bV92bWFwKCkgYW5kIA0KZHJtX2dlbV9waW4oKSwgZXRjLg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KDQo+ICsNCj4gICAjZW5kaWYgLyogX19EUk1fR0VNX0hfXyAqLw0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
+Second, if the intention was to deprecate both of these, then this
+commit could stay with changes - make it enum for both compatibles (not
+list).
 
---------------vYWkz1BEleRqHYNcrZkuGPM3--
+Best regards,
+Krzysztof
 
---------------XgxlqJUeJZ17gdNZZniu83tv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPvcdUFAwAAAAAACgkQlh/E3EQov+Cw
-bw/8Dcmr9ufV3Ln2EKd7jQSorGRz4kFZFVHwfHvZ4KQPJ1eUbZU5e5XdNrBvN7EDjZhBFLMhoStb
-JTp8BZm9eq4DLp4uJLDXdKqeqj1Q004RIll7Z3wVHM26tGN7uIjM4SqnWi0NZc43IhJ6AuxRMQZE
-Piq1wMD+JtYJhTmuSn3QkS34Q/YlFlUnsPwVxnXBQW5/78u2F0WH9PXes6hBdTF96HL8CTqCBK10
-5P93U048jeouDF7HbBpj5IWaw006ZZAIW6MOzQoXV4eXOqXpCbzP62ySwh9Nu/nWBAZ8qPtDsAlg
-nuuL1NeziySRR1uTqpVtFNAFJGi3LsVVLiFOrMHoQ8fWtkvpPYg/GPwYzKK+/U8H3HNF2g/pzSb9
-eL0V4CWJgW+PAnH1sFe0xl24+igCoasX658j7E7EIoXV+6ZfP3bqc/320fEewEz1cc7YvngvsCSO
-3WQRyvXOTczS35LntWqHNXdoevJWK7zjC72v/nrku67xDJQIdmFH1SlASeQvseafvPslcwzDaLdt
-YVTSw4UmF34GXzTNq333LmC98aLg33uKLN+h95QihgLo+ytENdh+YJn8w9xSrfM4FPWLSHVJ0Qy5
-4uGOejKID3mLOYtNufOAL0GUT9xrZ6jfaLD5XRaq+pNa5QKrYQWED9R/6Lq3iyRbjgmpcqgzJEYU
-vZA=
-=hjd0
------END PGP SIGNATURE-----
-
---------------XgxlqJUeJZ17gdNZZniu83tv--
