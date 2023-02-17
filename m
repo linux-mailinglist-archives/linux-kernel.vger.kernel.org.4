@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252B869B5B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DCE69B5B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 23:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBQWzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 17:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S229748AbjBQWzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 17:55:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBQWzo (ORCPT
+        with ESMTP id S229608AbjBQWzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:55:44 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7EC49899
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:43 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id a5-20020a170902ecc500b001990ad8de5bso1295147plh.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:43 -0800 (PST)
+        Fri, 17 Feb 2023 17:55:46 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38B049899
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:45 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id 16-20020a630510000000b004fc1f5c8a4dso778968pgf.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 14:55:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qX01yCG8Tyfo4OLzTgqDTzCtCYMj9HQcITl6rWSXSe8=;
-        b=KBb86AS6Bi2LtTKgGnz+8tOM0X+pAfsuaBUQ+iFcVSfi5Q5AQyb1AmPUDnw4AF4gxh
-         ILwju8KN1MrzKii0D3UKWafgBswM4wVwIez1qnpau5bJpKtEDbrorC91Aww0VLFfFi0J
-         Qrq87XIUMfz4EkYE8GoI3zWFMBA8F03vGXjTT8SygbfjKuwF92wHF5HshOdFknqHdYTZ
-         HUp73oX11zD18NsvAnQ2hELjhHDQ3hewfdnx8rCsh+2g0n8XLYPt0vqV32jOT38j7J0A
-         kNmnfUHFW96AGn3gboicXNua5odI23/BGQp+ksMx+BW4CNtXbCPHXh5rKCMJ92E5L4Ix
-         QpHw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=7mkmapQ0vpzt9xv9DlarEuVnl2MD/unk2tf8qAki/3I=;
+        b=sqvkhVW/pJB0gLXBZHzFDiw5qGK8xfy/MB8PwaIHDGW/DEsWFeEaPv9clNYGHliia+
+         laClR02a/Bm3c7qNMCQICLwV/kWvPbwON3t+XiXxXZyjCOlizfHVOqQzUkkc7KI8O3Ko
+         sknW0S6AvIHTY6PirIT4C+ilK6M6OzWxAU43rMaxE03q5XccjjQrXmyiqEKp3u4AIQBs
+         98OK7cLaefVLSsAhfpvouKDI98IXJa2hhkD0MRxTXJYgTvi/S8ZV6TaACac926YO4NEV
+         aX54KbzoJD1KtwGXqK8M7BXyVU/QY65DZKtg7e1mHmbpSh2LSeJMlPeUtbUTcyK6YW+g
+         tCZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qX01yCG8Tyfo4OLzTgqDTzCtCYMj9HQcITl6rWSXSe8=;
-        b=b6FYlZIAbVW6MHtrf/tawBY+tZH9kLWQUHasXjxHOHGJAbcIDq3A604J4BCoquLgRb
-         FPA5kPzY26Pvvr0KhD+/N5OLztnytuBdfN6IHrYSltTjas5ZVq07N7aBgu6tamtVXEP2
-         EuRVDkyHy/dkMUSXulrUytcafiv4w5ZIgvRsvzrDCBVgpoLQ+TdDTGmXoicGAc6fBB4v
-         8a64Wt9jz+ojqQEU+T71pdZWEYbvFC8JEEZCSDS6/4/YmoRermeiVfVEIZ/DPi2Ril4s
-         RBDZll1OE8Mw1loYtr+EGk7IoT88LIWCZ6AirceN4FSmyXRvDSs7tUeENsbOlaqLWoHn
-         eSow==
-X-Gm-Message-State: AO0yUKWB+No+I8l13THNfHv8KefTyKjntINpgUuVkJU221iK8IEsPDKO
-        AWBHkVP8rKnfwvA1Bs/V3nZAYNyHglk=
-X-Google-Smtp-Source: AK7set/mf3kTZZHYyyxIdumXwfoCp+a614uL8v4tEP2+5jOUSq8xyzK6n8AWr3/rs0uqUdxzNytzvZFXBtI=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7mkmapQ0vpzt9xv9DlarEuVnl2MD/unk2tf8qAki/3I=;
+        b=ZsfEADudEIcKUbsei+MwxWgVQrfzP1rAMG8FkpYAAw3wszxCEPxX8xwx1BJyVjM0XO
+         P9jlCM8g04gJxsIBgeb8wfYEXWdlxKmdEvWbGT2jjuRM5es3x4FEmHkBQTYrA6A9vd7B
+         Z8t7hn82ClEE0wfTCtDq5K4emdZrBkUXFHPbhTy+0A95qlKQp+CiNaiiPmNYg0/SzIGf
+         f9BSdZM060m0xhD7YpBTRqdpSkDSbL7XpFBhweOUt13ItQSaM3XOpRBimsnDZ+rXPLGM
+         MeaJnuoQax5N83ldaGYPsRJ9DqLHkaefBCK4DoagEccT8O6FRNHVBDNKfARnP0g3Z5AD
+         kgaw==
+X-Gm-Message-State: AO0yUKUhxPoFuxwAutoL7iG5ru55gS0dGeR+wvwtWMVgDx9R37gcewBM
+        QYiwevr91vexTFEjCZmM6GON3XwoX8Q=
+X-Google-Smtp-Source: AK7set9jAgOuHOMAVbm+qokY7KHkEL+an+ozoMjNJHE+5dzTbvZmbHlIYrrQb0ES6LDHVU4aEL9bYvevBsI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:6b94:0:b0:4fb:398f:ef2a with SMTP id
- d20-20020a656b94000000b004fb398fef2amr983477pgw.0.1676674543018; Fri, 17 Feb
- 2023 14:55:43 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:aa7:8005:0:b0:5a8:c2e8:e08e with SMTP id
+ j5-20020aa78005000000b005a8c2e8e08emr333287pfi.5.1676674544993; Fri, 17 Feb
+ 2023 14:55:44 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 17 Feb 2023 14:54:47 -0800
+Date:   Fri, 17 Feb 2023 14:54:48 -0800
+In-Reply-To: <20230217225449.811957-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20230217225449.811957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230217225449.811957-1-seanjc@google.com>
-Subject: [PATCH 0/2] Documentation/process: Add a maintainer handbook for KVM x86
+Message-ID: <20230217225449.811957-2-seanjc@google.com>
+Subject: [PATCH 1/2] Documentation/process: Add a label for the tip tree
+ handbook's coding style
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>
@@ -110,7 +114,7 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,27 +122,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all!
+Add a label for the tip tree's "Coding style notes" so that a forthcoming
+KVM x86 handbook can reference/piggyback the tip tree's preferred coding
+style.
 
-Here be the long-promised/threatened documentation for contributing to KVM
-x86.  The Cc list is quite large for two reason: partly to spread awareness,
-but mostly to get input from the target audience.  If you have something
-to say, a question to ask, or a request to make, now's the time!
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ Documentation/process/maintainer-tip.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sean Christopherson (2):
-  Documentation/process: Add a label for the tip tree handbook's coding
-    style
-  Documentation/process: Add a maintainer handbook for KVM x86
-
- .../process/maintainer-handbooks.rst          |   1 +
- Documentation/process/maintainer-kvm-x86.rst  | 347 ++++++++++++++++++
- Documentation/process/maintainer-tip.rst      |   2 +
- MAINTAINERS                                   |   1 +
- 4 files changed, 351 insertions(+)
- create mode 100644 Documentation/process/maintainer-kvm-x86.rst
-
-
-base-commit: 3ac88fa4605ec98e545fb3ad0154f575fda2de5f
+diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
+index 572a3289c9cb..ad0540d6882b 100644
+--- a/Documentation/process/maintainer-tip.rst
++++ b/Documentation/process/maintainer-tip.rst
+@@ -452,6 +452,8 @@ and can be added to an existing kernel config by running:
+ Some of these options are x86-specific and can be left out when testing
+ on other architectures.
+ 
++.. _maintainer-tip-coding-style:
++
+ Coding style notes
+ ------------------
+ 
 -- 
 2.39.2.637.g21b0678d19-goog
 
