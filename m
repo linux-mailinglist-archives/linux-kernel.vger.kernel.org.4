@@ -2,245 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E204A69BB7D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437B069BB7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBRSzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 13:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S229695AbjBRS5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 13:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBRSzu (ORCPT
+        with ESMTP id S229472AbjBRS5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 13:55:50 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D81423D
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:55:48 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id ee44so1533048edb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:55:48 -0800 (PST)
+        Sat, 18 Feb 2023 13:57:08 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F181448E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:57:07 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id s22-20020a17090a075600b0023127b2d602so1287698pje.2
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:57:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=stB38V3fdBlcd6D0cBa/2Lgks2xX7xVFDJ6BHXxoksE=;
-        b=SoAYDh8SnuZb8Gu4r2FwfYCw0QJtRY3AfujYJ/7viSKDIdxnLUVDbPtITB9EaJHVX+
-         RVIZZNYSGSALLsukfpvmCvs/+l3+Va+FHJ4Z31hrY/HKaHta3HRqPt8DYoIUS6F1FQ+e
-         ljkSWRig2kLXGnhw3P6ZPPz6Vf6UIX0fl9ql6j6JwbKkM/eXNbOBi/W5ACxDhGjxsnci
-         SGaQpcp9nKH9rJXVMljVOPEQfek36g2CPqpQTwfWuMehFCi2ypMsU+X8kqndCTeRwpWm
-         zuV5aYuYoVb/oJdye1YBmKfPPH4NW3Cr5PLC3awVMeK8R4bDDIpOI7LfDbh+Cl8dMRU1
-         Fo3A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=khZrsJSUbGfXiIFHZOzdW4XxaJRpRDKuFefHfpZk7VQ=;
+        b=U6L3h3+huPvbAl1pYzB7644CU3KslDuSDX/rnUVdVSE8EO/jCl8KSq+HcTUmNsUE+l
+         MWVVQtZ3n5ZeIMx6Q3sC7M3riG3dy2sD18l8bUQ1a0sb5qb7hU3bBz+hKrcrS0eE2KKL
+         vOPUl845OwdVRpTXc9K7AP2A5q5DeYBvq2lts=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=stB38V3fdBlcd6D0cBa/2Lgks2xX7xVFDJ6BHXxoksE=;
-        b=Uim8RQlQcva4xnEXakLNgOJK9ALFpoyoIx4o/x96BdFU8OZh7OCw3LJyCR8h/QSR4j
-         FZJoWpI4SKBpNagfkBIuJlZsQuh3wA04zhbOzSCbl6q7noBYRqFEp4erJmi72bCbGPlT
-         gnzOMtpfEvlLc+9iSJfA6NFXkoqYkJqH89MgIpihys+xUAVtvCsTSFKoA1mLOkPD/Z5O
-         jXf5l1o9vnx1NfBtbwtuZmvmupItOdQN/Ym7TYwZVyQWrE9ci5CesjbnkPf/ZT7BiO20
-         eMZcGKUmxVsQJiD2nxF0Ii5QPEWQSCy5uYmMSeOYhS3K5AatwaYp25z1UtiQLPJEvi0F
-         fKWQ==
-X-Gm-Message-State: AO0yUKVvOoziaBkv5ew6PfPutgozURbC52aTJvDC9x/lLuLUOGDu1pRu
-        j1Zy+YOM8Wtyo+UJv4nzBZY=
-X-Google-Smtp-Source: AK7set+QftzU/ZbqTZ1haMAMnd1BnHKFmoA2oiAhrtjAqxMxs9LfYRgveg1CfLTpJBhLO2CbZln4pg==
-X-Received: by 2002:aa7:c9c2:0:b0:4ac:c6ca:b1f8 with SMTP id i2-20020aa7c9c2000000b004acc6cab1f8mr4281544edt.12.1676746547156;
-        Sat, 18 Feb 2023 10:55:47 -0800 (PST)
-Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
-        by smtp.googlemail.com with ESMTPSA id x29-20020a50d61d000000b0049e1f167956sm3952361edi.9.2023.02.18.10.55.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 10:55:46 -0800 (PST)
-Message-ID: <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
-Date:   Sat, 18 Feb 2023 18:55:44 +0000
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=khZrsJSUbGfXiIFHZOzdW4XxaJRpRDKuFefHfpZk7VQ=;
+        b=puem6HTaFcNjtoqknxIOcVGaDdnCV1++RrOtVXrnF293H25os4qzp6DHXsCrWhF0sj
+         jeQ7i40cvSl1NLJZmPLAu9Bdv+StZDPaoqqrQDyBJVE7T+oz+t/n0LGP/5vz8juHMa1G
+         dBYiDRodvVZeHFRF2igUguasRL7AKGeLL9uFXrKYqlwgAG/R0ex93uPC+/5wDSqIPd2b
+         i0mNGeFC9ENFwFKCwOyXWfeUWrJKFoGpeonOOqCE0o2D9akejyq7sQFaoejPirJwKykm
+         Jqkl6doWaFGY72+q4ohL8og2xIShMPCEHTuskmruqdsH0Zf/ZNQl83g0Vv8AcQpUlT/X
+         ny/w==
+X-Gm-Message-State: AO0yUKW7v76+U9k1oWlpQ/CMULIuCP+eSRcRoORt+8V3ZNuuJJOjrJrh
+        QpTtVR8s4U2NnrOODZxm7B4Fcg==
+X-Google-Smtp-Source: AK7set95Ml42LR0aoYZ5jPoLyq1v3GWS3Edju77aaI6PR7qVPaby8Nb58nQ1Fv3u+8cYbCr1oIxDJg==
+X-Received: by 2002:a17:90b:314b:b0:234:68d:b8ea with SMTP id ip11-20020a17090b314b00b00234068db8eamr1256773pjb.39.1676746627369;
+        Sat, 18 Feb 2023 10:57:07 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t13-20020a63b70d000000b004fd0feae70fsm2858542pgf.92.2023.02.18.10.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 10:57:06 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc:     Kees Cook <keescook@chromium.org>, Zhang Yi <yizhan@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] IB/rdmavt: Fix target union member for rvt_post_one_wr()
+Date:   Sat, 18 Feb 2023 10:57:05 -0800
+Message-Id: <20230218185701.never.779-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-From:   Chris Clayton <chris2553@googlemail.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Dave Airlie <airlied@gmail.com>,
-        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
- <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
- <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
- <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
- <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
- <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
- <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
- <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
- <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
- <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
-Content-Language: en-GB
-In-Reply-To: <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1516; h=from:subject:message-id; bh=/HzWdAZi2mss32NkJTT96+rWSz+FBTRF7/tT4SPTBks=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj8R+ARt1rH8yQPogZEw9kSqe4GVamEa1N1HdO1wYS 1JDcxkeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY/EfgAAKCRCJcvTf3G3AJoPNEA Cjcju+UTd4rwsspQF9f1FONGLufsnWQl92vAKO2OOksXhZcW1WDdhCoDrJdWXaHw5wgQOSIMpspIUd ZksDF5Jp3W6IfXPM/bN7slCBF3BUViF38ztE+3jKL4kSKQ887pa29Yc1J8diepEAOGqgIA39dZkCiU nOeB/ZMcnDEoX/I60yQ3OmdNdnsTAmfu6J8lpO9pKBh4MVjwcYI9S0IB8NPEUdW0MzO02N7qE7nV+V 0er2MeeJHAcXxIUZ991WMIpd47H+gc24LT2LdagmoJYsoegbKgnC1kZuguQtVtb0Isjy59nfuTn4ou os2K04AXXrCdSrQ6YthE0hn51kH/Gww1NR7dcuqNfFudn9XlaxEg+rmLvdwFMfcGgsxf2E9t0sWqty LiUUfGP7N/hEGIOXz5r6/oAUztcDqTDGuSftulNTwrMsl8diNNfwiLmDSD5x0yL5oeyjY1sQXkjMIV KuLbgKnHjFC8SibUkJjZkPiMIVnJ7rONXhholiK8QNj6iUlzwTa1wMlJjF92Lk8YMSmI0fsmQASd77 fKwzOGpFK65V7IkbD+GR5eRkkpSimTgBAS11oYySch5Rjp1RdDr9m88F3LHIAhzOYkb4rRK5skmHVc Kh78SYU1rT0z7iUppS95kwWZapnmpmA7Nog+eysw8adTM+dGGrJdQ7W682QQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The "cplen" result used by the memcpy() into struct rvt_swqe "wqe" may
+be sized to 80 for struct rvt_ud_wr (which is member "ud_wr", not "wr"
+which is only 40 bytes in size). Change the destination union member so
+the compiler can use the correct bounds check.
 
+struct rvt_swqe {
+        union {
+                struct ib_send_wr wr;   /* don't use wr.sg_list */
+                struct rvt_ud_wr ud_wr;
+		...
+	};
+	...
+};
 
-On 18/02/2023 15:19, Chris Clayton wrote:
-> 
-> 
-> On 18/02/2023 12:25, Karol Herbst wrote:
->> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
->>>
->>>
->>>
->>> On 15/02/2023 11:09, Karol Herbst wrote:
->>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
->>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>
->>>>> On 13.02.23 10:14, Chris Clayton wrote:
->>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
->>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
->>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
->>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>>>>>>
->>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
->>>>>>>>>>>>
->>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
->>>>>>>>>>>
->>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
->>>>>>>>>>> time to fix it and there is one thing I wonder:
->>>>>>>>>>>
->>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
->>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
->>>>>>>>>>> the root of this problem?
->>>>>>>>>>
->>>>>>>>>> I did now and I can't spot anything. I think at this point it would
->>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
->>>>>>>>>> any is in a weird state preventing the machine from shutting down.
->>>>>>>>>
->>>>>>>>> Many thx for looking into it!
->>>>>>>>
->>>>>>>> Yes, thanks Karol.
->>>>>>>>
->>>>>>>> Attached is the output from dmesg when this block of code:
->>>>>>>>
->>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
->>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
->>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
->>>>>>>>         /bin/echo t > /proc/sysrq-trigger
->>>>>>>>         /bin/sleep 1
->>>>>>>>         /bin/sync
->>>>>>>>         /bin/sleep 1
->>>>>>>>         kill $(pidof dmesg)
->>>>>>>>         /bin/umount /mnt/sda7
->>>>>>>>
->>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
->>>>>>>>
->>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
->>>>>>
->>>>>> Thanks Dave. [...]
->>>>> FWIW, in case anyone strands here in the archives: the msg was
->>>>> truncated. The full post can be found in a new thread:
->>>>>
->>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>>
->>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
->>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
->>>>> really like it, but for regression tracking I'm now putting this on the
->>>>> back-burner, as a fix is not in sight.
->>>>>
->>>>> #regzbot monitor:
->>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>> #regzbot backburner: hard to debug and apparently rare
->>>>> #regzbot ignore-activity
->>>>>
->>>>
->>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
->>>> laptop I got doesn't work on Nouveau because of firmware related
->>>> issues and we probably need to get updated ones from Nvidia here :(
->>>>
->>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
->>>> see anything in the logs which would prevent that from happening.
->>>> Unless it's waiting on one of the tasks to complete, but none of them
->>>> looked in any way nouveau related.
->>>>
->>>> If somebody else has any fancy kernel debugging tips here to figure
->>>> out why it hangs, that would be very helpful...
->>>>
->>>
->>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
->>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
->>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
->>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
->>>
->>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
->>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
->>> partition, and thus the scrubber binary, have become inaccessible.
->>>
->>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
->>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
->>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
->>> permanent solution.
->>>
->>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
->>>
->>
->> Well.. nouveau shouldn't prevent the system from shutting down if the
->> firmware file isn't available. Or at least it should print a
->> warning/error. Mind messing with the code a little to see if skipping
->> it kind of works? I probably can also come up with a patch by next
->> week.
->>
-> Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
-> 
-> int
-> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
-> {
->         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
-> 
->         if (nvkm_msec(falcon->owner->device, 10,
->                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
->                         break;
->         ) < 0)
->                 return -ETIMEDOUT;
-> 
->         return 0;
-> }
-> 
-> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
-> appears
+Silences false positive memcpy() run-time warning:
 
-I think someone who knows the code needs to look at this. What I can confirm is that after a freeze, I waited for 90
-seconds for a timeout to occur, but it didn't.
+  memcpy: detected field-spanning write (size 80) of single field "&wqe->wr" at drivers/infiniband/sw/rdmavt/qp.c:2043 (size 40)
 
+Reported-by: Zhang Yi <yizhan@redhat.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216561
+Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/infiniband/sw/rdmavt/qp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-.> Chris
->>>
->>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>> --
->>>>> Everything you wanna know about Linux kernel regression tracking:
->>>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>>> That page also explains what to do if mails like this annoy you.
->>>>>
->>>>> #regzbot ignore-activity
->>>>>
->>>>
->>>
->>
+diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+index 3acab569fbb9..3f707e1fa517 100644
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -2040,7 +2040,7 @@ static int rvt_post_one_wr(struct rvt_qp *qp,
+ 	wqe = rvt_get_swqe_ptr(qp, qp->s_head);
+ 
+ 	/* cplen has length from above */
+-	memcpy(&wqe->wr, wr, cplen);
++	memcpy(&wqe->ud_wr, wr, cplen);
+ 
+ 	wqe->length = 0;
+ 	j = 0;
+-- 
+2.34.1
+
