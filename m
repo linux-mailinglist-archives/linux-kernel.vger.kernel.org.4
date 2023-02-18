@@ -2,195 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A6169B865
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326E069B872
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 08:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjBRGyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 01:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S229658AbjBRHHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 02:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBRGyF (ORCPT
+        with ESMTP id S229606AbjBRHHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 01:54:05 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2017.outbound.protection.outlook.com [40.92.99.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC132595B;
-        Fri, 17 Feb 2023 22:54:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YojDy5Vi6Nda4+mTX/wAnZyhUkaKI4teCZ8EJQc3DaxwGf1z6ImtSJ5dRLAlktltgkUsz6bjAqdZWMuFHI8JZY75NdZLxAUP6Wopiu44xx1jffIvnaTYTknICofPT6JxU1f5YkFUNs/ZgIMzpMBw1RVxT6njEj8VM4Frh1B7OC0aWb4Fb6SWo+cDhtK6kBJIEvkjFsVvrDHPE1R2nKGShX8vdEAbg4LpFRRw/1NQWqy7ZPMG+tzHJnSxGbnp9C+VEkYPQqLt/HSiVZvshl/YyU5y+qO8jEw2M0FQ60L/VhhleUqvu54D6hWofdBlHTn4tjnAaHzZrxL+LqAK79Y+8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qjCGJXd3+ouVUxyF2LRoijYo2GaRzTUwAm7PUzMjg48=;
- b=NeAnr1dstS3WsKfE+gzJEVc9QCVQCRgetzJsss9kDeYEwJPps8TJdU1wCMwEJ23LxbC5rL0ppDSo1Y7A2ex1OAgPYDuubwwnJ2fKUxLHCNWRD10J5o9tM43lSqBGB+M9k/bbwul41mq/lfG0Xu2pS8bYDsxRPSLobF9cwc6oypkRhH5+2igm07jVTZ6gUdAWFP6mcCe9kzRWNmvwVO24LDddZgkzJok8sm3YTAzoajej7PKPch9Xgadgek1o+rl+bZ/LSVrNaxHN+ssf04KkgpSGyN/9+uL+9C5GxvdmQznH0OAyq/SD1pQNXd2Q5OACuzaqcRNbP7YLtMBjAtek7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qjCGJXd3+ouVUxyF2LRoijYo2GaRzTUwAm7PUzMjg48=;
- b=Nt3QYYmRjIcTUJbCkD9fxDGYsVGX8c1z93aiV6V+T/bQzzVGjQXyKvi5cm2UTCwyguj2SMnxXTYrT3QkLayDUsgL8N1PuqRo+LhxmTAnU3d81dwJd0Qm+PMNu7hO0z9BG4YxNbPxRezasdvpsvpFg02TTP7t+R3BrdIaJbIyP1CtRWs6Kx+5fSaFfXv2/3mQ/75giKj/FhWQ+O9ZXzID26bwNJ69niK7GIVozWY+bpaP27FLbWUO88QncX5jnefBFWBJYR7wNDxg76zXg784WjmuwDIyov21ueNiIUg7VH3RnqWV1DQkN9M1bweK1Oo0aH0/kmfdpySisfhSi94iyA==
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
- by OS3P286MB3209.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:20f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.18; Sat, 18 Feb
- 2023 06:54:00 +0000
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6086.024; Sat, 18 Feb 2023
- 06:54:00 +0000
-From:   Eddy Tao <taoyuan_eddy@hotmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Eddy Tao <taoyuan_eddy@hotmail.com>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: openvswitch: ovs_packet_cmd_execute put sw_flow mainbody in stack
-Date:   Sat, 18 Feb 2023 14:53:29 +0800
-Message-ID: <OS3P286MB229509B8AD0264CC84F57845F5A69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.27.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [m8K3aQrx7zPcq3XlYnxQD2T6DJThmlJI]
-X-ClientProxiedBy: SG2PR01CA0128.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::32) To OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:19b::11)
-X-Microsoft-Original-Message-ID: <20230218065330.229748-1-taoyuan_eddy@hotmail.com>
+        Sat, 18 Feb 2023 02:07:48 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC32ED59
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 23:07:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676704066; x=1708240066;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vdv4kLuHF123wAtdJgGSHLW0CZwF0d95pX5SQj9BcYc=;
+  b=ak5D0URuwnImNy0Qrungz6tdOT5M6I1aKNZ87eqXW2QtFp5jtQj13Hz7
+   OH2jcKfwNrb8gpj2Hy+3v7cLGURe1zEENJbLVtOZCHuD9R97jb1wNxDZy
+   D4sjRLPWjS4mpl4D7uUB24giUfW/hj7QtRCTUDuiBbZzyuJDbgsp7govd
+   iSuuAP3kxGZ/w60dHtnbgYFSE+8Y/bSCtzEQp10YksITwGJY2qTZrcAAK
+   jeaLbMN7ArHxJ/UqSKIx+lQXi+1FLC69tPHaJf33jKYoMhQFGSXB9M8EI
+   ZGjo24oXmXc0Dt0uO69WCY/9NlZpvY+KfKffX/fSTGHerz1ixY7UumCdS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="329868577"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="329868577"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 23:07:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="670802956"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="670802956"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga002.jf.intel.com with ESMTP; 17 Feb 2023 23:07:42 -0800
+Message-ID: <6be2aa16-817a-fb85-5371-08e656a29217@linux.intel.com>
+Date:   Sat, 18 Feb 2023 14:59:16 +0800
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|OS3P286MB3209:EE_
-X-MS-Office365-Filtering-Correlation-Id: 220c73d9-53de-439f-067f-08db117cea00
-X-MS-Exchange-SLBlob-MailProps: WE1/0xzO5cKe9cgmlwsG2XCcghGBxPuU2ZaPvCJZd98XbYc68p8YXz4vO0V4zxYc/AQNyx+geSp5/Nn+K6GG+m1ktmK7Q9VNYYsbqgB2uiWvbCqPs5KaDwTFWY76QsjL5jij2HGaPwAlyZW/de9G9KvOyB2tARr+x4Juut1S4fbMVN1MkbhaUUsmbmsxT9OJNc6YUBVxLyXujFqJf7nLhFMjgxORKmVEusnDOjTBgC1rkOLxPqz5kKAhRoXSXX61rLAosdvTB68oNFTonPja6/+tfQBl322ZXAWdUGCkWrPlWTxiCCYZGBDeWNAOqbEnbKZfmTW258G4Ke+tqejK/rO1fDCBYuGX4ttQHfGi3O0tojO4KupAqEkV114L82qmrUBGhQCjeYOll5au+Ob/A2y0YJdXVCxM37MSfdWlnTgQlpb+m7Q7cT/UHtlDuqvM9myCGHH0xMusma6UJf9jwMzgBNtgfN++HbprOwrW2IXCMnWXOBpCxOBukgshCFq1QwueSZGJi5zhWdIMibOt5ORMSaemfzj9HcJRlsVKw9PIJckcTdhfA3o5f6d0Gcf3qjdAEt5oIusqbLF7gGGRLE3cHDukwEohzR2cD0GONx/Jhzi/WlqNd9jK5+tyZxR1G86dMt3aVY6pTgi7dVq+3x0SLC0bJb94fKqmtRCmUMGQddmTKSsxxODHnmrbnOdyFUsZxGYVB276b9SVNzIVSitdlVTRjlN/DVkQr2Gf2fZEfW6BSfDLiw==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 61Bfaqfa4sjOdpNbSRzGHIaUZq2NDDBtG6zhM8Rf2BqE7hS65ulTtuSowu2BUb7SkoS7npyibvewvEvyquviVvlqksIWlN6ewoJTCL5MaYgg0ctEjWp734T35rqBZVv8+tneVTOxj5sBBF85/Jp+RO4QSCaWQtN6qxtqnusPMxFl9Zlr8C9gC09ZKIc/7rZ5t0m0cY55EkMwgQuclEEsHszZT3c/3KzGbBd9omxAqJDGwktqhdF4Zx6y3juCWNNCem8lRhDH0WTBdPSOjXSoSkB2E0sZ8kSlUGXkVYNc9i9sZHfS3bNH/y/o9LX+kew3zHFoaLw15Y96fcQh3MjKPgSgqzrItKw6H6hMjbzQ+69aHyfBYSzVlIwL5XaDyVHuPaahYRBBVBHgzIHG7skmd/4Hfsz1QQHGKQkTZbv/g2Wem+OjEWeHpQRNvJjLq5JOkCsdR/UqUFURqG5iT2plFo6Cjv6VK9ShiX8VwYsIENiRHuQdTpJWos9gJoo5TBAX+cvBB6lJ9hNWOjSMdBGSKd6+uvYSe3aPbOQE7p1mcZkZGP1CflXYqgf3afqPinKSCUqvJWVnyFs9boFnZdosmBnd2ABrO9z2SiN2ysmNIlx2fIjyiKbMSP0ut56zzjeYIBKYbdXICClRtlQpl8ouyw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yUiURsyHWjVfH1+fcSz294g+vJk6Jr2o46u2Gio16qWa/BeqyupF9XkegGnc?=
- =?us-ascii?Q?5NbP/QERLMxLrkLmdnc6kVpsQ/XTCc5zTCTWOFdZPOEW4g6EChzmiRibgXET?=
- =?us-ascii?Q?cHe6iY1aW848lbywf6pPAxN5jFf/9ACwOmAhQE0vqXy73JRNREXWypUfflNS?=
- =?us-ascii?Q?QiA2sgyZe2azk8koIzT3UJUNoF5Vkp3bnaKjyuPho02sC4QTboumq8rJbzSS?=
- =?us-ascii?Q?Xiu42hGZF2YHo0u7IoEE3MOHyquRl25tJvL/ehI77a0fK2Hcnm/SG5fS/cqD?=
- =?us-ascii?Q?+f7Sr1eZKeHF1tSVn/qW9L33a+Q+BPVIsoc4wTXWlmI/priHoUupFyR540Lm?=
- =?us-ascii?Q?qPPTyxjXNtvRdMKGVBMED0EYQtoCYRFfw9Za0WC7Qt/JRZvkcdk9X5hNGZ6E?=
- =?us-ascii?Q?PsNzgoBaifTPJZnj4fMjz8o1wMXJQFYjL1wGMt+I/HQqfthrBelsALboWtdx?=
- =?us-ascii?Q?QF+PrMbL9lpIKLpfpEqMW1IhbsklAywUj36Fhn+KlGea3jxE/YymBBBMpDae?=
- =?us-ascii?Q?43aI1h8xfFMGDFFlUi8YIKYXiQbCdngms7KsI6yBSUTs8IgtmEASqZlDYuUR?=
- =?us-ascii?Q?b4AOH8WiZ603fZAbopglRwT3a62yFhDVj9uQxTMwWdfahODMprrCfY4IkQ7M?=
- =?us-ascii?Q?zlBudu/t5V+9iVXfNNtaVwNRQyE8+1IZjXng8KTPb7oGh5L/ufJiJ9a6vv+d?=
- =?us-ascii?Q?msBfxsrfMeCRJY+XdmGSoPwC2+K52GxBTZ5+fucTrtSgwt7XMe5wj6zObcXi?=
- =?us-ascii?Q?RjONGVouBfbe0NLSvIuvkZRkAR724jzGwhzYqEH7A+TYprFldD3xWbvds3co?=
- =?us-ascii?Q?XrDbfeYNE+HKnnlqsikRUmXhHB3MxkSL2QMPLP7tYZ4MolkXAFtOSXwjAhDR?=
- =?us-ascii?Q?KfYeR6lVGFFxKhG2BRr93tRBnOTP2YOF88zZ1e13ajInEl+y6cHCETeCwnrR?=
- =?us-ascii?Q?aXZDJG7yz9VDv+XDPacerhvn9DicMORKQVxJmJJIpm+WCB/u2vVORf2VjS8M?=
- =?us-ascii?Q?q7sowRuIaCVBEuvhHpO6BdKPlFzk35uPYQyFA53TrTeBJ+iAddCLQRut1At0?=
- =?us-ascii?Q?bLy8T7vHsAEccKArEeK9wZpLrxPRCJi9Hm2BRc1/nfOhTFiIO+9dVxttS9/O?=
- =?us-ascii?Q?mw0nYCn0G1nUI8ziEr2wabZXC1jmLkI6Rk253+H2v4VHRA9xHgVapP11PvY7?=
- =?us-ascii?Q?G7q4q+C7pqYpMzwmjzr9TwqNHbROxoE0TM3gktQegIBqLTWaAmGajfkG45U/?=
- =?us-ascii?Q?/5/k8XU15O0e6T7RY84IESiqX8sHQDDg2ili48vrfA=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 220c73d9-53de-439f-067f-08db117cea00
-X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2023 06:54:00.6137
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB3209
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] ARM/dma-mapping: Remove iommu_detach_device()
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20230217094736.159005-1-baolu.lu@linux.intel.com>
+ <20230217094736.159005-2-baolu.lu@linux.intel.com>
+ <Y++fqH7Eeq3Njoa9@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y++fqH7Eeq3Njoa9@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 2 performance revisions for ovs_packet_cmd_execute
+On 2/17/23 11:39 PM, Jason Gunthorpe wrote:
+> On Fri, Feb 17, 2023 at 05:47:31PM +0800, Lu Baolu wrote:
+>> iommu_detach_device() attaches the default domain to the device, or if
+>> default domain is not supported by the IOMMU driver, it calls its
+>> set_platform_dma_ops callback. If the default domain is supported or
+>> the IOMMU driver is not iommu-dma aware, iommu_detach_device() is
+>> actually a noop.
+>>
+>> The 64-bit ARM drivers always support default domain and iommu-dma is
+>> even not enabled for 32-bit ARM. This turns out that iommu_detach_device()
+>> is always a noop in arm_iommu_detach_device(). Remove it to avoid dead
+>> code.
+> 
+> This isn't entirely right..
+> 
+> The purpose of the iommu_detach_device here should be to make the
+> iommu driver stop using the domain that it is about to free. It cannot
+> be a NOP or it is a UAF.
+> 
+> I think things have become confused.
+> 
+> What we decided is that NULL domain is supposed to mean the DMA
+> translation is controlled by the platform, the concept is modeled
+> after S390's private iommu implementation. This means the current
+> IOMMU translation is invisibly set to something that matches the
+> device's dma_ops.
 
-1.Stores mainbody of sw_flow(600+ bytes) in stack
-  Benifit: avoid kmem cache alloc/free caused by ovs_flow_alloc/free
+Yes. This matches what I understood.
 
-2.Define sw_flow_without_stats_init to initialize mainbody of
-  struct sw_flow, which does not provides memory for sw_flow_stats.
-  Reason: ovs_execute_actions does not touch sw_flow_stats.
-  Benefit: less memzero, say each 'sw_flow_stats *' takes 4/8
-  bytes, on systems with 20 to 128 logic cpus, this is a good deal.
+> 
+> arm_iommu doesn't work that way, it allocates and assigns domains so
+> when the platform DMA ops are in control the group->domain is not NULL
 
-Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
----
- net/openvswitch/datapath.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+This is what the iommu core assumes, right? Any iommu group should
+always has a domain attached, default domain, blocking domain or driver-
+owned unmanaged domain. The iommu core just switches between different
+domains.
 
-diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index fcee6012293b..337947d34355 100644
---- a/net/openvswitch/datapath.c
-+++ b/net/openvswitch/datapath.c
-@@ -589,6 +589,12 @@ static int queue_userspace_packet(struct datapath *dp, struct sk_buff *skb,
- 	return err;
- }
- 
-+static void sw_flow_without_stats_init(struct sw_flow *flow)
-+{
-+	memset(flow, 0, sizeof(*flow));
-+	flow->stats_last_writer = -1;
-+}
-+
- static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
- {
- 	struct ovs_header *ovs_header = info->userhdr;
-@@ -596,7 +602,8 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
- 	struct nlattr **a = info->attrs;
- 	struct sw_flow_actions *acts;
- 	struct sk_buff *packet;
--	struct sw_flow *flow;
-+	struct sw_flow f;
-+	struct sw_flow *flow = &f;
- 	struct sw_flow_actions *sf_acts;
- 	struct datapath *dp;
- 	struct vport *input_vport;
-@@ -636,20 +643,18 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
- 	}
- 
- 	/* Build an sw_flow for sending this packet. */
--	flow = ovs_flow_alloc();
--	err = PTR_ERR(flow);
--	if (IS_ERR(flow))
--		goto err_kfree_skb;
-+	/* This flow has no sw_flow_stats */
-+	sw_flow_without_stats_init(flow);
- 
- 	err = ovs_flow_key_extract_userspace(net, a[OVS_PACKET_ATTR_KEY],
- 					     packet, &flow->key, log);
- 	if (err)
--		goto err_flow_free;
-+		goto err_kfree_skb;
- 
- 	err = ovs_nla_copy_actions(net, a[OVS_PACKET_ATTR_ACTIONS],
- 				   &flow->key, &acts, log);
- 	if (err)
--		goto err_flow_free;
-+		goto err_kfree_skb;
- 
- 	rcu_assign_pointer(flow->sf_acts, acts);
- 	packet->priority = flow->key.phy.priority;
-@@ -677,13 +682,10 @@ static int ovs_packet_cmd_execute(struct sk_buff *skb, struct genl_info *info)
- 	local_bh_enable();
- 	rcu_read_unlock();
- 
--	ovs_flow_free(flow, false);
- 	return err;
- 
- err_unlock:
- 	rcu_read_unlock();
--err_flow_free:
--	ovs_flow_free(flow, false);
- err_kfree_skb:
- 	kfree_skb(packet);
- err:
--- 
-2.27.0
+> - which is the opposite of S390's design. Further when arm_iommu asks
+> for a NULL domain it doesn't mean "put it back to platform DMA ops" it
+> really means "park the IOMMU it is not being used anymore"
 
+This is what identity domain and blocking domains were designed to do,
+right?
+
+If my understanding is right, ARM presumably could implement the
+identity default domain and blocking domain. With that implemented,
+iommu_attach/detac_device() could be removed from drivers and everything
+then could go through the iommu core.
+
+Best regards,
+baolu
+
+> 
+> So.. Blah - we had two meanings for group->domain = NULL and didn't
+> quite get it right.
+> 
+> IMHO the way to make sense of this is to always have a domain attached
+> and remove group->domain = NULL and set_platform_dma entirely. If the
+> driver doesn't want to use dma_iommu then it should provide its own
+> iommu_domain that it wants attached whenever the iommu API is not
+> being used.
+> 
+> You can see this in the exynos fix because what it is doing is calling
+> __sysmmu_disable() from set_platform_dma which is either IDENTITY or
+> BLOCKING IOMMU behavior.
+> 
+> Then we can document what the idle domain is supposed to be doing in
+> each of the drivers, but the core code is logical and doesn't have a
+> confusing overloaded domain = NULL case.
+> 
+> Something like this as a starting idea of how the drivers could look.
+> 
+> diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+> index b0cde22119875e..143d1abcae2641 100644
+> --- a/drivers/iommu/exynos-iommu.c
+> +++ b/drivers/iommu/exynos-iommu.c
+> @@ -948,6 +948,20 @@ static void exynos_iommu_detach_device(struct iommu_domain *iommu_domain,
+>   		&pagetable);
+>   }
+>   
+> +static struct iommu_domain_ops exynos_private_ops = {
+> +	.attach_dev_nofail = &exynos_iommu_detach_device,
+> +};
+> +
+> +static struct iommu_domain exynos_private_domain = {
+> +	/*
+> +	 * This is private because nobody knew what __sysmmu_disable() does.
+> +	 * When someone figures that out this should be made blocking or
+> +	 * identity
+> +	 */
+> +	.type = IOMMU_DOMAN_PRIVATE,
+> +	.ops = &exynos_private_ops,
+> +};
+> +
+>   static int exynos_iommu_attach_device(struct iommu_domain *iommu_domain,
+>   				   struct device *dev)
+>   {
+> @@ -1400,11 +1414,11 @@ static const struct iommu_ops exynos_iommu_ops = {
+>   	.device_group = generic_device_group,
+>   	.probe_device = exynos_iommu_probe_device,
+>   	.release_device = exynos_iommu_release_device,
+> +	.idle_domain = IS_ENABLED(CONFIG_ARM) ? &exynos_private_domain : NULL,
+>   	.pgsize_bitmap = SECT_SIZE | LPAGE_SIZE | SPAGE_SIZE,
+>   	.of_xlate = exynos_iommu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+>   		.attach_dev	= exynos_iommu_attach_device,
+> -		.detach_dev	= exynos_iommu_detach_device,
+>   		.map		= exynos_iommu_map,
+>   		.unmap		= exynos_iommu_unmap,
+>   		.iova_to_phys	= exynos_iommu_iova_to_phys,
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index de91dd88705bd3..b71a1667f43bd5 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -387,14 +387,13 @@ int iommu_probe_device(struct device *dev)
+>   		goto err_release;
+>   	}
+>   
+> -	/*
+> -	 * Try to allocate a default domain - needs support from the
+> -	 * IOMMU driver. There are still some drivers which don't
+> -	 * support default domains, so the return value is not yet
+> -	 * checked.
+> -	 */
+>   	mutex_lock(&group->mutex);
+> -	iommu_alloc_default_domain(group, dev);
+> +	ret = iommu_alloc_default_domain(group, dev);
+> +	if (ret) {
+> +		mutex_unlock(&group->mutex);
+> +		iommu_group_put(group);
+> +		goto err_release;
+> +	}
+>   
+>   	/*
+>   	 * If device joined an existing group which has been claimed, don't
+> @@ -1645,7 +1644,15 @@ static int iommu_alloc_default_domain(struct iommu_group *group,
+>   
+>   	type = iommu_get_def_domain_type(dev) ? : iommu_def_domain_type;
+>   
+> -	return iommu_group_alloc_default_domain(dev->bus, group, type);
+> +	if (!iommu_group_alloc_default_domain(dev->bus, group, type))
+> +		return 0;
+> +
+> +	/*
+> +	 * Driver must support default domains or provide an legacy idle domain
+> +	 */
+> +	if (WARN_ON(!dev_iommu_ops(dev)->idle_domain))
+> +		return -EINVAL;
+> +	return 0;
+>   }
+>   
+>   /**
+> @@ -2172,17 +2179,22 @@ static int __iommu_group_set_domain(struct iommu_group *group,
+>   		return 0;
+>   
+>   	/*
+> -	 * New drivers should support default domains and so the detach_dev() op
+> -	 * will never be called. Otherwise the NULL domain represents some
+> -	 * platform specific behavior.
+> +	 * New drivers should support default domains, otherwise the driver
+> +	 * must provide a domain to be attached when the iommu subsystem
+> +	 * is not using the device. The purpose of this domain depends
+> +	 * on how the iommu driver is operating the dma_ops.
+>   	 */
+>   	if (!new_domain) {
+> -		if (WARN_ON(!group->domain->ops->detach_dev))
+> +		struct group_device *grp_dev;
+> +		const struct iommu_ops *ops;
+> +
+> +		grp_dev = list_first_entry(&group->devices, struct group_device,
+> +					   list);
+> +		ops = dev_iommu_ops(grp_dev->dev);
+> +
+> +		if (WARN_ON(!ops->idle_domain))
+>   			return -EINVAL;
+> -		__iommu_group_for_each_dev(group, group->domain,
+> -					   iommu_group_do_detach_device);
+> -		group->domain = NULL;
+> -		return 0;
+> +		new_domain = ops->idle_domain;
+>   	}
+>   
+>   	/*
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 46e1347bfa2286..a17069368d70d9 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -91,6 +91,7 @@ struct iommu_domain_geometry {
+>   				 __IOMMU_DOMAIN_DMA_API |	\
+>   				 __IOMMU_DOMAIN_DMA_FQ)
+>   #define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SVA)
+> +#define IOMMU_DOMAN_PRIVATE	(1 << 5)
+>   
+>   struct iommu_domain {
+>   	unsigned type;
+> @@ -272,7 +273,18 @@ struct iommu_ops {
+>   			     struct iommu_fault_event *evt,
+>   			     struct iommu_page_response *msg);
+>   
+> +	/*
+> +	 * driver wants to use dma_ops provided by dma-iommu.c, return
+> +	 * the recommended initial IDENTITY/DMA domain.
+> +	 */
+>   	int (*def_domain_type)(struct device *dev);
+> +
+> +	/*
+> +	 * Driver is not using dma-iommu.c, when the iommu core is not
+> +	 * using the device it will attach it to this domain.
+> +	 */
+> +	struct iommu_domain *idle_domain;
+> +
+>   	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
+>   
+>   	const struct iommu_domain_ops *default_domain_ops;
+> @@ -315,6 +327,7 @@ struct iommu_ops {
+>    * @free: Release the domain after use.
+>    */
+>   struct iommu_domain_ops {
+> +	void (*attach_dev_nofail)(struct iommu_domain *domain, struct device *dev);
+>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+>   	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+>   	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
