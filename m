@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C27069B946
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F59C69B94C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjBRKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 05:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S229813AbjBRKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 05:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBRKOK (ORCPT
+        with ESMTP id S229525AbjBRKQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 05:14:10 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF4C38EAE
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:14:09 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id ek11so1916500edb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:14:09 -0800 (PST)
+        Sat, 18 Feb 2023 05:16:30 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A3039295
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:16:28 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id ec30so1724924edb.10
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XlYpUpe2mvgMM93e/W7QPf63bpnY6+x3AWjdp9vVuto=;
-        b=vHc8eWnXv559cPUvTjAwx4fjMkcCMs3PZaTCVmo9y2AIJhUH/Mp2yT8Pl2aIjne5Hm
-         KM5BtTCbsjyE1g6mTFetLELJG5SuG2FcFLlfDE5lmVnZ9t1KhJ2sisOUBxAjaTFdBE/1
-         3+SLrC/KB4z3DqbF8ibLbezZrcFMTxC86DohLdKexLBV9EpJ8UQliQ5S4Biqy1/ffceD
-         B5kgjXdVmJpXyFY8lzfVNuzm3X8y+gTKXD1MR1RxR+5cFrSwBalH5q0OblIADiPaNM/E
-         xSvsyeoqlLkWo4YTSQcM5VIzUyz2fqIH/S/h4hfwP+5/O6wx+dCtKD1n05e1WBaORrEF
-         6klA==
+        bh=isL683qk+zwUEc0fdI1TRbW50SVZApf+Izx8IU5t3v0=;
+        b=XfNmEX3U5b2bz9p/4Acby5zZSdHmyuZiC9ZflVTG9zuCSZ6t2++DOdQdm2MJ19SZ9S
+         9MdULBlDxnVCX090immUY2DhglxwvP0BUPLQAoKUaiKmNLMir3tokZESbEiBeXnLck06
+         p5ftKiBxux9QC/LeMUGeAU1DhFqQrd7Z1ShrKDj5/ZIb+7Dhs16wNyhPuGAJM1EnhFHK
+         FFMa0CiUhqtFQdmDmHQBDhGAuL1vMhPqXxN3+TVKuiwrrhhbqgO1A2JQwQS4sTEC8Prk
+         FRimIeOx4H0fvKXGwGLBX8qAUBNp2XJfDkBUnV3Qw7C5dvduT11DONqx5FmvfhsrULvm
+         /tDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XlYpUpe2mvgMM93e/W7QPf63bpnY6+x3AWjdp9vVuto=;
-        b=3Z/cs9w3eTbtSWhJynhEA8w1fvy3s2LCQElk/cQaWvvOpTalSXiXMdwrVLlVSqmDCe
-         T/bquloZ/oMvCDED6FBzTtqzx2pwAh2bgprnY9gE96jh2efDKAmVS1kpST5FnJiQVgNz
-         KLDHULbDqNPSvjeL2d/M4/n95b6T2h0ixk4wFRrKsoFunqe0jb+Vnpl/1yfIP8kOvjxK
-         f/vyIO4f6Zst6BtUgAVwlH4J7xN1o7ZLkVU0Zt11hBN6CE06RDhgqPOHpizSq/t79knf
-         48yHMLZRtdAK7UlV0qgWB2Z2oOS+qDc1quNqSL+4SSM/q1IVkp7mcnAyKWxCadXsP1iH
-         lNpA==
-X-Gm-Message-State: AO0yUKW6Bp7o9EeUrTcup07idwkh5xTva3pmu6c864jkE47/SgzMJ0am
-        nL2hDQPh4RdF/yeyrhfO3DvCDg==
-X-Google-Smtp-Source: AK7set+3xynx3gDPCY9sAfEctMu3DjKAusUU/V/7HxqiREWds9wQjauq9fvyl47NEeCBkmqS4EqKcw==
-X-Received: by 2002:a05:6402:d2:b0:4ab:4ad1:a37e with SMTP id i18-20020a05640200d200b004ab4ad1a37emr98905edu.16.1676715247702;
-        Sat, 18 Feb 2023 02:14:07 -0800 (PST)
+        bh=isL683qk+zwUEc0fdI1TRbW50SVZApf+Izx8IU5t3v0=;
+        b=DXSlHG3kOvM+Uoc2wcOJ9FB03NDaHHzZlnCbHSSvaK1RfI7ej9pLeQ+Lp2/3OJr+e6
+         9sRw3CItwuW/dNrmFC0WLXGD4y45WM8/N2FILKcKykvMyvXzW0vIxZORiRRdpdy0N5WX
+         LIXlo7Pl1T4VQF5kO9D9U+JEoDP4b+NR30lfNiw0xyY+Hd+7AG08RNIyFI5VKCjCPwU6
+         7nfPSbsLFeJ/ybqc9oO9SQiBQIjkMsEA7nTJbndeUoEKc3IhsziW/kLfPx5oRHBZUEik
+         CHO1Uy3b9ugiWrEAGTQXrMlpwE0zNmsqUetmVolVcTQBw+CuIz44KWLvUuW7Q4i7xI7B
+         gBLQ==
+X-Gm-Message-State: AO0yUKXW9Euosewo6Y0AK1mMUAtctITmq0HQIsSvQ0PH919zAc6gpeR4
+        1NkK5pATP3EdyIlmqDWtJQIqrcLvAYhiq0HH
+X-Google-Smtp-Source: AK7set8F5+d4ybBx7pl4yewkqkHJpbFAsLcHzIGt4byA3KBeymPai/DkcZidLH13N/hJczuU5rqiqA==
+X-Received: by 2002:a17:906:2655:b0:8af:5752:26e4 with SMTP id i21-20020a170906265500b008af575226e4mr1059536ejc.68.1676715387002;
+        Sat, 18 Feb 2023 02:16:27 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r23-20020a50c017000000b004a233e03afdsm3381118edb.46.2023.02.18.02.14.05
+        by smtp.gmail.com with ESMTPSA id j11-20020a170906474b00b0088f8a61eb48sm3208173ejs.154.2023.02.18.02.16.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 02:14:07 -0800 (PST)
-Message-ID: <e6d397bb-dd5d-8308-eb07-3aeb2589115c@linaro.org>
-Date:   Sat, 18 Feb 2023 11:14:04 +0100
+        Sat, 18 Feb 2023 02:16:26 -0800 (PST)
+Message-ID: <610e8b6a-8e1c-753e-d2c9-0056a7804f9b@linaro.org>
+Date:   Sat, 18 Feb 2023 11:16:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
- deprecated QCM2290 compatible
+Subject: Re: [PATCH v3 3/3] dt-bindings: misc: servo-pwm: Add new bindings for
+ servo-pwm
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+To:     Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc:     Angelo Compagnucci <angelo@amarulasolutions.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
- <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
- <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
- <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
- <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
- <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
- <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
+        "open list:GENERIC PWM SERVO DRIVER" <linux-pwm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230217161038.3130053-1-angelo@amarulasolutions.com>
+ <20230217161038.3130053-3-angelo@amarulasolutions.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
+In-Reply-To: <20230217161038.3130053-3-angelo@amarulasolutions.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,21 +82,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 22:13, Bryan O'Donoghue wrote:
-> On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
->> First, it would be nice to know what was the intention of Bryan's commit?
+On 17/02/2023 17:10, Angelo Compagnucci wrote:
+> This binding describes the binding for controlling servo motors through
+> pwm.
 > 
-> Sorry I've been grazing this thread but, not responding.
-> 
-> - qcom,dsi-ctrl-6g-qcm2290
-> 
-> is non-compliant with qcom,socid-dsi-ctrl which is our desired naming 
-> convention, so that's what the deprecation is about i.e. moving this 
-> compat to "qcom,qcm2290-dsi-ctrl"
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> v2:
+> * Converted old txt to yaml
+> v3:
+> * Fixed errors rised by make dt_binding_check 
 
-OK, then there was no intention to deprecate qcom,mdss-dsi-ctrl and it
-should be left as allowed compatible.
+Still fails the tests.
 
-Best regards,
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> 
+>  .../devicetree/bindings/misc/servo-pwm.yaml   | 57 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/servo-pwm.yaml b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> new file mode 100644
+> index 000000000000..73e81b939daf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/servo-pwm.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/servo-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Servo motor connected to PWM
+> +
+> +maintainers:
+> +  - Angelo Compagnucci <angelo@amarulasolutions.com>
+> +
+> +description:
+> +  Each servo is represented as a servo-pwm device.
+> +  The 20ms period is the accepted standard and so most of the motors
+> +  support it, while the positioning min/max duty cycle or the motor
+> +  degrees aperture vary lot between manufacturers.
+> +  The most common type of servo (SG90) has 180 degrees of movement
+> +  and moves between 0.5ms and 2.5ms duty cycle.
+> +
+> +properties:
+> +  compatible:
+> +    const: servo-pwm
+> +
+> +  pwms:
+> +    maxItems: 1
+> +
+> +  pwm-names: true
+
+You got later feedback from Rob for v2, so this needs changes.
+
+> +
+> +  degrees:
+> +    description:
+> +      How many degrees the motor can move.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  duty-min:
+> +    description:
+> +      Duty cycle for position the motor at 0 degrees.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  duty-max:
+> +    description:
+> +      Duty cycle for positioning the motor at "degrees" angle.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+
+Drop blank line.
+
 Krzysztof
 
