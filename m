@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437B069BB7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E2169BB84
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 20:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBRS5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 13:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S229663AbjBRTGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 14:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBRS5I (ORCPT
+        with ESMTP id S229524AbjBRTGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 13:57:08 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F181448E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:57:07 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id s22-20020a17090a075600b0023127b2d602so1287698pje.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:57:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=khZrsJSUbGfXiIFHZOzdW4XxaJRpRDKuFefHfpZk7VQ=;
-        b=U6L3h3+huPvbAl1pYzB7644CU3KslDuSDX/rnUVdVSE8EO/jCl8KSq+HcTUmNsUE+l
-         MWVVQtZ3n5ZeIMx6Q3sC7M3riG3dy2sD18l8bUQ1a0sb5qb7hU3bBz+hKrcrS0eE2KKL
-         vOPUl845OwdVRpTXc9K7AP2A5q5DeYBvq2lts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=khZrsJSUbGfXiIFHZOzdW4XxaJRpRDKuFefHfpZk7VQ=;
-        b=puem6HTaFcNjtoqknxIOcVGaDdnCV1++RrOtVXrnF293H25os4qzp6DHXsCrWhF0sj
-         jeQ7i40cvSl1NLJZmPLAu9Bdv+StZDPaoqqrQDyBJVE7T+oz+t/n0LGP/5vz8juHMa1G
-         dBYiDRodvVZeHFRF2igUguasRL7AKGeLL9uFXrKYqlwgAG/R0ex93uPC+/5wDSqIPd2b
-         i0mNGeFC9ENFwFKCwOyXWfeUWrJKFoGpeonOOqCE0o2D9akejyq7sQFaoejPirJwKykm
-         Jqkl6doWaFGY72+q4ohL8og2xIShMPCEHTuskmruqdsH0Zf/ZNQl83g0Vv8AcQpUlT/X
-         ny/w==
-X-Gm-Message-State: AO0yUKW7v76+U9k1oWlpQ/CMULIuCP+eSRcRoORt+8V3ZNuuJJOjrJrh
-        QpTtVR8s4U2NnrOODZxm7B4Fcg==
-X-Google-Smtp-Source: AK7set95Ml42LR0aoYZ5jPoLyq1v3GWS3Edju77aaI6PR7qVPaby8Nb58nQ1Fv3u+8cYbCr1oIxDJg==
-X-Received: by 2002:a17:90b:314b:b0:234:68d:b8ea with SMTP id ip11-20020a17090b314b00b00234068db8eamr1256773pjb.39.1676746627369;
-        Sat, 18 Feb 2023 10:57:07 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t13-20020a63b70d000000b004fd0feae70fsm2858542pgf.92.2023.02.18.10.57.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 10:57:06 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc:     Kees Cook <keescook@chromium.org>, Zhang Yi <yizhan@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] IB/rdmavt: Fix target union member for rvt_post_one_wr()
-Date:   Sat, 18 Feb 2023 10:57:05 -0800
-Message-Id: <20230218185701.never.779-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 18 Feb 2023 14:06:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1CB14E89;
+        Sat, 18 Feb 2023 11:06:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22E35B808BF;
+        Sat, 18 Feb 2023 19:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80FDC433EF;
+        Sat, 18 Feb 2023 19:06:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676747203;
+        bh=tDnOSgmeKEukAjBU54pIc4km4vcB8vmwy0IJMLjDDzc=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=M3fJkgKTYKnkCFYdl7gZ7SMIN0rZnewU0fC64WnoPcjYE+B5PY3VQEGfe2QILWBxE
+         nnMyixFn2KovU3XOHVNmZ284ABqEOHly0tRCZ6I+5Btoeo2f4EFFWXGVP5lcgQKPbU
+         3cxZad04GCMYZ+siM184RvMKPqVKg5BowoA1+smpyJLa041/wMKmeK0PlUbofXPZpL
+         vIXakcZ4+HngI2jMnXj40zMTet7r5Cfwv7hG+kGqQJEJMxpWrbSmYdcnL9+DrTFGhI
+         Wy5ZhBw6fO8LhjtZnjNwZtrSBvl7/28OfTzlDJMysPs+fXSWMAsVKMpE+iZnZsKK02
+         covcGAnFaflmQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 757045C0ACF; Sat, 18 Feb 2023 11:06:41 -0800 (PST)
+Date:   Sat, 18 Feb 2023 11:06:41 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        mingo@kernel.org, tglx@linutronix.de, rcu@vger.kernel.org,
+        joel@joelfernandes.org, boqun.feng@gmail.com, frederic@kernel.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: [GIT PULL] RCU changes for v6.3
+Message-ID: <20230218190641.GA1215210@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1516; h=from:subject:message-id; bh=/HzWdAZi2mss32NkJTT96+rWSz+FBTRF7/tT4SPTBks=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj8R+ARt1rH8yQPogZEw9kSqe4GVamEa1N1HdO1wYS 1JDcxkeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY/EfgAAKCRCJcvTf3G3AJoPNEA Cjcju+UTd4rwsspQF9f1FONGLufsnWQl92vAKO2OOksXhZcW1WDdhCoDrJdWXaHw5wgQOSIMpspIUd ZksDF5Jp3W6IfXPM/bN7slCBF3BUViF38ztE+3jKL4kSKQ887pa29Yc1J8diepEAOGqgIA39dZkCiU nOeB/ZMcnDEoX/I60yQ3OmdNdnsTAmfu6J8lpO9pKBh4MVjwcYI9S0IB8NPEUdW0MzO02N7qE7nV+V 0er2MeeJHAcXxIUZ991WMIpd47H+gc24LT2LdagmoJYsoegbKgnC1kZuguQtVtb0Isjy59nfuTn4ou os2K04AXXrCdSrQ6YthE0hn51kH/Gww1NR7dcuqNfFudn9XlaxEg+rmLvdwFMfcGgsxf2E9t0sWqty LiUUfGP7N/hEGIOXz5r6/oAUztcDqTDGuSftulNTwrMsl8diNNfwiLmDSD5x0yL5oeyjY1sQXkjMIV KuLbgKnHjFC8SibUkJjZkPiMIVnJ7rONXhholiK8QNj6iUlzwTa1wMlJjF92Lk8YMSmI0fsmQASd77 fKwzOGpFK65V7IkbD+GR5eRkkpSimTgBAS11oYySch5Rjp1RdDr9m88F3LHIAhzOYkb4rRK5skmHVc Kh78SYU1rT0z7iUppS95kwWZapnmpmA7Nog+eysw8adTM+dGGrJdQ7W682QQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +56,247 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "cplen" result used by the memcpy() into struct rvt_swqe "wqe" may
-be sized to 80 for struct rvt_ud_wr (which is member "ud_wr", not "wr"
-which is only 40 bytes in size). Change the destination union member so
-the compiler can use the correct bounds check.
+Hello, Linus,
 
-struct rvt_swqe {
-        union {
-                struct ib_send_wr wr;   /* don't use wr.sg_list */
-                struct rvt_ud_wr ud_wr;
-		...
-	};
-	...
-};
+Once the merge window opens, please pull the latest RCU git tree from:
 
-Silences false positive memcpy() run-time warning:
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2023.02.10a
+  # HEAD: bba8d3d17dc2678f9647962900aa421a18c25320: Merge branch 'stall.2023.01.09a' into HEAD (2023-02-02 16:40:07 -0800)
 
-  memcpy: detected field-spanning write (size 80) of single field "&wqe->wr" at drivers/infiniband/sw/rdmavt/qp.c:2043 (size 40)
+This pull request contains this commit:
+	dc7c31b07ade ("drivers/base: Remove CONFIG_SRCU")
+Which conflicted in -next with this commit:
+        3a2dbc510c43 ("driver core: fw_devlink: Don't purge child fwnode's consumer links")
+Stephen Rothwell's proposed resolution work for me:
+        https://lore.kernel.org/lkml/20230210124818.2caaa77f@canb.auug.org.au
+The -rcu tree contains a sample resolution merge commit at branch
+conflict-resolution.2023.02.10a.
 
-Reported-by: Zhang Yi <yizhan@redhat.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216561
-Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: linux-rdma@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/infiniband/sw/rdmavt/qp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+RCU pull request for v6.3
 
-diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
-index 3acab569fbb9..3f707e1fa517 100644
---- a/drivers/infiniband/sw/rdmavt/qp.c
-+++ b/drivers/infiniband/sw/rdmavt/qp.c
-@@ -2040,7 +2040,7 @@ static int rvt_post_one_wr(struct rvt_qp *qp,
- 	wqe = rvt_get_swqe_ptr(qp, qp->s_head);
- 
- 	/* cplen has length from above */
--	memcpy(&wqe->wr, wr, cplen);
-+	memcpy(&wqe->ud_wr, wr, cplen);
- 
- 	wqe->length = 0;
- 	j = 0;
--- 
-2.34.1
+This pull request contains the following branches:
 
+doc.2023.01.05a: Documentation updates.
+
+fixes.2023.01.23a: Miscellaneous fixes, perhaps most notably:
+
+o	Throttling callback invocation based on the number of callbacks
+	that are now ready to invoke instead of on the total number
+	of callbacks.
+
+o	Several patches that suppress false-positive boot-time
+	diagnostics, for example, due to lockdep not yet being
+	initialized.
+
+o	Make expedited RCU CPU stall warnings dump stacks of any tasks
+	that are blocking the stalled grace period.  (Normal RCU CPU
+	stall warnings have doen this for mnay years.)
+
+o	Lazy-callback fixes to avoid delays during boot, suspend, and
+	resume.  (Note that lazy callbacks must be explicitly enabled,
+	so this should not (yet) affect production use cases.)
+
+kvfree.2023.01.03a: Cause kfree_rcu() and friends to take advantage of
+	polled grace periods, thus reducing memory footprint by almost
+	two orders of magnitude, admittedly on a microbenchmark.
+	This series also begins the transition from kfree_rcu(p) to
+	kfree_rcu_mightsleep(p).  This transition was motivated by bugs
+	where kfree_rcu(p), which can block, was typed instead of the
+	intended kfree_rcu(p, rh).
+
+srcu.2023.01.03a: SRCU updates, perhaps most notably fixing a bug that
+	causes SRCU to fail when booted on a system with a non-zero boot
+	CPU.  This surprising situation actually happens for kdump kernels
+	on the powerpc architecture.  It also adds an srcu_down_read()
+	and srcu_up_read(), which act like srcu_read_lock() and
+	srcu_read_unlock(), but allow an SRCU read-side critical section
+	to be handed off from one task to another.
+
+srcu-always.2023.02.02a: Cleans up the now-useless SRCU Kconfig option.
+	There are a few more commits that are not yet acked or pulled
+	into maintainer trees, and these will be in a pull request for
+	a later merge window.
+
+tasks.2023.01.03a: RCU-tasks updates, perhaps most notably these fixes:
+
+o	A strange interaction between PID-namespace unshare and the
+	RCU-tasks grace period that results in a low-probability but
+	very real hang.
+
+o	A race between an RCU tasks rude grace period on a single-CPU
+	system and CPU-hotplug addition of the second CPU that can result
+	in a too-short grace period.
+
+o	A race between shrinking RCU tasks down to a single callback list
+	and queuing a new callback to some other CPU, but where that
+	queuing is delayed for more than an RCU grace period.  This can
+	result in that callback being stranded on the non-boot CPU.
+
+torture.2023.01.05a: Torture-test updates and fixes.
+
+torturescript.2023.01.03a: Torture-test scripting updates and fixes.
+
+stall.2023.01.09a: Provide additional RCU CPU stall-warning information
+	in kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y, and
+	restore the full five-minute timeout limit for expedited RCU
+	CPU stall warnings.
+
+----------------------------------------------------------------
+Akira Yokosawa (2):
+      docs/RCU/rcubarrier: Adjust 'Answer' parts of QQs as definition-lists
+      docs/RCU/rcubarrier: Right-adjust line numbers in code snippets
+
+Frederic Weisbecker (3):
+      rcu-tasks: Improve comments explaining tasks_rcu_exit_srcu purpose
+      rcu-tasks: Remove preemption disablement around srcu_read_[un]lock() calls
+      rcu-tasks: Fix synchronize_rcu_tasks() VS zap_pid_ns_processes()
+
+Joel Fernandes (Google) (5):
+      locktorture: Allow non-rtmutex lock types to be boosted
+      locktorture: Make the rt_boost factor a tunable
+      torture: Fix hang during kthread shutdown phase
+      rcu: Track laziness during boot and suspend
+      rcu: Disable laziness if lazy-tracking says so
+
+Paul E. McKenney (44):
+      doc: Further updates to RCU's lockdep.rst
+      doc: Update NMI-RCU.rst
+      doc: Update rcubarrier.rst
+      doc: Update rcu_dereference.rst
+      rcu: Consolidate initialization and CPU-hotplug code
+      rcu: Throttle callback invocation based on number of ready callbacks
+      rcu: Upgrade header comment for poll_state_synchronize_rcu()
+      rcu: Make RCU_LOCKDEP_WARN() avoid early lockdep checks
+      rcu: Suppress smp_processor_id() complaint in synchronize_rcu_expedited_wait()
+      rcu: Test synchronous RCU grace periods at the end of rcu_init()
+      rcu: Allow expedited RCU CPU stall warnings to dump task stacks
+      rcu: Add srcu_down_read() and srcu_up_read()
+      rcu: Add test code for semaphore-like SRCU readers
+      srcu: Yet more detail for srcu_readers_active_idx_check() comments
+      srcu: Update comment after the index flip
+      torture: Seed torture_random_state on CPU
+      refscale: Provide for initialization failure
+      torture: make kvm-find-errors.sh check for compressed vmlinux files
+      torture: Permit double-quoted-string Kconfig options
+      rcu: Permit string-valued Kconfig options in kvm.sh
+      doc: Update and wordsmith rculist_nulls.rst
+      doc: Update rcu.rst
+      doc: Update stallwarn.rst
+      doc: Update torture.rst
+      doc: Update UP.rst
+      doc: Update rcu.rst URL to RCU publications
+      doc: Update whatisRCU.rst
+      refscale: Add tests using SLAB_TYPESAFE_BY_RCU
+      rcutorture: Drop sparse lock-acquisition annotations
+      rcu: Allow up to five minutes expedited RCU CPU stall-warning timeouts
+      drivers/base: Remove CONFIG_SRCU
+      drivers/dax: Remove "select SRCU"
+      drivers/hwtracing/stm: Remove "select SRCU"
+      drivers/md: Remove "select SRCU"
+      drivers/net: Remove "select SRCU"
+      drivers/pci/controller: Remove "select SRCU"
+      fs: Remove CONFIG_SRCU
+      fs/btrfs: Remove "select SRCU"
+      fs/notify: Remove "select SRCU"
+      fs/quota: Remove "select SRCU"
+      init: Remove "select SRCU"
+      kernel/notifier: Remove CONFIG_SRCU
+      Merge branches 'doc.2023.01.05a', 'fixes.2023.01.23a', 'kvfree.2023.01.03a', 'srcu.2023.01.03a', 'srcu-always.2023.02.02a', 'tasks.2023.01.03a', 'torture.2023.01.05a' and 'torturescript.2023.01.03a' into HEAD
+      Merge branch 'stall.2023.01.09a' into HEAD
+
+Pingfan Liu (4):
+      srcu: Delegate work to the boot cpu if using SRCU_SIZE_SMALL
+      srcu: Fix a misspelling in comment
+      srcu: Fix the comparision in srcu_invl_snp_seq()
+      srcu: Remove needless rcu_seq_done() check while holding read lock
+
+Tiezhu Yang (1):
+      selftests: rcutorture: Use "grep -E" instead of "egrep"
+
+Uladzislau Rezki (Sony) (9):
+      rcu: Refactor kvfree_call_rcu() and high-level helpers
+      rcu/kvfree: Switch to a generic linked list API
+      rcu/kvfree: Move bulk/list reclaim to separate functions
+      rcu/kvfree: Move need_offload_krc() out of krcp->lock
+      rcu/kvfree: Use a polled API to speedup a reclaim process
+      rcu/kvfree: Use READ_ONCE() when access to krcp->head
+      rcu/kvfree: Carefully reset number of objects in krcp
+      rcu/kvfree: Split ready for reclaim objects from a batch
+      rcu/kvfree: Add kvfree_rcu_mightsleep() and kfree_rcu_mightsleep()
+
+Zhao Mengmeng (1):
+      rcu: Use hlist_nulls_next_rcu() in hlist_nulls_add_tail_rcu()
+
+Zhen Lei (7):
+      genirq: Fix the return type of kstat_cpu_irqs_sum()
+      doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+      doc: Fix htmldocs build warnings of stallwarn.rst
+      sched: Add helper kstat_cpu_softirqs_sum()
+      sched: Add helper nr_context_switches_cpu()
+      rcu: Add RCU stall diagnosis information
+      rcu: Align the output of RCU CPU stall warning messages
+
+Zqiang (6):
+      rcu: Make rcu_blocking_is_gp() stop early-boot might_sleep()
+      srcu: Release early_srcu resources when no longer in use
+      rcu-tasks: Use accurate runstart time for RCU Tasks boot-time testing
+      rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+      rcu-tasks: Handle queue-shrink/callback-enqueue race condition
+      rcu: Remove redundant call to rcu_boost_kthread_setaffinity()
+
+ Documentation/RCU/NMI-RCU.rst                      |   4 +-
+ Documentation/RCU/UP.rst                           |  13 +-
+ Documentation/RCU/lockdep.rst                      |  13 +-
+ Documentation/RCU/rcu.rst                          |   6 +-
+ Documentation/RCU/rcu_dereference.rst              |  21 +-
+ Documentation/RCU/rcubarrier.rst                   | 357 +++++------
+ Documentation/RCU/rculist_nulls.rst                | 109 ++--
+ Documentation/RCU/stallwarn.rst                    | 135 ++++-
+ Documentation/RCU/torture.rst                      |  89 ++-
+ Documentation/RCU/whatisRCU.rst                    | 193 +++---
+ Documentation/admin-guide/kernel-parameters.txt    |  11 +
+ drivers/base/core.c                                |  42 --
+ drivers/dax/Kconfig                                |   1 -
+ drivers/hwtracing/stm/Kconfig                      |   1 -
+ drivers/md/Kconfig                                 |   1 -
+ drivers/net/Kconfig                                |   1 -
+ drivers/pci/controller/Kconfig                     |   2 +-
+ fs/btrfs/Kconfig                                   |   1 -
+ fs/locks.c                                         |  25 -
+ fs/notify/Kconfig                                  |   1 -
+ fs/quota/Kconfig                                   |   1 -
+ include/linux/kernel_stat.h                        |  14 +-
+ include/linux/rculist_nulls.h                      |   2 +-
+ include/linux/rcupdate.h                           |  19 +-
+ include/linux/rcutiny.h                            |  12 +-
+ include/linux/rcutree.h                            |   2 +-
+ include/linux/srcu.h                               |  45 ++
+ include/linux/srcutree.h                           |   2 +-
+ init/Kconfig                                       |   1 -
+ kernel/locking/locktorture.c                       | 101 ++--
+ kernel/notifier.c                                  |   3 -
+ kernel/pid_namespace.c                             |  17 +
+ kernel/rcu/Kconfig.debug                           |  15 +-
+ kernel/rcu/rcu.h                                   |   8 +
+ kernel/rcu/rcu_segcblist.c                         |   2 +-
+ kernel/rcu/rcu_segcblist.h                         |   2 +
+ kernel/rcu/rcutorture.c                            |  12 +-
+ kernel/rcu/refscale.c                              | 250 +++++++-
+ kernel/rcu/srcutree.c                              |  98 ++-
+ kernel/rcu/tasks.h                                 |  85 ++-
+ kernel/rcu/tiny.c                                  |   9 +-
+ kernel/rcu/tree.c                                  | 657 ++++++++++++---------
+ kernel/rcu/tree.h                                  |  19 +
+ kernel/rcu/tree_exp.h                              |  43 ++
+ kernel/rcu/tree_stall.h                            |  37 +-
+ kernel/rcu/update.c                                |  49 +-
+ kernel/sched/core.c                                |   5 +
+ kernel/torture.c                                   |   4 +-
+ .../selftests/rcutorture/bin/configcheck.sh        |   5 +-
+ .../selftests/rcutorture/bin/console-badness.sh    |   2 +-
+ .../testing/selftests/rcutorture/bin/kvm-build.sh  |   4 +-
+ .../selftests/rcutorture/bin/kvm-find-errors.sh    |   6 +-
+ tools/testing/selftests/rcutorture/bin/kvm.sh      |   6 +-
+ .../selftests/rcutorture/bin/parse-console.sh      |  10 +-
+ 54 files changed, 1734 insertions(+), 839 deletions(-)
