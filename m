@@ -2,141 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBA969BA1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DC469BA20
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjBRNEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 08:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S229758AbjBRNEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 08:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBRNEF (ORCPT
+        with ESMTP id S229541AbjBRNEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 08:04:05 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9985C13D7A;
-        Sat, 18 Feb 2023 05:04:04 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id bx37so491374ljb.12;
-        Sat, 18 Feb 2023 05:04:04 -0800 (PST)
+        Sat, 18 Feb 2023 08:04:08 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9600113D7A
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:04:07 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id b1so955255lfs.8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:04:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BDd4Z6+6MlW0i6nLuKIJnVb+Uvg1qlIV7+KCkuqlt2g=;
-        b=U+4AB2pPZXTlmR9Yron8JLy2SjLoCq3Ez6KbCFTn4J5LwbxC9eR/tlmFV2/xX4fTId
-         glMMXjTaLQF4PF4676dVrzKZj/is1hdiS1KeEYaark9fFiQLxFGYKi3JUPqRQyh4poJL
-         opekiF5jpAuTcU8EnV0GE54N/9y0gf3BSrzkLGdWt7exWDqoSKdNyKX8C/eM2DK0JwTy
-         lNFjJsGpFwhdzIygJZKmcUbouQ7VWa6Zl9qLrRTK/iq+PEGtacsGbP1DfIK8Bfm78GIX
-         B0FkvnHFFh4+2HCu7Z01PCmFNp4t8CwzuCCZnq6thZWXw4sToh+9iBeBCskkb7vknlV1
-         XCDw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3N5WAzbRFEo6T4gVmAxjSh/Vc/Ea58u6XaJqPwHeVh4=;
+        b=U4IXj5fZbsqDGnnIHvFZjApawI7qJL91IjBv5k4Klvpgh7GQl6AdaUil67EYPWWXgo
+         5qzdpVEqeRX4xOzpvzc4pKf7InKG6AWHme+BkdAoMHe8B+nmo461rqY3zraL5on846DP
+         gJOMYCVgu7xeuo1EPhlyvmP1+X4/D3pcaHvH0jr0X9A81wjmOXkFd2G3Hau5sbrLcsCY
+         r09p4VrVglNWHtBAm4Mzs/dKh8VpV43bBvYLS9ymwCkaq0ZyLAdQTHOzrp0OnTUIFARl
+         rrlN8H7+vUDN+jdo/2gUYb5KHNcW2oOCccSmZkDFRJ+QUwY82MuWqnjAJJtHH+BypEtW
+         Nylw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BDd4Z6+6MlW0i6nLuKIJnVb+Uvg1qlIV7+KCkuqlt2g=;
-        b=L6OnMtTiSN3zF347uvm1RWiRSZv6L1HjX8r0xoJknC4vnlzlECkZxJHnNTU7kmW5ow
-         EuDbAfeen6Bvi2qwBphEiPg/H2U6hG9YN3ho7BwnRNWnzHzL877lut7wlyr2NHKtfFN1
-         LKSL1g28vsX+j/9JIxQuexP+DAhJpbw7dlAHZwoFpQsEHPCax07LY/qY/xbiT8vd/Tje
-         UKkzJnhkGKcy5WvP6KNm7OJ3tpxELKDuBdaujRZjWNm3rTRb/O4pxSHE5jBbUYfD0l/a
-         Th768x0iF+pY9SyRMDpsu9tkB5LsGfXekVgOSUAc/hZrFvgEC1uxGfIQWqT1/tbe0iUF
-         Hckg==
-X-Gm-Message-State: AO0yUKU4oYlgotOuD4+MZRl82f5GBNkwp4a7RCVTYKnvmDpPr9G3eEUE
-        Jgsw8d1XHovrEc0sC1z9WjU=
-X-Google-Smtp-Source: AK7set9mpZAzsOwz9uUXITmAKafi8n3PNMZ9kXP1/RnXc1wUQV6Fp4g2Zqwb0yykWZoZ64TLvn4iHA==
-X-Received: by 2002:a2e:a271:0:b0:293:5354:7161 with SMTP id k17-20020a2ea271000000b0029353547161mr1212297ljm.17.1676725442526;
-        Sat, 18 Feb 2023 05:04:02 -0800 (PST)
-Received: from mkor.. (89-109-49-189.dynamic.mts-nn.ru. [89.109.49.189])
-        by smtp.gmail.com with ESMTPSA id a14-20020a2e980e000000b00295733a3390sm174062ljj.101.2023.02.18.05.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 05:04:02 -0800 (PST)
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-To:     Rasesh Mody <rmody@marvell.com>
-Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <mchan@broadcom.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] bnx2: remove deadcode in bnx2_init_cpus()
-Date:   Sat, 18 Feb 2023 16:00:16 +0300
-Message-Id: <20230218130016.42856-1-korotkov.maxim.s@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3N5WAzbRFEo6T4gVmAxjSh/Vc/Ea58u6XaJqPwHeVh4=;
+        b=fQWAA0CQDE4HF6jl1dfy0EaRhNXmccu/ZJpdEJbVLwrUHqdjQJALnX/DPPBd/1JhvH
+         s/JCxR6nXVPYpaeP4D+gRak2gOSef0tSLDneUk1Mw+t6gW8u3x822KcAenlHW+ZSL/PW
+         OS6J4YfSKZlkWGqusIheM3JaUug04pFuHWucLl8v2CBZU8W8sN0pXgla0X6VQlPp7Fxa
+         PN0IkhS8pbZUmBHb0/FpqJjWNvtnnpqK+ph1FJk4TbOCadJwLxDguqPWayOiSCVL19vm
+         zlds37RZSvyxjuAI3xVQ117KENTITBnjpQ6q78irRrUeIZ1w7qklyAMGi3IOGPh5QVIL
+         24gw==
+X-Gm-Message-State: AO0yUKX2rn3V+9FqGpQRCRgwS65ALBGERFSvgxcBZCPukCdWVrbGawJs
+        oY16jZ9XzYO+pyOZuvkxK/Cz6w==
+X-Google-Smtp-Source: AK7set/gnKvtFmRzdwyC6P2wMI81d4vWwm6HjdeC7KtCbMNjaI4FGSQJ3mv5xfpjdnNPaUNiKYztuA==
+X-Received: by 2002:ac2:561b:0:b0:4b5:7096:23ff with SMTP id v27-20020ac2561b000000b004b5709623ffmr1010457lfd.66.1676725445833;
+        Sat, 18 Feb 2023 05:04:05 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac250d2000000b004d865c781eesm980042lfm.24.2023.02.18.05.04.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 05:04:05 -0800 (PST)
+Message-ID: <417fe51e-1f35-53d4-0dd7-bbb01d5bd164@linaro.org>
+Date:   Sat, 18 Feb 2023 15:04:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 07/14] drm/msm/a6xx: Add support for A619_holi
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
+ <20230214173145.2482651-8-konrad.dybcio@linaro.org>
+ <8268b4c9-ca5e-4ff3-628c-7e9daaeb16b0@linaro.org>
+ <9269c5dd-d97c-e29a-98a9-b42c598ebfc6@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <9269c5dd-d97c-e29a-98a9-b42c598ebfc6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The load_cpu_fw function has no error return code
-and always returns zero. Checking the value returned by
-this function does not make sense.
-As a result, bnx2_init_cpus will also return only zero
+On 17/02/2023 23:21, Konrad Dybcio wrote:
+> 
+> 
+> On 17.02.2023 22:19, Dmitry Baryshkov wrote:
+>> On 14/02/2023 19:31, Konrad Dybcio wrote:
+>>> A619_holi is a GMU-less variant of the already-supported A619 GPU.
+>>> It's present on at least SM4350 (holi) and SM6375 (blair). No mesa
+>>> changes are required. Add the required kernel-side support for it.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 37 +++++++++++++++++-----
+>>>    drivers/gpu/drm/msm/adreno/adreno_device.c | 13 ++++++++
+>>>    drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  5 +++
+>>>    3 files changed, 47 insertions(+), 8 deletions(-)
 
-Found by Security Code and Linux Verification
-Center (linuxtesting.org) with SVACE
+[...]
 
-Fixes: 57579f7629a3 ("bnx2: Use request_firmware()")
-Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
----
- drivers/net/ethernet/broadcom/bnx2.c | 22 ++++++----------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-index 9f473854b0f4..4dacb65a7348 100644
---- a/drivers/net/ethernet/broadcom/bnx2.c
-+++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -3908,37 +3908,27 @@ bnx2_init_cpus(struct bnx2 *bp)
- 		(const struct bnx2_mips_fw_file *) bp->mips_firmware->data;
- 	const struct bnx2_rv2p_fw_file *rv2p_fw =
- 		(const struct bnx2_rv2p_fw_file *) bp->rv2p_firmware->data;
--	int rc;
- 
- 	/* Initialize the RV2P processor. */
- 	load_rv2p_fw(bp, RV2P_PROC1, &rv2p_fw->proc1);
- 	load_rv2p_fw(bp, RV2P_PROC2, &rv2p_fw->proc2);
- 
- 	/* Initialize the RX Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
--	if (rc)
--		goto init_cpu_err;
-+	(void)load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
- 
- 	/* Initialize the TX Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_txp, &mips_fw->txp);
--	if (rc)
--		goto init_cpu_err;
-+	(void)load_cpu_fw(bp, &cpu_reg_txp, &mips_fw->txp);
- 
- 	/* Initialize the TX Patch-up Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_tpat, &mips_fw->tpat);
--	if (rc)
--		goto init_cpu_err;
-+	(void)load_cpu_fw(bp, &cpu_reg_tpat, &mips_fw->tpat);
- 
- 	/* Initialize the Completion Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_com, &mips_fw->com);
--	if (rc)
--		goto init_cpu_err;
-+	(void)load_cpu_fw(bp, &cpu_reg_com, &mips_fw->com);
- 
- 	/* Initialize the Command Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_cp, &mips_fw->cp);
-+	(void)load_cpu_fw(bp, &cpu_reg_cp, &mips_fw->cp);
- 
--init_cpu_err:
--	return rc;
-+	return 0;
- }
- 
- static void
+>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+>>> index 82757f005a1a..71faeb3fd466 100644
+>>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+>>> @@ -264,6 +264,19 @@ static const struct adreno_info gpulist[] = {
+>>>            .gmem = SZ_512K,
+>>>            .inactive_period = DRM_MSM_INACTIVE_PERIOD,
+>>>            .init = a6xx_gpu_init,
+>>> +    }, {
+>>> +        .rev = ADRENO_REV(6, 1, 9, 1),
+>>
+>> I think this deserves a comment that GMU-enabled sm6350 has patch_id 0 (if I interpreted the vendor dtsi correctly).
+>>
+>> Another option might be to actually check for the qcom,gmu presense and add that to the selection conditional.
+> We pass the GMU wrapper in qcom,gmu = <>, though perhaps setting
+> the holi-ness based on whether it's "qcom,gmu-x.y.z.a" or
+> "qcom,gmu-wrapper" would be wiser.. The patch ID is indeterminate
+> and I *think* one GMU-wrapper A619 has patch id 0..
+
+I was not aware that GMU-wrapper also adds a GMU device. In this case, 
+checking the GMU's compatible strings sounds like a logical approach to me.
+
+> 
+> Konrad
+>>
+>>> +        .revn = 619,
+>>> +        .name = "A619_holi",
+>>> +        .fw = {
+>>> +            [ADRENO_FW_SQE] = "a630_sqe.fw",
+>>> +        },
+>>> +        .gmem = SZ_512K,
+>>> +        .inactive_period = DRM_MSM_INACTIVE_PERIOD,
+>>> +        .quirks = ADRENO_QUIRK_GMU_WRAPPER,
+>>> +        .init = a6xx_gpu_init,
+>>> +        .zapfw = "a615_zap.mdt",
+>>> +        .hwcg = a615_hwcg,
+>>>        }, {
+>>>            .rev = ADRENO_REV(6, 1, 9, ANY_ID),
+>>>            .revn = 619,
+>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+>>> index 7c5e0a90b5fb..16241368c2e4 100644
+>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+>>> @@ -252,6 +252,11 @@ static inline int adreno_is_a619(struct adreno_gpu *gpu)
+>>>        return gpu->revn == 619;
+>>>    }
+>>>    +static inline int adreno_is_a619_holi(struct adreno_gpu *gpu)
+>>> +{
+>>> +    return adreno_is_a619(gpu) && adreno_has_gmu_wrapper(gpu);
+>>> +}
+>>> +
+>>>    static inline int adreno_is_a630(struct adreno_gpu *gpu)
+>>>    {
+>>>        return gpu->revn == 630;
+>>
+
 -- 
-2.37.2
+With best wishes
+Dmitry
 
