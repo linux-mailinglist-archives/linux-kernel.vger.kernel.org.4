@@ -2,84 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C5169B8A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B32969B8A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjBRIFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S229577AbjBRIKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBRIFk (ORCPT
+        with ESMTP id S229481AbjBRIKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:05:40 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B939241F1;
-        Sat, 18 Feb 2023 00:05:39 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 0D381C009; Sat, 18 Feb 2023 09:06:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676707562; bh=OAFcUBrsFSt/oLsR9EX7XJPu+XPQ3u8XJHEt8p0SO6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHd8YQX7F8Yb5vCd7Wz0fW+8gJYl0yPKGqWXeRSBmxrHzvCWMYCynq+HmxjibxaSq
-         CV/eZIjxmlmOskC0qyM+4ppyoxHlvTnL+Mk4RxHAv/8WqGDJtRN58qhrnwGHJ8sqme
-         ULClBf0mySrEau33jjTAweqRdxHPUUJMx50BGA4NxOHWluWruPNI2QkkZBCrgzeyev
-         FLpBxB4RfvC9aLGZDuAsCjEEUA+PcOjfmb2JF5+KvrXc8SUZ09yjsp/y0A+rTmYueZ
-         brZhlzYfnlFhSlLX55I92b8z0HsEPQEHa+z+rWXUqa9stwD65y72MsVpSPN8GTlHT/
-         /V9XWUNA+YfKQ==
+        Sat, 18 Feb 2023 03:10:40 -0500
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362F42B2B2
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:10:38 -0800 (PST)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id TIIkp7w6pOJaFTIIlpYfjR; Sat, 18 Feb 2023 09:10:36 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 18 Feb 2023 09:10:36 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] virtio: Reorder fields in 'struct virtqueue'
+Date:   Sat, 18 Feb 2023 09:10:31 +0100
+Message-Id: <8f3d2e49270a2158717e15008e7ed7228196ba02.1676707807.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 53958C009;
-        Sat, 18 Feb 2023 09:05:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676707561; bh=OAFcUBrsFSt/oLsR9EX7XJPu+XPQ3u8XJHEt8p0SO6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t4o7yZ0dQS0w/9C742EN6EZy3polnQtnWPv3DhkBLu2PWmWTPxvhXV6CYW+ZIKYQb
-         NMbERoFfPK3EXtTFk/TfePHaKmJCP6liTcAC9BFCDLd1GB9VPjJJiUPcxk4VsXO45p
-         QVvwvAi/PckB3N58LuzcOH7zR9qsb1TIh9qU9SYq8IEOH5TcJL5ZoaIEUTtF9nFDCc
-         sbwG+dvkVa2iMX/LGoB0ng1c6hrqpb/lHI0LnfJWd94IBRaKhFLTWdwm2jXvO8mFVa
-         rMfywRxcUD9mdfwm6PfGha0TxXZpANhmjO96P4GbCzumjfQb90K7bd+TQco2dF6wx5
-         3Ej7embvrv59Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id fb6f5d93;
-        Sat, 18 Feb 2023 08:05:32 +0000 (UTC)
-Date:   Sat, 18 Feb 2023 17:05:17 +0900
-From:   asmadeus@codewreck.org
-To:     Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
-        lucho@ionkov.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
-Subject: Re: [PATCH v4 07/11] 9p: Add additional debug flags and open modes
-Message-ID: <Y/CGvTCyhjFITkFs@codewreck.org>
-References: <20230124023834.106339-1-ericvh@kernel.org>
- <20230218003323.2322580-1-ericvh@kernel.org>
- <20230218003323.2322580-8-ericvh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230218003323.2322580-8-ericvh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 12:33:19AM +0000:
-> Add some additional debug flags to assist with debugging
-> cache changes.  Also add some additional open modes so we
-> can track cache state in fids more directly.
-> 
-> Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
+Group some variables based on their sizes to reduce hole and avoid padding.
+On x86_64, this shrinks the size of 'struct virtqueue'
+from 72 to 68 bytes.
 
-New debug flags can't hurt.
+It saves a few bytes of memory.
 
-For open modes: don't we send the mode verbatim to servers? won't they
-be confused?
-I guess I'll see in the next patch if you trim it down, but we might
-want to add a P9_MODE_MASK or something with values we're allowed to
-send and have client.c filter it out?
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Using pahole
 
+Before:
+======
+struct virtqueue {
+	struct list_head           list;                 /*     0    16 */
+	void                       (*callback)(struct virtqueue *); /*    16     8 */
+	const char  *              name;                 /*    24     8 */
+	struct virtio_device *     vdev;                 /*    32     8 */
+	unsigned int               index;                /*    40     4 */
+	unsigned int               num_free;             /*    44     4 */
+	unsigned int               num_max;              /*    48     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	void *                     priv;                 /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	bool                       reset;                /*    64     1 */
+
+	/* size: 72, cachelines: 2, members: 9 */
+	/* sum members: 61, holes: 1, sum holes: 4 */
+	/* padding: 7 */
+	/* last cacheline: 8 bytes */
+};
+
+After:
+=====
+struct virtqueue {
+	struct list_head           list;                 /*     0    16 */
+	void                       (*callback)(struct virtqueue *); /*    16     8 */
+	const char  *              name;                 /*    24     8 */
+	struct virtio_device *     vdev;                 /*    32     8 */
+	unsigned int               index;                /*    40     4 */
+	unsigned int               num_free;             /*    44     4 */
+	unsigned int               num_max;              /*    48     4 */
+	bool                       reset;                /*    52     1 */
+
+	/* XXX 3 bytes hole, try to pack */
+
+	void *                     priv;                 /*    56     8 */
+
+	/* size: 64, cachelines: 1, members: 9 */
+	/* sum members: 61, holes: 1, sum holes: 3 */
+};
+---
+ include/linux/virtio.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 6ac2655500dc..9439ae898310 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -35,8 +35,8 @@ struct virtqueue {
+ 	unsigned int index;
+ 	unsigned int num_free;
+ 	unsigned int num_max;
+-	void *priv;
+ 	bool reset;
++	void *priv;
+ };
+ 
+ int virtqueue_add_outbuf(struct virtqueue *vq,
 -- 
-Dominique
+2.34.1
+
