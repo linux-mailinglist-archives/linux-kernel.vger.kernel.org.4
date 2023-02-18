@@ -2,73 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA57069B7D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 04:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE3E69B7D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 04:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjBRDEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 22:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
+        id S229566AbjBRDNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 22:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBRDEb (ORCPT
+        with ESMTP id S229445AbjBRDNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 22:04:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A01C6B330;
-        Fri, 17 Feb 2023 19:04:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF609B82F28;
-        Sat, 18 Feb 2023 03:04:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F10AC433EF;
-        Sat, 18 Feb 2023 03:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676689468;
-        bh=2bj7d/9sTjnIwubfO4gptXyPlYmiHPnLCYj0UUaVN9o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=p1vYmbSHgaliHausQYkKzz3fwqv2507XdIyFjadw6qZ3QyN6ex2ZKnNie+X1YAVeD
-         oB5FwGGRW9POhURypVSotmRCPObu6ZvPti6L3RLozbEF0malAjKy+t5sf74QI4Yra/
-         cZwCathvX/ChCQwxtA9II/3HcgCWd2du6L37PqBXCQjx1/A/DvelKtjClHgp1Wp16a
-         70vGOFEAoqGSNggC74tGdP2LKNVQsOv2A1Hau5pW6MZR6H1qVM16TVpNt0K/5k9JC1
-         jSNZQIAWsC8U3OM52TgD+1GeEzMSbBITFO4D21tNReM+tNh0JDSryt44jhjuUA1WCm
-         JQ961kPIXvT0w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B825E68D2F;
-        Sat, 18 Feb 2023 03:04:28 +0000 (UTC)
-Subject: Re: [GIT PULL] hotfixes for 6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230217151820.e1fa2d36179e44069a77040c@linux-foundation.org>
-References: <20230217151820.e1fa2d36179e44069a77040c@linux-foundation.org>
-X-PR-Tracked-List-Id: <linux-mm.kvack.org>
-X-PR-Tracked-Message-Id: <20230217151820.e1fa2d36179e44069a77040c@linux-foundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-02-17-15-16-2
-X-PR-Tracked-Commit-Id: 99b9402a36f0799f25feee4465bfa4b8dfa74b4d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 38f8ccde04a3fa317b51b05e63c3cb57e1641931
-Message-Id: <167668946830.29732.7595341653557543287.pr-tracker-bot@kernel.org>
-Date:   Sat, 18 Feb 2023 03:04:28 +0000
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 22:13:02 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33D119F0B;
+        Fri, 17 Feb 2023 19:12:58 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u14-20020a17090a4bce00b002341fadc370so3160902pjl.1;
+        Fri, 17 Feb 2023 19:12:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Go/rrb42F/i0f8PVYoy8oUwA/BFEAezoQHrQtZBPKeQ=;
+        b=S0jKcsmQGoogHrpeU1NrfXgmk0MTiRqFtheVmPi+zbKzd5R0ZLdndMJtl9/SDHSpFh
+         7ELqFz7Ap1Glj5DiFwIrowahLwf2XWwnSWwxuObJl/nqFJo9XkwDWMzL4bDMKi+Zg1+y
+         u0I+x4W1T7c5Pdyyf/p+zgfGCRQzsj3mV9M4l+oTrdU8W5CSaLTLnYnErkpSFy5BArUd
+         CFkWfMRDcwbYTa7HQuHuQjEocASmzGmGW61nBf/5Xs/BVp9G1ZuRW4iKlvFN/5SVLPgf
+         KzyE/YGHtFN8r9p99uCsC1EzXcwRg7/4r73jJQCoCq21xvQ4qTiNBItzFttAghOdeY8e
+         IXrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Go/rrb42F/i0f8PVYoy8oUwA/BFEAezoQHrQtZBPKeQ=;
+        b=0rYPkq56uc2M6fQJXoxAKqDv+xQzOnUYXqe+8jsyiF257aKIGcmXIBRqwJCiGIKKrV
+         7nbDSA0Yj+12vX7hxne7ww+bvbHot4CwloGfS5dzIga+wM/rTos5Ns5MOtDJNeCBouKV
+         EjRKxzg+6ycyUTNahzlFSQzYMkCY9Sb0y9ySlTFXsfzINMhvMu+cCKw2CXFDssdVyrN6
+         lx3bvhqpxdpUYNcX19ptHnFDU3M6sqQvPWHe6sbFUJ5oKC2z5K3hEjhNYgwCsM4dMfkd
+         ZDjK1rYxSBMyDPzcVZ7/e+ac1u6LGtk3lhx+LfTv6rG5M6R0leuLNALbAfkjH+d7QTjj
+         dNyA==
+X-Gm-Message-State: AO0yUKVxr6P7udWR5IokW5pC5cAbp2TQ4wcGT/Iu6ZKVKFtnClvow8SP
+        BlIFnNy7EJ8rEmh/jkzIAZk=
+X-Google-Smtp-Source: AK7set/zisvzpVF1oVA+rUrz5DdY9o/hLU9ndApIrHUKrNKXORjyY3Ko0UX5Gtp6FPym29v9PopdzA==
+X-Received: by 2002:a17:902:f686:b0:19a:a647:1891 with SMTP id l6-20020a170902f68600b0019aa6471891mr2455870plg.67.1676689978086;
+        Fri, 17 Feb 2023 19:12:58 -0800 (PST)
+Received: from striker.. ([2401:4900:1c80:ffd7:ef1b:ca8:f52:fad])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b00198f36a8941sm3757490ple.221.2023.02.17.19.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 19:12:57 -0800 (PST)
+From:   Vishal Parmar <vishistriker@gmail.com>
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org
+Cc:     Vishal Parmar <vishistriker@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] first patch test
+Date:   Sat, 18 Feb 2023 08:42:37 +0530
+Message-Id: <20230218031238.5747-1-vishistriker@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 17 Feb 2023 15:18:20 -0800:
+Signed-off-by: Vishal Parmar <vishistriker@gmail.com>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-02-17-15-16-2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/38f8ccde04a3fa317b51b05e63c3cb57e1641931
-
-Thank you!
-
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index e4bcb5011360..c79dcee2213f 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2082,7 +2082,7 @@ static int uvc_probe(struct usb_interface *intf,
+ 		(const struct uvc_device_info *)id->driver_info;
+ 	int function;
+ 	int ret;
+-
++        pr_info("I changed uvcvideo driver in the Linux Kernel\n");
+ 	/* Allocate memory for the device and initialize it. */
+ 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+ 	if (dev == NULL)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
