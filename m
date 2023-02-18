@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7FA69B9E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299B369B9E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjBRLxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 06:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S229595AbjBRLx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 06:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRLxt (ORCPT
+        with ESMTP id S229607AbjBRLxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 06:53:49 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0147713D5F;
-        Sat, 18 Feb 2023 03:53:45 -0800 (PST)
+        Sat, 18 Feb 2023 06:53:55 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D924F18158;
+        Sat, 18 Feb 2023 03:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676721204; i=w_armin@gmx.de;
-        bh=/fmzoCaMhnWReJYZfoH3jC5r2/1L4ZtHhXop0SMK+UE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=AjnaHu7B/QYyUWn++aMX2z2PDtT2WQv0dRmm4KrGTRWpbYkdk0QCyX10FupKRt6mL
-         J269UD2U5ug5T7Ma3WajNoCsQdTMaRokHFO/s1J/9HBkeJZ7eSpt7dw+4wnsYnq1Dq
-         Inzzk9OreeokGPdY6nL9hjQ5Owmp9eqQPBzyrFKY11VkpycF4Qc00gpoECi2UdFACV
-         P0c0Bevx1EatxFtTbG4RIkJxKC8KWg5B51O2tGr5KWpmGGx6z9W/CMY6TY5i6+mG2a
-         G9yKLu/TAvGEp2bnSfd7ao0v7LEBNtxu++Y1ApYhxxiutzyhEq8lwdofzYJ3DjMNU7
-         eWiXcVGLO4CzQ==
+        t=1676721207; i=w_armin@gmx.de;
+        bh=QPjZNlJU4QJ41mwOkCGDhNx04tR/f7ULkAR65bMgRBE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=nKjGxFVawnebHNAYS2FFFcwbyNCrcCeqKOgaSTS7E1jsD4tSgossVDuwOB8eOEF0o
+         UybTERZcm5gAvVXSanYE2Jhvn4A1tCnFsWInmRSXnio9+bt8H4YAKdbPhe9aUSYhSG
+         eflUpGZkj22FsQgeuZ6Z9TcZ5MMzYXlB8gfWbbKS54gDgzvjVE206H0tUdneNv91Fz
+         yJWMlDEJGm2EmIeMJWK5MI3XjjN3W6HHfSTHQjepqvZOY7PLpK/RZUxwUzB93fDiq3
+         tk/l6tX3HcvhY8ActknHRb1K5nxRIVJbrLCiN2wDCCTbyjCxM/8L1pw7p1YC38XfiR
+         z7ItDAfoMsh3Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MTRMi-1p6H0x3WjU-00TiXJ; Sat, 18 Feb 2023 12:53:23 +0100
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M2O6Y-1pXBnd2nQE-003yMD; Sat, 18 Feb 2023 12:53:27 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     hdegoede@redhat.com, markgross@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] platform/x86: dell-ddv: Fix cache invalidation on resume
-Date:   Sat, 18 Feb 2023 12:53:17 +0100
-Message-Id: <20230218115318.20662-1-W_Armin@gmx.de>
+Subject: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
+Date:   Sat, 18 Feb 2023 12:53:18 +0100
+Message-Id: <20230218115318.20662-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
+References: <20230218115318.20662-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:77WJU57lj8Qu0dhg8UbEVrImGjypha5gHmE/E8whmJk1OnA42YP
- hmBKmg+cvSG1eC+eRXw22V+3TXrYDpc0pHU12QmcR2Y8nzj/FQSuWor1zJycIyZZ3hIPBZr
- yatAY3kB+3b+/QJUyQ0dm7U5Vt+j+/2NPVPdJRFk7f7Kk7/sSkENLnUNzo/Dim7WB586+FG
- NBoVmaH4ygN5cbxVWgi4A==
-UI-OutboundReport: notjunk:1;M01:P0:um7DH0aAbPI=;+ijOefp3GJ7g5xSDUG9+wwLyAPu
- r8ZVSN+Re8wvpGxBTwboOnm6d4ycJ50uHMOmCG4S97/skXJBzkE3MuB484L5roaSuKL7Kd+dB
- 0rL2EgMBh3jafMnUH+rQqpQM/t0ZuUaVYrip7wEMnU0/4zIjFwDXn3goZ2IFOZwc398Fdw6Zj
- yc4JtYDWb/C8HUD1/sNdcehbMGTMn3Frt105sP+ha3WZDR77nxeNvgAYycLwWmIi+I0Blu6QM
- gp0i+itop1/1MifnfG9K5cm22o6ZRKu4JGOyZfFmtcaKdPvp5kYRsCoEQsuR2ObgebCai1dWU
- 6/Cx7XEt4yI42SDHA+qy9b0i8HoAwyVYDDi1sQQYn2OWMjHLRNXeT9pJVdxWWElKsJS+REBR3
- DlRx9J1X0R7Ng1wycLSe5djG1oaocD8qTdg4/Rww3Ltf0RUJEt+/R9krJs+yRFxmJTpc2X97y
- gIRIC0QhW2uuv+eHr6ZlUK/OUUxWBB4Xf77x7Q0XGJPaAfOhywTN27zoE/BKOPDrpFFiZQoej
- rObsGtzNz8/nHgRIRuLBUdYqZeUrMB8saLfcjkxqF5wliauDuQ8DgQGAVbLTVlZk6zSzft9SP
- DY+nfXiXSuUgbzCF5ZV4ugYsdZdhy2kN/opOTW4JuwDQbsIIIdltPg+qgbKQq0v3o4qYh7VY7
- BHXial3maN2ogOF9Y3tfXIXEYFGNAD38srimI9xwcUEJSjO9kgxD8+uupOYroNuHWJmt4ODHH
- i7O+1WQHZxSLG+32kbh5XYhAW80PE52Ry7+kJdojwBjdzj4Wt+T9492KzeugxnRFuKPrXEGx5
- Q/Cjm7eqNmHu+3WQUt2gF/0oxFbu9B/bL2E2+T7nTeJnO3+bl5vakMXgbKSuwmywN0TVCIfge
- zRsA654Rl3YTCOQ2ne2QJKbvvCLdXw3S+0hKOdSH+YrILxg36GwLRtgWHVHLbzZhL4WVAfnh2
- 07p/+FfC3A5okUWWcXgiVgp1n1w=
+X-Provags-ID: V03:K1:Gbh4wqiM8biRiU8epJdlXhRMVTnObRg6WJp80kZzdY00wrcko8S
+ 9Gdz0+GGC7t3nN1lu3DHOaJ1ezIsY7QGdva0Llw+oFFUNnINEogt4utp8RslV9tWg/KwVUm
+ sAnDnfkjX47VjUc2crcBtec3myUtKGkwax60+GmAnWKKqs0tn620rEndVwHrVBNMefBQhqc
+ 9PTwcpUCs14ucRyre+42w==
+UI-OutboundReport: notjunk:1;M01:P0:fRhWJvkkKy4=;y//mm4Qs0ynnCNKzNgCXWQXQ4Eq
+ UoVtF5fB277FilJ4P22Ys91fyrt8h3MpLhwrjqivt2yHqZ1TCyYdhq9TRFabadZgesQO8vYnp
+ QlUe+6VwYCoXOEWzsB4Mdgc9ut2yPLx/rItdfSDL6dNhe9zlIfmtdRnRQIuZjDOLSfkEGFTRm
+ oGm3vSv/7AWkQNsNMSPUCvnWHw9eJQz48PJUTRTsd7zzMD7s4577IBycFIBbb/is/JGhTveC2
+ bW1pOVcX4nmzvClQ2fMzq+QBVa55heVEXteZmnZQ3fkshRRRSUZYh9BI41BcF8kqsbHIc69ns
+ p1XtMP/J+xYSi+H3FIGJA8+ZVXNZsrlsk0sgh1z78Efssxp88AOIgwsUtKqM1c2Er/EpeiTMZ
+ voezy1XYD+lhDOG+1ZUK4r4u94lXaLdky6bIBiWC6m8Myw2tukHnzqak1OUyN1yLG5rxTLTUl
+ W34Acg8oTQq4QByWAuJ28W1G+4MFhwQ2L4aDlYenq1zDj7l9IRSj1VPbCQwrN7uM86a3ZFx5T
+ YwzacgoLUB4i7jJiOezgsbFXkyQRfcztGgS15F/PXbUOQ/yCgrFG2O1x/IFSXRbLXMfcQPYEf
+ pAEGjS504TSVuHl5MXCGbetpDx8h0UMh3Di/kt9rQGHSa/M5QakV0prt+gnq5f/qjxZS+HDT8
+ YLRHjKRGn7l2RRRYnoRxcQoMoVdf3WWNa47Yh7Qgd2wcXvHSEkXL4ur6BMSiP+Nvbm1l4Vvmx
+ C8hqRoL1czmkcDBtlaPmUgMyMDVasmKEukG+zSeipLEvCOu5cU+LMZuiILbk3mcQUJPbxRmix
+ NLs6TrcFL7pN4z0fqa55Bwui6ZhJhxIYPxby0VQJD67Fg4p/UwETIKxksLwmGyjcmrPIh8Tke
+ asux1LqZBd36RLspqpkTZa9yoCbxXnQ1g3vtOQHifKwkbBuApNlpBQHvtlMXAACaGAG8dbojF
+ JN+PLJTLi7vvjZL36elEu984UrE=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,79 +71,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If one or both sensor buffers could not be initialized, either
-due to missing hardware support or due to some error during probing,
-the resume handler will encounter undefined behaviour when
-attempting to lock buffers then protected by an uninitialized or
-destroyed mutex.
-Fix this by introducing a "active" flag which is set during probe,
-and only invalidate buffers which where flaged as "active".
+After using the built-in UEFI hardware diagnostics to compare
+the measured battery temperature, i noticed that the temperature
+is actually expressed in tenth degree kelvin, similar to the
+SBS-Data standard. For example, a value of 2992 is displayed as
+26 degrees celsius.
+Fix the scaling so that the correct values are being displayed.
 
 Tested on a Dell Inspiron 3505.
 
-Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
 Changes in v2:
-- move checking of the "active" flag inside
-  dell_wmi_ddv_hwmon_cache_invalidate()
+- Avoid unnecessary rounding
 =2D--
- drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
 86/dell/dell-wmi-ddv.c
-index d547c9d09725..eff4e9649faf 100644
+index eff4e9649faf..2750dee99c3e 100644
 =2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
 +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-@@ -96,6 +96,7 @@ struct combined_chip_info {
- };
-
- struct dell_wmi_ddv_sensors {
-+	bool active;
- 	struct mutex lock;	/* protect caching */
- 	unsigned long timestamp;
- 	union acpi_object *obj;
-@@ -520,6 +521,9 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel=
-_create(struct device *dev
-
- static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_senso=
-rs *sensors)
- {
-+	if (!sensors->active)
-+		return;
-+
- 	mutex_lock(&sensors->lock);
- 	kfree(sensors->obj);
- 	sensors->obj =3D NULL;
-@@ -530,6 +534,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *dat=
-a)
- {
- 	struct dell_wmi_ddv_sensors *sensors =3D data;
-
-+	sensors->active =3D false;
- 	mutex_destroy(&sensors->lock);
- 	kfree(sensors->obj);
- }
-@@ -549,6 +554,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel=
-_init(struct wmi_device *w
- 		return ERR_PTR(ret);
-
- 	mutex_init(&sensors->lock);
-+	sensors->active =3D true;
-
- 	ret =3D devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_de=
-stroy, sensors);
+@@ -17,7 +17,6 @@
+ #include <linux/kernel.h>
+ #include <linux/hwmon.h>
+ #include <linux/kstrtox.h>
+-#include <linux/math.h>
+ #include <linux/math64.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+@@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct de=
+vice_attribute *attr, char
  	if (ret < 0)
-@@ -852,7 +858,7 @@ static int dell_wmi_ddv_resume(struct device *dev)
- {
- 	struct dell_wmi_ddv_data *data =3D dev_get_drvdata(dev);
+ 		return ret;
 
--	/* Force re-reading of all sensors */
-+	/* Force re-reading of all active sensors */
- 	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
- 	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+-	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
++	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
++	return sysfs_emit(buf, "%d\n", value - 2731);
+ }
 
+ static ssize_t eppid_show(struct device *dev, struct device_attribute *at=
+tr, char *buf)
 =2D-
 2.30.2
 
