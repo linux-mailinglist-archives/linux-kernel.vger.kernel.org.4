@@ -2,139 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCAD69BA98
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F8469BA9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBRPTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 10:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S229702AbjBRPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 10:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBRPTk (ORCPT
+        with ESMTP id S229700AbjBRPUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 10:19:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3715546;
-        Sat, 18 Feb 2023 07:19:39 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b22so1367224lfv.5;
-        Sat, 18 Feb 2023 07:19:39 -0800 (PST)
+        Sat, 18 Feb 2023 10:20:02 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A6D17CF9
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:19:58 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z10so3072038edc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:19:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7q2Wg8S1rsfm30D7lgChP+RGLUmdPuKtGfy28d6nd2c=;
-        b=Q+twZu/73PHUCZPn32nq0NgKH/rksz15uwZZFZqEIxVuq7cBUyB91DH9OFAkMhBZOZ
-         25h4g1NLayShc27rvbNVkiohaUxWtzE8Ggc//EMsxd0HqhYXAftPtFojX5+lMfYHVmZP
-         PXwIF10DE36X0lJNd/UsoMy2vlQlsUWT723LH09UTQtZIZ5aY8aqRnWSOc8UiAPiTTHL
-         6fIoa9Gu54FZZWDRIEkiZg9RjNn0g++x8pTqJQIWfc0noFCtrvbfU715AePLjKoxCX/E
-         If9AQx/7mZzIXoR9JgsZxE6WL3X9vbb3g5vMu2bVZDVCz12eYAHutrUL1o0GgMiFB4sZ
-         LJgQ==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Es+Lqx15nhH72hDuco7gnSjiFCCGxIOyI29cELR1jX0=;
+        b=GU2xEXt3bkwHO76OElw0E/hoqS38izDZLWpqKZCMreNCIav87v6LWdWmoMojofxhYA
+         SoCnIMYXHFS7mdokBbt+Vyt6hDGvmY9VCHUTbgjEmfQCYLdUyXDh3paJIt2jGdE7+DZi
+         GiS++kp83n/QBwHyOc+0kGxApPVkALbDMjUJuyYlkkJV/s0AowMbR5H94xj8ECotip6a
+         Xj6KmOa+hVEFyvExjJ2YmXncOx+2o3weTVWLCM/fKwTtQDfPYgLu90BKkerLymM75hAd
+         hDmLWCj5GvXUur13xcQnLmJU9o6EUPoYjz3FRiL7d23Y2HLoiKxm+9IxgPHJYEqKNwOu
+         d3cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7q2Wg8S1rsfm30D7lgChP+RGLUmdPuKtGfy28d6nd2c=;
-        b=MR5cPGrk3ycy9gZudMWBmZEpeiMS6ckbbna4uvnRwQrPqf36dMa4hC/ZvUEvpQPKwo
-         o65TuVGzs4vrk57pi8mHY77wsKkSLPW4gy6MA4TYXKQG9NP816JB3bL3c86gni0B5UNd
-         4BsF/jcpH/hwAH4uxNVtLUpVrhCayvGRayqon0/4r7H7FcHzeCKKY1+7TvCR7egxe37T
-         X+OWjOtp8zfQGS4OzJFiAST2/gGTfGS8JdGwxNMjL/hP/HggBGEg70Mq10oQVDw4XCRd
-         WjXb0kwoyjvxHtsA+u6XKOTHxLf4yWfzRkgqJzFWnas5wcNLK6mgyAhqF6L2MMhFKBY4
-         UxsA==
-X-Gm-Message-State: AO0yUKU6aT8dTP7DIfV/S44m6WoHAI09YJMXDFfzZLJmzvMlbI/VLdH/
-        1fG4NCscwiOKCaMGty8m+ohNDiXVbXzrLFm/LZhZRaON
-X-Google-Smtp-Source: AK7set9O89dNDCkMb+Ei/ZIH686OBETFP2ZLwTaSTkzyJBNq3dib4fxm87Hu9j1qs5CFBv5i1vz4rqvnBjNPBHRTCvQ=
-X-Received: by 2002:a05:6512:501:b0:4d5:ca32:7bc3 with SMTP id
- o1-20020a056512050100b004d5ca327bc3mr1349945lfb.10.1676733577507; Sat, 18 Feb
- 2023 07:19:37 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Es+Lqx15nhH72hDuco7gnSjiFCCGxIOyI29cELR1jX0=;
+        b=Ce6b2nUt7b3rlkeePig1bzu8ToFfw9kP96zxfpFPTDkMkhH/cUXlwQ/x63OeOk53z7
+         OO2JUQ7ahh1HKQu9XARM8HDB4R12U2HaUZ08WlAvgcCg1XbnhD3+ioHhWxY/u1k0zmwb
+         0A+v7LB6bBkiRoXiabTEJlUd4dNCnSNxJnr7KtLNWJzKdeFklzB6ruk6pibBHRV2lyyb
+         A9gL0YRdwrEcp9lD1IBgw7ukBOEZtwFnrmXv9inEp69jMprmkGP2HucRpPstgAXxEGiT
+         17VPJ0Z7EVGoQEmiI5yato1a+YCIJqTwi4UJrpdb5LsJDdOq3bgMDR/T9b5hRm1seEXo
+         w+zw==
+X-Gm-Message-State: AO0yUKWWtUPPQykdojsE0gDXYU6jdf3OYGgHZosp80q7ihxCOgB+toSG
+        d/YeXY9uHnl2k9l7BCweUXVPxWeqT+c=
+X-Google-Smtp-Source: AK7set+INP8dEuhA7Ie/h+TUrwSv4cZGC/e/19fQCwFgu5XImo5u/0P6x43B+NNN+GUOAve5XBo5fg==
+X-Received: by 2002:a17:907:8c11:b0:8b1:7968:7fb8 with SMTP id ta17-20020a1709078c1100b008b179687fb8mr8590794ejc.62.1676733596410;
+        Sat, 18 Feb 2023 07:19:56 -0800 (PST)
+Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
+        by smtp.googlemail.com with ESMTPSA id pk2-20020a170906d7a200b008806a3c22c5sm3501464ejb.25.2023.02.18.07.19.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 07:19:55 -0800 (PST)
+Message-ID: <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
+Date:   Sat, 18 Feb 2023 15:19:53 +0000
 MIME-Version: 1.0
-References: <20230218002436.give.204-kees@kernel.org> <CAKYAXd9Y+wCbAy3a_W55fgb2Sy7M9UQUhR+XujaTKZ255YCjGg@mail.gmail.com>
-In-Reply-To: <CAKYAXd9Y+wCbAy3a_W55fgb2Sy7M9UQUhR+XujaTKZ255YCjGg@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 18 Feb 2023 09:19:26 -0600
-Message-ID: <CAH2r5msJ1ZogypaiiLQ=STiroEXULwJr71_ta_+ZamXSqzxgpA@mail.gmail.com>
-Subject: Re: [PATCH v3] smb3: Replace smb2pdu 1-element arrays with flex-arrays
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Dave Airlie <airlied@gmail.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
+ <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+ <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+ <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+ <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
+ <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+ <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+ <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
+ <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
+ <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
+Content-Language: en-GB
+From:   Chris Clayton <chris2553@googlemail.com>
+In-Reply-To: <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-merged into cifs-2.6.git for-next pending testing
-
-On Fri, Feb 17, 2023 at 9:24 PM Namjae Jeon <linkinjeon@kernel.org> wrote:
->
-> 2023-02-18 9:24 GMT+09:00, Kees Cook <keescook@chromium.org>:
-> > The kernel is globally removing the ambiguous 0-length and 1-element
-> > arrays in favor of flexible arrays, so that we can gain both compile-time
-> > and run-time array bounds checking[1].
-> >
-> > Replace the trailing 1-element array with a flexible array in the
-> > following structures:
-> >
-> >       struct smb2_err_rsp
-> >       struct smb2_tree_connect_req
-> >       struct smb2_negotiate_rsp
-> >       struct smb2_sess_setup_req
-> >       struct smb2_sess_setup_rsp
-> >       struct smb2_read_req
-> >       struct smb2_read_rsp
-> >       struct smb2_write_req
-> >       struct smb2_write_rsp
-> >       struct smb2_query_directory_req
-> >       struct smb2_query_directory_rsp
-> >       struct smb2_set_info_req
-> >       struct smb2_change_notify_rsp
-> >       struct smb2_create_rsp
-> >       struct smb2_query_info_req
-> >       struct smb2_query_info_rsp
-> >
-> > Replace the trailing 1-element array with a flexible array, but leave
-> > the existing structure padding:
-> >
-> >       struct smb2_file_all_info
-> >       struct smb2_lock_req
-> >
-> > Adjust all related size calculations to match the changes to sizeof().
-> >
-> > No machine code output or .data section differences are produced after
-> > these changes.
-> >
-> > [1] For lots of details, see both:
-> >
-> > https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
-> >     https://people.kernel.org/kees/bounded-flexible-arrays-in-c
-> >
-> > Cc: Steve French <sfrench@samba.org>
-> > Cc: Paulo Alcantara <pc@cjr.nz>
-> > Cc: Ronnie Sahlberg <lsahlber@redhat.com>
-> > Cc: Shyam Prasad N <sprasad@microsoft.com>
-> > Cc: Tom Talpey <tom@talpey.com>
-> > Cc: Namjae Jeon <linkinjeon@kernel.org>
-> > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Cc: linux-cifs@vger.kernel.org
-> > Cc: samba-technical@lists.samba.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
->
-> Thanks!
 
 
+On 18/02/2023 12:25, Karol Herbst wrote:
+> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
+>>
+>>
+>>
+>> On 15/02/2023 11:09, Karol Herbst wrote:
+>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
+>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>
+>>>> On 13.02.23 10:14, Chris Clayton wrote:
+>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
+>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>>>>>>
+>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>>>>>>
+>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>>>>>>> time to fix it and there is one thing I wonder:
+>>>>>>>>>>
+>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>>>>>>> the root of this problem?
+>>>>>>>>>
+>>>>>>>>> I did now and I can't spot anything. I think at this point it would
+>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>>>>>>> any is in a weird state preventing the machine from shutting down.
+>>>>>>>>
+>>>>>>>> Many thx for looking into it!
+>>>>>>>
+>>>>>>> Yes, thanks Karol.
+>>>>>>>
+>>>>>>> Attached is the output from dmesg when this block of code:
+>>>>>>>
+>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
+>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
+>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>>>>>>         /bin/echo t > /proc/sysrq-trigger
+>>>>>>>         /bin/sleep 1
+>>>>>>>         /bin/sync
+>>>>>>>         /bin/sleep 1
+>>>>>>>         kill $(pidof dmesg)
+>>>>>>>         /bin/umount /mnt/sda7
+>>>>>>>
+>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>>>>>>
+>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
+>>>>>
+>>>>> Thanks Dave. [...]
+>>>> FWIW, in case anyone strands here in the archives: the msg was
+>>>> truncated. The full post can be found in a new thread:
+>>>>
+>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>>
+>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
+>>>> really like it, but for regression tracking I'm now putting this on the
+>>>> back-burner, as a fix is not in sight.
+>>>>
+>>>> #regzbot monitor:
+>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>> #regzbot backburner: hard to debug and apparently rare
+>>>> #regzbot ignore-activity
+>>>>
+>>>
+>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
+>>> laptop I got doesn't work on Nouveau because of firmware related
+>>> issues and we probably need to get updated ones from Nvidia here :(
+>>>
+>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
+>>> see anything in the logs which would prevent that from happening.
+>>> Unless it's waiting on one of the tasks to complete, but none of them
+>>> looked in any way nouveau related.
+>>>
+>>> If somebody else has any fancy kernel debugging tips here to figure
+>>> out why it hangs, that would be very helpful...
+>>>
+>>
+>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
+>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
+>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
+>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
+>>
+>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
+>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
+>> partition, and thus the scrubber binary, have become inaccessible.
+>>
+>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
+>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
+>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
+>> permanent solution.
+>>
+>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
+>>
+> 
+> Well.. nouveau shouldn't prevent the system from shutting down if the
+> firmware file isn't available. Or at least it should print a
+> warning/error. Mind messing with the code a little to see if skipping
+> it kind of works? I probably can also come up with a patch by next
+> week.
+> 
+Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
 
--- 
-Thanks,
+int
+gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
+{
+        nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
 
-Steve
+        if (nvkm_msec(falcon->owner->device, 10,
+                if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
+                        break;
+        ) < 0)
+                return -ETIMEDOUT;
+
+        return 0;
+}
+
+nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
+appears.> Chris
+>>
+>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>> --
+>>>> Everything you wanna know about Linux kernel regression tracking:
+>>>> https://linux-regtracking.leemhuis.info/about/#tldr
+>>>> That page also explains what to do if mails like this annoy you.
+>>>>
+>>>> #regzbot ignore-activity
+>>>>
+>>>
+>>
+> 
