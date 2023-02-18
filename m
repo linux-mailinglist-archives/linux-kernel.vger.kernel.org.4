@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2B169BA92
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B13669BA94
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjBRPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 10:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S229679AbjBRPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 10:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBRPIh (ORCPT
+        with ESMTP id S229461AbjBRPJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 10:08:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB9814221;
-        Sat, 18 Feb 2023 07:08:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED20BB82297;
-        Sat, 18 Feb 2023 15:08:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B55C433D2;
-        Sat, 18 Feb 2023 15:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676732913;
-        bh=sPa0pH2g0UXFbG2oKpJGFWnf16edjVekfceTCAy0iO0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DjCcLFyPtY4eX0lG4GQFGcPX/VgqDZI4nA14qNkjlygE9mU7Fs/8865bB6r+p0mgb
-         27juK2Yn9jCS5V0oTFwHevhsrkcirvCHLmaeOL7mIOQdI//baC3OfrKA1aJStZLrDM
-         ebGqXsKBwPrlsKFCd5YLynJNKZY5/8yv77Q73X7EMEJYxR6aKvL2XK5iBKXJmO6LSk
-         7Xt0u68wcWxDxtQIp9mPjJ44pdzMCNwMHaxUcHE90FrPT81nh145cOFrZddWkILOxS
-         8PmMHsOIDFXnNVC4XGcJCCfpDQwqqQRvqdQftTcDiDeNTd+ilp+ySckjbUgz1o1xhI
-         Y7kOpzhUxztig==
-Date:   Sat, 18 Feb 2023 15:08:28 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Message-ID: <Y/Dp7OSNIAL39DSV@spud>
-References: <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
- <Y+8x/KSujhgNLAd6@wendy>
- <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
- <Y++B43uCnPQlRYFi@wendy>
- <dcba75b5-7b62-35aa-6836-5d5edd785002@linaro.org>
- <Y++q9ln8P3XegqfN@spud>
- <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
- <Y/CztNs6laTzttrI@spud>
- <a3217699-7b23-35e6-84b2-fe9e52158481@linaro.org>
+        Sat, 18 Feb 2023 10:09:46 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19814221
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:09:44 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id i28so2865198eda.8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:09:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgJb9gVH88PGc08H2WjK2lb5uIuxbgsWahfg6NJGgvc=;
+        b=NOf7dxPFDZRhzPkx6GyGPyfikWbRviwRTkr22smpaRGvLecdj4iSZZSIA63iROUmKu
+         KDMFx0ABUHjiCNq9PAEaf3ynIwc18NRBzzmfgJuqUAFwRLtQddIwzEW94TQlmjR8bTel
+         Ko6twuH3hrKskeFGYt9zwMIOOTegVc6hhRj94Rewr9BJBOyjfDABZxsAtSjdQ+CLl+cB
+         s00y5eiDQtESQmO8O2A2Yn+K/dIU4XHO23Br/v0RpLCrvlt0TzEiFzx3RYFj28erzzEX
+         XfCukIayTfFche3Ff72u29qMT6d3unJ/UEp5laHioHdnw4GTiKXeaZ0CzmDUke3hF4vV
+         rEPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgJb9gVH88PGc08H2WjK2lb5uIuxbgsWahfg6NJGgvc=;
+        b=kBohMqt1iMaGvFnfT/880/AXfrGtAY01lrwAivnU22TPqo8CfTsgxhYmgKKbyYK7xL
+         2MQQ8JEe+UKhJxVvZ0fX+CXpW4KIlPC5LQ3/bxcll0lCmySpfKWQVnpk19PLu9IMirS7
+         xvhXNQHC3iO9oJihJjPVg78ZvspogWNBf1dn6MLfvZ9qIzUiaSnFArAqBW+V/27/PHJz
+         JBtI6kAvXD/4YeNc0nk7FkL65KFCIMMhjuxLCJ2kf+XTtpsCsoUWGtUH6HBe0PJq+cXI
+         x65LKaE7kLIVsrAv2m0R6ITefbr+6ggpm60MRV7ulMsRHcgMTECdgayvg4SSAfT2hEAR
+         l41g==
+X-Gm-Message-State: AO0yUKXevss//ja7O+t2hQSF6GDlqTmnSBLT6H14A9u9PD/BeBwpD0MN
+        3+SduU9PkxLRvG59wYTE4UHBhw==
+X-Google-Smtp-Source: AK7set8B7ASOT9ahO5mmjKrhEN8TOQur8B2zQbAphdp95C/MToAcBLZ2OShTFKDaR7If0BvEHlCIaw==
+X-Received: by 2002:a05:6402:556:b0:4ac:b32e:b65 with SMTP id i22-20020a056402055600b004acb32e0b65mr5588099edx.3.1676732983283;
+        Sat, 18 Feb 2023 07:09:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j17-20020a508a91000000b004a21c9facd5sm3685608edj.67.2023.02.18.07.09.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 07:09:42 -0800 (PST)
+Message-ID: <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
+Date:   Sat, 18 Feb 2023 16:09:41 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="d3e604Nj3oEHKdcd"
-Content-Disposition: inline
-In-Reply-To: <a3217699-7b23-35e6-84b2-fe9e52158481@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     linux-nfs@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <65ae10cd-a086-47c6-c881-d1385d7fcf42@leemhuis.info>
+ <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,120 +80,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18/02/2023 05:42, Linux regression tracking #update (Thorsten
+Leemhuis) wrote:
+> [TLDR: This mail in primarily relevant for Linux regression tracking. A
+> change or fix related to the regression discussed in this thread was
+> posted or applied, but it did not use a Link: tag to point to the
+> report, as Linus and the documentation call for. Things happen, no
+> worries -- but now the regression tracking bot needs to be told manually
+> about the fix. See link in footer if these mails annoy you.]
+> 
+> On 08.01.23 09:52, Linux kernel regression tracking (#adding) wrote:
+>> On 07.01.23 16:44, Krzysztof Kozlowski wrote:
+>>>
+>>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
+>>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
+>>> when mounting NFS root on NFSv4 client:
+>> [...]
+>> Thanks for the report. To be sure the issue doesn't fall through the
+>> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+>> tracking bot:
+>>
+>> #regzbot ^introduced 7fd461c47
+>> #regzbot title nfs: NULL pointer dereference since NFS_V4_2_READ_PLUS is
+>> enabled by default
+>> #regzbot ignore-activity
+> 
+> #regzbot fix: 896e090eefedeb8a715ea19938a2791c32679
 
---d3e604Nj3oEHKdcd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I see it was posted and merged as "Revert "NFSv4.2: Change the default
+KConfig value for READ_PLUS"". It's nice to give credits to people who
+report bugs with "Reported-by" tag.
 
-On Sat, Feb 18, 2023 at 03:55:25PM +0100, Krzysztof Kozlowski wrote:
-> On 18/02/2023 12:17, Conor Dooley wrote:
-> > On Sat, Feb 18, 2023 at 11:20:30AM +0100, Krzysztof Kozlowski wrote:
+Best regards,
+Krzysztof
 
-> >>>> That's a long thread, please summarize what you ask. Otherwise I hav=
-e no
-> >>>> clue what is the question.
-> >>>
-> >>> Sorry. I tried to preserve the context of the conversation the last t=
-ime
-> >>> I cropped it so that things would be contained on one email.
-> >>>
-> >>> For me at least, I am wondering how you convey that out of a list of
-> >>> clock inputs (for example a, b, c, d) that two of the clocks are inpu=
-ts
-> >>> to a mux and it is only required to provide one of the two (say b & c=
-).
-> >=20
-> > You skipped this part which was what I was trying to ask you about.
->=20
-> Yeah, I skipped a lot because there was one big thread with a question:
-> what do you think? Sorry, I will not dig 8 emails thread to figure out
-> which question is to me and which is not...
-
-This was in the cut-down message & a fake scenario to avoid you needing
-to understand the full thread.
-I kept the context originally so that you would not have to dig out the
-thread & provided the fake scenario this time for this very reason.
-
-> > Do you know how to convey this situation, or is it even possible to
-> > express those rules?
->=20
-> oneOf:
->  - clock-names:
->      minItems: 3
->      items:
->        - a
->        - b
->        - c
->        - d
->  - clock-names:
->      items:
->        - a
->        - b
->        - d
->=20
-> or maybe:
->  - clock-names:
->      minItems: 3
->      items:
->        - a
->        - b
->        - enum: [c, d]
->        - d
-
-Thanks for the suggestions. Without actually going and playing with it,
-the first of those two looks like it may be the right fit for this
-situation, depending on what Hal says the hardware can do.
-
-> >>>> Does the mux works correctly if clock input is not connected? I mean,
-> >>>> are you now talking about real hardware or some simplification from =
-SW
-> >>>> point of view?
-> >>>
-> >>> I'm coming at this from an angle of "is a StarFive customer going to =
-show
-> >>> up with a devicetree containing dummy fixed-clocks to satisfy dtbs_ch=
-eck
-> >>> because they opted to only populate one input to the mux".
-> >>> I don't really care about implications for the driver, just about
-> >>> whether the hardware allows for inputs to the mux to be left
-> >>> un-populated.
-> >>
-> >> Whether hardware allows - not a question to me.
-> >=20
-> >> BTW, this is rather question coming from me...
-> >=20
-> > I don't understand what you mean by this, sorry.
->=20
-> You said to a letter addressed to me "whether the hardware allows for
-> ...". Why would you ask me about hardware I know nothing about? That was
-> my question - I am asking - whether hardware allows it or not. Then
-> write bindings depending on that.
-
-There was no question here, instead it was an answer to this question of
-yours:
-> I mean,
-> are you now talking about real hardware or some simplification from SW
-> point of view?
-
-In which I was saying I cared about the "real hardware". For obvious
-reasons, I wouldn't ask you to explain whether the hardware is capable
-of it or not!
-Perhaps your original question here was misunderstood.
-
-Thanks for the suggestions,
-Conor.
-
-
---d3e604Nj3oEHKdcd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/Dp2gAKCRB4tDGHoIJi
-0k8fAP9J1L6UC9WiKthxZyx3ScL304V9dCIoiKl7RfN3APwx8QEAtNgO+U4h/T3x
-XP94Chr0S+Ck/9gT1OENwU5YFD/x2QE=
-=O/TG
------END PGP SIGNATURE-----
-
---d3e604Nj3oEHKdcd--
