@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B13669BA94
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A7369BA97
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjBRPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 10:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S229533AbjBRPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 10:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBRPJq (ORCPT
+        with ESMTP id S229445AbjBRPQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 10:09:46 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19814221
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:09:44 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id i28so2865198eda.8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgJb9gVH88PGc08H2WjK2lb5uIuxbgsWahfg6NJGgvc=;
-        b=NOf7dxPFDZRhzPkx6GyGPyfikWbRviwRTkr22smpaRGvLecdj4iSZZSIA63iROUmKu
-         KDMFx0ABUHjiCNq9PAEaf3ynIwc18NRBzzmfgJuqUAFwRLtQddIwzEW94TQlmjR8bTel
-         Ko6twuH3hrKskeFGYt9zwMIOOTegVc6hhRj94Rewr9BJBOyjfDABZxsAtSjdQ+CLl+cB
-         s00y5eiDQtESQmO8O2A2Yn+K/dIU4XHO23Br/v0RpLCrvlt0TzEiFzx3RYFj28erzzEX
-         XfCukIayTfFche3Ff72u29qMT6d3unJ/UEp5laHioHdnw4GTiKXeaZ0CzmDUke3hF4vV
-         rEPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgJb9gVH88PGc08H2WjK2lb5uIuxbgsWahfg6NJGgvc=;
-        b=kBohMqt1iMaGvFnfT/880/AXfrGtAY01lrwAivnU22TPqo8CfTsgxhYmgKKbyYK7xL
-         2MQQ8JEe+UKhJxVvZ0fX+CXpW4KIlPC5LQ3/bxcll0lCmySpfKWQVnpk19PLu9IMirS7
-         xvhXNQHC3iO9oJihJjPVg78ZvspogWNBf1dn6MLfvZ9qIzUiaSnFArAqBW+V/27/PHJz
-         JBtI6kAvXD/4YeNc0nk7FkL65KFCIMMhjuxLCJ2kf+XTtpsCsoUWGtUH6HBe0PJq+cXI
-         x65LKaE7kLIVsrAv2m0R6ITefbr+6ggpm60MRV7ulMsRHcgMTECdgayvg4SSAfT2hEAR
-         l41g==
-X-Gm-Message-State: AO0yUKXevss//ja7O+t2hQSF6GDlqTmnSBLT6H14A9u9PD/BeBwpD0MN
-        3+SduU9PkxLRvG59wYTE4UHBhw==
-X-Google-Smtp-Source: AK7set8B7ASOT9ahO5mmjKrhEN8TOQur8B2zQbAphdp95C/MToAcBLZ2OShTFKDaR7If0BvEHlCIaw==
-X-Received: by 2002:a05:6402:556:b0:4ac:b32e:b65 with SMTP id i22-20020a056402055600b004acb32e0b65mr5588099edx.3.1676732983283;
-        Sat, 18 Feb 2023 07:09:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j17-20020a508a91000000b004a21c9facd5sm3685608edj.67.2023.02.18.07.09.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 07:09:42 -0800 (PST)
-Message-ID: <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
-Date:   Sat, 18 Feb 2023 16:09:41 +0100
+        Sat, 18 Feb 2023 10:16:26 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BFA14E99
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:16:24 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vbw4f5G_1676733378;
+Received: from 30.236.26.42(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vbw4f5G_1676733378)
+          by smtp.aliyun-inc.com;
+          Sat, 18 Feb 2023 23:16:19 +0800
+Message-ID: <fffbd8d2-11ad-1c09-6174-76cb13fa5e59@linux.alibaba.com>
+Date:   Sat, 18 Feb 2023 23:16:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     linux-nfs@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <65ae10cd-a086-47c6-c881-d1385d7fcf42@leemhuis.info>
- <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/arm-cmn: Fix and refactor device mapping resource
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2023 05:42, Linux regression tracking #update (Thorsten
-Leemhuis) wrote:
-> [TLDR: This mail in primarily relevant for Linux regression tracking. A
-> change or fix related to the regression discussed in this thread was
-> posted or applied, but it did not use a Link: tag to point to the
-> report, as Linus and the documentation call for. Things happen, no
-> worries -- but now the regression tracking bot needs to be told manually
-> about the fix. See link in footer if these mails annoy you.]
+Hi all,
+
+Do you have any comments on this?:)
+
+Thanks,
+Jing
+
+在 2023/2/16 下午4:17, Jing Zhang 写道:
+> The devm_platform_ioremap_resource() won't let the platform device
+> claim resource when the ACPI companion device has already claimed it.
+> If CMN-ANY except CMN600 is ACPI companion device, it will return
+> -EBUSY in devm_platform_ioremap_resource(), and the driver cannot be
+> successfully installed.
 > 
-> On 08.01.23 09:52, Linux kernel regression tracking (#adding) wrote:
->> On 07.01.23 16:44, Krzysztof Kozlowski wrote:
->>>
->>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
->>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
->>> when mounting NFS root on NFSv4 client:
->> [...]
->> Thanks for the report. To be sure the issue doesn't fall through the
->> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
->> tracking bot:
->>
->> #regzbot ^introduced 7fd461c47
->> #regzbot title nfs: NULL pointer dereference since NFS_V4_2_READ_PLUS is
->> enabled by default
->> #regzbot ignore-activity
+> So let ACPI companion device call arm_cmn_acpi_probe and not claim
+> resource again. In addition, the arm_cmn_acpi_probe() and
+> arm_cmn_of_probe() functions are refactored to make them compatible
+> with both CMN600 and CMN-ANY.
 > 
-> #regzbot fix: 896e090eefedeb8a715ea19938a2791c32679
-
-I see it was posted and merged as "Revert "NFSv4.2: Change the default
-KConfig value for READ_PLUS"". It's nice to give credits to people who
-report bugs with "Reported-by" tag.
-
-Best regards,
-Krzysztof
-
+> Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
+> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+> ---
+>  drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 37 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+> index 1deb61b..beb3b37 100644
+> --- a/drivers/perf/arm-cmn.c
+> +++ b/drivers/perf/arm-cmn.c
+> @@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+>  	return 0;
+>  }
+>  
+> -static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+> +static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>  {
+>  	struct resource *cfg, *root;
+>  
+> @@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>  	if (!cfg)
+>  		return -EINVAL;
+>  
+> -	root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> -	if (!root)
+> -		return -EINVAL;
+> +	/* If ACPI defines more than one resource, such as cmn-600, then there may be
+> +	 * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
+> +	 * be obtained from the second resource. Otherwise, it can be considered that
+> +	 * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
+> +	 */
+> +	if (pdev->num_resources > 1) {
+> +		root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +		if (!root)
+> +			return -EINVAL;
+>  
+> -	if (!resource_contains(cfg, root))
+> -		swap(cfg, root);
+> +		if (!resource_contains(cfg, root))
+> +			swap(cfg, root);
+> +	} else {
+> +		root = cfg;
+> +	}
+>  	/*
+>  	 * Note that devm_ioremap_resource() is dumb and won't let the platform
+>  	 * device claim cfg when the ACPI companion device has already claimed
+> @@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>  	 * appropriate name, we don't really need to do it again here anyway.
+>  	 */
+>  	cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
+> -	if (!cmn->base)
+> -		return -ENOMEM;
+> +	if (IS_ERR(cmn->base))
+> +		return PTR_ERR(cmn->base);
+>  
+>  	return root->start - cfg->start;
+>  }
+>  
+> -static int arm_cmn600_of_probe(struct device_node *np)
+> +static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>  {
+>  	u32 rootnode;
+> +	int ret;
+> +
+> +	cmn->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(cmn->base))
+> +		return PTR_ERR(cmn->base);
+>  
+> -	return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
+> +	/* If of_property_read_u32() return EINVAL, it means that device tree has
+> +	 * not define root-node, and root-node will return 0, which is compatible
+> +	 * with cmn-600 and cmn-any.
+> +	 */
+> +	ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
+> +	if (ret == -EINVAL)
+> +		return 0;
+> +
+> +	return rootnode;
+>  }
+>  
+>  static int arm_cmn_probe(struct platform_device *pdev)
+> @@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
+>  	cmn->model = (unsigned long)device_get_match_data(cmn->dev);
+>  	platform_set_drvdata(pdev, cmn);
+>  
+> -	if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
+> -		rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+> -	} else {
+> -		rootnode = 0;
+> -		cmn->base = devm_platform_ioremap_resource(pdev, 0);
+> -		if (IS_ERR(cmn->base))
+> -			return PTR_ERR(cmn->base);
+> -		if (cmn->model == CMN600)
+> -			rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+> -	}
+> +	if (has_acpi_companion(cmn->dev))
+> +		rootnode = arm_cmn_acpi_probe(pdev, cmn);
+> +	else
+> +		rootnode = arm_cmn_of_probe(pdev, cmn);
+> +
+>  	if (rootnode < 0)
+>  		return rootnode;
+>  
