@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8483069B6D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2968569B6DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjBRAbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S230103AbjBRAbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjBRAaQ (ORCPT
+        with ESMTP id S229656AbjBRAan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:30:16 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A257964B22
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:37 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5365a8e6d8dso18114837b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:37 -0800 (PST)
+        Fri, 17 Feb 2023 19:30:43 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FED6D264
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:41 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 75-20020a250b4e000000b0090f2c84a6a4so1998119ybl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GaGw9/EzNbJa/6t4pJ7yTdVKyp/NxSZHrGSlaKMUK+E=;
-        b=JocgWYINYVmULfBzV4L8RQDVrC/ksz9Y8dI+J+nlAsc/Rp1x6bcRPeZoTXr9WfAAcE
-         637vbboTsrEowR0AFIppjUO9sj33exLylRWnzGJRB4Ke4REBcvqZSCDhAGTVp/j5YufQ
-         YgJobCIYoQmdFEhMN4GhlXFaOyyGAAfpa0yi+wp2F9k5f0rcjtQQjbs0cPJHzrVzFUhk
-         50adDYi9tmH1ngFR2JYpBWBk6Q0MNk3dZbjF//o0K6YVOKO0ibfrqlf5m/HRlbVFSL22
-         zZbQkatRHAWrwIFzYMCpOzJ34fpVzrSFt1DFYR7+DUtjlcSXBgnd1OMWELyjBlQGE0L4
-         N6FQ==
+        bh=ep+t2caOQSahkPTOUAWt22QPS6ka0wL1iktlvruOFtk=;
+        b=eXxtIitdVZvzFBf04daw9PPgRtXdmihKwPkQjcig6vMYYMtp+LOPKmFy/GNPGDZBuZ
+         hUMbzRNTCrNmLeDYHlIEgRctvtpQ9FpU/o7UPh1ZIp/HRvg6DXU0nPANTJe2xRrjJGwp
+         WbMuaqtCTStJZiCZ1A+9pK76quqdRz7D7vwYcnbCxzAH8ZqKG92mdTDkW+Ff5KgL16Oc
+         bfQ+hpZtyfxk3DBK5nZlhD8pUxO/J77oxCvJiRMYzZvWPl+L1gHyATsIUcMQzvI17Xkm
+         FGAjE5aD9xBtLlj157PrQ56C2U6XXydzea3z40X2BAfKNbG/jjnHVSZCkfPzbPOV1U8m
+         sBLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GaGw9/EzNbJa/6t4pJ7yTdVKyp/NxSZHrGSlaKMUK+E=;
-        b=BFhwe3q2T8PM0Yr8wQ1Cqa/BHYcdYzAxA0xGpGwXX6DctVUR//wKKoH8z5uuOJQGTO
-         3W3hqX48V9aKR4G9H9ksHPutSSh3cYJHxyz7xOiDEyLeGoYTV6qNnuar2tCoIDkmgg1X
-         Xl71DxR9aFonk/tpwTX2C0ekHh5Q5pECu7G8uA3UcqJw/MCm7YA26j5IpWGvMA/6BGjZ
-         MJOLgrz0eQbMUVVzSHReTSb9Ac9EtOk/OZU+qbe++7VEnppEo8HzkmbAFmiewkkffDBW
-         O19lAB/bAA4MkXUaCP2m72/tbQwtrProSD3/VLf9xrnGYJT65OMtqvoVFyhMSW50tt1x
-         gMqA==
-X-Gm-Message-State: AO0yUKVAz+dU636JJcw48hVFNoHmrPqzGjFomNzoTz3lZWs+D6AEmf3F
-        QE6vX3e5z69mUWVb2/BKh0k2gl1kGt+UTwOO
-X-Google-Smtp-Source: AK7set9wC+TS+nhluAugC3NIlRB72Nwu/shM7r466HV9itDauVe/hJjpxls4Y6ZfyXihDUoWjGrwgClTAbgrS6MV
+        bh=ep+t2caOQSahkPTOUAWt22QPS6ka0wL1iktlvruOFtk=;
+        b=igxrMWXMAxA7kza0kCO3chs5gaHN3oSNNdh2nuAunXS+8wAL7oOwQ+rhkrjWxVoTf8
+         EVX0yoJ3V8+kMcjBVjBMszCM2yzc+bs1xWkRaGX7uRoHrIDMX4kB09h8UKm1vRyAVItd
+         WDX2AYVDMNrG7jYGSfAlxK445m0lyfCRCSr2qpy/hEfvkpEEBgsmgDNgeWicOaEYSrH0
+         G2Xp4e0LhCffszc+NoX+wNQ3vvP7TZwCfP1tEp14wSzygiEWe3KzEygI3e/3ViDgZ9fP
+         sR67ROMJSk3v8XzSYGxFdUVK6e/PRwRl9ZWnsklfRLl//Td+OJJxnmTJ1NptelZmS1Tn
+         /2mQ==
+X-Gm-Message-State: AO0yUKXwvMCaOPUT9aIEKkf93kLZyazWuikaxQMfNujn+4XYscJrtJf5
+        bXqtdllh5G05ocgpPnCvo62Q5qWAfQXTF5PC
+X-Google-Smtp-Source: AK7set+tBwsrzsGfYGkr6mqGYtCrd2pD30kKOdycyIYEofwc08SH08MLRIHONTv2mYLxvGH/o6jI+3RKVfH+ffxg
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:12c8:b0:8e3:6aea:973 with SMTP
- id j8-20020a05690212c800b008e36aea0973mr91564ybu.4.1676680161464; Fri, 17 Feb
- 2023 16:29:21 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:28:10 +0000
+ (user=jthoughton job=sendgmr) by 2002:a5b:d4b:0:b0:8da:6dc5:ca06 with SMTP id
+ f11-20020a5b0d4b000000b008da6dc5ca06mr215488ybr.7.1676680162408; Fri, 17 Feb
+ 2023 16:29:22 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:28:11 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-38-jthoughton@google.com>
-Subject: [PATCH v2 37/46] hugetlb: replace make_huge_pte with make_huge_pte_with_shift
+Message-ID: <20230218002819.1486479-39-jthoughton@google.com>
+Subject: [PATCH v2 38/46] mm: smaps: add stats for HugeTLB mapping size
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,93 +86,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes the old definition of make_huge_pte, where now we always
-require the shift to be explicitly given. All callsites are cleaned up.
+When the kernel is compiled with HUGETLB_HIGH_GRANULARITY_MAPPING,
+smaps may provide HugetlbPudMapped, HugetlbPmdMapped, and
+HugetlbPteMapped. Levels that are folded will not be outputted.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e0a92e7c1755..4c9b3c5379b2 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5204,9 +5204,9 @@ const struct vm_operations_struct hugetlb_vm_ops = {
- 	.pagesize = hugetlb_vm_op_pagesize,
- };
- 
--static pte_t make_huge_pte_with_shift(struct vm_area_struct *vma,
--				      struct page *page, int writable,
--				      int shift)
-+static pte_t make_huge_pte(struct vm_area_struct *vma,
-+			   struct page *page, int writable,
-+			   int shift)
- {
- 	pte_t entry;
- 
-@@ -5222,14 +5222,6 @@ static pte_t make_huge_pte_with_shift(struct vm_area_struct *vma,
- 	return entry;
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 2f293b5dabc0..1ced7300f8cd 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -412,6 +412,15 @@ struct mem_size_stats {
+ 	unsigned long swap;
+ 	unsigned long shared_hugetlb;
+ 	unsigned long private_hugetlb;
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++#ifndef __PAGETABLE_PUD_FOLDED
++	unsigned long hugetlb_pud_mapped;
++#endif
++#ifndef __PAGETABLE_PMD_FOLDED
++	unsigned long hugetlb_pmd_mapped;
++#endif
++	unsigned long hugetlb_pte_mapped;
++#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
+ 	u64 pss;
+ 	u64 pss_anon;
+ 	u64 pss_file;
+@@ -731,6 +740,33 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
  }
  
--static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
--			   int writable)
--{
--	unsigned int shift = huge_page_shift(hstate_vma(vma));
--
--	return make_huge_pte_with_shift(vma, page, writable, shift);
--}
--
- static void set_huge_ptep_writable(struct vm_area_struct *vma,
- 				   unsigned long address, pte_t *ptep)
- {
-@@ -5272,7 +5264,9 @@ hugetlb_install_folio(struct vm_area_struct *vma, pte_t *ptep, unsigned long add
- {
- 	__folio_mark_uptodate(new_folio);
- 	hugepage_add_new_anon_rmap(new_folio, vma, addr);
--	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(vma, &new_folio->page, 1));
-+	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(
-+				vma, &new_folio->page, 1,
-+				huge_page_shift(hstate_vma(vma))));
- 	hugetlb_count_add(pages_per_huge_page(hstate_vma(vma)), vma->vm_mm);
- 	folio_set_hugetlb_migratable(new_folio);
+ #ifdef CONFIG_HUGETLB_PAGE
++
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++static void smaps_hugetlb_hgm_account(struct mem_size_stats *mss,
++		struct hugetlb_pte *hpte)
++{
++	unsigned long size = hugetlb_pte_size(hpte);
++
++	switch (hpte->level) {
++#ifndef __PAGETABLE_PUD_FOLDED
++	case HUGETLB_LEVEL_PUD:
++		mss->hugetlb_pud_mapped += size;
++		break;
++#endif
++#ifndef __PAGETABLE_PMD_FOLDED
++	case HUGETLB_LEVEL_PMD:
++		mss->hugetlb_pmd_mapped += size;
++		break;
++#endif
++	case HUGETLB_LEVEL_PTE:
++		mss->hugetlb_pte_mapped += size;
++		break;
++	default:
++		break;
++	}
++}
++#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
++
+ static int smaps_hugetlb_range(struct hugetlb_pte *hpte,
+ 				unsigned long addr,
+ 				struct mm_walk *walk)
+@@ -764,6 +800,9 @@ static int smaps_hugetlb_range(struct hugetlb_pte *hpte,
+ 			mss->shared_hugetlb += sz;
+ 		else
+ 			mss->private_hugetlb += sz;
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++		smaps_hugetlb_hgm_account(mss, hpte);
++#endif
+ 	}
+ 	return 0;
  }
-@@ -6006,7 +6000,8 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 		hugetlb_remove_rmap(old_page, huge_page_shift(h), h, vma);
- 		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
- 		set_huge_pte_at(mm, haddr, ptep,
--				make_huge_pte(vma, &new_folio->page, !unshare));
-+				make_huge_pte(vma, &new_folio->page, !unshare,
-+					      huge_page_shift(h)));
- 		folio_set_hugetlb_migratable(new_folio);
- 		/* Make the old page be freed below */
- 		new_folio = page_folio(old_page);
-@@ -6348,7 +6343,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	else
- 		hugetlb_add_file_rmap(subpage, hpte->shift, h, vma);
+@@ -833,38 +872,47 @@ static void smap_gather_stats(struct vm_area_struct *vma,
+ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
+ 	bool rollup_mode)
+ {
+-	SEQ_PUT_DEC("Rss:            ", mss->resident);
+-	SEQ_PUT_DEC(" kB\nPss:            ", mss->pss >> PSS_SHIFT);
+-	SEQ_PUT_DEC(" kB\nPss_Dirty:      ", mss->pss_dirty >> PSS_SHIFT);
++	SEQ_PUT_DEC("Rss:              ", mss->resident);
++	SEQ_PUT_DEC(" kB\nPss:              ", mss->pss >> PSS_SHIFT);
++	SEQ_PUT_DEC(" kB\nPss_Dirty:        ", mss->pss_dirty >> PSS_SHIFT);
+ 	if (rollup_mode) {
+ 		/*
+ 		 * These are meaningful only for smaps_rollup, otherwise two of
+ 		 * them are zero, and the other one is the same as Pss.
+ 		 */
+-		SEQ_PUT_DEC(" kB\nPss_Anon:       ",
++		SEQ_PUT_DEC(" kB\nPss_Anon:         ",
+ 			mss->pss_anon >> PSS_SHIFT);
+-		SEQ_PUT_DEC(" kB\nPss_File:       ",
++		SEQ_PUT_DEC(" kB\nPss_File:         ",
+ 			mss->pss_file >> PSS_SHIFT);
+-		SEQ_PUT_DEC(" kB\nPss_Shmem:      ",
++		SEQ_PUT_DEC(" kB\nPss_Shmem:        ",
+ 			mss->pss_shmem >> PSS_SHIFT);
+ 	}
+-	SEQ_PUT_DEC(" kB\nShared_Clean:   ", mss->shared_clean);
+-	SEQ_PUT_DEC(" kB\nShared_Dirty:   ", mss->shared_dirty);
+-	SEQ_PUT_DEC(" kB\nPrivate_Clean:  ", mss->private_clean);
+-	SEQ_PUT_DEC(" kB\nPrivate_Dirty:  ", mss->private_dirty);
+-	SEQ_PUT_DEC(" kB\nReferenced:     ", mss->referenced);
+-	SEQ_PUT_DEC(" kB\nAnonymous:      ", mss->anonymous);
+-	SEQ_PUT_DEC(" kB\nLazyFree:       ", mss->lazyfree);
+-	SEQ_PUT_DEC(" kB\nAnonHugePages:  ", mss->anonymous_thp);
+-	SEQ_PUT_DEC(" kB\nShmemPmdMapped: ", mss->shmem_thp);
+-	SEQ_PUT_DEC(" kB\nFilePmdMapped:  ", mss->file_thp);
+-	SEQ_PUT_DEC(" kB\nShared_Hugetlb: ", mss->shared_hugetlb);
+-	seq_put_decimal_ull_width(m, " kB\nPrivate_Hugetlb: ",
++	SEQ_PUT_DEC(" kB\nShared_Clean:     ", mss->shared_clean);
++	SEQ_PUT_DEC(" kB\nShared_Dirty:     ", mss->shared_dirty);
++	SEQ_PUT_DEC(" kB\nPrivate_Clean:    ", mss->private_clean);
++	SEQ_PUT_DEC(" kB\nPrivate_Dirty:    ", mss->private_dirty);
++	SEQ_PUT_DEC(" kB\nReferenced:       ", mss->referenced);
++	SEQ_PUT_DEC(" kB\nAnonymous:        ", mss->anonymous);
++	SEQ_PUT_DEC(" kB\nLazyFree:         ", mss->lazyfree);
++	SEQ_PUT_DEC(" kB\nAnonHugePages:    ", mss->anonymous_thp);
++	SEQ_PUT_DEC(" kB\nShmemPmdMapped:   ", mss->shmem_thp);
++	SEQ_PUT_DEC(" kB\nFilePmdMapped:    ", mss->file_thp);
++	SEQ_PUT_DEC(" kB\nShared_Hugetlb:   ", mss->shared_hugetlb);
++	seq_put_decimal_ull_width(m, " kB\nPrivate_Hugetlb:   ",
+ 				  mss->private_hugetlb >> 10, 7);
+-	SEQ_PUT_DEC(" kB\nSwap:           ", mss->swap);
+-	SEQ_PUT_DEC(" kB\nSwapPss:        ",
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++#ifndef __PAGETABLE_PUD_FOLDED
++	SEQ_PUT_DEC(" kB\nHugetlbPudMapped: ", mss->hugetlb_pud_mapped);
++#endif
++#ifndef __PAGETABLE_PMD_FOLDED
++	SEQ_PUT_DEC(" kB\nHugetlbPmdMapped: ", mss->hugetlb_pmd_mapped);
++#endif
++	SEQ_PUT_DEC(" kB\nHugetlbPteMapped: ", mss->hugetlb_pte_mapped);
++#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
++	SEQ_PUT_DEC(" kB\nSwap:             ", mss->swap);
++	SEQ_PUT_DEC(" kB\nSwapPss:          ",
+ 					mss->swap_pss >> PSS_SHIFT);
+-	SEQ_PUT_DEC(" kB\nLocked:         ",
++	SEQ_PUT_DEC(" kB\nLocked:           ",
+ 					mss->pss_locked >> PSS_SHIFT);
+ 	seq_puts(m, " kB\n");
+ }
+@@ -880,18 +928,18 @@ static int show_smap(struct seq_file *m, void *v)
  
--	new_pte = make_huge_pte_with_shift(vma, subpage,
-+	new_pte = make_huge_pte(vma, subpage,
- 			((vma->vm_flags & VM_WRITE)
- 			 && (vma->vm_flags & VM_SHARED)),
- 			hpte->shift);
-@@ -6770,8 +6765,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	else
- 		writable = dst_vma->vm_flags & VM_WRITE;
+ 	show_map_vma(m, vma);
  
--	_dst_pte = make_huge_pte_with_shift(dst_vma, subpage, writable,
--			dst_hpte->shift);
-+	_dst_pte = make_huge_pte(dst_vma, subpage, writable, dst_hpte->shift);
- 	/*
- 	 * Always mark UFFDIO_COPY page dirty; note that this may not be
- 	 * extremely important for hugetlbfs for now since swapping is not
-@@ -8169,8 +8163,7 @@ static int __hugetlb_collapse(struct mm_struct *mm, struct vm_area_struct *vma,
- 		}
+-	SEQ_PUT_DEC("Size:           ", vma->vm_end - vma->vm_start);
+-	SEQ_PUT_DEC(" kB\nKernelPageSize: ", vma_kernel_pagesize(vma));
+-	SEQ_PUT_DEC(" kB\nMMUPageSize:    ", vma_mmu_pagesize(vma));
++	SEQ_PUT_DEC("Size:             ", vma->vm_end - vma->vm_start);
++	SEQ_PUT_DEC(" kB\nKernelPageSize:   ", vma_kernel_pagesize(vma));
++	SEQ_PUT_DEC(" kB\nMMUPageSize:      ", vma_mmu_pagesize(vma));
+ 	seq_puts(m, " kB\n");
  
- 		subpage = hugetlb_find_subpage(h, folio, curr);
--		entry = make_huge_pte_with_shift(vma, subpage,
--						 writable, hpte.shift);
-+		entry = make_huge_pte(vma, subpage, writable, hpte.shift);
- 		hugetlb_add_file_rmap(subpage, hpte.shift, h, vma);
- 		set_huge_pte_at(mm, curr, hpte.ptep, entry);
- 		spin_unlock(ptl);
+ 	__show_smap(m, &mss, false);
+ 
+-	seq_printf(m, "THPeligible:    %d\n",
++	seq_printf(m, "THPeligible:      %d\n",
+ 		   hugepage_vma_check(vma, vma->vm_flags, true, false, true));
+ 
+ 	if (arch_pkeys_enabled())
+-		seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
++		seq_printf(m, "ProtectionKey:    %8u\n", vma_pkey(vma));
+ 	show_smap_vma_flags(m, vma);
+ 
+ 	return 0;
 -- 
 2.39.2.637.g21b0678d19-goog
 
