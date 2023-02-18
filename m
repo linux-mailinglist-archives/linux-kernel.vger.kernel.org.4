@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5276C69B6BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E49469B6B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjBRA24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S229585AbjBRA3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjBRA2r (ORCPT
+        with ESMTP id S229822AbjBRA2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:28:47 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA8A5A3AD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:47 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l206-20020a25ccd7000000b006fdc6aaec4fso2656471ybf.20
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:47 -0800 (PST)
+        Fri, 17 Feb 2023 19:28:48 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9BA59732
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:48 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5365936facfso20637387b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDdwvW86Qv3EMGRuKtmhHN/6JFPd8EDP9/1ArRwRYXY=;
-        b=fw5qqHMfBDzeIudommkAOwo+9UU/gmxeQgIih9FaoEsaJr2Xir63Ni9u5plph47GPQ
-         qKNMSk3EoMZlFvKBixc5SlWffdrOIGT9xwufVeB6w6XtbUefWoHl0UTkSBIeVWA0nx9V
-         3vx/k8P3X+Nic17umWBpychYwMRvoLYQTiDpyeEvZuRVuWt8x3OPh+qcKKxIEMfqpB+f
-         E4BJn1mxijItNJzVQ7AX794mA3LDFIyPdFN2u6SvQkdpMoHSeet4GeunVcsqyLAUuaFL
-         HvKzb76potSZYgInefPIg3oX/vB0taPuTk8WpA+EnFjlSQJ7bSf8eNOYwuT07YyeDAq/
-         1HaA==
+        bh=ywqgi26Brd11uCoWP0sbMHtbYsofzUY9ZAimSzTW2NE=;
+        b=n/AuNA+wao69AJqH2jxvia/RDl00z2MfIhcsqjJucnXsT0cN+rnMxxAJPhBDLk5ZSi
+         MCiuvlZOLO6F7xC0qObRnm2Fw7Kk4xKcB8RUyTN9WchfsVg6IiD35+jkjOxG7TArgt04
+         nthdLjbi+YqMB//69CKeg7ZPl8QIrBQY7Ll3FExxGFCSIT1L0xNOUp19y9PDuIe+SxhZ
+         B4Zyh5fsXW/P04RT85l9L0piLa0E//fpZzktUrEB+JJqehCEtNNVOMSTn6SN8kGNhUKz
+         UMxeGr/Oj6oj5yYpspoF7jsafZJJiQT+dGrZV68rl4q3U6mgeh9r3mvqGZ+fe/wLSD9M
+         jzxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDdwvW86Qv3EMGRuKtmhHN/6JFPd8EDP9/1ArRwRYXY=;
-        b=rV/Ak7uYg1+nUcXhwhFgwb2O/djGNJvsu5VfW/zyy9GNhI/MF9QwDI11JpTPUBSXA9
-         f894AFAWIbiv8UG8ny1I3ULhi0HCESK8GIVpVsUva6LG3Vuau3T0EgbGiJo3Rvk/nrc7
-         IhFviLsUwdCa2dtciOCWR2d9mXjqJ64u63kFAokQBBOsUVMsj99Xof3dN9msjNXRZXcz
-         BHULRRQoG5XWKeHT+WATlEWisJIN5vSRvGkuYojXrvL4XWdIfyRkKjmOX8Rzv+gS5HmC
-         gp4YLuNih5R1o29AfspttvQMZLbC6tMx6a7J0iQLdz0dYr0Kgb3EVa4er02BdLbjgBud
-         /6/Q==
-X-Gm-Message-State: AO0yUKWlITKU+Uu0KT1F0zlIwMwrhm8rk6luLgvznZreMQk+9UD6AkjI
-        eCfUc1sUYup2bm6IYC5YOJ/ZwZZJyVGReTxd
-X-Google-Smtp-Source: AK7set+jWNiXveMIuz9URODx+pb4bTot1Uag93kYz1pPcv1KgJFihpEhzSj3o+H8iWxGWVbjL8VHgACEeLjh2Bea
+        bh=ywqgi26Brd11uCoWP0sbMHtbYsofzUY9ZAimSzTW2NE=;
+        b=krrTtTPp1MUrJHSb8GgjBn4L/tTomeHYvpDdjYpzejPTBRA18rxCgjY7GHp7+0v3by
+         KYElLJQd5OAwJ5pXMfRuXvwngMfZz2n6TZlDnAnIrCcVkgAG/NopjtzO3ScxFnBrBz6+
+         0YMcaFuHS7YUEDpLaBUrOjf5VIeG9p8SVOmMMG6gvkyH9c15GGrP3KJZAhsNtV6FRi/G
+         JN17aIudVJDlaFMMnCY0IJmGrW6MOg0JmRpqxAHtZK81+oW2+kkORHR8evrwZvP3I9Fq
+         uhBr86WhR15hUM9AGP5gGYUyDMPJLDuhvCUt0Brt1hNY1Uvjw/23kob9BzdjrwySuRXD
+         IpoQ==
+X-Gm-Message-State: AO0yUKUYl5XgNYC3pm6BWlKhCVGXYcnngVu/ZQ/NzqSJ6C3OIE+hrto/
+        vuDZaV779mIm31QKoFzvo7MaSsBwVraagJCp
+X-Google-Smtp-Source: AK7set91EOlgY73vi4WtH0/wZAAYWGqc3EHj1NmJd/UToA1QLT2ebGJE6OT31llBzsdBdICY2Qgx1JjnImasJfkA
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:4511:0:b0:52f:69d:cc75 with SMTP id
- s17-20020a814511000000b0052f069dcc75mr301138ywa.6.1676680126332; Fri, 17 Feb
- 2023 16:28:46 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:36 +0000
+ (user=jthoughton job=sendgmr) by 2002:a5b:84:0:b0:902:5b5c:73f7 with SMTP id
+ b4-20020a5b0084000000b009025b5c73f7mr14406ybp.12.1676680127282; Fri, 17 Feb
+ 2023 16:28:47 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:37 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-4-jthoughton@google.com>
-Subject: [PATCH v2 03/46] hugetlb: remove redundant pte_mkhuge in migration path
+Message-ID: <20230218002819.1486479-5-jthoughton@google.com>
+Subject: [PATCH v2 04/46] hugetlb: only adjust address ranges when VMAs want
+ PMD sharing
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,28 +87,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch_make_huge_pte, which is called immediately following pte_mkhuge,
-already makes the necessary changes to the PTE that pte_mkhuge would
-have. The generic implementation of arch_make_huge_pte simply calls
-pte_mkhuge.
+Currently this check is overly aggressive. For some userfaultfd VMAs,
+VMA sharing is disabled, yet we still widen the address range, which is
+used for flushing TLBs and sending MMU notifiers.
+
+This is done now, as HGM VMAs also have sharing disabled, yet would
+still have flush ranges adjusted. Overaggressively flushing TLBs and
+triggering MMU notifiers is particularly harmful with lots of
+high-granularity operations.
 
 Acked-by: Peter Xu <peterx@redhat.com>
-Acked-by: Mina Almasry <almasrymina@google.com>
 Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 37865f85df6d..d3964c414010 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -249,7 +249,6 @@ static bool remove_migration_pte(struct folio *folio,
- 		if (folio_test_hugetlb(folio)) {
- 			unsigned int shift = huge_page_shift(hstate_vma(vma));
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 540cdf9570d3..08004371cfed 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6999,22 +6999,31 @@ static unsigned long page_table_shareable(struct vm_area_struct *svma,
+ 	return saddr;
+ }
  
--			pte = pte_mkhuge(pte);
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			if (folio_test_anon(folio))
- 				hugepage_add_anon_rmap(new, vma, pvmw.address,
+-bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
++static bool pmd_sharing_possible(struct vm_area_struct *vma)
+ {
+-	unsigned long start = addr & PUD_MASK;
+-	unsigned long end = start + PUD_SIZE;
+-
+ #ifdef CONFIG_USERFAULTFD
+ 	if (uffd_disable_huge_pmd_share(vma))
+ 		return false;
+ #endif
+ 	/*
+-	 * check on proper vm_flags and page table alignment
++	 * Only shared VMAs can share PMDs.
+ 	 */
+ 	if (!(vma->vm_flags & VM_MAYSHARE))
+ 		return false;
+ 	if (!vma->vm_private_data)	/* vma lock required for sharing */
+ 		return false;
++	return true;
++}
++
++bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
++{
++	unsigned long start = addr & PUD_MASK;
++	unsigned long end = start + PUD_SIZE;
++	/*
++	 * check on proper vm_flags and page table alignment
++	 */
++	if (!pmd_sharing_possible(vma))
++		return false;
+ 	if (!range_in_vma(vma, start, end))
+ 		return false;
+ 	return true;
+@@ -7035,7 +7044,7 @@ void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
+ 	 * vma needs to span at least one aligned PUD size, and the range
+ 	 * must be at least partially within in.
+ 	 */
+-	if (!(vma->vm_flags & VM_MAYSHARE) || !(v_end > v_start) ||
++	if (!pmd_sharing_possible(vma) || !(v_end > v_start) ||
+ 		(*end <= v_start) || (*start >= v_end))
+ 		return;
+ 
 -- 
 2.39.2.637.g21b0678d19-goog
 
